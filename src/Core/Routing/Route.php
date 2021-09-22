@@ -1,0 +1,162 @@
+<?php
+
+
+namespace App\Core\Routing;
+
+
+use App\Core\Request;
+use InvalidArgumentException;
+
+class Route
+{
+
+	public const GET             = 'GET';
+	public const POST            = 'POST';
+	public const DELETE          = 'DELETE';
+	public const UPDATE          = 'PUT';
+	public const REQUEST_METHODS = [self::GET, self::POST, self::DELETE, self::UPDATE];
+	/** @var Route[] */
+	public static array $availableRoutes = [];
+	public static array $namedRoutes     = [];
+	public array        $path            = [];
+
+	/** @var callable|array $handler */
+	protected $handler;
+	/** @var Middleware[] */
+	protected array $middleware = [];
+
+
+	/**
+	 * Route constructor.
+	 *
+	 * @param string         $type
+	 * @param callable|array $handler
+	 */
+	public function __construct(protected string $type, callable|array $handler) {
+		$this->handler = $handler;
+	}
+
+	/**
+	 * @param string         $pathString
+	 * @param callable|array $handler
+	 *
+	 * @return Route
+	 */
+	public static function get(string $pathString, callable|array $handler) : Route {
+		return self::create(self::GET, $pathString, $handler);
+	}
+
+	protected static function create(string $type, string $pathString, callable|array $handler) : Route {
+		$route = new self($type, $handler);
+		$route->path = array_filter(explode('/', $pathString), 'not_empty');
+		self::insertIntoAvailableRoutes($route->path, $type, $route);
+		return $route;
+	}
+
+	/**
+	 * Add a new route into availableRoutes array
+	 *
+	 * @param string[] $path  Route path
+	 * @param string   $type  Route type (GET, POST, DELETE, PUT)
+	 * @param Route    $route Route object
+	 */
+	protected static function insertIntoAvailableRoutes(array $path, string $type, Route $route) : void {
+		$routes = &self::$availableRoutes;
+		foreach ($path as $name) {
+			$name = strtolower($name);
+			if (!isset($routes[$name])) {
+				$routes[$name] = [];
+			}
+			$routes = &$routes[$name];
+		}
+		if (!isset($routes[$type])) {
+			$routes[$type] = [];
+		}
+		$routes = &$routes[$type];
+		$routes[] = $route;
+	}
+
+	public static function post(string $pathString, callable|array $handler) : Route {
+		return self::create(self::POST, $pathString, $handler);
+	}
+
+	public static function update(string $pathString, callable|array $handler) : Route {
+		return self::create(self::UPDATE, $pathString, $handler);
+	}
+
+	public static function delete(string $pathString, callable|array $handler) : Route {
+		return self::create(self::DELETE, $pathString, $handler);
+	}
+
+	public static function getRoute(string $type, array $path, array &$params = []) : ?Route {
+		$routes = self::$availableRoutes;
+		foreach ($path as $value) {
+			if (isset($routes[$value])) {
+				$routes = $routes[$value];
+				continue;
+			}
+
+			$paramRoutes = array_filter($routes, static function(string $key) {
+				return preg_match('/({[^}]+})/', $key) > 0;
+			},                          ARRAY_FILTER_USE_KEY);
+			if (count($paramRoutes) === 1) {
+				$name = substr(array_keys($paramRoutes)[0], 1, -1);
+				$routes = reset($paramRoutes);
+				$params[$name] = $value;
+				continue;
+			}
+
+			return null;
+		}
+		if (isset($routes[$type]) && count($routes[$type]) !== 0) {
+			return reset($routes[$type]);
+		}
+		return null;
+	}
+
+	public static function getRouteByName(string $name) : ?Route {
+		return self::$namedRoutes[$name] ?? null;
+	}
+
+	public function handle(Request $request) : void {
+		// Route-wide middleware
+		foreach ($this->middleware as $middleware) {
+			$middleware->handle($request);
+		}
+
+		if (is_array($this->handler)) {
+			if (class_exists($this->handler[0])) {
+				[$class, $func] = $this->handler;
+				$page = new $class;
+
+				// Class-wide middleware
+				foreach ($page->middleware as $middleware) {
+					$middleware->handle($request);
+				}
+
+				$page->init($request);
+				$page->$func($request);
+			}
+		}
+		else {
+			call_user_func($this->handler, $request);
+		}
+	}
+
+	/**
+	 * @param Middleware[] $middleware
+	 */
+	public function middleware(Middleware ...$middleware) : Route {
+		$this->middleware = array_merge($this->middleware, $middleware);
+		return $this;
+	}
+
+	public function name(string $name) : Route {
+		if (isset(self::$namedRoutes[$name]) && self::$namedRoutes[$name] !== $this) {
+			throw new InvalidArgumentException('Route of this name already exists. ('.$name.')');
+		}
+		self::$namedRoutes[$name] = $this;
+		return $this;
+	}
+
+}

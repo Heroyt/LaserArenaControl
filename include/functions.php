@@ -10,6 +10,10 @@
  */
 
 use App\Core\App;
+use App\Logging\Tracy\Events\TranslationEvent;
+use App\Logging\Tracy\TranslationTracyPanel;
+use Gettext\Generator\PoGenerator;
+use Gettext\Translation;
 
 /**
  * Get latte template file path by template name
@@ -116,4 +120,91 @@ function view(string $template, array $params = [], bool $return = false) : stri
  */
 function map(float $x, float $minIn, float $maxIn, float $minOut, float $maxOut) : float {
 	return ($x - $minIn) * ($maxOut - $minOut) / ($maxIn - $minIn) + $minOut;
+}
+
+/**
+ * Wrapper for gettext function
+ *
+ * @param string|null $msg Massage to translate
+ * @param string|null $plural
+ * @param int         $num
+ * @param string|null $context
+ *
+ * @return string Translated message
+ *
+ * @version 1.0
+ * @author  Tomáš Vojík <vojik@wboy.cz>
+ */
+function lang(?string $msg = null, ?string $plural = null, int $num = 1, ?string $context = null) : string {
+
+	if (empty($msg)) {
+		return '';
+	}
+
+	// Add context
+	$msgTmp = $msg;
+	if (!empty($context)) {
+		$msg = $context."\004".$msg;
+	}
+
+	// If in development - add translation to po file if not exist
+	if (!PRODUCTION && CHECK_TRANSLATIONS) {
+		$logged = false;
+		foreach ($GLOBALS['translations'] as $lang => $translations) {
+			if (!$translations->find($context, $msgTmp)) {                    // Check if translation exists
+				// Create new translation
+				if (!$logged) {
+					$event = new TranslationEvent();
+					$event->message = $msgTmp;
+					$event->plural = $plural;
+					$event->context = $context;
+					$trace = debug_backtrace(limit: 1);
+					$event->source = $trace[0]['file'].':'.$trace[0]['line'].' '.$trace[0]['function'].'()';
+					TranslationTracyPanel::logEvent($event);
+					$logged = true;
+				}
+				$translation = Translation::create($context, $msgTmp);
+				if ($plural !== null) {
+					$translation->setPlural($plural);
+				}
+				$translations->add($translation);
+				$GLOBALS['translationChange'] = true;
+			}
+		}
+	}
+
+	// Translate
+	if ($num === 1) {
+		$translated = gettext($msg);
+	}
+	else {
+		$translated = ngettext($msg, $plural, $num);
+	}
+
+	// If the translation with the context does not exist, try to translate it without it
+	$split = explode("\004", $translated);
+	if (count($split) === 2) {
+		if ($num === 1) {
+			$translated = gettext($split[1]);
+		}
+		else {
+			$translated = ngettext($split[1], $plural, $num);
+		}
+	}
+	TranslationTracyPanel::incrementTranslations();
+	return $translated;
+}
+
+/**
+ * Regenerate the translation .po files
+ */
+function updateTranslations() : void {
+	global $translationChange, $translations;
+	if (PRODUCTION || !$translationChange) {
+		return;
+	}
+	$poGenerator = new PoGenerator();
+	foreach ($translations as $lang => $translation) {
+		$poGenerator->generateFile($translation, LANGUAGE_DIR.$lang.'/LAC.po');
+	}
 }

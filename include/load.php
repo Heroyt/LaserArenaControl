@@ -11,6 +11,8 @@
 
 use App\Core\Loader;
 use App\Logging\Tracy\DbTracyPanel;
+use App\Logging\Tracy\TranslationTracyPanel;
+use Gettext\Loader\PoLoader;
 use Tracy\Debugger;
 
 if (!defined('ROOT')) {
@@ -27,8 +29,27 @@ require_once ROOT.'vendor/autoload.php';
 // Load all globals and constants
 require_once ROOT.'include/config.php';
 
+
+// Translations update
+$translationChange = false;
+if (!PRODUCTION) {
+	$poLoader = new PoLoader();
+	$translations = [];
+	$languages = glob(LANGUAGE_DIR.'*');
+	bdump($languages);
+	foreach ($languages as $path) {
+		if (!is_dir($path)) {
+			continue;
+		}
+		$lang = str_replace(LANGUAGE_DIR, '', $path);
+		$file = $path.'/LAC.po';
+		$translations[$lang] = $poLoader->loadFile($file);
+	}
+	bdump($translations);
+}
+
 Debugger::enable(PRODUCTION ? Debugger::PRODUCTION : Debugger::DEVELOPMENT, LOG_DIR);
-Debugger::getBar()->addPanel(new DbTracyPanel());
+Debugger::getBar()->addPanel(new DbTracyPanel())->addPanel(new TranslationTracyPanel());
 
 Loader::init();
 

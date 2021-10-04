@@ -27,11 +27,15 @@ return [
 		'alertWarning' => [
 			'echo alert(%node.args, "warning")',
 		],
+		'lang'         => [
+			'echo lang(%node.args)',
+		],
 	],
 
 
 	'filters' => [
 		// name => callback
+		'lang' => 'lang',
 	],
 
 ];

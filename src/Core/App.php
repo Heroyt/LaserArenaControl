@@ -14,6 +14,7 @@ namespace App\Core;
 
 use App\Core\Routing\Route;
 use App\Logging\Logger;
+use Gettext\Languages\Language;
 use Latte\Engine;
 use Latte\Macros\MacroSet;
 use Nette\Http\Url;
@@ -40,28 +41,60 @@ class App
 	 * @brief If app should use a SEO-friendly pretty url
 	 */
 	protected static bool $prettyUrl = false;
-	/**
-	 * @var Request $request
-	 * @brief Request path
-	 */
+	/** @var Request $request Current request object */
 	protected static Request $request;
 
 	protected static Logger $logger;
 
+	/** @var array Parsed config.ini file */
 	protected static array $config;
+	/**
+	 * @var string
+	 */
+	private static mixed $timezone;
 
 
+	/**
+	 * Initialization function
+	 *
+	 * @post Logger is initialized
+	 * @post Routes are set
+	 * @post Request is parsed
+	 * @post Latte macros are set
+	 */
 	public static function init() : void {
 		self::$logger = new Logger(LOG_DIR, 'app');
 		self::setupRoutes();
 
 		self::$request = new Request(self::$prettyUrl ? $_SERVER['REQUEST_URI'] : ($_GET['p'] ?? []));
 
+		bdump(Language::getAll());
+		bdump(Language::getById($_SERVER['HTTP_ACCEPT_LANGUAGE']));
+
+		bdump($_SERVER);
+		// Set language and translations
+		$language = Language::getById($_SERVER['HTTP_ACCEPT_LANGUAGE'] ?? 'cs_CZ');
+		date_default_timezone_set(self::getTimezone());
+		if (isset($language)) {
+			setlocale(LC_ALL, $language->id.'.UTF-8');
+			bindtextdomain("LAC", LANGUAGE_DIR);
+			textdomain('LAC');
+			bind_textdomain_codeset('LAC', "UTF-8");
+		}
+
 		self::setupLatte();
 	}
 
+	/**
+	 * Include all files from the /routes directory to initialize the Route objects
+	 *
+	 * @see Route
+	 */
 	protected static function setupRoutes() : void {
-		require ROOT.'routes/web.php';
+		$routeFiles = glob(ROOT.'routes/*.php');
+		foreach ($routeFiles as $file) {
+			require $file;
+		}
 	}
 
 	/**
@@ -121,7 +154,9 @@ class App
 	}
 
 	/**
-	 * @param bool $returnObject
+	 * Get the current URL
+	 *
+	 * @param bool $returnObject If true, return Url object, else return string
 	 *
 	 * @return Url|string
 	 */
@@ -148,12 +183,25 @@ class App
 		return !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off';
 	}
 
+	/**
+	 * Gets the FE cache version from config.ini
+	 *
+	 * @return int
+	 */
 	public static function getCacheVersion() : int {
+		return (int) (self::getconfig()['General']['CACHE_VERSION'] ?? 1);
+	}
+
+	/**
+	 * Get parsed config.ini file
+	 *
+	 * @return array
+	 */
+	public static function getConfig() : array {
 		if (!isset(self::$config)) {
 			self::$config = parse_ini_file(PRIVATE_DIR.'config.ini', true);
 		}
-
-		return (int) (self::$config['General']['CACHE_VERSION'] ?? 1);
+		return self::$config;
 	}
 
 	/**
@@ -199,20 +247,23 @@ class App
 	}
 
 	/**
+	 * Echo json-encoded data and exits
+	 *
 	 * @param array $data
 	 */
 	public static function sendAjaxData(array $data) : void {
 		header('Content-Type: application/json; charset=UTF-8');
 		bdump($data);
-		die(json_encode($data, JSON_THROW_ON_ERROR));
+		exit(json_encode($data, JSON_THROW_ON_ERROR));
 	}
 
+	/**
+	 * Checks if the GENERAL - DEBUG option is set in config.ini
+	 *
+	 * @return bool
+	 */
 	public static function isProduction() : bool {
-		if (!isset(self::$config)) {
-			self::$config = parse_ini_file(PRIVATE_DIR.'config.ini', true);
-		}
-
-		return !(bool) (self::$config['General']['DEBUG'] ?? false);
+		return !(bool) (self::getconfig()['General']['DEBUG'] ?? false);
 	}
 
 	/**
@@ -299,6 +350,16 @@ class App
 	 */
 	public static function getLogger() : Logger {
 		return self::$logger;
+	}
+
+	/**
+	 * @return string
+	 */
+	public static function getTimezone() : string {
+		if (empty(self::$timezone)) {
+			self::$timezone = self::getConfig()['General']['TIMEZONE'] ?? 'Europe/Prague';
+		}
+		return self::$timezone;
 	}
 
 }

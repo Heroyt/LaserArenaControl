@@ -21,9 +21,11 @@ const TEMPLATE_DIR = ROOT.'templates/';
 const UPLOAD_DIR = ROOT.'upload/';
 /** Directory for files hidden from the user */
 const PRIVATE_DIR = ROOT.'private/';
+const LANGUAGE_DIR = ROOT.'languages/';
 
 /** If in production */
 define('PRODUCTION', App::isProduction());
+define('CHECK_TRANSLATIONS', (bool) (App::getConfig()['General']['TRANSLATIONS'] ?? false));
 
 /**
  * @var $DEBUG

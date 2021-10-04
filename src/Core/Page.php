@@ -14,6 +14,8 @@
 namespace App\Core;
 
 
+use JetBrains\PhpStorm\Pure;
+
 /**
  * @class   Page
  * @brief   Abstract Page class that specifies all basic functionality for other Pages
@@ -67,7 +69,7 @@ abstract class Page
 	 * @since   1.0
 	 */
 	public function getTitle() : string {
-		return Constants::SITE_NAME.(!empty($this->title) ? ' - '.$this->title : '');
+		return Constants::SITE_NAME.(!empty($this->title) ? ' - '.lang($this->title, context: 'pageTitles') : '');
 	}
 
 	/**
@@ -79,6 +81,6 @@ abstract class Page
 	 * @since   1.0
 	 */
 	public function getDescription() : string {
-		return $this->description;
+		return lang($this->description, context: 'pageDescription');
 	}
 }

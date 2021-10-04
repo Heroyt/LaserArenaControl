@@ -18,7 +18,6 @@ use Dibi\Exception;
 use Dibi\Fluent;
 use Dibi\Result;
 use InvalidArgumentException;
-use const PRIVATE_DIR;
 
 /**
  * @class   DB
@@ -44,15 +43,14 @@ class DB
 	/**
 	 * Initialization function
 	 *
-	 * @pre   Environment variables must have been set
-	 * @post  Database is connected and stored in DB::db variable
+	 * @post  Database connection is created and stored in DB::db variable
 	 *
 	 * @throws Exception
 	 *
 	 * @since 1.0
 	 */
 	public static function init() : void {
-		$config = parse_ini_file(PRIVATE_DIR.'config.ini', true);
+		$config = App::getConfig();
 		self::$log = new Logger(LOG_DIR, 'db');
 		self::$db = new Connection([
 																 'driver'   => $config['Database']['DRIVER'] ?? 'mysqli',

@@ -17,7 +17,6 @@ namespace App\Core;
 
 use Dibi\Exception;
 use RuntimeException;
-use const PRIVATE_DIR;
 
 /**
  * @class   Loader
@@ -65,7 +64,7 @@ class Loader
 	 * @version 1.0
 	 */
 	private static function initConfig() : void {
-		$config = parse_ini_file(PRIVATE_DIR.'config.ini', true);
+		$config = App::getConfig();
 
 		if ($config['General']['PRETTY_URL'] ?? false) {
 			App::prettyUrl();

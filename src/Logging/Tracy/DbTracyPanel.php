@@ -26,6 +26,8 @@ class DbTracyPanel implements IBarPanel
 	 * @inheritDoc
 	 */
 	public function getPanel() : string {
-		return view('debug/Db/panel', [], true);
+		$panel = view('debug/Db/panel', [], true);
+		updateTranslations();
+		return $panel;
 	}
 }

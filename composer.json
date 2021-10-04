@@ -10,11 +10,13 @@
 		"nette/security": "^3.1",
 		"ext-zip": "*",
 		"php": "^8.0",
-		"nette/http": "^3.1"
+		"nette/http": "^3.1",
+		"ext-gettext": "*"
 	},
 	"require-dev": {
 		"roave/security-advisories": "dev-latest",
-		"phpunit/phpunit": "^9.5"
+		"phpunit/phpunit": "^9.5",
+		"gettext/gettext": "^5.5"
 	},
 	"license": "GPL-3.0",
 	"autoload": {

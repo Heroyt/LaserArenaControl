@@ -42,7 +42,7 @@ if (!PRODUCTION) {
 			continue;
 		}
 		$lang = str_replace(LANGUAGE_DIR, '', $path);
-		$file = $path.'/LAC.po';
+		$file = $path.'/LC_MESSAGES/LAC.po';
 		$translations[$lang] = $poLoader->loadFile($file);
 	}
 	bdump($translations);

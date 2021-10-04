@@ -205,6 +205,6 @@ function updateTranslations() : void {
 	}
 	$poGenerator = new PoGenerator();
 	foreach ($translations as $lang => $translation) {
-		$poGenerator->generateFile($translation, LANGUAGE_DIR.$lang.'/LAC.po');
+		$poGenerator->generateFile($translation, LANGUAGE_DIR.$lang.'/LC_MESSAGES/LAC.po');
 	}
 }

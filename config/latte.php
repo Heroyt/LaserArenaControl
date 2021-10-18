@@ -30,6 +30,9 @@ return [
 		'lang'         => [
 			'echo lang(%node.args)',
 		],
+		'tracyDump'    => [
+			'echo \Tracy\Dumper::toHtml(%node.args)',
+		],
 	],
 
 

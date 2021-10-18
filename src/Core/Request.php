@@ -70,7 +70,8 @@ class Request
 	}
 
 	protected function parseStringQuery(string $query) : void {
-		$this->parseArrayQuery(array_filter(explode('/', $query), static function($a) {
+		$url = parse_url($query);
+		$this->parseArrayQuery(array_filter(explode('/', $url['path']), static function($a) {
 			return !empty($a);
 		}));
 	}
@@ -105,6 +106,13 @@ class Request
 	 */
 	public function isAjax() : bool {
 		return !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest';
+	}
+
+	/**
+	 * @return Route|null
+	 */
+	public function getRoute() : ?Route {
+		return $this->route;
 	}
 
 }

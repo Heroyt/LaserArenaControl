@@ -11,6 +11,7 @@
 
 use App\Core\Loader;
 use App\Logging\Tracy\DbTracyPanel;
+use App\Logging\Tracy\RoutingTracyPanel;
 use App\Logging\Tracy\TranslationTracyPanel;
 use Gettext\Loader\PoLoader;
 use Tracy\Debugger;
@@ -49,7 +50,7 @@ if (!PRODUCTION) {
 }
 
 Debugger::enable(PRODUCTION ? Debugger::PRODUCTION : Debugger::DEVELOPMENT, LOG_DIR);
-Debugger::getBar()->addPanel(new DbTracyPanel())->addPanel(new TranslationTracyPanel());
+Debugger::getBar()->addPanel(new DbTracyPanel())->addPanel(new TranslationTracyPanel())->addPanel(new RoutingTracyPanel());
 
 Loader::init();
 

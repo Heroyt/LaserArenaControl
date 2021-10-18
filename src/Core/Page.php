@@ -83,4 +83,8 @@ abstract class Page
 	public function getDescription() : string {
 		return lang($this->description, context: 'pageDescription');
 	}
+
+	protected function view(string $template) : void {
+		view($template, $this->params);
+	}
 }

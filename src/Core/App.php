@@ -17,6 +17,9 @@ use App\Logging\Logger;
 use Gettext\Languages\Language;
 use Latte\Engine;
 use Latte\Macros\MacroSet;
+use Nette\DI\Compiler;
+use Nette\DI\Container;
+use Nette\DI\ContainerLoader;
 use Nette\Http\Url;
 use const PRIVATE_DIR;
 
@@ -53,6 +56,8 @@ class App
 	 */
 	private static mixed $timezone;
 
+	private static Container $container;
+
 
 	/**
 	 * Initialization function
@@ -68,10 +73,12 @@ class App
 
 		self::$request = new Request(self::$prettyUrl ? $_SERVER['REQUEST_URI'] : ($_GET['p'] ?? []));
 
-		bdump(Language::getAll());
-		bdump(Language::getById($_SERVER['HTTP_ACCEPT_LANGUAGE']));
+		$loader = new ContainerLoader(TMP_DIR);
+		$class = $loader->load(function(Compiler $compiler) {
+			$compiler->loadConfig(ROOT.'config/services.neon');
+		});
+		self::$container = new $class;
 
-		bdump($_SERVER);
 		// Set language and translations
 		$language = Language::getById($_SERVER['HTTP_ACCEPT_LANGUAGE'] ?? 'cs_CZ');
 		date_default_timezone_set(self::getTimezone());
@@ -95,6 +102,28 @@ class App
 		foreach ($routeFiles as $file) {
 			require $file;
 		}
+	}
+
+	/**
+	 * @return string
+	 */
+	public static function getTimezone() : string {
+		if (empty(self::$timezone)) {
+			self::$timezone = self::getConfig()['General']['TIMEZONE'] ?? 'Europe/Prague';
+		}
+		return self::$timezone;
+	}
+
+	/**
+	 * Get parsed config.ini file
+	 *
+	 * @return array
+	 */
+	public static function getConfig() : array {
+		if (!isset(self::$config)) {
+			self::$config = parse_ini_file(PRIVATE_DIR.'config.ini', true);
+		}
+		return self::$config;
 	}
 
 	/**
@@ -190,18 +219,6 @@ class App
 	 */
 	public static function getCacheVersion() : int {
 		return (int) (self::getconfig()['General']['CACHE_VERSION'] ?? 1);
-	}
-
-	/**
-	 * Get parsed config.ini file
-	 *
-	 * @return array
-	 */
-	public static function getConfig() : array {
-		if (!isset(self::$config)) {
-			self::$config = parse_ini_file(PRIVATE_DIR.'config.ini', true);
-		}
-		return self::$config;
 	}
 
 	/**
@@ -353,13 +370,61 @@ class App
 	}
 
 	/**
-	 * @return string
+	 * @return Container
 	 */
-	public static function getTimezone() : string {
-		if (empty(self::$timezone)) {
-			self::$timezone = self::getConfig()['General']['TIMEZONE'] ?? 'Europe/Prague';
+	public static function getContainer() : Container {
+		return self::$container;
+	}
+
+	/**
+	 * @return MenuItem[]
+	 */
+	public static function getMenu() : array {
+		$config = require ROOT.'config/menu.php';
+		$menu = [];
+		foreach ($config as $item) {
+			if (isset($item['route'])) {
+				$path = Route::getRouteByName($item['route'])->path;
+			}
+			else {
+				$path = $item['path'] ?? ['E404'];
+			}
+			$menuItem = new MenuItem(name: $item['name'], path: $path);
+			foreach ($item['children'] ?? [] as $child) {
+				if (isset($child['route'])) {
+					$path = Route::getRouteByName($child['route'])->path;
+				}
+				else {
+					$path = $child['path'] ?? ['E404'];
+				}
+				$menuItem->children[] = new MenuItem(name: $child['name'], path: $path);
+			}
+			$menu[] = $menuItem;
 		}
-		return self::$timezone;
+		return $menu;
+	}
+
+	public static function comparePaths(array $path1, ?array $path2 = null) : bool {
+		if (!isset($path2)) {
+			$path2 = self::getRequest()->path;
+		}
+		foreach ($path1 as $key => $value) {
+			if (!is_numeric($key)) {
+				unset($path1[$key]);
+			}
+			else {
+				$path1[$key] = strtolower($value);
+			}
+		}
+		foreach ($path2 as $key => $value) {
+			if (!is_numeric($key)) {
+				unset($path2[$key]);
+			}
+			else {
+				$path2[$key] = strtolower($value);
+			}
+		}
+		return $path1 === $path2;
 	}
 
 }

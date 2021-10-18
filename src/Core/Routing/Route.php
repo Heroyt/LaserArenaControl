@@ -26,7 +26,8 @@ class Route
 	/** @var callable|array $handler Route callback */
 	protected $handler;
 	/** @var Middleware[] Route's middleware objects */
-	protected array $middleware = [];
+	protected array  $middleware = [];
+	protected string $routeName  = '';
 
 
 	/**
@@ -223,8 +224,23 @@ class Route
 		if (isset(self::$namedRoutes[$name]) && self::$namedRoutes[$name] !== $this) {
 			throw new InvalidArgumentException('Route of this name already exists. ('.$name.')');
 		}
+		$this->routeName = $name;
 		self::$namedRoutes[$name] = $this;
 		return $this;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getRouteName() : string {
+		return $this->routeName;
+	}
+
+	/**
+	 * @return array|callable
+	 */
+	public function getHandler() : callable|array {
+		return $this->handler;
 	}
 
 }

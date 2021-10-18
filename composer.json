@@ -11,7 +11,8 @@
 		"ext-zip": "*",
 		"php": "^8.0",
 		"nette/http": "^3.1",
-		"ext-gettext": "*"
+		"ext-gettext": "*",
+		"nette/di": "^3.0"
 	},
 	"require-dev": {
 		"roave/security-advisories": "dev-latest",

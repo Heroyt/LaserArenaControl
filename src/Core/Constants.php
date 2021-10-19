@@ -62,4 +62,7 @@ class Constants
 		'png',
 		'jpeg',
 	];
+
+	public const SORT_ASC  = 'ASC';
+	public const SORT_DESC = 'DESC';
 }

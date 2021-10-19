@@ -156,7 +156,7 @@ class Logger extends AbstractLogger
 		$logEvent->sql = dibi::dump($event->sql, TRUE);
 		$logEvent->source = str_replace(ROOT, '', implode(':', $event->source));
 		$logEvent->time = $event->time;
-		$logEvent->count = $event->count;
+		$logEvent->count = (int) $event->count;
 
 		// DB query error
 		if ($event->result instanceof Exception) {

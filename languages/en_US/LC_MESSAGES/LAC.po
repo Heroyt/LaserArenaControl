@@ -36,3 +36,21 @@ msgstr ""
 msgctxt "debugPanel"
 msgid "Context"
 msgstr ""
+
+msgctxt "pageTitles"
+msgid "Dashboard"
+msgstr ""
+
+msgid "New game"
+msgstr ""
+
+msgid "Toggle navigation"
+msgstr ""
+
+msgctxt "pageTitles"
+msgid "Results"
+msgstr ""
+
+msgctxt "pageTitles"
+msgid "Games list"
+msgstr ""

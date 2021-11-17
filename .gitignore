@@ -30,3 +30,4 @@ private/*
 !private/.htaccess
 build/
 *.cache
+logs/

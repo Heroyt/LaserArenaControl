@@ -1,0 +1,46 @@
+SITE{53874,0503001,EVO-5 MAXX}#
+GAME{588,,20140503211052,20140503212624,8}#
+TIMING{30, 15, 10, 20140503211122,20140503212622}#
+STYLE{t-Ochranci zvirat,Heroytova Týmová hra.,1,15}#
+SCORING{-50,100,-25,-50,-50,0,150,100,100,100,25915,1,0,0}#
+ENVIRONMENT{ , , , ,,C:\Program Files (x86)\LaserMaxx Lasergames\Shared\music\EVO-5 LaserMixx Standard\hraci\ochranci zvirat\2.mp3,C:\Program Files (x86)\LaserMaxx Lasergames\Shared\music\EVO-5 LaserMixx Standard\hraci\ochranci zvirat\Game Over LA.mp3,,,,}#
+
+GROUP{,37}#
+PACK{1,Monca,1,0}#
+PACK{2,Ana,1,0}#
+PACK{3,Ondra,1,0}#
+PACK{4,Canny,1,0}#
+PACK{5,Ciza,0,0}#
+PACK{6,Kudrle,0,0}#
+PACK{7,Blond,0,0}#
+PACK{8,Maki,0,0}#
+TEAM{0,Red team,4}#
+TEAM{1,Green team,4}#
+
+PACKX{1,-1725,469,13,54,8,}#
+PACKX{2,-275,414,28,59,7,}#
+PACKX{3,1049,527,45,66,6,}#
+PACKX{4,9548,552,93,42,1,}#
+PACKX{5,1921,764,42,43,4,}#
+PACKX{6,5979,1000,81,49,2,}#
+PACKX{7,1830,438,43,48,5,}#
+PACKX{8,3642,642,55,39,3,}#
+PACKY{1,0,0,0,-200,9530,3,4,0,0,0,0,12,1,53,1}#
+PACKY{2,0,0,0,0,9585,7,0,0,0,0,0,27,1,58,1}#
+PACKY{3,0,99,0,-150,9472,9,3,0,0,0,0,44,1,64,2}#
+PACKY{4,0,1198,1400,-100,9447,17,2,4,3,0,7,92,1,42,0}#
+PACKY{5,0,96,0,-100,9235,5,2,0,0,0,0,41,1,42,1}#
+PACKY{6,0,454,0,-150,8999,8,3,0,0,0,0,81,0,48,1}#
+PACKY{7,0,180,0,-150,9561,10,3,0,0,0,0,42,1,46,2}#
+PACKY{8,0,292,200,-100,9357,9,2,2,0,0,0,53,2,39,0}#
+TEAMX{0,13372,1}#
+TEAMX{1,8597,2}#
+HITS{1,0,0,1,0,4,4,3,1}#
+HITS{2,0,0,1,0,3,8,10,6}#
+HITS{3,0,1,0,0,11,15,9,9}#
+HITS{4,1,0,0,0,24,21,24,23}#
+HITS{5,10,12,13,6,0,0,1,0}#
+HITS{6,21,18,25,17,0,0,0,0}#
+HITS{7,9,16,13,4,1,0,0,0}#
+HITS{8,13,12,13,15,0,1,1,0}#
+

@@ -1,0 +1,51 @@
+SITE{53874,0504011,EVO-5 MAXX}#
+GAME{703,,20200302134355,20200302135912,4}#
+TIMING{15, 15, 5, 20200302134410,20200302135910,20200302135915}#
+STYLE{4 - skola DUPSTEP,Description of the new profile,1,15, 0}#
+STYLEX{5,9999,999,5135,5135}#
+STYLELEDS{1,15,15,15,15,15,1,5,1,0,15}#
+STYLEFLAGS{0,0,1,1,0,1,0,1,0,1,0,1,0,1,1,1,1,1,0,0,1,1,0,0,1,0,0}#
+STYLESOUNDS{255}#
+SCORING{-50,100,-50,-25,-50,0,100,100,100,100,22150,0,0,0,0,0}#
+ENVIRONMENT{ , , ,Z:\Program Files (x86)\LaserMaxx Lasergames\Shared\music\EVO-5 LaserMixx Standard\EVO-5 LaserMixx Standard Armed.mp3,Z:\Program Files (x86)\LaserMaxx Lasergames\Shared\music\EVO-5 LaserMixx Standard\EVO-5 LaserMixx Standard Intro 30sec.mp3,C:\LaserMaxx\Shared\music\EVO-5 LaserMixx Standard\hraci\Best Gaming Dubstep Mix.mp3,Z:\Program Files (x86)\LaserMaxx Lasergames\Shared\music\EVO-5 LaserMixx Standard\EVO-5 LaserMixx Standard Gameover.mp3,,,,}#
+VIPSTYLE{0,1,20,1,13,1,0}#
+VAMPIRESTYLE{0,1,0,3,99,0}#
+SWITCHSTYLE{0,0}#
+ASSISTEDSTYLE{0,0,0,0,0,0,0,0}#
+HITSTREAKSTYLE{0,5,15}#
+SHOWDOWNSTYLE{0,0,0,1,0}#
+ACTIVITYSTYLE{0,0,0}#
+TERMINATESTYLE{0}#
+MINESTYLE{0,0,0,0,Unnamed Unit}#
+MINESTYLE{1,0,0,0,Unnamed Unit}#
+MINESTYLE{2,0,0,0,Unnamed Unit}#
+MINESTYLE{3,0,0,0,Unnamed Unit}#
+MINESTYLE{4,0,0,0,Unnamed Unit}#
+MINESTYLE{5,0,0,0,Unnamed Unit}#
+MINESTYLE{6,0,2,6,Mina}#
+MINESTYLE{7,0,2,6,Mina}#
+
+GROUP{,}#
+PACK{1,ONDRA,5,0,0,0,0}#
+PACK{2,PETRA,5,0,0,0,0}#
+PACK{3,Denis,3,0,0,0,0}#
+PACK{4,David,3,0,0,0,0}#
+TEAM{3,Pink team,2}#
+TEAM{5,Ocean team,2}#
+
+PACKX{1,1300,623,41,56,3,,15}#
+PACKX{2,825,268,38,57,4,,25}#
+PACKX{3,5575,489,80,46,1,,14}#
+PACKX{4,1650,233,33,33,2,,19}#
+PACKY{1,0,0,0,0,9376,7,0,0,0,0,0,41,0,55,1,943,0,1300,0,0,0,0}#
+PACKY{2,0,0,0,0,9731,14,0,0,0,0,0,37,1,57,0,942,0,825,0,0,0,0}#
+PACKY{3,0,0,0,0,9510,16,0,0,0,0,0,79,1,46,0,953,0,5575,0,0,0,0}#
+PACKY{4,0,0,0,0,9766,14,0,0,0,0,0,33,0,32,1,966,0,1650,0,0,0,0}#
+TEAMX{3,7225,1}#
+TEAMX{5,2125,2}#
+HITS{1,0,0,22,19}#
+HITS{2,1,0,24,13}#
+HITS{3,37,42,0,1}#
+HITS{4,18,15,0,0}#
+
+GAMECLONES{0}#

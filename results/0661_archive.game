@@ -1,0 +1,71 @@
+SITE{53874,0504011,EVO-5 MAXX}#
+GAME{661,,20200228162730,20200228164053,9}#
+TIMING{20, 13, 5, 20200228162750,20200228164050,20200228164055}#
+STYLE{1-TEAM-Narozeniny,Description of the new profile,1,13, 0}#
+STYLEX{5,9999,999,5135,5135}#
+STYLELEDS{0,15,15,15,15,15,1,5,3,0,15}#
+STYLEFLAGS{0,0,1,1,1,1,0,1,0,1,0,1,0,1,1,1,1,1,0,0,1,1,0,0,1,0,0}#
+STYLESOUNDS{255}#
+SCORING{-50,100,0,-25,-50,0,100,100,100,100,24075,0,0,0,0,0}#
+ENVIRONMENT{ , , ,Z:\Program Files (x86)\LaserMaxx Lasergames\Shared\music\EVO-5 LaserMixx Standard\EVO-5 LaserMixx Standard Armed.mp3,Z:\Program Files (x86)\LaserMaxx Lasergames\Shared\music\EVO-5 LaserMixx Standard\EVO-5 LaserMixx Standard Standby.mp3,C:\LaserMaxx\shared\music\EVO-5 LaserMixx Standard\Hudba do Laser Arény\DJ Nonstop 2013  Happy Birthday.mp3,Z:\Program Files (x86)\LaserMaxx Lasergames\Shared\music\EVO-5 LaserMixx Standard\EVO-5 LaserMixx Standard Gameover.mp3,,,,}#
+VIPSTYLE{0,1,20,1,13,1,0}#
+VAMPIRESTYLE{0,1,0,3,99,0}#
+SWITCHSTYLE{0,0}#
+ASSISTEDSTYLE{0,0,0,0,0,0,0,0}#
+HITSTREAKSTYLE{0,7,15}#
+SHOWDOWNSTYLE{0,3,1,1,0}#
+ACTIVITYSTYLE{0,0,0}#
+TERMINATESTYLE{0}#
+MINESTYLE{0,0,0,0,Unnamed Unit}#
+MINESTYLE{1,0,0,0,Unnamed Unit}#
+MINESTYLE{2,0,0,0,Unnamed Unit}#
+MINESTYLE{3,0,0,0,Unnamed Unit}#
+MINESTYLE{4,0,0,0,Unnamed Unit}#
+MINESTYLE{5,0,0,0,Unnamed Unit}#
+MINESTYLE{6,0,2,6,Unnamed Unit}#
+MINESTYLE{7,0,2,6,Unnamed Unit}#
+
+GROUP{,}#
+PACK{1,Patrik,5,0,0,0,0}#
+PACK{2,Marek,5,0,0,0,0}#
+PACK{3,Adela,5,0,0,0,0}#
+PACK{4,Lily,0,0,0,0,0}#
+PACK{5,Roman,0,0,0,0,0}#
+PACK{6,Eli,0,0,0,0,0}#
+PACK{7,Honza,0,0,0,0,0}#
+PACK{8,Hedvika,5,0,0,0,0}#
+PACK{9,Brain,0,0,0,0,0}#
+TEAM{0,Red team,5}#
+TEAM{5,Ocean team,4}#
+
+PACKX{1,475,307,21,38,5,,45}#
+PACKX{2,8400,838,108,26,2,,53}#
+PACKX{3,16050,883,196,20,1,,28}#
+PACKX{4,-1975,338,31,70,6,,35}#
+PACKX{5,-2800,415,14,69,9,,23}#
+PACKX{6,-2525,282,7,77,8,,30}#
+PACKX{7,1675,800,55,58,3,,35}#
+PACKX{8,600,373,20,37,4,,44}#
+PACKX{9,-2450,321,14,71,7,,27}#
+PACKY{1,0,0,0,0,9692,7,0,0,0,0,0,16,5,20,18,961,0,475,0,0,0,0}#
+PACKY{2,0,0,0,0,9161,13,0,0,0,0,0,96,12,18,8,973,0,8400,0,0,0,0}#
+PACKY{3,0,0,0,0,9116,22,0,0,0,0,0,174,22,16,4,979,0,16050,0,0,0,0}#
+PACKY{4,0,0,0,0,9661,9,0,0,0,0,0,16,15,64,6,929,0,-1975,0,0,0,0}#
+PACKY{5,0,0,0,0,9584,3,0,0,0,0,0,6,8,64,5,930,0,-2800,0,0,0,0}#
+PACKY{6,0,0,0,0,9717,2,0,0,0,0,0,6,1,62,15,922,0,-2525,0,0,0,0}#
+PACKY{7,0,0,0,0,9199,7,0,0,0,0,0,46,9,54,4,941,0,1675,0,0,0,0}#
+PACKY{8,0,0,0,0,9626,5,0,0,0,0,0,20,0,28,9,962,0,600,0,0,0,0}#
+PACKY{9,0,0,0,0,9678,4,0,0,0,0,0,8,6,62,9,928,0,-2450,0,0,0,0}#
+TEAMX{0,-8075,2}#
+TEAMX{5,25525,1}#
+HITS{1,0,3,1,3,4,3,4,1,2}#
+HITS{2,7,0,3,25,21,19,9,2,22}#
+HITS{3,11,5,0,32,36,36,36,6,34}#
+HITS{4,4,5,3,0,0,8,2,4,5}#
+HITS{5,1,1,2,0,0,4,1,2,3}#
+HITS{6,0,2,2,0,1,0,0,2,0}#
+HITS{7,14,9,8,4,3,1,0,15,1}#
+HITS{8,0,0,0,4,3,4,5,0,4}#
+HITS{9,1,1,1,2,1,2,1,5,0}#
+
+GAMECLONES{0}#

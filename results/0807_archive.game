@@ -1,0 +1,47 @@
+SITE{53874,0504011,EVO-5 MAXX}#
+GAME{807,,20200307194236,20200307195559,3}#
+TIMING{20, 13, 5, 20200307194256,20200307195556,20200307195601}#
+STYLE{1-TEAM-Narozeniny,Description of the new profile,1,13, 0}#
+STYLEX{5,9999,999,5135,5135}#
+STYLELEDS{0,15,15,15,15,15,1,5,3,0,15}#
+STYLEFLAGS{0,0,1,1,1,1,0,1,0,1,0,1,0,1,1,1,1,1,0,0,1,1,0,0,1,0,0}#
+STYLESOUNDS{255}#
+SCORING{-50,100,0,-25,-50,0,100,100,100,100,24075,0,0,0,0,0}#
+ENVIRONMENT{ , , ,Z:\Program Files (x86)\LaserMaxx Lasergames\Shared\music\EVO-5 LaserMixx Standard\EVO-5 LaserMixx Standard Armed.mp3,Z:\Program Files (x86)\LaserMaxx Lasergames\Shared\music\EVO-5 LaserMixx Standard\EVO-5 LaserMixx Standard Standby.mp3,C:\LaserMaxx\shared\music\EVO-5 LaserMixx Standard\Hudba do Laser Arény\DJ Nonstop 2013  Happy Birthday.mp3,Z:\Program Files (x86)\LaserMaxx Lasergames\Shared\music\EVO-5 LaserMixx Standard\EVO-5 LaserMixx Standard Gameover.mp3,,,,}#
+VIPSTYLE{0,1,20,1,13,1,0}#
+VAMPIRESTYLE{0,1,0,3,99,0}#
+SWITCHSTYLE{0,0}#
+ASSISTEDSTYLE{0,0,0,0,0,0,0,0}#
+HITSTREAKSTYLE{0,7,15}#
+SHOWDOWNSTYLE{0,3,1,1,0}#
+ACTIVITYSTYLE{0,0,0}#
+TERMINATESTYLE{0}#
+MINESTYLE{0,0,0,0,Unnamed Unit}#
+MINESTYLE{1,0,0,0,Unnamed Unit}#
+MINESTYLE{2,0,0,0,Unnamed Unit}#
+MINESTYLE{3,0,0,0,Unnamed Unit}#
+MINESTYLE{4,0,0,0,Unnamed Unit}#
+MINESTYLE{5,0,0,0,Unnamed Unit}#
+MINESTYLE{6,0,2,6,Unnamed Unit}#
+MINESTYLE{7,0,2,6,Unnamed Unit}#
+
+GROUP{,}#
+PACK{1,venda,1,0,0,0,0}#
+PACK{2,terka,1,0,0,0,0}#
+PACK{3,Kajous,2,0,0,0,0}#
+TEAM{1,Green team,2}#
+TEAM{2,Blue team,1}#
+
+PACKX{1,550,134,17,24,3,,21}#
+PACKX{2,2225,316,37,27,2,,27}#
+PACKX{3,2350,465,50,53,1,,35}#
+PACKY{1,0,0,0,0,9865,13,0,0,0,0,0,17,0,23,1,975,0,550,0,0,0,0}#
+PACKY{2,0,0,0,0,9683,12,0,0,0,0,0,36,1,27,0,972,0,2225,0,0,0,0}#
+PACKY{3,0,0,0,0,9534,11,0,0,0,0,0,50,0,53,0,946,0,2350,0,0,0,0}#
+TEAMX{1,2775,1}#
+TEAMX{2,2350,2}#
+HITS{1,0,0,17}#
+HITS{2,1,0,36}#
+HITS{3,23,27,0}#
+
+GAMECLONES{0}#

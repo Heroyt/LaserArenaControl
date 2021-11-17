@@ -26,9 +26,17 @@ class ResultsParser extends AbstractResultsParser
 	public function parse() : Game {
 		$game = new Game();
 
+		$pathInfo = pathinfo($this->fileName);
+		preg_match('/(\d+)/', $pathInfo['filename'], $matches);
+		$game->fileNumber = $matches[0] ?? 0;
+
 		preg_match_all('/([A-Z]+){([^{}]*)}#/', $this->fileContents, $matches);
 
 		[$lines, $titles, $argsAll] = $matches;
+
+		if (empty($titles) || empty($argsAll)) {
+			throw new ResultsParseException('The results file cannot be parsed: '.$this->fileName);
+		}
 
 		$keysVests = [];
 		$currKey = 1;
@@ -57,7 +65,8 @@ class ResultsParser extends AbstractResultsParser
 					$game->timing = new Timing(before: $args[0], gameLength: $args[1], after: $args[2]);
 					break;
 				case 'STYLE':
-					$game->mode = GameModeFactory::find($args[0], $args[2], 'Evo5');
+					$game->modeName = $args[0];
+					$game->mode = GameModeFactory::find($args[0], (int) $args[2], 'Evo5');
 					break;
 				case 'SCORING':
 					$game->scoring = new Scoring(...$args);
@@ -68,6 +77,7 @@ class ResultsParser extends AbstractResultsParser
 				case 'PACK':
 					$player = new Player();
 					$game->getPlayers()->set($player, $args[0]);
+					$player->setGame($game);
 					$player->vest = $args[0];
 					$keysVests[$player->vest] = $currKey++;
 					$player->name = $args[1];
@@ -76,6 +86,7 @@ class ResultsParser extends AbstractResultsParser
 				case 'TEAM':
 					$team = new Team();
 					$game->getTeams()->set($team, $args[0]);
+					$team->setGame($game);
 					if (!isset($player)) {
 						throw new ResultsParseException('Cannot find Team - '.json_encode($args[0], JSON_THROW_ON_ERROR).PHP_EOL.$this->fileName.':'.PHP_EOL.$this->fileContents);
 					}
@@ -113,10 +124,10 @@ class ResultsParser extends AbstractResultsParser
 					$player->ammoRest = $args[5] ?? 0;
 					$player->accuracy = $args[6] ?? 0;
 					$player->minesHits = $args[7] ?? 0;
-					$player->bonus['agent'] = $args[8] ?? 0;
-					$player->bonus['invisibility'] = $args[9] ?? 0;
-					$player->bonus['machineGun'] = $args[10] ?? 0;
-					$player->bonus['shield'] = $args[11] ?? 0;
+					$player->bonus->agent = $args[8] ?? 0;
+					$player->bonus->invisibility = $args[9] ?? 0;
+					$player->bonus->machineGun = $args[10] ?? 0;
+					$player->bonus->shield = $args[11] ?? 0;
 					$player->hitsOther = $args[12] ?? 0;
 					$player->hitsOwn = $args[13] ?? 0;
 					$player->deathsOther = $args[14] ?? 0;

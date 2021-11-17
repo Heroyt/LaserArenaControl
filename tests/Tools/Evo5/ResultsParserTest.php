@@ -3,6 +3,9 @@
 namespace Tools\Evo5;
 
 use App\Exceptions\FileException;
+use App\Models\Game\Evo5\Game;
+use App\Models\Game\Evo5\Player;
+use App\Models\Game\Evo5\Team;
 use App\Tools\Evo5\ResultsParser;
 use PHPUnit\Framework\TestCase;
 
@@ -14,7 +17,13 @@ class ResultsParserTest extends TestCase
 		return array_map(static function(string $fName) {
 			return [$fName];
 		}, $files);
+	}
 
+	public function getFilesError() : array {
+		$files = glob(ROOT.'results/????_error.game');
+		return array_map(static function(string $fName) {
+			return [$fName];
+		}, $files);
 	}
 
 	/**
@@ -26,8 +35,58 @@ class ResultsParserTest extends TestCase
 	public function testParser(string $file) : void {
 		$parser = new ResultsParser($file);
 		$game = $parser->parse();
-		//print_r($game);
-		self::assertTrue(true);
+		if (!$game->isFinished()) {
+			self::assertTrue(true);
+			return;
+		}
+		self::assertTrue($game->save(), 'Game save failed for file: '.$file);
+		self::assertNotNull($game->id, 'Game save failed for file: '.$file);
+		/** @var Player $player */
+		foreach ($game->getPlayers() as $player) {
+			self::assertNotNull($player->id, 'Player save failed for file: '.$file);
+		}
+		/** @var Team $team */
+		foreach ($game->getTeams() as $team) {
+			self::assertNotNull($team->id, 'Team save failed for file: '.$file);
+		}
+		$game2 = new Game($game->id);
+		self::assertEquals(
+			json_decode(json_encode($game->getQueryData())),
+			json_decode(json_encode($game2->getQueryData())),
+			'Game data got from DB is not the same: '.$file
+		);
+		foreach ($game->getPlayers() as $player) {
+			$player2 = $game2->getPlayers()->get($player->vest);
+			self::assertNotNull($player2, 'Player does not exist in DB: '.$file);
+			self::assertEquals(
+				json_decode(json_encode($player->getQueryData())),
+				json_decode(json_encode($player2->getQueryData())),
+				'Player data got from DB is not the same: '.$file
+			);
+		}
+		/** @var Team $team */
+		foreach ($game->getTeams() as $team) {
+			$team2 = $game2->getTeams()->get($team->color);
+			self::assertNotNull($team2, 'Team does not exist in DB: '.$file);
+			self::assertEquals(
+				json_decode(json_encode($team->getQueryData())),
+				json_decode(json_encode($team2->getQueryData())),
+				'Team data got from DB is not the same: '.$file
+			);
+		}
 	}
+
+	/**
+	 * @dataProvider getFilesError
+	 *
+	 * @param string $file
+	 *
+	 * @throws FileException
+	 */
+	/*public function testParserError(string $file) : void {
+		$parser = new ResultsParser($file);
+		$this->expectException(ResultsParseException::class);
+		$game = $parser->parse();
+	}*/
 
 }

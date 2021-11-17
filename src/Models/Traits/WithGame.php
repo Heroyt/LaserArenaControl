@@ -7,7 +7,7 @@ use App\Models\Game\Game;
 trait WithGame
 {
 
-	protected Game $game;
+	protected ?Game $game;
 
 	/**
 	 * @return Game

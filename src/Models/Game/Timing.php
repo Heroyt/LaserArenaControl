@@ -2,7 +2,10 @@
 
 namespace App\Models\Game;
 
-class Timing
+use App\Core\Interfaces\InsertExtendInterface;
+use Dibi\Row;
+
+class Timing implements InsertExtendInterface
 {
 
 	/**
@@ -17,4 +20,17 @@ class Timing
 	) {
 	}
 
+	public static function parseRow(Row $row) : InsertExtendInterface {
+		return new Timing(
+			$row->timing_before ?? 0,
+			$row->timing_game_length ?? 0,
+			$row->timing_after ?? 0,
+		);
+	}
+
+	public function addQueryData(array &$data) : void {
+		$data['timing_before'] = $this->before;
+		$data['timing_game_length'] = $this->gameLength;
+		$data['timing_after'] = $this->after;
+	}
 }

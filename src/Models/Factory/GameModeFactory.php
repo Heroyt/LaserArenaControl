@@ -5,10 +5,24 @@ namespace App\Models\Factory;
 use App\Core\DB;
 use App\Exceptions\GameModeNotFoundException;
 use App\Models\Game\GameModes\AbstractMode;
+use Dibi\Row;
 use Nette\Utils\Strings;
 
 class GameModeFactory
 {
+
+	/**
+	 * @param int $id
+	 *
+	 * @return AbstractMode
+	 * @throws GameModeNotFoundException
+	 */
+	public static function getById(int $id) : AbstractMode {
+		$mode = DB::select('game_modes', 'id_mode, name, system, type')->where('id_mode = %i', $id)->fetch();
+		$system = $mode->system ?? '';
+		$modeType = ($mode->type ?? 'TEAM') === 'TEAM' ? AbstractMode::TYPE_TEAM : AbstractMode::TYPE_SOLO;
+		return self::findModeObject($system, $mode, $modeType);
+	}
 
 	/**
 	 * @param string $modeName Raw game mode name
@@ -24,6 +38,18 @@ class GameModeFactory
 			/** @noinspection CallableParameterUseCaseInTypeContextInspection */
 			$system = $mode->system;
 		}
+		return self::findModeObject($system, $mode, $modeType);
+	}
+
+	/**
+	 * @param string         $system
+	 * @param array|Row|null $mode
+	 * @param int            $modeType
+	 *
+	 * @return mixed
+	 * @throws GameModeNotFoundException
+	 */
+	protected static function findModeObject(string $system, array|Row|null $mode, int $modeType) : mixed {
 		$args = [];
 		$classBase = 'App\\Models\\Game\\';
 		$classSystem = '';
@@ -33,7 +59,7 @@ class GameModeFactory
 		$classNamespace = 'GameModes\\';
 		$className = '';
 		if (isset($mode)) {
-			$dbName = str_replace(' ', '', Strings::capitalize($mode->name));
+			$dbName = str_replace(' ', '', Strings::toAscii(Strings::capitalize($mode->name)));
 			$class = $classBase.$classSystem.$classNamespace.$dbName;
 			if (class_exists($class)) {
 				$className = $dbName;
@@ -58,5 +84,6 @@ class GameModeFactory
 		}
 		return new $class(...$args);
 	}
+
 
 }

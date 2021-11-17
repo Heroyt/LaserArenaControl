@@ -65,11 +65,11 @@ abstract class Game extends AbstractModel implements InsertExtendInterface
 	}
 
 	public function isStarted() : bool {
-		return is_null($this->start);
+		return !is_null($this->start);
 	}
 
 	public function isFinished() : bool {
-		return is_null($this->end);
+		return !is_null($this->end);
 	}
 
 }

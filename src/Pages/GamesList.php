@@ -3,6 +3,7 @@
 namespace App\Pages;
 
 use App\Core\Page;
+use App\Core\Request;
 
 class GamesList extends Page
 {
@@ -14,7 +15,7 @@ class GamesList extends Page
 		$this->view('pages/dashboard/index');
 	}
 
-	public function game() : void {
+	public function game(Request $request) : void {
 		$this->view('pages/dashboard/index');
 	}
 

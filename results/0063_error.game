@@ -33,7 +33,6 @@ PACK{6,azrael,1,0,0,0,0}#
 PACK{8,vtipalek,0,0,0,0,0}#
 PACK{9,spinkal,2,0,0,0,0}#
 PACK{10,mrzout,1,0,0,0,0}#
-TEAM{0,Red team,1}#
 TEAM{1,Green team,2}#
 
 PACKX{1,50,12,1,1,2,,12}#

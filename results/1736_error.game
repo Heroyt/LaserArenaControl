@@ -1,5 +1,5 @@
 SITE{53874,0504011,EVO-5 MAXX}#
-GAME{733,20200303181503,20200303182303,10}#
+GAME{733,,20200303181503,20200303182303,10}#
 TIMING{40, 10, 5, 20200303181543,20200303182258,20200303182303}#
 STYLE{3-TEAM-Chra� VIP,1 hrac z kazd�ho t�mu je oznacen jako VIP. VIP m� 10 n�boj�� 5 zivotu a pokud nekoho tref�� sebere mu vsechny zivoty. C�lem je zabit protejsiho VIP.,1,10, 0}#
 STYLEX{5,999,25,5135,5135}#
@@ -26,7 +26,7 @@ MINESTYLE{6,0,2,6,Mina}#
 MINESTYLE{7,0,2,6,Mina}#
 
 GROUP{,}#
-PACK{1,Chmelda,2,0,0,0,0}#
+PACK{1,Chmelda,2,0,0,0,0,}#
 PACK{2,Vojta,3,0,0,0,0}#
 PACK{3,Dave,3,0,0,0,0}#
 PACK{4,Rysa,2,0,0,0,0}#

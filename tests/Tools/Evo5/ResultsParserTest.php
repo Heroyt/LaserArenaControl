@@ -3,6 +3,7 @@
 namespace Tools\Evo5;
 
 use App\Exceptions\FileException;
+use App\Exceptions\ResultsParseException;
 use App\Models\Game\Evo5\Game;
 use App\Models\Game\Evo5\Player;
 use App\Models\Game\Evo5\Team;
@@ -33,6 +34,7 @@ class ResultsParserTest extends TestCase
 	 * @dataProvider getFiles
 	 */
 	public function testParser(string $file) : void {
+		echo 'File: '.$file.PHP_EOL;
 		$parser = new ResultsParser($file);
 		$game = $parser->parse();
 		if (!$game->isFinished()) {
@@ -83,10 +85,16 @@ class ResultsParserTest extends TestCase
 	 *
 	 * @throws FileException
 	 */
-	/*public function testParserError(string $file) : void {
+	public function testParserError(string $file) : void {
 		$parser = new ResultsParser($file);
 		$this->expectException(ResultsParseException::class);
+		echo 'File: '.$file.PHP_EOL;
 		$game = $parser->parse();
-	}*/
+	}
+
+	public function testUnknownFile() : void {
+		$this->expectException(FileException::class);
+		$parser = new ResultsParser(ROOT.'invalidFile');
+	}
 
 }

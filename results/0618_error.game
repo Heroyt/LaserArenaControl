@@ -26,14 +26,13 @@ MINESTYLE{6,0,0,0,Unnamed Unit}#
 MINESTYLE{7,0,0,0,Unnamed Unit}#
 
 GROUP{,}#
-PACK{1,nìkdo,1,0,0,0,0}#
+PACK{1,nï¿½kdo,1,0,0,0,0}#
 PACK{2,nejaky,0,0,0,0,0}#
 PACK{3,nic,1,0,0,0,0}#
 PACK{5,none,1,0,0,0,0}#
 PACK{6,nejaky,0,0,0,0,0}#
 PACK{7,obdasek,1,0,0,0,0}#
 PACK{9,Roman,2,0,0,0,0}#
-TEAM{1,Green team,1}#
 
 PACKX{1,0,25,0,0,1,,16}#
 PACKY{1,0,0,0,0,9974,0,0,0,0,0,0,0,0,0,0,1,516,0,0,0,0,0}#

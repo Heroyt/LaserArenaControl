@@ -1,7 +1,7 @@
 SITE{53874,0504011,EVO-5 MAXX}#
 GAME{753,,20200304195751,20000101000000,0}#
 TIMING{20, 15, 5, 20200304195811,20200304195954,20200304195959}#
-STYLE{3-TEAM-Barvičky,Po 2 smrtích se hrác zmení tym na toho, kdo ho trefil.,1,15, 0}#
+STYLE{3-TEAM-Barvičky,Po 2 smrtích se hrác zmení tym na toho kdo ho trefil.,1,15, 0}#
 STYLEX{5,2539,999,5135,5135}#
 STYLELEDS{1,15,15,15,15,15,1,6,1,0,15}#
 STYLEFLAGS{0,0,1,1,0,1,0,1,0,1,0,1,0,1,1,1,1,1,0,0,1,1,0,1,1,1,0}#

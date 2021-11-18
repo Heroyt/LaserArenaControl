@@ -42,6 +42,7 @@ class ResultsParser extends AbstractResultsParser
 		$currKey = 1;
 		foreach ($titles as $key => $title) {
 			$args = $this->getArgs($argsAll[$key]);
+			$argsCount = count($args);
 			switch ($title) {
 				case 'SITE':
 					if ($args[2] !== 'EVO-5 MAXX') {
@@ -49,6 +50,9 @@ class ResultsParser extends AbstractResultsParser
 					}
 					break;
 				case 'GAME':
+					if ($argsCount !== 5) {
+						throw new ResultsParseException('Invalid argument count in GAME');
+					}
 					[$gameNumber, $a, $dateStart, $dateEnd, $playerCount] = $args;
 					$game->gameNumber = (int) $gameNumber;
 					$game->playerCount = (int) $playerCount;
@@ -62,19 +66,31 @@ class ResultsParser extends AbstractResultsParser
 					}
 					break;
 				case 'TIMING':
+					if ($argsCount !== 6 && $argsCount !== 5) {
+						throw new ResultsParseException('Invalid argument count in TIMING');
+					}
 					$game->timing = new Timing(before: $args[0], gameLength: $args[1], after: $args[2]);
 					break;
 				case 'STYLE':
+					if ($argsCount !== 5 && $argsCount !== 4) {
+						throw new ResultsParseException('Invalid argument count in STYLE');
+					}
 					$game->modeName = $args[0];
 					$game->mode = GameModeFactory::find($args[0], (int) $args[2], 'Evo5');
 					break;
 				case 'SCORING':
+					if ($argsCount !== 16 && $argsCount !== 14) {
+						throw new ResultsParseException('Invalid argument count in SCORING');
+					}
 					$game->scoring = new Scoring(...$args);
 					break;
 				case 'GROUP':
 					// TODO: Maybe parse additional info
 					break;
 				case 'PACK':
+					if ($argsCount !== 4 && $argsCount !== 7) {
+						throw new ResultsParseException('Invalid argument count in PACK');
+					}
 					$player = new Player();
 					$game->getPlayers()->set($player, $args[0]);
 					$player->setGame($game);
@@ -84,12 +100,12 @@ class ResultsParser extends AbstractResultsParser
 					$player->teamNum = $args[2];
 					break;
 				case 'TEAM':
+					if ($argsCount !== 3) {
+						throw new ResultsParseException('Invalid argument count in TEAM');
+					}
 					$team = new Team();
 					$game->getTeams()->set($team, $args[0]);
 					$team->setGame($game);
-					if (!isset($player)) {
-						throw new ResultsParseException('Cannot find Team - '.json_encode($args[0], JSON_THROW_ON_ERROR).PHP_EOL.$this->fileName.':'.PHP_EOL.$this->fileContents);
-					}
 					$team->name = $args[1];
 					$team->color = $args[0];
 					$team->playerCount = $args[2];
@@ -100,6 +116,9 @@ class ResultsParser extends AbstractResultsParser
 					}
 					break;
 				case 'PACKX':
+					if ($argsCount !== 7 && $argsCount !== 8) {
+						throw new ResultsParseException('Invalid argument count in PACKX');
+					}
 					/** @var Player $player */
 					$player = $game->getPlayers()->get($args[0]);
 					if (!isset($player)) {
@@ -112,6 +131,9 @@ class ResultsParser extends AbstractResultsParser
 					$player->position = $args[5];
 					break;
 				case 'PACKY':
+					if ($argsCount !== 16 && $argsCount !== 22 && $argsCount !== 23) {
+						throw new ResultsParseException('Invalid argument count in PACKY');
+					}
 					/** @var Player $player */
 					$player = $game->getPlayers()->get($args[0]);
 					if (!isset($player)) {
@@ -134,15 +156,21 @@ class ResultsParser extends AbstractResultsParser
 					$player->deathsOwn = $args[15] ?? 0;
 					break;
 				case 'TEAMX':
+					if ($argsCount !== 3) {
+						throw new ResultsParseException('Invalid argument count in TEAMX');
+					}
 					/** @var Team $team */
 					$team = $game->getTeams()->get($args[0]);
-					if (!isset($player)) {
+					if (!isset($team)) {
 						throw new ResultsParseException('Cannot find Team - '.json_encode($args[0], JSON_THROW_ON_ERROR).PHP_EOL.$this->fileName.':'.PHP_EOL.$this->fileContents);
 					}
 					$team->score = $args[1];
 					$team->position = $args[2];
 					break;
 				case 'HITS':
+					if ($argsCount < 2) {
+						throw new ResultsParseException('Invalid argument count in HITS');
+					}
 					/** @var Player $player */
 					$player = $game->getPlayers()->get($args[0]);
 					if (!isset($player)) {

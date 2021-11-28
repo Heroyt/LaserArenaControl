@@ -71,6 +71,40 @@ class Request
 
 	protected function parseStringQuery(string $query) : void {
 		$url = parse_url($query);
+		$filePath = ROOT.substr($url['path'], 1);
+		if (file_exists($filePath) && is_file($filePath)) {
+			$extension = pathinfo($filePath, PATHINFO_EXTENSION);
+			if ($extension !== 'php') {
+				switch ($extension) {
+					case 'css':
+						$mime = 'text/css';
+						break;
+					case 'scss':
+						$mime = 'text/x-scss';
+						break;
+					case 'sass':
+						$mime = 'text/x-sass';
+						break;
+					case 'csv':
+						$mime = 'text/csv';
+						break;
+					case 'css.map':
+					case 'js.map':
+					case 'map':
+					case 'json':
+						$mime = 'application/json';
+						break;
+					case 'js':
+						$mime = 'text/javascript';
+						break;
+					default:
+						$mime = mime_content_type($filePath);
+						break;
+				}
+				header('Content-Type: '.$mime);
+				exit(file_get_contents($filePath));
+			}
+		}
 		$this->parseArrayQuery(array_filter(explode('/', $url['path']), static function($a) {
 			return !empty($a);
 		}));

@@ -1,6 +1,13 @@
 {
 	"name": "heroyt/laser-arena-control",
 	"type": "project",
+	"scripts": {
+		"serve": "php -S localhost:8000 index.php",
+		"test": "./vendor/bin/phpunit",
+		"docs": "doxygen",
+		"build-production": "composer update --no-dev && composer dump-autoload --no-dev && npm install && npm run buildDev",
+		"build": "composer update && composer dump-autoload && npm install && npm run build"
+	},
 	"require": {
 		"dibi/dibi": "^4.2",
 		"latte/latte": "^2.10",
@@ -14,7 +21,8 @@
 		"ext-gettext": "*",
 		"nette/di": "^3.0",
 		"ext-mbstring": "*",
-		"ext-sockets": "*"
+		"ext-sockets": "*",
+		"ext-fileinfo": "*"
 	},
 	"require-dev": {
 		"roave/security-advisories": "dev-latest",

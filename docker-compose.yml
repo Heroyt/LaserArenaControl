@@ -1,0 +1,15 @@
+services:
+    web:
+        build: .
+        ports:
+            - "1234:80"
+        links:
+            - "db"
+    db:
+        image: "mariadb:latest"
+        ports:
+            - "3307:3306"
+        environment:
+            MARIADB_ROOT_PASSWORD: ""
+            MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: "yes"
+            MARIADB_DATABASE: "lac"

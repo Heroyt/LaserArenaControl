@@ -49,4 +49,8 @@ class Player extends \App\Models\Game\Player
 	public int         $deathsOwn   = 0;
 	public int         $deathsOther = 0;
 
+	public function getMines() : int {
+		return $this->bonus->getSum();
+	}
+
 }

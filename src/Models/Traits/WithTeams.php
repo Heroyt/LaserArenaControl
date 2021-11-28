@@ -13,8 +13,10 @@ trait WithTeams
 	/** @var Team */
 	protected string $teamClass;
 
-	/** @var TeamCollection */
+	/** @var TeamCollection|Team[] */
 	protected TeamCollection $teams;
+	/** @var TeamCollection|Team[] */
+	protected TeamCollection $teamsSorted;
 
 	public function addTeam(Team ...$teams) : static {
 		if (!isset($this->teams)) {
@@ -24,12 +26,36 @@ trait WithTeams
 		return $this;
 	}
 
+	/**
+	 * @return TeamCollection|Team[]
+	 */
+	public function getTeamsSorted() : TeamCollection {
+		if (empty($this->teamsSorted)) {
+			$this->teamsSorted = $this
+				->getTeams()
+				->query()
+				->sortBy('score')
+				->desc()
+				->get();
+		}
+		return $this->teamsSorted;
+	}
+
+	/**
+	 * @return TeamCollection|Team[]
+	 */
+	public function getTeams() : TeamCollection {
+		if (!isset($this->teams)) {
+			$this->loadTeams();
+		}
+		return $this->teams;
+	}
 
 	public function loadTeams() : TeamCollection {
 		if (!isset($this->teams)) {
 			$this->teams = new TeamCollection();
 		}
-		$className = $this->teamClass;
+		$className = preg_replace('/(.+)Game$/', '${1}Team', get_class($this));
 		$primaryKey = $className::PRIMARY_KEY;
 		$rows = DB::select($className::TABLE, '*')->where('%n = %i', $this::PRIMARY_KEY, $this->id)->fetchAll();
 		foreach ($rows as $row) {
@@ -39,16 +65,6 @@ trait WithTeams
 				$team->setGame($this);
 			}
 			$this->teams->set($team, $team->color);
-		}
-		return $this->teams;
-	}
-
-	/**
-	 * @return TeamCollection
-	 */
-	public function getTeams() : TeamCollection {
-		if (!isset($this->teams)) {
-			$this->loadTeams();
 		}
 		return $this->teams;
 	}

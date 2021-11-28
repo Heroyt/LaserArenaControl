@@ -8,6 +8,7 @@ use App\Core\Interfaces\InsertExtendInterface;
 use App\Models\Game\GameModes\AbstractMode;
 use App\Models\Traits\WithPlayers;
 use App\Models\Traits\WithTeams;
+use App\Tools\Strings;
 use DateTimeInterface;
 use Dibi\Row;
 
@@ -16,6 +17,7 @@ abstract class Game extends AbstractModel implements InsertExtendInterface
 	use WithPlayers;
 	use WithTeams;
 
+	public const SYSTEM      = '';
 	public const PRIMARY_KEY = 'id_game';
 	public const DEFINITION  = [
 		'start'   => [],
@@ -70,6 +72,51 @@ abstract class Game extends AbstractModel implements InsertExtendInterface
 
 	public function isFinished() : bool {
 		return !is_null($this->end);
+	}
+
+	/**
+	 * @param string $property
+	 *
+	 * @return Player
+	 */
+	public function getBestPlayer(string $property) : Player {
+		$query = $this->getPlayers()->query()->sortBy($property);
+		switch ($property) {
+			case 'shots':
+				$query->asc();
+				break;
+			default:
+				$query->desc();
+				break;
+		}
+		return $query->first();
+	}
+
+	/**
+	 * @return array<string,string>
+	 */
+	public function getBestsFields() : array {
+		$fields = [
+			'hits'     => lang('Největší terminátor', context: 'results'),
+			'deaths'   => lang('Objekt největšího zájmu', context: 'results'),
+			'score'    => lang('Absoltní vítěz', context: 'results'),
+			'accuracy' => lang('Hráč s nejlepší muškou', context: 'results'),
+			'shots'    => lang('Nejúspornější střelec', context: 'results'),
+			'miss'     => lang('Největší mimoň', context: 'results'),
+		];
+		bdump($this->mode->settings);
+		foreach ($fields as $key => $value) {
+			$settingName = Strings::toCamelCase('best_'.$key);
+			bdump($settingName);
+			if (!($this->mode->settings->$settingName ?? true)) {
+				unset($fields[$key]);
+			}
+		}
+		return $fields;
+	}
+
+	public function getTeamColors() : array {
+		return [];
 	}
 
 }

@@ -61,4 +61,49 @@ abstract class Team extends AbstractModel implements InsertExtendInterface
 		return parent::save();
 	}
 
+	/**
+	 * @return int
+	 */
+	public function getShots() : int {
+		$sum = 0;
+		foreach ($this->getPlayers() as $player) {
+			$sum += $player->shots;
+		}
+		return $sum;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getHits() : int {
+		$sum = 0;
+		foreach ($this->getPlayers() as $player) {
+			$sum += $player->hits;
+		}
+		return $sum;
+	}
+
+	public function getAccuracy() : float {
+		return round(100 * $this->getHits() / $this->getShots(), 2);
+	}
+
+	/**
+	 * @param Team $team
+	 *
+	 * @return int
+	 * @throws DirectoryCreationException
+	 * @throws ModelNotFoundException
+	 */
+	public function getHitsTeam(Team $team) : int {
+		$sum = 0;
+		foreach ($this->getPlayers() as $player) {
+			foreach ($player->getHitsPlayers() as $hits) {
+				if ($hits->playerTarget->getTeam()->color === $team->color) {
+					$sum += $hits->count;
+				}
+			}
+		}
+		return $sum;
+	}
+
 }

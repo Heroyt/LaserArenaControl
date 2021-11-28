@@ -9,6 +9,7 @@ use App\Models\Game\Timing;
 class Game extends \App\Models\Game\Game
 {
 
+	public const SYSTEM     = 'evo5';
 	public const TABLE      = 'evo5_games';
 	public const DEFINITION = [
 		'fileNumber' => [],
@@ -37,6 +38,7 @@ class Game extends \App\Models\Game\Game
 
 	protected string $playerClass = Player::class;
 	protected string $teamClass   = Team::class;
+	protected bool   $minesOn;
 
 	public function insert() : bool {
 		$this->logger->info('Inserting game: '.$this->fileNumber);
@@ -45,5 +47,53 @@ class Game extends \App\Models\Game\Game
 
 	public function save() : bool {
 		return parent::save() && $this->saveTeams() && $this->savePlayers();
+	}
+
+	/**
+	 * Check if mines were enabled
+	 *
+	 * Checks players until it finds one with some mine-related scores.
+	 *
+	 * @return bool
+	 */
+	public function isMinesOn() : bool {
+		if (!isset($this->minesOn)) {
+			$this->minesOn = false;
+			/** @var Player $player */
+			foreach ($this->getPlayers() as $player) {
+				if ($player->minesHits !== 0 || $player->scoreMines !== 0 || $player->bonus->getSum() > 0) {
+					$this->minesOn = true;
+					break;
+				}
+			}
+		}
+		return $this->minesOn;
+	}
+
+	public function getBestsFields() : array {
+		$info = parent::getBestsFields();
+		if ($this->mode->isTeam()) {
+			if ($this->mode->settings->bestHitsOwn) {
+				$info['hitsOwn'] = lang('Zabiják vlastního týmu', context: 'results');
+			}
+			if ($this->mode->settings->bestDeathsOwn) {
+				$info['deathsOwn'] = lang('Největší vlastňák', context: 'results');
+			}
+		}
+		if ($this->mode->settings->bestMines && $this->mode->settings->mines && $this->isMinesOn()) {
+			$info['mines'] = lang('Drtič min', context: 'results');
+		}
+		return $info;
+	}
+
+	public function getTeamColors() : array {
+		return [
+			0 => '#f00',
+			1 => '#0F0',
+			2 => '#00f',
+			3 => '#ffc0cb',
+			4 => '#ff0',
+			5 => '#0ff',
+		];
 	}
 }

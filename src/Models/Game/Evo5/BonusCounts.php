@@ -37,4 +37,8 @@ class BonusCounts implements InsertExtendInterface
 		$data['bonus_machine_gun'] = $this->machineGun;
 		$data['bonus_shield'] = $this->shield;
 	}
+
+	public function getSum() : int {
+		return $this->agent + $this->invisibility + $this->machineGun + $this->shield;
+	}
 }

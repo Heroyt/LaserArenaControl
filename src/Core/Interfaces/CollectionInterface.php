@@ -63,4 +63,11 @@ interface CollectionInterface extends ArrayAccess, JsonSerializable, Countable, 
 	 */
 	public function sort(callable $callback) : CollectionInterface;
 
+	/**
+	 * Get first object in collection
+	 *
+	 * @return AbstractModel|null
+	 */
+	public function first() : ?AbstractModel;
+
 }

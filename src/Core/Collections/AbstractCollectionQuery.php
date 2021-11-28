@@ -182,4 +182,24 @@ abstract class AbstractCollectionQuery implements CollectionQueryInterface
 		return $this;
 	}
 
+	/**
+	 * Set sort direction in ascending order
+	 *
+	 * @return CollectionQueryInterface
+	 */
+	public function asc() : CollectionQueryInterface {
+		$this->sortDirection = Constants::SORT_ASC;
+		return $this;
+	}
+
+	/**
+	 * Set sort direction in descending order
+	 *
+	 * @return CollectionQueryInterface
+	 */
+	public function desc() : CollectionQueryInterface {
+		$this->sortDirection = Constants::SORT_DESC;
+		return $this;
+	}
+
 }

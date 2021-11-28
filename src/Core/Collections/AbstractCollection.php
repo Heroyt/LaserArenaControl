@@ -95,6 +95,18 @@ abstract class AbstractCollection implements CollectionInterface
 	}
 
 	/**
+	 * Get first object in collection
+	 *
+	 * @return AbstractModel|null
+	 */
+	public function first() : ?AbstractModel {
+		foreach ($this->data as $object) {
+			return $object;
+		}
+		return null;
+	}
+
+	/**
 	 * Add new data to collection
 	 *
 	 * @details Checks value's type and uniqueness
@@ -287,7 +299,8 @@ abstract class AbstractCollection implements CollectionInterface
 	 * @return string
 	 */
 	public function getType() : string {
-		return $this->type;
+		$first = $this->first();
+		return isset($first) ? get_class($first) : $this->type;
 	}
 
 	/**

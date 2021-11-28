@@ -68,4 +68,18 @@ interface CollectionQueryInterface
 	 */
 	public function map(callable $callback) : CollectionQueryInterface;
 
+	/**
+	 * Set sort direction in ascending order
+	 *
+	 * @return CollectionQueryInterface
+	 */
+	public function asc() : CollectionQueryInterface;
+
+	/**
+	 * Set sort direction in descending order
+	 *
+	 * @return CollectionQueryInterface
+	 */
+	public function desc() : CollectionQueryInterface;
+
 }

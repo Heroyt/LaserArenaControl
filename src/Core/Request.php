@@ -19,6 +19,10 @@ class Request
 	public array     $post            = [];
 	public array     $get             = [];
 	public array     $request         = [];
+	public array     $errors          = [];
+	public array     $notices         = [];
+	public array     $passErrors      = [];
+	public array     $passNotices     = [];
 	public ?Request  $previousRequest = null;
 	protected ?Route $route           = null;
 
@@ -39,6 +43,8 @@ class Request
 		if (isset($_SESSION['fromRequest'])) {
 			$this->previousRequest = unserialize($_SESSION['fromRequest'], [__CLASS__]);
 			unset($_SESSION['fromRequest']);
+			$this->errors = array_merge($this->previousRequest->passErrors, $this->errors);
+			$this->notices = array_merge($this->previousRequest->passNotices, $this->notices);
 		}
 		if (str_contains($_SERVER['CONTENT_TYPE'] ?? '', 'application/json')) {
 			$input = fopen("php://input", 'rb');

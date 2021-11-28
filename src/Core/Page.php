@@ -58,7 +58,8 @@ abstract class Page
 		$this->request = $request;
 		$this->params['page'] = $this;
 		$this->params['request'] = $request;
-		$this->params['errors'] = [];
+		$this->params['errors'] = $request->errors;
+		$this->params['notices'] = $request->notices;
 	}
 
 	/**

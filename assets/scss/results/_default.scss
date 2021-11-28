@@ -1,0 +1,163 @@
+.template-default {
+	--font-size: 6pt;
+	--size: 9pt;
+	align-items: center;
+	display: grid;
+	grid-gap: 1rem;
+	grid-template-areas:
+		 "info qr"
+		 "scores scores"
+		 "players players"
+		 "today today"
+		 "hits teams"
+		 "hits bests";
+	grid-template-columns: 1fr 2fr;
+	grid-template-rows: auto;
+	justify-content: start;
+
+	> * {
+		max-width: 100%;
+	}
+
+	* {
+		font-size: var(--font-size);
+	}
+
+	.team-color {
+		border-radius: 50%;
+		display: inline-block;
+		height: var(--size);
+		margin-bottom: calc(var(--size) / -4);
+		position: relative;
+		width: var(--size);
+	}
+
+	.results-header {
+		grid-area: info;
+		max-width: 20cm;
+		width: 100%;
+
+		td,
+		th {
+			border: none;
+			padding: .3rem .5rem;
+			text-align: left;
+		}
+	}
+
+	th,
+	td {
+		border: 1px solid var(--print-dark);
+		padding: .3rem;
+		text-align: center;
+		vertical-align: middle;
+		word-break: break-word;
+	}
+
+	table {
+		caption-side: top;
+		max-width: 100%;
+	}
+
+	caption,
+	.caption {
+		color: var(--print-primary);
+		font-size: calc(var(--size) * 1.1);
+		font-weight: bold;
+		padding: .4rem 0;
+	}
+
+	table:not(.colorless) {
+		border-collapse: collapse;
+
+		th {
+			background-color: var(--print-dark);
+			border: 1px solid var(--print-dark-text);
+			color: var(--print-dark-text);
+		}
+
+		tr:nth-child(even) td {
+			background-color: var(--print-light);
+			color: var(--print-light-text);
+		}
+	}
+
+	.results-scoring {
+		grid-area: scores;
+
+		td, th {
+			padding: .1rem;
+		}
+	}
+
+	.results-hits {
+		--size-x: 5rem;
+		--size-y: calc(var(--size-x) / 3);
+
+		grid-area: hits;
+		table-layout: fixed;
+
+		thead {
+			th {
+				height: var(--size-x);
+				position: relative;
+				width: var(--size-y);
+
+				.rotate-90 {
+					height: var(--size-y);
+					line-height: var(--size-y);
+					width: var(--size-x);
+				}
+			}
+
+			th:nth-child(1) {
+				width: var(--size-x);
+			}
+		}
+	}
+
+	.results-teams {
+		grid-area: teams;
+	}
+
+	.results-players {
+		grid-area: players;
+
+		td {
+			max-width: 100pt;
+		}
+
+		tbody th {
+			text-align: left;
+		}
+	}
+
+	.results-bests {
+		grid-area: bests;
+
+		.w-100 {
+			border: 1px solid var(--print-dark);
+
+			> div {
+				border: 1px solid var(--print-dark);
+			}
+
+			div.w-50 {
+				line-height: var(--size);
+			}
+		}
+	}
+
+	.results-today {
+		grid-area: today;
+	}
+
+	.rotate-90 {
+		left: 0;
+		position: absolute;
+		top: 0;
+		transform: rotate(90deg) translate(var(--size-y), var(--size-y));
+		z-index: 2;
+	}
+
+}

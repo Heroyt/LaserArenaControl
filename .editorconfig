@@ -12,9 +12,11 @@ tab_width = 4
 
 [*.sass]
 indent_size = 2
+tab_width = 2
 
 [*.scss]
 indent_size = 2
+tab_width = 2
 
 [{*.bplist,*.dist,*.har,*.jsb2,*.jsb3,*.json,.babelrc,.eslintrc,.stylelintrc,StoreLocator.mdj,bowerrc,composer.lock,jest.config}]
 indent_size = 2

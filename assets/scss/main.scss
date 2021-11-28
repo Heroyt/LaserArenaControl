@@ -5,6 +5,8 @@
 @import '~bootstrap/scss/variables';
 @import '~bootstrap/scss/mixins';
 
+@import 'maps';
+
 // Utilities
 @import '~bootstrap/scss/utilities';
 
@@ -45,8 +47,20 @@
 // BS Utilities
 @import '~bootstrap/scss/utilities/api';
 
+// Core items
+@import 'animations';
+
 // Utilities
+@import 'utilities/text';
+@import 'utilities/border';
+@import 'utilities/background';
+@import 'utilities/filling';
+@import 'utilities/headings';
 
 // Components
 
 // Pages
+
+// Results
+@import 'results/general';
+@import 'results/default';

@@ -9,9 +9,13 @@ use App\Logging\DirectoryCreationException;
 use App\Logging\Logger;
 use App\Tools\Strings;
 use ArrayAccess;
+use DateInterval;
+use DateTime;
+use DateTimeInterface;
 use Dibi\Exception;
 use Dibi\Row;
 use JsonSerializable;
+use RuntimeException;
 
 abstract class AbstractModel implements JsonSerializable, ArrayAccess
 {
@@ -23,8 +27,11 @@ abstract class AbstractModel implements JsonSerializable, ArrayAccess
 
 	];
 
+	/** @var AbstractModel[][] */
+	protected static array $instances = [];
+
 	public ?int      $id = null;
-	protected Row    $row;
+	protected ?Row   $row;
 	protected Logger $logger;
 
 	/**
@@ -34,37 +41,14 @@ abstract class AbstractModel implements JsonSerializable, ArrayAccess
 	 * @throws ModelNotFoundException|DirectoryCreationException
 	 */
 	public function __construct(?int $id = null, ?Row $dbRow = null) {
+		if (!isset(self::$instances[$this::TABLE])) {
+			self::$instances[$this::TABLE] = [];
+		}
 		if (isset($id) && !empty($this::TABLE)) {
-			if (!isset($dbRow)) {
-				/** @noinspection CallableParameterUseCaseInTypeContextInspection */
-				$dbRow = DB::select($this::TABLE, '*')->where('%n = %i', $this::PRIMARY_KEY, $id)->fetch();
-			}
-			if (!isset($dbRow)) {
-				throw new ModelNotFoundException(get_class($this).' model of ID '.$id.' was not found.');
-			}
+			$this->id = $id;
 			$this->row = $dbRow;
-			foreach ($dbRow as $key => $val) {
-				if ($key === $this::PRIMARY_KEY) {
-					$this->id = $val;
-				}
-				if (property_exists($this, $key)) {
-					$this->$key = $val;
-					continue;
-				}
-				$key = Strings::toCamelCase($key);
-				if (property_exists($this, $key)) {
-					$this->$key = $val;
-				}
-			}
-			foreach ($this::DEFINITION as $key => $definition) {
-				$className = $definition['class'] ?? '';
-				if (property_exists($this, $key) && !empty($className)) {
-					$implements = class_implements($className);
-					if (isset($implements[InsertExtendInterface::class])) {
-						$this->$key = $className::parseRow($this->row);
-					}
-				}
-			}
+			$this->fetch();
+			self::$instances[$this::TABLE][$this->id] = $this;
 		}
 		else {
 			foreach ($this::DEFINITION as $key => $definition) {
@@ -75,6 +59,87 @@ abstract class AbstractModel implements JsonSerializable, ArrayAccess
 			}
 		}
 		$this->logger = new Logger(LOG_DIR.'models/', $this::TABLE);
+	}
+
+	/**
+	 * Fetch model's data from DB
+	 *
+	 * @throws ModelNotFoundException
+	 */
+	public function fetch(bool $refresh = false) : void {
+		if (!isset($this->id) || $this->id <= 0) {
+			throw new RuntimeException('Id needs to be set before fetching model\'s data.');
+		}
+		if ($refresh || !isset($this->row)) {
+			$this->row = DB::select($this::TABLE, '*')->where('%n = %i', $this::PRIMARY_KEY, $this->id)->fetch();
+		}
+		if (!isset($this->row)) {
+			throw new ModelNotFoundException(get_class($this).' model of ID '.$this->id.' was not found.');
+		}
+		foreach ($this->row as $key => $val) {
+			if ($key === $this::PRIMARY_KEY) {
+				$this->id = $val;
+			}
+			if (property_exists($this, $key)) {
+				if ($val instanceof DateInterval && isset($this::DEFINITION[$key]['class']) && $this::DEFINITION[$key]['class'] === DateTimeInterface::class) {
+					$val = new DateTime($val->format('%H:%i:%s'));
+				}
+				$this->$key = $val;
+				continue;
+			}
+			$key = Strings::toCamelCase($key);
+			if (property_exists($this, $key)) {
+				if ($val instanceof DateInterval && isset($this::DEFINITION[$key]['class']) && $this::DEFINITION[$key]['class'] === DateTimeInterface::class) {
+					$val = new DateTime($val->format('%H:%i:%s'));
+				}
+				$this->$key = $val;
+			}
+		}
+		foreach ($this::DEFINITION as $key => $definition) {
+			$className = $definition['class'] ?? '';
+			if (property_exists($this, $key) && !empty($className)) {
+				$implements = class_implements($className);
+				if (isset($implements[InsertExtendInterface::class])) {
+					$this->$key = $className::parseRow($this->row);
+				}
+			}
+		}
+	}
+
+	/**
+	 * Checks if a model with given ID exists in database
+	 *
+	 * @param int $id
+	 *
+	 * @return bool
+	 */
+	public static function exists(int $id) : bool {
+		$test = DB::select(static::TABLE, 'count(*)')->where('%n = %i', static::PRIMARY_KEY, $id)->fetchSingle();
+		return $test > 0;
+	}
+
+	/**
+	 * Get all models
+	 *
+	 * @return AbstractModel[]
+	 */
+	public static function getAll() : array {
+		return static::query()->get();
+	}
+
+	public static function query() : ModelQuery {
+		return new ModelQuery(static::class);
+	}
+
+	/**
+	 * @param int $id
+	 *
+	 * @return AbstractModel
+	 * @throws DirectoryCreationException
+	 * @throws ModelNotFoundException
+	 */
+	public static function get(int $id) : AbstractModel {
+		return self::$instances[self::TABLE][$id] ?? new static($id);
 	}
 
 	/**
@@ -150,6 +215,7 @@ abstract class AbstractModel implements JsonSerializable, ArrayAccess
 			$this->logger->error('Insert query passed, but ID was not returned.');
 			return false;
 		}
+		self::$instances[$this::TABLE][$this->id] = $this;
 		return true;
 	}
 
@@ -195,6 +261,23 @@ abstract class AbstractModel implements JsonSerializable, ArrayAccess
 	 */
 	public function offsetUnset($offset) : void {
 		// Do nothing
+	}
+
+	/**
+	 * Delete model from DB
+	 *
+	 * @return bool
+	 */
+	public function delete() : bool {
+		$this->logger->info('Delete model: '.$this::TABLE.' of ID: '.$this->id);
+		try {
+			DB::delete($this::TABLE, ['%n = %i', $this::PRIMARY_KEY, $this->id]);
+		} catch (Exception $e) {
+			$this->logger->error($e->getMessage());
+			$this->logger->debug($e->getTraceAsString());
+			return false;
+		}
+		return true;
 	}
 
 }

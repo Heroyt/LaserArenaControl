@@ -15,7 +15,6 @@ namespace App\Core;
 
 
 use App\Exceptions\TemplateDoesNotExistException;
-use JetBrains\PhpStorm\Pure;
 
 /**
  * @class   Page

@@ -69,9 +69,11 @@ class App
 	 */
 	public static function init() : void {
 		self::$logger = new Logger(LOG_DIR, 'app');
-		self::setupRoutes();
 
-		self::$request = new Request(self::$prettyUrl ? $_SERVER['REQUEST_URI'] : ($_GET['p'] ?? []));
+		if (PHP_SAPI !== "cli") {
+			self::setupRoutes();
+			self::$request = new Request(self::$prettyUrl ? $_SERVER['REQUEST_URI'] : ($_GET['p'] ?? []));
+		}
 
 		$loader = new ContainerLoader(TMP_DIR);
 		$class = $loader->load(function(Compiler $compiler) {

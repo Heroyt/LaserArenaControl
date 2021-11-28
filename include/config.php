@@ -22,6 +22,13 @@ const UPLOAD_DIR = ROOT.'upload/';
 /** Directory for files hidden from the user */
 const PRIVATE_DIR = ROOT.'private/';
 const LANGUAGE_DIR = ROOT.'languages/';
+/** App's default language */
+const DEFAULT_LANGUAGE = 'cs';
+/** Suffixes for language translations */
+const LANGUAGE_SUFFIXES = [
+	'cs' => 'CZ',
+	'en' => 'US',
+];
 
 /** If in production */
 define('PRODUCTION', App::isProduction());

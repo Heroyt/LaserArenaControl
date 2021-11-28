@@ -80,7 +80,7 @@ class App
 		self::$container = new $class;
 
 		// Set language and translations
-		$language = Language::getById($_SERVER['HTTP_ACCEPT_LANGUAGE'] ?? 'cs_CZ');
+		$language = Language::getById($_SERVER['HTTP_ACCEPT_LANGUAGE'] ?? DEFAULT_LANGUAGE.'_'.LANGUAGE_SUFFIXES[DEFAULT_LANGUAGE] ?? '');
 		date_default_timezone_set(self::getTimezone());
 		if (isset($language)) {
 			setlocale(LC_ALL, $language->id.'.UTF-8');

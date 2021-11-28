@@ -5,6 +5,7 @@ namespace App\Core\Routing;
 
 
 use App\Core\Request;
+use App\Exceptions\TemplateDoesNotExistException;
 use InvalidArgumentException;
 
 class Route
@@ -144,6 +145,7 @@ class Route
 				continue;
 			}
 
+			// TODO: Optional params? "[param]"
 			$paramRoutes = array_filter($routes, static function(string $key) {
 				return preg_match('/({[^}]+})/', $key) > 0;
 			},                          ARRAY_FILTER_USE_KEY);
@@ -195,7 +197,11 @@ class Route
 				}
 
 				$page->init($request);
-				$page->$func($request);
+				try {
+					$page->$func($request);
+				} catch (TemplateDoesNotExistException $e) {
+					view('undefinedTemplate');
+				}
 			}
 		}
 		else {

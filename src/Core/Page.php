@@ -14,6 +14,7 @@
 namespace App\Core;
 
 
+use App\Exceptions\TemplateDoesNotExistException;
 use JetBrains\PhpStorm\Pure;
 
 /**
@@ -84,6 +85,11 @@ abstract class Page
 		return lang($this->description, context: 'pageDescription');
 	}
 
+	/**
+	 * @param string $template
+	 *
+	 * @throws TemplateDoesNotExistException
+	 */
 	protected function view(string $template) : void {
 		view($template, $this->params);
 	}

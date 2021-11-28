@@ -10,6 +10,7 @@
  */
 
 use App\Core\App;
+use App\Exceptions\TemplateDoesNotExistException;
 use App\Logging\Tracy\Events\TranslationEvent;
 use App\Logging\Tracy\TranslationTracyPanel;
 use Gettext\Generator\PoGenerator;
@@ -22,14 +23,14 @@ use Gettext\Translation;
  *
  * @return string
  *
- * @throws RuntimeException
+ * @throws TemplateDoesNotExistException()
  *
  * @version 0.1
  * @since   0.1
  */
 function getTemplate(string $name) : string {
 	if (!file_exists(TEMPLATE_DIR.$name.'.latte')) {
-		throw new RuntimeException('Cannot find latte template file ('.$name.')');
+		throw new TemplateDoesNotExistException('Cannot find latte template file ('.$name.')');
 	}
 	return TEMPLATE_DIR.$name.'.latte';
 }
@@ -100,6 +101,7 @@ function not_empty($var) : bool {
  * @param bool   $return   If true, returns the HTML as string
  *
  * @return string Can be empty if $return is false
+ * @throws TemplateDoesNotExistException
  */
 function view(string $template, array $params = [], bool $return = false) : string {
 	if ($return) {

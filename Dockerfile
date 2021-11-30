@@ -1,4 +1,10 @@
-FROM php:8.0-apache
+FROM node:latest AS node_base
+FROM php:8.0-apache as setup
+
+COPY --from=node_base / /
+
+# Setup
+RUN apt-get update && apt-get -y install wget git
 
 # Apache
 SHELL ["/bin/bash", "-c"]
@@ -7,11 +13,15 @@ RUN sed -e '/<Directory \/var\/www\/>/,/<\/Directory>/s/AllowOverride None/Allow
 RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
 
 # PHP extensions
+RUN apt-get install -y libzip-dev unzip
 RUN docker-php-ext-install mysqli && docker-php-ext-enable mysqli
 RUN docker-php-ext-install gettext && docker-php-ext-enable gettext
 RUN docker-php-ext-install sockets && docker-php-ext-enable sockets
 RUN docker-php-ext-install pdo_mysql && docker-php-ext-enable pdo_mysql
+RUN docker-php-ext-install zip && docker-php-ext-enable zip
 RUN apt-get update && apt-get upgrade -y
+
+FROM setup as composer
 
 # Composer
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" &&\
@@ -20,11 +30,28 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" &&
     php -r "unlink('composer-setup.php');"
 RUN mv composer.phar /usr/local/bin/composer
 
+# Node and NPM
+#RUN curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash
+#ENV NVM_DIR=/root/.nvm
+#RUN . "$NVM_DIR/nvm.sh" && nvm install node
+RUN npm -v
+RUN node -v
+
+FROM composer as project
+
 # Project files
+RUN mkdir -p "/var/www/.npm" && chown -R 33:33 "/var/www/.npm"
 USER www-data
-COPY --chown=www-data . /var/www/html
-RUN mv /var/www/html/private/docker-config.ini /var/www/html/private/config.ini
-RUN mkdir -p /var/www/html/logs
-RUN mkdir -p /var/www/html/temp
+RUN git clone https://github.com/Heroyt/LaserArenaControl.git /var/www/html/
+
+WORKDIR /var/www/html/
+
+RUN mv private/docker-config.ini private/config.ini
+RUN mkdir -p logs
+RUN mkdir -p temp
+
+RUN composer build-production
 #RUN chown -R www-data:www-data /var/www/html/
 #RUN chmod -R 0777 /var/www/html/temp && rm -R /var/www/html/temp/*
+
+CMD git pull && composer build-production

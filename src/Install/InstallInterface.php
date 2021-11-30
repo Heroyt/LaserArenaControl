@@ -10,6 +10,6 @@ interface InstallInterface
 	 *
 	 * @return bool Success
 	 */
-	public static function install() : bool;
+	public static function install(bool $fresh = false) : bool;
 
 }

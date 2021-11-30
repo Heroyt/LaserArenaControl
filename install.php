@@ -15,7 +15,7 @@ const INDEX = false;
 
 require_once ROOT."include/load.php";
 
-if (Install::install()) {
+if (Install::install(in_array('fresh', $argv ?? [], true) || isset($_GET['fresh']))) {
 	echo 'Successfully installed!'.PHP_EOL;
 	exit(0);
 }

@@ -3,18 +3,183 @@
 namespace App\Install;
 
 use App\Core\DB;
+use App\Models\Game\Evo5\Game;
+use App\Models\Game\Evo5\Player;
+use App\Models\Game\Evo5\Team;
+use App\Models\Game\PrintStyle;
 use Dibi\Exception;
 
 class DbInstall implements InstallInterface
 {
 
-	public const TABLES = [];
+	public const TABLES = [
+		'page_info'                => "(
+			`key` varchar(30) NOT NULL DEFAULT '',
+			`value` text DEFAULT NULL,
+			PRIMARY KEY (`key`)
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;",
+		'game_modes'               => "(
+			`id_mode` int(11) unsigned NOT NULL AUTO_INCREMENT,
+			`system` varchar(10) DEFAULT NULL,
+			`name` varchar(50) DEFAULT NULL,
+			`description` text DEFAULT NULL,
+			`load_name` varchar(50) DEFAULT NULL,
+			`type` enum('TEAM','SOLO') NOT NULL DEFAULT 'TEAM',
+			`public` tinyint(1) NOT NULL DEFAULT 0,
+			`win_func` varchar(30) NOT NULL DEFAULT 'win',
+			`mines` tinyint(1) NOT NULL DEFAULT 1 COMMENT 'Jestli automaticky detekovat miny nebo vůbec',
+			`part_win` tinyint(1) NOT NULL DEFAULT 1 COMMENT 'Jestli má být vložena část s tím kdo vyhrál.',
+			`part_teams` tinyint(1) NOT NULL DEFAULT 1 COMMENT 'Jestli se na výsledcích zobrazuje tabulka teamů',
+			`part_players` tinyint(1) NOT NULL DEFAULT 1 COMMENT 'Jestli se na výsledcích zobrazuje tabulka hráčů',
+			`part_hits` tinyint(1) NOT NULL DEFAULT 1 COMMENT 'Jestli se na výsledcích zobrazuje tabulka zabití',
+			`part_best` tinyint(1) NOT NULL DEFAULT 1 COMMENT 'Jestli se na výsledcích zobrazuje tabulka \"Ti nej\"',
+			`part_best_day` tinyint(1) NOT NULL DEFAULT 1,
+			`player_score` tinyint(1) NOT NULL DEFAULT 1 COMMENT 'Jestli se ve výsledcích hráče zobrazí skóre.',
+			`player_shots` tinyint(1) NOT NULL DEFAULT 1 COMMENT 'Jestli se ve výsledcích hráče zobrazí výstřely.',
+			`player_miss` tinyint(1) NOT NULL DEFAULT 1 COMMENT 'Jestli se ve výsledcích hráče zobrazí výstřely mimo.',
+			`player_accuracy` tinyint(1) NOT NULL DEFAULT 1 COMMENT 'Jestli se ve výsledcích hráče zobrazí přesnost',
+			`player_mines` tinyint(1) NOT NULL DEFAULT 1 COMMENT 'Jestli se ve výsledcích hráče zobrazí miny.',
+			`player_players` tinyint(1) NOT NULL DEFAULT 1 COMMENT 'Jestli se ve výsledcích hráče zobrazí Zásahy hráčů.',
+			`player_players_teams` tinyint(1) NOT NULL DEFAULT 1 COMMENT 'Jestli se ve výsledcích hráče zobrazí zabití na vlastní a protihráče.',
+			`team_score` tinyint(1) NOT NULL DEFAULT 1,
+			`team_accuracy` tinyint(1) NOT NULL DEFAULT 1,
+			`team_shots` tinyint(1) NOT NULL DEFAULT 1,
+			`team_hits` tinyint(1) NOT NULL DEFAULT 1,
+			`team_zakladny` tinyint(1) NOT NULL DEFAULT 0,
+			`best_score` tinyint(1) NOT NULL DEFAULT 1 COMMENT 'Jestli zobrazovat v tabulce \"Ti nej\" hodnotu',
+			`best_hits` tinyint(1) NOT NULL DEFAULT 1 COMMENT 'Jestli zobrazovat v tabulce \"Ti nej\" hodnotu',
+			`best_deaths` tinyint(1) NOT NULL DEFAULT 1 COMMENT 'Jestli zobrazovat v tabulce \"Ti nej\" hodnotu',
+			`best_accuracy` tinyint(1) NOT NULL DEFAULT 1 COMMENT 'Jestli zobrazovat v tabulce \"Ti nej\" hodnotu',
+			`best_hits_own` tinyint(1) NOT NULL DEFAULT 1 COMMENT 'Jestli zobrazovat v tabulce \"Ti nej\" hodnotu',
+			`best_deaths_own` tinyint(1) NOT NULL DEFAULT 1 COMMENT 'Jestli zobrazovat v tabulce \"Ti nej\" hodnotu',
+			`best_shots` tinyint(1) NOT NULL DEFAULT 1 COMMENT 'Jestli zobrazovat v tabulce \"Ti nej\" hodnotu',
+			`best_miss` tinyint(1) NOT NULL DEFAULT 1 COMMENT 'Jestli zobrazovat v tabulce \"Ti nej\" hodnotu',
+			`best_mines` tinyint(1) NOT NULL DEFAULT 1 COMMENT 'Jestli zobrazovat v tabulce \"Ti nej\" hodnotu',
+			PRIMARY KEY (`id_mode`)
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Seznam a nastavení módů.';",
+		'game_modes-names'         => "(
+			`id_mode` int(11) unsigned NOT NULL,
+			`sysName` varchar(20) NOT NULL,
+			KEY `Mode` (`id_mode`),
+			CONSTRAINT `game_modes-names_ibfk_1` FOREIGN KEY (`id_mode`) REFERENCES `game_modes` (`id_mode`) ON DELETE CASCADE ON UPDATE CASCADE
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;",
+		Game::TABLE                => "(
+			`id_game` int(11) unsigned NOT NULL AUTO_INCREMENT,
+			`id_mode` int(11) unsigned DEFAULT NULL,
+			`mode_name` varchar(100) DEFAULT NULL,
+			`start` datetime DEFAULT NULL,
+			`end` datetime DEFAULT NULL,
+			`file_number` int(11) DEFAULT NULL,
+			`timing_before` int(10) unsigned DEFAULT NULL,
+			`timing_game_length` int(10) unsigned DEFAULT NULL,
+			`timing_after` int(10) unsigned DEFAULT NULL,
+			`scoring_hit_other` int(11) DEFAULT NULL,
+			`scoring_hit_own` int(11) DEFAULT NULL,
+			`scoring_death_other` int(11) DEFAULT NULL,
+			`scoring_death_own` int(11) DEFAULT NULL,
+			`scoring_hit_pod` int(11) DEFAULT NULL,
+			`scoring_shot` int(11) DEFAULT NULL,
+			`scoring_power_machine_gun` int(11) DEFAULT NULL,
+			`scoring_power_invisibility` int(11) DEFAULT NULL,
+			`scoring_power_agent` int(11) DEFAULT NULL,
+			`scoring_power_shield` int(11) DEFAULT NULL,
+			`code` varchar(50) DEFAULT NULL,
+			PRIMARY KEY (`id_game`),
+			KEY `id_mode` (`id_mode`),
+			CONSTRAINT `evo5_games_ibfk_1` FOREIGN KEY (`id_mode`) REFERENCES `game_modes` (`id_mode`) ON DELETE SET NULL ON UPDATE CASCADE
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;",
+		Team::TABLE                => "(
+			`id_team` int(11) unsigned NOT NULL AUTO_INCREMENT,
+			`id_game` int(11) unsigned NOT NULL,
+			`color` int(10) unsigned DEFAULT NULL,
+			`score` int(11) NOT NULL DEFAULT 0,
+			`position` int(10) unsigned NOT NULL DEFAULT 0,
+			`name` varchar(20) DEFAULT NULL,
+			PRIMARY KEY (`id_team`),
+			KEY `id_game` (`id_game`),
+			CONSTRAINT `evo5_teams_ibfk_1` FOREIGN KEY (`id_game`) REFERENCES `evo5_games` (`id_game`) ON DELETE CASCADE ON UPDATE CASCADE
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;",
+		Player::TABLE              => "(
+			`id_player` int(11) unsigned NOT NULL AUTO_INCREMENT,
+			`id_game` int(11) unsigned NOT NULL,
+			`id_team` int(11) unsigned DEFAULT NULL,
+			`name` varchar(20) NOT NULL DEFAULT '',
+			`score` int(11) NOT NULL DEFAULT 0,
+			`vest` int(10) unsigned NOT NULL DEFAULT 0,
+			`shots` int(10) unsigned NOT NULL DEFAULT 0,
+			`accuracy` int(10) unsigned NOT NULL DEFAULT 0,
+			`hits` int(10) unsigned NOT NULL DEFAULT 0,
+			`deaths` int(10) unsigned NOT NULL DEFAULT 0,
+			`position` int(10) unsigned NOT NULL DEFAULT 0,
+			`shot_points` int(11) NOT NULL DEFAULT 0,
+			`score_bonus` int(11) NOT NULL DEFAULT 0,
+			`score_powers` int(11) NOT NULL DEFAULT 0,
+			`score_mines` int(11) NOT NULL DEFAULT 0,
+			`ammo_rest` int(10) unsigned NOT NULL DEFAULT 0,
+			`mines_hits` int(10) unsigned NOT NULL DEFAULT 0,
+			`hits_other` int(10) unsigned NOT NULL DEFAULT 0,
+			`hits_own` int(10) unsigned NOT NULL DEFAULT 0,
+			`deaths_other` int(10) unsigned NOT NULL DEFAULT 0,
+			`deaths_own` int(10) unsigned NOT NULL DEFAULT 0,
+			`bonus_agent` int(10) unsigned NOT NULL DEFAULT 0,
+			`bonus_invisibility` int(10) unsigned NOT NULL DEFAULT 0,
+			`bonus_machine_gun` int(10) unsigned NOT NULL DEFAULT 0,
+			`bonus_shield` int(10) unsigned NOT NULL DEFAULT 0,
+			PRIMARY KEY (`id_player`),
+			KEY `id_game` (`id_game`),
+			KEY `id_team` (`id_team`),
+			CONSTRAINT `evo5_players_ibfk_1` FOREIGN KEY (`id_game`) REFERENCES `evo5_games` (`id_game`) ON DELETE CASCADE ON UPDATE CASCADE,
+			CONSTRAINT `evo5_players_ibfk_2` FOREIGN KEY (`id_team`) REFERENCES `evo5_teams` (`id_team`) ON DELETE SET NULL ON UPDATE CASCADE
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;",
+		'evo5_hits'                => "(
+			`id_player` int(11) unsigned NOT NULL,
+			`id_target` int(11) unsigned NOT NULL,
+			`count` int(10) unsigned DEFAULT NULL,
+			PRIMARY KEY (`id_player`,`id_target`),
+			KEY `id_target` (`id_target`),
+			KEY `id_player` (`id_player`),
+			CONSTRAINT `evo5_hits_ibfk_1` FOREIGN KEY (`id_player`) REFERENCES `evo5_players` (`id_player`) ON DELETE CASCADE ON UPDATE CASCADE,
+			CONSTRAINT `evo5_hits_ibfk_2` FOREIGN KEY (`id_target`) REFERENCES `evo5_players` (`id_player`) ON DELETE CASCADE ON UPDATE CASCADE
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;",
+		PrintStyle::TABLE          => "(
+			`id_style` int(10) unsigned NOT NULL AUTO_INCREMENT,
+			`name` varchar(50) COLLATE utf8_czech_ci DEFAULT NULL,
+			`color_dark` varchar(7) COLLATE utf8_czech_ci NOT NULL DEFAULT '#304D99',
+			`color_light` varchar(7) COLLATE utf8_czech_ci NOT NULL DEFAULT '#a7d0f0',
+			`color_primary` varchar(7) COLLATE utf8_czech_ci NOT NULL DEFAULT '#1b4799',
+			`bg` varchar(100) COLLATE utf8_czech_ci NOT NULL DEFAULT 'assets/images/print/bg.jpg',
+			`default` tinyint(1) NOT NULL DEFAULT 0,
+			PRIMARY KEY (`id_style`)
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;",
+		PrintStyle::TABLE.'_dates' => "(
+			`id_style` int(10) unsigned NOT NULL,
+			`date_from` date NOT NULL,
+			`date_to` date NOT NULL,
+			KEY `style` (`id_style`),
+			CONSTRAINT `style` FOREIGN KEY (`id_style`) REFERENCES `print_styles` (`id_style`) ON DELETE CASCADE ON UPDATE CASCADE
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;",
+	];
 
-	public static function install() : bool {
+	public static function install(bool $fresh = false) : bool {
 		try {
+			if ($fresh) {
+				foreach (array_reverse(self::TABLES) as $tableName => $definition) {
+					DB::getConnection()->query("DROP TABLE IF EXISTS %n;", $tableName);
+				}
+			}
+
 			foreach (self::TABLES as $tableName => $definition) {
 				DB::getConnection()->query("CREATE TABLE IF NOT EXISTS %n $definition", $tableName);
 			}
+			DB::getConnection()->query("CREATE OR REPLACE VIEW `vModesNames`
+AS SELECT
+   `a`.`id_mode` AS `id_mode`,
+   `a`.`system` AS `system`,
+   `a`.`name` AS `name`,
+   `a`.`description` AS `description`,
+   `a`.`type` AS `type`,
+   `b`.`sysName` AS `sysName`
+FROM (`game_modes` `a` left join `game_modes-names` `b` on(`a`.`id_mode` = `b`.`id_mode`));");
 		} catch (Exception $e) {
 			return false;
 		}

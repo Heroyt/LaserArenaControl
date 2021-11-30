@@ -14,7 +14,7 @@
 namespace App\Core;
 
 
-use App\Exceptions\TemplateDoesNotExistException;
+use JetBrains\PhpStorm\Pure;
 
 /**
  * @class   Page
@@ -85,12 +85,17 @@ abstract class Page
 		return lang($this->description, context: 'pageDescription');
 	}
 
-	/**
-	 * @param string $template
-	 *
-	 * @throws TemplateDoesNotExistException
-	 */
 	protected function view(string $template) : void {
+		bdump($this->params);
 		view($template, $this->params);
+	}
+
+	/**
+	 * @param mixed $data Serializable data
+	 */
+	protected function ajaxJson(mixed $data) : void {
+		header('Content-Type: application/json');
+		echo json_encode($data, JSON_THROW_ON_ERROR);
+		exit();
 	}
 }

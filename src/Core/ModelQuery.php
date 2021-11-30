@@ -12,7 +12,7 @@ class ModelQuery
 	public function __construct(
 		protected AbstractModel|string $className
 	) {
-		$this->query = DB::select($this->className::TABLE, '*');
+		$this->query = DB::select([$this->className::TABLE, 'a'], '*');
 	}
 
 	public function where(...$cond) : ModelQuery {
@@ -27,6 +27,16 @@ class ModelQuery
 
 	public function offset(int $offset) : ModelQuery {
 		$this->query->offset($offset);
+		return $this;
+	}
+
+	public function join(...$table) : ModelQuery {
+		$this->query->join(...$table);
+		return $this;
+	}
+
+	public function on(...$cond) : ModelQuery {
+		$this->query->on(...$cond);
 		return $this;
 	}
 

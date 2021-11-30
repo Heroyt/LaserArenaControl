@@ -12,7 +12,9 @@
 namespace App\Core;
 
 
+use App\Core\Auth\User;
 use App\Core\Routing\Route;
+use App\Exceptions\FileException;
 use App\Logging\Logger;
 use Gettext\Languages\Language;
 use Latte\Engine;
@@ -69,9 +71,9 @@ class App
 	 */
 	public static function init() : void {
 		self::$logger = new Logger(LOG_DIR, 'app');
+		self::setupRoutes();
 
 		if (PHP_SAPI !== "cli") {
-			self::setupRoutes();
 			self::$request = new Request(self::$prettyUrl ? $_SERVER['REQUEST_URI'] : ($_GET['p'] ?? []));
 		}
 
@@ -82,7 +84,7 @@ class App
 		self::$container = new $class;
 
 		// Set language and translations
-		$language = Language::getById($_SERVER['HTTP_ACCEPT_LANGUAGE'] ?? DEFAULT_LANGUAGE.'_'.LANGUAGE_SUFFIXES[DEFAULT_LANGUAGE] ?? '');
+		$language = Language::getById($_SERVER['HTTP_ACCEPT_LANGUAGE'] ?? 'cs_CZ');
 		date_default_timezone_set(self::getTimezone());
 		if (isset($language)) {
 			setlocale(LC_ALL, $language->id.'.UTF-8');
@@ -92,6 +94,7 @@ class App
 		}
 
 		self::setupLatte();
+		bdump($_SESSION, 'session');
 	}
 
 	/**
@@ -254,18 +257,6 @@ class App
 	}
 
 	/**
-	 * Get the request array
-	 *
-	 * @return Request|null
-	 *
-	 * @version 1.0
-	 * @since   1.0
-	 */
-	public static function getRequest() : ?Request {
-		return self::$request ?? null;
-	}
-
-	/**
 	 * Echo json-encoded data and exits
 	 *
 	 * @param array $data
@@ -293,7 +284,7 @@ class App
 	 *
 	 * @noreturn
 	 */
-	public static function redirect(Url|Route|array|string $to, Request $from = null) : void {
+	public static function redirect(Url|Route|array|string $to, ?Request $from = null) : void {
 		$link = '';
 		if ($to instanceof Route) {
 			$link = self::getLink($to->path);
@@ -313,7 +304,7 @@ class App
 				$link = $to;
 			}
 		}
-		if (isset($from)) {
+		if (isset($from) && $from instanceof Request) {
 			$_SESSION['fromRequest'] = serialize($from);
 		}
 		header('Location: '.$link);
@@ -379,12 +370,21 @@ class App
 	}
 
 	/**
+	 * @param string $type
+	 *
 	 * @return MenuItem[]
+	 * @throws FileException
 	 */
-	public static function getMenu() : array {
-		$config = require ROOT.'config/menu.php';
+	public static function getMenu(string $type = 'menu') : array {
+		if (!file_exists(ROOT.'config/nav/'.$type.'.php')) {
+			throw new FileException('Menu configuration file "'.$type.'.php" does not exist.');
+		}
+		$config = require ROOT.'config/nav/'.$type.'.php';
 		$menu = [];
 		foreach ($config as $item) {
+			if (!self::checkAccess($item)) {
+				continue;
+			}
 			if (isset($item['route'])) {
 				$path = Route::getRouteByName($item['route'])->path;
 			}
@@ -393,6 +393,9 @@ class App
 			}
 			$menuItem = new MenuItem(name: $item['name'], path: $path);
 			foreach ($item['children'] ?? [] as $child) {
+				if (!self::checkAccess($child)) {
+					continue;
+				}
 				if (isset($child['route'])) {
 					$path = Route::getRouteByName($child['route'])->path;
 				}
@@ -404,6 +407,38 @@ class App
 			$menu[] = $menuItem;
 		}
 		return $menu;
+	}
+
+	/**
+	 * @param array{access:array|null|string,loggedInOnly:bool|null,loggedOutOnly:bool|null} $item
+	 *
+	 * @return bool
+	 */
+	private static function checkAccess(array $item) : bool {
+		if (isset($item['loggedInOnly']) && $item['loggedInOnly'] && !User::loggedIn()) {
+			return false;
+		}
+		if (isset($item['loggedOutOnly']) && $item['loggedOutOnly'] && User::loggedIn()) {
+			return false;
+		}
+		if (!isset($item['access'])) {
+			return true;
+		}
+		$available = true;
+		$access = [];
+		if (is_string($item['access'])) {
+			$access = [$item['access']];
+		}
+		else if (is_array($item['access'])) {
+			$access = $item['access'];
+		}
+		foreach ($access as $right) {
+			if (!User::hasRight($right)) {
+				$available = false;
+				break;
+			}
+		}
+		return $available;
 	}
 
 	public static function comparePaths(array $path1, ?array $path2 = null) : bool {
@@ -427,6 +462,18 @@ class App
 			}
 		}
 		return $path1 === $path2;
+	}
+
+	/**
+	 * Get the request array
+	 *
+	 * @return Request|null
+	 *
+	 * @version 1.0
+	 * @since   1.0
+	 */
+	public static function getRequest() : ?Request {
+		return self::$request ?? null;
 	}
 
 }

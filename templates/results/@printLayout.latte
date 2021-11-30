@@ -36,7 +36,8 @@
 	{ifset $game}
 		<style>
 			:root {
-			{foreach $game->getTeamColors() as $key => $color} --team- {$key}: {$color|noescape};
+			{foreach $game->getTeamColors() as $key => $color}
+				--team-{$key}: {$color|noescape};
 			{/foreach}
 			}
 

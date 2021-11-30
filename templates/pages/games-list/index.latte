@@ -1,0 +1,55 @@
+{layout '../../@layout.latte'}
+
+{varType App\Models\Game\Game[] $games}
+{varType \DateTime $date}
+{varType int[] $gameCountsPerDay}
+
+{define addHead}
+	{\App\Tools\Color::getGamesColor($games)|noescape}
+{/define}
+
+{block content}
+	<h2>{lang 'Games list'}:</h2>
+	<form action="{link ['list']}" class="mb-3" method="get">
+		<label for="date">{lang 'Date'}:</label>
+		<div class="date-picker" data-events="{json_encode($gameCountsPerDay)}">
+			<input type="text" name="date" class="form-control bg-white" data-toggle="submit" id="date"
+				   value="{$date->format('d.m.Y')}"
+				   data-input>
+		</div>
+	</form>
+	{if empty($games)}
+		{alertWarning lang('No games had been played on this date.')}
+	{/if}
+	<table class="table">
+		<thead>
+		<tr>
+			<th>{lang 'Time'}</th>
+			<th>{lang 'Game mode'}</th>
+			<th>{lang 'Players'}</th>
+			<th class="text-end">{lang 'Actions'}</th>
+		</tr>
+		</thead>
+		<tbody>
+		<tr n:foreach="$games as $game">
+			{do $game->loadTeams()}
+			<td>{$game->start->format('H:i')}</td>
+			<td>{$game->mode?->name}</td>
+			<td>
+				<span n:foreach="$game->getPlayersSorted() as $player"
+						data-toggle="tooltip"
+						title="{sprintf(lang('%s score'), number_format($player->score, 0, ',', '&nbsp;'))|noescape}"
+						class="badge bg-{$player->getTeam() !== null ? $player->getTeam()->getTeamBgClass(true) : 'dark'}">
+					{$player->position}.&nbsp;{$player->name}
+				</span>
+			</td>
+			<td class="text-end">
+				<div class="btn-group">
+					<a href="{link ['results', $game->code, 'print']}" class="btn btn-info" data-toggle="tooltip"
+					   title="{lang 'Print'}"><i class="fas fa-print"></i></a>
+				</div>
+			</td>
+		</tr>
+		</tbody>
+	</table>
+{/block}

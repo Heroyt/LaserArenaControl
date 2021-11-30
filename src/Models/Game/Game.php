@@ -59,6 +59,9 @@ abstract class Game extends AbstractModel implements InsertExtendInterface
 	}
 
 	public static function parseRow(Row $row) : ?InsertExtendInterface {
+		if (isset($row->id_game, static::$instances[static::TABLE][$row->id_game])) {
+			return static::$instances[static::TABLE][$row->id_game];
+		}
 		return null;
 	}
 
@@ -104,10 +107,8 @@ abstract class Game extends AbstractModel implements InsertExtendInterface
 			'shots'    => lang('Nejúspornější střelec', context: 'results'),
 			'miss'     => lang('Největší mimoň', context: 'results'),
 		];
-		bdump($this->mode->settings);
 		foreach ($fields as $key => $value) {
 			$settingName = Strings::toCamelCase('best_'.$key);
-			bdump($settingName);
 			if (!($this->mode->settings->$settingName ?? true)) {
 				unset($fields[$key]);
 			}

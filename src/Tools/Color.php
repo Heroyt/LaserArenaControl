@@ -2,8 +2,39 @@
 
 namespace App\Tools;
 
+use App\Models\Game\Game;
+
 class Color
 {
+
+	/**
+	 * @param Game[] $games
+	 *
+	 * @return string
+	 */
+	public static function getGamesColor(array $games) : string {
+		$styles = [];
+		foreach ($games as $game) {
+			if (isset($styles[$game::SYSTEM])) {
+				continue;
+			}
+			$styles[$game::SYSTEM] = $game->getTeamColors();
+		}
+		$classes = '';
+		$return = '<style>:root{';
+		foreach ($styles as $system => $colors) {
+			$system = Strings::toSnakeCase($system, '-');
+			foreach ($colors as $key => $color) {
+				$fontColor = self::getFontColor($color);
+				$var = 'team-'.$system.'-'.$key;
+				$return .= '--'.$var.': '.$color.';';
+				$classes .= '.bg-'.$var.'{background-color: var(--'.$var.');color:'.$fontColor.';}';
+			}
+		}
+		$return .= '}'.$classes.'</style>';
+
+		return $return;
+	}
 
 	/**
 	 * Get the font color for given background color
@@ -31,7 +62,6 @@ class Color
 				break;
 		}
 		$luminance = (0.299 * $r + 0.587 * $g + 0.114 * $b) / 255;
-		bdump(['bg' => $backgroundColor, 'r' => $r, 'g' => $g, 'b' => $b, 'l' => $luminance]);
 		if ($luminance > 0.5) {
 			return $returnHex ? '#000' : 'text-dark';
 		}

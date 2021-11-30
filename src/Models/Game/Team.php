@@ -41,6 +41,9 @@ abstract class Team extends AbstractModel implements InsertExtendInterface
 	 * @throws DirectoryCreationException
 	 */
 	public static function parseRow(Row $row) : InsertExtendInterface {
+		if (isset($row->id_team, static::$instances[static::TABLE][$row->id_team])) {
+			return static::$instances[static::TABLE][$row->id_team];
+		}
 		return new static($row->id_team ?? 0);
 	}
 
@@ -104,6 +107,10 @@ abstract class Team extends AbstractModel implements InsertExtendInterface
 			}
 		}
 		return $sum;
+	}
+
+	public function getTeamBgClass(bool $includeSystem = false) : string {
+		return 'team-'.($includeSystem ? $this->getGame()::SYSTEM.'-' : '').$this->color;
 	}
 
 }

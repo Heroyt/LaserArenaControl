@@ -1,14 +1,20 @@
+// File: main.scss
+// Author: Tomáš Vojík <xvojik00@stud.fit.vutbr.cz>
+// Main stylesheet that is compiled into /dist/main.css
+
+@import '~bootstrap/scss/functions';
+@import 'variables/customVariables';
+@import '~bootstrap/scss/variables';
+
 @import 'custom';
 
 // BS Configuration
-@import '~bootstrap/scss/functions';
-@import '~bootstrap/scss/variables';
 @import '~bootstrap/scss/mixins';
 
 @import 'maps';
 
 // Utilities
-@import '~bootstrap/scss/utilities';
+//@import '~bootstrap/scss/utilities';
 
 // BS Layout & components
 @import '~bootstrap/scss/root';
@@ -58,6 +64,8 @@
 @import 'utilities/headings';
 
 // Components
+@import '~flatpickr';
+@import 'components/datepicker';
 
 // Pages
 

@@ -7,6 +7,8 @@
 {/define}
 {define content}
 {/define}
+{define addHead}
+{/define}
 
 {varType \App\Core\Page $page}
 
@@ -33,6 +35,7 @@
 	{\App\Core\App::getCss()|noescape}
 	<title>{$page->getTitle()}</title>
 	{\Tracy\Debugger::renderLoader()|noescape}
+	{include addHead}
 </head>
 <body>
 {include header}

@@ -36,16 +36,17 @@ class Strings extends \Nette\Utils\Strings
 	 * Convert string to snake_case
 	 *
 	 * @param string $str
+	 * @param string $separator
 	 *
 	 * @return string
 	 */
-	public static function toSnakeCase(string $str) : string {
+	public static function toSnakeCase(string $str, string $separator = '_') : string {
 		if (!ctype_lower($str)) {
 			$str = (string) preg_replace('/\s+/u', '', ucwords($str));
 			$str = mb_strtolower(
 				preg_replace(
 					'/(.)(?=[A-Z])/u',
-					'$1_',
+					'$1'.$separator,
 					$str
 				)
 			);

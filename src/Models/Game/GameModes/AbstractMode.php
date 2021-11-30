@@ -44,7 +44,7 @@ abstract class AbstractMode extends AbstractModel implements InsertExtendInterfa
 	 * @noinspection PhpMissingParentConstructorInspection
 	 * @noinspection MagicMethodsValidityInspection
 	 */
-	public function __construct(public ?int $id = null, ?Row $dbRow = null) {
+	public function __construct(?int $id = null, ?Row $dbRow = null) {
 		if (!isset(self::$instances[$this::TABLE])) {
 			self::$instances[$this::TABLE] = [];
 		}

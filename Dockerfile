@@ -30,13 +30,6 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" &&
     php -r "unlink('composer-setup.php');"
 RUN mv composer.phar /usr/local/bin/composer
 
-# Node and NPM
-#RUN curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash
-#ENV NVM_DIR=/root/.nvm
-#RUN . "$NVM_DIR/nvm.sh" && nvm install node
-RUN npm -v
-RUN node -v
-
 FROM composer as project
 
 # Project files
@@ -50,8 +43,6 @@ RUN mv private/docker-config.ini private/config.ini
 RUN mkdir -p logs
 RUN mkdir -p temp
 
-RUN composer build-production
-#RUN chown -R www-data:www-data /var/www/html/
-#RUN chmod -R 0777 /var/www/html/temp && rm -R /var/www/html/temp/*
+RUN composer build
 
-CMD git pull && composer build-production
+CMD git pull && composer build-production && php install.php

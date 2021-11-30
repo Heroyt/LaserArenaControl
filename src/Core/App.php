@@ -359,6 +359,9 @@ class App
 	 * @return Logger
 	 */
 	public static function getLogger() : Logger {
+		if (!isset(self::$logger)) {
+			self::$logger = new Logger(LOG_DIR, 'app');
+		}
 		return self::$logger;
 	}
 

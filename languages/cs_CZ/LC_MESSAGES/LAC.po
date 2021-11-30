@@ -54,3 +54,214 @@ msgstr ""
 msgctxt "pageTitles"
 msgid "Games list"
 msgstr ""
+
+msgid "Datum"
+msgstr ""
+
+msgid "Hra neexistuje!"
+msgstr ""
+
+msgid "Herní mód"
+msgstr ""
+
+msgid "CSGO"
+msgstr ""
+
+msgid "Počet hráčů"
+msgstr ""
+
+msgid "Počet týmů"
+msgstr ""
+
+msgid "Zásah protihráče"
+msgstr ""
+
+msgid "Zasažen protihráčem"
+msgstr ""
+
+msgid "Zásah spoluhráče"
+msgstr ""
+
+msgid "Zasažen spouhráčem"
+msgstr ""
+
+msgid "Zasažen minou"
+msgstr ""
+
+msgid "Body za výstřel"
+msgstr ""
+
+msgid "Samopal"
+msgstr ""
+
+msgid "Neviditelnost"
+msgstr ""
+
+msgid "Agent"
+msgstr ""
+
+msgid "Štít"
+msgstr ""
+
+msgid "Jméno"
+msgstr ""
+
+msgid "Tým"
+msgstr ""
+
+msgid "Skóre"
+msgstr ""
+
+msgid "Počet výstřelů"
+msgstr ""
+
+msgid "Počet střel do prázdna"
+msgstr ""
+
+msgid "Úspěšnost"
+msgstr ""
+
+msgid "Hráči"
+msgstr ""
+
+msgid "Zásahy"
+msgstr ""
+
+msgid "Smrti"
+msgstr ""
+
+msgid "Týmy"
+msgstr ""
+
+msgid "Soupeř"
+msgstr ""
+
+msgid "Vlastní"
+msgstr ""
+
+msgid "Team deathmach"
+msgstr ""
+
+msgid "Zásahy hráčů"
+msgstr ""
+
+msgid "Zasáhl si hráče"
+msgstr ""
+
+msgid "Výstřelů"
+msgstr ""
+
+msgid "Zásahů"
+msgstr ""
+
+msgid "Výsledky týmů"
+msgstr ""
+
+msgid "Absoltní vítěz"
+msgstr ""
+
+msgctxt "results"
+msgid "Absoltní vítěz"
+msgstr ""
+
+msgctxt "results"
+msgid "Hráč s nejlepší muškou"
+msgstr ""
+
+msgctxt "results"
+msgid "Největší terminátor"
+msgstr ""
+
+msgctxt "results"
+msgid "Objekt největšího zájmu"
+msgstr ""
+
+msgctxt "results"
+msgid "Zabiják vlastního týmu"
+msgstr ""
+
+msgctxt "results"
+msgid "Největší vlastňák"
+msgstr ""
+
+msgctxt "results"
+msgid "Nejúspornější střelec"
+msgstr ""
+
+msgctxt "results"
+msgid "Největší mimoň"
+msgstr ""
+
+msgctxt "results"
+msgid "Drtič min"
+msgstr ""
+
+msgid "Ti nej..."
+msgstr ""
+
+msgid "Umístění dne"
+msgstr ""
+
+msgid "Denní pořadí podle"
+msgstr ""
+
+msgid "Přesnosti"
+msgstr ""
+
+msgid "Smrtí"
+msgstr ""
+
+msgid "Dnes odehráno"
+msgstr ""
+
+msgid "%d hra"
+msgid_plural "%d her"
+msgstr[0] ""
+
+msgid "%d tým"
+msgid_plural "%d týmů"
+msgstr[0] ""
+
+msgid "%d hráč"
+msgid_plural "%d hráčů"
+msgstr[0] ""
+
+msgctxt "debugPanel"
+msgid "Plural"
+msgstr ""
+
+msgid "Games"
+msgstr ""
+
+msgid "Date"
+msgstr ""
+
+msgid "Games list"
+msgstr ""
+
+msgid "No games had been played on this date."
+msgstr ""
+
+msgid "Time"
+msgstr ""
+
+msgid "Game mode"
+msgstr ""
+
+msgid "Players"
+msgstr ""
+
+msgid "%d score"
+msgstr ""
+
+msgid "%s score"
+msgstr ""
+
+msgid "Actions"
+msgstr ""
+
+msgid "Print"
+msgstr ""
+
+msgid "Základny"
+msgstr ""

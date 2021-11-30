@@ -22,12 +22,12 @@
 		"nette/di": "^3.0",
 		"ext-mbstring": "*",
 		"ext-sockets": "*",
-		"ext-fileinfo": "*"
+		"ext-fileinfo": "*",
+		"gettext/gettext": "^5.5"
 	},
 	"require-dev": {
 		"roave/security-advisories": "dev-latest",
-		"phpunit/phpunit": "^9.5",
-		"gettext/gettext": "^5.5"
+		"phpunit/phpunit": "^9.5"
 	},
 	"license": "GPL-3.0",
 	"autoload": {

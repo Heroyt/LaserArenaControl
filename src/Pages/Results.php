@@ -19,6 +19,10 @@ class Results extends Page
 
 	public function show(Request $request) : void {
 		$rows = GameFactory::queryGames()->orderBy('start')->desc()->limit(10)->fetchAll();
+		if (count($rows) === 0) {
+			$this->view('pages/results/noGames');
+			return;
+		}
 		$this->params['games'] = [];
 		if (isset($request->params['code'])) {
 			$this->params['selected'] = GameFactory::getByCode($request->params['code']);

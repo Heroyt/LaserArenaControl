@@ -45,4 +45,4 @@ RUN mkdir -p temp
 
 RUN composer build
 
-CMD git pull && composer build-production && php install.php
+CMD git pull && composer build && php install.php && apache2-foreground

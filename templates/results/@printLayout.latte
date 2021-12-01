@@ -2,6 +2,7 @@
 
 {varType App\Models\Game\Game $game}
 {varType App\Models\Game\PrintStyle $style}
+{varType int $copies}
 
 {define containerClasses}
 {/define}
@@ -44,6 +45,7 @@
 			{foreach $game->getTeamColors() as $key => $color}
 			.bg-team-{$key} {
 				background-color: var(--team-{$key});
+				color: {\App\Tools\Color::getFontColor($color)|noescape};
 			}
 
 			{/foreach}
@@ -54,9 +56,11 @@
 	{/ifset}
 </head>
 <body>
-<main class="container-print {include containerClasses}">
-	{include content}
-</main>
+{for $i = 0; $i < $copies; $i++}
+	<main class="container-print {include containerClasses}">
+		{include content}
+	</main>
+{/for}
 {include svgSymbols}
 </body>
 </html>

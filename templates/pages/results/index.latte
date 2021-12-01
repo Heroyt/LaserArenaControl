@@ -10,7 +10,7 @@
 
 {block content}
 	<div class="row">
-		<div class="col-md-4">
+		<div class="col-md-3">
 			<label for="selectGame">{lang 'Game'}:</label>
 			<select id="selectGame" class="form-select">
 				<option n:foreach="$games as $game" {if $selected->code === $game->code}selected{/if}
@@ -33,12 +33,12 @@
 				</option>
 			</select>
 		</div>
-		<div class="col-md-8" style="--size:35px;">
+		<div class="col-md-9" style="--size:35px;">
 			<div class="row my-2">
-				<div class="col-3">
+				<div class="col-lg-3 lh-size">
 					<strong>{lang 'Language'}:</strong>
 				</div>
-				<div class="col-9">
+				<div class="col-lg-9">
 					{var string $selectedLang = $_GET['lang'] ?? App\Core\App::$language->id}
 					{foreach App\Core\App::getSupportedLanguages() as $lang => $country}
 						<input type="radio" id="lang-{$lang}" name="lang" class="country-select-input" value="{$lang}"

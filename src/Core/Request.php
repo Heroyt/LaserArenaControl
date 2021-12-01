@@ -77,7 +77,7 @@ class Request
 
 	protected function parseStringQuery(string $query) : void {
 		$url = parse_url($query);
-		$filePath = ROOT.substr($url['path'], 1);
+		$filePath = urldecode(ROOT.substr($url['path'], 1));
 		if (file_exists($filePath) && is_file($filePath)) {
 			$extension = pathinfo($filePath, PATHINFO_EXTENSION);
 			if ($extension !== 'php') {

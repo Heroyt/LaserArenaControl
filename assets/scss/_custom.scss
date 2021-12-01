@@ -69,5 +69,22 @@ $utilities: map.deep-merge(
 						)
 				),
 			),
+			"min-viewport-height": (
+				values: (
+					25: 25vh,
+					50: 50vh,
+					60: 60vh,
+					75: 75vh,
+				),
+			),
+			"line-height": (
+				values: (
+					20: 20px,
+					25: 25px,
+					30: 30px,
+					35: 35px,
+					size: var(--size, 1),
+				),
+			),
 		),
 );

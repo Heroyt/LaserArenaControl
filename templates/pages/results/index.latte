@@ -1,0 +1,119 @@
+{layout '../../@layout.latte'}
+
+{varType App\Models\Game\Game[] $games}
+{varType App\Models\Game\Game $selected}
+{varType App\Models\Game\PrintStyle[] $styles}
+{varType App\Models\Game\PrintTemplate[] $templates}
+{varType array $_GET}
+{varType int $selectedStyle}
+{varType string $selectedTemplate}
+
+{block content}
+	<div class="row">
+		<div class="col-md-4">
+			<label for="selectGame">{lang 'Game'}:</label>
+			<select id="selectGame" class="form-select">
+				<option n:foreach="$games as $game" {if $selected->code === $game->code}selected{/if}
+						value="{$game->code}">
+					{$game->start?->format('d.m.Y H:i')} - {$game->mode?->name} ({$game->getPlayers()|length})
+				</option>
+			</select>
+			<label for="selectStyle">{lang 'Style', context: 'results.style'}:</label>
+			<select id="selectStyle" class="form-select">
+				<option n:foreach="$styles as $style" {if $style->id === $selectedStyle}selected{/if}
+						value="{$style->id}">
+					{lang $style->name, context: 'results.style'}
+				</option>
+			</select>
+			<label for="selectTemplate">{lang 'Template', context: 'results.style'}:</label>
+			<select id="selectTemplate" class="form-select">
+				<option n:foreach="$templates as $template" {if $template->slug === $selectedTemplate}selected{/if}
+						value="{$template->slug}">
+					{lang $template->name, context: 'results.style'}
+				</option>
+			</select>
+		</div>
+		<div class="col-md-8" style="--size:35px;">
+			<div class="row my-2">
+				<div class="col-3">
+					<strong>{lang 'Language'}:</strong>
+				</div>
+				<div class="col-9">
+					{var string $selectedLang = $_GET['lang'] ?? App\Core\App::$language->id}
+					{foreach App\Core\App::getSupportedLanguages() as $lang => $country}
+						<input type="radio" id="lang-{$lang}" name="lang" class="country-select-input" value="{$lang}"
+							   {if $selectedLang === $lang}checked{/if}>
+						<label class="country-select" for="lang-{$lang}">
+							<img src="{getUrl}assets/flags/{\App\Core\Constants::COUNTRIES[$country]|escapeurl}.png"
+								 alt="{\App\Core\Constants::COUNTRIES[$country]}">
+						</label>
+					{/foreach}
+				</div>
+			</div>
+			<div class="row my-2">
+				<div class="col-lg-3 lh-size">
+					<strong>{lang 'In color', context: 'print'}:</strong>
+				</div>
+				<div class="col-lg-9">
+					<div class="btn-group">
+						{for $i = 1; $i < 11; $i++}
+							<a href="{link ['results', $selected->code, 'print', $selectedLang, $i]}"
+							   class="btn btn-success print-btn" target="_blank" data-value="{$i}" data-type="color">
+								{$i}&times;
+							</a>
+						{/for}
+					</div>
+				</div>
+			</div>
+			<div class="row my-2">
+				<div class="col-lg-3 lh-size">
+					<strong>{lang 'Black & white', context: 'print'}:</strong>
+				</div>
+				<div class="col-lg-9">
+					<div class="btn-group">
+						{for $i = 1; $i < 11; $i++}
+							<a href="{link ['results', $selected->code, 'print', $selectedLang, $i, 'colorless']}"
+							   class="btn btn-secondary print-btn" target="_blank" data-value="{$i}"
+							   data-type="colorless">
+								{$i}&times;
+							</a>
+						{/for}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<iframe id="print-iframe"
+			src="{link ['results', $selected->code, 'print', $selectedLang, 1, $selectedStyle, $selectedTemplate]}"
+			class="w-100 min-vh-60 mt-4"></iframe>
+	<script n:syntax="double">
+		const selectGame = document.getElementById("selectGame");
+		const selectStyle = document.getElementById("selectStyle");
+		const selectTemplate = document.getElementById("selectTemplate");
+		const iframe = document.getElementById("print-iframe");
+		const printLinks = document.querySelectorAll(".print-btn");
+		selectGame.addEventListener("change", () => {
+			const lang = document.querySelector('[name="lang"]:checked').value;
+			window.location = `{{link ['results']}}/${selectGame.value}?lang=${lang}&style=${selectStyle.value}&template=${selectTemplate.value}`;
+		});
+		selectStyle.addEventListener("change", () => {
+			updateIframe();
+		});
+		selectTemplate.addEventListener("change", () => {
+			updateIframe();
+		});
+		document.querySelectorAll('[name="lang"]').forEach(input => {
+			input.addEventListener("change", () => {
+				updateIframe();
+			});
+		});
+
+		function updateIframe() {
+			const lang = document.querySelector('[name="lang"]:checked').value;
+			printLinks.forEach(link => {
+				link.href = `{{link ['results', $selected->code, 'print']}}/${lang}/${link.dataset.value}/${selectStyle.value}/${selectTemplate.value}/${link.dataset.type}`;
+			});
+			iframe.src = `{{link ['results', $selected->code, 'print']}}/${lang}/1/${selectStyle.value}/${selectTemplate.value}`;
+		}
+	</script>
+{/block}

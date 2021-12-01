@@ -43,6 +43,7 @@ class App
 	public static string    $activeLanguageCode = 'cs_CZ';
 	public static ?Language $language;
 	public static array     $supportedLanguages = [];
+	public static array     $supportedCountries = [];
 	/**
 	 * @var bool $prettyUrl
 	 * @brief If app should use a SEO-friendly pretty url
@@ -178,9 +179,11 @@ class App
 	}
 
 	/**
-	 * @return array<string,string>
+	 * @param bool $returnObjects
+	 *
+	 * @return string[]|Language[]
 	 */
-	public static function getSupportedLanguages() : array {
+	public static function getSupportedLanguages(bool $returnObjects = false) : array {
 		if (empty(self::$supportedLanguages)) {
 			$dirs = array_map(static function(string $dir) {
 				return str_replace(LANGUAGE_DIR, '', $dir);
@@ -190,7 +193,25 @@ class App
 				self::$supportedLanguages[$lang] = $country;
 			}
 		}
+		if ($returnObjects) {
+			$return = [];
+			foreach (self::$supportedLanguages as $lang => $country) {
+				$return[$lang] = Language::getById($lang);
+			}
+			return $return;
+		}
 		return self::$supportedLanguages;
+	}
+
+	public static function getSupportedCountries() : array {
+		if (empty(self::$supportedCountries)) {
+			foreach (self::getSupportedLanguages() as $lang => $country) {
+				if (isset(Constants::COUNTRIES[$country])) {
+					self::$supportedCountries[$country] = Constants::COUNTRIES[$country];
+				}
+			}
+		}
+		return self::$supportedCountries;
 	}
 
 	/**

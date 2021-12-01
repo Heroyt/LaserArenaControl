@@ -7,6 +7,7 @@ use App\Core\Request;
 use App\Exceptions\TemplateDoesNotExistException;
 use App\Models\Factory\GameFactory;
 use App\Models\Game\PrintStyle;
+use App\Models\Game\PrintTemplate;
 use App\Models\Game\Today;
 use App\Tools\Strings;
 
@@ -16,16 +17,33 @@ class Results extends Page
 	protected string $title       = 'Results';
 	protected string $description = '';
 
-	public function show() : void {
-		$this->view('pages/dashboard/index');
+	public function show(Request $request) : void {
+		$rows = GameFactory::queryGames()->orderBy('start')->desc()->limit(10)->fetchAll();
+		$this->params['games'] = [];
+		if (isset($request->params['code'])) {
+			$this->params['selected'] = GameFactory::getByCode($request->params['code']);
+			$this->params['games'][] = $this->params['selected'];
+		}
+		foreach ($rows as $row) {
+			$this->params['games'][] = GameFactory::getByCode($row->code);
+		}
+		if (!isset($this->params['selected'])) {
+			$this->params['selected'] = $this->params['games'][0] ?? null;
+		}
+		$this->params['selectedStyle'] = (int) ($_GET['style'] ?? PrintStyle::getActiveStyleId());
+		$this->params['selectedTemplate'] = $_GET['template'] ?? 'default';
+		$this->params['styles'] = PrintStyle::getAll();
+		$this->params['templates'] = PrintTemplate::getAll();
+		bdump($this->params);
+		$this->view('pages/results/index');
 	}
 
 	public function printGame(Request $request) : void {
 		$code = $request->params['code'] ?? '';
-		$lang = $request->params['lang'] ?? DEFAULT_LANGUAGE;
 		$copies = $request->params['copies'] ?? 1;
 		$template = $request->params['template'] ?? 'default';
-		$style = $request->params['style'] ?? PrintStyle::getActiveStyle();
+		$style = (int) ($request->params['style'] ?? PrintStyle::getActiveStyleId());
+		$this->params['colorless'] = ($request->params['type'] ?? 'color') === 'colorless';
 
 		// Get game
 		$game = GameFactory::getByCode($code);
@@ -35,16 +53,19 @@ class Results extends Page
 			return;
 		}
 
-		try {
-			$this->params['game'] = $game;
-			$this->params['style'] = $style;
-			$namespace = '\\App\\Models\\Game\\'.Strings::toPascalCase($game::SYSTEM).'\\';
-			$teamClass = $namespace.'Team';
-			$playerClass = $namespace.'Player';
-			$this->params['today'] = new Today($game, new $playerClass, new $teamClass);
-			$this->view('results/templates/'.$template);
-		} catch (TemplateDoesNotExistException $e) {
-			$this->view('results/templates/default');
+		$this->params['game'] = $game;
+		$this->params['style'] = PrintStyle::exists($style) ? PrintStyle::get($style) : PrintStyle::getActiveStyle();
+		$namespace = '\\App\\Models\\Game\\'.Strings::toPascalCase($game::SYSTEM).'\\';
+		$teamClass = $namespace.'Team';
+		$playerClass = $namespace.'Player';
+		$this->params['today'] = new Today($game, new $playerClass, new $teamClass);
+
+		for ($i = 0; $i < $copies; $i++) {
+			try {
+				$this->view('results/templates/'.$template);
+			} catch (TemplateDoesNotExistException $e) {
+				$this->view('results/templates/default');
+			}
 		}
 	}
 

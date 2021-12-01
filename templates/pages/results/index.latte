@@ -57,7 +57,7 @@
 				<div class="col-lg-9">
 					<div class="btn-group">
 						{for $i = 1; $i < 11; $i++}
-							<a href="{link ['results', $selected->code, 'print', $selectedLang, $i]}"
+							<a href="{link ['results', $selected->code, 'print', $selectedLang, $i, $selectedStyle, $selectedTemplate]}"
 							   class="btn btn-success print-btn" target="_blank" data-value="{$i}" data-type="color">
 								{$i}&times;
 							</a>
@@ -72,7 +72,7 @@
 				<div class="col-lg-9">
 					<div class="btn-group">
 						{for $i = 1; $i < 11; $i++}
-							<a href="{link ['results', $selected->code, 'print', $selectedLang, $i, 'colorless']}"
+							<a href="{link ['results', $selected->code, 'print', $selectedLang, $i, $selectedStyle, $selectedTemplate, 'colorless']}"
 							   class="btn btn-secondary print-btn" target="_blank" data-value="{$i}"
 							   data-type="colorless">
 								{$i}&times;

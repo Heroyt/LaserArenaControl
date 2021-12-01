@@ -10,7 +10,11 @@ use App\Exceptions\ModelNotFoundException;
 use App\Logging\DirectoryCreationException;
 use App\Logging\Logger;
 use App\Models\Factory\GameModeFactory;
+use App\Models\Game\Game;
 use App\Models\Game\ModeSettings;
+use App\Models\Game\Player;
+use App\Models\Game\Team;
+use App\Models\Game\TeamCollection;
 use App\Tools\Strings;
 use Dibi\Row;
 
@@ -121,6 +125,31 @@ abstract class AbstractMode extends AbstractModel implements InsertExtendInterfa
 
 	public function isSolo() : bool {
 		return $this->type === self::TYPE_SOLO;
+	}
+
+	/**
+	 * Get winning team by some rules
+	 *
+	 * Default rules are: the best position (score) wins.
+	 *
+	 * @param Game $game
+	 *
+	 * @return Player|Team|null null = draw
+	 */
+	public function getWin(Game $game) : Player|Team|null {
+		if ($this->isTeam()) {
+			/** @var Team[]|TeamCollection $teams */
+			$teams = $game->getTeamsSorted();
+			/** @var Team $team */
+			$team = $teams->first();
+			if (count($teams) === 2 && $team->score === $teams->last()?->score) {
+				return null;
+			}
+			return $team;
+		}
+		/** @var Player $player */
+		$player = $game->getPlayersSorted()->first();
+		return $player;
 	}
 
 

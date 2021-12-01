@@ -78,6 +78,14 @@ class ResultsParser extends AbstractResultsParser
 					$game->modeName = $args[0];
 					$game->mode = GameModeFactory::find($args[0], (int) $args[2], 'Evo5');
 					break;
+				case 'STYLEX':
+					if ($argsCount < 3) {
+						throw new ResultsParseException('Invalid argument count in STYLE');
+					}
+					$game->respawn = (int) $args[0];
+					$game->ammo = (int) $args[1];
+					$game->lives = (int) $args[2];
+					break;
 				case 'SCORING':
 					if ($argsCount !== 16 && $argsCount !== 14) {
 						throw new ResultsParseException('Invalid argument count in SCORING');

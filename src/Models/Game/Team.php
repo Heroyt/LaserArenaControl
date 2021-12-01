@@ -86,8 +86,19 @@ abstract class Team extends AbstractModel implements InsertExtendInterface
 		return $sum;
 	}
 
+	/**
+	 * @return int
+	 */
+	public function getDeaths() : int {
+		$sum = 0;
+		foreach ($this->getPlayers() as $player) {
+			$sum += $player->deaths;
+		}
+		return $sum;
+	}
+
 	public function getAccuracy() : float {
-		return round(100 * $this->getHits() / $this->getShots(), 2);
+		return $this->getShots() === 0 ? 0 : round(100 * $this->getHits() / $this->getShots(), 2);
 	}
 
 	/**

@@ -31,10 +31,19 @@ class Game extends \App\Models\Game\Game
 			'validators' => ['instanceOf:'.Scoring::class],
 			'class'      => Scoring::class,
 		],
+		'lives'      => [],
+		'ammo'       => [],
+		'respawn'    => [],
 	];
 
 	public int    $fileNumber;
 	public string $modeName;
+	/** @var int Initial lives */
+	public int $lives = 9999;
+	/** @var int Initial ammo count */
+	public int $ammo = 9999;
+	/** @var int Respawn time in seconds */
+	public int $respawn = 5;
 
 	protected string $playerClass = Player::class;
 	protected string $teamClass   = Team::class;

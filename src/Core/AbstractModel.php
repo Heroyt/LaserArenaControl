@@ -51,6 +51,12 @@ abstract class AbstractModel implements JsonSerializable, ArrayAccess
 			$this->fetch();
 			self::$instances[$this::TABLE][$this->id] = $this;
 		}
+		foreach ($this::DEFINITION as $name => $definition) {
+			if (isset($definition['class'], $definition['initialize']) && $definition['initialize'] === true && !isset($this->$name)) {
+				$class = $definition['class'];
+				$this->$name = new $class();
+			}
+		}
 		$this->logger = new Logger(LOG_DIR.'models/', $this::TABLE);
 	}
 

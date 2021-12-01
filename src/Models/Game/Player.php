@@ -153,4 +153,46 @@ abstract class Player extends AbstractModel
 		return $this->shots - $this->hits;
 	}
 
+	/**
+	 * Get a player that this player hit the most
+	 *
+	 * @return Player|null
+	 * @throws DirectoryCreationException
+	 * @throws ModelNotFoundException
+	 */
+	public function getFavouriteTarget() : ?Player {
+		$max = 0;
+		$maxPlayer = null;
+		foreach ($this->getHitsPlayers() as $hits) {
+			if ($hits->count > $max) {
+				$maxPlayer = $hits->playerTarget;
+				$max = $hits->count;
+			}
+		}
+		return $maxPlayer;
+	}
+
+	/**
+	 * Get a player that hit this player the most
+	 *
+	 * @return Player|null
+	 * @throws DirectoryCreationException
+	 * @throws ModelNotFoundException
+	 */
+	public function getFavouriteTargetOf() : ?Player {
+		$max = 0;
+		$maxPlayer = null;
+		foreach ($this->getGame()->getPlayers() as $player) {
+			if ($player->id === $this->id) {
+				continue;
+			}
+			$hits = $player->getHitsPlayer($this);
+			if ($hits > $max) {
+				$max = $hits;
+				$maxPlayer = $player;
+			}
+		}
+		return $maxPlayer;
+	}
+
 }

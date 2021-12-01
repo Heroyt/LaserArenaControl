@@ -28,7 +28,7 @@ class PlayerHit
 		];
 		try {
 			if (isset($test)) {
-				DB::update($this::TABLE, $data, ['[id_player] = %i AND [id_target] = %i', $this->playerShot->id, $this->playerTarget->id])->execute();
+				DB::update($this::TABLE, $data, ['[id_player] = %i AND [id_target] = %i', $this->playerShot->id, $this->playerTarget->id]);
 			}
 			else {
 				DB::insert($this::TABLE, $data);

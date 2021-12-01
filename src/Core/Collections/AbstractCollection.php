@@ -107,6 +107,18 @@ abstract class AbstractCollection implements CollectionInterface
 	}
 
 	/**
+	 * Get last object in collection
+	 *
+	 * @return AbstractModel|null
+	 */
+	public function last() : ?AbstractModel {
+		foreach (array_reverse($this->data) as $object) {
+			return $object;
+		}
+		return null;
+	}
+
+	/**
 	 * Add new data to collection
 	 *
 	 * @details Checks value's type and uniqueness

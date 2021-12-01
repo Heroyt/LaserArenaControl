@@ -418,3 +418,31 @@ msgstr "Template"
 msgctxt "results.style"
 msgid "Default"
 msgstr "Default"
+
+msgctxt "results.player"
+msgid "K:D"
+msgstr ""
+
+msgctxt "results.player"
+msgid "Nejoblíbenější cíl"
+msgstr ""
+
+msgctxt "results.player"
+msgid "Největší zabiják"
+msgstr ""
+
+msgctxt "results"
+msgid "Vítězství"
+msgstr ""
+
+msgctxt "results"
+msgid "Remíza"
+msgstr ""
+
+msgctxt "results.team"
+msgid "Ztráty základny"
+msgstr ""
+
+msgctxt "results.player"
+msgid "Zbývá životů"
+msgstr ""

@@ -40,7 +40,7 @@ class Results extends Page
 
 	public function printGame(Request $request) : void {
 		$code = $request->params['code'] ?? '';
-		$copies = $request->params['copies'] ?? 1;
+		$this->params['copies'] = (int) ($request->params['copies'] ?? 1);
 		$template = $request->params['template'] ?? 'default';
 		$style = (int) ($request->params['style'] ?? PrintStyle::getActiveStyleId());
 		$this->params['colorless'] = ($request->params['type'] ?? 'color') === 'colorless';
@@ -54,18 +54,17 @@ class Results extends Page
 		}
 
 		$this->params['game'] = $game;
+		bdump($game->getPlayers());
 		$this->params['style'] = PrintStyle::exists($style) ? PrintStyle::get($style) : PrintStyle::getActiveStyle();
 		$namespace = '\\App\\Models\\Game\\'.Strings::toPascalCase($game::SYSTEM).'\\';
 		$teamClass = $namespace.'Team';
 		$playerClass = $namespace.'Player';
 		$this->params['today'] = new Today($game, new $playerClass, new $teamClass);
 
-		for ($i = 0; $i < $copies; $i++) {
-			try {
-				$this->view('results/templates/'.$template);
-			} catch (TemplateDoesNotExistException $e) {
-				$this->view('results/templates/default');
-			}
+		try {
+			$this->view('results/templates/'.$template);
+		} catch (TemplateDoesNotExistException $e) {
+			$this->view('results/templates/default');
 		}
 	}
 

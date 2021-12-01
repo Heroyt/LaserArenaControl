@@ -53,4 +53,8 @@ class Player extends \App\Models\Game\Player
 		return $this->bonus->getSum();
 	}
 
+	public function getRemainingLives() : int {
+		return ($this->getGame()->lives ?? 9999) - $this->deaths;
+	}
+
 }

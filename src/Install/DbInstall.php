@@ -186,7 +186,8 @@ class DbInstall implements InstallInterface
 			foreach (self::TABLES as $tableName => $definition) {
 				DB::getConnection()->query("CREATE TABLE IF NOT EXISTS %n $definition", $tableName);
 			}
-			DB::getConnection()->query("CREATE OR REPLACE VIEW `vModesNames`
+			DB::getConnection()->query("DROP VIEW IF EXISTS `vModesNames`");
+			DB::getConnection()->query("CREATE VIEW IF NOT EXISTS `vModesNames`
 AS SELECT
    `a`.`id_mode` AS `id_mode`,
    `a`.`system` AS `system`,

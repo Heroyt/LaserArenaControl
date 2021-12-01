@@ -6,6 +6,7 @@ use App\Core\DB;
 use App\Models\Game\GameModes\AbstractMode;
 use App\Models\Game\PrintStyle;
 use App\Models\Game\PrintTemplate;
+use Dibi\Exception;
 
 class Seeder implements InstallInterface
 {
@@ -526,34 +527,39 @@ class Seeder implements InstallInterface
 	 * @inheritDoc
 	 */
 	public static function install(bool $fresh = false) : bool {
-		// Game modes
-		if ($fresh) {
-			DB::delete(AbstractMode::TABLE, ['1=1']);
-		}
-		foreach (self::GAME_MODES as $insert) {
-			DB::insertIgnore(AbstractMode::TABLE, $insert);
-		}
-		if ($fresh) {
-			DB::delete(AbstractMode::TABLE.'-names', ['1=1']);
-		}
-		foreach (self::GAME_MODE_NAMES as $insert) {
-			DB::insertIgnore(AbstractMode::TABLE.'-names', $insert);
-		}
+		try {
+			// Game modes
+			if ($fresh) {
+				DB::delete(AbstractMode::TABLE, ['1=1']);
+			}
+			foreach (self::GAME_MODES as $insert) {
+				DB::insertIgnore(AbstractMode::TABLE, $insert);
+			}
+			if ($fresh) {
+				DB::delete(AbstractMode::TABLE.'-names', ['1=1']);
+			}
+			foreach (self::GAME_MODE_NAMES as $insert) {
+				DB::insertIgnore(AbstractMode::TABLE.'-names', $insert);
+			}
 
-		// Print styles
-		if ($fresh) {
-			DB::delete(PrintStyle::TABLE.'-names', ['1=1']);
-		}
-		foreach (self::PRINT_STYLES as $insert) {
-			DB::insertIgnore(PrintStyle::TABLE, $insert);
-		}
+			// Print styles
+			if ($fresh) {
+				DB::delete(PrintStyle::TABLE.'-names', ['1=1']);
+			}
+			foreach (self::PRINT_STYLES as $insert) {
+				DB::insertIgnore(PrintStyle::TABLE, $insert);
+			}
 
-		// Print templates
-		if ($fresh) {
-			DB::delete(PrintTemplate::TABLE.'-names', ['1=1']);
-		}
-		foreach (self::PRINT_TEMPLATES as $insert) {
-			DB::insertIgnore(PrintTemplate::TABLE, $insert);
+			// Print templates
+			if ($fresh) {
+				DB::delete(PrintTemplate::TABLE.'-names', ['1=1']);
+			}
+			foreach (self::PRINT_TEMPLATES as $insert) {
+				DB::insertIgnore(PrintTemplate::TABLE, $insert);
+			}
+		} catch (Exception $e) {
+			echo $e->getMessage().PHP_EOL.$e->getSql().PHP_EOL;
+			return false;
 		}
 		return true;
 	}

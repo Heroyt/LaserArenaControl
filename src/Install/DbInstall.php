@@ -196,6 +196,7 @@ AS SELECT
    `b`.`sysName` AS `sysName`
 FROM (`game_modes` `a` left join `game_modes-names` `b` on(`a`.`id_mode` = `b`.`id_mode`));");
 		} catch (Exception $e) {
+			echo $e->getMessage().PHP_EOL.$e->getSql().PHP_EOL;
 			return false;
 		}
 		return true;

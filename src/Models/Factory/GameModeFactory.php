@@ -59,7 +59,7 @@ class GameModeFactory
 		$classNamespace = 'GameModes\\';
 		$className = '';
 		if (isset($mode)) {
-			$dbName = str_replace(' ', '', Strings::toAscii(Strings::capitalize($mode->name)));
+			$dbName = str_replace([' ', '.', '_', '-'], '', Strings::toAscii(Strings::capitalize($mode->name)));
 			$class = $classBase.$classSystem.$classNamespace.$dbName;
 			if (class_exists($class)) {
 				$className = $dbName;

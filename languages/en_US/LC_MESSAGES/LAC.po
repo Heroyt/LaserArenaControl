@@ -348,16 +348,73 @@ msgstr "HTTP header"
 
 msgctxt "gameModes"
 msgid "Základny"
-msgstr ""
+msgstr "Base defence"
 
 msgctxt "gameModes"
 msgid "CSGO"
-msgstr ""
+msgstr "CSGO"
 
 msgctxt "results.bests"
 msgid "Drtič min"
-msgstr ""
+msgstr "Pod crusher"
 
 msgctxt "gameModes"
 msgid "Deathmach"
-msgstr ""
+msgstr "Deathmach"
+
+msgid "Language"
+msgstr "Language"
+
+msgctxt "print"
+msgid "In color:"
+msgstr "In color:"
+
+msgctxt "print"
+msgid "In color"
+msgstr "In color"
+
+msgctxt "print"
+msgid "Black & white"
+msgstr "Black & white"
+
+msgid "Game"
+msgstr "Game"
+
+msgid "Style"
+msgstr "Style"
+
+msgctxt "results.style"
+msgid "Style"
+msgstr "Style"
+
+msgctxt "results.style"
+msgid "Základní"
+msgstr "Default"
+
+msgctxt "results.style"
+msgid "Čerti"
+msgstr "Čerti"
+
+msgctxt "results.style"
+msgid "Zima"
+msgstr "Winter"
+
+msgctxt "results.style"
+msgid "Valentýn"
+msgstr "Valentine’s day"
+
+msgctxt "results.style"
+msgid "Vánoce"
+msgstr "Christmas"
+
+msgctxt "results.style"
+msgid "Nový rok"
+msgstr "New year"
+
+msgctxt "results.style"
+msgid "Template"
+msgstr "Template"
+
+msgctxt "results.style"
+msgid "Default"
+msgstr "Default"

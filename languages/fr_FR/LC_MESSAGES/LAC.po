@@ -350,3 +350,60 @@ msgstr "Concasseur des mines"
 msgctxt "gameModes"
 msgid "Deathmach"
 msgstr ""
+
+msgid "Language"
+msgstr ""
+
+msgctxt "print"
+msgid "In color:"
+msgstr ""
+
+msgctxt "print"
+msgid "In color"
+msgstr ""
+
+msgctxt "print"
+msgid "Black & white"
+msgstr ""
+
+msgid "Game"
+msgstr ""
+
+msgid "Style"
+msgstr ""
+
+msgctxt "results.style"
+msgid "Style"
+msgstr ""
+
+msgctxt "results.style"
+msgid "Základní"
+msgstr ""
+
+msgctxt "results.style"
+msgid "Čerti"
+msgstr ""
+
+msgctxt "results.style"
+msgid "Zima"
+msgstr ""
+
+msgctxt "results.style"
+msgid "Valentýn"
+msgstr ""
+
+msgctxt "results.style"
+msgid "Vánoce"
+msgstr ""
+
+msgctxt "results.style"
+msgid "Nový rok"
+msgstr ""
+
+msgctxt "results.style"
+msgid "Template"
+msgstr ""
+
+msgctxt "results.style"
+msgid "Default"
+msgstr ""

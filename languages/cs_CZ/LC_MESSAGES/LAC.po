@@ -367,3 +367,60 @@ msgstr "Drtič min"
 msgctxt "gameModes"
 msgid "Deathmach"
 msgstr "Deathmach"
+
+msgid "Language"
+msgstr "Jazyk"
+
+msgctxt "print"
+msgid "In color:"
+msgstr "Barevně:"
+
+msgctxt "print"
+msgid "In color"
+msgstr "Barevně"
+
+msgctxt "print"
+msgid "Black & white"
+msgstr "Černobílé"
+
+msgid "Game"
+msgstr "Hra"
+
+msgid "Style"
+msgstr "Styl"
+
+msgctxt "results.style"
+msgid "Style"
+msgstr "Styl"
+
+msgctxt "results.style"
+msgid "Základní"
+msgstr "Základní"
+
+msgctxt "results.style"
+msgid "Čerti"
+msgstr "Čerti"
+
+msgctxt "results.style"
+msgid "Zima"
+msgstr "Zima"
+
+msgctxt "results.style"
+msgid "Valentýn"
+msgstr "Valentýn"
+
+msgctxt "results.style"
+msgid "Vánoce"
+msgstr "Vánoce"
+
+msgctxt "results.style"
+msgid "Nový rok"
+msgstr "Nový rok"
+
+msgctxt "results.style"
+msgid "Template"
+msgstr "Šablona"
+
+msgctxt "results.style"
+msgid "Default"
+msgstr "Základní"

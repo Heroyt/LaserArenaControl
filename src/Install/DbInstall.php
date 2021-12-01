@@ -6,6 +6,7 @@ use App\Core\DB;
 use App\Models\Game\Evo5\Game;
 use App\Models\Game\Evo5\Player;
 use App\Models\Game\Evo5\Team;
+use App\Models\Game\GameModes\AbstractMode;
 use App\Models\Game\PrintStyle;
 use App\Models\Game\PrintTemplate;
 use Dibi\Exception;
@@ -14,12 +15,12 @@ class DbInstall implements InstallInterface
 {
 
 	public const TABLES = [
-		'page_info'                => "(
+		'page_info'         => "(
 			`key` varchar(30) NOT NULL DEFAULT '',
 			`value` text DEFAULT NULL,
 			PRIMARY KEY (`key`)
 		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;",
-		'game_modes'               => "(
+		AbstractMode::TABLE => "(
 			`id_mode` int(11) unsigned NOT NULL AUTO_INCREMENT,
 			`system` varchar(10) DEFAULT NULL,
 			`name` varchar(50) DEFAULT NULL,
@@ -27,7 +28,6 @@ class DbInstall implements InstallInterface
 			`load_name` varchar(50) DEFAULT NULL,
 			`type` enum('TEAM','SOLO') NOT NULL DEFAULT 'TEAM',
 			`public` tinyint(1) NOT NULL DEFAULT 0,
-			`win_func` varchar(30) NOT NULL DEFAULT 'win',
 			`mines` tinyint(1) NOT NULL DEFAULT 1 COMMENT 'Jestli automaticky detekovat miny nebo vůbec',
 			`part_win` tinyint(1) NOT NULL DEFAULT 1 COMMENT 'Jestli má být vložena část s tím kdo vyhrál.',
 			`part_teams` tinyint(1) NOT NULL DEFAULT 1 COMMENT 'Jestli se na výsledcích zobrazuje tabulka teamů',
@@ -42,6 +42,9 @@ class DbInstall implements InstallInterface
 			`player_mines` tinyint(1) NOT NULL DEFAULT 1 COMMENT 'Jestli se ve výsledcích hráče zobrazí miny.',
 			`player_players` tinyint(1) NOT NULL DEFAULT 1 COMMENT 'Jestli se ve výsledcích hráče zobrazí Zásahy hráčů.',
 			`player_players_teams` tinyint(1) NOT NULL DEFAULT 1 COMMENT 'Jestli se ve výsledcích hráče zobrazí zabití na vlastní a protihráče.',
+			`player_kd` tinyint(1) NOT NULL DEFAULT 1,
+			`player_favourites` tinyint(1) NOT NULL DEFAULT 1,
+			`player_lives` tinyint(1) NOT NULL DEFAULT 0,
 			`team_score` tinyint(1) NOT NULL DEFAULT 1,
 			`team_accuracy` tinyint(1) NOT NULL DEFAULT 1,
 			`team_shots` tinyint(1) NOT NULL DEFAULT 1,
@@ -64,7 +67,7 @@ class DbInstall implements InstallInterface
 			KEY `Mode` (`id_mode`),
 			CONSTRAINT `game_modes-names_ibfk_1` FOREIGN KEY (`id_mode`) REFERENCES `game_modes` (`id_mode`) ON DELETE CASCADE ON UPDATE CASCADE
 		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;",
-		Game::TABLE                => "(
+		Game::TABLE         => "(
 			`id_game` int(11) unsigned NOT NULL AUTO_INCREMENT,
 			`id_mode` int(11) unsigned DEFAULT NULL,
 			`mode_name` varchar(100) DEFAULT NULL,
@@ -85,6 +88,9 @@ class DbInstall implements InstallInterface
 			`scoring_power_agent` int(11) DEFAULT NULL,
 			`scoring_power_shield` int(11) DEFAULT NULL,
 			`code` varchar(50) DEFAULT NULL,
+			`respawn` smallint(4) unsigned DEFAULT NULL,
+			`lives` int(10) unsigned DEFAULT NULL,
+			`ammo` int(10) unsigned DEFAULT NULL,
 			PRIMARY KEY (`id_game`),
 			KEY `id_mode` (`id_mode`),
 			CONSTRAINT `evo5_games_ibfk_1` FOREIGN KEY (`id_mode`) REFERENCES `game_modes` (`id_mode`) ON DELETE SET NULL ON UPDATE CASCADE

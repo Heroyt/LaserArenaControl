@@ -48,9 +48,12 @@ abstract class Game extends AbstractModel implements InsertExtendInterface
 	public bool $finished = false;
 
 	public function save() : bool {
-		$test = DB::select($this::TABLE, $this::PRIMARY_KEY)->where('start = %dt', $this->start)->fetchSingle();
+		$pk = $this::PRIMARY_KEY;
+		/** @var object{id_game:int,code:string|null}|null $test */
+		$test = DB::select($this::TABLE, $pk.', code')->where('start = %dt', $this->start)->fetch();
 		if (isset($test)) {
-			$this->id = $test;
+			$this->id = $test->$pk;
+			$this->code = $test->code;
 		}
 		if (empty($this->code)) {
 			$this->code = uniqid('g', false);

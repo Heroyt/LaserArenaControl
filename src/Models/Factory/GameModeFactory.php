@@ -33,7 +33,7 @@ class GameModeFactory
 	 * @throws GameModeNotFoundException
 	 */
 	public static function find(string $modeName, int $modeType = AbstractMode::TYPE_TEAM, string $system = '') : AbstractMode {
-		$mode = DB::select('vModesNames', 'id_mode, name, system')->where('%s LIKE CONCAT(\'%\', sysName, \'%\')', $modeName)->fetch();
+		$mode = DB::select('vModesNames', 'id_mode, name, system')->where('%s LIKE CONCAT(\'%\', [sysName], \'%\')', $modeName)->fetch();
 		if (isset($mode->system)) {
 			/** @noinspection CallableParameterUseCaseInTypeContextInspection */
 			$system = $mode->system;
@@ -61,9 +61,17 @@ class GameModeFactory
 		if (isset($mode)) {
 			$dbName = str_replace([' ', '.', '_', '-'], '', Strings::toAscii(Strings::capitalize($mode->name)));
 			$class = $classBase.$classSystem.$classNamespace.$dbName;
+			$args[] = $mode->id_mode;
 			if (class_exists($class)) {
 				$className = $dbName;
-				$args[] = $mode->id_mode;
+			}
+			else if ($modeType === AbstractMode::TYPE_TEAM) {
+				$classSystem = '';
+				$className = 'CustomTeamMode';
+			}
+			else {
+				$classSystem = '';
+				$className = 'CustomSoloMode';
 			}
 		}
 

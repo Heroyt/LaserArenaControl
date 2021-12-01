@@ -14,14 +14,14 @@ class ResultsParserTest extends TestCase
 {
 
 	public function getFiles() : array {
-		$files = array_merge(glob(ROOT.'results/*_archive.game'), glob(ROOT.'results/????.game'));
+		$files = array_merge(glob(ROOT.'results-test/*_archive.game'), glob(ROOT.'results/????.game'));
 		return array_map(static function(string $fName) {
 			return [$fName];
 		}, $files);
 	}
 
 	public function getFilesError() : array {
-		$files = glob(ROOT.'results/????_error.game');
+		$files = glob(ROOT.'results-test/????_error.game');
 		return array_map(static function(string $fName) {
 			return [$fName];
 		}, $files);

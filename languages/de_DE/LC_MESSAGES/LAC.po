@@ -2,368 +2,351 @@ msgid ""
 msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Language: cs_CZ\n"
+"Language: de_DE\n"
 "Language-Team: \n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: \n"
-"POT-Creation-Date: \n"
-"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n>=2 && n<=4 ? 1 : 2);\n"
+"PO-Revision-Date: 2021-12-01 12:38+0100\n"
+"POT-Creation-Date: 2021-12-01 12:05+0100\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Project-Id-Version: \n"
 "X-Generator: Poedit 2.3\n"
+"X-Poedit-Basepath: .\n"
 
 msgctxt "pageTitles"
-msgid "404"
-msgstr "404"
+msgid "Games list"
+msgstr ""
 
-msgctxt "errors"
-msgid "stránka nenalezena"
-msgstr "stránka nenalezena"
+msgid "Toggle navigation"
+msgstr ""
+
+msgid "New game"
+msgstr ""
+
+msgid "Games"
+msgstr ""
+
+msgid "Print"
+msgstr ""
+
+msgid "Games list"
+msgstr ""
+
+msgid "Date"
+msgstr ""
+
+msgid "Time"
+msgstr ""
+
+msgid "Game mode"
+msgstr ""
+
+msgid "Players"
+msgstr "Spieler"
+
+msgid "Actions"
+msgstr ""
+
+msgid "%s score"
+msgstr ""
 
 msgctxt "debugPanel"
 msgid "Rows"
-msgstr "Řádky"
+msgstr ""
 
 msgctxt "debugPanel"
 msgid "Takes"
-msgstr "Trvání"
+msgstr ""
 
 msgctxt "debugPanel"
 msgid "Translations"
-msgstr "Překlady"
+msgstr ""
+
+msgctxt "debugPanel"
+msgid "Language"
+msgstr ""
+
+msgctxt "debugPanel"
+msgid "HTTP header"
+msgstr ""
 
 msgctxt "debugPanel"
 msgid "Translated strings"
-msgstr "Přeložené řetězcce"
+msgstr ""
 
 msgctxt "debugPanel"
 msgid "Added a new string"
-msgstr "Přidán řetězec"
+msgstr ""
 
 msgctxt "debugPanel"
 msgid "String"
-msgstr "Řetězec"
+msgstr ""
 
 msgctxt "debugPanel"
 msgid "Context"
-msgstr "Kontext"
+msgstr ""
 
 msgctxt "pageTitles"
-msgid "Dashboard"
-msgstr "Úvod"
+msgid "404"
+msgstr ""
 
-msgid "New game"
-msgstr "Nová hra"
-
-msgid "Toggle navigation"
-msgstr "Přepnout navigaci"
+msgctxt "errors"
+msgid "stránka nenalezena"
+msgstr ""
 
 msgctxt "pageTitles"
 msgid "Results"
-msgstr "Výsledky"
+msgstr ""
 
-msgctxt "pageTitles"
-msgid "Games list"
-msgstr "Seznam her"
-
+msgctxt "results.info"
 msgid "Datum"
-msgstr "Datum"
+msgstr ""
 
-msgid "Hra neexistuje!"
-msgstr "Hra neexistuje!"
-
+msgctxt "results.info"
 msgid "Herní mód"
-msgstr "Herní mód"
+msgstr "Spielmodus"
 
-msgctxt "debugPanel"
-msgid "Plural"
-msgstr "Množné číslo"
-
-msgid "Games"
-msgstr "Hry"
-
-msgid "Date"
-msgstr "Datum"
-
-msgid "Games list"
-msgstr "Seznam her"
-
-msgid "No games had been played on this date."
-msgstr "Tento den se nehrály žádné hry."
-
-msgid "Time"
-msgstr "Čas"
-
-msgid "Game mode"
-msgstr "Herní mód"
-
-msgid "Players"
-msgstr "Hráči"
-
-msgid "%d score"
-msgstr "%d skóre"
-
-msgid "%s score"
-msgstr "%s skóre"
-
-msgid "Actions"
-msgstr "Akce"
-
-msgid "Print"
-msgstr "Tisk"
-
+msgctxt "gameModes"
 msgid "Základny"
-msgstr "Základny"
-
-msgctxt "results.info"
-msgid "Datum"
-msgstr "Datum"
-
-msgctxt "results.info"
-msgid "Herní mód"
-msgstr "Herní mód"
+msgstr ""
 
 msgctxt "results.info"
 msgid "Počet hráčů"
-msgstr "Počet hráčů"
+msgstr "Spieler Anzahl"
 
 msgctxt "results.info"
 msgid "Počet týmů"
-msgstr "Počet týmů"
+msgstr "Teams Anzahl"
 
 msgctxt "results.scoring"
 msgid "Zásah protihráče"
-msgstr "Zásah protihráče"
+msgstr "Gegner getroffen"
 
 msgctxt "results.scoring"
 msgid "Zasažen protihráčem"
-msgstr "Zasažen protihráčem"
+msgstr "getroffen durch Gegner"
 
 msgctxt "results.scoring"
 msgid "Zásah spoluhráče"
-msgstr "Zásah spoluhráče"
+msgstr "Mitspieler getroffen"
 
 msgctxt "results.scoring"
 msgid "Zasažen spouhráčem"
-msgstr "Zasažen spoluhráčem"
+msgstr "getroffen durch Mitspieler"
 
 msgctxt "results.scoring"
 msgid "Zasažen minou"
-msgstr "Zasažen minou"
+msgstr "getroffen durch Minen"
 
 msgctxt "results.scoring"
 msgid "Body za výstřel"
-msgstr "Body za výstřel"
+msgstr ""
 
 msgctxt "results.scoring"
 msgid "Samopal"
-msgstr "Samopal"
+msgstr ""
 
 msgctxt "results.scoring"
 msgid "Neviditelnost"
-msgstr "Neviditelnost"
+msgstr ""
 
 msgctxt "results.scoring"
 msgid "Agent"
-msgstr "Agent"
+msgstr ""
 
 msgctxt "results.scoring"
 msgid "Štít"
-msgstr "Štít"
+msgstr ""
 
 msgctxt "results.player"
 msgid "Jméno"
-msgstr "Jméno"
+msgstr "Name"
 
 msgctxt "results.player"
 msgid "Tým"
-msgstr "Tým"
+msgstr "Team"
 
 msgctxt "results.player"
 msgid "Skóre"
-msgstr "Skóre"
+msgstr "Ergebnis"
 
 msgctxt "results.player"
 msgid "Počet výstřelů"
-msgstr "Počet výstřelů"
+msgstr "Anzahl der Schüsse"
 
 msgctxt "results.player"
 msgid "Počet střel do prázdna"
-msgstr "Počet střel do prázdna"
+msgstr ""
 
 msgctxt "results.player"
 msgid "Úspěšnost"
-msgstr "Úspěšnost"
+msgstr "Genauigkeit"
 
 msgctxt "results.player"
 msgid "Hráči"
-msgstr "Hráči"
+msgstr ""
 
 msgctxt "results.player"
 msgid "Zásahy"
-msgstr "Zásahy"
+msgstr "Treffer"
 
 msgctxt "results.player"
 msgid "Smrti"
-msgstr "Smrti"
+msgstr ""
 
 msgctxt "results.player"
 msgid "Týmy"
-msgstr "Týmy"
+msgstr "Teams"
 
 msgctxt "results.player"
 msgid "Soupeř"
-msgstr "Soupeř"
+msgstr "Gegner"
 
 msgctxt "results.player"
 msgid "Vlastní"
-msgstr "Vlastní"
+msgstr ""
 
 msgctxt "results.today"
 msgid "Umístění dne"
-msgstr "Umístění dne"
+msgstr ""
 
 msgctxt "results.today"
 msgid "Jméno"
-msgstr "Jméno"
+msgstr "Name"
 
 msgctxt "results.today"
 msgid "Denní pořadí podle"
-msgstr "Denní pořadí podle"
+msgstr ""
 
 msgctxt "results.today"
 msgid "Skóre"
-msgstr "Skóre"
+msgstr "Ergebnis"
 
 msgctxt "results.today"
 msgid "Přesnosti"
-msgstr "Přesnosti"
+msgstr "Genauigkeit"
 
 msgctxt "results.today"
 msgid "Zásahů"
-msgstr "Zásahů"
+msgstr ""
 
 msgctxt "results.today"
 msgid "Smrtí"
-msgstr "Smrtí"
+msgstr ""
 
 msgctxt "results.today"
 msgid "Dnes odehráno"
-msgstr "Dnes odehráno"
+msgstr ""
 
 msgctxt "results.today"
 msgid "%d hra"
 msgid_plural "%d her"
-msgstr[0] "%d hra"
-msgstr[1] "%d hry"
-msgstr[2] "%d her"
+msgstr[0] ""
+msgstr[1] ""
 
 msgctxt "results.today"
 msgid "%d tým"
 msgid_plural "%d týmů"
-msgstr[0] "%d tým"
-msgstr[1] "%d týmy"
-msgstr[2] "%d týmů"
+msgstr[0] ""
+msgstr[1] ""
 
 msgctxt "results.today"
 msgid "%d hráč"
 msgid_plural "%d hráčů"
-msgstr[0] "%d hráč"
-msgstr[1] "%d hráči"
-msgstr[2] "%d hráčů"
+msgstr[0] ""
+msgstr[1] ""
 
 msgctxt "results.hits"
 msgid "Zásahy hráčů"
-msgstr "Zásahy hráčů"
+msgstr "Treffer"
 
 msgctxt "results.hits"
 msgid "Zasáhl si hráče"
-msgstr "Zasáhl si hráče"
+msgstr ""
 
 msgctxt "results.team"
 msgid "Výsledky týmů"
-msgstr "Výsledky týmů"
+msgstr "Team Ergebnisse"
 
 msgctxt "results.team"
 msgid "Tým"
-msgstr "Tým"
+msgstr "Team"
 
 msgctxt "results.team"
 msgid "Zásahů"
-msgstr "Zásahů"
+msgstr "Treffer"
 
 msgctxt "results.team"
 msgid "Skóre"
-msgstr "Skóre"
+msgstr "Ergebnis"
 
 msgctxt "results.team"
 msgid "Úspěšnost"
-msgstr "Úspěšnost"
+msgstr "Genauigkeit"
 
 msgctxt "results.team"
 msgid "Výstřelů"
-msgstr "Výstřelů"
+msgstr "Schüsse"
 
 msgctxt "results.bests"
 msgid "Ti nej..."
-msgstr "Ti nej..."
+msgstr "Top Spieler…"
 
 msgctxt "results.bests"
 msgid "Největší terminátor"
-msgstr "Největší terminátor"
+msgstr ""
 
 msgctxt "results.bests"
 msgid "Objekt největšího zájmu"
-msgstr "Objekt největšího zájmu"
+msgstr "am meisten getroffen"
 
 msgctxt "results.bests"
 msgid "Absoltní vítěz"
-msgstr "Absoltní vítěz"
+msgstr "Absoluter Gewinner"
 
 msgctxt "results.bests"
 msgid "Hráč s nejlepší muškou"
-msgstr "Hráč s nejlepší muškou"
+msgstr "Spieler mit beste Genauigkeit"
 
 msgctxt "results.bests"
 msgid "Nejúspornější střelec"
-msgstr "Nejúspornější střelec"
+msgstr "der sparsamster Schütze"
 
 msgctxt "results.bests"
 msgid "Největší mimoň"
-msgstr "Největší mimoň"
-
-msgctxt "gameModes"
-msgid "Team deathmach"
-msgstr "Team deathmach"
+msgstr "der grösste Minion"
 
 msgctxt "results.bests"
 msgid "Zabiják vlastního týmu"
-msgstr "Zabiják vlastního týmu"
+msgstr "Mitspieler killer"
 
 msgctxt "results.bests"
 msgid "Největší vlastňák"
-msgstr "Největší vlastňák"
+msgstr "am meisten getroffen durch Mitspieler"
 
 msgctxt "debugPanel"
-msgid "Language"
-msgstr "Jazyk"
+msgid "Plural"
+msgstr ""
 
-msgctxt "debugPanel"
-msgid "HTTP header"
-msgstr "HTTP hlavička"
+msgctxt "pageTitles"
+msgid "Dashboard"
+msgstr ""
 
-msgctxt "gameModes"
-msgid "Základny"
-msgstr "Základny"
+msgid "No games had been played on this date."
+msgstr ""
 
 msgctxt "gameModes"
 msgid "CSGO"
 msgstr "CSGO"
 
+msgctxt "gameModes"
+msgid "Team deathmach"
+msgstr ""
+
 msgctxt "results.bests"
 msgid "Drtič min"
-msgstr "Drtič min"
+msgstr "Minenbrecher"
 
 msgctxt "gameModes"
 msgid "Deathmach"
-msgstr "Deathmach"
+msgstr ""

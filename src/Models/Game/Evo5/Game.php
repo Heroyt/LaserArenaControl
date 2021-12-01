@@ -74,14 +74,14 @@ class Game extends \App\Models\Game\Game
 		$info = parent::getBestsFields();
 		if ($this->mode->isTeam()) {
 			if ($this->mode->settings->bestHitsOwn) {
-				$info['hitsOwn'] = lang('Zabiják vlastního týmu', context: 'results');
+				$info['hitsOwn'] = lang('Zabiják vlastního týmu', context: 'results.bests');
 			}
 			if ($this->mode->settings->bestDeathsOwn) {
-				$info['deathsOwn'] = lang('Největší vlastňák', context: 'results');
+				$info['deathsOwn'] = lang('Největší vlastňák', context: 'results.bests');
 			}
 		}
 		if ($this->mode->settings->bestMines && $this->mode->settings->mines && $this->isMinesOn()) {
-			$info['mines'] = lang('Drtič min', context: 'results');
+			$info['mines'] = lang('Drtič min', context: 'results.bests');
 		}
 		return $info;
 	}

@@ -86,7 +86,6 @@ abstract class Page
 	}
 
 	protected function view(string $template) : void {
-		bdump($this->params);
 		view($template, $this->params);
 	}
 

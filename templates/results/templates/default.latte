@@ -35,32 +35,32 @@
 {define resultsHeader}
 	<table class="results-header text-print-primary colorless">
 		<tr>
-			<th>{lang 'Datum'}:</th>
+			<th>{lang 'Datum', context: 'results.info'}:</th>
 			<td>{$game->start->format('d.m.Y H:i:s')}</td>
 		</tr>
 		<tr>
-			<th>{lang 'Herní mód'}:</th>
-			<td>{$game->mode->name|lang}</td>
-			<th>{lang 'Počet hráčů'}:</th>
+			<th>{lang 'Herní mód', context: 'results.info'}:</th>
+			<td>{lang $game->mode->name, context: 'gameModes'}</td>
+			<th>{lang 'Počet hráčů', context: 'results.info'}:</th>
 			<td>{$game->getPlayersSorted()|length}</td>
-			<th>{lang 'Počet týmů'}:</th>
+			<th>{lang 'Počet týmů', context: 'results.info'}:</th>
 			<td>{$game->getTeamsSorted()|length}</td>
 		</tr>
 	</table>
 	<table class="results-scoring table colorless print-dark">
 		<tr>
-			<td>{lang 'Zásah protihráče'}: {$game->scoring->hitOther}</td>
-			<td>{lang 'Zasažen protihráčem'}: {$game->scoring->deathOther}</td>
-			<td>{lang 'Zásah spoluhráče'}: {$game->scoring->hitOwn}</td>
-			<td>{lang 'Zasažen spouhráčem'}: {$game->scoring->deathOwn}</td>
-			<td>{lang 'Zasažen minou'}: {$game->scoring->hitPod}</td>
+			<td>{lang 'Zásah protihráče', context: 'results.scoring'}: {$game->scoring->hitOther}</td>
+			<td>{lang 'Zasažen protihráčem', context: 'results.scoring'}: {$game->scoring->deathOther}</td>
+			<td>{lang 'Zásah spoluhráče', context: 'results.scoring'}: {$game->scoring->hitOwn}</td>
+			<td>{lang 'Zasažen spouhráčem', context: 'results.scoring'}: {$game->scoring->deathOwn}</td>
+			<td>{lang 'Zasažen minou', context: 'results.scoring'}: {$game->scoring->hitPod}</td>
 		</tr>
 		<tr>
-			<td>{lang 'Body za výstřel'}: {$game->scoring->shot}</td>
-			<td>{lang 'Samopal'}: {$game->scoring->machineGun}</td>
-			<td>{lang 'Neviditelnost'}: {$game->scoring->invisibility}</td>
-			<td>{lang 'Agent'}: {$game->scoring->agent}</td>
-			<td>{lang 'Štít'}: {$game->scoring->shield}</td>
+			<td>{lang 'Body za výstřel', context: 'results.scoring'}: {$game->scoring->shot}</td>
+			<td>{lang 'Samopal', context: 'results.scoring'}: {$game->scoring->machineGun}</td>
+			<td>{lang 'Neviditelnost', context: 'results.scoring'}: {$game->scoring->invisibility}</td>
+			<td>{lang 'Agent', context: 'results.scoring'}: {$game->scoring->agent}</td>
+			<td>{lang 'Štít', context: 'results.scoring'}: {$game->scoring->shield}</td>
 		</tr>
 	</table>
 {/define}
@@ -69,74 +69,74 @@
 	<table class="results-players table">
 		<thead>
 		<tr>
-			<th colspan="3" class="text-start">{lang 'Jméno'}</th>
+			<th colspan="3" class="text-start">{lang 'Jméno', context: 'results.player'}</th>
 			<th n:foreach="$game->getPlayersSorted() as $player">{$player->name}</th>
 		</tr>
 		</thead>
 		<tbody>
 		<tr>
-			<th colspan="3">{lang 'Tým'}</th>
+			<th colspan="3">{lang 'Tým', context: 'results.player'}</th>
 			<td n:foreach="$game->getPlayersSorted() as $player">{include teamColor, teamColor: $player->getTeam()->color}</td>
 		</tr>
 		<tr>
-			<th colspan="3">{lang 'Skóre'}</th>
+			<th colspan="3">{lang 'Skóre', context: 'results.player'}</th>
 			<td n:foreach="$game->getPlayersSorted() as $player">{$player->score|number:0,',','&nbsp;'|noescape}</td>
 		</tr>
 		<tr>
-			<th colspan="3">{lang 'Počet výstřelů'}</th>
+			<th colspan="3">{lang 'Počet výstřelů', context: 'results.player'}</th>
 			<td n:foreach="$game->getPlayersSorted() as $player">
 				{$player->shots|number:0,',','&nbsp;'|noescape}
 			</td>
 		</tr>
 		<tr>
-			<th colspan="3">{lang 'Počet střel do prázdna'}</th>
+			<th colspan="3">{lang 'Počet střel do prázdna', context: 'results.player'}</th>
 			<td n:foreach="$game->getPlayersSorted() as $player">
 				{($player->shots-$player->hits)|number:0,',','&nbsp;'|noescape}
 			</td>
 		</tr>
 		<tr>
-			<th colspan="3">{lang 'Úspěšnost'}</th>
+			<th colspan="3">{lang 'Úspěšnost', context: 'results.player'}</th>
 			<td n:foreach="$game->getPlayersSorted() as $player">
 				{$player->accuracy}%
 			</td>
 		</tr>
 		<tr>
-			<th rowspan="2">{lang 'Hráči'}</th>
-			<th colspan="2">{lang 'Zásahy'}</th>
+			<th rowspan="2">{lang 'Hráči', context: 'results.player'}</th>
+			<th colspan="2">{lang 'Zásahy', context: 'results.player'}</th>
 			<td n:foreach="$game->getPlayersSorted() as $player">
 				{$player->hits}
 			</td>
 		</tr>
 		<tr>
-			<th colspan="2">{lang 'Smrti'}</th>
+			<th colspan="2">{lang 'Smrti', context: 'results.player'}</th>
 			<td n:foreach="$game->getPlayersSorted() as $player">
 				{$player->deaths}
 			</td>
 		</tr>
 		{if $game->mode->isTeam()}
 			<tr>
-				<th rowspan="4">{lang 'Týmy'}</th>
-				<th rowspan="2">{lang 'Soupeř'}</th>
-				<th>{lang 'Zásahy'}</th>
+				<th rowspan="4">{lang 'Týmy', context: 'results.player'}</th>
+				<th rowspan="2">{lang 'Soupeř', context: 'results.player'}</th>
+				<th>{lang 'Zásahy', context: 'results.player'}</th>
 				<td n:foreach="$game->getPlayersSorted() as $player">
 					{$player->hitsOther}
 				</td>
 			</tr>
 			<tr>
-				<th>{lang 'Smrti'}</th>
+				<th>{lang 'Smrti', context: 'results.player'}</th>
 				<td n:foreach="$game->getPlayersSorted() as $player">
 					{$player->deathsOther}
 				</td>
 			</tr>
 			<tr>
-				<th rowspan="2">{lang 'Vlastní'}</th>
-				<th>{lang 'Zásahy'}</th>
+				<th rowspan="2">{lang 'Vlastní', context: 'results.player'}</th>
+				<th>{lang 'Zásahy', context: 'results.player'}</th>
 				<td n:foreach="$game->getPlayersSorted() as $player">
 					{$player->hitsOwn}
 				</td>
 			</tr>
 			<tr>
-				<th>{lang 'Smrti'}</th>
+				<th>{lang 'Smrti', context: 'results.player'}</th>
 				<td n:foreach="$game->getPlayersSorted() as $player">
 					{$player->deathsOwn}
 				</td>
@@ -148,10 +148,10 @@
 
 {define resultsHits}
 	<table class="table results-hits">
-		<caption>{lang 'Zásahy hráčů'}</caption>
+		<caption>{lang 'Zásahy hráčů', context: 'results.hits'}</caption>
 		<thead>
 		<tr>
-			<th>{lang 'Zasáhl si hráče'}</th>
+			<th>{lang 'Zasáhl si hráče', context: 'results.hits'}</th>
 			<th n:foreach="$game->getPlayersSorted() as $player">
 				<div class="rotate-90">
 					{$player->name}
@@ -170,15 +170,15 @@
 
 {define resultsTeams}
 	<table class="table results-teams">
-		<caption>{lang 'Výsledky týmů'}</caption>
+		<caption>{lang 'Výsledky týmů', context: 'results.team'}</caption>
 		<thead>
 		<tr>
-			<th>{lang 'Tým'}</th>
+			<th>{lang 'Tým', context: 'results.team'}</th>
 			<th n:foreach="$game->getTeamsSorted() as $team">{include teamColor, teamColor: $team->color}</th>
-			<th>{lang 'Zásahů'}</th>
-			<th>{lang 'Skóre'}</th>
-			<th>{lang 'Úspěšnost'}</th>
-			<th>{lang 'Výstřelů'}</th>
+			<th>{lang 'Zásahů', context: 'results.team'}</th>
+			<th>{lang 'Skóre', context: 'results.team'}</th>
+			<th>{lang 'Úspěšnost', context: 'results.team'}</th>
+			<th>{lang 'Výstřelů', context: 'results.team'}</th>
 		</tr>
 		<tr n:foreach="$game->getTeamsSorted() as $team">
 			<th>{include teamColor, teamColor: $team->color}</th>
@@ -195,29 +195,29 @@
 {define resultsBestDay}
 	<div class="results-today">
 		<table class="table">
-			<caption>{lang 'Umístění dne'}:</caption>
+			<caption>{lang 'Umístění dne', context: 'results.today'}:</caption>
 			<thead>
 			<tr>
-				<th colspan="3">{lang 'Jméno'}</th>
+				<th colspan="3">{lang 'Jméno', context: 'results.today'}</th>
 				<th n:foreach="$game->getPlayersSorted() as $player">{$player->name}</th>
 			</tr>
 			</thead>
 			<tbody>
 			<tr>
-				<th colspan="2" rowspan="4">{lang 'Denní pořadí podle'}</th>
-				<td>{lang 'Skóre'}</td>
+				<th colspan="2" rowspan="4">{lang 'Denní pořadí podle', context: 'results.today'}</th>
+				<td>{lang 'Skóre', context: 'results.today'}</td>
 				<td n:foreach="$game->getPlayersSorted() as $player">{$today->getPlayerOrder($player,'score')}.</td>
 			</tr>
 			<tr>
-				<td>{lang 'Přesnosti'}</td>
+				<td>{lang 'Přesnosti', context: 'results.today'}</td>
 				<td n:foreach="$game->getPlayersSorted() as $player">{$today->getPlayerOrder($player,'accuracy')}.</td>
 			</tr>
 			<tr>
-				<td>{lang 'Zásahů'}</td>
+				<td>{lang 'Zásahů', context: 'results.today'}</td>
 				<td n:foreach="$game->getPlayersSorted() as $player">{$today->getPlayerOrder($player,'hits')}.</td>
 			</tr>
 			<tr>
-				<td>{lang 'Smrtí'}</td>
+				<td>{lang 'Smrtí', context: 'results.today'}</td>
 				<td n:foreach="$game->getPlayersSorted() as $player">{$today->getPlayerOrder($player,'deaths')}.</td>
 			</tr>
 			</tbody>
@@ -225,10 +225,10 @@
 		<table class="table">
 			<tbody>
 			<tr>
-				<th colspan="3">{lang 'Dnes odehráno'}:</th>
-				<td class="print-light">{sprintf(lang('%d hra', '%d her', $today->games), $today->games)}</td>
-				<td class="print-light">{sprintf(lang('%d tým', '%d týmů', $today->teams), $today->teams)}</td>
-				<td class="print-light">{sprintf(lang('%d hráč', '%d hráčů', $today->players), $today->players)}</td>
+				<th colspan="3">{lang 'Dnes odehráno', context: 'results.today'}:</th>
+				<td class="print-light">{sprintf(lang('%d hra', '%d her', $today->games, context: 'results.today'), $today->games)}</td>
+				<td class="print-light">{sprintf(lang('%d tým', '%d týmů', $today->teams, context: 'results.today'), $today->teams)}</td>
+				<td class="print-light">{sprintf(lang('%d hráč', '%d hráčů', $today->players, context: 'results.today'), $today->players)}</td>
 			</tr>
 			</tbody>
 		</table>
@@ -237,7 +237,7 @@
 
 {define resultsBests}
 	<div class="results-bests">
-		<div class="caption">{lang 'Ti nej...'}</div>
+		<div class="caption">{lang 'Ti nej...', context: 'results.bests'}</div>
 		<div class="d-flex w-100 flex-wrap">
 			{var array $fields = $game->getBestsFields()}
 		{if count($fields) % 2 === 1}

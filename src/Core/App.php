@@ -12,7 +12,6 @@
 namespace App\Core;
 
 
-use App\Core\Auth\User;
 use App\Core\Routing\Route;
 use App\Exceptions\FileException;
 use App\Logging\Logger;
@@ -40,7 +39,10 @@ class App
 	/**
 	 * @var Engine $latte Latte engine
 	 */
-	public static Engine $latte;
+	public static Engine    $latte;
+	public static string    $activeLanguageCode = 'cs_CZ';
+	public static ?Language $language;
+	public static array     $supportedLanguages = [];
 	/**
 	 * @var bool $prettyUrl
 	 * @brief If app should use a SEO-friendly pretty url
@@ -48,18 +50,14 @@ class App
 	protected static bool $prettyUrl = false;
 	/** @var Request $request Current request object */
 	protected static Request $request;
-
-	protected static Logger $logger;
-
+	protected static Logger  $logger;
 	/** @var array Parsed config.ini file */
 	protected static array $config;
 	/**
 	 * @var string
 	 */
-	private static mixed $timezone;
-
+	private static mixed     $timezone;
 	private static Container $container;
-
 
 	/**
 	 * Initialization function
@@ -84,13 +82,20 @@ class App
 		self::$container = new $class;
 
 		// Set language and translations
-		$language = Language::getById($_SERVER['HTTP_ACCEPT_LANGUAGE'] ?? 'cs_CZ');
+		self::$language = Language::getById(self::getDesiredLanguageCode());
 		date_default_timezone_set(self::getTimezone());
-		if (isset($language)) {
-			setlocale(LC_ALL, $language->id.'.UTF-8');
-			bindtextdomain("LAC", LANGUAGE_DIR);
-			textdomain('LAC');
-			bind_textdomain_codeset('LAC', "UTF-8");
+		if (isset(self::$language)) {
+			$supported = self::getSupportedLanguages();
+			self::$activeLanguageCode = self::$language->id;
+			if (isset($supported[self::$language->id])) {
+				self::$activeLanguageCode .= '_'.$supported[self::$language->id];
+			}
+			putenv('LANG='.self::$activeLanguageCode);
+			putenv('LC_ALL='.self::$activeLanguageCode);
+			bdump(setlocale(LC_ALL, [self::$activeLanguageCode.'.UTF-8', self::$activeLanguageCode, self::$language->name]), 'setlocale');
+			bdump(bindtextdomain("LAC", substr(LANGUAGE_DIR, 0, -1)), 'bindtextdomain');
+			bdump(textdomain('LAC'), 'textdomain');
+			bdump(bind_textdomain_codeset('LAC', "UTF-8"), 'bind_textdomain_codeset');
 		}
 
 		self::setupLatte();
@@ -107,6 +112,85 @@ class App
 		foreach ($routeFiles as $file) {
 			require $file;
 		}
+	}
+
+	/**
+	 * Get desired language for the page
+	 *
+	 * Checks request parameters, session and HTTP headers in this order.
+	 *
+	 * @return string Language code
+	 */
+	protected static function getDesiredLanguageCode() : string {
+		$request = self::getRequest();
+		if (isset($request, $request->params['lang']) && self::isSupportedLanguage($request->params['lang'])) {
+			return $request->params['lang'];
+		}
+		if (isset($_SESSION['lang']) && self::isSupportedLanguage($_SESSION['lang'])) {
+			return $_SESSION['lang'];
+		}
+		if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
+			$info = explode(';', $_SERVER['HTTP_ACCEPT_LANGUAGE']);
+			$languages = explode(',', $info[0]);
+			foreach ($languages as $language) {
+				if (self::isSupportedLanguage($language)) {
+					return $language;
+				}
+			}
+		}
+		return DEFAULT_LANGUAGE;
+	}
+
+	/**
+	 * Get the request array
+	 *
+	 * @return Request|null
+	 *
+	 * @version 1.0
+	 * @since   1.0
+	 */
+	public static function getRequest() : ?Request {
+		return self::$request ?? null;
+	}
+
+	/**
+	 * Test if the language code is valid and if the language is supported
+	 *
+	 * @param string $language Language code
+	 *
+	 * @return bool
+	 */
+	protected static function isSupportedLanguage(string $language) : bool {
+		preg_match('/([a-z]{2})[\-_]?/', $language, $matches);
+		$id = $matches[1];
+		return self::isValidLanguage($language) && isset(self::getSupportedLanguages()[$id]);
+	}
+
+	/**
+	 * Check if the language exists
+	 *
+	 * @param string $language
+	 *
+	 * @return bool
+	 */
+	protected static function isValidLanguage(string $language) : bool {
+		return Language::getById($language) !== null;
+	}
+
+	/**
+	 * @return array<string,string>
+	 */
+	public static function getSupportedLanguages() : array {
+		if (empty(self::$supportedLanguages)) {
+			$dirs = array_map(static function(string $dir) {
+				return str_replace(LANGUAGE_DIR, '', $dir);
+			}, glob(LANGUAGE_DIR.'*'));
+			foreach ($dirs as $dir) {
+				[$lang, $country] = explode('_', $dir);
+				self::$supportedLanguages[$lang] = $country;
+			}
+		}
+		return self::$supportedLanguages;
 	}
 
 	/**
@@ -465,18 +549,6 @@ class App
 			}
 		}
 		return $path1 === $path2;
-	}
-
-	/**
-	 * Get the request array
-	 *
-	 * @return Request|null
-	 *
-	 * @version 1.0
-	 * @since   1.0
-	 */
-	public static function getRequest() : ?Request {
-		return self::$request ?? null;
 	}
 
 }

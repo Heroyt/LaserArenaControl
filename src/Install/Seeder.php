@@ -5,6 +5,7 @@ namespace App\Install;
 use App\Core\DB;
 use App\Models\Game\GameModes\AbstractMode;
 use App\Models\Game\PrintStyle;
+use App\Models\Game\PrintTemplate;
 
 class Seeder implements InstallInterface
 {
@@ -108,6 +109,14 @@ class Seeder implements InstallInterface
 			'color_primary' => '#1b4799',
 			'bg'            => 'assets/images/print/bg.jpg',
 			'default'       => true,
+		]);
+
+		// Print templates
+		DB::insertIgnore(PrintTemplate::TABLE, [
+			'id_template' => 1,
+			'slug'        => 'default',
+			'name'        => 'Default',
+			'description' => 'Basic result template',
 		]);
 		return true;
 	}

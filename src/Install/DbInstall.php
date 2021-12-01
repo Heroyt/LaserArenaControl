@@ -7,6 +7,7 @@ use App\Models\Game\Evo5\Game;
 use App\Models\Game\Evo5\Player;
 use App\Models\Game\Evo5\Team;
 use App\Models\Game\PrintStyle;
+use App\Models\Game\PrintTemplate;
 use Dibi\Exception;
 
 class DbInstall implements InstallInterface
@@ -158,6 +159,14 @@ class DbInstall implements InstallInterface
 			KEY `style` (`id_style`),
 			CONSTRAINT `style` FOREIGN KEY (`id_style`) REFERENCES `print_styles` (`id_style`) ON DELETE CASCADE ON UPDATE CASCADE
 		) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;",
+		PrintTemplate::TABLE       => "(
+			`id_template` int(11) unsigned NOT NULL AUTO_INCREMENT,
+			`slug` varchar(50) NOT NULL DEFAULT '',
+			`name` varchar(50) DEFAULT NULL,
+			`description` text DEFAULT NULL,
+			PRIMARY KEY (`id_template`),
+			UNIQUE KEY `slug` (`slug`)
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;",
 	];
 
 	public static function install(bool $fresh = false) : bool {

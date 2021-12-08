@@ -435,3 +435,123 @@ msgstr ""
 msgctxt "results.player"
 msgid "Zbývá životů"
 msgstr ""
+
+msgctxt "tips"
+msgid "Jak se v aréně střílí, tak se v aréně umírá..."
+msgstr ""
+
+msgctxt "tips"
+msgid "Trénink se vyplácí!"
+msgstr ""
+
+msgctxt "tips"
+msgid "Tip #%d"
+msgstr ""
+
+msgctxt "tips"
+msgid "Střílíme v Písku už od 31.12.2013!!!"
+msgstr ""
+
+msgctxt "tips"
+msgid "Ve hře vždy sleduj svoje okolí!"
+msgstr ""
+
+msgctxt "tips"
+msgid "Čidlo na zbrani, ač nenápadné, se dá velmi dobře trefit."
+msgstr ""
+
+msgctxt "tips"
+msgid "Zkušení hráči hrajou týmově!"
+msgstr ""
+
+msgctxt "tips"
+msgid "Pro vyřízení osobních sporů je aréna ideální."
+msgstr ""
+
+msgctxt "tips"
+msgid "Dobití protihráče pažbou, vám žádné body nepřidá."
+msgstr ""
+
+msgctxt "tips"
+msgid "Zabiják vlastního týmu, či největší vlasťnák... To je oč tu běží!"
+msgstr ""
+
+msgctxt "tips"
+msgid "Vestu si oblečte vždy zbraní dobředu."
+msgstr ""
+
+msgctxt "tips"
+msgid "Při týmové hře není výhodné střílet do hráčů se stejnou barvou."
+msgstr ""
+
+msgctxt "tips"
+msgid "Jen Chuck Norris vás může zastřelit baterkou na svém mobilu."
+msgstr ""
+
+msgctxt "tips"
+msgid "Nejlepší výherní taktika je strílet do protihráčů."
+msgstr ""
+
+msgctxt "tips"
+msgid "Nemá cenu umírat na tom samém místě. Když to nejde, uteč jinam!"
+msgstr ""
+
+msgctxt "tips"
+msgid "Všechny bonusy, kromě štítu, trvají 30s."
+msgstr ""
+
+msgctxt "tips"
+msgid "Držení zbraně v obou rukách je přesnější."
+msgstr ""
+
+msgctxt "tips"
+msgid "Měl bys radši hrát laser game a být úžasný!"
+msgstr ""
+
+msgctxt "tips"
+msgid "Spoluhráč je nejlepší cíl. Neutíká."
+msgstr ""
+
+msgctxt "tips"
+msgid "#laserarenapísek"
+msgstr ""
+
+msgctxt "tips"
+msgid "Zabití: 100 bodů, Smrt: -50 bodů, Zabití vlastního hráče: -25 bodů"
+msgstr ""
+
+msgctxt "tips"
+msgid "Go, go, go, go..."
+msgstr ""
+
+msgctxt "tips"
+msgid "Ramenní čidla se trefují nejlépe, zádová nejhůř."
+msgstr ""
+
+msgctxt "tips"
+msgid "Pohyblivý cíl je vždycky těžší trefit."
+msgstr ""
+
+msgctxt "tips"
+msgid "Na displeji vesty po zásahu vidíte kdo vás zasáhl do jakého čidla. To pomáhá při orientaci."
+msgstr ""
+
+msgctxt "tips"
+msgid "Při výstupu z arény vždy připni zbraň k vestě."
+msgstr ""
+
+msgctxt "tips"
+msgid "LASER TAG - SUIT UP!"
+msgstr ""
+
+msgctxt "tips"
+msgid "Když tě bolí nohy, kempi!"
+msgstr ""
+
+msgctxt "tips"
+msgid "Nikdy nejsi příliš starý na laser game."
+msgstr ""
+
+msgctxt "tips"
+msgid "Nezapomeň každý květen a listopad registrovat svůj tým na turnaj!"
+msgstr ""

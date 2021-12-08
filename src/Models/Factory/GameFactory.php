@@ -44,6 +44,9 @@ class GameFactory
 		$rows = self::queryGameCountPerDay()->fetchAll();
 		$return = [];
 		foreach ($rows as $row) {
+			if (!isset($row->date)) {
+				continue;
+			}
 			$return[$row->date->format($format)] = $row->count;
 		}
 		return $return;

@@ -16,6 +16,7 @@
 
 {define content}
 	{dump $style}
+	{dump $game->mode}
 	{include resultsHeader}
 	{if $game->mode->settings->partWin}
 		{include resultsWin}

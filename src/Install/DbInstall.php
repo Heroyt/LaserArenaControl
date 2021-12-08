@@ -65,6 +65,7 @@ class DbInstall implements InstallInterface
 		'game_modes-names'         => "(
 			`id_mode` int(11) unsigned NOT NULL,
 			`sysName` varchar(20) NOT NULL,
+			PRIMARY KEY (`sysName`,`id_mode`),
 			KEY `Mode` (`id_mode`),
 			CONSTRAINT `game_modes-names_ibfk_1` FOREIGN KEY (`id_mode`) REFERENCES `game_modes` (`id_mode`) ON DELETE CASCADE ON UPDATE CASCADE
 		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;",

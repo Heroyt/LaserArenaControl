@@ -1,29 +1,29 @@
 .template-default {
-	--font-size: 6pt;
 	--size: 9pt;
 	align-items: center;
 	display: grid;
-	grid-gap: 1rem;
+	grid-gap: .5rem;
 	grid-template-areas:
-		 "info qr"
-		 "scores scores"
-		 "win win"
-		 "players players"
-		 "today today"
-		 "hits teams"
-		 "hits bests";
-	grid-template-columns: 1fr 2fr;
+		 'info qr'
+		 'scores scores'
+		 'win win'
+		 'players players'
+		 'today today'
+		 'hits teams'
+		 'hits bests';
+	grid-template-columns: 1fr 1fr;
 	grid-template-rows: auto;
 	justify-content: start;
+	--font-size: 6pt;
 
 	&.solo {
 		grid-template-areas:
-		 "info qr"
-		 "scores scores"
-		 "win win"
-		 "players players"
-		 "today today"
-		 "hits bests";
+		 'info qr'
+		 'scores scores'
+		 'win win'
+		 'players players'
+		 'today today'
+		 'hits bests';
 	}
 
 	> * {
@@ -66,12 +66,26 @@
 	}
 
 	table {
+		border: 1px solid var(--print-dark);
+		border-radius: 10px;
 		caption-side: top;
 		max-width: 100%;
+		overflow: hidden;
+
+		thead {
+			border-top-left-radius: 10px;
+			border-top-right-radius: 10px;
+		}
+
+		tbody {
+			border-bottom-left-radius: 10px;
+			border-bottom-right-radius: 10px;
+		}
 
 		tbody,
 		thead {
 			border: none !important;
+			overflow: hidden;
 		}
 	}
 
@@ -88,7 +102,7 @@
 
 		th {
 			background-color: var(--print-dark);
-			border: 1px solid var(--print-dark-text);
+			border-bottom: 1px solid var(--print-dark-text);
 			color: var(--print-dark-text);
 		}
 

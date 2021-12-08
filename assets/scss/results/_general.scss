@@ -2,9 +2,52 @@
 	margin: 0;
 }
 
-.container-print {
+.container-print-wrapper {
 	aspect-ratio: 1.41;
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: contain;
+	height: 100%;
+	overflow: hidden;
 	padding: 6.5mm;
 	position: relative;
 	width: 100vw;
+	z-index: 0;
+
+	.bg-img {
+		display: none;
+		left: 0;
+		position: absolute;
+		top: 0;
+		width: 100%;
+		z-index: 0;
+	}
+
+	.container-print {
+		margin-top: 15%;
+		position: relative;
+		width: 100%;
+		z-index: 1;
+	}
+}
+
+@media print {
+	.container-print-wrapper .bg-img {
+		display: initial;
+	}
+}
+
+.tip {
+	background: rgba(0, 0, 0, .6);
+	bottom: 7%;
+	color: var(--white);
+	font-size: .7rem;
+	font-weight: bold;
+	left: 0;
+	padding: .5em 0;
+	position: absolute;
+	text-align: center;
+	text-transform: uppercase;
+	width: 100vw;
+	z-index: 2;
 }

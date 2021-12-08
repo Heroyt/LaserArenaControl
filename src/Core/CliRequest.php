@@ -15,14 +15,14 @@ class CliRequest implements RequestInterface
 
 	public string       $type    = RouteInterface::CLI;
 	public array        $path    = [];
-	public array        $query   = [];
+	public array        $args    = [];
 	public array        $params  = [];
-	public string       $body    = '';
 	public array        $errors  = [];
 	public array        $notices = [];
 	protected ?CliRoute $route   = null;
 
 	public function __construct(array|string $query) {
+		global $argv;
 		if (is_array($query)) {
 			$this->parseArrayQuery($query);
 		}
@@ -30,6 +30,7 @@ class CliRequest implements RequestInterface
 			$this->parseStringQuery($query);
 		}
 		$this->route = CliRoute::getRoute(RouteInterface::CLI, $this->path, $this->params);
+		$this->args = array_slice($argv, 2);
 	}
 
 	protected function parseArrayQuery(array $query) : void {
@@ -47,7 +48,7 @@ class CliRequest implements RequestInterface
 			$this->route->handle($this);
 		}
 		else {
-			echo 'Unknown request.'.PHP_EOL;
+			fwrite(STDERR, 'Unknown request.'.PHP_EOL);
 			exit(1);
 		}
 	}

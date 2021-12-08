@@ -42,6 +42,9 @@ class Results extends CliController
 		$total = 0;
 		$start = microtime(true);
 		foreach ($resultFiles as $file) {
+			if (str_ends_with($file, '0000.game')) {
+				continue;
+			}
 			if (filemtime($file) > $lastCheck) {
 				$total++;
 				echo 'Importing: '.$file.PHP_EOL;

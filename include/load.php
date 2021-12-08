@@ -49,6 +49,10 @@ if (!PRODUCTION) {
 	bdump($translations);
 }
 
+if ((!file_exists(LOG_DIR) || !is_dir(LOG_DIR)) && !mkdir(LOG_DIR) && !is_dir(LOG_DIR)) {
+	throw new RuntimeException(sprintf('Directory "%s" was not created', LOG_DIR));
+}
+
 Debugger::enable(PRODUCTION ? Debugger::PRODUCTION : Debugger::DEVELOPMENT, LOG_DIR);
 Debugger::getBar()->addPanel(new DbTracyPanel())->addPanel(new TranslationTracyPanel())->addPanel(new RoutingTracyPanel());
 

@@ -25,7 +25,7 @@ class Info
 			return $default;
 		}
 		/** @noinspection UnserializeExploitsInspection */
-		$value = unserialize($value, true);
+		$value = unserialize($value);
 		self::$info[$key] = $value; // Cache
 		return $value;
 	}

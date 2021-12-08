@@ -6,6 +6,7 @@ use App\Core\DB;
 use App\Models\Game\GameModes\AbstractMode;
 use App\Models\Game\PrintStyle;
 use App\Models\Game\PrintTemplate;
+use App\Models\Tip;
 use Dibi\Exception;
 
 class Seeder implements InstallInterface
@@ -523,6 +524,39 @@ class Seeder implements InstallInterface
 		],
 	];
 
+	public const TIPS = [
+		1  => 'Ve hře vždy sleduj svoje okolí!',
+		2  => 'Při týmové hře není výhodné střílet do hráčů se stejnou barvou.',
+		3  => 'Při výstupu z arény vždy připni zbraň k vestě.',
+		4  => 'Zabiják vlastního týmu, či největší vlasťnák... To je oč tu běží!',
+		5  => 'Ramenní čidla se trefují nejlépe, zádová nejhůř.',
+		6  => 'Jak se v aréně střílí, tak se v aréně umírá...',
+		7  => 'Čidlo na zbrani, ač nenápadné, se dá velmi dobře trefit.',
+		8  => 'Zkušení hráči hrajou týmově!',
+		9  => 'Nemá cenu umírat na tom samém místě. Když to nejde, uteč jinam!',
+		10 => 'Držení zbraně v obou rukách je přesnější.',
+		11 => 'Spoluhráč je nejlepší cíl. Neutíká.',
+		12 => 'Nejlepší výherní taktika je strílet do protihráčů.',
+		13 => 'Na displeji vesty po zásahu vidíte kdo vás zasáhl do jakého čidla. To pomáhá při orientaci.',
+		14 => 'Pohyblivý cíl je vždycky těžší trefit.',
+		15 => 'Go, go, go, go...',
+		16 => 'Trénink se vyplácí!',
+		17 => 'Nezapomeň každý květen a listopad registrovat svůj tým na turnaj!',
+		18 => 'Zabití: 100 bodů, Smrt: -50 bodů, Zabití vlastního hráče: -25 bodů',
+		19 => 'Střílíme v Písku už od 31.12.2013!!!',
+		20 => '#laserarenapísek',
+		21 => 'Všechny bonusy, kromě štítu, trvají 30s.',
+		22 => 'Dobití protihráče pažbou, vám žádné body nepřidá.',
+		23 => 'LASER TAG - SUIT UP!',
+		24 => 'Měl bys radši hrát laser game a být úžasný!',
+		25 => 'Jen Chuck Norris vás může zastřelit baterkou na svém mobilu.',
+		26 => 'Oživení trvá 5 sekund.',
+		27 => 'Nikdy nejsi příliš starý na laser game.',
+		28 => 'Když tě bolí nohy, kempi!',
+		29 => 'Vestu si oblečte vždy zbraní dobředu.',
+		30 => 'Pro vyřízení osobních sporů je aréna ideální.',
+	];
+
 	/**
 	 * @inheritDoc
 	 */
@@ -556,6 +590,17 @@ class Seeder implements InstallInterface
 			}
 			foreach (self::PRINT_TEMPLATES as $insert) {
 				DB::insertIgnore(PrintTemplate::TABLE, $insert);
+			}
+
+			// Tips
+			if ($fresh) {
+				DB::delete(Tip::TABLE, ['1=1']);
+			}
+			foreach (self::TIPS as $id => $tip) {
+				DB::insertIgnore(Tip::TABLE, [
+					'id_tip' => $id,
+					'text'   => $tip,
+				]);
 			}
 		} catch (Exception $e) {
 			echo $e->getMessage().PHP_EOL.$e->getSql().PHP_EOL;

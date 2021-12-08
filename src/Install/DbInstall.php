@@ -9,13 +9,14 @@ use App\Models\Game\Evo5\Team;
 use App\Models\Game\GameModes\AbstractMode;
 use App\Models\Game\PrintStyle;
 use App\Models\Game\PrintTemplate;
+use App\Models\Tip;
 use Dibi\Exception;
 
 class DbInstall implements InstallInterface
 {
 
 	public const TABLES = [
-		'page_info'         => "(
+		'page_info'                => "(
 			`key` varchar(30) NOT NULL DEFAULT '',
 			`value` text DEFAULT NULL,
 			PRIMARY KEY (`key`)
@@ -172,6 +173,11 @@ class DbInstall implements InstallInterface
 			`description` text DEFAULT NULL,
 			PRIMARY KEY (`id_template`),
 			UNIQUE KEY `slug` (`slug`)
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;",
+		Tip::TABLE                 => "(
+			`id_tip` int(11) unsigned NOT NULL AUTO_INCREMENT,
+			`text` text DEFAULT NULL,
+			PRIMARY KEY (`id_tip`)
 		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;",
 	];
 

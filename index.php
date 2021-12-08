@@ -18,6 +18,6 @@ const INDEX = true;
 
 require_once ROOT."include/load.php";
 
-App::generatePage();
+App::run();
 
 updateTranslations();

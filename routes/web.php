@@ -1,9 +1,9 @@
 <?php
 
+use App\Controllers\Dashboard;
+use App\Controllers\GamesList;
+use App\Controllers\Results;
 use App\Core\Routing\Route;
-use App\Pages\Dashboard;
-use App\Pages\GamesList;
-use App\Pages\Results;
 
 Route::get('/', [Dashboard::class, 'show'])->name('dashboard');
 Route::get('/results', [Results::class, 'show'])->name('results');

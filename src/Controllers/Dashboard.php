@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Pages;
+namespace App\Controllers;
 
-use App\Core\Page;
+use App\Core\Controller;
 
-class Dashboard extends Page
+class Dashboard extends Controller
 {
 
 	protected string $title       = 'Dashboard';

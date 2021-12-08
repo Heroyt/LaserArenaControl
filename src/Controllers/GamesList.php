@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Pages;
+namespace App\Controllers;
 
-use App\Core\Page;
+use App\Core\Controller;
 use App\Core\Request;
 use App\Models\Factory\GameFactory;
 use DateTime;
 
-class GamesList extends Page
+class GamesList extends Controller
 {
 
 	protected string $title       = 'Games list';

@@ -12,6 +12,7 @@
 namespace App\Core;
 
 
+use App\Core\Interfaces\RequestInterface;
 use App\Core\Routing\Route;
 use App\Exceptions\FileException;
 use App\Logging\Logger;
@@ -49,9 +50,9 @@ class App
 	 * @brief If app should use a SEO-friendly pretty url
 	 */
 	protected static bool $prettyUrl = false;
-	/** @var Request $request Current request object */
-	protected static Request $request;
-	protected static Logger  $logger;
+	/** @var RequestInterface $request Current request object */
+	protected static RequestInterface $request;
+	protected static Logger           $logger;
 	/** @var array Parsed config.ini file */
 	protected static array $config;
 	/**
@@ -72,7 +73,11 @@ class App
 		self::$logger = new Logger(LOG_DIR, 'app');
 		self::setupRoutes();
 
-		if (PHP_SAPI !== "cli") {
+		if (PHP_SAPI === "cli") {
+			global $argv;
+			self::$request = new CliRequest($argv[1] ?? '');
+		}
+		else {
 			self::$request = new Request(self::$prettyUrl ? $_SERVER['REQUEST_URI'] : ($_GET['p'] ?? []));
 		}
 
@@ -93,14 +98,13 @@ class App
 			}
 			putenv('LANG='.self::$activeLanguageCode);
 			putenv('LC_ALL='.self::$activeLanguageCode);
-			bdump(setlocale(LC_ALL, [self::$activeLanguageCode.'.UTF-8', self::$activeLanguageCode, self::$language->name]), 'setlocale');
-			bdump(bindtextdomain("LAC", substr(LANGUAGE_DIR, 0, -1)), 'bindtextdomain');
-			bdump(textdomain('LAC'), 'textdomain');
-			bdump(bind_textdomain_codeset('LAC', "UTF-8"), 'bind_textdomain_codeset');
+			setlocale(LC_ALL, [self::$activeLanguageCode.'.UTF-8', self::$activeLanguageCode, self::$language->name]);
+			bindtextdomain("LAC", substr(LANGUAGE_DIR, 0, -1));
+			textdomain('LAC');
+			bind_textdomain_codeset('LAC', "UTF-8");
 		}
 
 		self::setupLatte();
-		bdump($_SESSION, 'session');
 	}
 
 	/**
@@ -150,7 +154,7 @@ class App
 	 * @version 1.0
 	 * @since   1.0
 	 */
-	public static function getRequest() : ?Request {
+	public static function getRequest() : ?RequestInterface {
 		return self::$request ?? null;
 	}
 
@@ -352,12 +356,12 @@ class App
 	}
 
 	/**
-	 * Get current page HTML
+	 * Get current page HTML or run CLI command
 	 *
 	 * @version 1.0
 	 * @since   1.0
 	 */
-	public static function generatePage() : void {
+	public static function run() : void {
 		self::$request->handle();
 	}
 

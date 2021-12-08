@@ -9,7 +9,7 @@
 {define content}
 {/define}
 
-{varType \App\Core\Page $page}
+{varType \App\Core\Controller $page}
 
 <!DOCTYPE html>
 <html lang="cs">
@@ -57,8 +57,15 @@
 </head>
 <body>
 {for $i = 0; $i < $copies; $i++}
-	<main class="container-print {include containerClasses}">
-		{include content}
+	<main class="container-print-wrapper">
+		<img src="{getUrl}{$style->bg|noescape}" alt="background" class="bg-img">
+		<div class="container-print {include containerClasses}">
+			{include content}
+		</div>
+		<div class="tip">
+			{var App\Models\Tip|null $tip = \App\Models\Tip::random()}
+			<span class="content">{sprintf(lang('Tip #%d', context: 'tips'), $tip?->id)}: {lang $tip?->text, context: 'tips'}</span>
+		</div>
 	</main>
 {/for}
 {include svgSymbols}

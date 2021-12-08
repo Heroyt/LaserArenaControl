@@ -1,0 +1,74 @@
+<?php
+
+
+namespace App\Core;
+
+
+use App\Core\Interfaces\RequestInterface;
+use App\Core\Routing\CliRoute;
+use App\Core\Routing\RouteInterface;
+
+class CliRequest implements RequestInterface
+{
+
+	// TODO: Parse additional cli args and opts
+
+	public string       $type    = RouteInterface::CLI;
+	public array        $path    = [];
+	public array        $query   = [];
+	public array        $params  = [];
+	public string       $body    = '';
+	public array        $errors  = [];
+	public array        $notices = [];
+	protected ?CliRoute $route   = null;
+
+	public function __construct(array|string $query) {
+		if (is_array($query)) {
+			$this->parseArrayQuery($query);
+		}
+		else {
+			$this->parseStringQuery($query);
+		}
+		$this->route = CliRoute::getRoute(RouteInterface::CLI, $this->path, $this->params);
+	}
+
+	protected function parseArrayQuery(array $query) : void {
+		$this->path = array_map('strtolower', $query);
+	}
+
+	protected function parseStringQuery(string $query) : void {
+		$this->parseArrayQuery(array_filter(explode('/', $query), static function($a) {
+			return !empty($a);
+		}));
+	}
+
+	public function handle() : void {
+		if (isset($this->route)) {
+			$this->route->handle($this);
+		}
+		else {
+			echo 'Unknown request.'.PHP_EOL;
+			exit(1);
+		}
+	}
+
+	public function __get($name) {
+		return $this->params[$name] ?? null;
+	}
+
+	public function __set($name, $value) {
+		$this->params[$name] = $value;
+	}
+
+	public function __isset($name) {
+		return isset($this->params[$name]);
+	}
+
+	/**
+	 * @return CliRoute|null
+	 */
+	public function getRoute() : ?CliRoute {
+		return $this->route;
+	}
+
+}

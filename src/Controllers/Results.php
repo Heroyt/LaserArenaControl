@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Pages;
+namespace App\Controllers;
 
-use App\Core\Page;
+use App\Core\Controller;
 use App\Core\Request;
 use App\Exceptions\TemplateDoesNotExistException;
 use App\Models\Factory\GameFactory;
@@ -11,7 +11,7 @@ use App\Models\Game\PrintTemplate;
 use App\Models\Game\Today;
 use App\Tools\Strings;
 
-class Results extends Page
+class Results extends Controller
 {
 
 	protected string $title       = 'Results';

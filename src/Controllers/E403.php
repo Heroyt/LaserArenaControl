@@ -10,9 +10,9 @@
  * @ingroup   Pages
  */
 
-namespace App\Pages;
+namespace App\Controllers;
 
-use App\Core\Page;
+use App\Core\Controller;
 
 /**
  * @class   E403
@@ -25,7 +25,7 @@ use App\Core\Page;
  * @version 1.0
  * @since   1.0
  */
-class E403 extends Page
+class E403 extends Controller
 {
 	/**
 	 * @var string $title Page name

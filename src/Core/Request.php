@@ -4,13 +4,15 @@
 namespace App\Core;
 
 
+use App\Controllers\E404;
+use App\Core\Interfaces\RequestInterface;
 use App\Core\Routing\Route;
-use App\Pages\E404;
+use App\Core\Routing\RouteInterface;
 
-class Request
+class Request implements RequestInterface
 {
 
-	public string    $type            = Route::GET;
+	public string    $type            = RouteInterface::GET;
 	public array     $path            = [];
 	public array     $query           = [];
 	public array     $params          = [];
@@ -27,7 +29,7 @@ class Request
 	protected ?Route $route           = null;
 
 	public function __construct(array|string $query) {
-		if (in_array($_SERVER['REQUEST_METHOD'], Route::REQUEST_METHODS, true)) {
+		if (in_array($_SERVER['REQUEST_METHOD'], RouteInterface::REQUEST_METHODS, true)) {
 			$this->type = $_SERVER['REQUEST_METHOD'];
 		}
 		if (is_array($query)) {
@@ -53,15 +55,15 @@ class Request
 				$this->body .= $data;
 			}
 			fclose($input);
-			if ($this->type === Route::POST) {
+			if ($this->type === RouteInterface::POST) {
 				$_POST = array_merge($_POST, json_decode($this->body, true, 512, JSON_THROW_ON_ERROR));
 				$_REQUEST = array_merge($_REQUEST, $_POST);
 			}
-			elseif ($this->type === Route::UPDATE) {
+			elseif ($this->type === RouteInterface::UPDATE) {
 				$this->put = array_merge($this->put, json_decode($this->body, true, 512, JSON_THROW_ON_ERROR));
 				$_REQUEST = array_merge($_REQUEST, $this->put);
 			}
-			elseif ($this->type === Route::GET) {
+			elseif ($this->type === RouteInterface::GET) {
 				$_GET = array_merge($_GET, json_decode($this->body, true, 512, JSON_THROW_ON_ERROR));
 				$_REQUEST = array_merge($_REQUEST, $_GET);
 			}

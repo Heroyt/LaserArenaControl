@@ -14,7 +14,8 @@
 namespace App\Core;
 
 
-use JetBrains\PhpStorm\Pure;
+use App\Core\Interfaces\ControllerInterface;
+use App\Core\Interfaces\RequestInterface;
 
 /**
  * @class   Page
@@ -27,7 +28,7 @@ use JetBrains\PhpStorm\Pure;
  * @version 1.0
  * @since   1.0
  */
-abstract class Page
+abstract class Controller implements ControllerInterface
 {
 
 	public array $middleware = [];
@@ -43,17 +44,17 @@ abstract class Page
 	 * @var array $params Parameters added to latte template
 	 */
 	protected array   $params = [];
-	protected Request $request;
+	protected RequestInterface $request;
 
 	/**
 	 * Initialization function
 	 *
-	 * @param Request $request
+	 * @param RequestInterface $request
 	 *
 	 * @version 1.0
 	 * @since   1.0
 	 */
-	public function init(Request $request) : void {
+	public function init(RequestInterface $request) : void {
 		$this->request = $request;
 		$this->params['page'] = $this;
 		$this->params['request'] = $request;

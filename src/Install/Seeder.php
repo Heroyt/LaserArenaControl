@@ -578,7 +578,7 @@ class Seeder implements InstallInterface
 
 			// Print styles
 			if ($fresh) {
-				DB::delete(PrintStyle::TABLE.'-names', ['1=1']);
+				DB::delete(PrintStyle::TABLE, ['1=1']);
 			}
 			foreach (self::PRINT_STYLES as $insert) {
 				DB::insertIgnore(PrintStyle::TABLE, $insert);
@@ -586,7 +586,7 @@ class Seeder implements InstallInterface
 
 			// Print templates
 			if ($fresh) {
-				DB::delete(PrintTemplate::TABLE.'-names', ['1=1']);
+				DB::delete(PrintTemplate::TABLE, ['1=1']);
 			}
 			foreach (self::PRINT_TEMPLATES as $insert) {
 				DB::insertIgnore(PrintTemplate::TABLE, $insert);

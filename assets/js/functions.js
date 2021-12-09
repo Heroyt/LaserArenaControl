@@ -1,3 +1,5 @@
+import {Tooltip} from "bootstrap";
+
 String.prototype.replaceMultiple = function (chars) {
 	let retStr = this;
 	chars.forEach(ch => {
@@ -160,4 +162,11 @@ export function selectInputDescriptionSetup(input) {
 		update();
 		input.addEventListener("change", update);
 	}
+}
+
+export function initTooltips(dom) {
+	const tooltipTriggerList = [].slice.call(dom.querySelectorAll('[data-toggle="tooltip"]'))
+	const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+		return new Tooltip(tooltipTriggerEl)
+	});
 }

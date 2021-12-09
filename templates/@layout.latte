@@ -3,11 +3,18 @@
 {import 'loader.latte'}
 {import 'symbols.latte'}
 
+{varType string[] $errors}
+
 {define containerClasses}
 {/define}
 {define content}
 {/define}
 {define addHead}
+{/define}
+{define errors}
+	{foreach $errors as $error}
+		{alertDanger $error}
+	{/foreach}
 {/define}
 
 {varType \App\Core\Controller $page}
@@ -42,12 +49,15 @@
 
 {include smallLoader}
 
+
 <main class="container my-5 {include containerClasses}">
+		{include errors}
 		{include content}
 </main>
 
 {include footer}
 {include loader}
+
 
 <script>
 	const page = {\App\Core\App::getRequest()};

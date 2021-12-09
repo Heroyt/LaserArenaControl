@@ -3,6 +3,7 @@
 {varType App\Models\Game\Game $game}
 {varType App\Models\Game\PrintStyle $style}
 {varType int $copies}
+{varType array $_GET}
 
 {define containerClasses}
 {/define}
@@ -69,5 +70,10 @@
 	</main>
 {/for}
 {include svgSymbols}
+{if !isset($_GET['view'])}
+	<script>
+		window.print();
+	</script>
+{/if}
 </body>
 </html>

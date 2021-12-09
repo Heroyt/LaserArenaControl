@@ -13,16 +13,22 @@ class PrintStyle extends AbstractModel
 
 	public const TABLE       = 'print_styles';
 	public const PRIMARY_KEY = 'id_style';
-	public const DEFINITION  = [];
+	public const DEFINITION  = [
+		'name'         => [],
+		'colorDark'    => [],
+		'colorLight'   => [],
+		'colorPrimary' => [],
+		'bg'           => [],
+	];
 
 	public const COLORS  = ['dark', 'light', 'primary'];
 	public const CLASSES = ['text', 'bg', ''];
-	public static bool $gotVars = false;
-	public string      $name;
-	public string      $colorDark;
-	public string      $colorLight;
-	public string      $colorPrimary;
-	public string      $bg;
+	public static bool $gotVars      = false;
+	public string      $name         = '';
+	public string      $colorDark    = '';
+	public string      $colorLight   = '';
+	public string      $colorPrimary = '';
+	public string      $bg           = '';
 
 	/**
 	 * @return PrintStyle|null

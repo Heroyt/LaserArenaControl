@@ -11,18 +11,31 @@
 					{foreach App\Core\App::getMenu() as $key => $menuItem}
 						<li class="nav-item{if count($menuItem->children) > 0} dropdown{/if}">
 							{if count($menuItem->children) > 0}
-								<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown{$key}" role="button"
+								<a class="nav-link dropdown-toggle" id="navbarDropdown{$key}" role="button"
 								   data-bs-toggle="dropdown" aria-expanded="false">
+									{if !empty($menuItem->icon)}
+										<i class="{$menuItem->icon}"></i>
+									{/if}
 									{$menuItem->name}
-									<ul class="dropdown-menu" aria-labelledby="navbarDropdown{$key}">
-										<li n:foreach="$menuItem->children as $child"><a class="dropdown-item"
-																						 href="{$child->url}">{$child->name}</a>
-										</li>
-									</ul>
 								</a>
+								<ul class="dropdown-menu" aria-labelledby="navbarDropdown{$key}">
+									<li n:foreach="$menuItem->children as $child">
+										<a class="dropdown-item" href="{$child->url}">
+											{if !empty($child->icon)}
+												<i class="{$child->icon}"></i>
+											{/if}
+											{$child->name}
+										</a>
+									</li>
+								</ul>
 							{else}
 								<a class="nav-link{if $menuItem->active} active{/if}" aria-current="page"
-								   href="{$menuItem->url}">{$menuItem->name}</a>
+								   href="{$menuItem->url}">
+									{if !empty($menuItem->icon)}
+										<i class="{$menuItem->icon}"></i>
+									{/if}
+									{$menuItem->name}
+								</a>
 							{/if}
 						</li>
 					{/foreach}

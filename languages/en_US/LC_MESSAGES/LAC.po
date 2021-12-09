@@ -566,3 +566,59 @@ msgstr ""
 msgctxt "tips"
 msgid "Nezapomeň každý květen a listopad registrovat svůj tým na turnaj!"
 msgstr ""
+
+msgid "Settings"
+msgstr ""
+
+msgid "Game modes"
+msgstr ""
+
+msgid "General"
+msgstr ""
+
+msgctxt "pageTitles"
+msgid "Settings"
+msgstr ""
+
+msgctxt "results.style.settings"
+msgid "Name"
+msgstr ""
+
+msgctxt "results.style.settings"
+msgid "Primary color"
+msgstr ""
+
+msgctxt "results.style.settings"
+msgid "Dark color"
+msgstr ""
+
+msgctxt "results.style.settings"
+msgid "Light color"
+msgstr ""
+
+msgctxt "results.style.settings"
+msgid "Background"
+msgstr ""
+
+msgid "Print styles"
+msgstr ""
+
+msgctxt "results.style.settings"
+msgid "Print styles"
+msgstr ""
+
+msgctxt "results.style.settings"
+msgid "Add style"
+msgstr ""
+
+msgctxt "actions"
+msgid "Send"
+msgstr ""
+
+msgctxt "actions"
+msgid "Delete"
+msgstr ""
+
+msgctxt "results.style"
+msgid "Test"
+msgstr ""

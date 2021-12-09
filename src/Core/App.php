@@ -503,7 +503,7 @@ class App
 			else {
 				$path = $item['path'] ?? ['E404'];
 			}
-			$menuItem = new MenuItem(name: $item['name'], path: $path);
+			$menuItem = new MenuItem(name: $item['name'], icon: $item['icon'] ?? '', path: $path);
 			foreach ($item['children'] ?? [] as $child) {
 				if (!self::checkAccess($child)) {
 					continue;
@@ -514,7 +514,7 @@ class App
 				else {
 					$path = $child['path'] ?? ['E404'];
 				}
-				$menuItem->children[] = new MenuItem(name: $child['name'], path: $path);
+				$menuItem->children[] = new MenuItem(name: $child['name'], icon: $child['icon'] ?? '', path: $path);
 			}
 			$menu[] = $menuItem;
 		}

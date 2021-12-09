@@ -1,9 +1,14 @@
-import * as bootstrap from 'bootstrap'
-import {formatPhoneNumber} from './functions.js';
+import {formatPhoneNumber, initTooltips} from './functions.js';
 import axios from 'axios';
 import flatpickr from "flatpickr";
+import initPrintSettings from "./pages/settings/print";
 
 axios.defaults.headers.post['X-Requested-With'] = 'XMLHttpRequest';
+
+jscolor.presets.default = {
+	format: 'hex',
+	uppercase: false,
+};
 
 window.addEventListener("load", () => {
 
@@ -92,10 +97,7 @@ window.addEventListener("load", () => {
 		});
 	});
 	// Tooltips
-	const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-toggle="tooltip"]'))
-	const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-		return new bootstrap.Tooltip(tooltipTriggerEl)
-	});
+	initTooltips(document);
 
 	// Toggles
 	document.querySelectorAll('[data-toggle="submit"]').forEach(element => {
@@ -103,5 +105,10 @@ window.addEventListener("load", () => {
 			element.findParentElement("form").submit();
 		});
 	});
+
+	// Pages
+	if (page.routeName && page.routeName === 'settings-print') {
+		initPrintSettings();
+	}
 });
 

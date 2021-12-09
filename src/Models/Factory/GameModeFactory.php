@@ -12,6 +12,21 @@ class GameModeFactory
 {
 
 	/**
+	 * @return AbstractMode[]
+	 * @throws GameModeNotFoundException
+	 */
+	public static function getAll() : array {
+		$ids = DB::select('game_modes', 'id_mode, name, system, type')->fetchAssoc('id_mode');
+		$modes = [];
+		foreach ($ids as $id => $mode) {
+			$system = $mode->system ?? '';
+			$modeType = ($mode->type ?? 'TEAM') === 'TEAM' ? AbstractMode::TYPE_TEAM : AbstractMode::TYPE_SOLO;
+			$modes[] = self::findModeObject($system, $mode, $modeType);
+		}
+		return $modes;
+	}
+
+	/**
 	 * @param int $id
 	 *
 	 * @return AbstractMode

@@ -1,0 +1,128 @@
+{layout '../../@layout.latte'}
+
+{varType App\Models\Game\PrintStyle[] $styles}
+
+{block content}
+	<form action="{link ['settings', 'print']}" enctype="multipart/form-data" method="post" class="text-center">
+		<h2>{lang 'Print styles', context: 'results.style.settings'}:</h2>
+		<div class="d-flex flex-wrap justify-content-center align-items-center" id="styles">
+			<div class="card bg-light m-3 print-style" n:foreach="$styles as $key => $style" style="max-width: 550px;">
+				<div class="row g-0">
+					<div class="col-md-6">
+						<img class="img-fluid rounded-start" src="{getUrl}{$style->bg}" alt="background">
+					</div>
+					<div class="col-md-6 p-3">
+						<div class="form-group mb-1">
+							<label class="form-label" for="name-{$key}">
+								{lang 'Name', context: 'results.style.settings'}:
+							</label>
+							<input id="name-{$key}" name="styles[{$key}][name]" type="text"
+								   value="{$style->name}" class="form-control">
+						</div>
+						<div class="form-group mb-1">
+							<label class="form-label" for="file-{$key}">
+								{lang 'Background', context: 'results.style.settings'}:
+							</label>
+							<input type="hidden" name="styles[{$key}][original-background]" value="{$style->bg}">
+							<input id="file-{$key}" name="styles[{$key}][background]" type="file"
+								   accept="image/jpeg,image/png"
+								   value="{lang $style->name, context: 'results.style'}" class="form-control">
+						</div>
+						<div class="form-group mb-1">
+							<label class="form-label"
+								   for="primary-{$key}">{lang 'Primary color', context: 'results.style.settings'}
+								:</label>
+							<input id="primary-{$key}" name="styles[{$key}][primary]" type="text" data-jscolor=""
+								   value="{$style->colorPrimary}"
+								   class="form-control">
+						</div>
+						<div class="form-group mb-1">
+							<label class="form-label"
+								   for="dark-{$key}">{lang 'Dark color', context: 'results.style.settings'}:</label>
+							<input id="dark-{$key}" name="styles[{$key}][dark]" type="text" data-jscolor=""
+								   value="{$style->colorDark}"
+								   class="form-control">
+						</div>
+						<div class="form-group mb-1">
+							<label class="form-label"
+								   for="light-{$key}">{lang 'Light color', context: 'results.style.settings'}:</label>
+							<input id="light-{$key}" name="styles[{$key}][light]" type="text" data-jscolor=""
+								   value="{$style->colorLight}"
+								   class="form-control">
+						</div>
+						<p class="text-end mb-0 mt-2">
+							<button type="button" class="btn btn-danger btn-sm remove" data-toggle="tooltip"
+									title="{lang 'Delete', context: 'actions'}">
+								<i class="fas fa-trash"></i>
+							</button>
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="btn-group btn-group-lg my-4">
+			<button class="btn btn-primary" type="button" id="addStyle" data-key="{count($styles)}">
+				<i class="fas fa-plus"></i>
+				{lang 'Add style', context: 'results.style.settings'}
+			</button>
+			<button class="btn btn-success" type="submit">
+				{lang 'Send', context: 'actions'}
+			</button>
+		</div>
+	</form>
+	<template id="print-style-template">
+		<div class="card bg-light m-3" style="max-width: 550px;">
+			<div class="row g-0">
+				<div class="col-md-6">
+					<img class="img-fluid rounded-start" style="display:none;" src="" alt="background">
+				</div>
+				<div class="col-md-6 p-3">
+					<div class="form-group mb-1">
+						<label class="form-label" for="name-#key#">
+							{lang 'Name', context: 'results.style.settings'}:
+						</label>
+						<input id="name-#key#" name="styles[#key#][name]" type="text"
+							   value="" class="form-control">
+					</div>
+					<div class="form-group mb-1">
+						<label class="form-label" for="file-#key#">
+							{lang 'Background', context: 'results.style.settings'}:
+						</label>
+						<input id="file-#key#" name="styles[#key#][background]" type="file"
+							   accept="image/jpeg,image/png"
+							   value="" class="form-control">
+					</div>
+					<div class="form-group mb-1">
+						<label class="form-label" for="primary-#key#">
+							{lang 'Primary color', context: 'results.style.settings'}:
+						</label>
+						<input id="primary-#key#" name="styles[#key#][primary]" type="text" data-jscolor="" value=""
+							   class="form-control">
+					</div>
+					<div class="form-group mb-1">
+						<label class="form-label" for="dark-#key#">
+							{lang 'Dark color', context: 'results.style.settings'}:
+						</label>
+						<input id="dark-#key#" name="styles[#key#][dark]" type="text" data-jscolor=""
+							   value=""
+							   class="form-control">
+					</div>
+					<div class="form-group mb-1">
+						<label class="form-label" for="light-#key#">
+							{lang 'Light color', context: 'results.style.settings'}:
+						</label>
+						<input id="light-#key#" name="styles[#key#][light]" type="text" data-jscolor=""
+							   value=""
+							   class="form-control">
+					</div>
+					<p class="text-end mb-0 mt-2">
+						<button type="button" class="btn btn-danger btn-sm remove" data-toggle="tooltip"
+								title="{lang 'Delete', context: 'actions'}">
+							<i class="fas fa-trash"></i>
+						</button>
+					</p>
+				</div>
+			</div>
+		</div>
+	</template>
+{/block}

@@ -10,11 +10,13 @@ class MenuItem
 
 	/**
 	 * @param string     $name
+	 * @param string     $icon
 	 * @param array      $path
 	 * @param MenuItem[] $children
 	 */
 	public function __construct(
 		public string $name = '',
+		public string $icon = '',
 		public array  $path = [],
 		public array  $children = []
 	) {

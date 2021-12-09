@@ -84,7 +84,7 @@
 		</div>
 	</div>
 	<iframe id="print-iframe"
-			src="{ifset $selected}{link ['results', $selected->code, 'print', $selectedLang, 1, $selectedStyle, $selectedTemplate]}{/ifset}"
+			src="{ifset $selected}{link ['results', $selected->code, 'print', $selectedLang, 1, $selectedStyle, $selectedTemplate, 'view' => 1]}{/ifset}"
 			class="w-100 min-vh-60 mt-4"></iframe>
 	<script n:syntax="double">
 		const selectGame = document.getElementById("selectGame");
@@ -114,7 +114,7 @@
 			printLinks.forEach(link => {
 				link.href = `{{link ['results', $selected->code, 'print']}}/${lang}/${link.dataset.value}/${selectStyle.value}/${selectTemplate.value}/${link.dataset.type}`;
 			});
-			iframe.src = `{{link ['results', $selected->code, 'print']}}/${lang}/1/${selectStyle.value}/${selectTemplate.value}`;
+			iframe.src = `{{link ['results', $selected->code, 'print']}}/${lang}/1/${selectStyle.value}/${selectTemplate.value}?view=1`;
 		}
 
 		{{/ifset}}

@@ -7,6 +7,7 @@ use App\Core\DB;
 use App\Exceptions\ModelNotFoundException;
 use App\Logging\DirectoryCreationException;
 use App\Tools\Color;
+use Dibi\DateTime;
 
 class PrintStyle extends AbstractModel
 {
@@ -56,6 +57,25 @@ class PrintStyle extends AbstractModel
 		}
 		$defaultStyle = DB::select(self::TABLE, '[id_style]')->where('[default] = 1')->fetchSingle();
 		return $defaultStyle ?? 0;
+	}
+
+
+	/**
+	 * @return array{style:PrintStyle,from:DateTime,to:DateTime}[]
+	 * @throws DirectoryCreationException
+	 * @throws ModelNotFoundException
+	 */
+	public static function getAllStyleDates() : array {
+		$styles = DB::select(self::TABLE.'_dates', '*')->fetchAll();
+		$return = [];
+		foreach ($styles as $style) {
+			$return[] = [
+				'style' => self::get($style->id_style),
+				'from'  => $style->date_from,
+				'to'    => $style->date_to,
+			];
+		}
+		return $return;
 	}
 
 	/**

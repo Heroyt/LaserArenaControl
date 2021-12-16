@@ -576,4 +576,8 @@ class App
 		return $path1 === $path2;
 	}
 
+	public static function getShortLanguageCode() : string {
+		return explode('_', self::$activeLanguageCode)[0];
+	}
+
 }

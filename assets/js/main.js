@@ -27,26 +27,26 @@ window.addEventListener("load", () => {
 	});
 	// Datepicker
 	document.querySelectorAll('input[type="date"]:not([data-input]), .date-picker').forEach(input => {
-		let value = '', wrap = input.classList.contains("date-picker"), enable = undefined;
+		let value = '', wrap = input.classList.contains("date-picker");
 		if (wrap) {
 			value = input.querySelector("[data-input]").value;
 		} else {
 			value = input.value;
 		}
-		if (input.dataset.events) {
-			const events = JSON.parse(input.dataset.events);
-			enable = Object.keys(events);
-		}
-		flatpickr(input, {
-			//defaultDate: value,
+		let options = {
+			defaultDate: value,
 			dateFormat: "d.m.Y",
 			position: "auto center",
 			positionElement: input,
 			static: true,
 			appendTo: input.parentNode,
 			wrap,
-			enable,
-		});
+		};
+		if (input.dataset.events) {
+			const events = JSON.parse(input.dataset.events);
+			options.enable = Object.keys(events);
+		}
+		flatpickr(input, options);
 	});
 	document.querySelectorAll('input[type="datetime"]:not([data-input]), .datetime-picker').forEach(input => {
 		let value = '', wrap = input.classList.contains("datetime-picker");

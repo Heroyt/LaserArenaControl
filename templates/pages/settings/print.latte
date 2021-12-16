@@ -1,12 +1,86 @@
 {layout '../../@layout.latte'}
 
 {varType App\Models\Game\PrintStyle[] $styles}
+{varType array $dates}
 
 {block content}
 	<form action="{link ['settings', 'print']}" enctype="multipart/form-data" method="post" class="text-center">
 		<h2>{lang 'Print styles', context: 'results.style.settings'}:</h2>
+		<div id="ranges" class="d-flex flex-wrap justify-content-center">
+			<div class="card bg-light m-2 print-style-date" n:foreach="$dates as $info">
+				<div class="card-header text-end">
+					<span class="btn btn-danger remove" data-toggle="tooltip"
+						  title="{lang 'Delete', context: 'actions'}">
+						<i class="fas fa-trash"></i>
+					</span>
+				</div>
+				<div class="card-body">
+					<label class="form-label" for="style-date-select-{$iterator->counter0}">
+						{lang 'Style', context: 'results.style.settings'}
+					</label>
+					<select name="dateRange[{$iterator->counter0}][style]" class="form-select"
+							id="style-date-select-{$iterator->counter0}">
+						<option n:foreach="$styles as $style"
+								value="{$style->id}" {if $style->id === $info['style']->id}selected{/if}>
+							{lang $style->name, context: 'results.style'}
+						</option>
+					</select>
+					<label class="form-label" for="date-range-{$iterator->counter0}">
+						{lang 'Dates', context: 'dates'}:
+					</label>
+					<div class="date">
+						<input type="text" name="dateRange[{$iterator->counter0}][dates]"
+							   class="form-control bg-white" id="date-range-{$iterator->counter0}"
+							   value="{$info['from']->format('d.m.Y')}-{$info['to']->format('d.m.Y')}"
+							   data-input>
+					</div>
+				</div>
+			</div>
+		</div>
+		<p class="text-center">
+			<button type="button" class="btn btn-lg my-2 btn-primary" id="addRange" data-key="{count($dates)}">
+				<i class="fas fa-plus"></i>
+				{lang 'Add', context: 'actions'}
+			</button>
+		</p>
+		<template id="print-style-date">
+			<div class="card bg-light m-2 print-style-date">
+				<div class="card-header text-end">
+					<span class="btn btn-danger remove" data-toggle="tooltip"
+						  title="{lang 'Delete', context: 'actions'}">
+						<i class="fas fa-trash"></i>
+					</span>
+				</div>
+				<div class="card-body">
+					<label class="form-label" for="style-date-select-#i#">
+						{lang 'Style', context: 'results.style.settings'}
+					</label>
+					<select name="dateRange[#i#][style]" class="form-select" id="style-date-select-#i#">
+						<option n:foreach="$styles as $style"
+								value="{$style->id}">
+							{lang $style->name, context: 'results.style'}
+						</option>
+					</select>
+					<label class="form-label" for="date-range-#i#">
+						{lang 'Dates', context: 'dates'}:
+					</label>
+					<div class="date">
+						<input type="text" name="dateRange[#i#][dates]" class="form-control bg-white"
+							   id="date-range-#i#"
+							   value=""
+							   data-input>
+					</div>
+				</div>
+			</div>
+		</template>
 		<div class="d-flex flex-wrap justify-content-center align-items-center" id="styles">
 			<div class="card bg-light m-3 print-style" n:foreach="$styles as $key => $style" style="max-width: 550px;">
+				<div class="card-header text-end">
+					<span class="btn btn-danger remove btn-sm" data-toggle="tooltip"
+						  title="{lang 'Delete', context: 'actions'}">
+						<i class="fas fa-trash"></i>
+					</span>
+				</div>
 				<div class="row g-0">
 					<div class="col-md-6">
 						<img class="img-fluid rounded-start" src="{getUrl}{$style->bg}" alt="background">
@@ -30,8 +104,9 @@
 						</div>
 						<div class="form-group mb-1">
 							<label class="form-label"
-								   for="primary-{$key}">{lang 'Primary color', context: 'results.style.settings'}
-								:</label>
+								   for="primary-{$key}">
+								{lang 'Primary color', context: 'results.style.settings'}:
+							</label>
 							<input id="primary-{$key}" name="styles[{$key}][primary]" type="text" data-jscolor=""
 								   value="{$style->colorPrimary}"
 								   class="form-control">
@@ -50,12 +125,6 @@
 								   value="{$style->colorLight}"
 								   class="form-control">
 						</div>
-						<p class="text-end mb-0 mt-2">
-							<button type="button" class="btn btn-danger btn-sm remove" data-toggle="tooltip"
-									title="{lang 'Delete', context: 'actions'}">
-								<i class="fas fa-trash"></i>
-							</button>
-						</p>
 					</div>
 				</div>
 			</div>
@@ -72,6 +141,12 @@
 	</form>
 	<template id="print-style-template">
 		<div class="card bg-light m-3" style="max-width: 550px;">
+			<div class="card-header text-end">
+					<span class="btn btn-danger remove btn-sm" data-toggle="tooltip"
+						  title="{lang 'Delete', context: 'actions'}">
+						<i class="fas fa-trash"></i>
+					</span>
+			</div>
 			<div class="row g-0">
 				<div class="col-md-6">
 					<img class="img-fluid rounded-start" style="display:none;" src="" alt="background">
@@ -115,12 +190,6 @@
 							   value=""
 							   class="form-control">
 					</div>
-					<p class="text-end mb-0 mt-2">
-						<button type="button" class="btn btn-danger btn-sm remove" data-toggle="tooltip"
-								title="{lang 'Delete', context: 'actions'}">
-							<i class="fas fa-trash"></i>
-						</button>
-					</p>
 				</div>
 			</div>
 		</div>

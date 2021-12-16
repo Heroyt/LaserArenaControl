@@ -622,3 +622,27 @@ msgstr ""
 msgctxt "results.style"
 msgid "Test"
 msgstr ""
+
+msgctxt "results.style.settings"
+msgid "Style"
+msgstr ""
+
+msgctxt "dates"
+msgid "Date from"
+msgstr ""
+
+msgctxt "dates"
+msgid "to"
+msgstr ""
+
+msgctxt "actions"
+msgid "Add"
+msgstr ""
+
+msgctxt "dates"
+msgid "Date"
+msgstr ""
+
+msgctxt "dates"
+msgid "Dates"
+msgstr ""

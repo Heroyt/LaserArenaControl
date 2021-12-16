@@ -9,6 +9,7 @@ use App\Core\Request;
 use App\Exceptions\ValidationException;
 use App\Models\Factory\GameModeFactory;
 use App\Models\Game\PrintStyle;
+use DateTime;
 use Dibi\DriverException;
 use Dibi\Exception;
 
@@ -31,12 +32,32 @@ class Settings extends Controller
 			try {
 				DB::getConnection()->begin();
 
+				// Delete all dates
+				DB::delete(PrintStyle::TABLE.'_dates', ['1=1']);
+				/**
+				 * @var int                           $key
+				 * @var array{style:int,dates:string} $info
+				 */
+				foreach ($_POST['dateRange'] ?? [] as $key => $info) {
+					preg_match_all('/(\d{2}\.\d{2}\.\d{4})/', $info['dates'], $matches);
+					$dateFrom = new DateTime($matches[0][1]);
+					$dateTo = new DateTime($matches[1][1]);
+					DB::insert(PrintStyle::TABLE.'_dates', [
+						PrintStyle::PRIMARY_KEY => $info['style'],
+						'date_from'             => $dateFrom,
+						'date_to'               => $dateTo,
+					]);
+				}
+
 				// Delete all styles
 				DB::delete(PrintStyle::TABLE, ['1=1']);
 				DB::resetAutoIncrement(PrintStyle::TABLE);
 
 				$printDir = 'assets/images/print/';
 
+				/**
+				 * @var array{name:string,primary:string,dark:string,light:string,original-background:string} $info
+				 */
 				foreach ($_POST['styles'] ?? [] as $key => $info) {
 					$style = new PrintStyle();
 					$style->name = $info['name'];
@@ -83,11 +104,13 @@ class Settings extends Controller
 	}
 
 	private function validatePrint(Request $request) : bool {
+		// TODO: Actually validate request..
 		return count($request->passErrors) === 0;
 	}
 
 	public function print() : void {
 		$this->params['styles'] = PrintStyle::getAll();
+		$this->params['dates'] = PrintStyle::getAllStyleDates();
 		$this->view('pages/settings/print');
 	}
 

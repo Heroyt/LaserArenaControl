@@ -39,8 +39,8 @@
 	{ifset $game}
 		<style>
 			:root {
-			{foreach $game->getTeamColors() as $key => $color} --team- {$key}: {$color|noescape};
-				--team- {$key} -text: {\App\Tools\Color::getFontColor($color)|noescape};
+			{foreach $game->getTeamColors() as $key => $color} {var string $varName1 = '--team-'.$key} {var string $varName2 = '--team-'.$key.'-text'} {$varName1}: {$color|noescape};
+			{$varName2}:{\App\Tools\Color::getFontColor($color)|noescape};
 			{/foreach}
 			}
 

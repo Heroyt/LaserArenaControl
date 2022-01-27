@@ -35,6 +35,8 @@ abstract class Player extends AbstractModel
 		],
 	];
 
+	public const CLASSIC_BESTS = ['score', 'hits', 'score', 'accuracy', 'shots', 'miss'];
+
 	public int    $id_player;
 	public string $name;
 	public int    $score;
@@ -193,6 +195,148 @@ abstract class Player extends AbstractModel
 			}
 		}
 		return $maxPlayer;
+	}
+
+	/**
+	 * @return array{name:string,icon:string}
+	 */
+	public function getBestAt() : array {
+		/** @var array{name:string,icon:string} $fields Best names */
+		$fields = [
+			'hits'              => [
+				'name' => lang('Největší terminátor', context: 'results.bests'),
+				'icon' => 'predator',
+			],
+			'deaths'            => [
+				'name' => lang('Objekt největšího zájmu', context: 'results.bests'),
+				'icon' => 'skull',
+			],
+			'score'             => [
+				'name' => lang('Absolutní vítěz', context: 'results.bests'),
+				'icon' => 'crown',
+			],
+			'accuracy'          => [
+				'name' => lang('Hráč s nejlepší muškou', context: 'results.bests'),
+				'icon' => 'target',
+			],
+			'shots'             => [
+				'name' => lang('Nejúspornější střelec', context: 'results.bests'),
+				'icon' => 'bullet',
+			],
+			'miss'              => [
+				'name' => lang('Největší mimoň', context: 'results.bests'),
+				'icon' => 'bullets',
+			],
+			'zero-deaths'       => [
+				'name' => lang('Nedotknutelný', context: 'results.bests'),
+				'icon' => 'shield',
+			],
+			'100-percent'       => [
+				'name' => lang('Sniper', context: 'results.bests'),
+				'icon' => 'target',
+			],
+			'50-percent'        => [
+				'name' => lang('Poloviční sniper', context: 'results.bests'),
+				'icon' => 'target',
+			],
+			'5-percent'         => [
+				'name' => lang('Občas se i trefí', context: 'results.bests'),
+				'icon' => 'target',
+			],
+			'hitsOwn'           => [
+				'name' => lang('Zabiják vlastního týmu', context: 'results.bests'),
+				'icon' => 'kill',
+			],
+			'deathsOwn'         => [
+				'name' => lang('Největší vlastňák', context: 'results.bests'),
+				'icon' => 'skull',
+			],
+			'mines'             => [
+				'name' => lang('Drtič min', context: 'results.bests'),
+				'icon' => 'base_2',
+			],
+			'average'           => [
+				'name' => lang('Hráč', context: 'results.bests'),
+				'icon' => 'Vesta',
+			],
+			'kd-1'              => [
+				'name' => lang('Vyrovnaný', context: 'results.bests'),
+				'icon' => 'balance',
+			],
+			'kd-2'              => [
+				'name' => lang('Zabiják', context: 'results.bests'),
+				'icon' => 'kill',
+			],
+			'zero'              => [
+				'name' => lang('Nula', context: 'results.bests'),
+				'icon' => 'zero',
+			],
+			'team-50'           => [
+				'name' => lang('Potahal tým', context: 'results.bests'),
+				'icon' => 'star',
+			],
+			'favouriteTarget'   => [
+				'name' => lang('Zasedlý', context: 'results.bests'),
+				'icon' => 'death',
+			],
+			'favouriteTargetOf' => [
+				'name' => lang('Pronásledovaný', context: 'results.bests'),
+				'icon' => 'death',
+			],
+		];
+
+		$best = '';
+		// Special
+		if ($this->accuracy === 100) {
+			$best = '100-percent';
+		}
+		else if ($this->deaths === 0) {
+			$best = 'zero-deaths';
+		}
+
+		// Classic
+		if (empty($best)) {
+			foreach ($this::CLASSIC_BESTS as $check) {
+				if ($this->getGame()->getBestPlayer($check)->id_player === $this->id_player) {
+					$best = $check;
+					break;
+				}
+			}
+		}
+
+		// Other
+		if (empty($best)) {
+			if (($this->score / $this->getTeam()->score) > 0.45) {
+				$best = 'team-50';
+			}
+			else if (abs(($this->hits / $this->deaths) - 1) < 0.1) {
+				$best = 'kd-1';
+			}
+			else if (($this->hits / $this->deaths) > 1.9) {
+				$best = 'kd-2';
+			}
+			else if ($this->accuracy > 50) {
+				$best = '50-percent';
+			}
+			else if ($this->score === 0) {
+				$best = 'zero';
+			}
+			else if ($this->accuracy < 5) {
+				$best = 'accuracy';
+			}
+		}
+		if (empty($best)) {
+			$favouriteTarget = $this->getFavouriteTarget();
+			$favouriteTargetOf = $this->getFavouriteTargetOf();
+			if (isset($favouriteTarget) && $this->getHitsPlayer($favouriteTarget) / $this->hits > 0.45) {
+				$best = 'favouriteTarget';
+			}
+			else if (isset($favouriteTargetOf) && $favouriteTargetOf->getHitsPlayer($this) / $favouriteTargetOf->hits > 0.45) {
+				$best = 'favouriteTargetOf';
+			}
+		}
+
+		return $fields[$best] ?? $fields['average'];
 	}
 
 }

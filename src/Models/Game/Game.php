@@ -105,7 +105,7 @@ abstract class Game extends AbstractModel implements InsertExtendInterface
 		$fields = [
 			'hits'     => lang('Největší terminátor', context: 'results.bests'),
 			'deaths'   => lang('Objekt největšího zájmu', context: 'results.bests'),
-			'score'    => lang('Absoltní vítěz', context: 'results.bests'),
+			'score'    => lang('Absolutní vítěz', context: 'results.bests'),
 			'accuracy' => lang('Hráč s nejlepší muškou', context: 'results.bests'),
 			'shots'    => lang('Nejúspornější střelec', context: 'results.bests'),
 			'miss'     => lang('Největší mimoň', context: 'results.bests'),

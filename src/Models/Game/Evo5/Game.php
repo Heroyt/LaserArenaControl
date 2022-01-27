@@ -98,7 +98,7 @@ class Game extends \App\Models\Game\Game
 	public function getTeamColors() : array {
 		return [
 			0 => '#f00',
-			1 => '#0F0',
+			1 => '#0c0',
 			2 => '#00f',
 			3 => '#ffc0cb',
 			4 => '#ff0',

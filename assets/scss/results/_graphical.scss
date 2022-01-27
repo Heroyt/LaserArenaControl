@@ -1,0 +1,318 @@
+.template-graphical {
+	--size: 9pt;
+	align-items: center;
+	display: grid;
+	grid-gap: .5rem;
+	grid-template-areas:
+		 'info qr'
+		 'scores scores'
+		 'teams teams'
+		 'players players';
+	grid-template-columns: 1fr 1fr;
+	grid-template-rows: auto;
+	justify-content: start;
+	--font-size: 6pt;
+
+	&.solo {
+		grid-template-areas:
+		 'info qr'
+		 'scores scores'
+		 'win win'
+		 'players players'
+		 'today today'
+		 'hits bests';
+	}
+
+	> * {
+		max-width: 100%;
+	}
+
+	* {
+		font-size: var(--font-size);
+	}
+
+	.team-color {
+		border-radius: 50%;
+		display: inline-block;
+		height: var(--size);
+		margin-bottom: calc(var(--size) / -4);
+		position: relative;
+		width: var(--size);
+	}
+
+	.results-header {
+		grid-area: info;
+		max-width: 20cm;
+		width: 100%;
+
+		td,
+		th {
+			border: none;
+			padding: .3rem .5rem;
+			text-align: left;
+		}
+	}
+
+	th,
+	td {
+		border: 1px solid var(--print-dark);
+		padding: .3rem;
+		text-align: center;
+		vertical-align: middle;
+		word-break: break-word;
+	}
+
+	table {
+		border: 1px solid var(--print-dark);
+		border-radius: 10px;
+		caption-side: top;
+		max-width: 100%;
+		overflow: hidden;
+
+		thead {
+			border-top-left-radius: 10px;
+			border-top-right-radius: 10px;
+		}
+
+		tbody {
+			border-bottom-left-radius: 10px;
+			border-bottom-right-radius: 10px;
+		}
+
+		tbody,
+		thead {
+			border: none !important;
+			overflow: hidden;
+		}
+	}
+
+	caption,
+	.caption {
+		color: var(--print-primary);
+		font-size: calc(var(--size) * 1.1);
+		font-weight: bold;
+		padding: .4rem 0;
+	}
+
+	table:not(.colorless) {
+		border-collapse: collapse;
+
+		th {
+			background-color: var(--print-dark);
+			border-bottom: 1px solid var(--print-dark-text);
+			color: var(--print-dark-text);
+		}
+
+		tr:nth-child(even) td {
+			background-color: var(--print-light);
+			color: var(--print-light-text);
+		}
+	}
+
+	.results-scoring {
+		grid-area: scores;
+
+		td, th {
+			padding: .1rem;
+		}
+	}
+
+	.results-teams {
+		display: flex;
+		grid-area: teams;
+		width: 100%;
+
+		svg {
+			path {
+				fill: var(--text-color);
+			}
+		}
+
+		.team-score {
+			align-items: center;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			min-width: 3rem;
+			padding: .3rem 1rem;
+		}
+	}
+
+	.results-players {
+		display: grid;
+		grid-area: players;
+		grid-gap: .5rem;
+
+		.player-head {
+
+			svg {
+				display: block;
+				margin: 0 auto;
+				position: relative;
+			}
+
+			.player-rank {
+				height: 1rem;
+				line-height: 1.2;
+				text-align: center;
+
+				.rank-name {
+					font-size: calc(var(--font-size) * .8);
+				}
+			}
+
+			.player-name {
+				font-size: calc(var(--font-size) * 1.2);
+				font-weight: bold;
+				margin: .2rem 0 0;
+				text-transform: uppercase;
+			}
+		}
+
+		.score-shadow {
+			height: 40pt;
+			padding: .2rem;
+			position: relative;
+			width: 100%;
+		}
+
+		.score {
+			top: 1.5em;
+			height: calc(100% - 1.5em);
+			position: relative;
+			width: 100%;
+
+			.score-number {
+				position: absolute;
+				text-align: center;
+				width: 100%;
+			}
+
+			.inner {
+				position: absolute;
+				width: 100%;
+			}
+
+			.line {
+				background-color: #000;
+				height: 1px;
+				position: absolute;
+				width: 100%;
+			}
+		}
+
+		.hits {
+			display: flex;
+			flex-direction: column;
+			position: relative;
+			text-align: center;
+			width: 100%;
+			height: 6rem;
+
+			.kills {
+				background-color: #55EA6A;
+			}
+
+			.deaths {
+				background-color: #EA5555;
+			}
+
+			.kills,
+			.deaths {
+				display: flex;
+				min-height: 2rem;
+				padding: 0;
+
+				.main {
+					align-items: center;
+					display: flex;
+					flex-direction: column;
+					height: 100%;
+					justify-content: center;
+					padding: 0 .3rem;
+					flex: 1;
+				}
+
+				.side {
+					display: flex;
+					flex-direction: column;
+					height: 100%;
+					max-width: 20%;
+
+					.other {
+						background-color: rgba(255, 255, 255, .5);
+					}
+
+					.own {
+						background-color: rgba(105, 0, 0, 0.6);
+						color: #fff;
+					}
+
+					.own,
+					.other {
+						padding: 0 .2rem;
+						align-items: center;
+						display: flex;
+						justify-content: center;
+						min-height: 1.5em;
+					}
+				}
+
+				.icon {
+					display: flex;
+					justify-content: center;
+				}
+
+				.number {
+				}
+			}
+		}
+
+		svg.accuracy {
+			--color: rgb(72, 196, 255);
+			max-width: 2.5rem;
+			display: block;
+			margin: 0 auto;
+			position: relative;
+
+			* {
+				font-size: 64pt;
+			}
+
+			path,
+			rect,
+			text {
+				fill: var(--color);
+			}
+
+			.fill-circle {
+				opacity: .4;
+				stroke: var(--color);
+				transform: rotate(-90deg);
+				transform-origin: center;
+			}
+		}
+
+		.player-shots {
+			text-align: center;
+
+			.number svg {
+				display: inline-block;
+				width: auto;
+			}
+
+			svg {
+				width: 100%;
+			}
+		}
+	}
+
+	.rotate-90 {
+		left: 0;
+		position: absolute;
+		top: 0;
+		transform: rotate(90deg) translate(var(--size-y), var(--size-y));
+		z-index: 2;
+	}
+
+}

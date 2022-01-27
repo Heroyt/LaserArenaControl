@@ -14,12 +14,36 @@ trait WithPlayers
 
 	/** @var int */
 	public int $playerCount;
-	/** @var Player */
+	/** @var string */
 	protected string $playerClass;
-	/** @var PlayerCollection|Player[] */
+	/** @var PlayerCollection */
 	protected PlayerCollection $players;
-	/** @var PlayerCollection|Player[] */
+	/** @var PlayerCollection */
 	protected PlayerCollection $playersSorted;
+
+	/**
+	 * @return int
+	 */
+	public function getMinScore() : int {
+		/** @var Player|null $player */
+		$player = $this->getPlayers()->query()->sortBy('score')->asc()->first();
+		if (isset($player)) {
+			return $player->score;
+		}
+		return 0;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getMaxScore() : int {
+		/** @var Player|null $player */
+		$player = $this->getPlayers()->query()->sortBy('score')->desc()->first();
+		if (isset($player)) {
+			return $player->score;
+		}
+		return 0;
+	}
 
 	public function addPlayer(Player ...$players) : static {
 		if (!isset($this->players)) {
@@ -48,7 +72,7 @@ trait WithPlayers
 	}
 
 	/**
-	 * @return PlayerCollection|Player[]
+	 * @return PlayerCollection
 	 */
 	public function getPlayers() : PlayerCollection {
 		if (!isset($this->players)) {
@@ -58,7 +82,7 @@ trait WithPlayers
 	}
 
 	/**
-	 * @return PlayerCollection|Player[]
+	 * @return PlayerCollection
 	 */
 	public function loadPlayers() : PlayerCollection {
 		if (!isset($this->players)) {

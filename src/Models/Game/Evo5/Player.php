@@ -37,6 +37,7 @@ class Player extends \App\Models\Game\Player
 		'deathsOwn'   => [],
 		'bonus'       => ['class' => BonusCounts::class, 'initialize' => true],
 	];
+	public const CLASSIC_BESTS = ['score', 'hits', 'score', 'accuracy', 'shots', 'miss', 'hitsOwn', 'deathsOwn', 'mines'];
 	public int         $shotPoints  = 0;
 	public int         $scoreBonus  = 0;
 	public int         $scorePowers = 0;

@@ -33,6 +33,9 @@ return [
 		'tracyDump'    => [
 			'echo \Tracy\Dumper::toHtml(%node.args)',
 		],
+		'svgIcon'      => [
+			'echo svgIcon(%node.args)',
+		],
 	],
 
 

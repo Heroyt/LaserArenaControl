@@ -234,3 +234,28 @@ function ratio(int $var1, int $var2, int $return = null) : array|int {
 	}
 	return $arr[$return] ?? 0;
 }
+
+function svgIcon(string $name, string|int $width = '100%', string|int $height = '') : string {
+	$file = ASSETS_DIR.'icons/'.$name.'.svg';
+	if (!file_exists($file)) {
+		throw new InvalidArgumentException('Icon "'.$name.'" does not exist in "'.ASSETS_DIR.'icons/".');
+	}
+	$xml = simplexml_load_string(file_get_contents($file));
+	unset($xml['width'], $xml['height']);
+	$xml['id'] = '';
+	$xml['class'] = 'icon-'.$name;
+	if (is_int($width)) {
+		$width .= 'px';
+	}
+	if (is_int($height)) {
+		$height .= 'px';
+	}
+	$xml['style'] = '';
+	if (!empty($width)) {
+		$xml['style'] .= 'width:'.$width.';';
+	}
+	if (!empty($height)) {
+		$xml['style'] .= 'height:'.$height.';';
+	}
+	return $xml->asXML();
+}

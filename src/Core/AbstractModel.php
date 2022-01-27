@@ -9,6 +9,7 @@ use App\Logging\DirectoryCreationException;
 use App\Logging\Logger;
 use App\Tools\Strings;
 use ArrayAccess;
+use BackedEnum;
 use DateInterval;
 use DateTime;
 use DateTimeInterface;
@@ -80,18 +81,12 @@ abstract class AbstractModel implements JsonSerializable, ArrayAccess
 				$this->id = $val;
 			}
 			if (property_exists($this, $key)) {
-				if ($val instanceof DateInterval && isset($this::DEFINITION[$key]['class']) && $this::DEFINITION[$key]['class'] === DateTimeInterface::class) {
-					$val = new DateTime($val->format('%H:%i:%s'));
-				}
-				$this->$key = $val;
+				$this->setProperty($key, $val);
 				continue;
 			}
 			$key = Strings::toCamelCase($key);
 			if (property_exists($this, $key)) {
-				if ($val instanceof DateInterval && isset($this::DEFINITION[$key]['class']) && $this::DEFINITION[$key]['class'] === DateTimeInterface::class) {
-					$val = new DateTime($val->format('%H:%i:%s'));
-				}
-				$this->$key = $val;
+				$this->setProperty($key, $val);
 			}
 		}
 		foreach ($this::DEFINITION as $key => $definition) {
@@ -103,6 +98,17 @@ abstract class AbstractModel implements JsonSerializable, ArrayAccess
 				}
 			}
 		}
+	}
+
+	protected function setProperty(string $name, mixed $value) : void {
+		if ($value instanceof DateInterval && isset($this::DEFINITION[$name]['class']) && $this::DEFINITION[$name]['class'] === DateTimeInterface::class) {
+			$value = new DateTime($value->format('%H:%i:%s'));
+		}
+		else if (isset($this::DEFINITION[$name]['class']) && enum_exists($this::DEFINITION[$name]['class'])) {
+			$enumName = $this::DEFINITION[$name]['class'];
+			$value = $enumName::tryFrom($value);
+		}
+		$this->$name = $value;
 	}
 
 	/**
@@ -187,6 +193,9 @@ abstract class AbstractModel implements JsonSerializable, ArrayAccess
 			}
 			if ($this->$property instanceof InsertExtendInterface) {
 				($this->$property)->addQueryData($data);
+			}
+			else if ($this->$property instanceof BackedEnum) {
+				$data[Strings::toSnakeCase($property)] = $this->$property->value;
 			}
 			else {
 				$data[Strings::toSnakeCase($property)] = $this->$property;

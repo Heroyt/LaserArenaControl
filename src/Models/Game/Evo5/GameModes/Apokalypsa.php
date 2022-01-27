@@ -8,6 +8,5 @@ class Apokalypsa extends AbstractMode
 {
 
 	public string $name = 'Apokalypsa';
-	public int    $type = self::TYPE_TEAM;
 
 }

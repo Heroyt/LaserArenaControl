@@ -101,8 +101,8 @@ class Game extends \App\Models\Game\Game
 			1 => '#0c0',
 			2 => '#00f',
 			3 => '#ffc0cb',
-			4 => '#ff0',
-			5 => '#0ff',
+			4 => '#f5bc00',
+			5 => '#28d1f0',
 		];
 	}
 }

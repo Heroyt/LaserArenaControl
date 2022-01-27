@@ -12,7 +12,6 @@ class CSGO extends AbstractMode
 {
 
 	public string $name = 'CSGO';
-	public int    $type = self::TYPE_TEAM;
 
 	/**
 	 * @param Evo5Game $game

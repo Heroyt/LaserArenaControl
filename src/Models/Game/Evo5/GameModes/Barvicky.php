@@ -8,6 +8,5 @@ class Barvicky extends AbstractMode
 {
 
 	public string $name = 'Barvičky';
-	public int    $type = self::TYPE_TEAM;
 
 }

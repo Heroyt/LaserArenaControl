@@ -4,6 +4,7 @@ namespace App\Models\Factory;
 
 use App\Core\DB;
 use App\Exceptions\GameModeNotFoundException;
+use App\Models\Game\Enums\GameModeType;
 use App\Models\Game\GameModes\AbstractMode;
 use Dibi\Row;
 use Nette\Utils\Strings;
@@ -20,7 +21,7 @@ class GameModeFactory
 		$modes = [];
 		foreach ($ids as $id => $mode) {
 			$system = $mode->system ?? '';
-			$modeType = ($mode->type ?? 'TEAM') === 'TEAM' ? AbstractMode::TYPE_TEAM : AbstractMode::TYPE_SOLO;
+			$modeType = GameModeType::tryFrom($mode->type ?? 'TEAM') ?? GameModeType::TEAM;
 			$modes[] = self::findModeObject($system, $mode, $modeType);
 		}
 		return $modes;
@@ -35,7 +36,7 @@ class GameModeFactory
 	public static function getById(int $id) : AbstractMode {
 		$mode = DB::select('game_modes', 'id_mode, name, system, type')->where('id_mode = %i', $id)->fetch();
 		$system = $mode->system ?? '';
-		$modeType = ($mode->type ?? 'TEAM') === 'TEAM' ? AbstractMode::TYPE_TEAM : AbstractMode::TYPE_SOLO;
+		$modeType = GameModeType::tryFrom($mode->type ?? 'TEAM') ?? GameModeType::TEAM;
 		return self::findModeObject($system, $mode, $modeType);
 	}
 
@@ -47,7 +48,7 @@ class GameModeFactory
 	 * @return AbstractMode
 	 * @throws GameModeNotFoundException
 	 */
-	public static function find(string $modeName, int $modeType = AbstractMode::TYPE_TEAM, string $system = '') : AbstractMode {
+	public static function find(string $modeName, GameModeType $modeType = GameModeType::TEAM, string $system = '') : AbstractMode {
 		$mode = DB::select('vModesNames', 'id_mode, name, system')->where('%s LIKE CONCAT(\'%\', [sysName], \'%\')', $modeName)->fetch();
 		if (isset($mode->system)) {
 			/** @noinspection CallableParameterUseCaseInTypeContextInspection */
@@ -59,12 +60,12 @@ class GameModeFactory
 	/**
 	 * @param string         $system
 	 * @param array|Row|null $mode
-	 * @param int            $modeType
+	 * @param GameModeType   $modeType
 	 *
 	 * @return mixed
 	 * @throws GameModeNotFoundException
 	 */
-	protected static function findModeObject(string $system, array|Row|null $mode, int $modeType) : mixed {
+	protected static function findModeObject(string $system, array|Row|null $mode, GameModeType $modeType) : mixed {
 		$args = [];
 		$classBase = 'App\\Models\\Game\\';
 		$classSystem = '';
@@ -80,7 +81,7 @@ class GameModeFactory
 			if (class_exists($class)) {
 				$className = $dbName;
 			}
-			else if ($modeType === AbstractMode::TYPE_TEAM) {
+			else if ($modeType === GameModeType::TEAM) {
 				$classSystem = '';
 				$className = 'CustomTeamMode';
 			}
@@ -91,7 +92,7 @@ class GameModeFactory
 		}
 
 		if (empty($className)) {
-			if ($modeType === AbstractMode::TYPE_TEAM) {
+			if ($modeType === GameModeType::TEAM) {
 				$className = 'TeamDeathmach';
 			}
 			else {

@@ -2,6 +2,7 @@
 
 namespace App\Models\Game\Evo5\GameModes;
 
+use App\Models\Game\Evo5\Player;
 use App\Models\Game\Game;
 use App\Models\Game\GameModes\AbstractMode;
 use App\Models\Game\Team;
@@ -10,7 +11,6 @@ class Zakladny extends AbstractMode
 {
 
 	public string $name = 'Základny';
-	public int    $type = self::TYPE_TEAM;
 
 	/**
 	 * @param Game $game
@@ -42,7 +42,7 @@ class Zakladny extends AbstractMode
 	 */
 	public function getBasesDestroyed(\App\Models\Game\Evo5\Team $team) : int {
 		return max(
-			array_map(static function(\App\Models\Game\Evo5\Player $player) {
+			array_map(static function(Player $player) {
 				return $player->bonus->shield;
 			}, $team->getPlayers()->getAll())
 		);

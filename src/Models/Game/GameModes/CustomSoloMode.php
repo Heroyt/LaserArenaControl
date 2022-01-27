@@ -2,9 +2,11 @@
 
 namespace App\Models\Game\GameModes;
 
+use App\Models\Game\Enums\GameModeType;
+
 class CustomSoloMode extends AbstractMode
 {
 
-	public int $type = AbstractMode::TYPE_SOLO;
+	public GameModeType $type = GameModeType::SOLO;
 
 }

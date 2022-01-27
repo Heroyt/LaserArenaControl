@@ -53,6 +53,7 @@ abstract class Player extends AbstractModel
 	public int $teamNum;
 
 	protected ?Team $team;
+	protected int   $color;
 
 	/**
 	 * @return Team|null
@@ -272,7 +273,7 @@ abstract class Player extends AbstractModel
 				'icon' => 'zero',
 			],
 			'team-50'           => [
-				'name' => lang('Potahal tým', context: 'results.bests'),
+				'name' => lang('Tahoun týmu', context: 'results.bests'),
 				'icon' => 'star',
 			],
 			'favouriteTarget'   => [
@@ -283,6 +284,18 @@ abstract class Player extends AbstractModel
 				'name' => lang('Pronásledovaný', context: 'results.bests'),
 				'icon' => 'death',
 			],
+			'devil'             => [
+				'name' => lang('Ďábel', context: 'results.bests'),
+				'icon' => 'devil',
+			],
+			'not-found'         => [
+				'name' => lang('Skóre nenalezeno', context: 'results.bests'),
+				'icon' => 'magnifying-glass',
+			],
+			'not-found-shots'   => [
+				'name' => lang('Výstřely nenalezeny', context: 'results.bests'),
+				'icon' => 'magnifying-glass',
+			],
 		];
 
 		$best = '';
@@ -290,8 +303,17 @@ abstract class Player extends AbstractModel
 		if ($this->accuracy === 100) {
 			$best = '100-percent';
 		}
-		else if ($this->deaths === 0) {
+		else if ($this->deaths < 10) {
 			$best = 'zero-deaths';
+		}
+		else if ($this->score === 666 || $this->score === 6666 || $this->shots === 666) {
+			$best = 'devil';
+		}
+		else if ($this->score === 404 || $this->score === 4040 || $this->score === 40400) {
+			$best = 'not-found';
+		}
+		else if ($this->shots === 404) {
+			$best = 'not-found-shots';
 		}
 
 		// Classic
@@ -321,8 +343,8 @@ abstract class Player extends AbstractModel
 			else if ($this->score === 0) {
 				$best = 'zero';
 			}
-			else if ($this->accuracy < 5) {
-				$best = 'accuracy';
+			else if ($this->accuracy < 6) {
+				$best = '5-percent';
 			}
 		}
 		if (empty($best)) {
@@ -331,12 +353,22 @@ abstract class Player extends AbstractModel
 			if (isset($favouriteTarget) && $this->getHitsPlayer($favouriteTarget) / $this->hits > 0.45) {
 				$best = 'favouriteTarget';
 			}
-			else if (isset($favouriteTargetOf) && $favouriteTargetOf->getHitsPlayer($this) / $favouriteTargetOf->hits > 0.45) {
+			else if (isset($favouriteTargetOf) && $favouriteTargetOf->getHitsPlayer($this) / $this->deaths > 0.45) {
 				$best = 'favouriteTargetOf';
 			}
 		}
 
 		return $fields[$best] ?? $fields['average'];
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getTeamColor() : int {
+		if (!isset($this->color)) {
+			$this->color = isset($this->game) && $this->getGame()->mode->isSolo() ? 2 : $this->getTeam()->color;
+		}
+		return $this->color;
 	}
 
 }

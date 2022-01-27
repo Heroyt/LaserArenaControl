@@ -1,10 +1,10 @@
 FROM node:latest AS node_base
-FROM php:8.0-apache as setup
+FROM php:8.1-apache as setup
 
 COPY --from=node_base / /
 
 # Setup
-RUN apt-get update && apt-get -y install wget git
+RUN apt-get update && apt update && apt-get -y install wget git build-essential && apt install cifs
 
 # Apache
 SHELL ["/bin/bash", "-c"]
@@ -19,7 +19,10 @@ RUN docker-php-ext-install gettext && docker-php-ext-enable gettext
 RUN docker-php-ext-install sockets && docker-php-ext-enable sockets
 RUN docker-php-ext-install pdo_mysql && docker-php-ext-enable pdo_mysql
 RUN docker-php-ext-install zip && docker-php-ext-enable zip
+RUN docker-php-ext-install intl && docker-php-ext-enable intl
 RUN apt-get update && apt-get upgrade -y
+
+#
 
 FROM setup as composer
 

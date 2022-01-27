@@ -5,6 +5,7 @@ namespace App\Tools\Evo5;
 use App\Exceptions\GameModeNotFoundException;
 use App\Exceptions\ResultsParseException;
 use App\Models\Factory\GameModeFactory;
+use App\Models\Game\Enums\GameModeType;
 use App\Models\Game\Evo5\Game;
 use App\Models\Game\Evo5\Player;
 use App\Models\Game\Evo5\Team;
@@ -76,7 +77,7 @@ class ResultsParser extends AbstractResultsParser
 						throw new ResultsParseException('Invalid argument count in STYLE');
 					}
 					$game->modeName = $args[0];
-					$game->mode = GameModeFactory::find($args[0], (int) $args[2], 'Evo5');
+					$game->mode = GameModeFactory::find($args[0], ((int) $args[2]) === 1 ? GameModeType::TEAM : GameModeType::SOLO, 'Evo5');
 					break;
 				case 'STYLEX':
 					if ($argsCount < 3) {

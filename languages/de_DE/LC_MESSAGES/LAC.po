@@ -301,7 +301,7 @@ msgid "Objekt největšího zájmu"
 msgstr "am meisten getroffen"
 
 msgctxt "results.bests"
-msgid "Absoltní vítěz"
+msgid "Absolutní vítěz"
 msgstr "Absoluter Gewinner"
 
 msgctxt "results.bests"
@@ -635,3 +635,76 @@ msgstr ""
 msgctxt "dates"
 msgid "Dates"
 msgstr ""
+
+msgid "No games have been played yet."
+msgstr ""
+
+msgctxt "results.style"
+msgid "Graphical"
+msgstr ""
+
+msgctxt "tips"
+msgid "Oživení trvá 5 sekund."
+msgstr ""
+
+msgctxt "results.bests"
+msgid "Nedotknutelný"
+msgstr ""
+
+msgctxt "results.bests"
+msgid "Sniper"
+msgstr ""
+
+msgctxt "results.bests"
+msgid "Hráč"
+msgstr ""
+
+msgctxt "results"
+msgid "Výsledky hráčů"
+msgstr ""
+
+msgctxt "results.player"
+msgid "Výstřely"
+msgstr ""
+
+msgctxt "results.bests"
+msgid "Vyrovnaný"
+msgstr ""
+
+msgctxt "results.bests"
+msgid "Poloviční sniper"
+msgstr ""
+
+msgctxt "results.bests"
+msgid "Zabiják"
+msgstr ""
+
+msgctxt "results.bests"
+msgid "Nula"
+msgstr ""
+
+msgctxt "results.bests"
+msgid "Potahal tým"
+msgstr ""
+
+msgctxt "results.bests"
+msgid "Občas se i trefí"
+msgstr ""
+
+msgctxt "results.bests"
+msgid "Zasedlý"
+msgstr ""
+
+msgctxt "results.bests"
+msgid "Pronásledovaný"
+msgstr ""
+
+msgctxt "results"
+msgid "%d zabití"
+msgstr ""
+
+msgctxt "results"
+msgid "%d smrt"
+msgid_plural "%d smrtí"
+msgstr[0] ""
+msgstr[1] ""

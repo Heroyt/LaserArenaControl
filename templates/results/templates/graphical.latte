@@ -15,25 +15,6 @@
 {/define}
 
 {define content}
-	<style>
-		@page {
-			size: A4 landscape;
-		}
-
-		.container-print-wrapper {
-			aspect-ratio: 0.71;
-		}
-
-		.container-print-wrapper .tip {
-			bottom: 2%;
-		}
-
-		@media print {
-			.container-print-wrapper .container-print {
-				margin-top: 5%;
-			}
-		}
-	</style>
 	{include resultsHeader}
 	{if $game->mode->isTeam() && $game->mode->settings->partTeams}
 		{include resultsTeams}
@@ -65,36 +46,20 @@
 {/define}
 
 {define resultsHeader}
-	<table class="results-header text-print-primary colorless">
-		<tr>
-			<th>{lang 'Datum', context: 'results.info'}:</th>
-			<td>{$game->start->format('d.m.Y H:i:s')}</td>
-		</tr>
-		<tr>
-			<th>{lang 'Herní mód', context: 'results.info'}:</th>
-			<td>{lang $game->mode->name, context: 'gameModes'}</td>
-			<th>{lang 'Počet hráčů', context: 'results.info'}:</th>
-			<td>{$game->getPlayersSorted()|length}</td>
-			<th>{lang 'Počet týmů', context: 'results.info'}:</th>
-			<td>{$game->getTeamsSorted()|length}</td>
-		</tr>
-	</table>
-	<table class="results-scoring table colorless print-dark">
-		<tr>
-			<td>{lang 'Zásah protihráče', context: 'results.scoring'}: {$game->scoring->hitOther}</td>
-			<td>{lang 'Zasažen protihráčem', context: 'results.scoring'}: {$game->scoring->deathOther}</td>
-			<td>{lang 'Zásah spoluhráče', context: 'results.scoring'}: {$game->scoring->hitOwn}</td>
-			<td>{lang 'Zasažen spouhráčem', context: 'results.scoring'}: {$game->scoring->deathOwn}</td>
-			<td>{lang 'Zasažen minou', context: 'results.scoring'}: {$game->scoring->hitPod}</td>
-		</tr>
-		<tr>
-			<td>{lang 'Body za výstřel', context: 'results.scoring'}: {$game->scoring->shot}</td>
-			<td>{lang 'Samopal', context: 'results.scoring'}: {$game->scoring->machineGun}</td>
-			<td>{lang 'Neviditelnost', context: 'results.scoring'}: {$game->scoring->invisibility}</td>
-			<td>{lang 'Agent', context: 'results.scoring'}: {$game->scoring->agent}</td>
-			<td>{lang 'Štít', context: 'results.scoring'}: {$game->scoring->shield}</td>
-		</tr>
-	</table>
+	<div class="results-header text-white text-start">
+		<div class="my-1">
+			<strong>{lang 'Kód hry', context: 'results.info'}:</strong>
+			{$game->code}
+		</div>
+		<div class="my-1">
+			<strong>{lang 'Datum', context: 'results.info'}:</strong>
+			{$game->start->format('d.m.Y H:i:s')}
+		</div>
+		<div>
+			<strong>{lang 'Herní mód', context: 'results.info'}:</strong>
+			{lang $game->mode->name, context: 'gameModes'}
+		</div>
+	</div>
 {/define}
 
 {define resultsPlayers}
@@ -109,7 +74,7 @@
 				<div class="player-head">
 					{var array $rank = $player->getBestAt()}
 					{svgIcon $rank['icon'], '', 15}
-					<div class="player-name text-center text-team-{$player->getTeam()->color}">
+					<div class="player-name text-center text-team-{$player->getTeamColor()}">
 						{$player->name}
 					</div>
 					<div class="player-rank">
@@ -121,14 +86,29 @@
 				{include playerShots}
 				{include playerHits}
 				{include playerFavourites}
+				{if method_exists($game, 'isMinesOn') && $game->isMinesOn() && $game->mode->settings->playerMines}
+					{include playerMines}
+				{/if}
 			</div>
 		{/foreach}
 	</section>
 {/define}
 
+{define playerMines}
+	{varType App\Models\Game\Evo5\Player $player}
+	<div class="player_mines mt-2">
+		{svgIcon 'base_2', '2rem'}
+		<div class="bonus">
+			<div n:foreach="$player->bonus->getArray() as $name => $value" class="{$name}">
+				{svgIcon $name}
+				{$value}
+			</div>
+		</div>
+	</div>
+{/define}
+
 {define playerShots}
-	<!--<h4 class="my-1">{lang 'Výstřely', context: 'results.player'}:</h4>-->
-	<div class="player-shots">
+	<div n:if="$game->mode->settings->playerShots" class="player-shots">
 		{var int $step = ceil($maxShots / 10)}
 		{var int $count = ceil($player->shots / $step)}
 		<svg viewBox="0 0 1720 504" class="mb-1">
@@ -146,8 +126,9 @@
 {/define}
 
 {define playerAccuracy}
-	<svg viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg" class="accuracy" xml:space="preserve"
-		 style="{if $game->mode->isTeam()}--color:var(--team-{$player->getTeam()?->color});{/if}fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+	<svg n:if="$game->mode->settings->playerAccuracy" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg"
+													  class="accuracy" xml:space="preserve"
+													  style="--color:var(--team-{$player->getTeamColor()});fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
 					{var int $circleRadius = 98}
 		<circle class="fill-circle" r="{$circleRadius}" cx="250" cy="250" fill="transparent" stroke="tomato"
 				stroke-width="{2*$circleRadius}"
@@ -178,7 +159,7 @@
 {define playerHits}
 	<h4 class="mt-2 mb-0">{lang 'Zásahy', context: 'results.player'}:</h4>
 	{var int $total = $player->hits + $player->deaths}
-	<div class="hits mt-1 mb-2">
+	<div n:if="$game->mode->settings->playerPlayers" class="hits mt-1 mb-2">
 		<div class="kills" style="height:{100*$player->hits / $total|noescape}%">
 			<div class="main">
 				<div class="icon">
@@ -188,12 +169,12 @@
 					{$player->hits}
 				</div>
 			</div>
-			<div n:if="$game->mode->isTeam()" class="side">
+			<div n:if="$game->mode->settings->playerPlayersTeams && $game->mode->isTeam()" class="side">
 				<div class="other"
 					 style="height: {$player->hits === 0 ? 0 : (100 * $player->hitsOther / $player->hits)|noescape}%;">
 					<div class="number">{$player->hitsOther}</div>
 				</div>
-				<div class="own bg-team-{$player->getTeam()->color}"
+				<div class="own bg-team-{$player->getTeamColor()}"
 					 style="height: {$player->hits === 0 ? 0 : (100 * $player->hitsOwn / $player->hits)|noescape}%;">
 					<div class="number">{$player->hitsOwn}</div>
 				</div>
@@ -208,12 +189,12 @@
 					{$player->deaths}
 				</div>
 			</div>
-			<div n:if="$game->mode->isTeam()" class="side">
+			<div n:if="$game->mode->settings->playerPlayersTeams && $game->mode->isTeam()" class="side">
 				<div class="other"
 					 style="height: {$player->deaths === 0 ? 0 : (100 * $player->deathsOther / $player->deaths)|noescape}%;">
 					<div class="number">{$player->deathsOther}</div>
 				</div>
-				<div class="own bg-team-{$player->getTeam()->color}"
+				<div class="own bg-team-{$player->getTeamColor()}"
 					 style="height: {$player->deaths === 0 ? 0 : (100 * $player->deathsOwn / $player->deaths)|noescape}%;">
 					<div class="number">{$player->deathsOwn}</div>
 				</div>
@@ -225,12 +206,12 @@
 {define playerScore}
 	{var float $height = 100 * abs($player->score) / $totalHeight}
 	{var float $bottom = $player->score < 0 ? 0 : 100 * abs($minScore) / $totalHeight}
-	<div class="score-shadow mb-1 rounded">
+	<div n:if="$game->mode->settings->playerScore" class="score-shadow mb-1 rounded">
 		<div class="score">
 			<div class="score-number" style="bottom: {$height+$bottom|noescape}%">
 				<i class="fas fa-star"></i> {$player->score|number:0,',','&nbsp;'|noescape}
 			</div>
-			<div class="inner bg-team-{$player->getTeam()->color}"
+			<div class="inner bg-team-{$player->getTeamColor()}"
 				 style="height: {$height|noescape}%;bottom:{$bottom|noescape}%;"></div>
 			<div class="line" style="bottom:{($player->score < 0 ? $height : $bottom)|noescape}%;"></div>
 		</div>
@@ -238,12 +219,12 @@
 {/define}
 
 {define playerFavourites}
-	{var App\Models\Game\Player $favourite = $player->getFavouriteTarget()}
-	{var App\Models\Game\Player $favouriteOf = $player->getFavouriteTargetOf()}
-	<div class="player-favourites text-center">
-		<div class="favourite-target">
+	{var App\Models\Game\Player|null $favourite = $player->getFavouriteTarget()}
+	{var App\Models\Game\Player|null $favouriteOf = $player->getFavouriteTargetOf()}
+	<div n:if="$game->mode->settings->playerFavourites" class="player-favourites text-center">
+		<div n:if="isset($favourite)" class="favourite-target">
 			<strong>{lang 'Nejoblíbenější cíl', context: 'results.player'}:</strong>
-			<div class="text-team-{$favourite->getTeam()->color}">
+			<div class="text-team-{$game->mode->isSolo() ? 2 : $favourite->getTeamColor()}">
 				{$favourite->name}
 			</div>
 			<div class="number">
@@ -251,9 +232,9 @@
 				{sprintf(lang('%d zabití', context: 'results'), $hits)}
 			</div>
 		</div>
-		<div class="favourite-target-of">
+		<div n:if="isset($favouriteOf)" class="favourite-target-of">
 			<strong>{lang 'Největší zabiják', context: 'results.player'}:</strong>
-			<div class="text-team-{$favouriteOf->getTeam()->color}">
+			<div class="text-team-{$game->mode->isSolo() ? 2 : $favouriteOf->getTeamColor()}">
 				{$favouriteOf->name}
 			</div>
 			<div class="number">

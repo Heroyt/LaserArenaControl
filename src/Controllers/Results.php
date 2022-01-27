@@ -60,6 +60,7 @@ class Results extends Controller
 		$this->params['game'] = $game;
 		bdump($game->getPlayers());
 		$this->params['style'] = PrintStyle::exists($style) ? PrintStyle::get($style) : PrintStyle::getActiveStyle();
+		$this->params['template'] = PrintTemplate::query()->where('slug = %s', $template)->first();
 		$namespace = '\\App\\Models\\Game\\'.Strings::toPascalCase($game::SYSTEM).'\\';
 		$teamClass = $namespace.'Team';
 		$playerClass = $namespace.'Player';

@@ -712,3 +712,23 @@ msgid_plural "%d smrtí"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
+
+msgctxt "results.bests"
+msgid "Tahoun týmu"
+msgstr ""
+
+msgctxt "results.bests"
+msgid "Ďábel"
+msgstr ""
+
+msgctxt "results.bests"
+msgid "Skóre nenalezeno"
+msgstr ""
+
+msgctxt "results.bests"
+msgid "Výstřely nenalezeny"
+msgstr ""
+
+msgctxt "results.info"
+msgid "Kód hry"
+msgstr ""

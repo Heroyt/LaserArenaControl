@@ -39,7 +39,7 @@
 					<strong>{lang 'Language'}:</strong>
 				</div>
 				<div class="col-lg-9">
-					{var string $selectedLang = $_GET['lang'] ?? App\Core\App::$language->id}
+					{var string $selectedLang = explode('_',$_GET['lang'] ?? App\Core\App::$language->id)[0]}
 					{foreach App\Core\App::getSupportedLanguages() as $lang => $country}
 						<input type="radio" id="lang-{$lang}" name="lang" class="country-select-input" value="{$lang}"
 							   {if $selectedLang === $lang}checked{/if}>

@@ -52,6 +52,9 @@ class Results extends CliController
 				try {
 					$parser = new ResultsParser($file);
 					$game = $parser->parse();
+					if (!isset($game->end)) {
+						continue;
+					}
 					if (!$game->save()) {
 						throw new ResultsParseException('Failed saving game into DB.');
 					}

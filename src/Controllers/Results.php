@@ -6,6 +6,7 @@ use App\Core\Controller;
 use App\Core\Request;
 use App\Exceptions\TemplateDoesNotExistException;
 use App\Models\Factory\GameFactory;
+use App\Models\Game\Game;
 use App\Models\Game\PrintStyle;
 use App\Models\Game\PrintTemplate;
 use App\Models\Game\Today;
@@ -31,6 +32,9 @@ class Results extends Controller
 		foreach ($rows as $row) {
 			$this->params['games'][] = GameFactory::getByCode($row->code);
 		}
+		usort($this->params['games'], static function(Game $game1, Game $game2) {
+			return $game2->start->getTimestamp() - $game1->start->getTimestamp();
+		});
 		if (!isset($this->params['selected'])) {
 			$this->params['selected'] = $this->params['games'][0] ?? null;
 		}

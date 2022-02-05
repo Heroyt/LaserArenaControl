@@ -3,6 +3,7 @@
 namespace App\Models\Traits;
 
 use App\Core\DB;
+use App\Exceptions\ValidationException;
 use App\Models\Game\Game;
 use App\Models\Game\Team;
 use App\Models\Game\TeamCollection;
@@ -31,6 +32,7 @@ trait WithTeams
 	 */
 	public function getTeamsSorted() : TeamCollection {
 		if (empty($this->teamsSorted)) {
+			/** @noinspection PhpFieldAssignmentTypeMismatchInspection */
 			$this->teamsSorted = $this
 				->getTeams()
 				->query()
@@ -69,7 +71,16 @@ trait WithTeams
 		return $this->teams;
 	}
 
+	/**
+	 * Save all teams to the DB
+	 *
+	 * @return bool
+	 * @throws ValidationException
+	 */
 	public function saveTeams() : bool {
+		if (!isset($this->teams)) {
+			return true;
+		}
 		foreach ($this->teams as $team) {
 			if (!$team->save()) {
 				return false;

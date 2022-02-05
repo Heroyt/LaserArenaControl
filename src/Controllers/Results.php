@@ -18,7 +18,7 @@ class Results extends Controller
 	protected string $description = '';
 
 	public function show(Request $request) : void {
-		$rows = GameFactory::queryGames()->orderBy('start')->desc()->limit(10)->fetchAll();
+		$rows = GameFactory::queryGames(true)->orderBy('start')->desc()->limit(10)->fetchAll();
 		if (count($rows) === 0) {
 			$this->view('pages/results/noGames');
 			return;

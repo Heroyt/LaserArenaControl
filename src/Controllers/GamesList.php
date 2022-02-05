@@ -15,7 +15,7 @@ class GamesList extends Controller
 
 	public function show() : void {
 		$this->params['date'] = new DateTime($_GET['date'] ?? 'now');
-		$this->params['games'] = GameFactory::getByDate($this->params['date']);
+		$this->params['games'] = GameFactory::getByDate($this->params['date'], true);
 		$this->params['gameCountsPerDay'] = GameFactory::getGamesCountPerDay('d.m.Y');
 		$this->view('pages/games-list/index');
 	}

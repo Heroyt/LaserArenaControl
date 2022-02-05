@@ -28,9 +28,21 @@ class GameFactory
 		return null;
 	}
 
-	public static function getByDate(DateTime $date) : array {
+	/**
+	 * Get games for the day
+	 *
+	 * @param DateTime $date
+	 * @param bool     $excludeNotFinished
+	 *
+	 * @return Game[]
+	 */
+	public static function getByDate(DateTime $date, bool $excludeNotFinished = false) : array {
 		$games = [];
-		$rows = self::queryGames()->where('DATE([start]) = %d', $date)->orderBy('start')->desc()->fetchAll();
+		$query = self::queryGames()->where('DATE([start]) = %d', $date)->orderBy('start')->desc();
+		if ($excludeNotFinished) {
+			$query->where('[end] IS NOT NULL');
+		}
+		$rows = $query->fetchAll();
 		foreach ($rows as $row) {
 			$game = self::getById($row->id_game, $row->system);
 			if (isset($game)) {
@@ -40,8 +52,16 @@ class GameFactory
 		return $games;
 	}
 
-	public static function getGamesCountPerDay(string $format = 'Y-m-d') : array {
-		$rows = self::queryGameCountPerDay()->fetchAll();
+	/**
+	 * Get game counts for each dates
+	 *
+	 * @param string $format
+	 * @param bool   $excludeNotFinished
+	 *
+	 * @return array<string,int>
+	 */
+	public static function getGamesCountPerDay(string $format = 'Y-m-d', bool $excludeNotFinished = false) : array {
+		$rows = self::queryGameCountPerDay($excludeNotFinished)->fetchAll();
 		$return = [];
 		foreach ($rows as $row) {
 			if (!isset($row->date)) {
@@ -52,11 +72,20 @@ class GameFactory
 		return $return;
 	}
 
-	public static function queryGameCountPerDay() : Fluent {
+	/**
+	 * @param bool $excludeNotFinished
+	 *
+	 * @return Fluent
+	 */
+	public static function queryGameCountPerDay(bool $excludeNotFinished = false) : Fluent {
 		$query = DB::getConnection()->select('[date], count(*) as [count]');
 		$queries = [];
 		foreach (self::getSupportedSystems() as $key => $system) {
-			$queries[] = (string) DB::select(["[{$system}_games]", "[g$key]"], "[g$key].[code], DATE([g$key].[start]) as [date]");
+			$q = DB::select(["[{$system}_games]", "[g$key]"], "[g$key].[code], DATE([g$key].[start]) as [date]");
+			if ($excludeNotFinished) {
+				$q->where("[g$key].[end] IS NOT NULL");
+			}
+			$queries[] = (string) $q;
 		}
 		$query
 			->from('%sql', '(('.implode(') UNION ALL (', $queries).')) [t]')
@@ -64,11 +93,22 @@ class GameFactory
 		return $query;
 	}
 
-	public static function queryGames() : Fluent {
+	/**
+	 * Prepare a SQL query for all games (from all systems)
+	 *
+	 * @param bool $excludeNotFinished
+	 *
+	 * @return Fluent
+	 */
+	public static function queryGames(bool $excludeNotFinished = false) : Fluent {
 		$query = DB::getConnection()->select('*');
 		$queries = [];
 		foreach (self::getSupportedSystems() as $key => $system) {
-			$queries[] = (string) DB::select(["[{$system}_games]", "[g$key]"], "[g$key].[id_game], %s as [system], [g$key].[code], [g$key].[start]", $system);
+			$q = DB::select(["[{$system}_games]", "[g$key]"], "[g$key].[id_game], %s as [system], [g$key].[code], [g$key].[start]", $system);
+			if ($excludeNotFinished) {
+				$q->where("[g$key].[end] IS NOT NULL");
+			}
+			$queries[] = (string) $q;
 		}
 		$query->from('%sql', '(('.implode(') UNION ALL (', $queries).')) [t]');
 		return $query;

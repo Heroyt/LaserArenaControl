@@ -322,11 +322,12 @@
 		<div class="caption">{lang 'Ti nej...', context: 'results.bests'}</div>
 		<div class="d-flex w-100 flex-wrap">
 			{var array $fields = $game->getBestsFields()}
-		{if count($fields) % 2 === 1}
+			{if count($fields) % 2 === 1}
 				{do $fields = array_slice($fields,1)}
 			{/if}
 			<div n:foreach="$fields as $property => $name" class="d-flex w-50">
-				{var App\Models\Game\Player $player = $game->getBestPlayer($property)}
+				{var App\Models\Game\Player|null $player = $game->getBestPlayer($property)}
+				{continueIf !isset($player)}
 				<div class="w-50 p-1 print-dark">{$name}:</div>
 				<div class="w-50 p-1 {if $iterator->counter0 % 4 < 2}print-light{/if}">
 					{if $game->mode->isTeam()}

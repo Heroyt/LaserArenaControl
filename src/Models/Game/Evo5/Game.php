@@ -3,6 +3,7 @@
 namespace App\Models\Game\Evo5;
 
 use App\Models\Game\GameModes\AbstractMode;
+use App\Models\Game\Player;
 use App\Models\Game\Scoring;
 use App\Models\Game\Timing;
 
@@ -93,6 +94,13 @@ class Game extends \App\Models\Game\Game
 			$info['mines'] = lang('Drtič min', context: 'results.bests');
 		}
 		return $info;
+	}
+
+	public function getBestPlayer(string $property) : ?Player {
+		if ($property === 'mines' && !$this->isMinesOn()) {
+			return null;
+		}
+		return parent::getBestPlayer($property);
 	}
 
 	public function getTeamColors() : array {

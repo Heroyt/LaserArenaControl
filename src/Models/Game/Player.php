@@ -200,6 +200,8 @@ abstract class Player extends AbstractModel
 
 	/**
 	 * @return array{name:string,icon:string}
+	 * @throws DirectoryCreationException
+	 * @throws ModelNotFoundException
 	 */
 	public function getBestAt() : array {
 		/** @var array{name:string,icon:string} $fields Best names */
@@ -319,7 +321,7 @@ abstract class Player extends AbstractModel
 		// Classic
 		if (empty($best)) {
 			foreach ($this::CLASSIC_BESTS as $check) {
-				if ($this->getGame()->getBestPlayer($check)->id_player === $this->id_player) {
+				if ($this->getGame()->getBestPlayer($check)?->id_player === $this->id_player) {
 					$best = $check;
 					break;
 				}

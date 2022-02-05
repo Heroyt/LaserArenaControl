@@ -83,9 +83,9 @@ abstract class Game extends AbstractModel implements InsertExtendInterface
 	/**
 	 * @param string $property
 	 *
-	 * @return Player
+	 * @return Player|null
 	 */
-	public function getBestPlayer(string $property) : Player {
+	public function getBestPlayer(string $property) : ?Player {
 		$query = $this->getPlayers()->query()->sortBy($property);
 		switch ($property) {
 			case 'shots':

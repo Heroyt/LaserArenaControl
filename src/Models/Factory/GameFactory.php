@@ -38,10 +38,7 @@ class GameFactory
 	 */
 	public static function getByDate(DateTime $date, bool $excludeNotFinished = false) : array {
 		$games = [];
-		$query = self::queryGames()->where('DATE([start]) = %d', $date)->orderBy('start')->desc();
-		if ($excludeNotFinished) {
-			$query->where('[end] IS NOT NULL');
-		}
+		$query = self::queryGames($excludeNotFinished)->where('DATE([start]) = %d', $date)->orderBy('start')->desc();
 		$rows = $query->fetchAll();
 		foreach ($rows as $row) {
 			$game = self::getById($row->id_game, $row->system);
@@ -104,7 +101,7 @@ class GameFactory
 		$query = DB::getConnection()->select('*');
 		$queries = [];
 		foreach (self::getSupportedSystems() as $key => $system) {
-			$q = DB::select(["[{$system}_games]", "[g$key]"], "[g$key].[id_game], %s as [system], [g$key].[code], [g$key].[start]", $system);
+			$q = DB::select(["[{$system}_games]", "[g$key]"], "[g$key].[id_game], %s as [system], [g$key].[code], [g$key].[start], [g$key].[end]", $system);
 			if ($excludeNotFinished) {
 				$q->where("[g$key].[end] IS NOT NULL");
 			}

@@ -421,31 +421,31 @@ msgstr "Default"
 
 msgctxt "results.player"
 msgid "K:D"
-msgstr ""
+msgstr "K:D"
 
 msgctxt "results.player"
 msgid "Nejoblíbenější cíl"
-msgstr ""
+msgstr "Favorite target"
 
 msgctxt "results.player"
 msgid "Největší zabiják"
-msgstr ""
+msgstr "The biggest killer"
 
 msgctxt "results"
 msgid "Vítězství"
-msgstr ""
+msgstr "Win"
 
 msgctxt "results"
 msgid "Remíza"
-msgstr ""
+msgstr "Draw"
 
 msgctxt "results.team"
 msgid "Ztráty základny"
-msgstr ""
+msgstr "Bases lost"
 
 msgctxt "results.player"
 msgid "Zbývá životů"
-msgstr ""
+msgstr "Lives left"
 
 msgctxt "tips"
 msgid "Jak se v aréně střílí, tak se v aréně umírá..."
@@ -457,7 +457,7 @@ msgstr ""
 
 msgctxt "tips"
 msgid "Tip #%d"
-msgstr ""
+msgstr "Hint #%d"
 
 msgctxt "tips"
 msgid "Střílíme v Písku už od 31.12.2013!!!"
@@ -525,7 +525,7 @@ msgstr ""
 
 msgctxt "tips"
 msgid "#laserarenapísek"
-msgstr ""
+msgstr "#laserarenapísek"
 
 msgctxt "tips"
 msgid "Zabití: 100 bodů, Smrt: -50 bodů, Zabití vlastního hráče: -25 bodů"
@@ -533,7 +533,7 @@ msgstr ""
 
 msgctxt "tips"
 msgid "Go, go, go, go..."
-msgstr ""
+msgstr "Go, go, go, go..."
 
 msgctxt "tips"
 msgid "Ramenní čidla se trefují nejlépe, zádová nejhůř."
@@ -553,7 +553,7 @@ msgstr ""
 
 msgctxt "tips"
 msgid "LASER TAG - SUIT UP!"
-msgstr ""
+msgstr "LASER TAG - SUIT UP!"
 
 msgctxt "tips"
 msgid "Když tě bolí nohy, kempi!"
@@ -568,91 +568,91 @@ msgid "Nezapomeň každý květen a listopad registrovat svůj tým na turnaj!"
 msgstr ""
 
 msgid "Settings"
-msgstr ""
+msgstr "Settings"
 
 msgid "Game modes"
-msgstr ""
+msgstr "Game modes"
 
 msgid "General"
-msgstr ""
+msgstr "General"
 
 msgctxt "pageTitles"
 msgid "Settings"
-msgstr ""
+msgstr "Settings"
 
 msgctxt "results.style.settings"
 msgid "Name"
-msgstr ""
+msgstr "Name"
 
 msgctxt "results.style.settings"
 msgid "Primary color"
-msgstr ""
+msgstr "Primary color"
 
 msgctxt "results.style.settings"
 msgid "Dark color"
-msgstr ""
+msgstr "Dark color"
 
 msgctxt "results.style.settings"
 msgid "Light color"
-msgstr ""
+msgstr "Light color"
 
 msgctxt "results.style.settings"
 msgid "Background"
-msgstr ""
+msgstr "Background"
 
 msgid "Print styles"
-msgstr ""
+msgstr "Print styles"
 
 msgctxt "results.style.settings"
 msgid "Print styles"
-msgstr ""
+msgstr "Print styles"
 
 msgctxt "results.style.settings"
 msgid "Add style"
-msgstr ""
+msgstr "Add style"
 
 msgctxt "actions"
 msgid "Send"
-msgstr ""
+msgstr "Send"
 
 msgctxt "actions"
 msgid "Delete"
-msgstr ""
+msgstr "Delete"
 
 msgctxt "results.style"
 msgid "Test"
-msgstr ""
+msgstr "Test"
 
 msgctxt "results.style.settings"
 msgid "Style"
-msgstr ""
+msgstr "Style"
 
 msgctxt "dates"
 msgid "Date from"
-msgstr ""
+msgstr "Date from"
 
 msgctxt "dates"
 msgid "to"
-msgstr ""
+msgstr "to"
 
 msgctxt "actions"
 msgid "Add"
-msgstr ""
+msgstr "Add"
 
 msgctxt "dates"
 msgid "Date"
-msgstr ""
+msgstr "Date"
 
 msgctxt "dates"
 msgid "Dates"
-msgstr ""
+msgstr "Dates"
 
 msgid "No games have been played yet."
-msgstr ""
+msgstr "No games have been played yet."
 
 msgctxt "results.style"
 msgid "Graphical"
-msgstr ""
+msgstr "Graphical"
 
 msgctxt "tips"
 msgid "Oživení trvá 5 sekund."
@@ -660,39 +660,39 @@ msgstr ""
 
 msgctxt "results.bests"
 msgid "Nedotknutelný"
-msgstr ""
+msgstr "Untouchable"
 
 msgctxt "results.bests"
 msgid "Sniper"
-msgstr ""
+msgstr "Sniper"
 
 msgctxt "results.bests"
 msgid "Hráč"
-msgstr ""
+msgstr "Player"
 
 msgctxt "results"
 msgid "Výsledky hráčů"
-msgstr ""
+msgstr "Players’ results"
 
 msgctxt "results.player"
 msgid "Výstřely"
-msgstr ""
+msgstr "Shots"
 
 msgctxt "results.bests"
 msgid "Vyrovnaný"
-msgstr ""
+msgstr "Balanced"
 
 msgctxt "results.bests"
 msgid "Poloviční sniper"
-msgstr ""
+msgstr "Half-sniper"
 
 msgctxt "results.bests"
 msgid "Zabiják"
-msgstr ""
+msgstr "Killer"
 
 msgctxt "results.bests"
 msgid "Nula"
-msgstr ""
+msgstr "Zero"
 
 msgctxt "results.bests"
 msgid "Potahal tým"
@@ -700,7 +700,7 @@ msgstr ""
 
 msgctxt "results.bests"
 msgid "Občas se i trefí"
-msgstr ""
+msgstr "May hit something"
 
 msgctxt "results.bests"
 msgid "Zasedlý"
@@ -708,17 +708,17 @@ msgstr ""
 
 msgctxt "results.bests"
 msgid "Pronásledovaný"
-msgstr ""
+msgstr "Followed"
 
 msgctxt "results"
 msgid "%d zabití"
-msgstr ""
+msgstr "%d hits"
 
 msgctxt "results"
 msgid "%d smrt"
 msgid_plural "%d smrtí"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d death"
+msgstr[1] "%d deaths"
 
 msgctxt "results.bests"
 msgid "Tahoun týmu"
@@ -726,16 +726,16 @@ msgstr ""
 
 msgctxt "results.bests"
 msgid "Ďábel"
-msgstr ""
+msgstr "The devil"
 
 msgctxt "results.bests"
 msgid "Skóre nenalezeno"
-msgstr ""
+msgstr "Score not found"
 
 msgctxt "results.bests"
 msgid "Výstřely nenalezeny"
-msgstr ""
+msgstr "Shots not found"
 
 msgctxt "results.info"
 msgid "Kód hry"
-msgstr ""
+msgstr "Game code"

@@ -26,8 +26,18 @@ class Results extends Controller
 		}
 		$this->params['games'] = [];
 		if (isset($request->params['code'])) {
-			$this->params['selected'] = GameFactory::getByCode($request->params['code']);
-			$this->params['games'][] = $this->params['selected'];
+			// Check if game already exists
+			$found = false;
+			foreach ($rows as $row) {
+				if ($row->code === $request->params['code']) {
+					$found = true;
+					break;
+				}
+			}
+			if (!$found) {
+				$this->params['selected'] = GameFactory::getByCode($request->params['code']);
+				$this->params['games'][] = $this->params['selected'];
+			}
 		}
 		foreach ($rows as $row) {
 			$this->params['games'][] = GameFactory::getByCode($row->code);

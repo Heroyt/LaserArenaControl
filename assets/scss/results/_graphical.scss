@@ -1,4 +1,5 @@
 .template-graphical {
+	--font-size: 7pt;
 	--size: 9pt;
 	align-items: center;
 	display: grid;
@@ -10,7 +11,6 @@
 	grid-template-columns: 1fr 1fr;
 	grid-template-rows: 28mm auto;
 	justify-content: start;
-	--font-size: 6pt;
 
 	&.solo {
 		grid-template-areas:
@@ -19,6 +19,18 @@
 		 'players players'
 		 'today today'
 		 'hits bests';
+	}
+
+	&.less-players {
+		grid-template-columns: 2fr 1fr;
+		grid-template-areas:
+		 'info qr'
+		 'teams teams'
+		 'players hits';
+	}
+
+	.fs-sm {
+		font-size: calc(var(--font-size) * 0.8);
 	}
 
 	> * {
@@ -62,7 +74,7 @@
 	}
 
 	table {
-		border: 1px solid var(--print-dark);
+		border: none;
 		border-radius: 10px;
 		caption-side: top;
 		max-width: 100%;
@@ -83,6 +95,21 @@
 			border: none !important;
 			overflow: hidden;
 		}
+
+		td,
+		th {
+			background-color: var(--bg-color);
+			border: none;
+			border-radius: 10px;
+		}
+
+		tbody tr:nth-child(odd) td {
+			background-color: var(--print-light);
+		}
+
+		tbody tr:nth-child(even) td {
+			background-color: var(--white);
+		}
 	}
 
 	caption,
@@ -91,21 +118,6 @@
 		font-size: calc(var(--size) * 1.1);
 		font-weight: bold;
 		padding: .4rem 0;
-	}
-
-	table:not(.colorless) {
-		border-collapse: collapse;
-
-		th {
-			background-color: var(--print-dark);
-			border-bottom: 1px solid var(--print-dark-text);
-			color: var(--print-dark-text);
-		}
-
-		tr:nth-child(even) td {
-			background-color: var(--print-light);
-			color: var(--print-light-text);
-		}
 	}
 
 	.results-teams {
@@ -148,12 +160,12 @@
 				text-align: center;
 
 				.rank-name {
-					font-size: calc(var(--font-size) * .8);
+					font-size: calc(var(--font-size) * .9);
 				}
 			}
 
 			.player-name {
-				font-size: calc(var(--font-size) * 1.2);
+				font-size: calc(var(--font-size) * 1.3);
 				font-weight: bold;
 				margin: .2rem 0 0;
 				text-transform: uppercase;
@@ -325,6 +337,11 @@
 		top: 0;
 		transform: rotate(90deg) translate(var(--size-y), var(--size-y));
 		z-index: 2;
+	}
+
+	.results-hits {
+		grid-area: hits;
+
 	}
 
 }

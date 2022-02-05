@@ -26,6 +26,7 @@ class Results extends Controller
 		}
 		$this->params['games'] = [];
 		if (isset($request->params['code'])) {
+			$this->params['selected'] = GameFactory::getByCode($request->params['code']);
 			// Check if game already exists
 			$found = false;
 			foreach ($rows as $row) {
@@ -35,7 +36,6 @@ class Results extends Controller
 				}
 			}
 			if (!$found) {
-				$this->params['selected'] = GameFactory::getByCode($request->params['code']);
 				$this->params['games'][] = $this->params['selected'];
 			}
 		}

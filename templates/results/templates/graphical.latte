@@ -11,7 +11,7 @@
 {/define}
 
 {define containerClasses}
-	template-graphical {if $game->mode->isSolo()}solo{/if}
+	template-graphical {if $game->mode->isSolo()}solo{/if} {if $game->mode->settings->partHits && count($game->getPlayers()) < 7}less-players{/if}
 {/define}
 
 {define content}
@@ -22,8 +22,9 @@
 	{if $game->mode->settings->partPlayers}
 		{include resultsPlayers}
 	{/if}
-
-	{* TODO: Add player hits when less than 7 players *}
+	{if $game->mode->settings->partHits && count($game->getPlayers()) < 7}
+		{include resultsHits}
+	{/if}
 {/define}
 
 {define resultsWin}
@@ -256,4 +257,34 @@
 			<div class="score"><i class="fas fa-star"></i> {$team->score|number:0,',','&nbsp;'|noescape}</div>
 		</div>
 	</div>
+{/define}
+
+{define resultsHits}
+	{var float $width = 87.5 / count($game->getPlayers())}
+	<section class="results-hits align-self-end">
+		<h4 class="caption">
+			{svgIcon 'kill', '', '1rem'}
+			{lang 'Zásahy hráčů', context: 'results.hits'}
+		</h4>
+		<div n:foreach="$game->getPlayersSorted() as $player"
+				class="player-hits w-100 bg-white rounded px-1 py-2 d-flex mt-1 align-items-center">
+			<div class="player pe-1 border-end" style="width: 17.5%;">
+				<div class="text-uppercase fw-bold text-team-{$player->getTeamColor()}">
+					{$player->name}
+				</div>
+				<div class="fs-sm">
+					{lang 'Zasáhl si hráče', context: 'results.hits'}:
+				</div>
+			</div>
+			<div n:foreach="$game->getPlayersSorted()->getAll() as $player2" style="width: {$width|noescape}%;"
+																			 class="text-center px-1 {if $player->id === $player2->id}text-muted{elseif $player->getFavouriteTarget()?->id === $player2->id}fw-bold text-print-primary{/if}">
+				<div class="text-uppercase fw-bold {if $player->id !== $player2->id}text-team-{$player2->getTeamColor()}{/if}">
+					{$player2->name}
+				</div>
+				<div class="">
+					{$player->getHitsPlayer($player2)}
+				</div>
+			</div>
+		</div>
+	</section>
 {/define}

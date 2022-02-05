@@ -52,25 +52,10 @@ abstract class Player extends AbstractModel
 
 	public int $teamNum;
 
-	protected ?Team $team;
-	protected int   $color;
-
-	/**
-	 * @return Team|null
-	 */
-	public function getTeam() : ?Team {
-		return $this->team;
-	}
-
-	/**
-	 * @param Team $team
-	 *
-	 * @return Player
-	 */
-	public function setTeam(Team $team) : Player {
-		$this->team = $team;
-		return $this;
-	}
+	protected ?Team   $team;
+	protected int     $color;
+	protected ?Player $favouriteTarget   = null;
+	protected ?Player $favouriteTargetOf = null;
 
 	/**
 	 * @return bool
@@ -96,106 +81,12 @@ abstract class Player extends AbstractModel
 		return true;
 	}
 
-	/**
-	 * @return PlayerHit[]
-	 * @throws DirectoryCreationException
-	 * @throws ModelNotFoundException
-	 */
-	public function getHitsPlayers() : array {
-		if (empty($this->hitPlayers)) {
-			return $this->loadHits();
-		}
-		return $this->hitPlayers;
-	}
-
-	/**
-	 * @param Player $player
-	 *
-	 * @return int
-	 * @throws DirectoryCreationException
-	 * @throws ModelNotFoundException
-	 */
-	public function getHitsPlayer(Player $player) : int {
-		return $this->getHitsPlayers()[$player->vest]?->count ?? 0;
-	}
-
-	/**
-	 * @return PlayerHit[]
-	 * @throws ModelNotFoundException
-	 * @throws DirectoryCreationException
-	 */
-	public function loadHits() : array {
-		/** @var PlayerHit $className */
-		$className = str_replace('Player', 'PlayerHit', get_class($this));
-		$hits = DB::select($className::TABLE, 'id_target, count')->where('id_player = %i', $this->id)->fetchAll();
-		foreach ($hits as $row) {
-			/** @noinspection PhpParamsInspection */
-			$this->addHits($this::get($row->id_target), $row->count);
-		}
-		return $this->hitPlayers;
-	}
-
-	/**
-	 * @param Player $player
-	 * @param int    $count
-	 *
-	 * @return $this
-	 */
-	public function addHits(Player $player, int $count) : Player {
-		/** @var PlayerHit $className */
-		$className = str_replace('Player', 'PlayerHit', get_class($this));
-		$this->hitPlayers[$player->vest] = new $className($this, $player, $count);
-		return $this;
-	}
-
 	public function getTodayPosition(string $property) : int {
 		return 0; // TODO: Implement
 	}
 
 	public function getMiss() : int {
 		return $this->shots - $this->hits;
-	}
-
-	/**
-	 * Get a player that this player hit the most
-	 *
-	 * @return Player|null
-	 * @throws DirectoryCreationException
-	 * @throws ModelNotFoundException
-	 */
-	public function getFavouriteTarget() : ?Player {
-		$max = 0;
-		$maxPlayer = null;
-		foreach ($this->getHitsPlayers() as $hits) {
-			if ($hits->count > $max) {
-				$maxPlayer = $hits->playerTarget;
-				$max = $hits->count;
-			}
-		}
-		return $maxPlayer;
-	}
-
-	/**
-	 * Get a player that hit this player the most
-	 *
-	 * @return Player|null
-	 * @throws DirectoryCreationException
-	 * @throws ModelNotFoundException
-	 */
-	public function getFavouriteTargetOf() : ?Player {
-		$max = 0;
-		$maxPlayer = null;
-		foreach ($this->getGame()->getPlayers() as $player) {
-			if ($player->id === $this->id) {
-				continue;
-			}
-			$hits = $player->getHitsPlayer($this);
-			if ($hits > $max) {
-				$max = $hits;
-				$maxPlayer = $player;
-			}
-		}
-		return $maxPlayer;
 	}
 
 	/**
@@ -361,6 +252,119 @@ abstract class Player extends AbstractModel
 		}
 
 		return $fields[$best] ?? $fields['average'];
+	}
+
+	/**
+	 * @return Team|null
+	 */
+	public function getTeam() : ?Team {
+		return $this->team;
+	}
+
+	/**
+	 * @param Team $team
+	 *
+	 * @return Player
+	 */
+	public function setTeam(Team $team) : Player {
+		$this->team = $team;
+		return $this;
+	}
+
+	/**
+	 * Get a player that this player hit the most
+	 *
+	 * @return Player|null
+	 * @throws DirectoryCreationException
+	 * @throws ModelNotFoundException
+	 */
+	public function getFavouriteTarget() : ?Player {
+		if (!isset($this->favouriteTarget)) {
+			$max = 0;
+			foreach ($this->getHitsPlayers() as $hits) {
+				if ($hits->count > $max) {
+					$this->favouriteTarget = $hits->playerTarget;
+					$max = $hits->count;
+				}
+			}
+		}
+		return $this->favouriteTarget;
+	}
+
+	/**
+	 * @return PlayerHit[]
+	 * @throws DirectoryCreationException
+	 * @throws ModelNotFoundException
+	 */
+	public function getHitsPlayers() : array {
+		if (empty($this->hitPlayers)) {
+			return $this->loadHits();
+		}
+		return $this->hitPlayers;
+	}
+
+	/**
+	 * @return PlayerHit[]
+	 * @throws ModelNotFoundException
+	 * @throws DirectoryCreationException
+	 */
+	public function loadHits() : array {
+		/** @var PlayerHit $className */
+		$className = str_replace('Player', 'PlayerHit', get_class($this));
+		$hits = DB::select($className::TABLE, 'id_target, count')->where('id_player = %i', $this->id)->fetchAll();
+		foreach ($hits as $row) {
+			/** @noinspection PhpParamsInspection */
+			$this->addHits($this::get($row->id_target), $row->count);
+		}
+		return $this->hitPlayers;
+	}
+
+	/**
+	 * @param Player $player
+	 * @param int    $count
+	 *
+	 * @return $this
+	 */
+	public function addHits(Player $player, int $count) : Player {
+		/** @var PlayerHit $className */
+		$className = str_replace('Player', 'PlayerHit', get_class($this));
+		$this->hitPlayers[$player->vest] = new $className($this, $player, $count);
+		return $this;
+	}
+
+	/**
+	 * Get a player that hit this player the most
+	 *
+	 * @return Player|null
+	 * @throws DirectoryCreationException
+	 * @throws ModelNotFoundException
+	 */
+	public function getFavouriteTargetOf() : ?Player {
+		if (!isset($this->favouriteTargetOf)) {
+			$max = 0;
+			foreach ($this->getGame()->getPlayers() as $player) {
+				if ($player->id === $this->id) {
+					continue;
+				}
+				$hits = $player->getHitsPlayer($this);
+				if ($hits > $max) {
+					$max = $hits;
+					$this->favouriteTargetOf = $player;
+				}
+			}
+		}
+		return $this->favouriteTargetOf;
+	}
+
+	/**
+	 * @param Player $player
+	 *
+	 * @return int
+	 * @throws DirectoryCreationException
+	 * @throws ModelNotFoundException
+	 */
+	public function getHitsPlayer(Player $player) : int {
+		return $this->getHitsPlayers()[$player->vest]?->count ?? 0;
 	}
 
 	/**

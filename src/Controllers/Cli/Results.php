@@ -11,6 +11,7 @@ use App\Exceptions\ResultsParseException;
 use App\Exceptions\ValidationException;
 use App\Logging\DirectoryCreationException;
 use App\Logging\Logger;
+use App\Services\EventService;
 use App\Tools\Evo5\ResultsParser;
 use Dibi\Exception;
 
@@ -71,6 +72,12 @@ class Results extends CliController
 		} catch (Exception $e) {
 			fwrite(STDERR, 'Failed to save the last check time: '.$e->getMessage().PHP_EOL.$e->getSql().PHP_EOL);
 		}
+
+		// Send event on new import
+		if ($imported > 0) {
+			EventService::trigger('game-imported');
+		}
+
 		echo 'Successfully imported: '.$imported.'/'.$total.' in '.round(microtime(true) - $start, 2).'s'.PHP_EOL;
 		exit(0);
 	}

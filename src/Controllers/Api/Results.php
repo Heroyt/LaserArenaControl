@@ -11,6 +11,7 @@ use App\Exceptions\ResultsParseException;
 use App\Exceptions\ValidationException;
 use App\Logging\DirectoryCreationException;
 use App\Logging\Logger;
+use App\Services\EventService;
 use App\Tools\Evo5\ResultsParser;
 use Dibi\Exception;
 
@@ -45,7 +46,6 @@ class Results extends ApiController
 			}
 			if (filemtime($file) > $lastCheck) {
 				$total++;
-				echo 'Importing: '.$file.PHP_EOL;
 				$logger->info('Importing file: '.$file);
 				try {
 					$parser = new ResultsParser($file);
@@ -67,15 +67,18 @@ class Results extends ApiController
 		try {
 			Info::set($resultsDir.'check', time());
 		} catch (Exception $e) {
-			$this->respond(
-				[
-					'error'     => 'Failed to save the last check time.',
-					'exception' => $e->getMessage(),
-					'sql'       => $e->getSql()
-				],
-				500
-			);
+			$errors[] = [
+				'error'     => 'Failed to save the last check time.',
+				'exception' => $e->getMessage(),
+				'sql'       => $e->getSql()
+			];
 		}
+
+		// Send event on new import
+		if ($imported > 0) {
+			EventService::trigger('game-imported');
+		}
+
 		$this->respond(
 			[
 				'imported' => $imported,

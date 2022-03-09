@@ -14,6 +14,10 @@ class EventService
 
 	private static Logger $logger;
 
+	public static function getEventPort() : int {
+		return EVENT_PORT;
+	}
+
 	/**
 	 * Trigger a new event to be broadcast
 	 *

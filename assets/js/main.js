@@ -2,6 +2,7 @@ import {formatPhoneNumber, initTooltips} from './functions.js';
 import axios from 'axios';
 import flatpickr from "flatpickr";
 import initPrintSettings from "./pages/settings/print";
+import initPrintPage from "./pages/print";
 
 axios.defaults.headers.post['X-Requested-With'] = 'XMLHttpRequest';
 
@@ -109,6 +110,8 @@ window.addEventListener("load", () => {
 	// Pages
 	if (page.routeName && page.routeName === 'settings-print') {
 		initPrintSettings();
+	} else if (page.routeName && page.routeName === 'results') {
+		initPrintPage();
 	} else if (page.routeName && page.routeName === 'dashboard') {
 		const ws = new WebSocket('ws://' + window.location.hostname + ':9999');
 		ws.onmessage = e => {

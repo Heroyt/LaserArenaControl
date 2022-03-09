@@ -58,10 +58,12 @@
 {include footer}
 {include loader}
 
+<div class="toast-container position-absolute bottom-0 end-0 p-3" id="toasts"></div>
 
 <script>
 	const page = {\App\Core\App::getRequest()};
 	const prettyUrl = {\App\Core\App::isPrettyUrl()};
+	const webSocketEventURI = 'ws://' + window.location.hostname + ':{\App\Services\EventService::getEventPort()}';
 </script>
 {\App\Core\App::getJs()|noescape}
 

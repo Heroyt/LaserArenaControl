@@ -31,6 +31,8 @@ const LANGUAGE_SUFFIXES = [
 	'en' => 'US',
 ];
 
+const EVENT_PORT = 9999;
+
 /** If in production */
 define('PRODUCTION', App::isProduction());
 define('CHECK_TRANSLATIONS', (bool) (App::getConfig()['General']['TRANSLATIONS'] ?? false));

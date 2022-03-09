@@ -109,6 +109,17 @@ window.addEventListener("load", () => {
 	// Pages
 	if (page.routeName && page.routeName === 'settings-print') {
 		initPrintSettings();
+	} else if (page.routeName && page.routeName === 'dashboard') {
+		const ws = new WebSocket('ws://' + window.location.hostname + ':9999');
+		ws.onmessage = e => {
+			console.log(e);
+		};
+		const input = document.getElementById('socket');
+		if (input) {
+			input.addEventListener('change', () => {
+				ws.send(input.value + '\n');
+			});
+		}
 	}
 });
 

@@ -118,11 +118,11 @@ class ResultsParser extends AbstractResultsParser
 					$team->name = $args[1];
 					$team->color = $args[0];
 					$team->playerCount = $args[2];
-					$players = $game->getPlayers()->query()->filter('teamNum', $team->color)->get();
+					/*$players = $game->getPlayers()->query()->filter('teamNum', $team->color)->get();
 					$team->addPlayer(...$players);
 					foreach ($players as $player) {
 						$player->setTeam($team);
-					}
+					}*/
 					break;
 				case 'PACKX':
 					if ($argsCount !== 7 && $argsCount !== 8) {
@@ -189,6 +189,15 @@ class ResultsParser extends AbstractResultsParser
 						$player->addHits($player2, $args[$keysVests[$player2->vest] ?? -1] ?? 0);
 					}
 					break;
+			}
+
+			// Set player teams
+			foreach ($game->getPlayers() as $player) {
+				foreach ($game->getTeams() as $team) {
+					if ($player->teamNum === $team->color) {
+						$player->setTeam($team);
+					}
+				}
 			}
 		}
 

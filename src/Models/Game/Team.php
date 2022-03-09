@@ -36,15 +36,18 @@ abstract class Team extends AbstractModel implements InsertExtendInterface
 	 *
 	 * @param Row $row Row from DB
 	 *
-	 * @return InsertExtendInterface
-	 * @throws ModelNotFoundException
+	 * @return InsertExtendInterface|null
 	 * @throws DirectoryCreationException
+	 * @throws ModelNotFoundException
 	 */
-	public static function parseRow(Row $row) : InsertExtendInterface {
+	public static function parseRow(Row $row) : ?InsertExtendInterface {
 		if (isset($row->id_team, static::$instances[static::TABLE][$row->id_team])) {
 			return static::$instances[static::TABLE][$row->id_team];
 		}
-		return new static($row->id_team ?? 0);
+		if (isset($row->id_team)) {
+			return new static($row->id_team);
+		}
+		return null;
 	}
 
 	/**

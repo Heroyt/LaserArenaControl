@@ -3,9 +3,7 @@
 namespace App\Controllers\Cli;
 
 use App\Core\CliController;
-use App\Core\DB;
-use App\Events\EventInterface;
-use Dibi\Exception;
+use App\Services\EventService;
 
 class EventServer extends CliController
 {
@@ -13,16 +11,28 @@ class EventServer extends CliController
 	/** @var resource[] */
 	private array $clients = [];
 
+	/**
+	 * Start a WS server
+	 *
+	 * Allows for multiple WS connections. Pools data once every second. Broadcasts any incoming messages and new events from DB to all connected clients.
+	 *
+	 * @return void
+	 */
 	public function start() : void {
 		$this->echo('Starting server', 'info');
 		$null = null;
+		// Create the master (=server) socket
+		// Using IPv4 and TCP
 		$sock = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
 		socket_set_option($sock, SOL_SOCKET, SO_REUSEADDR, 1);
+		// Listen for connection on predefined port
 		socket_bind($sock, '0.0.0.0', EVENT_PORT);
 		socket_listen($sock);
+		// Set blocking for socket_select() function to detect new connections
 		socket_set_block($sock);
 
 		do {
+			// The $newSockets list will be filtered by the socket_select() to only contain those sockets which have some data to read
 			$newSockets = $this->clients;
 			$newSockets[] = $sock;
 
@@ -33,27 +43,33 @@ class EventServer extends CliController
 			// If the main socket received a new connect message -> open a new client socket
 			if (in_array($sock, $newSockets, true)) {
 				$client = socket_accept($sock);
-				//socket_set_nonblock($client);
+
+				// Debug message
 				socket_getpeername($client, $clientIP);
 				$this->echo('Client connected.', $clientIP);
 
 				// Send WebSocket handshake headers.
 				$request = @socket_read($client, 10000);
 				if ($request === false) {
+					// Initial request failed
 					$this->echo("socket_read() failed; reason: ".socket_strerror(socket_last_error($client)), 'error');
+					socket_close($client);
 				}
 				else {
+					// Get the key
 					preg_match('#Sec-WebSocket-Key: (.*)\r\n#', $request, $matches);
 					$key = base64_encode(pack(
 																 'H*',
 																 sha1(($matches[1] ?? '').'258EAFA5-E914-47DA-95CA-C5AB0DC85B11')
 															 ));
+					// WS HTTP headers (WS ACK)
 					$headers = "HTTP/1.1 101 Switching Protocols\r\n";
 					$headers .= "Upgrade: websocket\r\n";
 					$headers .= "Connection: Upgrade\r\n";
 					$headers .= "Sec-WebSocket-Version: 13\r\n";
 					$headers .= "Sec-WebSocket-Accept: $key\r\n\r\n";
 					socket_write($client, $headers, strlen($headers));
+					// Add to client-pool
 					$this->clients[] = $client;
 				}
 			}
@@ -68,15 +84,23 @@ class EventServer extends CliController
 
 			// Db polling
 			$this->sentUnsentMessages();
-		} while (true);
+		} while (true); // Infinite server loop
 	}
 
+	/**
+	 * Formatted echo
+	 *
+	 * @param string $message
+	 * @param string $clientIP
+	 *
+	 * @return void
+	 */
 	public function echo(string $message, string $clientIP = '') : void {
 		echo date('[Y-m-d H:i:s]').' '.$clientIP.' '.trim($message).PHP_EOL;
 	}
 
 	/**
-	 * Wait for messages to
+	 * Receive a message from client
 	 *
 	 * @param resource $client
 	 *
@@ -84,8 +108,12 @@ class EventServer extends CliController
 	 */
 	private function clientRead($client) : void {
 		socket_getpeername($client, $clientIP);
+
+		// Receive any message from client
 		if (socket_recv($client, $socketData, 1024, 0) >= 1) {
 			$message = $this->unseal($socketData);
+			// Prevent wrong encoding error
+			// This can happen if the disconnect message is incorrectly read
 			$validUTF8 = mb_check_encoding($message, 'UTF-8');
 			if ($validUTF8) {
 				$this->echo($message, $clientIP);
@@ -93,22 +121,34 @@ class EventServer extends CliController
 			}
 		}
 
+		// Check for disconnections
 		$test = [$client];
 		$null = null;
+		// Test the socket to prevent socket_read() from blocking the process
 		socket_select($test, $null, $null, 0, 10);
 		if (count($test) > 0) {
 			$socketData = @socket_read($client, 1024, PHP_NORMAL_READ);
+			// Error means the client is disconnected
 			if ($socketData === false) {
 				$this->echo('Client disconnected.', $clientIP);
+				// Remove the client socket from the client-pool
 				$key = array_search($client, $this->clients, true);
 				if (isset($this->clients[$key])) {
 					unset($this->clients[$key]);
 				}
+				// Close the socket
 				socket_close($client);
 			}
 		}
 	}
 
+	/**
+	 * Parse the WS data
+	 *
+	 * @param string $socketData
+	 *
+	 * @return string
+	 */
 	public function unseal(string $socketData) : string {
 		$length = ord($socketData[1]) & 127;
 		if ($length === 126) {
@@ -134,7 +174,7 @@ class EventServer extends CliController
 	/**
 	 * Send a message to all listening clients
 	 *
-	 * @param EventInterface $event
+	 * @param string $message
 	 *
 	 * @return void
 	 */
@@ -150,30 +190,34 @@ class EventServer extends CliController
 	}
 
 	/**
+	 * Broadcasts all new events from the database
+	 *
 	 * @return void
 	 */
 	private function sentUnsentMessages() : void {
-		$events = DB::select('events', '*')->where('sent = 0')->orderBy('datetime')->desc()->fetchAll();
+		$events = EventService::getUnsent();
 		$ids = [];
 		foreach ($events as $event) {
 			$this->echo($event->message, 'event');
 			$this->broadcast($event->message);
 			$ids[] = $event->id_event;
 		}
-		if (!empty($ids)) {
-			try {
-				DB::update('events', ['sent' => 1], ['id_event IN %in', $ids]);
-			} catch (Exception $e) {
-				$this->echo($e->getMessage(), 'error');
-			}
+		if (!empty($ids) && !EventService::updateSent($ids)) {
+			$this->echo('Failed to flag events as sent', 'error');
 		}
 	}
 
+	/**
+	 * Add a WS header
+	 *
+	 * @param string $socketData
+	 *
+	 * @return string
+	 */
 	public function seal(string $socketData) : string {
 		$b1 = 0x80 | (0x1 & 0x0f);
 		$length = strlen($socketData);
 
-		$header = '';
 		if ($length <= 125) {
 			$header = pack('CC', $b1, $length);
 		}

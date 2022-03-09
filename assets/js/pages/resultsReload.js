@@ -4,7 +4,7 @@ let activityTimer;
 let isActive = true;
 let newGame = false;
 
-export default function initPrintPage() {
+export default function initResultsReload() {
 
 	// Activity timer detects any user activity to prevent site-reload when not wanted
 	document.addEventListener("mousemove", resetActivityTimer, false);

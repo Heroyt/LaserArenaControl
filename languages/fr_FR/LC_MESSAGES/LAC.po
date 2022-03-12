@@ -728,3 +728,48 @@ msgstr ""
 msgctxt "results.info"
 msgid "Kód hry"
 msgstr ""
+
+msgid "Zobrazit na Gate"
+msgstr ""
+
+msgctxt "results"
+msgid "Sniper"
+msgstr ""
+
+msgctxt "results"
+msgid "Mega střelec"
+msgstr ""
+
+msgctxt "results"
+msgid "Predátor"
+msgstr ""
+
+msgctxt "results"
+msgid "Cíl"
+msgstr ""
+
+msgctxt "gate"
+msgid "Nejlepší skóre dne"
+msgstr ""
+
+msgctxt "gate"
+msgid "Výsledky dne"
+msgstr ""
+
+msgctxt "results"
+msgid "%d shot"
+msgid_plural "%d shots"
+msgstr[0] ""
+msgstr[1] ""
+
+msgctxt "results"
+msgid "%d hit"
+msgid_plural "%d hits"
+msgstr[0] ""
+msgstr[1] ""
+
+msgctxt "results"
+msgid "%d death"
+msgid_plural "%d deaths"
+msgstr[0] ""
+msgstr[1] ""

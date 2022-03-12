@@ -696,7 +696,7 @@ msgstr "Zero"
 
 msgctxt "results.bests"
 msgid "Potahal tým"
-msgstr ""
+msgstr "Carried his team"
 
 msgctxt "results.bests"
 msgid "Občas se i trefí"
@@ -722,7 +722,7 @@ msgstr[1] "%d deaths"
 
 msgctxt "results.bests"
 msgid "Tahoun týmu"
-msgstr ""
+msgstr "Team-carry"
 
 msgctxt "results.bests"
 msgid "Ďábel"
@@ -739,3 +739,48 @@ msgstr "Shots not found"
 msgctxt "results.info"
 msgid "Kód hry"
 msgstr "Game code"
+
+msgid "Zobrazit na Gate"
+msgstr "Show on Gate"
+
+msgctxt "results"
+msgid "Sniper"
+msgstr "Sniper"
+
+msgctxt "results"
+msgid "Mega střelec"
+msgstr "Mega shooter"
+
+msgctxt "results"
+msgid "Predátor"
+msgstr "Predator"
+
+msgctxt "results"
+msgid "Cíl"
+msgstr "Target"
+
+msgctxt "gate"
+msgid "Nejlepší skóre dne"
+msgstr "Today top scores"
+
+msgctxt "gate"
+msgid "Výsledky dne"
+msgstr "Today’s results"
+
+msgctxt "results"
+msgid "%d shot"
+msgid_plural "%d shots"
+msgstr[0] "%d shot"
+msgstr[1] "%d shots"
+
+msgctxt "results"
+msgid "%d hit"
+msgid_plural "%d hits"
+msgstr[0] "%d hit"
+msgstr[1] "%d hits"
+
+msgctxt "results"
+msgid "%d death"
+msgid_plural "%d deaths"
+msgstr[0] "%d death"
+msgstr[1] "%d deaths"

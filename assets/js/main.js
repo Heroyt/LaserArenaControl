@@ -3,6 +3,9 @@ import axios from 'axios';
 import flatpickr from "flatpickr";
 import initPrintSettings from "./pages/settings/print";
 import initResultsReload from "./pages/resultsReload";
+import initGate from "./pages/gate";
+import {startLoading, stopLoading} from "./loaders";
+import * as bootstrap from "bootstrap";
 
 axios.defaults.headers.post['X-Requested-With'] = 'XMLHttpRequest';
 axios.defaults.headers.get['X-Requested-With'] = 'XMLHttpRequest';
@@ -110,10 +113,13 @@ window.addEventListener("load", () => {
 	});
 
 	// Pages
+	console.log(page.routeName);
 	if (page.routeName && page.routeName === 'settings-print') {
 		initPrintSettings();
 	} else if (page.routeName && (page.routeName === 'results' || page.routeName === 'games-list')) {
 		initResultsReload();
+	} else if (page.routeName && page.routeName === 'gate') {
+		initGate();
 	} else if (page.routeName && page.routeName === 'dashboard') {
 		const ws = new WebSocket('ws://' + window.location.hostname + ':9999');
 		ws.onmessage = e => {
@@ -126,5 +132,31 @@ window.addEventListener("load", () => {
 			});
 		}
 	}
-});
 
+	// Setting a game to gate
+	document.querySelectorAll('[data-toggle="gate"]').forEach(btn => {
+		const id = btn.dataset.id;
+		const system = btn.dataset.system;
+		// Allow for tooltips
+		if (btn.title) {
+			new bootstrap.Tooltip(btn);
+		}
+		btn.addEventListener('click', () => {
+			startLoading(true);
+			axios
+				.post('/gate/set/' + system, {
+					game: id
+				})
+				.then(response => {
+					stopLoading(true, true);
+					if (btn.classList.contains('btn-danger')) {
+						btn.classList.remove('btn-danger');
+						btn.classList.add('btn-success');
+					}
+				})
+				.catch(response => {
+					stopLoading(false, true);
+				});
+		});
+	});
+});

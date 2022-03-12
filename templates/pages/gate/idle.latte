@@ -1,0 +1,115 @@
+{layout '@layout.latte'}
+
+{varType App\Models\Game\Game|null $game}
+{varType int $gameCount}
+{varType int $teamCount}
+{varType int $playerCount}
+
+{varType App\Models\Game\Player[] $topScores}
+{varType App\Models\Game\Player|null $topHits}
+{varType App\Models\Game\Player|null $topDeaths}
+{varType App\Models\Game\Player|null $topAccuracy}
+{varType App\Models\Game\Player|null $topShots}
+
+{define content}
+	<div class="today">
+		<h1 class="title text-center text-white">{lang 'Výsledky dne', context: 'gate'}</h1>
+		<div class="score">
+			<table class="table">
+				<thead>
+				<tr class="print-dark text-center">
+					<th colspan="3">
+						{svgIcon 'star', '', '2rem'}
+						{lang 'Nejlepší skóre dne', context: 'gate'}
+					</th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr n:for="$i = 1; $i < 4; $i++" class="text-center">
+					<td class="bg-white col-2">{$i}.</td>
+					<td class="bg-white col-6">
+						{ifset $topScores[$i-1]}
+							{$topScores[$i-1]->name}
+						{/ifset}
+					</td>
+					<td class="bg-white col-4">
+						{ifset $topScores[$i-1]}
+							{$topScores[$i-1]->score}
+							<i class="fas fa-star"></i>
+						{/ifset}
+					</td>
+				</tr>
+				</tbody>
+				<tbody>
+			</table>
+			<table class="table">
+				<tbody>
+				<tr class="text-center">
+					<th class="print-dark">
+						{svgIcon 'gun', '', '2rem'}
+						Odehráno her
+					</th>
+					<td class="bg-white col-4">{$gameCount}</td>
+				</tr>
+				</tbody>
+			</table>
+		</div>
+		<div class="best">
+			<table class="table">
+				<tbody>
+				<tr class="text-center">
+					<th class="print-dark">
+						{svgIcon 'target', '', '2.5rem'}
+						{lang 'Sniper', context: 'results'}
+					</th>
+					<td class="col-6 bg-white">
+						{ifset $topAccuracy}
+							{$topAccuracy->name} ({$topAccuracy->accuracy}%)
+						{/ifset}
+					</td>
+				</tr>
+				<tr class="text-center">
+					<th class="print-dark">
+						{svgIcon 'bullets', '', '2.5rem'}
+						{lang 'Mega střelec', context: 'results'}
+					</th>
+					<td class="col-6 bg-white">
+						{ifset $topShots}
+							{$topShots->name} ({sprintf(lang('%d shot', '%d shots', $topShots->shots, 'results'), $topShots->shots)})
+						{/ifset}
+					</td>
+				</tr>
+				<tr class="text-center">
+					<th class="print-dark">
+						{svgIcon 'predator', '', '2.5rem'}
+						{lang 'Predátor', context: 'results'}
+					</th>
+					<td class="col-6 bg-white">
+						{ifset $topHits}
+							{$topHits->name} ({sprintf(lang('%d hit', '%d hits', $topHits->hits, 'results'), $topHits->hits)})
+						{/ifset}
+					</td>
+				</tr>
+				<tr class="text-center">
+					<th class="print-dark">
+						{svgIcon 'skull', '', '2.5rem'}
+						{lang 'Cíl', context: 'results'}
+					</th>
+					<td class="col-6 bg-white">
+						{ifset $topDeaths}
+							{$topDeaths->name} ({sprintf(lang('%d death', '%d deaths', $topDeaths->deaths, 'results'), $topDeaths->deaths)})
+						{/ifset}
+					</td>
+				</tr>
+				</tbody>
+			</table>
+		</div>
+		<div class="timer" n:ifset="$game">
+			{var int $left = ($game->timing->gameLength * 60) - (time() - $game->start->getTimestamp())}
+			<div class="time text-white {if $left < 0}d-none{/if}" data-start="{$game->start->getTimestamp()}"
+				 data-length="{$game->timing->gameLength * 60}">
+				{floor($left / 60)|padLeft:2,'0'}:{($left % 60)|padLeft:2,'0'}
+			</div>
+		</div>
+	</div>
+{/define}

@@ -1,0 +1,61 @@
+{layout '@layout.latte'}
+
+{varType App\Models\Game\Game $game}
+{varType App\Models\Game\PrintStyle $style}
+{varType App\Models\Game\Today $today}
+
+{define content}
+	<div class="results">
+		<section class="win" n:if="$game->mode->settings->partWin">
+			{include partWin}
+		</section>
+		<section class="players">
+			{include partPlayers}
+		</section>
+		<section class="teams" n:if="$game->mode->isTeam() && $game->mode->settings->partTeams">
+			{include partTeams}
+		</section>
+	</div>
+{/define}
+
+{define partWin}
+	{var App\Models\Game\Player|App\Models\Game\Team|null $win = $game->mode->getWin($game)}
+	{if is_null($win)}
+		<div class="print-primary">
+			{lang 'Remíza', context: 'results'}
+		</div>
+	{elseif $win instanceof App\Models\Game\Team}
+		<div class="bg-team-{$game::SYSTEM}-{$win->color}">
+			{lang 'Vítězství', context: 'results'}: {$win->name}
+		</div>
+	{elseif $win instanceof App\Models\Game\Player}
+		<div class="{if $game->mode->isSolo()}print-primary{else}bg-team-{$game::SYSTEM}-{$win->getTeam()->color}{/if}">
+			{lang 'Vítězství', context: 'results'}: {$win->name}
+		</div>
+	{/if}
+{/define}
+
+{define partPlayers}
+	<div class="player" n:foreach="$game->getPlayersSorted() as $player">
+		{var array $rank = $player->getBestAt()}
+		<div class="name bg-team-{$game::SYSTEM}-{$player->getTeamColor()}">
+			{$iterator->counter}. {$player->name}
+		</div>
+		<div class="rank">
+			{svgIcon $rank['icon'], '', 15}
+			{$rank['name']}
+		</div>
+		<div class="score text-end">{$player->score|number:0,',','&nbsp;'|noescape} <i class="fas fa-star"></i></div>
+	</div>
+{/define}
+
+{define partTeams}
+	{var App\Models\Game\Team|null $win = $game->mode->getWin($game)}
+	<div class="team" n:foreach="$game->getTeamsSorted() as $team">
+		<div class="name bg-team-{$game::SYSTEM}-{$team->color}">
+			{if is_null($win) || $win->id_team === $team->id_team}{svgIcon 'crown', '1rem'}{/if}
+				{$team->name}
+		</div>
+		<div class="score text-end">{$team->score|number:0,',','&nbsp;'|noescape} <i class="fas fa-star"></i></div>
+	</div>
+{/define}

@@ -1,0 +1,159 @@
+%players-teams {
+	display: flex;
+	flex-direction: column;
+}
+
+%gate-wrapper {
+	display: grid;
+	grid-gap: 3rem;
+	grid-template-columns: repeat(3, 1fr);
+	grid-template-rows: repeat(4, 1fr);
+	height: 100%;
+	width: 100%;
+}
+
+#gate {
+	background-image: url('/assets/images/gate/bg.jpg');
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
+	display: grid;
+	font-size: 1.3em;
+	grid-gap: 1rem;
+	grid-template-columns: 1fr;
+	grid-template-rows: 1fr 3rem;
+	min-height: 1081px;
+	min-width: 1920px;
+	padding: 2em 0;
+
+	.tip {
+		font-size: 1.5rem;
+		padding: .75rem 0;
+	}
+
+	main {
+		padding: 4em 3em 0;
+	}
+
+	.results {
+		@extend %gate-wrapper;
+		grid-template-areas: '. win .' 'players players .' 'players players teams' 'players players teams';
+
+		.win {
+			align-self: end;
+			font-size: 1.5em;
+			grid-area: win;
+
+			> div {
+				border-radius: calc(1.5em + .8rem);
+				padding: .4rem;
+				text-align: center;
+			}
+		}
+
+		.players {
+			@extend %players-teams;
+			grid-area: players;
+		}
+
+		.teams {
+			@extend %players-teams;
+			align-self: end;
+			grid-area: teams;
+			justify-content: flex-end;
+		}
+
+		.player,
+		.team {
+			background-color: var(--white);
+			border-radius: 10px;
+			display: flex;
+			margin: .1rem 0;
+			width: 100%;
+
+			.name,
+			.score,
+			.rank {
+				flex: 1;
+				max-width: 50%;
+				padding: .4rem 1rem;
+			}
+
+			.name {
+				border-bottom-left-radius: 10px;
+				border-top-left-radius: 10px;
+				font-weight: bold;
+			}
+		}
+
+		.team svg {
+			position: relative;
+			top: -.2rem;
+		}
+
+		.rank svg {
+			position: relative;
+			top: calc((-1.4rem + 15px) / 2);
+		}
+
+		svg {
+			path {
+				fill: var(--text-color);
+			}
+		}
+	}
+
+	.today {
+		@extend %gate-wrapper;
+		font-size: 1.55rem;
+		grid-template-areas: '. title title .' 'score score best best' 'score score best best' 'timer timer timer timer';
+		grid-template-columns: repeat(4, 1fr);
+		padding: 0 10rem;
+
+		.table {
+			border-color: var(--print-dark);
+		}
+
+		td,
+		th {
+			vertical-align: middle;
+		}
+
+		.title {
+			align-self: end;
+			grid-area: title;
+		}
+
+		.score {
+			display: flex;
+			flex-direction: column;
+			grid-area: score;
+			justify-content: space-between;
+		}
+
+		.best {
+			grid-area: best;
+		}
+
+		.timer {
+			align-self: center;
+			font-size: 7rem;
+			font-weight: bold;
+			grid-area: timer;
+			text-align: center;
+		}
+
+		.text-center svg {
+			margin: 0 auto;
+			position: relative;
+		}
+
+		svg {
+			display: block;
+
+			path {
+				fill: var(--text-color);
+			}
+		}
+	}
+}

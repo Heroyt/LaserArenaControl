@@ -2,13 +2,218 @@
 
 namespace App\Controllers;
 
+use App\Core\Constants;
 use App\Core\Controller;
+use App\Core\Info;
+use App\Core\Request;
+use App\Exceptions\ModelNotFoundException;
+use App\Logging\DirectoryCreationException;
+use App\Models\Factory\GameFactory;
+use App\Models\Factory\PlayerFactory;
+use App\Models\Factory\TeamFactory;
+use App\Models\Game\Game;
+use App\Models\Game\PrintStyle;
+use App\Models\Game\Today;
+use App\Services\EventService;
+use App\Tools\Strings;
+use DateTime;
+use Dibi\Exception;
 
 class Gate extends Controller
 {
 
-	public function show() : void {
+	protected ?Game $game = null;
 
+	/**
+	 * @return void
+	 * @throws DirectoryCreationException
+	 * @throws ModelNotFoundException
+	 */
+	public function show() : void {
+		$this->params['style'] = PrintStyle::getActiveStyle();
+
+		// Allow for filtering games just from one system
+		$system = $_GET['system'] ?? 'all';
+		$systems = [$system];
+
+		// Fallback to all available systems
+		if ($system === 'all') {
+			$systems = GameFactory::getSupportedSystems();
+		}
+
+		$now = time();
+
+		// LAC allows for setting a game to display
+		/** @var Game|null $test */
+		$test = Info::get('gate-game');
+		$gateTime = (int) Info::get('gate-time', $now);
+		if (isset($test) && ($now - $gateTime) <= Constants::TMP_GAME_RESULTS_TIME) {
+			$this->params['reloadTimer'] = Constants::TMP_GAME_RESULTS_TIME - ($now - $gateTime) + 2;
+			header('X-Reload-Time: '.$this->params['reloadTimer']);
+			$this->game = $test;
+			$this->getResults();
+			return;
+		}
+
+		// Get the results of the last game played if it had finished in the last 2 minutes
+		$lastGame = GameFactory::getLastGame($system);
+		if (isset($lastGame) && ($now - $lastGame->end->getTimestamp()) <= Constants::GAME_RESULTS_TIME) {
+			$this->params['reloadTimer'] = Constants::GAME_RESULTS_TIME - ($now - $lastGame->end->getTimestamp()) + 2;
+			header('X-Reload-Time: '.$this->params['reloadTimer']);
+			$this->game = $lastGame;
+			$this->getResults();
+			return;
+		}
+
+		// Try to find the last loaded or started games in selected systems
+		foreach ($systems as $system) {
+			/** @var Game|null $started */
+			$started = Info::get($system.'-game-started');
+			if (isset($started) && ($now - $started->start->getTimestamp()) <= Constants::GAME_STARTED_TIME) {
+				if (isset($this->game) && $this->game->fileTime > $started->fileTime) {
+					continue;
+				}
+				$this->params['reloadTimer'] = Constants::GAME_STARTED_TIME - ($now - $started->start->getTimestamp()) + 2;
+				$this->game = $started;
+				continue;
+			}
+
+			/** @var Game|null $loaded */
+			$loaded = Info::get($system.'-game-loaded');
+			if (isset($loaded) && ($now - $loaded->fileTime->getTimestamp()) <= Constants::GAME_LOADED_TIME) {
+				if (isset($this->game) && $this->game->fileTime > $loaded->fileTime) {
+					continue;
+				}
+				$this->params['reloadTimer'] = Constants::GAME_LOADED_TIME - ($now - $loaded->fileTime->getTimestamp()) + 2;
+				$this->game = $loaded;
+			}
+		}
+		if (isset($this->params['reloadTimer'])) {
+			header('X-Reload-Time: '.$this->params['reloadTimer']);
+		}
+
+		if (isset($this->game) && !$this->game->started) {
+			$this->getLoaded();
+		}
+
+		$this->getIdle();
+	}
+
+	/**
+	 * Display the results of the game
+	 *
+	 * @pre Gate::$game must be set
+	 *
+	 * @return void
+	 * @throws ModelNotFoundException
+	 * @throws DirectoryCreationException
+	 */
+	private function getResults() : void {
+		$this->params['game'] = $this->game;
+		$namespace = '\\App\\Models\\Game\\'.Strings::toPascalCase($this->game::SYSTEM).'\\';
+		$teamClass = $namespace.'Team';
+		$playerClass = $namespace.'Player';
+		$this->params['today'] = new Today($this->game, new $playerClass, new $teamClass);
+		$this->view('pages/gate/results');
+	}
+
+	/**
+	 * Get the loaded screen containing current players and their vests
+	 *
+	 * @pre Gate::$game must be set
+	 *
+	 * @return void
+	 */
+	private function getLoaded() : void {
+		$this->view('pages/gate/loaded');
+	}
+
+	/**
+	 * Generate the idle screen containing today's statistics
+	 *
+	 * @return void
+	 */
+	private function getIdle() : void {
+		$this->params['game'] = $this->game;
+		$today = new DateTime();
+		$games = GameFactory::queryGames(true, $today)->fetchAssoc('system|id_game');
+		$gameIds = [];
+		foreach ($games as $system => $g) {
+			$gameIds[$system] = array_keys($g);
+		}
+		$playersQuery = PlayerFactory::queryPlayers($gameIds);
+
+		$this->params['gameCount'] = count($games);
+		$this->params['playerCount'] = empty($gameIds) ? 0 : $playersQuery->count();
+		$this->params['teamCount'] = empty($gameIds) ? 0 : TeamFactory::queryTeams($gameIds)->count();
+
+		$this->params['topScores'] = [];
+		$this->params['topHits'] = null;
+		$this->params['topDeaths'] = null;
+		$this->params['topAccuracy'] = null;
+		$this->params['topShots'] = null;
+
+		if (!empty($gameIds)) {
+			$topScores = $playersQuery->orderBy('[score]')->desc()->limit(3)->fetchAll();
+			if (!empty($topScores)) {
+				foreach ($topScores as $score) {
+					$this->params['topScores'][] = PlayerFactory::getById($score->id_player, $score->system);
+				}
+			}
+			$topHits = $playersQuery->orderBy('[hits]')->desc()->fetch();
+			if (isset($topHits)) {
+				$this->params['topHits'] = PlayerFactory::getById($topHits->id_player, $topHits->system);
+			}
+			$topDeaths = $playersQuery->orderBy('[deaths]')->desc()->fetch();
+			if (isset($topDeaths)) {
+				$this->params['topDeaths'] = PlayerFactory::getById($topDeaths->id_player, $topDeaths->system);
+			}
+			$topAccuracy = $playersQuery->orderBy('[accuracy]')->desc()->fetch();
+			if (isset($topAccuracy)) {
+				$this->params['topAccuracy'] = PlayerFactory::getById($topAccuracy->id_player, $topAccuracy->system);
+			}
+			$topShots = $playersQuery->orderBy('[shots]')->desc()->fetch();
+			if (isset($topShots)) {
+				$this->params['topShots'] = PlayerFactory::getById($topShots->id_player, $topShots->system);
+			}
+		}
+		$this->view('pages/gate/idle');
+	}
+
+	/**
+	 * @param Request $request
+	 *
+	 * @return void
+	 */
+	public function setGateGame(Request $request) : void {
+		$gameId = (int) ($request->post['game'] ?? 0);
+		if (empty($gameId)) {
+			http_response_code(400);
+			$this->ajaxJson(['error' => 'Missing / Incorrect game']);
+			return;
+		}
+		$system = $request->params['system'] ?? '';
+		if (empty($system)) {
+			http_response_code(400);
+			$this->ajaxJson(['error' => 'Missing / Incorrect system']);
+			return;
+		}
+		$game = GameFactory::getById($gameId, $system);
+		if (!isset($game)) {
+			http_response_code(404);
+			$this->ajaxJson(['error' => 'Cannot find game']);
+			return;
+		}
+		try {
+			Info::set('gate-game', $game);
+			Info::set('gate-time', time());
+			EventService::trigger('gate-reload');
+		} catch (Exception $e) {
+			http_response_code(500);
+			$this->ajaxJson(['error' => 'Failed to save the game info', 'exception' => $e->getMessage()]);
+			return;
+		}
+		$this->ajaxJson(['success' => true]);
 	}
 
 }

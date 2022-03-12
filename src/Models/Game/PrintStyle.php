@@ -92,9 +92,9 @@ class PrintStyle extends AbstractModel
 			$return .= ':root {'.$this->getCssVars(false).'}';
 		}
 		foreach (self::COLORS as $color) {
-			$return .= '.print-'.$color.' {background-color: var(--print-'.$color.') !important; color: var(--print-'.$color.'-text) !important;}';
+			$return .= '.print-'.$color.' {--text-color: var(--print-'.$color.'-text); background-color: var(--print-'.$color.') !important; color: var(--print-'.$color.'-text) !important;}';
 			$return .= '.bg-print-'.$color.' {background-color: var(--print-'.$color.') !important;}';
-			$return .= '.text-print-'.$color.' {color: var(--print-'.$color.') !important;}';
+			$return .= '.text-print-'.$color.' {--text-color: var(--print-'.$color.'-text); color: var(--print-'.$color.') !important;}';
 		}
 		if ($tag) {
 			$return .= '</style>';

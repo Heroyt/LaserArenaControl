@@ -2,6 +2,7 @@
 
 use App\Controllers\Dashboard;
 use App\Controllers\GamesList;
+use App\Controllers\Gate;
 use App\Controllers\Results;
 use App\Controllers\Settings;
 use App\Core\Routing\Route;
@@ -23,3 +24,7 @@ Route::get('/settings', [Settings::class, 'show'])->name('settings');
 Route::get('/settings/modes', [Settings::class, 'modes'])->name('settings-modes');
 Route::get('/settings/print', [Settings::class, 'print'])->name('settings-print');
 Route::post('/settings/print', [Settings::class, 'savePrint']);
+
+Route::get('/gate', [Gate::class, 'show'])->name('gate');
+Route::post('/gate/set', [Gate::class, 'setGateGame']); // Error
+Route::post('/gate/set/{system}', [Gate::class, 'setGateGame']);

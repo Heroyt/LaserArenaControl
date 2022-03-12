@@ -36,7 +36,8 @@ class ResultsParser extends AbstractResultsParser
 		$game->fileNumber = $matches[0] ?? 0;
 		$fTime = filemtime($this->fileName);
 		if (is_int($fTime)) {
-			$game->fileTime = new DateTime($fTime);
+			$game->fileTime = new DateTime();
+			$game->fileTime->setTimestamp($fTime);
 		}
 
 		// Parse file into lines and arguments

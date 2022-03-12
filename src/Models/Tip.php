@@ -25,6 +25,17 @@ class Tip extends AbstractModel
 	}
 
 	/**
+	 * @return string[]
+	 */
+	public static function shuffledFormatted() : array {
+		$formatted = [];
+		foreach (self::shuffled() as $tip) {
+			$formatted[] = sprintf(lang('Tip #%d', context: 'tips'), $tip->id).': '.lang($tip->text, context: 'tips');
+		}
+		return $formatted;
+	}
+
+	/**
 	 * Get one random
 	 *
 	 * @return Tip|null

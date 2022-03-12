@@ -33,6 +33,11 @@ const LANGUAGE_SUFFIXES = [
 
 const EVENT_PORT = 9999;
 
+// Prevent IDE warnings about non-existent constant
+if (!defined('JSON_THROW_ON_ERROR')) {
+	define('JSON_THROW_ON_ERROR', 4194304);
+}
+
 /** If in production */
 define('PRODUCTION', App::isProduction());
 define('CHECK_TRANSLATIONS', (bool) (App::getConfig()['General']['TRANSLATIONS'] ?? false));

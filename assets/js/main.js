@@ -5,6 +5,8 @@ import initPrintSettings from "./pages/settings/print";
 import initResultsReload from "./pages/resultsReload";
 
 axios.defaults.headers.post['X-Requested-With'] = 'XMLHttpRequest';
+axios.defaults.headers.get['X-Requested-With'] = 'XMLHttpRequest';
+axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
 jscolor.presets.default = {
 	format: 'hex',

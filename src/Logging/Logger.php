@@ -132,7 +132,9 @@ class Logger extends AbstractLogger
 	}
 
 	public function __destruct() {
-		fclose($this->handle);
+		if (isset($this->handle) && is_resource($this->handle)) {
+			fclose($this->handle);
+		}
 	}
 
 	/**

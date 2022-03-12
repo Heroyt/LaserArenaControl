@@ -17,9 +17,12 @@ use DateTime;
 class ResultsParser extends AbstractResultsParser
 {
 
+	/** @var string Default LMX date string passed when no distinct date should be used (= null) */
 	public const EMPTY_DATE = '20000101000000';
 
 	/**
+	 * Parse a game results file and return a parsed object
+	 *
 	 * @return Game
 	 * @throws ResultsParseException
 	 * @throws GameModeNotFoundException
@@ -27,6 +30,7 @@ class ResultsParser extends AbstractResultsParser
 	public function parse() : Game {
 		$game = new Game();
 
+		// Results file info
 		$pathInfo = pathinfo($this->fileName);
 		preg_match('/(\d+)/', $pathInfo['filename'], $matches);
 		$game->fileNumber = $matches[0] ?? 0;
@@ -35,10 +39,11 @@ class ResultsParser extends AbstractResultsParser
 			$game->fileTime = new DateTime($fTime);
 		}
 
+		// Parse file into lines and arguments
 		preg_match_all('/([A-Z]+){([^{}]*)}#/', $this->fileContents, $matches);
-
 		[$lines, $titles, $argsAll] = $matches;
 
+		// Check if parsing is successful and lines were found
 		if (empty($titles) || empty($argsAll)) {
 			throw new ResultsParseException('The results file cannot be parsed: '.$this->fileName);
 		}
@@ -47,13 +52,25 @@ class ResultsParser extends AbstractResultsParser
 		$currKey = 1;
 		foreach ($titles as $key => $title) {
 			$args = $this->getArgs($argsAll[$key]);
+
+			// To prevent calling the count() function multiple times - save the value
 			$argsCount = count($args);
+
 			switch ($title) {
+				// SITE line contains information about the LMX arena and possibly version?
+				// This can only be useful to validate if the results are from the correct system (EVO-5)
 				case 'SITE':
 					if ($args[2] !== 'EVO-5 MAXX') {
 						throw new ResultsParseException('Invalid results system type. - '.$title.': '.json_encode($args, JSON_THROW_ON_ERROR));
 					}
 					break;
+
+				// GAME contains general game information
+				// - game number
+				// - ???
+				// - Start datetime (when the "Start game" button was pressed)
+				// - Finish datetime (when the results are downloaded)
+				// - Player count
 				case 'GAME':
 					if ($argsCount !== 5) {
 						throw new ResultsParseException('Invalid argument count in GAME');
@@ -70,12 +87,27 @@ class ResultsParser extends AbstractResultsParser
 						$game->finished = true;
 					}
 					break;
+
+				// TIMING contains all game settings regarding game times
+				// - Start time [s]
+				// - Play time [min]
+				// - End time [s]
+				// - Play start time [datetime]
+				// - Play end time [datetime]
+				// - End time [datetime] (Real end - after the play ended and after end time)
 				case 'TIMING':
 					if ($argsCount !== 6 && $argsCount !== 5) {
 						throw new ResultsParseException('Invalid argument count in TIMING');
 					}
 					$game->timing = new Timing(before: $args[0], gameLength: $args[1], after: $args[2]);
 					break;
+
+				// STYLE contains game mode information
+				// - Game mode's name
+				// - Game mode's description
+				// - Team (1) / Solo (0) game type
+				// - Play length [min]
+				// - ??
 				case 'STYLE':
 					if ($argsCount !== 5 && $argsCount !== 4) {
 						throw new ResultsParseException('Invalid argument count in STYLE');
@@ -83,6 +115,13 @@ class ResultsParser extends AbstractResultsParser
 					$game->modeName = $args[0];
 					$game->mode = GameModeFactory::find($args[0], ((int) $args[2]) === 1 ? GameModeType::TEAM : GameModeType::SOLO, 'Evo5');
 					break;
+
+				// STYLEX contains additional game mode settings
+				// - Respawn time [s]
+				// - Starting ammo
+				// - Starting lives
+				// - High-score
+				// - ???
 				case 'STYLEX':
 					if ($argsCount < 3) {
 						throw new ResultsParseException('Invalid argument count in STYLE');
@@ -91,15 +130,83 @@ class ResultsParser extends AbstractResultsParser
 					$game->ammo = (int) $args[1];
 					$game->lives = (int) $args[2];
 					break;
+
+				// STYLELEDS contains lightning settings
+				// - 11 unknown arguments
+				case 'STYLELEDS':
+					// STYLEFLAGS
+					// - 27 Unknown arguments
+				case 'STYLEFLAGS':
+					// STYLESOUNDS
+					// - ???
+				case 'STYLESOUNDS':
+					break;
+
+				// SCORING contains score settings
+				// - Death enemy
+				// - Hit enemy
+				// - Death teammate
+				// - Hit teammate
+				// - Death from pod
+				// - Score per shot
+				// - Score per machine gun
+				// - Score per invisibility
+				// - Score per agent
+				// - Score per shield
 				case 'SCORING':
 					if ($argsCount !== 16 && $argsCount !== 14) {
 						throw new ResultsParseException('Invalid argument count in SCORING');
 					}
 					$game->scoring = new Scoring(...$args);
 					break;
+
+				// ENVIRONMENT contains sound and effects settings
+				// - 5 unknown arguments
+				// - Play music file
+				// - 5 unknown arguments
+				case 'ENVIRONMENT':
+					// VIPSTYLE contains special mode settings
+					// - 7 unknown arguments
+				case 'VIPSTYLE':
+					// VAMPIRESTYLE contains special mode settings
+					// - 6 unknown arguments
+				case 'VAMPIRESTYLE':
+					// SWITCHSTYLE contains special mode settings
+					// - 2 unknown arguments
+				case 'SWITCHSTYLE':
+					// ASSISTEDSTYLE contains special mode settings
+					// - 8 unknown arguments
+				case 'ASSISTEDSTYLE':
+					// HITSTREAKSTYLE contains special mode settings
+					// - 3 unknown arguments
+				case 'HITSTREAKSTYLE':
+					// SHOWDOWNSTYLE contains special mode settings
+					// - 5 unknown arguments
+				case 'SHOWDOWNSTYLE':
+					// ACTIVITYSTYLE contains special mode settings
+					// - 3 unknown arguments
+				case 'ACTIVITYSTYLE':
+					// TERMINATESTYLE contains special mode settings
+					// - 1 unknown argument
+				case 'TERMINATESTYLE':
+					// MINESTYLE contains pods settings
+					// - Pod number
+					// - 3 unknown arguments
+					// - Pod name
+				case 'MINESTYLE':
+					// GROUP contains additional game notes
+					// - 2 arguments
 				case 'GROUP':
 					// TODO: Maybe parse additional info
 					break;
+
+				// PACK contains information about vest settings
+				// - Vest number
+				// - Player name
+				// - Team number
+				// - ???
+				// - VIP
+				// - 2 unknown arguments
 				case 'PACK':
 					if ($argsCount !== 4 && $argsCount !== 7) {
 						throw new ResultsParseException('Invalid argument count in PACK');
@@ -112,6 +219,11 @@ class ResultsParser extends AbstractResultsParser
 					$player->name = $args[1];
 					$player->teamNum = $args[2];
 					break;
+
+				// TEAM contains team info
+				// - Team number
+				// - Team name
+				// - Player count
 				case 'TEAM':
 					if ($argsCount !== 3) {
 						throw new ResultsParseException('Invalid argument count in TEAM');
@@ -122,12 +234,17 @@ class ResultsParser extends AbstractResultsParser
 					$team->name = $args[1];
 					$team->color = $args[0];
 					$team->playerCount = $args[2];
-					/*$players = $game->getPlayers()->query()->filter('teamNum', $team->color)->get();
-					$team->addPlayer(...$players);
-					foreach ($players as $player) {
-						$player->setTeam($team);
-					}*/
 					break;
+
+				// PACKX contains player's results
+				// - Vest number
+				// - Score
+				// - Shots
+				// - Hits
+				// - Deaths
+				// - Position
+				// - ???
+				// - ???
 				case 'PACKX':
 					if ($argsCount !== 7 && $argsCount !== 8) {
 						throw new ResultsParseException('Invalid argument count in PACKX');
@@ -143,6 +260,24 @@ class ResultsParser extends AbstractResultsParser
 					$player->deaths = $args[4];
 					$player->position = $args[5];
 					break;
+
+				// PACKY contains player's additional results
+				// - Vest number
+				// - Score for shots
+				// - Score for bonuses
+				// - Score for pod deaths
+				// - Ammo remaining
+				// - Accuracy
+				// - Pod hits
+				// - Agent
+				// - Invisibility
+				// - Machine gun
+				// - Shield
+				// - Enemy hits
+				// - Teammate hits
+				// - Enemy deaths
+				// - Teammate deaths
+				// - 7 unknown arguments
 				case 'PACKY':
 					if ($argsCount !== 16 && $argsCount !== 22 && $argsCount !== 23) {
 						throw new ResultsParseException('Invalid argument count in PACKY');
@@ -168,6 +303,11 @@ class ResultsParser extends AbstractResultsParser
 					$player->deathsOther = $args[14] ?? 0;
 					$player->deathsOwn = $args[15] ?? 0;
 					break;
+
+				// TEAMX contains information about team's score
+				// - Team number
+				// - Score
+				// - Position
 				case 'TEAMX':
 					if ($argsCount !== 3) {
 						throw new ResultsParseException('Invalid argument count in TEAMX');
@@ -180,6 +320,10 @@ class ResultsParser extends AbstractResultsParser
 					$team->score = $args[1];
 					$team->position = $args[2];
 					break;
+
+				// HITS contain information about individual hits between players
+				// - Vest number
+				// - X (X > 0) values for each player indicating how many times did a player with "Vest number" hit that player
 				case 'HITS':
 					if ($argsCount < 2) {
 						throw new ResultsParseException('Invalid argument count in HITS');
@@ -193,13 +337,22 @@ class ResultsParser extends AbstractResultsParser
 						$player->addHits($player2, $args[$keysVests[$player2->vest] ?? -1] ?? 0);
 					}
 					break;
+
+				// GAMECLONES contain information about cloned games
+				case 'GAMECLONES':
+					// TODO: Detect clones and deal with them
+					break;
 			}
+
+			// TODO: Figure out the unknown arguments
 
 			// Set player teams
 			foreach ($game->getPlayers() as $player) {
+				// Find team
 				foreach ($game->getTeams() as $team) {
 					if ($player->teamNum === $team->color) {
 						$player->setTeam($team);
+						break;
 					}
 				}
 			}
@@ -208,6 +361,15 @@ class ResultsParser extends AbstractResultsParser
 		return $game;
 	}
 
+	/**
+	 * Get arguments from a line
+	 *
+	 * Arguments are separated by a comma ',' character.
+	 *
+	 * @param string $args Concatenated arguments
+	 *
+	 * @return string[] Separated and trimmed arguments, not type-casted
+	 */
 	private function getArgs(string $args) : array {
 		return array_map('trim', explode(',', $args));
 	}

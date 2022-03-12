@@ -121,6 +121,23 @@ class GameFactory
 	}
 
 	/**
+	 * Get team colors for all supported systems
+	 *
+	 * @return string[][]
+	 */
+	public static function getAllTeamsColors() : array {
+		$colors = [];
+		foreach (self::getSupportedSystems() as $system) {
+			/** @var Game $className */
+			$className = 'App\Models\Game\\'.ucfirst($system).'\Game';
+			if (method_exists($className, 'getTeamColors')) {
+				$colors[$system] = $className::getTeamColors();
+			}
+		}
+		return $colors;
+	}
+
+	/**
 	 * Get a game model
 	 *
 	 * @param int    $id

@@ -18,7 +18,7 @@ class Color
 			if (isset($styles[$game::SYSTEM])) {
 				continue;
 			}
-			$styles[$game::SYSTEM] = $game->getTeamColors();
+			$styles[$game::SYSTEM] = $game::getTeamColors();
 		}
 		$classes = '';
 		$return = '<style>:root{';

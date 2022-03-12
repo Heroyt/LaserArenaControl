@@ -103,7 +103,7 @@ class Game extends \App\Models\Game\Game
 		return parent::getBestPlayer($property);
 	}
 
-	public function getTeamColors() : array {
+	public static function getTeamColors() : array {
 		return [
 			0 => '#f00',
 			1 => '#0c0',

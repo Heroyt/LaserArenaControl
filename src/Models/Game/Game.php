@@ -120,7 +120,7 @@ abstract class Game extends AbstractModel implements InsertExtendInterface
 		return $fields;
 	}
 
-	public function getTeamColors() : array {
+	public static function getTeamColors() : array {
 		return [];
 	}
 

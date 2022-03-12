@@ -20,18 +20,19 @@ abstract class Game extends AbstractModel implements InsertExtendInterface
 	public const SYSTEM      = '';
 	public const PRIMARY_KEY = 'id_game';
 	public const DEFINITION  = [
-		'start'   => [],
-		'end'     => [],
-		'timing'  => [
+		'fileTime' => [],
+		'start'    => [],
+		'end'      => [],
+		'timing'   => [
 			'validators' => ['instanceOf:'.Timing::class],
 		],
-		'code'    => [
+		'code'     => [
 			'validators' => [],
 		],
-		'mode'    => [
+		'mode'     => [
 			'validators' => ['instanceOf:'.AbstractMode::class],
 		],
-		'scoring' => [
+		'scoring'  => [
 			'validators' => ['instanceOf:'.Scoring::class],
 		],
 	];
@@ -39,14 +40,25 @@ abstract class Game extends AbstractModel implements InsertExtendInterface
 	public int                $id_game;
 	public ?DateTimeInterface $fileTime = null;
 	public ?DateTimeInterface $start    = null;
-	public ?DateTimeInterface $end     = null;
-	public ?Timing            $timing  = null;
+	public ?DateTimeInterface $end      = null;
+	public ?Timing            $timing   = null;
 	public string             $code;
-	public ?AbstractMode      $mode    = null;
-	public ?Scoring           $scoring = null;
+	public ?AbstractMode      $mode     = null;
+	public ?Scoring           $scoring  = null;
 
 	public bool $started  = false;
 	public bool $finished = false;
+
+	public static function parseRow(Row $row) : ?InsertExtendInterface {
+		if (isset($row->id_game, static::$instances[static::TABLE][$row->id_game])) {
+			return static::$instances[static::TABLE][$row->id_game];
+		}
+		return null;
+	}
+
+	public static function getTeamColors() : array {
+		return [];
+	}
 
 	public function save() : bool {
 		$pk = $this::PRIMARY_KEY;
@@ -60,13 +72,6 @@ abstract class Game extends AbstractModel implements InsertExtendInterface
 			$this->code = uniqid('g', false);
 		}
 		return parent::save();
-	}
-
-	public static function parseRow(Row $row) : ?InsertExtendInterface {
-		if (isset($row->id_game, static::$instances[static::TABLE][$row->id_game])) {
-			return static::$instances[static::TABLE][$row->id_game];
-		}
-		return null;
 	}
 
 	public function addQueryData(array &$data) : void {
@@ -118,10 +123,6 @@ abstract class Game extends AbstractModel implements InsertExtendInterface
 			}
 		}
 		return $fields;
-	}
-
-	public static function getTeamColors() : array {
-		return [];
 	}
 
 }

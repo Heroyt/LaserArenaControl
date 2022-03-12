@@ -15,6 +15,7 @@ class Game extends \App\Models\Game\Game
 	public const DEFINITION = [
 		'fileNumber' => [],
 		'modeName'   => [],
+		'fileTime'   => [],
 		'start'      => [],
 		'end'        => [],
 		'timing'     => [
@@ -50,6 +51,17 @@ class Game extends \App\Models\Game\Game
 	protected string $teamClass   = Team::class;
 	protected bool   $minesOn;
 
+	public static function getTeamColors() : array {
+		return [
+			0 => '#f00',
+			1 => '#0c0',
+			2 => '#00f',
+			3 => '#ffc0cb',
+			4 => '#f5bc00',
+			5 => '#28d1f0',
+		];
+	}
+
 	public function insert() : bool {
 		$this->logger->info('Inserting game: '.$this->fileNumber);
 		return parent::insert();
@@ -57,6 +69,22 @@ class Game extends \App\Models\Game\Game
 
 	public function save() : bool {
 		return parent::save() && $this->saveTeams() && $this->savePlayers();
+	}
+
+	public function getBestsFields() : array {
+		$info = parent::getBestsFields();
+		if ($this->mode->isTeam()) {
+			if ($this->mode->settings->bestHitsOwn) {
+				$info['hitsOwn'] = lang('Zabiják vlastního týmu', context: 'results.bests');
+			}
+			if ($this->mode->settings->bestDeathsOwn) {
+				$info['deathsOwn'] = lang('Největší vlastňák', context: 'results.bests');
+			}
+		}
+		if ($this->mode->settings->bestMines && $this->mode->settings->mines && $this->isMinesOn()) {
+			$info['mines'] = lang('Drtič min', context: 'results.bests');
+		}
+		return $info;
 	}
 
 	/**
@@ -80,37 +108,10 @@ class Game extends \App\Models\Game\Game
 		return $this->minesOn;
 	}
 
-	public function getBestsFields() : array {
-		$info = parent::getBestsFields();
-		if ($this->mode->isTeam()) {
-			if ($this->mode->settings->bestHitsOwn) {
-				$info['hitsOwn'] = lang('Zabiják vlastního týmu', context: 'results.bests');
-			}
-			if ($this->mode->settings->bestDeathsOwn) {
-				$info['deathsOwn'] = lang('Největší vlastňák', context: 'results.bests');
-			}
-		}
-		if ($this->mode->settings->bestMines && $this->mode->settings->mines && $this->isMinesOn()) {
-			$info['mines'] = lang('Drtič min', context: 'results.bests');
-		}
-		return $info;
-	}
-
 	public function getBestPlayer(string $property) : ?Player {
 		if ($property === 'mines' && !$this->isMinesOn()) {
 			return null;
 		}
 		return parent::getBestPlayer($property);
-	}
-
-	public static function getTeamColors() : array {
-		return [
-			0 => '#f00',
-			1 => '#0c0',
-			2 => '#00f',
-			3 => '#ffc0cb',
-			4 => '#f5bc00',
-			5 => '#28d1f0',
-		];
 	}
 }

@@ -9,10 +9,10 @@ class Scoring implements InsertExtendInterface
 {
 
 	public function __construct(
-		public int $hitOther = 0,
-		public int $hitOwn = 0,
 		public int $deathOther = 0,
+		public int $hitOther = 0,
 		public int $deathOwn = 0,
+		public int $hitOwn = 0,
 		public int $hitPod = 0,
 		public int $shot = 0,
 		public int $machineGun = 0,
@@ -24,10 +24,10 @@ class Scoring implements InsertExtendInterface
 
 	public static function parseRow(Row $row) : InsertExtendInterface {
 		return new Scoring(
-			$row->scoring_hit_other ?? 0,
-			$row->scoring_hit_own ?? 0,
 			$row->scoring_death_other ?? 0,
+			$row->scoring_hit_other ?? 0,
 			$row->scoring_death_own ?? 0,
+			$row->scoring_hit_own ?? 0,
 			$row->scoring_hit_pod ?? 0,
 			$row->scoring_shot ?? 0,
 			$row->scoring_power_machine_gun ?? 0,

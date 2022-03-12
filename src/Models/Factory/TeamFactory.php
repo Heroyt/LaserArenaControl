@@ -1,0 +1,62 @@
+<?php
+
+namespace App\Models\Factory;
+
+use App\Core\DB;
+use App\Exceptions\ModelNotFoundException;
+use App\Models\Game\Team;
+use App\Tools\Strings;
+use Dibi\Fluent;
+use InvalidArgumentException;
+
+class TeamFactory
+{
+
+	/**
+	 * Get a game model
+	 *
+	 * @param int    $id
+	 * @param string $system
+	 *
+	 * @return Team|null
+	 */
+	public static function getById(int $id, string $system) : ?Team {
+		if (empty($system)) {
+			throw new InvalidArgumentException('System name is required.');
+		}
+		/** @var Team $className */
+		$className = '\\App\\Models\\Game\\'.Strings::toPascalCase($system).'\\Team';
+		if (!class_exists($className)) {
+			throw new InvalidArgumentException('Game model of does not exist: '.$className);
+		}
+		try {
+			$game = new $className($id);
+		} catch (ModelNotFoundException $e) {
+			return null;
+		}
+		return $game;
+	}
+
+	/**
+	 * Prepare a SQL query for all teams (from all systems)
+	 *
+	 * @param int[][] $gameIds
+	 *
+	 * @return Fluent
+	 */
+	public static function queryTeams(array $gameIds) : Fluent {
+		$query = DB::getConnection()->select('*');
+		$queries = [];
+		foreach (GameFactory::getSupportedSystems() as $key => $system) {
+			if (empty($gameIds[$system])) {
+				continue;
+			}
+			$q = DB::select(["[{$system}_teams]", "[g$key]"], "[g$key].[id_team], [g$key].[id_game], [g$key].[color], %s as [system], [g$key].[name], [g$key].[score]", $system)
+						 ->where("[g$key].[id_game] IN %in", $gameIds[$system]);
+			$queries[] = (string) $q;
+		}
+		$query->from('%sql', '(('.implode(') UNION ALL (', $queries).')) [t]');
+		return $query;
+	}
+
+}

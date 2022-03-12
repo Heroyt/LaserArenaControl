@@ -29,6 +29,102 @@ class GameFactory
 	}
 
 	/**
+	 * Prepare a SQL query for all games (from all systems)
+	 *
+	 * @param bool          $excludeNotFinished
+	 * @param DateTime|null $date
+	 *
+	 * @return Fluent
+	 */
+	public static function queryGames(bool $excludeNotFinished = false, ?DateTime $date = null) : Fluent {
+		$query = DB::getConnection()->select('*');
+		$queries = [];
+		foreach (self::getSupportedSystems() as $key => $system) {
+			$q = DB::select(["[{$system}_games]", "[g$key]"], "[g$key].[id_game], %s as [system], [g$key].[code], [g$key].[start], [g$key].[end]", $system);
+			if ($excludeNotFinished) {
+				$q->where("[g$key].[end] IS NOT NULL");
+			}
+			if (isset($date)) {
+				$q->where("DATE([g$key].[start]) = %d", $date);
+			}
+			$queries[] = (string) $q;
+		}
+		$query->from('%sql', '(('.implode(') UNION ALL (', $queries).')) [t]');
+		return $query;
+	}
+
+	/**
+	 * Get a list of all supported systems
+	 *
+	 * @return string[]
+	 */
+	public static function getSupportedSystems() : array {
+		return require ROOT.'config/supportedSystems.php';
+	}
+
+	/**
+	 * Get a game model
+	 *
+	 * @param int    $id
+	 * @param string $system
+	 *
+	 * @return Game|null
+	 */
+	public static function getById(int $id, string $system) : ?Game {
+		if (empty($system)) {
+			throw new InvalidArgumentException('System name is required.');
+		}
+		/** @var Game $className */
+		$className = '\\App\\Models\\Game\\'.Strings::toPascalCase($system).'\\Game';
+		if (!class_exists($className)) {
+			throw new InvalidArgumentException('Game model of does not exist: '.$className);
+		}
+		try {
+			$game = new $className($id);
+		} catch (ModelNotFoundException $e) {
+			return null;
+		}
+		return $game;
+	}
+
+	/**
+	 * Get the last played game
+	 *
+	 * @param string $system System filter
+	 *
+	 * @return Game|null
+	 */
+	public static function getLastGame(string $system = 'all') : ?Game {
+		if ($system === 'all') {
+			$query = self::queryGames(true);
+		}
+		else {
+			$query = self::queryGamesSystem($system, true);
+		}
+		$row = $query->orderBy('end')->desc()->fetch();
+		if (isset($row)) {
+			return self::getById($row->id_game, $row->system);
+		}
+		return null;
+	}
+
+	/**
+	 * Prepare a SQL query for all games (from one system)
+	 *
+	 * @param string $system
+	 * @param bool   $excludeNotFinished
+	 *
+	 * @return Fluent
+	 */
+	public static function queryGamesSystem(string $system, bool $excludeNotFinished = false) : Fluent {
+		$query = DB::select(["[{$system}_games]"], "[id_game], %s as [system], [code], [start], [end]", $system);
+		if ($excludeNotFinished) {
+			$query->where("[end] IS NOT NULL");
+		}
+		return $query;
+	}
+
+	/**
 	 * Get games for the day
 	 *
 	 * @param DateTime $date
@@ -91,36 +187,6 @@ class GameFactory
 	}
 
 	/**
-	 * Prepare a SQL query for all games (from all systems)
-	 *
-	 * @param bool $excludeNotFinished
-	 *
-	 * @return Fluent
-	 */
-	public static function queryGames(bool $excludeNotFinished = false) : Fluent {
-		$query = DB::getConnection()->select('*');
-		$queries = [];
-		foreach (self::getSupportedSystems() as $key => $system) {
-			$q = DB::select(["[{$system}_games]", "[g$key]"], "[g$key].[id_game], %s as [system], [g$key].[code], [g$key].[start], [g$key].[end]", $system);
-			if ($excludeNotFinished) {
-				$q->where("[g$key].[end] IS NOT NULL");
-			}
-			$queries[] = (string) $q;
-		}
-		$query->from('%sql', '(('.implode(') UNION ALL (', $queries).')) [t]');
-		return $query;
-	}
-
-	/**
-	 * Get a list of all supported systems
-	 *
-	 * @return string[]
-	 */
-	public static function getSupportedSystems() : array {
-		return require ROOT.'config/supportedSystems.php';
-	}
-
-	/**
 	 * Get team colors for all supported systems
 	 *
 	 * @return string[][]
@@ -135,31 +201,6 @@ class GameFactory
 			}
 		}
 		return $colors;
-	}
-
-	/**
-	 * Get a game model
-	 *
-	 * @param int    $id
-	 * @param string $system
-	 *
-	 * @return Game|null
-	 */
-	public static function getById(int $id, string $system) : ?Game {
-		if (empty($system)) {
-			throw new InvalidArgumentException('System name is required.');
-		}
-		/** @var Game $className */
-		$className = '\\App\\Models\\Game\\'.Strings::toPascalCase($system).'\\Game';
-		if (!class_exists($className)) {
-			throw new InvalidArgumentException('Game model of does not exist: '.$className);
-		}
-		try {
-			$game = new $className($id);
-		} catch (ModelNotFoundException $e) {
-			return null;
-		}
-		return $game;
 	}
 
 }

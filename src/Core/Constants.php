@@ -316,4 +316,9 @@ class Constants
 		'ZM' => 'Zambia',
 		'ZW' => 'Zimbabwe',
 	];
+
+	/** @var int Time, when a game should be considered "new" when loaded */
+	public const GAME_LOADED_TIME = 300; // 5 minutes
+	/** @var int Time, when a game should be considered "new" when loaded */
+	public const GAME_STARTED_TIME = 1800; // 30 minutes
 }

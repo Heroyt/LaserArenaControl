@@ -45,4 +45,15 @@ abstract class CliController implements ControllerInterface
 		$this->request = $request;
 	}
 
+	/**
+	 * Print a message to STDERR
+	 *
+	 * @param string $message
+	 *
+	 * @return void
+	 */
+	public function errorPrint(string $message) : void {
+		fwrite(STDERR, $message.PHP_EOL);
+	}
+
 }

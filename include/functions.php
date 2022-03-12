@@ -259,3 +259,17 @@ function svgIcon(string $name, string|int $width = '100%', string|int $height = 
 	}
 	return $xml->asXML();
 }
+
+/**
+ * Add a trailing slash to a string (file/directory path)
+ *
+ * @param string $string
+ *
+ * @return string
+ */
+function trailingSlashIt(string $string) : string {
+	if (substr($string, -1) !== DIRECTORY_SEPARATOR) {
+		$string .= DIRECTORY_SEPARATOR;
+	}
+	return $string;
+}

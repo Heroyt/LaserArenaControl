@@ -30,6 +30,10 @@ class ResultsParser extends AbstractResultsParser
 		$pathInfo = pathinfo($this->fileName);
 		preg_match('/(\d+)/', $pathInfo['filename'], $matches);
 		$game->fileNumber = $matches[0] ?? 0;
+		$fTime = filemtime($this->fileName);
+		if (is_int($fTime)) {
+			$game->fileTime = new DateTime($fTime);
+		}
 
 		preg_match_all('/([A-Z]+){([^{}]*)}#/', $this->fileContents, $matches);
 

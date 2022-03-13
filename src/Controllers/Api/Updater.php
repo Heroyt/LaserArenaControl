@@ -19,7 +19,9 @@ class Updater extends ApiController
 		}
 
 		/** @var string|false $out */
-		$out = exec('git stash 2>&1; git pull -r --ff-only 2>&1; git stash pop 2>&1;', $output, $returnCode);
+		$out = exec('git stash push -u -a 2>&1; git pull 2>&1;', $output, $returnCode);
+		exec('git stash pop 2>&1', $output2);
+		$output = array_merge($output, $output2);
 
 		if ($out === false || $returnCode !== 0) {
 			$logger?->warning('Cannot execute command');

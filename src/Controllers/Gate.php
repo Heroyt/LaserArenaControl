@@ -94,6 +94,7 @@ class Gate extends Controller
 
 		if (isset($this->game) && !$this->game->started) {
 			$this->getLoaded();
+			return;
 		}
 
 		$this->getIdle();
@@ -125,6 +126,7 @@ class Gate extends Controller
 	 * @return void
 	 */
 	private function getLoaded() : void {
+		$this->params['game'] = $this->game;
 		$this->view('pages/gate/loaded');
 	}
 

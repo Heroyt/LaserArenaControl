@@ -1,5 +1,21 @@
 {layout '@layout.latte'}
 
-{define content}
+{varType App\Models\Game\Game $game}
 
+{define content}
+	{var $gridDimensions = App\Models\Vest::getGridDimensions($game::SYSTEM)}
+	{dump $game->getPlayers()->getAll()}
+	<div class="vests" style="--cols: {$gridDimensions->cols}; --rows: {$gridDimensions->rows};">
+		<div class="vest" n:foreach="App\Models\Vest::getForSystem($game::SYSTEM) as $vest"
+			 style="grid-column: {$vest->gridCol};grid-row: {$vest->gridRow};">
+			{var App\Models\Game\Player|null $player = $game->getVestPlayer($vest->vestNum)}
+			{ifset $player}
+				{svgIcon 'Vesta' . $player->getTeamColor(), '', '6.3rem'}
+				<div class="name">{$player->name}</div>
+			{else}
+				{svgIcon 'Vesta', '', '6.3rem'}
+			{/ifset}
+			<div class="number">{$vest->vestNum}</div>
+		</div>
+	</div>
 {/define}

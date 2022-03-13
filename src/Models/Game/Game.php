@@ -125,4 +125,15 @@ abstract class Game extends AbstractModel implements InsertExtendInterface
 		return $fields;
 	}
 
+	/**
+	 * Get player by vest number
+	 *
+	 * @param int $vestNum
+	 *
+	 * @return Player|null
+	 */
+	public function getVestPlayer(int $vestNum) : ?Player {
+		return $this->getPlayers()->query()->filter('vest', $vestNum)->first();
+	}
+
 }

@@ -16,6 +16,7 @@ class CollectionQueryFilter implements CollectionQueryFilterInterface
 	}
 
 	public function apply(CollectionInterface $collection) : CollectionQueryFilterInterface {
+		$remove = [];
 		foreach ($collection as $key => $model) {
 			$modelValues = $this->method ? $model->{$this->name}() : $model->{$this->name};
 			$filter = false;
@@ -26,8 +27,11 @@ class CollectionQueryFilter implements CollectionQueryFilterInterface
 				$filter = in_array($modelValues, $this->values, false);
 			}
 			if (!$filter) {
-				unset($collection[$key]);
+				$remove[] = $key;
 			}
+		}
+		foreach ($remove as $key) {
+			unset($collection[$key]);
 		}
 		return $this;
 	}

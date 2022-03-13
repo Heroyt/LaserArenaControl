@@ -3,6 +3,7 @@
 namespace App\Core;
 
 use App\Exceptions\ValidationException;
+use App\Models\Factory\GameFactory;
 use App\Tools\Strings;
 use InvalidArgumentException;
 use Nette\Utils\Validators;
@@ -147,6 +148,18 @@ class ModelValidator
 		}
 		if (!$value instanceof $className) {
 			throw new ValidationException('Value must be an instance of '.$className.'.');
+		}
+	}
+
+	/**
+	 * @param string|null $value
+	 *
+	 * @return void
+	 * @throws ValidationException
+	 */
+	public static function validateSystem(?string $value = null) : void {
+		if (isset($value) && !in_array($value, GameFactory::getSupportedSystems(), true)) {
+			throw new ValidationException('Value is not a valid system ('.implode(', ', GameFactory::getSupportedSystems()).')');
 		}
 	}
 

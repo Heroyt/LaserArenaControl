@@ -55,6 +55,10 @@ class ModelQuery
 		return $this;
 	}
 
+	public function count() : int {
+		return $this->query->count();
+	}
+
 	public function first() : ?AbstractModel {
 		$row = $this->query->fetch();
 		if (!isset($row)) {

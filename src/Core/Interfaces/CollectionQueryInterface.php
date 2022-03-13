@@ -29,9 +29,11 @@ interface CollectionQueryInterface
 	/**
 	 * Get the query's result
 	 *
+	 * @param bool $returnArray
+	 *
 	 * @return CollectionInterface|array
 	 */
-	public function get() : CollectionInterface|array;
+	public function get(bool $returnArray = false) : CollectionInterface|array;
 
 	/**
 	 * Get only the first result or null

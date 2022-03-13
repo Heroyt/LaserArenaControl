@@ -16,6 +16,7 @@ Route::post('/api/git/fetch', [Updater::class, 'fetch']);
 Route::post('/api/git/status', [Updater::class, 'status']);
 
 Route::post('/api/build', [Updater::class, 'build']);
+Route::post('/api/install', [Updater::class, 'install']);
 
 Route::get('/api/logs', [Logs::class, 'show']);
 Route::get('/api/logs/download', [Logs::class, 'download']);

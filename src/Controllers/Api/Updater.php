@@ -4,6 +4,7 @@ namespace App\Controllers\Api;
 
 use App\Core\ApiController;
 use App\Core\Request;
+use App\Install\Install;
 use App\Logging\DirectoryCreationException;
 use App\Logging\Logger;
 
@@ -118,6 +119,33 @@ class Updater extends ApiController
 			$this->respond(['error' => 'Cannot execute build', 'errorCode' => $returnCode], 500);
 		}
 		$this->respond(['success' => true]);
+	}
+
+	/**
+	 * Install the database changes
+	 *
+	 * @param Request $request
+	 *
+	 * @return void
+	 */
+	public function install(Request $request) : void {
+		try {
+			$logger = new Logger(LOG_DIR.'api/', 'update');
+			$logger->info('Updating LAC - install ('.$request->getIp().')');
+		} catch (DirectoryCreationException $e) {
+			$logger = null;
+		}
+
+		ob_start();
+		$success = Install::install(isset($request->post['fresh']) && $request->post['fresh'] === 1);
+		$output = ob_get_clean();
+
+		if (!$success) {
+			$logger?->warning('Install failed');
+			$logger?->debug($output);
+			$this->respond(['error' => 'Install failed', 'output' => $output], 500);
+		}
+		$this->respond(['success' => true, 'output' => $output]);
 	}
 
 }

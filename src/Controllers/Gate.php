@@ -138,12 +138,13 @@ class Gate extends Controller
 		$today = new DateTime();
 		$games = GameFactory::queryGames(true, $today)->fetchAssoc('system|id_game');
 		$gameIds = [];
+		$this->params['gameCount'] = 0;
 		foreach ($games as $system => $g) {
 			$gameIds[$system] = array_keys($g);
+			$this->params['gameCount'] += count($g);
 		}
 		$playersQuery = PlayerFactory::queryPlayers($gameIds);
 
-		$this->params['gameCount'] = count($games);
 		$this->params['playerCount'] = empty($gameIds) ? 0 : $playersQuery->count();
 		$this->params['teamCount'] = empty($gameIds) ? 0 : TeamFactory::queryTeams($gameIds)->count();
 
@@ -154,25 +155,30 @@ class Gate extends Controller
 		$this->params['topShots'] = null;
 
 		if (!empty($gameIds)) {
-			$topScores = $playersQuery->orderBy('[score]')->desc()->limit(3)->fetchAll();
+			$q = clone $playersQuery;
+			$topScores = $q->orderBy('[score]')->desc()->limit(3)->fetchAll();
 			if (!empty($topScores)) {
 				foreach ($topScores as $score) {
 					$this->params['topScores'][] = PlayerFactory::getById($score->id_player, $score->system);
 				}
 			}
-			$topHits = $playersQuery->orderBy('[hits]')->desc()->fetch();
+			$q = clone $playersQuery;
+			$topHits = $q->orderBy('[hits]')->desc()->fetch();
 			if (isset($topHits)) {
 				$this->params['topHits'] = PlayerFactory::getById($topHits->id_player, $topHits->system);
 			}
-			$topDeaths = $playersQuery->orderBy('[deaths]')->desc()->fetch();
+			$q = clone $playersQuery;
+			$topDeaths = $q->orderBy('[deaths]')->desc()->fetch();
 			if (isset($topDeaths)) {
 				$this->params['topDeaths'] = PlayerFactory::getById($topDeaths->id_player, $topDeaths->system);
 			}
-			$topAccuracy = $playersQuery->orderBy('[accuracy]')->desc()->fetch();
+			$q = clone $playersQuery;
+			$topAccuracy = $q->orderBy('[accuracy]')->desc()->fetch();
 			if (isset($topAccuracy)) {
 				$this->params['topAccuracy'] = PlayerFactory::getById($topAccuracy->id_player, $topAccuracy->system);
 			}
-			$topShots = $playersQuery->orderBy('[shots]')->desc()->fetch();
+			$q = clone $playersQuery;
+			$topShots = $q->orderBy('[shots]')->desc()->fetch();
 			if (isset($topShots)) {
 				$this->params['topShots'] = PlayerFactory::getById($topShots->id_player, $topShots->system);
 			}

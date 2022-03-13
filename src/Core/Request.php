@@ -169,4 +169,13 @@ class Request implements RequestInterface
 		}
 		return $vars;
 	}
+
+	/**
+	 * Get IP of the client requesting
+	 *
+	 * @return string
+	 */
+	public function getIp() : string {
+		return $_SERVER['HTTP_CLIENT_IP'] ?? $_SERVER['HTTP_X_FORWARDED_FOR'] ?? $_SERVER['REMOTE_ADDR'] ?? '';
+	}
 }

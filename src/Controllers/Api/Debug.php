@@ -27,7 +27,7 @@ class Debug extends ApiController
 			$logger?->debug(json_encode($output, JSON_THROW_ON_ERROR));
 			$this->respond(['error' => 'Cannot execute pwd', 'errorCode' => $returnCode], 500);
 		}
-		$this->respond(['success' => true]);
+		$this->respond(['success' => true, 'output' => $out]);
 	}
 
 	public function whoami(Request $request) : void {
@@ -47,7 +47,7 @@ class Debug extends ApiController
 			$logger?->debug(json_encode($output, JSON_THROW_ON_ERROR));
 			$this->respond(['error' => 'Cannot execute whoami', 'errorCode' => $returnCode], 500);
 		}
-		$this->respond(['success' => true]);
+		$this->respond(['success' => true, 'output' => $out]);
 	}
 
 }

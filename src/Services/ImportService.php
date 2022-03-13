@@ -71,7 +71,9 @@ class ImportService
 			}
 			if (filemtime($file) > $lastCheck) {
 				$total++;
-				echo 'Importing: '.$file.PHP_EOL;
+				if (self::$cliFlag) {
+					echo 'Importing: '.$file.PHP_EOL;
+				}
 				$logger->info('Importing file: '.$file);
 				try {
 					$parser = new ResultsParser($file);

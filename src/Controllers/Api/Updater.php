@@ -10,6 +10,13 @@ use App\Logging\Logger;
 class Updater extends ApiController
 {
 
+	/**
+	 * Pull changes from remote using an API route
+	 *
+	 * @param Request $request
+	 *
+	 * @return void
+	 */
 	public function pull(Request $request) : void {
 		try {
 			$logger = new Logger(LOG_DIR.'api/', 'update');
@@ -32,6 +39,13 @@ class Updater extends ApiController
 		$this->respond(['success' => true, 'output' => $output]);
 	}
 
+	/**
+	 * Fetch changes from remote using an API route
+	 *
+	 * @param Request $request
+	 *
+	 * @return void
+	 */
 	public function fetch(Request $request) : void {
 		try {
 			$logger = new Logger(LOG_DIR.'api/', 'update');
@@ -52,6 +66,13 @@ class Updater extends ApiController
 		$this->respond(['success' => true, 'output' => $output]);
 	}
 
+	/**
+	 * Get GIT status using an API route
+	 *
+	 * @param Request $request
+	 *
+	 * @return void
+	 */
 	public function status(Request $request) : void {
 		try {
 			$logger = new Logger(LOG_DIR.'api/', 'update');
@@ -72,6 +93,13 @@ class Updater extends ApiController
 		$this->respond(['success' => true, 'output' => $output]);
 	}
 
+	/**
+	 * Build all assets using an API route
+	 *
+	 * @param Request $request
+	 *
+	 * @return void
+	 */
 	public function build(Request $request) : void {
 		try {
 			$logger = new Logger(LOG_DIR.'api/', 'update');

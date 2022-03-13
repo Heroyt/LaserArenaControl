@@ -11,6 +11,7 @@ use App\Models\Game\GameModes\AbstractMode;
 use App\Models\Game\PrintStyle;
 use App\Models\Game\PrintTemplate;
 use App\Models\Tip;
+use App\Models\Vest;
 use App\Services\EventService;
 use Dibi\DriverException;
 use Dibi\Exception;
@@ -19,7 +20,7 @@ class DbInstall implements InstallInterface
 {
 
 	public const TABLES = [
-		'page_info'                => [
+		'page_info'          => [
 			'definition'    => "(
 				`key` varchar(30) NOT NULL DEFAULT '',
 				`value` text DEFAULT NULL,
@@ -199,7 +200,7 @@ class DbInstall implements InstallInterface
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;",
 			'modifications' => [],
 		],
-		PrintTemplate::TABLE       => [
+		PrintTemplate::TABLE => [
 			'definition'    => "(
 				`id_template` int(11) unsigned NOT NULL AUTO_INCREMENT,
 				`slug` varchar(50) NOT NULL DEFAULT '',
@@ -211,7 +212,7 @@ class DbInstall implements InstallInterface
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;",
 			'modifications' => [],
 		],
-		Tip::TABLE                 => [
+		Tip::TABLE           => [
 			'definition'    => "(
 				`id_tip` int(11) unsigned NOT NULL AUTO_INCREMENT,
 				`text` text DEFAULT NULL,
@@ -219,7 +220,7 @@ class DbInstall implements InstallInterface
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;",
 			'modifications' => [],
 		],
-		EventService::TABLE        => [
+		EventService::TABLE  => [
 			'definition'    => "(
 				`id_event` int(11) unsigned NOT NULL AUTO_INCREMENT,
 				`datetime` datetime NOT NULL DEFAULT current_timestamp(),
@@ -227,6 +228,17 @@ class DbInstall implements InstallInterface
 				`sent` tinyint(1) NOT NULL DEFAULT 0,
 				PRIMARY KEY (`id_event`)
 			) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=utf8mb4;",
+			'modifications' => [],
+		],
+		Vest::TABLE          => [
+			'definition'    => "(
+				`id_vest` int(11) unsigned NOT NULL AUTO_INCREMENT,
+				`vest_num` int(11) NOT NULL,
+				`system` varchar(50) NOT NULL DEFAULT '',
+				`grid_col` int(10) unsigned DEFAULT NULL,
+				`grid_row` int(10) unsigned DEFAULT NULL,
+				PRIMARY KEY (`id_vest`)
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;",
 			'modifications' => [],
 		],
 	];

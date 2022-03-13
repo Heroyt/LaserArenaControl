@@ -7,6 +7,7 @@ use App\Models\Game\GameModes\AbstractMode;
 use App\Models\Game\PrintStyle;
 use App\Models\Game\PrintTemplate;
 use App\Models\Tip;
+use App\Models\Vest;
 use Dibi\Exception;
 
 class Seeder implements InstallInterface
@@ -557,6 +558,86 @@ class Seeder implements InstallInterface
 		30 => 'Pro vyřízení osobních sporů je aréna ideální.',
 	];
 
+	public const VESTS = [
+		[
+			'id_vest'  => 1,
+			'vest_num' => 1,
+			'system'   => 'evo5',
+			'grid_col' => 1,
+			'grid_row' => 1,
+		],
+		[
+			'id_vest'  => 2,
+			'vest_num' => 2,
+			'system'   => 'evo5',
+			'grid_col' => 1,
+			'grid_row' => 2,
+		],
+		[
+			'id_vest'  => 3,
+			'vest_num' => 3,
+			'system'   => 'evo5',
+			'grid_col' => 1,
+			'grid_row' => 3,
+		],
+		[
+			'id_vest'  => 4,
+			'vest_num' => 4,
+			'system'   => 'evo5',
+			'grid_col' => 1,
+			'grid_row' => 4,
+		],
+		[
+			'id_vest'  => 5,
+			'vest_num' => 5,
+			'system'   => 'evo5',
+			'grid_col' => 1,
+			'grid_row' => 6,
+		],
+		[
+			'id_vest'  => 6,
+			'vest_num' => 6,
+			'system'   => 'evo5',
+			'grid_col' => 1,
+			'grid_row' => 6,
+		],
+		[
+			'id_vest'  => 7,
+			'vest_num' => 7,
+			'system'   => 'evo5',
+			'grid_col' => 3,
+			'grid_row' => 6,
+		],
+		[
+			'id_vest'  => 8,
+			'vest_num' => 8,
+			'system'   => 'evo5',
+			'grid_col' => 4,
+			'grid_row' => 6,
+		],
+		[
+			'id_vest'  => 9,
+			'vest_num' => 9,
+			'system'   => 'evo5',
+			'grid_col' => 5,
+			'grid_row' => 6,
+		],
+		[
+			'id_vest'  => 10,
+			'vest_num' => 10,
+			'system'   => 'evo5',
+			'grid_col' => 5,
+			'grid_row' => 5,
+		],
+		[
+			'id_vest'  => 11,
+			'vest_num' => 11,
+			'system'   => 'evo5',
+			'grid_col' => 5,
+			'grid_row' => 4,
+		],
+	];
+
 	/**
 	 * @inheritDoc
 	 */
@@ -601,6 +682,14 @@ class Seeder implements InstallInterface
 					'id_tip' => $id,
 					'text'   => $tip,
 				]);
+			}
+
+			// Vests
+			if ($fresh) {
+				DB::delete(Vest::TABLE, ['1=1']);
+			}
+			foreach (self::VESTS as $row) {
+				DB::insertIgnore(Tip::TABLE, $row);
 			}
 		} catch (Exception $e) {
 			echo $e->getMessage().PHP_EOL.$e->getSql().PHP_EOL;

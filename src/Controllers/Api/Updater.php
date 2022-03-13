@@ -109,8 +109,14 @@ class Updater extends ApiController
 			$logger = null;
 		}
 
-		/** @var string|false $out */
-		$out = exec('composer build 2>&1', $output, $returnCode);
+		if (isset($request->get['npmOnly'])) {
+			/** @var string|false $out */
+			$out = exec('npm run build 2>&1', $output, $returnCode);
+		}
+		else {
+			/** @var string|false $out */
+			$out = exec('composer build 2>&1', $output, $returnCode);
+		}
 
 		if ($out === false || $returnCode !== 0) {
 			$logger?->warning('Cannot execute command');

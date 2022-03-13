@@ -115,10 +115,12 @@ class ImportService
 				}
 			}
 		}
-		try {
-			Info::set($resultsDir.'check', $now);
-		} catch (Exception $e) {
-			self::errorHandle($e);
+		if ($imported > 0) {
+			try {
+				Info::set($resultsDir.'check', $now);
+			} catch (Exception $e) {
+				self::errorHandle($e);
+			}
 		}
 
 		if (isset($lastUnfinishedGame)) {

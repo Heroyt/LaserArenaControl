@@ -19,7 +19,7 @@ class Mount extends ApiController
 		}
 
 		/** @var string|false $out */
-		$out = exec('mount -a', $output, $returnCode);
+		$out = exec('mount -a 2>&1', $output, $returnCode);
 
 		if ($out === false || $returnCode !== 0) {
 			$logger?->warning('Cannot execute command');

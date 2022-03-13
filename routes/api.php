@@ -8,7 +8,9 @@ use App\Core\Routing\Route;
 
 Route::post('/api/results/import', [Results::class, 'import']);
 Route::post('/api/mount', [Mount::class, 'mount']);
-Route::post('/api/pull', [Updater::class, 'pull']);
+Route::post('/api/git/pull', [Updater::class, 'pull']);
+Route::post('/api/git/fetch', [Updater::class, 'fetch']);
+Route::post('/api/git/status', [Updater::class, 'status']);
 Route::post('/api/build', [Updater::class, 'build']);
 Route::get('/api/logs', [Logs::class, 'show']);
 Route::get('/api/logs/download', [Logs::class, 'download']);

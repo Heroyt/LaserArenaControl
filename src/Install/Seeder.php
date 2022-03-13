@@ -689,7 +689,7 @@ class Seeder implements InstallInterface
 				DB::delete(Vest::TABLE, ['1=1']);
 			}
 			foreach (self::VESTS as $row) {
-				DB::insertIgnore(Tip::TABLE, $row);
+				DB::insertIgnore(Vest::TABLE, $row);
 			}
 		} catch (Exception $e) {
 			echo $e->getMessage().PHP_EOL.$e->getSql().PHP_EOL;

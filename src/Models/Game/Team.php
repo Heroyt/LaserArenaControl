@@ -127,4 +127,11 @@ abstract class Team extends AbstractModel implements InsertExtendInterface
 		return 'team-'.($includeSystem ? $this->getGame()::SYSTEM.'-' : '').$this->color;
 	}
 
+	/**
+	 * @return int
+	 */
+	public function getTeamColor() : int {
+		return $this->color;
+	}
+
 }

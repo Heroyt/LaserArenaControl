@@ -35,12 +35,14 @@
 	}
 
 	main {
-		padding: 4em 3em 0;
+		padding: 2em 3em 0;
 	}
 
 	.results {
 		@extend %gate-wrapper;
-		grid-template-areas: '. win .' 'players players .' 'players players teams' 'players players teams';
+		grid-template-areas: '. players' 'teams players';
+		grid-template-rows: 9rem 1fr;
+		grid-template-columns: 27rem 1fr;
 
 		.win {
 			align-self: end;
@@ -57,34 +59,79 @@
 		.players {
 			@extend %players-teams;
 			grid-area: players;
+			justify-content: flex-end;
 		}
 
 		.teams {
 			@extend %players-teams;
 			align-self: end;
+			display: flex;
+			flex-direction: column;
 			grid-area: teams;
-			justify-content: flex-end;
+			height: 100%;
+			justify-content: space-between;
+			align-items: center;
+		}
+
+		.player {
+			background-color: rgba(255, 255, 255, .8);
+
+			> div {
+				flex: 1;
+			}
+		}
+
+		.team {
+			flex-direction: column;
+			justify-content: center;
+			max-width: 14rem;
+			min-height: 4rem;
+
+			.name {
+				font-size: 1.7rem;
+			}
 		}
 
 		.player,
 		.team {
-			background-color: var(--white);
+			align-items: center;
 			border-radius: 10px;
 			display: flex;
 			margin: .1rem 0;
 			width: 100%;
 
-			.name,
-			.score,
-			.rank {
-				flex: 1;
-				max-width: 50%;
+			> .name,
+			> .score,
+			> .rank,
+			> .position,
+			> .rank-name {
 				padding: .4rem 1rem;
 			}
 
-			.name {
+			> .name {
 				border-bottom-left-radius: 10px;
 				border-top-left-radius: 10px;
+				font-weight: bold;
+			}
+
+			> .position {
+				max-width: 6%;
+				text-align: center;
+				font-size: 1.7rem;
+			}
+
+			> .score {
+				font-size: 1.7rem;
+				font-weight: bold;
+			}
+		}
+
+		.rank-name {
+			display: flex;
+			flex-direction: column;
+
+			.name {
+				font-size: 1.4rem;
 				font-weight: bold;
 			}
 		}

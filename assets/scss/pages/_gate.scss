@@ -74,7 +74,7 @@
 		}
 
 		.player {
-			background-color: rgba(255, 255, 255, .8);
+			background-color: rgba(255, 255, 255, .9);
 
 			> div {
 				flex: 1;
@@ -85,7 +85,7 @@
 			flex-direction: column;
 			justify-content: center;
 			max-width: 14rem;
-			min-height: 4rem;
+			min-height: 5rem;
 
 			.name {
 				font-size: 1.7rem;
@@ -115,9 +115,9 @@
 			}
 
 			> .position {
+				font-size: 1.7rem;
 				max-width: 6%;
 				text-align: center;
-				font-size: 1.7rem;
 			}
 
 			> .score {
@@ -133,6 +133,8 @@
 			.name {
 				font-size: 1.4rem;
 				font-weight: bold;
+				text-shadow: 0 0 5px var(--white);
+				text-transform: uppercase;
 			}
 		}
 

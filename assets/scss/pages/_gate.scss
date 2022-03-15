@@ -27,6 +27,7 @@
 	grid-template-rows: 1fr 3rem;
 	min-height: 1081px;
 	min-width: 1920px;
+	overflow: hidden;
 	padding: 2em 0;
 
 	.tip {
@@ -85,7 +86,7 @@
 			flex-direction: column;
 			justify-content: center;
 			max-width: 14rem;
-			min-height: 5rem;
+			min-height: 6rem;
 
 			.name {
 				font-size: 1.7rem;

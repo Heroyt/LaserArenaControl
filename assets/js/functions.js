@@ -1,4 +1,6 @@
 import {Tooltip} from "bootstrap";
+import {startLoading, stopLoading} from "./loaders";
+import axios from "axios";
 
 String.prototype.replaceMultiple = function (chars) {
 	let retStr = this;
@@ -168,5 +170,99 @@ export function initTooltips(dom) {
 	const tooltipTriggerList = [].slice.call(dom.querySelectorAll('[data-toggle="tooltip"]'))
 	const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
 		return new Tooltip(tooltipTriggerEl)
+	});
+}
+
+export function initAutoSaveForm() {
+	// Autosave form
+	document.querySelectorAll('form.autosave').forEach(form => {
+		const method = form.method;
+		const url = form.action;
+
+		let lastData = new FormData(form);
+		let autosaving = 0;
+		const lastSave = document.querySelectorAll(`.last-save[data-target="#${form.id}"]`);
+		const saveButtons = form.querySelectorAll(`[data-action="autosave"]`);
+		const save = (smallLoader = true) => {
+			let newData = new FormData(form);
+			let changed = false;
+			if (!smallLoader) {
+				startLoading(false);
+			}
+			newData.forEach((value, key) => {
+				if (changed || key === "_csrf_token" || key === 'action') {
+					return;
+				}
+				if (!lastData.has(key)) {
+					console.log("Changed - new key", key, value)
+					changed = true;
+				} else if (value instanceof File) {
+					if (value.name !== lastData.get(key).name) {
+						console.log("Changed - new file", key, value)
+						changed = true;
+					}
+				} else if (JSON.stringify(lastData.getAll(key)) !== JSON.stringify(newData.getAll(key))) {
+					console.log("Changed - new value", key, value)
+					changed = true;
+				}
+			});
+			if (!changed) {
+				lastData.forEach((value, key) => {
+					if (changed || key === "_csrf_token" || key === 'action') {
+						return;
+					}
+					if (!newData.has(key)) {
+						console.log("Changed - removed key", key, value)
+						changed = true;
+					}
+				});
+			}
+			if (changed && autosaving === 0) {
+				autosaving++;
+				lastData = newData;
+				newData.append("action", "autosave");
+				if (smallLoader) startLoading(smallLoader);
+				saveButtons.forEach(button => {
+					button.disabled = true;
+				});
+				axios(
+					{
+						method,
+						url,
+						data: newData
+					}
+				)
+					.then((result) => {
+						autosaving--;
+						stopLoading(result.data.success, smallLoader);
+						saveButtons.forEach(button => {
+							button.disabled = false;
+						});
+						lastSave.forEach(save => {
+							save.innerHTML = (new Date()).toLocaleTimeString();
+						});
+					})
+					.catch(err => {
+						console.error(err);
+						autosaving--;
+						stopLoading(false, smallLoader);
+						saveButtons.forEach(button => {
+							button.disabled = false;
+						});
+					});
+			} else if (!smallLoader) {
+				stopLoading(true, false);
+			}
+		};
+
+		form.addEventListener("autosave", save);
+
+		saveButtons.forEach(button => {
+			button.addEventListener("click", () => {
+				save(false);
+			});
+		})
+
+		setInterval(save, 10000);
 	});
 }

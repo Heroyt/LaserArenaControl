@@ -64,8 +64,18 @@ function initStyle(dom) {
 			dom.remove();
 		});
 	}
-	const img = dom.querySelector('img');
-	const imgInput = dom.querySelector('input[type="file"]');
+
+	dom.querySelectorAll('input,select').forEach(input => {
+		const event = new Event('autosave', {bubbles: true});
+		input.addEventListener('change', () => {
+			input.dispatchEvent(event);
+		});
+	})
+
+	const img = dom.querySelector('img.portrait');
+	const imgLandscape = dom.querySelector('img.landscape');
+	const imgInput = dom.querySelector('input[type="file"].portrait');
+	const imgInputLandscape = dom.querySelector('input[type="file"].landscape');
 	imgInput.addEventListener('change', () => {
 		const files = imgInput.files[0];
 		if (files) {
@@ -74,6 +84,17 @@ function initStyle(dom) {
 			fileReader.addEventListener("load", function () {
 				img.style.display = 'initial';
 				img.src = this.result;
+			});
+		}
+	});
+	imgInputLandscape.addEventListener('change', () => {
+		const files = imgInputLandscape.files[0];
+		if (files) {
+			const fileReader = new FileReader();
+			fileReader.readAsDataURL(files);
+			fileReader.addEventListener("load", function () {
+				imgLandscape.style.display = 'initial';
+				imgLandscape.src = this.result;
 			});
 		}
 	});
@@ -99,6 +120,14 @@ function initStyleDate(dom) {
 		};
 		flatpickr(input, options);
 	});
+
+	dom.querySelectorAll('input,select').forEach(input => {
+		const event = new Event('autosave', {bubbles: true});
+		input.addEventListener('change', () => {
+			input.dispatchEvent(event);
+		});
+	})
+
 	const rmBtn = dom.querySelector('.remove');
 	if (rmBtn) {
 		rmBtn.addEventListener('click', () => {

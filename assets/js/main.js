@@ -1,4 +1,4 @@
-import {formatPhoneNumber, initTooltips} from './functions.js';
+import {formatPhoneNumber, initAutoSaveForm, initTooltips} from './functions.js';
 import axios from 'axios';
 import flatpickr from "flatpickr";
 import initPrintSettings from "./pages/settings/print";
@@ -31,6 +31,7 @@ window.addEventListener("load", () => {
 			input.value = formatPhoneNumber(input.value);
 		});
 	});
+
 	// Datepicker
 	document.querySelectorAll('input[type="date"]:not([data-input]), .date-picker').forEach(input => {
 		let value = '', wrap = input.classList.contains("date-picker");
@@ -102,8 +103,12 @@ window.addEventListener("load", () => {
 			}
 		});
 	});
+
 	// Tooltips
 	initTooltips(document);
+
+	// Auto-save
+	initAutoSaveForm();
 
 	// Toggles
 	document.querySelectorAll('[data-toggle="submit"]').forEach(element => {

@@ -4,8 +4,13 @@
 {varType array $dates}
 
 {block content}
-	<form action="{link ['settings', 'print']}" enctype="multipart/form-data" method="post" class="text-center">
-		<h2>{lang 'Print styles', context: 'results.style.settings'}:</h2>
+	<form action="{link ['settings', 'print']}" enctype="multipart/form-data" method="post" class="text-center autosave"
+		  id="print-settings-form">
+		<div class="me-4 last-save-wrapper text-end position-fixed end-0">{lang 'Last saved:'} <span class="last-save"
+																									 data-target="#print-settings-form">{lang 'never'}</span>
+		</div>
+
+		<h2>{lang 'Print styles dates', context: 'results.style.settings'}:</h2>
 		<div id="ranges" class="d-flex flex-wrap justify-content-center">
 			<div class="card bg-light m-2 print-style-date" n:foreach="$dates as $info">
 				<div class="card-header text-end">
@@ -40,7 +45,7 @@
 		<p class="text-center">
 			<button type="button" class="btn btn-lg my-2 btn-primary" id="addRange" data-key="{count($dates)}">
 				<i class="fas fa-plus"></i>
-				{lang 'Add', context: 'actions'}
+				{lang 'Add date', context: 'actions'}
 			</button>
 		</p>
 		<template id="print-style-date">
@@ -73,8 +78,10 @@
 				</div>
 			</div>
 		</template>
+
+		<h2>{lang 'Print styles', context: 'results.style.settings'}:</h2>
 		<div class="d-flex flex-wrap justify-content-center align-items-center" id="styles">
-			<div class="card bg-light m-3 print-style" n:foreach="$styles as $key => $style" style="max-width: 550px;">
+			<div class="card bg-light m-3 print-style" n:foreach="$styles as $key => $style" style="max-width: 800px;">
 				<div class="card-header text-end">
 					<span class="btn btn-danger remove btn-sm" data-toggle="tooltip"
 						  title="{lang 'Delete', context: 'actions'}">
@@ -83,7 +90,9 @@
 				</div>
 				<div class="row g-0">
 					<div class="col-md-6">
-						<img class="img-fluid rounded-start" src="{getUrl}{$style->bg}" alt="background">
+						<img class="portrait img-fluid rounded-start" src="{getUrl}{$style->bg}" alt="background">
+						<img class="landscape img-fluid rounded-start" src="{getUrl}{$style->bg_landscape}"
+							 alt="background-landscape">
 					</div>
 					<div class="col-md-6 p-3">
 						<div class="form-group mb-1">
@@ -99,8 +108,16 @@
 							</label>
 							<input type="hidden" name="styles[{$key}][original-background]" value="{$style->bg}">
 							<input id="file-{$key}" name="styles[{$key}][background]" type="file"
-								   accept="image/jpeg,image/png"
-								   value="{lang $style->name, context: 'results.style'}" class="form-control">
+								   accept="image/jpeg,image/png" class="form-control portrait">
+						</div>
+						<div class="form-group mb-1">
+							<label class="form-label" for="file-{$key}">
+								{lang 'Landscape background', context: 'results.style.settings'}:
+							</label>
+							<input type="hidden" name="styles[{$key}][original-background-landscape]"
+								   value="{$style->bg_landscape}">
+							<input id="file-{$key}" name="styles[{$key}][background-landscape]" type="file"
+								   accept="image/jpeg,image/png" class="form-control landscape">
 						</div>
 						<div class="form-group mb-1">
 							<label class="form-label"
@@ -134,7 +151,7 @@
 				<i class="fas fa-plus"></i>
 				{lang 'Add style', context: 'results.style.settings'}
 			</button>
-			<button class="btn btn-success" type="submit">
+			<button class="btn btn-success" type="submit" data-action="autosave">
 				{lang 'Send', context: 'actions'}
 			</button>
 		</div>
@@ -149,7 +166,9 @@
 			</div>
 			<div class="row g-0">
 				<div class="col-md-6">
-					<img class="img-fluid rounded-start" style="display:none;" src="" alt="background">
+					<img class="portrait img-fluid rounded-start" style="display:none;" src="" alt="background">
+					<img class="landscape img-fluid rounded-start" style="display:none;" src=""
+						 alt="background-landscape">
 				</div>
 				<div class="col-md-6 p-3">
 					<div class="form-group mb-1">
@@ -164,8 +183,14 @@
 							{lang 'Background', context: 'results.style.settings'}:
 						</label>
 						<input id="file-#key#" name="styles[#key#][background]" type="file"
-							   accept="image/jpeg,image/png"
-							   value="" class="form-control">
+							   accept="image/jpeg,image/png" class="form-control portrait">
+					</div>
+					<div class="form-group mb-1">
+						<label class="form-label" for="file-{$key}">
+							{lang 'Landscape background', context: 'results.style.settings'}:
+						</label>
+						<input id="file-#key#" name="styles[#key#][background-landscape]" type="file"
+							   accept="image/jpeg,image/png" class="form-control landscape">
 					</div>
 					<div class="form-group mb-1">
 						<label class="form-label" for="primary-#key#">

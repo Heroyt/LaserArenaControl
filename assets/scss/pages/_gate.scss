@@ -42,8 +42,8 @@
 	.results {
 		@extend %gate-wrapper;
 		grid-template-areas: '. players' 'teams players';
-		grid-template-rows: 9rem 1fr;
 		grid-template-columns: 27rem 1fr;
+		grid-template-rows: 9rem 1fr;
 
 		.win {
 			align-self: end;
@@ -65,13 +65,13 @@
 
 		.teams {
 			@extend %players-teams;
+			align-items: center;
 			align-self: end;
 			display: flex;
 			flex-direction: column;
 			grid-area: teams;
 			height: 100%;
 			justify-content: space-between;
-			align-items: center;
 		}
 
 		.player {

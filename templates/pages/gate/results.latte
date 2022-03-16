@@ -30,7 +30,11 @@
 			{$rank['name']}
 			</div>
 		</div>
-		<div class="score text-end {if $player->score < 0}text-danger{/if}">{$player->score|number:0,',','&nbsp;'|noescape}
+		<div class="score text-end {switch $iterator->counter}
+			{case 1} text-gold
+			{case 2} text-dark-silver
+			{case 3} text-bronze
+		   {/switch}{if $player->score < 0}text-danger{/if}">{$player->score|number:0,',','&nbsp;'|noescape}
 			<i class="fas fa-star"></i></div>
 	</div>
 {/define}

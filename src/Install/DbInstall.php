@@ -185,10 +185,15 @@ class DbInstall implements InstallInterface
 				`color_light` varchar(7) COLLATE utf8_czech_ci NOT NULL DEFAULT '#a7d0f0',
 				`color_primary` varchar(7) COLLATE utf8_czech_ci NOT NULL DEFAULT '#1b4799',
 				`bg` varchar(100) COLLATE utf8_czech_ci NOT NULL DEFAULT 'assets/images/print/bg.jpg',
+				`bg_landscape` varchar(100) COLLATE utf8_czech_ci NOT NULL DEFAULT 'assets/images/print/bg_landscape.jpg',
 				`default` tinyint(1) NOT NULL DEFAULT 0,
 				PRIMARY KEY (`id_style`)
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;",
-			'modifications' => [],
+			'modifications' => [
+				'0.1' => [
+					"ADD `bg_landscape` VARCHAR(100)  NOT NULL  DEFAULT 'assets/images/print/bg_landscape.jpg' AFTER `bg`;"
+				],
+			],
 		],
 		PrintStyle::TABLE.'_dates' => [
 			'definition'    => "(

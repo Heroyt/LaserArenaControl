@@ -2,6 +2,8 @@
 
 namespace App\Models\Game\GameModes;
 
+use App\Core\Controller;
+
 interface CustomResultsMode
 {
 
@@ -10,13 +12,13 @@ interface CustomResultsMode
 	 *
 	 * @return string Path to template file
 	 */
-	public function getCustomResultsTemplate() : string;
+	public function getCustomResultsTemplate(Controller $controller) : string;
 
 	/**
 	 * Get a template file containing the custom gate results
 	 *
 	 * @return string Path to template file
 	 */
-	public function getCustomGateTemplate() : string;
+	public function getCustomGateTemplate(Controller $controller) : string;
 
 }

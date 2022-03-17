@@ -43,7 +43,7 @@ abstract class Controller implements ControllerInterface
 	/**
 	 * @var array $params Parameters added to latte template
 	 */
-	protected array   $params = [];
+	public array               $params = [];
 	protected RequestInterface $request;
 
 	/**

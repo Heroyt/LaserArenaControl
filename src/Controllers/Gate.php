@@ -12,6 +12,7 @@ use App\Models\Factory\GameFactory;
 use App\Models\Factory\PlayerFactory;
 use App\Models\Factory\TeamFactory;
 use App\Models\Game\Game;
+use App\Models\Game\GameModes\CustomResultsMode;
 use App\Models\Game\PrintStyle;
 use App\Models\Game\Today;
 use App\Services\EventService;
@@ -115,7 +116,14 @@ class Gate extends Controller
 		$teamClass = $namespace.'Team';
 		$playerClass = $namespace.'Player';
 		$this->params['today'] = new Today($this->game, new $playerClass, new $teamClass);
-		$this->view('pages/gate/results');
+		if (isset($this->game->mode) && $this->game->mode instanceof CustomResultsMode) {
+			$this->view(
+				$this->game->mode->getCustomGateTemplate($this)
+			);
+		}
+		else {
+			$this->view('pages/gate/results');
+		}
 	}
 
 	/**

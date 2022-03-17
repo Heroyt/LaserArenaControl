@@ -1,0 +1,48 @@
+{layout '../@layout.latte'}
+
+{varType App\Models\Game\Evo5\Game $game}
+{varType App\Models\Game\Evo5\GameModes\Zakladny $mode}
+{varType App\Models\Game\PrintStyle $style}
+{varType App\Models\Game\Today $today}
+
+{define content}
+	<div class="results-zakladny">
+		<section class="teams">
+			{var App\Models\Game\Team|null $win = $game->mode->getWin($game)}
+			<div class="team" n:foreach="$game->getTeamsSorted() as $team">
+				<div class="name text-center bg-team-{$game::SYSTEM}-{$team->getTeamColor()}">
+					<div>
+						{if is_null($win)}
+							{svgIcon 'shield', '2rem'}
+						{elseif $win->id_team === $team->id_team}
+							{svgIcon 'crown', '2rem'}
+						{else}
+							{svgIcon 'skull', '2rem'}
+						{/if}
+					</div>
+					{$team->name}
+					<div class="mines text-center mt-3">
+						{svgIcon 'base', '', '3rem'}
+					{$mode->getBasesDestroyed($team)}
+					</div>
+				</div>
+				<div class="players">
+					{include partPlayers, players: $team->getPlayersSorted()}
+				</div>
+			</div>
+		</section>
+	</div>
+{/define}
+
+{define partPlayers}
+	{varType App\Models\Game\Evo5\Player[] $players}
+	<div n:foreach="$players as $player" class="player text-center">
+		<div class="name text-team-{$game::SYSTEM}-{$player->getTeamColor()}">
+			{$player->name}
+		</div>
+		<div class="hits-deaths">
+			<div class="hits">{$player->hits} {svgIcon 'gun', '', '1.5rem'}</div>
+			<div class="deaths">{$player->deaths} {svgIcon 'skull', '', '1.5rem'}</div>
+		</div>
+	</div>
+{/define}

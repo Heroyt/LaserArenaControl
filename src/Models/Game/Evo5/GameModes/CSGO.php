@@ -2,13 +2,15 @@
 
 namespace App\Models\Game\Evo5\GameModes;
 
+use App\Core\Controller;
 use App\Models\Game\Evo5\Game as Evo5Game;
 use App\Models\Game\Evo5\Team as Evo5Team;
 use App\Models\Game\Game;
 use App\Models\Game\GameModes\AbstractMode;
+use App\Models\Game\GameModes\CustomResultsMode;
 use App\Models\Game\Team;
 
-class CSGO extends AbstractMode
+class CSGO extends AbstractMode implements CustomResultsMode
 {
 
 	public string $name = 'CSGO';
@@ -83,4 +85,17 @@ class CSGO extends AbstractMode
 		return count($team->getPlayers()) * $game->lives;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
+	public function getCustomResultsTemplate(Controller $controller) : string {
+		return '';
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function getCustomGateTemplate(Controller $controller) : string {
+		return 'pages/gate/modes/csgo';
+	}
 }

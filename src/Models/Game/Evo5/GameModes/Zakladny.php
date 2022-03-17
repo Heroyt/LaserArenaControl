@@ -2,12 +2,14 @@
 
 namespace App\Models\Game\Evo5\GameModes;
 
+use App\Core\Controller;
 use App\Models\Game\Evo5\Player;
 use App\Models\Game\Game;
 use App\Models\Game\GameModes\AbstractMode;
+use App\Models\Game\GameModes\CustomResultsMode;
 use App\Models\Game\Team;
 
-class Zakladny extends AbstractMode
+class Zakladny extends AbstractMode implements CustomResultsMode
 {
 
 	public string $name = 'Základny';
@@ -48,4 +50,18 @@ class Zakladny extends AbstractMode
 		);
 	}
 
+	/**
+	 * @inheritDoc
+	 */
+	public function getCustomResultsTemplate(Controller $controller) : string {
+		return '';
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function getCustomGateTemplate(Controller $controller) : string {
+		$controller->params['mode'] = $this;
+		return 'pages/gate/modes/zakladny';
+	}
 }

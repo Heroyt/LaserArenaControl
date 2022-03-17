@@ -453,7 +453,7 @@ msgstr ""
 
 msgctxt "tips"
 msgid "Trénink se vyplácí!"
-msgstr ""
+msgstr "Training pays off!"
 
 msgctxt "tips"
 msgid "Tip #%d"
@@ -461,27 +461,27 @@ msgstr "Hint #%d"
 
 msgctxt "tips"
 msgid "Střílíme v Písku už od 31.12.2013!!!"
-msgstr ""
+msgstr "Shooting in Písek since 31.12.2013!!!"
 
 msgctxt "tips"
 msgid "Ve hře vždy sleduj svoje okolí!"
-msgstr ""
+msgstr "Always be aware of your surroundings!"
 
 msgctxt "tips"
 msgid "Čidlo na zbrani, ač nenápadné, se dá velmi dobře trefit."
-msgstr ""
+msgstr "The gun sensor is quite invisible but very easy to hit."
 
 msgctxt "tips"
 msgid "Zkušení hráči hrajou týmově!"
-msgstr ""
+msgstr "Pro players cooperate with their teams!"
 
 msgctxt "tips"
 msgid "Pro vyřízení osobních sporů je aréna ideální."
-msgstr ""
+msgstr "The arena is the best place to settle personal disputes."
 
 msgctxt "tips"
 msgid "Dobití protihráče pažbou, vám žádné body nepřidá."
-msgstr ""
+msgstr "Melee hits do not add any score."
 
 msgctxt "tips"
 msgid "Zabiják vlastního týmu, či největší vlasťnák... To je oč tu běží!"
@@ -489,39 +489,39 @@ msgstr ""
 
 msgctxt "tips"
 msgid "Vestu si oblečte vždy zbraní dobředu."
-msgstr ""
+msgstr "Always put your vest on with your gun in the front."
 
 msgctxt "tips"
 msgid "Při týmové hře není výhodné střílet do hráčů se stejnou barvou."
-msgstr ""
+msgstr "It is not very beneficial to shoot the players with the same colour during team deathmach."
 
 msgctxt "tips"
 msgid "Jen Chuck Norris vás může zastřelit baterkou na svém mobilu."
-msgstr ""
+msgstr "Only Chuck Norris can hit you with his mobile’s flashlight."
 
 msgctxt "tips"
 msgid "Nejlepší výherní taktika je strílet do protihráčů."
-msgstr ""
+msgstr "The best winning tactic is to shoot your enemies."
 
 msgctxt "tips"
 msgid "Nemá cenu umírat na tom samém místě. Když to nejde, uteč jinam!"
-msgstr ""
+msgstr "There is no use dying in the same place. If it’s hard, run somewhere else!"
 
 msgctxt "tips"
 msgid "Všechny bonusy, kromě štítu, trvají 30s."
-msgstr ""
+msgstr "All powers, apart from the shield, last for 30s."
 
 msgctxt "tips"
 msgid "Držení zbraně v obou rukách je přesnější."
-msgstr ""
+msgstr "Holding a gun with both hands is more accurate."
 
 msgctxt "tips"
 msgid "Měl bys radši hrát laser game a být úžasný!"
-msgstr ""
+msgstr "You should rather play laser game and be awesome!"
 
 msgctxt "tips"
 msgid "Spoluhráč je nejlepší cíl. Neutíká."
-msgstr ""
+msgstr "The teammate is the best target. He doesn’t run away."
 
 msgctxt "tips"
 msgid "#laserarenapísek"
@@ -529,7 +529,7 @@ msgstr "#laserarenapísek"
 
 msgctxt "tips"
 msgid "Zabití: 100 bodů, Smrt: -50 bodů, Zabití vlastního hráče: -25 bodů"
-msgstr ""
+msgstr "HIt: 100 points, Death: -50 points, Hit your teammate: -25 points"
 
 msgctxt "tips"
 msgid "Go, go, go, go..."
@@ -537,19 +537,19 @@ msgstr "Go, go, go, go..."
 
 msgctxt "tips"
 msgid "Ramenní čidla se trefují nejlépe, zádová nejhůř."
-msgstr ""
+msgstr "Shoulders are the easiest to hit, back is the hardest."
 
 msgctxt "tips"
 msgid "Pohyblivý cíl je vždycky těžší trefit."
-msgstr ""
+msgstr "A moving target is always harder to hit."
 
 msgctxt "tips"
 msgid "Na displeji vesty po zásahu vidíte kdo vás zasáhl do jakého čidla. To pomáhá při orientaci."
-msgstr ""
+msgstr "You can see who hit you and to which sensor on your vest’s display."
 
 msgctxt "tips"
 msgid "Při výstupu z arény vždy připni zbraň k vestě."
-msgstr ""
+msgstr "When coming out from the arena, always plug your gun on the vest."
 
 msgctxt "tips"
 msgid "LASER TAG - SUIT UP!"
@@ -557,15 +557,15 @@ msgstr "LASER TAG - SUIT UP!"
 
 msgctxt "tips"
 msgid "Když tě bolí nohy, kempi!"
-msgstr ""
+msgstr "When your legs hurt, camp!"
 
 msgctxt "tips"
 msgid "Nikdy nejsi příliš starý na laser game."
-msgstr ""
+msgstr "You’re never too old to play laser game."
 
 msgctxt "tips"
 msgid "Nezapomeň každý květen a listopad registrovat svůj tým na turnaj!"
-msgstr ""
+msgstr "Don’t forget to sign-up for a tournament every May and November!"
 
 msgid "Settings"
 msgstr "Settings"
@@ -656,7 +656,7 @@ msgstr "Graphical"
 
 msgctxt "tips"
 msgid "Oživení trvá 5 sekund."
-msgstr ""
+msgstr "Respawn is 5s."
 
 msgctxt "results.bests"
 msgid "Nedotknutelný"
@@ -704,7 +704,7 @@ msgstr "May hit something"
 
 msgctxt "results.bests"
 msgid "Zasedlý"
-msgstr ""
+msgstr "Zasedlý"
 
 msgctxt "results.bests"
 msgid "Pronásledovaný"
@@ -784,3 +784,41 @@ msgid "%d death"
 msgid_plural "%d deaths"
 msgstr[0] "%d death"
 msgstr[1] "%d deaths"
+
+msgctxt "results.style.settings"
+msgid "Print styles dates"
+msgstr "Print styles dates"
+
+msgctxt "actions"
+msgid "Add date"
+msgstr "Add date"
+
+msgid "Last saved:"
+msgstr "Last saved:"
+
+msgid "never"
+msgstr "never"
+
+msgctxt "results.style.settings"
+msgid "Landscape background"
+msgstr "Landscape background"
+
+msgctxt "errors"
+msgid "Uploaded file is too large"
+msgstr "Uploaded file is too large"
+
+msgctxt "errors"
+msgid "Database error occurred."
+msgstr "Database error occurred."
+
+msgctxt "results.style.settings"
+msgid "Print defaults"
+msgstr ""
+
+msgctxt "results.style.settings"
+msgid "Default print style"
+msgstr ""
+
+msgctxt "results.style.settings"
+msgid "Default template"
+msgstr ""

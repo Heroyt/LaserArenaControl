@@ -780,3 +780,41 @@ msgid_plural "%d deaths"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
+
+msgctxt "results.style.settings"
+msgid "Print styles dates"
+msgstr ""
+
+msgctxt "actions"
+msgid "Add date"
+msgstr ""
+
+msgid "Last saved:"
+msgstr ""
+
+msgid "never"
+msgstr ""
+
+msgctxt "results.style.settings"
+msgid "Landscape background"
+msgstr ""
+
+msgctxt "errors"
+msgid "Uploaded file is too large"
+msgstr ""
+
+msgctxt "errors"
+msgid "Database error occurred."
+msgstr ""
+
+msgctxt "results.style.settings"
+msgid "Print defaults"
+msgstr ""
+
+msgctxt "results.style.settings"
+msgid "Default print style"
+msgstr ""
+
+msgctxt "results.style.settings"
+msgid "Default template"
+msgstr ""

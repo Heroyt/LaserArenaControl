@@ -794,3 +794,41 @@ msgid_plural "%d deaths"
 msgstr[0] "%d smrt"
 msgstr[1] "%d smrti"
 msgstr[2] "%d smrtí"
+
+msgctxt "results.style.settings"
+msgid "Print styles dates"
+msgstr "Data tiskových stylů"
+
+msgctxt "actions"
+msgid "Add date"
+msgstr "Přidat datum"
+
+msgid "Last saved:"
+msgstr "Naposledy uloženo:"
+
+msgid "never"
+msgstr "nikdy"
+
+msgctxt "results.style.settings"
+msgid "Landscape background"
+msgstr "Pozadí na šířku"
+
+msgctxt "errors"
+msgid "Uploaded file is too large"
+msgstr "Nahraný soubor je příliš velký"
+
+msgctxt "errors"
+msgid "Database error occurred."
+msgstr "Nastala chyba databáze."
+
+msgctxt "results.style.settings"
+msgid "Print defaults"
+msgstr "Nastavení tisku"
+
+msgctxt "results.style.settings"
+msgid "Default print style"
+msgstr "Základní tiskový styl"
+
+msgctxt "results.style.settings"
+msgid "Default template"
+msgstr "Základní šablona"

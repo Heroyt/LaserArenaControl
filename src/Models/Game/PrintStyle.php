@@ -21,6 +21,7 @@ class PrintStyle extends AbstractModel
 		'colorPrimary' => [],
 		'bg'           => [],
 		'bg_landscape' => [],
+		'default'      => [],
 	];
 
 	public const COLORS  = ['dark', 'light', 'primary'];
@@ -32,6 +33,7 @@ class PrintStyle extends AbstractModel
 	public string      $colorPrimary = '';
 	public string      $bg           = '';
 	public string      $bg_landscape = '';
+	public bool        $default      = false;
 
 	/**
 	 * @return PrintStyle|null

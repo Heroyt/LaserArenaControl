@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Core\Controller;
+use App\Core\Info;
 use App\Core\Request;
 use App\Exceptions\TemplateDoesNotExistException;
 use App\Models\Factory\GameFactory;
@@ -49,7 +50,7 @@ class Results extends Controller
 			$this->params['selected'] = $this->params['games'][0] ?? null;
 		}
 		$this->params['selectedStyle'] = (int) ($_GET['style'] ?? PrintStyle::getActiveStyleId());
-		$this->params['selectedTemplate'] = $_GET['template'] ?? 'default';
+		$this->params['selectedTemplate'] = $_GET['template'] ?? Info::get('default_print_template', 'default');
 		$this->params['styles'] = PrintStyle::getAll();
 		$this->params['templates'] = PrintTemplate::getAll();
 		bdump($this->params);

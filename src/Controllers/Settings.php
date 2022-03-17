@@ -5,10 +5,12 @@ namespace App\Controllers;
 use App\Core\App;
 use App\Core\Controller;
 use App\Core\DB;
+use App\Core\Info;
 use App\Core\Request;
 use App\Exceptions\ValidationException;
 use App\Models\Factory\GameModeFactory;
 use App\Models\Game\PrintStyle;
+use App\Models\Game\PrintTemplate;
 use DateTime;
 use Dibi\DriverException;
 use Dibi\Exception;
@@ -31,6 +33,9 @@ class Settings extends Controller
 		if ($this->validatePrint($request)) {
 			try {
 				DB::getConnection()->begin();
+
+				// Save default template
+				Info::set('default_print_template', $_POST['default-template'] ?? 'default');
 
 				// Delete all dates
 				DB::delete(PrintStyle::TABLE.'_dates', ['1=1']);
@@ -119,6 +124,8 @@ class Settings extends Controller
 						}
 					}
 					$style->save();
+					$style->default = $style->id === (int) ($_POST['default-style'] ?? 0);
+					$style->save();
 				}
 
 				/**
@@ -161,6 +168,8 @@ class Settings extends Controller
 
 	public function print() : void {
 		$this->params['styles'] = PrintStyle::getAll();
+		$this->params['templates'] = PrintTemplate::getAll();
+		$this->params['defaultTemplateId'] = Info::get('default_print_template', 'default');
 		$this->params['dates'] = PrintStyle::getAllStyleDates();
 		$this->view('pages/settings/print');
 	}

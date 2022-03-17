@@ -1,6 +1,8 @@
 {layout '../../@layout.latte'}
 
 {varType App\Models\Game\PrintStyle[] $styles}
+{varType App\Models\Game\PrintTemplate[] $templates}
+{varType string $defaultTemplateId}
 {varType array $dates}
 
 {block content}
@@ -9,6 +11,30 @@
 		<div class="me-4 last-save-wrapper text-end position-fixed end-0">{lang 'Last saved:'} <span class="last-save"
 																									 data-target="#print-settings-form">{lang 'never'}</span>
 		</div>
+
+		<h2>{lang 'Print defaults', context: 'results.style.settings'}:</h2>
+		<p>
+			<label class="form-label" for="default-style">
+				{lang 'Default print style', context: 'results.style.settings'}
+			</label>
+			<select name="default-style" class="form-select" id="default-style">
+				<option n:foreach="$styles as $style"
+						value="{$style->id}" {if $style->default}selected{/if}>
+					{lang $style->name, context: 'results.style'}
+				</option>
+			</select>
+		</p>
+		<p>
+			<label class="form-label" for="default-template">
+				{lang 'Default template', context: 'results.style.settings'}
+			</label>
+			<select name="default-template" class="form-select" id="default-template">
+				<option n:foreach="$templates as $template"
+						value="{$template->slug}" {if $template->slug === $defaultTemplateId}selected{/if}>
+					{lang $template->name, context: 'results.style'}
+				</option>
+			</select>
+		</p>
 
 		<h2>{lang 'Print styles dates', context: 'results.style.settings'}:</h2>
 		<div id="ranges" class="d-flex flex-wrap justify-content-center">

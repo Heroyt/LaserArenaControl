@@ -10,6 +10,22 @@ use App\Logging\Logger;
 class Debug extends ApiController
 {
 
+	public function disable() : void {
+		$contents = file_get_contents(PRIVATE_DIR.'config.ini');
+		if (file_put_contents(PRIVATE_DIR.'config.ini', str_replace('DEBUG = true', 'DEBUG = false', $contents)) === false) {
+			$this->respond(['error' => 'Cannot write to config file.'], 500);
+		}
+		$this->respond(['success' => true]);
+	}
+
+	public function enable() : void {
+		$contents = file_get_contents(PRIVATE_DIR.'config.ini');
+		if (file_put_contents(PRIVATE_DIR.'config.ini', str_replace('DEBUG = false', 'DEBUG = true', $contents)) === false) {
+			$this->respond(['error' => 'Cannot write to config file.'], 500);
+		}
+		$this->respond(['success' => true]);
+	}
+
 	public function pwd(Request $request) : void {
 		try {
 			$logger = new Logger(LOG_DIR.'api/', 'mount');

@@ -297,6 +297,7 @@ export function gameTimer() {
 	startTimer();
 
 	function startTimer() {
+		console.log('Starting timer...', endDate);
 		timerInterval = setInterval(() => {
 			const remaining = endDate - (Date.now() / 1000);
 			if (remaining < 0) {
@@ -338,6 +339,7 @@ export function gameTimer() {
 			return;
 		}
 		endDate = (start + length);
+		console.log(start, length, endDate);
 		if ((endDate - start) > 0) {
 			startTimer();
 			parent.style.display = 'initial';

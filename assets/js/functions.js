@@ -314,7 +314,6 @@ export function gameTimer() {
 	 * Set the timers to the current game status
 	 */
 	function loadGameInfo() {
-		const parent = time.parentElement;
 		axios.get('/api/game/loaded')
 			.then(response => {
 				/**
@@ -326,15 +325,11 @@ export function gameTimer() {
 					time.dataset.length = data.gameLength.toString();
 				}
 				setTimes();
-			})
-			.catch(response => {
-				time.dataset.start = '0';
-				time.dataset.length = '0';
-				setTimes();
-			})
+			});
 	}
 
 	function setTimes() {
+		const parent = time.parentElement;
 		start = parseInt(time.dataset.start);
 		length = parseInt(time.dataset.length);
 		if (isNaN(start) || isNaN(length)) {

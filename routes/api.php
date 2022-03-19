@@ -24,7 +24,7 @@ Route::get('/api/logs/download', [Logs::class, 'download']);
 
 Route::get('/api/debug/pwd', [Debug::class, 'pwd']);
 Route::get('/api/debug/whoami', [Debug::class, 'whoami']);
-Route::get('/api/debug/enable', [Debug::class, 'enable']);
-Route::get('/api/debug/disable', [Debug::class, 'disable']);
+Route::post('/api/debug/enable', [Debug::class, 'enable']);
+Route::post('/api/debug/disable', [Debug::class, 'disable']);
 
 Route::get('/api/game/loaded', [GameHelpers::class, 'getLoadedGameInfo']);

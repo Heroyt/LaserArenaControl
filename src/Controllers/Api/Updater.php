@@ -115,11 +115,11 @@ class Updater extends ApiController
 		}
 		else if (isset($request->get['composerOnly'])) {
 			/** @var string|false $out */
-			$out = exec('composer update 2>&1 && composer dump-autoload 2>&1', $output, $returnCode);
+			$out = exec('COMPOSER_HOME=$(pwd) composer update 2>&1 && composer dump-autoload 2>&1', $output, $returnCode);
 		}
 		else {
 			/** @var string|false $out */
-			$out = exec('composer build 2>&1', $output, $returnCode);
+			$out = exec('COMPOSER_HOME=$(pwd) composer build 2>&1', $output, $returnCode);
 		}
 
 		if ($out === false || $returnCode !== 0) {

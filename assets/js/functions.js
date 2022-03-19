@@ -284,7 +284,7 @@ export function gameTimer() {
 	let length = parseInt(time.dataset.length);
 	let endDate = 0;
 	if (isNaN(start) || isNaN(length)) {
-		resetGame();
+		loadGameInfo();
 		if (isNaN(start) || isNaN(length)) {
 			return;
 		}
@@ -292,23 +292,27 @@ export function gameTimer() {
 	endDate = (start + length);
 
 	// Auto-reload timer on game started
-	EventServerInstance.addEventListener('game-started', resetGame);
+	EventServerInstance.addEventListener('game-started', loadGameInfo);
 
-	timerInterval = setInterval(() => {
-		const remaining = endDate - (Date.now() / 1000);
-		if (remaining < 0) {
-			time.innerHTML = "00:00";
-			return;
-		}
-		const minutes = Math.floor(remaining / 60).toString().padStart(2, '0');
-		const seconds = Math.floor(remaining % 60).toString().padStart(2, '0');
-		time.innerHTML = `${minutes}:${seconds}`;
-	}, 50);
+	startTimer();
+
+	function startTimer() {
+		timerInterval = setInterval(() => {
+			const remaining = endDate - (Date.now() / 1000);
+			if (remaining < 0) {
+				time.innerHTML = "00:00";
+				return;
+			}
+			const minutes = Math.floor(remaining / 60).toString().padStart(2, '0');
+			const seconds = Math.floor(remaining % 60).toString().padStart(2, '0');
+			time.innerHTML = `${minutes}:${seconds}`;
+		}, 50);
+	}
 
 	/**
 	 * Set the timers to the current game status
 	 */
-	function resetGame() {
+	function loadGameInfo() {
 		const parent = time.parentElement;
 		axios.get('/api/game/loaded')
 			.then(response => {
@@ -330,11 +334,12 @@ export function gameTimer() {
 		if (isNaN(start) || isNaN(length)) {
 			start = 0;
 			length = 0;
-			endDate = Date.now();
+			endDate = Date.now() / 1000;
 			return;
 		}
 		endDate = (start + length);
 		if ((endDate - start) > 0) {
+			startTimer();
 			parent.style.display = 'initial';
 		} else {
 			parent.style.display = 'none';

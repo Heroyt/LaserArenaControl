@@ -317,7 +317,7 @@ export function gameTimer() {
 				 */
 				const data = response.data;
 				if (data.started && data.startTime) {
-					time.dataset.start = (data.startTime * 1000).toString();
+					time.dataset.start = data.startTime.toString();
 					time.dataset.length = data.gameLength.toString();
 				}
 			})

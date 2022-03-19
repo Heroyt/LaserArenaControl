@@ -1,0 +1,3 @@
+[submodule "Models"]
+	path = src/Models
+	url = https://github.com/Heroyt/LACModels

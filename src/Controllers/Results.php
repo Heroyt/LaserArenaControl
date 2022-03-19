@@ -6,11 +6,11 @@ use App\Core\Controller;
 use App\Core\Info;
 use App\Core\Request;
 use App\Exceptions\TemplateDoesNotExistException;
-use App\Models\Factory\GameFactory;
-use App\Models\Game\Game;
-use App\Models\Game\PrintStyle;
-use App\Models\Game\PrintTemplate;
-use App\Models\Game\Today;
+use App\GameModels\Factory\GameFactory;
+use App\GameModels\Game\Game;
+use App\GameModels\Game\PrintStyle;
+use App\GameModels\Game\PrintTemplate;
+use App\GameModels\Game\Today;
 use App\Tools\Strings;
 
 class Results extends Controller
@@ -76,7 +76,7 @@ class Results extends Controller
 		bdump($game->getPlayers());
 		$this->params['style'] = PrintStyle::exists($style) ? PrintStyle::get($style) : PrintStyle::getActiveStyle();
 		$this->params['template'] = PrintTemplate::query()->where('slug = %s', $template)->first();
-		$namespace = '\\App\\Models\\Game\\'.Strings::toPascalCase($game::SYSTEM).'\\';
+		$namespace = '\\App\\GameModels\\Game\\'.Strings::toPascalCase($game::SYSTEM).'\\';
 		$teamClass = $namespace.'Team';
 		$playerClass = $namespace.'Player';
 		$this->params['today'] = new Today($game, new $playerClass, new $teamClass);

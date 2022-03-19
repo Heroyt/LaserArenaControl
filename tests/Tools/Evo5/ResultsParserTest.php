@@ -4,9 +4,9 @@ namespace Tools\Evo5;
 
 use App\Exceptions\FileException;
 use App\Exceptions\ResultsParseException;
-use App\Models\Game\Evo5\Game;
-use App\Models\Game\Evo5\Player;
-use App\Models\Game\Evo5\Team;
+use App\GameModels\Game\Evo5\Game;
+use App\GameModels\Game\Evo5\Player;
+use App\GameModels\Game\Evo5\Team;
 use App\Tools\Evo5\ResultsParser;
 use PHPUnit\Framework\TestCase;
 

@@ -10,9 +10,9 @@ use App\Exceptions\FileException;
 use App\Exceptions\GameModeNotFoundException;
 use App\Exceptions\ResultsParseException;
 use App\Exceptions\ValidationException;
+use App\GameModels\Game\Game;
 use App\Logging\DirectoryCreationException;
 use App\Logging\Logger;
-use App\Models\Game\Game;
 use App\Tools\Evo5\ResultsParser;
 use Dibi\Exception;
 

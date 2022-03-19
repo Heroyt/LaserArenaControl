@@ -7,14 +7,14 @@ use App\Core\Controller;
 use App\Core\Info;
 use App\Core\Request;
 use App\Exceptions\ModelNotFoundException;
+use App\GameModels\Factory\GameFactory;
+use App\GameModels\Factory\PlayerFactory;
+use App\GameModels\Factory\TeamFactory;
+use App\GameModels\Game\Game;
+use App\GameModels\Game\GameModes\CustomResultsMode;
+use App\GameModels\Game\PrintStyle;
+use App\GameModels\Game\Today;
 use App\Logging\DirectoryCreationException;
-use App\Models\Factory\GameFactory;
-use App\Models\Factory\PlayerFactory;
-use App\Models\Factory\TeamFactory;
-use App\Models\Game\Game;
-use App\Models\Game\GameModes\CustomResultsMode;
-use App\Models\Game\PrintStyle;
-use App\Models\Game\Today;
 use App\Services\EventService;
 use App\Tools\Strings;
 use DateTime;
@@ -112,7 +112,7 @@ class Gate extends Controller
 	 */
 	private function getResults() : void {
 		$this->params['game'] = $this->game;
-		$namespace = '\\App\\Models\\Game\\'.Strings::toPascalCase($this->game::SYSTEM).'\\';
+		$namespace = '\\App\\GameModels\\Game\\'.Strings::toPascalCase($this->game::SYSTEM).'\\';
 		$teamClass = $namespace.'Team';
 		$playerClass = $namespace.'Player';
 		$this->params['today'] = new Today($this->game, new $playerClass, new $teamClass);

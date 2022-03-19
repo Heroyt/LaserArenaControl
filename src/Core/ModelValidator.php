@@ -3,7 +3,7 @@
 namespace App\Core;
 
 use App\Exceptions\ValidationException;
-use App\Models\Factory\GameFactory;
+use App\GameModels\Factory\GameFactory;
 use App\Tools\Strings;
 use InvalidArgumentException;
 use Nette\Utils\Validators;

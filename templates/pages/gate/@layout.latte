@@ -2,8 +2,8 @@
 {import '../../symbols.latte'}
 {import '../../loader.latte'}
 
-{varType App\Models\Game\PrintStyle $style}
-{varType App\Models\Game\Game $game}
+{varType App\GameModels\Game\PrintStyle $style}
+{varType App\GameModels\Game\Game $game}
 {varType int|null $reloadTimer}
 
 {define containerClasses}
@@ -39,7 +39,7 @@
 		{\App\Core\App::getCss()|noescape}
 		<title>{$page->getTitle()}</title>
 		{\Tracy\Debugger::renderLoader()|noescape}
-		{var string[][] $colors = App\Models\Factory\GameFactory::getAllTeamsColors()}
+		{var string[][] $colors = App\GameModels\Factory\GameFactory::getAllTeamsColors()}
 		<style>
 				:root {
 				{foreach $colors as $system => $systemColors} {foreach $systemColors as $key => $color} {var string $varName1 = '--team-'.$system.'-'.$key} {var string $varName2 = '--team-'.$system.'-'.$key.'-text'} {$varName1}: {$color|noescape};
@@ -71,7 +71,7 @@
 		{include content}
 	</main>
 	<div class="tip">
-		{var App\Models\Tip|null $tip = \App\Models\Tip::random()}
+		{var App\GameModels\Tip|null $tip = \App\GameModels\Tip::random()}
 		<span class="content">{sprintf(lang('Tip #%d', context: 'tips'), $tip?->id)}: {lang $tip?->text, context: 'tips'}</span>
 	</div>
 	{include loader}
@@ -81,7 +81,7 @@
 		const page = {\App\Core\App::getRequest()};
 		const prettyUrl = {\App\Core\App::isPrettyUrl()};
 		const webSocketEventURI = 'ws://' + window.location.hostname + ':{\App\Services\EventService::getEventPort()}';
-		const tips = {\App\Models\Tip::shuffledFormatted()};
+		const tips = {\App\GameModels\Tip::shuffledFormatted()};
 		let reloadTimer = {ifset $reloadTimer}{$reloadTimer}{else}-1{/ifset};
 	</script>
 	{\App\Core\App::getJs()|noescape}

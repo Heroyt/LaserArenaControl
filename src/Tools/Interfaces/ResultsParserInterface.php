@@ -2,7 +2,7 @@
 
 namespace App\Tools\Interfaces;
 
-use App\Models\Game\Game;
+use App\GameModels\Game\Game;
 
 interface ResultsParserInterface
 {

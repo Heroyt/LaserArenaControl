@@ -1,15 +1,15 @@
 {layout '@layout.latte'}
 
-{varType App\Models\Game\Game|null $game}
+{varType App\GameModels\Game\Game|null $game}
 {varType int $gameCount}
 {varType int $teamCount}
 {varType int $playerCount}
 
-{varType App\Models\Game\Player[] $topScores}
-{varType App\Models\Game\Player|null $topHits}
-{varType App\Models\Game\Player|null $topDeaths}
-{varType App\Models\Game\Player|null $topAccuracy}
-{varType App\Models\Game\Player|null $topShots}
+{varType App\GameModels\Game\Player[] $topScores}
+{varType App\GameModels\Game\Player|null $topHits}
+{varType App\GameModels\Game\Player|null $topDeaths}
+{varType App\GameModels\Game\Player|null $topAccuracy}
+{varType App\GameModels\Game\Player|null $topShots}
 
 {define content}
 	<div class="today">

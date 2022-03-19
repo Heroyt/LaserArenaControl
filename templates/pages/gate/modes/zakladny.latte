@@ -1,14 +1,14 @@
 {layout '../@layout.latte'}
 
-{varType App\Models\Game\Evo5\Game $game}
-{varType App\Models\Game\Evo5\GameModes\Zakladny $mode}
-{varType App\Models\Game\PrintStyle $style}
-{varType App\Models\Game\Today $today}
+{varType App\GameModels\Game\Evo5\Game $game}
+{varType App\GameModels\Game\Evo5\GameModes\Zakladny $mode}
+{varType App\GameModels\Game\PrintStyle $style}
+{varType App\GameModels\Game\Today $today}
 
 {define content}
 	<div class="results-zakladny">
 		<section class="teams">
-			{var App\Models\Game\Team|null $win = $game->mode->getWin($game)}
+			{var App\GameModels\Game\Team|null $win = $game->mode->getWin($game)}
 			<div class="team" n:foreach="$game->getTeamsSorted() as $team">
 				<div class="name text-center bg-team-{$game::SYSTEM}-{$team->getTeamColor()}">
 					<div>
@@ -35,7 +35,7 @@
 {/define}
 
 {define partPlayers}
-	{varType App\Models\Game\Evo5\Player[] $players}
+	{varType App\GameModels\Game\Evo5\Player[] $players}
 	<div n:foreach="$players as $player" class="player text-center">
 		<div class="name text-team-{$game::SYSTEM}-{$player->getTeamColor()}">
 			{$player->name}

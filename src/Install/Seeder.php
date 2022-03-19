@@ -3,11 +3,11 @@
 namespace App\Install;
 
 use App\Core\DB;
-use App\Models\Game\GameModes\AbstractMode;
-use App\Models\Game\PrintStyle;
-use App\Models\Game\PrintTemplate;
-use App\Models\Tip;
-use App\Models\Vest;
+use App\GameModels\Game\GameModes\AbstractMode;
+use App\GameModels\Game\PrintStyle;
+use App\GameModels\Game\PrintTemplate;
+use App\GameModels\Tip;
+use App\GameModels\Vest;
 use Dibi\Exception;
 
 class Seeder implements InstallInterface

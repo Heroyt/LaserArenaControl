@@ -2,7 +2,7 @@
 
 namespace App\Tools;
 
-use App\Models\Game\Game;
+use App\GameModels\Game\Game;
 
 class Color
 {

@@ -1,8 +1,8 @@
 {import '../symbols.latte'}
 
-{varType App\Models\Game\Game $game}
-{varType App\Models\Game\PrintStyle $style}
-{varType App\Models\Game\PrintTemplate $template}
+{varType App\GameModels\Game\Game $game}
+{varType App\GameModels\Game\PrintStyle $style}
+{varType App\GameModels\Game\PrintTemplate $template}
 {varType int $copies}
 {varType array $_GET}
 
@@ -62,7 +62,7 @@
 	{ifset $style}
 		{$style->getCssClasses()|noescape}
 	{/ifset}
-	<style n:if="$template->orientation === App\Models\Game\Enums\PrintOrientation::landscape">
+	<style n:if="$template->orientation === App\GameModels\Game\Enums\PrintOrientation::landscape">
 		@page {
 			size: A4 landscape;
 		}
@@ -92,13 +92,13 @@
 <body>
 {for $i = 0; $i < $copies; $i++}
 	<main class="container-print-wrapper">
-		<img src="{getUrl}{($template->orientation === App\Models\Game\Enums\PrintOrientation::landscape ? str_replace('.jpg', '_landscape.jpg', $style->bg) : $style->bg)|noescape}"
+		<img src="{getUrl}{($template->orientation === App\GameModels\Game\Enums\PrintOrientation::landscape ? str_replace('.jpg', '_landscape.jpg', $style->bg) : $style->bg)|noescape}"
 			 alt="background" class="bg-img">
 		<div class="container-print {include containerClasses}">
 			{include content}
 		</div>
 		<div class="tip">
-			{var App\Models\Tip|null $tip = \App\Models\Tip::random()}
+			{var App\GameModels\Tip|null $tip = \App\GameModels\Tip::random()}
 			<span class="content">{sprintf(lang('Tip #%d', context: 'tips'), $tip?->id)}: {lang $tip?->text, context: 'tips'}</span>
 		</div>
 	</main>

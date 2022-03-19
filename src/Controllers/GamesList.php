@@ -4,7 +4,7 @@ namespace App\Controllers;
 
 use App\Core\Controller;
 use App\Core\Request;
-use App\Models\Factory\GameFactory;
+use App\GameModels\Factory\GameFactory;
 use DateTime;
 
 class GamesList extends Controller

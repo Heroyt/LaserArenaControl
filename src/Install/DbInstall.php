@@ -4,14 +4,14 @@ namespace App\Install;
 
 use App\Core\DB;
 use App\Core\Info;
-use App\Models\Game\Evo5\Game;
-use App\Models\Game\Evo5\Player;
-use App\Models\Game\Evo5\Team;
-use App\Models\Game\GameModes\AbstractMode;
-use App\Models\Game\PrintStyle;
-use App\Models\Game\PrintTemplate;
-use App\Models\Tip;
-use App\Models\Vest;
+use App\GameModels\Game\Evo5\Game;
+use App\GameModels\Game\Evo5\Player;
+use App\GameModels\Game\Evo5\Team;
+use App\GameModels\Game\GameModes\AbstractMode;
+use App\GameModels\Game\PrintStyle;
+use App\GameModels\Game\PrintTemplate;
+use App\GameModels\Tip;
+use App\GameModels\Vest;
 use App\Services\EventService;
 use Dibi\DriverException;
 use Dibi\Exception;
@@ -20,7 +20,7 @@ class DbInstall implements InstallInterface
 {
 
 	public const TABLES = [
-		'page_info'          => [
+		'page_info'                => [
 			'definition'    => "(
 				`key` varchar(30) NOT NULL DEFAULT '',
 				`value` text DEFAULT NULL,
@@ -248,6 +248,13 @@ class DbInstall implements InstallInterface
 		],
 	];
 
+	/**
+	 * Install all database tables
+	 *
+	 * @param bool $fresh
+	 *
+	 * @return bool
+	 */
 	public static function install(bool $fresh = false) : bool {
 		try {
 			if ($fresh) {

@@ -1,8 +1,8 @@
 {layout '../@printLayout.latte'}
 
-{varType App\Models\Game\Game $game}
-{varType App\Models\Game\Today $today}
-{varType App\Models\Game\PrintStyle $style}
+{varType App\GameModels\Game\Game $game}
+{varType App\GameModels\Game\Today $today}
+{varType App\GameModels\Game\PrintStyle $style}
 {default bool $colorless = false}
 
 {define teamColor}
@@ -39,17 +39,17 @@
 {/define}
 
 {define resultsWin}
-	{var App\Models\Game\Player|App\Models\Game\Team|null $win = $game->mode->getWin($game)}
+	{var App\GameModels\Game\Player|App\GameModels\Game\Team|null $win = $game->mode->getWin($game)}
 	<div class="results-win">
 		{if is_null($win)}
 			<div class="print-primary">
 				{lang 'Remíza', context: 'results'}
 			</div>
-		{elseif $win instanceof App\Models\Game\Team}
+		{elseif $win instanceof App\GameModels\Game\Team}
 			<div class="bg-team-{$win->color}">
 				{lang 'Vítězství', context: 'results'}: {$win->name}
 			</div>
-		{elseif $win instanceof App\Models\Game\Player}
+		{elseif $win instanceof App\GameModels\Game\Player}
 			<div class="{if $game->mode->isSolo()}print-primary{else}bg-team-{$win->getTeam()->color}{/if}">
 				{lang 'Vítězství', context: 'results'}: {$win->name}
 			</div>
@@ -156,7 +156,8 @@
 		{/if}
 
 
-		<tr n:if="$game->mode->settings->playerLives && $game instanceof App\Models\Game\Evo5\Game">
+
+		<tr n:if="$game->mode->settings->playerLives && $game instanceof App\GameModels\Game\Evo5\Game">
 				<th colspan="3">{lang 'Zbývá životů', context: 'results.player'}</th>
 				<td n:foreach="$game->getPlayersSorted() as $player">
 					{$player->getRemainingLives()}
@@ -249,7 +250,7 @@
 			<th n:if="$game->mode->settings->teamScore">{lang 'Skóre', context: 'results.team'}</th>
 			<th n:if="$game->mode->settings->teamAccuracy">{lang 'Úspěšnost', context: 'results.team'}</th>
 			<th n:if="$game->mode->settings->teamShots">{lang 'Výstřelů', context: 'results.team'}</th>
-			<th n:if="$game->mode->settings->teamZakladny && $game->mode instanceof App\Models\Game\Evo5\GameModes\Zakladny">
+			<th n:if="$game->mode->settings->teamZakladny && $game->mode instanceof App\GameModels\Game\Evo5\GameModes\Zakladny">
 				{lang 'Ztráty základny', context: 'results.team'}
 			</th>
 		</tr>
@@ -266,7 +267,7 @@
 			<td n:if="$game->mode->settings->teamScore">{$team->score|number:0,',','&nbsp;'|noescape}</td>
 			<td n:if="$game->mode->settings->teamAccuracy">{$team->getAccuracy()|number:2,',','&nbsp;'|noescape}%</td>
 			<td n:if="$game->mode->settings->teamShots">{$team->getShots()|number:0,',','&nbsp;'|noescape}</td>
-			<td n:if="$game->mode->settings->teamZakladny && $game->mode instanceof App\Models\Game\Evo5\GameModes\Zakladny">
+			<td n:if="$game->mode->settings->teamZakladny && $game->mode instanceof App\GameModels\Game\Evo5\GameModes\Zakladny">
 				{$game->mode->getBasesDestroyed($team)}
 			</td>
 		</tr>
@@ -326,7 +327,7 @@
 				{do $fields = array_slice($fields,1)}
 			{/if}
 			<div n:foreach="$fields as $property => $name" class="d-flex w-50">
-				{var App\Models\Game\Player|null $player = $game->getBestPlayer($property)}
+				{var App\GameModels\Game\Player|null $player = $game->getBestPlayer($property)}
 				{continueIf !isset($player)}
 				<div class="w-50 p-1 print-dark">{$name}:</div>
 				<div class="w-50 p-1 {if $iterator->counter0 % 4 < 2}print-light{/if}">

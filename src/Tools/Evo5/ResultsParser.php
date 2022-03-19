@@ -4,13 +4,13 @@ namespace App\Tools\Evo5;
 
 use App\Exceptions\GameModeNotFoundException;
 use App\Exceptions\ResultsParseException;
-use App\Models\Factory\GameModeFactory;
-use App\Models\Game\Enums\GameModeType;
-use App\Models\Game\Evo5\Game;
-use App\Models\Game\Evo5\Player;
-use App\Models\Game\Evo5\Team;
-use App\Models\Game\Scoring;
-use App\Models\Game\Timing;
+use App\GameModels\Factory\GameModeFactory;
+use App\GameModels\Game\Enums\GameModeType;
+use App\GameModels\Game\Evo5\Game;
+use App\GameModels\Game\Evo5\Player;
+use App\GameModels\Game\Evo5\Team;
+use App\GameModels\Game\Scoring;
+use App\GameModels\Game\Timing;
 use App\Tools\AbstractResultsParser;
 use DateTime;
 

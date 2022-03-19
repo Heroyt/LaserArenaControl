@@ -126,7 +126,7 @@ class Updater extends ApiController
 			$logger?->warning('Cannot execute command');
 			$logger?->debug(json_encode($out, JSON_THROW_ON_ERROR));
 			$logger?->debug(json_encode($output, JSON_THROW_ON_ERROR));
-			$this->respond(['error' => 'Cannot execute build', 'errorCode' => $returnCode], 500);
+			$this->respond(['error' => 'Cannot execute build', 'errorCode' => $returnCode, 'output' => $output], 500);
 		}
 		$this->respond(['success' => true]);
 	}

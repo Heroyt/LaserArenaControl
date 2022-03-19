@@ -100,6 +100,7 @@ abstract class AbstractCollection implements CollectionInterface
 	 * @return AbstractModel|null
 	 */
 	public function first() : ?AbstractModel {
+		/** @noinspection LoopWhichDoesNotLoopInspection */
 		foreach ($this->data as $object) {
 			return $object;
 		}
@@ -112,6 +113,7 @@ abstract class AbstractCollection implements CollectionInterface
 	 * @return AbstractModel|null
 	 */
 	public function last() : ?AbstractModel {
+		/** @noinspection LoopWhichDoesNotLoopInspection */
 		foreach (array_reverse($this->data) as $object) {
 			return $object;
 		}

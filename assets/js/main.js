@@ -1,4 +1,4 @@
-import {formatPhoneNumber, initAutoSaveForm, initTooltips} from './functions.js';
+import {formatPhoneNumber, gameTimer, initAutoSaveForm, initTooltips} from './functions.js';
 import axios from 'axios';
 import flatpickr from "flatpickr";
 import initPrintSettings from "./pages/settings/print";
@@ -137,6 +137,9 @@ window.addEventListener("load", () => {
 			});
 		}
 	}
+
+	// Game timer
+	gameTimer();
 
 	// Setting a game to gate
 	document.querySelectorAll('[data-toggle="gate"]').forEach(btn => {

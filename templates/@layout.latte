@@ -51,7 +51,7 @@
 
 
 <main class="container my-5 {include containerClasses}">
-		{include errors}
+	{include errors}
 		{include content}
 </main>
 
@@ -60,12 +60,17 @@
 
 <div class="toast-container position-absolute bottom-0 end-0 p-3" id="toasts"></div>
 
+<div class="game-timer" style="display:none;">
+	<div class="time" data-start="" data-length="">00:00</div>
+</div>
+
 <script>
 	const page = {\App\Core\App::getRequest()};
 	const prettyUrl = {\App\Core\App::isPrettyUrl()};
 	const webSocketEventURI = 'ws://' + window.location.hostname + ':{\App\Services\EventService::getEventPort()}';
 </script>
 {\App\Core\App::getJs()|noescape}
+
 
 <script src="{getUrl}node_modules/flatpickr/dist/l10n/{\App\Core\App::getShortLanguageCode()}.js"></script>
 

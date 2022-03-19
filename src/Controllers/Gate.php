@@ -20,6 +20,9 @@ use App\Tools\Strings;
 use DateTime;
 use Dibi\Exception;
 
+/**
+ * Gate is a page that displays actual results and information preferably on other visible display.
+ */
 class Gate extends Controller
 {
 
@@ -206,19 +209,16 @@ class Gate extends Controller
 		if (empty($gameId)) {
 			http_response_code(400);
 			$this->ajaxJson(['error' => 'Missing / Incorrect game']);
-			return;
 		}
 		$system = $request->params['system'] ?? '';
 		if (empty($system)) {
 			http_response_code(400);
 			$this->ajaxJson(['error' => 'Missing / Incorrect system']);
-			return;
 		}
 		$game = GameFactory::getById($gameId, $system);
 		if (!isset($game)) {
 			http_response_code(404);
 			$this->ajaxJson(['error' => 'Cannot find game']);
-			return;
 		}
 		try {
 			Info::set('gate-game', $game);
@@ -227,7 +227,6 @@ class Gate extends Controller
 		} catch (Exception $e) {
 			http_response_code(500);
 			$this->ajaxJson(['error' => 'Failed to save the game info', 'exception' => $e->getMessage()]);
-			return;
 		}
 		$this->ajaxJson(['success' => true]);
 	}

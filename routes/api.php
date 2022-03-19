@@ -1,6 +1,7 @@
 <?php
 
 use App\Controllers\Api\Debug;
+use App\Controllers\Api\GameHelpers;
 use App\Controllers\Api\Logs;
 use App\Controllers\Api\Mount;
 use App\Controllers\Api\Results;
@@ -23,3 +24,5 @@ Route::get('/api/logs/download', [Logs::class, 'download']);
 
 Route::get('/api/debug/pwd', [Debug::class, 'pwd']);
 Route::get('/api/debug/whoami', [Debug::class, 'whoami']);
+
+Route::get('/api/game/loaded', [GameHelpers::class, 'getLoadedGameInfo']);

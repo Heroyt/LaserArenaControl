@@ -1,6 +1,7 @@
 import {Tooltip} from "bootstrap";
 import {startLoading, stopLoading} from "./loaders";
 import axios from "axios";
+import EventServerInstance from "./EventServer";
 
 String.prototype.replaceMultiple = function (chars) {
 	let retStr = this;
@@ -265,4 +266,78 @@ export function initAutoSaveForm() {
 
 		setInterval(save, 10000);
 	});
+}
+
+let timerInterval = null;
+
+/**
+ * Initialize a timer displaying the remaining game time
+ */
+export function gameTimer() {
+	clearInterval(timerInterval);
+	const time = document.querySelector('.time');
+	if (!time) {
+		return;
+	}
+
+	let start = parseInt(time.dataset.start);
+	let length = parseInt(time.dataset.length);
+	let endDate = 0;
+	if (isNaN(start) || isNaN(length)) {
+		resetGame();
+		if (isNaN(start) || isNaN(length)) {
+			return;
+		}
+	}
+	endDate = (start + length);
+
+	// Auto-reload timer on game started
+	EventServerInstance.addEventListener('game-started', resetGame);
+
+	timerInterval = setInterval(() => {
+		const remaining = endDate - (Date.now() / 1000);
+		if (remaining < 0) {
+			time.innerHTML = "00:00";
+			return;
+		}
+		const minutes = Math.floor(remaining / 60).toString().padStart(2, '0');
+		const seconds = Math.floor(remaining % 60).toString().padStart(2, '0');
+		time.innerHTML = `${minutes}:${seconds}`;
+	}, 50);
+
+	/**
+	 * Set the timers to the current game status
+	 */
+	function resetGame() {
+		const parent = time.parentElement;
+		axios.get('/api/game/loaded')
+			.then(response => {
+				/**
+				 * @type {{started:bool,startTime:number|null,gameLength:number,loadTime:number,playerCount:number,teamCount:number,mode:object}}
+				 */
+				const data = response.data;
+				if (data.started && data.startTime) {
+					time.dataset.start = (data.startTime * 1000).toString();
+					time.dataset.length = data.gameLength.toString();
+				}
+			})
+			.catch(response => {
+				time.dataset.start = '0';
+				time.dataset.length = '0';
+			})
+		start = parseInt(time.dataset.start);
+		length = parseInt(time.dataset.length);
+		if (isNaN(start) || isNaN(length)) {
+			start = 0;
+			length = 0;
+			endDate = Date.now();
+			return;
+		}
+		endDate = (start + length);
+		if ((endDate - start) > 0) {
+			parent.style.display = 'initial';
+		} else {
+			parent.style.display = 'none';
+		}
+	}
 }

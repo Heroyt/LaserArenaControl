@@ -1,4 +1,5 @@
 import {Toast} from "bootstrap";
+import EventServerInstance from "../EventServer";
 
 let activityTimer;
 let isActive = true;
@@ -14,12 +15,7 @@ export default function initResultsReload() {
 	startActivityTimer();
 
 	// WebSocket event listener
-	const ws = new WebSocket(webSocketEventURI);
-	ws.onmessage = e => {
-		if (e.data.trim() === 'game-imported') {
-			triggerNewGame();
-		}
-	};
+	EventServerInstance.addEventListener("game-imported", triggerNewGame);
 }
 
 function triggerNewGame() {

@@ -325,11 +325,16 @@ export function gameTimer() {
 					time.dataset.start = data.startTime.toString();
 					time.dataset.length = data.gameLength.toString();
 				}
+				setTimes();
 			})
 			.catch(response => {
 				time.dataset.start = '0';
 				time.dataset.length = '0';
+				setTimes();
 			})
+	}
+
+	function setTimes() {
 		start = parseInt(time.dataset.start);
 		length = parseInt(time.dataset.length);
 		if (isNaN(start) || isNaN(length)) {

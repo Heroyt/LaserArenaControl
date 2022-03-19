@@ -113,6 +113,10 @@ class Updater extends ApiController
 			/** @var string|false $out */
 			$out = exec('npm run build 2>&1', $output, $returnCode);
 		}
+		else if (isset($request->get['composerOnly'])) {
+			/** @var string|false $out */
+			$out = exec('composer update 2>&1 && composer dump-autoload 2>&1', $output, $returnCode);
+		}
 		else {
 			/** @var string|false $out */
 			$out = exec('composer build 2>&1', $output, $returnCode);

@@ -27,7 +27,7 @@ class Updater extends ApiController
 		}
 
 		/** @var string|false $out */
-		$out = exec('git stash push -u 2>&1; git pull 2>&1;', $output, $returnCode);
+		$out = exec('git stash push -u 2>&1; git pull --recurse-submodules 2>&1;', $output, $returnCode);
 		exec('git stash pop 2>&1', $output2);
 		$output = array_merge($output, $output2);
 

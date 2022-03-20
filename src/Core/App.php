@@ -97,6 +97,7 @@ class App
 			if (isset($supported[self::$language->id])) {
 				self::$activeLanguageCode .= '_'.$supported[self::$language->id];
 			}
+			bdump(self::$activeLanguageCode);
 			putenv('LANG='.self::$activeLanguageCode);
 			putenv('LC_ALL='.self::$activeLanguageCode);
 			bdump(setlocale(LC_ALL, [self::$activeLanguageCode.'.UTF-8', self::$activeLanguageCode, self::$language->name]));

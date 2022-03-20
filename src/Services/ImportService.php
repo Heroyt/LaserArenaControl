@@ -80,6 +80,8 @@ class ImportService
 					$parser = new ResultsParser($file);
 					$game = $parser->parse();
 					if (!isset($game->importTime)) {
+						$logger->debug('Game is not finished');
+
 						// The game is not finished and does not contain any results
 						// It is either:
 						// - an old, un-played game
@@ -116,6 +118,7 @@ class ImportService
 						}
 					}
 					if ($null) {
+						$logger->warning('Game is empty');
 						continue; // Empty game - no shots, no hits, etc..
 					}
 

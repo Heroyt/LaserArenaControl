@@ -83,7 +83,7 @@ class ResultsParser extends AbstractResultsParser
 						$game->start = DateTime::createFromFormat('YmdHis', $dateStart);
 					}
 					if ($dateEnd !== $this::EMPTY_DATE) {
-						$game->end = DateTime::createFromFormat('YmdHis', $dateEnd);
+						$game->importTime = DateTime::createFromFormat('YmdHis', $dateEnd);
 					}
 					break;
 

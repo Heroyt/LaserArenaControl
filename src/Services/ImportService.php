@@ -79,7 +79,7 @@ class ImportService
 				try {
 					$parser = new ResultsParser($file);
 					$game = $parser->parse();
-					if (!isset($game->end)) {
+					if (!isset($game->importTime)) {
 						// The game is not finished and does not contain any results
 						// It is either:
 						// - an old, un-played game

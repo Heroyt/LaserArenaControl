@@ -101,8 +101,8 @@ class App
 			bdump([self::$activeLanguageCode.'.UTF-8', self::$activeLanguageCode, self::$language->id]);
 			putenv('LANG='.self::$activeLanguageCode);
 			putenv('LC_ALL='.self::$activeLanguageCode);
-			bdump(setlocale(LC_ALL, self::$activeLanguageCode.'.UTF-8', self::$activeLanguageCode, self::$language->name));
 			bdump(bindtextdomain("LAC", substr(LANGUAGE_DIR, 0, -1)));
+			bdump(setlocale(LC_ALL, self::$activeLanguageCode.'.UTF-8', self::$activeLanguageCode.'.utf-8', self::$activeLanguageCode, self::$language->name));
 			bdump(textdomain('LAC'));
 			bdump(bind_textdomain_codeset('LAC', "UTF-8"));
 		}

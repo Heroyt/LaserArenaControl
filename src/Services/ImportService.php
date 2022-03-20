@@ -79,18 +79,6 @@ class ImportService
 				try {
 					$parser = new ResultsParser($file);
 					$game = $parser->parse();
-					// Check players
-					$null = true;
-					/** @var Player $player */
-					foreach ($game->getPlayers() as $player) {
-						if ($player->score !== 0 || $player->shots !== 0) {
-							$null = false;
-							break;
-						}
-					}
-					if ($null) {
-						continue; // Empty game - no shots, no hits, etc..
-					}
 					if (!isset($game->end)) {
 						// The game is not finished and does not contain any results
 						// It is either:
@@ -117,6 +105,20 @@ class ImportService
 						}
 						continue;
 					}
+
+					// Check players
+					$null = true;
+					/** @var Player $player */
+					foreach ($game->getPlayers() as $player) {
+						if ($player->score !== 0 || $player->shots !== 0) {
+							$null = false;
+							break;
+						}
+					}
+					if ($null) {
+						continue; // Empty game - no shots, no hits, etc..
+					}
+
 					if (!$game->save()) {
 						throw new ResultsParseException('Failed saving game into DB.');
 					}

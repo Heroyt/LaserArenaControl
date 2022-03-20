@@ -26,10 +26,10 @@ class Results extends ApiController
 		$resultFiles = glob($resultsDir.'*.game');
 		// Sort by time
 		usort($resultFiles, static function(string $a, string $b) {
-			return filemtime($b) - filemtime($a);
+			return filemtime(ROOT.$b) - filemtime(ROOT.$a);
 		});
 		header('Content-Type: text/plain');
-		echo file_get_contents($resultFiles[0]);
+		echo file_get_contents(ROOT.$resultFiles[0]);
 		exit;
 	}
 

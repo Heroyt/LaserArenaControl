@@ -29,7 +29,7 @@ class Results extends ApiController
 		usort($resultFiles, static function(string $a, string $b) {
 			return filemtime($a) - filemtime($b);
 		});
-		$this->respond(['files' => $resultFiles, 'contents1' => file_get_contents($resultFiles[0]), 'contents2' => file_get_contents($resultFiles[1])]);
+		$this->respond(['files' => $resultFiles, 'contents1' => utf8_encode(file_get_contents($resultFiles[0])), 'contents2' => utf8_encode(file_get_contents($resultFiles[1]))]);
 	}
 
 }

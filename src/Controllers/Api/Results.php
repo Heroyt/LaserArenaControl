@@ -27,7 +27,7 @@ class Results extends ApiController
 		$resultFiles = glob(ROOT.$resultsDir.'*.game');
 		// Sort by time
 		usort($resultFiles, static function(string $a, string $b) {
-			return filemtime($a) - filemtime($b);
+			return filemtime($b) - filemtime($a);
 		});
 		$this->respond(['files' => $resultFiles, 'contents1' => utf8_encode(file_get_contents($resultFiles[0])), 'contents2' => utf8_encode(file_get_contents($resultFiles[1]))]);
 	}

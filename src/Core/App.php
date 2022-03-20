@@ -312,7 +312,7 @@ class App
 		$url = new Url();
 		$url
 			->setScheme(self::isSecure() ? 'https' : 'http')
-			->setHost($_SERVER['HTTP_HOST']);
+			->setHost($_SERVER['HTTP_HOST'] ?? 'localhost');
 		if ($returnObject) {
 			return $url;
 		}

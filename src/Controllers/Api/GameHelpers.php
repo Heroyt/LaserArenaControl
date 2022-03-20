@@ -87,7 +87,7 @@ class GameHelpers extends ApiController
 				'loadTime'          => $game->fileTime->getTimestamp(),
 				'startTime'         => $game->start?->getTimestamp(),
 				'gameLength'        => !isset($game->timing) ? 0 : ($game->timing->gameLength * 60),
-				'playerCount'       => $game->playerCount,
+				'playerCount'       => count($game->getPlayers()),
 				'teamCount'         => count($game->getTeams()),
 				'mode'              => $game->mode,
 			]

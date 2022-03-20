@@ -105,7 +105,7 @@ class ResultsParser extends AbstractResultsParser
 						$game->start = DateTime::createFromFormat('YmdHis', $dateStart);
 						$game->started = $now > $game->start;
 					}
-					$dateEnd = $args[3];
+					$dateEnd = $args[4];
 					$now = new DateTime();
 					if ($dateEnd !== $this::EMPTY_DATE) {
 						$game->end = DateTime::createFromFormat('YmdHis', $dateEnd);

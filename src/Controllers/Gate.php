@@ -169,7 +169,7 @@ class Gate extends Controller
 
 		if (!empty($gameIds)) {
 			$q = clone $playersQuery;
-			$topScores = $q->orderBy('[score]')->desc()->limit(3)->fetchAll();
+			$topScores = $q->orderBy('[score]')->groupBy('name')->desc()->limit(3)->fetchAll();
 			if (!empty($topScores)) {
 				foreach ($topScores as $score) {
 					$this->params['topScores'][] = PlayerFactory::getById($score->id_player, $score->system);

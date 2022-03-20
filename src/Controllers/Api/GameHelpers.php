@@ -70,4 +70,28 @@ class GameHelpers extends ApiController
 		);
 	}
 
+	public function getGateGameInfo() : never {
+		/** @var Game|null $game */
+		$game = Info::get('gate-game');
+
+		if (!isset($game)) {
+			$this->respond(['error' => 'No game found'], 404);
+		}
+
+		$this->respond(
+			[
+				'currentServerTime' => time(),
+				'gateTime'          => Info::get('gate-time'),
+				'started'           => $game->started,
+				'finished'          => $game->finished,
+				'loadTime'          => $game->fileTime->getTimestamp(),
+				'startTime'         => $game->start?->getTimestamp(),
+				'gameLength'        => !isset($game->timing) ? 0 : ($game->timing->gameLength * 60),
+				'playerCount'       => $game->playerCount,
+				'teamCount'         => count($game->getTeams()),
+				'mode'              => $game->mode,
+			]
+		);
+	}
+
 }

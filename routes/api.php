@@ -28,3 +28,4 @@ Route::post('/api/debug/enable', [Debug::class, 'enable']);
 Route::post('/api/debug/disable', [Debug::class, 'disable']);
 
 Route::get('/api/game/loaded', [GameHelpers::class, 'getLoadedGameInfo']);
+Route::get('/api/game/gate', [GameHelpers::class, 'getGateGameInfo']);

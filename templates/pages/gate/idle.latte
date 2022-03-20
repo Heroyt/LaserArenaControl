@@ -107,7 +107,7 @@
 		<div class="timer" n:ifset="$game">
 			{var int $left = ($game->timing->gameLength * 60) - (time() - $game->start->getTimestamp())}
 			<div class="time text-white {if $left < 0}d-none{/if}" data-start="{$game->start->getTimestamp()}"
-				 data-length="{$game->timing->gameLength * 60}">
+				 data-length="{$game->timing->gameLength * 60}" data-serverTime="{time()}">
 				{floor($left / 60)|padLeft:2,'0'}:{($left % 60)|padLeft:2,'0'}
 			</div>
 		</div>

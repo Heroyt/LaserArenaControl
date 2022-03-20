@@ -89,6 +89,7 @@ class App
 
 		// Set language and translations
 		self::$language = Language::getById(self::getDesiredLanguageCode());
+		bdump(self::$language);
 		date_default_timezone_set(self::getTimezone());
 		if (isset(self::$language)) {
 			$supported = self::getSupportedLanguages();
@@ -98,10 +99,10 @@ class App
 			}
 			putenv('LANG='.self::$activeLanguageCode);
 			putenv('LC_ALL='.self::$activeLanguageCode);
-			setlocale(LC_ALL, [self::$activeLanguageCode.'.UTF-8', self::$activeLanguageCode, self::$language->name]);
-			bindtextdomain("LAC", substr(LANGUAGE_DIR, 0, -1));
-			textdomain('LAC');
-			bind_textdomain_codeset('LAC', "UTF-8");
+			bdump(setlocale(LC_ALL, [self::$activeLanguageCode.'.UTF-8', self::$activeLanguageCode, self::$language->name]));
+			bdump(bindtextdomain("LAC", substr(LANGUAGE_DIR, 0, -1)));
+			bdump(textdomain('LAC'));
+			bdump(bind_textdomain_codeset('LAC', "UTF-8"));
 		}
 
 		self::setupLatte();

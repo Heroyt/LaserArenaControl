@@ -28,9 +28,7 @@ class Results extends ApiController
 		usort($resultFiles, static function(string $a, string $b) {
 			return filemtime(ROOT.$b) - filemtime(ROOT.$a);
 		});
-		header('Content-Type: text/plain');
-		echo file_get_contents(ROOT.$resultFiles[0]);
-		exit;
+		$this->respond(['files' => $resultFiles, 'contents1' => file_get_contents(ROOT.$resultFiles[0]), 'contents2' => file_get_contents(ROOT.$resultFiles[1])]);
 	}
 
 }

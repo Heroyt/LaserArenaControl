@@ -300,7 +300,7 @@ export function gameTimer() {
 	function startTimer() {
 		console.log('Starting timer...', endDate);
 		timerInterval = setInterval(() => {
-			const remaining = endDate - (Date.now() / 1000) - offset;
+			const remaining = endDate - (Date.now() / 1000) + offset;
 			if (remaining < 0) {
 				time.innerHTML = "00:00";
 				return;

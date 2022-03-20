@@ -23,7 +23,7 @@ class Results extends ApiController
 		if (empty($resultsDir)) {
 			$this->respond(['error' => 'Missing required argument "dir". Valid results directory is expected.'], 400);
 		}
-		$resultFiles = glob($resultsDir.'*.game');
+		$resultFiles = glob(ROOT.$resultsDir.'*.game');
 		// Sort by time
 		usort($resultFiles, static function(string $a, string $b) {
 			return filemtime(ROOT.$b) - filemtime(ROOT.$a);

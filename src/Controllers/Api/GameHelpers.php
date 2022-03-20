@@ -57,13 +57,15 @@ class GameHelpers extends ApiController
 
 		$this->respond(
 			[
-				'started'     => $game->started,
-				'loadTime'    => $game->fileTime->getTimestamp(),
-				'startTime'   => $game->start?->getTimestamp(),
-				'gameLength'  => !isset($game->timing) ? 0 : ($game->timing->gameLength * 60),
-				'playerCount' => $game->playerCount,
-				'teamCount'   => count($game->getTeams()),
-				'mode'        => $game->mode,
+				'currentServerTime' => time(),
+				'started'           => $game->started,
+				'finished'          => $game->finished,
+				'loadTime'          => $game->fileTime->getTimestamp(),
+				'startTime'         => $game->start?->getTimestamp(),
+				'gameLength'        => !isset($game->timing) ? 0 : ($game->timing->gameLength * 60),
+				'playerCount'       => $game->playerCount,
+				'teamCount'         => count($game->getTeams()),
+				'mode'              => $game->mode,
 			]
 		);
 	}

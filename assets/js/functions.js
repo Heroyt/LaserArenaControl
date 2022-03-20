@@ -280,6 +280,7 @@ export function gameTimer() {
 		return;
 	}
 
+	let offset = 0;
 	let start = parseInt(time.dataset.start);
 	let length = parseInt(time.dataset.length);
 	let endDate = 0;
@@ -299,7 +300,7 @@ export function gameTimer() {
 	function startTimer() {
 		console.log('Starting timer...', endDate);
 		timerInterval = setInterval(() => {
-			const remaining = endDate - (Date.now() / 1000);
+			const remaining = endDate - (Date.now() / 1000) - offset;
 			if (remaining < 0) {
 				time.innerHTML = "00:00";
 				return;
@@ -317,9 +318,10 @@ export function gameTimer() {
 		axios.get('/api/game/loaded')
 			.then(response => {
 				/**
-				 * @type {{started:bool,startTime:number|null,gameLength:number,loadTime:number,playerCount:number,teamCount:number,mode:object}}
+				 * @type {{started:bool,currentServerTime:number,startTime:number|null,gameLength:number,loadTime:number,playerCount:number,teamCount:number,mode:object}}
 				 */
 				const data = response.data;
+				offset = (Date.now() / 1000) - data.currentServerTime;
 				if (data.started && data.startTime) {
 					time.dataset.start = data.startTime.toString();
 					time.dataset.length = data.gameLength.toString();

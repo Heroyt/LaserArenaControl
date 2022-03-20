@@ -27,12 +27,15 @@ class Logs extends ApiController
 		if (empty($logFile)) {
 			$this->respond('Missing required argument "log".', 400);
 		}
-		if (!file_exists(LOG_DIR.$logFile)) {
+		if (!file_exists(LOG_DIR.$logFile.'.log')) {
 			$date = $request->get['date'] ?? date('Y-m-d');
 			$logFile .= '-'.$date.'.log';
 			if (!file_exists(LOG_DIR.$logFile) || !is_readable(LOG_DIR.$logFile)) {
 				$this->respond('Log file "'.$logFile.'" does not exist or is not readable.', 404);
 			}
+		}
+		else {
+			$logFile .= '.log';
 		}
 
 		$contents = file_get_contents(LOG_DIR.$logFile);

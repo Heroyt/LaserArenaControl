@@ -11,6 +11,7 @@ use App\Exceptions\GameModeNotFoundException;
 use App\Exceptions\ResultsParseException;
 use App\Exceptions\ValidationException;
 use App\GameModels\Game\Game;
+use App\GameModels\Game\Player;
 use App\Logging\DirectoryCreationException;
 use App\Logging\Logger;
 use App\Tools\Evo5\ResultsParser;
@@ -78,6 +79,18 @@ class ImportService
 				try {
 					$parser = new ResultsParser($file);
 					$game = $parser->parse();
+					// Check players
+					$null = true;
+					/** @var Player $player */
+					foreach ($game->getPlayers() as $player) {
+						if ($player->score !== 0 || $player->shots !== 0) {
+							$null = false;
+							break;
+						}
+					}
+					if ($null) {
+						continue; // Empty game - no shots, no hits, etc..
+					}
 					if (!isset($game->end)) {
 						// The game is not finished and does not contain any results
 						// It is either:

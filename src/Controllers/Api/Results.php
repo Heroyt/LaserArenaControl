@@ -18,4 +18,19 @@ class Results extends ApiController
 		ImportService::import($resultsDir, $this);
 	}
 
+	public function getLastGameFile() : never {
+		$resultsDir = $request->get['dir'] ?? '';
+		if (empty($resultsDir)) {
+			$this->respond(['error' => 'Missing required argument "dir". Valid results directory is expected.'], 400);
+		}
+		$resultFiles = glob($resultsDir.'*.game');
+		// Sort by time
+		usort($resultFiles, static function(string $a, string $b) {
+			return filemtime($b) - filemtime($a);
+		});
+		header('Content-Type: text/plain');
+		echo file_get_contents($resultFiles[0]);
+		exit;
+	}
+
 }

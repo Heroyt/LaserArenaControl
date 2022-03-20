@@ -9,6 +9,7 @@ use App\Controllers\Api\Updater;
 use App\Core\Routing\Route;
 
 Route::post('/api/results/import', [Results::class, 'import']);
+Route::get('/api/results/last', [Results::class, 'getLastGameFile']);
 
 Route::post('/api/mount', [Mount::class, 'mount']);
 

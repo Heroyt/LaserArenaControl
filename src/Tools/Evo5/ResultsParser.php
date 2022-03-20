@@ -81,11 +81,9 @@ class ResultsParser extends AbstractResultsParser
 					$game->playerCount = (int) $playerCount;
 					if ($dateStart !== $this::EMPTY_DATE) {
 						$game->start = DateTime::createFromFormat('YmdHis', $dateStart);
-						$game->started = true;
 					}
 					if ($dateEnd !== $this::EMPTY_DATE) {
 						$game->end = DateTime::createFromFormat('YmdHis', $dateEnd);
-						$game->finished = true;
 					}
 					break;
 
@@ -101,6 +99,18 @@ class ResultsParser extends AbstractResultsParser
 						throw new ResultsParseException('Invalid argument count in TIMING');
 					}
 					$game->timing = new Timing(before: $args[0], gameLength: $args[1], after: $args[2]);
+					$dateStart = $args[3];
+					$now = new DateTime();
+					if ($dateStart !== $this::EMPTY_DATE) {
+						$game->start = DateTime::createFromFormat('YmdHis', $dateStart);
+						$game->started = $now > $game->start;
+					}
+					$dateEnd = $args[3];
+					$now = new DateTime();
+					if ($dateEnd !== $this::EMPTY_DATE) {
+						$game->end = DateTime::createFromFormat('YmdHis', $dateEnd);
+						$game->finished = $now->getTimestamp() > ($game->end->getTimestamp() + $game->timing->after);
+					}
 					break;
 
 				// STYLE contains game mode information

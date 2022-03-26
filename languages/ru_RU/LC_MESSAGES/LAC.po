@@ -818,3 +818,39 @@ msgstr ""
 msgctxt "results.style.settings"
 msgid "Default template"
 msgstr ""
+
+msgctxt "cli.messages"
+msgid "Description"
+msgstr ""
+
+msgctxt "cli.messages"
+msgid "Usage"
+msgstr ""
+
+msgctxt "cli.messages"
+msgid "Arguments"
+msgstr ""
+
+msgctxt "cli.help.arguments"
+msgid "A command to get information about."
+msgstr ""
+
+msgctxt "cli.messages"
+msgid "Examples"
+msgstr ""
+
+msgctxt "cli.help.arguments"
+msgid "A valid results directory"
+msgstr ""
+
+msgctxt "cli.messages"
+msgid "Information"
+msgstr ""
+
+msgctxt "cli.help.arguments"
+msgid "Optional filter for command groups."
+msgstr ""
+
+msgctxt "cli.help.arguments"
+msgid "Optional filter for command groups"
+msgstr ""

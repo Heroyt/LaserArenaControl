@@ -7,6 +7,7 @@ namespace App\Core;
 use App\Core\Interfaces\RequestInterface;
 use App\Core\Routing\CliRoute;
 use App\Core\Routing\RouteInterface;
+use App\Services\CliHelper;
 
 class CliRequest implements RequestInterface
 {
@@ -29,6 +30,13 @@ class CliRequest implements RequestInterface
 		else {
 			$this->parseStringQuery($query);
 		}
+
+		if (empty($this->path)) {
+			CliHelper::printErrorMessage('Missing the required path argument (1)');
+			CliHelper::printUsage();
+			exit(1);
+		}
+
 		$this->route = CliRoute::getRoute(RouteInterface::CLI, $this->path, $this->params);
 		$this->args = array_slice($argv, 2);
 	}
@@ -48,7 +56,8 @@ class CliRequest implements RequestInterface
 			$this->route->handle($this);
 		}
 		else {
-			fwrite(STDERR, 'Unknown request.'.PHP_EOL);
+			CliHelper::printErrorMessage('Unknown request "%s"', implode('/', $this->path));
+			fprintf(STDERR, PHP_EOL.'To list all available commands use:'.PHP_EOL.CliHelper::getCaller().' list'.PHP_EOL);
 			exit(1);
 		}
 	}

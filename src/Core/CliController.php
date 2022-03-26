@@ -16,6 +16,7 @@ namespace App\Core;
 
 use App\Core\Interfaces\ControllerInterface;
 use App\Core\Interfaces\RequestInterface;
+use App\Services\CliHelper;
 
 /**
  * @class   Page
@@ -53,7 +54,7 @@ abstract class CliController implements ControllerInterface
 	 * @return void
 	 */
 	public function errorPrint(string $message) : void {
-		fwrite(STDERR, $message.PHP_EOL);
+		CliHelper::printErrorMessage($message);
 	}
 
 }

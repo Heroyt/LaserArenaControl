@@ -1,0 +1,63 @@
+{
+	"name": "lac",
+	"description": "Laser arena control CLI tools",
+	"subcommands": [
+		{
+			"name": "autocomplete/get",
+			"description": "Generate an autocomplete JSON for all available commands.",
+			"args": [
+				{
+					"name": "out",
+					"isOptional": true,
+					"description": "If set, output will be written to the [out] file. Otherwise, output will be written to stdout.",
+					"template": "filepaths"
+				}
+			]
+		},
+		{
+			"name": "list",
+			"description": "Lists all available CLI commands.",
+			"args": [
+				{
+					"name": "commandGroup",
+					"isOptional": true,
+					"description": "Optional filter for command groups"
+				}
+			]
+		},
+		{
+			"name": "help",
+			"description": "Print help for a command.",
+			"args": [
+				{
+					"name": "command",
+					"isOptional": false,
+					"description": "A command to get information about.",
+					"suggestions": [
+						"autocomplete/get",
+						"list",
+						"help",
+						"results/load",
+						"event/server"
+					]
+				}
+			]
+		},
+		{
+			"name": "results/load",
+			"description": "Imports all results from a given directory.",
+			"args": [
+				{
+					"name": "dir",
+					"isOptional": false,
+					"description": "A valid results directory"
+				}
+			]
+		},
+		{
+			"name": "event/server",
+			"description": "Start a WebSocket event server.",
+			"args": []
+		}
+	]
+}

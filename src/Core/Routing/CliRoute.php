@@ -19,6 +19,15 @@ class CliRoute implements RouteInterface
 	/** @var callable|array $handler Route callback */
 	protected $handler;
 
+	/** @var string Route's usage to print */
+	public string $usage = '';
+	/** @var string Route's description to print */
+	public string $description = '';
+	/** @var callable|null Command's help information to print */
+	public $helpPrint = null;
+	/** @var array{name:string,isOptional:bool,description:string,suggestions:array}[] */
+	public array $arguments = [];
+
 
 	/**
 	 * Route constructor.
@@ -143,6 +152,48 @@ class CliRoute implements RouteInterface
 	 */
 	public function getHandler() : callable|array {
 		return $this->handler;
+	}
+
+	/**
+	 * @param string $usage
+	 *
+	 * @return CliRoute
+	 */
+	public function usage(string $usage) : CliRoute {
+		$this->usage = $usage;
+		return $this;
+	}
+
+	/**
+	 * @param string $description
+	 *
+	 * @return CliRoute
+	 */
+	public function description(string $description) : CliRoute {
+		$this->description = $description;
+		return $this;
+	}
+
+	/**
+	 * @param callable $help
+	 *
+	 * @return CliRoute
+	 */
+	public function help(callable $help) : CliRoute {
+		$this->helpPrint = $help;
+		return $this;
+	}
+
+	/**
+	 * @param array{name:string,isOptional:bool,description:string,suggestions:array} ...$argument
+	 *
+	 * @return $this
+	 */
+	public function addArgument(array ...$argument) : CliRoute {
+		foreach ($argument as $arg) {
+			$this->arguments[] = $arg;
+		}
+		return $this;
 	}
 
 }

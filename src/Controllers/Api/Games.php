@@ -1,0 +1,59 @@
+<?php
+
+namespace App\Controllers\Api;
+
+use App\Core\ApiController;
+use App\Core\Request;
+use App\GameModels\Factory\GameFactory;
+use DateTime;
+use Exception;
+
+/**
+ * API controller for everything game related
+ */
+class Games extends ApiController
+{
+
+	/**
+	 * Get list of all games
+	 *
+	 * @param Request $request
+	 *
+	 * @return void
+	 */
+	public function listGames(Request $request) : void {
+		$date = null;
+		if (!empty($request->get['date'])) {
+			try {
+				$date = new DateTime($request->get['date']);
+			} catch (Exception $e) {
+				$this->respond(['error' => 'Invalid parameter: "date"', 'exception' => $e->getMessage()], 400);
+			}
+		}
+		// TODO: Possibly more filters
+		$query = GameFactory::queryGames(false, $date);
+
+		$games = $query->fetchAll();
+		$this->respond($games);
+	}
+
+	/**
+	 * Get one game's data by its code
+	 *
+	 * @param Request $request
+	 *
+	 * @return void
+	 */
+	public function getGame(Request $request) : void {
+		$gameCode = $request->params['code'] ?? '';
+		if (empty($gameCode)) {
+			$this->respond(['Invalid code'], 400);
+		}
+		$game = GameFactory::getByCode($gameCode);
+		if (!isset($game)) {
+			$this->respond(['error' => 'Game not found'], 404);
+		}
+		$this->respond($game);
+	}
+
+}

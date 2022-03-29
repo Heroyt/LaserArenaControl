@@ -2,6 +2,7 @@
 
 use App\Controllers\Api\Debug;
 use App\Controllers\Api\GameHelpers;
+use App\Controllers\Api\Games;
 use App\Controllers\Api\Logs;
 use App\Controllers\Api\Mount;
 use App\Controllers\Api\Results;
@@ -31,3 +32,6 @@ Route::post('/api/debug/disable', [Debug::class, 'disable']);
 
 Route::get('/api/game/loaded', [GameHelpers::class, 'getLoadedGameInfo']);
 Route::get('/api/game/gate', [GameHelpers::class, 'getGateGameInfo']);
+
+Route::get('api/games', [Games::class, 'listGames']);
+Route::get('api/games/{code}', [Games::class, 'getGame']);

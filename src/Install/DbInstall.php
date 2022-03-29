@@ -19,6 +19,7 @@ use Dibi\Exception;
 class DbInstall implements InstallInterface
 {
 
+	/** @var array{definition:string, modifications:array}[] */
 	public const TABLES = [
 		'page_info'                => [
 			'definition'    => "(

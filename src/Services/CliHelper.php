@@ -90,4 +90,26 @@ class CliHelper
 		}
 	}
 
+	/**
+	 * @param array  $routes
+	 * @param array  $routesAll
+	 * @param string $currKey
+	 *
+	 * @return array
+	 */
+	public static function getAllCommands(array &$routes = [], array $routesAll = [], string $currKey = '') : array {
+		if (empty($routesAll)) {
+			$routesAll = CliRoute::$availableRoutes;
+		}
+		foreach ($routesAll as $key => $route) {
+			if (count($route) === 1 && ($route[0] ?? null) instanceof CliRoute) {
+				$routes[] = $currKey;
+			}
+			else {
+				self::getAllCommands($routes, $route, empty($currKey) ? $key : $currKey.'/'.$key);
+			}
+		}
+		return $routes;
+	}
+
 }

@@ -8,6 +8,7 @@ use App\Core\Interfaces\RequestInterface;
 use App\Core\Routing\CliRoute;
 use App\Core\Routing\RouteInterface;
 use App\Services\CliHelper;
+use Nette\Utils\Helpers;
 
 class CliRequest implements RequestInterface
 {
@@ -56,7 +57,9 @@ class CliRequest implements RequestInterface
 			$this->route->handle($this);
 		}
 		else {
-			CliHelper::printErrorMessage('Unknown request "%s"', implode('/', $this->path));
+			$request = implode('/', $this->path);
+			$suggestion = Helpers::getSuggestion(CliHelper::getAllCommands(), $request);
+			CliHelper::printErrorMessage('Unknown request "%s". %s', $request, isset($suggestion) ? 'Did you mean: "'.$suggestion.'"?' : '');
 			fprintf(STDERR, PHP_EOL.'To list all available commands use:'.PHP_EOL.CliHelper::getCaller().' list'.PHP_EOL);
 			exit(1);
 		}

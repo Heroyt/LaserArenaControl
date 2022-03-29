@@ -13,6 +13,8 @@ const ROOT = __DIR__.'/';
 /** Visiting site normally */
 const INDEX = false;
 
+array_unshift($argv, 'install');
+
 require_once ROOT."include/load.php";
 
 if (Install::install(in_array('fresh', $argv ?? [], true) || isset($_GET['fresh']))) {

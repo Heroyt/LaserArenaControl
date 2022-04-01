@@ -96,7 +96,7 @@ class LigaApi
 			}
 			$response = $this->client->post('games', $config);
 			if ($response->getStatusCode() !== 200) {
-				$this->logger->error('Request failed: '.json_encode($response->getBody(), JSON_THROW_ON_ERROR));
+				$this->logger->error('Request failed: '.json_encode($response->getBody()->getContents(), JSON_THROW_ON_ERROR));
 				return false;
 			}
 		} catch (GuzzleException $e) {

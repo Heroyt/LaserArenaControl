@@ -68,10 +68,10 @@ class SyncService
 			$systemStart = microtime(true);
 			$logger->info('Synchronizing "'.$system.'" system. ('.count($games).' games)');
 			$systemTimes[$system] = 0.0;
-			// Send request in batches of 5 games max
+			// Send request in batches of 2 games max
 			$batchNum = 1;
 			do {
-				$batch = array_splice($games, 0, 5);
+				$batch = array_splice($games, 0, 2);
 				$apiStart = microtime(true);
 				if ($liga->syncGames($system, $batch, $timeout, $recreateClient)) {
 					$apiTime += microtime(true) - $apiStart;

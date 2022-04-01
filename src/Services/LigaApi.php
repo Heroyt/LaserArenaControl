@@ -45,8 +45,8 @@ class LigaApi
 																 'base_uri' => trailingSlashIt($this->url).'api/',
 																 'timeout'  => 60.0, // 1 minute
 																 'headers'  => [
-																	 'Authorization' => 'Bearer '.$this->apiKey,
 																	 'Accept'        => 'application/json',
+																	 'Authorization' => 'Bearer '.$this->apiKey,
 																 ]
 															 ]);
 
@@ -91,7 +91,13 @@ class LigaApi
 
 		// Build a request
 		try {
-			$config = ['json' => ['system' => $system, 'games' => $gamesData], 'synchronous' => true];
+			$config = [
+				'json'        => ['system' => $system, 'games' => $gamesData],
+				'synchronous' => true,
+				'headers'     => [
+					'Authorization' => 'Bearer '.$this->apiKey,
+				],
+			];
 			if (isset($timeout)) {
 				$config['timeout'] = $timeout;
 			}

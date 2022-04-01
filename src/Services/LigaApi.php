@@ -41,7 +41,6 @@ class LigaApi
 
 		// Initialize client
 		$this->client = new Client([
-																 'debug'           => true,
 																 'handler'         => $stack,
 																 'base_uri'        => trailingSlashIt($this->url).'api/',
 																 'timeout'         => 60.0, // 1 minute

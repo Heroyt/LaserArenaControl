@@ -35,4 +35,5 @@ Route::get('/api/game/gate', [GameHelpers::class, 'getGateGameInfo']);
 
 Route::get('api/games', [Games::class, 'listGames']);
 Route::post('api/games/sync', [Games::class, 'syncGames']);
+Route::post('api/games/sync/{limit}', [Games::class, 'syncGames']);
 Route::get('api/games/{code}', [Games::class, 'getGame']);

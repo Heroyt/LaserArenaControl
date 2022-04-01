@@ -5,6 +5,7 @@ namespace App\Controllers\Api;
 use App\Core\ApiController;
 use App\Core\Request;
 use App\GameModels\Factory\GameFactory;
+use App\Services\SyncService;
 use DateTime;
 use Exception;
 
@@ -14,8 +15,16 @@ use Exception;
 class Games extends ApiController
 {
 
+	/**
+	 * @param Request $request
+	 *
+	 * @return void
+	 */
 	public function syncGames(Request $request) : void {
-
+		$limit = (int) ($request->params['limit'] ?? 10);
+		$timeout = isset($request->get['timeout']) ? (float) $request->get['timeout'] : null;
+		SyncService::syncGames($limit, $timeout);
+		$this->respond(['success' => true]);
 	}
 
 	/**

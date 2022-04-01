@@ -16,6 +16,9 @@ use App\Services\EventService;
 use Dibi\DriverException;
 use Dibi\Exception;
 
+/**
+ * @version 0.2
+ */
 class DbInstall implements InstallInterface
 {
 
@@ -83,7 +86,7 @@ class DbInstall implements InstallInterface
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;",
 			'modifications' => [],
 		],
-		Game::TABLE                => [
+		Game::TABLE          => [
 			'definition'    => "(
 				`id_game` int(11) unsigned NOT NULL AUTO_INCREMENT,
 				`id_mode` int(11) unsigned DEFAULT NULL,
@@ -109,11 +112,15 @@ class DbInstall implements InstallInterface
 				`respawn` smallint(4) unsigned DEFAULT NULL,
 				`lives` int(10) unsigned DEFAULT NULL,
 				`ammo` int(10) unsigned DEFAULT NULL,
+				`sync` TINYINT(1)  NOT NULL  DEFAULT 0,
 				PRIMARY KEY (`id_game`),
 				KEY `id_mode` (`id_mode`),
 				CONSTRAINT `evo5_games_ibfk_1` FOREIGN KEY (`id_mode`) REFERENCES `game_modes` (`id_mode`) ON DELETE SET NULL ON UPDATE CASCADE
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;",
 			'modifications' => [
+				'0.2' => [
+					"ADD `sync` TINYINT(1)  NOT NULL  DEFAULT 0  AFTER `ammo`",
+				]
 			],
 		],
 		Team::TABLE                => [

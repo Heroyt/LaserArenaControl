@@ -3,8 +3,8 @@
 use App\Cli\Colors;
 use App\Cli\Enums\ForegroundColors;
 use App\Controllers\Cli\EventServer;
+use App\Controllers\Cli\Games;
 use App\Controllers\Cli\Help;
-use App\Controllers\Cli\Results;
 use App\Core\Routing\CliRoute;
 use App\Services\CliHelper;
 
@@ -48,13 +48,31 @@ if (PHP_SAPI === 'cli') {
 						}
 					);
 
-	CliRoute::cli('results/load', [Results::class, 'import'])
+	CliRoute::cli('results/load', [Games::class, 'import'])
 					->description('Imports all results from a given directory.')
 					->usage('<dir>')
 					->addArgument([
 													'name'        => 'dir',
 													'isOptional'  => false,
 													'description' => 'A valid results directory',
+												])
+					->help(static function() {
+						echo Colors::color(ForegroundColors::LIGHT_PURPLE).lang('Examples', context: 'cli.messages').':'.Colors::reset().PHP_EOL;
+						echo Colors::color(ForegroundColors::LIGHT_BLUE).CliHelper::getCaller().' results/load results'.Colors::reset().PHP_EOL."\tWill import all new files from the '".Colors::color(ForegroundColors::LIGHT_BLUE)."./results/".Colors::reset()."' directory".PHP_EOL;
+					});
+
+	CliRoute::cli('games/sync', [Games::class, 'sync'])
+					->description('Synchronize not synchronized games from DB to public API.')
+					->usage('[limit=10] [timeout]')
+					->addArgument([
+													'name'        => 'limit',
+													'isOptional'  => true,
+													'description' => 'Maximum number of games to synchronize',
+												],
+												[
+													'name'        => 'timeout',
+													'isOptional'  => true,
+													'description' => 'Timeout for each curl request',
 												])
 					->help(static function() {
 						echo Colors::color(ForegroundColors::LIGHT_PURPLE).lang('Examples', context: 'cli.messages').':'.Colors::reset().PHP_EOL;

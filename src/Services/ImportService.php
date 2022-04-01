@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Core\ApiController;
+use App\Core\App;
 use App\Core\CliController;
 use App\Core\Constants;
 use App\Core\Info;
@@ -65,6 +66,8 @@ class ImportService
 		$lastUnfinishedGame = null;
 		$lastEvent = '';
 
+		$finishedGames = [];
+
 		// Import all files
 		foreach ($resultFiles as $file) {
 			if (str_ends_with($file, '0000.game')) {
@@ -125,6 +128,9 @@ class ImportService
 					if (!$game->save()) {
 						throw new ResultsParseException('Failed saving game into DB.');
 					}
+					if ($game->isFinished()) {
+						$finishedGames[] = $game;
+					}
 					$imported++;
 				} catch (FileException|GameModeNotFoundException|ResultsParseException|ValidationException $e) {
 					$logger->error($e->getMessage());
@@ -153,6 +159,24 @@ class ImportService
 		// Send event on new import
 		if ($imported > 0) {
 			EventService::trigger('game-imported');
+		}
+
+		// Try to synchronize finished games to public
+		if (!empty($finishedGames)) {
+			$system = $finishedGames[0]::SYSTEM;
+			/** @var LigaApi $liga */
+			$liga = App::getService('liga');
+			if ($liga->syncGames($system, $finishedGames)) {
+				$logger->info('Synchronized games to public.');
+				// Set the sync flag
+				foreach ($finishedGames as $finishedGame) {
+					$finishedGame->sync = true;
+					try {
+						$finishedGame->save();
+					} catch (ValidationException $e) {
+					}
+				}
+			}
 		}
 
 		if (self::$cliFlag) {

@@ -22,6 +22,7 @@ use Latte\Macros\MacroSet;
 use Nette\DI\Compiler;
 use Nette\DI\Container;
 use Nette\DI\ContainerLoader;
+use Nette\DI\MissingServiceException;
 use Nette\Http\Url;
 use const PRIVATE_DIR;
 
@@ -583,6 +584,16 @@ class App
 
 	public static function getShortLanguageCode() : string {
 		return explode('_', self::$activeLanguageCode)[0];
+	}
+
+	/**
+	 * Gets the service object by name.
+	 *
+	 * @return object
+	 * @throws MissingServiceException
+	 */
+	public static function getService(string $name) : object {
+		return self::getContainer()->getService($name);
 	}
 
 }

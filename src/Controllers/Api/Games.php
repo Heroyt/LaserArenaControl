@@ -14,6 +14,10 @@ use Exception;
 class Games extends ApiController
 {
 
+	public function syncGames(Request $request) : void {
+
+	}
+
 	/**
 	 * Get list of all games
 	 *

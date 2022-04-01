@@ -152,6 +152,11 @@ class Logger extends AbstractLogger
 		fwrite($this->handle, sprintf('[%s] %s: %s'.PHP_EOL, date('Y-m-d H:i:s'), strtoupper($level), $message));
 	}
 
+	public function exception(\Exception $e) : void {
+		$this->error($e->getMessage());
+		$this->debug($e->getTraceAsString());
+	}
+
 	public function logDb(Event $event) : void {
 		// Create tracy log event
 		$logEvent = new DbEvent;

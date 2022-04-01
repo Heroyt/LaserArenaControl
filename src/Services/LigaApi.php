@@ -109,11 +109,13 @@ class LigaApi
 					'Accept: application/json',
 					'Authorization: Bearer '.$this->apiKey,
 				],
+				CURLINFO_HEADER_OUT    => true,
 			]);
 			$response = curl_exec($curl);
 			$info = curl_getinfo($curl);
 			if ($info['http_code'] !== 200) {
 				$this->logger->error('Request failed: '.$response);
+				$this->logger->debug(curl_getinfo($curl, CURLINFO_HEADER_OUT));
 				return false;
 			}
 

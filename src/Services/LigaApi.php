@@ -95,7 +95,6 @@ class LigaApi
 		try {
 			$config = [
 				'json'        => ['system' => $system, 'games' => $gamesData],
-				'synchronous' => true,
 				'headers'     => [
 					'Authorization' => 'Bearer '.$this->apiKey,
 				],

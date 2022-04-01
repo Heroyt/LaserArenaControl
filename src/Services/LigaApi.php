@@ -94,16 +94,34 @@ class LigaApi
 		// Build a request
 		try {
 			$config = [
-				'json'        => ['system' => $system, 'games' => $gamesData],
+				'json' => ['system' => $system, 'games' => $gamesData],
 			];
 			if (isset($timeout)) {
 				$config['timeout'] = $timeout;
 			}
-			$response = $this->client->post('games', $config);
+
+			$curl = curl_init(trailingSlashIt($this->url).'api/games');
+			curl_setopt_array($curl, [
+				CURLOPT_RETURNTRANSFER => true,
+				CURLOPT_POST           => true,
+				CURLOPT_POSTFIELDS     => json_encode($config['json'], JSON_THROW_ON_ERROR),
+				CURLOPT_HTTPHEADER     => [
+					'Accept: application/json',
+					'Authorization: Bearer '.$this->apiKey,
+				],
+			]);
+			$response = curl_exec($curl);
+			$info = curl_getinfo($curl);
+			if ($info['http_code'] !== 200) {
+				$this->logger->error('Request failed: '.$response);
+				return false;
+			}
+
+			/*$response = $this->client->post('games', $config);
 			if ($response->getStatusCode() !== 200) {
 				$this->logger->error('Request failed: '.json_encode($response->getBody()->getContents(), JSON_THROW_ON_ERROR));
 				return false;
-			}
+			}*/
 		} catch (GuzzleException $e) {
 			$this->logger->exception($e);
 			return false;

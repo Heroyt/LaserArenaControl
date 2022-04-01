@@ -41,10 +41,12 @@ class LigaApi
 
 		// Initialize client
 		$this->client = new Client([
-																 'handler'  => $stack,
-																 'base_uri' => trailingSlashIt($this->url).'api/',
-																 'timeout'  => 60.0, // 1 minute
-																 'headers'  => [
+																 'debug'           => true,
+																 'handler'         => $stack,
+																 'base_uri'        => trailingSlashIt($this->url).'api/',
+																 'timeout'         => 60.0, // 1 minute
+																 'allow_redirects' => true,
+																 'headers'         => [
 																	 'Accept'        => 'application/json',
 																	 'Authorization' => 'Bearer '.$this->apiKey,
 																 ]

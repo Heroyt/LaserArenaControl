@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Core\App;
 use App\Core\Info;
 use App\GameModels\Game\Game;
 use App\Logging\Logger;
@@ -36,7 +37,7 @@ class LigaApi
 		// Add logging to handler and set handler to cUrl
 		$stack = new HandlerStack();
 		$stack->setHandler(new CurlHandler());
-		$stack->push(Middleware::log($this->logger, new MessageFormatter()));
+		$stack->push(Middleware::log($this->logger, new MessageFormatter(App::isProduction() ? MessageFormatter::CLF : MessageFormatter::DEBUG)));
 
 		// Initialize client
 		$this->client = new Client([

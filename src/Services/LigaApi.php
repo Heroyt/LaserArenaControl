@@ -106,6 +106,7 @@ class LigaApi
 				CURLOPT_POST           => true,
 				CURLOPT_POSTFIELDS     => json_encode($config['json'], JSON_THROW_ON_ERROR),
 				CURLOPT_HTTPHEADER     => [
+					'Content-Type: application/json',
 					'Accept: application/json',
 					'Authorization: Bearer '.$this->apiKey,
 				],

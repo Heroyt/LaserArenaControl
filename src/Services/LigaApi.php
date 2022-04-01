@@ -95,9 +95,6 @@ class LigaApi
 		try {
 			$config = [
 				'json'        => ['system' => $system, 'games' => $gamesData],
-				'headers'     => [
-					'Authorization' => 'Bearer '.$this->apiKey,
-				],
 			];
 			if (isset($timeout)) {
 				$config['timeout'] = $timeout;

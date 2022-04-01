@@ -8,6 +8,7 @@ use App\GameModels\Game\Game;
 use App\Logging\Logger;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Handler\CurlFactory;
 use GuzzleHttp\Handler\CurlHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\MessageFormatter;
@@ -36,7 +37,7 @@ class LigaApi
 	private function makeClient() : void {
 		// Add logging to handler and set handler to cUrl
 		$stack = new HandlerStack();
-		$stack->setHandler(new CurlHandler());
+		$stack->setHandler(new CurlHandler(['handle_factory' => new CurlFactory(99)]));
 		$stack->push(Middleware::log($this->logger, new MessageFormatter(App::isProduction() ? MessageFormatter::CLF : MessageFormatter::DEBUG)));
 
 		// Initialize client

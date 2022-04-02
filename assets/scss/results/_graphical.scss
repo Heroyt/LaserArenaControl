@@ -50,11 +50,29 @@
 		width: var(--size);
 	}
 
+	.results-qr {
+		align-items: flex-end;
+		display: flex;
+		flex-direction: column;
+		grid-area: qr;
+		height: 100%;
+		justify-content: flex-start;
+		width: 100%;
+
+		svg {
+			--size: 2cm;
+			height: var(--size);
+			right: 0;
+			top: 0;
+			width: var(--size);
+		}
+	}
+
 	.results-header {
+		align-self: start;
 		grid-area: info;
 		max-width: 20cm;
 		width: 100%;
-		align-self: start;
 
 		td,
 		th {

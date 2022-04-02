@@ -12,6 +12,10 @@ use App\GameModels\Game\PrintStyle;
 use App\GameModels\Game\PrintTemplate;
 use App\GameModels\Game\Today;
 use App\Tools\Strings;
+use Endroid\QrCode\Builder\Builder;
+use Endroid\QrCode\Encoding\Encoding;
+use Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelLow;
+use Endroid\QrCode\Writer\SvgWriter;
 
 class Results extends Controller
 {
@@ -80,12 +84,35 @@ class Results extends Controller
 		$teamClass = $namespace.'Team';
 		$playerClass = $namespace.'Player';
 		$this->params['today'] = new Today($game, new $playerClass, new $teamClass);
+		$this->params['publicUrl'] = $this->getPublicUrl($game);
+		$this->params['qr'] = $this->getQR($game);
 
 		try {
 			$this->view('results/templates/'.$template);
 		} catch (TemplateDoesNotExistException $e) {
 			$this->view('results/templates/default');
 		}
+	}
+
+	private function getPublicUrl(Game $game) : string {
+		return trailingSlashIt(Info::get('liga_api_url')).'g/'.$game->code;
+	}
+
+	/**
+	 * Get SVG QR code for game
+	 *
+	 * @param Game $game
+	 *
+	 * @return string
+	 */
+	private function getQR(Game $game) : string {
+		$result = Builder::create()
+										 ->data($this->getPublicUrl($game))
+										 ->writer(new SvgWriter())
+										 ->encoding(new Encoding('UTF-8'))
+										 ->errorCorrectionLevel(new ErrorCorrectionLevelLow())
+										 ->build();
+		return $result->getString();
 	}
 
 }

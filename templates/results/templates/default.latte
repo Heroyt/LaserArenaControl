@@ -3,6 +3,8 @@
 {varType App\GameModels\Game\Game $game}
 {varType App\GameModels\Game\Today $today}
 {varType App\GameModels\Game\PrintStyle $style}
+{varType string $qr}
+{varType string $publicUrl}
 {default bool $colorless = false}
 
 {define teamColor}
@@ -88,6 +90,10 @@
 			<td>{lang 'Štít', context: 'results.scoring'}: {$game->scoring->shield}</td>
 		</tr>
 	</table>
+	<div class="results-qr text-end">
+		<a href="{$publicUrl}" class="d-block mb-2">{$publicUrl}</a>
+		{$qr|noescape}
+	</div>
 {/define}
 
 {define resultsPlayers}

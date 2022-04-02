@@ -4,6 +4,7 @@
 	display: grid;
 	grid-gap: .5rem;
 	grid-template-areas:
+	   '. qr'
 		 'info qr'
 		 'scores scores'
 		 'win win'
@@ -12,12 +13,13 @@
 		 'hits teams'
 		 'hits bests';
 	grid-template-columns: 1fr 1fr;
-	grid-template-rows: auto;
+	grid-template-rows: 2cm auto;
 	justify-content: start;
 	--font-size: 6pt;
 
 	&.solo {
 		grid-template-areas:
+		 '. qr'
 		 'info qr'
 		 'scores scores'
 		 'win win'
@@ -41,6 +43,24 @@
 		margin-bottom: calc(var(--size) / -4);
 		position: relative;
 		width: var(--size);
+	}
+
+	.results-qr {
+		align-items: flex-end;
+		display: flex;
+		flex-direction: column;
+		grid-area: qr;
+		height: 100%;
+		justify-content: flex-start;
+		width: 100%;
+
+		svg {
+			--size: 2cm;
+			height: var(--size);
+			right: 0;
+			top: 0;
+			width: var(--size);
+		}
 	}
 
 	.results-header {

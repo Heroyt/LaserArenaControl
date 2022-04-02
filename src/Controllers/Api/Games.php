@@ -21,7 +21,7 @@ class Games extends ApiController
 	 * @return void
 	 */
 	public function syncGames(Request $request) : void {
-		$limit = (int) ($request->params['limit'] ?? 10);
+		$limit = (int) ($request->params['limit'] ?? 5);
 		$timeout = isset($request->get['timeout']) ? (float) $request->get['timeout'] : null;
 		SyncService::syncGames($limit, $timeout);
 		$this->respond(['success' => true]);

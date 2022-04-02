@@ -39,7 +39,7 @@ class Games extends CliController
 	 * @return void
 	 */
 	public function sync(CliRequest $request) : void {
-		$limit = (int) ($request->args[0] ?? 10);
+		$limit = (int) ($request->args[0] ?? 5);
 		$timeout = isset($request->args[1]) ? (float) $request->args[1] : null;
 		SyncService::syncGames($limit, $timeout);
 	}

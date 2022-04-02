@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Core\App;
 use App\Exceptions\ValidationException;
 use App\GameModels\Factory\GameFactory;
 use App\GameModels\Game\Game;
@@ -23,7 +22,7 @@ class SyncService
 	 *
 	 * @return void
 	 */
-	public static function syncGames(int $limit = 10, ?float $timeout = null) : void {
+	public static function syncGames(int $limit = 5, ?float $timeout = null) : void {
 		$logger = new Logger(LOG_DIR, 'sync');
 		/** @var object{id_game:int,system:string,code:string,start:DateTime,end:DateTime,sync:int}[] $gameRows */
 		$gameRows = GameFactory::queryGames(true)->where('[sync] = 0')->limit($limit)->fetchAll();
@@ -36,7 +35,7 @@ class SyncService
 			return;
 		}
 
-		$recreateClient = count($gameRows) > 10;
+		//$recreateClient = count($gameRows) > 10;
 
 		$message = 'Starting sync for games: '.implode(', ', array_map(static function(object $row) {
 				return $row->id_game.' - '.$row->code;
@@ -56,21 +55,26 @@ class SyncService
 		}
 
 		/** @var LigaApi $liga */
-		$liga = App::getService('liga');
+		//$liga = App::getService('liga');
 
 		// Time it
 		$start = microtime(true);
 		$systemTimes = [];
-		$apiTime = 0.0;
-		$dbTime = 0.0;
+		//$apiTime = 0.0;
+		//$dbTime = 0.0;
 		// Sync each system individually
 		foreach ($systems as $system => $games) {
 			$systemStart = microtime(true);
 			$logger->info('Synchronizing "'.$system.'" system. ('.count($games).' games)');
 			$systemTimes[$system] = 0.0;
 			// Send request in batches of 2 games max
-			$batchNum = 1;
-			do {
+			//$batchNum = 1;
+			foreach ($games as $key => $game) {
+				if (!$game->sync()) {
+					$logger->warning('Failed to synchronize "'.$system.'" system (game '.$key.')');
+				}
+			}
+			/*do {
 				$batch = array_splice($games, 0, 2);
 				$apiStart = microtime(true);
 				if ($liga->syncGames($system, $batch, $timeout, $recreateClient)) {
@@ -84,7 +88,7 @@ class SyncService
 					$logger->warning('Failed to synchronize "'.$system.'" system (batch '.$batchNum.')');
 				}
 				$batchNum++;
-			} while (!empty($games));
+			} while (!empty($games));*/
 			$systemTimes[$system] += microtime(true) - $systemStart;
 		}
 		$message = 'Synchronization end. Times: ';
@@ -95,8 +99,8 @@ class SyncService
 		$logger->info($message);
 		if (PHP_SAPI === 'cli') {
 			echo $message.PHP_EOL;
-			echo 'API time: '.$apiTime.'s'.PHP_EOL;
-			echo 'DB time: '.$dbTime.'s'.PHP_EOL;
+			//echo 'API time: '.$apiTime.'s'.PHP_EOL;
+			//echo 'DB time: '.$dbTime.'s'.PHP_EOL;
 		}
 	}
 

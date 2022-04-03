@@ -131,7 +131,7 @@ class ImportService
 					if (!$game->save()) {
 						throw new ResultsParseException('Failed saving game into DB.');
 					}
-					$finishedGames[] = GameFactory::getById($game->id_game, $game::SYSTEM);
+					$finishedGames[] = GameFactory::getById($game->id, $game::SYSTEM);
 					$imported++;
 				} catch (FileException|GameModeNotFoundException|ResultsParseException|ValidationException $e) {
 					$logger->error($e->getMessage());

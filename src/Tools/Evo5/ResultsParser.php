@@ -123,7 +123,9 @@ class ResultsParser extends AbstractResultsParser
 						throw new ResultsParseException('Invalid argument count in STYLE');
 					}
 					$game->modeName = $args[0];
-					$game->mode = GameModeFactory::find($args[0], ((int) $args[2]) === 1 ? GameModeType::TEAM : GameModeType::SOLO, 'Evo5');
+					$type = ((int) $args[2]) === 1 ? GameModeType::TEAM : GameModeType::SOLO;
+					$game->mode = GameModeFactory::find($args[0], $type, 'Evo5');
+					$game->gameType = $type;
 					break;
 
 				// STYLEX contains additional game mode settings

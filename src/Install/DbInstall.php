@@ -90,6 +90,7 @@ class DbInstall implements InstallInterface
 			'definition'    => "(
 				`id_game` int(11) unsigned NOT NULL AUTO_INCREMENT,
 				`id_mode` int(11) unsigned DEFAULT NULL,
+				`game_type` enum('TEAM','SOLO') NOT NULL DEFAULT 'TEAM',
 				`mode_name` varchar(100) DEFAULT NULL,
 				`file_time` datetime DEFAULT NULL,
 				`start` datetime DEFAULT NULL,
@@ -120,6 +121,7 @@ class DbInstall implements InstallInterface
 			'modifications' => [
 				'0.2' => [
 					"ADD `sync` TINYINT(1)  NOT NULL  DEFAULT 0  AFTER `ammo`",
+					"ADD `game_type` enum('TEAM','SOLO') NOT NULL DEFAULT 'TEAM' AFTER `id_mode`",
 				]
 			],
 		],

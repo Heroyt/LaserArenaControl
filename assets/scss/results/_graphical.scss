@@ -250,28 +250,48 @@
 			width: 100%;
 			height: 6rem;
 
+			.kills-row, .deaths-row {
+				align-items: center;
+				display: flex;
+				justify-content: flex-start;
+				min-height: 2rem;
+				width: 100%;
+			}
+
 			.kills {
 				background-color: #55EA6A;
+			}
+
+			.kills-own {
+				background-color: #49cc5b;
 			}
 
 			.deaths {
 				background-color: #EA5555;
 			}
 
+			.deaths-own {
+				background-color: #cc4949;
+			}
+
 			.kills,
-			.deaths {
+			.deaths,
+			.kills-own,
+			.deaths-own {
 				display: flex;
-				min-height: 2rem;
+				flex-shrink: 1;
+				height: 100%;
+				min-width: 2rem;
 				padding: 0;
 
 				.main {
 					align-items: center;
 					display: flex;
+					flex: 1;
 					flex-direction: column;
 					height: 100%;
 					justify-content: center;
 					padding: 0 .3rem;
-					flex: 1;
 				}
 
 				.side {
@@ -311,9 +331,9 @@
 
 		svg.accuracy {
 			--color: rgb(72, 196, 255);
-			max-width: 2.5rem;
 			display: block;
 			margin: 0 auto;
+			max-width: 2.5rem;
 			position: relative;
 
 			* {
@@ -345,6 +365,12 @@
 			svg {
 				max-height: 25pt;
 				width: 100%;
+
+				.empty path {
+					fill: transparent;
+					stroke: #000;
+					stroke-width: 2px;
+				}
 			}
 		}
 	}

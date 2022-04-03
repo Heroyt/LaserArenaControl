@@ -127,6 +127,14 @@
 						  style="fill-rule:nonzero;"/>
 				</g>
 			</g>
+			<g class="empty" n:for="; $i < 10; $i++" transform="translate({172*$i})">
+				<g transform="matrix(1,0,0,1,-167,0)">
+					<path d="M335.738,436.459L335.738,184.656C335.738,180.014 331.986,176.263 327.345,176.263L176.263,176.263C171.621,176.263 167.87,180.015 167.87,184.656L167.87,436.459C167.87,441.101 171.622,444.852 176.263,444.852L176.263,453.245C171.621,453.245 167.87,456.997 167.87,461.638L167.87,495.212C167.87,499.854 171.622,503.605 176.263,503.605L327.345,503.605C331.987,503.605 335.738,499.853 335.738,495.212L335.738,461.64C335.738,456.998 331.986,453.247 327.345,453.247L327.345,444.854C331.986,444.853 335.738,441.101 335.738,436.459Z"
+						  fill="transparent" stroke="#000"/>
+					<path d="M184.656,159.478L318.951,159.478C323.593,159.478 327.344,155.726 327.344,151.085L327.344,142.692C327.344,87.514 300.98,34.803 256.839,1.682C253.851,-0.559 249.755,-0.559 246.767,1.682C202.626,34.803 176.262,87.513 176.262,142.692L176.262,151.085C176.263,155.726 180.014,159.478 184.656,159.478Z"
+						  fill="transparent" stroke="#000"/>
+				</g>
+			</g>
 		</svg>
 		<div class="number">{svgIcon 'bullets', '', '1em'} {$player->shots|number:0,',','&nbsp;'|noescape}</div>
 	</div>
@@ -167,42 +175,48 @@
 	<h4 class="mt-2 mb-0">{lang 'Zásahy', context: 'results.player'}:</h4>
 	{var int $total = $player->hits + $player->deaths}
 	<div n:if="$game->mode->settings->playerPlayers" class="hits mt-1 mb-2">
-		<div class="kills" style="height:{100*$player->hits / ($total > 0 ? $total : 1)|noescape}%">
-			<div class="main">
-				<div class="icon">
-					{svgIcon 'kill', '', '1rem'}
-				</div>
-				<div class="number">
-					{$player->hits}
+		{var int $hits = $game->mode->isTeam() ? $player->hitsOther : $player->hits}
+		{var int $deaths = $game->mode->isTeam() ? $player->deathsOther : $player->deaths}
+		<div class="kills-row" style="height:{100*$player->hits / ($total > 0 ? $total : 1)|noescape}%;">
+			<div class="kills" style="width:{100*$hits / ($player->hits > 0 ? $player->hits : 1)|noescape}%;">
+				<div class="main">
+					<div class="icon">
+						{svgIcon 'kill', '', '1rem'}
+					</div>
+					<div class="number">
+						{$hits}
+					</div>
 				</div>
 			</div>
-			<div n:if="$game->mode->settings->playerPlayersTeams && $game->mode->isTeam()" class="side">
-				<div class="other"
-					 style="height: {$player->hits === 0 ? 0 : (100 * $player->hitsOther / $player->hits)|noescape}%;">
-					<div class="number">{$player->hitsOther}</div>
-				</div>
-				<div class="own bg-team-{$player->getTeamColor()}"
-					 style="height: {$player->hits === 0 ? 0 : (100 * $player->hitsOwn / $player->hits)|noescape}%;">
+			<div n:if="$game->mode->settings->playerPlayersTeams && $game->mode->isTeam()"
+					class="kills-own"
+					style="width: {100*($player->hitsOwn / ($player->hits > 0 ? $player->hits : 1))|noescape}%;">
+				<div class="main">
+					<div class="icon">
+						{svgIcon 'dead', '', '1rem'}
+					</div>
 					<div class="number">{$player->hitsOwn}</div>
 				</div>
 			</div>
 		</div>
-		<div class="deaths" style="height:{100*$player->deaths / ($total > 0 ? $total : 1)|noescape}%">
-			<div class="main">
-				<div class="icon">
-					{svgIcon 'skull', '', '1rem'}
-				</div>
-				<div class="number">
-					{$player->deaths}
+		<div class="deaths-row" style="height:{100*$player->deaths / ($total > 0 ? $total : 1)|noescape}%;">
+			<div class="deaths" style="width:{100*$deaths / ($player->deaths > 0 ? $player->deaths : 1)|noescape}%;">
+				<div class="main">
+					<div class="icon">
+						{svgIcon 'skull', '', '1rem'}
+					</div>
+					<div class="number">
+						{$deaths}
+					</div>
 				</div>
 			</div>
-			<div n:if="$game->mode->settings->playerPlayersTeams && $game->mode->isTeam()" class="side">
-				<div class="other"
-					 style="height: {$player->deaths === 0 ? 0 : (100 * $player->deathsOther / $player->deaths)|noescape}%;">
-					<div class="number">{$player->deathsOther}</div>
-				</div>
-				<div class="own bg-team-{$player->getTeamColor()}"
-					 style="height: {$player->deaths === 0 ? 0 : (100 * $player->deathsOwn / $player->deaths)|noescape}%;">
+			<div n:if="$game->mode->settings->playerPlayersTeams && $game->mode->isTeam()"
+					class="deaths-own"
+					style="width: {100*($player->deathsOwn / ($player->deaths > 0 ? $player->deaths : 1))|noescape}%;">
+				<div class="main">
+					<div class="icon">
+						{svgIcon 'dead', '', '1rem'}
+					</div>
 					<div class="number">{$player->deathsOwn}</div>
 				</div>
 			</div>

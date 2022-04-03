@@ -46,10 +46,12 @@ class ImportService
 			$logger = new Logger(LOG_DIR.'results/', 'import');
 		} catch (DirectoryCreationException $e) {
 			self::errorHandle($e, 500);
+			return;
 		}
 
 		if (!file_exists($resultsDir) || !is_dir($resultsDir) || !is_readable($resultsDir)) {
 			self::errorHandle('Results directory does not exist.', 400);
+			return;
 		}
 
 		$resultsDir = trailingSlashIt($resultsDir);
@@ -128,9 +130,7 @@ class ImportService
 					if (!$game->save()) {
 						throw new ResultsParseException('Failed saving game into DB.');
 					}
-					if ($game->isFinished()) {
-						$finishedGames[] = $game;
-					}
+					$finishedGames[] = $game;
 					$imported++;
 				} catch (FileException|GameModeNotFoundException|ResultsParseException|ValidationException $e) {
 					$logger->error($e->getMessage());
@@ -174,9 +174,17 @@ class ImportService
 					try {
 						$finishedGame->save();
 					} catch (ValidationException $e) {
+						$logger->warning('Failed to synchronize games to public');
+						$logger->exception($e);
 					}
 				}
 			}
+			else {
+				$logger->warning('Failed to synchronize games to public');
+			}
+		}
+		else {
+			$logger->info('No games to synchronize to public');
 		}
 
 		if (self::$cliFlag) {

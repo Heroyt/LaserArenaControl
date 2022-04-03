@@ -11,6 +11,7 @@ use App\Exceptions\FileException;
 use App\Exceptions\GameModeNotFoundException;
 use App\Exceptions\ResultsParseException;
 use App\Exceptions\ValidationException;
+use App\GameModels\Factory\GameFactory;
 use App\GameModels\Game\Game;
 use App\GameModels\Game\Player;
 use App\Logging\DirectoryCreationException;
@@ -130,8 +131,7 @@ class ImportService
 					if (!$game->save()) {
 						throw new ResultsParseException('Failed saving game into DB.');
 					}
-					$game->fetch(true);
-					$finishedGames[] = $game;
+					$finishedGames[] = GameFactory::getById($game->id_game, $game::SYSTEM);
 					$imported++;
 				} catch (FileException|GameModeNotFoundException|ResultsParseException|ValidationException $e) {
 					$logger->error($e->getMessage());

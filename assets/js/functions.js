@@ -299,7 +299,7 @@ export function gameTimer() {
 	startTimer();
 
 	function startTimer() {
-		console.log('Starting timer...', endDate);
+		console.log('Starting timer...', endDate, offset);
 		timerInterval = setInterval(() => {
 			const remaining = endDate - (Date.now() / 1000) + offset;
 			if (remaining < 0) {
@@ -308,6 +308,7 @@ export function gameTimer() {
 			}
 			const minutes = Math.floor(remaining / 60).toString().padStart(2, '0');
 			const seconds = Math.floor(remaining % 60).toString().padStart(2, '0');
+			console.log(remaining, minutes, seconds);
 			time.innerHTML = `${minutes}:${seconds}`;
 		}, 50);
 	}

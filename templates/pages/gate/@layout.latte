@@ -83,6 +83,7 @@
 		const webSocketEventURI = 'ws://' + window.location.hostname + ':{\App\Services\EventService::getEventPort()}';
 		const tips = {\App\GameModels\Tip::shuffledFormatted()};
 		let reloadTimer = {ifset $reloadTimer}{$reloadTimer}{else}-1{/ifset};
+		const timerOffset = {\App\Core\Info::get('timer-offset', 0)};
 	</script>
 	{\App\Core\App::getJs()|noescape}
 

@@ -351,6 +351,9 @@ export function gameTimer() {
 			return;
 		}
 		endDate = (start + length);
+		if (timerOffset && !isNaN(timerOffset)) {
+			endDate += timerOffset;
+		}
 		console.log(start, length, endDate, offset);
 		if ((endDate - start) > 0) {
 			startTimer();

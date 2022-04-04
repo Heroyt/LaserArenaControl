@@ -66,6 +66,7 @@
 	const page = {\App\Core\App::getRequest()};
 	const prettyUrl = {\App\Core\App::isPrettyUrl()};
 	const webSocketEventURI = 'ws://' + window.location.hostname + ':{\App\Services\EventService::getEventPort()}';
+	const timerOffset = {\App\Core\Info::get('timer-offset', 0)};
 </script>
 {\App\Core\App::getJs()|noescape}
 

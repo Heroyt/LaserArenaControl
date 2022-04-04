@@ -281,7 +281,9 @@ export function gameTimer() {
 	}
 
 	let offset = 0;
-	offset = (Date.now() / 1000) - parseInt(time.dataset.serverTime);
+	const serverTime = parseInt(time.dataset.serverTime);
+	console.log(time.dataset.serverTime, serverTime);
+	offset = (Date.now() / 1000) - (isNaN(serverTime) ? 0 : serverTime);
 	let start = parseInt(time.dataset.start);
 	let length = parseInt(time.dataset.length);
 	let endDate = 0;

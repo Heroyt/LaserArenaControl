@@ -100,6 +100,7 @@ class ImportService
 						if ($game->started && isset($game->fileTime) && ($now - $game->fileTime->getTimestamp()) <= Constants::GAME_STARTED_TIME) {
 							$lastUnfinishedGame = $game;
 							$lastEvent = 'game-started';
+							$logger->debug('Game is started');
 							continue;
 						}
 						// The game is loaded
@@ -110,6 +111,7 @@ class ImportService
 							}
 							$lastUnfinishedGame = $game;
 							$lastEvent = 'game-loaded';
+							$logger->debug('Game is loaded');
 						}
 						continue;
 					}
@@ -149,6 +151,7 @@ class ImportService
 		}
 
 		if (isset($lastUnfinishedGame)) {
+			$logger->debug('Setting last unfinished game: "'.$lastUnfinishedGame::SYSTEM.'-'.$lastEvent.'" - '.$lastUnfinishedGame->fileNumber);
 			try {
 				Info::set($lastUnfinishedGame::SYSTEM.'-'.$lastEvent, $lastUnfinishedGame);
 				EventService::trigger($lastEvent);

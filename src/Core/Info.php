@@ -39,17 +39,7 @@ class Info
 	 */
 	public static function set(string $key, mixed $value) : void {
 		self::$info[$key] = $value; // Cache
-		$test = DB::select(self::TABLE, 'count(*)')->where('[key] = %s', $key)->fetchSingle();
-		if ($test > 0) {
-			DB::update(self::TABLE, [
-				'value' => serialize($value),
-			],         [
-									 '[key] = %s',
-									 $key
-								 ]);
-			return;
-		}
-		DB::insert(self::TABLE, [
+		DB::replace(self::TABLE, [
 			'key'   => $key,
 			'value' => serialize($value),
 		]);

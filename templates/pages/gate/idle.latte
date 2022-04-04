@@ -104,6 +104,7 @@
 				</tbody>
 			</table>
 		</div>
+		{dump $game}
 		<div class="timer" n:if="isset($game) && !$game->isFinished()">
 			{var int $left = ($game->timing->gameLength * 60) - (time() - $game->start->getTimestamp())}
 			<div class="time text-white {if $left < 0}d-none{/if}" data-start="{$game->start->getTimestamp()}"

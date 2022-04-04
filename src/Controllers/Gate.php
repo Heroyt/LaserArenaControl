@@ -96,7 +96,7 @@ class Gate extends Controller
 			header('X-Reload-Time: '.$this->params['reloadTimer']);
 		}
 
-		if (isset($this->game) && !$this->game->started) {
+		if (isset($this->game) && !$this->game->isStarted()) {
 			$this->getLoaded();
 			return;
 		}

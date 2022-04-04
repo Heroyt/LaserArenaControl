@@ -78,6 +78,8 @@ class Gate extends Controller
 					continue;
 				}
 				$this->params['reloadTimer'] = Constants::GAME_STARTED_TIME - ($now - $started->start->getTimestamp()) + 2;
+				$started->end = null;
+				$started->finished = false;
 				$this->game = $started;
 				continue;
 			}

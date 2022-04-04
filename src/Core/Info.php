@@ -40,8 +40,10 @@ class Info
 	public static function set(string $key, mixed $value) : void {
 		self::$info[$key] = $value; // Cache
 		DB::replace(self::TABLE, [
-			'key'   => $key,
-			'value' => serialize($value),
+			[
+				'key'   => $key,
+				'value' => serialize($value),
+			]
 		]);
 	}
 

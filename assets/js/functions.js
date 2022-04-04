@@ -281,8 +281,8 @@ export function gameTimer() {
 	}
 
 	let offset = 0;
-	const serverTime = parseInt(time.dataset.serverTime);
-	console.log(time.dataset.serverTime, serverTime);
+	const serverTime = parseInt(time.dataset.servertime);
+	console.log(time.dataset.servertime, serverTime);
 	offset = (Date.now() / 1000) - (isNaN(serverTime) ? 0 : serverTime);
 	let start = parseInt(time.dataset.start);
 	let length = parseInt(time.dataset.length);
@@ -326,7 +326,7 @@ export function gameTimer() {
 				 */
 				const data = response.data;
 				if (data.currentServerTime) {
-					time.dataset.serverTime = data.currentServerTime.toString();
+					time.dataset.servertime = data.currentServerTime.toString();
 				}
 				if (data.started && !data.finished && data.startTime) {
 					time.dataset.start = data.startTime.toString();
@@ -341,7 +341,8 @@ export function gameTimer() {
 
 	function setTimes() {
 		const parent = time.parentElement;
-		offset = (Date.now() / 1000) - parseInt(time.dataset.serverTime);
+		const serverTime = parseInt(time.dataset.servertime);
+		offset = (Date.now() / 1000) - (isNaN(serverTime) ? 0 : serverTime);
 		start = parseInt(time.dataset.start);
 		length = parseInt(time.dataset.length);
 		if (isNaN(start) || isNaN(length)) {

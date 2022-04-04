@@ -38,6 +38,7 @@ class GameHelpers extends ApiController
 					continue;
 				}
 				$started->end = null;
+				$started->finished = false;
 				$game = $started;
 				continue;
 			}

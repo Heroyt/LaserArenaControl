@@ -9,23 +9,28 @@
 		 'teams teams'
 		 'players players';
 	grid-template-columns: 1fr 1fr;
-	grid-template-rows: 28mm auto;
+	grid-template-rows: 28mm auto 1fr 10mm;
+	height: 100%;
 	justify-content: start;
 
 	&.solo {
 		grid-template-areas:
 		 'info qr'
-		 'win win'
-		 'players players'
-		 'today today'
-		 'hits bests';
+		 'players players';
+		grid-template-rows: 28mm 1fr 10mm;
 	}
 
 	&.less-players {
-		grid-template-columns: 2fr 1fr;
 		grid-template-areas:
 		 'info qr'
 		 'teams teams'
+		 'players hits';
+		grid-template-columns: 2fr 1fr;
+	}
+
+	&.solo.less-players {
+		grid-template-areas:
+		 'info qr'
 		 'players hits';
 	}
 
@@ -163,6 +168,7 @@
 		display: grid;
 		grid-area: players;
 		grid-gap: .5rem;
+		align-self: center;
 
 		.player-head {
 
@@ -243,12 +249,13 @@
 		}
 
 		.hits {
+			align-self: center;
 			display: flex;
 			flex-direction: column;
+			height: 6rem;
 			position: relative;
 			text-align: center;
 			width: 100%;
-			height: 6rem;
 
 			.kills-row, .deaths-row {
 				align-items: center;

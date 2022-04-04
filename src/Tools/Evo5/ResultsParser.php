@@ -51,6 +51,7 @@ class ResultsParser extends AbstractResultsParser
 
 		$keysVests = [];
 		$currKey = 1;
+		$now = new DateTime();
 		foreach ($titles as $key => $title) {
 			$args = $this->getArgs($argsAll[$key]);
 
@@ -81,6 +82,7 @@ class ResultsParser extends AbstractResultsParser
 					$game->playerCount = (int) $playerCount;
 					if ($dateStart !== $this::EMPTY_DATE) {
 						$game->start = DateTime::createFromFormat('YmdHis', $dateStart);
+						$game->started = $now > $game->start;
 					}
 					if ($dateEnd !== $this::EMPTY_DATE) {
 						$game->importTime = DateTime::createFromFormat('YmdHis', $dateEnd);
@@ -100,10 +102,8 @@ class ResultsParser extends AbstractResultsParser
 					}
 					$game->timing = new Timing(before: $args[0], gameLength: $args[1], after: $args[2]);
 					$dateStart = $args[3];
-					$now = new DateTime();
 					if ($dateStart !== $this::EMPTY_DATE) {
 						$game->start = DateTime::createFromFormat('YmdHis', $dateStart);
-						$game->started = $now > $game->start;
 					}
 					$dateEnd = $args[4];
 					if ($dateEnd !== $this::EMPTY_DATE) {

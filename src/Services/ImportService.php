@@ -96,6 +96,8 @@ class ImportService
 						// An old game should be ignored, the other 2 cases should be logged and an event should be sent.
 						// But only the latest game should be considered
 
+						// TODO: Detect manually stopped game and delete game-started
+
 						// The game is started
 						if ($game->started && isset($game->fileTime) && ($now - $game->fileTime->getTimestamp()) <= Constants::GAME_STARTED_TIME) {
 							$lastUnfinishedGame = $game;

@@ -294,6 +294,9 @@ export function gameTimer() {
 		}
 	}
 	endDate = (start + length);
+	if (timerOffset && !isNaN(timerOffset)) {
+		endDate += timerOffset;
+	}
 
 	// Auto-reload timer on game started
 	EventServerInstance.addEventListener('game-started', loadGameInfo);

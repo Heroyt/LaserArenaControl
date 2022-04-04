@@ -24,6 +24,10 @@ return [
 				'route' => 'settings',
 			],
 			[
+				'name'  => lang('Vests'),
+				'route' => 'settings-vests',
+			],
+			[
 				'name'  => lang('Game modes'),
 				'route' => 'settings-modes',
 			],

@@ -1,4 +1,21 @@
 {layout '../../@layout.latte'}
 
 {block content}
+	<form action="{link ['settings']}" method="post" class="text-center autosave"
+		  id="general-settings-form">
+		<div class="me-4 last-save-wrapper text-end position-fixed end-0">
+			{lang 'Last saved:'} <span class="last-save" data-target="#general-settings-form">{lang 'never'}</span>
+		</div>
+		<h2>{lang 'General settings', context: 'settings'}:</h2>
+		<div class="form-group">
+			<label for="api_key">{lang 'API klíč', context: 'settings'}:</label>
+			<input type="text" name="api_key" class="form-control" id="api_key"
+				   value="{\App\Core\Info::get('liga_api_key', '')}">
+		</div>
+		<p class="my-4">
+			<button class="btn btn-success btn-lg" type="submit" data-action="autosave" data-prevent="true">
+				{lang 'Send', context: 'actions'}
+			</button>
+		</p>
+	</form>
 {/block}

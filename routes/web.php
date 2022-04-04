@@ -21,7 +21,10 @@ Route::get('/list', [GamesList::class, 'show'])->name('games-list');
 Route::get('/list/{game}', [GamesList::class, 'game']);
 
 Route::get('/settings', [Settings::class, 'show'])->name('settings');
+Route::post('/settings', [Settings::class, 'saveGeneral']);
 Route::get('/settings/modes', [Settings::class, 'modes'])->name('settings-modes');
+Route::get('/settings/vests', [Settings::class, 'vests'])->name('settings-vests');
+Route::post('/settings/vests', [Settings::class, 'saveVests']);
 Route::get('/settings/print', [Settings::class, 'print'])->name('settings-print');
 Route::post('/settings/print', [Settings::class, 'savePrint']);
 

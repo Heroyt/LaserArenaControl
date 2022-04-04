@@ -253,13 +253,19 @@ export function initAutoSaveForm() {
 					});
 			} else if (!smallLoader) {
 				stopLoading(true, false);
+				lastSave.forEach(save => {
+					save.innerHTML = (new Date()).toLocaleTimeString();
+				});
 			}
 		};
 
 		form.addEventListener("autosave", save);
 
 		saveButtons.forEach(button => {
-			button.addEventListener("click", () => {
+			button.addEventListener("click", e => {
+				if (button.dataset.prevent) {
+					e.preventDefault();
+				}
 				save(false);
 			});
 		})

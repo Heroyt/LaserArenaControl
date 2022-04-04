@@ -872,3 +872,42 @@ msgstr ""
 msgctxt "gameModes"
 msgid "Survival"
 msgstr ""
+
+msgctxt "settings"
+msgid "API klíč"
+msgstr ""
+
+msgctxt "settings"
+msgid "General settings"
+msgstr ""
+
+msgid "Vests"
+msgstr ""
+
+msgctxt "settings"
+msgid "Vest settings"
+msgstr ""
+
+msgctxt "systems"
+msgid "evo5"
+msgstr ""
+
+msgctxt "settings.vests"
+msgid "Porucha"
+msgstr ""
+
+msgctxt "settings.vests.status"
+msgid "V pořádku"
+msgstr ""
+
+msgctxt "settings.vests.status"
+msgid "Nefunkční"
+msgstr ""
+
+msgctxt "settings.vests.status"
+msgid "Hratelná"
+msgstr ""
+
+msgctxt "errors"
+msgid "Failed to save settings."
+msgstr ""

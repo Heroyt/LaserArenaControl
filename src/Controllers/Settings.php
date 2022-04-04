@@ -7,10 +7,13 @@ use App\Core\Controller;
 use App\Core\DB;
 use App\Core\Info;
 use App\Core\Request;
+use App\Exceptions\GameModeNotFoundException;
 use App\Exceptions\ValidationException;
+use App\GameModels\Factory\GameFactory;
 use App\GameModels\Factory\GameModeFactory;
 use App\GameModels\Game\PrintStyle;
 use App\GameModels\Game\PrintTemplate;
+use App\GameModels\Vest;
 use DateTime;
 use Dibi\DriverException;
 use Dibi\Exception;
@@ -20,13 +23,78 @@ class Settings extends Controller
 
 	protected string $title = 'Settings';
 
+	/**
+	 * @return void
+	 */
 	public function show() : void {
 		$this->view('pages/settings/index');
 	}
 
+	public function vests() : void {
+		/** @var Vest[] $vests */
+		$vests = Vest::getAll();
+		$this->params['vests'] = [];
+		foreach (GameFactory::getSupportedSystems() as $system) {
+			$this->params['vests'][$system] = [];
+		}
+		foreach ($vests as $vest) {
+			$this->params['vests'][$vest->system][] = $vest;
+		}
+		$this->view('pages/settings/vests');
+	}
+
+	/**
+	 * @param Request $request
+	 *
+	 * @return void
+	 */
+	public function saveVests(Request $request) : void {
+		try {
+			foreach ($request->post['vest'] ?? [] as $id => $info) {
+				DB::update(Vest::TABLE, $info, ['%n = %i', Vest::PRIMARY_KEY, $id]);
+			}
+		} catch (Exception $e) {
+			$request->passErrors[] = lang('Failed to save settings.', context: 'errors');
+			bdump($e);
+		}
+		if ($request->isAjax()) {
+			$this->ajaxJson([
+												'success' => empty($request->passErrors),
+												'errors'  => $request->passErrors,
+											]);
+		}
+		App::redirect('settings', $request);
+	}
+
+	/**
+	 * @return void
+	 * @throws GameModeNotFoundException
+	 */
 	public function modes() : void {
 		$this->params['modes'] = GameModeFactory::getAll();
 		$this->view('pages/settings/modes');
+	}
+
+	/**
+	 * @param Request $request
+	 *
+	 * @return void
+	 */
+	public function saveGeneral(Request $request) : void {
+		try {
+			if (isset($request->post['api_key'])) {
+				Info::set('liga_api_key', $request->post['api_key']);
+			}
+		} catch (Exception $e) {
+			$request->passErrors[] = lang('Failed to save settings.', context: 'errors');
+		}
+		if ($request->isAjax()) {
+			$this->ajaxJson([
+												'success' => empty($request->passErrors),
+												'errors'  => $request->passErrors,
+											]);
+		}
+		App::redirect('settings', $request);
 	}
 
 	public function savePrint(Request $request) : void {

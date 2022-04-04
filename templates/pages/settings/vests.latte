@@ -1,0 +1,79 @@
+{layout '../../@layout.latte'}
+
+{varType App\GameModels\Vest[][] $vests}
+
+{block content}
+	<form action="{link ['settings', 'vests']}" method="post" class="text-center autosave"
+		  id="vests-settings-form">
+		<div class="me-4 last-save-wrapper text-end position-fixed end-0">
+			{lang 'Last saved:'} <span class="last-save" data-target="#vests-settings-form">{lang 'never'}</span>
+		</div>
+		<h2>{lang 'Vest settings', context: 'settings'}:</h2>
+		{if count($vests) > 1}
+			<ul class="nav nav-tabs" id="systems" role="tablist">
+				<li class="nav-item" role="presentation" n:foreach="$vests as $system => $v">
+					<button class="nav-link {if $iterator->first}active{/if}" id="system-tab-{$system}"
+							data-bs-toggle="tab"
+							data-bs-target="#vests-{$system}" type="button" role="tab" aria-controls="vests-{$system}"
+							aria-selected="true">
+						{lang $system, context: 'systems'}
+					</button>
+				</li>
+			</ul>
+			<div class="tab-content" id="systems-content">
+				<div n:foreach="$vests as $system => $systemVests"
+						class="tab-pane fade {if $iterator->first}show active{/if}" id="vests-{$system}" role="tabpanel"
+						aria-labelledby="system-tab-{$system}">
+					{include vestSettings}
+				</div>
+			</div>
+		{elseif count($vests) === 1}
+			{include vestSettings, systemVests: reset($vests)}
+		{/if}
+	</form>
+{/block}
+
+{define vestSettings}
+	{varType App\GameModels\Vest[] $systemVests}
+	<div class="vests d-flex justify-content-evenly flex-wrap align-items-center w-100">
+		<div n:foreach="$systemVests as $vest" class="vest p-4 shadow rounded m-4 text-white {switch $vest->status}
+					{case App\GameModels\Game\Enums\VestStatus::OK}bg-success
+					{case App\GameModels\Game\Enums\VestStatus::PLAYABLE}bg-warning
+					{case App\GameModels\Game\Enums\VestStatus::BROKEN}bg-danger
+		         {/switch}">
+			{svgIcon 'Vesta', '', '3rem'}
+			<input type="number" name="vest[{$vest->id}][vest_num]" class="form-control" value="{$vest->vestNum}">
+			<div>
+				<div class="btn-group my-3 shadow">
+					<input type="radio" class="btn-check" name="vest[{$vest->id}][status]"
+						   id="vest-status-{$vest->id}-ok"
+						   autocomplete="off" value="ok"
+						   {if $vest->status === App\GameModels\Game\Enums\VestStatus::OK}checked{/if}>
+					<label class="btn btn-outline-success"
+						   for="vest-status-{$vest->id}-ok">{lang 'V pořádku', context: 'settings.vests.status'}</label>
+					<input type="radio" class="btn-check" name="vest[{$vest->id}][status]"
+						   id="vest-status-{$vest->id}-playable"
+						   autocomplete="off" value="playable"
+						   {if $vest->status === App\GameModels\Game\Enums\VestStatus::PLAYABLE}checked{/if}>
+					<label class="btn btn-outline-warning"
+						   for="vest-status-{$vest->id}-playable">{lang 'Hratelná', context: 'settings.vests.status'}</label>
+					<input type="radio" class="btn-check" name="vest[{$vest->id}][status]"
+						   id="vest-status-{$vest->id}-broken"
+						   autocomplete="off" value="broken"
+						   {if $vest->status === App\GameModels\Game\Enums\VestStatus::BROKEN}checked{/if}>
+					<label class="btn btn-outline-danger"
+						   for="vest-status-{$vest->id}-broken">{lang 'Nefunkční', context: 'settings.vests.status'}</label>
+				</div>
+			</div>
+			<label for="vest-{$vest->id}-info">{lang 'Porucha', context: 'settings.vests'}:</label>
+			<textarea class="form-control" name="vest[{$vest->id}][info]" id="vest-{$vest->id}-info" cols="20"
+					  rows="4">{$vest->info}</textarea>
+		</div>
+	</div>
+
+	<p class="my-4">
+		<button class="btn btn-success btn-lg" type="submit" data-action="autosave" data-prevent="true">
+			{lang 'Send', context: 'actions'}
+		</button>
+	</p>
+{/define}

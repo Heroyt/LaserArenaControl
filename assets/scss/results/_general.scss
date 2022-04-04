@@ -1,9 +1,9 @@
 @page {
-	margin: 0;
+	margin: 5mm;
 }
 
 .container-print-wrapper {
-	aspect-ratio: 1.41;
+	aspect-ratio: (297 / 210);
 	background-position: center;
 	background-repeat: no-repeat;
 	background-size: contain;
@@ -14,6 +14,7 @@
 
 	.bg-img {
 		display: none;
+		height: 100%;
 		left: 0;
 		position: absolute;
 		top: 0;

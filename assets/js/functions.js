@@ -319,15 +319,18 @@ export function gameTimer() {
 		axios.get('/api/game/loaded')
 			.then(response => {
 				/**
-				 * @type {{started:bool,currentServerTime:number,startTime:number|null,gameLength:number,loadTime:number,playerCount:number,teamCount:number,mode:object}}
+				 * @type {{started:boolean,finished:boolean,currentServerTime:number,startTime:number|null,gameLength:number,loadTime:number,playerCount:number,teamCount:number,mode:object}}
 				 */
 				const data = response.data;
 				if (data.currentServerTime) {
 					time.dataset.serverTime = data.currentServerTime.toString();
 				}
-				if (data.started && data.startTime) {
+				if (data.started && !data.finished && data.startTime) {
 					time.dataset.start = data.startTime.toString();
 					time.dataset.length = data.gameLength.toString();
+				} else {
+					time.dataset.start = '0';
+					time.dataset.length = '0';
 				}
 				setTimes();
 			});

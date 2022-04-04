@@ -37,6 +37,7 @@ class GameHelpers extends ApiController
 				if (isset($this->game) && $this->game->fileTime > $started->fileTime) {
 					continue;
 				}
+				$started->end = null;
 				$game = $started;
 				continue;
 			}

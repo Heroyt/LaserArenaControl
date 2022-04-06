@@ -9,7 +9,7 @@
 		 'teams teams'
 		 'players players';
 	grid-template-columns: 1fr 1fr;
-	grid-template-rows: 28mm auto 1fr 10mm;
+	grid-template-rows: 40mm auto 1fr 10mm;
 	height: 100%;
 	justify-content: start;
 
@@ -159,9 +159,13 @@
 			display: flex;
 			flex-direction: column;
 			justify-content: center;
-			min-width: 3rem;
-			padding: .3rem 1rem;
+			min-width: 4rem;
+			padding: .1rem 1rem;
 		}
+	}
+
+	path {
+		fill: currentColor;
 	}
 
 	.results-players {
@@ -270,7 +274,7 @@
 			}
 
 			.kills-own {
-				background-color: #49cc5b;
+				background-color: #50b35d;
 			}
 
 			.deaths {
@@ -278,7 +282,8 @@
 			}
 
 			.deaths-own {
-				background-color: #cc4949;
+				background-color: #b35050;
+				color: #fff;
 			}
 
 			.kills,

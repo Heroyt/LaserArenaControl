@@ -42,7 +42,7 @@
 				</tbody>
 				<tbody>
 			</table>
-			<table class="table">
+			<table class="table mb-0">
 				<tbody>
 				<tr class="text-center">
 					<th class="print-dark">
@@ -55,47 +55,47 @@
 			</table>
 		</div>
 		<div class="best">
-			<table class="table">
+			<table class="table mb-0">
 				<tbody>
 				<tr class="text-center">
-					<th class="print-dark">
+					<th class="print-dark py-4">
 						{svgIcon 'target', '', '2.5rem'}
 						{lang 'Sniper', context: 'results'}
 					</th>
-					<td class="col-6 bg-white">
+					<td class="col-6 bg-white py-4">
 						{ifset $topAccuracy}
 							{$topAccuracy->name} ({$topAccuracy->accuracy}%)
 						{/ifset}
 					</td>
 				</tr>
 				<tr class="text-center">
-					<th class="print-dark">
+					<th class="print-dark py-4">
 						{svgIcon 'bullets', '', '2.5rem'}
 						{lang 'Mega střelec', context: 'results'}
 					</th>
-					<td class="col-6 bg-white">
+					<td class="col-6 bg-white py-4">
 						{ifset $topShots}
 							{$topShots->name} ({sprintf(lang('%d shot', '%d shots', $topShots->shots, 'results'), $topShots->shots)})
 						{/ifset}
 					</td>
 				</tr>
 				<tr class="text-center">
-					<th class="print-dark">
+					<th class="print-dark py-4">
 						{svgIcon 'predator', '', '2.5rem'}
 						{lang 'Predátor', context: 'results'}
 					</th>
-					<td class="col-6 bg-white">
+					<td class="col-6 bg-white py-4">
 						{ifset $topHits}
 							{$topHits->name} ({sprintf(lang('%d hit', '%d hits', $topHits->hits, 'results'), $topHits->hits)})
 						{/ifset}
 					</td>
 				</tr>
 				<tr class="text-center">
-					<th class="print-dark">
+					<th class="print-dark py-4">
 						{svgIcon 'skull', '', '2.5rem'}
 						{lang 'Cíl', context: 'results'}
 					</th>
-					<td class="col-6 bg-white">
+					<td class="col-6 bg-white py-4">
 						{ifset $topDeaths}
 							{$topDeaths->name} ({sprintf(lang('%d death', '%d deaths', $topDeaths->deaths, 'results'), $topDeaths->deaths)})
 						{/ifset}

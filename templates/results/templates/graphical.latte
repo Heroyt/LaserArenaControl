@@ -291,7 +291,7 @@
 				class="player-hits w-100 bg-white rounded px-1 py-2 d-flex mt-1 align-items-center">
 			<div class="player pe-1 border-end" style="width: 17.5%;">
 				<div class="text-uppercase fw-bold text-team-{$player->getTeamColor()}"
-					 {if strlen($player->name) > 10}style="--font-size: 6pt;"{/if}>
+					 {if strlen($player->name) > 10}style="--font-size: 5pt;"{/if}>
 					{$player->name}
 				</div>
 				<div class="fs-sm">
@@ -301,7 +301,7 @@
 			<div n:foreach="$game->getPlayersSorted()->getAll() as $player2" style="width: {$width|noescape}%;"
 																			 class="text-center px-1 {if $player->id === $player2->id}text-muted{elseif $player->getFavouriteTarget()?->id === $player2->id}fw-bold text-print-primary{/if}">
 				<div class="text-uppercase fw-bold {if $player->id !== $player2->id}text-team-{$player2->getTeamColor()}{/if}"
-					 {if strlen($player2->name) > 10}style="--font-size: 6pt;"{/if}>
+					 {if strlen($player2->name) > 10}style="--font-size: 5pt;"{/if}>
 					{$player2->name}
 				</div>
 				<div class="">

@@ -64,6 +64,7 @@
 		</div>
 	</div>
 	<div class="results-qr text-end">
+		{*{lang 'Podrobnější výsledky zde', context: 'results.info'}:*}
 		<a href="{$publicUrl}" class="d-block mb-2">{$publicUrl}</a>
 		{$qr|noescape}
 	</div>
@@ -136,7 +137,7 @@
 				</g>
 			</g>
 		</svg>
-		<div class="number">{svgIcon 'bullets', '', '1em'} {$player->shots|number:0,',','&nbsp;'|noescape}</div>
+		<div class="number">{lang 'Výstřely', context: 'results.player'}: {svgIcon 'bullets', '', '1em'} {$player->shots|number:0,',','&nbsp;'|noescape}</div>
 	</div>
 {/define}
 

@@ -4,38 +4,28 @@
 	align-items: center;
 	display: grid;
 	grid-gap: .5rem;
-	grid-template-areas:
-		 'info qr'
-		 'teams teams'
-		 'players players';
+	grid-template-areas: 'info qr' 'teams teams' 'players players';
 	grid-template-columns: 1fr 1fr;
-	grid-template-rows: 40mm auto 1fr 10mm;
+	grid-template-rows: 32mm auto 1fr 10mm;
 	height: 100%;
 	justify-content: start;
 
 	&.solo {
-		grid-template-areas:
-		 'info qr'
-		 'players players';
-		grid-template-rows: 28mm 1fr 10mm;
+		grid-template-areas: 'info qr' 'players players';
+		grid-template-rows: 33mm 1fr 10mm;
+
+		&.less-players {
+			grid-template-areas: 'info qr' 'players hits';
+		}
 	}
 
 	&.less-players {
-		grid-template-areas:
-		 'info qr'
-		 'teams teams'
-		 'players hits';
+		grid-template-areas: 'info qr' 'teams teams' 'players hits';
 		grid-template-columns: 2fr 1fr;
 	}
 
-	&.solo.less-players {
-		grid-template-areas:
-		 'info qr'
-		 'players hits';
-	}
-
 	.fs-sm {
-		font-size: calc(var(--font-size) * 0.8);
+		font-size: calc(var(--font-size) * .8);
 	}
 
 	> * {
@@ -57,6 +47,7 @@
 
 	.results-qr {
 		align-items: flex-end;
+		color: var(--white);
 		display: flex;
 		flex-direction: column;
 		grid-area: qr;
@@ -65,7 +56,7 @@
 		width: 100%;
 
 		svg {
-			--size: 2cm;
+			--size: 18mm;
 			height: var(--size);
 			right: 0;
 			top: 0;
@@ -159,7 +150,8 @@
 			display: flex;
 			flex-direction: column;
 			justify-content: center;
-			min-width: 4rem;
+			line-height: 1.1;
+			min-width: 6rem;
 			padding: .1rem 1rem;
 		}
 	}
@@ -184,7 +176,7 @@
 
 			.player-rank {
 				height: 1rem;
-				line-height: 1.2;
+				line-height: 1.1;
 				text-align: center;
 
 				.rank-name {
@@ -345,7 +337,8 @@
 			--color: rgb(72, 196, 255);
 			display: block;
 			margin: 0 auto;
-			max-width: 2.5rem;
+			max-width: 3rem;
+			width: 100%;
 			position: relative;
 
 			* {
@@ -375,7 +368,7 @@
 			}
 
 			svg {
-				max-height: 25pt;
+				max-height: 8mm;
 				width: 100%;
 
 				.empty path {
@@ -383,6 +376,14 @@
 					stroke: #000;
 					stroke-width: 2px;
 				}
+			}
+		}
+
+		.player-favourites {
+			line-height: 1.1;
+
+			strong {
+				line-height: 1.5;
 			}
 		}
 	}

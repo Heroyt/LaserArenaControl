@@ -85,7 +85,7 @@
 		.team {
 			flex-direction: column;
 			justify-content: center;
-			max-width: 14rem;
+			max-width: 13rem;
 			min-height: 6rem;
 
 			.name {
@@ -117,8 +117,12 @@
 
 			> .position {
 				font-size: 1.7rem;
-				max-width: 6%;
+				max-width: 5rem;
 				text-align: center;
+			}
+
+			> .trophies {
+				font-size: 1.4rem;
 			}
 
 			> .score {

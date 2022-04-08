@@ -27,7 +27,11 @@
 			</div>
 			<div class="rank">
 				{svgIcon $rank['icon'], '', 15}
-			{$rank['name']}
+				{$rank['name']}
+				{var $count = count($player->getAllBestAt()) - 1}
+				{if $count > 0}
+					+&nbsp;{$count}&nbsp;<i class="fa-solid fa-award"></i>
+				{/if}
 			</div>
 		</div>
 		<div class="score text-end {switch $iterator->counter}

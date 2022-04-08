@@ -399,6 +399,9 @@
 	.results-hits {
 		grid-area: hits;
 
+		.player-hit-name {
+			word-break: break-word;
+		}
 	}
 
 }

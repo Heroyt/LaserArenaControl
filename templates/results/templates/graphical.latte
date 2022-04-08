@@ -7,6 +7,19 @@
 {varType string $publicUrl}
 {default bool $colorless = false}
 
+{var array $fontSize = [
+10 => 6,
+11 => 5,
+12 => 4,
+]}
+{var array $fontSizeHits = [
+8 => 6,
+9 => 6,
+10 => 5,
+11 => 4,
+12 => 4,
+]}
+
 {define teamColor}
 	{default int $teamColor = 0}
 	<span class="team-color bg-team-{$teamColor}"></span>
@@ -82,7 +95,9 @@
 				<div class="player-head">
 					{var array $rank = $player->getBestAt()}
 					{svgIcon $rank['icon'], '', 15}
-					<div class="player-name text-center text-team-{$player->getTeamColor()}">
+					{var int $len = strlen($player->name)}
+					<div class="player-name text-center text-team-{$player->getTeamColor()}"
+						 {ifset $fontSize[$len]}style="--font-size: {$fontSize[$len]}pt;"{/ifset}>
 						{$player->name}
 					</div>
 					<div class="player-rank">
@@ -287,21 +302,22 @@
 			{svgIcon 'kill', '', '1rem'}
 			{lang 'Zásahy hráčů', context: 'results.hits'}
 		</h4>
-		<div n:foreach="$game->getPlayersSorted() as $player"
+		<div n:foreach="$game->getPlayersSorted() as $player" {var int $len = strlen($player->name)}
 				class="player-hits w-100 bg-white rounded px-1 py-2 d-flex mt-1 align-items-center">
 			<div class="player pe-1 border-end" style="width: 17.5%;">
 				<div class="text-uppercase fw-bold text-team-{$player->getTeamColor()}"
-					 {if strlen($player->name) > 10}style="--font-size: 5pt;"{/if}>
+					 {ifset $fontSizeHits[$len]}style="--font-size: {$fontSizeHits[$len]}pt;"{/ifset}>
 					{$player->name}
 				</div>
 				<div class="fs-sm">
 					{lang 'Zasáhl si hráče', context: 'results.hits'}:
 				</div>
 			</div>
-			<div n:foreach="$game->getPlayersSorted()->getAll() as $player2" style="width: {$width|noescape}%;"
-																			 class="text-center px-1 {if $player->id === $player2->id}text-muted{elseif $player->getFavouriteTarget()?->id === $player2->id}fw-bold text-print-primary{/if}">
-				<div class="text-uppercase fw-bold {if $player->id !== $player2->id}text-team-{$player2->getTeamColor()}{/if}"
-					 {if strlen($player2->name) > 10}style="--font-size: 5pt;"{/if}>
+			<div n:foreach="$game->getPlayersSorted()->getAll() as $player2"
+					style="width: {$width|noescape}%;" {var int $len2 = strlen($player2->name)}
+					class="text-center px-1 {if $player->id === $player2->id}text-muted{elseif $player->getFavouriteTarget()?->id === $player2->id}fw-bold text-print-primary{/if}">
+				<div class="player-hit-name text-uppercase fw-bold {if $player->id !== $player2->id}text-team-{$player2->getTeamColor()}{/if}"
+					 {ifset $fontSizeHits[$len2]}style="--font-size: {$fontSizeHits[$len2]}pt;"{/ifset}>
 					{$player2->name}
 				</div>
 				<div class="">

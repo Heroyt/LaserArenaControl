@@ -890,3 +890,19 @@ msgstr ""
 msgctxt "errors"
 msgid "Failed to save settings."
 msgstr ""
+
+msgctxt "gameModes"
+msgid "T.M.A - solo"
+msgstr ""
+
+msgctxt "results.info"
+msgid "Podrobnější výsledky zde"
+msgstr ""
+
+msgctxt "results.bests"
+msgid "Férový hráč"
+msgstr ""
+
+msgctxt "results.bests"
+msgid "Terč"
+msgstr ""

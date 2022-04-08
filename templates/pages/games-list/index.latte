@@ -45,6 +45,11 @@
 			</td>
 			<td class="text-end">
 				<div class="btn-group">
+					<a href="{trailingSlashIt(\App\Core\Info::get('liga_api_url')) . 'g/' . $game->code}"
+					   target="_blank"
+					   class="btn btn-primary" data-toggle="tooltip" title="{lang 'Výsledky on-line'}">
+						<i class="fa-solid fa-cloud"></i>
+					</a>
 					<button class="btn btn-danger" data-toggle="gate" title="{lang 'Zobrazit na Gate'}"
 							data-id="{$game->id}" data-system="{$game::SYSTEM}">
 						<i class="fas fa-bullseye"></i>

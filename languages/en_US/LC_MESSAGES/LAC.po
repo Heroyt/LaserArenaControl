@@ -1017,3 +1017,6 @@ msgstr ""
 msgctxt "results.bests.description"
 msgid "Průměrný hráč. Bohužel na tebe nesedí žádná z trofejí."
 msgstr ""
+
+msgid "Výsledky on-line"
+msgstr ""

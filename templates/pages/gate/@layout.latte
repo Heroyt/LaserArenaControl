@@ -16,7 +16,7 @@
 {if \App\Core\App::getRequest()->isAjax()}
 	{include content}
 	{if \App\Core\Info::get('gate_force_reload', false)}
-		{do \App\Core\Info::set('gate_force_realod', false)}
+		{do \App\Core\Info::set('gate_force_reload', false)}
 		<script>
 			window.location.reload();
 		</script>
@@ -82,7 +82,7 @@
 	</div>
 	{include loader}
 	{if \App\Core\Info::get('gate_force_reload', false)}
-		{do \App\Core\Info::set('gate_force_realod', false)}
+		{do \App\Core\Info::set('gate_force_reload', false)}
 		<script>
 			window.location.reload();
 		</script>

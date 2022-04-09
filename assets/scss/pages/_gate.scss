@@ -42,9 +42,26 @@
 
 	.results {
 		@extend %gate-wrapper;
-		grid-template-areas: '. players' 'teams players';
-		grid-template-columns: 27rem 1fr;
+		grid-template-areas: '. players teams' 'info players teams';
+		grid-template-columns: 27rem 1fr 13rem;
 		grid-template-rows: 9rem 1fr;
+
+		&.no-teams {
+			grid-template-areas: '. players players' 'info players players';
+		}
+
+		.info {
+			align-items: center;
+			color: var(--white);
+			display: flex;
+			flex-direction: column;
+			grid-area: info;
+			justify-content: center;
+
+			svg {
+				border-radius: 1rem;
+			}
+		}
 
 		.win {
 			align-self: end;

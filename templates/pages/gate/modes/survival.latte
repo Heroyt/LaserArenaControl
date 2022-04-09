@@ -3,16 +3,26 @@
 {varType App\GameModels\Game\Game $game}
 {varType App\GameModels\Game\PrintStyle $style}
 {varType App\GameModels\Game\Today $today}
+{varType string $qr}
 
 {define content}
-	<div class="results">
+	{var bool $includeTeams = $game->mode->isTeam() && $game->mode->settings->partTeams}
+	<div class="results {if !$includeTeams}no-teams{/if}">
+		<section class="info">
+			{include partInfo}
+		</section>
 		<section class="players">
 			{include partPlayers}
 		</section>
-		<section class="teams" n:if="$game->mode->isTeam() && $game->mode->settings->partTeams">
+		<section class="teams" n:if="$includeTeams">
 			{include partTeams}
 		</section>
 	</div>
+{/define}
+
+{define partInfo}
+	{$qr|noescape}
+	<h3>{lang 'On-line detailní výsledky', context: 'results'}</h3>
 {/define}
 
 {define partPlayers}

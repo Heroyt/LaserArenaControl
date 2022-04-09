@@ -19,6 +19,10 @@ use App\Services\EventService;
 use App\Tools\Strings;
 use DateTime;
 use Dibi\Exception;
+use Endroid\QrCode\Builder\Builder;
+use Endroid\QrCode\Encoding\Encoding;
+use Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelLow;
+use Endroid\QrCode\Writer\SvgWriter;
 
 /**
  * Gate is a page that displays actual results and information preferably on other visible display.
@@ -117,6 +121,7 @@ class Gate extends Controller
 	 */
 	private function getResults() : void {
 		$this->params['game'] = $this->game;
+		$this->params['qr'] = $this->getQR($this->game);
 		$namespace = '\\App\\GameModels\\Game\\'.Strings::toPascalCase($this->game::SYSTEM).'\\';
 		$teamClass = $namespace.'Team';
 		$playerClass = $namespace.'Player';
@@ -235,6 +240,27 @@ class Gate extends Controller
 			$this->ajaxJson(['error' => 'Failed to save the game info', 'exception' => $e->getMessage()]);
 		}
 		$this->ajaxJson(['success' => true]);
+	}
+
+	private function getPublicUrl(Game $game) : string {
+		return trailingSlashIt(Info::get('liga_api_url')).'g/'.$game->code;
+	}
+
+	/**
+	 * Get SVG QR code for game
+	 *
+	 * @param Game $game
+	 *
+	 * @return string
+	 */
+	private function getQR(Game $game) : string {
+		$result = Builder::create()
+										 ->data($this->getPublicUrl($game))
+										 ->writer(new SvgWriter())
+										 ->encoding(new Encoding('UTF-8'))
+										 ->errorCorrectionLevel(new ErrorCorrectionLevelLow())
+										 ->build();
+		return $result->getString();
 	}
 
 }

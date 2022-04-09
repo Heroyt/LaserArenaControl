@@ -15,6 +15,12 @@
 
 {if \App\Core\App::getRequest()->isAjax()}
 	{include content}
+	{if \App\Core\Info::get('gate_force_reload', false)}
+		{do \App\Core\Info::set('gate_force_realod', false)}
+		<script>
+			window.location.reload();
+		</script>
+	{/if}
 {else}
 	<!DOCTYPE html>
 	<html lang="cs">

@@ -269,6 +269,7 @@
 		--cols: 4;
 		font-size: 1.55rem;
 		grid-template-areas: '. title title .' 'score score best best' 'score score best best' 'timer timer timer timer';
+		grid-template-rows: 19% 1fr 1fr 20%;
 		padding: 0 10rem;
 
 		.table {

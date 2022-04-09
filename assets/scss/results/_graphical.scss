@@ -4,23 +4,23 @@
 	align-items: center;
 	display: grid;
 	grid-gap: .5rem;
-	grid-template-areas: 'info qr' 'teams teams' 'players players';
+	grid-template-areas: 'info qr' 'teams teams' 'players players' 'legend legend';
 	grid-template-columns: 1fr 1fr;
-	grid-template-rows: 32mm auto 1fr 10mm;
+	grid-template-rows: 29mm auto 1fr 5mm 10mm;
 	height: 100%;
 	justify-content: start;
 
 	&.solo {
-		grid-template-areas: 'info qr' 'players players';
-		grid-template-rows: 33mm 1fr 10mm;
+		grid-template-areas: 'info qr' 'players players' 'legend legend';
+		grid-template-rows: 29mm 1fr 5mm 10mm;
 
 		&.less-players {
-			grid-template-areas: 'info qr' 'players hits';
+			grid-template-areas: 'info qr' 'players hits' 'legend legend';
 		}
 	}
 
 	&.less-players {
-		grid-template-areas: 'info qr' 'teams teams' 'players hits';
+		grid-template-areas: 'info qr' 'teams teams' 'players hits' 'legend legend';
 		grid-template-columns: 2fr 1fr;
 	}
 
@@ -61,6 +61,17 @@
 			right: 0;
 			top: 0;
 			width: var(--size);
+		}
+	}
+
+	.results-legend {
+		align-items: center;
+		display: flex;
+		grid-area: legend;
+		justify-content: center;
+
+		.legend {
+			margin: .5rem 1rem;
 		}
 	}
 

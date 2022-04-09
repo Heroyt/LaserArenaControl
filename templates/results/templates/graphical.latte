@@ -40,6 +40,40 @@
 	{if $game->mode->settings->partHits && count($game->getPlayers()) < 7}
 		{include resultsHits}
 	{/if}
+	<div class="results-legend">
+		<div class="legend">
+			{svgIcon 'star', '', '1em'} - {lang 'Skóre', context: 'results'}
+		</div>
+		<div class="legend">
+			{svgIcon 'bullets', '', '1em'} - {lang 'Výstřely', context: 'results'}
+		</div>
+		<div class="legend">
+			{svgIcon 'kill', '', '1em'} - {lang 'Zásahy', context: 'results'}
+		</div>
+		<div class="legend">
+			{svgIcon 'skull', '', '1em'} - {lang 'Smrti', context: 'results'}
+		</div>
+		<div class="legend">
+			{svgIcon 'dead', '', '1em'} - {lang 'Zásahy/Smrti od spoluhráčů', context: 'results'}
+		</div>
+		{if method_exists($game, 'isMinesOn') && $game->isMinesOn() && $game->mode->settings->playerMines}
+			<div class="legend">
+				{svgIcon 'base_2', '', '1em'} - {lang 'Bonusy', context: 'results'}
+			</div>
+			<div class="legend">
+				{svgIcon 'agent', '', '1em'} - {lang 'Agent', context: 'results.bonus'}
+			</div>
+			<div class="legend">
+				{svgIcon 'invisibility', '', '1em'} - {lang 'Neviditelnost', context: 'results.bonus'}
+			</div>
+			<div class="legend">
+				{svgIcon 'machine_gun', '', '1em'} - {lang 'Samopal', context: 'results.bonus'}
+			</div>
+			<div class="legend">
+				{svgIcon 'shield', '', '1em'} - {lang 'Štít', context: 'results.bonus'}
+			</div>
+		{/if}
+	</div>
 {/define}
 
 {define resultsWin}
@@ -123,7 +157,7 @@
 		{svgIcon 'base_2', '2rem'}
 		<div class="bonus">
 			<div n:foreach="$player->bonus->getArray() as $name => $value" class="{$name}">
-				{svgIcon $name}
+				{svgIcon $name, '', '0.8rem'}
 				{$value}
 			</div>
 		</div>

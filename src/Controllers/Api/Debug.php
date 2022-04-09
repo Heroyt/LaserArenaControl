@@ -46,6 +46,14 @@ class Debug extends ApiController
 		$this->respond(['success' => true, 'output' => $out]);
 	}
 
+	public function glob(Request $request) : void {
+		$param = urldecode($request->get['param'] ?? '');
+		if (empty($param)) {
+			$this->respond(['error' => 'Missing required argument "param".'], 400);
+		}
+		$this->respond(['success' => true, 'output' => glob($param)]);
+	}
+
 	public function whoami(Request $request) : void {
 		try {
 			$logger = new Logger(LOG_DIR.'api/', 'mount');

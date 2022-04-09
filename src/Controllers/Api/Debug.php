@@ -3,6 +3,7 @@
 namespace App\Controllers\Api;
 
 use App\Core\ApiController;
+use App\Core\App;
 use App\Core\Request;
 use App\Logging\DirectoryCreationException;
 use App\Logging\Logger;
@@ -13,6 +14,15 @@ class Debug extends ApiController
 	public function disable() : void {
 		$contents = file_get_contents(PRIVATE_DIR.'config.ini');
 		if (file_put_contents(PRIVATE_DIR.'config.ini', str_replace('DEBUG = true', 'DEBUG = false', $contents)) === false) {
+			$this->respond(['error' => 'Cannot write to config file.'], 500);
+		}
+		$this->respond(['success' => true]);
+	}
+
+	public function incrementCache() : void {
+		$version = App::getCacheVersion();
+		$contents = file_get_contents(PRIVATE_DIR.'config.ini');
+		if (file_put_contents(PRIVATE_DIR.'config.ini', str_replace('CACHE_VERSION = '.$version, 'CACHE_VERSION = '.($version + 1), $contents)) === false) {
 			$this->respond(['error' => 'Cannot write to config file.'], 500);
 		}
 		$this->respond(['success' => true]);

@@ -29,6 +29,7 @@ Route::get('/api/debug/pwd', [Debug::class, 'pwd']);
 Route::get('/api/debug/whoami', [Debug::class, 'whoami']);
 Route::post('/api/debug/enable', [Debug::class, 'enable']);
 Route::post('/api/debug/disable', [Debug::class, 'disable']);
+Route::update('/api/debug/incrementCache', [Debug::class, 'incrementCache']);
 Route::get('/api/debug/glob', [Debug::class, 'glob']);
 
 Route::get('/api/game/loaded', [GameHelpers::class, 'getLoadedGameInfo']);

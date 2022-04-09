@@ -75,6 +75,12 @@
 		<span class="content">{sprintf(lang('Tip #%d', context: 'tips'), $tip?->id)}: {lang $tip?->text, context: 'tips'}</span>
 	</div>
 	{include loader}
+	{if \App\Core\Info::get('gate_force_reload', false)}
+		{do \App\Core\Info::set('gate_force_realod', false)}
+		<script>
+			window.location.reload();
+		</script>
+	{/if}
 
 	<div class="toast-container position-absolute bottom-0 end-0 p-3" id="toasts"></div>
 	<script>
@@ -87,7 +93,9 @@
 	</script>
 	{\App\Core\App::getJs()|noescape}
 
+
 	<script src="{getUrl}node_modules/flatpickr/dist/l10n/{\App\Core\App::getShortLanguageCode()}.js"></script>
+
 
 	<script>
 		flatpickr.localize(flatpickr.l10ns.{\App\Core\App::getShortLanguageCode()|noescape});

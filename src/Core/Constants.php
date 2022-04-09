@@ -324,5 +324,5 @@ class Constants
 	/** @var int Time, when a game should be considered "new" when the results are loaded */
 	public const GAME_RESULTS_TIME = 120; // 2 minutes
 	/** @var int How long should a set game be displayed on gate */
-	public const TMP_GAME_RESULTS_TIME = 60; // 1 minute
+	public const TMP_GAME_RESULTS_TIME = 120; // 2 minutes
 }

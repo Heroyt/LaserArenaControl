@@ -178,32 +178,44 @@ class ResultsParser extends AbstractResultsParser
 				// - 5 unknown arguments
 				case 'ENVIRONMENT':
 					// VIPSTYLE contains special mode settings
-					// - 7 unknown arguments
+					// - ON / OFF
+					// - Lives
+					// - Ammo
+					// - 3 unknown arguments (bazooka, eliminates the whole team, allow one trigger shooting?)
+					// - Points for hitting a VIP
 				case 'VIPSTYLE':
 					// VAMPIRESTYLE contains special mode settings
-					// - 6 unknown arguments
+					// - ON / OFF
+					// - 5 unknown arguments (Lives, hits to infect, vampire team..?)
 				case 'VAMPIRESTYLE':
 					// SWITCHSTYLE contains special mode settings
-					// - 2 unknown arguments
+					// - ON / OFF
+					// - Number of hits before switch
 				case 'SWITCHSTYLE':
 					// ASSISTEDSTYLE contains special mode settings
-					// - 8 unknown arguments
+					// - ON / OFF
+					// - 7 unknown arguments (respawn, allow one trigger shooting, ignore hits by teammates, machine gun,..)
 				case 'ASSISTEDSTYLE':
 					// HITSTREAKSTYLE contains special mode settings
-					// - 3 unknown arguments
+					// - ON / OFF
+					// - 2 unknown arguments (number of hits, allowed bonuses)
 				case 'HITSTREAKSTYLE':
 					// SHOWDOWNSTYLE contains special mode settings
-					// - 5 unknown arguments
+					// - ON / OFF
+					// - 4 unknown arguments (time before game, bazooka,...)
 				case 'SHOWDOWNSTYLE':
 					// ACTIVITYSTYLE contains special mode settings
-					// - 3 unknown arguments
+					// - ON / OFF
+					// - 2 unknown arguments
 				case 'ACTIVITYSTYLE':
 					// TERMINATESTYLE contains special mode settings
-					// - 1 unknown argument
+					// - ON / OFF
 				case 'TERMINATESTYLE':
 					// MINESTYLE contains pods settings
 					// - Pod number
-					// - 3 unknown arguments
+					// - 1 unknown argument
+					// - Settings ID
+					// - Team number (6 = all)
 					// - Pod name
 				case 'MINESTYLE':
 					// GROUP contains additional game notes

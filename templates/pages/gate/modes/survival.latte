@@ -1,4 +1,4 @@
-{layout '@layout.latte'}
+{layout '../@layout.latte'}
 
 {varType App\GameModels\Game\Game $game}
 {varType App\GameModels\Game\PrintStyle $style}
@@ -18,7 +18,9 @@
 {define partPlayers}
 	{var int $playerCount = count($game->getPlayers())}
 	<div class="player" n:foreach="$game->getPlayersSorted() as $player"
-		 style="--multiplier: {((-0.05 * ($playerCount - 11)) + 1)|noescape};">
+			{var int $lives = $player->getRemainingLives()}
+			{var int $ammoRest = $player->ammoRest ?? 1}
+		 style="--multiplier: {((-0.05 * ($playerCount - 11)) + 1)|noescape}; {if $lives <= 0 || $ammoRest <= 0}background-color: rgba(255, 200, 200, 0.9);{/if}">
 		{var array $rank = $player->getBestAt()}
 		<div class="position">
 			{$iterator->counter}.
@@ -35,6 +37,18 @@
 					+&nbsp;{$count}&nbsp;<i class="fa-solid fa-trophy"></i>
 				{/if}
 			</div>
+		</div>
+		<div class="lives text-end" n:if="method_exists($player,'getRemainingLives')">
+			{$lives}
+			{if $lives > 0}
+				<i class="fas fa-heart"></i>
+			{else}
+				<i class="fa-solid fa-heart-crack"></i>
+			{/if}
+		</div>
+		<div class="ammo text-end" n:if="property_exists($player,'ammoRest')">
+			{$ammoRest}
+			{svgIcon $ammoRest > 0 ? 'bullet' : 'bullets', '', '1em'}
 		</div>
 		<div class="score text-end {switch $iterator->counter}
 			{case 1} text-gold

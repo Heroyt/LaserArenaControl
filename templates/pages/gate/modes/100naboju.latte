@@ -1,4 +1,4 @@
-{layout '@layout.latte'}
+{layout '../@layout.latte'}
 
 {varType App\GameModels\Game\Game $game}
 {varType App\GameModels\Game\PrintStyle $style}
@@ -35,6 +35,40 @@
 					+&nbsp;{$count}&nbsp;<i class="fa-solid fa-trophy"></i>
 				{/if}
 			</div>
+		</div>
+		<div class="accuracy">
+			<svg viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg"
+				 class="accuracy" xml:space="preserve"
+				 style="--color:var(--team-evo5-{$player->getTeamColor()});fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+					{var int $circleRadius = 98}
+				<circle class="fill-circle" r="{$circleRadius}" cx="250" cy="250" fill="transparent" stroke="tomato"
+						stroke-width="{2*$circleRadius}"
+						stroke-dasharray="{round($player->accuracy * pi() * 2 * $circleRadius / 100, 4)} {round(pi() * 2 * $circleRadius,4)}"/>
+				<text x="250px" y="282px" font-weight="bold">
+					<tspan text-anchor="middle">{$player->accuracy}%</tspan>
+				</text>
+				<g class="sight">
+					<g transform="matrix(1,0,0,1,-55,-4)">
+						<path d="M305,56C414.279,56 503,144.721 503,254C503,363.279 414.279,452 305,452C195.721,452 107,363.279 107,254C107,144.721 195.721,56 305,56ZM305,65.98C408.771,65.98 493.02,150.229 493.02,254C493.02,357.771 408.771,442.02 305,442.02C201.229,442.02 116.98,357.771 116.98,254C116.98,150.229 201.229,65.98 305,65.98Z"/>
+					</g>
+					<g transform="matrix(1,0,0,1,-0.5,4.5)">
+						<rect x="24" y="241" width="67" height="9"/>
+					</g>
+					<g transform="matrix(6.12323e-17,-1,1,6.12323e-17,4.5,500.5)">
+						<rect x="24" y="241" width="67" height="9"/>
+					</g>
+					<g transform="matrix(1,0,0,1,385.5,4.5)">
+						<rect x="24" y="241" width="67" height="9"/>
+					</g>
+					<g transform="matrix(6.12323e-17,-1,1,6.12323e-17,4.5,114.5)">
+						<rect x="24" y="241" width="67" height="9"/>
+					</g>
+				</g>
+				</svg>
+		</div>
+		<div class="ammo text-end" n:if="property_exists($player,'ammoRest')">
+			{$player->ammoRest}
+			{svgIcon 'bullet', '', '1em'}
 		</div>
 		<div class="score text-end {switch $iterator->counter}
 			{case 1} text-gold

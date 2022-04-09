@@ -16,12 +16,13 @@
 }
 
 #gate {
+	--multiplier: 1;
 	background-image: url('/assets/images/gate/bg.jpg');
 	background-position: center;
 	background-repeat: no-repeat;
 	background-size: cover;
 	display: grid;
-	font-size: 1.3em;
+	font-size: calc(1.3em * var(--multiplier));
 	grid-gap: 1rem;
 	grid-template-columns: 1fr;
 	grid-template-rows: 1fr 3rem;
@@ -76,6 +77,7 @@
 
 		.player {
 			background-color: rgba(255, 255, 255, .9);
+			flex: 1;
 
 			> div {
 				flex: 1;
@@ -98,7 +100,7 @@
 			align-items: center;
 			border-radius: 10px;
 			display: flex;
-			margin: .1rem 0;
+			margin: calc(.2rem * var(--multiplier)) 0;
 			width: 100%;
 
 			> .name,
@@ -116,18 +118,44 @@
 			}
 
 			> .position {
-				font-size: 1.7rem;
+				font-size: calc(1.7rem * var(--multiplier));
 				max-width: 5rem;
 				text-align: center;
 			}
 
 			> .trophies {
-				font-size: 1.4rem;
+				font-size: calc(1.4rem * var(--multiplier));
 			}
 
-			> .score {
-				font-size: 1.7rem;
+			> .score, > .ammo, > .lives {
+				font-size: calc(1.7rem * var(--multiplier));
 				font-weight: bold;
+			}
+
+			svg.accuracy {
+				--color: rgb(72, 196, 255);
+				display: block;
+				margin: 0 auto;
+				max-width: calc(5rem * var(--multiplier));
+				width: 100%;
+				position: relative;
+
+				* {
+					font-size: 64pt;
+				}
+
+				path,
+				rect,
+				text {
+					fill: var(--color);
+				}
+
+				.fill-circle {
+					opacity: .4;
+					stroke: var(--color);
+					transform: rotate(-90deg);
+					transform-origin: center;
+				}
 			}
 		}
 
@@ -136,7 +164,7 @@
 			flex-direction: column;
 
 			.name {
-				font-size: 1.4rem;
+				font-size: calc(1.4rem * var(--multiplier));
 				font-weight: bold;
 				text-shadow: 0 0 5px var(--white);
 				text-transform: uppercase;

@@ -87,9 +87,11 @@
 			</div>
 		</div>
 	</div>
-	<iframe id="print-iframe"
-			src="{ifset $selected}{link ['results', $selected->code, 'print', $selectedLang, 1, $selectedStyle, $selectedTemplate, 'view' => 1]}{/ifset}"
-			class="w-100 min-vh-60 mt-4"></iframe>
+	<div class="card bg-very-light shadow mt-4 p-4">
+		<iframe id="print-iframe"
+				src="{ifset $selected}{link ['results', $selected->code, 'print', $selectedLang, 1, $selectedStyle, $selectedTemplate, 'view' => 1]}{/ifset}"
+				class="w-100 min-vh-60"></iframe>
+	</div>
 	<script n:syntax="double">
 		const selectGame = document.getElementById("selectGame");
 		const selectStyle = document.getElementById("selectStyle");

@@ -6,13 +6,13 @@
 	grid-gap: .5rem;
 	grid-template-areas: 'info qr' 'teams teams' 'players players' 'legend legend';
 	grid-template-columns: 1fr 1fr;
-	grid-template-rows: 29mm auto 1fr 5mm 10mm;
+	grid-template-rows: minmax(25mm, 33mm) auto 1fr 5mm 10mm;
 	height: 100%;
 	justify-content: start;
 
 	&.solo {
 		grid-template-areas: 'info qr' 'players players' 'legend legend';
-		grid-template-rows: 29mm 1fr 5mm 10mm;
+		grid-template-rows: minmax(25mm, 33mm) 1fr 5mm 10mm;
 
 		&.less-players {
 			grid-template-areas: 'info qr' 'players hits' 'legend legend';
@@ -172,10 +172,10 @@
 	}
 
 	.results-players {
+		align-self: center;
 		display: grid;
 		grid-area: players;
-		grid-gap: .5rem;
-		align-self: center;
+		grid-gap: .3rem;
 
 		.player-head {
 
@@ -189,10 +189,10 @@
 				height: 1rem;
 				line-height: 1.1;
 				text-align: center;
+			}
 
-				.rank-name {
-					font-size: calc(var(--font-size) * .9);
-				}
+			.rank-name {
+				font-size: calc(var(--font-size) * .9);
 			}
 
 			.player-name {
@@ -214,13 +214,13 @@
 
 			svg {
 				display: block;
-				position: relative;
 				margin: 0 auto;
+				position: relative;
 			}
 
 			.bonus {
-				width: 100%;
 				display: flex;
+				width: 100%;
 
 				div {
 					flex: 1;
@@ -231,9 +231,9 @@
 		}
 
 		.score {
-			top: 1.5em;
 			height: calc(100% - 1.5em);
 			position: relative;
+			top: 1.5em;
 			width: 100%;
 
 			.score-number {
@@ -326,11 +326,11 @@
 
 					.own,
 					.other {
-						padding: 0 .2rem;
 						align-items: center;
 						display: flex;
 						justify-content: center;
 						min-height: 1.5em;
+						padding: 0 .2rem;
 					}
 				}
 
@@ -349,8 +349,8 @@
 			display: block;
 			margin: 0 auto;
 			max-width: 3rem;
-			width: 100%;
 			position: relative;
+			width: 100%;
 
 			* {
 				font-size: 64pt;

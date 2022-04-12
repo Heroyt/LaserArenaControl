@@ -17,6 +17,7 @@ const ROOT = __DIR__.'/';
 const INDEX = true;
 
 if (PHP_SAPI === 'cli') {
+	pcntl_async_signals(true);
 	$_ = $_SERVER['_'];
 }
 

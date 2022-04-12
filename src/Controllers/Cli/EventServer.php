@@ -19,17 +19,6 @@ class EventServer extends CliController
 	 * @return void
 	 */
 	public function start() : void {
-		// Try to register self auto-restart on error or kill.
-		// The only way to stop the process should be SIGINT interrupt (CTRL+C) and system shutdown.
-		// Stolen from: https://stackoverflow.com/a/11463187
-		$restartMyself = static function() {
-			global $_, $argv;
-			pcntl_exec($_, $argv);
-		};
-		register_shutdown_function($restartMyself);
-		pcntl_signal(SIGTERM, $restartMyself); // kill
-		pcntl_signal(SIGHUP, $restartMyself);  // kill -s HUP or kill -1
-
 		$this->echo('Starting server', 'info');
 		$null = null;
 		// Create the master (=server) socket
@@ -42,6 +31,36 @@ class EventServer extends CliController
 		// Set blocking for socket_select() function to detect new connections
 		socket_set_block($sock);
 
+		// Try to register self auto-restart on error or kill.
+		// The only way to stop the process should be SIGINT interrupt (CTRL+C) and system shutdown.
+		// This function also handles gracefully closing opened sockets.
+		// Stolen from: https://stackoverflow.com/a/11463187
+		$handleInterrupt = function(?int $sig = null) use ($sock) {
+			global $_, $argv;
+			if ($sig !== null) {
+				$this->errorPrint('Received signal '.$sig);
+			}
+			// Close sockets
+			$this->errorPrint('Closing sockets');
+			socket_shutdown($sock);
+			socket_close($sock);
+			foreach ($this->clients as $s) {
+				if ($s === $sock) {
+					continue;
+				}
+				socket_close($s);
+			}
+			if ($sig !== SIGINT) {
+				// Restart
+				pcntl_exec($_, $argv);
+			}
+			exit;
+		};
+		register_shutdown_function($handleInterrupt);
+		pcntl_signal(SIGTERM, $handleInterrupt); // kill
+		pcntl_signal(SIGHUP, $handleInterrupt);  // kill -s HUP or kill -1
+		pcntl_signal(SIGINT, $handleInterrupt);  // CTRL + C
+
 		do {
 			// The $newSockets list will be filtered by the socket_select() to only contain those sockets which have some data to read
 			$newSockets = $this->clients;
@@ -49,7 +68,7 @@ class EventServer extends CliController
 
 			// The socket select function will check for incoming messages and connections
 			// It will also serve as an interval timer for DB polling
-			socket_select($newSockets, $null, $null, 1);
+			@socket_select($newSockets, $null, $null, 1);
 
 			// If the main socket received a new connect message -> open a new client socket
 			if (in_array($sock, $newSockets, true)) {
@@ -136,7 +155,7 @@ class EventServer extends CliController
 		$test = [$client];
 		$null = null;
 		// Test the socket to prevent socket_read() from blocking the process
-		socket_select($test, $null, $null, 0, 10);
+		@socket_select($test, $null, $null, 0, 10);
 		if (count($test) > 0) {
 			$socketData = @socket_read($client, 1024, PHP_NORMAL_READ);
 			// Error means the client is disconnected

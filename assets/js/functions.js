@@ -305,7 +305,7 @@ export function gameTimer() {
 	}
 
 	// Auto-reload timer on game started
-	EventServerInstance.addEventListener('game-started', loadGameInfo);
+	EventServerInstance.addEventListener(['game-started', 'game-imported', 'game-loaded'], loadGameInfo);
 
 	startTimer();
 

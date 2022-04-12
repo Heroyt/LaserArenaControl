@@ -135,6 +135,17 @@ class ImportService
 					if (!$game->save()) {
 						throw new ResultsParseException('Failed saving game into DB.');
 					}
+
+					// Refresh the started-game info to stop the game timer
+					/** @var Game $startedGame */
+					$startedGame = Info::get($game::SYSTEM.'-game-started');
+					if (isset($startedGame) && $game->fileNumber === $startedGame->fileNumber) {
+						try {
+							Info::set($game::SYSTEM.'-game-started', null);
+						} catch (Exception $e) {
+						}
+					}
+
 					$finishedGames[] = GameFactory::getById($game->id, $game::SYSTEM);
 					$imported++;
 				} catch (FileException|GameModeNotFoundException|ResultsParseException|ValidationException $e) {

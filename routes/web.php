@@ -9,7 +9,7 @@ use App\Core\Routing\Route;
 
 Route::get('/', [Dashboard::class, 'show'])->name('dashboard');
 Route::get('/results', [Results::class, 'show'])->name('results');
-Route::get('/results/{code}', [Results::class, 'show']);
+Route::get('/results/{code}', [Results::class, 'show'])->name('results-game');
 Route::get('/results/{code}/print', [Results::class, 'printGame'])->name('print');
 Route::get('/results/{code}/print/{lang}', [Results::class, 'printGame']);
 Route::get('/results/{code}/print/{lang}/{copies}', [Results::class, 'printGame']);

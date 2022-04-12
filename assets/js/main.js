@@ -1,4 +1,4 @@
-import {formatPhoneNumber, gameTimer, initAutoSaveForm, initTooltips} from './functions.js';
+import {formatPhoneNumber, gameTimer, getLink, initAutoSaveForm, initTooltips} from './functions.js';
 import axios from 'axios';
 import flatpickr from "flatpickr";
 import initPrintSettings from "./pages/settings/print";
@@ -124,8 +124,10 @@ window.addEventListener("load", () => {
 		initPrintSettings();
 	} else if (page.routeName && page.routeName === 'settings-vests') {
 		initVestsSettings();
-	} else if (page.routeName && (page.routeName === 'results' || page.routeName === 'games-list')) {
+	} else if (page.routeName && page.routeName === 'games-list') {
 		initResultsReload();
+	} else if (page.routeName && (page.routeName === 'results' || page.routeName === 'results-game')) {
+		initResultsReload(getLink(['results']));
 	} else if (page.routeName && page.routeName === 'gate') {
 		initGate();
 	} else if (page.routeName && page.routeName === 'dashboard') {

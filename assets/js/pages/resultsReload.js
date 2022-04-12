@@ -4,8 +4,17 @@ import EventServerInstance from "../EventServer";
 let activityTimer;
 let isActive = true;
 let newGame = false;
+let reloadUrl = window.location.href;
 
-export default function initResultsReload() {
+/**
+ *
+ * @param {String|null} url
+ */
+export default function initResultsReload(url = null) {
+
+	if (url) {
+		reloadUrl = url;
+	}
 
 	// Activity timer detects any user activity to prevent site-reload when not wanted
 	document.addEventListener("mousemove", resetActivityTimer, false);
@@ -26,7 +35,7 @@ function triggerNewGame() {
 	toast.role = 'alert';
 	toast.ariaLive = "assertive";
 	toast.ariaAtomic = "true";
-	toast.innerHTML = `<div class="toast-header"><strong class="me-auto">Upozornění</strong></div><div class="toast-body text-start"><p>Byla detekována nová hra</p><p><a href="${window.location.href}" class="btn btn-primary">Načíst</a></p></div>`;
+	toast.innerHTML = `<div class="toast-header"><strong class="me-auto">Upozornění</strong></div><div class="toast-body text-start"><p>Byla detekována nová hra</p><p><a href="${reloadUrl}" class="btn btn-primary">Načíst</a></p></div>`;
 	toasts.appendChild(toast);
 	const toastObj = new Toast(toast, {
 		autohide: false
@@ -34,7 +43,11 @@ function triggerNewGame() {
 	toastObj.show();
 	if (!isActive) {
 		setTimeout(() => {
-			window.location.reload();
+			if (reloadUrl === window.location.href) {
+				window.location.reload();
+			} else {
+				window.location = reloadUrl;
+			}
 		}, 10000);
 	}
 }
@@ -43,7 +56,11 @@ function startActivityTimer() {
 	activityTimer = window.setTimeout(() => {
 		isActive = false;
 		if (newGame) {
-			window.location.reload();
+			if (reloadUrl === window.location.href) {
+				window.location.reload();
+			} else {
+				window.location = reloadUrl;
+			}
 		}
 	}, 30000);
 }

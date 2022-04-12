@@ -27,7 +27,8 @@
 		"php": "^8.1",
 		"psr/log": "^1.1",
 		"tracy/tracy": "^2.8",
-		"endroid/qr-code": "^4.4"
+		"endroid/qr-code": "^4.4",
+		"ext-pcntl": "*"
 	},
 	"require-dev": {
 		"roave/security-advisories": "dev-latest",

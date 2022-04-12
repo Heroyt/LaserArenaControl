@@ -16,6 +16,10 @@ const ROOT = __DIR__.'/';
 /** Visiting site normally */
 const INDEX = true;
 
+if (PHP_SAPI === 'cli') {
+	$_ = $_SERVER['_'];
+}
+
 require_once ROOT."include/load.php";
 
 App::run();

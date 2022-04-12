@@ -19,6 +19,17 @@ class EventServer extends CliController
 	 * @return void
 	 */
 	public function start() : void {
+		// Try to register self auto-restart on error or kill.
+		// The only way to stop the process should be SIGINT interrupt (CTRL+C) and system shutdown.
+		// Stolen from: https://stackoverflow.com/a/11463187
+		$restartMyself = static function() {
+			global $_, $argv;
+			pcntl_exec($_, $argv);
+		};
+		register_shutdown_function($restartMyself);
+		pcntl_signal(SIGTERM, $restartMyself); // kill
+		pcntl_signal(SIGHUP, $restartMyself);  // kill -s HUP or kill -1
+
 		$this->echo('Starting server', 'info');
 		$null = null;
 		// Create the master (=server) socket

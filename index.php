@@ -16,8 +16,11 @@ const ROOT = __DIR__.'/';
 /** Visiting site normally */
 const INDEX = true;
 
+// For CLI use - init some important functions
 if (PHP_SAPI === 'cli') {
+	// Async signals is necessary for interrupt handling
 	pcntl_async_signals(true);
+	/** @var string $_ command used to run the script */
 	$_ = $_SERVER['_'];
 }
 

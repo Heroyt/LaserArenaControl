@@ -74,7 +74,7 @@
 			<td>{$game->getTeamsSorted()|length}</td>
 		</tr>
 	</table>
-	<table class="results-scoring table colorless print-dark">
+	<table class="results-scoring mb-0 table colorless print-dark">
 		<tr>
 			<td>{lang 'Zásah protihráče', context: 'results.scoring'}: {$game->scoring->hitOther}</td>
 			<td>{lang 'Zasažen protihráčem', context: 'results.scoring'}: {$game->scoring->deathOther}</td>
@@ -97,7 +97,7 @@
 {/define}
 
 {define resultsPlayers}
-	<table class="results-players table">
+	<table class="results-players table mb-0">
 		<thead>
 		<tr>
 			<th colspan="3" class="text-start">{lang 'Jméno', context: 'results.player'}</th>
@@ -218,7 +218,7 @@
 {/define}
 
 {define resultsHits}
-	<table class="table results-hits">
+	<table class="table results-hits mb-0">
 		<caption>{lang 'Zásahy hráčů', context: 'results.hits'}</caption>
 		<thead>
 		<tr>
@@ -240,7 +240,7 @@
 {/define}
 
 {define resultsTeams}
-	<table class="table results-teams">
+	<table class="table results-teams mb-0">
 		<caption>{lang 'Výsledky týmů', context: 'results.team'}</caption>
 		<thead>
 		<tr>
@@ -283,7 +283,7 @@
 
 {define resultsBestDay}
 	<div class="results-today">
-		<table class="table">
+		<table class="table mb-2">
 			<caption>{lang 'Umístění dne', context: 'results.today'}:</caption>
 			<thead>
 			<tr>
@@ -311,7 +311,7 @@
 			</tr>
 			</tbody>
 		</table>
-		<table class="table">
+		<table class="table mb-0">
 			<tbody>
 			<tr>
 				<th colspan="3">{lang 'Dnes odehráno', context: 'results.today'}:</th>

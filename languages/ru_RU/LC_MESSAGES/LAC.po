@@ -1016,3 +1016,71 @@ msgstr ""
 
 msgid "Výsledky on-line"
 msgstr ""
+
+msgctxt "gameModes"
+msgid "100 nábojů"
+msgstr ""
+
+msgctxt "results"
+msgid "On-line detailní výsledky"
+msgstr ""
+
+msgctxt "results"
+msgid "Skóre"
+msgstr ""
+
+msgctxt "results"
+msgid "Výstřely"
+msgstr ""
+
+msgctxt "results"
+msgid "Zásahy"
+msgstr ""
+
+msgctxt "results"
+msgid "Smrti"
+msgstr ""
+
+msgctxt "results"
+msgid "Zásahy/Smrti od spoluhráčů"
+msgstr ""
+
+msgctxt "results"
+msgid "Bonusy"
+msgstr ""
+
+msgctxt "results.bonus"
+msgid "Agent"
+msgstr ""
+
+msgctxt "results.bonus"
+msgid "Neviditelnost"
+msgstr ""
+
+msgctxt "results.bonus"
+msgid "Samopal"
+msgstr ""
+
+msgctxt "results.bonus"
+msgid "Štít"
+msgstr ""
+
+msgctxt "results.bests.description"
+msgid "Staň se hráčem s největším skóre."
+msgstr ""
+
+msgctxt "results.bests.description"
+msgid "Staň se hráčem s největším počtem zásahů."
+msgstr ""
+
+msgctxt "results.bests.description"
+msgid "Staň se hráčem s největším počtem smrtí."
+msgstr ""
+
+msgctxt "results.bests.description"
+msgid "Staň se nejpřesnějším hráčem."
+msgstr ""
+
+msgctxt "results"
+msgid "Zásahy od/do spoluhráčů"
+msgstr ""

@@ -847,7 +847,7 @@ msgstr "Argumenty"
 
 msgctxt "cli.help.arguments"
 msgid "A command to get information about."
-msgstr ""
+msgstr "A command to get information about."
 
 msgctxt "cli.messages"
 msgid "Examples"
@@ -855,7 +855,7 @@ msgstr "Příklady"
 
 msgctxt "cli.help.arguments"
 msgid "A valid results directory"
-msgstr ""
+msgstr "A valid results directory"
 
 msgctxt "cli.messages"
 msgid "Information"
@@ -863,11 +863,11 @@ msgstr "Informace"
 
 msgctxt "cli.help.arguments"
 msgid "Optional filter for command groups."
-msgstr ""
+msgstr "Optional filter for command groups."
 
 msgctxt "cli.help.arguments"
 msgid "Optional filter for command groups"
-msgstr ""
+msgstr "Optional filter for command groups"
 
 msgctxt "gameModes"
 msgid "Survival"
@@ -1030,3 +1030,71 @@ msgstr "Průměrný hráč. Bohužel na tebe nesedí žádná z trofejí."
 
 msgid "Výsledky on-line"
 msgstr "Výsledky on-line"
+
+msgctxt "gameModes"
+msgid "100 nábojů"
+msgstr "100 nábojů"
+
+msgctxt "results"
+msgid "On-line detailní výsledky"
+msgstr "On-line detailní výsledky"
+
+msgctxt "results"
+msgid "Skóre"
+msgstr "Skóre"
+
+msgctxt "results"
+msgid "Výstřely"
+msgstr "Výstřely"
+
+msgctxt "results"
+msgid "Zásahy"
+msgstr "Zásahy"
+
+msgctxt "results"
+msgid "Smrti"
+msgstr "Smrti"
+
+msgctxt "results"
+msgid "Zásahy/Smrti od spoluhráčů"
+msgstr "Zásahy/Smrti od spoluhráčů"
+
+msgctxt "results"
+msgid "Bonusy"
+msgstr "Bonusy"
+
+msgctxt "results.bonus"
+msgid "Agent"
+msgstr "Agent"
+
+msgctxt "results.bonus"
+msgid "Neviditelnost"
+msgstr "Neviditelnost"
+
+msgctxt "results.bonus"
+msgid "Samopal"
+msgstr "Samopal"
+
+msgctxt "results.bonus"
+msgid "Štít"
+msgstr "Štít"
+
+msgctxt "results.bests.description"
+msgid "Staň se hráčem s největším skóre."
+msgstr "Staň se hráčem s největším skóre."
+
+msgctxt "results.bests.description"
+msgid "Staň se hráčem s největším počtem zásahů."
+msgstr "Staň se hráčem s největším počtem zásahů."
+
+msgctxt "results.bests.description"
+msgid "Staň se hráčem s největším počtem smrtí."
+msgstr "Staň se hráčem s největším počtem smrtí."
+
+msgctxt "results.bests.description"
+msgid "Staň se nejpřesnějším hráčem."
+msgstr "Staň se nejpřesnějším hráčem."
+
+msgctxt "results"
+msgid "Zásahy od/do spoluhráčů"
+msgstr "Zásahy od/do spoluhráčů"

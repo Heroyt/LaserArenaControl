@@ -449,7 +449,7 @@ msgstr "Lives left"
 
 msgctxt "tips"
 msgid "Jak se v aréně střílí, tak se v aréně umírá..."
-msgstr ""
+msgstr "A game a day keeps the improvements coming your way…"
 
 msgctxt "tips"
 msgid "Trénink se vyplácí!"
@@ -485,7 +485,7 @@ msgstr "Melee hits do not add any score."
 
 msgctxt "tips"
 msgid "Zabiják vlastního týmu, či největší vlasťnák... To je oč tu běží!"
-msgstr ""
+msgstr "Hit or be hit, there is no other way!"
 
 msgctxt "tips"
 msgid "Vestu si oblečte vždy zbraní dobředu."
@@ -1020,3 +1020,71 @@ msgstr "Average player. Unfortunately, no trophy is suited for you."
 
 msgid "Výsledky on-line"
 msgstr "Online results"
+
+msgctxt "gameModes"
+msgid "100 nábojů"
+msgstr "100 ammo"
+
+msgctxt "results"
+msgid "On-line detailní výsledky"
+msgstr "Detailed online results"
+
+msgctxt "results"
+msgid "Skóre"
+msgstr "Score"
+
+msgctxt "results"
+msgid "Výstřely"
+msgstr "Shots"
+
+msgctxt "results"
+msgid "Zásahy"
+msgstr "Hits"
+
+msgctxt "results"
+msgid "Smrti"
+msgstr "Deaths"
+
+msgctxt "results"
+msgid "Zásahy/Smrti od spoluhráčů"
+msgstr "Hits from/to teammates"
+
+msgctxt "results"
+msgid "Bonusy"
+msgstr "Powers"
+
+msgctxt "results.bonus"
+msgid "Agent"
+msgstr "Spy"
+
+msgctxt "results.bonus"
+msgid "Neviditelnost"
+msgstr "Invisibility"
+
+msgctxt "results.bonus"
+msgid "Samopal"
+msgstr "Machine gun"
+
+msgctxt "results.bonus"
+msgid "Štít"
+msgstr "Shield"
+
+msgctxt "results.bests.description"
+msgid "Staň se hráčem s největším skóre."
+msgstr "Become a player with the most score."
+
+msgctxt "results.bests.description"
+msgid "Staň se hráčem s největším počtem zásahů."
+msgstr "Become a player with the most hits."
+
+msgctxt "results.bests.description"
+msgid "Staň se hráčem s největším počtem smrtí."
+msgstr "Become a player with the most deaths."
+
+msgctxt "results.bests.description"
+msgid "Staň se nejpřesnějším hráčem."
+msgstr "Become the most accurate player."
+
+msgctxt "results"
+msgid "Zásahy od/do spoluhráčů"
+msgstr "Hits from/to teammates"

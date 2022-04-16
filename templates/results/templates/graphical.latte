@@ -111,8 +111,10 @@
 		</div>
 	</div>
 	<div class="results-qr text-end">
-		{*{lang 'Podrobnější výsledky zde', context: 'results.info'}:*}
-		<a href="{$publicUrl}" class="d-block mb-2">{$publicUrl}</a>
+		<div class="me-2">
+			<div class="fw-bold">{lang 'On-line detailní výsledky', context: 'results'}:</div>
+			<a href="{$publicUrl}" class="d-block mb-2">{$publicUrl}</a>
+		</div>
 		{$qr|noescape}
 	</div>
 {/define}

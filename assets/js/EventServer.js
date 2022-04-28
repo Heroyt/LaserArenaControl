@@ -6,12 +6,37 @@ export default EventServerInstance;
  */
 class EventServer {
 	constructor() {
-		this.ws = new WebSocket(webSocketEventURI);
+		this.ws = null;
+		this.connect();
 		this.listeners = {};
+	}
+
+	/**
+	 * Connect websocket to server
+	 *
+	 * @post Connection to websocket server is established
+	 */
+	connect() {
+		try {
+			this.ws = new WebSocket(webSocketEventURI);
+		} catch (e) {
+			console.error(e.message);
+			setTimeout(this.connect, 1000); // Retry in one second
+		}
 		this.ws.onmessage = e => {
 			const message = e.data.trim();
 			this.triggerEvent(message, e);
 		};
+		this.ws.onclose = e => {
+			console.log('Socket is closed. Reconnect will be attempted in 1 second.', e.reason);
+			setTimeout(() => {
+				this.connect(); // Automatically reconnect on close
+			}, 500);
+		}
+		this.ws.onerror = err => {
+			console.error('Socket encountered error: ', err.message, 'Closing socket');
+			this.ws.close();
+		}
 	}
 
 	/**

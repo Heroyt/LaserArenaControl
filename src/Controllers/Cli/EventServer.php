@@ -8,6 +8,9 @@ use App\Services\EventService;
 class EventServer extends CliController
 {
 
+	//public const RESTART_TIME = 3600*10;
+	public const RESTART_TIME = 20;
+
 	/** @var resource[] */
 	private array $clients = [];
 
@@ -19,6 +22,7 @@ class EventServer extends CliController
 	 * @return void
 	 */
 	public function start() : void {
+		$start = microtime(true);
 		$this->echo('Starting server', 'info');
 		$null = null;
 		// Create the master (=server) socket
@@ -62,6 +66,12 @@ class EventServer extends CliController
 		pcntl_signal(SIGINT, $handleInterrupt);  // CTRL + C
 
 		do {
+			// Check time to auto-restart after 10 hours
+			if (microtime(true) - $start > $this::RESTART_TIME) {
+				$this->echo('Restarting...');
+				exit();
+			}
+
 			// The $newSockets list will be filtered by the socket_select() to only contain those sockets which have some data to read
 			$newSockets = $this->clients;
 			$newSockets[] = $sock;
@@ -215,6 +225,12 @@ class EventServer extends CliController
 		}
 	}
 
+	/**
+	 * @param        $client
+	 * @param string $message
+	 *
+	 * @return bool
+	 */
 	public function sendTo($client, string $message) : bool {
 		return socket_write($client, chr(129).chr(strlen($message)).$message) > 0;
 	}

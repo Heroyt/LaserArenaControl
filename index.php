@@ -22,6 +22,9 @@ if (PHP_SAPI === 'cli') {
 	pcntl_async_signals(true);
 	/** @var string $_ command used to run the script */
 	$_ = $_SERVER['_'];
+	if ($_ === '/bin/sh') {
+		$_ = 'php';
+	}
 }
 
 require_once ROOT."include/load.php";

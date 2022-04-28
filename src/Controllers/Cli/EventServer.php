@@ -8,8 +8,7 @@ use App\Services\EventService;
 class EventServer extends CliController
 {
 
-	//public const RESTART_TIME = 3600*10;
-	public const RESTART_TIME = 20;
+	public const RESTART_TIME = 3600 * 10;
 
 	/** @var resource[] */
 	private array $clients = [];
@@ -56,7 +55,6 @@ class EventServer extends CliController
 			}
 			if ($sig !== SIGINT) {
 				// Restart
-				$this->echo($_.' '.implode(' ', $argv));
 				if (pcntl_exec($_, $argv) === false) {
 					$this->errorPrint('Failed to restart process');
 				}

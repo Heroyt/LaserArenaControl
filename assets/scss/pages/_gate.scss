@@ -1,6 +1,7 @@
 %players-teams {
 	display: flex;
 	flex-direction: column;
+	padding-bottom: 2.5rem;
 }
 
 %gate-wrapper {
@@ -8,7 +9,7 @@
 	--rows: 4;
 
 	display: grid;
-	grid-gap: 3rem;
+	grid-gap: 1.5rem;
 	grid-template-columns: repeat(var(--cols), 1fr);
 	grid-template-rows: repeat(var(--rows), 1fr);
 	height: 100%;
@@ -17,37 +18,61 @@
 
 #gate {
 	--multiplier: 1;
-	background-image: url('/assets/images/gate/bg.jpg');
+	background-image: url('/assets/images/gate/bg.png');
 	background-position: center;
 	background-repeat: no-repeat;
 	background-size: cover;
-	display: grid;
 	font-size: calc(1.3em * var(--multiplier));
-	grid-gap: 1rem;
-	grid-template-columns: 1fr;
-	grid-template-rows: 1fr 3rem;
 	min-height: 1081px;
 	min-width: 1920px;
 	overflow: hidden;
-	padding: 2em 0;
+	padding: 2rem;
 
 	.tip {
+		bottom: 1rem;
 		font-size: 1.5rem;
+		left: 0;
 		padding: .75rem 0;
+		position: fixed;
+		width: 100%;
 	}
 
 	main {
-		padding: 2em 3em 0;
+		display: grid;
+		grid-gap: 3rem;
+		grid-template-areas: 'logo logo . . . . . . . .'
+			                   '. . . . . . . . . .'
+			                   '. . . . . . . . . .'
+			                   '. . . . . . . . . .';
+		grid-template-columns: repeat(10, 1fr);
+		grid-template-rows: repeat(4, 1fr);
+		height: calc(100vh - 4rem);
+		justify-content: center;
+		justify-items: center;
+		padding: 0;
+		width: calc(100vw - 4rem);
+	}
+
+	#arena-logo {
+		align-self: end;
+		grid-area: logo;
 	}
 
 	.results {
-		@extend %gate-wrapper;
-		grid-template-areas: '. players teams' 'info players teams';
-		grid-template-columns: 27rem 1fr 13rem;
-		grid-template-rows: 9rem 1fr;
+		grid-column-gap: 1.5rem;
+		grid-template-areas: 'logo logo players players players players players players players teams'
+			                   'info info players players players players players players players teams'
+			                   'info info players players players players players players players teams'
+			                   'info info players players players players players players players teams';
+		//grid-template-areas: '. players teams' 'info players teams';
+		//grid-template-columns: 27rem 1fr 13rem;
+		//grid-template-rows: 9rem 1fr;
 
 		&.no-teams {
-			grid-template-areas: '. players players' 'info players players';
+			grid-template-areas: 'logo logo players players players players players players players players'
+			                     'info info players players players players players players players players'
+			                     'info info players players players players players players players players'
+  			                   'info info players players players players players players players players';
 		}
 
 		.info {
@@ -57,6 +82,7 @@
 			flex-direction: column;
 			grid-area: info;
 			justify-content: center;
+			text-align: center;
 
 			svg {
 				border-radius: 1rem;
@@ -79,6 +105,7 @@
 			@extend %players-teams;
 			grid-area: players;
 			justify-content: flex-end;
+			width: 100%;
 		}
 
 		.teams {
@@ -90,6 +117,7 @@
 			grid-area: teams;
 			height: 100%;
 			justify-content: space-between;
+			text-align: center;
 		}
 
 		.player {
@@ -105,7 +133,7 @@
 			flex-direction: column;
 			justify-content: center;
 			max-width: 13rem;
-			min-height: 6rem;
+			min-height: 8rem;
 
 			.name {
 				font-size: 1.7rem;
@@ -206,10 +234,10 @@
 	}
 
 	.results-csgo, .results-zakladny {
-		@extend %gate-wrapper;
-		grid-template-areas: '. .' 'teams teams';
-		grid-template-columns: 27rem 1fr;
-		grid-template-rows: 9rem 1fr;
+		grid-template-areas: 'logo logo . . . . . . . .'
+		                     'teams teams teams teams teams teams teams teams teams teams'
+			                   'teams teams teams teams teams teams teams teams teams teams'
+  			                 'teams teams teams teams teams teams teams teams teams teams';
 
 		.teams {
 			align-items: flex-start;
@@ -282,12 +310,11 @@
 	}
 
 	.today {
-		@extend %gate-wrapper;
-		--cols: 4;
 		font-size: 1.55rem;
-		grid-template-areas: '. title title .' 'score score best best' 'score score best best' 'timer timer timer timer';
-		grid-template-rows: 19% 1fr 1fr 20%;
-		padding: 0 10rem;
+		grid-template-areas: 'logo logo . . title title . . . .'
+			                   '. score score score score best best best best .'
+			                   '. score score score score best best best best .'
+			                   '. . . . timer timer . . . .';
 
 		.table {
 			border-color: var(--print-dark);
@@ -308,10 +335,16 @@
 			flex-direction: column;
 			grid-area: score;
 			justify-content: space-between;
+			justify-self: stretch;
 		}
 
 		.best {
 			grid-area: best;
+			justify-self: stretch;
+		}
+
+		.bbd {
+			border-bottom: 2px solid var(--print-dark);
 		}
 
 		.timer {
@@ -337,31 +370,46 @@
 	}
 
 	.vests {
-		@extend %gate-wrapper;
-		grid-gap: 1rem;
-		padding-left: 23rem;
+		grid-template-areas: 'logo logo vest vest vest vest vest vest vest .'
+			                   '. . vest vest vest vest vest vest vest .'
+			                   '. . vest vest vest vest vest vest vest .'
+			                   '. . vest vest vest vest vest vest vest .';
+
+
+		.vest-grid {
+			@extend %gate-wrapper;
+			grid-area: vest;
+			height: calc(100vh - 4rem);
+		}
 
 		.vest {
-			align-self: start;
-			color: var(--white);
+			align-self: stretch;
+			display: flex;
+			flex-direction: column;
 			font-weight: bold;
-			justify-self: center;
+			justify-self: stretch;
 			position: relative;
 			text-align: center;
-			text-shadow: 0 0 5px rgba(0, 0, 0, .8);
 			text-transform: uppercase;
 
 			.number {
 				font-size: 2rem;
 				position: absolute;
-				top: 2.5rem;
+				top: 30%;
 				width: 100%;
 			}
 
 			svg {
 				display: block;
+				//flex: 1;
 				margin: 0 auto;
+				max-height: 10rem;
 				position: relative;
+			}
+
+			path {
+				fill: currentColor;
+				stroke: none;
 			}
 		}
 	}

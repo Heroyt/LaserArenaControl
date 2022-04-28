@@ -29,5 +29,7 @@ Route::get('/settings/print', [Settings::class, 'print'])->name('settings-print'
 Route::post('/settings/print', [Settings::class, 'savePrint']);
 
 Route::get('/gate', [Gate::class, 'show'])->name('gate');
-Route::post('/gate/set', [Gate::class, 'setGateGame']); // Error
+Route::post('/gate/set', [Gate::class, 'setGateGame']);      // Error
+Route::post('/gate/loaded', [Gate::class, 'setGateLoaded']); // Error
 Route::post('/gate/set/{system}', [Gate::class, 'setGateGame']);
+Route::post('/gate/loaded/{system}', [Gate::class, 'setGateLoaded']);

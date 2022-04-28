@@ -5,33 +5,35 @@
 {varType App\GameModels\Game\PrintStyle $style}
 {varType App\GameModels\Game\Today $today}
 
+{define containerClasses}
+	results-zakladny
+{/define}
+
 {define content}
-	<div class="results-zakladny">
-		<section class="teams">
-			{var App\GameModels\Game\Team|null $win = $game->mode->getWin($game)}
-			<div class="team" n:foreach="$game->getTeamsSorted() as $team">
-				<div class="name text-center bg-team-{$game::SYSTEM}-{$team->getTeamColor()}">
-					<div>
-						{if is_null($win)}
-							{svgIcon 'shield', '2rem'}
-						{elseif $win->id_team === $team->id_team}
-							{svgIcon 'crown', '2rem'}
-						{else}
-							{svgIcon 'skull', '2rem'}
-						{/if}
-					</div>
-					{$team->name}
-					<div class="mines text-center mt-3">
-						{svgIcon 'base', '', '3rem'}
-					{$mode->getBasesDestroyed($team)}
-					</div>
+	<section class="teams">
+		{var App\GameModels\Game\Team|null $win = $game->mode->getWin($game)}
+		<div class="team" n:foreach="$game->getTeamsSorted() as $team">
+			<div class="name text-center bg-team-{$game::SYSTEM}-{$team->getTeamColor()}">
+				<div>
+					{if is_null($win)}
+						{svgIcon 'shield', '2rem'}
+					{elseif $win->id_team === $team->id_team}
+						{svgIcon 'crown', '2rem'}
+					{else}
+						{svgIcon 'skull', '2rem'}
+					{/if}
 				</div>
-				<div class="players">
-					{include partPlayers, players: $team->getPlayersSorted()}
+				{$team->name}
+				<div class="mines text-center mt-3">
+					{svgIcon 'base', '', '3rem'}
+					{$mode->getBasesDestroyed($team)}
 				</div>
 			</div>
-		</section>
-	</div>
+			<div class="players">
+				{include partPlayers, players: $team->getPlayersSorted()}
+			</div>
+		</div>
+	</section>
 {/define}
 
 {define partPlayers}

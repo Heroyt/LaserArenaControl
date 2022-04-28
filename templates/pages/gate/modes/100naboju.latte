@@ -5,19 +5,22 @@
 {varType App\GameModels\Game\Today $today}
 {varType string $qr}
 
+{var bool $includeTeams = $game->mode->isTeam() && $game->mode->settings->partTeams}
+
+{define containerClasses}
+	results {if !$includeTeams}no-teams{/if}
+{/define}
+
 {define content}
-	{var bool $includeTeams = $game->mode->isTeam() && $game->mode->settings->partTeams}
-	<div class="results {if !$includeTeams}no-teams{/if}">
-		<section class="info">
-			{include partInfo}
-		</section>
-		<section class="players">
-			{include partPlayers}
-		</section>
-		<section class="teams" n:if="$includeTeams">
-			{include partTeams}
-		</section>
-	</div>
+	<section class="info">
+		{include partInfo}
+	</section>
+	<section class="players">
+		{include partPlayers}
+	</section>
+	<section class="teams" n:if="$includeTeams">
+		{include partTeams}
+	</section>
 {/define}
 
 {define partInfo}

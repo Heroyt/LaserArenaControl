@@ -31,6 +31,10 @@ function loadContent() {
 				}
 			}
 			container.innerHTML = response.data;
+			const meta = container.querySelector('meta[name="container-classes"]');
+			if (meta) {
+				container.className = meta.getAttribute('content');
+			}
 			gameTimer();
 		})
 		.catch(response => {

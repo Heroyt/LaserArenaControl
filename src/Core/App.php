@@ -22,7 +22,6 @@ use Latte\Macros\MacroSet;
 use Nette\DI\Compiler;
 use Nette\DI\Container;
 use Nette\DI\ContainerLoader;
-use Nette\DI\MissingServiceException;
 use Nette\Http\Url;
 use const PRIVATE_DIR;
 
@@ -589,11 +588,64 @@ class App
 	/**
 	 * Gets the service object by name.
 	 *
+	 * @param string $name
+	 *
 	 * @return object
-	 * @throws MissingServiceException
 	 */
 	public static function getService(string $name) : object {
 		return self::getContainer()->getService($name);
+	}
+
+	/**
+	 * Checks there exists an image of the arena
+	 *
+	 * The image must be either SVG or PNG. If no logo image exists, returns empty string;
+	 *
+	 * @return string Full path to image
+	 */
+	public static function getLogoFileName() : string {
+		$imageBase = ASSETS_DIR.'images/logo';
+		if (file_exists($imageBase.'.svg')) {
+			return $imageBase.'.svg';
+		}
+		if (file_exists($imageBase.'.png')) {
+			return $imageBase.'.png';
+		}
+		return '';
+	}
+
+	/**
+	 * Checks there exists an image of the arena
+	 *
+	 * The image must be either SVG or PNG. If no logo image exists, returns empty string;
+	 *
+	 * @return string URL of the image
+	 */
+	public static function getLogoUrl() : string {
+		$image = self::getLogoFileName();
+		if (empty($image)) {
+			return '';
+		}
+		return str_replace(ROOT, self::getUrl(), $image);
+	}
+
+	/**
+	 * Gets HTML for displaying the arena image
+	 *
+	 * For SVG images, it returns the SVG XML, for other formats, it returns the <img> tag.
+	 *
+	 * @return string HTML or empty string if no logo exists
+	 */
+	public static function getLogoHtml() : string {
+		$image = self::getLogoFileName();
+		if (empty($image)) {
+			return '';
+		}
+		$type = pathinfo($image, PATHINFO_EXTENSION);
+		if ($type === 'svg') {
+			return file_get_contents($image);
+		}
+		return '<img src="'.str_replace(ROOT, self::getUrl(), $image).'" class="img-fluid arena-logo" alt="Arena - Logo" id="arena-logo-image" />';
 	}
 
 }

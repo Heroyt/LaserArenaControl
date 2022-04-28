@@ -242,6 +242,40 @@ class Gate extends Controller
 		$this->ajaxJson(['success' => true]);
 	}
 
+	/**
+	 * @param Request $request
+	 *
+	 * @return void
+	 */
+	public function setGateLoaded(Request $request) : void {
+		$gameId = (int) ($request->post['game'] ?? 0);
+		if (empty($gameId)) {
+			http_response_code(400);
+			$this->ajaxJson(['error' => 'Missing / Incorrect game']);
+		}
+		$system = $request->params['system'] ?? '';
+		if (empty($system)) {
+			http_response_code(400);
+			$this->ajaxJson(['error' => 'Missing / Incorrect system']);
+		}
+		$game = GameFactory::getById($gameId, $system);
+		if (!isset($game)) {
+			http_response_code(404);
+			$this->ajaxJson(['error' => 'Cannot find game']);
+		}
+		try {
+			Info::set('gate-game', null);
+			$game->fileTime = new DateTime(); // Set time to NOW
+			$game->start = null;
+			Info::set($system.'-game-loaded', $game);
+			EventService::trigger('gate-reload');
+		} catch (Exception $e) {
+			http_response_code(500);
+			$this->ajaxJson(['error' => 'Failed to save the game info', 'exception' => $e->getMessage()]);
+		}
+		$this->ajaxJson(['success' => true]);
+	}
+
 	private function getPublicUrl(Game $game) : string {
 		return trailingSlashIt(Info::get('liga_api_url')).'g/'.$game->code;
 	}

@@ -3,6 +3,9 @@ return [
 
 	'tags' => [
 		// name => [startTag, endTag]
+		'logo'         => [
+			'echo \App\Core\App::getLogoHtml()',
+		],
 		'link'         => [
 			'echo \App\Core\App::getLink(%node.args)',
 		],

@@ -14,7 +14,11 @@
 {varType \App\Core\Controller $page}
 
 {if \App\Core\App::getRequest()->isAjax()}
+	<div id="arena-logo">
+		{logo}
+	</div>
 	{include content}
+	<meta name="container-classes" content="container-fluid {include containerClasses|noescape}"/>
 	{if \App\Core\Info::get('gate_force_reload', false)}
 		{do \App\Core\Info::set('gate_force_reload', false)}
 		<script>
@@ -74,6 +78,9 @@
 	</head>
 	<body id="gate">
 	<main class="container-fluid {include containerClasses}">
+		<div id="arena-logo">
+			{logo}
+		</div>
 		{include content}
 	</main>
 	<div class="tip">

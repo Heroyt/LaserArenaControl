@@ -4,29 +4,31 @@
 {varType App\GameModels\Game\PrintStyle $style}
 {varType App\GameModels\Game\Today $today}
 
+{define containerClasses}
+	results-csgo
+{/define}
+
 {define content}
-	<div class="results-csgo">
-		<section class="teams">
-			{var App\GameModels\Game\Team|null $win = $game->mode->getWin($game)}
-			<div class="team" n:foreach="$game->getTeamsSorted() as $team">
-				<div class="name bg-team-{$game::SYSTEM}-{$team->getTeamColor()}">
-					<div class="text-center">
-						{if is_null($win)}
-							{svgIcon 'shield', '2rem'}
-						{elseif $win->id_team === $team->id_team}
-							{svgIcon 'crown', '2rem'}
-						{else}
-							{svgIcon 'skull', '2rem'}
-						{/if}
-					</div>
-					{$team->name}
+	<section class="teams">
+		{var App\GameModels\Game\Team|null $win = $game->mode->getWin($game)}
+		<div class="team" n:foreach="$game->getTeamsSorted() as $team">
+			<div class="name bg-team-{$game::SYSTEM}-{$team->getTeamColor()}">
+				<div class="text-center">
+					{if is_null($win)}
+						{svgIcon 'shield', '2rem'}
+					{elseif $win->id_team === $team->id_team}
+						{svgIcon 'crown', '2rem'}
+					{else}
+						{svgIcon 'skull', '2rem'}
+					{/if}
 				</div>
-				<div class="players">
-					{include partPlayers, players: $team->getPlayersSorted()}
-				</div>
+				{$team->name}
 			</div>
-		</section>
-	</div>
+			<div class="players">
+				{include partPlayers, players: $team->getPlayersSorted()}
+			</div>
+		</div>
+	</section>
 {/define}
 
 {define partPlayers}

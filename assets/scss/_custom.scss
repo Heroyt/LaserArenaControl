@@ -86,5 +86,49 @@ $utilities: map.deep-merge(
 					size: var(--size, 1),
 				),
 			),
+			'cursor': (
+				property: cursor,
+				class: cursor,
+				responsive: false,
+				print: false,
+				values: (
+					pointer: pointer,
+					default: default,
+					help: help,
+					not-allowed: not-allowed,
+					copy: copy,
+					crosshair: crosshair,
+				),
+			),
+			'font-size': (
+				values: (
+					sm: .8rem,
+				),
+			),
+			"rounded": (
+				values: (
+					10: 10px,
+				)
+			),
+			"rounded-top": (
+				values: (
+					10: 10px
+				)
+			),
+			"rounded-end": (
+				values: (
+					10: 10px
+				)
+			),
+			"rounded-bottom": (
+				values: (
+					10: 10px
+				)
+			),
+			"rounded-start": (
+				values: (
+					10: 10px
+				)
+			),
 		),
 );

@@ -1084,3 +1084,6 @@ msgstr ""
 msgctxt "results"
 msgid "Zásahy od/do spoluhráčů"
 msgstr ""
+
+msgid "Zobrazit vesty na Gate"
+msgstr ""

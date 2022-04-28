@@ -23,7 +23,7 @@ if (PHP_SAPI === 'cli') {
 	/** @var string $_ command used to run the script */
 	$_ = $_SERVER['_'];
 	if ($_ === '/bin/sh') {
-		$_ = 'php';
+		$_ = '/usr/local/bin/php';
 	}
 }
 

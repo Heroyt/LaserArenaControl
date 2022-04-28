@@ -56,8 +56,10 @@ class EventServer extends CliController
 			}
 			if ($sig !== SIGINT) {
 				// Restart
-				$this->errorPrint($_.' '.implode(' ', $argv));
-				pcntl_exec($_, $argv);
+				$this->echo($_.' '.implode(' ', $argv));
+				if (pcntl_exec($_, $argv) === false) {
+					$this->errorPrint('Failed to restart process');
+				}
 			}
 			exit;
 		};

@@ -99,7 +99,7 @@
 	<div class="results-header text-white text-start">
 		<div class="my-1">
 			<strong>{lang 'Kód hry', context: 'results.info'}:</strong>
-			{$game->code}
+			{$game->code} {ifset $game->fileNumber}({$game->fileNumber}){/ifset}
 		</div>
 		<div class="my-1">
 			<strong>{lang 'Datum', context: 'results.info'}:</strong>

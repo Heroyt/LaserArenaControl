@@ -56,6 +56,7 @@ class EventServer extends CliController
 			}
 			if ($sig !== SIGINT) {
 				// Restart
+				$this->errorPrint($_.' '.implode(' ', $argv));
 				pcntl_exec($_, $argv);
 			}
 			exit;

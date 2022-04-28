@@ -1,13 +1,21 @@
 services:
     web:
+        restart: always
         build: .
         ports:
             - "1234:80"
+            - "9999:9999"
         links:
             - "db"
         depends_on:
             - db
+        volumes:
+            - lmx:/var/www/html/lmx
+            - /mnt/d/Docker/private:/var/www/html/private
+        environment:
+            ENTR_INOTIFY_WORKAROUND: "yes"
     db:
+        restart: always
         image: "mariadb:latest"
         ports:
             - "3307:3306"
@@ -15,3 +23,12 @@ services:
             MARIADB_ROOT_PASSWORD: ""
             MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: "yes"
             MARIADB_DATABASE: "lac"
+        volumes:
+            - /mnt/d/Docker/mysql:/var/lib/mysql
+volumes:
+    lmx:
+        driver: local
+        driver_opts:
+            type: cifs
+            device: "//192.168.50.3/lasermaxx/shared"
+            o: username=bar,password=bar,rw,file_mode=0777,dir_mode=0777

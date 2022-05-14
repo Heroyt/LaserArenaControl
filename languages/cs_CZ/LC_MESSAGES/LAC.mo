@@ -1,28 +1,58 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: laserarenacontrol\n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: 2022-05-14 14:54\n"
-"Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
-"Language-Team: Czech\n"
-"Language: cs_CZ\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: cs_CZ\n"
+"Language-Team: Czech\n"
+"Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
+"MIME-Version: 1.0\n"
+"PO-Revision-Date: 2022-05-14 14:54\n"
+"POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=4; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 3;\n"
-"X-Generator: Poedit 3.0.1\n"
+"Project-Id-Version: laserarenacontrol\n"
+"X-Generator: Poedit 2.3\n"
+"X-Poedit-Basepath: .\n"
 "X-Crowdin-Project: laserarenacontrol\n"
 "X-Crowdin-Project-ID: 515800\n"
 "X-Crowdin-Language: cs\n"
-"X-Crowdin-File: /master/languages/cs_CZ/LC_MESSAGES/LAC.po\n"
-"X-Crowdin-File-ID: 30\n"
+"X-Crowdin-File: /master/languages/de_DE/LC_MESSAGES/LAC.po\n"
+"X-Crowdin-File-ID: 32\n"
 
 msgctxt "pageTitles"
-msgid "404"
+msgid "Games list"
 msgstr ""
 
-msgctxt "errors"
-msgid "stránka nenalezena"
+msgid "Toggle navigation"
+msgstr ""
+
+msgid "New game"
+msgstr ""
+
+msgid "Games"
+msgstr ""
+
+msgid "Print"
+msgstr ""
+
+msgid "Games list"
+msgstr ""
+
+msgid "Date"
+msgstr ""
+
+msgid "Time"
+msgstr ""
+
+msgid "Game mode"
+msgstr ""
+
+msgid "Players"
+msgstr ""
+
+msgid "Actions"
+msgstr ""
+
+msgid "%s score"
 msgstr ""
 
 msgctxt "debugPanel"
@@ -35,6 +65,14 @@ msgstr ""
 
 msgctxt "debugPanel"
 msgid "Translations"
+msgstr ""
+
+msgctxt "debugPanel"
+msgid "Language"
+msgstr ""
+
+msgctxt "debugPanel"
+msgid "HTTP header"
 msgstr ""
 
 msgctxt "debugPanel"
@@ -54,78 +92,27 @@ msgid "Context"
 msgstr ""
 
 msgctxt "pageTitles"
-msgid "Dashboard"
+msgid "404"
 msgstr ""
 
-msgid "New game"
-msgstr ""
-
-msgid "Toggle navigation"
+msgctxt "errors"
+msgid "stránka nenalezena"
 msgstr ""
 
 msgctxt "pageTitles"
 msgid "Results"
 msgstr ""
 
-msgctxt "pageTitles"
-msgid "Games list"
-msgstr ""
-
+msgctxt "results.info"
 msgid "Datum"
 msgstr ""
 
-msgid "Hra neexistuje!"
-msgstr ""
-
+msgctxt "results.info"
 msgid "Herní mód"
 msgstr ""
 
-msgctxt "debugPanel"
-msgid "Plural"
-msgstr ""
-
-msgid "Games"
-msgstr ""
-
-msgid "Date"
-msgstr ""
-
-msgid "Games list"
-msgstr ""
-
-msgid "No games had been played on this date."
-msgstr ""
-
-msgid "Time"
-msgstr ""
-
-msgid "Game mode"
-msgstr ""
-
-msgid "Players"
-msgstr ""
-
-msgid "%d score"
-msgstr ""
-
-msgid "%s score"
-msgstr ""
-
-msgid "Actions"
-msgstr ""
-
-msgid "Print"
-msgstr ""
-
+msgctxt "gameModes"
 msgid "Základny"
-msgstr ""
-
-msgctxt "results.info"
-msgid "Datum"
-msgstr ""
-
-msgctxt "results.info"
-msgid "Herní mód"
 msgstr ""
 
 msgctxt "results.info"
@@ -340,10 +327,6 @@ msgctxt "results.bests"
 msgid "Největší mimoň"
 msgstr ""
 
-msgctxt "gameModes"
-msgid "Team deathmach"
-msgstr ""
-
 msgctxt "results.bests"
 msgid "Zabiják vlastního týmu"
 msgstr ""
@@ -353,19 +336,22 @@ msgid "Největší vlastňák"
 msgstr ""
 
 msgctxt "debugPanel"
-msgid "Language"
+msgid "Plural"
 msgstr ""
 
-msgctxt "debugPanel"
-msgid "HTTP header"
+msgctxt "pageTitles"
+msgid "Dashboard"
 msgstr ""
 
-msgctxt "gameModes"
-msgid "Základny"
+msgid "No games had been played on this date."
 msgstr ""
 
 msgctxt "gameModes"
 msgid "CSGO"
+msgstr ""
+
+msgctxt "gameModes"
+msgid "Team deathmach"
 msgstr ""
 
 msgctxt "results.bests"

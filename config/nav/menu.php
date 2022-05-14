@@ -24,6 +24,10 @@ return [
 				'route' => 'settings',
 			],
 			[
+				'name'  => lang('Gate'),
+				'route' => 'settings-gate',
+			],
+			[
 				'name'  => lang('Vests'),
 				'route' => 'settings-vests',
 			],

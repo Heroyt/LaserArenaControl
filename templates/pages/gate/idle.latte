@@ -119,6 +119,7 @@
 		<div class="time text-white {if $left < 0}d-none{/if}"
 			 data-start="{strtotime($game->start->format('Y-m-d H:i'))}"
 			 data-startdate="{$game->start->format('Y-m-d H:i')}"
+			 data-showafter="{\App\Core\Info::get('timer_show', 30)}"
 			 data-length="{$game->timing->gameLength * 60}" data-serverTime="{time()}">
 			{floor($left / 60)|padLeft:2,'0'}:{($left % 60)|padLeft:2,'0'}
 		</div>

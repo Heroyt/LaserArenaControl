@@ -9,6 +9,28 @@ class EventServer {
 		this.ws = null;
 		this.connect();
 		this.listeners = {};
+		this.initTriggers();
+	}
+
+	/**
+	 * Initializes all buttons that trigger events on the event server
+	 */
+	initTriggers() {
+		document.querySelectorAll(`[data-toggle="event"]`).forEach(btn => {
+			const event = btn.dataset.event;
+			if (!event || event === '') {
+				return;
+			}
+			console.log("Found event trigger:", event, btn);
+			btn.addEventListener('click', () => {
+				this.ws.send(event + '\n');
+				console.log("Event trigger:", event);
+			});
+			btn.addEventListener('trigger-event', () => {
+				this.ws.send(event + '\n');
+				console.log("Event trigger:", event);
+			});
+		});
 	}
 
 	/**

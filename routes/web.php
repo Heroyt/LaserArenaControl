@@ -1,4 +1,7 @@
 <?php
+/**
+ * @author Tomáš Vojík <xvojik00@stud.fit.vutbr.cz>, <vojik@wboy.cz>
+ */
 
 use App\Controllers\Dashboard;
 use App\Controllers\GamesList;
@@ -22,6 +25,8 @@ Route::get('/list/{game}', [GamesList::class, 'game']);
 
 Route::get('/settings', [Settings::class, 'show'])->name('settings');
 Route::post('/settings', [Settings::class, 'saveGeneral']);
+Route::get('/settings/gate', [Settings::class, 'gate'])->name('settings-gate');
+Route::post('/settings/gate', [Settings::class, 'saveGate']);
 Route::get('/settings/modes', [Settings::class, 'modes'])->name('settings-modes');
 Route::get('/settings/vests', [Settings::class, 'vests'])->name('settings-vests');
 Route::post('/settings/vests', [Settings::class, 'saveVests']);

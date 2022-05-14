@@ -290,6 +290,11 @@ export function gameTimer() {
 	const serverTime = parseInt(time.dataset.servertime);
 	console.log(time.dataset.servertime, serverTime);
 	offset = (Date.now() / 1000) - (isNaN(serverTime) ? 0 : serverTime);
+	let showAfter = parseInt(time.dataset.showafter);
+	if (isNaN(showAfter)) {
+		showAfter = 30;
+	}
+	showAfter *= 60; // Convert to seconds
 	let start = parseInt(time.dataset.start);
 	let length = parseInt(time.dataset.length);
 	let endDate = 0;
@@ -313,6 +318,11 @@ export function gameTimer() {
 		console.log('Starting timer...', endDate, offset);
 		timerInterval = setInterval(() => {
 			const remaining = endDate - (Date.now() / 1000) + offset;
+			if (remaining > showAfter) {
+				time.classList.add('d-none');
+			} else {
+				time.classList.remove('d-none');
+			}
 			if (remaining < 0) {
 				time.innerHTML = "00:00";
 				return;

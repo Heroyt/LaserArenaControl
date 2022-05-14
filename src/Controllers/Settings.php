@@ -48,6 +48,30 @@ class Settings extends Controller
 		$this->view('pages/settings/vests');
 	}
 
+	public function gate() : void {
+		$this->view('pages/settings/gate');
+	}
+
+	public function saveGate(Request $request) : void {
+		try {
+			if (isset($request->post['timer_offset'])) {
+				Info::set('timer-offset', (int) $request->post['timer_offset']);
+			}
+			if (isset($request->post['timer_show'])) {
+				Info::set('timer_show', (int) $request->post['timer_show']);
+			}
+		} catch (Exception $e) {
+			$request->passErrors[] = lang('Failed to save settings.', context: 'errors');
+		}
+		if ($request->isAjax()) {
+			$this->ajaxJson([
+												'success' => empty($request->passErrors),
+												'errors'  => $request->passErrors,
+											]);
+		}
+		App::redirect('settings-gate', $request);
+	}
+
 	/**
 	 * @param Request $request
 	 *

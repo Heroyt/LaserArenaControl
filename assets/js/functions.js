@@ -289,7 +289,7 @@ export function gameTimer() {
 	let offset = 0;
 	const serverTime = parseInt(time.dataset.servertime);
 	console.log(time.dataset.servertime, serverTime);
-	offset = (Date.now() / 1000) - (isNaN(serverTime) ? 0 : serverTime);
+	//offset = (Date.now() / 1000) - (isNaN(serverTime) ? 0 : serverTime);
 	let showAfter = parseInt(time.dataset.showafter);
 	if (isNaN(showAfter)) {
 		showAfter = 30;

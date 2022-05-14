@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: German\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2022-05-14 15:57\n"
+"PO-Revision-Date: 2022-05-14 17:51\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -15,7 +15,7 @@ msgstr ""
 "X-Crowdin-Project: laserarenacontrol\n"
 "X-Crowdin-Project-ID: 515800\n"
 "X-Crowdin-Language: de\n"
-"X-Crowdin-File: /master/languages/uk_UA/LC_MESSAGES/LAC.pot\n"
+"X-Crowdin-File: /master/languages/LAC.pot\n"
 "X-Crowdin-File-ID: 64\n"
 
 msgctxt "pageTitles"
@@ -47,7 +47,7 @@ msgid "Game mode"
 msgstr ""
 
 msgid "Players"
-msgstr ""
+msgstr "Spieler"
 
 msgid "Actions"
 msgstr ""
@@ -109,7 +109,7 @@ msgstr ""
 
 msgctxt "results.info"
 msgid "Herní mód"
-msgstr ""
+msgstr "Spielmodus"
 
 msgctxt "gameModes"
 msgid "Základny"
@@ -117,31 +117,31 @@ msgstr ""
 
 msgctxt "results.info"
 msgid "Počet hráčů"
-msgstr ""
+msgstr "Spieler Anzahl"
 
 msgctxt "results.info"
 msgid "Počet týmů"
-msgstr ""
+msgstr "Teams Anzahl"
 
 msgctxt "results.scoring"
 msgid "Zásah protihráče"
-msgstr ""
+msgstr "Gegner getroffen"
 
 msgctxt "results.scoring"
 msgid "Zasažen protihráčem"
-msgstr ""
+msgstr "getroffen durch Gegner"
 
 msgctxt "results.scoring"
 msgid "Zásah spoluhráče"
-msgstr ""
+msgstr "Mitspieler getroffen"
 
 msgctxt "results.scoring"
 msgid "Zasažen spouhráčem"
-msgstr ""
+msgstr "getroffen durch Mitspieler"
 
 msgctxt "results.scoring"
 msgid "Zasažen minou"
-msgstr ""
+msgstr "getroffen durch Minen"
 
 msgctxt "results.scoring"
 msgid "Body za výstřel"
@@ -165,19 +165,19 @@ msgstr ""
 
 msgctxt "results.player"
 msgid "Jméno"
-msgstr ""
+msgstr "Name"
 
 msgctxt "results.player"
 msgid "Tým"
-msgstr ""
+msgstr "Team"
 
 msgctxt "results.player"
 msgid "Skóre"
-msgstr ""
+msgstr "Ergebnis"
 
 msgctxt "results.player"
 msgid "Počet výstřelů"
-msgstr ""
+msgstr "Anzahl der Schüsse"
 
 msgctxt "results.player"
 msgid "Počet střel do prázdna"
@@ -185,7 +185,7 @@ msgstr ""
 
 msgctxt "results.player"
 msgid "Úspěšnost"
-msgstr ""
+msgstr "Genauigkeit"
 
 msgctxt "results.player"
 msgid "Hráči"
@@ -193,7 +193,7 @@ msgstr ""
 
 msgctxt "results.player"
 msgid "Zásahy"
-msgstr ""
+msgstr "Treffer"
 
 msgctxt "results.player"
 msgid "Smrti"
@@ -201,11 +201,11 @@ msgstr ""
 
 msgctxt "results.player"
 msgid "Týmy"
-msgstr ""
+msgstr "Teams"
 
 msgctxt "results.player"
 msgid "Soupeř"
-msgstr ""
+msgstr "Gegner"
 
 msgctxt "results.player"
 msgid "Vlastní"
@@ -217,7 +217,7 @@ msgstr ""
 
 msgctxt "results.today"
 msgid "Jméno"
-msgstr ""
+msgstr "Name"
 
 msgctxt "results.today"
 msgid "Denní pořadí podle"
@@ -225,11 +225,11 @@ msgstr ""
 
 msgctxt "results.today"
 msgid "Skóre"
-msgstr ""
+msgstr "Ergebnis"
 
 msgctxt "results.today"
 msgid "Přesnosti"
-msgstr ""
+msgstr "Genauigkeit"
 
 msgctxt "results.today"
 msgid "Zásahů"
@@ -263,7 +263,7 @@ msgstr[1] ""
 
 msgctxt "results.hits"
 msgid "Zásahy hráčů"
-msgstr ""
+msgstr "Treffer"
 
 msgctxt "results.hits"
 msgid "Zasáhl si hráče"
@@ -271,31 +271,31 @@ msgstr ""
 
 msgctxt "results.team"
 msgid "Výsledky týmů"
-msgstr ""
+msgstr "Team Ergebnisse"
 
 msgctxt "results.team"
 msgid "Tým"
-msgstr ""
+msgstr "Team"
 
 msgctxt "results.team"
 msgid "Zásahů"
-msgstr ""
+msgstr "Treffer"
 
 msgctxt "results.team"
 msgid "Skóre"
-msgstr ""
+msgstr "Ergebnis"
 
 msgctxt "results.team"
 msgid "Úspěšnost"
-msgstr ""
+msgstr "Genauigkeit"
 
 msgctxt "results.team"
 msgid "Výstřelů"
-msgstr ""
+msgstr "Schüsse"
 
 msgctxt "results.bests"
 msgid "Ti nej..."
-msgstr ""
+msgstr "Top Spieler…"
 
 msgctxt "results.bests"
 msgid "Největší terminátor"
@@ -303,31 +303,31 @@ msgstr ""
 
 msgctxt "results.bests"
 msgid "Objekt největšího zájmu"
-msgstr ""
+msgstr "am meisten getroffen"
 
 msgctxt "results.bests"
 msgid "Absolutní vítěz"
-msgstr ""
+msgstr "Absoluter Gewinner"
 
 msgctxt "results.bests"
 msgid "Hráč s nejlepší muškou"
-msgstr ""
+msgstr "Spieler mit beste Genauigkeit"
 
 msgctxt "results.bests"
 msgid "Nejúspornější střelec"
-msgstr ""
+msgstr "der sparsamster Schütze"
 
 msgctxt "results.bests"
 msgid "Největší mimoň"
-msgstr ""
+msgstr "der grösste Minion"
 
 msgctxt "results.bests"
 msgid "Zabiják vlastního týmu"
-msgstr ""
+msgstr "Mitspieler killer"
 
 msgctxt "results.bests"
 msgid "Největší vlastňák"
-msgstr ""
+msgstr "am meisten getroffen durch Mitspieler"
 
 msgctxt "debugPanel"
 msgid "Plural"
@@ -342,7 +342,7 @@ msgstr ""
 
 msgctxt "gameModes"
 msgid "CSGO"
-msgstr ""
+msgstr "CSGO"
 
 msgctxt "gameModes"
 msgid "Team deathmach"
@@ -350,7 +350,7 @@ msgstr ""
 
 msgctxt "results.bests"
 msgid "Drtič min"
-msgstr ""
+msgstr "Minenbrecher"
 
 msgctxt "gameModes"
 msgid "Deathmach"

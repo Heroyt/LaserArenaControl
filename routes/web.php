@@ -8,7 +8,14 @@ use App\Controllers\GamesList;
 use App\Controllers\Gate;
 use App\Controllers\Results;
 use App\Controllers\Settings;
+use App\Core\App;
+use App\Core\Request;
 use App\Core\Routing\Route;
+
+Route::get('/lang/{lang}', static function(Request $request) {
+	$_SESSION['lang'] = $request->params['lang'];
+	App::redirect($request->get['redirect'] ?? []);
+});
 
 Route::get('/', [Dashboard::class, 'show'])->name('dashboard');
 Route::get('/results', [Results::class, 'show'])->name('results');

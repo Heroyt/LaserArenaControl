@@ -1087,3 +1087,30 @@ msgstr ""
 
 msgid "Zobrazit vesty na Gate"
 msgstr ""
+
+msgid "Gate"
+msgstr ""
+
+msgctxt "settings"
+msgid "Gate settings"
+msgstr ""
+
+msgctxt "settings"
+msgid "Trigger events"
+msgstr ""
+
+msgctxt "events"
+msgid "Reload gate"
+msgstr ""
+
+msgctxt "settings"
+msgid "Game timer offset in seconds"
+msgstr ""
+
+msgctxt "settings"
+msgid "Show timer from minute"
+msgstr ""
+
+msgctxt "settings"
+msgid "Settings"
+msgstr ""

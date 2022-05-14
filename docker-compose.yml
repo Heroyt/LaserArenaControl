@@ -12,16 +12,13 @@ services:
         volumes:
             - lmx:/var/www/html/lmx
             - /mnt/d/Docker/private:/var/www/html/private
-        environment:
-            ENTR_INOTIFY_WORKAROUND: "yes"
     db:
         restart: always
         image: "mariadb:latest"
         ports:
             - "3307:3306"
         environment:
-            MARIADB_ROOT_PASSWORD: ""
-            MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: "yes"
+            MARIADB_ROOT_PASSWORD: "super-secret-password"
             MARIADB_DATABASE: "lac"
         volumes:
             - /mnt/d/Docker/mysql:/var/lib/mysql
@@ -31,4 +28,4 @@ volumes:
         driver_opts:
             type: cifs
             device: "//192.168.50.3/lasermaxx/shared"
-            o: username=bar,password=bar,rw,file_mode=0777,dir_mode=0777
+            o: username=xxxx,password=xxxxx,rw,file_mode=0777,dir_mode=0777

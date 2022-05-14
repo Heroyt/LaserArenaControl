@@ -29,7 +29,7 @@ RUN apt-get install -y cifs-utils
 
 FROM setup as langs
 
-RUN apt-get update
+# Setup gettext languages
 RUN apt-get install -y locales \
 	&& sed -i -e 's/# cs_CZ.UTF-8 UTF-8/cs_CZ.UTF-8 UTF-8/' /etc/locale.gen \
 	&& sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen \
@@ -64,11 +64,11 @@ RUN apt-get -y install sudo
 RUN echo "www-data:pass" | chpasswd && adduser www-data sudo
 RUN cron
 USER www-data
-RUN echo "Cloning..."
-#RUN git clone https://github.com/Heroyt/LaserArenaControl.git /var/www/html/
 
+# Move to project directory
 WORKDIR /var/www/html/
 
+# Initialize git and download project
 RUN git init && git remote add origin https://github.com/Heroyt/LaserArenaControl.git && git fetch && git checkout -t origin/master
 RUN git config pull.ff only
 RUN git pull --recurse-submodules
@@ -76,6 +76,7 @@ RUN git submodule init
 RUN git submodule update
 RUN git submodule update --init --recursive --remote
 
+# Initialize all configs and create necessary directories
 RUN mv private/docker-config.ini private/config.ini
 RUN mkdir -p logs
 RUN mkdir -p temp
@@ -85,11 +86,14 @@ RUN mkdir -p lmx/games
 
 RUN composer update
 
+# Copy shell scripts
 COPY start.sh .
 COPY resultsCheck.sh .
 
+# Initialize crontab
 COPY cron.txt .
-
 RUN crontab cron.txt
 
+# Start command
+# Updates project, builds it and runs a start script which starts WS event server and Apache
 CMD git pull --recurse-submodules && git submodule update --init --recursive --remote && composer build && php install.php && sh ./start.sh

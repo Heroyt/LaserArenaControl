@@ -14,8 +14,8 @@ msgstr ""
 "X-Crowdin-Project: laserarenacontrol\n"
 "X-Crowdin-Project-ID: 515800\n"
 "X-Crowdin-Language: en\n"
-"X-Crowdin-File: /master/languages/cs_CZ/LC_MESSAGES/LAC.po\n"
-"X-Crowdin-File-ID: 30\n"
+"X-Crowdin-File: /master/languages/en_US/LC_MESSAGES/LAC.po\n"
+"X-Crowdin-File-ID: 34\n"
 
 msgctxt "pageTitles"
 msgid "404"
@@ -75,9 +75,6 @@ msgid "Datum"
 msgstr ""
 
 msgid "Hra neexistuje!"
-msgstr ""
-
-msgid "Herní mód"
 msgstr ""
 
 msgctxt "debugPanel"

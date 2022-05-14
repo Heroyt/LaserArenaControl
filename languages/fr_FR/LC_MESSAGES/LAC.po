@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: French\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2022-05-14 17:51\n"
+"PO-Revision-Date: 2022-05-14 18:48\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -20,22 +20,22 @@ msgstr ""
 
 msgctxt "pageTitles"
 msgid "Games list"
-msgstr ""
+msgstr "Liste des jeux"
 
 msgid "Toggle navigation"
 msgstr ""
 
 msgid "New game"
-msgstr ""
+msgstr "Nouveau match"
 
 msgid "Games"
 msgstr "Matchs"
 
 msgid "Print"
-msgstr ""
+msgstr "Imprimé"
 
 msgid "Games list"
-msgstr ""
+msgstr "Liste des jeux"
 
 msgid "Date"
 msgstr "Date"
@@ -50,7 +50,7 @@ msgid "Players"
 msgstr "Joueurs"
 
 msgid "Actions"
-msgstr ""
+msgstr "Actions"
 
 msgid "%s score"
 msgstr "%s score"
@@ -65,11 +65,11 @@ msgstr ""
 
 msgctxt "debugPanel"
 msgid "Translations"
-msgstr ""
+msgstr "Traductions"
 
 msgctxt "debugPanel"
 msgid "Language"
-msgstr ""
+msgstr "Langue"
 
 msgctxt "debugPanel"
 msgid "HTTP header"
@@ -89,7 +89,7 @@ msgstr ""
 
 msgctxt "debugPanel"
 msgid "Context"
-msgstr ""
+msgstr "Contexte"
 
 msgctxt "pageTitles"
 msgid "404"
@@ -97,11 +97,11 @@ msgstr "404"
 
 msgctxt "errors"
 msgid "stránka nenalezena"
-msgstr ""
+msgstr "page non trouvée"
 
 msgctxt "pageTitles"
 msgid "Results"
-msgstr ""
+msgstr "Résultats"
 
 msgctxt "results.info"
 msgid "Datum"
@@ -331,7 +331,7 @@ msgstr "Tireur le plus touché par son équipe"
 
 msgctxt "debugPanel"
 msgid "Plural"
-msgstr ""
+msgstr "Pluriel"
 
 msgctxt "pageTitles"
 msgid "Dashboard"
@@ -346,7 +346,7 @@ msgstr "CSGO"
 
 msgctxt "gameModes"
 msgid "Team deathmach"
-msgstr ""
+msgstr "Match à mort en équipe"
 
 msgctxt "results.bests"
 msgid "Drtič min"
@@ -354,36 +354,36 @@ msgstr "Concasseur des mines"
 
 msgctxt "gameModes"
 msgid "Deathmach"
-msgstr ""
+msgstr "Match à mort"
 
 msgid "Language"
-msgstr ""
+msgstr "Langue"
 
 msgctxt "print"
 msgid "In color:"
-msgstr ""
+msgstr "En couleur :"
 
 msgctxt "print"
 msgid "In color"
-msgstr ""
+msgstr "En couleur"
 
 msgctxt "print"
 msgid "Black & white"
-msgstr ""
+msgstr "Noir et blanc"
 
 msgid "Game"
-msgstr ""
+msgstr "Jeu"
 
 msgid "Style"
-msgstr ""
+msgstr "Style"
 
 msgctxt "results.style"
 msgid "Style"
-msgstr ""
+msgstr "Style"
 
 msgctxt "results.style"
 msgid "Základní"
-msgstr ""
+msgstr "De base"
 
 msgctxt "results.style"
 msgid "Čerti"
@@ -391,7 +391,7 @@ msgstr ""
 
 msgctxt "results.style"
 msgid "Zima"
-msgstr ""
+msgstr "Hiver"
 
 msgctxt "results.style"
 msgid "Valentýn"
@@ -399,23 +399,23 @@ msgstr ""
 
 msgctxt "results.style"
 msgid "Vánoce"
-msgstr ""
+msgstr "Noël"
 
 msgctxt "results.style"
 msgid "Nový rok"
-msgstr ""
+msgstr "Le jour de l'An"
 
 msgctxt "results.style"
 msgid "Template"
-msgstr ""
+msgstr "Modèle"
 
 msgctxt "results.style"
 msgid "Default"
-msgstr ""
+msgstr "De base"
 
 msgctxt "results.player"
 msgid "K:D"
-msgstr ""
+msgstr "K:D"
 
 msgctxt "results.player"
 msgid "Nejoblíbenější cíl"
@@ -576,7 +576,7 @@ msgstr ""
 
 msgctxt "results.style.settings"
 msgid "Name"
-msgstr ""
+msgstr "Nom"
 
 msgctxt "results.style.settings"
 msgid "Primary color"
@@ -619,7 +619,7 @@ msgstr ""
 
 msgctxt "results.style.settings"
 msgid "Style"
-msgstr ""
+msgstr "Style"
 
 msgctxt "dates"
 msgid "Date from"
@@ -635,11 +635,11 @@ msgstr ""
 
 msgctxt "dates"
 msgid "Date"
-msgstr ""
+msgstr "Date"
 
 msgctxt "dates"
 msgid "Dates"
-msgstr ""
+msgstr "Dates"
 
 msgid "No games have been played yet."
 msgstr ""

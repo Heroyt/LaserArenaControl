@@ -8,8 +8,61 @@ use App\Install\Install;
 use App\Logging\DirectoryCreationException;
 use App\Logging\Logger;
 
+/**
+ *
+ */
 class Updater extends ApiController
 {
+
+	/**
+	 * Combines Updater::pull(), Updater::build() and Updater::install() methods
+	 *
+	 * @param Request $request
+	 *
+	 * @return void
+	 */
+	public function update(Request $request) : void {
+		try {
+			$logger = new Logger(LOG_DIR.'api/', 'update');
+			$logger->info('Updating LAC - ('.$request->getIp().')');
+		} catch (DirectoryCreationException $e) {
+			$logger = null;
+		}
+
+		/** @var string|false $out */
+		$out = exec('git stash push -u 2>&1 && git pull --recurse-submodules 2>&1 && git submodule update --init --recursive --remote 2>&1', $output, $returnCode);
+		exec('git stash pop 2>&1', $output2);
+		$output = array_merge($output, $output2);
+
+		if ($out === false || $returnCode !== 0) {
+			$logger?->warning('Cannot execute command');
+			$logger?->debug(json_encode($out, JSON_THROW_ON_ERROR));
+			$logger?->debug(json_encode($output, JSON_THROW_ON_ERROR));
+			$this->respond(['error' => 'Cannot execute git pull', 'errorCode' => $returnCode, 'output' => $output], 500);
+		}
+
+		/** @var string|false $out */
+		$out = exec('COMPOSER_HOME=$(pwd) composer build 2>&1', $output, $returnCode);
+
+		if ($out === false || $returnCode !== 0) {
+			$logger?->warning('Cannot execute command');
+			$logger?->debug(json_encode($out, JSON_THROW_ON_ERROR));
+			$logger?->debug(json_encode($output, JSON_THROW_ON_ERROR));
+			$this->respond(['error' => 'Cannot execute build', 'errorCode' => $returnCode, 'output' => $output], 500);
+		}
+
+		ob_start();
+		$success = Install::install();
+		$output = ob_get_clean();
+
+		if (!$success) {
+			$logger?->warning('Install failed');
+			$logger?->debug($output);
+			$this->respond(['error' => 'Install failed', 'output' => $output], 500);
+		}
+
+		$this->respond(['success' => true, 'output' => $output]);
+	}
 
 	/**
 	 * Pull changes from remote using an API route

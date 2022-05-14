@@ -15,6 +15,8 @@ Route::get('/api/results/download', [Results::class, 'downloadLastGameFiles']);
 
 Route::post('/api/mount', [Mount::class, 'mount']);
 
+Route::post('/api/update', [Updater::class, 'update']);
+
 Route::post('/api/git/pull', [Updater::class, 'pull']);
 Route::post('/api/git/fetch', [Updater::class, 'fetch']);
 Route::post('/api/git/status', [Updater::class, 'status']);

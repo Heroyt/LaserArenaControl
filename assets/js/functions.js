@@ -359,8 +359,8 @@ export function gameTimer() {
 
 	function setTimes() {
 		const parent = time.parentElement;
-		const serverTime = parseInt(time.dataset.servertime);
-		offset = (Date.now() / 1000) - (isNaN(serverTime) ? 0 : serverTime);
+		//const serverTime = parseInt(time.dataset.servertime);
+		//offset = (Date.now() / 1000) - (isNaN(serverTime) ? 0 : serverTime);
 		start = parseInt(time.dataset.start);
 		length = parseInt(time.dataset.length);
 		if (isNaN(start) || isNaN(length)) {

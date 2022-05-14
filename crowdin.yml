@@ -1,0 +1,3 @@
+files:
+  - source: /languages/*/LC_MESSAGES/LAC.po
+    translation: /languages/%locale_with_underscore%/LC_MESSAGES/LAC.mo

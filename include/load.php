@@ -14,6 +14,7 @@ use App\Logging\Tracy\DbTracyPanel;
 use App\Logging\Tracy\RoutingTracyPanel;
 use App\Logging\Tracy\TranslationTracyPanel;
 use Gettext\Loader\PoLoader;
+use Gettext\Translations;
 use Tracy\Debugger;
 
 if (!defined('ROOT')) {
@@ -35,6 +36,7 @@ require_once ROOT.'include/config.php';
 $translationChange = false;
 if (!PRODUCTION) {
 	$poLoader = new PoLoader();
+	/** @var Translations[] $translations */
 	$translations = [];
 	$languages = glob(LANGUAGE_DIR.'*');
 	bdump($languages);

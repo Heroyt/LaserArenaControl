@@ -13,8 +13,10 @@ use App\Core\App;
 use App\Exceptions\TemplateDoesNotExistException;
 use App\Logging\Tracy\Events\TranslationEvent;
 use App\Logging\Tracy\TranslationTracyPanel;
+use Gettext\Generator\MoGenerator;
 use Gettext\Generator\PoGenerator;
 use Gettext\Translation;
+use Gettext\Translations;
 
 /**
  * Get latte template file path by template name
@@ -201,13 +203,27 @@ function lang(?string $msg = null, ?string $plural = null, int $num = 1, ?string
  * Regenerate the translation .po files
  */
 function updateTranslations() : void {
+	/** @var Translations[] $translations */
 	global $translationChange, $translations;
 	if (PRODUCTION || !$translationChange) {
 		return;
 	}
 	$poGenerator = new PoGenerator();
+	$moGenerator = new MoGenerator();
 	foreach ($translations as $lang => $translation) {
 		$poGenerator->generateFile($translation, LANGUAGE_DIR.$lang.'/LC_MESSAGES/LAC.po');
+		$moGenerator->generateFile($translation, LANGUAGE_DIR.$lang.'/LC_MESSAGES/LAC.mo');
+		foreach ($translation->getTranslations() as $string) {
+			$string->translate('');
+			$pluralCount = count($string->getPluralTranslations());
+			if ($pluralCount > 0) {
+				$plural = [];
+				for ($i = 0; $i < $pluralCount; $i++) {
+					$plural[] = '';
+				}
+				$string->translatePlural(...$plural);
+			}
+		}
 		$poGenerator->generateFile($translation, LANGUAGE_DIR.$lang.'/LC_MESSAGES/LAC.pot');
 	}
 }

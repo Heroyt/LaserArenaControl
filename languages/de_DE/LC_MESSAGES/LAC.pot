@@ -42,7 +42,7 @@ msgid "Game mode"
 msgstr ""
 
 msgid "Players"
-msgstr "Spieler"
+msgstr ""
 
 msgid "Actions"
 msgstr ""
@@ -104,7 +104,7 @@ msgstr ""
 
 msgctxt "results.info"
 msgid "Herní mód"
-msgstr "Spielmodus"
+msgstr ""
 
 msgctxt "gameModes"
 msgid "Základny"
@@ -112,31 +112,31 @@ msgstr ""
 
 msgctxt "results.info"
 msgid "Počet hráčů"
-msgstr "Spieler Anzahl"
+msgstr ""
 
 msgctxt "results.info"
 msgid "Počet týmů"
-msgstr "Teams Anzahl"
+msgstr ""
 
 msgctxt "results.scoring"
 msgid "Zásah protihráče"
-msgstr "Gegner getroffen"
+msgstr ""
 
 msgctxt "results.scoring"
 msgid "Zasažen protihráčem"
-msgstr "getroffen durch Gegner"
+msgstr ""
 
 msgctxt "results.scoring"
 msgid "Zásah spoluhráče"
-msgstr "Mitspieler getroffen"
+msgstr ""
 
 msgctxt "results.scoring"
 msgid "Zasažen spouhráčem"
-msgstr "getroffen durch Mitspieler"
+msgstr ""
 
 msgctxt "results.scoring"
 msgid "Zasažen minou"
-msgstr "getroffen durch Minen"
+msgstr ""
 
 msgctxt "results.scoring"
 msgid "Body za výstřel"
@@ -160,19 +160,19 @@ msgstr ""
 
 msgctxt "results.player"
 msgid "Jméno"
-msgstr "Name"
+msgstr ""
 
 msgctxt "results.player"
 msgid "Tým"
-msgstr "Team"
+msgstr ""
 
 msgctxt "results.player"
 msgid "Skóre"
-msgstr "Ergebnis"
+msgstr ""
 
 msgctxt "results.player"
 msgid "Počet výstřelů"
-msgstr "Anzahl der Schüsse"
+msgstr ""
 
 msgctxt "results.player"
 msgid "Počet střel do prázdna"
@@ -180,7 +180,7 @@ msgstr ""
 
 msgctxt "results.player"
 msgid "Úspěšnost"
-msgstr "Genauigkeit"
+msgstr ""
 
 msgctxt "results.player"
 msgid "Hráči"
@@ -188,7 +188,7 @@ msgstr ""
 
 msgctxt "results.player"
 msgid "Zásahy"
-msgstr "Treffer"
+msgstr ""
 
 msgctxt "results.player"
 msgid "Smrti"
@@ -196,11 +196,11 @@ msgstr ""
 
 msgctxt "results.player"
 msgid "Týmy"
-msgstr "Teams"
+msgstr ""
 
 msgctxt "results.player"
 msgid "Soupeř"
-msgstr "Gegner"
+msgstr ""
 
 msgctxt "results.player"
 msgid "Vlastní"
@@ -212,7 +212,7 @@ msgstr ""
 
 msgctxt "results.today"
 msgid "Jméno"
-msgstr "Name"
+msgstr ""
 
 msgctxt "results.today"
 msgid "Denní pořadí podle"
@@ -220,11 +220,11 @@ msgstr ""
 
 msgctxt "results.today"
 msgid "Skóre"
-msgstr "Ergebnis"
+msgstr ""
 
 msgctxt "results.today"
 msgid "Přesnosti"
-msgstr "Genauigkeit"
+msgstr ""
 
 msgctxt "results.today"
 msgid "Zásahů"
@@ -258,7 +258,7 @@ msgstr[1] ""
 
 msgctxt "results.hits"
 msgid "Zásahy hráčů"
-msgstr "Treffer"
+msgstr ""
 
 msgctxt "results.hits"
 msgid "Zasáhl si hráče"
@@ -266,31 +266,31 @@ msgstr ""
 
 msgctxt "results.team"
 msgid "Výsledky týmů"
-msgstr "Team Ergebnisse"
+msgstr ""
 
 msgctxt "results.team"
 msgid "Tým"
-msgstr "Team"
+msgstr ""
 
 msgctxt "results.team"
 msgid "Zásahů"
-msgstr "Treffer"
+msgstr ""
 
 msgctxt "results.team"
 msgid "Skóre"
-msgstr "Ergebnis"
+msgstr ""
 
 msgctxt "results.team"
 msgid "Úspěšnost"
-msgstr "Genauigkeit"
+msgstr ""
 
 msgctxt "results.team"
 msgid "Výstřelů"
-msgstr "Schüsse"
+msgstr ""
 
 msgctxt "results.bests"
 msgid "Ti nej..."
-msgstr "Top Spieler…"
+msgstr ""
 
 msgctxt "results.bests"
 msgid "Největší terminátor"
@@ -298,31 +298,31 @@ msgstr ""
 
 msgctxt "results.bests"
 msgid "Objekt největšího zájmu"
-msgstr "am meisten getroffen"
+msgstr ""
 
 msgctxt "results.bests"
 msgid "Absolutní vítěz"
-msgstr "Absoluter Gewinner"
+msgstr ""
 
 msgctxt "results.bests"
 msgid "Hráč s nejlepší muškou"
-msgstr "Spieler mit beste Genauigkeit"
+msgstr ""
 
 msgctxt "results.bests"
 msgid "Nejúspornější střelec"
-msgstr "der sparsamster Schütze"
+msgstr ""
 
 msgctxt "results.bests"
 msgid "Největší mimoň"
-msgstr "der grösste Minion"
+msgstr ""
 
 msgctxt "results.bests"
 msgid "Zabiják vlastního týmu"
-msgstr "Mitspieler killer"
+msgstr ""
 
 msgctxt "results.bests"
 msgid "Největší vlastňák"
-msgstr "am meisten getroffen durch Mitspieler"
+msgstr ""
 
 msgctxt "debugPanel"
 msgid "Plural"
@@ -337,7 +337,7 @@ msgstr ""
 
 msgctxt "gameModes"
 msgid "CSGO"
-msgstr "CSGO"
+msgstr ""
 
 msgctxt "gameModes"
 msgid "Team deathmach"
@@ -345,7 +345,7 @@ msgstr ""
 
 msgctxt "results.bests"
 msgid "Drtič min"
-msgstr "Minenbrecher"
+msgstr ""
 
 msgctxt "gameModes"
 msgid "Deathmach"

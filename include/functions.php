@@ -224,7 +224,7 @@ function updateTranslations() : void {
 				$string->translatePlural(...$plural);
 			}
 		}
-		$poGenerator->generateFile($translation, LANGUAGE_DIR.$lang.'/LC_MESSAGES/LAC.pot');
+		$poGenerator->generateFile($translation, LANGUAGE_DIR.'LAC.pot');
 	}
 }
 

@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: English\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2022-05-15 07:45\n"
+"PO-Revision-Date: 2022-05-17 13:33\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -479,7 +479,7 @@ msgstr "Melee hits do not add any score."
 
 msgctxt "tips"
 msgid "Zabiják vlastního týmu, či největší vlasťnák... To je oč tu běží!"
-msgstr "Hit or be hit, there is no other way!"
+msgstr "Hit or be hit; there is no other way!"
 
 msgctxt "tips"
 msgid "Vestu si oblečte vždy zbraní dobředu."
@@ -487,7 +487,7 @@ msgstr "Always put your vest on with your gun in the front."
 
 msgctxt "tips"
 msgid "Při týmové hře není výhodné střílet do hráčů se stejnou barvou."
-msgstr "It is not very beneficial to shoot the players with the same colour during team deathmach."
+msgstr "It is not very beneficial to shoot the players with the same colour during a team deathmatch."
 
 msgctxt "tips"
 msgid "Jen Chuck Norris vás může zastřelit baterkou na svém mobilu."
@@ -503,7 +503,7 @@ msgstr "There is no use dying in the same place. If it’s hard, run somewhere e
 
 msgctxt "tips"
 msgid "Všechny bonusy, kromě štítu, trvají 30s."
-msgstr "All powers, apart from the shield, last for 30s."
+msgstr "All powers, apart from the shield, last for the 30s."
 
 msgctxt "tips"
 msgid "Držení zbraně v obou rukách je přesnější."
@@ -515,7 +515,7 @@ msgstr "You should rather play laser game and be awesome!"
 
 msgctxt "tips"
 msgid "Spoluhráč je nejlepší cíl. Neutíká."
-msgstr "The teammate is the best target. He doesn’t run away."
+msgstr "A teammate is the best target. He doesn’t run away."
 
 msgctxt "tips"
 msgid "#laserarenapísek"
@@ -523,7 +523,7 @@ msgstr "#laserarenapísek"
 
 msgctxt "tips"
 msgid "Zabití: 100 bodů, Smrt: -50 bodů, Zabití vlastního hráče: -25 bodů"
-msgstr "HIt: 100 points, Death: -50 points, Hit your teammate: -25 points"
+msgstr "Hit: 100 points, Death: -50 points, Hit your teammate: -25 points"
 
 msgctxt "tips"
 msgid "Go, go, go, go..."
@@ -531,7 +531,7 @@ msgstr "Go, go, go, go..."
 
 msgctxt "tips"
 msgid "Ramenní čidla se trefují nejlépe, zádová nejhůř."
-msgstr "Shoulders are the easiest to hit, back is the hardest."
+msgstr "Shoulders are the easiest to hit; back is the hardest."
 
 msgctxt "tips"
 msgid "Pohyblivý cíl je vždycky těžší trefit."
@@ -539,7 +539,7 @@ msgstr "A moving target is always harder to hit."
 
 msgctxt "tips"
 msgid "Na displeji vesty po zásahu vidíte kdo vás zasáhl do jakého čidla. To pomáhá při orientaci."
-msgstr "You can see who hit you and to which sensor on your vest’s display."
+msgstr "You can see who hit you and which sensor on your vest’s display."
 
 msgctxt "tips"
 msgid "Při výstupu z arény vždy připni zbraň k vestě."
@@ -551,7 +551,7 @@ msgstr "LASER TAG - SUIT UP!"
 
 msgctxt "tips"
 msgid "Když tě bolí nohy, kempi!"
-msgstr "When your legs hurt, camp!"
+msgstr "If your legs hurt, try camping!"
 
 msgctxt "tips"
 msgid "Nikdy nejsi příliš starý na laser game."

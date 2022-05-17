@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: French\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2022-05-17 12:22\n"
+"PO-Revision-Date: 2022-05-17 13:33\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -23,7 +23,7 @@ msgid "Games list"
 msgstr "Liste des jeux"
 
 msgid "Toggle navigation"
-msgstr ""
+msgstr "Changer la navigation"
 
 msgid "New game"
 msgstr "Nouveau match"
@@ -395,7 +395,7 @@ msgstr "Hiver"
 
 msgctxt "results.style"
 msgid "Valentýn"
-msgstr ""
+msgstr "St. Valentine"
 
 msgctxt "results.style"
 msgid "Vánoce"
@@ -447,31 +447,31 @@ msgstr ""
 
 msgctxt "tips"
 msgid "Trénink se vyplácí!"
-msgstr ""
+msgstr "Entraînement est rentable!"
 
 msgctxt "tips"
 msgid "Tip #%d"
-msgstr ""
+msgstr "Conseil #%d"
 
 msgctxt "tips"
 msgid "Střílíme v Písku už od 31.12.2013!!!"
-msgstr ""
+msgstr "Nous tirons à Písek depuis le 31 décembre 2013!!!"
 
 msgctxt "tips"
 msgid "Ve hře vždy sleduj svoje okolí!"
-msgstr ""
+msgstr "Surveillez toujours votre environnement!"
 
 msgctxt "tips"
 msgid "Čidlo na zbrani, ač nenápadné, se dá velmi dobře trefit."
-msgstr ""
+msgstr "La cible sur le pistolet est un peu invisible, pourtant facile a touché."
 
 msgctxt "tips"
 msgid "Zkušení hráči hrajou týmově!"
-msgstr ""
+msgstr "Les joueurs experimentés coopèrent avec leurs équipes!"
 
 msgctxt "tips"
 msgid "Pro vyřízení osobních sporů je aréna ideální."
-msgstr ""
+msgstr "L'arène est le meilleur endroit pour régler les différends personnels."
 
 msgctxt "tips"
 msgid "Dobití protihráče pažbou, vám žádné body nepřidá."
@@ -519,15 +519,15 @@ msgstr ""
 
 msgctxt "tips"
 msgid "#laserarenapísek"
-msgstr ""
+msgstr "#laserarenapísek"
 
 msgctxt "tips"
 msgid "Zabití: 100 bodů, Smrt: -50 bodů, Zabití vlastního hráče: -25 bodů"
-msgstr ""
+msgstr "Touche: 100 points, Mort: -50 points, Touche réussie sur un coéquipier: -25 points"
 
 msgctxt "tips"
 msgid "Go, go, go, go..."
-msgstr ""
+msgstr "Allez, allez, allez, allez..."
 
 msgctxt "tips"
 msgid "Ramenní čidla se trefují nejlépe, zádová nejhůř."
@@ -562,13 +562,13 @@ msgid "Nezapomeň každý květen a listopad registrovat svůj tým na turnaj!"
 msgstr ""
 
 msgid "Settings"
-msgstr ""
+msgstr "Réglages"
 
 msgid "Game modes"
-msgstr ""
+msgstr "Modes de jeux"
 
 msgid "General"
-msgstr ""
+msgstr "Général"
 
 msgctxt "pageTitles"
 msgid "Settings"
@@ -646,7 +646,7 @@ msgstr ""
 
 msgctxt "results.style"
 msgid "Graphical"
-msgstr ""
+msgstr "Graphique"
 
 msgctxt "tips"
 msgid "Oživení trvá 5 sekund."
@@ -743,7 +743,7 @@ msgstr ""
 
 msgctxt "results"
 msgid "Mega střelec"
-msgstr ""
+msgstr "Grand tireur"
 
 msgctxt "results"
 msgid "Predátor"

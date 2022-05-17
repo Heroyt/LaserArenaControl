@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: French\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2022-05-17 13:42\n"
+"PO-Revision-Date: 2022-05-17 13:52\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -853,11 +853,11 @@ msgstr "Date du"
 
 msgctxt "dates"
 msgid "to"
-msgstr ""
+msgstr "à"
 
 msgctxt "actions"
 msgid "Add"
-msgstr ""
+msgstr "Ajouter"
 
 msgctxt "dates"
 msgid "Date"
@@ -870,7 +870,7 @@ msgid "Dates"
 msgstr "Dates"
 
 msgid "No games have been played yet."
-msgstr ""
+msgstr "Aucun jeu n'a encore été joué."
 
 # /templates/pages/results/index.latte:43
 # /templates/pages/settings/print.latte:41
@@ -881,7 +881,7 @@ msgstr "Graphique"
 # /src/GameModels/Tip.php:26
 msgctxt "tips"
 msgid "Oživení trvá 5 sekund."
-msgstr ""
+msgstr "La désactivation dure 5 secondes."
 
 # /src/GameModels/Game/PlayerTrophy.php:78
 msgctxt "results.bests"
@@ -986,12 +986,12 @@ msgstr ""
 # /templates/pages/games-list/index.latte:54
 # /templates/pages/results/index.latte:67
 msgid "Zobrazit na Gate"
-msgstr ""
+msgstr "Visualiser sur le Gate"
 
 # /templates/pages/gate/idle.latte:69
 msgctxt "results"
 msgid "Sniper"
-msgstr ""
+msgstr "Tireur d'élite"
 
 # /templates/pages/gate/idle.latte:82
 msgctxt "results"
@@ -1001,40 +1001,40 @@ msgstr "Grand tireur"
 # /templates/pages/gate/idle.latte:95
 msgctxt "results"
 msgid "Predátor"
-msgstr ""
+msgstr "Prédateur"
 
 # /templates/pages/gate/idle.latte:110
 msgctxt "results"
 msgid "Cíl"
-msgstr ""
+msgstr "Cible"
 
 # /templates/pages/gate/idle.latte:28
 msgctxt "gate"
 msgid "Nejlepší skóre dne"
-msgstr ""
+msgstr "Meilleure score du jour"
 
 # /templates/pages/gate/idle.latte:28
 msgctxt "gate"
 msgid "Výsledky dne"
-msgstr ""
+msgstr "Résultats du jour"
 
 msgctxt "results"
 msgid "%d shot"
 msgid_plural "%d shots"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d tirs"
+msgstr[1] "%d tirs"
 
 msgctxt "results"
 msgid "%d hit"
 msgid_plural "%d hits"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d touche"
+msgstr[1] "%d touches"
 
 msgctxt "results"
 msgid "%d death"
 msgid_plural "%d deaths"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d mort"
+msgstr[1] "%d morts"
 
 # /templates/pages/settings/print.latte:41
 msgctxt "results.style.settings"
@@ -1044,21 +1044,21 @@ msgstr ""
 # /templates/pages/settings/print.latte:90
 msgctxt "actions"
 msgid "Add date"
-msgstr ""
+msgstr "Ajouter une date"
 
 # /templates/pages/settings/index.latte:13
 # /templates/pages/settings/gate.latte:22
 # /templates/pages/settings/vests.latte:12
 # /templates/pages/settings/print.latte:21
 msgid "Last saved:"
-msgstr ""
+msgstr "Dernière sauvegarde:"
 
 # /templates/pages/settings/index.latte:13
 # /templates/pages/settings/gate.latte:22
 # /templates/pages/settings/vests.latte:12
 # /templates/pages/settings/print.latte:21
 msgid "never"
-msgstr ""
+msgstr "jamais"
 
 # /templates/pages/settings/print.latte:143
 # /templates/pages/settings/print.latte:
@@ -1479,3 +1479,4 @@ msgstr ""
 msgctxt "cli.help.arguments"
 msgid "If set, output will be written to the [out] file. Otherwise, output will be written to stdout."
 msgstr ""
+

@@ -242,21 +242,25 @@ function updateTranslations() : void {
 	}
 	$poGenerator = new PoGenerator();
 	$moGenerator = new MoGenerator();
+	$template = null;
 	foreach ($translations as $lang => $translation) {
+		if (!isset($template)) {
+			$template = clone $translation;
+		}
 		$poGenerator->generateFile($translation, LANGUAGE_DIR.$lang.'/LC_MESSAGES/LAC.po');
 		$moGenerator->generateFile($translation, LANGUAGE_DIR.$lang.'/LC_MESSAGES/LAC.mo');
-		foreach ($translation->getTranslations() as $string) {
-			$string->translate('');
-			$pluralCount = count($string->getPluralTranslations());
-			if ($pluralCount > 0) {
-				$plural = [];
-				for ($i = 0; $i < $pluralCount; $i++) {
-					$plural[] = '';
-				}
-				$string->translatePlural(...$plural);
+	}
+	foreach ($template->getTranslations() as $string) {
+		$string->translate('');
+		$pluralCount = count($string->getPluralTranslations());
+		if ($pluralCount > 0) {
+			$plural = [];
+			for ($i = 0; $i < $pluralCount; $i++) {
+				$plural[] = '';
 			}
+			$string->translatePlural(...$plural);
 		}
-		$poGenerator->generateFile($translation, LANGUAGE_DIR.'LAC.pot');
+		$poGenerator->generateFile($template, LANGUAGE_DIR.'LAC.pot');
 	}
 }
 

@@ -154,8 +154,34 @@ function lang(?string $msg = null, ?string $plural = null, int $num = 1, ?string
 	// If in development - add translation to po file if not exist
 	if (!PRODUCTION && CHECK_TRANSLATIONS) {
 		$logged = false;
+		// Use an exception to get the trace to this function call
+		$trace = (new Exception)->getTrace();
+		$file = '';
+		if (is_array($trace) && isset($trace[0])) {
+			$file = str_replace(ROOT, '/', $trace[0]['file']).':'.$trace[0]['line'];
+			if (str_contains($trace[0]['file'], 'latte')) {
+				// Load parsed latte file by lines
+				$lines = file($trace[0]['file']);
+				// Source comment is on line 5
+				$line = $lines[4] ?? '';
+				if (preg_match('/\/\*+ source: ([^*]+) \*\//', $line, $matches)) {
+					$file = str_replace(ROOT, '/', $matches[1]).':';
+					// Find line number
+					// Line number should be located in a comment somewhere on or bellow the called line
+					$lineCount = count($lines);
+					for ($i = $trace[0]['line'] - 1; $i < $lineCount; $i++) {
+						if (preg_match('/\/\*+ line (\d+) \*\//', $lines[$i], $matches)) {
+							// Found line number
+							$file .= $matches[1];
+							break;
+						}
+					}
+				}
+			}
+		}
 		foreach ($GLOBALS['translations'] as $lang => $translations) {
-			if (!$translations->find($context, $msgTmp)) {                    // Check if translation exists
+			/** @var Translations $translations */
+			if (!($translation = $translations->find($context, $msgTmp))) {                    // Check if translation exists
 				// Create new translation
 				if (!$logged) {
 					$event = new TranslationEvent();
@@ -171,7 +197,13 @@ function lang(?string $msg = null, ?string $plural = null, int $num = 1, ?string
 				if ($plural !== null) {
 					$translation->setPlural($plural);
 				}
+
 				$translations->add($translation);
+				$GLOBALS['translationChange'] = true;
+			}
+			$comments = $translation->getComments();
+			if (!empty($file) && !in_array($file, $comments->toArray(), true)) {
+				$comments->add($file);
 				$GLOBALS['translationChange'] = true;
 			}
 		}

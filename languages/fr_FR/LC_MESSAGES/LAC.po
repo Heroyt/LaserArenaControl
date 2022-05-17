@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: French\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2022-05-17 13:52\n"
+"PO-Revision-Date: 2022-05-17 15:02\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -743,7 +743,7 @@ msgstr ""
 # /src/GameModels/Tip.php:26
 msgctxt "tips"
 msgid "LASER TAG - SUIT UP!"
-msgstr ""
+msgstr "LASER TAG - SUIT UP!"
 
 # /src/GameModels/Tip.php:26
 msgctxt "tips"
@@ -891,7 +891,7 @@ msgstr ""
 # /src/GameModels/Game/PlayerTrophy.php:83
 msgctxt "results.bests"
 msgid "Sniper"
-msgstr ""
+msgstr "Tireur d'élite"
 
 # /src/GameModels/Game/PlayerTrophy.php:153
 msgctxt "results.bests"
@@ -1114,7 +1114,7 @@ msgstr ""
 # /routes/cli.php:60
 msgctxt "cli.messages"
 msgid "Examples"
-msgstr ""
+msgstr "Exemples"
 
 # /src/Services/CliHelper.php:91
 msgctxt "cli.help.arguments"
@@ -1124,7 +1124,7 @@ msgstr ""
 # /routes/cli.php:85
 msgctxt "cli.messages"
 msgid "Information"
-msgstr ""
+msgstr "Information"
 
 msgctxt "cli.help.arguments"
 msgid "Optional filter for command groups."
@@ -1137,21 +1137,21 @@ msgstr ""
 
 msgctxt "gameModes"
 msgid "Survival"
-msgstr ""
+msgstr "Survie"
 
 # /templates/pages/settings/index.latte:13
 msgctxt "settings"
 msgid "API klíč"
-msgstr ""
+msgstr "API clé"
 
 # /templates/pages/settings/index.latte:13
 msgctxt "settings"
 msgid "General settings"
-msgstr ""
+msgstr "Réglages généraux"
 
 # /config/nav/menu.php:31
 msgid "Vests"
-msgstr ""
+msgstr "Vestes"
 
 # /templates/pages/settings/vests.latte:12
 msgctxt "settings"
@@ -1160,22 +1160,22 @@ msgstr ""
 
 msgctxt "systems"
 msgid "evo5"
-msgstr ""
+msgstr "evo5"
 
 # /templates/pages/settings/vests.latte:69
 msgctxt "settings.vests"
 msgid "Porucha"
-msgstr ""
+msgstr "Panne"
 
 # /templates/pages/settings/vests.latte:54
 msgctxt "settings.vests.status"
 msgid "V pořádku"
-msgstr ""
+msgstr "OK"
 
 # /templates/pages/settings/vests.latte:68
 msgctxt "settings.vests.status"
 msgid "Nefunkční"
-msgstr ""
+msgstr "KO"
 
 # /templates/pages/settings/vests.latte:60
 msgctxt "settings.vests.status"
@@ -1188,7 +1188,7 @@ msgstr ""
 
 msgctxt "gameModes"
 msgid "T.M.A - solo"
-msgstr ""
+msgstr "T.M.A - solo"
 
 msgctxt "results.info"
 msgid "Podrobnější výsledky zde"
@@ -1202,7 +1202,7 @@ msgstr ""
 # /src/GameModels/Game/PlayerTrophy.php:108
 msgctxt "results.bests"
 msgid "Terč"
-msgstr ""
+msgstr "Cible"
 
 msgctxt "results.bests.description"
 msgid "Staň se hráčem s největším skóre hry."
@@ -1462,7 +1462,7 @@ msgstr ""
 # /src/Services/CliHelper.php:29
 msgctxt "cli.errors"
 msgid "Missing the required path argument (1)"
-msgstr ""
+msgstr "Il manque le chemin d'accès requis (1)"
 
 # /templates/pages/gate/idle.latte:53
 msgctxt "results"
@@ -1478,5 +1478,5 @@ msgstr ""
 # /src/Services/CliHelper.php:91
 msgctxt "cli.help.arguments"
 msgid "If set, output will be written to the [out] file. Otherwise, output will be written to stdout."
-msgstr ""
+msgstr "Si défini, la sortie sera écrite dans le fichier [out] . Sinon, la sortie sera écrite dans stdout."
 

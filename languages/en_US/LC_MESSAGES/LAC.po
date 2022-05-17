@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: English\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2022-05-17 13:52\n"
+"PO-Revision-Date: 2022-05-17 15:02\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -1467,16 +1467,16 @@ msgstr "Missing the required path argument (1)"
 # /templates/pages/gate/idle.latte:53
 msgctxt "results"
 msgid "Odehráno her"
-msgstr ""
+msgstr "Games played"
 
 # /templates/results/templates/graphical.latte:116
 # /templates/results/templates/default.latte:72
 msgctxt "gameModes"
 msgid "Barvičky"
-msgstr ""
+msgstr "Colour conquest"
 
 # /src/Services/CliHelper.php:91
 msgctxt "cli.help.arguments"
 msgid "If set, output will be written to the [out] file. Otherwise, output will be written to stdout."
-msgstr ""
+msgstr "If set, the output will be written to the [out] file. Otherwise, the output will be written to stdout."
 

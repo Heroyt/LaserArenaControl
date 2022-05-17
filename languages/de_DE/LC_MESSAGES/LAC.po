@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: German\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2022-05-14 15:32\n"
+"PO-Revision-Date: 2022-05-17 13:42\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -21,7 +21,7 @@ msgstr ""
 # /src/Core/Controller.php:74
 msgctxt "pageTitles"
 msgid "Games list"
-msgstr ""
+msgstr "Spiele-Liste"
 
 # /templates/header.latte:11
 msgid "Toggle navigation"
@@ -29,11 +29,11 @@ msgstr ""
 
 # /config/nav/menu.php:4
 msgid "New game"
-msgstr ""
+msgstr "Neues Spiel"
 
 # /config/nav/menu.php:8
 msgid "Games"
-msgstr ""
+msgstr "Spiele"
 
 # /config/nav/menu.php:13
 # /config/nav/menu.php:39
@@ -43,19 +43,19 @@ msgstr ""
 
 # /templates/pages/games-list/index.latte:15
 msgid "Games list"
-msgstr ""
+msgstr "Spiele-Liste"
 
 # /templates/pages/games-list/index.latte:15
 msgid "Date"
-msgstr ""
+msgstr "Datum"
 
 # /templates/pages/games-list/index.latte:34
 msgid "Time"
-msgstr ""
+msgstr "Zeit"
 
 # /templates/pages/games-list/index.latte:34
 msgid "Game mode"
-msgstr ""
+msgstr "Spielmodus"
 
 # /templates/pages/games-list/index.latte:34
 msgid "Players"
@@ -70,12 +70,10 @@ msgid "%s score"
 msgstr ""
 
 # /templates/debug/Db/panel.latte:7
-# /templates/debug/Db/panel.latte:7
 msgctxt "debugPanel"
 msgid "Rows"
 msgstr ""
 
-# /templates/debug/Db/panel.latte:8
 # /templates/debug/Db/panel.latte:8
 msgctxt "debugPanel"
 msgid "Takes"
@@ -83,25 +81,20 @@ msgstr ""
 
 # /templates/debug/Translation/tab.latte:
 # /templates/debug/Translation/panel.latte:8
-# /templates/debug/Translation/tab.latte:
-# /templates/debug/Translation/panel.latte:8
 msgctxt "debugPanel"
 msgid "Translations"
 msgstr ""
 
-# /templates/debug/Translation/panel.latte:8
 # /templates/debug/Translation/panel.latte:8
 msgctxt "debugPanel"
 msgid "Language"
 msgstr ""
 
 # /templates/debug/Translation/panel.latte:10
-# /templates/debug/Translation/panel.latte:10
 msgctxt "debugPanel"
 msgid "HTTP header"
 msgstr ""
 
-# /templates/debug/Translation/panel.latte:17
 # /templates/debug/Translation/panel.latte:17
 msgctxt "debugPanel"
 msgid "Translated strings"
@@ -996,36 +989,30 @@ msgid "Zobrazit na Gate"
 msgstr ""
 
 # /templates/pages/gate/idle.latte:69
-# /templates/pages/gate/idle.latte:69
 msgctxt "results"
 msgid "Sniper"
 msgstr ""
 
-# /templates/pages/gate/idle.latte:82
 # /templates/pages/gate/idle.latte:82
 msgctxt "results"
 msgid "Mega střelec"
 msgstr ""
 
 # /templates/pages/gate/idle.latte:95
-# /templates/pages/gate/idle.latte:95
 msgctxt "results"
 msgid "Predátor"
 msgstr ""
 
-# /templates/pages/gate/idle.latte:110
 # /templates/pages/gate/idle.latte:110
 msgctxt "results"
 msgid "Cíl"
 msgstr ""
 
 # /templates/pages/gate/idle.latte:28
-# /templates/pages/gate/idle.latte:28
 msgctxt "gate"
 msgid "Nejlepší skóre dne"
 msgstr ""
 
-# /templates/pages/gate/idle.latte:28
 # /templates/pages/gate/idle.latte:28
 msgctxt "gate"
 msgid "Výsledky dne"
@@ -1473,6 +1460,22 @@ msgstr ""
 
 msgctxt "cli.errors"
 msgid "Missing the required path argument (1)"
+msgstr ""
+
+# /templates/pages/gate/idle.latte:53
+msgctxt "results"
+msgid "Odehráno her"
+msgstr ""
+
+# /templates/results/templates/graphical.latte:116
+# /templates/results/templates/default.latte:72
+msgctxt "gameModes"
+msgid "Barvičky"
+msgstr ""
+
+# /src/Services/CliHelper.php:91
+msgctxt "cli.help.arguments"
+msgid "If set, output will be written to the [out] file. Otherwise, output will be written to stdout."
 msgstr ""
 
 # /templates/pages/gate/idle.latte:53

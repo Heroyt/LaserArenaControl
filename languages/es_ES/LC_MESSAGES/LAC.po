@@ -3,15 +3,20 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Language: es_ES\n"
-"Language-Team: \n"
+"Language-Team: Spanish\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2021-12-01 13:23+0100\n"
+"PO-Revision-Date: 2022-05-17 13:42\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"Project-Id-Version: \n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Project-Id-Version: laserarenacontrol\n"
 "X-Generator: Poedit 2.3\n"
 "X-Poedit-Basepath: .\n"
+"X-Crowdin-Project: laserarenacontrol\n"
+"X-Crowdin-Project-ID: 515800\n"
+"X-Crowdin-Language: es-ES\n"
+"X-Crowdin-File: /master/languages/LAC.pot\n"
+"X-Crowdin-File-ID: 64\n"
 
 # /src/Core/Controller.php:74
 msgctxt "pageTitles"
@@ -65,12 +70,10 @@ msgid "%s score"
 msgstr ""
 
 # /templates/debug/Db/panel.latte:7
-# /templates/debug/Db/panel.latte:7
 msgctxt "debugPanel"
 msgid "Rows"
 msgstr ""
 
-# /templates/debug/Db/panel.latte:8
 # /templates/debug/Db/panel.latte:8
 msgctxt "debugPanel"
 msgid "Takes"
@@ -78,25 +81,20 @@ msgstr ""
 
 # /templates/debug/Translation/tab.latte:
 # /templates/debug/Translation/panel.latte:8
-# /templates/debug/Translation/tab.latte:
-# /templates/debug/Translation/panel.latte:8
 msgctxt "debugPanel"
 msgid "Translations"
 msgstr ""
 
-# /templates/debug/Translation/panel.latte:8
 # /templates/debug/Translation/panel.latte:8
 msgctxt "debugPanel"
 msgid "Language"
 msgstr ""
 
 # /templates/debug/Translation/panel.latte:10
-# /templates/debug/Translation/panel.latte:10
 msgctxt "debugPanel"
 msgid "HTTP header"
 msgstr ""
 
-# /templates/debug/Translation/panel.latte:17
 # /templates/debug/Translation/panel.latte:17
 msgctxt "debugPanel"
 msgid "Translated strings"
@@ -991,36 +989,30 @@ msgid "Zobrazit na Gate"
 msgstr ""
 
 # /templates/pages/gate/idle.latte:69
-# /templates/pages/gate/idle.latte:69
 msgctxt "results"
 msgid "Sniper"
 msgstr ""
 
-# /templates/pages/gate/idle.latte:82
 # /templates/pages/gate/idle.latte:82
 msgctxt "results"
 msgid "Mega střelec"
 msgstr ""
 
 # /templates/pages/gate/idle.latte:95
-# /templates/pages/gate/idle.latte:95
 msgctxt "results"
 msgid "Predátor"
 msgstr ""
 
-# /templates/pages/gate/idle.latte:110
 # /templates/pages/gate/idle.latte:110
 msgctxt "results"
 msgid "Cíl"
 msgstr ""
 
 # /templates/pages/gate/idle.latte:28
-# /templates/pages/gate/idle.latte:28
 msgctxt "gate"
 msgid "Nejlepší skóre dne"
 msgstr ""
 
-# /templates/pages/gate/idle.latte:28
 # /templates/pages/gate/idle.latte:28
 msgctxt "gate"
 msgid "Výsledky dne"
@@ -1471,7 +1463,6 @@ msgid "Missing the required path argument (1)"
 msgstr ""
 
 # /templates/pages/gate/idle.latte:53
-# /templates/pages/gate/idle.latte:53
 msgctxt "results"
 msgid "Odehráno her"
 msgstr ""
@@ -1486,3 +1477,4 @@ msgstr ""
 msgctxt "cli.help.arguments"
 msgid "If set, output will be written to the [out] file. Otherwise, output will be written to stdout."
 msgstr ""
+

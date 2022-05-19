@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: Slovak\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2022-05-19 11:42\n"
+"PO-Revision-Date: 2022-05-19 20:16\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=4; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 3;\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -1495,206 +1495,222 @@ msgctxt "cli.help.arguments"
 msgid "If set, output will be written to the [out] file. Otherwise, output will be written to stdout."
 msgstr "Ak je nastavené, výstup bude zapísaný do [out] súboru. V opačnom prípade bude výstup zapísaný do stdout."
 
+msgid "Datum"
+msgstr "Dátum"
+
+msgid "Hra neexistuje!"
+msgstr "Hra neexistuje!"
+
+msgid "Herní mód"
+msgstr "Herný mód"
+
+msgid "%d score"
+msgstr "%d skóre"
+
+msgid "Základny"
+msgstr "Základne"
+
 msgctxt "results.today"
 msgid "Dnešní pořadí podle"
-msgstr ""
+msgstr "Denné poradie podľa"
 
 msgctxt "results.today"
 msgid "Výstřelů"
-msgstr ""
+msgstr "Výstrelov"
 
 msgctxt "actions"
 msgid "Close"
-msgstr ""
+msgstr "Zavrieť"
 
 msgctxt "leaderboard"
 msgid "Hráč"
-msgstr ""
+msgstr "Hráč"
 
 msgctxt "leaderboard"
 msgid "Mód"
-msgstr ""
+msgstr "Mód"
 
 msgctxt "leaderboard"
 msgid "Čas"
-msgstr ""
+msgstr "Čas"
 
 msgctxt "leaderboard"
 msgid "Score"
-msgstr ""
+msgstr "Skóre"
 
 msgctxt "leaderboard"
 msgid "Accuracy"
-msgstr ""
+msgstr "Presnosť"
 
 msgctxt "leaderboard"
 msgid "Hits"
-msgstr ""
+msgstr "Zásahy"
 
 msgctxt "leaderboard"
 msgid "Deaths"
-msgstr ""
+msgstr "Smrti"
 
 msgctxt "leaderboard"
 msgid "Shots"
-msgstr ""
+msgstr "Výstrely"
 
 msgctxt "results.info"
 msgid "Body za zásah"
-msgstr ""
+msgstr "Body za zásah"
 
 msgctxt "results.info"
 msgid "Body za smrt"
-msgstr ""
+msgstr "Body za smrť"
 
 msgctxt "results.info"
 msgid "Body za zásah vlastního"
-msgstr ""
+msgstr "Body za zásah vlastného"
 
 msgctxt "results.info"
 msgid "Body za smrt od vlastního hráče"
-msgstr ""
+msgstr "Body za smrť od vlastného hráča"
 
 msgctxt "results.bests"
 msgid "Získané trofeje"
-msgstr ""
+msgstr "Získané trofeje"
 
 msgctxt "results.bests"
 msgid "Zobrazit dostupné trofeje"
-msgstr ""
+msgstr "Zobraziť dostupné trofeje"
 
 msgctxt "results"
 msgid "Střely do prázdna"
-msgstr ""
+msgstr "Streli do prázdna"
 
 msgctxt "results.hits"
 msgid "Zásahy do hráčů"
-msgstr ""
+msgstr "Zásahy do hráčov"
 
 msgctxt "results.hits"
 msgid "Smrti od hráčů"
-msgstr ""
+msgstr "Smrti od hráčov"
 
 msgid "Bohužel tady nic není..."
-msgstr ""
+msgstr "Bohužiaľ tu nič nie je..."
 
 msgctxt "results.bests"
 msgid "Dostupné trofeje"
-msgstr ""
+msgstr "Dostupné trofeje"
 
 msgctxt "results.info"
 msgid "Body smrt od miny"
-msgstr ""
+msgstr "Body smrť od míny"
 
 msgctxt "results.info"
 msgid "Body za bonus"
-msgstr ""
+msgstr "Body za bonus"
 
 msgctxt "results.bonus"
 msgid "agent"
-msgstr ""
+msgstr "agent"
 
 msgctxt "results.bonus"
 msgid "neviditelnost"
-msgstr ""
+msgstr "neviditeľnosť"
 
 msgctxt "results.bonus"
 msgid "samopal"
-msgstr ""
+msgstr "samopal"
 
 msgctxt "results.bonus"
 msgid "štít"
-msgstr ""
+msgstr "štít"
 
 msgid "Legenda"
-msgstr ""
+msgstr "Legenda"
 
 msgctxt "results.bests"
 msgid "Zobrazit všechny trofeje"
-msgstr ""
+msgstr "Zobraziť všetky trofeje"
 
 msgctxt "results.today"
 msgid "Klikněte níže na okénko pro zobrazení tabulky dnešního pořadí."
-msgstr ""
+msgstr "Kliknite nižšie na okienko pre zobrazenie tabuľky dnešného poradia."
 
 msgctxt "results.today"
 msgid "Zobrazit dnešní pořadí"
-msgstr ""
+msgstr "Zobraziť dnešné poradie"
 
 msgctxt "actions"
 msgid "Začít"
-msgstr ""
+msgstr "Začať"
 
 msgctxt "actions"
 msgid "Zavřít"
-msgstr ""
+msgstr "Zavrieť"
 
 msgctxt "action"
 msgid "Zobrazit později"
-msgstr ""
+msgstr "Zobraziť neskôr"
 
 msgctxt "action"
 msgid "Nezobrazovat"
-msgstr ""
+msgstr "Nezobrazovať"
 
 msgctxt "results.bests"
 msgid "Bohužel na tebe nesedí žádná z trofejí..."
-msgstr ""
+msgstr "Bohužiaľ na teba nesedí žiadna z trofejí..."
 
 msgctxt "actions"
 msgid "Předchozí"
-msgstr ""
+msgstr "Predchádzajúci"
 
 msgctxt "action"
 msgid "Další"
-msgstr ""
+msgstr "Ďalšia"
 
 msgctxt "actions"
 msgid "Načítání"
-msgstr ""
+msgstr "Načítanie"
 
 msgctxt "action"
 msgid "Dokončit"
-msgstr ""
+msgstr "Dokončiť"
 
 msgctxt "action"
 msgid "Zavřít"
-msgstr ""
+msgstr "Zavrieť"
 
 msgctxt "form.errors"
 msgid "Toto pole je povinné"
-msgstr ""
+msgstr "Toto pole je povinné"
 
 msgctxt "results"
 msgid "Bodování"
-msgstr ""
+msgstr "Bodovanie"
 
 # /src/Services/CliHelper.php:29
 msgctxt "cli.errors"
 msgid "Cannot find any translation files in \"%s\" for language \"%s\" - skipping"
-msgstr ""
+msgstr "Nie je možné nájsť žiadne prekladové súbory v \"%s\" pre jazyk \"%s\" - preskakujem"
 
 # /templates/pages/game/index.latte:126
 msgid "Velký květnový turnaj 2022!"
-msgstr ""
+msgstr "Veľký májový turnaj 2022!"
 
 # /templates/pages/game/index.latte:126
 msgid "Přihlaš i svůj (vý)herní tým na pravidelný turnaj!"
-msgstr ""
+msgstr "Prihlás aj svoj (vý)herný tím na pravidelný turnaj!"
 
 # /templates/pages/game/index.latte:126
 msgid "3 kategorie - začátečníci, pokročilí a mazáci"
-msgstr ""
+msgstr "3 kategórie - začiatočníci, pokročilí a mazáci"
 
 # /templates/pages/game/index.latte:126
 msgid "Možnost tréninkových her za 50 Kč / hráč / hra"
-msgstr ""
+msgstr "Možnosť tréningových hier za 50 Kč / hráč / hra"
 
 # /templates/pages/game/index.latte:126
 msgid "Domluv si trénink s profíky!"
-msgstr ""
+msgstr "Dohovor si tréning s profíkmi!"
 
 # /templates/pages/game/leaderboard.latte:24
 msgctxt "gameModes"
 msgid "Apokalypsa"
-msgstr ""
+msgstr "Apokalypsa"
+

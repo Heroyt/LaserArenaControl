@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: English\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2022-05-17 15:02\n"
+"PO-Revision-Date: 2022-05-19 20:06\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -1487,6 +1487,9 @@ msgstr "Date"
 msgid "Hra neexistuje!"
 msgstr "Game does not exist!"
 
+msgid "Herní mód"
+msgstr "Game mode"
+
 msgid "%d score"
 msgstr "%d score"
 
@@ -1670,29 +1673,30 @@ msgstr "Scoring"
 # /src/Services/CliHelper.php:29
 msgctxt "cli.errors"
 msgid "Cannot find any translation files in \"%s\" for language \"%s\" - skipping"
-msgstr ""
+msgstr "Cannot find any translation files in \"%s\" for language \"%s\" - skipping"
 
 # /templates/pages/game/index.latte:126
 msgid "Velký květnový turnaj 2022!"
-msgstr ""
+msgstr "Big May tournament 2022!"
 
 # /templates/pages/game/index.latte:126
 msgid "Přihlaš i svůj (vý)herní tým na pravidelný turnaj!"
-msgstr ""
+msgstr "Sign-up your (winning) team for a regular tournament!"
 
 # /templates/pages/game/index.latte:126
 msgid "3 kategorie - začátečníci, pokročilí a mazáci"
-msgstr ""
+msgstr "3 categories - beginners, advanced, pros"
 
 # /templates/pages/game/index.latte:126
 msgid "Možnost tréninkových her za 50 Kč / hráč / hra"
-msgstr ""
+msgstr "Training games for only 50 Kč per player per game"
 
 # /templates/pages/game/index.latte:126
 msgid "Domluv si trénink s profíky!"
-msgstr ""
+msgstr "Book a training session with our pros!"
 
 # /templates/pages/game/leaderboard.latte:24
 msgctxt "gameModes"
 msgid "Apokalypsa"
-msgstr ""
+msgstr "Apocalypse"
+

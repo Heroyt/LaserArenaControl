@@ -1494,3 +1494,12 @@ msgctxt "cli.help.arguments"
 msgid "If set, output will be written to the [out] file. Otherwise, output will be written to stdout."
 msgstr ""
 
+# /src/Services/CliHelper.php:29
+msgctxt "cli.errors"
+msgid "Cannot find any translation files in \"/Users/heroyt/Projects/LaserLiga/languages/\" for language \"es_ES\" - skipping"
+msgstr ""
+
+# /src/Services/CliHelper.php:29
+msgctxt "cli.errors"
+msgid "Cannot find any translation files in \"/Users/heroyt/Projects/LaserLiga/languages/\" for language \"uk_UA\" - skipping"
+msgstr ""

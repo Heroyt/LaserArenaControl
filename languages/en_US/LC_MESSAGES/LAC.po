@@ -1480,3 +1480,198 @@ msgctxt "cli.help.arguments"
 msgid "If set, output will be written to the [out] file. Otherwise, output will be written to stdout."
 msgstr "If set, the output will be written to the [out] file. Otherwise, the output will be written to stdout."
 
+# /src/Services/CliHelper.php:29
+msgctxt "cli.errors"
+msgid "Cannot find any translation files in \"/Users/heroyt/Projects/LaserLiga/languages/\" for language \"es_ES\" - skipping"
+msgstr ""
+
+# /src/Services/CliHelper.php:29
+msgctxt "cli.errors"
+msgid "Cannot find any translation files in \"/Users/heroyt/Projects/LaserLiga/languages/\" for language \"uk_UA\" - skipping"
+msgstr ""
+
+msgid "Datum"
+msgstr "Date"
+
+msgid "Hra neexistuje!"
+msgstr "Game does not exist!"
+
+msgid "%d score"
+msgstr "%d score"
+
+msgid "Základny"
+msgstr "Base defence"
+
+msgctxt "results.today"
+msgid "Dnešní pořadí podle"
+msgstr "Today’s leaderboard"
+
+msgctxt "results.today"
+msgid "Výstřelů"
+msgstr "Shots"
+
+msgctxt "actions"
+msgid "Close"
+msgstr "Close"
+
+msgctxt "leaderboard"
+msgid "Hráč"
+msgstr "Player"
+
+msgctxt "leaderboard"
+msgid "Mód"
+msgstr "Mode"
+
+msgctxt "leaderboard"
+msgid "Čas"
+msgstr "Time"
+
+msgctxt "leaderboard"
+msgid "Score"
+msgstr "Score"
+
+msgctxt "leaderboard"
+msgid "Accuracy"
+msgstr "Accuracy"
+
+msgctxt "leaderboard"
+msgid "Hits"
+msgstr "Hits"
+
+msgctxt "leaderboard"
+msgid "Deaths"
+msgstr "Deaths"
+
+msgctxt "leaderboard"
+msgid "Shots"
+msgstr "Shots"
+
+msgctxt "results.info"
+msgid "Body za zásah"
+msgstr "Points per hit"
+
+msgctxt "results.info"
+msgid "Body za smrt"
+msgstr "Points per deaths"
+
+msgctxt "results.info"
+msgid "Body za zásah vlastního"
+msgstr "Points per teammate hit"
+
+msgctxt "results.info"
+msgid "Body za smrt od vlastního hráče"
+msgstr "Points per death by teammate"
+
+msgctxt "results.bests"
+msgid "Získané trofeje"
+msgstr "Acquired trophies"
+
+msgctxt "results.bests"
+msgid "Zobrazit dostupné trofeje"
+msgstr "Show available trophies"
+
+msgctxt "results"
+msgid "Střely do prázdna"
+msgstr "Missed shots"
+
+msgctxt "results.hits"
+msgid "Zásahy do hráčů"
+msgstr "Player hits"
+
+msgctxt "results.hits"
+msgid "Smrti od hráčů"
+msgstr "Deaths by players"
+
+msgid "Bohužel tady nic není..."
+msgstr "Unfortunately there is nothing to see here…"
+
+msgctxt "results.bests"
+msgid "Dostupné trofeje"
+msgstr "Available trophies"
+
+msgctxt "results.info"
+msgid "Body smrt od miny"
+msgstr "Points for death by pod"
+
+msgctxt "results.info"
+msgid "Body za bonus"
+msgstr "Points for power"
+
+msgctxt "results.bonus"
+msgid "agent"
+msgstr "spy"
+
+msgctxt "results.bonus"
+msgid "neviditelnost"
+msgstr "invisibility"
+
+msgctxt "results.bonus"
+msgid "samopal"
+msgstr "machine gun"
+
+msgctxt "results.bonus"
+msgid "štít"
+msgstr "shield"
+
+msgid "Legenda"
+msgstr "Legend"
+
+msgctxt "results.bests"
+msgid "Zobrazit všechny trofeje"
+msgstr "Show all trophies"
+
+msgctxt "results.today"
+msgid "Klikněte níže na okénko pro zobrazení tabulky dnešního pořadí."
+msgstr "Click on the box below to show today’s leaderboard."
+
+msgctxt "results.today"
+msgid "Zobrazit dnešní pořadí"
+msgstr "Show today’s leaderboard"
+
+msgctxt "actions"
+msgid "Začít"
+msgstr "Begin"
+
+msgctxt "actions"
+msgid "Zavřít"
+msgstr "Close"
+
+msgctxt "action"
+msgid "Zobrazit později"
+msgstr "Show later"
+
+msgctxt "action"
+msgid "Nezobrazovat"
+msgstr "Don’t show again"
+
+msgctxt "results.bests"
+msgid "Bohužel na tebe nesedí žádná z trofejí..."
+msgstr "Unfortunately, there is no trophy for you…"
+
+msgctxt "actions"
+msgid "Předchozí"
+msgstr "Previous"
+
+msgctxt "action"
+msgid "Další"
+msgstr "Next"
+
+msgctxt "actions"
+msgid "Načítání"
+msgstr "Loading"
+
+msgctxt "action"
+msgid "Dokončit"
+msgstr "Finish"
+
+msgctxt "action"
+msgid "Zavřít"
+msgstr "Close"
+
+msgctxt "form.errors"
+msgid "Toto pole je povinné"
+msgstr "This field is required"
+
+msgctxt "results"
+msgid "Bodování"
+msgstr "Scoring"

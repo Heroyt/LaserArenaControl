@@ -104,9 +104,9 @@ class App
 			bdump(setlocale(LC_ALL, 0));
 			bdump(setlocale(LC_ALL, self::$activeLanguageCode, self::$activeLanguageCode.'.UTF8', self::$activeLanguageCode.'.UTF-8', self::$activeLanguageCode.'.utf-8', self::$language->name));
 			bdump(setlocale(LC_MESSAGES, self::$activeLanguageCode, self::$activeLanguageCode.'.UTF8', self::$activeLanguageCode.'.UTF-8', self::$activeLanguageCode.'.utf-8', self::$language->name));
-			bdump(bindtextdomain("LAC", substr(LANGUAGE_DIR, 0, -1)));
-			bdump(textdomain('LAC'));
-			bdump(bind_textdomain_codeset('LAC', "UTF-8"));
+			bdump(bindtextdomain(LANGUAGE_FILE_NAME, substr(LANGUAGE_DIR, 0, -1)));
+			bdump(textdomain(LANGUAGE_FILE_NAME));
+			bdump(bind_textdomain_codeset(LANGUAGE_FILE_NAME, "UTF-8"));
 		}
 
 		self::setupLatte();

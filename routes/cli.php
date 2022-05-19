@@ -102,4 +102,19 @@ if (PHP_SAPI === 'cli') {
 
 	CliRoute::cli('translations/compile', [Translations::class, 'compile'])
 					->description('Compile all translation files.');
+
+	CliRoute::cli('translations/merge', [Translations::class, 'merge'])
+					->description('Merge translations from this and one other project.')
+					->usage('<dir> [contextSkip]')
+					->addArgument([
+													'name'        => 'dir',
+													'isOptional'  => false,
+													'description' => 'A language directory from the other project.',
+													'template'    => 'filepaths',
+												],
+												[
+													'name'        => 'contextSkip',
+													'isOptional'  => true,
+													'description' => 'A comma separated list of context names to skip while merging.',
+												]);
 }

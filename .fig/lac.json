@@ -79,6 +79,18 @@
 			"name": "translations/compile",
 			"description": "Compile all translation files.",
 			"args": []
+		},
+		{
+			"name": "translations/merge",
+			"description": "Merge translations from this and one other project.",
+			"args": [
+				{
+					"name": "dir",
+					"isOptional": false,
+					"description": "A language directory from the other project.",
+					"template": "filepaths"
+				}
+			]
 		}
 	]
 }

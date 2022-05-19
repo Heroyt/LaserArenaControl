@@ -3,18 +3,6 @@
 	"description": "Laser arena control CLI tools",
 	"subcommands": [
 		{
-			"name": "autocomplete/get",
-			"description": "Generate an autocomplete JSON for all available commands.",
-			"args": [
-				{
-					"name": "out",
-					"isOptional": true,
-					"description": "If set, output will be written to the [out] file. Otherwise, output will be written to stdout.",
-					"template": "filepaths"
-				}
-			]
-		},
-		{
 			"name": "list",
 			"description": "Lists all available CLI commands.",
 			"args": [
@@ -55,8 +43,41 @@
 			]
 		},
 		{
+			"name": "games/sync",
+			"description": "Synchronize not synchronized games from DB to public API.",
+			"args": [
+				{
+					"name": "limit",
+					"isOptional": true,
+					"description": "Maximum number of games to synchronize"
+				},
+				{
+					"name": "timeout",
+					"isOptional": true,
+					"description": "Timeout for each curl request"
+				}
+			]
+		},
+		{
 			"name": "event/server",
 			"description": "Start a WebSocket event server.",
+			"args": []
+		},
+		{
+			"name": "autocomplete/get",
+			"description": "Generate an autocomplete JSON for all available commands.",
+			"args": [
+				{
+					"name": "out",
+					"isOptional": true,
+					"description": "If set, output will be written to the [out] file. Otherwise, output will be written to stdout.",
+					"template": "filepaths"
+				}
+			]
+		},
+		{
+			"name": "translations/compile",
+			"description": "Compile all translation files.",
 			"args": []
 		}
 	]

@@ -638,6 +638,7 @@ msgstr ""
 
 # /src/GameModels/Tip.php:26
 # /templates/pages/gate/@layout.latte:90
+# /templates/results/@printLayout.latte:112
 msgctxt "tips"
 msgid "Pro vyřízení osobních sporů je aréna ideální."
 msgstr ""
@@ -1494,16 +1495,6 @@ msgctxt "cli.help.arguments"
 msgid "If set, output will be written to the [out] file. Otherwise, output will be written to stdout."
 msgstr ""
 
-# /src/Services/CliHelper.php:29
-msgctxt "cli.errors"
-msgid "Cannot find any translation files in \"/Users/heroyt/Projects/LaserLiga/languages/\" for language \"es_ES\" - skipping"
-msgstr ""
-
-# /src/Services/CliHelper.php:29
-msgctxt "cli.errors"
-msgid "Cannot find any translation files in \"/Users/heroyt/Projects/LaserLiga/languages/\" for language \"uk_UA\" - skipping"
-msgstr ""
-
 msgctxt "results.today"
 msgid "Dnešní pořadí podle"
 msgstr ""
@@ -1676,4 +1667,9 @@ msgstr ""
 
 msgctxt "results"
 msgid "Bodování"
+msgstr ""
+
+# /src/Services/CliHelper.php:29
+msgctxt "cli.errors"
+msgid "Cannot find any translation files in \"%s\" for language \"%s\" - skipping"
 msgstr ""

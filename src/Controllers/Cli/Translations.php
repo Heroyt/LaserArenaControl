@@ -49,7 +49,7 @@ class Translations extends CliController
 		// Load current templates
 		$templateFiles = glob(LANGUAGE_DIR.'*.pot');
 		if (empty($templateFiles)) {
-			$this->errorPrint('No .pot template files were found in directory. "'.LANGUAGE_DIR.'"');
+			$this->errorPrint('No .pot template files were found in directory. "%s"', LANGUAGE_DIR);
 			exit(2);
 		}
 		/** @var array<string, GettextTranslations> $templates */
@@ -62,7 +62,7 @@ class Translations extends CliController
 		// Load other templates
 		$templateFiles = glob($otherDir.'*.pot');
 		if (empty($templateFiles)) {
-			$this->errorPrint('No .pot template files were found in directory. "'.$otherDir.'"');
+			$this->errorPrint('No .pot template files were found in directory. "%s"', $otherDir);
 			exit(1);
 		}
 		/** @var array<string, GettextTranslations> $otherTemplates */
@@ -78,7 +78,7 @@ class Translations extends CliController
 		foreach ($translations as $lang => $translation) {
 			$translationFiles = glob($otherDir.$lang.'/LC_MESSAGES/*.po');
 			if (empty($translationFiles)) {
-				$this->errorPrint('Cannot find any translation files in "'.$otherDir.'" for language "'.$lang.'" - skipping');
+				$this->errorPrint('Cannot find any translation files in "%s" for language "%s" - skipping', $otherDir, $lang);
 				continue;
 			}
 			$otherTranslations[$lang] = [

@@ -50,11 +50,12 @@ abstract class CliController implements ControllerInterface
 	 * Print a message to STDERR
 	 *
 	 * @param string $message
+	 * @param mixed  ...$args
 	 *
 	 * @return void
 	 */
-	public function errorPrint(string $message) : void {
-		CliHelper::printErrorMessage($message);
+	public function errorPrint(string $message, ...$args) : void {
+		CliHelper::printErrorMessage($message, ...$args);
 	}
 
 }

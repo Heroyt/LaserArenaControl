@@ -22,6 +22,7 @@ const UPLOAD_DIR = ROOT.'upload/';
 /** Directory for files hidden from the user */
 const PRIVATE_DIR = ROOT.'private/';
 const LANGUAGE_DIR = ROOT.'languages/';
+const LANGUAGE_FILE_NAME = 'LAC';
 const ASSETS_DIR = ROOT.'assets/';
 /** App's default language */
 const DEFAULT_LANGUAGE = 'cs';

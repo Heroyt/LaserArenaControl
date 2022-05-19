@@ -1714,3 +1714,7 @@ msgctxt "gameModes"
 msgid "Apokalypsa"
 msgstr ""
 
+# /src/Services/CliHelper.php:29
+msgctxt "cli.errors"
+msgid "Cannot find any translation files in \"%s\" for language \"%s\" - skipping"
+msgstr ""

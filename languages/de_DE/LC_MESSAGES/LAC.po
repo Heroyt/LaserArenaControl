@@ -1659,3 +1659,28 @@ msgstr ""
 msgctxt "cli.errors"
 msgid "Cannot find any translation files in \"%s\" for language \"%s\" - skipping"
 msgstr ""
+
+# /templates/pages/game/index.latte:126
+msgid "Velký květnový turnaj 2022!"
+msgstr ""
+
+# /templates/pages/game/index.latte:126
+msgid "Přihlaš i svůj (vý)herní tým na pravidelný turnaj!"
+msgstr ""
+
+# /templates/pages/game/index.latte:126
+msgid "3 kategorie - začátečníci, pokročilí a mazáci"
+msgstr ""
+
+# /templates/pages/game/index.latte:126
+msgid "Možnost tréninkových her za 50 Kč / hráč / hra"
+msgstr ""
+
+# /templates/pages/game/index.latte:126
+msgid "Domluv si trénink s profíky!"
+msgstr ""
+
+# /templates/pages/game/leaderboard.latte:24
+msgctxt "gameModes"
+msgid "Apokalypsa"
+msgstr ""

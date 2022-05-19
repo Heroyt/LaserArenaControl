@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: French\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2022-05-17 13:42\n"
+"PO-Revision-Date: 2022-05-17 15:02\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -743,7 +743,7 @@ msgstr ""
 # /src/GameModels/Tip.php:26
 msgctxt "tips"
 msgid "LASER TAG - SUIT UP!"
-msgstr ""
+msgstr "LASER TAG - SUIT UP!"
 
 # /src/GameModels/Tip.php:26
 msgctxt "tips"
@@ -853,11 +853,11 @@ msgstr "Date du"
 
 msgctxt "dates"
 msgid "to"
-msgstr ""
+msgstr "à"
 
 msgctxt "actions"
 msgid "Add"
-msgstr ""
+msgstr "Ajouter"
 
 msgctxt "dates"
 msgid "Date"
@@ -870,7 +870,7 @@ msgid "Dates"
 msgstr "Dates"
 
 msgid "No games have been played yet."
-msgstr ""
+msgstr "Aucun jeu n'a encore été joué."
 
 # /templates/pages/results/index.latte:43
 # /templates/pages/settings/print.latte:41
@@ -881,7 +881,7 @@ msgstr "Graphique"
 # /src/GameModels/Tip.php:26
 msgctxt "tips"
 msgid "Oživení trvá 5 sekund."
-msgstr ""
+msgstr "La désactivation dure 5 secondes."
 
 # /src/GameModels/Game/PlayerTrophy.php:78
 msgctxt "results.bests"
@@ -891,7 +891,7 @@ msgstr ""
 # /src/GameModels/Game/PlayerTrophy.php:83
 msgctxt "results.bests"
 msgid "Sniper"
-msgstr ""
+msgstr "Tireur d'élite"
 
 # /src/GameModels/Game/PlayerTrophy.php:153
 msgctxt "results.bests"
@@ -986,12 +986,12 @@ msgstr ""
 # /templates/pages/games-list/index.latte:54
 # /templates/pages/results/index.latte:67
 msgid "Zobrazit na Gate"
-msgstr ""
+msgstr "Visualiser sur le Gate"
 
 # /templates/pages/gate/idle.latte:69
 msgctxt "results"
 msgid "Sniper"
-msgstr ""
+msgstr "Tireur d'élite"
 
 # /templates/pages/gate/idle.latte:82
 msgctxt "results"
@@ -1001,40 +1001,40 @@ msgstr "Grand tireur"
 # /templates/pages/gate/idle.latte:95
 msgctxt "results"
 msgid "Predátor"
-msgstr ""
+msgstr "Prédateur"
 
 # /templates/pages/gate/idle.latte:110
 msgctxt "results"
 msgid "Cíl"
-msgstr ""
+msgstr "Cible"
 
 # /templates/pages/gate/idle.latte:28
 msgctxt "gate"
 msgid "Nejlepší skóre dne"
-msgstr ""
+msgstr "Meilleure score du jour"
 
 # /templates/pages/gate/idle.latte:28
 msgctxt "gate"
 msgid "Výsledky dne"
-msgstr ""
+msgstr "Résultats du jour"
 
 msgctxt "results"
 msgid "%d shot"
 msgid_plural "%d shots"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d tirs"
+msgstr[1] "%d tirs"
 
 msgctxt "results"
 msgid "%d hit"
 msgid_plural "%d hits"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d touche"
+msgstr[1] "%d touches"
 
 msgctxt "results"
 msgid "%d death"
 msgid_plural "%d deaths"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d mort"
+msgstr[1] "%d morts"
 
 # /templates/pages/settings/print.latte:41
 msgctxt "results.style.settings"
@@ -1044,21 +1044,21 @@ msgstr ""
 # /templates/pages/settings/print.latte:90
 msgctxt "actions"
 msgid "Add date"
-msgstr ""
+msgstr "Ajouter une date"
 
 # /templates/pages/settings/index.latte:13
 # /templates/pages/settings/gate.latte:22
 # /templates/pages/settings/vests.latte:12
 # /templates/pages/settings/print.latte:21
 msgid "Last saved:"
-msgstr ""
+msgstr "Dernière sauvegarde:"
 
 # /templates/pages/settings/index.latte:13
 # /templates/pages/settings/gate.latte:22
 # /templates/pages/settings/vests.latte:12
 # /templates/pages/settings/print.latte:21
 msgid "never"
-msgstr ""
+msgstr "jamais"
 
 # /templates/pages/settings/print.latte:143
 # /templates/pages/settings/print.latte:
@@ -1114,7 +1114,7 @@ msgstr ""
 # /routes/cli.php:60
 msgctxt "cli.messages"
 msgid "Examples"
-msgstr ""
+msgstr "Exemples"
 
 # /src/Services/CliHelper.php:91
 msgctxt "cli.help.arguments"
@@ -1124,7 +1124,7 @@ msgstr ""
 # /routes/cli.php:85
 msgctxt "cli.messages"
 msgid "Information"
-msgstr ""
+msgstr "Information"
 
 msgctxt "cli.help.arguments"
 msgid "Optional filter for command groups."
@@ -1137,21 +1137,21 @@ msgstr ""
 
 msgctxt "gameModes"
 msgid "Survival"
-msgstr ""
+msgstr "Survie"
 
 # /templates/pages/settings/index.latte:13
 msgctxt "settings"
 msgid "API klíč"
-msgstr ""
+msgstr "API clé"
 
 # /templates/pages/settings/index.latte:13
 msgctxt "settings"
 msgid "General settings"
-msgstr ""
+msgstr "Réglages généraux"
 
 # /config/nav/menu.php:31
 msgid "Vests"
-msgstr ""
+msgstr "Vestes"
 
 # /templates/pages/settings/vests.latte:12
 msgctxt "settings"
@@ -1160,22 +1160,22 @@ msgstr ""
 
 msgctxt "systems"
 msgid "evo5"
-msgstr ""
+msgstr "evo5"
 
 # /templates/pages/settings/vests.latte:69
 msgctxt "settings.vests"
 msgid "Porucha"
-msgstr ""
+msgstr "Panne"
 
 # /templates/pages/settings/vests.latte:54
 msgctxt "settings.vests.status"
 msgid "V pořádku"
-msgstr ""
+msgstr "OK"
 
 # /templates/pages/settings/vests.latte:68
 msgctxt "settings.vests.status"
 msgid "Nefunkční"
-msgstr ""
+msgstr "KO"
 
 # /templates/pages/settings/vests.latte:60
 msgctxt "settings.vests.status"
@@ -1188,7 +1188,7 @@ msgstr ""
 
 msgctxt "gameModes"
 msgid "T.M.A - solo"
-msgstr ""
+msgstr "T.M.A - solo"
 
 msgctxt "results.info"
 msgid "Podrobnější výsledky zde"
@@ -1202,7 +1202,7 @@ msgstr ""
 # /src/GameModels/Game/PlayerTrophy.php:108
 msgctxt "results.bests"
 msgid "Terč"
-msgstr ""
+msgstr "Cible"
 
 msgctxt "results.bests.description"
 msgid "Staň se hráčem s největším skóre hry."
@@ -1462,7 +1462,7 @@ msgstr ""
 # /src/Services/CliHelper.php:29
 msgctxt "cli.errors"
 msgid "Missing the required path argument (1)"
-msgstr ""
+msgstr "Il manque le chemin d'accès requis (1)"
 
 # /templates/pages/gate/idle.latte:53
 msgctxt "results"
@@ -1478,4 +1478,5 @@ msgstr ""
 # /src/Services/CliHelper.php:91
 msgctxt "cli.help.arguments"
 msgid "If set, output will be written to the [out] file. Otherwise, output will be written to stdout."
-msgstr ""
+msgstr "Si défini, la sortie sera écrite dans le fichier [out] . Sinon, la sortie sera écrite dans stdout."
+

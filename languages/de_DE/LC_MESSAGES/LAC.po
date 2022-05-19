@@ -6,12 +6,12 @@ msgstr ""
 "Language-Team: German\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2022-05-17 13:42\n"
+"PO-Revision-Date: 2022-05-17 13:52\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Project-Id-Version: laserarenacontrol\n"
-"X-Crowdin-File: /master/languages/de_DE/LC_MESSAGES/LAC.pot\n"
-"X-Crowdin-File-ID: 44\n"
+"X-Crowdin-File: /master/languages/LAC.pot\n"
+"X-Crowdin-File-ID: 64\n"
 "X-Crowdin-Language: de\n"
 "X-Crowdin-Project: laserarenacontrol\n"
 "X-Crowdin-Project-ID: 515800\n"
@@ -59,7 +59,7 @@ msgstr "Spielmodus"
 
 # /templates/pages/games-list/index.latte:34
 msgid "Players"
-msgstr ""
+msgstr "Spieler"
 
 # /templates/pages/games-list/index.latte:34
 msgid "Actions"
@@ -140,7 +140,7 @@ msgstr ""
 # /templates/results/templates/default.latte:72
 msgctxt "results.info"
 msgid "Herní mód"
-msgstr ""
+msgstr "Spielmodus"
 
 # /templates/results/templates/graphical.latte:116
 # /templates/results/templates/default.latte:72
@@ -151,37 +151,37 @@ msgstr ""
 # /templates/results/templates/default.latte:72
 msgctxt "results.info"
 msgid "Počet hráčů"
-msgstr ""
+msgstr "Spieler Anzahl"
 
 # /templates/results/templates/default.latte:74
 msgctxt "results.info"
 msgid "Počet týmů"
-msgstr ""
+msgstr "Teams Anzahl"
 
 # /templates/results/templates/default.latte:79
 msgctxt "results.scoring"
 msgid "Zásah protihráče"
-msgstr ""
+msgstr "Gegner getroffen"
 
 # /templates/results/templates/default.latte:80
 msgctxt "results.scoring"
 msgid "Zasažen protihráčem"
-msgstr ""
+msgstr "getroffen durch Gegner"
 
 # /templates/results/templates/default.latte:81
 msgctxt "results.scoring"
 msgid "Zásah spoluhráče"
-msgstr ""
+msgstr "Mitspieler getroffen"
 
 # /templates/results/templates/default.latte:82
 msgctxt "results.scoring"
 msgid "Zasažen spouhráčem"
-msgstr ""
+msgstr "getroffen durch Mitspieler"
 
 # /templates/results/templates/default.latte:83
 msgctxt "results.scoring"
 msgid "Zasažen minou"
-msgstr ""
+msgstr "getroffen durch Minen"
 
 # /templates/results/templates/default.latte:86
 msgctxt "results.scoring"
@@ -211,22 +211,22 @@ msgstr ""
 # /templates/results/templates/default.latte:104
 msgctxt "results.player"
 msgid "Jméno"
-msgstr ""
+msgstr "Name"
 
 # /templates/results/templates/default.latte:110
 msgctxt "results.player"
 msgid "Tým"
-msgstr ""
+msgstr "Team"
 
 # /templates/results/templates/default.latte:120
 msgctxt "results.player"
 msgid "Skóre"
-msgstr ""
+msgstr "Ergebnis"
 
 # /templates/results/templates/default.latte:124
 msgctxt "results.player"
 msgid "Počet výstřelů"
-msgstr ""
+msgstr "Anzahl der Schüsse"
 
 # /templates/results/templates/default.latte:130
 msgctxt "results.player"
@@ -236,7 +236,7 @@ msgstr ""
 # /templates/results/templates/default.latte:136
 msgctxt "results.player"
 msgid "Úspěšnost"
-msgstr ""
+msgstr "Genauigkeit"
 
 # /templates/results/templates/default.latte:176
 msgctxt "results.player"
@@ -250,7 +250,7 @@ msgstr ""
 # /templates/results/templates/default.latte:205
 msgctxt "results.player"
 msgid "Zásahy"
-msgstr ""
+msgstr "Treffer"
 
 # /templates/results/templates/default.latte:145
 # /templates/results/templates/default.latte:182
@@ -263,12 +263,12 @@ msgstr ""
 # /templates/results/templates/default.latte:192
 msgctxt "results.player"
 msgid "Týmy"
-msgstr ""
+msgstr "Teams"
 
 # /templates/results/templates/default.latte:192
 msgctxt "results.player"
 msgid "Soupeř"
-msgstr ""
+msgstr "Gegner"
 
 # /templates/results/templates/default.latte:205
 msgctxt "results.player"
@@ -283,7 +283,7 @@ msgstr ""
 # /templates/results/templates/default.latte:291
 msgctxt "results.today"
 msgid "Jméno"
-msgstr ""
+msgstr "Name"
 
 # /templates/results/templates/default.latte:298
 msgctxt "results.today"
@@ -293,12 +293,12 @@ msgstr ""
 # /templates/results/templates/default.latte:298
 msgctxt "results.today"
 msgid "Skóre"
-msgstr ""
+msgstr "Ergebnis"
 
 # /templates/results/templates/default.latte:302
 msgctxt "results.today"
 msgid "Přesnosti"
-msgstr ""
+msgstr "Genauigkeit"
 
 # /templates/results/templates/default.latte:306
 msgctxt "results.today"
@@ -340,7 +340,7 @@ msgstr[1] ""
 # /templates/results/templates/default.latte:226
 msgctxt "results.hits"
 msgid "Zásahy hráčů"
-msgstr ""
+msgstr "Treffer"
 
 # /templates/results/templates/graphical.latte:352
 # /templates/results/templates/default.latte:226
@@ -351,37 +351,37 @@ msgstr ""
 # /templates/results/templates/default.latte:248
 msgctxt "results.team"
 msgid "Výsledky týmů"
-msgstr ""
+msgstr "Team Ergebnisse"
 
 # /templates/results/templates/default.latte:248
 msgctxt "results.team"
 msgid "Tým"
-msgstr ""
+msgstr "Team"
 
 # /templates/results/templates/default.latte:256
 msgctxt "results.team"
 msgid "Zásahů"
-msgstr ""
+msgstr "Treffer"
 
 # /templates/results/templates/default.latte:257
 msgctxt "results.team"
 msgid "Skóre"
-msgstr ""
+msgstr "Ergebnis"
 
 # /templates/results/templates/default.latte:258
 msgctxt "results.team"
 msgid "Úspěšnost"
-msgstr ""
+msgstr "Genauigkeit"
 
 # /templates/results/templates/default.latte:259
 msgctxt "results.team"
 msgid "Výstřelů"
-msgstr ""
+msgstr "Schüsse"
 
 # /templates/results/templates/default.latte:331
 msgctxt "results.bests"
 msgid "Ti nej..."
-msgstr ""
+msgstr "Top Spieler…"
 
 # /src/GameModels/Game/PlayerTrophy.php:38
 # /src/GameModels/Game/Game.php:264
@@ -393,43 +393,43 @@ msgstr ""
 # /src/GameModels/Game/Game.php:265
 msgctxt "results.bests"
 msgid "Objekt největšího zájmu"
-msgstr ""
+msgstr "am meisten getroffen"
 
 # /src/GameModels/Game/PlayerTrophy.php:33
 # /src/GameModels/Game/Game.php:266
 msgctxt "results.bests"
 msgid "Absolutní vítěz"
-msgstr ""
+msgstr "Absoluter Gewinner"
 
 # /src/GameModels/Game/PlayerTrophy.php:48
 # /src/GameModels/Game/Game.php:267
 msgctxt "results.bests"
 msgid "Hráč s nejlepší muškou"
-msgstr ""
+msgstr "Spieler mit beste Genauigkeit"
 
 # /src/GameModels/Game/PlayerTrophy.php:53
 # /src/GameModels/Game/Game.php:268
 msgctxt "results.bests"
 msgid "Nejúspornější střelec"
-msgstr ""
+msgstr "der sparsamster Schütze"
 
 # /src/GameModels/Game/PlayerTrophy.php:58
 # /src/GameModels/Game/Game.php:269
 msgctxt "results.bests"
 msgid "Největší mimoň"
-msgstr ""
+msgstr "der grösste Minion"
 
 # /src/GameModels/Game/PlayerTrophy.php:63
 # /src/GameModels/Game/Evo5/Game.php:83
 msgctxt "results.bests"
 msgid "Zabiják vlastního týmu"
-msgstr ""
+msgstr "Mitspieler killer"
 
 # /src/GameModels/Game/PlayerTrophy.php:68
 # /src/GameModels/Game/Evo5/Game.php:86
 msgctxt "results.bests"
 msgid "Největší vlastňák"
-msgstr ""
+msgstr "am meisten getroffen durch Mitspieler"
 
 msgctxt "debugPanel"
 msgid "Plural"
@@ -446,7 +446,7 @@ msgstr ""
 
 msgctxt "gameModes"
 msgid "CSGO"
-msgstr ""
+msgstr "CSGO"
 
 # /templates/results/templates/graphical.latte:116
 # /templates/results/templates/default.latte:72
@@ -458,7 +458,7 @@ msgstr ""
 # /src/GameModels/Game/Evo5/Game.php:90
 msgctxt "results.bests"
 msgid "Drtič min"
-msgstr ""
+msgstr "Minenbrecher"
 
 # /templates/results/templates/graphical.latte:116
 # /templates/results/templates/default.latte:72
@@ -1479,3 +1479,4 @@ msgstr ""
 msgctxt "cli.help.arguments"
 msgid "If set, output will be written to the [out] file. Otherwise, output will be written to stdout."
 msgstr ""
+

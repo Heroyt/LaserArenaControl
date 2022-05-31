@@ -17,7 +17,7 @@ USER www-data
 WORKDIR /var/www/html/
 
 # Initialize git and download project
-RUN git init && git remote add origin https://github.com/Heroyt/LaserArenaControl.git && git fetch && git checkout -t origin/master
+RUN git init && git remote add origin https://github.com/Heroyt/LaserArenaControl.git && git stash push -a && git fetch && git checkout -t origin/master && git stash pop
 RUN git config pull.ff only
 RUN git pull --recurse-submodules
 RUN git submodule init

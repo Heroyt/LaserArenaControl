@@ -3,8 +3,6 @@ FROM heroyt/lac_core:latest AS project
 COPY cron /etc/cron.d/lac-cron
 RUN chmod 0644 /etc/cron.d/lac-cron &&\
     crontab /etc/cron.d/lac-cron
-COPY cron.sh /var/www/html/cron.sh
-RUN chmod +x /var/www/html/cron.sh
 
 # Project files
 RUN mkdir -p "/var/www/.npm" && chown -R 33:33 "/var/www/.npm"
@@ -17,12 +15,18 @@ USER www-data
 WORKDIR /var/www/html/
 
 # Initialize git and download project
-RUN git init && git remote add origin https://github.com/Heroyt/LaserArenaControl.git && git stash push -a && git fetch && git checkout -t origin/master && git stash pop
-RUN git config pull.ff only
-RUN git pull --recurse-submodules
+RUN git init
+RUN git remote add origin https://github.com/Heroyt/LaserArenaControl.git
+RUN git fetch
+RUN git checkout -t origin/master
+RUN git config pull.ff only --autostash
+RUN git pull --recurse-submodules=yes
 RUN git submodule init
 RUN git submodule update
 RUN git submodule update --init --recursive --remote
+
+# Cron rights
+RUN echo "pass" | sudo -S chmod +x /var/www/html/cron.sh
 
 # Initialize all configs and create necessary directories
 RUN mv private/docker-config.ini private/config.ini

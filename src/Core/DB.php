@@ -101,6 +101,20 @@ class DB
 	}
 
 	/**
+	 * Get query insert
+	 *
+	 * @param string   $table
+	 * @param iterable $args
+	 *
+	 * @return Fluent
+	 *
+	 * @since 1.0
+	 */
+	public static function insertGet(string $table, iterable $args) : Fluent {
+		return self::$db->insert($table, $args);
+	}
+
+	/**
 	 * Insert values
 	 *
 	 * @param string   $table
@@ -113,20 +127,6 @@ class DB
 	 */
 	public static function insert(string $table, iterable $args) : int {
 		return self::$db->insert($table, $args)->execute(dibi::AFFECTED_ROWS);
-	}
-
-	/**
-	 * Get query insert
-	 *
-	 * @param string   $table
-	 * @param iterable $args
-	 *
-	 * @return Fluent
-	 *
-	 * @since 1.0
-	 */
-	public static function insertGet(string $table, iterable $args) : Fluent {
-		return self::$db->insert($table, $args);
 	}
 
 	/**
@@ -143,6 +143,19 @@ class DB
 	}
 
 	/**
+	 * Get query insert
+	 *
+	 * @param string $table
+	 *
+	 * @return Fluent
+	 *
+	 * @since 1.0
+	 */
+	public static function deleteGet(string $table) : Fluent {
+		return self::$db->delete($table);
+	}
+
+	/**
 	 * Insert values
 	 *
 	 * @param string $table
@@ -154,19 +167,6 @@ class DB
 	 */
 	public static function delete(string $table, array $where = []) : int {
 		return self::$db->delete($table)->where(...$where)->execute(dibi::AFFECTED_ROWS);
-	}
-
-	/**
-	 * Get query insert
-	 *
-	 * @param string $table
-	 *
-	 * @return Fluent
-	 *
-	 * @since 1.0
-	 */
-	public static function deleteGet(string $table) : Fluent {
-		return self::$db->delete($table);
 	}
 
 	/**
@@ -204,7 +204,12 @@ class DB
 	 * @since 1.0
 	 */
 	public static function select(array|string $table, ...$args) : Fluent {
-		$query = self::$db->select(...$args);
+		if (isset(self::$db)) {
+			$query = self::$db->select(...$args);
+		}
+		else {
+			$query = (new Mock\Fluent(new Connection(['lazy' => true])))->select(...$args);
+		}
 		if (is_string($table)) {
 			$query->from($table);
 		}

@@ -4,6 +4,8 @@
 	"scripts": {
 		"serve": "php -S localhost:8000 index.php",
 		"test": "./vendor/bin/phpunit",
+		"testUnit": "./vendor/bin/phpunit --testsuite=unit",
+		"testIntegration": "./vendor/bin/phpunit --testsuite=integration",
 		"docs": "doxygen",
 		"build-production": "composer update --no-dev && composer dump-autoload --no-dev && npm install && npm run buildDev",
 		"build": "composer update && composer dump-autoload && npm install && npm run build"

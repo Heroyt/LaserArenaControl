@@ -1,0 +1,739 @@
+{
+	"id": null,
+	"row": null,
+	"logger": {},
+	"fileTime": {
+		"date": "2022-03-13 15:13:46.000000",
+		"timezone_type": 3,
+		"timezone": "Europe\/Prague"
+	},
+	"start": {
+		"date": "2020-05-20 14:25:35.000000",
+		"timezone_type": 3,
+		"timezone": "Europe\/Prague"
+	},
+	"importTime": {
+		"date": "2020-05-20 14:29:42.000000",
+		"timezone_type": 3,
+		"timezone": "Europe\/Prague"
+	},
+	"end": {
+		"date": "2020-05-20 14:29:39.000000",
+		"timezone_type": 3,
+		"timezone": "Europe\/Prague"
+	},
+	"timing": {
+		"before": 50,
+		"gameLength": 10,
+		"after": 1
+	},
+	"mode": {
+		"id": null,
+		"row": null,
+		"logger": {},
+		"name": "Team deathmach",
+		"description": "Classic team game type.",
+		"type": "TEAM",
+		"settings": {
+			"public": true,
+			"mines": true,
+			"partWin": true,
+			"partTeams": true,
+			"partPlayers": true,
+			"partHits": true,
+			"partBest": true,
+			"partBestDay": true,
+			"playerScore": true,
+			"playerShots": true,
+			"playerMiss": true,
+			"playerAccuracy": true,
+			"playerMines": true,
+			"playerPlayers": true,
+			"playerPlayersTeams": true,
+			"playerKd": true,
+			"playerFavourites": true,
+			"playerLives": true,
+			"teamScore": true,
+			"teamAccuracy": true,
+			"teamShots": true,
+			"teamHits": true,
+			"teamZakladny": true,
+			"bestScore": true,
+			"bestHits": true,
+			"bestDeaths": true,
+			"bestAccuracy": true,
+			"bestHitsOwn": true,
+			"bestDeathsOwn": true,
+			"bestShots": true,
+			"bestMiss": true,
+			"bestMines": true
+		}
+	},
+	"gameType": "TEAM",
+	"scoring": {
+		"deathOther": -50,
+		"hitOther": 100,
+		"deathOwn": -50,
+		"hitOwn": -25,
+		"hitPod": -50,
+		"shot": 0,
+		"machineGun": 100,
+		"invisibility": 100,
+		"agent": 100,
+		"shield": 100
+	},
+	"sync": false,
+	"started": true,
+	"finished": true,
+	"playerCount": 8,
+	"playerClass": "App\\GameModels\\Game\\Evo5\\Player",
+	"players": {
+		"1": {
+			"id": null,
+			"row": null,
+			"logger": {},
+			"id_player": 0,
+			"name": "Davydeg",
+			"score": 150,
+			"vest": 1,
+			"shots": 146,
+			"accuracy": 2,
+			"hits": 3,
+			"deaths": 3,
+			"position": 4,
+			"hitPlayers": {
+				"1": {
+					"shot": 0,
+					"target": 0,
+					"count": 0
+				},
+				"2": {
+					"shot": 0,
+					"target": 0,
+					"count": 0
+				},
+				"6": {
+					"shot": 0,
+					"target": 0,
+					"count": 0
+				},
+				"7": {
+					"shot": 0,
+					"target": 0,
+					"count": 0
+				},
+				"8": {
+					"shot": 0,
+					"target": 0,
+					"count": 2
+				},
+				"9": {
+					"shot": 0,
+					"target": 0,
+					"count": 0
+				},
+				"10": {
+					"shot": 0,
+					"target": 0,
+					"count": 1
+				},
+				"11": {
+					"shot": 0,
+					"target": 0,
+					"count": 0
+				}
+			},
+			"teamNum": 1,
+			"team": null,
+			"color": 0,
+			"favouriteTarget": null,
+			"favouriteTargetOf": null,
+			"shotPoints": 0,
+			"scoreBonus": 0,
+			"scorePowers": 0,
+			"scoreMines": 0,
+			"ammoRest": 9853,
+			"minesHits": 0,
+			"bonus": {
+				"agent": 0,
+				"invisibility": 0,
+				"machineGun": 0,
+				"shield": 0
+			},
+			"hitsOther": 3,
+			"hitsOwn": 0,
+			"deathsOwn": 0,
+			"deathsOther": 3
+		},
+		"2": {
+			"id": null,
+			"row": null,
+			"logger": {},
+			"id_player": 0,
+			"name": "Lukyndr",
+			"score": -50,
+			"vest": 2,
+			"shots": 149,
+			"accuracy": 1,
+			"hits": 1,
+			"deaths": 3,
+			"position": 6,
+			"hitPlayers": {
+				"1": {
+					"shot": 0,
+					"target": 0,
+					"count": 0
+				},
+				"2": {
+					"shot": 0,
+					"target": 0,
+					"count": 0
+				},
+				"6": {
+					"shot": 0,
+					"target": 0,
+					"count": 0
+				},
+				"7": {
+					"shot": 0,
+					"target": 0,
+					"count": 1
+				},
+				"8": {
+					"shot": 0,
+					"target": 0,
+					"count": 0
+				},
+				"9": {
+					"shot": 0,
+					"target": 0,
+					"count": 0
+				},
+				"10": {
+					"shot": 0,
+					"target": 0,
+					"count": 0
+				},
+				"11": {
+					"shot": 0,
+					"target": 0,
+					"count": 0
+				}
+			},
+			"teamNum": 1,
+			"team": null,
+			"color": 0,
+			"favouriteTarget": null,
+			"favouriteTargetOf": null,
+			"shotPoints": 0,
+			"scoreBonus": 0,
+			"scorePowers": 0,
+			"scoreMines": 0,
+			"ammoRest": 9850,
+			"minesHits": 0,
+			"bonus": {
+				"agent": 0,
+				"invisibility": 0,
+				"machineGun": 0,
+				"shield": 0
+			},
+			"hitsOther": 1,
+			"hitsOwn": 0,
+			"deathsOwn": 0,
+			"deathsOther": 3
+		},
+		"6": {
+			"id": null,
+			"row": null,
+			"logger": {},
+			"id_player": 0,
+			"name": "Marek",
+			"score": 150,
+			"vest": 6,
+			"shots": 149,
+			"accuracy": 2,
+			"hits": 3,
+			"deaths": 3,
+			"position": 3,
+			"hitPlayers": {
+				"1": {
+					"shot": 0,
+					"target": 0,
+					"count": 0
+				},
+				"2": {
+					"shot": 0,
+					"target": 0,
+					"count": 0
+				},
+				"6": {
+					"shot": 0,
+					"target": 0,
+					"count": 0
+				},
+				"7": {
+					"shot": 0,
+					"target": 0,
+					"count": 2
+				},
+				"8": {
+					"shot": 0,
+					"target": 0,
+					"count": 1
+				},
+				"9": {
+					"shot": 0,
+					"target": 0,
+					"count": 0
+				},
+				"10": {
+					"shot": 0,
+					"target": 0,
+					"count": 0
+				},
+				"11": {
+					"shot": 0,
+					"target": 0,
+					"count": 0
+				}
+			},
+			"teamNum": 1,
+			"team": null,
+			"color": 0,
+			"favouriteTarget": null,
+			"favouriteTargetOf": null,
+			"shotPoints": 0,
+			"scoreBonus": 0,
+			"scorePowers": 0,
+			"scoreMines": 0,
+			"ammoRest": 9850,
+			"minesHits": 0,
+			"bonus": {
+				"agent": 0,
+				"invisibility": 0,
+				"machineGun": 0,
+				"shield": 0
+			},
+			"hitsOther": 3,
+			"hitsOwn": 0,
+			"deathsOwn": 0,
+			"deathsOther": 3
+		},
+		"7": {
+			"id": null,
+			"row": null,
+			"logger": {},
+			"id_player": 0,
+			"name": "mini",
+			"score": 350,
+			"vest": 7,
+			"shots": 59,
+			"accuracy": 8,
+			"hits": 5,
+			"deaths": 3,
+			"position": 2,
+			"hitPlayers": {
+				"1": {
+					"shot": 0,
+					"target": 0,
+					"count": 0
+				},
+				"2": {
+					"shot": 0,
+					"target": 0,
+					"count": 2
+				},
+				"6": {
+					"shot": 0,
+					"target": 0,
+					"count": 1
+				},
+				"7": {
+					"shot": 0,
+					"target": 0,
+					"count": 0
+				},
+				"8": {
+					"shot": 0,
+					"target": 0,
+					"count": 0
+				},
+				"9": {
+					"shot": 0,
+					"target": 0,
+					"count": 2
+				},
+				"10": {
+					"shot": 0,
+					"target": 0,
+					"count": 0
+				},
+				"11": {
+					"shot": 0,
+					"target": 0,
+					"count": 0
+				}
+			},
+			"teamNum": 2,
+			"team": null,
+			"color": 0,
+			"favouriteTarget": null,
+			"favouriteTargetOf": null,
+			"shotPoints": 0,
+			"scoreBonus": 0,
+			"scorePowers": 0,
+			"scoreMines": 0,
+			"ammoRest": 9940,
+			"minesHits": 0,
+			"bonus": {
+				"agent": 0,
+				"invisibility": 0,
+				"machineGun": 0,
+				"shield": 0
+			},
+			"hitsOther": 5,
+			"hitsOwn": 0,
+			"deathsOwn": 0,
+			"deathsOther": 3
+		},
+		"8": {
+			"id": null,
+			"row": null,
+			"logger": {},
+			"id_player": 0,
+			"name": "Tomazeg",
+			"score": -150,
+			"vest": 8,
+			"shots": 107,
+			"accuracy": 0,
+			"hits": 0,
+			"deaths": 3,
+			"position": 8,
+			"hitPlayers": {
+				"1": {
+					"shot": 0,
+					"target": 0,
+					"count": 0
+				},
+				"2": {
+					"shot": 0,
+					"target": 0,
+					"count": 0
+				},
+				"6": {
+					"shot": 0,
+					"target": 0,
+					"count": 0
+				},
+				"7": {
+					"shot": 0,
+					"target": 0,
+					"count": 0
+				},
+				"8": {
+					"shot": 0,
+					"target": 0,
+					"count": 0
+				},
+				"9": {
+					"shot": 0,
+					"target": 0,
+					"count": 0
+				},
+				"10": {
+					"shot": 0,
+					"target": 0,
+					"count": 0
+				},
+				"11": {
+					"shot": 0,
+					"target": 0,
+					"count": 0
+				}
+			},
+			"teamNum": 2,
+			"team": null,
+			"color": 0,
+			"favouriteTarget": null,
+			"favouriteTargetOf": null,
+			"shotPoints": 0,
+			"scoreBonus": 0,
+			"scorePowers": 0,
+			"scoreMines": 0,
+			"ammoRest": 9892,
+			"minesHits": 0,
+			"bonus": {
+				"agent": 0,
+				"invisibility": 0,
+				"machineGun": 0,
+				"shield": 0
+			},
+			"hitsOther": 0,
+			"hitsOwn": 0,
+			"deathsOwn": 0,
+			"deathsOther": 3
+		},
+		"9": {
+			"id": null,
+			"row": null,
+			"logger": {},
+			"id_player": 0,
+			"name": "Dave",
+			"score": -150,
+			"vest": 9,
+			"shots": 49,
+			"accuracy": 0,
+			"hits": 0,
+			"deaths": 3,
+			"position": 7,
+			"hitPlayers": {
+				"1": {
+					"shot": 0,
+					"target": 0,
+					"count": 0
+				},
+				"2": {
+					"shot": 0,
+					"target": 0,
+					"count": 0
+				},
+				"6": {
+					"shot": 0,
+					"target": 0,
+					"count": 0
+				},
+				"7": {
+					"shot": 0,
+					"target": 0,
+					"count": 0
+				},
+				"8": {
+					"shot": 0,
+					"target": 0,
+					"count": 0
+				},
+				"9": {
+					"shot": 0,
+					"target": 0,
+					"count": 0
+				},
+				"10": {
+					"shot": 0,
+					"target": 0,
+					"count": 0
+				},
+				"11": {
+					"shot": 0,
+					"target": 0,
+					"count": 0
+				}
+			},
+			"teamNum": 1,
+			"team": null,
+			"color": 0,
+			"favouriteTarget": null,
+			"favouriteTargetOf": null,
+			"shotPoints": 0,
+			"scoreBonus": 0,
+			"scorePowers": 0,
+			"scoreMines": 0,
+			"ammoRest": 9950,
+			"minesHits": 0,
+			"bonus": {
+				"agent": 0,
+				"invisibility": 0,
+				"machineGun": 0,
+				"shield": 0
+			},
+			"hitsOther": 0,
+			"hitsOwn": 0,
+			"deathsOwn": 0,
+			"deathsOther": 3
+		},
+		"10": {
+			"id": null,
+			"row": null,
+			"logger": {},
+			"id_player": 0,
+			"name": "Maty",
+			"score": 50,
+			"vest": 10,
+			"shots": 41,
+			"accuracy": 2,
+			"hits": 1,
+			"deaths": 1,
+			"position": 5,
+			"hitPlayers": {
+				"1": {
+					"shot": 0,
+					"target": 0,
+					"count": 0
+				},
+				"2": {
+					"shot": 0,
+					"target": 0,
+					"count": 0
+				},
+				"6": {
+					"shot": 0,
+					"target": 0,
+					"count": 1
+				},
+				"7": {
+					"shot": 0,
+					"target": 0,
+					"count": 0
+				},
+				"8": {
+					"shot": 0,
+					"target": 0,
+					"count": 0
+				},
+				"9": {
+					"shot": 0,
+					"target": 0,
+					"count": 0
+				},
+				"10": {
+					"shot": 0,
+					"target": 0,
+					"count": 0
+				},
+				"11": {
+					"shot": 0,
+					"target": 0,
+					"count": 0
+				}
+			},
+			"teamNum": 2,
+			"team": null,
+			"color": 0,
+			"favouriteTarget": null,
+			"favouriteTargetOf": null,
+			"shotPoints": 0,
+			"scoreBonus": 0,
+			"scorePowers": 0,
+			"scoreMines": 0,
+			"ammoRest": 9958,
+			"minesHits": 0,
+			"bonus": {
+				"agent": 0,
+				"invisibility": 0,
+				"machineGun": 0,
+				"shield": 0
+			},
+			"hitsOther": 1,
+			"hitsOwn": 0,
+			"deathsOwn": 0,
+			"deathsOther": 1
+		},
+		"11": {
+			"id": null,
+			"row": null,
+			"logger": {},
+			"id_player": 0,
+			"name": "Ondra",
+			"score": 600,
+			"vest": 11,
+			"shots": 87,
+			"accuracy": 7,
+			"hits": 6,
+			"deaths": 0,
+			"position": 1,
+			"hitPlayers": {
+				"1": {
+					"shot": 0,
+					"target": 0,
+					"count": 3
+				},
+				"2": {
+					"shot": 0,
+					"target": 0,
+					"count": 1
+				},
+				"6": {
+					"shot": 0,
+					"target": 0,
+					"count": 1
+				},
+				"7": {
+					"shot": 0,
+					"target": 0,
+					"count": 0
+				},
+				"8": {
+					"shot": 0,
+					"target": 0,
+					"count": 0
+				},
+				"9": {
+					"shot": 0,
+					"target": 0,
+					"count": 1
+				},
+				"10": {
+					"shot": 0,
+					"target": 0,
+					"count": 0
+				},
+				"11": {
+					"shot": 0,
+					"target": 0,
+					"count": 0
+				}
+			},
+			"teamNum": 2,
+			"team": null,
+			"color": 0,
+			"favouriteTarget": null,
+			"favouriteTargetOf": null,
+			"shotPoints": 0,
+			"scoreBonus": 0,
+			"scorePowers": 0,
+			"scoreMines": 0,
+			"ammoRest": 9912,
+			"minesHits": 0,
+			"bonus": {
+				"agent": 0,
+				"invisibility": 0,
+				"machineGun": 0,
+				"shield": 0
+			},
+			"hitsOther": 6,
+			"hitsOwn": 0,
+			"deathsOwn": 0,
+			"deathsOther": 0
+		}
+	},
+	"teamClass": "App\\GameModels\\Game\\Evo5\\Team",
+	"teams": {
+		"1": {
+			"id": null,
+			"row": null,
+			"logger": {},
+			"color": 1,
+			"score": 100,
+			"position": 2,
+			"name": "Green team",
+			"playerCount": 4,
+			"playerClass": "App\\GameModels\\Game\\Evo5\\Player"
+		},
+		"2": {
+			"id": null,
+			"row": null,
+			"logger": {},
+			"color": 2,
+			"score": 850,
+			"position": 1,
+			"name": "Blue team",
+			"playerCount": 4,
+			"playerClass": "App\\GameModels\\Game\\Evo5\\Player"
+		}
+	},
+	"fileNumber": 971,
+	"modeName": "3-TEAM-CSGO",
+	"lives": 3,
+	"ammo": 9999,
+	"respawn": 1,
+	"gameNumber": 971
+}

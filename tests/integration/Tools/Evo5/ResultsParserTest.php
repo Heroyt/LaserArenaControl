@@ -1,6 +1,6 @@
 <?php
 
-namespace Tools\Evo5;
+namespace unit\Tools\Evo5;
 
 use App\Exceptions\FileException;
 use App\Exceptions\ResultsParseException;
@@ -34,7 +34,6 @@ class ResultsParserTest extends TestCase
 	 * @dataProvider getFiles
 	 */
 	public function testParser(string $file) : void {
-		echo 'File: '.$file.PHP_EOL;
 		$parser = new ResultsParser($file);
 		$game = $parser->parse();
 		if (!$game->isFinished()) {
@@ -88,7 +87,6 @@ class ResultsParserTest extends TestCase
 	public function testParserError(string $file) : void {
 		$parser = new ResultsParser($file);
 		$this->expectException(ResultsParseException::class);
-		echo 'File: '.$file.PHP_EOL;
 		$game = $parser->parse();
 	}
 

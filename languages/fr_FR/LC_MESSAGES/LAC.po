@@ -38,6 +38,7 @@ msgstr "Jeux"
 # /config/nav/menu.php:13
 # /config/nav/menu.php:39
 # /templates/pages/games-list/index.latte:
+# /config/nav/menu.php:44
 msgid "Print"
 msgstr "Imprimé"
 
@@ -626,6 +627,7 @@ msgid "Čidlo na zbrani, ač nenápadné, se dá velmi dobře trefit."
 msgstr "La cible sur le pistolet est un peu invisible, pourtant facile a touché."
 
 # /src/GameModels/Tip.php:26
+# /templates/results/@printLayout.latte:112
 msgctxt "tips"
 msgid "Zkušení hráči hrajou týmově!"
 msgstr "Les joueurs experimentés coopèrent avec leurs équipes!"
@@ -688,6 +690,7 @@ msgid "Držení zbraně v obou rukách je přesnější."
 msgstr ""
 
 # /src/GameModels/Tip.php:26
+# /templates/results/@printLayout.latte:112
 msgctxt "tips"
 msgid "Měl bys radši hrát laser game a být úžasný!"
 msgstr ""
@@ -763,14 +766,17 @@ msgid "Nezapomeň každý květen a listopad registrovat svůj tým na turnaj!"
 msgstr ""
 
 # /config/nav/menu.php:18
+# /config/nav/menu.php:23
 msgid "Settings"
 msgstr "Réglages"
 
 # /config/nav/menu.php:35
+# /config/nav/menu.php:40
 msgid "Game modes"
 msgstr "Modes de jeux"
 
 # /config/nav/menu.php:23
+# /config/nav/menu.php:28
 msgid "General"
 msgstr "Général"
 
@@ -880,6 +886,7 @@ msgid "Graphical"
 msgstr "Graphique"
 
 # /src/GameModels/Tip.php:26
+# /templates/results/@printLayout.latte:112
 msgctxt "tips"
 msgid "Oživení trvá 5 sekund."
 msgstr "La désactivation dure 5 secondes."
@@ -1151,6 +1158,7 @@ msgid "General settings"
 msgstr "Réglages généraux"
 
 # /config/nav/menu.php:31
+# /config/nav/menu.php:36
 msgid "Vests"
 msgstr "Vestes"
 
@@ -1422,6 +1430,8 @@ msgid "Zobrazit vesty na Gate"
 msgstr ""
 
 # /config/nav/menu.php:27
+# /config/nav/menu.php:18
+# /config/nav/menu.php:32
 msgid "Gate"
 msgstr ""
 
@@ -1699,4 +1709,3 @@ msgstr ""
 msgctxt "gameModes"
 msgid "Apokalypsa"
 msgstr ""
-

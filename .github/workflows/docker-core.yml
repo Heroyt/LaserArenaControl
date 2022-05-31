@@ -22,4 +22,6 @@ jobs:
                     password: ${{ secrets.DOCKERHUB_TOKEN }}
             -   uses: actions/checkout@v2
             -   name: Build the Docker core image
-                run: docker build dockerCore --file dockerCore/Dockerfile --tag heroyt/lac_core:$(date +%s) --tag heroyt/lac_core:latest & docker push heroyt/lac_core -a
+                run: docker build dockerCore --file dockerCore/Dockerfile --tag heroyt/lac_core:$(date +%s) --tag heroyt/lac_core:latest
+            -   name: Push docker image
+                run: docker push heroyt/lac_core -a

@@ -21,6 +21,6 @@ jobs:
                     password: ${{ secrets.DOCKERHUB_TOKEN }}
             -   uses: actions/checkout@v2
             -   name: Build the Docker image
-                run: docker build . --file Dockerfile --tag heroyt/laser-arena-control:latest -tag heroyt/laser-arena-control:${{ GITHUB_REF/refs\/tags\// }}
+                run: docker build . --file Dockerfile --tag heroyt/laser-arena-control:latest -tag heroyt/laser-arena-control:${GITHUB_REF/refs\/tags\//}
             -   name: Push docker image
                 run: docker push heroyt/laser-arena-control -a

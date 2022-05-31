@@ -1,1 +1,0 @@
-*/15 * * * * /var/www/html/lac games/sync >> /var/www/html/logs/cron.log 2>&1

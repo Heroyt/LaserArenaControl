@@ -2,9 +2,10 @@ name: Docker Push on tag
 
 on:
     push:
-        branches: [ master ]
+        branches: 
+            - master
         tags:
-            - *
+            - '*'
 
 jobs:
 

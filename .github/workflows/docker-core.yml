@@ -4,6 +4,7 @@ on:
     push:
         paths:
             - dockerCore/*
+            - .github/workflows/docker-core.yml
         branches: [ master ]
     pull_request:
         branches: [ master ]

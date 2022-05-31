@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: German\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2022-05-29 17:59\n"
+"PO-Revision-Date: 2022-05-31 09:42\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -38,6 +38,7 @@ msgstr "Spiele"
 # /config/nav/menu.php:13
 # /config/nav/menu.php:39
 # /templates/pages/games-list/index.latte:
+# /config/nav/menu.php:44
 msgid "Print"
 msgstr "Drucken"
 
@@ -626,6 +627,7 @@ msgid "Čidlo na zbrani, ač nenápadné, se dá velmi dobře trefit."
 msgstr ""
 
 # /src/GameModels/Tip.php:26
+# /templates/results/@printLayout.latte:112
 msgctxt "tips"
 msgid "Zkušení hráči hrajou týmově!"
 msgstr ""
@@ -688,6 +690,7 @@ msgid "Držení zbraně v obou rukách je přesnější."
 msgstr ""
 
 # /src/GameModels/Tip.php:26
+# /templates/results/@printLayout.latte:112
 msgctxt "tips"
 msgid "Měl bys radši hrát laser game a být úžasný!"
 msgstr ""
@@ -763,14 +766,17 @@ msgid "Nezapomeň každý květen a listopad registrovat svůj tým na turnaj!"
 msgstr ""
 
 # /config/nav/menu.php:18
+# /config/nav/menu.php:23
 msgid "Settings"
 msgstr ""
 
 # /config/nav/menu.php:35
+# /config/nav/menu.php:40
 msgid "Game modes"
 msgstr ""
 
 # /config/nav/menu.php:23
+# /config/nav/menu.php:28
 msgid "General"
 msgstr ""
 
@@ -880,6 +886,7 @@ msgid "Graphical"
 msgstr ""
 
 # /src/GameModels/Tip.php:26
+# /templates/results/@printLayout.latte:112
 msgctxt "tips"
 msgid "Oživení trvá 5 sekund."
 msgstr ""
@@ -1151,6 +1158,7 @@ msgid "General settings"
 msgstr ""
 
 # /config/nav/menu.php:31
+# /config/nav/menu.php:36
 msgid "Vests"
 msgstr ""
 
@@ -1422,6 +1430,8 @@ msgid "Zobrazit vesty na Gate"
 msgstr ""
 
 # /config/nav/menu.php:27
+# /config/nav/menu.php:18
+# /config/nav/menu.php:32
 msgid "Gate"
 msgstr ""
 

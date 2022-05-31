@@ -1,18 +1,24 @@
 name: Docker Image CI
 
 on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+    push:
+        paths:
+            - Dockerfile
+            - dockerCore/*
+        branches: [ master ]
+    pull_request:
+        paths:
+            - Dockerfile
+            - dockerCore/*
+        branches: [ master ]
 
 jobs:
 
-  build:
+    build:
 
-    runs-on: ubuntu-latest
+        runs-on: ubuntu-latest
 
-    steps:
-    - uses: actions/checkout@v2
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+        steps:
+            -   uses: actions/checkout@v2
+            -   name: Build the Docker image
+                run: docker build . --file Dockerfile --tag heroyt/laser-arena-control:$(date +%s)

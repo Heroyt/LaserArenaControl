@@ -1,0 +1,24 @@
+name: Docker Image Core build
+
+on:
+    push:
+        paths:
+            - dockerCore/*
+        branches: [ master ]
+    pull_request:
+        branches: [ master ]
+        paths:
+            - dockerCore/*
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        steps:
+            -   name: Login to DockerHub
+                uses: docker/login-action@v2
+                with:
+                    username: ${{ secrets.DOCKERHUB_USERNAME }}
+                    password: ${{ secrets.DOCKERHUB_TOKEN }}
+            -   uses: actions/checkout@v2
+            -   name: Build the Docker core image
+                run: cd dockerCore & docker build . --file Dockerfile --tag heroyt/lac_core:$(date +%s) --tag heroyt/lac_core:latest & docker push heroyt/lac_core -a

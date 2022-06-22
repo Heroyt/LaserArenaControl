@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: French\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2022-05-31 09:42\n"
+"PO-Revision-Date: 2022-06-22 10:28\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -894,7 +894,7 @@ msgstr "La désactivation dure 5 secondes."
 # /src/GameModels/Game/PlayerTrophy.php:78
 msgctxt "results.bests"
 msgid "Nedotknutelný"
-msgstr ""
+msgstr "Untouchable"
 
 # /src/GameModels/Game/PlayerTrophy.php:83
 msgctxt "results.bests"
@@ -904,36 +904,36 @@ msgstr "Tireur d'élite"
 # /src/GameModels/Game/PlayerTrophy.php:153
 msgctxt "results.bests"
 msgid "Hráč"
-msgstr ""
+msgstr "Joueur"
 
 msgctxt "results"
 msgid "Výsledky hráčů"
-msgstr ""
+msgstr "Résultats des joueurs"
 
 # /templates/results/templates/graphical.latte:191
 msgctxt "results.player"
 msgid "Výstřely"
-msgstr ""
+msgstr "Tirs"
 
 # /src/GameModels/Game/PlayerTrophy.php:98
 msgctxt "results.bests"
 msgid "Vyrovnaný"
-msgstr ""
+msgstr "Équilibré"
 
 # /src/GameModels/Game/PlayerTrophy.php:88
 msgctxt "results.bests"
 msgid "Poloviční sniper"
-msgstr ""
+msgstr "Demi-sniper"
 
 # /src/GameModels/Game/PlayerTrophy.php:103
 msgctxt "results.bests"
 msgid "Zabiják"
-msgstr ""
+msgstr "Assassin"
 
 # /src/GameModels/Game/PlayerTrophy.php:113
 msgctxt "results.bests"
 msgid "Nula"
-msgstr ""
+msgstr "Zéro"
 
 msgctxt "results.bests"
 msgid "Potahal tým"
@@ -963,7 +963,7 @@ msgstr ""
 msgctxt "results"
 msgid "%d smrt"
 msgid_plural "%d smrtí"
-msgstr[0] ""
+msgstr[0] "%d mort"
 msgstr[1] ""
 
 # /src/GameModels/Game/PlayerTrophy.php:118
@@ -974,12 +974,12 @@ msgstr ""
 # /src/GameModels/Game/PlayerTrophy.php:133
 msgctxt "results.bests"
 msgid "Ďábel"
-msgstr ""
+msgstr "Diable"
 
 # /src/GameModels/Game/PlayerTrophy.php:138
 msgctxt "results.bests"
 msgid "Skóre nenalezeno"
-msgstr ""
+msgstr "Résultats non trouvés"
 
 # /src/GameModels/Game/PlayerTrophy.php:143
 msgctxt "results.bests"
@@ -989,7 +989,7 @@ msgstr ""
 # /templates/results/templates/graphical.latte:102
 msgctxt "results.info"
 msgid "Kód hry"
-msgstr ""
+msgstr "Code du jeu"
 
 # /templates/pages/games-list/index.latte:54
 # /templates/pages/results/index.latte:67

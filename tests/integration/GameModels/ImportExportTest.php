@@ -1,6 +1,6 @@
 <?php
 
-namespace GameModels;
+namespace integration\GameModels;
 
 use App\Core\AbstractModel;
 use App\GameModels\Factory\GameFactory;

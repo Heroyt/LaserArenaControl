@@ -1723,4 +1723,3 @@ msgstr "Domluv si trénink s profíky!"
 msgctxt "gameModes"
 msgid "Apokalypsa"
 msgstr "Apokalypsa"
-

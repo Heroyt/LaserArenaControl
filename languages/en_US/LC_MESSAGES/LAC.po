@@ -1709,4 +1709,3 @@ msgstr "Book a training session with our pros!"
 msgctxt "gameModes"
 msgid "Apokalypsa"
 msgstr "Apocalypse"
-

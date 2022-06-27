@@ -15,6 +15,11 @@ return [
 		'icon'  => 'fas fa-print',
 	],
 	[
+		'name'  => lang('Gate'),
+		'route' => 'gate',
+		'icon'  => 'fas fa-display',
+	],
+	[
 		'name'     => lang('Settings'),
 		'route'    => 'settings',
 		'icon'     => 'fas fa-cog',

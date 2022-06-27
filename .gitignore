@@ -35,5 +35,4 @@ logs/
 *.sass-cache/
 lmx/
 results/
-results-test/
 entr/

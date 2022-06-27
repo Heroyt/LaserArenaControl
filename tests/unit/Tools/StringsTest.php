@@ -1,6 +1,6 @@
 <?php
 
-namespace Tools;
+namespace unit\Tools;
 
 use App\Tools\Strings;
 use PHPUnit\Framework\TestCase;

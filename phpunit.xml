@@ -13,8 +13,11 @@
 		</report>
 	</coverage>
 	<testsuites>
-		<testsuite name="Laser arena control">
-			<directory>tests</directory>
+		<testsuite name="unit">
+			<directory>tests/unit</directory>
+		</testsuite>
+		<testsuite name="integration">
+			<directory>tests/integration</directory>
 		</testsuite>
 	</testsuites>
 	<logging/>

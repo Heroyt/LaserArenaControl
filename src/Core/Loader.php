@@ -84,6 +84,9 @@ class Loader
 	 * @version 1.0
 	 */
 	public static function initDB() : void {
+		if (isset($_ENV['noDb'])) {
+			return;
+		}
 		try {
 			DB::init();
 		} catch (Exception $e) {

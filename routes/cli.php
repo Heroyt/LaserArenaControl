@@ -6,8 +6,8 @@ use App\Controllers\Cli\EventServer;
 use App\Controllers\Cli\Games;
 use App\Controllers\Cli\Help;
 use App\Controllers\Cli\Translations;
-use App\Core\Routing\CliRoute;
-use App\Services\CliHelper;
+use Lsr\Core\Routing\CliRoute;
+use Lsr\Helpers\Cli\CliHelper;
 
 if (PHP_SAPI === 'cli') {
 

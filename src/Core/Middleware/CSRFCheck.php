@@ -6,8 +6,8 @@
 namespace App\Core\Middleware;
 
 
-use App\Core\Request;
 use App\Core\Routing\Middleware;
+use Lsr\Core\Requests\Request;
 
 class CSRFCheck implements Middleware
 {

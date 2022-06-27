@@ -7,8 +7,8 @@ namespace App\Services;
 use App\Exceptions\ValidationException;
 use App\GameModels\Factory\GameFactory;
 use App\GameModels\Game\Game;
-use App\Logging\Logger;
 use Dibi\DateTime;
+use Lsr\Logging\Logger;
 
 /**
  * Service class for synchronization functions with public API

@@ -2,12 +2,12 @@
 
 namespace App\Controllers\Api;
 
-use App\Core\ApiController;
-use App\Core\Request;
 use App\GameModels\Factory\GameFactory;
 use App\Services\SyncService;
 use DateTime;
 use Exception;
+use Lsr\Core\ApiController;
+use Lsr\Core\Requests\Request;
 
 /**
  * API controller for everything game related

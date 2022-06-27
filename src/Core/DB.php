@@ -11,7 +11,6 @@
 
 namespace App\Core;
 
-use App\Logging\Logger;
 use DateTimeInterface;
 use dibi;
 use Dibi\Connection;
@@ -19,6 +18,8 @@ use Dibi\Exception;
 use Dibi\Fluent;
 use Dibi\Result;
 use InvalidArgumentException;
+use Lsr\Core\App;
+use Lsr\Logging\Logger;
 
 /**
  * @class   DB

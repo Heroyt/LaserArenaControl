@@ -2,10 +2,10 @@
 
 namespace App\Controllers;
 
-use App\Core\Controller;
-use App\Core\Request;
 use App\GameModels\Factory\GameFactory;
 use DateTime;
+use Lsr\Core\Controller;
+use Lsr\Core\Requests\Request;
 
 class GamesList extends Controller
 {

@@ -2,11 +2,11 @@
 
 namespace App\Controllers\Cli;
 
-use App\Core\CliController;
 use App\Core\CliRequest;
-use App\Services\CliHelper;
 use App\Services\ImportService;
 use App\Services\SyncService;
+use Lsr\Core\CliController;
+use Lsr\Helpers\Cli\CliHelper;
 
 /**
  *

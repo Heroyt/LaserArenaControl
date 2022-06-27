@@ -9,9 +9,14 @@
  * @since     1.0
  */
 
-use App\Core\App;
 
 /** Root directory */
+
+use App\Controllers\E404;
+use Lsr\Core\App;
+use Lsr\Core\Requests\Exceptions\RouteNotFoundException;
+use Lsr\Helpers\Tools\Timer;
+
 const ROOT = __DIR__.'/';
 /** Visiting site normally */
 const INDEX = true;
@@ -29,6 +34,15 @@ if (PHP_SAPI === 'cli') {
 
 require_once ROOT."include/load.php";
 
-App::run();
+Timer::start('app');
+try {
+	App::run();
+} catch (RouteNotFoundException $e) {
+	// Handle 404 Error
+	$controller = App::getContainer()->getByType(E404::class);
+	$controller->init(App::getRequest());
+	$controller->show(App::getRequest());
+}
+Timer::stop('app');
 
 updateTranslations();

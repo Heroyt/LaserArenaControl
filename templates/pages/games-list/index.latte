@@ -54,7 +54,7 @@
 							data-id="{$game->id}" data-system="{$game::SYSTEM}">
 						<i class="fas fa-bullseye"></i>
 					</button>
-					<button n:if="!\App\Core\App::isProduction()" class="btn btn-danger" data-toggle="gate-loaded"
+					<button n:if="!\Lsr\Core\App::isProduction()" class="btn btn-danger" data-toggle="gate-loaded"
 																  title="{lang 'Zobrazit vesty na Gate'}"
 																  data-id="{$game->id}" data-system="{$game::SYSTEM}">
 						{svgIcon 'Vesta', '1em'}

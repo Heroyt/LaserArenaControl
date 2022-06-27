@@ -2,11 +2,11 @@
 
 namespace App\Controllers\Api;
 
-use App\Core\ApiController;
-use App\Core\App;
-use App\Core\Request;
-use App\Logging\DirectoryCreationException;
-use App\Logging\Logger;
+use Lsr\Core\ApiController;
+use Lsr\Core\App;
+use Lsr\Core\Requests\Request;
+use Lsr\Logging\Exceptions\DirectoryCreationException;
+use Lsr\Logging\Logger;
 
 class Debug extends ApiController
 {

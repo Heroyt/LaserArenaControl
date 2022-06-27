@@ -7,8 +7,6 @@ namespace App\Core;
 use App\Core\Interfaces\InsertExtendInterface;
 use App\Exceptions\ModelNotFoundException;
 use App\Exceptions\ValidationException;
-use App\Logging\DirectoryCreationException;
-use App\Logging\Logger;
 use App\Tools\Strings;
 use ArrayAccess;
 use BackedEnum;
@@ -18,6 +16,8 @@ use DateTimeInterface;
 use Dibi\Exception;
 use Dibi\Row;
 use JsonSerializable;
+use Lsr\Logging\Exceptions\DirectoryCreationException;
+use Lsr\Logging\Logger;
 use RuntimeException;
 
 abstract class AbstractModel implements JsonSerializable, ArrayAccess

@@ -5,9 +5,9 @@
 namespace App\Services;
 
 use App\Core\DB;
-use App\Logging\Logger;
 use Dibi\DateTime;
 use Dibi\Exception;
+use Lsr\Logging\Logger;
 
 class EventService
 {

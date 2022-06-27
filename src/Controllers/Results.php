@@ -2,10 +2,7 @@
 
 namespace App\Controllers;
 
-use App\Core\Controller;
 use App\Core\Info;
-use App\Core\Request;
-use App\Exceptions\TemplateDoesNotExistException;
 use App\GameModels\Factory\GameFactory;
 use App\GameModels\Game\Game;
 use App\GameModels\Game\PrintStyle;
@@ -16,6 +13,9 @@ use Endroid\QrCode\Builder\Builder;
 use Endroid\QrCode\Encoding\Encoding;
 use Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelLow;
 use Endroid\QrCode\Writer\SvgWriter;
+use Lsr\Core\Controller;
+use Lsr\Core\Requests\Request;
+use Lsr\Exceptions\TemplateDoesNotExistException;
 
 class Results extends Controller
 {

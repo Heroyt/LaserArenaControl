@@ -4,8 +4,8 @@
  */
 namespace App\Tools;
 
-use App\Exceptions\FileException;
 use App\Tools\Interfaces\ResultsParserInterface;
+use Lsr\Exceptions\FileException;
 
 abstract class AbstractResultsParser implements ResultsParserInterface
 {

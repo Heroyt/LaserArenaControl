@@ -4,13 +4,13 @@ return [
 	'tags' => [
 		// name => [startTag, endTag]
 		'logo'         => [
-			'echo \App\Core\App::getLogoHtml()',
+			'echo \Lsr\Core\App::getLogoHtml()',
 		],
 		'link'         => [
-			'echo \App\Core\App::getLink(%node.args)',
+			'echo \Lsr\Core\App::getLink(%node.args)',
 		],
 		'getUrl'       => [
-			'echo \App\Core\App::getUrl()',
+			'echo \Lsr\Core\App::getUrl()',
 		],
 		'csrf'         => [
 			'echo formToken()',

@@ -2,7 +2,7 @@
 
 namespace App\Controllers;
 
-use App\Core\Controller;
+use Lsr\Core\Controller;
 
 class Dashboard extends Controller
 {

@@ -2,10 +2,10 @@
 
 namespace App\Controllers\Api;
 
-use App\Core\ApiController;
-use App\Core\Request;
 use App\Logging\ArchiveCreationException;
 use App\Services\ImportService;
+use Lsr\Core\ApiController;
+use Lsr\Core\Requests\Request;
 use ZipArchive;
 
 class Results extends ApiController

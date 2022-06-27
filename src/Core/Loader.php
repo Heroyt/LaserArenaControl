@@ -16,6 +16,8 @@
 namespace App\Core;
 
 use Dibi\Exception;
+use Lsr\Core\App;
+use Lsr\Helpers\Tools\Timer;
 use RuntimeException;
 
 /**
@@ -45,15 +47,21 @@ class Loader
 	public static function init() : void {
 
 		if (defined('INDEX') && INDEX) {
+			Timer::start('core.init.config');
 			// Initialize config
 			self::initConfig();
+			Timer::stop('core.init.config');
 
 			// Initialize app
+			Timer::start('core.init.app');
 			App::init();
+			Timer::stop('core.init.app');
 		}
 
 		// Setup database connection
+		Timer::start('core.init.db');
 		self::initDB();
+		Timer::stop('core.init.db');
 
 	}
 

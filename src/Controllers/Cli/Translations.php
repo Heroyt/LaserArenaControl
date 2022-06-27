@@ -4,13 +4,13 @@ namespace App\Controllers\Cli;
 
 use App\Cli\Colors;
 use App\Cli\Enums\ForegroundColors;
-use App\Core\CliController;
 use App\Core\CliRequest;
 use Gettext\Generator\MoGenerator;
 use Gettext\Generator\PoGenerator;
 use Gettext\Loader\PoLoader;
 use Gettext\Translation;
 use Gettext\Translations as GettextTranslations;
+use Lsr\Core\CliController;
 
 class Translations extends CliController
 {

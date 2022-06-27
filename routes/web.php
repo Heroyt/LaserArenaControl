@@ -8,9 +8,9 @@ use App\Controllers\GamesList;
 use App\Controllers\Gate;
 use App\Controllers\Results;
 use App\Controllers\Settings;
-use App\Core\App;
-use App\Core\Request;
-use App\Core\Routing\Route;
+use Lsr\Core\App;
+use Lsr\Core\Requests\Request;
+use Lsr\Core\Routing\Route;
 
 Route::get('/lang/{lang}', static function(Request $request) {
 	$_SESSION['lang'] = $request->params['lang'];

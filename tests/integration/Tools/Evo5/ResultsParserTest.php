@@ -2,12 +2,12 @@
 
 namespace unit\Tools\Evo5;
 
-use App\Exceptions\FileException;
 use App\Exceptions\ResultsParseException;
 use App\GameModels\Game\Evo5\Game;
 use App\GameModels\Game\Evo5\Player;
 use App\GameModels\Game\Evo5\Team;
 use App\Tools\Evo5\ResultsParser;
+use Lsr\Exceptions\FileException;
 use PHPUnit\Framework\TestCase;
 
 class ResultsParserTest extends TestCase

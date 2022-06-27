@@ -1,2 +1,4 @@
+extensions:
+	caching: Nette\Bridges\CacheDI\CacheExtension(%constants.tempDir%)
 services:
 	liga: App\Services\LigaApi::getInstance()

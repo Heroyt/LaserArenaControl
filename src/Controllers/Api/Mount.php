@@ -2,10 +2,10 @@
 
 namespace App\Controllers\Api;
 
-use App\Core\ApiController;
-use App\Core\Request;
-use App\Logging\DirectoryCreationException;
-use App\Logging\Logger;
+use Lsr\Core\ApiController;
+use Lsr\Core\Requests\Request;
+use Lsr\Logging\Exceptions\DirectoryCreationException;
+use Lsr\Logging\Logger;
 
 class Mount extends ApiController
 {

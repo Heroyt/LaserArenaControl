@@ -4,11 +4,13 @@ namespace App\Controllers\Cli;
 
 use App\Cli\Colors;
 use App\Cli\Enums\ForegroundColors;
-use App\Core\CliController;
-use App\Core\CliRequest;
-use App\Core\Routing\CliRoute;
-use App\Core\Routing\RouteInterface;
-use App\Services\CliHelper;
+use Lsr\Core\CliController;
+use Lsr\Core\Requests\CliRequest;
+use Lsr\Core\Routing\CliRoute;
+use Lsr\Core\Routing\Route;
+use Lsr\Core\Routing\Router;
+use Lsr\Enums\RequestMethod;
+use Lsr\Helpers\Cli\CliHelper;
 
 class Help extends CliController
 {
@@ -28,7 +30,7 @@ class Help extends CliController
 			'subcommands' => [],
 		];
 		// Add all routes (subcommands)
-		$this->addRoutes(CliRoute::$availableRoutes, $out);
+		$this->addRoutes(Router::$availableRoutes, $out);
 
 		$json = json_encode($out, JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
 
@@ -56,7 +58,7 @@ class Help extends CliController
 					'args'        => $route->arguments,
 				];
 			}
-			else {
+			else if (is_array($route)) {
 				$this->addRoutes($route, $out);
 			}
 		}
@@ -64,7 +66,7 @@ class Help extends CliController
 
 	public function listCommands(CliRequest $request) : void {
 		$group = $request->args[0] ?? '';
-		$routes = $this->formatRoutes(CliRoute::$availableRoutes);
+		$routes = $this->formatRoutes(Router::$availableRoutes);
 		$currGroup = '';
 		if (!empty($group)) {
 			$groups = explode('/', $group);
@@ -96,6 +98,9 @@ class Help extends CliController
 	private function formatRoutes(array $routes) : array|string {
 		$formatted = [];
 		foreach ($routes as $key => $route) {
+			if ($route instanceof Route) {
+				continue;
+			}
 			if (count($route) === 1 && ($route[0] ?? null) instanceof CliRoute) {
 				return $route[0]->description;
 			}
@@ -136,7 +141,8 @@ class Help extends CliController
 			exit(1);
 		}
 
-		$route = CliRoute::getRoute(RouteInterface::CLI, explode('/', $path));
+		/** @var CliRoute $route */
+		$route = Router::getRoute(RequestMethod::CLI, explode('/', $path));
 		if (!isset($route)) {
 			CliHelper::printErrorMessage('Cannot find command "%s"'.PHP_EOL.'Use "%s list" to list all available commands.', $path, CliHelper::getCaller());
 			exit(1);

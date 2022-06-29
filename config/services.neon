@@ -1,4 +1,11 @@
+parameters:
+	memcached:
+		host: 'localhost'
+		port: 11211
+		prefix: ''
 extensions:
 	caching: Nette\Bridges\CacheDI\CacheExtension(%constants.tempDir%)
 services:
 	liga: App\Services\LigaApi::getInstance()
+	cache.journal: Nette\Caching\Storages\SQLiteJournal(%cache.path%)
+	cache.storage: Nette\Caching\Storages\MemcachedStorage(%memcached.host%, %memcached.port%, %memcached.prefix%, @cache.journal)

@@ -11,7 +11,7 @@ use Lsr\Core\Routing\Attributes\Cli;
 class Cache extends CliController
 {
 
-	public function __construct(public \Nette\Caching\Cache $cache) {
+	public function __construct(public \Lsr\Core\Caching\Cache $cache) {
 	}
 
 	#[Cli(
@@ -32,7 +32,7 @@ class Cache extends CliController
 			echo Colors::color(ForegroundColors::GREEN).'Successfully purged cache'.Colors::reset().PHP_EOL;
 			exit(0);
 		}
-		$this->cache->clean();
+		$this->cache->clean([\Nette\Caching\Cache::All => true]);
 		echo Colors::color(ForegroundColors::GREEN).'Successfully purged cache'.Colors::reset().PHP_EOL;
 		exit(0);
 	}

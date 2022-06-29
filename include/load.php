@@ -18,6 +18,7 @@ use Latte\Bridges\Tracy\BlueScreenPanel;
 use Latte\Bridges\Tracy\LattePanel;
 use Lsr\Core\App;
 use Lsr\Helpers\Tools\Timer;
+use Lsr\Helpers\Tracy\CacheTracyPanel;
 use Lsr\Helpers\Tracy\DbTracyPanel;
 use Lsr\Helpers\Tracy\RoutingTracyPanel;
 use Lsr\Helpers\Tracy\TimerTracyPanel;
@@ -74,6 +75,7 @@ Debugger::$dumpTheme = 'dark';
 // Register custom tracy panels
 Debugger::getBar()
 				->addPanel(new TimerTracyPanel())
+				->addPanel(new CacheTracyPanel())
 				->addPanel(new DbTracyPanel())
 				->addPanel(new TranslationTracyPanel())
 				->addPanel(new RoutingTracyPanel());

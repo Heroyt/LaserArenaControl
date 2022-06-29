@@ -122,16 +122,19 @@ msgid "Translated strings"
 msgstr "Translated strings"
 
 # /templates/debug/Translation/panel.latte:20
+# /templates/../vendor/lsr/helpers/templates/Translation/panel.latte:19
 msgctxt "debugPanel"
 msgid "Added a new string"
 msgstr "Added a new string"
 
 # /templates/debug/Translation/panel.latte:20
+# /templates/../vendor/lsr/helpers/templates/Translation/panel.latte:20
 msgctxt "debugPanel"
 msgid "String"
 msgstr "String"
 
 # /templates/debug/Translation/panel.latte:22
+# /templates/../vendor/lsr/helpers/templates/Translation/panel.latte:22
 msgctxt "debugPanel"
 msgid "Context"
 msgstr "Context"
@@ -458,6 +461,7 @@ msgctxt "results.bests"
 msgid "Největší vlastňák"
 msgstr "Hated by allies"
 
+# /templates/../vendor/lsr/helpers/templates/Translation/panel.latte:21
 msgctxt "debugPanel"
 msgid "Plural"
 msgstr "Plural"
@@ -1790,3 +1794,15 @@ msgstr "Apocalypse"
 msgctxt "cli.help.arguments"
 msgid "If set, only the records with specified tags will be removed"
 msgstr ""
+
+# /templates/../vendor/lsr/helpers/templates/Caching/tab.latte:28
+msgctxt "debugPanel"
+msgid "Invalid cache class"
+msgstr ""
+
+# /templates/../vendor/lsr/helpers/templates/Caching/tab.latte:28
+msgctxt "debugPanel"
+msgid "%d call"
+msgid_plural "%d calls"
+msgstr[0] ""
+msgstr[1] ""

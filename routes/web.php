@@ -6,16 +6,12 @@
 use App\Controllers\Dashboard;
 use App\Controllers\GamesList;
 use App\Controllers\Gate;
+use App\Controllers\Lang;
 use App\Controllers\Results;
 use App\Controllers\Settings;
-use Lsr\Core\App;
-use Lsr\Core\Requests\Request;
 use Lsr\Core\Routing\Route;
 
-Route::get('/lang/{lang}', static function(Request $request) {
-	$_SESSION['lang'] = $request->params['lang'];
-	App::redirect($request->get['redirect'] ?? []);
-});
+Route::get('/lang/{lang}', [Lang::class, 'setLang']);
 
 Route::get('/', [Dashboard::class, 'show'])->name('dashboard');
 Route::get('/results', [Results::class, 'show'])->name('results');

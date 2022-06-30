@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: French\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2022-06-30 09:00\n"
+"PO-Revision-Date: 2022-06-30 17:13\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -655,13 +655,13 @@ msgstr ""
 # /src/GameModels/Tip.php:26
 msgctxt "tips"
 msgid "Vestu si oblečte vždy zbraní dobředu."
-msgstr ""
+msgstr "Portez toujours le gilet avec le pistolet devant."
 
 # /src/GameModels/Tip.php:26
 # /templates/pages/gate/@layout.latte:90
 msgctxt "tips"
 msgid "Při týmové hře není výhodné střílet do hráčů se stejnou barvou."
-msgstr ""
+msgstr "Dans un jeu d'équipe, il n'est pas avantageux de tirer sur des joueurs de la même couleur."
 
 # /src/GameModels/Tip.php:26
 msgctxt "tips"
@@ -672,7 +672,7 @@ msgstr ""
 # /src/GameModels/Tip.php:26
 msgctxt "tips"
 msgid "Nejlepší výherní taktika je strílet do protihráčů."
-msgstr ""
+msgstr "La meilleure tactique gagnante est de tirer sur les adversaires."
 
 # /src/GameModels/Tip.php:26
 msgctxt "tips"
@@ -682,7 +682,7 @@ msgstr ""
 # /src/GameModels/Tip.php:26
 msgctxt "tips"
 msgid "Všechny bonusy, kromě štítu, trvají 30s."
-msgstr ""
+msgstr "Tous les bonus, sauf le bouclier, durent 30s."
 
 # /src/GameModels/Tip.php:26
 msgctxt "tips"
@@ -722,7 +722,7 @@ msgstr "Allez, allez, allez, allez..."
 # /templates/results/@printLayout.latte:112
 msgctxt "tips"
 msgid "Ramenní čidla se trefují nejlépe, zádová nejhůř."
-msgstr ""
+msgstr "Les épaules sont les plus faciles à toucher; le dos est le plus dur."
 
 # /templates/results/@printLayout.latte:112
 # /src/GameModels/Tip.php:26
@@ -1085,17 +1085,17 @@ msgstr "Erreur de base de données s’est produite."
 # /templates/pages/settings/print.latte:21
 msgctxt "results.style.settings"
 msgid "Print defaults"
-msgstr ""
+msgstr "Paramètres d'impression"
 
 # /templates/pages/settings/print.latte:21
 msgctxt "results.style.settings"
 msgid "Default print style"
-msgstr ""
+msgstr "Style d'impression de base"
 
 # /templates/pages/settings/print.latte:32
 msgctxt "results.style.settings"
 msgid "Default template"
-msgstr ""
+msgstr "Modèle par défaut"
 
 # /src/Controllers/Cli/Help.php:145
 msgctxt "cli.messages"
@@ -1443,7 +1443,7 @@ msgstr "Paramètres de la tableau de bord"
 # /templates/pages/settings/gate.latte:22
 msgctxt "settings"
 msgid "Trigger events"
-msgstr ""
+msgstr "Événements déclencheurs"
 
 # /templates/pages/settings/gate.latte:22
 msgctxt "events"
@@ -1572,7 +1572,7 @@ msgstr "Trophées acquises"
 
 msgctxt "results.bests"
 msgid "Zobrazit dostupné trofeje"
-msgstr ""
+msgstr "Afficher les trophées disponibles"
 
 msgctxt "results"
 msgid "Střely do prázdna"
@@ -1703,7 +1703,7 @@ msgstr ""
 
 # /templates/pages/game/index.latte:126
 msgid "Domluv si trénink s profíky!"
-msgstr ""
+msgstr "Réservez une session de formation avec nos pros !"
 
 # /templates/pages/game/leaderboard.latte:24
 msgctxt "gameModes"

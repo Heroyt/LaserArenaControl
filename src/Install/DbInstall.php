@@ -308,7 +308,15 @@ FROM (`game_modes` `a` left join `game_modes-names` `b` on(`a`.`id_mode` = `b`.`
 						}
 						foreach ($queries as $query) {
 							echo 'Altering table: '.$tableName.' - '.$query.PHP_EOL;
-							DB::getConnection()->query("ALTER TABLE %n $query;", $tableName);
+							try {
+								DB::getConnection()->query("ALTER TABLE %n $query;", $tableName);
+							} catch (Exception $e) {
+								if ($e->getCode() === 1060 || $e->getCode() === 1061) {
+									// Duplicate column <-> already created
+									continue;
+								}
+								throw $e;
+							}
 						}
 					}
 				}
@@ -318,7 +326,7 @@ FROM (`game_modes` `a` left join `game_modes-names` `b` on(`a`.`id_mode` = `b`.`
 				}
 			}
 		} catch (Exception $e) {
-			echo $e->getMessage().PHP_EOL.$e->getSql().PHP_EOL;
+			echo $e->getCode().' - '.$e->getMessage().PHP_EOL.$e->getSql().PHP_EOL;
 			return false;
 		}
 

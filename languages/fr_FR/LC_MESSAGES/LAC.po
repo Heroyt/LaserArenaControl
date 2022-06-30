@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: French\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2022-06-30 08:01\n"
+"PO-Revision-Date: 2022-06-30 09:00\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -1336,7 +1336,7 @@ msgstr ""
 
 # /templates/pages/games-list/index.latte:54
 msgid "Výsledky on-line"
-msgstr ""
+msgstr "Résultats en ligne"
 
 # /templates/results/templates/graphical.latte:116
 # /templates/results/templates/default.latte:72
@@ -1427,18 +1427,18 @@ msgstr ""
 
 # /templates/pages/games-list/index.latte:59
 msgid "Zobrazit vesty na Gate"
-msgstr ""
+msgstr "Visualiser les gilets sur la tableau de bord"
 
 # /config/nav/menu.php:27
 # /config/nav/menu.php:18
 # /config/nav/menu.php:32
 msgid "Gate"
-msgstr ""
+msgstr "Tableau de bord"
 
 # /templates/pages/settings/gate.latte:22
 msgctxt "settings"
 msgid "Gate settings"
-msgstr ""
+msgstr "Paramètres de la tableau de bord"
 
 # /templates/pages/settings/gate.latte:22
 msgctxt "settings"
@@ -1448,7 +1448,7 @@ msgstr ""
 # /templates/pages/settings/gate.latte:22
 msgctxt "events"
 msgid "Reload gate"
-msgstr ""
+msgstr "Rechargement de la tableu de bord"
 
 # /templates/pages/settings/gate.latte:22
 msgctxt "settings"
@@ -1556,11 +1556,11 @@ msgstr ""
 
 msgctxt "results.info"
 msgid "Body za smrt"
-msgstr ""
+msgstr "Points par morts"
 
 msgctxt "results.info"
 msgid "Body za zásah vlastního"
-msgstr ""
+msgstr "Points par touche de allié"
 
 msgctxt "results.info"
 msgid "Body za smrt od vlastního hráče"
@@ -1568,7 +1568,7 @@ msgstr ""
 
 msgctxt "results.bests"
 msgid "Získané trofeje"
-msgstr ""
+msgstr "Trophées acquises"
 
 msgctxt "results.bests"
 msgid "Zobrazit dostupné trofeje"
@@ -1599,7 +1599,7 @@ msgstr ""
 
 msgctxt "results.info"
 msgid "Body za bonus"
-msgstr ""
+msgstr "Points par bonus"
 
 msgctxt "results.bonus"
 msgid "agent"
@@ -1626,11 +1626,11 @@ msgstr "Afficher tous les trophées"
 
 msgctxt "results.today"
 msgid "Klikněte níže na okénko pro zobrazení tabulky dnešního pořadí."
-msgstr ""
+msgstr "Cliquez ci-dessous pour afficher le classement d'aujourd'hui."
 
 msgctxt "results.today"
 msgid "Zobrazit dnešní pořadí"
-msgstr ""
+msgstr "Afficher le classement d'aujourd'hui"
 
 msgctxt "actions"
 msgid "Začít"
@@ -1678,16 +1678,16 @@ msgstr "Ce champ est obligatoire"
 
 msgctxt "results"
 msgid "Bodování"
-msgstr ""
+msgstr "Calcul de classement"
 
 # /src/Services/CliHelper.php:29
 msgctxt "cli.errors"
 msgid "Cannot find any translation files in \"%s\" for language \"%s\" - skipping"
-msgstr ""
+msgstr "Impossible de trouver des fichiers de traduction dans \"%s\" pour la langue \"%s\" - sauter"
 
 # /templates/pages/game/index.latte:126
 msgid "Velký květnový turnaj 2022!"
-msgstr ""
+msgstr "Grand tournoi de mai 2022!"
 
 # /templates/pages/game/index.latte:126
 msgid "Přihlaš i svůj (vý)herní tým na pravidelný turnaj!"

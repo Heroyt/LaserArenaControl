@@ -1,6 +1,6 @@
 parameters:
 	memcached:
-		host: 'localhost'
+		host: 'cache'
 		port: 11211
 		prefix: ''
 extensions:

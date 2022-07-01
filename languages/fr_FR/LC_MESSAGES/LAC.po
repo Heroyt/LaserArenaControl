@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: French\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2022-06-30 17:13\n"
+"PO-Revision-Date: 2022-07-01 17:47\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -752,7 +752,7 @@ msgstr "LASER TAG - SUIT UP!"
 # /src/GameModels/Tip.php:26
 msgctxt "tips"
 msgid "Když tě bolí nohy, kempi!"
-msgstr ""
+msgstr "Quand vos pieds vous font mal, campez-vous!"
 
 # /src/GameModels/Tip.php:26
 msgctxt "tips"
@@ -1136,7 +1136,7 @@ msgstr "Information"
 
 msgctxt "cli.help.arguments"
 msgid "Optional filter for command groups."
-msgstr ""
+msgstr "Filtre optionnel pour les groupes de commandes."
 
 # /src/Services/CliHelper.php:91
 msgctxt "cli.help.arguments"

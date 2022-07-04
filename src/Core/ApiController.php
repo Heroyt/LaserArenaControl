@@ -5,6 +5,8 @@
 namespace App\Core;
 
 
+use Throwable;
+
 abstract class ApiController extends Controller
 {
 
@@ -23,7 +25,13 @@ abstract class ApiController extends Controller
 			$dataNormalized = $data;
 		}
 		else if (is_array($data) || is_object($data)) {
-			$dataNormalized = json_encode($data, JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+			try {
+				$dataNormalized = json_encode($data, JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+			} catch (Throwable $e) {
+				App::getLogger()->error('JSON encode error - '.$e->getMessage());
+				App::getLogger()->debug(print_r($data, true));
+				throw $e;
+			}
 			$headers['Content-Type'] = 'application/json';
 		}
 

@@ -148,7 +148,7 @@ class ImportService
 						}
 					}
 
-					$finishedGames[] = GameFactory::getById($game->id, $game::SYSTEM);
+					$finishedGames[] = GameFactory::getById($game->id, ['system' => $game::SYSTEM]);
 					$imported++;
 				} catch (FileException|GameModeNotFoundException|ResultsParseException|ValidationException $e) {
 					$logger->error($e->getMessage());

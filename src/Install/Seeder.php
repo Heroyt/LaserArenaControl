@@ -4,13 +4,13 @@
  */
 namespace App\Install;
 
-use App\Core\DB;
 use App\GameModels\Game\GameModes\AbstractMode;
 use App\GameModels\Game\PrintStyle;
 use App\GameModels\Game\PrintTemplate;
 use App\GameModels\Tip;
 use App\GameModels\Vest;
 use Dibi\Exception;
+use Lsr\Core\DB;
 
 class Seeder implements InstallInterface
 {

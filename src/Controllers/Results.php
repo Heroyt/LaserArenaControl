@@ -57,7 +57,6 @@ class Results extends Controller
 		$this->params['selectedTemplate'] = $_GET['template'] ?? Info::get('default_print_template', 'default');
 		$this->params['styles'] = PrintStyle::getAll();
 		$this->params['templates'] = PrintTemplate::getAll();
-		bdump($this->params);
 		$this->view('pages/results/index');
 	}
 
@@ -77,7 +76,6 @@ class Results extends Controller
 		}
 
 		$this->params['game'] = $game;
-		bdump($game->getPlayers());
 		$this->params['style'] = PrintStyle::exists($style) ? PrintStyle::get($style) : PrintStyle::getActiveStyle();
 		$this->params['template'] = PrintTemplate::query()->where('slug = %s', $template)->first();
 		$namespace = '\\App\\GameModels\\Game\\'.Strings::toPascalCase($game::SYSTEM).'\\';

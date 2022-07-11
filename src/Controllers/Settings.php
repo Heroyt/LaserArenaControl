@@ -4,7 +4,6 @@
  */
 namespace App\Controllers;
 
-use App\Core\DB;
 use App\Core\Info;
 use App\Exceptions\GameModeNotFoundException;
 use App\Exceptions\ValidationException;
@@ -18,6 +17,7 @@ use Dibi\DriverException;
 use Dibi\Exception;
 use Lsr\Core\App;
 use Lsr\Core\Controller;
+use Lsr\Core\DB;
 use Lsr\Core\Requests\Request;
 
 /**
@@ -80,11 +80,10 @@ class Settings extends Controller
 	public function saveVests(Request $request) : void {
 		try {
 			foreach ($request->post['vest'] ?? [] as $id => $info) {
-				DB::update(Vest::TABLE, $info, ['%n = %i', Vest::PRIMARY_KEY, $id]);
+				DB::update(Vest::TABLE, $info, ['%n = %i', Vest::getPrimaryKey(), $id]);
 			}
 		} catch (Exception $e) {
 			$request->passErrors[] = lang('Failed to save settings.', context: 'errors');
-			bdump($e);
 		}
 		if ($request->isAjax()) {
 			$this->ajaxJson([
@@ -154,8 +153,6 @@ class Settings extends Controller
 					$style->colorLight = $info['light'];
 					$style->bg = $info['original-background'] ?? '';
 					$style->bg_landscape = $info['original-background-landscape'] ?? '';
-					bdump($_POST);
-					bdump($_FILES);
 					if (!empty($_FILES['styles']['name'][$key]['background'])) {
 						if ($_FILES['styles']['error'][$key]['background'] !== UPLOAD_ERR_OK) {
 							$request->passErrors[] = match ($_FILES['styles']['error'][$key]['background']) {
@@ -234,9 +231,9 @@ class Settings extends Controller
 					$dateFrom = new DateTime($matches[0][1] ?? '');
 					$dateTo = new DateTime($matches[1][1] ?? '');
 					DB::insert(PrintStyle::TABLE.'_dates', [
-						PrintStyle::PRIMARY_KEY => $info['style'],
-						'date_from'             => $dateFrom,
-						'date_to'               => $dateTo,
+						PrintStyle::getPrimaryKey() => $info['style'],
+						'date_from'                 => $dateFrom,
+						'date_to'                   => $dateTo,
 					]);
 				}
 

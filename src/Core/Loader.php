@@ -17,6 +17,7 @@ namespace App\Core;
 
 use Dibi\Exception;
 use Lsr\Core\App;
+use Lsr\Core\DB;
 use Lsr\Helpers\Tools\Timer;
 use RuntimeException;
 

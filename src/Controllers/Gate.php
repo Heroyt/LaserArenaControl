@@ -182,7 +182,7 @@ class Gate extends Controller
 			if (!empty($topScores)) {
 				$count = 0;
 				foreach ($topScores as $score) {
-					$this->params['topScores'][] = PlayerFactory::getById($score->id_player, $score->system);
+					$this->params['topScores'][] = PlayerFactory::getById($score->id_player, ['system' => $score->system]);
 					if ((++$count) > 3) {
 						break;
 					}
@@ -191,22 +191,22 @@ class Gate extends Controller
 			$q = clone $playersQuery;
 			$topHits = $q->orderBy('[hits]')->desc()->fetch();
 			if (isset($topHits)) {
-				$this->params['topHits'] = PlayerFactory::getById($topHits->id_player, $topHits->system);
+				$this->params['topHits'] = PlayerFactory::getById($topHits->id_player, ['system' => $topHits->system]);
 			}
 			$q = clone $playersQuery;
 			$topDeaths = $q->orderBy('[deaths]')->desc()->fetch();
 			if (isset($topDeaths)) {
-				$this->params['topDeaths'] = PlayerFactory::getById($topDeaths->id_player, $topDeaths->system);
+				$this->params['topDeaths'] = PlayerFactory::getById($topDeaths->id_player, ['system' => $topDeaths->system]);
 			}
 			$q = clone $playersQuery;
 			$topAccuracy = $q->orderBy('[accuracy]')->desc()->fetch();
 			if (isset($topAccuracy)) {
-				$this->params['topAccuracy'] = PlayerFactory::getById($topAccuracy->id_player, $topAccuracy->system);
+				$this->params['topAccuracy'] = PlayerFactory::getById($topAccuracy->id_player, ['system' => $topAccuracy->system]);
 			}
 			$q = clone $playersQuery;
 			$topShots = $q->orderBy('[shots]')->desc()->fetch();
 			if (isset($topShots)) {
-				$this->params['topShots'] = PlayerFactory::getById($topShots->id_player, $topShots->system);
+				$this->params['topShots'] = PlayerFactory::getById($topShots->id_player, ['system' => $topShots->system]);
 			}
 		}
 		$this->view('pages/gate/idle');
@@ -228,7 +228,7 @@ class Gate extends Controller
 			http_response_code(400);
 			$this->ajaxJson(['error' => 'Missing / Incorrect system']);
 		}
-		$game = GameFactory::getById($gameId, $system);
+		$game = GameFactory::getById($gameId, ['system' => $system]);
 		if (!isset($game)) {
 			http_response_code(404);
 			$this->ajaxJson(['error' => 'Cannot find game']);
@@ -260,7 +260,7 @@ class Gate extends Controller
 			http_response_code(400);
 			$this->ajaxJson(['error' => 'Missing / Incorrect system']);
 		}
-		$game = GameFactory::getById($gameId, $system);
+		$game = GameFactory::getById($gameId, ['system' => $system]);
 		if (!isset($game)) {
 			http_response_code(404);
 			$this->ajaxJson(['error' => 'Cannot find game']);

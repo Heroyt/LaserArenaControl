@@ -7,6 +7,7 @@ use App\Services\SyncService;
 use DateTime;
 use Exception;
 use Lsr\Core\ApiController;
+use Lsr\Core\Exceptions\ValidationException;
 use Lsr\Core\Requests\Request;
 
 /**
@@ -45,7 +46,6 @@ class Games extends ApiController
 		}
 		// TODO: Possibly more filters
 		$query = GameFactory::queryGames(false, $date);
-
 		$games = $query->fetchAll();
 		$this->respond($games);
 	}
@@ -56,6 +56,7 @@ class Games extends ApiController
 	 * @param Request $request
 	 *
 	 * @return void
+	 * @throws ValidationException
 	 */
 	public function getGame(Request $request) : void {
 		$gameCode = $request->params['code'] ?? '';

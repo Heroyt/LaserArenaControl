@@ -2,10 +2,11 @@
 /**
  * @author Tomáš Vojík <xvojik00@stud.fit.vutbr.cz>, <vojik@wboy.cz>
  */
+
 namespace App\Core\Collections;
 
-use App\Core\AbstractModel;
 use App\Core\Interfaces\CollectionInterface;
+use App\Core\Model;
 use App\Exceptions\InvalidCollectionClassException;
 use InvalidArgumentException;
 
@@ -14,7 +15,7 @@ abstract class AbstractCollection implements CollectionInterface
 
 	/** @var string Type of collection's data */
 	protected string $type;
-	/** @var AbstractModel[] */
+	/** @var \Lsr\Core\Models\Model[] */
 	protected array $data = [];
 	/** @var int|null Current offset for iterator access */
 	protected ?int $currentOffset = null;
@@ -22,7 +23,7 @@ abstract class AbstractCollection implements CollectionInterface
 	/**
 	 * Create a new collection from array of data
 	 *
-	 * @param AbstractModel[] $array
+	 * @param \Lsr\Core\Models\Model[] $array
 	 *
 	 * @return CollectionInterface
 	 */
@@ -33,25 +34,15 @@ abstract class AbstractCollection implements CollectionInterface
 	}
 
 	/**
-	 * Get all collection's data as an array
-	 *
-	 * @return AbstractModel[]
-	 */
-	public function getAll() : array {
-		return $this->data;
-	}
-
-
-	/**
 	 * Add new data to collection
 	 *
 	 * @details Checks value's type and uniqueness
 	 *
-	 * @param AbstractModel ...$values
+	 * @param \Lsr\Core\Models\Model ...$values
 	 *
 	 * @return CollectionInterface
 	 */
-	public function add(AbstractModel ...$values) : CollectionInterface {
+	public function add(\Lsr\Core\Models\Model ...$values) : CollectionInterface {
 		foreach ($values as $value) {
 			if (!$this->checkType($value)) {
 				throw new InvalidCollectionClassException('Class '.get_class($value).' cannot be added to collection of type '.$this->type);
@@ -66,11 +57,11 @@ abstract class AbstractCollection implements CollectionInterface
 	/**
 	 * Checks value's type before adding to the collection
 	 *
-	 * @param AbstractModel $value
+	 * @param \Lsr\Core\Models\Model $value
 	 *
 	 * @return bool
 	 */
-	protected function checkType(AbstractModel $value) : bool {
+	protected function checkType(\Lsr\Core\Models\Model $value) : bool {
 		if (!isset($this->type)) {
 			$this->type = get_class($value);
 			return true;
@@ -81,11 +72,11 @@ abstract class AbstractCollection implements CollectionInterface
 	/**
 	 * Checks whether the given model already exists in collection
 	 *
-	 * @param AbstractModel $model
+	 * @param \Lsr\Core\Models\Model $model
 	 *
 	 * @return bool
 	 */
-	public function contains(AbstractModel $model) : bool {
+	public function contains(\Lsr\Core\Models\Model $model) : bool {
 		foreach ($this->data as $test) {
 			/** @noinspection PhpNonStrictObjectEqualityInspection */
 			/** @noinspection TypeUnsafeComparisonInspection */
@@ -97,24 +88,20 @@ abstract class AbstractCollection implements CollectionInterface
 	}
 
 	/**
-	 * Get first object in collection
+	 * Get all collection's data as an array
 	 *
-	 * @return AbstractModel|null
+	 * @return \Lsr\Core\Models\Model[]
 	 */
-	public function first() : ?AbstractModel {
-		/** @noinspection LoopWhichDoesNotLoopInspection */
-		foreach ($this->data as $object) {
-			return $object;
-		}
-		return null;
+	public function getAll() : array {
+		return $this->data;
 	}
 
 	/**
 	 * Get last object in collection
 	 *
-	 * @return AbstractModel|null
+	 * @return \Lsr\Core\Models\Model|null
 	 */
-	public function last() : ?AbstractModel {
+	public function last() : ?\Lsr\Core\Models\Model {
 		/** @noinspection LoopWhichDoesNotLoopInspection */
 		foreach (array_reverse($this->data) as $object) {
 			return $object;
@@ -127,12 +114,12 @@ abstract class AbstractCollection implements CollectionInterface
 	 *
 	 * @details Checks value's type and uniqueness
 	 *
-	 * @param AbstractModel $value
-	 * @param int           $key
+	 * @param \Lsr\Core\Models\Model $value
+	 * @param int                    $key
 	 *
 	 * @return CollectionInterface
 	 */
-	public function set(AbstractModel $value, int $key) : CollectionInterface {
+	public function set(\Lsr\Core\Models\Model $value, int $key) : CollectionInterface {
 		if (!$this->checkType($value)) {
 			throw new InvalidCollectionClassException('Class '.get_class($value).' cannot be added to collection of type '.$this->type);
 		}
@@ -148,9 +135,9 @@ abstract class AbstractCollection implements CollectionInterface
 	/**
 	 * @param int $key
 	 *
-	 * @return AbstractModel|null
+	 * @return \Lsr\Core\Models\Model|null
 	 */
-	public function get(int $key) : ?AbstractModel {
+	public function get(int $key) : ?\Lsr\Core\Models\Model {
 		if (empty($this->data[$key])) {
 			return null;
 		}
@@ -317,6 +304,19 @@ abstract class AbstractCollection implements CollectionInterface
 	public function getType() : string {
 		$first = $this->first();
 		return isset($first) ? get_class($first) : $this->type;
+	}
+
+	/**
+	 * Get first object in collection
+	 *
+	 * @return \Lsr\Core\Models\Model|null
+	 */
+	public function first() : ?\Lsr\Core\Models\Model {
+		/** @noinspection LoopWhichDoesNotLoopInspection */
+		foreach ($this->data as $object) {
+			return $object;
+		}
+		return null;
 	}
 
 	/**

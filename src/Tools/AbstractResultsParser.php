@@ -7,6 +7,9 @@ namespace App\Tools;
 use App\Tools\Interfaces\ResultsParserInterface;
 use Lsr\Exceptions\FileException;
 
+/**
+ * Abstract base for any result parser class
+ */
 abstract class AbstractResultsParser implements ResultsParserInterface
 {
 

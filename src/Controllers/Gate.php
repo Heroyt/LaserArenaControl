@@ -5,7 +5,6 @@
 
 namespace App\Controllers;
 
-use App\Core\Constants;
 use App\Core\Info;
 use App\GameModels\Factory\GameFactory;
 use App\GameModels\Factory\PlayerFactory;
@@ -15,18 +14,19 @@ use App\GameModels\Game\GameModes\CustomResultsMode;
 use App\GameModels\Game\PrintStyle;
 use App\GameModels\Game\Today;
 use App\Services\EventService;
-use App\Tools\Strings;
 use DateTime;
 use Dibi\Exception;
 use Endroid\QrCode\Builder\Builder;
 use Endroid\QrCode\Encoding\Encoding;
 use Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelLow;
 use Endroid\QrCode\Writer\SvgWriter;
+use Lsr\Core\Constants;
 use Lsr\Core\Controller;
 use Lsr\Core\Exceptions\ModelNotFoundException;
 use Lsr\Core\Exceptions\ValidationException;
 use Lsr\Core\Requests\Request;
 use Lsr\Exceptions\TemplateDoesNotExistException;
+use Lsr\Helpers\Tools\Strings;
 use Throwable;
 
 /**

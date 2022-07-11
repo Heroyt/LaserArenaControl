@@ -6,6 +6,9 @@ namespace App\Tools\Interfaces;
 
 use App\GameModels\Game\Game;
 
+/**
+ * Interface for all result parsers
+ */
 interface ResultsParserInterface
 {
 

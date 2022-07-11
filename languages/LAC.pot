@@ -559,6 +559,9 @@ msgstr ""
 # /templates/pages/settings/print.latte:59
 # /templates/pages/settings/print.latte:110
 # /templates/pages/results/index.latte:26
+# /templates/pages/settings/print.latte:23
+# /templates/pages/settings/print.latte:56
+# /templates/pages/settings/print.latte:92
 msgctxt "results.style"
 msgid "Čerti"
 msgstr ""
@@ -568,6 +571,9 @@ msgstr ""
 # /templates/pages/settings/print.latte:59
 # /templates/pages/settings/print.latte:110
 # /templates/pages/results/index.latte:26
+# /templates/pages/settings/print.latte:23
+# /templates/pages/settings/print.latte:56
+# /templates/pages/settings/print.latte:92
 msgctxt "results.style"
 msgid "Zima"
 msgstr ""
@@ -577,6 +583,9 @@ msgstr ""
 # /templates/pages/settings/print.latte:59
 # /templates/pages/settings/print.latte:110
 # /templates/pages/results/index.latte:26
+# /templates/pages/settings/print.latte:23
+# /templates/pages/settings/print.latte:56
+# /templates/pages/settings/print.latte:92
 msgctxt "results.style"
 msgid "Valentýn"
 msgstr ""
@@ -586,6 +595,9 @@ msgstr ""
 # /templates/pages/settings/print.latte:59
 # /templates/pages/settings/print.latte:110
 # /templates/pages/results/index.latte:26
+# /templates/pages/settings/print.latte:23
+# /templates/pages/settings/print.latte:56
+# /templates/pages/settings/print.latte:92
 msgctxt "results.style"
 msgid "Vánoce"
 msgstr ""
@@ -595,6 +607,9 @@ msgstr ""
 # /templates/pages/settings/print.latte:59
 # /templates/pages/settings/print.latte:110
 # /templates/pages/results/index.latte:26
+# /templates/pages/settings/print.latte:23
+# /templates/pages/settings/print.latte:56
+# /templates/pages/settings/print.latte:92
 msgctxt "results.style"
 msgid "Nový rok"
 msgstr ""
@@ -613,6 +628,10 @@ msgstr ""
 # /templates/pages/settings/print.latte:110
 # /templates/pages/results/index.latte:26
 # /templates/pages/results/index.latte:33
+# /templates/pages/settings/print.latte:23
+# /templates/pages/settings/print.latte:34
+# /templates/pages/settings/print.latte:56
+# /templates/pages/settings/print.latte:92
 msgctxt "results.style"
 msgid "Default"
 msgstr ""
@@ -904,36 +923,47 @@ msgid "General"
 msgstr ""
 
 # /src/Core/Controller.php:74
+# /vendor/lsr/core/src/Controller.php:79
 msgctxt "pageTitles"
 msgid "Settings"
 msgstr ""
 
 # /templates/pages/settings/print.latte:128
 # /templates/pages/settings/print.latte:215
+# /templates/pages/settings/print.latte:126
+# /templates/pages/settings/print.latte:202
 msgctxt "results.style.settings"
 msgid "Name"
 msgstr ""
 
 # /templates/pages/settings/print.latte:153
 # /templates/pages/settings/print.latte:
+# /templates/pages/settings/print.latte:151
+# /templates/pages/settings/print.latte:223
 msgctxt "results.style.settings"
 msgid "Primary color"
 msgstr ""
 
 # /templates/pages/settings/print.latte:160
 # /templates/pages/settings/print.latte:
+# /templates/pages/settings/print.latte:159
+# /templates/pages/settings/print.latte:230
 msgctxt "results.style.settings"
 msgid "Dark color"
 msgstr ""
 
 # /templates/pages/settings/print.latte:167
 # /templates/pages/settings/print.latte:
+# /templates/pages/settings/print.latte:166
+# /templates/pages/settings/print.latte:238
 msgctxt "results.style.settings"
 msgid "Light color"
 msgstr ""
 
 # /templates/pages/settings/print.latte:135
 # /templates/pages/settings/print.latte:215
+# /templates/pages/settings/print.latte:133
+# /templates/pages/settings/print.latte:209
 msgctxt "results.style.settings"
 msgid "Background"
 msgstr ""
@@ -942,11 +972,13 @@ msgid "Print styles"
 msgstr ""
 
 # /templates/pages/settings/print.latte:110
+# /templates/pages/settings/print.latte:108
 msgctxt "results.style.settings"
 msgid "Print styles"
 msgstr ""
 
 # /templates/pages/settings/print.latte:215
+# /templates/pages/settings/print.latte:178
 msgctxt "results.style.settings"
 msgid "Add style"
 msgstr ""
@@ -955,6 +987,10 @@ msgstr ""
 # /templates/pages/settings/gate.latte:
 # /templates/pages/settings/vests.latte:
 # /templates/pages/settings/print.latte:215
+# /templates/pages/settings/index.latte:17
+# /templates/pages/settings/gate.latte:31
+# /templates/pages/settings/vests.latte:76
+# /templates/pages/settings/print.latte:181
 msgctxt "actions"
 msgid "Send"
 msgstr ""
@@ -963,6 +999,10 @@ msgstr ""
 # /templates/pages/settings/print.latte:90
 # /templates/pages/settings/print.latte:119
 # /templates/pages/settings/print.latte:215
+# /templates/pages/settings/print.latte:44
+# /templates/pages/settings/print.latte:81
+# /templates/pages/settings/print.latte:113
+# /templates/pages/settings/print.latte:189
 msgctxt "actions"
 msgid "Delete"
 msgstr ""
@@ -973,6 +1013,8 @@ msgstr ""
 
 # /templates/pages/settings/print.latte:52
 # /templates/pages/settings/print.latte:90
+# /templates/pages/settings/print.latte:50
+# /templates/pages/settings/print.latte:87
 msgctxt "results.style.settings"
 msgid "Style"
 msgstr ""
@@ -995,6 +1037,8 @@ msgstr ""
 
 # /templates/pages/settings/print.latte:63
 # /templates/pages/settings/print.latte:110
+# /templates/pages/settings/print.latte:60
+# /templates/pages/settings/print.latte:96
 msgctxt "dates"
 msgid "Dates"
 msgstr ""
@@ -1005,6 +1049,7 @@ msgstr ""
 # /templates/pages/results/index.latte:43
 # /templates/pages/settings/print.latte:41
 # /templates/pages/results/index.latte:33
+# /templates/pages/settings/print.latte:34
 msgctxt "results.style"
 msgid "Graphical"
 msgstr ""
@@ -1202,11 +1247,13 @@ msgstr[2] ""
 msgstr[3] ""
 
 # /templates/pages/settings/print.latte:41
+# /templates/pages/settings/print.latte:39
 msgctxt "results.style.settings"
 msgid "Print styles dates"
 msgstr ""
 
 # /templates/pages/settings/print.latte:90
+# /templates/pages/settings/print.latte:74
 msgctxt "actions"
 msgid "Add date"
 msgstr ""
@@ -1215,6 +1262,10 @@ msgstr ""
 # /templates/pages/settings/gate.latte:22
 # /templates/pages/settings/vests.latte:12
 # /templates/pages/settings/print.latte:21
+# /templates/pages/settings/index.latte:7
+# /templates/pages/settings/gate.latte:7
+# /templates/pages/settings/vests.latte:9
+# /templates/pages/settings/print.latte:11
 msgid "Last saved:"
 msgstr ""
 
@@ -1222,11 +1273,17 @@ msgstr ""
 # /templates/pages/settings/gate.latte:22
 # /templates/pages/settings/vests.latte:12
 # /templates/pages/settings/print.latte:21
+# /templates/pages/settings/index.latte:7
+# /templates/pages/settings/gate.latte:7
+# /templates/pages/settings/vests.latte:9
+# /templates/pages/settings/print.latte:12
 msgid "never"
 msgstr ""
 
 # /templates/pages/settings/print.latte:143
 # /templates/pages/settings/print.latte:
+# /templates/pages/settings/print.latte:141
+# /templates/pages/settings/print.latte:216
 msgctxt "results.style.settings"
 msgid "Landscape background"
 msgstr ""
@@ -1240,16 +1297,19 @@ msgid "Database error occurred."
 msgstr ""
 
 # /templates/pages/settings/print.latte:21
+# /templates/pages/settings/print.latte:15
 msgctxt "results.style.settings"
 msgid "Print defaults"
 msgstr ""
 
 # /templates/pages/settings/print.latte:21
+# /templates/pages/settings/print.latte:18
 msgctxt "results.style.settings"
 msgid "Default print style"
 msgstr ""
 
 # /templates/pages/settings/print.latte:32
+# /templates/pages/settings/print.latte:29
 msgctxt "results.style.settings"
 msgid "Default template"
 msgstr ""
@@ -1308,11 +1368,13 @@ msgid "Survival"
 msgstr ""
 
 # /templates/pages/settings/index.latte:13
+# /templates/pages/settings/index.latte:11
 msgctxt "settings"
 msgid "API klíč"
 msgstr ""
 
 # /templates/pages/settings/index.latte:13
+# /templates/pages/settings/index.latte:9
 msgctxt "settings"
 msgid "General settings"
 msgstr ""
@@ -1323,6 +1385,7 @@ msgid "Vests"
 msgstr ""
 
 # /templates/pages/settings/vests.latte:12
+# /templates/pages/settings/vests.latte:11
 msgctxt "settings"
 msgid "Vest settings"
 msgstr ""
@@ -1332,21 +1395,25 @@ msgid "evo5"
 msgstr ""
 
 # /templates/pages/settings/vests.latte:69
+# /templates/pages/settings/vests.latte:68
 msgctxt "settings.vests"
 msgid "Porucha"
 msgstr ""
 
 # /templates/pages/settings/vests.latte:54
+# /templates/pages/settings/vests.latte:53
 msgctxt "settings.vests.status"
 msgid "V pořádku"
 msgstr ""
 
 # /templates/pages/settings/vests.latte:68
+# /templates/pages/settings/vests.latte:65
 msgctxt "settings.vests.status"
 msgid "Nefunkční"
 msgstr ""
 
 # /templates/pages/settings/vests.latte:60
+# /templates/pages/settings/vests.latte:59
 msgctxt "settings.vests.status"
 msgid "Hratelná"
 msgstr ""
@@ -1637,31 +1704,37 @@ msgid "Gate"
 msgstr ""
 
 # /templates/pages/settings/gate.latte:22
+# /templates/pages/settings/gate.latte:9
 msgctxt "settings"
 msgid "Gate settings"
 msgstr ""
 
 # /templates/pages/settings/gate.latte:22
+# /templates/pages/settings/gate.latte:11
 msgctxt "settings"
 msgid "Trigger events"
 msgstr ""
 
 # /templates/pages/settings/gate.latte:22
+# /templates/pages/settings/gate.latte:14
 msgctxt "events"
 msgid "Reload gate"
 msgstr ""
 
 # /templates/pages/settings/gate.latte:22
+# /templates/pages/settings/gate.latte:20
 msgctxt "settings"
 msgid "Game timer offset in seconds"
 msgstr ""
 
 # /templates/pages/settings/gate.latte:27
+# /templates/pages/settings/gate.latte:25
 msgctxt "settings"
 msgid "Show timer from minute"
 msgstr ""
 
 # /templates/pages/settings/gate.latte:22
+# /templates/pages/settings/gate.latte:18
 msgctxt "settings"
 msgid "Settings"
 msgstr ""

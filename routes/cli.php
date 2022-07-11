@@ -1,4 +1,8 @@
 <?php
+/**
+ * @file  cli.php
+ * @brief CLI route definitions
+ */
 
 use App\Cli\Colors;
 use App\Cli\Enums\ForegroundColors;

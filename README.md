@@ -1,6 +1,6 @@
 # Laser arena control
 
-Vojík Tomáš <xvojik00@stud.vutbr.cz>
+Vojík Tomáš <xvojik00@stud.vutbr.cz>, <vojik@wboy.cz>
 
 ## Installation
 

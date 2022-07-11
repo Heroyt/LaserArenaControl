@@ -1,4 +1,8 @@
 <?php
+/**
+ * @file  api.php
+ * @brief API route definitions
+ */
 
 use App\Controllers\Api\Debug;
 use App\Controllers\Api\GameHelpers;

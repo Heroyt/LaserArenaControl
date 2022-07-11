@@ -1,4 +1,11 @@
 <?php
+/**
+ * @file      constants.php
+ * @brief     All basic global constants
+ * @author    Tomáš Vojík <vojik@wboy.cz>
+ * @version   1.1
+ * @since     1.1
+ */
 
 /** Directory containing log files */
 const LOG_DIR = ROOT.'logs/';

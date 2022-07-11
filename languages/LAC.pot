@@ -648,6 +648,7 @@ msgstr ""
 
 # /src/GameModels/Tip.php:26
 # /templates/results/@printLayout.latte:108
+# /src/GameModels/Tip.php:27
 msgctxt "tips"
 msgid "Jak se v aréně střílí, tak se v aréně umírá..."
 msgstr ""
@@ -656,6 +657,7 @@ msgstr ""
 # /src/GameModels/Tip.php:26
 # /templates/pages/gate/@layout.latte:90
 # /templates/pages/gate/@layout.latte:88
+# /src/GameModels/Tip.php:27
 msgctxt "tips"
 msgid "Trénink se vyplácí!"
 msgstr ""
@@ -663,21 +665,26 @@ msgstr ""
 # /templates/results/@printLayout.latte:108
 # /templates/pages/gate/@layout.latte:88
 # /src/GameModels/Tip.php:26
+# /src/GameModels/Tip.php:27
 msgctxt "tips"
 msgid "Tip #%d"
 msgstr ""
 
 # /src/GameModels/Tip.php:26
+# /src/GameModels/Tip.php:27
 msgctxt "tips"
 msgid "Střílíme v Písku už od 31.12.2013!!!"
 msgstr ""
 
 # /src/GameModels/Tip.php:26
+# /src/GameModels/Tip.php:27
 msgctxt "tips"
 msgid "Ve hře vždy sleduj svoje okolí!"
 msgstr ""
 
 # /src/GameModels/Tip.php:26
+# /templates/results/@printLayout.latte:108
+# /src/GameModels/Tip.php:27
 msgctxt "tips"
 msgid "Čidlo na zbrani, ač nenápadné, se dá velmi dobře trefit."
 msgstr ""
@@ -685,6 +692,7 @@ msgstr ""
 # /src/GameModels/Tip.php:26
 # /templates/results/@printLayout.latte:112
 # /templates/results/@printLayout.latte:108
+# /src/GameModels/Tip.php:27
 msgctxt "tips"
 msgid "Zkušení hráči hrajou týmově!"
 msgstr ""
@@ -692,63 +700,81 @@ msgstr ""
 # /src/GameModels/Tip.php:26
 # /templates/pages/gate/@layout.latte:90
 # /templates/results/@printLayout.latte:112
+# /src/GameModels/Tip.php:27
 msgctxt "tips"
 msgid "Pro vyřízení osobních sporů je aréna ideální."
 msgstr ""
 
 # /templates/pages/gate/@layout.latte:90
 # /src/GameModels/Tip.php:26
+# /templates/results/@printLayout.latte:108
+# /src/GameModels/Tip.php:27
 msgctxt "tips"
 msgid "Dobití protihráče pažbou, vám žádné body nepřidá."
 msgstr ""
 
 # /src/GameModels/Tip.php:26
 # /templates/results/@printLayout.latte:112
+# /templates/results/@printLayout.latte:108
+# /src/GameModels/Tip.php:27
 msgctxt "tips"
 msgid "Zabiják vlastního týmu, či největší vlasťnák... To je oč tu běží!"
 msgstr ""
 
 # /templates/results/@printLayout.latte:112
 # /src/GameModels/Tip.php:26
+# /src/GameModels/Tip.php:27
 msgctxt "tips"
 msgid "Vestu si oblečte vždy zbraní dobředu."
 msgstr ""
 
 # /src/GameModels/Tip.php:26
 # /templates/pages/gate/@layout.latte:90
+# /templates/results/@printLayout.latte:108
+# /src/GameModels/Tip.php:27
 msgctxt "tips"
 msgid "Při týmové hře není výhodné střílet do hráčů se stejnou barvou."
 msgstr ""
 
 # /src/GameModels/Tip.php:26
+# /templates/results/@printLayout.latte:108
+# /src/GameModels/Tip.php:27
 msgctxt "tips"
 msgid "Jen Chuck Norris vás může zastřelit baterkou na svém mobilu."
 msgstr ""
 
 # /templates/results/@printLayout.latte:112
 # /src/GameModels/Tip.php:26
+# /templates/results/@printLayout.latte:108
+# /src/GameModels/Tip.php:27
 msgctxt "tips"
 msgid "Nejlepší výherní taktika je strílet do protihráčů."
 msgstr ""
 
 # /src/GameModels/Tip.php:26
+# /src/GameModels/Tip.php:27
 msgctxt "tips"
 msgid "Nemá cenu umírat na tom samém místě. Když to nejde, uteč jinam!"
 msgstr ""
 
 # /src/GameModels/Tip.php:26
+# /templates/results/@printLayout.latte:108
+# /src/GameModels/Tip.php:27
 msgctxt "tips"
 msgid "Všechny bonusy, kromě štítu, trvají 30s."
 msgstr ""
 
 # /src/GameModels/Tip.php:26
 # /templates/results/@printLayout.latte:108
+# /src/GameModels/Tip.php:27
 msgctxt "tips"
 msgid "Držení zbraně v obou rukách je přesnější."
 msgstr ""
 
 # /src/GameModels/Tip.php:26
 # /templates/results/@printLayout.latte:112
+# /templates/results/@printLayout.latte:108
+# /src/GameModels/Tip.php:27
 msgctxt "tips"
 msgid "Měl bys radši hrát laser game a být úžasný!"
 msgstr ""
@@ -756,28 +782,36 @@ msgstr ""
 # /templates/results/@printLayout.latte:112
 # /src/GameModels/Tip.php:26
 # /templates/pages/gate/@layout.latte:90
+# /templates/results/@printLayout.latte:108
+# /src/GameModels/Tip.php:27
 msgctxt "tips"
 msgid "Spoluhráč je nejlepší cíl. Neutíká."
 msgstr ""
 
 # /src/GameModels/Tip.php:26
 # /templates/results/@printLayout.latte:112
+# /templates/results/@printLayout.latte:108
+# /src/GameModels/Tip.php:27
 msgctxt "tips"
 msgid "#laserarenapísek"
 msgstr ""
 
 # /src/GameModels/Tip.php:26
+# /src/GameModels/Tip.php:27
 msgctxt "tips"
 msgid "Zabití: 100 bodů, Smrt: -50 bodů, Zabití vlastního hráče: -25 bodů"
 msgstr ""
 
 # /src/GameModels/Tip.php:26
+# /templates/results/@printLayout.latte:108
+# /src/GameModels/Tip.php:27
 msgctxt "tips"
 msgid "Go, go, go, go..."
 msgstr ""
 
 # /src/GameModels/Tip.php:26
 # /templates/results/@printLayout.latte:112
+# /src/GameModels/Tip.php:27
 msgctxt "tips"
 msgid "Ramenní čidla se trefují nejlépe, zádová nejhůř."
 msgstr ""
@@ -785,40 +819,52 @@ msgstr ""
 # /templates/results/@printLayout.latte:112
 # /src/GameModels/Tip.php:26
 # /templates/pages/gate/@layout.latte:90
+# /templates/results/@printLayout.latte:108
+# /src/GameModels/Tip.php:27
 msgctxt "tips"
 msgid "Pohyblivý cíl je vždycky těžší trefit."
 msgstr ""
 
 # /templates/results/@printLayout.latte:112
 # /src/GameModels/Tip.php:26
+# /src/GameModels/Tip.php:27
 msgctxt "tips"
 msgid "Na displeji vesty po zásahu vidíte kdo vás zasáhl do jakého čidla. To pomáhá při orientaci."
 msgstr ""
 
 # /templates/results/@printLayout.latte:112
 # /src/GameModels/Tip.php:26
+# /templates/pages/gate/@layout.latte:88
+# /src/GameModels/Tip.php:27
 msgctxt "tips"
 msgid "Při výstupu z arény vždy připni zbraň k vestě."
 msgstr ""
 
 # /templates/results/@printLayout.latte:112
 # /src/GameModels/Tip.php:26
+# /templates/results/@printLayout.latte:108
+# /src/GameModels/Tip.php:27
 msgctxt "tips"
 msgid "LASER TAG - SUIT UP!"
 msgstr ""
 
 # /src/GameModels/Tip.php:26
+# /templates/results/@printLayout.latte:108
+# /src/GameModels/Tip.php:27
 msgctxt "tips"
 msgid "Když tě bolí nohy, kempi!"
 msgstr ""
 
 # /src/GameModels/Tip.php:26
+# /src/GameModels/Tip.php:27
 msgctxt "tips"
 msgid "Nikdy nejsi příliš starý na laser game."
 msgstr ""
 
 # /src/GameModels/Tip.php:26
 # /templates/results/@printLayout.latte:112
+# /templates/results/@printLayout.latte:108
+# /src/GameModels/Tip.php:27
 msgctxt "tips"
 msgid "Nezapomeň každý květen a listopad registrovat svůj tým na turnaj!"
 msgstr ""
@@ -946,6 +992,7 @@ msgstr ""
 
 # /src/GameModels/Tip.php:26
 # /templates/results/@printLayout.latte:112
+# /src/GameModels/Tip.php:27
 msgctxt "tips"
 msgid "Oživení trvá 5 sekund."
 msgstr ""

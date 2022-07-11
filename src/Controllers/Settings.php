@@ -64,10 +64,10 @@ class Settings extends Controller
 			$request->passErrors[] = lang('Failed to save settings.', context: 'errors');
 		}
 		if ($request->isAjax()) {
-			$this->ajaxJson([
-												'success' => empty($request->passErrors),
-												'errors'  => $request->passErrors,
-											]);
+			$this->respond([
+											 'success' => empty($request->passErrors),
+											 'errors'  => $request->passErrors,
+										 ]);
 		}
 		App::redirect('settings-gate', $request);
 	}
@@ -86,10 +86,10 @@ class Settings extends Controller
 			$request->passErrors[] = lang('Failed to save settings.', context: 'errors');
 		}
 		if ($request->isAjax()) {
-			$this->ajaxJson([
-												'success' => empty($request->passErrors),
-												'errors'  => $request->passErrors,
-											]);
+			$this->respond([
+											 'success' => empty($request->passErrors),
+											 'errors'  => $request->passErrors,
+										 ]);
 		}
 		App::redirect('settings', $request);
 	}
@@ -117,10 +117,10 @@ class Settings extends Controller
 			$request->passErrors[] = lang('Failed to save settings.', context: 'errors');
 		}
 		if ($request->isAjax()) {
-			$this->ajaxJson([
-												'success' => empty($request->passErrors),
-												'errors'  => $request->passErrors,
-											]);
+			$this->respond([
+											 'success' => empty($request->passErrors),
+											 'errors'  => $request->passErrors,
+										 ]);
 		}
 		App::redirect('settings', $request);
 	}
@@ -247,10 +247,10 @@ class Settings extends Controller
 			}
 		}
 		if ($request->isAjax()) {
-			$this->ajaxJson([
-												'success' => empty($request->passErrors),
-												'errors'  => $request->passErrors,
-											]);
+			$this->respond([
+											 'success' => empty($request->passErrors),
+											 'errors'  => $request->passErrors,
+										 ]);
 		}
 		App::redirect('settings-print', $request);
 	}

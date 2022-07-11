@@ -65,7 +65,7 @@
 													  style="height:calc({100*($team->score > 0 ? $team->score : 0) / ($totalScore > 0 ? $totalScore : 1)|noescape}% - .2rem);">
 		<div class="name">
 			<div class="text-center">
-				{if is_null($win) || $win->id_team === $team->id_team}{svgIcon 'crown', '2rem'}{/if}
+				{if is_null($win) || $win->id === $team->id}{svgIcon 'crown', '2rem'}{/if}
 			</div>
 			{$team->name}
 		</div>

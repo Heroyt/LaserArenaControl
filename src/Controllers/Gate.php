@@ -2,11 +2,11 @@
 /**
  * @author Tomáš Vojík <xvojik00@stud.fit.vutbr.cz>, <vojik@wboy.cz>
  */
+
 namespace App\Controllers;
 
 use App\Core\Constants;
 use App\Core\Info;
-use App\Exceptions\ModelNotFoundException;
 use App\GameModels\Factory\GameFactory;
 use App\GameModels\Factory\PlayerFactory;
 use App\GameModels\Factory\TeamFactory;
@@ -23,8 +23,11 @@ use Endroid\QrCode\Encoding\Encoding;
 use Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelLow;
 use Endroid\QrCode\Writer\SvgWriter;
 use Lsr\Core\Controller;
+use Lsr\Core\Exceptions\ModelNotFoundException;
+use Lsr\Core\Exceptions\ValidationException;
 use Lsr\Core\Requests\Request;
-use Lsr\Logging\Exceptions\DirectoryCreationException;
+use Lsr\Exceptions\TemplateDoesNotExistException;
+use Throwable;
 
 /**
  * Gate is a page that displays actual results and information preferably on other visible display.
@@ -36,7 +39,8 @@ class Gate extends Controller
 
 	/**
 	 * @return void
-	 * @throws DirectoryCreationException
+	 * @throws TemplateDoesNotExistException
+	 * @throws ValidationException
 	 * @throws ModelNotFoundException
 	 */
 	public function show() : void {
@@ -118,8 +122,7 @@ class Gate extends Controller
 	 * @pre Gate::$game must be set
 	 *
 	 * @return void
-	 * @throws ModelNotFoundException
-	 * @throws DirectoryCreationException
+	 * @throws TemplateDoesNotExistException
 	 */
 	private function getResults() : void {
 		$this->params['game'] = $this->game;
@@ -139,11 +142,33 @@ class Gate extends Controller
 	}
 
 	/**
+	 * Get SVG QR code for game
+	 *
+	 * @param Game $game
+	 *
+	 * @return string
+	 */
+	private function getQR(Game $game) : string {
+		$result = Builder::create()
+										 ->data($this->getPublicUrl($game))
+										 ->writer(new SvgWriter())
+										 ->encoding(new Encoding('UTF-8'))
+										 ->errorCorrectionLevel(new ErrorCorrectionLevelLow())
+										 ->build();
+		return $result->getString();
+	}
+
+	private function getPublicUrl(Game $game) : string {
+		return trailingSlashIt(Info::get('liga_api_url')).'g/'.$game->code;
+	}
+
+	/**
 	 * Get the loaded screen containing current players and their vests
 	 *
 	 * @pre Gate::$game must be set
 	 *
 	 * @return void
+	 * @throws TemplateDoesNotExistException
 	 */
 	private function getLoaded() : void {
 		$this->params['game'] = $this->game;
@@ -154,6 +179,8 @@ class Gate extends Controller
 	 * Generate the idle screen containing today's statistics
 	 *
 	 * @return void
+	 * @throws ValidationException
+	 * @throws TemplateDoesNotExistException
 	 */
 	private function getIdle() : void {
 		$this->params['game'] = $this->game;
@@ -216,54 +243,49 @@ class Gate extends Controller
 	 * @param Request $request
 	 *
 	 * @return void
+	 * @throws Throwable
 	 */
 	public function setGateGame(Request $request) : void {
 		$gameId = (int) ($request->post['game'] ?? 0);
 		if (empty($gameId)) {
-			http_response_code(400);
-			$this->ajaxJson(['error' => 'Missing / Incorrect game']);
+			$this->respond(['error' => 'Missing / Incorrect game'], 400);
 		}
 		$system = $request->params['system'] ?? '';
 		if (empty($system)) {
-			http_response_code(400);
-			$this->ajaxJson(['error' => 'Missing / Incorrect system']);
+			$this->respond(['error' => 'Missing / Incorrect system'], 400);
 		}
 		$game = GameFactory::getById($gameId, ['system' => $system]);
 		if (!isset($game)) {
-			http_response_code(404);
-			$this->ajaxJson(['error' => 'Cannot find game']);
+			$this->respond(['error' => 'Cannot find game'], 404);
 		}
 		try {
 			Info::set('gate-game', $game);
 			Info::set('gate-time', time());
 			EventService::trigger('gate-reload');
 		} catch (Exception $e) {
-			http_response_code(500);
-			$this->ajaxJson(['error' => 'Failed to save the game info', 'exception' => $e->getMessage()]);
+			$this->respond(['error' => 'Failed to save the game info', 'exception' => $e->getMessage()], 500);
 		}
-		$this->ajaxJson(['success' => true]);
+		$this->respond(['success' => true]);
 	}
 
 	/**
 	 * @param Request $request
 	 *
 	 * @return void
+	 * @throws Throwable
 	 */
 	public function setGateLoaded(Request $request) : void {
 		$gameId = (int) ($request->post['game'] ?? 0);
 		if (empty($gameId)) {
-			http_response_code(400);
-			$this->ajaxJson(['error' => 'Missing / Incorrect game']);
+			$this->respond(['error' => 'Missing / Incorrect game'], 400);
 		}
 		$system = $request->params['system'] ?? '';
 		if (empty($system)) {
-			http_response_code(400);
-			$this->ajaxJson(['error' => 'Missing / Incorrect system']);
+			$this->respond(['error' => 'Missing / Incorrect system'], 400);
 		}
 		$game = GameFactory::getById($gameId, ['system' => $system]);
 		if (!isset($game)) {
-			http_response_code(404);
-			$this->ajaxJson(['error' => 'Cannot find game']);
+			$this->respond(['error' => 'Cannot find game'], 404);
 		}
 		try {
 			Info::set('gate-game', null);
@@ -272,31 +294,9 @@ class Gate extends Controller
 			Info::set($system.'-game-loaded', $game);
 			EventService::trigger('gate-reload');
 		} catch (Exception $e) {
-			http_response_code(500);
-			$this->ajaxJson(['error' => 'Failed to save the game info', 'exception' => $e->getMessage()]);
+			$this->respond(['error' => 'Failed to save the game info', 'exception' => $e->getMessage()], 500);
 		}
-		$this->ajaxJson(['success' => true]);
-	}
-
-	private function getPublicUrl(Game $game) : string {
-		return trailingSlashIt(Info::get('liga_api_url')).'g/'.$game->code;
-	}
-
-	/**
-	 * Get SVG QR code for game
-	 *
-	 * @param Game $game
-	 *
-	 * @return string
-	 */
-	private function getQR(Game $game) : string {
-		$result = Builder::create()
-										 ->data($this->getPublicUrl($game))
-										 ->writer(new SvgWriter())
-										 ->encoding(new Encoding('UTF-8'))
-										 ->errorCorrectionLevel(new ErrorCorrectionLevelLow())
-										 ->build();
-		return $result->getString();
+		$this->respond(['success' => true]);
 	}
 
 }

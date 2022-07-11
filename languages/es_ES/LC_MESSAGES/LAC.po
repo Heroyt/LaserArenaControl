@@ -415,48 +415,56 @@ msgstr ""
 
 # /src/GameModels/Game/PlayerTrophy.php:38
 # /src/GameModels/Game/Game.php:264
+# /src/GameModels/Game/PlayerTrophy.php:39
 msgctxt "results.bests"
 msgid "Největší terminátor"
 msgstr ""
 
 # /src/GameModels/Game/PlayerTrophy.php:43
 # /src/GameModels/Game/Game.php:265
+# /src/GameModels/Game/PlayerTrophy.php:44
 msgctxt "results.bests"
 msgid "Objekt největšího zájmu"
 msgstr ""
 
 # /src/GameModels/Game/PlayerTrophy.php:33
 # /src/GameModels/Game/Game.php:266
+# /src/GameModels/Game/PlayerTrophy.php:34
 msgctxt "results.bests"
 msgid "Absolutní vítěz"
 msgstr ""
 
 # /src/GameModels/Game/PlayerTrophy.php:48
 # /src/GameModels/Game/Game.php:267
+# /src/GameModels/Game/PlayerTrophy.php:49
 msgctxt "results.bests"
 msgid "Hráč s nejlepší muškou"
 msgstr ""
 
 # /src/GameModels/Game/PlayerTrophy.php:53
 # /src/GameModels/Game/Game.php:268
+# /src/GameModels/Game/PlayerTrophy.php:54
 msgctxt "results.bests"
 msgid "Nejúspornější střelec"
 msgstr ""
 
 # /src/GameModels/Game/PlayerTrophy.php:58
 # /src/GameModels/Game/Game.php:269
+# /src/GameModels/Game/PlayerTrophy.php:59
 msgctxt "results.bests"
 msgid "Největší mimoň"
 msgstr ""
 
 # /src/GameModels/Game/PlayerTrophy.php:63
 # /src/GameModels/Game/Evo5/Game.php:83
+# /src/GameModels/Game/PlayerTrophy.php:64
 msgctxt "results.bests"
 msgid "Zabiják vlastního týmu"
 msgstr ""
 
 # /src/GameModels/Game/PlayerTrophy.php:68
 # /src/GameModels/Game/Evo5/Game.php:86
+# /src/GameModels/Game/PlayerTrophy.php:69
 msgctxt "results.bests"
 msgid "Největší vlastňák"
 msgstr ""
@@ -490,6 +498,7 @@ msgstr ""
 
 # /src/GameModels/Game/PlayerTrophy.php:73
 # /src/GameModels/Game/Evo5/Game.php:90
+# /src/GameModels/Game/PlayerTrophy.php:74
 msgctxt "results.bests"
 msgid "Drtič min"
 msgstr ""
@@ -666,6 +675,7 @@ msgstr ""
 
 # /src/GameModels/Tip.php:26
 # /src/GameModels/Tip.php:27
+# /templates/results/@printLayout.latte:108
 msgctxt "tips"
 msgid "Střílíme v Písku už od 31.12.2013!!!"
 msgstr ""
@@ -695,6 +705,7 @@ msgstr ""
 # /templates/pages/gate/@layout.latte:90
 # /templates/results/@printLayout.latte:112
 # /src/GameModels/Tip.php:27
+# /templates/pages/gate/@layout.latte:88
 msgctxt "tips"
 msgid "Pro vyřízení osobních sporů je aréna ideální."
 msgstr ""
@@ -703,6 +714,7 @@ msgstr ""
 # /src/GameModels/Tip.php:26
 # /templates/results/@printLayout.latte:108
 # /src/GameModels/Tip.php:27
+# /templates/pages/gate/@layout.latte:88
 msgctxt "tips"
 msgid "Dobití protihráče pažbou, vám žádné body nepřidá."
 msgstr ""
@@ -718,6 +730,7 @@ msgstr ""
 # /templates/results/@printLayout.latte:112
 # /src/GameModels/Tip.php:26
 # /src/GameModels/Tip.php:27
+# /templates/pages/gate/@layout.latte:88
 msgctxt "tips"
 msgid "Vestu si oblečte vždy zbraní dobředu."
 msgstr ""
@@ -726,6 +739,7 @@ msgstr ""
 # /templates/pages/gate/@layout.latte:90
 # /templates/results/@printLayout.latte:108
 # /src/GameModels/Tip.php:27
+# /templates/pages/gate/@layout.latte:88
 msgctxt "tips"
 msgid "Při týmové hře není výhodné střílet do hráčů se stejnou barvou."
 msgstr ""
@@ -733,6 +747,7 @@ msgstr ""
 # /src/GameModels/Tip.php:26
 # /templates/results/@printLayout.latte:108
 # /src/GameModels/Tip.php:27
+# /templates/pages/gate/@layout.latte:88
 msgctxt "tips"
 msgid "Jen Chuck Norris vás může zastřelit baterkou na svém mobilu."
 msgstr ""
@@ -754,6 +769,7 @@ msgstr ""
 # /src/GameModels/Tip.php:26
 # /templates/results/@printLayout.latte:108
 # /src/GameModels/Tip.php:27
+# /templates/pages/gate/@layout.latte:88
 msgctxt "tips"
 msgid "Všechny bonusy, kromě štítu, trvají 30s."
 msgstr ""
@@ -761,6 +777,7 @@ msgstr ""
 # /src/GameModels/Tip.php:26
 # /templates/results/@printLayout.latte:108
 # /src/GameModels/Tip.php:27
+# /templates/pages/gate/@layout.latte:88
 msgctxt "tips"
 msgid "Držení zbraně v obou rukách je přesnější."
 msgstr ""
@@ -786,6 +803,7 @@ msgstr ""
 # /templates/results/@printLayout.latte:112
 # /templates/results/@printLayout.latte:108
 # /src/GameModels/Tip.php:27
+# /templates/pages/gate/@layout.latte:88
 msgctxt "tips"
 msgid "#laserarenapísek"
 msgstr ""
@@ -851,6 +869,7 @@ msgstr ""
 
 # /src/GameModels/Tip.php:26
 # /src/GameModels/Tip.php:27
+# /templates/pages/gate/@layout.latte:88
 msgctxt "tips"
 msgid "Nikdy nejsi příliš starý na laser game."
 msgstr ""
@@ -987,21 +1006,25 @@ msgstr ""
 # /src/GameModels/Tip.php:26
 # /templates/results/@printLayout.latte:112
 # /src/GameModels/Tip.php:27
+# /templates/pages/gate/@layout.latte:88
 msgctxt "tips"
 msgid "Oživení trvá 5 sekund."
 msgstr ""
 
 # /src/GameModels/Game/PlayerTrophy.php:78
+# /src/GameModels/Game/PlayerTrophy.php:79
 msgctxt "results.bests"
 msgid "Nedotknutelný"
 msgstr ""
 
 # /src/GameModels/Game/PlayerTrophy.php:83
+# /src/GameModels/Game/PlayerTrophy.php:84
 msgctxt "results.bests"
 msgid "Sniper"
 msgstr ""
 
 # /src/GameModels/Game/PlayerTrophy.php:153
+# /src/GameModels/Game/PlayerTrophy.php:154
 msgctxt "results.bests"
 msgid "Hráč"
 msgstr ""
@@ -1016,21 +1039,25 @@ msgid "Výstřely"
 msgstr ""
 
 # /src/GameModels/Game/PlayerTrophy.php:98
+# /src/GameModels/Game/PlayerTrophy.php:99
 msgctxt "results.bests"
 msgid "Vyrovnaný"
 msgstr ""
 
 # /src/GameModels/Game/PlayerTrophy.php:88
+# /src/GameModels/Game/PlayerTrophy.php:89
 msgctxt "results.bests"
 msgid "Poloviční sniper"
 msgstr ""
 
 # /src/GameModels/Game/PlayerTrophy.php:103
+# /src/GameModels/Game/PlayerTrophy.php:104
 msgctxt "results.bests"
 msgid "Zabiják"
 msgstr ""
 
 # /src/GameModels/Game/PlayerTrophy.php:113
+# /src/GameModels/Game/PlayerTrophy.php:114
 msgctxt "results.bests"
 msgid "Nula"
 msgstr ""
@@ -1040,16 +1067,19 @@ msgid "Potahal tým"
 msgstr ""
 
 # /src/GameModels/Game/PlayerTrophy.php:93
+# /src/GameModels/Game/PlayerTrophy.php:94
 msgctxt "results.bests"
 msgid "Občas se i trefí"
 msgstr ""
 
 # /src/GameModels/Game/PlayerTrophy.php:123
+# /src/GameModels/Game/PlayerTrophy.php:124
 msgctxt "results.bests"
 msgid "Zasedlý"
 msgstr ""
 
 # /src/GameModels/Game/PlayerTrophy.php:128
+# /src/GameModels/Game/PlayerTrophy.php:129
 msgctxt "results.bests"
 msgid "Pronásledovaný"
 msgstr ""
@@ -1067,21 +1097,25 @@ msgstr[0] ""
 msgstr[1] ""
 
 # /src/GameModels/Game/PlayerTrophy.php:118
+# /src/GameModels/Game/PlayerTrophy.php:119
 msgctxt "results.bests"
 msgid "Tahoun týmu"
 msgstr ""
 
 # /src/GameModels/Game/PlayerTrophy.php:133
+# /src/GameModels/Game/PlayerTrophy.php:134
 msgctxt "results.bests"
 msgid "Ďábel"
 msgstr ""
 
 # /src/GameModels/Game/PlayerTrophy.php:138
+# /src/GameModels/Game/PlayerTrophy.php:139
 msgctxt "results.bests"
 msgid "Skóre nenalezeno"
 msgstr ""
 
 # /src/GameModels/Game/PlayerTrophy.php:143
+# /src/GameModels/Game/PlayerTrophy.php:144
 msgctxt "results.bests"
 msgid "Výstřely nenalezeny"
 msgstr ""
@@ -1316,11 +1350,13 @@ msgid "Podrobnější výsledky zde"
 msgstr ""
 
 # /src/GameModels/Game/PlayerTrophy.php:148
+# /src/GameModels/Game/PlayerTrophy.php:149
 msgctxt "results.bests"
 msgid "Férový hráč"
 msgstr ""
 
 # /src/GameModels/Game/PlayerTrophy.php:108
+# /src/GameModels/Game/PlayerTrophy.php:109
 msgctxt "results.bests"
 msgid "Terč"
 msgstr ""
@@ -1342,106 +1378,127 @@ msgid "Staň se nejpřesnějším hráčem hry."
 msgstr ""
 
 # /src/GameModels/Game/PlayerTrophy.php:54
+# /src/GameModels/Game/PlayerTrophy.php:55
 msgctxt "results.bests.description"
 msgid "Staň se hráčem s nejméně výstřely z celé hry."
 msgstr ""
 
 # /src/GameModels/Game/PlayerTrophy.php:59
+# /src/GameModels/Game/PlayerTrophy.php:60
 msgctxt "results.bests.description"
 msgid "Staň se hráčem, který se nejvícekrát netrefil."
 msgstr ""
 
 # /src/GameModels/Game/PlayerTrophy.php:64
+# /src/GameModels/Game/PlayerTrophy.php:65
 msgctxt "results.bests.description"
 msgid "Staň se hrářem, který nejvíckát zasáhnul spoluhráče."
 msgstr ""
 
 # /src/GameModels/Game/PlayerTrophy.php:69
+# /src/GameModels/Game/PlayerTrophy.php:70
 msgctxt "results.bests.description"
 msgid "Staň se hráčem, kterého nejvíckrát trefili spoluhráči."
 msgstr ""
 
 # /src/GameModels/Game/PlayerTrophy.php:74
+# /src/GameModels/Game/PlayerTrophy.php:75
 msgctxt "results.bests.description"
 msgid "Získej nejvíce bonusů za hru."
 msgstr ""
 
 # /src/GameModels/Game/PlayerTrophy.php:79
+# /src/GameModels/Game/PlayerTrophy.php:80
 msgctxt "results.bests.description"
 msgid "Zemři méně než 10krát za hru."
 msgstr ""
 
 # /src/GameModels/Game/PlayerTrophy.php:84
+# /src/GameModels/Game/PlayerTrophy.php:85
 msgctxt "results.bests.description"
 msgid "Získej přesnost alespoň 95% za hru."
 msgstr ""
 
 # /src/GameModels/Game/PlayerTrophy.php:89
+# /src/GameModels/Game/PlayerTrophy.php:90
 msgctxt "results.bests.description"
 msgid "Získej přesnost alespoň 50% za hru."
 msgstr ""
 
 # /src/GameModels/Game/PlayerTrophy.php:94
+# /src/GameModels/Game/PlayerTrophy.php:95
 msgctxt "results.bests.description"
 msgid "Získej přesnost maximálně 5% za hru."
 msgstr ""
 
 # /src/GameModels/Game/PlayerTrophy.php:99
+# /src/GameModels/Game/PlayerTrophy.php:100
 msgctxt "results.bests.description"
 msgid "Měj téměř stejně zásahů a smrtí."
 msgstr ""
 
 # /src/GameModels/Game/PlayerTrophy.php:104
+# /src/GameModels/Game/PlayerTrophy.php:105
 msgctxt "results.bests.description"
 msgid "Měj alespoň 2x tolik zásahů co smrtí."
 msgstr ""
 
 # /src/GameModels/Game/PlayerTrophy.php:109
+# /src/GameModels/Game/PlayerTrophy.php:110
 msgctxt "results.bests.description"
 msgid "Měl alespoň přibližně 2x tolik smrtí co zásahů."
 msgstr ""
 
 # /src/GameModels/Game/PlayerTrophy.php:114
+# /src/GameModels/Game/PlayerTrophy.php:115
 msgctxt "results.bests.description"
 msgid "Měj 0 skóre."
 msgstr ""
 
 # /src/GameModels/Game/PlayerTrophy.php:119
+# /src/GameModels/Game/PlayerTrophy.php:120
 msgctxt "results.bests.description"
 msgid "Získej alespoň přibližně polovinu skóre celého tvého týmu."
 msgstr ""
 
 # /src/GameModels/Game/PlayerTrophy.php:124
+# /src/GameModels/Game/PlayerTrophy.php:125
 msgctxt "results.bests.description"
 msgid "Alespoň přibližně polovina všech tvých zásahů je jen jeden hráč."
 msgstr ""
 
 # /src/GameModels/Game/PlayerTrophy.php:129
+# /src/GameModels/Game/PlayerTrophy.php:130
 msgctxt "results.bests.description"
 msgid "Alespoň přibližně polovina všech tvých smrtí je jen jeden hráč."
 msgstr ""
 
 # /src/GameModels/Game/PlayerTrophy.php:134
+# /src/GameModels/Game/PlayerTrophy.php:135
 msgctxt "results.bests.description"
 msgid "Získej 666 skóre nebo výstřelů."
 msgstr ""
 
 # /src/GameModels/Game/PlayerTrophy.php:139
+# /src/GameModels/Game/PlayerTrophy.php:140
 msgctxt "results.bests.description"
 msgid "Získej 404, 4040, nebo 40400 skóre."
 msgstr ""
 
 # /src/GameModels/Game/PlayerTrophy.php:144
+# /src/GameModels/Game/PlayerTrophy.php:145
 msgctxt "results.bests.description"
 msgid "Vystřel 404krát."
 msgstr ""
 
 # /src/GameModels/Game/PlayerTrophy.php:149
+# /src/GameModels/Game/PlayerTrophy.php:150
 msgctxt "results.bests.description"
 msgid "Zasáhni všechny své nepřátele stejněkrát (přibližně)."
 msgstr ""
 
 # /src/GameModels/Game/PlayerTrophy.php:154
+# /src/GameModels/Game/PlayerTrophy.php:155
 msgctxt "results.bests.description"
 msgid "Průměrný hráč. Bohužel na tebe nesedí žádná z trofejí."
 msgstr ""
@@ -1461,6 +1518,7 @@ msgstr ""
 # /templates/pages/gate/results.latte:32
 # /templates/pages/gate/modes/100naboju.latte:32
 # /templates/results/templates/graphical.latte:115
+# /templates/pages/gate/results.latte:28
 msgctxt "results"
 msgid "On-line detailní výsledky"
 msgstr ""
@@ -1524,21 +1582,25 @@ msgid "Štít"
 msgstr ""
 
 # /src/GameModels/Game/PlayerTrophy.php:34
+# /src/GameModels/Game/PlayerTrophy.php:35
 msgctxt "results.bests.description"
 msgid "Staň se hráčem s největším skóre."
 msgstr ""
 
 # /src/GameModels/Game/PlayerTrophy.php:39
+# /src/GameModels/Game/PlayerTrophy.php:40
 msgctxt "results.bests.description"
 msgid "Staň se hráčem s největším počtem zásahů."
 msgstr ""
 
 # /src/GameModels/Game/PlayerTrophy.php:44
+# /src/GameModels/Game/PlayerTrophy.php:45
 msgctxt "results.bests.description"
 msgid "Staň se hráčem s největším počtem smrtí."
 msgstr ""
 
 # /src/GameModels/Game/PlayerTrophy.php:49
+# /src/GameModels/Game/PlayerTrophy.php:50
 msgctxt "results.bests.description"
 msgid "Staň se nejpřesnějším hráčem."
 msgstr ""

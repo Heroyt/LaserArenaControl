@@ -5,11 +5,17 @@
 namespace App\Tools;
 
 use App\GameModels\Game\Game;
+use Lsr\Helpers\Tools\Strings;
 
+/**
+ * Service for generating CSS classes for a laser game system
+ */
 class Color
 {
 
 	/**
+	 * Get CSS definition for team colors used in games
+	 *
 	 * @param Game[] $games
 	 *
 	 * @return string

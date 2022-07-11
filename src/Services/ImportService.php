@@ -2,13 +2,12 @@
 /**
  * @author Tomáš Vojík <xvojik00@stud.fit.vutbr.cz>, <vojik@wboy.cz>
  */
+
 namespace App\Services;
 
-use App\Core\Constants;
 use App\Core\Info;
 use App\Exceptions\GameModeNotFoundException;
 use App\Exceptions\ResultsParseException;
-use App\Exceptions\ValidationException;
 use App\GameModels\Factory\GameFactory;
 use App\GameModels\Game\Game;
 use App\GameModels\Game\Player;
@@ -17,10 +16,17 @@ use Dibi\Exception;
 use Lsr\Core\ApiController;
 use Lsr\Core\App;
 use Lsr\Core\CliController;
+use Lsr\Core\Constants;
+use Lsr\Core\Exceptions\ModelNotFoundException;
+use Lsr\Core\Exceptions\ValidationException;
 use Lsr\Exceptions\FileException;
 use Lsr\Logging\Exceptions\DirectoryCreationException;
 use Lsr\Logging\Logger;
+use Throwable;
 
+/**
+ * Service for handling import of game files from controllers
+ */
 class ImportService
 {
 
@@ -39,6 +45,9 @@ class ImportService
 	 * @param ApiController|CliController $controller The controller object
 	 *
 	 * @return void
+	 * @throws ModelNotFoundException
+	 * @throws ValidationException
+	 * @throws Throwable
 	 */
 	public static function import(string $resultsDir, ApiController|CliController $controller) : void {
 		self::$controller = $controller;

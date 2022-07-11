@@ -8,7 +8,6 @@ use App\GameModels\Game\Game;
 use App\GameModels\Game\PrintStyle;
 use App\GameModels\Game\PrintTemplate;
 use App\GameModels\Game\Today;
-use App\Tools\Strings;
 use Endroid\QrCode\Builder\Builder;
 use Endroid\QrCode\Encoding\Encoding;
 use Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelLow;
@@ -16,6 +15,7 @@ use Endroid\QrCode\Writer\SvgWriter;
 use Lsr\Core\Controller;
 use Lsr\Core\Requests\Request;
 use Lsr\Exceptions\TemplateDoesNotExistException;
+use Lsr\Helpers\Tools\Strings;
 
 class Results extends Controller
 {

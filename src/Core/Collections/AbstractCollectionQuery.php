@@ -4,11 +4,11 @@
  */
 namespace App\Core\Collections;
 
-use App\Core\Constants;
 use App\Core\Interfaces\CollectionInterface;
 use App\Core\Interfaces\CollectionQueryFilterInterface;
 use App\Core\Interfaces\CollectionQueryInterface;
 use App\Exceptions\InvalidQueryParameterException;
+use Lsr\Core\Constants;
 use Lsr\Core\Models\Model;
 use Nette\Utils\Strings;
 

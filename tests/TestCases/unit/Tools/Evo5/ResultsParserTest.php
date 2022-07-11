@@ -1,6 +1,6 @@
 <?php
 
-namespace unit\Tools\Evo5;
+namespace TestCases\unit\Tools\Evo5;
 
 use App\Exceptions\ResultsParseException;
 use App\GameModels\Game\Evo5\Game;

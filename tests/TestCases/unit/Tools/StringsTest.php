@@ -1,6 +1,6 @@
 <?php
 
-namespace unit\Tools;
+namespace TestCases\unit\Tools;
 
 use Lsr\Helpers\Tools\Strings;
 use PHPUnit\Framework\TestCase;

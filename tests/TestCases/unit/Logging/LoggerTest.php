@@ -1,6 +1,6 @@
 <?php
 
-namespace unit\Logging;
+namespace TestCases\unit\Logging;
 
 use Lsr\Logging\Logger;
 use PHPUnit\Framework\TestCase;

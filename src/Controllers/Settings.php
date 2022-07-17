@@ -152,7 +152,7 @@ class Settings extends Controller
 					$style->colorDark = $info['dark'];
 					$style->colorLight = $info['light'];
 					$style->bg = $info['original-background'] ?? '';
-					$style->bg_landscape = $info['original-background-landscape'] ?? '';
+					$style->bgLandscape = $info['original-background-landscape'] ?? '';
 					if (!empty($_FILES['styles']['name'][$key]['background'])) {
 						if ($_FILES['styles']['error'][$key]['background'] !== UPLOAD_ERR_OK) {
 							$request->passErrors[] = match ($_FILES['styles']['error'][$key]['background']) {
@@ -202,7 +202,7 @@ class Settings extends Controller
 							if ($check !== false) {
 								if (in_array($imageFileType, ['jpg', 'jpeg', 'png'], true)) {
 									if (move_uploaded_file($_FILES['styles']["tmp_name"][$key]['background-landscape'], ROOT.$name)) {
-										$style->bg_landscape = $name;
+										$style->bgLandscape = $name;
 									}
 									else {
 										$request->passErrors[] = lang('File upload failed.', context: 'errors');

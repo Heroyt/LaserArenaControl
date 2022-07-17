@@ -83,7 +83,9 @@ Debugger::getBar()
 Loader::init();
 
 // Register library tracy panels
-(new Panel())->register(DB::getConnection());
+if (!isset($_ENV['noDb'])) {
+	(new Panel())->register(DB::getConnection());
+}
 /** @noinspection PhpParamsInspection */
 Debugger::getBar()
 				->addPanel(new ContainerPanel(App::getContainer()))

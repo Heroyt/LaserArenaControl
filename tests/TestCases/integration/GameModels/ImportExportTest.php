@@ -9,6 +9,7 @@ use App\GameModels\Game\Player;
 use App\GameModels\Game\Team;
 use Lsr\Core\Models\Model;
 use PHPUnit\Framework\TestCase;
+use ReflectionProperty;
 
 /**
  *
@@ -27,6 +28,7 @@ class ImportExportTest extends TestCase
 		foreach ($gameRows as $row) {
 			$data[] = [GameFactory::getByCode($row->code)];
 		}
+
 		return $data;
 	}
 
@@ -47,7 +49,9 @@ class ImportExportTest extends TestCase
 		self::assertTrue(isset($decoded['code']), 'Missing required field: "code"');
 		self::assertTrue(isset($decoded['start']), 'Missing required field: "start"');
 		self::assertTrue(isset($decoded['end']), 'Missing required field: "end"');
-		self::assertTrue(isset($decoded['mode']), 'Missing required field: "mode"');
+		if (isset($game->mode)) {
+			self::assertTrue(isset($decoded['mode']), 'Missing required field: "mode"');
+		}
 		self::assertTrue(isset($decoded['timing']), 'Missing required field: "timing"');
 		self::assertTrue(isset($decoded['scoring']), 'Missing required field: "scoring"');
 		self::assertTrue(isset($decoded['players']), 'Missing required field: "players"');
@@ -99,6 +103,18 @@ class ImportExportTest extends TestCase
 		}
 	}
 
+	public const SKIP_FIELDS = [
+		'fileTime',
+		'id',
+		'playerCount',
+		'players',
+		'teams',
+		'game',
+		'hitPlayers',
+		'description',
+		'mode',
+	];
+
 	/**
 	 * @param Game $game
 	 *
@@ -114,13 +130,15 @@ class ImportExportTest extends TestCase
 		$decoded = $class::fromJson(json_decode($json, true, 512, JSON_THROW_ON_ERROR));
 
 		// Test all fields
-		foreach ($game::DEFINITION as $field => $info) {
-			if (isset($info['noTest']) && $info['noTest']) {
+		foreach ($game::getPropertyReflections(ReflectionProperty::IS_PUBLIC) as $propertyReflection) {
+			$field = $propertyReflection->getName();
+			if (in_array($field, self::SKIP_FIELDS, true)) {
 				continue;
 			}
 			if ($game->{$field} instanceof Model) {
-				foreach ($game->{$field}::DEFINITION as $field2 => $info2) {
-					if (isset($info2['noTest']) && $info2['noTest']) {
+				foreach ($game->{$field}::getPropertyReflections(ReflectionProperty::IS_PUBLIC) as $propertyReflection2) {
+					$field2 = $propertyReflection2->getName();
+					if (in_array($field, self::SKIP_FIELDS, true)) {
 						continue;
 					}
 					self::assertEquals($game->{$field}->{$field2}, $decoded->{$field}->{$field2}, 'Failed asserting that the properties are the same: "game.'.$field.'.'.$field2.'" ('.json_encode($game->{$field}).')');
@@ -137,13 +155,15 @@ class ImportExportTest extends TestCase
 			/** @var Player|null $decodedPlayer */
 			$decodedPlayer = $decoded->getPlayers()->query()->filter('name', $player->name)->first();
 			self::assertTrue(isset($decodedPlayer), 'Cannot find player "'.$player->name.'"');
-			foreach ($player::DEFINITION as $field => $info) {
-				if (isset($info['noTest']) && $info['noTest']) {
+			foreach ($player::getPropertyReflections(ReflectionProperty::IS_PUBLIC) as $propertyReflection) {
+				$field = $propertyReflection->getName();
+				if (in_array($field, self::SKIP_FIELDS, true)) {
 					continue;
 				}
-				if ($player->{$field} instanceof AbstractModel) {
-					foreach ($player->{$field}::DEFINITION as $field2 => $info2) {
-						if (isset($info2['noTest']) && $info2['noTest']) {
+				if ($player->{$field} instanceof Model) {
+					foreach ($player->{$field}::getPropertyReflections(ReflectionProperty::IS_PUBLIC) as $propertyReflection2) {
+						$field2 = $propertyReflection2->getName();
+						if (in_array($field2, self::SKIP_FIELDS, true)) {
 							continue;
 						}
 						self::assertEquals($player->{$field}->{$field2}, $decodedPlayer->{$field}->{$field2}, 'Failed asserting that the properties are the same: "player.'.$field.'.'.$field2.'"');
@@ -167,13 +187,15 @@ class ImportExportTest extends TestCase
 			/** @var Team|null $decodedPlayer */
 			$decodedTeam = $decoded->getTeams()->query()->filter('name', $team->name)->first();
 			self::assertTrue(isset($decodedTeam), 'Cannot find team "'.$team->name.'"');
-			foreach ($team::DEFINITION as $field => $info) {
-				if (isset($info['noTest']) && $info['noTest']) {
+			foreach ($team::getPropertyReflections(ReflectionProperty::IS_PUBLIC) as $propertyReflection) {
+				$field = $propertyReflection->getName();
+				if (in_array($field, self::SKIP_FIELDS, true)) {
 					continue;
 				}
 				if ($team->{$field} instanceof Model) {
-					foreach ($team->{$field}::DEFINITION as $field2 => $info2) {
-						if (isset($info2['noTest']) && $info2['noTest']) {
+					foreach ($team->{$field}::getPropertyReflections(ReflectionProperty::IS_PUBLIC) as $propertyReflection2) {
+						$field2 = $propertyReflection2->getName();
+						if (in_array($field2, self::SKIP_FIELDS, true)) {
 							continue;
 						}
 						self::assertEquals($team->{$field}->{$field2}, $decodedTeam->{$field}->{$field2}, 'Failed asserting that the properties are the same: "team.'.$field.'.'.$field2.'"');

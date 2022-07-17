@@ -30,10 +30,9 @@ class ResultsParserTest extends TestCase
 	/**
 	 * @param string $file
 	 *
-	 * @throws FileException
 	 * @dataProvider getFiles
 	 */
-	public function testParser(string $file) : void {
+	public function testParserAndDbSave(string $file) : void {
 		$parser = new ResultsParser($file);
 		$game = $parser->parse();
 		if (!$game->isFinished()) {

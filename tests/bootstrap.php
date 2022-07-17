@@ -1,6 +1,7 @@
 <?php
 
 define('ROOT', dirname(__DIR__).'/');
+const INDEX = true;
 
 $noDb = ['--testsuite=unit', '--testsuite="unit"'];
 

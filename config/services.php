@@ -4,9 +4,12 @@
  * @brief List of all DI container definition files
  */
 
-return [
+use Lsr\Core\App;
+
+$services = [
 	ROOT.'vendor/lsr/routing/services.neon',
 	ROOT.'vendor/lsr/logging/services.neon',
 	ROOT.'vendor/lsr/core/services.neon',
-	ROOT.'config/services.neon',
 ];
+$services[] = App::isProduction() ? ROOT.'config/services.neon' : ROOT.'config/servicesDebug.neon';
+return $services;

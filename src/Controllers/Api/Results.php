@@ -54,7 +54,7 @@ class Results extends ApiController
 		if (empty($game->fileNumber)) {
 			$this->respond(['error' => 'Cannot get game file number.', 'game' => $game], 404);
 		}
-		$files = glob($resultsDir.$game->fileNumber.'*.game');
+		$files = glob($resultsDir.str_pad($game->fileNumber, 4, '0', STR_PAD_LEFT).'*.game');
 		if (empty($files)) {
 			$this->respond(['error' => 'Cannot find game file.', 'path' => $resultsDir.$game->fileNumber.'*.game'], 404);
 		}

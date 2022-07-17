@@ -16,7 +16,7 @@ jobs:
                 operating-system: [ ubuntu-latest ]
                 php-version: [ '8.1' ]
                 dependencies: [ '' ]
-                coverage-driver: [ pcov, xdebug ]
+                coverage-driver: [ xdebug ]
 
         steps:
             -   uses: actions/checkout@master
@@ -34,7 +34,7 @@ jobs:
                         ${{ runner.os }}-php-
 
             -   name: Install dependencies
-                run: composer install --prefer-dist --no-progress
+                run: composer install --prefer-dist --no-progress -v
 
             # Add a test script to composer.json, for instance: "test": "vendor/bin/phpunit"
             # Docs: https://getcomposer.org/doc/articles/scripts.md

@@ -17,9 +17,6 @@ jobs:
                 php-version: [ '8.1' ]
                 dependencies: [ '' ]
                 coverage-driver: [ pcov, xdebug ]
-                include:
-                    - { operating-system: 'ubuntu-latest', php-version: '7.4', dependencies: '--prefer-lowest', coverage-driver: 'pcov' }
-                    - { operating-system: 'ubuntu-latest', php-version: '8.0', dependencies: '--ignore-platform-req=php', coverage-driver: 'pcov' }
 
         steps:
             -   uses: actions/checkout@master

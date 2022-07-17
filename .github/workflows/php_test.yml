@@ -20,6 +20,9 @@ jobs:
 
         steps:
             -   uses: actions/checkout@master
+            
+            -   name: submodules-init
+                uses: snickerbockers/submodules-init@v4
 
             -   name: Validate composer.json and composer.lock
                 run: composer validate --strict

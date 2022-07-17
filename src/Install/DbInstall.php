@@ -2,6 +2,7 @@
 /**
  * @author Tomáš Vojík <xvojik00@stud.fit.vutbr.cz>, <vojik@wboy.cz>
  */
+
 namespace App\Install;
 
 use App\Core\Info;
@@ -89,7 +90,7 @@ class DbInstall implements InstallInterface
 			'modifications' => [],
 		],
 		Game::TABLE          => [
-			'definition'    => "(
+			'definition' => "(
 				`id_game` int(11) unsigned NOT NULL AUTO_INCREMENT,
 				`id_mode` int(11) unsigned DEFAULT NULL,
 				`game_type` enum('TEAM','SOLO') NOT NULL DEFAULT 'TEAM',

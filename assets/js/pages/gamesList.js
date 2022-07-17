@@ -14,6 +14,7 @@ export default function initGamesList() {
 			axios.post('/api/results/import/' + gameCode, {})
 				.then(response => {
 					stopLoading(true);
+					window.location.reload();
 				})
 				.catch(() => {
 					stopLoading(false);

@@ -12,6 +12,7 @@
 use Lsr\Core\App;
 
 require_once ROOT.'include/constants.php';
+const DEFAULT_RESULTS_DIR = ROOT.'lmx/results/';
 
 // Prevent IDE warnings about non-existent constant
 if (!defined('JSON_THROW_ON_ERROR')) {

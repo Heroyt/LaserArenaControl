@@ -26,7 +26,7 @@ abstract class AbstractResultsParser implements ResultsParserInterface
 		if (!file_exists($this->fileName) || !is_readable($this->fileName)) {
 			throw new FileException('File "'.$this->fileName.'" does not exist or is not readable');
 		}
-		$this->fileContents = file_get_contents($this->fileName);
+		$this->fileContents = utf8_encode(file_get_contents($this->fileName));
 	}
 
 }

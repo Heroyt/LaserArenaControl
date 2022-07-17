@@ -7,6 +7,7 @@ import initGate from "./pages/gate";
 import {startLoading, stopLoading} from "./loaders";
 import * as bootstrap from "bootstrap";
 import initVestsSettings from "./pages/settings/vests";
+import initGamesList from "./pages/gamesList";
 
 axios.defaults.headers.post['X-Requested-With'] = 'XMLHttpRequest';
 axios.defaults.headers.get['X-Requested-With'] = 'XMLHttpRequest';
@@ -126,6 +127,7 @@ window.addEventListener("load", () => {
 		initVestsSettings();
 	} else if (page.routeName && page.routeName === 'games-list') {
 		initResultsReload();
+		initGamesList();
 	} else if (page.routeName && (page.routeName === 'results' || page.routeName === 'results-game')) {
 		initResultsReload(getLink(['results']));
 	} else if (page.routeName && page.routeName === 'gate') {

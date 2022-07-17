@@ -16,6 +16,7 @@ abstract class ApiController extends Controller
 	 * @param string[]            $headers
 	 *
 	 * @return never
+	 * @throws Throwable On json_encode error
 	 */
 	public function respond(string|array|object $data, int $code = 200, array $headers = []) : never {
 		http_response_code($code);

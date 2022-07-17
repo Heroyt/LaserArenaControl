@@ -24,6 +24,7 @@ const PRIVATE_DIR = ROOT.'private/';
 const LANGUAGE_DIR = ROOT.'languages/';
 const LANGUAGE_FILE_NAME = 'LAC';
 const ASSETS_DIR = ROOT.'assets/';
+const DEFAULT_RESULTS_DIR = ROOT.'lmx/results/';
 /** App's default language */
 const DEFAULT_LANGUAGE = 'cs';
 /** Suffixes for language translations */

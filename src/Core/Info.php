@@ -5,7 +5,13 @@
 namespace App\Core;
 
 use Dibi\Exception;
+use Lsr\Core\DB;
 
+/**
+ * Key-value read-write storage (in database)
+ *
+ * Allows storing any serializable values.
+ */
 class Info
 {
 

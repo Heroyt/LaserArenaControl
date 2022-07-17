@@ -3,6 +3,27 @@
 	"description": "Laser arena control CLI tools",
 	"subcommands": [
 		{
+			"name": "cache/clean",
+			"description": "Clean server cache",
+			"args": [
+				{
+					"name": "...tag",
+					"isOptional": true,
+					"description": "If set, only the records with specified tags will be removed"
+				}
+			]
+		},
+		{
+			"name": "cache/clean/di",
+			"description": "Clean server cache",
+			"args": []
+		},
+		{
+			"name": "cache/clean/latte",
+			"description": "Clean latte cache",
+			"args": []
+		},
+		{
 			"name": "list",
 			"description": "Lists all available CLI commands.",
 			"args": [
@@ -89,6 +110,11 @@
 					"isOptional": false,
 					"description": "A language directory from the other project.",
 					"template": "filepaths"
+				},
+				{
+					"name": "contextSkip",
+					"isOptional": true,
+					"description": "A comma separated list of context names to skip while merging."
 				}
 			]
 		}

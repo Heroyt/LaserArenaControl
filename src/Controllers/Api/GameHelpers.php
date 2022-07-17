@@ -2,11 +2,11 @@
 
 namespace App\Controllers\Api;
 
-use App\Core\ApiController;
-use App\Core\Constants;
 use App\Core\Info;
 use App\GameModels\Factory\GameFactory;
 use App\GameModels\Game\Game;
+use Lsr\Core\ApiController;
+use Lsr\Core\Constants;
 
 /**
  * Used for getting information about current games

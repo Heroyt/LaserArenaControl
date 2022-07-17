@@ -4,10 +4,8 @@
  */
 namespace App\Services;
 
-use App\Core\App;
 use App\Core\Info;
 use App\GameModels\Game\Game;
-use App\Logging\Logger;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Handler\CurlFactory;
@@ -16,6 +14,8 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\MessageFormatter;
 use GuzzleHttp\Middleware;
 use InvalidArgumentException;
+use Lsr\Core\App;
+use Lsr\Logging\Logger;
 
 /**
  * Singleton service for handling public API calls

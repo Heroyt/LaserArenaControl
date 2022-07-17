@@ -12,7 +12,8 @@
 
 namespace App\Controllers;
 
-use App\Core\Controller;
+use Lsr\Core\Controller;
+use Lsr\Core\Requests\Request;
 
 /**
  * @class   E403
@@ -37,9 +38,12 @@ class E403 extends Controller
 	protected string $description = 'Access denied';
 
 
-	public function show() : void {
-		http_response_code(404);
-		view('errors/E404', $this->params);
+	public function show(Request $request) : void {
+		if ($request->header('Accept') === 'application/json') {
+			$this->respond(['error' => 'Unauthorized'], 403);
+		}
+		http_response_code(403);
+		$this->view('errors/E403');
 	}
 
 }

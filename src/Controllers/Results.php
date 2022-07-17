@@ -2,20 +2,20 @@
 
 namespace App\Controllers;
 
-use App\Core\Controller;
 use App\Core\Info;
-use App\Core\Request;
-use App\Exceptions\TemplateDoesNotExistException;
 use App\GameModels\Factory\GameFactory;
 use App\GameModels\Game\Game;
 use App\GameModels\Game\PrintStyle;
 use App\GameModels\Game\PrintTemplate;
 use App\GameModels\Game\Today;
-use App\Tools\Strings;
 use Endroid\QrCode\Builder\Builder;
 use Endroid\QrCode\Encoding\Encoding;
 use Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelLow;
 use Endroid\QrCode\Writer\SvgWriter;
+use Lsr\Core\Controller;
+use Lsr\Core\Requests\Request;
+use Lsr\Exceptions\TemplateDoesNotExistException;
+use Lsr\Helpers\Tools\Strings;
 
 class Results extends Controller
 {
@@ -57,7 +57,6 @@ class Results extends Controller
 		$this->params['selectedTemplate'] = $_GET['template'] ?? Info::get('default_print_template', 'default');
 		$this->params['styles'] = PrintStyle::getAll();
 		$this->params['templates'] = PrintTemplate::getAll();
-		bdump($this->params);
 		$this->view('pages/results/index');
 	}
 
@@ -77,7 +76,6 @@ class Results extends Controller
 		}
 
 		$this->params['game'] = $game;
-		bdump($game->getPlayers());
 		$this->params['style'] = PrintStyle::exists($style) ? PrintStyle::get($style) : PrintStyle::getActiveStyle();
 		$this->params['template'] = PrintTemplate::query()->where('slug = %s', $template)->first();
 		$namespace = '\\App\\GameModels\\Game\\'.Strings::toPascalCase($game::SYSTEM).'\\';

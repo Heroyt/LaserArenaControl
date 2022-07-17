@@ -2,13 +2,14 @@
 /**
  * @author Tomáš Vojík <xvojik00@stud.fit.vutbr.cz>, <vojik@wboy.cz>
  */
+
 namespace App\Core\Interfaces;
 
-use App\Core\AbstractModel;
 use ArrayAccess;
 use Countable;
 use Iterator;
 use JsonSerializable;
+use Lsr\Core\Models\Model;
 
 interface CollectionInterface extends ArrayAccess, JsonSerializable, Countable, Iterator
 {
@@ -16,7 +17,7 @@ interface CollectionInterface extends ArrayAccess, JsonSerializable, Countable, 
 	/**
 	 * Create a new collection from array of data
 	 *
-	 * @param AbstractModel[] $array
+	 * @param Model[] $array
 	 *
 	 * @return CollectionInterface
 	 */
@@ -25,7 +26,7 @@ interface CollectionInterface extends ArrayAccess, JsonSerializable, Countable, 
 	/**
 	 * Get all collection's data as an array
 	 *
-	 * @return AbstractModel[]
+	 * @return Model[]
 	 */
 	public function getAll() : array;
 
@@ -34,20 +35,20 @@ interface CollectionInterface extends ArrayAccess, JsonSerializable, Countable, 
 	/**
 	 * Add new data to collection
 	 *
-	 * @param AbstractModel ...$values
+	 * @param Model ...$values
 	 *
 	 * @return CollectionInterface
 	 */
-	public function add(AbstractModel ...$values) : CollectionInterface;
+	public function add(Model ...$values) : CollectionInterface;
 
 	/**
 	 * Checks whether the given model already exists in collection
 	 *
-	 * @param AbstractModel $model
+	 * @param Model $model
 	 *
 	 * @return bool
 	 */
-	public function contains(AbstractModel $model) : bool;
+	public function contains(Model $model) : bool;
 
 	/**
 	 * Get collection's model type
@@ -68,8 +69,8 @@ interface CollectionInterface extends ArrayAccess, JsonSerializable, Countable, 
 	/**
 	 * Get first object in collection
 	 *
-	 * @return AbstractModel|null
+	 * @return Model|null
 	 */
-	public function first() : ?AbstractModel;
+	public function first() : ?Model;
 
 }

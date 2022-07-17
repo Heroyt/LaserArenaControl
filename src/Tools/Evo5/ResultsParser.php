@@ -2,6 +2,7 @@
 /**
  * @author Tomáš Vojík <xvojik00@stud.fit.vutbr.cz>, <vojik@wboy.cz>
  */
+
 namespace App\Tools\Evo5;
 
 use App\Exceptions\GameModeNotFoundException;
@@ -15,7 +16,12 @@ use App\GameModels\Game\Scoring;
 use App\GameModels\Game\Timing;
 use App\Tools\AbstractResultsParser;
 use DateTime;
+use Lsr\Core\Exceptions\ModelNotFoundException;
+use Lsr\Core\Exceptions\ValidationException;
 
+/**
+ * Result parser for the EVO5 system
+ */
 class ResultsParser extends AbstractResultsParser
 {
 
@@ -26,8 +32,10 @@ class ResultsParser extends AbstractResultsParser
 	 * Parse a game results file and return a parsed object
 	 *
 	 * @return Game
-	 * @throws ResultsParseException
 	 * @throws GameModeNotFoundException
+	 * @throws ResultsParseException
+	 * @throws ModelNotFoundException
+	 * @throws ValidationException
 	 */
 	public function parse() : Game {
 		$game = new Game();
@@ -44,7 +52,7 @@ class ResultsParser extends AbstractResultsParser
 
 		// Parse file into lines and arguments
 		preg_match_all('/([A-Z]+){([^{}]*)}#/', $this->fileContents, $matches);
-		[$lines, $titles, $argsAll] = $matches;
+		[, $titles, $argsAll] = $matches;
 
 		// Check if parsing is successful and lines were found
 		if (empty($titles) || empty($argsAll)) {
@@ -79,8 +87,8 @@ class ResultsParser extends AbstractResultsParser
 					if ($argsCount !== 5) {
 						throw new ResultsParseException('Invalid argument count in GAME');
 					}
-					[$gameNumber, $a, $dateStart, $dateEnd, $playerCount] = $args;
-					$game->gameNumber = (int) $gameNumber;
+					[$gameNumber, , $dateStart, $dateEnd, $playerCount] = $args;
+					$game->fileNumber = (int) $gameNumber;
 					$game->playerCount = (int) $playerCount;
 					if ($dateStart !== $this::EMPTY_DATE) {
 						$game->start = DateTime::createFromFormat('YmdHis', $dateStart);

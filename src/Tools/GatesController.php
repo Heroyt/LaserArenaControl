@@ -6,6 +6,9 @@ namespace App\Tools;
 
 use Exception;
 
+/**
+ * Controller for sending UDP requests to control gates
+ */
 class GatesController
 {
 

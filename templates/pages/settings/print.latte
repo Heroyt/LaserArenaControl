@@ -117,7 +117,7 @@
 				<div class="row g-0">
 					<div class="col-md-6">
 						<img class="portrait img-fluid rounded-start" src="{getUrl}{$style->bg}" alt="background">
-						<img class="landscape img-fluid rounded-start" src="{getUrl}{$style->bg_landscape}"
+						<img class="landscape img-fluid rounded-start" src="{getUrl}{$style->bgLandscape}"
 							 alt="background-landscape">
 					</div>
 					<div class="col-md-6 p-3">
@@ -141,7 +141,7 @@
 								{lang 'Landscape background', context: 'results.style.settings'}:
 							</label>
 							<input type="hidden" name="styles[{$key}][original-background-landscape]"
-								   value="{$style->bg_landscape}">
+								   value="{$style->bgLandscape}">
 							<input id="file-{$key}" name="styles[{$key}][background-landscape]" type="file"
 								   accept="image/jpeg,image/png" class="form-control landscape">
 						</div>

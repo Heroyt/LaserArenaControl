@@ -6,6 +6,9 @@ namespace App\Exceptions;
 
 use Exception;
 
+/**
+ * Exception thrown when a game file error occurs
+ */
 class ResultsParseException extends Exception
 {
 

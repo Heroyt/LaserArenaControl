@@ -1,11 +1,12 @@
 <?php
 
-namespace unit\Tools\Evo5;
+namespace TestCases\unit\Tools\Evo5;
 
-use App\Exceptions\FileException;
 use App\Exceptions\ResultsParseException;
 use App\Tools\Evo5\ResultsParser;
+use Lsr\Exceptions\FileException;
 use PHPUnit\Framework\TestCase;
+use const unit\Tools\Evo5\ROOT;
 
 class ResultsParserTest extends TestCase
 {

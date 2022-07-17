@@ -2,6 +2,12 @@
 	"name": "heroyt/laser-arena-control",
 	"description": "Systém pro lepší zpracování a sjednocení výsledků LaserGame z různých arén a různých výrobců.",
 	"type": "project",
+	"repositories": [
+		{
+			"type": "composer",
+			"url": "https://packages.laserliga.cz"
+		}
+	],
 	"scripts": {
 		"serve": "php -S localhost:8000 index.php",
 		"test": "./vendor/bin/phpunit",
@@ -22,16 +28,22 @@
 		"ext-zip": "*",
 		"gettext/gettext": "^5.5",
 		"guzzlehttp/guzzle": "^7.4",
-		"latte/latte": "^2.10",
+		"latte/latte": "^3.0.0",
 		"nette/di": "^3.0",
 		"nette/http": "^3.1",
 		"nette/security": "^3.1",
 		"nette/utils": "^3.2",
 		"php": "^8.1",
-		"psr/log": "^1.1",
+		"psr/log": "^3.0",
 		"tracy/tracy": "^2.8",
 		"endroid/qr-code": "^4.4",
-		"ext-pcntl": "*"
+		"ext-pcntl": "*",
+		"lsr/interfaces": "dev-master",
+		"lsr/helpers": "dev-master",
+		"lsr/core": "dev-master",
+		"lsr/routing": "dev-master",
+		"lsr/logging": "dev-master",
+		"lsr/request": "dev-master"
 	},
 	"require-dev": {
 		"roave/security-advisories": "dev-latest",

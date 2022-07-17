@@ -1,13 +1,13 @@
 <?php
 
-namespace integration\GameModels;
+namespace TestCases\integration\GameModels;
 
-use App\Core\AbstractModel;
 use App\GameModels\Factory\GameFactory;
 use App\GameModels\Game\Enums\GameModeType;
 use App\GameModels\Game\Game;
 use App\GameModels\Game\Player;
 use App\GameModels\Game\Team;
+use Lsr\Core\Models\Model;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -118,7 +118,7 @@ class ImportExportTest extends TestCase
 			if (isset($info['noTest']) && $info['noTest']) {
 				continue;
 			}
-			if ($game->{$field} instanceof AbstractModel) {
+			if ($game->{$field} instanceof Model) {
 				foreach ($game->{$field}::DEFINITION as $field2 => $info2) {
 					if (isset($info2['noTest']) && $info2['noTest']) {
 						continue;
@@ -171,7 +171,7 @@ class ImportExportTest extends TestCase
 				if (isset($info['noTest']) && $info['noTest']) {
 					continue;
 				}
-				if ($team->{$field} instanceof AbstractModel) {
+				if ($team->{$field} instanceof Model) {
 					foreach ($team->{$field}::DEFINITION as $field2 => $info2) {
 						if (isset($info2['noTest']) && $info2['noTest']) {
 							continue;

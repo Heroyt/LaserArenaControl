@@ -2,13 +2,15 @@
 /**
  * @author Tomáš Vojík <xvojik00@stud.fit.vutbr.cz>, <vojik@wboy.cz>
  */
+
 namespace App\Services;
 
-use App\Exceptions\ValidationException;
 use App\GameModels\Factory\GameFactory;
 use App\GameModels\Game\Game;
-use App\Logging\Logger;
 use Dibi\DateTime;
+use Lsr\Core\Exceptions\ValidationException;
+use Lsr\Logging\Logger;
+use Throwable;
 
 /**
  * Service class for synchronization functions with public API
@@ -23,6 +25,7 @@ class SyncService
 	 * @param float|null $timeout Timeout for each request in seconds
 	 *
 	 * @return void
+	 * @throws Throwable
 	 */
 	public static function syncGames(int $limit = 5, ?float $timeout = null) : void {
 		$logger = new Logger(LOG_DIR, 'sync');

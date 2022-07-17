@@ -36,3 +36,5 @@ logs/
 lmx/
 results/
 entr/
+docker-compose.yml
+docs/

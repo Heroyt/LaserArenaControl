@@ -4,12 +4,12 @@
  */
 namespace App\Core\Collections;
 
-use App\Core\AbstractModel;
-use App\Core\Constants;
 use App\Core\Interfaces\CollectionInterface;
 use App\Core\Interfaces\CollectionQueryFilterInterface;
 use App\Core\Interfaces\CollectionQueryInterface;
 use App\Exceptions\InvalidQueryParameterException;
+use Lsr\Core\Constants;
+use Lsr\Core\Models\Model;
 use Nette\Utils\Strings;
 
 abstract class AbstractCollectionQuery implements CollectionQueryInterface
@@ -30,7 +30,7 @@ abstract class AbstractCollectionQuery implements CollectionQueryInterface
 	/**
 	 * Get only the first result or null
 	 *
-	 * @return AbstractModel|null|mixed
+	 * @return Model|null|mixed
 	 */
 	public function first() : mixed {
 		$data = array_values($this->get(true));
@@ -70,7 +70,7 @@ abstract class AbstractCollectionQuery implements CollectionQueryInterface
 			return $this;
 		}
 		if (property_exists($this->getType(), $this->sortBy)) {
-			$collection->sort(function(AbstractModel $modelA, AbstractModel $modelB) {
+			$collection->sort(function(Model $modelA, Model $modelB) {
 				$paramA = $modelA->{$this->sortBy};
 				$paramB = $modelB->{$this->sortBy};
 				if (is_numeric($paramA)) {
@@ -83,7 +83,7 @@ abstract class AbstractCollectionQuery implements CollectionQueryInterface
 			});
 		}
 		else if (method_exists($this->getType(), $this->sortBy)) {
-			$collection->sort(function(AbstractModel $modelA, AbstractModel $modelB) {
+			$collection->sort(function(Model $modelA, Model $modelB) {
 				$paramA = $modelA->{$this->sortBy}();
 				$paramB = $modelB->{$this->sortBy}();
 				if (is_numeric($paramA)) {
@@ -164,14 +164,14 @@ abstract class AbstractCollectionQuery implements CollectionQueryInterface
 	 */
 	public function pluck(string $param) : CollectionQueryInterface {
 		if (property_exists($this->getType(), $param)) {
-			$this->mapCallback = static function(AbstractModel $model) use ($param) {
+			$this->mapCallback = static function(Model $model) use ($param) {
 				return $model->$param;
 			};
 			return $this;
 		}
 		$method = 'get'.Strings::firstUpper($param);
 		if (method_exists($this->getType(), $method)) {
-			$this->mapCallback = static function(AbstractModel $model) use ($method) {
+			$this->mapCallback = static function(Model $model) use ($method) {
 				return $model->$method();
 			};
 			return $this;

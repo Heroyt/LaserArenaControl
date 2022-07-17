@@ -6,6 +6,9 @@ namespace App\Exceptions;
 
 use InvalidArgumentException;
 
+/**
+ * Exception thrown when trying to add an incorrect object to a collection
+ */
 class InvalidCollectionClassException extends InvalidArgumentException
 {
 

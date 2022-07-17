@@ -40,13 +40,13 @@
 					<strong>{lang 'Language'}:</strong>
 				</div>
 				<div class="col-lg-9">
-					{var string $selectedLang = explode('_',$_GET['lang'] ?? App\Core\App::$language->id)[0]}
-					{foreach App\Core\App::getSupportedLanguages() as $lang => $country}
+					{var string $selectedLang = explode('_',$_GET['lang'] ?? Lsr\Core\App::$language->id)[0]}
+					{foreach Lsr\Core\App::getSupportedLanguages() as $lang => $country}
 						<input type="radio" id="lang-{$lang}" name="lang" class="country-select-input" value="{$lang}"
 							   {if $selectedLang === $lang}checked{/if}>
 						<label class="country-select" for="lang-{$lang}">
-							<img src="{getUrl}assets/flags/{\App\Core\Constants::COUNTRIES[$country]|escapeurl}.png"
-								 alt="{\App\Core\Constants::COUNTRIES[$country]}">
+							<img src="{getUrl}assets/flags/{\Lsr\Core\Constants::COUNTRIES[$country]|escapeUrl}.png"
+								 alt="{\Lsr\Core\Constants::COUNTRIES[$country]}">
 						</label>
 					{/foreach}
 				</div>

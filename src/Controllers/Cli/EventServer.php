@@ -4,8 +4,8 @@
  */
 namespace App\Controllers\Cli;
 
-use App\Core\CliController;
 use App\Services\EventService;
+use Lsr\Core\CliController;
 
 class EventServer extends CliController
 {

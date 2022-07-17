@@ -4,7 +4,6 @@
  */
 namespace App\Install;
 
-use App\Core\DB;
 use App\Core\Info;
 use App\GameModels\Game\Evo5\Game;
 use App\GameModels\Game\Evo5\Player;
@@ -17,6 +16,7 @@ use App\GameModels\Vest;
 use App\Services\EventService;
 use Dibi\DriverException;
 use Dibi\Exception;
+use Lsr\Core\DB;
 
 /**
  * @version 0.2

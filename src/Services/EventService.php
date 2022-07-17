@@ -4,11 +4,14 @@
  */
 namespace App\Services;
 
-use App\Core\DB;
-use App\Logging\Logger;
 use Dibi\DateTime;
 use Dibi\Exception;
+use Lsr\Core\DB;
+use Lsr\Logging\Logger;
 
+/**
+ * Service for broadcasting WS events to front-end users
+ */
 class EventService
 {
 

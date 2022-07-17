@@ -35,6 +35,12 @@ jobs:
 
             -   name: Install dependencies
                 run: composer install --prefer-dist --no-progress -v
+                
+            -   name: Create dummy config file
+                uses: finnp/create-file-action@1.0.0
+                env:
+                    FILE_NAME: private/config.ini
+                    FILE_BASE64: "OyBNYWluIGNvbmZpZ3VyYXRpb24gZmlsZSBmb3IgRFRQIGFwcAoKW0RhdGFiYXNlXQpIT1NUID0gImxvY2FsaG9zdCIKUE9SVCA9IDMzMDYKVVNFUiA9ICJyb290IgpQQVNTID0gIiIKREFUQUJBU0UgPSAibGFjIgpDT0xMQVRFID0gInV0ZjhtYjQiCkRSSVZFUiA9ICJteXNxbGkiClBSRUZJWCA9ICIiCgpbR2VuZXJhbF0KREVCVUcgPSB0cnVlClBSRVRUWV9VUkwgPSB0cnVlCkNBQ0hFX1ZFUlNJT04gPSAxClRJTUVaT05FID0gIkV1cm9wZS9QcmFndWUiClRSQU5TTEFUSU9OUyA9IHRydWU="
 
             # Add a test script to composer.json, for instance: "test": "vendor/bin/phpunit"
             # Docs: https://getcomposer.org/doc/articles/scripts.md

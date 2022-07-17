@@ -6,6 +6,8 @@ on:
             - dockerCore/*
             - .github/workflows/docker-core.yml
         branches: [ master ]
+        tags:
+            - '*'
     pull_request:
         branches: [ master ]
         paths:

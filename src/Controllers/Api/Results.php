@@ -52,11 +52,11 @@ class Results extends ApiController
 		}
 
 		if (empty($game->fileNumber)) {
-			$this->respond(['error' => 'Cannot find game file.'], 404);
+			$this->respond(['error' => 'Cannot get game file number.', 'game' => $game], 404);
 		}
 		$files = glob($resultsDir.$game->fileNumber.'*.game');
 		if (empty($files)) {
-			$this->respond(['error' => 'Cannot find game file.'], 404);
+			$this->respond(['error' => 'Cannot find game file.', 'path' => $resultsDir.$game->fileNumber.'*.game'], 404);
 		}
 		if (count($files) > 1) {
 			$this->respond(['error' => 'Found more than one suitable game file.'], 500);

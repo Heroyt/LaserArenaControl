@@ -52,11 +52,11 @@ jobs:
                 uses: finnp/create-file-action@1.0.0
                 env:
                     FILE_NAME: private/config.ini
-                    FILE_BASE64: "OyBNYWluIGNvbmZpZ3VyYXRpb24gZmlsZSBmb3IgRFRQIGFwcAoKW0RhdGFiYXNlXQpIT1NUID0gImxvY2FsaG9zdCIKUE9SVCA9IDMzMDYKVVNFUiA9ICJyb290IgpQQVNTID0gInJvb3QiCkRBVEFCQVNFID0gImxhYyIKQ09MTEFURSA9ICJ1dGY4bWI0IgpEUklWRVIgPSAibXlzcWxpIgpQUkVGSVggPSAiIgoKW0dlbmVyYWxdCkRFQlVHID0gdHJ1ZQpQUkVUVFlfVVJMID0gdHJ1ZQpDQUNIRV9WRVJTSU9OID0gMQpUSU1FWk9ORSA9ICJFdXJvcGUvUHJhZ3VlIgpUUkFOU0xBVElPTlMgPSB0cnVl"
+                    FILE_BASE64: "OyBNYWluIGNvbmZpZ3VyYXRpb24gZmlsZSBmb3IgRFRQIGFwcAoKW0RhdGFiYXNlXQpIT1NUID0gIjEyNy4wLjAuMSIKUE9SVCA9IDMzMDYKVVNFUiA9ICJyb290IgpQQVNTID0gInJvb3QiCkRBVEFCQVNFID0gImxhYyIKQ09MTEFURSA9ICJ1dGY4bWI0IgpEUklWRVIgPSAibXlzcWxpIgpQUkVGSVggPSAiIgoKW0dlbmVyYWxdCkRFQlVHID0gdHJ1ZQpQUkVUVFlfVVJMID0gdHJ1ZQpDQUNIRV9WRVJTSU9OID0gMQpUSU1FWk9ORSA9ICJFdXJvcGUvUHJhZ3VlIgpUUkFOU0xBVElPTlMgPSB0cnVl"
             
             -   name: Wait for MySQL
                 run: |
-                    while ! mysqladmin ping --host=127.0.0.1 --password=$MYSQL_ROOT_PASSWORD --silent; do
+                    while ! mysqladmin ping --host=127.0.0.1 --password=root --silent; do
                         sleep 1
                     done
 

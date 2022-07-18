@@ -82,15 +82,17 @@ Debugger::getBar()
 
 Loader::init();
 
-// Register library tracy panels
-if (!isset($_ENV['noDb'])) {
-	(new Panel())->register(DB::getConnection());
+if (!defined('INDEX') || INDEX) {
+	// Register library tracy panels
+	if (!isset($_ENV['noDb'])) {
+		(new Panel())->register(DB::getConnection());
+	}
+	/** @noinspection PhpParamsInspection */
+	Debugger::getBar()
+					->addPanel(new ContainerPanel(App::getContainer()))
+					->addPanel(new LattePanel(App::getService('templating.latte.engine')))
+					->addPanel(new SessionPanel());
 }
-/** @noinspection PhpParamsInspection */
-Debugger::getBar()
-				->addPanel(new ContainerPanel(App::getContainer()))
-				->addPanel(new LattePanel(App::getService('templating.latte.engine')))
-				->addPanel(new SessionPanel());
 
 BlueScreenPanel::initialize();
 

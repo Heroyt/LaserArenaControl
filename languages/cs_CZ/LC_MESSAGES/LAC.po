@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: Czech\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2022-07-17 22:44\n"
+"PO-Revision-Date: 2022-07-18 12:26\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=4; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 3;\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -729,6 +729,7 @@ msgstr "Ve hře vždy sleduj svoje okolí!"
 # /src/GameModels/Tip.php:26
 # /templates/results/@printLayout.latte:108
 # /src/GameModels/Tip.php:27
+# /templates/pages/gate/@layout.latte:88
 msgctxt "tips"
 msgid "Čidlo na zbrani, ač nenápadné, se dá velmi dobře trefit."
 msgstr "Čidlo na zbrani, ač nenápadné, se dá velmi dobře trefit."
@@ -857,6 +858,7 @@ msgstr "Zabití: 100 bodů, Smrt: -50 bodů, Zabití vlastního hráče: -25 bod
 # /src/GameModels/Tip.php:26
 # /templates/results/@printLayout.latte:108
 # /src/GameModels/Tip.php:27
+# /templates/pages/gate/@layout.latte:88
 msgctxt "tips"
 msgid "Go, go, go, go..."
 msgstr "Go, go, go, go..."
@@ -896,6 +898,7 @@ msgstr "Při výstupu z arény vždy připni zbraň k vestě."
 # /src/GameModels/Tip.php:26
 # /templates/results/@printLayout.latte:108
 # /src/GameModels/Tip.php:27
+# /templates/pages/gate/@layout.latte:88
 msgctxt "tips"
 msgid "LASER TAG - SUIT UP!"
 msgstr "LASER TAG - SUIT UP!"
@@ -1256,6 +1259,7 @@ msgctxt "gate"
 msgid "Výsledky dne"
 msgstr "Výsledky dne"
 
+# /templates/pages/gate/idle.latte:83
 msgctxt "results"
 msgid "%d shot"
 msgid_plural "%d shots"
@@ -1264,6 +1268,7 @@ msgstr[1] "%d výstřely"
 msgstr[2] "%d výstřelů"
 msgstr[3] "%d výstřelů"
 
+# /templates/pages/gate/idle.latte:96
 msgctxt "results"
 msgid "%d hit"
 msgid_plural "%d hits"
@@ -1272,6 +1277,7 @@ msgstr[1] "%d zásahy"
 msgstr[2] "%d zásahů"
 msgstr[3] "%d zásahů"
 
+# /templates/pages/gate/idle.latte:111
 msgctxt "results"
 msgid "%d death"
 msgid_plural "%d deaths"

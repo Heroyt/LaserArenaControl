@@ -100,7 +100,7 @@ class Loader
 			DB::init();
 		} catch (Exception $e) {
 			App::getLogger()->error('Cannot connect to the database!'.$e->getMessage());
-			throw new RuntimeException('Cannot connect to the database!'.PHP_EOL.$e->getMessage(), $e->getCode(), $e);
+			throw new RuntimeException('Cannot connect to the database!'.PHP_EOL.$e->getMessage().PHP_EOL.json_encode(App::getConfig()['Database']), $e->getCode(), $e);
 		}
 	}
 

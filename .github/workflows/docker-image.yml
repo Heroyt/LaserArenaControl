@@ -21,6 +21,11 @@ jobs:
         runs-on: ubuntu-latest
 
         steps:
+            -   name: Login to DockerHub
+                uses: docker/login-action@v2
+                with:
+                    username: ${{ secrets.DOCKERHUB_USERNAME }}
+                    password: ${{ secrets.DOCKERHUB_TOKEN }}
             -   uses: actions/checkout@v2
             -   name: Build the Docker image
-                run: docker build . --file DockerfileDev --tag heroyt/laser-arena-control:dev-latest && docker push -a
+                run: docker build . --file DockerfileDev --tag heroyt/laser-arena-control:dev-latest && docker push heroyt/laser-arena-control -a

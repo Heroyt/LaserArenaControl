@@ -2,9 +2,23 @@ name: PHP Unit test
 
 on:
     push:
+        paths:
+            - src/*
+            - include/*
+            - tests/*
+            - config/*
+            - composer.json
+            - phpunit.xml
         branches: [ master ]
     pull_request:
         branches: [ master ]
+        paths:
+            - src/*
+            - include/*
+            - tests/*
+            - config/*
+            - composer.json
+            - phpunit.xml
 
 jobs:
     build:

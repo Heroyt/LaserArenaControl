@@ -49,12 +49,6 @@ jobs:
             -   name: Install dependencies
                 run: composer install --prefer-dist --no-progress -v
 
-            -   name: Create dummy config file
-                uses: finnp/create-file-action@1.0.0
-                env:
-                    FILE_NAME: private/config.ini
-                    FILE_BASE64: "OyBNYWluIGNvbmZpZ3VyYXRpb24gZmlsZSBmb3IgRFRQIGFwcAoKW0RhdGFiYXNlXQpIT1NUID0gIjEyNy4wLjAuMSIKUE9SVCA9IDMzMDcKVVNFUiA9ICJyb290IgpQQVNTID0gInJvb3QiCkRBVEFCQVNFID0gImxhYyIKQ09MTEFURSA9ICJ1dGY4bWI0IgpEUklWRVIgPSAibXlzcWxpIgpQUkVGSVggPSAiIgoKW0dlbmVyYWxdCkRFQlVHID0gdHJ1ZQpQUkVUVFlfVVJMID0gdHJ1ZQpDQUNIRV9WRVJTSU9OID0gMQpUSU1FWk9ORSA9ICJFdXJvcGUvUHJhZ3VlIgpUUkFOU0xBVElPTlMgPSBmYWxzZQ=="
-            
             -   name: Wait for MySQL
                 run: |
                     while ! mysqladmin ping --host=127.0.0.1 --port=3307 --user=root --password=root --silent; do

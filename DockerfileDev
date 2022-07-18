@@ -14,7 +14,7 @@ USER www-data
 # Move to project directory
 WORKDIR /var/www/html/
 
-ENV LAC_VERSION="0.1.0"
+ENV LAC_VERSION="dev"
 
 # Initialize git and download project
 RUN git init
@@ -26,9 +26,6 @@ RUN git pull --recurse-submodules=yes
 RUN git submodule init
 RUN git submodule update
 RUN git submodule update --init --recursive --remote
-RUN git checkout "v${LAC_VERSION}" -b "v${LAC_VERSION}"
-RUN git -C src/GameModels fetch --all --tags
-RUN git -C src/GameModels checkout "v${LAC_VERSION}" -b "v${LAC_VERSION}"
 
 # Cron rights
 RUN echo "pass" | sudo -S chmod +x /var/www/html/cron.sh

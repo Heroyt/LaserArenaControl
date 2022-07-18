@@ -25,7 +25,7 @@ jobs:
             -   name: Set up MySQL
                 uses: getong/mariadb-action@v1.1
                 with:
-                    container port: 3307
+                    host port: 3307
                     mysql database: 'lac'
                     mysql root password: 'root'
 

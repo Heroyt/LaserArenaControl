@@ -23,13 +23,14 @@ jobs:
                 run: sudo service mysql stop # Shutdown the Default MySQL, "sudo" is necessary, please not remove it
 
             -   name: Set up MySQL
-                uses: mirromutth/mysql-action@v1.1
+                uses: getong/mariadb-action@v1.1
                 with:
+                    container port: 3307
                     mysql database: 'lac'
                     mysql root password: 'root'
-                    
+
             -   uses: actions/checkout@master
-            
+
             -   name: submodules-init
                 uses: snickerbockers/submodules-init@v4
 
@@ -52,7 +53,7 @@ jobs:
                 uses: finnp/create-file-action@1.0.0
                 env:
                     FILE_NAME: private/config.ini
-                    FILE_BASE64: "OyBNYWluIGNvbmZpZ3VyYXRpb24gZmlsZSBmb3IgRFRQIGFwcAoKW0RhdGFiYXNlXQpIT1NUID0gImxvY2FsaG9zdCIKUE9SVCA9IDMzMDYKVVNFUiA9ICJyb290IgpQQVNTID0gInJvb3QiCkRBVEFCQVNFID0gImxhYyIKQ09MTEFURSA9ICJ1dGY4bWI0IgpEUklWRVIgPSAibXlzcWxpIgpQUkVGSVggPSAiIgoKW0dlbmVyYWxdCkRFQlVHID0gdHJ1ZQpQUkVUVFlfVVJMID0gdHJ1ZQpDQUNIRV9WRVJTSU9OID0gMQpUSU1FWk9ORSA9ICJFdXJvcGUvUHJhZ3VlIgpUUkFOU0xBVElPTlMgPSB0cnVl"
+                    FILE_BASE64: "OyBNYWluIGNvbmZpZ3VyYXRpb24gZmlsZSBmb3IgRFRQIGFwcAoKW0RhdGFiYXNlXQpIT1NUID0gImxvY2FsaG9zdCIKUE9SVCA9IDMzMDcKVVNFUiA9ICJyb290IgpQQVNTID0gInJvb3QiCkRBVEFCQVNFID0gImxhYyIKQ09MTEFURSA9ICJ1dGY4bWI0IgpEUklWRVIgPSAibXlzcWxpIgpQUkVGSVggPSAiIgoKW0dlbmVyYWxdCkRFQlVHID0gdHJ1ZQpQUkVUVFlfVVJMID0gdHJ1ZQpDQUNIRV9WRVJTSU9OID0gMQpUSU1FWk9ORSA9ICJFdXJvcGUvUHJhZ3VlIgpUUkFOU0xBVElPTlMgPSBmYWxzZQ=="
             
             -   name: Wait for MySQL
                 run: |

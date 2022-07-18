@@ -14,7 +14,8 @@ USER www-data
 # Move to project directory
 WORKDIR /var/www/html/
 
-ENV LAC_VERSION="0.2.0"
+ENV LAC_VERSION="0.2.1"
+ENV LAC_MODELS_VERSION="0.2.0"
 
 # Initialize git and download project
 RUN git init
@@ -28,7 +29,7 @@ RUN git submodule update
 RUN git submodule update --init --recursive --remote
 RUN git checkout "v${LAC_VERSION}" -b "v${LAC_VERSION}"
 RUN git -C src/GameModels fetch --all --tags
-RUN git -C src/GameModels checkout "v${LAC_VERSION}" -b "v${LAC_VERSION}"
+RUN git -C src/GameModels checkout "v${LAC_MODELS_VERSION}" -b "v${LAC_MODELS_VERSION}"
 
 # Cron rights
 RUN echo "pass" | sudo -S chmod +x /var/www/html/cron.sh
@@ -50,6 +51,10 @@ COPY start.sh .
 COPY cron.txt .
 RUN crontab cron.txt
 
+# Install
+RUN composer build
+RUN php install.php
+
 # Start command
 # Updates project, builds it and runs a start script which starts WS event server and Apache
-CMD git pull --recurse-submodules && git submodule update --init --recursive --remote && composer build && php install.php && sh ./start.sh
+CMD sh ./start.sh

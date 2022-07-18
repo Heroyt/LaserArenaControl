@@ -58,6 +58,7 @@ class ResultsParserTest extends TestCase
 		foreach ($game->getPlayers() as $player) {
 			$player2 = $game2->getPlayers()->get($player->vest);
 			self::assertNotNull($player2, 'Player does not exist in DB: '.$file);
+			echo json_encode($player->getQueryData()).PHP_EOL;
 			self::assertEquals(
 				json_decode(json_encode($player->getQueryData())),
 				json_decode(json_encode($player2->getQueryData())),

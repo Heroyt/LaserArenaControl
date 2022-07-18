@@ -379,15 +379,14 @@ class ResultsParser extends AbstractResultsParser
 			}
 
 			// TODO: Figure out the unknown arguments
-
-			// Set player teams
-			foreach ($game->getPlayers() as $player) {
-				// Find team
-				foreach ($game->getTeams() as $team) {
-					if ($player->teamNum === $team->color) {
-						$player->setTeam($team);
-						break;
-					}
+		}
+		// Set player teams
+		foreach ($game->getPlayers()->getAll() as $player) {
+			// Find team
+			foreach ($game->getTeams()->getAll() as $team) {
+				if ($player->teamNum === $team->color) {
+					$player->setTeam($team);
+					break;
 				}
 			}
 		}

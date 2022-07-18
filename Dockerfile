@@ -53,8 +53,7 @@ RUN crontab cron.txt
 
 # Install
 RUN composer build
-RUN php install.php
 
 # Start command
 # Updates project, builds it and runs a start script which starts WS event server and Apache
-CMD sh ./start.sh
+CMD php install.php && sh ./start.sh

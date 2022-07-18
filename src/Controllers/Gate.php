@@ -39,9 +39,10 @@ class Gate extends Controller
 
 	/**
 	 * @return void
-	 * @throws TemplateDoesNotExistException
-	 * @throws ValidationException
 	 * @throws ModelNotFoundException
+	 * @throws TemplateDoesNotExistException
+	 * @throws Throwable
+	 * @throws ValidationException
 	 */
 	public function show() : void {
 		$this->params['style'] = PrintStyle::getActiveStyle();

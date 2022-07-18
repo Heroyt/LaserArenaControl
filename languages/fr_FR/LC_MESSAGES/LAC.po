@@ -723,6 +723,7 @@ msgstr "Surveillez toujours votre environnement!"
 # /src/GameModels/Tip.php:26
 # /templates/results/@printLayout.latte:108
 # /src/GameModels/Tip.php:27
+# /templates/pages/gate/@layout.latte:88
 msgctxt "tips"
 msgid "Čidlo na zbrani, ač nenápadné, se dá velmi dobře trefit."
 msgstr "La cible sur le pistolet est un peu invisible, pourtant facile a touché."
@@ -851,6 +852,7 @@ msgstr "Touche: 100 points, Mort: -50 points, Touche réussie sur un coéquipier
 # /src/GameModels/Tip.php:26
 # /templates/results/@printLayout.latte:108
 # /src/GameModels/Tip.php:27
+# /templates/pages/gate/@layout.latte:88
 msgctxt "tips"
 msgid "Go, go, go, go..."
 msgstr "Allez, allez, allez, allez..."
@@ -890,6 +892,7 @@ msgstr ""
 # /src/GameModels/Tip.php:26
 # /templates/results/@printLayout.latte:108
 # /src/GameModels/Tip.php:27
+# /templates/pages/gate/@layout.latte:88
 msgctxt "tips"
 msgid "LASER TAG - SUIT UP!"
 msgstr "LASER TAG - SUIT UP!"
@@ -1248,18 +1251,21 @@ msgctxt "gate"
 msgid "Výsledky dne"
 msgstr "Résultats du jour"
 
+# /templates/pages/gate/idle.latte:83
 msgctxt "results"
 msgid "%d shot"
 msgid_plural "%d shots"
 msgstr[0] "%d tirs"
 msgstr[1] "%d tirs"
 
+# /templates/pages/gate/idle.latte:96
 msgctxt "results"
 msgid "%d hit"
 msgid_plural "%d hits"
 msgstr[0] "%d touche"
 msgstr[1] "%d touches"
 
+# /templates/pages/gate/idle.latte:111
 msgctxt "results"
 msgid "%d death"
 msgid_plural "%d deaths"

@@ -723,6 +723,7 @@ msgstr ""
 # /src/GameModels/Tip.php:26
 # /templates/results/@printLayout.latte:108
 # /src/GameModels/Tip.php:27
+# /templates/pages/gate/@layout.latte:88
 msgctxt "tips"
 msgid "Čidlo na zbrani, ač nenápadné, se dá velmi dobře trefit."
 msgstr ""
@@ -851,6 +852,7 @@ msgstr ""
 # /src/GameModels/Tip.php:26
 # /templates/results/@printLayout.latte:108
 # /src/GameModels/Tip.php:27
+# /templates/pages/gate/@layout.latte:88
 msgctxt "tips"
 msgid "Go, go, go, go..."
 msgstr ""
@@ -890,6 +892,7 @@ msgstr ""
 # /src/GameModels/Tip.php:26
 # /templates/results/@printLayout.latte:108
 # /src/GameModels/Tip.php:27
+# /templates/pages/gate/@layout.latte:88
 msgctxt "tips"
 msgid "LASER TAG - SUIT UP!"
 msgstr ""
@@ -1248,18 +1251,21 @@ msgctxt "gate"
 msgid "Výsledky dne"
 msgstr ""
 
+# /templates/pages/gate/idle.latte:83
 msgctxt "results"
 msgid "%d shot"
 msgid_plural "%d shots"
 msgstr[0] ""
 msgstr[1] ""
 
+# /templates/pages/gate/idle.latte:96
 msgctxt "results"
 msgid "%d hit"
 msgid_plural "%d hits"
 msgstr[0] ""
 msgstr[1] ""
 
+# /templates/pages/gate/idle.latte:111
 msgctxt "results"
 msgid "%d death"
 msgid_plural "%d deaths"

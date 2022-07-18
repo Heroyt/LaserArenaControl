@@ -38,12 +38,12 @@
 		"tracy/tracy": "^2.8",
 		"endroid/qr-code": "^4.4",
 		"ext-pcntl": "*",
-		"lsr/interfaces": "dev-master",
-		"lsr/helpers": "dev-master",
-		"lsr/core": "dev-master",
-		"lsr/routing": "dev-master",
-		"lsr/logging": "dev-master",
-		"lsr/request": "dev-master"
+		"lsr/interfaces": "^0.1",
+		"lsr/helpers": "^0.1",
+		"lsr/core": "^0.1",
+		"lsr/routing": "^0.1",
+		"lsr/logging": "^0.1",
+		"lsr/request": "^0.1"
 	},
 	"require-dev": {
 		"roave/security-advisories": "dev-latest",

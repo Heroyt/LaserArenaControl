@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: Russian\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2022-07-17 22:44\n"
+"PO-Revision-Date: 2022-07-18 12:26\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=4; plural=((n%10==1 && n%100!=11) ? 0 : ((n%10 >= 2 && n%10 <=4 && (n%100 < 12 || n%100 > 14)) ? 1 : ((n%10 == 0 || (n%10 >= 5 && n%10 <=9)) || (n%100 >= 11 && n%100 <= 14)) ? 2 : 3));\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -729,6 +729,7 @@ msgstr ""
 # /src/GameModels/Tip.php:26
 # /templates/results/@printLayout.latte:108
 # /src/GameModels/Tip.php:27
+# /templates/pages/gate/@layout.latte:88
 msgctxt "tips"
 msgid "Čidlo na zbrani, ač nenápadné, se dá velmi dobře trefit."
 msgstr ""
@@ -857,6 +858,7 @@ msgstr ""
 # /src/GameModels/Tip.php:26
 # /templates/results/@printLayout.latte:108
 # /src/GameModels/Tip.php:27
+# /templates/pages/gate/@layout.latte:88
 msgctxt "tips"
 msgid "Go, go, go, go..."
 msgstr ""
@@ -896,6 +898,7 @@ msgstr ""
 # /src/GameModels/Tip.php:26
 # /templates/results/@printLayout.latte:108
 # /src/GameModels/Tip.php:27
+# /templates/pages/gate/@layout.latte:88
 msgctxt "tips"
 msgid "LASER TAG - SUIT UP!"
 msgstr ""
@@ -1256,6 +1259,7 @@ msgctxt "gate"
 msgid "Výsledky dne"
 msgstr ""
 
+# /templates/pages/gate/idle.latte:83
 msgctxt "results"
 msgid "%d shot"
 msgid_plural "%d shots"
@@ -1264,6 +1268,7 @@ msgstr[1] ""
 msgstr[2] ""
 msgstr[3] ""
 
+# /templates/pages/gate/idle.latte:96
 msgctxt "results"
 msgid "%d hit"
 msgid_plural "%d hits"
@@ -1272,6 +1277,7 @@ msgstr[1] ""
 msgstr[2] ""
 msgstr[3] ""
 
+# /templates/pages/gate/idle.latte:111
 msgctxt "results"
 msgid "%d death"
 msgid_plural "%d deaths"

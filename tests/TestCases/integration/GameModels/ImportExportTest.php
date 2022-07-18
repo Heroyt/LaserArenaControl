@@ -7,6 +7,7 @@ use App\GameModels\Game\Enums\GameModeType;
 use App\GameModels\Game\Game;
 use App\GameModels\Game\Player;
 use App\GameModels\Game\Team;
+use App\Tools\Evo5\ResultsParser;
 use Lsr\Core\Models\Model;
 use PHPUnit\Framework\TestCase;
 use ReflectionProperty;
@@ -17,6 +18,26 @@ use ReflectionProperty;
 class ImportExportTest extends TestCase
 {
 
+	public const SKIP_FIELDS = [
+		'fileTime',
+		'id',
+		'playerCount',
+		'players',
+		'teams',
+		'game',
+		'hitPlayers',
+		'description',
+		'mode',
+	];
+
+	public static function setUpBeforeClass() : void {
+		$files = glob(ROOT.'results-test/*_archive.game');
+		foreach ($files as $file) {
+			$parser = new ResultsParser($file);
+			$parser->parse()->save();
+		}
+	}
+
 	/**
 	 * Get 20 random games
 	 *
@@ -24,7 +45,7 @@ class ImportExportTest extends TestCase
 	 */
 	public function getRandomGames() : array {
 		$data = [];
-		$gameRows = GameFactory::queryGames(true)->orderBy('RAND()')->limit(20)->fetchAll();
+		$gameRows = GameFactory::queryGames(true)->orderBy('RAND()')->limit(10)->fetchAll();
 		foreach ($gameRows as $row) {
 			$data[] = [GameFactory::getByCode($row->code)];
 		}
@@ -102,18 +123,6 @@ class ImportExportTest extends TestCase
 			}
 		}
 	}
-
-	public const SKIP_FIELDS = [
-		'fileTime',
-		'id',
-		'playerCount',
-		'players',
-		'teams',
-		'game',
-		'hitPlayers',
-		'description',
-		'mode',
-	];
 
 	/**
 	 * @param Game $game

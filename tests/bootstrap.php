@@ -15,6 +15,9 @@ if (isset($GLOBALS['argv'][1]) && in_array($GLOBALS['argv'][1], $noDb, true)) {
 	$_ENV['noDb'] = true;
 }*/
 
+$GLOBALS['translations'] = [];
+$GLOBALS['argv'][] = 'a';
+
 require_once ROOT.'include/load.php';
 
 DbInstall::install();

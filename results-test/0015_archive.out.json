@@ -7,17 +7,17 @@
 		"timezone": "Europe\/Prague"
 	},
 	"start": {
-		"date": "2020-03-08 13:14:20.000000",
+		"date": "2020-05-26 17:39:09.000000",
 		"timezone_type": 3,
 		"timezone": "Europe\/Prague"
 	},
 	"importTime": {
-		"date": "2020-03-08 13:29:22.000000",
+		"date": "2020-05-26 17:54:12.000000",
 		"timezone_type": 3,
 		"timezone": "Europe\/Prague"
 	},
 	"end": {
-		"date": "2020-03-08 13:29:20.000000",
+		"date": "2020-05-26 17:54:09.000000",
 		"timezone_type": 3,
 		"timezone": "Europe\/Prague"
 	},
@@ -82,19 +82,79 @@
 	"sync": false,
 	"started": true,
 	"finished": true,
-	"playerCount": 4,
+	"playerCount": 5,
 	"playerClass": "App\\GameModels\\Game\\Evo5\\Player",
 	"players": {
 		"1": {
 			"id": null,
 			"row": null,
-			"name": "Miroslav",
-			"score": 3275,
+			"name": "tyna",
+			"score": 2500,
 			"vest": 1,
-			"shots": 149,
-			"accuracy": 39,
-			"hits": 58,
-			"deaths": 43,
+			"shots": 820,
+			"accuracy": 5,
+			"hits": 37,
+			"deaths": 24,
+			"position": 2,
+			"hitPlayers": {
+				"1": {
+					"shot": null,
+					"target": null,
+					"count": 0
+				},
+				"2": {
+					"shot": null,
+					"target": null,
+					"count": 0
+				},
+				"3": {
+					"shot": null,
+					"target": null,
+					"count": 12
+				},
+				"4": {
+					"shot": null,
+					"target": null,
+					"count": 13
+				},
+				"5": {
+					"shot": null,
+					"target": null,
+					"count": 12
+				}
+			},
+			"teamNum": 3,
+			"team": null,
+			"color": 0,
+			"favouriteTarget": null,
+			"favouriteTargetOf": null,
+			"shotPoints": 0,
+			"scoreBonus": 0,
+			"scorePowers": 0,
+			"scoreMines": 0,
+			"ammoRest": 9179,
+			"minesHits": 0,
+			"bonus": {
+				"agent": 0,
+				"invisibility": 0,
+				"machineGun": 0,
+				"shield": 0
+			},
+			"hitsOther": 37,
+			"hitsOwn": 0,
+			"deathsOwn": 0,
+			"deathsOther": 24
+		},
+		"2": {
+			"id": null,
+			"row": null,
+			"name": "dingo",
+			"score": 2850,
+			"vest": 2,
+			"shots": 1147,
+			"accuracy": 3,
+			"hits": 37,
+			"deaths": 17,
 			"position": 1,
 			"hitPlayers": {
 				"1": {
@@ -105,20 +165,25 @@
 				"2": {
 					"shot": null,
 					"target": null,
-					"count": 3
+					"count": 0
 				},
 				"3": {
 					"shot": null,
 					"target": null,
-					"count": 26
+					"count": 10
 				},
 				"4": {
 					"shot": null,
 					"target": null,
-					"count": 29
+					"count": 17
+				},
+				"5": {
+					"shot": null,
+					"target": null,
+					"count": 10
 				}
 			},
-			"teamNum": 1,
+			"teamNum": 3,
 			"team": null,
 			"color": 0,
 			"favouriteTarget": null,
@@ -127,7 +192,7 @@
 			"scoreBonus": 0,
 			"scorePowers": 0,
 			"scoreMines": 0,
-			"ammoRest": 9850,
+			"ammoRest": 8852,
 			"minesHits": 0,
 			"bonus": {
 				"agent": 0,
@@ -135,87 +200,32 @@
 				"machineGun": 0,
 				"shield": 0
 			},
-			"hitsOther": 55,
-			"hitsOwn": 3,
-			"deathsOwn": 0,
-			"deathsOther": 43
-		},
-		"2": {
-			"id": null,
-			"row": null,
-			"name": "Mario",
-			"score": -1050,
-			"vest": 2,
-			"shots": 101,
-			"accuracy": 0,
-			"hits": 0,
-			"deaths": 21,
-			"position": 4,
-			"hitPlayers": {
-				"1": {
-					"shot": null,
-					"target": null,
-					"count": 0
-				},
-				"2": {
-					"shot": null,
-					"target": null,
-					"count": 0
-				},
-				"3": {
-					"shot": null,
-					"target": null,
-					"count": 0
-				},
-				"4": {
-					"shot": null,
-					"target": null,
-					"count": 0
-				}
-			},
-			"teamNum": 1,
-			"team": null,
-			"color": 0,
-			"favouriteTarget": null,
-			"favouriteTargetOf": null,
-			"shotPoints": 0,
-			"scoreBonus": 0,
-			"scorePowers": 0,
-			"scoreMines": 0,
-			"ammoRest": 9898,
-			"minesHits": 0,
-			"bonus": {
-				"agent": 0,
-				"invisibility": 0,
-				"machineGun": 0,
-				"shield": 0
-			},
-			"hitsOther": 0,
+			"hitsOther": 37,
 			"hitsOwn": 0,
-			"deathsOwn": 3,
-			"deathsOther": 18
+			"deathsOwn": 0,
+			"deathsOther": 17
 		},
 		"3": {
 			"id": null,
 			"row": null,
-			"name": "Erika",
-			"score": 500,
+			"name": "dan",
+			"score": 2100,
 			"vest": 3,
-			"shots": 182,
-			"accuracy": 11,
-			"hits": 20,
-			"deaths": 30,
+			"shots": 534,
+			"accuracy": 7,
+			"hits": 37,
+			"deaths": 32,
 			"position": 3,
 			"hitPlayers": {
 				"1": {
 					"shot": null,
 					"target": null,
-					"count": 16
+					"count": 9
 				},
 				"2": {
 					"shot": null,
 					"target": null,
-					"count": 4
+					"count": 10
 				},
 				"3": {
 					"shot": null,
@@ -225,10 +235,15 @@
 				"4": {
 					"shot": null,
 					"target": null,
-					"count": 0
+					"count": 9
+				},
+				"5": {
+					"shot": null,
+					"target": null,
+					"count": 9
 				}
 			},
-			"teamNum": 0,
+			"teamNum": 5,
 			"team": null,
 			"color": 0,
 			"favouriteTarget": null,
@@ -237,7 +252,7 @@
 			"scoreBonus": 0,
 			"scorePowers": 0,
 			"scoreMines": 0,
-			"ammoRest": 9817,
+			"ammoRest": 9465,
 			"minesHits": 0,
 			"bonus": {
 				"agent": 0,
@@ -245,45 +260,50 @@
 				"machineGun": 0,
 				"shield": 0
 			},
-			"hitsOther": 20,
+			"hitsOther": 37,
 			"hitsOwn": 0,
-			"deathsOwn": 4,
-			"deathsOther": 26
+			"deathsOwn": 0,
+			"deathsOther": 32
 		},
 		"4": {
 			"id": null,
 			"row": null,
-			"name": "Sebastian",
-			"score": 2550,
+			"name": "lachtan",
+			"score": 700,
 			"vest": 4,
-			"shots": 438,
-			"accuracy": 10,
-			"hits": 45,
-			"deaths": 29,
-			"position": 2,
+			"shots": 382,
+			"accuracy": 7,
+			"hits": 27,
+			"deaths": 40,
+			"position": 4,
 			"hitPlayers": {
 				"1": {
 					"shot": null,
 					"target": null,
-					"count": 27
+					"count": 13
 				},
 				"2": {
 					"shot": null,
 					"target": null,
-					"count": 14
+					"count": 5
 				},
 				"3": {
 					"shot": null,
 					"target": null,
-					"count": 4
+					"count": 9
 				},
 				"4": {
 					"shot": null,
 					"target": null,
 					"count": 0
+				},
+				"5": {
+					"shot": null,
+					"target": null,
+					"count": 0
 				}
 			},
-			"teamNum": 0,
+			"teamNum": 1,
 			"team": null,
 			"color": 0,
 			"favouriteTarget": null,
@@ -292,7 +312,7 @@
 			"scoreBonus": 0,
 			"scorePowers": 0,
 			"scoreMines": 0,
-			"ammoRest": 9561,
+			"ammoRest": 9617,
 			"minesHits": 0,
 			"bonus": {
 				"agent": 0,
@@ -300,37 +320,107 @@
 				"machineGun": 0,
 				"shield": 0
 			},
-			"hitsOther": 41,
-			"hitsOwn": 4,
+			"hitsOther": 27,
+			"hitsOwn": 0,
+			"deathsOwn": 1,
+			"deathsOther": 39
+		},
+		"5": {
+			"id": null,
+			"row": null,
+			"name": "android",
+			"score": -1075,
+			"vest": 5,
+			"shots": 261,
+			"accuracy": 2,
+			"hits": 6,
+			"deaths": 31,
+			"position": 5,
+			"hitPlayers": {
+				"1": {
+					"shot": null,
+					"target": null,
+					"count": 2
+				},
+				"2": {
+					"shot": null,
+					"target": null,
+					"count": 2
+				},
+				"3": {
+					"shot": null,
+					"target": null,
+					"count": 1
+				},
+				"4": {
+					"shot": null,
+					"target": null,
+					"count": 1
+				},
+				"5": {
+					"shot": null,
+					"target": null,
+					"count": 0
+				}
+			},
+			"teamNum": 1,
+			"team": null,
+			"color": 0,
+			"favouriteTarget": null,
+			"favouriteTargetOf": null,
+			"shotPoints": 0,
+			"scoreBonus": 0,
+			"scorePowers": 0,
+			"scoreMines": 0,
+			"ammoRest": 9738,
+			"minesHits": 0,
+			"bonus": {
+				"agent": 0,
+				"invisibility": 0,
+				"machineGun": 0,
+				"shield": 0
+			},
+			"hitsOther": 5,
+			"hitsOwn": 1,
 			"deathsOwn": 0,
-			"deathsOther": 29
+			"deathsOther": 31
 		}
 	},
 	"teamClass": "App\\GameModels\\Game\\Evo5\\Team",
-	"teams": [
-		{
-			"id": null,
-			"row": null,
-			"color": 0,
-			"score": 3050,
-			"position": 1,
-			"name": "Red team",
-			"playerCount": 2,
-			"playerClass": "App\\GameModels\\Game\\Evo5\\Player"
-		},
-		{
+	"teams": {
+		"1": {
 			"id": null,
 			"row": null,
 			"color": 1,
-			"score": 2225,
-			"position": 2,
+			"score": -375,
+			"position": 3,
 			"name": "Green team",
 			"playerCount": 2,
 			"playerClass": "App\\GameModels\\Game\\Evo5\\Player"
+		},
+		"3": {
+			"id": null,
+			"row": null,
+			"color": 3,
+			"score": 5350,
+			"position": 1,
+			"name": "Pink team",
+			"playerCount": 2,
+			"playerClass": "App\\GameModels\\Game\\Evo5\\Player"
+		},
+		"5": {
+			"id": null,
+			"row": null,
+			"color": 5,
+			"score": 2100,
+			"position": 2,
+			"name": "Ocean team",
+			"playerCount": 1,
+			"playerClass": "App\\GameModels\\Game\\Evo5\\Player"
 		}
-	],
-	"fileNumber": 812,
-	"modeName": "1-TEAM-DEATHMACH",
+	},
+	"fileNumber": 15,
+	"modeName": "1-TEAM-Requiem",
 	"lives": 999,
 	"ammo": 9999,
 	"respawn": 5

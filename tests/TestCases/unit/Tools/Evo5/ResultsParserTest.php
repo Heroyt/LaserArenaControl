@@ -14,7 +14,7 @@ class ResultsParserTest extends TestCase
 {
 
 	public function getFiles() : array {
-		$files = array_merge(glob(ROOT.'results-test/*_archive.game'), glob(ROOT.'results/????.game'));
+		$files = array_merge(glob(ROOT.'results-test/*_archive.game'));
 		return array_map(static function(string $fName) {
 			return [$fName];
 		}, $files);

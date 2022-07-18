@@ -7,17 +7,17 @@
 		"timezone": "Europe\/Prague"
 	},
 	"start": {
-		"date": "2020-05-20 14:43:16.000000",
+		"date": "2020-05-26 16:49:08.000000",
 		"timezone_type": 3,
 		"timezone": "Europe\/Prague"
 	},
 	"importTime": {
-		"date": "2020-05-20 14:48:07.000000",
+		"date": "2020-05-26 16:52:01.000000",
 		"timezone_type": 3,
 		"timezone": "Europe\/Prague"
 	},
 	"end": {
-		"date": "2020-05-20 14:48:03.000000",
+		"date": "2020-05-26 16:51:56.000000",
 		"timezone_type": 3,
 		"timezone": "Europe\/Prague"
 	},
@@ -82,20 +82,20 @@
 	"sync": false,
 	"started": true,
 	"finished": true,
-	"playerCount": 8,
+	"playerCount": 10,
 	"playerClass": "App\\GameModels\\Game\\Evo5\\Player",
 	"players": {
 		"1": {
 			"id": null,
 			"row": null,
-			"name": "EliashiX",
-			"score": 0,
+			"name": "Chmelda",
+			"score": 50,
 			"vest": 1,
-			"shots": 17,
-			"accuracy": 12,
+			"shots": 62,
+			"accuracy": 3,
 			"hits": 2,
-			"deaths": 4,
-			"position": 6,
+			"deaths": 3,
+			"position": 5,
 			"hitPlayers": {
 				"1": {
 					"shot": null,
@@ -105,7 +105,92 @@
 				"2": {
 					"shot": null,
 					"target": null,
+					"count": 0
+				},
+				"3": {
+					"shot": null,
+					"target": null,
 					"count": 1
+				},
+				"4": {
+					"shot": null,
+					"target": null,
+					"count": 0
+				},
+				"5": {
+					"shot": null,
+					"target": null,
+					"count": 0
+				},
+				"6": {
+					"shot": null,
+					"target": null,
+					"count": 0
+				},
+				"8": {
+					"shot": null,
+					"target": null,
+					"count": 0
+				},
+				"9": {
+					"shot": null,
+					"target": null,
+					"count": 0
+				},
+				"10": {
+					"shot": null,
+					"target": null,
+					"count": 1
+				},
+				"11": {
+					"shot": null,
+					"target": null,
+					"count": 0
+				}
+			},
+			"teamNum": 2,
+			"team": null,
+			"color": 0,
+			"favouriteTarget": null,
+			"favouriteTargetOf": null,
+			"shotPoints": 0,
+			"scoreBonus": 0,
+			"scorePowers": 0,
+			"scoreMines": 0,
+			"ammoRest": 9937,
+			"minesHits": 0,
+			"bonus": {
+				"agent": 0,
+				"invisibility": 0,
+				"machineGun": 0,
+				"shield": 0
+			},
+			"hitsOther": 2,
+			"hitsOwn": 0,
+			"deathsOwn": 0,
+			"deathsOther": 3
+		},
+		"2": {
+			"id": null,
+			"row": null,
+			"name": "Buzerant 2.0",
+			"score": 550,
+			"vest": 2,
+			"shots": 157,
+			"accuracy": 4,
+			"hits": 7,
+			"deaths": 3,
+			"position": 2,
+			"hitPlayers": {
+				"1": {
+					"shot": null,
+					"target": null,
+					"count": 0
+				},
+				"2": {
+					"shot": null,
+					"target": null,
+					"count": 0
 				},
 				"3": {
 					"shot": null,
@@ -120,19 +205,24 @@
 				"5": {
 					"shot": null,
 					"target": null,
-					"count": 1
+					"count": 0
 				},
 				"6": {
 					"shot": null,
 					"target": null,
-					"count": 0
+					"count": 3
 				},
 				"8": {
 					"shot": null,
 					"target": null,
-					"count": 0
+					"count": 3
 				},
 				"9": {
+					"shot": null,
+					"target": null,
+					"count": 1
+				},
+				"10": {
 					"shot": null,
 					"target": null,
 					"count": 0
@@ -152,7 +242,7 @@
 			"scoreBonus": 0,
 			"scorePowers": 0,
 			"scoreMines": 0,
-			"ammoRest": 982,
+			"ammoRest": 9842,
 			"minesHits": 0,
 			"bonus": {
 				"agent": 0,
@@ -160,27 +250,27 @@
 				"machineGun": 0,
 				"shield": 0
 			},
-			"hitsOther": 2,
+			"hitsOther": 7,
 			"hitsOwn": 0,
 			"deathsOwn": 0,
-			"deathsOther": 4
+			"deathsOther": 3
 		},
-		"2": {
+		"3": {
 			"id": null,
 			"row": null,
-			"name": "David",
-			"score": 350,
-			"vest": 2,
-			"shots": 45,
-			"accuracy": 4,
-			"hits": 2,
-			"deaths": 1,
-			"position": 3,
+			"name": "Vojta",
+			"score": -150,
+			"vest": 3,
+			"shots": 7,
+			"accuracy": 0,
+			"hits": 0,
+			"deaths": 3,
+			"position": 10,
 			"hitPlayers": {
 				"1": {
 					"shot": null,
 					"target": null,
-					"count": 1
+					"count": 0
 				},
 				"2": {
 					"shot": null,
@@ -210,9 +300,439 @@
 				"8": {
 					"shot": null,
 					"target": null,
-					"count": 1
+					"count": 0
 				},
 				"9": {
+					"shot": null,
+					"target": null,
+					"count": 0
+				},
+				"10": {
+					"shot": null,
+					"target": null,
+					"count": 0
+				},
+				"11": {
+					"shot": null,
+					"target": null,
+					"count": 0
+				}
+			},
+			"teamNum": 0,
+			"team": null,
+			"color": 0,
+			"favouriteTarget": null,
+			"favouriteTargetOf": null,
+			"shotPoints": 0,
+			"scoreBonus": 0,
+			"scorePowers": 0,
+			"scoreMines": 0,
+			"ammoRest": 9992,
+			"minesHits": 0,
+			"bonus": {
+				"agent": 0,
+				"invisibility": 0,
+				"machineGun": 0,
+				"shield": 0
+			},
+			"hitsOther": 0,
+			"hitsOwn": 0,
+			"deathsOwn": 0,
+			"deathsOther": 3
+		},
+		"4": {
+			"id": null,
+			"row": null,
+			"name": "Dave",
+			"score": 350,
+			"vest": 4,
+			"shots": 204,
+			"accuracy": 2,
+			"hits": 5,
+			"deaths": 3,
+			"position": 3,
+			"hitPlayers": {
+				"1": {
+					"shot": null,
+					"target": null,
+					"count": 3
+				},
+				"2": {
+					"shot": null,
+					"target": null,
+					"count": 0
+				},
+				"3": {
+					"shot": null,
+					"target": null,
+					"count": 0
+				},
+				"4": {
+					"shot": null,
+					"target": null,
+					"count": 0
+				},
+				"5": {
+					"shot": null,
+					"target": null,
+					"count": 0
+				},
+				"6": {
+					"shot": null,
+					"target": null,
+					"count": 0
+				},
+				"8": {
+					"shot": null,
+					"target": null,
+					"count": 0
+				},
+				"9": {
+					"shot": null,
+					"target": null,
+					"count": 0
+				},
+				"10": {
+					"shot": null,
+					"target": null,
+					"count": 0
+				},
+				"11": {
+					"shot": null,
+					"target": null,
+					"count": 2
+				}
+			},
+			"teamNum": 0,
+			"team": null,
+			"color": 0,
+			"favouriteTarget": null,
+			"favouriteTargetOf": null,
+			"shotPoints": 0,
+			"scoreBonus": 0,
+			"scorePowers": 0,
+			"scoreMines": 0,
+			"ammoRest": 9795,
+			"minesHits": 0,
+			"bonus": {
+				"agent": 0,
+				"invisibility": 0,
+				"machineGun": 0,
+				"shield": 0
+			},
+			"hitsOther": 5,
+			"hitsOwn": 0,
+			"deathsOwn": 0,
+			"deathsOther": 3
+		},
+		"5": {
+			"id": null,
+			"row": null,
+			"name": "Rysa",
+			"score": -150,
+			"vest": 5,
+			"shots": 39,
+			"accuracy": 0,
+			"hits": 0,
+			"deaths": 3,
+			"position": 9,
+			"hitPlayers": {
+				"1": {
+					"shot": null,
+					"target": null,
+					"count": 0
+				},
+				"2": {
+					"shot": null,
+					"target": null,
+					"count": 0
+				},
+				"3": {
+					"shot": null,
+					"target": null,
+					"count": 0
+				},
+				"4": {
+					"shot": null,
+					"target": null,
+					"count": 0
+				},
+				"5": {
+					"shot": null,
+					"target": null,
+					"count": 0
+				},
+				"6": {
+					"shot": null,
+					"target": null,
+					"count": 0
+				},
+				"8": {
+					"shot": null,
+					"target": null,
+					"count": 0
+				},
+				"9": {
+					"shot": null,
+					"target": null,
+					"count": 0
+				},
+				"10": {
+					"shot": null,
+					"target": null,
+					"count": 0
+				},
+				"11": {
+					"shot": null,
+					"target": null,
+					"count": 0
+				}
+			},
+			"teamNum": 0,
+			"team": null,
+			"color": 0,
+			"favouriteTarget": null,
+			"favouriteTargetOf": null,
+			"shotPoints": 0,
+			"scoreBonus": 0,
+			"scorePowers": 0,
+			"scoreMines": 0,
+			"ammoRest": 9960,
+			"minesHits": 0,
+			"bonus": {
+				"agent": 0,
+				"invisibility": 0,
+				"machineGun": 0,
+				"shield": 0
+			},
+			"hitsOther": 0,
+			"hitsOwn": 0,
+			"deathsOwn": 0,
+			"deathsOther": 3
+		},
+		"6": {
+			"id": null,
+			"row": null,
+			"name": "Buzerant 3.0",
+			"score": 50,
+			"vest": 6,
+			"shots": 44,
+			"accuracy": 5,
+			"hits": 2,
+			"deaths": 3,
+			"position": 4,
+			"hitPlayers": {
+				"1": {
+					"shot": null,
+					"target": null,
+					"count": 0
+				},
+				"2": {
+					"shot": null,
+					"target": null,
+					"count": 1
+				},
+				"3": {
+					"shot": null,
+					"target": null,
+					"count": 0
+				},
+				"4": {
+					"shot": null,
+					"target": null,
+					"count": 0
+				},
+				"5": {
+					"shot": null,
+					"target": null,
+					"count": 0
+				},
+				"6": {
+					"shot": null,
+					"target": null,
+					"count": 0
+				},
+				"8": {
+					"shot": null,
+					"target": null,
+					"count": 0
+				},
+				"9": {
+					"shot": null,
+					"target": null,
+					"count": 0
+				},
+				"10": {
+					"shot": null,
+					"target": null,
+					"count": 1
+				},
+				"11": {
+					"shot": null,
+					"target": null,
+					"count": 0
+				}
+			},
+			"teamNum": 2,
+			"team": null,
+			"color": 0,
+			"favouriteTarget": null,
+			"favouriteTargetOf": null,
+			"shotPoints": 0,
+			"scoreBonus": 0,
+			"scorePowers": 0,
+			"scoreMines": 0,
+			"ammoRest": 9955,
+			"minesHits": 0,
+			"bonus": {
+				"agent": 0,
+				"invisibility": 0,
+				"machineGun": 0,
+				"shield": 0
+			},
+			"hitsOther": 2,
+			"hitsOwn": 0,
+			"deathsOwn": 0,
+			"deathsOther": 3
+		},
+		"8": {
+			"id": null,
+			"row": null,
+			"name": "Nufik",
+			"score": -50,
+			"vest": 8,
+			"shots": 23,
+			"accuracy": 4,
+			"hits": 1,
+			"deaths": 3,
+			"position": 6,
+			"hitPlayers": {
+				"1": {
+					"shot": null,
+					"target": null,
+					"count": 0
+				},
+				"2": {
+					"shot": null,
+					"target": null,
+					"count": 0
+				},
+				"3": {
+					"shot": null,
+					"target": null,
+					"count": 0
+				},
+				"4": {
+					"shot": null,
+					"target": null,
+					"count": 0
+				},
+				"5": {
+					"shot": null,
+					"target": null,
+					"count": 0
+				},
+				"6": {
+					"shot": null,
+					"target": null,
+					"count": 0
+				},
+				"8": {
+					"shot": null,
+					"target": null,
+					"count": 0
+				},
+				"9": {
+					"shot": null,
+					"target": null,
+					"count": 0
+				},
+				"10": {
+					"shot": null,
+					"target": null,
+					"count": 1
+				},
+				"11": {
+					"shot": null,
+					"target": null,
+					"count": 0
+				}
+			},
+			"teamNum": 2,
+			"team": null,
+			"color": 0,
+			"favouriteTarget": null,
+			"favouriteTargetOf": null,
+			"shotPoints": 0,
+			"scoreBonus": 0,
+			"scorePowers": 0,
+			"scoreMines": 0,
+			"ammoRest": 9976,
+			"minesHits": 0,
+			"bonus": {
+				"agent": 0,
+				"invisibility": 0,
+				"machineGun": 0,
+				"shield": 0
+			},
+			"hitsOther": 1,
+			"hitsOwn": 0,
+			"deathsOwn": 0,
+			"deathsOther": 3
+		},
+		"9": {
+			"id": null,
+			"row": null,
+			"name": "Davydeg",
+			"score": 950,
+			"vest": 9,
+			"shots": 159,
+			"accuracy": 6,
+			"hits": 10,
+			"deaths": 1,
+			"position": 1,
+			"hitPlayers": {
+				"1": {
+					"shot": null,
+					"target": null,
+					"count": 0
+				},
+				"2": {
+					"shot": null,
+					"target": null,
+					"count": 2
+				},
+				"3": {
+					"shot": null,
+					"target": null,
+					"count": 2
+				},
+				"4": {
+					"shot": null,
+					"target": null,
+					"count": 3
+				},
+				"5": {
+					"shot": null,
+					"target": null,
+					"count": 3
+				},
+				"6": {
+					"shot": null,
+					"target": null,
+					"count": 0
+				},
+				"8": {
+					"shot": null,
+					"target": null,
+					"count": 0
+				},
+				"9": {
+					"shot": null,
+					"target": null,
+					"count": 0
+				},
+				"10": {
 					"shot": null,
 					"target": null,
 					"count": 0
@@ -232,7 +752,7 @@
 			"scoreBonus": 0,
 			"scorePowers": 0,
 			"scoreMines": 0,
-			"ammoRest": 9954,
+			"ammoRest": 9840,
 			"minesHits": 0,
 			"bonus": {
 				"agent": 0,
@@ -240,132 +760,18 @@
 				"machineGun": 0,
 				"shield": 0
 			},
-			"hitsOther": 2,
+			"hitsOther": 10,
 			"hitsOwn": 0,
 			"deathsOwn": 0,
 			"deathsOther": 1
 		},
-		"3": {
+		"10": {
 			"id": null,
 			"row": null,
-			"name": "ASWpaul",
-			"score": 900,
-			"vest": 3,
-			"shots": 189,
-			"accuracy": 4,
-			"hits": 7,
-			"deaths": 0,
-			"position": 1,
-			"hitPlayers": {
-				"1": {
-					"shot": null,
-					"target": null,
-					"count": 1
-				},
-				"2": {
-					"shot": null,
-					"target": null,
-					"count": 0
-				},
-				"3": {
-					"shot": null,
-					"target": null,
-					"count": 0
-				},
-				"4": {
-					"shot": null,
-					"target": null,
-					"count": 3
-				},
-				"5": {
-					"shot": null,
-					"target": null,
-					"count": 0
-				},
-				"6": {
-					"shot": null,
-					"target": null,
-					"count": 3
-				},
-				"8": {
-					"shot": null,
-					"target": null,
-					"count": 0
-				},
-				"9": {
-					"shot": null,
-					"target": null,
-					"count": 0
-				},
-				"11": {
-					"shot": null,
-					"target": null,
-					"count": 0
-				}
-			},
-			"teamNum": 1,
-			"team": null,
-			"color": 0,
-			"favouriteTarget": null,
-			"favouriteTargetOf": null,
-			"shotPoints": 0,
-			"scoreBonus": 0,
-			"scorePowers": 0,
-			"scoreMines": 0,
-			"ammoRest": 9810,
-			"minesHits": 0,
-			"bonus": {
-				"agent": 0,
-				"invisibility": 0,
-				"machineGun": 0,
-				"shield": 0
-			},
-			"hitsOther": 7,
-			"hitsOwn": 0,
-			"deathsOwn": 0,
-			"deathsOther": 0
-		},
-		"4": {
-			"id": null,
-			"row": null,
-			"name": "Dave",
-			"score": 0,
-			"vest": 4,
-			"shots": 0,
-			"accuracy": 0,
-			"hits": 0,
-			"deaths": 0,
-			"position": 0,
-			"hitPlayers": [],
-			"teamNum": 1,
-			"team": null,
-			"color": 0,
-			"favouriteTarget": null,
-			"favouriteTargetOf": null,
-			"shotPoints": 0,
-			"scoreBonus": 0,
-			"scorePowers": 0,
-			"scoreMines": 0,
-			"ammoRest": 0,
-			"minesHits": 0,
-			"bonus": {
-				"agent": 0,
-				"invisibility": 0,
-				"machineGun": 0,
-				"shield": 0
-			},
-			"hitsOther": 0,
-			"hitsOwn": 0,
-			"deathsOwn": 0,
-			"deathsOther": 0
-		},
-		"5": {
-			"id": null,
-			"row": null,
-			"name": "Honza",
+			"name": "Buzerant",
 			"score": -150,
-			"vest": 5,
-			"shots": 31,
+			"vest": 10,
+			"shots": 11,
 			"accuracy": 0,
 			"hits": 0,
 			"deaths": 3,
@@ -411,13 +817,18 @@
 					"target": null,
 					"count": 0
 				},
+				"10": {
+					"shot": null,
+					"target": null,
+					"count": 0
+				},
 				"11": {
 					"shot": null,
 					"target": null,
 					"count": 0
 				}
 			},
-			"teamNum": 2,
+			"teamNum": 0,
 			"team": null,
 			"color": 0,
 			"favouriteTarget": null,
@@ -426,7 +837,7 @@
 			"scoreBonus": 0,
 			"scorePowers": 0,
 			"scoreMines": 0,
-			"ammoRest": 9968,
+			"ammoRest": 9988,
 			"minesHits": 0,
 			"bonus": {
 				"agent": 0,
@@ -439,96 +850,16 @@
 			"deathsOwn": 0,
 			"deathsOther": 3
 		},
-		"6": {
+		"11": {
 			"id": null,
 			"row": null,
-			"name": "Adam",
-			"score": 650,
-			"vest": 6,
-			"shots": 22,
-			"accuracy": 9,
-			"hits": 2,
-			"deaths": 1,
-			"position": 2,
-			"hitPlayers": {
-				"1": {
-					"shot": null,
-					"target": null,
-					"count": 2
-				},
-				"2": {
-					"shot": null,
-					"target": null,
-					"count": 0
-				},
-				"3": {
-					"shot": null,
-					"target": null,
-					"count": 0
-				},
-				"4": {
-					"shot": null,
-					"target": null,
-					"count": 0
-				},
-				"5": {
-					"shot": null,
-					"target": null,
-					"count": 0
-				},
-				"6": {
-					"shot": null,
-					"target": null,
-					"count": 0
-				},
-				"8": {
-					"shot": null,
-					"target": null,
-					"count": 0
-				},
-				"9": {
-					"shot": null,
-					"target": null,
-					"count": 0
-				},
-				"11": {
-					"shot": null,
-					"target": null,
-					"count": 0
-				}
-			},
-			"teamNum": 1,
-			"team": null,
-			"color": 0,
-			"favouriteTarget": null,
-			"favouriteTargetOf": null,
-			"shotPoints": 0,
-			"scoreBonus": 0,
-			"scorePowers": 0,
-			"scoreMines": 0,
-			"ammoRest": 9977,
-			"minesHits": 0,
-			"bonus": {
-				"agent": 0,
-				"invisibility": 0,
-				"machineGun": 0,
-				"shield": 0
-			},
-			"hitsOther": 2,
-			"hitsOwn": 0,
-			"deathsOwn": 0,
-			"deathsOther": 1
-		},
-		"8": {
-			"id": null,
-			"row": null,
-			"name": "ClappedByHon",
-			"score": -150,
-			"vest": 8,
-			"shots": 122,
+			"name": "David",
+			"score": -100,
+			"vest": 11,
+			"shots": 78,
 			"accuracy": 0,
 			"hits": 0,
-			"deaths": 3,
+			"deaths": 2,
 			"position": 7,
 			"hitPlayers": {
 				"1": {
@@ -571,6 +902,11 @@
 					"target": null,
 					"count": 0
 				},
+				"10": {
+					"shot": null,
+					"target": null,
+					"count": 0
+				},
 				"11": {
 					"shot": null,
 					"target": null,
@@ -586,7 +922,7 @@
 			"scoreBonus": 0,
 			"scorePowers": 0,
 			"scoreMines": 0,
-			"ammoRest": 9877,
+			"ammoRest": 9921,
 			"minesHits": 0,
 			"bonus": {
 				"agent": 0,
@@ -597,203 +933,33 @@
 			"hitsOther": 0,
 			"hitsOwn": 0,
 			"deathsOwn": 0,
-			"deathsOther": 3
-		},
-		"9": {
-			"id": null,
-			"row": null,
-			"name": "Teniska",
-			"score": 150,
-			"vest": 9,
-			"shots": 15,
-			"accuracy": 20,
-			"hits": 3,
-			"deaths": 3,
-			"position": 4,
-			"hitPlayers": {
-				"1": {
-					"shot": null,
-					"target": null,
-					"count": 0
-				},
-				"2": {
-					"shot": null,
-					"target": null,
-					"count": 0
-				},
-				"3": {
-					"shot": null,
-					"target": null,
-					"count": 0
-				},
-				"4": {
-					"shot": null,
-					"target": null,
-					"count": 0
-				},
-				"5": {
-					"shot": null,
-					"target": null,
-					"count": 0
-				},
-				"6": {
-					"shot": null,
-					"target": null,
-					"count": 0
-				},
-				"8": {
-					"shot": null,
-					"target": null,
-					"count": 0
-				},
-				"9": {
-					"shot": null,
-					"target": null,
-					"count": 3
-				},
-				"11": {
-					"shot": null,
-					"target": null,
-					"count": 0
-				}
-			},
-			"teamNum": 1,
-			"team": null,
-			"color": 0,
-			"favouriteTarget": null,
-			"favouriteTargetOf": null,
-			"shotPoints": 0,
-			"scoreBonus": 0,
-			"scorePowers": 0,
-			"scoreMines": 0,
-			"ammoRest": 9984,
-			"minesHits": 0,
-			"bonus": {
-				"agent": 0,
-				"invisibility": 0,
-				"machineGun": 0,
-				"shield": 0
-			},
-			"hitsOther": 3,
-			"hitsOwn": 0,
-			"deathsOwn": 0,
-			"deathsOther": 3
-		},
-		"11": {
-			"id": null,
-			"row": null,
-			"name": "Monopoly",
-			"score": 50,
-			"vest": 11,
-			"shots": 31,
-			"accuracy": 6,
-			"hits": 2,
-			"deaths": 3,
-			"position": 5,
-			"hitPlayers": {
-				"1": {
-					"shot": null,
-					"target": null,
-					"count": 0
-				},
-				"2": {
-					"shot": null,
-					"target": null,
-					"count": 0
-				},
-				"3": {
-					"shot": null,
-					"target": null,
-					"count": 0
-				},
-				"4": {
-					"shot": null,
-					"target": null,
-					"count": 0
-				},
-				"5": {
-					"shot": null,
-					"target": null,
-					"count": 0
-				},
-				"6": {
-					"shot": null,
-					"target": null,
-					"count": 0
-				},
-				"8": {
-					"shot": null,
-					"target": null,
-					"count": 2
-				},
-				"9": {
-					"shot": null,
-					"target": null,
-					"count": 0
-				},
-				"11": {
-					"shot": null,
-					"target": null,
-					"count": 0
-				}
-			},
-			"teamNum": 2,
-			"team": null,
-			"color": 0,
-			"favouriteTarget": null,
-			"favouriteTargetOf": null,
-			"shotPoints": 0,
-			"scoreBonus": 0,
-			"scorePowers": 0,
-			"scoreMines": 0,
-			"ammoRest": 9968,
-			"minesHits": 0,
-			"bonus": {
-				"agent": 0,
-				"invisibility": 0,
-				"machineGun": 0,
-				"shield": 0
-			},
-			"hitsOther": 2,
-			"hitsOwn": 0,
-			"deathsOwn": 0,
-			"deathsOther": 3
+			"deathsOther": 2
 		}
 	},
 	"teamClass": "App\\GameModels\\Game\\Evo5\\Team",
-	"teams": [
-		{
+	"teams": {
+		"0": {
 			"id": null,
 			"row": null,
 			"color": 0,
-			"score": 0,
-			"position": 3,
+			"score": 450,
+			"position": 2,
 			"name": "Red team",
-			"playerCount": 1,
+			"playerCount": 5,
 			"playerClass": "App\\GameModels\\Game\\Evo5\\Player"
 		},
-		{
-			"id": null,
-			"row": null,
-			"color": 1,
-			"score": 1700,
-			"position": 1,
-			"name": "Green team",
-			"playerCount": 3,
-			"playerClass": "App\\GameModels\\Game\\Evo5\\Player"
-		},
-		{
+		"2": {
 			"id": null,
 			"row": null,
 			"color": 2,
-			"score": 100,
-			"position": 2,
+			"score": 900,
+			"position": 1,
 			"name": "Blue team",
-			"playerCount": 4,
+			"playerCount": 5,
 			"playerClass": "App\\GameModels\\Game\\Evo5\\Player"
 		}
-	],
-	"fileNumber": 974,
+	},
+	"fileNumber": 9,
 	"modeName": "3-TEAM-CSGO",
 	"lives": 3,
 	"ammo": 9999,

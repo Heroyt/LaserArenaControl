@@ -32,6 +32,7 @@ class ImportExportTest extends TestCase
 	];
 
 	public static function setUpBeforeClass() : void {
+		/** @var string[] $files */
 		$files = glob(ROOT.'results-test/*_archive.game');
 		foreach ($files as $file) {
 			$parser = new ResultsParser($file);
@@ -48,7 +49,10 @@ class ImportExportTest extends TestCase
 		$data = [];
 		$gameRows = GameFactory::queryGames(true)->orderBy('RAND()')->limit(10)->fetchAll();
 		foreach ($gameRows as $row) {
-			$data[] = [GameFactory::getByCode($row->code)];
+			$game = GameFactory::getByCode($row->code);
+			if (isset($game)) {
+				$data[] = [$game];
+			}
 		}
 
 		return $data;
@@ -64,6 +68,7 @@ class ImportExportTest extends TestCase
 	public function testExport(Game $game) : void {
 		// Export to JSON and decode back into usable data
 		$json = json_encode($game, JSON_THROW_ON_ERROR);
+		/** @var array<string, mixed> $decoded */
 		$decoded = json_decode($json, true, 512, JSON_THROW_ON_ERROR);
 
 		// Test if the data contains all necessary information
@@ -83,43 +88,62 @@ class ImportExportTest extends TestCase
 		self::assertSame($game->code, $decoded['code']);
 		self::assertEquals(
 			[
-				'date'          => $game->start->format('Y-m-d H:i:s.u'),
+				'date'          => $game->start?->format('Y-m-d H:i:s.u'),
 				'timezone_type' => 3,
-				'timezone'      => $game->start->getTimezone()->getName()
+				'timezone'      => $game->start?->getTimezone()->getName()
 			],
 			$decoded['start']
 		);
 		self::assertEquals(
 			[
-				'date'          => $game->end->format('Y-m-d H:i:s.u'),
+				'date'          => $game->end?->format('Y-m-d H:i:s.u'),
 				'timezone_type' => 3,
-				'timezone'      => $game->end->getTimezone()->getName()
+				'timezone'      => $game->end?->getTimezone()->getName()
 			],
 			$decoded['end']
 		);
-		self::assertSame($game->mode->id, $decoded['mode']['id']);
-		self::assertSame($game->mode->name, $decoded['mode']['name']);
-		self::assertSame($game->mode->type, GameModeType::tryFrom($decoded['mode']['type']));
+		/* @phpstan-ignore-next-line */
+		self::assertSame($game->mode?->id, $decoded['mode']['id']);
+		/* @phpstan-ignore-next-line */
+		self::assertSame($game->mode?->name, $decoded['mode']['name']);
+		/* @phpstan-ignore-next-line */
+		self::assertSame($game->mode?->type, GameModeType::tryFrom($decoded['mode']['type']));
+		/* @phpstan-ignore-next-line */
 		self::assertEquals(get_object_vars($game->timing), $decoded['timing']);
+		/* @phpstan-ignore-next-line */
 		self::assertEquals(get_object_vars($game->scoring), $decoded['scoring']);
+		/* @phpstan-ignore-next-line */
 		self::assertCount(count($game->getPlayers()), $decoded['players']);
+		/* @phpstan-ignore-next-line */
 		self::assertCount(count($game->getTeams()), $decoded['teams']);
 
 		// Test players
+		/**
+		 * @var int $key
+		 * @phpstan-ignore-next-line
+		 */
 		foreach ($decoded['players'] as $key => $playerData) {
 			$player = $game->getPlayers()->get($key);
 			// Test player's data
 			foreach (['name', 'score', 'vest', 'shots', 'accuracy', 'hits', 'deaths', 'position'] as $field) {
+				/* @phpstan-ignore-next-line */
 				self::assertTrue(isset($playerData[$field]), 'Missing required field: "player.'.$field.'"');
+				/* @phpstan-ignore-next-line */
 				self::assertEquals($player->{$field}, $playerData[$field]);
 			}
 		}
 		// Test teams
+		/**
+		 * @var int $key
+		 * @phpstan-ignore-next-line
+		 */
 		foreach ($decoded['teams'] as $key => $teamData) {
 			$team = $game->getTeams()->get($key);
 			// Test team's data
 			foreach (['name', 'score', 'color', 'position'] as $field) {
+				/* @phpstan-ignore-next-line */
 				self::assertTrue(isset($teamData[$field]), 'Missing required field: "team.'.$field.'"');
+				/* @phpstan-ignore-next-line */
 				self::assertEquals($team->{$field}, $teamData[$field]);
 			}
 		}
@@ -137,6 +161,7 @@ class ImportExportTest extends TestCase
 		$json = json_encode($game, JSON_THROW_ON_ERROR);
 		/** @var Game $class */
 		$class = $game::class;
+		/* @phpstan-ignore-next-line */
 		$decoded = $class::fromJson(json_decode($json, true, 512, JSON_THROW_ON_ERROR));
 
 		// Test all fields
@@ -185,9 +210,11 @@ class ImportExportTest extends TestCase
 			}
 			// Test hits
 			foreach ($player->getHitsPlayers() as $key => $hits) {
+				/* @phpstan-ignore-next-line */
 				self::assertEquals($hits->count, $decodedPlayer->getHitsPlayer($hits->playerTarget));
 			}
 			// Test team
+			/* @phpstan-ignore-next-line */
 			self::assertEquals($player->getTeamColor(), $decodedPlayer->getTeamColor());
 		}
 

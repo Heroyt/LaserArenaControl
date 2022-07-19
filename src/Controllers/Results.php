@@ -5,8 +5,10 @@ namespace App\Controllers;
 use App\Core\Info;
 use App\GameModels\Factory\GameFactory;
 use App\GameModels\Game\Game;
+use App\GameModels\Game\Player;
 use App\GameModels\Game\PrintStyle;
 use App\GameModels\Game\PrintTemplate;
+use App\GameModels\Game\Team;
 use App\GameModels\Game\Today;
 use Endroid\QrCode\Builder\Builder;
 use Endroid\QrCode\Encoding\Encoding;
@@ -48,7 +50,7 @@ class Results extends Controller
 			$this->params['games'][] = GameFactory::getByCode($row->code);
 		}
 		usort($this->params['games'], static function(Game $game1, Game $game2) {
-			return $game2->start->getTimestamp() - $game1->start->getTimestamp();
+			return $game2->start?->getTimestamp() - $game1->start?->getTimestamp();
 		});
 		if (!isset($this->params['selected'])) {
 			$this->params['selected'] = $this->params['games'][0] ?? null;
@@ -81,7 +83,11 @@ class Results extends Controller
 		$namespace = '\\App\\GameModels\\Game\\'.Strings::toPascalCase($game::SYSTEM).'\\';
 		$teamClass = $namespace.'Team';
 		$playerClass = $namespace.'Player';
-		$this->params['today'] = new Today($game, new $playerClass, new $teamClass);
+		/** @var Player $player */
+		$player = new $playerClass;
+		/** @var Team $team */
+		$team = new $teamClass;
+		$this->params['today'] = new Today($game, $player, $team);
 		$this->params['publicUrl'] = $this->getPublicUrl($game);
 		$this->params['qr'] = $this->getQR($game);
 
@@ -93,7 +99,9 @@ class Results extends Controller
 	}
 
 	private function getPublicUrl(Game $game) : string {
-		return trailingSlashIt(Info::get('liga_api_url')).'g/'.$game->code;
+		/** @var string $url */
+		$url = Info::get('liga_api_url');
+		return trailingSlashIt($url).'g/'.$game->code;
 	}
 
 	/**

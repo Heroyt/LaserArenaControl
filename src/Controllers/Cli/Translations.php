@@ -89,7 +89,11 @@ class Translations extends CliController
 
 		// Merge templates
 		if (count($templates) === 1 && count($otherTemplates) === 1) {
-			$this->mergeTranslationFiles(first($templates), first($otherTemplates));
+			/** @var GettextTranslations $template */
+			$template = first($templates);
+			/** @var GettextTranslations $otherTemplate */
+			$otherTemplate = first($otherTemplates);
+			$this->mergeTranslationFiles($template, $otherTemplate);
 		}
 		else {
 			foreach ($templates as $name => $template) {

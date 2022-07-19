@@ -25,7 +25,7 @@ use Lsr\Core\DB;
 class DbInstall implements InstallInterface
 {
 
-	/** @var array{definition:string, modifications:array}[] */
+	/** @var array{definition:string, modifications:array<string,string[]>}[] */
 	public const TABLES = [
 		'page_info'                => [
 			'definition'    => "(
@@ -293,7 +293,7 @@ FROM (`game_modes` `a` left join `game_modes-names` `b` on(`a`.`id_mode` = `b`.`
 			if (!$fresh) {
 				try {
 					$currVersion = Info::get('db_version', 0.0);
-				} catch (DriverException $e) {
+				} catch (DriverException) {
 					$currVersion = 0.0;
 				}
 
@@ -323,7 +323,7 @@ FROM (`game_modes` `a` left join `game_modes-names` `b` on(`a`.`id_mode` = `b`.`
 				}
 				try {
 					Info::set('db_version', $maxVersion);
-				} catch (Exception $e) {
+				} catch (Exception) {
 				}
 			}
 		} catch (Exception $e) {

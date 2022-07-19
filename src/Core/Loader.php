@@ -47,7 +47,7 @@ class Loader
 	 */
 	public static function init() : void {
 
-		if (defined('INDEX') && INDEX) {
+		if (defined('INDEX')) {
 			Timer::start('core.init.config');
 			// Initialize config
 			self::initConfig();

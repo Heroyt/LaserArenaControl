@@ -8,7 +8,9 @@ use App\GameModels\Game\Player;
 use App\Services\ImportService;
 use App\Tools\Evo5\ResultsParser;
 use Exception;
+use JsonException;
 use Lsr\Core\ApiController;
+use Lsr\Core\Constants;
 use Lsr\Core\Exceptions\ModelNotFoundException;
 use Lsr\Core\Exceptions\ValidationException;
 use Lsr\Core\Requests\Request;
@@ -126,6 +128,7 @@ class Results extends ApiController
 	 * @param Request $request
 	 *
 	 * @return never
+	 * @throws JsonException
 	 */
 	public function getLastGameFile(Request $request) : never {
 		$resultsDir = urldecode($request->get['dir'] ?? '');
@@ -133,12 +136,17 @@ class Results extends ApiController
 			$this->respond(['error' => 'Missing required argument "dir". Valid results directory is expected.'], 400);
 		}
 		$resultsDir = trailingSlashIt($resultsDir);
+		/** @var string[] $resultFiles */
 		$resultFiles = glob(ROOT.$resultsDir.'*.game');
 		// Sort by time
 		usort($resultFiles, static function(string $a, string $b) {
 			return filemtime($b) - filemtime($a);
 		});
-		$this->respond(['files' => $resultFiles, 'contents1' => utf8_encode(file_get_contents($resultFiles[0])), 'contents2' => utf8_encode(file_get_contents($resultFiles[1]))]);
+		/** @var string $resultsContent1 */
+		$resultsContent1 = file_get_contents($resultFiles[0]);
+		/** @var string $resultsContent2 */
+		$resultsContent2 = file_get_contents($resultFiles[1]);
+		$this->respond(['files' => $resultFiles, 'contents1' => utf8_encode($resultsContent1), 'contents2' => utf8_encode($resultsContent2)]);
 	}
 
 	/**
@@ -146,6 +154,7 @@ class Results extends ApiController
 	 *
 	 * @return never
 	 * @throws ArchiveCreationException
+	 * @throws JsonException
 	 */
 	public function downloadLastGameFiles(Request $request) : never {
 		/** TODO: Secure.. this is really bad.. and would allow for downloading of any files */
@@ -154,6 +163,7 @@ class Results extends ApiController
 			$this->respond(['error' => 'Missing required argument "dir". Valid results directory is expected.'], 400);
 		}
 		$resultsDir = trailingSlashIt($resultsDir);
+		/** @var string[] $resultFiles */
 		$resultFiles = glob(ROOT.$resultsDir.'*.game');
 
 		$archive = new ZipArchive();

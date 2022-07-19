@@ -50,6 +50,7 @@ if (!PRODUCTION) {
 	$poLoader = new PoLoader();
 	/** @var Translations[] $translations */
 	$translations = [];
+	/** @var string[] $languages */
 	$languages = glob(LANGUAGE_DIR.'*');
 	foreach ($languages as $path) {
 		if (!is_dir($path)) {
@@ -62,7 +63,7 @@ if (!PRODUCTION) {
 	Timer::stop('core.init.translations');
 }
 
-if ((!file_exists(LOG_DIR) || !is_dir(LOG_DIR)) && !mkdir(LOG_DIR) && !is_dir(LOG_DIR)) {
+if (!is_dir(LOG_DIR) && !mkdir(LOG_DIR) && (!file_exists(LOG_DIR) || !is_dir(LOG_DIR))) {
 	throw new RuntimeException(sprintf('Directory "%s" was not created', LOG_DIR));
 }
 
@@ -82,7 +83,7 @@ Debugger::getBar()
 
 Loader::init();
 
-if (!defined('INDEX') || INDEX) {
+if (!defined('INDEX')) {
 	// Register library tracy panels
 	if (!isset($_ENV['noDb'])) {
 		(new Panel())->register(DB::getConnection());
@@ -90,7 +91,7 @@ if (!defined('INDEX') || INDEX) {
 	/** @noinspection PhpParamsInspection */
 	Debugger::getBar()
 					->addPanel(new ContainerPanel(App::getContainer()))
-					->addPanel(new LattePanel(App::getService('templating.latte.engine')))
+					->addPanel(new LattePanel(App::getService('templating.latte.engine'))) // @phpstan-ignore-line
 					->addPanel(new SessionPanel());
 }
 

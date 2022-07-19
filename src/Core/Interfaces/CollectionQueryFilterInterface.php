@@ -4,10 +4,17 @@
  */
 namespace App\Core\Interfaces;
 
-
+/**
+ * @template T of \Lsr\Core\Models\Model
+ */
 interface CollectionQueryFilterInterface
 {
 
+	/**
+	 * @param CollectionInterface<T> $collection
+	 *
+	 * @return CollectionQueryFilterInterface<T>
+	 */
 	public function apply(CollectionInterface $collection) : CollectionQueryFilterInterface;
 
 }

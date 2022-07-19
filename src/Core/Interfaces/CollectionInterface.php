@@ -11,40 +11,48 @@ use Iterator;
 use JsonSerializable;
 use Lsr\Core\Models\Model;
 
+/**
+ * @template T of Model
+ * @extends ArrayAccess<int, T>
+ * @extends Iterator<int, T>
+ */
 interface CollectionInterface extends ArrayAccess, JsonSerializable, Countable, Iterator
 {
 
 	/**
 	 * Create a new collection from array of data
 	 *
-	 * @param Model[] $array
+	 * @param T[] $array
 	 *
-	 * @return CollectionInterface
+	 * @return CollectionInterface<T>
 	 */
 	public static function fromArray(array $array) : CollectionInterface;
 
 	/**
 	 * Get all collection's data as an array
 	 *
-	 * @return Model[]
+	 * @return T[]
 	 */
 	public function getAll() : array;
 
+	/**
+	 * @return CollectionQueryInterface<T>
+	 */
 	public function query() : CollectionQueryInterface;
 
 	/**
 	 * Add new data to collection
 	 *
-	 * @param Model ...$values
+	 * @param T ...$values
 	 *
-	 * @return CollectionInterface
+	 * @return CollectionInterface<T>
 	 */
 	public function add(Model ...$values) : CollectionInterface;
 
 	/**
 	 * Checks whether the given model already exists in collection
 	 *
-	 * @param Model $model
+	 * @param T $model
 	 *
 	 * @return bool
 	 */
@@ -62,14 +70,14 @@ interface CollectionInterface extends ArrayAccess, JsonSerializable, Countable, 
 	 *
 	 * @param callable $callback
 	 *
-	 * @return CollectionInterface
+	 * @return CollectionInterface<T>
 	 */
 	public function sort(callable $callback) : CollectionInterface;
 
 	/**
 	 * Get first object in collection
 	 *
-	 * @return Model|null
+	 * @return T|null
 	 */
 	public function first() : ?Model;
 

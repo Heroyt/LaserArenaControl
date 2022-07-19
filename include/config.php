@@ -23,10 +23,3 @@ if (!defined('JSON_THROW_ON_ERROR')) {
 define('PRODUCTION', App::isProduction());
 define('CHECK_TRANSLATIONS', (bool) (App::getConfig()['General']['TRANSLATIONS'] ?? false));
 
-/**
- * @var $DEBUG
- * @brief All debug information
- */
-$DEBUG = [
-	'DB' => [],
-];

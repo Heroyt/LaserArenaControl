@@ -16,6 +16,7 @@ class Info
 {
 
 	public const TABLE = 'page_info';
+	/** @var array<string, mixed> */
 	private static array $info = [];
 
 	/**
@@ -28,6 +29,7 @@ class Info
 		if (isset(self::$info[$key])) {
 			return self::$info[$key];
 		}
+		/** @var string|null $value */
 		$value = DB::select(self::TABLE, '[value]')->where('[key] = %s', $key)->fetchSingle();
 		if (!isset($value)) {
 			return $default;

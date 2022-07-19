@@ -2,6 +2,7 @@
 
 namespace App\Controllers\Api;
 
+use JsonException;
 use Lsr\Core\ApiController;
 use Lsr\Core\App;
 use Lsr\Core\Requests\Request;
@@ -11,7 +12,12 @@ use Lsr\Logging\Logger;
 class Debug extends ApiController
 {
 
+	/**
+	 * @return void
+	 * @throws JsonException
+	 */
 	public function disable() : void {
+		/** @var string $contents */
 		$contents = file_get_contents(PRIVATE_DIR.'config.ini');
 		if (file_put_contents(PRIVATE_DIR.'config.ini', str_replace('DEBUG = true', 'DEBUG = false', $contents)) === false) {
 			$this->respond(['error' => 'Cannot write to config file.'], 500);
@@ -19,8 +25,13 @@ class Debug extends ApiController
 		$this->respond(['success' => true]);
 	}
 
+	/**
+	 * @return void
+	 * @throws JsonException
+	 */
 	public function incrementCache() : void {
 		$version = App::getCacheVersion();
+		/** @var string $contents */
 		$contents = file_get_contents(PRIVATE_DIR.'config.ini');
 		if (file_put_contents(PRIVATE_DIR.'config.ini', str_replace('CACHE_VERSION = '.$version, 'CACHE_VERSION = '.($version + 1), $contents)) === false) {
 			$this->respond(['error' => 'Cannot write to config file.'], 500);
@@ -28,7 +39,12 @@ class Debug extends ApiController
 		$this->respond(['success' => true]);
 	}
 
+	/**
+	 * @return void
+	 * @throws JsonException
+	 */
 	public function enable() : void {
+		/** @var string $contents */
 		$contents = file_get_contents(PRIVATE_DIR.'config.ini');
 		if (file_put_contents(PRIVATE_DIR.'config.ini', str_replace('DEBUG = false', 'DEBUG = true', $contents)) === false) {
 			$this->respond(['error' => 'Cannot write to config file.'], 500);
@@ -36,11 +52,17 @@ class Debug extends ApiController
 		$this->respond(['success' => true]);
 	}
 
+	/**
+	 * @param Request $request
+	 *
+	 * @return void
+	 * @throws JsonException
+	 */
 	public function pwd(Request $request) : void {
 		try {
 			$logger = new Logger(LOG_DIR.'api/', 'mount');
 			$logger->info('Executing pwd ('.$request->getIp().')');
-		} catch (DirectoryCreationException $e) {
+		} catch (DirectoryCreationException) {
 			$logger = null;
 		}
 
@@ -56,6 +78,12 @@ class Debug extends ApiController
 		$this->respond(['success' => true, 'output' => $out]);
 	}
 
+	/**
+	 * @param Request $request
+	 *
+	 * @return void
+	 * @throws JsonException
+	 */
 	public function glob(Request $request) : void {
 		$param = urldecode($request->get['param'] ?? '');
 		if (empty($param)) {
@@ -64,11 +92,17 @@ class Debug extends ApiController
 		$this->respond(['success' => true, 'output' => glob($param)]);
 	}
 
+	/**
+	 * @param Request $request
+	 *
+	 * @return void
+	 * @throws JsonException
+	 */
 	public function whoami(Request $request) : void {
 		try {
 			$logger = new Logger(LOG_DIR.'api/', 'mount');
 			$logger->info('Executing whoami ('.$request->getIp().')');
-		} catch (DirectoryCreationException $e) {
+		} catch (DirectoryCreationException) {
 			$logger = null;
 		}
 

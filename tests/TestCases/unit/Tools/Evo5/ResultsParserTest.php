@@ -14,14 +14,22 @@ use PHPUnit\Framework\TestCase;
 class ResultsParserTest extends TestCase
 {
 
+	/**
+	 * @return string[][]
+	 */
 	public function getFiles() : array {
-		$files = array_merge(glob(ROOT.'results-test/*_archive.game'));
+		/** @var string[] $files */
+		$files = glob(ROOT.'results-test/*_archive.game');
 		return array_map(static function(string $fName) {
 			return [$fName];
 		}, $files);
 	}
 
+	/**
+	 * @return string[][]
+	 */
 	public function getFilesError() : array {
+		/** @var string[] $files */
 		$files = glob(ROOT.'results-test/????_error.game');
 		return array_map(static function(string $fName) {
 			return [$fName];
@@ -44,7 +52,8 @@ class ResultsParserTest extends TestCase
 		}
 
 		// Test DB save
-		self::assertTrue($game->save(), 'Game save failed for file: '.$file.' - '.last(DbTracyPanel::$events)->message);
+		/* @phpstan-ignore-next-line */
+		self::assertTrue($game->save(), 'Game save failed for file: '.$file.' - '.last(DbTracyPanel::$events)?->message);
 		self::assertNotNull($game->id, 'Game save failed for file: '.$file);
 
 		// Test if all players have been inserted into DB
@@ -61,7 +70,9 @@ class ResultsParserTest extends TestCase
 		// Get game from DB
 		$game2 = new Game($game->id);
 		self::assertEquals(
+		/* @phpstan-ignore-next-line */
 			json_decode(json_encode($game->getQueryData())),
+			/* @phpstan-ignore-next-line */
 			json_decode(json_encode($game2->getQueryData())),
 			'Game data got from DB is not the same: '.$file
 		);
@@ -73,17 +84,19 @@ class ResultsParserTest extends TestCase
 
 			self::assertNotNull($player2, 'Player does not exist in DB: '.$file);
 			self::assertEquals(
+			/* @phpstan-ignore-next-line */
 				json_decode(json_encode($player->getQueryData())),
+				/* @phpstan-ignore-next-line */
 				json_decode(json_encode($player2->getQueryData())),
 				'Player data got from DB is not the same: '.$file
 			);
 
 			// Test if all players have a team assigned
-			if (!$game->mode->isSolo()) {
+			if (!$game->mode?->isSolo()) {
 				$team = $player->getTeam();
-				$team2 = $player2->getTeam();
+				$team2 = $player2?->getTeam();
 				self::assertNotNull($team);
-				self::assertSame($team2->color, $team->color);
+				self::assertSame($team2?->color, $team?->color);
 			}
 		}
 
@@ -94,7 +107,9 @@ class ResultsParserTest extends TestCase
 			$team2 = $game2->getTeams()->get($team->color);
 			self::assertNotNull($team2, 'Team does not exist in DB: '.$file);
 			self::assertEquals(
+			/* @phpstan-ignore-next-line */
 				json_decode(json_encode($team->getQueryData())),
+				/* @phpstan-ignore-next-line */
 				json_decode(json_encode($team2->getQueryData())),
 				'Team data got from DB is not the same: '.$file
 			);

@@ -5,8 +5,11 @@ namespace App\Controllers\Api;
 use App\Core\Info;
 use App\GameModels\Factory\GameFactory;
 use App\GameModels\Game\Game;
+use JsonException;
 use Lsr\Core\ApiController;
 use Lsr\Core\Constants;
+use Lsr\Core\Exceptions\ModelNotFoundException;
+use Lsr\Core\Exceptions\ValidationException;
 
 /**
  * Used for getting information about current games
@@ -14,6 +17,10 @@ use Lsr\Core\Constants;
 class GameHelpers extends ApiController
 {
 
+	/**
+	 * @return never
+	 * @throws JsonException
+	 */
 	public function getLoadedGameInfo() : never {
 		// Allow for filtering games just from one system
 		$system = $_GET['system'] ?? 'all';
@@ -33,7 +40,7 @@ class GameHelpers extends ApiController
 		foreach ($systems as $system) {
 			/** @var Game|null $started */
 			$started = Info::get($system.'-game-started');
-			if (isset($started) && ($now - $started->start->getTimestamp()) <= Constants::GAME_STARTED_TIME) {
+			if (isset($started) && ($now - $started->start?->getTimestamp()) <= Constants::GAME_STARTED_TIME) {
 				if (isset($this->game) && $this->game->fileTime > $started->fileTime) {
 					continue;
 				}
@@ -45,7 +52,7 @@ class GameHelpers extends ApiController
 
 			/** @var Game|null $loaded */
 			$loaded = Info::get($system.'-game-loaded');
-			if (isset($loaded) && ($now - $loaded->fileTime->getTimestamp()) <= Constants::GAME_LOADED_TIME) {
+			if (isset($loaded) && ($now - $loaded->fileTime?->getTimestamp()) <= Constants::GAME_LOADED_TIME) {
 				if (isset($this->game) && $this->game->fileTime > $loaded->fileTime) {
 					continue;
 				}
@@ -62,7 +69,7 @@ class GameHelpers extends ApiController
 				'currentServerTime' => time(),
 				'started'           => $game->started,
 				'finished'          => $game->finished,
-				'loadTime'          => $game->fileTime->getTimestamp(),
+				'loadTime'          => $game->fileTime?->getTimestamp(),
 				'startTime'         => $game->start?->getTimestamp(),
 				'gameLength'        => !isset($game->timing) ? 0 : ($game->timing->gameLength * 60),
 				'playerCount'       => $game->playerCount,
@@ -72,6 +79,12 @@ class GameHelpers extends ApiController
 		);
 	}
 
+	/**
+	 * @return never
+	 * @throws JsonException
+	 * @throws ModelNotFoundException
+	 * @throws ValidationException
+	 */
 	public function getGateGameInfo() : never {
 		/** @var Game|null $game */
 		$game = Info::get('gate-game');
@@ -86,7 +99,7 @@ class GameHelpers extends ApiController
 				'gateTime'          => Info::get('gate-time'),
 				'started'           => $game->started,
 				'finished'          => $game->finished,
-				'loadTime'          => $game->fileTime->getTimestamp(),
+				'loadTime'          => $game->fileTime?->getTimestamp(),
 				'startTime'         => $game->start?->getTimestamp(),
 				'gameLength'        => !isset($game->timing) ? 0 : ($game->timing->gameLength * 60),
 				'playerCount'       => count($game->getPlayers()),

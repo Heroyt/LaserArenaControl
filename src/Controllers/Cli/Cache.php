@@ -39,6 +39,7 @@ class Cache extends CliController
 
 	#[Cli('cache/clean/di', description: 'Clean server cache')]
 	public function cleanDi() : never {
+		/** @var string[] $files */
 		$files = glob(TMP_DIR.'di/*');
 		foreach ($files as $file) {
 			unlink($file);
@@ -49,6 +50,7 @@ class Cache extends CliController
 
 	#[Cli('cache/clean/latte', description: 'Clean latte cache')]
 	public function cleanLatte() : never {
+		/** @var string[] $files */
 		$files = glob(TMP_DIR.'latte/*');
 		foreach ($files as $file) {
 			unlink($file);

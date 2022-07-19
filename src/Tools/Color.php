@@ -21,6 +21,7 @@ class Color
 	 * @return string
 	 */
 	public static function getGamesColor(array $games) : string {
+		/** @var array<string, string[]> $styles */
 		$styles = [];
 		foreach ($games as $game) {
 			if (isset($styles[$game::SYSTEM])) {
@@ -30,6 +31,10 @@ class Color
 		}
 		$classes = '';
 		$return = '<style>:root{';
+		/**
+		 * @var string   $system
+		 * @var string[] $colors
+		 */
 		foreach ($styles as $system => $colors) {
 			$system = Strings::toSnakeCase($system, '-');
 			foreach ($colors as $key => $color) {

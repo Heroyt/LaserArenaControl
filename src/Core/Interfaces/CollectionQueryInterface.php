@@ -4,8 +4,12 @@
  */
 namespace App\Core\Interfaces;
 
-use App\Core\AbstractModel;
 
+use Lsr\Core\Models\Model;
+
+/**
+ * @template T of Model
+ */
 interface CollectionQueryInterface
 {
 
@@ -15,41 +19,39 @@ interface CollectionQueryInterface
 	 * @param string $param
 	 * @param mixed  ...$values
 	 *
-	 * @return CollectionQueryInterface
+	 * @return CollectionQueryInterface<T>
 	 */
 	public function filter(string $param, mixed ...$values) : CollectionQueryInterface;
 
 	/**
 	 * Add any filter object
 	 *
-	 * @param CollectionQueryFilterInterface $filter
+	 * @param CollectionQueryFilterInterface<T> $filter
 	 *
-	 * @return CollectionQueryInterface
+	 * @return CollectionQueryInterface<T>
 	 */
 	public function addFilter(CollectionQueryFilterInterface $filter) : CollectionQueryInterface;
 
 	/**
 	 * Get the query's result
 	 *
-	 * @param bool $returnArray
-	 *
-	 * @return CollectionInterface|array
+	 * @return CollectionInterface<T>
 	 */
-	public function get(bool $returnArray = false) : CollectionInterface|array;
+	public function get() : CollectionInterface;
 
 	/**
 	 * Get only the first result or null
 	 *
-	 * @return AbstractModel|null|mixed
+	 * @return T|null
 	 */
-	public function first() : mixed;
+	public function first() : ?Model;
 
 	/**
 	 * Set a parameter to sort the by result
 	 *
 	 * @param string $param
 	 *
-	 * @return CollectionQueryInterface
+	 * @return CollectionQueryInterface<T>
 	 */
 	public function sortBy(string $param) : CollectionQueryInterface;
 
@@ -58,7 +60,7 @@ interface CollectionQueryInterface
 	 *
 	 * @param string $param
 	 *
-	 * @return CollectionQueryInterface
+	 * @return CollectionQueryInterface<T>
 	 */
 	public function pluck(string $param) : CollectionQueryInterface;
 
@@ -67,7 +69,7 @@ interface CollectionQueryInterface
 	 *
 	 * @param callable $callback
 	 *
-	 * @return CollectionQueryInterface
+	 * @return CollectionQueryInterface<T>
 	 * @see array_map()
 	 */
 	public function map(callable $callback) : CollectionQueryInterface;
@@ -75,14 +77,14 @@ interface CollectionQueryInterface
 	/**
 	 * Set sort direction in ascending order
 	 *
-	 * @return CollectionQueryInterface
+	 * @return CollectionQueryInterface<T>
 	 */
 	public function asc() : CollectionQueryInterface;
 
 	/**
 	 * Set sort direction in descending order
 	 *
-	 * @return CollectionQueryInterface
+	 * @return CollectionQueryInterface<T>
 	 */
 	public function desc() : CollectionQueryInterface;
 

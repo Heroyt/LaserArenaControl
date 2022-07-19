@@ -13,6 +13,7 @@ use App\GameModels\Game\Game;
 use App\GameModels\Game\Player;
 use App\Tools\Evo5\ResultsParser;
 use Dibi\Exception;
+use JsonException;
 use Lsr\Core\ApiController;
 use Lsr\Core\App;
 use Lsr\Core\CliController;
@@ -30,6 +31,7 @@ use Throwable;
 class ImportService
 {
 
+	/** @var array{error?:string,exception?:string,sql?:string}[]|string[] */
 	private static array                       $errors = [];
 	private static ApiController|CliController $controller;
 
@@ -67,8 +69,10 @@ class ImportService
 		}
 
 		$resultsDir = trailingSlashIt($resultsDir);
+		/** @var string[] $resultFiles */
 		$resultFiles = glob($resultsDir.'*.game');
-		$lastCheck = (int) Info::get($resultsDir.'check', 0);
+		/** @var int $lastCheck */
+		$lastCheck = Info::get($resultsDir.'check', 0);
 
 		$now = time();
 
@@ -150,14 +154,18 @@ class ImportService
 					// Refresh the started-game info to stop the game timer
 					/** @var Game $startedGame */
 					$startedGame = Info::get($game::SYSTEM.'-game-started');
+					/* @phpstan-ignore-next-line */
 					if (isset($startedGame) && $game->fileNumber === $startedGame->fileNumber) {
 						try {
 							Info::set($game::SYSTEM.'-game-started', null);
-						} catch (Exception $e) {
+						} catch (Exception) {
 						}
 					}
 
-					$finishedGames[] = GameFactory::getById($game->id, ['system' => $game::SYSTEM]);
+					$gameModel = GameFactory::getById($game->id ?? 0, ['system' => $game::SYSTEM]);
+					if (isset($gameModel)) {
+						$finishedGames[] = $gameModel;
+					}
 					$imported++;
 				} catch (FileException|GameModeNotFoundException|ResultsParseException|ValidationException $e) {
 					$logger->error($e->getMessage());
@@ -175,6 +183,7 @@ class ImportService
 		}
 
 		if (isset($lastUnfinishedGame)) {
+			/* @phpstan-ignore-next-line */
 			$logger->debug('Setting last unfinished game: "'.$lastUnfinishedGame::SYSTEM.'-'.$lastEvent.'" - '.$lastUnfinishedGame->fileNumber);
 			try {
 				Info::set($lastUnfinishedGame::SYSTEM.'-'.$lastEvent, $lastUnfinishedGame);
@@ -220,6 +229,7 @@ class ImportService
 			exit(0);
 		}
 		if (self::$apiFlag) {
+			/* @phpstan-ignore-next-line */
 			self::$controller->respond(
 				[
 					'imported' => $imported,
@@ -238,6 +248,7 @@ class ImportService
 	 * @param int               $statusCode
 	 *
 	 * @return void
+	 * @throws JsonException
 	 */
 	private static function errorHandle(string|\Exception $data, int $statusCode = 0) : void {
 		if (self::$cliFlag) {
@@ -251,6 +262,7 @@ class ImportService
 					$info .= ' - '.$data->getSql();
 				}
 			}
+			/* @phpstan-ignore-next-line */
 			self::$controller->errorPrint($info);
 			if ($statusCode !== 0) {
 				exit($statusCode);
@@ -271,9 +283,11 @@ class ImportService
 				}
 			}
 			if ($statusCode === 0) {
+				/* @phpstan-ignore-next-line */
 				self::$errors[] = $info;
 			}
 			else {
+				/* @phpstan-ignore-next-line */
 				self::$controller->respond($info, $statusCode);
 			}
 		}

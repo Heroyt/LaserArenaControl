@@ -4,13 +4,14 @@ namespace App\Controllers\Cli;
 
 use App\Cli\Colors;
 use App\Cli\Enums\ForegroundColors;
+use JsonException;
 use Lsr\Core\CliController;
 use Lsr\Core\Requests\CliRequest;
 use Lsr\Core\Routing\CliRoute;
-use Lsr\Core\Routing\Route;
 use Lsr\Core\Routing\Router;
 use Lsr\Enums\RequestMethod;
 use Lsr\Helpers\Cli\CliHelper;
+use Lsr\Interfaces\RouteInterface;
 
 class Help extends CliController
 {
@@ -21,6 +22,7 @@ class Help extends CliController
 	 * @param CliRequest $request
 	 *
 	 * @return void
+	 * @throws JsonException
 	 */
 	public function generateAutocompleteJson(CliRequest $request) : void {
 		$outFile = $request->args[0] ?? '';
@@ -44,12 +46,20 @@ class Help extends CliController
 	}
 
 	/**
-	 * @param array<array|CliRoute> $routes
-	 * @param array                 $out
+	 * @param array<RouteInterface[]|RouteInterface> $routes
+	 * @param array{
+	 *     subcommands: array{
+	 *         name:string,
+	 *         description:string,
+	 *         args:array{
+	 *             name: string, description?: string, isOptional?:bool, suggestions: string[]
+	 *         }[]
+	 *    }[]
+	 * }                                             $out
 	 *
 	 * @return void
 	 */
-	public function addRoutes(array $routes, array &$out = []) : void {
+	public function addRoutes(array $routes, array &$out = ['subcommands' => []]) : void {
 		foreach ($routes as $route) {
 			if ($route instanceof CliRoute) {
 				$out['subcommands'][] = [
@@ -66,6 +76,7 @@ class Help extends CliController
 
 	public function listCommands(CliRequest $request) : void {
 		$group = $request->args[0] ?? '';
+		/** @var string[] $routes */
 		$routes = $this->formatRoutes(Router::$availableRoutes);
 		$currGroup = '';
 		if (!empty($group)) {
@@ -91,28 +102,32 @@ class Help extends CliController
 	/**
 	 * Formats routing array to more readable format
 	 *
-	 * @param array $routes
+	 * @param RouteInterface[]|RouteInterface[][] $routes
 	 *
-	 * @return array|string
+	 * @return array<string, string|array<string, string>>|string
 	 */
 	private function formatRoutes(array $routes) : array|string {
 		$formatted = [];
 		foreach ($routes as $key => $route) {
-			if ($route instanceof Route) {
+			if (!is_array($route)) {
 				continue;
 			}
-			if (count($route) === 1 && ($route[0] ?? null) instanceof CliRoute) {
-				return $route[0]->description;
+			if (count($route) === 1) {
+				$routeObj = $route[0];
+				if ($routeObj instanceof CliRoute) {
+					return $routeObj->description;
+				}
 			}
 
 			$formatted[$key.'/'] = $this->formatRoutes($route);
 		}
+		/** @var array<string, string|array<string, string>> $formatted */
 		return $formatted;
 	}
 
 	/**
-	 * @param array[] $routes
-	 * @param string  $currentKey
+	 * @param string[]|string[][] $routes
+	 * @param string              $currentKey
 	 *
 	 * @return void
 	 */
@@ -137,11 +152,14 @@ class Help extends CliController
 		$path = $request->args[0] ?? '';
 		if (empty($path)) {
 			CliHelper::printErrorMessage('Missing required argument (1)');
-			CliHelper::printRouteUsage($request->getRoute());
+			$route = $request->getRoute();
+			if (isset($route)) {
+				CliHelper::printRouteUsage($route);
+			}
 			exit(1);
 		}
 
-		/** @var CliRoute $route */
+		/** @var CliRoute|null $route */
 		$route = Router::getRoute(RequestMethod::CLI, explode('/', $path));
 		if (!isset($route)) {
 			CliHelper::printErrorMessage('Cannot find command "%s"'.PHP_EOL.'Use "%s list" to list all available commands.', $path, CliHelper::getCaller());

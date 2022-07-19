@@ -48,7 +48,11 @@
 	},
 	"require-dev": {
 		"roave/security-advisories": "dev-latest",
-		"phpunit/phpunit": "^9.5"
+		"phpunit/phpunit": "^9.5",
+		"phpstan/phpstan": "^1.8",
+		"phpstan/extension-installer": "^1.1",
+		"phpstan/phpstan-dibi": "^1.0",
+		"phpstan/phpstan-nette": "^1.0"
 	},
 	"license": "GPL-3.0-or-later",
 	"autoload": {
@@ -64,5 +68,10 @@
 			"name": "Tomáš Vojík",
 			"email": "vojik@wboy.cz"
 		}
-	]
+	],
+	"config": {
+		"allow-plugins": {
+			"phpstan/extension-installer": true
+		}
+	}
 }

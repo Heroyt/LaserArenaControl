@@ -9,6 +9,12 @@
  * @since     1.0
  */
 
+/**
+ * @param array $array
+ *
+ * @return mixed
+ * @phpstan-ignore-next-line
+ */
 function last(array $array) : mixed {
 	return end($array);
 }

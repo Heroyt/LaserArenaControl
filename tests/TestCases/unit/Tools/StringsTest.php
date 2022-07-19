@@ -8,6 +8,9 @@ use PHPUnit\Framework\TestCase;
 class StringsTest extends TestCase
 {
 
+	/**
+	 * @return string[][]
+	 */
 	public function camelCaseStrings() : array {
 		return [
 			['file_number', 'fileNumber'],
@@ -20,6 +23,9 @@ class StringsTest extends TestCase
 		];
 	}
 
+	/**
+	 * @return string[][]
+	 */
 	public function pascalCaseStrings() : array {
 		return [
 			['file_number', 'FileNumber'],
@@ -32,6 +38,9 @@ class StringsTest extends TestCase
 		];
 	}
 
+	/**
+	 * @return string[][]
+	 */
 	public function snakeCaseStrings() : array {
 		return [
 			['file_number', 'file_number'],

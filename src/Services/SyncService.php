@@ -6,9 +6,7 @@
 namespace App\Services;
 
 use App\GameModels\Factory\GameFactory;
-use App\GameModels\Game\Game;
-use Dibi\DateTime;
-use Lsr\Core\Exceptions\ValidationException;
+use Dibi\Row;
 use Lsr\Logging\Logger;
 use Throwable;
 
@@ -26,10 +24,11 @@ class SyncService
 	 *
 	 * @return void
 	 * @throws Throwable
+	 * @noinspection PhpIllegalArrayKeyTypeInspection
 	 */
 	public static function syncGames(int $limit = 5, ?float $timeout = null) : void {
 		$logger = new Logger(LOG_DIR, 'sync');
-		/** @var object{id_game:int,system:string,code:string,start:DateTime,end:DateTime,sync:int}[] $gameRows */
+		/** @var Row[] $gameRows */
 		$gameRows = GameFactory::queryGames(true)->where('[sync] = 0')->limit($limit)->fetchAll();
 
 		if (empty($gameRows)) {
@@ -56,10 +55,12 @@ class SyncService
 			if (!isset($systems[$row->system])) {
 				$systems[$row->system] = [];
 			}
-			$systems[$row->system][] = GameFactory::getByCode($row->code);
+			$game = GameFactory::getByCode($row->code);
+			if (isset($game)) {
+				$systems[$row->system][] = $game;
+			}
 		}
 
-		/** @var LigaApi $liga */
 		//$liga = App::getService('liga');
 
 		// Time it
@@ -106,21 +107,6 @@ class SyncService
 			echo $message.PHP_EOL;
 			//echo 'API time: '.$apiTime.'s'.PHP_EOL;
 			//echo 'DB time: '.$dbTime.'s'.PHP_EOL;
-		}
-	}
-
-	/**
-	 * @param Game[] $games
-	 *
-	 * @return void
-	 */
-	private static function setSyncFlag(array $games) : void {
-		foreach ($games as $game) {
-			$game->sync = true;
-			try {
-				$game->save();
-			} catch (ValidationException $e) {
-			}
 		}
 	}
 

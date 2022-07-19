@@ -16,6 +16,7 @@ use App\GameModels\Game\Scoring;
 use App\GameModels\Game\Timing;
 use App\Tools\AbstractResultsParser;
 use DateTime;
+use JsonException;
 use Lsr\Core\Exceptions\ModelNotFoundException;
 use Lsr\Core\Exceptions\ValidationException;
 
@@ -33,9 +34,10 @@ class ResultsParser extends AbstractResultsParser
 	 *
 	 * @return Game
 	 * @throws GameModeNotFoundException
-	 * @throws ResultsParseException
 	 * @throws ModelNotFoundException
+	 * @throws ResultsParseException
 	 * @throws ValidationException
+	 * @throws JsonException
 	 */
 	public function parse() : Game {
 		$game = new Game();
@@ -91,11 +93,19 @@ class ResultsParser extends AbstractResultsParser
 					$game->fileNumber = (int) $gameNumber;
 					$game->playerCount = (int) $playerCount;
 					if ($dateStart !== $this::EMPTY_DATE) {
-						$game->start = DateTime::createFromFormat('YmdHis', $dateStart);
+						$date = DateTime::createFromFormat('YmdHis', $dateStart);
+						if ($date === false) {
+							$date = null;
+						}
+						$game->start = $date;
 						$game->started = $now > $game->start;
 					}
 					if ($dateEnd !== $this::EMPTY_DATE) {
-						$game->importTime = DateTime::createFromFormat('YmdHis', $dateEnd);
+						$date = DateTime::createFromFormat('YmdHis', $dateEnd);
+						if ($date === false) {
+							$date = null;
+						}
+						$game->importTime = $date;
 					}
 					break;
 
@@ -110,15 +120,23 @@ class ResultsParser extends AbstractResultsParser
 					if ($argsCount !== 6 && $argsCount !== 5) {
 						throw new ResultsParseException('Invalid argument count in TIMING');
 					}
-					$game->timing = new Timing(before: $args[0], gameLength: $args[1], after: $args[2]);
+					$game->timing = new Timing(before: (int) $args[0], gameLength: (int) $args[1], after: (int) $args[2]);
 					$dateStart = $args[3];
 					if ($dateStart !== $this::EMPTY_DATE) {
-						$game->start = DateTime::createFromFormat('YmdHis', $dateStart);
+						$date = DateTime::createFromFormat('YmdHis', $dateStart);
+						if ($date === false) {
+							$date = null;
+						}
+						$game->start = $date;
 					}
 					$dateEnd = $args[4];
 					if ($dateEnd !== $this::EMPTY_DATE) {
-						$game->end = DateTime::createFromFormat('YmdHis', $dateEnd);
-						$game->finished = $now->getTimestamp() > ($game->end->getTimestamp() + $game->timing->after);
+						$date = DateTime::createFromFormat('YmdHis', $dateEnd);
+						if ($date === false) {
+							$date = null;
+						}
+						$game->end = $date;
+						$game->finished = $now->getTimestamp() > ($game->end?->getTimestamp() + $game->timing->after);
 					}
 					break;
 
@@ -179,6 +197,7 @@ class ResultsParser extends AbstractResultsParser
 					if ($argsCount !== 16 && $argsCount !== 14) {
 						throw new ResultsParseException('Invalid argument count in SCORING');
 					}
+					/** @var int[] $args */
 					$game->scoring = new Scoring(...$args);
 					break;
 
@@ -246,12 +265,12 @@ class ResultsParser extends AbstractResultsParser
 						throw new ResultsParseException('Invalid argument count in PACK');
 					}
 					$player = new Player();
-					$game->getPlayers()->set($player, $args[0]);
+					$game->getPlayers()->set($player, (int) $args[0]);
 					$player->setGame($game);
-					$player->vest = $args[0];
+					$player->vest = (int) $args[0];
 					$keysVests[$player->vest] = $currKey++;
 					$player->name = $args[1];
-					$player->teamNum = $args[2];
+					$player->teamNum = (int) $args[2];
 					break;
 
 				// TEAM contains team info
@@ -263,11 +282,11 @@ class ResultsParser extends AbstractResultsParser
 						throw new ResultsParseException('Invalid argument count in TEAM');
 					}
 					$team = new Team();
-					$game->getTeams()->set($team, $args[0]);
+					$game->getTeams()->set($team, (int) $args[0]);
 					$team->setGame($game);
 					$team->name = $args[1];
-					$team->color = $args[0];
-					$team->playerCount = $args[2];
+					$team->color = (int) $args[0];
+					$team->playerCount = (int) $args[2];
 					break;
 
 				// PACKX contains player's results
@@ -283,16 +302,16 @@ class ResultsParser extends AbstractResultsParser
 					if ($argsCount !== 7 && $argsCount !== 8) {
 						throw new ResultsParseException('Invalid argument count in PACKX');
 					}
-					/** @var Player $player */
-					$player = $game->getPlayers()->get($args[0]);
+					/** @var Player|null $player */
+					$player = $game->getPlayers()->get((int) $args[0]);
 					if (!isset($player)) {
 						throw new ResultsParseException('Cannot find Player - '.json_encode($args[0], JSON_THROW_ON_ERROR).PHP_EOL.$this->fileName.':'.PHP_EOL.$this->fileContents);
 					}
-					$player->score = $args[1];
-					$player->shots = $args[2];
-					$player->hits = $args[3];
-					$player->deaths = $args[4];
-					$player->position = $args[5];
+					$player->score = (int) $args[1];
+					$player->shots = (int) $args[2];
+					$player->hits = (int) $args[3];
+					$player->deaths = (int) $args[4];
+					$player->position = (int) $args[5];
 					break;
 
 				// PACKY contains player's additional results
@@ -316,26 +335,26 @@ class ResultsParser extends AbstractResultsParser
 					if ($argsCount !== 16 && $argsCount !== 22 && $argsCount !== 23) {
 						throw new ResultsParseException('Invalid argument count in PACKY');
 					}
-					/** @var Player $player */
-					$player = $game->getPlayers()->get($args[0]);
+					/** @var Player|null $player */
+					$player = $game->getPlayers()->get((int) $args[0]);
 					if (!isset($player)) {
 						throw new ResultsParseException('Cannot find Player - '.json_encode($args[0], JSON_THROW_ON_ERROR).PHP_EOL.$this->fileName.':'.PHP_EOL.$this->fileContents);
 					}
-					$player->shotPoints = $args[1] ?? 0;
-					$player->scoreBonus = $args[2] ?? 0;
-					$player->scorePowers = $args[3] ?? 0;
-					$player->scoreMines = $args[4] ?? 0;
-					$player->ammoRest = $args[5] ?? 0;
-					$player->accuracy = $args[6] ?? 0;
-					$player->minesHits = $args[7] ?? 0;
-					$player->bonus->agent = $args[8] ?? 0;
-					$player->bonus->invisibility = $args[9] ?? 0;
-					$player->bonus->machineGun = $args[10] ?? 0;
-					$player->bonus->shield = $args[11] ?? 0;
-					$player->hitsOther = $args[12] ?? 0;
-					$player->hitsOwn = $args[13] ?? 0;
-					$player->deathsOther = $args[14] ?? 0;
-					$player->deathsOwn = $args[15] ?? 0;
+					$player->shotPoints = (int) ($args[1] ?? 0);
+					$player->scoreBonus = (int) ($args[2] ?? 0);
+					$player->scorePowers = (int) ($args[3] ?? 0);
+					$player->scoreMines = (int) ($args[4] ?? 0);
+					$player->ammoRest = (int) ($args[5] ?? 0);
+					$player->accuracy = (int) ($args[6] ?? 0);
+					$player->minesHits = (int) ($args[7] ?? 0);
+					$player->bonus->agent = (int) ($args[8] ?? 0);
+					$player->bonus->invisibility = (int) ($args[9] ?? 0);
+					$player->bonus->machineGun = (int) ($args[10] ?? 0);
+					$player->bonus->shield = (int) ($args[11] ?? 0);
+					$player->hitsOther = (int) ($args[12] ?? 0);
+					$player->hitsOwn = (int) ($args[13] ?? 0);
+					$player->deathsOther = (int) ($args[14] ?? 0);
+					$player->deathsOwn = (int) ($args[15] ?? 0);
 					break;
 
 				// TEAMX contains information about team's score
@@ -346,13 +365,13 @@ class ResultsParser extends AbstractResultsParser
 					if ($argsCount !== 3) {
 						throw new ResultsParseException('Invalid argument count in TEAMX');
 					}
-					/** @var Team $team */
-					$team = $game->getTeams()->get($args[0]);
+					/** @var Team|null $team */
+					$team = $game->getTeams()->get((int) $args[0]);
 					if (!isset($team)) {
 						throw new ResultsParseException('Cannot find Team - '.json_encode($args[0], JSON_THROW_ON_ERROR).PHP_EOL.$this->fileName.':'.PHP_EOL.$this->fileContents);
 					}
-					$team->score = $args[1];
-					$team->position = $args[2];
+					$team->score = (int) $args[1];
+					$team->position = (int) $args[2];
 					break;
 
 				// HITS contain information about individual hits between players
@@ -362,13 +381,13 @@ class ResultsParser extends AbstractResultsParser
 					if ($argsCount < 2) {
 						throw new ResultsParseException('Invalid argument count in HITS');
 					}
-					/** @var Player $player */
-					$player = $game->getPlayers()->get($args[0]);
+					/** @var Player|null $player */
+					$player = $game->getPlayers()->get((int) $args[0]);
 					if (!isset($player)) {
 						throw new ResultsParseException('Cannot find Player - '.json_encode($args[0], JSON_THROW_ON_ERROR).PHP_EOL.$this->fileName.':'.PHP_EOL.$this->fileContents);
 					}
 					foreach ($game->getPlayers() as $player2) {
-						$player->addHits($player2, $args[$keysVests[$player2->vest] ?? -1] ?? 0);
+						$player->addHits($player2, (int) ($args[$keysVests[$player2->vest] ?? -1] ?? 0));
 					}
 					break;
 

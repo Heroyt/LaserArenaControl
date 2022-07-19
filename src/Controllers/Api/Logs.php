@@ -2,9 +2,10 @@
 
 namespace App\Controllers\Api;
 
-use App\Logging\ArchiveCreationException;
+use JsonException;
 use Lsr\Core\ApiController;
 use Lsr\Core\Requests\Request;
+use Lsr\Logging\Exceptions\ArchiveCreationException;
 use Lsr\Logging\Exceptions\DirectoryCreationException;
 use Lsr\Logging\Logger;
 use RecursiveDirectoryIterator;
@@ -15,11 +16,14 @@ use ZipArchive;
 class Logs extends ApiController
 {
 
+	/**
+	 * @throws JsonException
+	 */
 	public function show(Request $request) : void {
 		try {
 			$logger = new Logger(LOG_DIR.'api/', 'logs');
 			$logger->info('Showing logs ('.$request->getIp().')');
-		} catch (DirectoryCreationException $e) {
+		} catch (DirectoryCreationException) {
 			$logger = null;
 		}
 
@@ -38,6 +42,7 @@ class Logs extends ApiController
 			$logFile .= '.log';
 		}
 
+		/** @var string $contents */
 		$contents = file_get_contents(LOG_DIR.$logFile);
 
 		preg_match_all('/(^\[(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})] ([A-Z]+): ([^\[]+))/m', $contents, $matches);
@@ -58,12 +63,13 @@ class Logs extends ApiController
 	 *
 	 * @return void
 	 * @throws ArchiveCreationException
+	 * @throws JsonException
 	 */
 	public function download(Request $request) : void {
 		try {
 			$logger = new Logger(LOG_DIR.'api/', 'logs');
 			$logger->info('Downloading logs ('.$request->getIp().')');
-		} catch (DirectoryCreationException $e) {
+		} catch (DirectoryCreationException) {
 			$logger = null;
 		}
 

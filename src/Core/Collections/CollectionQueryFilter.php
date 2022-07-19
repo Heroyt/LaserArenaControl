@@ -7,9 +7,18 @@ namespace App\Core\Collections;
 use App\Core\Interfaces\CollectionInterface;
 use App\Core\Interfaces\CollectionQueryFilterInterface;
 
+/**
+ * @template T of \Lsr\Core\Models\Model
+ * @implements CollectionQueryFilterInterface<T>
+ */
 class CollectionQueryFilter implements CollectionQueryFilterInterface
 {
 
+	/**
+	 * @param string $name
+	 * @param T[]    $values
+	 * @param bool   $method
+	 */
 	public function __construct(
 		public string $name,
 		public array  $values = [],

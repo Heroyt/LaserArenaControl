@@ -8,6 +8,7 @@ use App\GameModels\Game\Evo5\Player;
 use App\GameModels\Game\Evo5\Team;
 use App\Tools\Evo5\ResultsParser;
 use Lsr\Exceptions\FileException;
+use Lsr\Helpers\Tracy\DbTracyPanel;
 use PHPUnit\Framework\TestCase;
 
 class ResultsParserTest extends TestCase
@@ -35,38 +36,61 @@ class ResultsParserTest extends TestCase
 	public function testParserAndDbSave(string $file) : void {
 		$parser = new ResultsParser($file);
 		$game = $parser->parse();
+
 		if (!$game->isFinished()) {
+			// Skip if not finished
 			self::assertTrue(true);
 			return;
 		}
-		self::assertTrue($game->save(), 'Game save failed for file: '.$file);
+
+		// Test DB save
+		self::assertTrue($game->save(), 'Game save failed for file: '.$file.' - '.last(DbTracyPanel::$events)->message);
 		self::assertNotNull($game->id, 'Game save failed for file: '.$file);
+
+		// Test if all players have been inserted into DB
 		/** @var Player $player */
 		foreach ($game->getPlayers() as $player) {
 			self::assertNotNull($player->id, 'Player save failed for file: '.$file);
 		}
+		// Test if all teams have been inserted into DB
 		/** @var Team $team */
 		foreach ($game->getTeams() as $team) {
 			self::assertNotNull($team->id, 'Team save failed for file: '.$file);
 		}
+
+		// Get game from DB
 		$game2 = new Game($game->id);
 		self::assertEquals(
 			json_decode(json_encode($game->getQueryData())),
 			json_decode(json_encode($game2->getQueryData())),
 			'Game data got from DB is not the same: '.$file
 		);
+
+		// Test all players
 		foreach ($game->getPlayers() as $player) {
+			// Get the same player from DB
 			$player2 = $game2->getPlayers()->get($player->vest);
+
 			self::assertNotNull($player2, 'Player does not exist in DB: '.$file);
-			echo json_encode($player->getQueryData()).PHP_EOL;
 			self::assertEquals(
 				json_decode(json_encode($player->getQueryData())),
 				json_decode(json_encode($player2->getQueryData())),
 				'Player data got from DB is not the same: '.$file
 			);
+
+			// Test if all players have a team assigned
+			if (!$game->mode->isSolo()) {
+				$team = $player->getTeam();
+				$team2 = $player2->getTeam();
+				self::assertNotNull($team);
+				self::assertSame($team2->color, $team->color);
+			}
 		}
+
+		// Test all teams
 		/** @var Team $team */
 		foreach ($game->getTeams() as $team) {
+			// Get the same team from DB
 			$team2 = $game2->getTeams()->get($team->color);
 			self::assertNotNull($team2, 'Team does not exist in DB: '.$file);
 			self::assertEquals(

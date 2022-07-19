@@ -8,3 +8,7 @@
  * @version   1.0
  * @since     1.0
  */
+
+function last(array $array) : mixed {
+	return end($array);
+}

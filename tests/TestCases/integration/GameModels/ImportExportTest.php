@@ -28,6 +28,7 @@ class ImportExportTest extends TestCase
 		'hitPlayers',
 		'description',
 		'mode',
+		'importTime',
 	];
 
 	public static function setUpBeforeClass() : void {

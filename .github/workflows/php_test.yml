@@ -3,22 +3,24 @@ name: PHP Unit test
 on:
     push:
         paths:
-            - src/*
-            - include/*
-            - tests/*
-            - config/*
+            - src/**
+            - include/**
+            - tests/**
+            - config/**
             - composer.json
             - phpunit.xml
+            - .github/workflows/php_test.yml
         branches: [ master ]
     pull_request:
         branches: [ master ]
         paths:
-            - src/*
-            - include/*
-            - tests/*
-            - config/*
+            - src/**
+            - include/**
+            - tests/**
+            - config/**
             - composer.json
             - phpunit.xml
+            - .github/workflows/php_test.yml
 
 jobs:
     build:

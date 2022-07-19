@@ -20,7 +20,7 @@ use Dibi\Exception;
 use Lsr\Core\DB;
 
 /**
- * @version 0.2
+ * @version 0.3
  */
 class DbInstall implements InstallInterface
 {
@@ -96,6 +96,7 @@ class DbInstall implements InstallInterface
 				`game_type` enum('TEAM','SOLO') NOT NULL DEFAULT 'TEAM',
 				`mode_name` varchar(100) DEFAULT NULL,
 				`file_time` datetime DEFAULT NULL,
+				`import_time` datetime DEFAULT NULL,
 				`start` datetime DEFAULT NULL,
 				`end` datetime DEFAULT NULL,
 				`file_number` int(11) DEFAULT NULL,
@@ -125,7 +126,10 @@ class DbInstall implements InstallInterface
 				'0.2' => [
 					"ADD `sync` TINYINT(1)  NOT NULL  DEFAULT 0  AFTER `ammo`",
 					"ADD `game_type` enum('TEAM','SOLO') NOT NULL DEFAULT 'TEAM' AFTER `id_mode`",
-				]
+				],
+				'0.3' => [
+					"ADD `import_time` datetime DEFAULT NULL AFTER `file_time`",
+				],
 			],
 		],
 		Team::TABLE                => [

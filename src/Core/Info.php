@@ -49,6 +49,7 @@ class Info
 	 */
 	public static function set(string $key, mixed $value) : void {
 		self::$info[$key] = $value; // Cache
+		/** @phpstan-ignore-next-line */
 		DB::replace(self::TABLE, [
 			[
 				'key'   => $key,

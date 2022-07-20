@@ -49,9 +49,11 @@ class Settings extends Controller
 		$vests = Vest::getAll();
 		$this->params['vests'] = [];
 		foreach (GameFactory::getSupportedSystems() as $system) {
+			/** @phpstan-ignore-next-line */
 			$this->params['vests'][$system] = [];
 		}
 		foreach ($vests as $vest) {
+			/** @phpstan-ignore-next-line */
 			$this->params['vests'][$vest->system][] = $vest;
 		}
 		$this->view('pages/settings/vests');

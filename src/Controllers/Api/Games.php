@@ -6,9 +6,10 @@ use App\GameModels\Factory\GameFactory;
 use App\Services\SyncService;
 use DateTime;
 use Exception;
+use JsonException;
 use Lsr\Core\ApiController;
-use Lsr\Core\Exceptions\ValidationException;
 use Lsr\Core\Requests\Request;
+use Throwable;
 
 /**
  * API controller for everything game related
@@ -20,6 +21,8 @@ class Games extends ApiController
 	 * @param Request $request
 	 *
 	 * @return void
+	 * @throws JsonException
+	 * @throws Throwable
 	 */
 	public function syncGames(Request $request) : void {
 		$limit = (int) ($request->params['limit'] ?? 5);
@@ -34,6 +37,7 @@ class Games extends ApiController
 	 * @param Request $request
 	 *
 	 * @return void
+	 * @throws JsonException
 	 */
 	public function listGames(Request $request) : void {
 		$date = null;
@@ -56,12 +60,13 @@ class Games extends ApiController
 	 * @param Request $request
 	 *
 	 * @return void
-	 * @throws ValidationException
+	 * @throws JsonException
+	 * @throws Throwable
 	 */
 	public function getGame(Request $request) : void {
 		$gameCode = $request->params['code'] ?? '';
 		if (empty($gameCode)) {
-			$this->respond(['Invalid code'], 400);
+			$this->respond(['error' => 'Invalid code'], 400);
 		}
 		$game = GameFactory::getByCode($gameCode);
 		if (!isset($game)) {

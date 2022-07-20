@@ -226,6 +226,7 @@ class Gate extends Controller
 			if (!empty($topScores)) {
 				$count = 0;
 				foreach ($topScores as $score) {
+					/** @phpstan-ignore-next-line */
 					$this->params['topScores'][] = PlayerFactory::getById($score->id_player, ['system' => $score->system]);
 					if ((++$count) > 3) {
 						break;

@@ -5,6 +5,8 @@
 @use 'variables/colors' as *;
 @use "sass:map";
 @use "functions";
+@import '~bootstrap/scss/variables';
+@import '~bootstrap/scss/maps';
 
 $utilityColors: functions.getUtilityColors($custom-colors);
 $theme-colors: map.merge($theme-colors, functions.getThemeColors($custom-colors));

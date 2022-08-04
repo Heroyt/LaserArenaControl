@@ -3,7 +3,7 @@
 }
 
 .container-print-wrapper {
-	aspect-ratio: (297 / 210);
+	aspect-ratio: calc(297 / 210);
 	background-position: center;
 	background-repeat: no-repeat;
 	background-size: contain;

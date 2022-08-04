@@ -146,6 +146,7 @@ msgstr "Kontext"
 
 # /src/Core/Controller.php:74
 # /vendor/lsr/core/src/Controller.php:79
+# /vendor/lsr/core/src/Controller.php:84
 msgctxt "pageTitles"
 msgid "404"
 msgstr "404"
@@ -495,6 +496,7 @@ msgstr "Množné číslo"
 
 # /src/Core/Controller.php:74
 # /vendor/lsr/core/src/Controller.php:79
+# /vendor/lsr/core/src/Controller.php:84
 msgctxt "pageTitles"
 msgid "Dashboard"
 msgstr "Úvod"
@@ -851,6 +853,7 @@ msgstr "#laserarenapísek"
 
 # /src/GameModels/Tip.php:26
 # /src/GameModels/Tip.php:27
+# /templates/pages/gate/@layout.latte:88
 msgctxt "tips"
 msgid "Zabití: 100 bodů, Smrt: -50 bodů, Zabití vlastního hráče: -25 bodů"
 msgstr "Zabití: 100 bodů, Smrt: -50 bodů, Zabití vlastního hráče: -25 bodů"
@@ -946,6 +949,7 @@ msgstr "Obecné"
 
 # /src/Core/Controller.php:74
 # /vendor/lsr/core/src/Controller.php:79
+# /vendor/lsr/core/src/Controller.php:84
 msgctxt "pageTitles"
 msgid "Settings"
 msgstr "Nastavení"
@@ -954,6 +958,7 @@ msgstr "Nastavení"
 # /templates/pages/settings/print.latte:215
 # /templates/pages/settings/print.latte:126
 # /templates/pages/settings/print.latte:202
+# /templates/pages/settings/print.latte:205
 msgctxt "results.style.settings"
 msgid "Name"
 msgstr "Jméno"
@@ -962,6 +967,7 @@ msgstr "Jméno"
 # /templates/pages/settings/print.latte:
 # /templates/pages/settings/print.latte:151
 # /templates/pages/settings/print.latte:223
+# /templates/pages/settings/print.latte:226
 msgctxt "results.style.settings"
 msgid "Primary color"
 msgstr "Primární barva"
@@ -970,6 +976,7 @@ msgstr "Primární barva"
 # /templates/pages/settings/print.latte:
 # /templates/pages/settings/print.latte:159
 # /templates/pages/settings/print.latte:230
+# /templates/pages/settings/print.latte:233
 msgctxt "results.style.settings"
 msgid "Dark color"
 msgstr "Tmavá barva"
@@ -978,6 +985,7 @@ msgstr "Tmavá barva"
 # /templates/pages/settings/print.latte:
 # /templates/pages/settings/print.latte:166
 # /templates/pages/settings/print.latte:238
+# /templates/pages/settings/print.latte:241
 msgctxt "results.style.settings"
 msgid "Light color"
 msgstr "Světlá barva"
@@ -986,6 +994,7 @@ msgstr "Světlá barva"
 # /templates/pages/settings/print.latte:215
 # /templates/pages/settings/print.latte:133
 # /templates/pages/settings/print.latte:209
+# /templates/pages/settings/print.latte:212
 msgctxt "results.style.settings"
 msgid "Background"
 msgstr "Pozadí"
@@ -1001,6 +1010,7 @@ msgstr "Tiskové styly"
 
 # /templates/pages/settings/print.latte:215
 # /templates/pages/settings/print.latte:178
+# /templates/pages/settings/print.latte:181
 msgctxt "results.style.settings"
 msgid "Add style"
 msgstr "Přidat styl"
@@ -1013,6 +1023,7 @@ msgstr "Přidat styl"
 # /templates/pages/settings/gate.latte:31
 # /templates/pages/settings/vests.latte:76
 # /templates/pages/settings/print.latte:181
+# /templates/pages/settings/print.latte:184
 msgctxt "actions"
 msgid "Send"
 msgstr "Odeslat"
@@ -1025,6 +1036,7 @@ msgstr "Odeslat"
 # /templates/pages/settings/print.latte:81
 # /templates/pages/settings/print.latte:113
 # /templates/pages/settings/print.latte:189
+# /templates/pages/settings/print.latte:192
 msgctxt "actions"
 msgid "Delete"
 msgstr "Smazat"
@@ -1324,6 +1336,7 @@ msgstr "nikdy"
 # /templates/pages/settings/print.latte:
 # /templates/pages/settings/print.latte:141
 # /templates/pages/settings/print.latte:216
+# /templates/pages/settings/print.latte:219
 msgctxt "results.style.settings"
 msgid "Landscape background"
 msgstr "Pozadí na šířku"
@@ -1332,6 +1345,8 @@ msgctxt "errors"
 msgid "Uploaded file is too large"
 msgstr "Nahraný soubor je příliš velký"
 
+# /src/Controllers/Settings.php:270
+# /src/Controllers/Settings.php:271
 msgctxt "errors"
 msgid "Database error occurred."
 msgstr "Nastala chyba databáze."

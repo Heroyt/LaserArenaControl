@@ -171,6 +171,9 @@
 					</div>
 				</div>
 			</div>
+			{if !isset($key)}
+				{var $key = 1}
+			{/if}
 		</div>
 		<div class="btn-group btn-group-lg my-4">
 			<button class="btn btn-primary" type="button" id="addStyle" data-key="{count($styles)}">

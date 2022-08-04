@@ -175,6 +175,7 @@ class Settings extends Controller
 				 */
 				foreach ($_POST['styles'] ?? [] as $key => $info) {
 					$style = new PrintStyle();
+					$style->id = $key;
 					$style->name = $info['name'];
 					$style->colorPrimary = $info['primary'];
 					$style->colorDark = $info['dark'];
@@ -245,9 +246,8 @@ class Settings extends Controller
 							}
 						}
 					}
-					$style->save();
 					$style->default = $style->id === (int) ($_POST['default-style'] ?? 0);
-					$style->save();
+					$style->insert();
 				}
 
 				/**
@@ -277,7 +277,7 @@ class Settings extends Controller
 			$this->respond([
 											 'success' => empty($request->passErrors),
 											 'errors'  => $request->passErrors,
-										 ]);
+										 ], empty($request->passErrors) ? 200 : 500);
 		}
 		App::redirect('settings-print', $request);
 	}

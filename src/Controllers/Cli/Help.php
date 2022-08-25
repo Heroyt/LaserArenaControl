@@ -113,7 +113,7 @@ class Help extends CliController
 				continue;
 			}
 			if (count($route) === 1) {
-				$routeObj = $route[0];
+				$routeObj = first($route);
 				if ($routeObj instanceof CliRoute) {
 					return $routeObj->description;
 				}

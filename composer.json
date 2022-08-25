@@ -27,7 +27,7 @@
 		"ext-simplexml": "*",
 		"ext-sockets": "*",
 		"ext-zip": "*",
-		"gettext/gettext": "^5.5",
+		"gettext/gettext": "^5.7",
 		"guzzlehttp/guzzle": "^7.4",
 		"latte/latte": "^3.0.0",
 		"nette/di": "^3.0",

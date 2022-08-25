@@ -20,6 +20,7 @@ msgstr ""
 
 # /src/Core/Controller.php:74
 # /vendor/lsr/core/src/Controller.php:79
+# /vendor/lsr/core/src/Controller.php:84
 msgctxt "pageTitles"
 msgid "Games list"
 msgstr "Zoznam hier"

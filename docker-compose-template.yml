@@ -1,9 +1,9 @@
 services:
     web:
         restart: always
-        build: .
+        image: heroyt/laser-arena-control:v0.2.4
         ports:
-            - "1234:80"
+            - "80:80"
             - "9999:9999"
         links:
             - "db"
@@ -13,21 +13,24 @@ services:
             - cache
         volumes:
             - lmx:/var/www/html/lmx
-            - /mnt/d/Docker/private:/var/www/html/private
+            - /home/vojik/lac/private:/var/www/html/private
+            - /home/vojik/lac/logs:/var/www/html/logs
     db:
         restart: always
         image: "mariadb:latest"
         ports:
             - "3307:3306"
         environment:
-            MARIADB_ROOT_PASSWORD: "super-secret-password"
+            MARIADB_ROOT_PASSWORD: ""
             MARIADB_DATABASE: "lac"
+            MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: "true"
         volumes:
-            - /mnt/d/Docker/mysql:/var/lib/mysql
+            - /home/vojik/lac/mysql:/var/lib/mysql
     cache:
         restart: always
-        image: memcached-alpine:latest
-        ports: 11211:11211
+        image: memcached:alpine
+        ports:
+            - "11211:11211"
 volumes:
     lmx:
         driver: local

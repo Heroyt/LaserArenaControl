@@ -16,7 +16,7 @@ $custom-colors: (
 		"600": ("color": #868e96, "alias": 'grey'),
 		"700": ("color": #495057, "alias": 'dark-grey'),
 		"800": #343a40,
-		"900": #212529,
+		"900": ('color': #212529, 'alias': 'dark'),
 	),
 	"blue": (
 		"100": #d6f4fe,

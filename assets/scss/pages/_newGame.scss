@@ -1,0 +1,67 @@
+#new-game-content {
+	display: grid;
+	grid-gap: 1rem;
+	grid-template-columns: repeat(12, 1fr);
+	grid-template-rows: repeat(10, 3rem);
+
+	#controls {
+		grid-column: 1 / 13;
+		grid-row: 1 / 2;
+	}
+
+	#vests {
+		grid-column: 1 / 8;
+		grid-row: 2 / 11;
+		overflow-y: auto;
+	}
+
+	#game-mode {
+		grid-column: 8 / 13;
+		grid-row: 2 / 4;
+	}
+
+	#music {
+		grid-column: 8 / 13;
+		grid-row: 4 / 6;
+	}
+
+	#teams {
+		grid-column: 8 / 13;
+		grid-row: 6 / 8;
+	}
+}
+
+label.team-color {
+	content: ' ';
+	cursor: pointer;
+	display: flex;
+	opacity: .4;
+	position: relative;
+	transition: opacity .1s ease;
+	width: 2rem;
+
+	.team-color-input:checked + & {
+		opacity: 1;
+	}
+}
+
+.team-color-input {
+	display: none;
+}
+
+label.player-skill {
+	align-items: center;
+	cursor: pointer;
+	display: none;
+	justify-content: center;
+	position: relative;
+	width: 2.5rem;
+
+	.player-skill-input:checked + & {
+		display: flex;
+	}
+}
+
+.player-skill-input {
+	display: none;
+}

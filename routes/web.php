@@ -5,17 +5,17 @@
  * @author Tomáš Vojík <xvojik00@stud.fit.vutbr.cz>, <vojik@wboy.cz>
  */
 
-use App\Controllers\Dashboard;
 use App\Controllers\GamesList;
 use App\Controllers\Gate;
 use App\Controllers\Lang;
+use App\Controllers\NewGame;
 use App\Controllers\Results;
 use App\Controllers\Settings;
 use Lsr\Core\Routing\Route;
 
 Route::get('/lang/{lang}', [Lang::class, 'setLang']);
 
-Route::get('/', [Dashboard::class, 'show'])->name('dashboard');
+Route::get('/', [NewGame::class, 'show'])->name('dashboard');
 Route::get('/results', [Results::class, 'show'])->name('results');
 Route::get('/results/{code}', [Results::class, 'show'])->name('results-game');
 Route::get('/results/{code}/print', [Results::class, 'printGame'])->name('print');

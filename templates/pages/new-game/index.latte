@@ -1,0 +1,133 @@
+{layout '../../@layout.latte'}
+
+{varType App\GameModels\Vest[] $vests}
+{varType string $system}
+{varType string[] $colors}
+{varType App\GameModels\Game\GameModes\AbstractMode[] $gameModes}
+
+{block content}
+	<div id="new-game-content" class="w-100">
+		<section id="controls">
+			<div class="btn-group">
+				<button type="submit" name="action" value="load" class="btn btn-warning">
+					<i class="fa-solid fa-circle-chevron-up"></i>
+					{lang 'Nahrát hru', context: 'game.actions'}
+				</button>
+				<button type="submit" name="action" value="start" class="btn btn-success">
+					<i class="fa-solid fa-circle-play"></i>
+					{lang 'Spustit hru', context: 'game.actions'}
+				</button>
+				<button type="submit" name="action" value="stop" class="btn btn-danger">
+					<i class="fa-solid fa-circle-stop"></i>
+					{lang 'Ukončit hru', context: 'game.actions'}
+				</button>
+			</div>
+		</section>
+		<section id="vests">
+			{foreach $vests as $vest}
+				{include vestRow, $vest}
+			{/foreach}
+		</section>
+		<section id="game-mode">
+			<label for="game-mode-select">
+				{lang 'Herní mód', context: 'game'}:
+			</label>
+			<div class="input-group">
+				<select name="game-mode" id="game-mode-select" class="form-select">
+					<option n:foreach="$gameModes as $mode" value="{$mode->id}" data-type="{$mode->type->value}"
+															data-description="{lang $mode->description, context: 'gameModes'}">
+						{lang $mode->name, context: 'gameModes'}
+					</option>
+				</select>
+				<button type="button" data-toggle="shuffle" data-target="#game-mode-select" class="btn btn-purple-500">
+					<i class="fa-solid fa-shuffle"></i>
+				</button>
+			</div>
+			<div id="game-mode-description" class="select-description text-muted" data-target="#game-mode-select"></div>
+		</section>
+		<section id="music">
+			<label for="music-select">
+				{lang 'Hudební mód', context: 'game'}:
+			</label>
+			<div class="input-group">
+				<select name="music" id="music-select" class="form-select">
+				</select>
+				<button type="button" data-toggle="shuffle" data-target="#music-select" class="btn btn-purple-500">
+					<i class="fa-solid fa-shuffle"></i>
+				</button>
+			</div>
+		</section>
+		<section id="teams" class="text-center">
+			<label for="team-color">
+				{lang 'Náhodné rozdělení týmů', context: 'game'}:
+			</label>
+			<div class="d-flex align-items-stretch justify-content-center w-100 mb-3 mt-2" style="height: 2rem;">
+				{foreach $colors as $key => $color}
+					<input class="team-color-input" type="checkbox" value="{$key}"
+						   id="team-color-{$key}">
+					<label class="team-color {if $iterator->first}rounded-start{elseif $iterator->last}rounded-end{/if}"
+						   style="background-color: {$color|noescape}; width: 3rem;"
+						   for="team-color-{$key}">&nbsp;</label>
+				{/foreach}
+			</div>
+			<div class="btn-group">
+				<button type="button" class="btn btn-purple-500" id="random-teams">
+					<i class="fa-solid fa-shuffle"></i>
+					{lang 'Náhodně', context: 'actions'}
+				</button>
+				<button type="button" class="btn btn-success" id="random-fair-teams">
+					<i class="fa-solid fa-star"></i>
+					{lang 'Náhodně fér', context: 'actions'}
+				</button>
+			</div>
+		</section>
+	</div>
+{/block}
+
+{define vestRow}
+	{varType App\GameModels\Vest $vest}
+	<div class="input-group my-2 shadow">
+		<label for="player-name-{$vest->vestNum}"
+			   class="
+			   input-group-text text-center
+				{if $vest->status === App\GameModels\Game\Enums\VestStatus::PLAYABLE}
+				bg-warning text-bg-warning
+				{elseif $vest->status === App\GameModels\Game\Enums\VestStatus::BROKEN}
+				bg-danger text-bg-danger
+				{/if}"
+			   style="width: 2.5em;"
+				{if $vest->status !== App\GameModels\Game\Enums\VestStatus::OK}
+					data-toggle="tooltip"
+					title="{$vest->info}"
+				{/if}
+		>
+			{$vest->vestNum}
+		</label>
+		<input id="player-name-{$vest->vestNum}" type="text" class="form-control player-name"
+			   name="player[{$vest->vestNum}][name]" maxlength="12">
+		{foreach $colors as $key => $color}
+			<input class="team-color-input" type="radio" name="player[{$vest->vestNum}][team]" value="{$key}"
+				   id="team-color-{$vest->vestNum}-{$key}">
+			<label class="team-color" style="background-color: {$color|noescape};"
+				   for="team-color-{$vest->vestNum}-{$key}">&nbsp;</label>
+		{/foreach}
+		<input type="radio" name="player[{$vest->vestNum}][skill]" value="1" class="player-skill-input"
+			   id="player-skill-{$vest->vestNum}-1" checked/>
+		<label class="player-skill bg-grey" for="player-skill-{$vest->vestNum}-2">
+			{svgIcon '1-stars'}
+		</label>
+		<input type="radio" name="player[{$vest->vestNum}][skill]" value="2" class="player-skill-input"
+			   id="player-skill-{$vest->vestNum}-2"/>
+		<label class="player-skill bg-primary" for="player-skill-{$vest->vestNum}-3">
+			{svgIcon '2-stars'}
+		</label>
+		<input type="radio" name="player[{$vest->vestNum}][skill]" value="3" class="player-skill-input"
+			   id="player-skill-{$vest->vestNum}-3"/>
+		<label class="player-skill bg-danger" for="player-skill-{$vest->vestNum}-1">
+			{svgIcon '3-stars'}
+		</label>
+		<button type="button" class="btn btn-danger clear">
+			<i class="fa-solid fa-trash"></i>
+		</button>
+	</div>
+{/define}

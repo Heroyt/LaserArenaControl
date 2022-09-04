@@ -1,4 +1,4 @@
-FROM node:18.4.0-slim AS node_base
+FROM node:18.8.0-slim AS node_base
 FROM php:8.1-apache as setup
 
 COPY --from=node_base / /

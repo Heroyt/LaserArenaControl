@@ -21,9 +21,8 @@ services:
         ports:
             - "3307:3306"
         environment:
-            MARIADB_ROOT_PASSWORD: ""
+            MARIADB_ROOT_PASSWORD: "laser-arena-control"
             MARIADB_DATABASE: "lac"
-            MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: "true"
         volumes:
             - /home/vojik/lac/mysql:/var/lib/mysql
     cache:

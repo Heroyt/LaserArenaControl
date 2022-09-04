@@ -1,0 +1,84 @@
+version: "3"
+services:
+    db:
+        restart: always
+        image: "mariadb:10.6.9"
+        ports:
+            - "3306:3306"
+        environment:
+            MYSQL_ROOT_PASSWORD: "laser-arena-control"
+            MARIADB_ROOT_PASSWORD: "laser-arena-control"
+            MYSQL_DATABASE: "lac"
+            MARIADB_DATABASE: "lac"
+        volumes:
+            - ./docker/mysql:/var/lib/mysql
+        networks:
+            - backend
+    cache:
+        restart: always
+        image: memcached:alpine
+        ports:
+            - "11211:11211"
+        networks:
+            - backend
+    php:
+        restart: always
+        image: "heroyt/laser-arena-control:nginx-latest"
+        working_dir: /var/www/
+        ports:
+            - "9999:9999"
+        links:
+            - db
+            - cache
+        depends_on:
+            - db
+            - cache
+        volumes:
+            - app-data:/var/www
+            - lmx:/var/www/lmx
+            - ./docker/private:/var/www/private
+        networks:
+            - backend
+    web:
+        restart: always
+        image: nginx
+        depends_on:
+            - php
+            - db
+            - cache
+        ports:
+            - "8001:80"
+        networks:
+            - backend
+            - frontend
+        links:
+            - php
+        volumes:
+            - app-data:/var/www
+            - ./docker/nginx:/etc/nginx
+    apache:
+        restart: always
+        image: heroyt/laser-arena-control:latest
+        ports:
+            - "8002:80"
+        links:
+            - db
+            - cache
+        depends_on:
+            - db
+            - cache
+        volumes:
+            - apache-data:/var/www/html
+            - lmx:/var/www/html/lmx
+            - ./docker/private:/var/www/html/private
+        networks:
+            - backend
+            - frontend
+volumes:
+    apache-data:
+    app-data:
+    lmx:
+        driver: local
+networks:
+    backend:
+    frontend:

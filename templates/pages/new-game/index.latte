@@ -24,6 +24,11 @@
 			</div>
 		</section>
 		<section id="vests">
+			<div class="text-end">
+				<button type="button" class="btn btn-danger" id="clear-all">
+					<i class="fa-solid fa-trash"></i>
+				</button>
+			</div>
 			{foreach $vests as $vest}
 				{include vestRow, $vest}
 			{/foreach}
@@ -39,7 +44,8 @@
 						{lang $mode->name, context: 'gameModes'}
 					</option>
 				</select>
-				<button type="button" data-toggle="shuffle" data-target="#game-mode-select" class="btn btn-purple-500">
+				<button type="button" data-toggle="shuffle" title="{lang 'Náhodně', context: 'actions'}"
+						data-target="#game-mode-select" class="btn btn-purple-500">
 					<i class="fa-solid fa-shuffle"></i>
 				</button>
 			</div>
@@ -52,7 +58,8 @@
 			<div class="input-group">
 				<select name="music" id="music-select" class="form-select">
 				</select>
-				<button type="button" data-toggle="shuffle" data-target="#music-select" class="btn btn-purple-500">
+				<button type="button" data-toggle="shuffle" title="{lang 'Náhodně', context: 'actions'}"
+						data-target="#music-select" class="btn btn-purple-500">
 					<i class="fa-solid fa-shuffle"></i>
 				</button>
 			</div>
@@ -86,28 +93,25 @@
 
 {define vestRow}
 	{varType App\GameModels\Vest $vest}
-	<div class="input-group my-2 shadow">
-		<label for="player-name-{$vest->vestNum}"
-			   class="
-			   input-group-text text-center
-				{if $vest->status === App\GameModels\Game\Enums\VestStatus::PLAYABLE}
-				bg-warning text-bg-warning
-				{elseif $vest->status === App\GameModels\Game\Enums\VestStatus::BROKEN}
-				bg-danger text-bg-danger
-				{/if}"
-			   style="width: 2.5em;"
-				{if $vest->status !== App\GameModels\Game\Enums\VestStatus::OK}
-					data-toggle="tooltip"
-					title="{$vest->info}"
-				{/if}
-		>
-			{$vest->vestNum}
+	<div class="input-group my-2 shadow-in-place vest-row rounded" data-vest="{$vest->vestNum}">
+		<label for="player-name-{$vest->vestNum}" class="input-group-text px-2 bg-light text-black vest-num">
+			<div>
+				{$vest->vestNum}
+			</div>
+			{if $vest->status === App\GameModels\Game\Enums\VestStatus::PLAYABLE}
+				<div class="fa-solid fa-circle-exclamation text-warning" data-toggle="tooltip"
+					 title="{$vest->info}"></div>
+			{elseif $vest->status === App\GameModels\Game\Enums\VestStatus::BROKEN}
+				<div class="fa-solid fa-circle-exclamation text-danger" data-toggle="tooltip"
+					 title="{$vest->info}"></div>
+			{/if}
 		</label>
 		<input id="player-name-{$vest->vestNum}" type="text" class="form-control player-name"
 			   name="player[{$vest->vestNum}][name]" maxlength="12">
 		{foreach $colors as $key => $color}
 			<input class="team-color-input" type="radio" name="player[{$vest->vestNum}][team]" value="{$key}"
-				   id="team-color-{$vest->vestNum}-{$key}">
+				   id="team-color-{$vest->vestNum}-{$key}" data-text="{\App\Tools\Color::getFontColor($color)}"
+				   data-color="{$color|noescape}">
 			<label class="team-color" style="background-color: {$color|noescape};"
 				   for="team-color-{$vest->vestNum}-{$key}">&nbsp;</label>
 		{/foreach}

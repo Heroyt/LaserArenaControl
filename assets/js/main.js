@@ -8,6 +8,7 @@ import {startLoading, stopLoading} from "./loaders";
 import * as bootstrap from "bootstrap";
 import initVestsSettings from "./pages/settings/vests";
 import initGamesList from "./pages/gamesList";
+import initNewGamePage from "./pages/newGame";
 
 axios.defaults.headers.post['X-Requested-With'] = 'XMLHttpRequest';
 axios.defaults.headers.get['X-Requested-With'] = 'XMLHttpRequest';
@@ -148,6 +149,9 @@ window.addEventListener("load", () => {
 		});
 	});
 	document.querySelectorAll('[data-toggle="shuffle"]').forEach(element => {
+		if (element.title) {
+			new bootstrap.Tooltip(element);
+		}
 		if (!element.dataset.target) {
 			// Missing target
 			return;
@@ -185,16 +189,7 @@ window.addEventListener("load", () => {
 	} else if (page.routeName && page.routeName === 'gate') {
 		initGate();
 	} else if (page.routeName && page.routeName === 'dashboard') {
-		const ws = new WebSocket('ws://' + window.location.hostname + ':9999');
-		ws.onmessage = e => {
-			console.log(e);
-		};
-		const input = document.getElementById('socket');
-		if (input) {
-			input.addEventListener('change', () => {
-				ws.send(input.value + '\n');
-			});
-		}
+		initNewGamePage();
 	}
 
 	// Game timer

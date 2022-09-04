@@ -12,7 +12,7 @@
 	#vests {
 		grid-column: 1 / 8;
 		grid-row: 2 / 11;
-		overflow-y: auto;
+		//overflow-y: auto;
 	}
 
 	#game-mode {
@@ -28,6 +28,16 @@
 	#teams {
 		grid-column: 8 / 13;
 		grid-row: 6 / 8;
+	}
+
+	.vest-num {
+		display: flex;
+		justify-content: space-between;
+		width: 3.5em;
+
+		.fa-solid {
+			text-shadow: 0 0 1rem rgba(0, 0, 0, .6);
+		}
 	}
 }
 

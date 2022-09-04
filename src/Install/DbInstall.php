@@ -15,9 +15,15 @@ use App\GameModels\Game\PrintTemplate;
 use App\GameModels\Tip;
 use App\GameModels\Vest;
 use App\Services\EventService;
-use Dibi\DriverException;
 use Dibi\Exception;
 use Lsr\Core\DB;
+use Lsr\Core\Exceptions\CyclicDependencyException;
+use Lsr\Core\Migrations\MigrationLoader;
+use Lsr\Core\Models\Model;
+use Lsr\Exceptions\FileException;
+use Nette\Utils\AssertionException;
+use ReflectionClass;
+use ReflectionException;
 
 /**
  * @version 0.3
@@ -27,15 +33,7 @@ class DbInstall implements InstallInterface
 
 	/** @var array{definition:string, modifications:array<string,string[]>}[] */
 	public const TABLES = [
-		'page_info'                => [
-			'definition'    => "(
-				`key` varchar(30) NOT NULL DEFAULT '',
-				`value` text DEFAULT NULL,
-				PRIMARY KEY (`key`)
-			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;",
-			'modifications' => [],
-		],
-		AbstractMode::TABLE        => [
+		AbstractMode::TABLE  => [
 			'definition'    => "(
 				`id_mode` int(11) unsigned NOT NULL AUTO_INCREMENT,
 				`system` varchar(10) DEFAULT NULL,
@@ -79,7 +77,7 @@ class DbInstall implements InstallInterface
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Seznam a nastavení módů.';",
 			'modifications' => [],
 		],
-		'game_modes-names'         => [
+		'game_modes-names'   => [
 			'definition'    => "(
 				`id_mode` int(11) unsigned NOT NULL,
 				`sysName` varchar(20) NOT NULL,
@@ -265,6 +263,9 @@ class DbInstall implements InstallInterface
 		],
 	];
 
+	/** @var array<class-string, string> */
+	protected static array $classTables = [];
+
 	/**
 	 * Install all database tables
 	 *
@@ -273,17 +274,45 @@ class DbInstall implements InstallInterface
 	 * @return bool
 	 */
 	public static function install(bool $fresh = false) : bool {
+		// Load migration files
+		$loader = new MigrationLoader(ROOT.'config/migrations.neon');
+		try {
+			$loader->load();
+		} catch (CyclicDependencyException|FileException|\Nette\Neon\Exception|AssertionException $e) {
+			echo "\e[0;31m".$e->getMessage()."\e[m\n".$e->getTraceAsString()."\n";
+			return false;
+		}
+
+		/** @var array{definition:string, modifications?:array<string,string[]>}[] $tables */
+		$tables = array_merge($loader->migrations, self::TABLES);
+
 		try {
 			if ($fresh) {
-				foreach (array_reverse(self::TABLES) as $tableName => $definition) {
+				// Drop all tables in reverse order
+				foreach (array_reverse($tables) as $tableName => $definition) {
+					if (class_exists($tableName)) {
+						$tableName = static::getTableNameFromClass($tableName);
+						if ($tableName === null) {
+							continue;
+						}
+					}
 					DB::getConnection()->query("DROP TABLE IF EXISTS %n;", $tableName);
 				}
 			}
 
-			foreach (self::TABLES as $tableName => $info) {
+			// Create tables
+			foreach ($tables as $tableName => $info) {
+				if (class_exists($tableName)) {
+					$tableName = static::getTableNameFromClass($tableName);
+					if ($tableName === null) {
+						continue;
+					}
+				}
 				$definition = $info['definition'];
 				DB::getConnection()->query("CREATE TABLE IF NOT EXISTS %n $definition", $tableName);
 			}
+
+			// Game mode view
 			DB::getConnection()->query("DROP VIEW IF EXISTS `vModesNames`");
 			DB::getConnection()->query("CREATE VIEW IF NOT EXISTS `vModesNames`
 AS SELECT
@@ -294,23 +323,32 @@ AS SELECT
    `a`.`type` AS `type`,
    `b`.`sysName` AS `sysName`
 FROM (`game_modes` `a` left join `game_modes-names` `b` on(`a`.`id_mode` = `b`.`id_mode`));");
-			if (!$fresh) {
-				try {
-					$currVersion = Info::get('db_version', 0.0);
-				} catch (DriverException) {
-					$currVersion = 0.0;
-				}
 
-				$maxVersion = $currVersion;
-				foreach (self::TABLES as $tableName => $info) {
-					foreach ($info['modifications'] as $version => $queries) {
-						$version = (float) $version;
-						if ($version <= $currVersion) {
+			if (!$fresh) {
+				/** @var array<string,string> $tableVersions */
+				$tableVersions = (array) Info::get('db_version', []);
+
+				// Update all tables if there have been any changes to the tables
+				foreach ($tables as $tableName => $info) {
+					if (class_exists($tableName)) {
+						$tableName = static::getTableNameFromClass($tableName);
+						if ($tableName === null) {
 							continue;
 						}
-						if ($version > $maxVersion) {
+					}
+					$currTableVersion = $tableVersions[$tableName] ?? '0.0';
+					$maxVersion = $currTableVersion;
+					foreach ($info['modifications'] ?? [] as $version => $queries) {
+						// Check versions
+						if (version_compare($currTableVersion, $version) > 0) {
+							// Skip if this version have already been processed
+							continue;
+						}
+						if (version_compare($maxVersion, $version) < 0) {
 							$maxVersion = $version;
 						}
+
+						// Run ALTER TABLE queries for current version
 						foreach ($queries as $query) {
 							echo 'Altering table: '.$tableName.' - '.$query.PHP_EOL;
 							try {
@@ -324,18 +362,56 @@ FROM (`game_modes` `a` left join `game_modes-names` `b` on(`a`.`id_mode` = `b`.`
 							}
 						}
 					}
+					$tableVersions[$tableName] = $maxVersion;
 				}
+
+				// Update table version cache
 				try {
-					Info::set('db_version', $maxVersion);
+					Info::set('db_version', $tableVersions);
 				} catch (Exception) {
 				}
 			}
 		} catch (Exception $e) {
-			echo $e->getCode().' - '.$e->getMessage().PHP_EOL.$e->getSql().PHP_EOL;
+			echo "\e[0;31m".$e->getMessage()."\e[m\n".$e->getSql()."\n";
 			return false;
 		}
 
 		return true;
+	}
+
+	/**
+	 * Get a table name for a Model class
+	 *
+	 * @param class-string $className
+	 *
+	 * @return string|null
+	 */
+	protected static function getTableNameFromClass(string $className) : ?string {
+		// Check static cache
+		if (isset(static::$classTables[$className])) {
+			return static::$classTables[$className];
+		}
+
+		// Try to get table name from reflection
+		try {
+			$reflection = new ReflectionClass($className);
+		} catch (ReflectionException) { // @phpstan-ignore-line
+			// Class not found
+			return null;
+		}
+
+		// Check if the class is instance of Model
+		while ($parent = $reflection->getParentClass()) {
+			if ($parent->getName() === Model::class) {
+				// Cache result
+				static::$classTables[$className] = $className::TABLE;
+				return $className::TABLE;
+			}
+			$reflection = $parent;
+		}
+
+		// Class is not a Model
+		return null;
 	}
 
 }

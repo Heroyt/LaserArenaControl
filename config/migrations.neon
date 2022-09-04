@@ -1,0 +1,12 @@
+includes:
+	- vendor/lsr/core/migrations.neon
+	- vendor/lsr/auth/migrations.neon
+tables:
+	page_info:
+		definition: '''
+    		(
+    			`key` varchar(30) NOT NULL DEFAULT '',
+    			`value` text DEFAULT NULL,
+    			PRIMARY KEY (`key`)
+    		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+    		'''

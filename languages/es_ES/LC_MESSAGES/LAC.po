@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: Spanish\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2022-09-04 14:27\n"
+"PO-Revision-Date: 2022-09-04 21:03\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -160,6 +160,7 @@ msgstr ""
 
 # /src/Core/Controller.php:74
 # /vendor/lsr/core/src/Controller.php:79
+# /vendor/lsr/core/src/Controller.php:84
 msgctxt "pageTitles"
 msgid "Results"
 msgstr ""
@@ -181,6 +182,8 @@ msgstr ""
 # /templates/results/templates/graphical.latte:116
 # /templates/results/templates/default.latte:72
 # /templates/pages/new-game/index.latte:38
+# /templates/pages/new-game/index.latte:39
+# /templates/pages/new-game/index.latte:44
 msgctxt "gameModes"
 msgid "Základny"
 msgstr ""
@@ -503,6 +506,8 @@ msgid "No games had been played on this date."
 msgstr ""
 
 # /templates/pages/new-game/index.latte:38
+# /templates/pages/new-game/index.latte:39
+# /templates/pages/new-game/index.latte:44
 msgctxt "gameModes"
 msgid "CSGO"
 msgstr ""
@@ -511,6 +516,8 @@ msgstr ""
 # /templates/results/templates/default.latte:72
 # /templates/results/templates/graphical.latte:110
 # /templates/pages/new-game/index.latte:38
+# /templates/pages/new-game/index.latte:39
+# /templates/pages/new-game/index.latte:44
 msgctxt "gameModes"
 msgid "Team deathmach"
 msgstr ""
@@ -526,6 +533,8 @@ msgstr ""
 # /templates/results/templates/graphical.latte:116
 # /templates/results/templates/default.latte:72
 # /templates/pages/new-game/index.latte:38
+# /templates/pages/new-game/index.latte:39
+# /templates/pages/new-game/index.latte:44
 msgctxt "gameModes"
 msgid "Deathmach"
 msgstr ""
@@ -748,6 +757,7 @@ msgstr ""
 # /templates/results/@printLayout.latte:112
 # /src/GameModels/Tip.php:27
 # /templates/pages/gate/@layout.latte:88
+# /templates/results/@printLayout.latte:108
 msgctxt "tips"
 msgid "Pro vyřízení osobních sporů je aréna ideální."
 msgstr ""
@@ -853,6 +863,7 @@ msgstr ""
 # /src/GameModels/Tip.php:26
 # /src/GameModels/Tip.php:27
 # /templates/pages/gate/@layout.latte:88
+# /templates/results/@printLayout.latte:108
 msgctxt "tips"
 msgid "Zabití: 100 bodů, Smrt: -50 bodů, Zabití vlastního hráče: -25 bodů"
 msgstr ""
@@ -1410,6 +1421,8 @@ msgid "Optional filter for command groups"
 msgstr ""
 
 # /templates/pages/new-game/index.latte:38
+# /templates/pages/new-game/index.latte:39
+# /templates/pages/new-game/index.latte:44
 msgctxt "gameModes"
 msgid "Survival"
 msgstr ""
@@ -1471,6 +1484,8 @@ msgid "Failed to save settings."
 msgstr ""
 
 # /templates/pages/new-game/index.latte:38
+# /templates/pages/new-game/index.latte:39
+# /templates/pages/new-game/index.latte:44
 msgctxt "gameModes"
 msgid "T.M.A - solo"
 msgstr ""
@@ -1664,6 +1679,8 @@ msgstr ""
 # /templates/results/templates/graphical.latte:116
 # /templates/results/templates/default.latte:72
 # /templates/pages/new-game/index.latte:38
+# /templates/pages/new-game/index.latte:39
+# /templates/pages/new-game/index.latte:44
 msgctxt "gameModes"
 msgid "100 nábojů"
 msgstr ""
@@ -1838,6 +1855,8 @@ msgstr ""
 # /templates/results/templates/graphical.latte:116
 # /templates/results/templates/default.latte:72
 # /templates/pages/new-game/index.latte:38
+# /templates/pages/new-game/index.latte:39
+# /templates/pages/new-game/index.latte:44
 msgctxt "gameModes"
 msgid "Barvičky"
 msgstr ""
@@ -2064,6 +2083,8 @@ msgstr ""
 
 # /templates/pages/game/leaderboard.latte:24
 # /templates/pages/new-game/index.latte:38
+# /templates/pages/new-game/index.latte:39
+# /templates/pages/new-game/index.latte:44
 msgctxt "gameModes"
 msgid "Apokalypsa"
 msgstr ""
@@ -2116,86 +2137,128 @@ msgid "Ukončit hru"
 msgstr ""
 
 # /templates/pages/new-game/index.latte:33
+# /templates/pages/new-game/index.latte:38
 msgctxt "game"
 msgid "Herní mód"
 msgstr ""
 
 # /templates/pages/new-game/index.latte:37
+# /templates/pages/new-game/index.latte:38
+# /templates/pages/new-game/index.latte:43
 msgctxt "gameModes"
 msgid "Classic team game."
 msgstr ""
 
 # /templates/pages/new-game/index.latte:37
+# /templates/pages/new-game/index.latte:38
+# /templates/pages/new-game/index.latte:43
 msgctxt "gameModes"
 msgid "Classic free for all game."
 msgstr ""
 
 # /templates/pages/new-game/index.latte:37
+# /templates/pages/new-game/index.latte:38
+# /templates/pages/new-game/index.latte:43
 msgctxt "gameModes"
 msgid "Náročná hra o přežití se 3mi životy."
 msgstr ""
 
 # /templates/pages/new-game/index.latte:37
+# /templates/pages/new-game/index.latte:38
+# /templates/pages/new-game/index.latte:43
 msgctxt "gameModes"
 msgid "Strategická hra, kdy 2 týmy bojují proti sobě o zničení základny druhého týmu."
 msgstr ""
 
 # /templates/pages/new-game/index.latte:37
+# /templates/pages/new-game/index.latte:38
+# /templates/pages/new-game/index.latte:43
 msgctxt "gameModes"
 msgid "Rychlá, šílená hra. Po pár smrtích se přebarvíš na barvu toho, kdo tě trefil."
 msgstr ""
 
 # /templates/pages/new-game/index.latte:37
+# /templates/pages/new-game/index.latte:38
+# /templates/pages/new-game/index.latte:43
 msgctxt "gameModes"
 msgid "Klasická hra, ale tentokrát bez světel."
 msgstr ""
 
 # /templates/pages/new-game/index.latte:38
+# /templates/pages/new-game/index.latte:39
+# /templates/pages/new-game/index.latte:44
 msgctxt "gameModes"
 msgid "T.M.A"
 msgstr ""
 
 # /templates/pages/new-game/index.latte:37
+# /templates/pages/new-game/index.latte:38
+# /templates/pages/new-game/index.latte:43
 msgctxt "gameModes"
 msgid "Hra na zombíky! Vybraní hráči jsou zombie, kteří se snaží infikovat ostatní hráče."
 msgstr ""
 
 # /templates/pages/new-game/index.latte:37
+# /templates/pages/new-game/index.latte:38
+# /templates/pages/new-game/index.latte:43
 msgctxt "gameModes"
 msgid "Strategická hra s omezeným počtem životů a nábojů."
 msgstr ""
 
 # /templates/pages/new-game/index.latte:38
+# /templates/pages/new-game/index.latte:39
+# /templates/pages/new-game/index.latte:44
 msgctxt "gameModes"
 msgid "Team Survival"
 msgstr ""
 
 # /templates/pages/new-game/index.latte:38
+# /templates/pages/new-game/index.latte:39
+# /templates/pages/new-game/index.latte:44
 msgctxt "gameModes"
 msgid "Marco Polo"
 msgstr ""
 
 # /templates/pages/new-game/index.latte:38
+# /templates/pages/new-game/index.latte:39
+# /templates/pages/new-game/index.latte:44
 msgctxt "gameModes"
 msgid "Zombie"
 msgstr ""
 
 # /templates/pages/new-game/index.latte:49
+# /templates/pages/new-game/index.latte:50
+# /templates/pages/new-game/index.latte:51
+# /templates/pages/new-game/index.latte:56
 msgctxt "game"
 msgid "Hudební mód"
 msgstr ""
 
 # /templates/pages/new-game/index.latte:61
+# /templates/pages/new-game/index.latte:62
+# /templates/pages/new-game/index.latte:64
+# /templates/pages/new-game/index.latte:69
 msgctxt "game"
 msgid "Náhodné rozdělení týmů"
 msgstr ""
 
 # /templates/pages/new-game/index.latte:74
+# /templates/pages/new-game/index.latte:76
+# /templates/pages/new-game/index.latte:42
+# /templates/pages/new-game/index.latte:55
+# /templates/pages/new-game/index.latte:56
+# /templates/pages/new-game/index.latte:78
+# /templates/pages/new-game/index.latte:47
+# /templates/pages/new-game/index.latte:61
+# /templates/pages/new-game/index.latte:83
 msgctxt "actions"
 msgid "Náhodně"
 msgstr ""
 
 # /templates/pages/new-game/index.latte:78
+# /templates/pages/new-game/index.latte:80
+# /templates/pages/new-game/index.latte:82
+# /templates/pages/new-game/index.latte:87
 msgctxt "actions"
 msgid "Náhodně fér"
 msgstr ""

@@ -2329,3 +2329,13 @@ msgstr "Yellow team"
 msgctxt "team.names"
 msgid "Ocean team"
 msgstr "Ocean team"
+
+# /templates/pages/new-game/index.latte:110
+msgctxt "errors"
+msgid "Musíte vybrat alespoň 2 týmy."
+msgstr ""
+
+# /templates/pages/new-game/index.latte:111
+msgctxt "errors"
+msgid "Musíte zadat alespoň 2 hráče."
+msgstr ""

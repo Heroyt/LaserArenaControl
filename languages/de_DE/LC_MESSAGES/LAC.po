@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: German\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2022-09-05 08:36\n"
+"PO-Revision-Date: 2022-09-05 11:40\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -2329,3 +2329,14 @@ msgstr ""
 msgctxt "team.names"
 msgid "Ocean team"
 msgstr ""
+
+# /templates/pages/new-game/index.latte:110
+msgctxt "errors"
+msgid "Musíte vybrat alespoň 2 týmy."
+msgstr ""
+
+# /templates/pages/new-game/index.latte:111
+msgctxt "errors"
+msgid "Musíte zadat alespoň 2 hráče."
+msgstr ""
+

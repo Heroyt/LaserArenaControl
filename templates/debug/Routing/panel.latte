@@ -1,4 +1,4 @@
-{varType App\Core\Routing\Route|null $route}
+{varType Lsr\Core\Routing\Route|null $route}
 {varType array $request}
 {varType array $params}
 {varType array $path}
@@ -22,7 +22,7 @@
 		{ifset $route}
 			<div class="p-3 my-2 rounded border">
 				<h5 class="fs-5">Route</h5>
-				<p><strong>Name:</strong> {$route->getRouteName()}</p>
+				<p><strong>Name:</strong> {$route->getName()}</p>
 				<p><strong>Path:</strong> {if empty($route->path)}/{else}{$route->path|implode:'/'}{/if}</p>
 			</div>
 		{/ifset}

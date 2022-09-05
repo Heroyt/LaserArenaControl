@@ -17,7 +17,7 @@
 				<div>
 					{if is_null($win)}
 						{svgIcon 'shield', '2rem'}
-					{elseif $win->id_team === $team->id_team}
+					{elseif $win->id === $team->id}
 						{svgIcon 'crown', '2rem'}
 					{else}
 						{svgIcon 'skull', '2rem'}

@@ -2,11 +2,14 @@
 
 namespace App\Controllers\Cli;
 
-use App\Core\CliController;
-use App\Core\CliRequest;
-use App\Services\CliHelper;
 use App\Services\ImportService;
 use App\Services\SyncService;
+use Lsr\Core\CliController;
+use Lsr\Core\Exceptions\ModelNotFoundException;
+use Lsr\Core\Exceptions\ValidationException;
+use Lsr\Core\Requests\CliRequest;
+use Lsr\Helpers\Cli\CliHelper;
+use Throwable;
 
 /**
  *
@@ -20,6 +23,9 @@ class Games extends CliController
 	 * @param CliRequest $request
 	 *
 	 * @return void
+	 * @throws Throwable
+	 * @throws ModelNotFoundException
+	 * @throws ValidationException
 	 */
 	public function import(CliRequest $request) : void {
 		$resultsDir = $request->args[0] ?? '';
@@ -37,6 +43,7 @@ class Games extends CliController
 	 * @param CliRequest $request
 	 *
 	 * @return void
+	 * @throws Throwable
 	 */
 	public function sync(CliRequest $request) : void {
 		$limit = (int) ($request->args[0] ?? 5);

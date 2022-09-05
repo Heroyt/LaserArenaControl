@@ -2,12 +2,11 @@
 /**
  * @author Tomáš Vojík <xvojik00@stud.fit.vutbr.cz>, <vojik@wboy.cz>
  */
+
 namespace App\Services;
 
-use App\Core\App;
 use App\Core\Info;
 use App\GameModels\Game\Game;
-use App\Logging\Logger;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Handler\CurlFactory;
@@ -16,6 +15,9 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\MessageFormatter;
 use GuzzleHttp\Middleware;
 use InvalidArgumentException;
+use JsonException;
+use Lsr\Core\App;
+use Lsr\Logging\Logger;
 
 /**
  * Singleton service for handling public API calls
@@ -53,7 +55,6 @@ class LigaApi
 																	 'Authorization' => 'Bearer '.$this->apiKey,
 																 ]
 															 ]);
-
 	}
 
 	/**
@@ -61,7 +62,11 @@ class LigaApi
 	 */
 	public static function getInstance() : LigaApi {
 		if (!isset(self::$instance)) {
-			self::$instance = new self(Info::get('liga_api_url', ''), Info::get('liga_api_key', ''));
+			/** @var string $url */
+			$url = Info::get('liga_api_url', '');
+			/** @var string $key */
+			$key = Info::get('liga_api_key', '');
+			self::$instance = new self($url, $key);
 		}
 		return self::$instance;
 	}
@@ -75,6 +80,7 @@ class LigaApi
 	 * @param bool       $recreateClient
 	 *
 	 * @return bool
+	 * @throws JsonException
 	 * @post All finished games will be sent to public
 	 */
 	public function syncGames(string $system, array $games, ?float $timeout = null, bool $recreateClient = false) : bool {
@@ -108,6 +114,7 @@ class LigaApi
 				return false;
 			}
 		} catch (GuzzleException $e) {
+			/* @phpstan-ignore-next-line */
 			$this->logger->exception($e);
 			return false;
 		}

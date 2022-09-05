@@ -5,16 +5,23 @@
 namespace App\Tools;
 
 use App\GameModels\Game\Game;
+use Lsr\Helpers\Tools\Strings;
 
+/**
+ * Service for generating CSS classes for a laser game system
+ */
 class Color
 {
 
 	/**
+	 * Get CSS definition for team colors used in games
+	 *
 	 * @param Game[] $games
 	 *
 	 * @return string
 	 */
 	public static function getGamesColor(array $games) : string {
+		/** @var array<string, string[]> $styles */
 		$styles = [];
 		foreach ($games as $game) {
 			if (isset($styles[$game::SYSTEM])) {
@@ -24,6 +31,10 @@ class Color
 		}
 		$classes = '';
 		$return = '<style>:root{';
+		/**
+		 * @var string   $system
+		 * @var string[] $colors
+		 */
 		foreach ($styles as $system => $colors) {
 			$system = Strings::toSnakeCase($system, '-');
 			foreach ($colors as $key => $color) {

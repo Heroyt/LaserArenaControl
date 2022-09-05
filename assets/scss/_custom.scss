@@ -5,6 +5,8 @@
 @use 'variables/colors' as *;
 @use "sass:map";
 @use "functions";
+@import '~bootstrap/scss/variables';
+@import '~bootstrap/scss/maps';
 
 $utilityColors: functions.getUtilityColors($custom-colors);
 $theme-colors: map.merge($theme-colors, functions.getThemeColors($custom-colors));
@@ -36,13 +38,21 @@ $font-sizes: map.merge(
 		)
 );
 
+$box-shadow: 0 .5rem 1rem var(--shadow-color, rgba($black, .15));
+$box-shadow-sm: 0 .125rem .25rem var(--shadow-color, rgba($black, .075));
+$box-shadow-lg: 0 1rem 3rem var(--shadow-color, rgba($black, .175));
+$box-shadow-in-place: 0 0 1rem var(--shadow-color, rgba($black, .175));
+$box-shadow-in-place-sm: 0 0 .25rem var(--shadow-color, rgba($black, .175));
+$box-shadow-in-place-lg: 0 0 3rem var(--shadow-color, rgba($black, .175));
+$box-shadow-inset: inset 0 1px 2px var(--shadow-color, rgba($black, .075));
+
 @import '~bootstrap/scss/utilities';
 @import '~bootstrap/scss/mixins';
 
 html,
 body {
-	width: 100%;
 	height: 100%;
+	width: 100%;
 }
 
 $card-bg: map.get($theme-colors, "dark");
@@ -50,6 +60,13 @@ $card-bg: map.get($theme-colors, "dark");
 $utilities: map.deep-merge(
 		$utilities,
 		(
+			"shadow": (
+				values: (
+					in-place: $box-shadow-in-place,
+					in-place-sm: $box-shadow-in-place-sm,
+					in-place-lg: $box-shadow-in-place-lg,
+				)
+			),
 			"border-color": (
 				values: $utilityColors
 			),

@@ -2,15 +2,11 @@
 /**
  * @author Tomáš Vojík <xvojik00@stud.fit.vutbr.cz>, <vojik@wboy.cz>
  */
+
 namespace App\Controllers;
 
-use App\Core\App;
-use App\Core\Controller;
-use App\Core\DB;
 use App\Core\Info;
-use App\Core\Request;
 use App\Exceptions\GameModeNotFoundException;
-use App\Exceptions\ValidationException;
 use App\GameModels\Factory\GameFactory;
 use App\GameModels\Factory\GameModeFactory;
 use App\GameModels\Game\PrintStyle;
@@ -19,6 +15,14 @@ use App\GameModels\Vest;
 use DateTime;
 use Dibi\DriverException;
 use Dibi\Exception;
+use JsonException;
+use Lsr\Core\App;
+use Lsr\Core\Controller;
+use Lsr\Core\DB;
+use Lsr\Core\Exceptions\ModelNotFoundException;
+use Lsr\Core\Exceptions\ValidationException;
+use Lsr\Core\Requests\Request;
+use Lsr\Exceptions\TemplateDoesNotExistException;
 
 /**
  *
@@ -30,28 +34,45 @@ class Settings extends Controller
 
 	/**
 	 * @return void
+	 * @throws TemplateDoesNotExistException
 	 */
 	public function show() : void {
 		$this->view('pages/settings/index');
 	}
 
+	/**
+	 * @return void
+	 * @throws ValidationException
+	 * @throws TemplateDoesNotExistException
+	 */
 	public function vests() : void {
-		/** @var Vest[] $vests */
 		$vests = Vest::getAll();
 		$this->params['vests'] = [];
 		foreach (GameFactory::getSupportedSystems() as $system) {
+			/** @phpstan-ignore-next-line */
 			$this->params['vests'][$system] = [];
 		}
 		foreach ($vests as $vest) {
+			/** @phpstan-ignore-next-line */
 			$this->params['vests'][$vest->system][] = $vest;
 		}
 		$this->view('pages/settings/vests');
 	}
 
+	/**
+	 * @return void
+	 * @throws TemplateDoesNotExistException
+	 */
 	public function gate() : void {
 		$this->view('pages/settings/gate');
 	}
 
+	/**
+	 * @param Request $request
+	 *
+	 * @return void
+	 * @throws JsonException
+	 */
 	public function saveGate(Request $request) : void {
 		try {
 			if (isset($request->post['timer_offset'])) {
@@ -60,14 +81,14 @@ class Settings extends Controller
 			if (isset($request->post['timer_show'])) {
 				Info::set('timer_show', (int) $request->post['timer_show']);
 			}
-		} catch (Exception $e) {
+		} catch (Exception) {
 			$request->passErrors[] = lang('Failed to save settings.', context: 'errors');
 		}
 		if ($request->isAjax()) {
-			$this->ajaxJson([
-												'success' => empty($request->passErrors),
-												'errors'  => $request->passErrors,
-											]);
+			$this->respond([
+											 'success' => empty($request->passErrors),
+											 'errors'  => $request->passErrors,
+										 ]);
 		}
 		App::redirect('settings-gate', $request);
 	}
@@ -76,21 +97,21 @@ class Settings extends Controller
 	 * @param Request $request
 	 *
 	 * @return void
+	 * @throws JsonException
 	 */
 	public function saveVests(Request $request) : void {
 		try {
 			foreach ($request->post['vest'] ?? [] as $id => $info) {
-				DB::update(Vest::TABLE, $info, ['%n = %i', Vest::PRIMARY_KEY, $id]);
+				DB::update(Vest::TABLE, $info, ['%n = %i', Vest::getPrimaryKey(), $id]);
 			}
-		} catch (Exception $e) {
+		} catch (Exception) {
 			$request->passErrors[] = lang('Failed to save settings.', context: 'errors');
-			bdump($e);
 		}
 		if ($request->isAjax()) {
-			$this->ajaxJson([
-												'success' => empty($request->passErrors),
-												'errors'  => $request->passErrors,
-											]);
+			$this->respond([
+											 'success' => empty($request->passErrors),
+											 'errors'  => $request->passErrors,
+										 ]);
 		}
 		App::redirect('settings', $request);
 	}
@@ -98,6 +119,7 @@ class Settings extends Controller
 	/**
 	 * @return void
 	 * @throws GameModeNotFoundException
+	 * @throws TemplateDoesNotExistException
 	 */
 	public function modes() : void {
 		$this->params['modes'] = GameModeFactory::getAll();
@@ -108,24 +130,29 @@ class Settings extends Controller
 	 * @param Request $request
 	 *
 	 * @return void
+	 * @throws JsonException
 	 */
 	public function saveGeneral(Request $request) : void {
 		try {
 			if (isset($request->post['api_key'])) {
 				Info::set('liga_api_key', $request->post['api_key']);
 			}
-		} catch (Exception $e) {
+		} catch (Exception) {
 			$request->passErrors[] = lang('Failed to save settings.', context: 'errors');
 		}
 		if ($request->isAjax()) {
-			$this->ajaxJson([
-												'success' => empty($request->passErrors),
-												'errors'  => $request->passErrors,
-											]);
+			$this->respond([
+											 'success' => empty($request->passErrors),
+											 'errors'  => $request->passErrors,
+										 ]);
 		}
 		App::redirect('settings', $request);
 	}
 
+	/**
+	 * @throws DriverException
+	 * @throws JsonException
+	 */
 	public function savePrint(Request $request) : void {
 		if ($this->validatePrint($request)) {
 			try {
@@ -144,18 +171,17 @@ class Settings extends Controller
 				$printDir = 'assets/images/print/';
 
 				/**
-				 * @var array{name:string,primary:string,dark:string,light:string,original-background:string} $info
+				 * @var array{name:string,primary:string,dark:string,light:string,original-background?:string,original-background-landscape?:string} $info
 				 */
 				foreach ($_POST['styles'] ?? [] as $key => $info) {
 					$style = new PrintStyle();
+					$style->id = $key;
 					$style->name = $info['name'];
 					$style->colorPrimary = $info['primary'];
 					$style->colorDark = $info['dark'];
 					$style->colorLight = $info['light'];
 					$style->bg = $info['original-background'] ?? '';
-					$style->bg_landscape = $info['original-background-landscape'] ?? '';
-					bdump($_POST);
-					bdump($_FILES);
+					$style->bgLandscape = $info['original-background-landscape'] ?? '';
 					if (!empty($_FILES['styles']['name'][$key]['background'])) {
 						if ($_FILES['styles']['error'][$key]['background'] !== UPLOAD_ERR_OK) {
 							$request->passErrors[] = match ($_FILES['styles']['error'][$key]['background']) {
@@ -205,7 +231,7 @@ class Settings extends Controller
 							if ($check !== false) {
 								if (in_array($imageFileType, ['jpg', 'jpeg', 'png'], true)) {
 									if (move_uploaded_file($_FILES['styles']["tmp_name"][$key]['background-landscape'], ROOT.$name)) {
-										$style->bg_landscape = $name;
+										$style->bgLandscape = $name;
 									}
 									else {
 										$request->passErrors[] = lang('File upload failed.', context: 'errors');
@@ -220,49 +246,58 @@ class Settings extends Controller
 							}
 						}
 					}
-					$style->save();
 					$style->default = $style->id === (int) ($_POST['default-style'] ?? 0);
-					$style->save();
+					$style->insert();
 				}
 
 				/**
-				 * @var int                           $key
 				 * @var array{style:int,dates:string} $info
 				 */
-				foreach ($_POST['dateRange'] ?? [] as $key => $info) {
+				foreach ($_POST['dateRange'] ?? [] as $info) {
 					preg_match_all('/(\d{2}\.\d{2}\.\d{4})/', $info['dates'], $matches);
 					$dateFrom = new DateTime($matches[0][1] ?? '');
 					$dateTo = new DateTime($matches[1][1] ?? '');
 					DB::insert(PrintStyle::TABLE.'_dates', [
-						PrintStyle::PRIMARY_KEY => $info['style'],
-						'date_from'             => $dateFrom,
-						'date_to'               => $dateTo,
+						PrintStyle::getPrimaryKey() => $info['style'],
+						'date_from'                 => $dateFrom,
+						'date_to'                   => $dateTo,
 					]);
 				}
 
 				DB::getConnection()->commit();
 			} catch (Exception|DriverException $e) {
 				DB::getConnection()->rollback();
-				$request->passErrors[] = lang('Database error occurred.', context: 'errors');
+				$request->passErrors[] = lang('Database error occurred.', context: 'errors').' '.$e->getMessage();
 			} catch (ValidationException $e) {
 				DB::getConnection()->rollback();
 				$request->passErrors[] = lang('Validation error:', context: 'errors').' '.$e->getMessage();
 			}
 		}
 		if ($request->isAjax()) {
-			$this->ajaxJson([
-												'success' => empty($request->passErrors),
-												'errors'  => $request->passErrors,
-											]);
+			$this->respond([
+											 'success' => empty($request->passErrors),
+											 'errors'  => $request->passErrors,
+										 ], empty($request->passErrors) ? 200 : 500);
 		}
 		App::redirect('settings-print', $request);
 	}
 
+	/**
+	 * @param Request $request
+	 *
+	 * @return bool
+	 */
 	private function validatePrint(Request $request) : bool {
 		// TODO: Actually validate request..
 		return count($request->passErrors) === 0;
 	}
 
+	/**
+	 * @return void
+	 * @throws TemplateDoesNotExistException
+	 * @throws ValidationException
+	 * @throws ModelNotFoundException
+	 */
 	public function print() : void {
 		$this->params['styles'] = PrintStyle::getAll();
 		$this->params['templates'] = PrintTemplate::getAll();

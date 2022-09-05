@@ -4,11 +4,14 @@
  */
 namespace App\Services;
 
-use App\Core\DB;
-use App\Logging\Logger;
-use Dibi\DateTime;
 use Dibi\Exception;
+use Dibi\Row;
+use Lsr\Core\DB;
+use Lsr\Logging\Logger;
 
+/**
+ * Service for broadcasting WS events to front-end users
+ */
 class EventService
 {
 
@@ -51,7 +54,7 @@ class EventService
 	/**
 	 * Get all events that are not flagged as sent yet
 	 *
-	 * @return object{id_event:int,message:string,datetime:DateTime,sent:int}[] Array of events ordered by their date from the most recent (descending)
+	 * @return Row[] Array of events ordered by their date from the most recent (descending)
 	 */
 	public static function getUnsent() : array {
 		return DB::select('events', '*')->where('sent = 0')->orderBy('datetime')->desc()->fetchAll();

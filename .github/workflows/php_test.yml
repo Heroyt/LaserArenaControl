@@ -2,9 +2,25 @@ name: PHP Unit test
 
 on:
     push:
+        paths:
+            - src/**
+            - include/**
+            - tests/**
+            - config/**
+            - composer.json
+            - phpunit.xml
+            - .github/workflows/php_test.yml
         branches: [ master ]
     pull_request:
         branches: [ master ]
+        paths:
+            - src/**
+            - include/**
+            - tests/**
+            - config/**
+            - composer.json
+            - phpunit.xml
+            - .github/workflows/php_test.yml
 
 jobs:
     build:
@@ -16,16 +32,26 @@ jobs:
                 operating-system: [ ubuntu-latest ]
                 php-version: [ '8.1' ]
                 dependencies: [ '' ]
-                coverage-driver: [ pcov, xdebug ]
-                include:
-                    - { operating-system: 'ubuntu-latest', php-version: '7.4', dependencies: '--prefer-lowest', coverage-driver: 'pcov' }
-                    - { operating-system: 'ubuntu-latest', php-version: '8.0', dependencies: '--ignore-platform-req=php', coverage-driver: 'pcov' }
+                coverage-driver: [ xdebug ]
 
         steps:
+            -   name: Shutdown Ubuntu MySQL (SUDO)
+                run: sudo service mysql stop # Shutdown the Default MySQL, "sudo" is necessary, please not remove it
+
+            -   name: Set up MySQL
+                uses: getong/mariadb-action@v1.1
+                with:
+                    host port: 3307
+                    mysql database: 'lac'
+                    mysql root password: 'root'
+
             -   uses: actions/checkout@master
 
+            -   name: submodules-init
+                uses: snickerbockers/submodules-init@v4
+
             -   name: Validate composer.json and composer.lock
-                run: composer validate --strict
+                run: composer validate --strict --no-check-version
 
             -   name: Cache Composer packages
                 id: composer-cache
@@ -37,12 +63,16 @@ jobs:
                         ${{ runner.os }}-php-
 
             -   name: Install dependencies
-                run: composer install --prefer-dist --no-progress
+                run: composer install --prefer-dist --no-progress -v
 
-            # Add a test script to composer.json, for instance: "test": "vendor/bin/phpunit"
-            # Docs: https://getcomposer.org/doc/articles/scripts.md
+            -   name: Wait for MySQL
+                run: |
+                    while ! mysqladmin ping --host=127.0.0.1 --port=3307 --user=root --password=root --silent; do
+                        sleep 1
+                    done
+
 
             -   name: Run test suite
                 env:
                     XDEBUG_MODE: coverage
-                run: composer run testUnit
+                run: composer run test

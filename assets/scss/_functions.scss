@@ -43,9 +43,17 @@
 				$map: map.merge(
 						$map,
 						(
-							"#{map.get($color, "alias")}": map.get($color, "color")
+							"#{map.get($color, "alias")}": map.get($color, "color"),
+							"#{$name}-#{$weight}": map.get($color, "color"),
 						)
 				);
+			} @else {
+				$map: map.merge(
+						$map,
+						(
+							"#{$name}-#{$weight}": $color,
+						)
+				)
 			}
 		}
 	}

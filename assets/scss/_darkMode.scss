@@ -1,0 +1,36 @@
+@use 'variables/colorsDark' as *;
+@use 'sass:map';
+@use 'functions';
+
+$theme-colors-dark: map.merge($theme-colors, functions.getThemeColors($custom-colors-dark));
+
+.bg-white path[fill="white"] {
+	fill: var(--not-so-dark);
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		@each $name, $values in $custom-colors-dark {
+			@each $weight, $color in $values {
+				$separator: '-';
+				@if $weight == '' {
+					$separator: '';
+				}
+				@if type-of($color) == 'map' {
+					--#{map.get($color, 'alias')}: #{map.get($color, 'color')};
+					--#{$name}#{$separator}#{$weight}: #{map.get($color, 'color')};
+				} @else {
+					--#{$name}#{$separator}#{$weight}: #{$color};
+				}
+			}
+		}
+		--#{$variable-prefix}body-bg: #{map.get($theme-colors-dark, 'background')};
+		--#{$variable-prefix}body-color: #{map.get($theme-colors-dark, 'text')};
+
+	}
+
+	$form-select-dark-indicator: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path fill='none' stroke='#fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/></svg>");
+	.form-select {
+		background-image: escape-svg($form-select-dark-indicator) !important;
+	}
+}

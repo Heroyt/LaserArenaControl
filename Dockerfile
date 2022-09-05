@@ -14,16 +14,22 @@ USER www-data
 # Move to project directory
 WORKDIR /var/www/html/
 
+ENV LAC_VERSION="0.2.5"
+ENV LAC_MODELS_VERSION="0.2.3"
+
 # Initialize git and download project
 RUN git init
 RUN git remote add origin https://github.com/Heroyt/LaserArenaControl.git
-RUN git fetch
+RUN git fetch --all --tags
 RUN git checkout -t origin/master
 RUN git config pull.ff only --autostash
 RUN git pull --recurse-submodules=yes
 RUN git submodule init
 RUN git submodule update
 RUN git submodule update --init --recursive --remote
+RUN git checkout "v${LAC_VERSION}" -b "v${LAC_VERSION}"
+RUN git -C src/GameModels fetch --all --tags
+RUN git -C src/GameModels checkout "v${LAC_MODELS_VERSION}" -b "v${LAC_MODELS_VERSION}"
 
 # Cron rights
 RUN echo "pass" | sudo -S chmod +x /var/www/html/cron.sh
@@ -45,6 +51,9 @@ COPY start.sh .
 COPY cron.txt .
 RUN crontab cron.txt
 
+# Install
+RUN composer build
+
 # Start command
 # Updates project, builds it and runs a start script which starts WS event server and Apache
-CMD git pull --recurse-submodules && git submodule update --init --recursive --remote && composer build && php install.php && sh ./start.sh
+CMD php install.php && sh ./start.sh

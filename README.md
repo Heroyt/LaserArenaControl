@@ -1,6 +1,8 @@
 # Laser arena control
 
-Vojík Tomáš <xvojik00@stud.vutbr.cz>
+[![PHP Unit test](https://github.com/Heroyt/LaserArenaControl/actions/workflows/php_test.yml/badge.svg)](https://github.com/Heroyt/LaserArenaControl/actions/workflows/php_test.yml)
+
+Vojík Tomáš <xvojik00@stud.vutbr.cz>, <vojik@wboy.cz>
 
 ## Installation
 

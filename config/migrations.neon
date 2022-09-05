@@ -1,0 +1,34 @@
+includes:
+	- vendor/lsr/core/migrations.neon
+tables:
+	page_info:
+		definition: '''
+    		(
+    			`key` varchar(30) NOT NULL DEFAULT '',
+    			`value` text DEFAULT NULL,
+    			PRIMARY KEY (`key`)
+    		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+    		'''
+	App\Models\Auth\Player:
+		definition: '''
+			(
+			  `id_user` int(11) unsigned NOT NULL,
+              `code` varchar(10) NOT NULL,
+              `nickname` varchar(20) NOT NULL,
+              `email` varchar(50) NOT NULL,
+              PRIMARY KEY (`id_user`),
+              UNIQUE KEY `code` (`code`)
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+			'''
+	App\Models\Auth\PlayerConnection:
+		definition: '''
+			(
+              `id_connection` int(11) unsigned NOT NULL AUTO_INCREMENT,
+              `id_user` int(11) unsigned NOT NULL,
+              `type` enum('rfid','laserforce') NOT NULL,
+              `identifier` tinytext NOT NULL,
+              PRIMARY KEY (`id_connection`),
+              KEY `id_user` (`id_user`),
+              CONSTRAINT `user_connected_accounts_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `players` (`id_user`) ON DELETE CASCADE ON UPDATE CASCADE
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+            '''

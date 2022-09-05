@@ -1,0 +1,427 @@
+{
+	"id": null,
+	"row": null,
+	"fileTime": {
+		"date": "2022-03-13 15:13:46.000000",
+		"timezone_type": 3,
+		"timezone": "Europe\/Prague"
+	},
+	"start": {
+		"date": "2020-05-26 17:39:09.000000",
+		"timezone_type": 3,
+		"timezone": "Europe\/Prague"
+	},
+	"importTime": {
+		"date": "2020-05-26 17:54:12.000000",
+		"timezone_type": 3,
+		"timezone": "Europe\/Prague"
+	},
+	"end": {
+		"date": "2020-05-26 17:54:09.000000",
+		"timezone_type": 3,
+		"timezone": "Europe\/Prague"
+	},
+	"timing": {
+		"before": 20,
+		"gameLength": 15,
+		"after": 5
+	},
+	"mode": {
+		"id": 1,
+		"name": "Team deathmach",
+		"description": "Classic team game.",
+		"type": "TEAM",
+		"settings": {
+			"public": true,
+			"mines": true,
+			"partWin": false,
+			"partTeams": true,
+			"partPlayers": true,
+			"partHits": true,
+			"partBest": true,
+			"partBestDay": true,
+			"playerScore": true,
+			"playerShots": true,
+			"playerMiss": true,
+			"playerAccuracy": true,
+			"playerMines": true,
+			"playerPlayers": true,
+			"playerPlayersTeams": true,
+			"playerKd": true,
+			"playerFavourites": true,
+			"playerLives": false,
+			"teamScore": true,
+			"teamAccuracy": true,
+			"teamShots": true,
+			"teamHits": true,
+			"teamZakladny": false,
+			"bestScore": true,
+			"bestHits": true,
+			"bestDeaths": true,
+			"bestAccuracy": true,
+			"bestHitsOwn": true,
+			"bestDeathsOwn": true,
+			"bestShots": true,
+			"bestMiss": true,
+			"bestMines": true
+		}
+	},
+	"gameType": "TEAM",
+	"scoring": {
+		"deathOther": -50,
+		"hitOther": 100,
+		"deathOwn": -50,
+		"hitOwn": -25,
+		"hitPod": -50,
+		"shot": 0,
+		"machineGun": 100,
+		"invisibility": 100,
+		"agent": 100,
+		"shield": 100
+	},
+	"sync": false,
+	"started": true,
+	"finished": true,
+	"playerCount": 5,
+	"playerClass": "App\\GameModels\\Game\\Evo5\\Player",
+	"players": {
+		"1": {
+			"id": null,
+			"row": null,
+			"name": "tyna",
+			"score": 2500,
+			"vest": 1,
+			"shots": 820,
+			"accuracy": 5,
+			"hits": 37,
+			"deaths": 24,
+			"position": 2,
+			"hitPlayers": {
+				"1": {
+					"shot": null,
+					"target": null,
+					"count": 0
+				},
+				"2": {
+					"shot": null,
+					"target": null,
+					"count": 0
+				},
+				"3": {
+					"shot": null,
+					"target": null,
+					"count": 12
+				},
+				"4": {
+					"shot": null,
+					"target": null,
+					"count": 13
+				},
+				"5": {
+					"shot": null,
+					"target": null,
+					"count": 12
+				}
+			},
+			"teamNum": 3,
+			"team": null,
+			"color": 0,
+			"favouriteTarget": null,
+			"favouriteTargetOf": null,
+			"shotPoints": 0,
+			"scoreBonus": 0,
+			"scorePowers": 0,
+			"scoreMines": 0,
+			"ammoRest": 9179,
+			"minesHits": 0,
+			"bonus": {
+				"agent": 0,
+				"invisibility": 0,
+				"machineGun": 0,
+				"shield": 0
+			},
+			"hitsOther": 37,
+			"hitsOwn": 0,
+			"deathsOwn": 0,
+			"deathsOther": 24
+		},
+		"2": {
+			"id": null,
+			"row": null,
+			"name": "dingo",
+			"score": 2850,
+			"vest": 2,
+			"shots": 1147,
+			"accuracy": 3,
+			"hits": 37,
+			"deaths": 17,
+			"position": 1,
+			"hitPlayers": {
+				"1": {
+					"shot": null,
+					"target": null,
+					"count": 0
+				},
+				"2": {
+					"shot": null,
+					"target": null,
+					"count": 0
+				},
+				"3": {
+					"shot": null,
+					"target": null,
+					"count": 10
+				},
+				"4": {
+					"shot": null,
+					"target": null,
+					"count": 17
+				},
+				"5": {
+					"shot": null,
+					"target": null,
+					"count": 10
+				}
+			},
+			"teamNum": 3,
+			"team": null,
+			"color": 0,
+			"favouriteTarget": null,
+			"favouriteTargetOf": null,
+			"shotPoints": 0,
+			"scoreBonus": 0,
+			"scorePowers": 0,
+			"scoreMines": 0,
+			"ammoRest": 8852,
+			"minesHits": 0,
+			"bonus": {
+				"agent": 0,
+				"invisibility": 0,
+				"machineGun": 0,
+				"shield": 0
+			},
+			"hitsOther": 37,
+			"hitsOwn": 0,
+			"deathsOwn": 0,
+			"deathsOther": 17
+		},
+		"3": {
+			"id": null,
+			"row": null,
+			"name": "dan",
+			"score": 2100,
+			"vest": 3,
+			"shots": 534,
+			"accuracy": 7,
+			"hits": 37,
+			"deaths": 32,
+			"position": 3,
+			"hitPlayers": {
+				"1": {
+					"shot": null,
+					"target": null,
+					"count": 9
+				},
+				"2": {
+					"shot": null,
+					"target": null,
+					"count": 10
+				},
+				"3": {
+					"shot": null,
+					"target": null,
+					"count": 0
+				},
+				"4": {
+					"shot": null,
+					"target": null,
+					"count": 9
+				},
+				"5": {
+					"shot": null,
+					"target": null,
+					"count": 9
+				}
+			},
+			"teamNum": 5,
+			"team": null,
+			"color": 0,
+			"favouriteTarget": null,
+			"favouriteTargetOf": null,
+			"shotPoints": 0,
+			"scoreBonus": 0,
+			"scorePowers": 0,
+			"scoreMines": 0,
+			"ammoRest": 9465,
+			"minesHits": 0,
+			"bonus": {
+				"agent": 0,
+				"invisibility": 0,
+				"machineGun": 0,
+				"shield": 0
+			},
+			"hitsOther": 37,
+			"hitsOwn": 0,
+			"deathsOwn": 0,
+			"deathsOther": 32
+		},
+		"4": {
+			"id": null,
+			"row": null,
+			"name": "lachtan",
+			"score": 700,
+			"vest": 4,
+			"shots": 382,
+			"accuracy": 7,
+			"hits": 27,
+			"deaths": 40,
+			"position": 4,
+			"hitPlayers": {
+				"1": {
+					"shot": null,
+					"target": null,
+					"count": 13
+				},
+				"2": {
+					"shot": null,
+					"target": null,
+					"count": 5
+				},
+				"3": {
+					"shot": null,
+					"target": null,
+					"count": 9
+				},
+				"4": {
+					"shot": null,
+					"target": null,
+					"count": 0
+				},
+				"5": {
+					"shot": null,
+					"target": null,
+					"count": 0
+				}
+			},
+			"teamNum": 1,
+			"team": null,
+			"color": 0,
+			"favouriteTarget": null,
+			"favouriteTargetOf": null,
+			"shotPoints": 0,
+			"scoreBonus": 0,
+			"scorePowers": 0,
+			"scoreMines": 0,
+			"ammoRest": 9617,
+			"minesHits": 0,
+			"bonus": {
+				"agent": 0,
+				"invisibility": 0,
+				"machineGun": 0,
+				"shield": 0
+			},
+			"hitsOther": 27,
+			"hitsOwn": 0,
+			"deathsOwn": 1,
+			"deathsOther": 39
+		},
+		"5": {
+			"id": null,
+			"row": null,
+			"name": "android",
+			"score": -1075,
+			"vest": 5,
+			"shots": 261,
+			"accuracy": 2,
+			"hits": 6,
+			"deaths": 31,
+			"position": 5,
+			"hitPlayers": {
+				"1": {
+					"shot": null,
+					"target": null,
+					"count": 2
+				},
+				"2": {
+					"shot": null,
+					"target": null,
+					"count": 2
+				},
+				"3": {
+					"shot": null,
+					"target": null,
+					"count": 1
+				},
+				"4": {
+					"shot": null,
+					"target": null,
+					"count": 1
+				},
+				"5": {
+					"shot": null,
+					"target": null,
+					"count": 0
+				}
+			},
+			"teamNum": 1,
+			"team": null,
+			"color": 0,
+			"favouriteTarget": null,
+			"favouriteTargetOf": null,
+			"shotPoints": 0,
+			"scoreBonus": 0,
+			"scorePowers": 0,
+			"scoreMines": 0,
+			"ammoRest": 9738,
+			"minesHits": 0,
+			"bonus": {
+				"agent": 0,
+				"invisibility": 0,
+				"machineGun": 0,
+				"shield": 0
+			},
+			"hitsOther": 5,
+			"hitsOwn": 1,
+			"deathsOwn": 0,
+			"deathsOther": 31
+		}
+	},
+	"teamClass": "App\\GameModels\\Game\\Evo5\\Team",
+	"teams": {
+		"1": {
+			"id": null,
+			"row": null,
+			"color": 1,
+			"score": -375,
+			"position": 3,
+			"name": "Green team",
+			"playerCount": 2,
+			"playerClass": "App\\GameModels\\Game\\Evo5\\Player"
+		},
+		"3": {
+			"id": null,
+			"row": null,
+			"color": 3,
+			"score": 5350,
+			"position": 1,
+			"name": "Pink team",
+			"playerCount": 2,
+			"playerClass": "App\\GameModels\\Game\\Evo5\\Player"
+		},
+		"5": {
+			"id": null,
+			"row": null,
+			"color": 5,
+			"score": 2100,
+			"position": 2,
+			"name": "Ocean team",
+			"playerCount": 1,
+			"playerClass": "App\\GameModels\\Game\\Evo5\\Player"
+		}
+	},
+	"fileNumber": 15,
+	"modeName": "1-TEAM-Requiem",
+	"lives": 999,
+	"ammo": 9999,
+	"respawn": 5
+}

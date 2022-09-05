@@ -2,17 +2,19 @@
 /**
  * @author Tomáš Vojík <xvojik00@stud.fit.vutbr.cz>, <vojik@wboy.cz>
  */
+
 namespace App\Controllers\Cli;
 
-use App\Core\CliController;
 use App\Services\EventService;
+use Lsr\Core\CliController;
+use Socket;
 
 class EventServer extends CliController
 {
 
 	public const RESTART_TIME = 3600 * 10;
 
-	/** @var resource[] */
+	/** @var Socket[] */
 	private array $clients = [];
 
 	/**
@@ -20,15 +22,19 @@ class EventServer extends CliController
 	 *
 	 * Allows for multiple WS connections. Pools data once every second. Broadcasts any incoming messages and new events from DB to all connected clients.
 	 *
-	 * @return void
+	 * @return never
 	 */
-	public function start() : void {
+	public function start() : never {
 		$start = microtime(true);
 		$this->echo('Starting server', 'info');
 		$null = null;
 		// Create the master (=server) socket
 		// Using IPv4 and TCP
 		$sock = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
+		if ($sock === false) {
+			$this->errorPrint('Cannot open socket.');
+			exit;
+		}
 		socket_set_option($sock, SOL_SOCKET, SO_REUSEADDR, 1);
 		// Listen for connection on predefined port
 		socket_bind($sock, '0.0.0.0', EVENT_PORT);
@@ -55,11 +61,9 @@ class EventServer extends CliController
 				}
 				socket_close($s);
 			}
-			if ($sig !== SIGINT) {
-				// Restart
-				if (pcntl_exec($_, $argv) === false) {
-					$this->errorPrint('Failed to restart process');
-				}
+			// Restart
+			if (($sig !== SIGINT) && pcntl_exec($_, $argv) === false) {
+				$this->errorPrint('Failed to restart process');
 			}
 			exit;
 		};
@@ -86,6 +90,10 @@ class EventServer extends CliController
 			// If the main socket received a new connect message -> open a new client socket
 			if (in_array($sock, $newSockets, true)) {
 				$client = socket_accept($sock);
+				if ($client === false) {
+					$this->errorPrint('Socker_accept failed');
+					continue;
+				}
 
 				// Debug message
 				socket_getpeername($client, $clientIP);
@@ -145,11 +153,11 @@ class EventServer extends CliController
 	/**
 	 * Receive a message from client
 	 *
-	 * @param resource $client
+	 * @param Socket $client
 	 *
 	 * @return void
 	 */
-	private function clientRead($client) : void {
+	private function clientRead(Socket $client) : void {
 		socket_getpeername($client, $clientIP);
 
 		// Receive any message from client
@@ -169,19 +177,17 @@ class EventServer extends CliController
 		$null = null;
 		// Test the socket to prevent socket_read() from blocking the process
 		@socket_select($test, $null, $null, 0, 10);
-		if (count($test) > 0) {
-			$socketData = @socket_read($client, 1024, PHP_NORMAL_READ);
-			// Error means the client is disconnected
-			if ($socketData === false) {
-				$this->echo('Client disconnected.', $clientIP);
-				// Remove the client socket from the client-pool
-				$key = array_search($client, $this->clients, true);
-				if (isset($this->clients[$key])) {
-					unset($this->clients[$key]);
-				}
-				// Close the socket
-				socket_close($client);
+		$socketData = @socket_read($client, 1024, PHP_NORMAL_READ);
+		// Error means the client is disconnected
+		if ($socketData === false) {
+			$this->echo('Client disconnected.', $clientIP);
+			// Remove the client socket from the client-pool
+			$key = array_search($client, $this->clients, true);
+			if (isset($this->clients[$key])) {
+				unset($this->clients[$key]);
 			}
+			// Close the socket
+			socket_close($client);
 		}
 	}
 
@@ -229,12 +235,12 @@ class EventServer extends CliController
 	}
 
 	/**
-	 * @param        $client
+	 * @param Socket $client
 	 * @param string $message
 	 *
 	 * @return bool
 	 */
-	public function sendTo($client, string $message) : bool {
+	public function sendTo(Socket $client, string $message) : bool {
 		return socket_write($client, chr(129).chr(strlen($message)).$message) > 0;
 	}
 

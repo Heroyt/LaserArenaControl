@@ -1,4 +1,8 @@
 <?php
+/**
+ * @file  api.php
+ * @brief API route definitions
+ */
 
 use App\Controllers\Api\Debug;
 use App\Controllers\Api\GameHelpers;
@@ -7,9 +11,10 @@ use App\Controllers\Api\Logs;
 use App\Controllers\Api\Mount;
 use App\Controllers\Api\Results;
 use App\Controllers\Api\Updater;
-use App\Core\Routing\Route;
+use Lsr\Core\Routing\Route;
 
 Route::post('/api/results/import', [Results::class, 'import']);
+Route::post('/api/results/import/{game}', [Results::class, 'importGame']);
 Route::get('/api/results/last', [Results::class, 'getLastGameFile']);
 Route::get('/api/results/download', [Results::class, 'downloadLastGameFiles']);
 

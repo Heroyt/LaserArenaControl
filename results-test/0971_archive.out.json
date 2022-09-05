@@ -1,7 +1,6 @@
 {
 	"id": null,
 	"row": null,
-	"logger": {},
 	"fileTime": {
 		"date": "2022-03-13 15:13:46.000000",
 		"timezone_type": 3,
@@ -28,45 +27,43 @@
 		"after": 1
 	},
 	"mode": {
-		"id": null,
-		"row": null,
-		"logger": {},
-		"name": "Team deathmach",
-		"description": "Classic team game type.",
+		"id": 3,
+		"name": "CSGO",
+		"description": "N\u00e1ro\u010dn\u00e1 hra o p\u0159e\u017eit\u00ed se 3mi \u017eivoty.",
 		"type": "TEAM",
 		"settings": {
 			"public": true,
-			"mines": true,
+			"mines": false,
 			"partWin": true,
 			"partTeams": true,
 			"partPlayers": true,
 			"partHits": true,
 			"partBest": true,
-			"partBestDay": true,
-			"playerScore": true,
+			"partBestDay": false,
+			"playerScore": false,
 			"playerShots": true,
 			"playerMiss": true,
 			"playerAccuracy": true,
-			"playerMines": true,
+			"playerMines": false,
 			"playerPlayers": true,
-			"playerPlayersTeams": true,
-			"playerKd": true,
-			"playerFavourites": true,
+			"playerPlayersTeams": false,
+			"playerKd": false,
+			"playerFavourites": false,
 			"playerLives": true,
-			"teamScore": true,
+			"teamScore": false,
 			"teamAccuracy": true,
 			"teamShots": true,
 			"teamHits": true,
-			"teamZakladny": true,
-			"bestScore": true,
+			"teamZakladny": false,
+			"bestScore": false,
 			"bestHits": true,
 			"bestDeaths": true,
 			"bestAccuracy": true,
-			"bestHitsOwn": true,
-			"bestDeathsOwn": true,
+			"bestHitsOwn": false,
+			"bestDeathsOwn": false,
 			"bestShots": true,
 			"bestMiss": true,
-			"bestMines": true
+			"bestMines": false
 		}
 	},
 	"gameType": "TEAM",
@@ -91,8 +88,6 @@
 		"1": {
 			"id": null,
 			"row": null,
-			"logger": {},
-			"id_player": 0,
 			"name": "Davydeg",
 			"score": 150,
 			"vest": 1,
@@ -103,43 +98,43 @@
 			"position": 4,
 			"hitPlayers": {
 				"1": {
-					"shot": 0,
-					"target": 0,
+					"shot": null,
+					"target": null,
 					"count": 0
 				},
 				"2": {
-					"shot": 0,
-					"target": 0,
+					"shot": null,
+					"target": null,
 					"count": 0
 				},
 				"6": {
-					"shot": 0,
-					"target": 0,
+					"shot": null,
+					"target": null,
 					"count": 0
 				},
 				"7": {
-					"shot": 0,
-					"target": 0,
+					"shot": null,
+					"target": null,
 					"count": 0
 				},
 				"8": {
-					"shot": 0,
-					"target": 0,
+					"shot": null,
+					"target": null,
 					"count": 2
 				},
 				"9": {
-					"shot": 0,
-					"target": 0,
+					"shot": null,
+					"target": null,
 					"count": 0
 				},
 				"10": {
-					"shot": 0,
-					"target": 0,
+					"shot": null,
+					"target": null,
 					"count": 1
 				},
 				"11": {
-					"shot": 0,
-					"target": 0,
+					"shot": null,
+					"target": null,
 					"count": 0
 				}
 			},
@@ -168,8 +163,6 @@
 		"2": {
 			"id": null,
 			"row": null,
-			"logger": {},
-			"id_player": 0,
 			"name": "Lukyndr",
 			"score": -50,
 			"vest": 2,
@@ -180,43 +173,43 @@
 			"position": 6,
 			"hitPlayers": {
 				"1": {
-					"shot": 0,
-					"target": 0,
+					"shot": null,
+					"target": null,
 					"count": 0
 				},
 				"2": {
-					"shot": 0,
-					"target": 0,
+					"shot": null,
+					"target": null,
 					"count": 0
 				},
 				"6": {
-					"shot": 0,
-					"target": 0,
+					"shot": null,
+					"target": null,
 					"count": 0
 				},
 				"7": {
-					"shot": 0,
-					"target": 0,
+					"shot": null,
+					"target": null,
 					"count": 1
 				},
 				"8": {
-					"shot": 0,
-					"target": 0,
+					"shot": null,
+					"target": null,
 					"count": 0
 				},
 				"9": {
-					"shot": 0,
-					"target": 0,
+					"shot": null,
+					"target": null,
 					"count": 0
 				},
 				"10": {
-					"shot": 0,
-					"target": 0,
+					"shot": null,
+					"target": null,
 					"count": 0
 				},
 				"11": {
-					"shot": 0,
-					"target": 0,
+					"shot": null,
+					"target": null,
 					"count": 0
 				}
 			},
@@ -245,8 +238,6 @@
 		"6": {
 			"id": null,
 			"row": null,
-			"logger": {},
-			"id_player": 0,
 			"name": "Marek",
 			"score": 150,
 			"vest": 6,
@@ -257,43 +248,43 @@
 			"position": 3,
 			"hitPlayers": {
 				"1": {
-					"shot": 0,
-					"target": 0,
+					"shot": null,
+					"target": null,
 					"count": 0
 				},
 				"2": {
-					"shot": 0,
-					"target": 0,
+					"shot": null,
+					"target": null,
 					"count": 0
 				},
 				"6": {
-					"shot": 0,
-					"target": 0,
+					"shot": null,
+					"target": null,
 					"count": 0
 				},
 				"7": {
-					"shot": 0,
-					"target": 0,
+					"shot": null,
+					"target": null,
 					"count": 2
 				},
 				"8": {
-					"shot": 0,
-					"target": 0,
+					"shot": null,
+					"target": null,
 					"count": 1
 				},
 				"9": {
-					"shot": 0,
-					"target": 0,
+					"shot": null,
+					"target": null,
 					"count": 0
 				},
 				"10": {
-					"shot": 0,
-					"target": 0,
+					"shot": null,
+					"target": null,
 					"count": 0
 				},
 				"11": {
-					"shot": 0,
-					"target": 0,
+					"shot": null,
+					"target": null,
 					"count": 0
 				}
 			},
@@ -322,8 +313,6 @@
 		"7": {
 			"id": null,
 			"row": null,
-			"logger": {},
-			"id_player": 0,
 			"name": "mini",
 			"score": 350,
 			"vest": 7,
@@ -334,43 +323,43 @@
 			"position": 2,
 			"hitPlayers": {
 				"1": {
-					"shot": 0,
-					"target": 0,
+					"shot": null,
+					"target": null,
 					"count": 0
 				},
 				"2": {
-					"shot": 0,
-					"target": 0,
+					"shot": null,
+					"target": null,
 					"count": 2
 				},
 				"6": {
-					"shot": 0,
-					"target": 0,
+					"shot": null,
+					"target": null,
 					"count": 1
 				},
 				"7": {
-					"shot": 0,
-					"target": 0,
+					"shot": null,
+					"target": null,
 					"count": 0
 				},
 				"8": {
-					"shot": 0,
-					"target": 0,
+					"shot": null,
+					"target": null,
 					"count": 0
 				},
 				"9": {
-					"shot": 0,
-					"target": 0,
+					"shot": null,
+					"target": null,
 					"count": 2
 				},
 				"10": {
-					"shot": 0,
-					"target": 0,
+					"shot": null,
+					"target": null,
 					"count": 0
 				},
 				"11": {
-					"shot": 0,
-					"target": 0,
+					"shot": null,
+					"target": null,
 					"count": 0
 				}
 			},
@@ -399,8 +388,6 @@
 		"8": {
 			"id": null,
 			"row": null,
-			"logger": {},
-			"id_player": 0,
 			"name": "Tomazeg",
 			"score": -150,
 			"vest": 8,
@@ -411,43 +398,43 @@
 			"position": 8,
 			"hitPlayers": {
 				"1": {
-					"shot": 0,
-					"target": 0,
+					"shot": null,
+					"target": null,
 					"count": 0
 				},
 				"2": {
-					"shot": 0,
-					"target": 0,
+					"shot": null,
+					"target": null,
 					"count": 0
 				},
 				"6": {
-					"shot": 0,
-					"target": 0,
+					"shot": null,
+					"target": null,
 					"count": 0
 				},
 				"7": {
-					"shot": 0,
-					"target": 0,
+					"shot": null,
+					"target": null,
 					"count": 0
 				},
 				"8": {
-					"shot": 0,
-					"target": 0,
+					"shot": null,
+					"target": null,
 					"count": 0
 				},
 				"9": {
-					"shot": 0,
-					"target": 0,
+					"shot": null,
+					"target": null,
 					"count": 0
 				},
 				"10": {
-					"shot": 0,
-					"target": 0,
+					"shot": null,
+					"target": null,
 					"count": 0
 				},
 				"11": {
-					"shot": 0,
-					"target": 0,
+					"shot": null,
+					"target": null,
 					"count": 0
 				}
 			},
@@ -476,8 +463,6 @@
 		"9": {
 			"id": null,
 			"row": null,
-			"logger": {},
-			"id_player": 0,
 			"name": "Dave",
 			"score": -150,
 			"vest": 9,
@@ -488,43 +473,43 @@
 			"position": 7,
 			"hitPlayers": {
 				"1": {
-					"shot": 0,
-					"target": 0,
+					"shot": null,
+					"target": null,
 					"count": 0
 				},
 				"2": {
-					"shot": 0,
-					"target": 0,
+					"shot": null,
+					"target": null,
 					"count": 0
 				},
 				"6": {
-					"shot": 0,
-					"target": 0,
+					"shot": null,
+					"target": null,
 					"count": 0
 				},
 				"7": {
-					"shot": 0,
-					"target": 0,
+					"shot": null,
+					"target": null,
 					"count": 0
 				},
 				"8": {
-					"shot": 0,
-					"target": 0,
+					"shot": null,
+					"target": null,
 					"count": 0
 				},
 				"9": {
-					"shot": 0,
-					"target": 0,
+					"shot": null,
+					"target": null,
 					"count": 0
 				},
 				"10": {
-					"shot": 0,
-					"target": 0,
+					"shot": null,
+					"target": null,
 					"count": 0
 				},
 				"11": {
-					"shot": 0,
-					"target": 0,
+					"shot": null,
+					"target": null,
 					"count": 0
 				}
 			},
@@ -553,8 +538,6 @@
 		"10": {
 			"id": null,
 			"row": null,
-			"logger": {},
-			"id_player": 0,
 			"name": "Maty",
 			"score": 50,
 			"vest": 10,
@@ -565,43 +548,43 @@
 			"position": 5,
 			"hitPlayers": {
 				"1": {
-					"shot": 0,
-					"target": 0,
+					"shot": null,
+					"target": null,
 					"count": 0
 				},
 				"2": {
-					"shot": 0,
-					"target": 0,
+					"shot": null,
+					"target": null,
 					"count": 0
 				},
 				"6": {
-					"shot": 0,
-					"target": 0,
+					"shot": null,
+					"target": null,
 					"count": 1
 				},
 				"7": {
-					"shot": 0,
-					"target": 0,
+					"shot": null,
+					"target": null,
 					"count": 0
 				},
 				"8": {
-					"shot": 0,
-					"target": 0,
+					"shot": null,
+					"target": null,
 					"count": 0
 				},
 				"9": {
-					"shot": 0,
-					"target": 0,
+					"shot": null,
+					"target": null,
 					"count": 0
 				},
 				"10": {
-					"shot": 0,
-					"target": 0,
+					"shot": null,
+					"target": null,
 					"count": 0
 				},
 				"11": {
-					"shot": 0,
-					"target": 0,
+					"shot": null,
+					"target": null,
 					"count": 0
 				}
 			},
@@ -630,8 +613,6 @@
 		"11": {
 			"id": null,
 			"row": null,
-			"logger": {},
-			"id_player": 0,
 			"name": "Ondra",
 			"score": 600,
 			"vest": 11,
@@ -642,43 +623,43 @@
 			"position": 1,
 			"hitPlayers": {
 				"1": {
-					"shot": 0,
-					"target": 0,
+					"shot": null,
+					"target": null,
 					"count": 3
 				},
 				"2": {
-					"shot": 0,
-					"target": 0,
+					"shot": null,
+					"target": null,
 					"count": 1
 				},
 				"6": {
-					"shot": 0,
-					"target": 0,
+					"shot": null,
+					"target": null,
 					"count": 1
 				},
 				"7": {
-					"shot": 0,
-					"target": 0,
+					"shot": null,
+					"target": null,
 					"count": 0
 				},
 				"8": {
-					"shot": 0,
-					"target": 0,
+					"shot": null,
+					"target": null,
 					"count": 0
 				},
 				"9": {
-					"shot": 0,
-					"target": 0,
+					"shot": null,
+					"target": null,
 					"count": 1
 				},
 				"10": {
-					"shot": 0,
-					"target": 0,
+					"shot": null,
+					"target": null,
 					"count": 0
 				},
 				"11": {
-					"shot": 0,
-					"target": 0,
+					"shot": null,
+					"target": null,
 					"count": 0
 				}
 			},
@@ -710,7 +691,6 @@
 		"1": {
 			"id": null,
 			"row": null,
-			"logger": {},
 			"color": 1,
 			"score": 100,
 			"position": 2,
@@ -721,7 +701,6 @@
 		"2": {
 			"id": null,
 			"row": null,
-			"logger": {},
 			"color": 2,
 			"score": 850,
 			"position": 1,
@@ -734,6 +713,5 @@
 	"modeName": "3-TEAM-CSGO",
 	"lives": 3,
 	"ammo": 9999,
-	"respawn": 1,
-	"gameNumber": 971
+	"respawn": 1
 }

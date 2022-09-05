@@ -1,6 +1,7 @@
-@page pages-page Creating pages @brief Documentation about creating page classes
+@page pages-page Creating pages
 
-All page classes need to be in a `Pages` namespace and inherit from `Core\Page` abstract class.
+All page classes need to be in a `Controllers` namespace and inherit from `Lsr\Core\Controller` abstract
+class (`Lsr\Interfaces\ControllerInterface`).
 
 ## Properties
 
@@ -20,17 +21,9 @@ protected string $title = '';
 protected string $description = '';
 ```
 
-#### Template file name
-
-Only the name without the `.latte` suffix
-
-```php
-protected string $templateFile = '';
-```
-
 #### Latte parameters
 
-Set in `init()` method.
+Set common parameters in the `init()` method.
 
 ```php
 protected array $params = [];
@@ -69,68 +62,39 @@ public function getDescription() : string {
 }
    ```
 
-#### generate
+#### view
 
 default:
 
 ```php
-public function generate(bool $return = false) : ?string {
-	$this->params['page'] = $this;
-	if ($return) {
-	  return App::$latte->renderToString(getTemplate($this->templateFile), $this->params);
-	}
-	App::$latte->render(getTemplate($this->templateFile), $this->params);
-	return null;
+public function view(string $templateName) : void {
+	view($templateName, $this->params);
 }
 ```
 
-## Login check
+#### respond
 
-Pages can be set to login-only. To create a login-only page, it needs to implement: `Core\NeedsLoginInterface` and use
-a `Core\NeedsLogin` trait.
-
-### Setting requirements
-
-Page can also have a set of requirements for user. These requirements are set within protected properties.
-
-#### Types
-
-User types that are allowed to view this page.
+default:
 
 ```php
-protected array $allowedTypes = [DB::ADMIN_TYPE, DB::USER_TYPE];
-```
+public function respond(string|array|object $data, int $code = 200, array $headers = []) : never {
+	http_response_code($code);
 
-#### Rights
+	$dataNormalized = '';
+	if (is_string($data)) {
+		$dataNormalized = $data;
+	}
+	else if (is_array($data) || is_object($data)) {
+		$dataNormalized = json_encode($data, JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+		$headers['Content-Type'] = 'application/json';
+	}
 
-Minimal rights for admin users to view this page.
 
-```php
-protected int $minRights = 0;
-```
+	foreach ($headers as $name => $value) {
+		header($name.': '.$value);
+	}
 
-### Example:
-
-This creates a new `With login` page that needs a user to be logged in with type of `ADMIN` and minimal rights of `5`.
-
-```php
-use \Core\Page;
-use \Core\NeedsLoginInterface;
-use \Core\NeedsLogin;
-use \Core\DB;
-
-namespace Pages;
-
-class WithLoginPage extends Page implements NeedsLoginInterface
-{
-	use NeedsLogin;
-
-	protected string $title = 'With login';
-	protected string $description = 'Page that needs user to be logged in.';
-	protected string $templateFile = 'withLogin';
-
-protected array $allowedTypes = [DB::ADMIN_TYPE];
-protected int $minRights = 5;
-
+	echo $dataNormalized;
+	exit;
 }
 ```

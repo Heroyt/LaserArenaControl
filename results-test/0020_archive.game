@@ -1,0 +1,62 @@
+SITE{53874,0504011,EVO-5 MAXX}#
+GAME{20,,20200526182355,20200526182443,6}#
+TIMING{20, 15, 5, 20200526182415,20200526182438,20200526182443}#
+STYLE{1-TEAM-Default,Description of the new profile,1,15, 0}#
+STYLEX{5,9999,999,5135,5135}#
+STYLELEDS{1,15,15,15,15,15,1,5,1,0,15}#
+STYLEFLAGS{0,0,1,1,0,1,0,0,0,1,0,1,0,1,1,1,1,1,0,0,0,1,0,0,1,0,0}#
+STYLESOUNDS{255}#
+SCORING{-50,100,-50,-25,-50,0,100,100,100,100,250000,0,0,0,0,0}#
+ENVIRONMENT{ , , ,C:\LaserMaxx\shared\music\EVO-5 LaserMixx Standard\EVO-5 LaserMixx Standard Armed.mp3,C:\LaserMaxx\shared\music\EVO-5 LaserMixx Standard\EVO-5 LaserMixx Standard Intro 30sec.mp3,C:\LaserMaxx\shared\music\EVO-5 LaserMixx Standard\EVO-5 LaserMixx Standard Play 15min.mp3,C:\LaserMaxx\shared\music\EVO-5 LaserMixx Standard\EVO-5 LaserMixx Standard Gameover.mp3,,,,}#
+VIPSTYLE{0,1,20,1,13,1,0}#
+VAMPIRESTYLE{0,1,0,3,99,0}#
+SWITCHSTYLE{0,0}#
+ASSISTEDSTYLE{0,0,0,0,0,0,0,0}#
+HITSTREAKSTYLE{0,5,15}#
+SHOWDOWNSTYLE{0,3,1,3,0}#
+ACTIVITYSTYLE{0,0,0}#
+TERMINATESTYLE{0}#
+MINESTYLE{0,0,0,0,Unnamed Unit}#
+MINESTYLE{1,0,0,0,Unnamed Unit}#
+MINESTYLE{2,0,0,0,Unnamed Unit}#
+MINESTYLE{3,0,0,0,Unnamed Unit}#
+MINESTYLE{4,0,0,0,Unnamed Unit}#
+MINESTYLE{5,0,0,0,miniMina}#
+MINESTYLE{6,0,2,0,MinaH}#
+MINESTYLE{7,0,2,0,MinaD/BRANA}#
+
+GROUP{,}#
+PACK{1,Chmelda,0,0,0,0,0}#
+PACK{2,Buzerant 2.0,0,0,0,0,0}#
+PACK{3,Vojta,0,0,0,0,0}#
+PACK{4,Cabrio,2,0,1,0,0}#
+PACK{5,Rysa,0,0,0,0,0}#
+PACK{6,Buzerant 3.0,0,0,0,0,0}#
+PACK{8,Nufik,2,0,1,0,0}#
+PACK{9,Davydeg,2,0,1,0,0}#
+PACK{10,Buzerant,0,0,0,0,0}#
+TEAM{0,Red team,4}#
+TEAM{2,Blue team,2}#
+
+PACKX{2,0,32,1,2,4,,36}#
+PACKX{3,50,14,1,1,3,,36}#
+PACKX{4,350,43,4,1,1,,27}#
+PACKX{6,-50,9,0,1,5,,26}#
+PACKX{8,-100,18,1,4,6,,25}#
+PACKX{10,250,32,3,1,2,,25}#
+PACKY{2,0,0,0,0,9967,3,0,0,0,0,0,1,0,2,0,997,876,0,0,0,0,0}#
+PACKY{3,0,0,0,0,9985,7,0,0,0,0,0,1,0,1,0,998,876,50,0,0,0,0}#
+PACKY{4,0,0,0,0,9956,9,0,0,0,0,0,4,0,1,0,998,876,350,0,0,0,0}#
+PACKY{6,0,0,0,0,9990,0,0,0,0,0,0,0,0,1,0,998,876,-50,0,0,0,0}#
+PACKY{8,0,0,0,0,9981,6,0,0,0,0,0,1,0,4,0,995,876,-100,0,0,0,0}#
+PACKY{10,0,0,0,0,9967,9,0,0,0,0,0,3,0,1,0,997,876,250,0,0,0,0}#
+TEAMX{0,250,2}#
+TEAMX{2,250,1}#
+HITS{2,0,0,0,0,1,0}#
+HITS{3,0,0,1,0,0,0}#
+HITS{4,2,1,0,0,0,1}#
+HITS{6,0,0,0,0,0,0}#
+HITS{8,0,0,0,1,0,0}#
+HITS{10,0,0,0,0,3,0}#
+
+GAMECLONES{0}#

@@ -12,8 +12,8 @@
 
 namespace App\Controllers;
 
-use App\Core\Controller;
-use App\Core\DB;
+use Lsr\Core\Controller;
+use Lsr\Core\Requests\Request;
 
 /**
  * @class   E404
@@ -37,9 +37,11 @@ class E404 extends Controller
 	 */
 	protected string $description = 'Page not found';
 
-	public function show() : void {
-		DB::select('page_info', '*')->fetchAll();
+	public function show(Request $request) : void {
+		if ($request->header('Accept') === 'application/json') {
+			$this->respond(['error' => 'Resource not found'], 404);
+		}
 		http_response_code(404);
-		view('errors/E404', $this->params);
+		$this->view('errors/E404');
 	}
 }

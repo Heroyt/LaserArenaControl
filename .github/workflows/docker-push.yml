@@ -23,4 +23,6 @@ jobs:
                     username: ${{ secrets.DOCKERHUB_USERNAME }}
                     password: ${{ secrets.DOCKERHUB_TOKEN }}
                     cache: true
+                    tags: latest
                     tag_names: true
+                    tag_semver: true

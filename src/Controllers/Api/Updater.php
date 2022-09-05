@@ -2,11 +2,12 @@
 
 namespace App\Controllers\Api;
 
-use App\Core\ApiController;
-use App\Core\Request;
 use App\Install\Install;
-use App\Logging\DirectoryCreationException;
-use App\Logging\Logger;
+use JsonException;
+use Lsr\Core\ApiController;
+use Lsr\Core\Requests\Request;
+use Lsr\Logging\Exceptions\DirectoryCreationException;
+use Lsr\Logging\Logger;
 
 /**
  *
@@ -53,6 +54,7 @@ class Updater extends ApiController
 
 		ob_start();
 		$success = Install::install();
+		/** @var string $output */
 		$output = ob_get_clean();
 
 		if (!$success) {
@@ -65,11 +67,41 @@ class Updater extends ApiController
 	}
 
 	/**
+	 * Install the database changes
+	 *
+	 * @param Request $request
+	 *
+	 * @return void
+	 * @throws JsonException
+	 */
+	public function install(Request $request) : void {
+		try {
+			$logger = new Logger(LOG_DIR.'api/', 'update');
+			$logger->info('Updating LAC - install ('.$request->getIp().')');
+		} catch (DirectoryCreationException $e) {
+			$logger = null;
+		}
+
+		ob_start();
+		$success = Install::install(isset($request->post['fresh']) && $request->post['fresh'] === 1);
+		/** @var string|false $output */
+		$output = ob_get_clean();
+
+		if (!$success) {
+			$logger?->warning('Install failed');
+			$logger?->debug($output !== false ? $output : '');
+			$this->respond(['error' => 'Install failed', 'output' => $output], 500);
+		}
+		$this->respond(['success' => true, 'output' => $output]);
+	}
+
+	/**
 	 * Pull changes from remote using an API route
 	 *
 	 * @param Request $request
 	 *
 	 * @return void
+	 * @throws JsonException
 	 */
 	public function pull(Request $request) : void {
 		try {
@@ -153,6 +185,7 @@ class Updater extends ApiController
 	 * @param Request $request
 	 *
 	 * @return void
+	 * @throws JsonException
 	 */
 	public function build(Request $request) : void {
 		try {
@@ -182,33 +215,6 @@ class Updater extends ApiController
 			$this->respond(['error' => 'Cannot execute build', 'errorCode' => $returnCode, 'output' => $output], 500);
 		}
 		$this->respond(['success' => true]);
-	}
-
-	/**
-	 * Install the database changes
-	 *
-	 * @param Request $request
-	 *
-	 * @return void
-	 */
-	public function install(Request $request) : void {
-		try {
-			$logger = new Logger(LOG_DIR.'api/', 'update');
-			$logger->info('Updating LAC - install ('.$request->getIp().')');
-		} catch (DirectoryCreationException $e) {
-			$logger = null;
-		}
-
-		ob_start();
-		$success = Install::install(isset($request->post['fresh']) && $request->post['fresh'] === 1);
-		$output = ob_get_clean();
-
-		if (!$success) {
-			$logger?->warning('Install failed');
-			$logger?->debug($output);
-			$this->respond(['error' => 'Install failed', 'output' => $output], 500);
-		}
-		$this->respond(['success' => true, 'output' => $output]);
 	}
 
 }

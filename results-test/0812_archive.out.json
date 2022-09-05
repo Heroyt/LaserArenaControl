@@ -1,7 +1,6 @@
 {
 	"id": null,
 	"row": null,
-	"logger": {},
 	"fileTime": {
 		"date": "2022-03-13 15:13:46.000000",
 		"timezone_type": 3,
@@ -28,16 +27,14 @@
 		"after": 5
 	},
 	"mode": {
-		"id": null,
-		"row": null,
-		"logger": {},
+		"id": 1,
 		"name": "Team deathmach",
-		"description": "Classic team game type.",
+		"description": "Classic team game.",
 		"type": "TEAM",
 		"settings": {
 			"public": true,
 			"mines": true,
-			"partWin": true,
+			"partWin": false,
 			"partTeams": true,
 			"partPlayers": true,
 			"partHits": true,
@@ -52,12 +49,12 @@
 			"playerPlayersTeams": true,
 			"playerKd": true,
 			"playerFavourites": true,
-			"playerLives": true,
+			"playerLives": false,
 			"teamScore": true,
 			"teamAccuracy": true,
 			"teamShots": true,
 			"teamHits": true,
-			"teamZakladny": true,
+			"teamZakladny": false,
 			"bestScore": true,
 			"bestHits": true,
 			"bestDeaths": true,
@@ -91,8 +88,6 @@
 		"1": {
 			"id": null,
 			"row": null,
-			"logger": {},
-			"id_player": 0,
 			"name": "Miroslav",
 			"score": 3275,
 			"vest": 1,
@@ -103,23 +98,23 @@
 			"position": 1,
 			"hitPlayers": {
 				"1": {
-					"shot": 0,
-					"target": 0,
+					"shot": null,
+					"target": null,
 					"count": 0
 				},
 				"2": {
-					"shot": 0,
-					"target": 0,
+					"shot": null,
+					"target": null,
 					"count": 3
 				},
 				"3": {
-					"shot": 0,
-					"target": 0,
+					"shot": null,
+					"target": null,
 					"count": 26
 				},
 				"4": {
-					"shot": 0,
-					"target": 0,
+					"shot": null,
+					"target": null,
 					"count": 29
 				}
 			},
@@ -148,8 +143,6 @@
 		"2": {
 			"id": null,
 			"row": null,
-			"logger": {},
-			"id_player": 0,
 			"name": "Mario",
 			"score": -1050,
 			"vest": 2,
@@ -160,23 +153,23 @@
 			"position": 4,
 			"hitPlayers": {
 				"1": {
-					"shot": 0,
-					"target": 0,
+					"shot": null,
+					"target": null,
 					"count": 0
 				},
 				"2": {
-					"shot": 0,
-					"target": 0,
+					"shot": null,
+					"target": null,
 					"count": 0
 				},
 				"3": {
-					"shot": 0,
-					"target": 0,
+					"shot": null,
+					"target": null,
 					"count": 0
 				},
 				"4": {
-					"shot": 0,
-					"target": 0,
+					"shot": null,
+					"target": null,
 					"count": 0
 				}
 			},
@@ -205,8 +198,6 @@
 		"3": {
 			"id": null,
 			"row": null,
-			"logger": {},
-			"id_player": 0,
 			"name": "Erika",
 			"score": 500,
 			"vest": 3,
@@ -217,23 +208,23 @@
 			"position": 3,
 			"hitPlayers": {
 				"1": {
-					"shot": 0,
-					"target": 0,
+					"shot": null,
+					"target": null,
 					"count": 16
 				},
 				"2": {
-					"shot": 0,
-					"target": 0,
+					"shot": null,
+					"target": null,
 					"count": 4
 				},
 				"3": {
-					"shot": 0,
-					"target": 0,
+					"shot": null,
+					"target": null,
 					"count": 0
 				},
 				"4": {
-					"shot": 0,
-					"target": 0,
+					"shot": null,
+					"target": null,
 					"count": 0
 				}
 			},
@@ -262,8 +253,6 @@
 		"4": {
 			"id": null,
 			"row": null,
-			"logger": {},
-			"id_player": 0,
 			"name": "Sebastian",
 			"score": 2550,
 			"vest": 4,
@@ -274,23 +263,23 @@
 			"position": 2,
 			"hitPlayers": {
 				"1": {
-					"shot": 0,
-					"target": 0,
+					"shot": null,
+					"target": null,
 					"count": 27
 				},
 				"2": {
-					"shot": 0,
-					"target": 0,
+					"shot": null,
+					"target": null,
 					"count": 14
 				},
 				"3": {
-					"shot": 0,
-					"target": 0,
+					"shot": null,
+					"target": null,
 					"count": 4
 				},
 				"4": {
-					"shot": 0,
-					"target": 0,
+					"shot": null,
+					"target": null,
 					"count": 0
 				}
 			},
@@ -322,7 +311,6 @@
 		{
 			"id": null,
 			"row": null,
-			"logger": {},
 			"color": 0,
 			"score": 3050,
 			"position": 1,
@@ -333,7 +321,6 @@
 		{
 			"id": null,
 			"row": null,
-			"logger": {},
 			"color": 1,
 			"score": 2225,
 			"position": 2,
@@ -346,6 +333,5 @@
 	"modeName": "1-TEAM-DEATHMACH",
 	"lives": 999,
 	"ammo": 9999,
-	"respawn": 5,
-	"gameNumber": 812
+	"respawn": 5
 }

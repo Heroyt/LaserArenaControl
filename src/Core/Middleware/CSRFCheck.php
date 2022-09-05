@@ -6,9 +6,13 @@
 namespace App\Core\Middleware;
 
 
-use App\Core\Request;
-use App\Core\Routing\Middleware;
+use Lsr\Core\Requests\Request;
+use Lsr\Core\Routing\Middleware;
+use Lsr\Interfaces\RequestInterface;
 
+/**
+ * Middleware to check cross-site request forgery attack using a token
+ */
 class CSRFCheck implements Middleware
 {
 
@@ -17,7 +21,7 @@ class CSRFCheck implements Middleware
 	 *
 	 * @return bool
 	 */
-	public function handle(Request $request) : bool {
+	public function handle(RequestInterface $request) : bool {
 		$csrfName = implode('/', $request->path);
 		if (formValid($csrfName)) {
 			$request->query['error'] = lang('Požadavek vypršel, zkuste to znovu.', context: 'errors');

@@ -2345,4 +2345,3 @@ msgstr "Žlutý tým"
 msgctxt "team.names"
 msgid "Ocean team"
 msgstr "Oceánový tým"
-

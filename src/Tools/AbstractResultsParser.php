@@ -4,9 +4,12 @@
  */
 namespace App\Tools;
 
-use App\Exceptions\FileException;
 use App\Tools\Interfaces\ResultsParserInterface;
+use Lsr\Exceptions\FileException;
 
+/**
+ * Abstract base for any result parser class
+ */
 abstract class AbstractResultsParser implements ResultsParserInterface
 {
 
@@ -23,7 +26,11 @@ abstract class AbstractResultsParser implements ResultsParserInterface
 		if (!file_exists($this->fileName) || !is_readable($this->fileName)) {
 			throw new FileException('File "'.$this->fileName.'" does not exist or is not readable');
 		}
-		$this->fileContents = file_get_contents($this->fileName);
+		$contents = file_get_contents($this->fileName);
+		if ($contents === false) {
+			throw new FileException('File "'.$this->fileName.'" read failed');
+		}
+		$this->fileContents = utf8_encode($contents);
 	}
 
 }

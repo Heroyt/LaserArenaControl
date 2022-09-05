@@ -7,6 +7,8 @@ import initGate from "./pages/gate";
 import {startLoading, stopLoading} from "./loaders";
 import * as bootstrap from "bootstrap";
 import initVestsSettings from "./pages/settings/vests";
+import initGamesList from "./pages/gamesList";
+import initNewGamePage from "./pages/newGame";
 
 axios.defaults.headers.post['X-Requested-With'] = 'XMLHttpRequest';
 axios.defaults.headers.get['X-Requested-With'] = 'XMLHttpRequest';
@@ -105,6 +107,35 @@ window.addEventListener("load", () => {
 		});
 	});
 
+	// Select description
+	document.querySelectorAll('.select-description').forEach(element => {
+		if (!element.dataset.target) {
+			// Missing target
+			console.log('Missing target');
+			return;
+		}
+
+		const target = document.querySelector(element.dataset.target);
+		console.log(target, target.value);
+		if (!target) {
+			// Invalid target
+			console.log('Invalid target');
+			return;
+		}
+		const option = target.querySelector(`option[value="${target.value}"]`);
+		if (option && option.dataset.description) {
+			console.log(option, target.dataset.description);
+			element.innerText = option.dataset.description;
+		}
+		target.addEventListener('change', () => {
+			const option = target.querySelector(`option[value="${target.value}"]`);
+			if (option && option.dataset.description) {
+				console.log(option, target.dataset.description);
+				element.innerText = option.dataset.description;
+			}
+		});
+	});
+
 	// Tooltips
 	initTooltips(document);
 
@@ -117,6 +148,32 @@ window.addEventListener("load", () => {
 			element.findParentElement("form").submit();
 		});
 	});
+	document.querySelectorAll('[data-toggle="shuffle"]').forEach(element => {
+		if (element.title) {
+			new bootstrap.Tooltip(element);
+		}
+		if (!element.dataset.target) {
+			// Missing target
+			return;
+		}
+		const targets = document.querySelectorAll(element.dataset.target);
+		if (targets.length === 0) {
+			// Invalid target
+			return;
+		}
+		element.addEventListener("click", () => {
+			targets.forEach(target => {
+				const options = target.querySelectorAll('option');
+				if (options.length === 0) {
+					return;
+				}
+				const index = Math.floor(Math.random() * options.length);
+				target.value = options[index].value;
+				const e = new Event("change", {bubbles: true});
+				target.dispatchEvent(e);
+			});
+		});
+	});
 
 	// Pages
 	console.log(page.routeName);
@@ -126,21 +183,13 @@ window.addEventListener("load", () => {
 		initVestsSettings();
 	} else if (page.routeName && page.routeName === 'games-list') {
 		initResultsReload();
+		initGamesList();
 	} else if (page.routeName && (page.routeName === 'results' || page.routeName === 'results-game')) {
 		initResultsReload(getLink(['results']));
 	} else if (page.routeName && page.routeName === 'gate') {
 		initGate();
 	} else if (page.routeName && page.routeName === 'dashboard') {
-		const ws = new WebSocket('ws://' + window.location.hostname + ':9999');
-		ws.onmessage = e => {
-			console.log(e);
-		};
-		const input = document.getElementById('socket');
-		if (input) {
-			input.addEventListener('change', () => {
-				ws.send(input.value + '\n');
-			});
-		}
+		initNewGamePage();
 	}
 
 	// Game timer

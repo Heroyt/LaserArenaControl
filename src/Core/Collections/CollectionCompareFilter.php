@@ -5,9 +5,18 @@ namespace App\Core\Collections;
 use App\Core\Interfaces\CollectionInterface;
 use App\Core\Interfaces\CollectionQueryFilterInterface;
 
+/**
+ * @template T of \Lsr\Core\Models\Model
+ * @implements CollectionQueryFilterInterface<T>
+ */
 class CollectionCompareFilter implements CollectionQueryFilterInterface
 {
 
+	/**
+	 * @param string     $property
+	 * @param Comparison $comparison
+	 * @param T          $value
+	 */
 	public function __construct(
 		public string     $property,
 		public Comparison $comparison,
@@ -15,6 +24,11 @@ class CollectionCompareFilter implements CollectionQueryFilterInterface
 	) {
 	}
 
+	/**
+	 * @param CollectionInterface<T> $collection
+	 *
+	 * @return CollectionQueryFilterInterface<T>
+	 */
 	public function apply(CollectionInterface $collection) : CollectionQueryFilterInterface {
 		$remove = [];
 		foreach ($collection as $key => $value) {

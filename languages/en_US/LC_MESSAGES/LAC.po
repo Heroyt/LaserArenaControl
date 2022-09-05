@@ -2193,7 +2193,7 @@ msgstr "A strategic game where two teams fight against each other, trying to des
 # /templates/pages/new-game/index.latte:44
 msgctxt "gameModes"
 msgid "Rychlá, šílená hra. Po pár smrtích se přebarvíš na barvu toho, kdo tě trefil."
-msgstr "A fast-paced, crazy game mode where you change your team after only a few hits. "
+msgstr "A fast-paced, crazy game mode where you change your team after only a few hits."
 
 # /templates/pages/new-game/index.latte:37
 # /templates/pages/new-game/index.latte:38
@@ -2329,4 +2329,3 @@ msgstr "Yellow team"
 msgctxt "team.names"
 msgid "Ocean team"
 msgstr "Ocean team"
-

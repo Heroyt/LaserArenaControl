@@ -1,4 +1,4 @@
-FROM node:18.4.0-slim AS node_base
+FROM node:18.8.0-slim AS node_base
 FROM php:8.1-apache as setup
 
 COPY --from=node_base / /
@@ -22,6 +22,11 @@ RUN docker-php-ext-install sockets && docker-php-ext-enable sockets
 RUN docker-php-ext-install pdo_mysql && docker-php-ext-enable pdo_mysql
 RUN docker-php-ext-install zip && docker-php-ext-enable zip
 RUN docker-php-ext-install pcntl && docker-php-ext-enable pcntl
+# Memcached
+RUN apt-get -y install libmemcached11 libmemcachedutil2 libmemcached-dev libz-dev
+RUN pecl install memcached
+RUN echo extension=memcached.so >> /usr/local/etc/php/conf.d/memcached.ini
+
 RUN apt-get install -y libicu-dev
 RUN docker-php-ext-install intl && docker-php-ext-enable intl
 RUN apt-get update && apt-get upgrade -y

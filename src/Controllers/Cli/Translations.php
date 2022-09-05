@@ -4,13 +4,13 @@ namespace App\Controllers\Cli;
 
 use App\Cli\Colors;
 use App\Cli\Enums\ForegroundColors;
-use App\Core\CliController;
-use App\Core\CliRequest;
 use Gettext\Generator\MoGenerator;
 use Gettext\Generator\PoGenerator;
 use Gettext\Loader\PoLoader;
 use Gettext\Translation;
 use Gettext\Translations as GettextTranslations;
+use Lsr\Core\CliController;
+use Lsr\Core\Requests\CliRequest;
 
 class Translations extends CliController
 {
@@ -89,7 +89,11 @@ class Translations extends CliController
 
 		// Merge templates
 		if (count($templates) === 1 && count($otherTemplates) === 1) {
-			$this->mergeTranslationFiles(first($templates), first($otherTemplates));
+			/** @var GettextTranslations $template */
+			$template = first($templates);
+			/** @var GettextTranslations $otherTemplate */
+			$otherTemplate = first($otherTemplates);
+			$this->mergeTranslationFiles($template, $otherTemplate);
 		}
 		else {
 			foreach ($templates as $name => $template) {

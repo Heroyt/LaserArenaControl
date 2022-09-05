@@ -2,6 +2,13 @@
 	"name": "heroyt/laser-arena-control",
 	"description": "Systém pro lepší zpracování a sjednocení výsledků LaserGame z různých arén a různých výrobců.",
 	"type": "project",
+	"version": "0.2.5",
+	"repositories": [
+		{
+			"type": "composer",
+			"url": "https://packages.laserliga.cz"
+		}
+	],
 	"scripts": {
 		"serve": "php -S localhost:8000 index.php",
 		"test": "./vendor/bin/phpunit",
@@ -9,7 +16,8 @@
 		"testIntegration": "./vendor/bin/phpunit --testsuite=integration",
 		"docs": "doxygen",
 		"build-production": "composer update --no-dev && composer dump-autoload --no-dev && npm install && npm run buildDev",
-		"build": "composer update && composer dump-autoload && npm install && npm run build"
+		"build": "composer update && composer dump-autoload && npm install && npm run build",
+		"docker-core": "docker build dockerCore --file dockerCore/Dockerfile --tag heroyt/lac_core:$(date +%s) --tag heroyt/lac_core:latest --tag heroyt/lac_core:apache && docker build dockerCore --file dockerCore/DockerfileNginx --tag heroyt/lac_core:nginx-$(date +%s) --tag heroyt/lac_core:nginx-latest --tag heroyt/lac_core:nginx"
 	},
 	"require": {
 		"dibi/dibi": "^4.2",
@@ -20,22 +28,32 @@
 		"ext-simplexml": "*",
 		"ext-sockets": "*",
 		"ext-zip": "*",
-		"gettext/gettext": "^5.5",
-		"guzzlehttp/guzzle": "^7.4",
-		"latte/latte": "^2.10",
+		"gettext/gettext": "^5.7",
+		"guzzlehttp/guzzle": "^7.5",
+		"latte/latte": "^3.0.0",
 		"nette/di": "^3.0",
 		"nette/http": "^3.1",
 		"nette/security": "^3.1",
 		"nette/utils": "^3.2",
 		"php": "^8.1",
-		"psr/log": "^1.1",
-		"tracy/tracy": "^2.8",
-		"endroid/qr-code": "^4.4",
-		"ext-pcntl": "*"
+		"psr/log": "^3.0",
+		"tracy/tracy": "^2.9",
+		"endroid/qr-code": "^4.5",
+		"ext-pcntl": "*",
+		"lsr/interfaces": "^0.1",
+		"lsr/helpers": "^0.1",
+		"lsr/core": "^0.1",
+		"lsr/routing": "^0.1",
+		"lsr/logging": "^0.1",
+		"lsr/request": "^0.1"
 	},
 	"require-dev": {
 		"roave/security-advisories": "dev-latest",
-		"phpunit/phpunit": "^9.5"
+		"phpunit/phpunit": "^9.5",
+		"phpstan/phpstan": "^1.8",
+		"phpstan/extension-installer": "^1.1",
+		"phpstan/phpstan-dibi": "^1.0",
+		"phpstan/phpstan-nette": "^1.0"
 	},
 	"license": "GPL-3.0-or-later",
 	"autoload": {
@@ -51,5 +69,10 @@
 			"name": "Tomáš Vojík",
 			"email": "vojik@wboy.cz"
 		}
-	]
+	],
+	"config": {
+		"allow-plugins": {
+			"phpstan/extension-installer": true
+		}
+	}
 }

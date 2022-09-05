@@ -16,6 +16,9 @@
 namespace App\Core;
 
 use Dibi\Exception;
+use Lsr\Core\App;
+use Lsr\Core\DB;
+use Lsr\Helpers\Tools\Timer;
 use RuntimeException;
 
 /**
@@ -44,16 +47,22 @@ class Loader
 	 */
 	public static function init() : void {
 
-		if (defined('INDEX') && INDEX) {
+		if (defined('INDEX')) {
+			Timer::start('core.init.config');
 			// Initialize config
 			self::initConfig();
+			Timer::stop('core.init.config');
 
 			// Initialize app
+			Timer::start('core.init.app');
 			App::init();
+			Timer::stop('core.init.app');
 		}
 
 		// Setup database connection
+		Timer::start('core.init.db');
 		self::initDB();
+		Timer::stop('core.init.db');
 
 	}
 
@@ -91,7 +100,7 @@ class Loader
 			DB::init();
 		} catch (Exception $e) {
 			App::getLogger()->error('Cannot connect to the database!'.$e->getMessage());
-			throw new RuntimeException('Cannot connect to the database!', $e->getCode(), $e);
+			throw new RuntimeException('Cannot connect to the database!'.PHP_EOL.$e->getMessage().PHP_EOL.$e->getTraceAsString().PHP_EOL.json_encode(App::getConfig()), $e->getCode(), $e);
 		}
 	}
 

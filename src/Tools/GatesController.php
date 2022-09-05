@@ -2,10 +2,16 @@
 /**
  * @author Tomáš Vojík <xvojik00@stud.fit.vutbr.cz>, <vojik@wboy.cz>
  */
+
 namespace App\Tools;
 
 use Exception;
+use RuntimeException;
+use Socket;
 
+/**
+ * Controller for sending UDP requests to control gates
+ */
 class GatesController
 {
 
@@ -20,7 +26,7 @@ class GatesController
 	 * @throws Exception
 	 */
 	public static function start(string $ip) : int {
-		return self::sendCommand($ip, hex2bin(self::START_COMMAND));
+		return self::sendCommand($ip, (string) hex2bin(self::START_COMMAND));
 	}
 
 	/**
@@ -31,16 +37,20 @@ class GatesController
 	 * @throws Exception
 	 */
 	public static function sendCommand(string $ip, string $command) : int {
+		/** @var Socket|false $sock */
 		$sock = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
 		if ($sock === false) {
-			throw new Exception(lang('Nepodařilo se vytvořit socket.'));
+			throw new RuntimeException(lang('Nepodařilo se vytvořit socket.'));
 		}
 		$res = socket_connect($sock, $ip, self::PORT);
 		if ($res === false) {
-			throw new Exception(lang('Nepodařilo se připojit k socket serveru ('.$ip.':'.self::PORT.').'));
+			throw new RuntimeException(lang('Nepodařilo se připojit k socket serveru ('.$ip.':'.self::PORT.').'));
 		}
 		$a = socket_write($sock, $command, 5);
 		socket_close($sock);
+		if ($a === false) {
+			return 0;
+		}
 		return $a;
 	}
 
@@ -51,7 +61,7 @@ class GatesController
 	 * @throws Exception
 	 */
 	public static function end(string $ip) : int {
-		return self::sendCommand($ip, hex2bin(self::END_COMMAND));
+		return self::sendCommand($ip, (string) hex2bin(self::END_COMMAND));
 	}
 
 }

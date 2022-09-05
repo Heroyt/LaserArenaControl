@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: English\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2022-09-05 08:51\n"
+"PO-Revision-Date: 2022-09-05 11:40\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -2193,7 +2193,7 @@ msgstr "A strategic game where two teams fight against each other, trying to des
 # /templates/pages/new-game/index.latte:44
 msgctxt "gameModes"
 msgid "Rychlá, šílená hra. Po pár smrtích se přebarvíš na barvu toho, kdo tě trefil."
-msgstr "A fast-paced, crazy game mode where you change your team after only a few hits."
+msgstr "A fast-paced, crazy game mode where you change your team after only a few hits. "
 
 # /templates/pages/new-game/index.latte:37
 # /templates/pages/new-game/index.latte:38
@@ -2329,3 +2329,14 @@ msgstr "Yellow team"
 msgctxt "team.names"
 msgid "Ocean team"
 msgstr "Ocean team"
+
+# /templates/pages/new-game/index.latte:110
+msgctxt "errors"
+msgid "Musíte vybrat alespoň 2 týmy."
+msgstr ""
+
+# /templates/pages/new-game/index.latte:111
+msgctxt "errors"
+msgid "Musíte zadat alespoň 2 hráče."
+msgstr ""
+

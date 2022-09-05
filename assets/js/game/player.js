@@ -67,19 +67,28 @@ export default class Player {
 	}
 
 	update() {
+		if (this.name.trim() === '' && this.$name.value.trim() !== '') {
+			const e = new Event("player-activate", {
+				bubbles: true,
+			});
+			this.$name.dispatchEvent(e);
+		}
+		if (this.name.trim() !== '' && this.$name.value.trim() === '') {
+			const e = new Event("player-deactivate", {
+				bubbles: true,
+			});
+			this.$name.dispatchEvent(e);
+		}
 		this.name = this.$name.value;
 		let found = false;
 		const origTeam = this.team;
 		this.$teams.forEach($team => {
 			if ($team.checked) {
-				console.log($team, $team.value);
 				this.team = $team.value;
 				if ($team.dataset.color) {
 					this.row.style.setProperty('--shadow-color', $team.dataset.color);
-					console.log(this.$vest.style, $team.dataset.color + ' !important');
 					this.$vest.style.setProperty('background-color', $team.dataset.color, 'important');
 					if ($team.dataset.text) {
-						console.log($team.dataset.text);
 						this.$vest.style.setProperty('color', $team.dataset.text, 'important');
 					}
 				}
@@ -88,6 +97,10 @@ export default class Player {
 		});
 		if (!found) {
 			this.team = null;
+
+			this.row.style.removeProperty('--shadow-color');
+			this.$vest.style.removeProperty('background-color');
+			this.$vest.style.removeProperty('color');
 		}
 
 		if (origTeam !== this.team) {
@@ -102,16 +115,6 @@ export default class Player {
 			}
 		}
 
-		found = false;
-		this.$teams.forEach($team => {
-			if ($team.checked) {
-				this.team = $team.value;
-				found = true;
-			}
-		});
-		if (!found) {
-			this.team = null;
-		}
 		found = false;
 		this.$skills.forEach($skill => {
 			if ($skill.checked) {

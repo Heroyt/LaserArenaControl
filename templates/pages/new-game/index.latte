@@ -69,7 +69,8 @@
 			<h4>
 				{lang 'Náhodné rozdělení týmů', context: 'game'}:
 			</h4>
-			<div class="d-flex align-items-stretch justify-content-center w-100 mb-3 mt-2" style="height: 2rem;">
+			<div id="team-random-select" class="d-flex align-items-stretch justify-content-center w-100 mb-3 mt-2"
+				 style="height: 2rem;">
 				{foreach $colors as $key => $color}
 					<input class="team-color-input" type="checkbox" value="{$key}"
 						   id="team-color-{$key}">
@@ -90,7 +91,7 @@
 			</div>
 		</section>
 		<section id="teams">
-			<h4>
+			<h4 class="text-center">
 				{lang 'Týmy', context: 'game'}
 			</h4>
 			<div n:foreach="$colors as $key => $color" class="team-row input-group my-1 d-none" id="team-{$key}"
@@ -104,6 +105,13 @@
 			</div>
 		</section>
 	</div>
+
+	<script>
+		const messages = {
+			missingShuffleTeam: '{lang 'Musíte vybrat alespoň 2 týmy.', context: 'errors'}',
+			noPlayersActive: '{lang 'Musíte zadat alespoň 2 hráče.', context: 'errors'}',
+		}
+	</script>
 {/block}
 
 {define vestRow}

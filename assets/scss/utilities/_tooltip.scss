@@ -1,0 +1,12 @@
+@each $name, $color in $theme-colors {
+	.tooltip-#{$name} {
+		--#{$prefix}tooltip-bg: var(--#{$name});
+		$text: color-contrast($color);
+
+		@if $text == $white or $text == $color-contrast-light {
+			--#{$prefix}tooltip-color: var(--white);
+		} @else {
+			--#{$prefix}tooltip-color: var(--black);
+		}
+	}
+}

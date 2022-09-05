@@ -3,6 +3,7 @@
 {varType App\GameModels\Vest[] $vests}
 {varType string $system}
 {varType string[] $colors}
+{varType string[] $teamNames}
 {varType App\GameModels\Game\GameModes\AbstractMode[] $gameModes}
 
 {block content}
@@ -64,10 +65,10 @@
 				</button>
 			</div>
 		</section>
-		<section id="teams" class="text-center">
-			<label for="team-color">
+		<section id="teams-random" class="text-center">
+			<h4>
 				{lang 'Náhodné rozdělení týmů', context: 'game'}:
-			</label>
+			</h4>
 			<div class="d-flex align-items-stretch justify-content-center w-100 mb-3 mt-2" style="height: 2rem;">
 				{foreach $colors as $key => $color}
 					<input class="team-color-input" type="checkbox" value="{$key}"
@@ -86,6 +87,20 @@
 					<i class="fa-solid fa-star"></i>
 					{lang 'Náhodně fér', context: 'actions'}
 				</button>
+			</div>
+		</section>
+		<section id="teams">
+			<h4>
+				{lang 'Týmy', context: 'game'}
+			</h4>
+			<div n:foreach="$colors as $key => $color" class="team-row input-group my-1 d-none" id="team-{$key}"
+													   data-key="{$key}">
+				<label for="team-{$key}-name" class="input-group-text player-count justify-content-center"
+					   style="background-color: {$color|noescape}; color: {\App\Tools\Color::getFontColor($color)|noescape}; width: 2.5rem;">
+					0
+				</label>
+				<input type="text" name="team" maxlength="12" class="form-control team-name" id="team-{$key}-name"
+					   value="{$teamNames[$key]}">
 			</div>
 		</section>
 	</div>

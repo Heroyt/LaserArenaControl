@@ -1,13 +1,14 @@
 export default class Player {
 
 	/**
-	 *
 	 * @param vest {String}
 	 * @param row {HTMLDivElement|Node}
+	 * @param game {Game}
 	 */
-	constructor(vest, row) {
+	constructor(vest, row, game) {
 		this.vest = vest;
 		this.row = row;
+		this.game = game;
 
 		this.skill = 1;
 		this.team = null;
@@ -68,6 +69,7 @@ export default class Player {
 	update() {
 		this.name = this.$name.value;
 		let found = false;
+		const origTeam = this.team;
 		this.$teams.forEach($team => {
 			if ($team.checked) {
 				console.log($team, $team.value);
@@ -87,6 +89,19 @@ export default class Player {
 		if (!found) {
 			this.team = null;
 		}
+
+		if (origTeam !== this.team) {
+			// Team changed - update team objects
+			let team = this.game.teams.get(origTeam);
+			if (team) {
+				team.update();
+			}
+			team = this.game.teams.get(this.team);
+			if (team) {
+				team.update();
+			}
+		}
+
 		found = false;
 		this.$teams.forEach($team => {
 			if ($team.checked) {
@@ -108,10 +123,10 @@ export default class Player {
 			this.skill = 1;
 			this.$skills[0].checked = true;
 		}
+
 		const e = new Event("update", {
 			bubbles: true,
 		});
-		this.$name.dispatchEvent(e);
 		this.row.dispatchEvent(e);
 	}
 

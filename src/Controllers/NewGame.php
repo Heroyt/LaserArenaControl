@@ -17,6 +17,7 @@ class NewGame extends Controller
 		$this->params['system'] = $_GET['system'] ?? first(GameFactory::getSupportedSystems());
 		$this->params['vests'] = Vest::getForSystem($this->params['system']);
 		$this->params['colors'] = GameFactory::getAllTeamsColors()[$this->params['system']];
+		$this->params['teamNames'] = GameFactory::getAllTeamsNames()[$this->params['system']];
 		$this->params['gameModes'] = GameModeFactory::getAll(['system' => $this->params['system']]);
 		$this->view('pages/new-game/index');
 	}

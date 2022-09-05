@@ -1,4 +1,5 @@
 import Player from "./player";
+import Team from "./team";
 
 export default class Game {
 
@@ -21,7 +22,7 @@ export default class Game {
 		/**
 		 * @type {NodeListOf<HTMLInputElement>}
 		 */
-		this.$teams = document.querySelectorAll('#teams .team-color-input');
+		this.$teams = document.querySelectorAll('#teams-random .team-color-input');
 		this.$shuffleTeams = document.getElementById('random-teams');
 		this.$shuffleFairTeams = document.getElementById('random-fair-teams');
 
@@ -29,10 +30,14 @@ export default class Game {
 
 		document.querySelectorAll('.vest-row').forEach(row => {
 			const vestNum = row.dataset.vest;
-			this.players.set(vestNum, new Player(vestNum, row));
+			this.players.set(vestNum, new Player(vestNum, row, this));
 			row.addEventListener("update", () => {
 				console.log(this);
 			})
+		});
+		document.querySelectorAll('.team-row').forEach(row => {
+			const key = row.dataset.key;
+			this.teams.set(key, new Team(key, row, this));
 		});
 		console.log(this);
 

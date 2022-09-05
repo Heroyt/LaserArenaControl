@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: Czech\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2022-06-22 12:43\n"
+"PO-Revision-Date: 2022-09-05 08:51\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=4; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 3;\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -2115,30 +2115,30 @@ msgstr "Apokalypsa"
 # /vendor/lsr/helpers/src/Cli/CliHelper.php:91
 msgctxt "cli.help.arguments"
 msgid "If set, only the records with specified tags will be removed"
-msgstr ""
+msgstr "Je-li nastaveno, budou odstraněny pouze záznamy se zadanými štítky"
 
 # /templates/../vendor/lsr/helpers/templates/Caching/tab.latte:28
 msgctxt "debugPanel"
 msgid "Invalid cache class"
-msgstr ""
+msgstr "Neplatná třída mezipaměti"
 
 # /templates/../vendor/lsr/helpers/templates/Caching/tab.latte:28
 msgctxt "debugPanel"
 msgid "%d call"
 msgid_plural "%d calls"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "%d volání"
+msgstr[1] "%d volání"
+msgstr[2] "%d volání"
+msgstr[3] "%d volání"
 
 # /templates/pages/games-list/index.latte:58
 msgid "Znovu importovat ze souboru"
-msgstr ""
+msgstr "Znovu importovat ze souboru"
 
 # /vendor/lsr/core/src/Controller.php:84
 msgctxt "pageTitles"
 msgid "New game"
-msgstr ""
+msgstr "Nová hra"
 
 # /templates/pages/new-game/index.latte:12
 # /templates/pages/new-game/index.latte:13
@@ -2146,7 +2146,7 @@ msgstr ""
 # /templates/pages/new-game/index.latte:15
 msgctxt "game.actions"
 msgid "Nahrát hru"
-msgstr ""
+msgstr "Nahrát hru"
 
 # /templates/pages/new-game/index.latte:15
 # /templates/pages/new-game/index.latte:17
@@ -2154,7 +2154,7 @@ msgstr ""
 # /templates/pages/new-game/index.latte:19
 msgctxt "game.actions"
 msgid "Spustit hru"
-msgstr ""
+msgstr "Spustit hru"
 
 # /templates/pages/new-game/index.latte:18
 # /templates/pages/new-game/index.latte:21
@@ -2162,14 +2162,14 @@ msgstr ""
 # /templates/pages/new-game/index.latte:23
 msgctxt "game.actions"
 msgid "Ukončit hru"
-msgstr ""
+msgstr "Ukončit hru"
 
 # /templates/pages/new-game/index.latte:33
 # /templates/pages/new-game/index.latte:38
 # /templates/pages/new-game/index.latte:39
 msgctxt "game"
 msgid "Herní mód"
-msgstr ""
+msgstr "Herní mód"
 
 # /templates/pages/new-game/index.latte:37
 # /templates/pages/new-game/index.latte:38
@@ -2177,7 +2177,7 @@ msgstr ""
 # /templates/pages/new-game/index.latte:44
 msgctxt "gameModes"
 msgid "Classic team game."
-msgstr ""
+msgstr "Klasická týmová hra."
 
 # /templates/pages/new-game/index.latte:37
 # /templates/pages/new-game/index.latte:38
@@ -2185,7 +2185,7 @@ msgstr ""
 # /templates/pages/new-game/index.latte:44
 msgctxt "gameModes"
 msgid "Classic free for all game."
-msgstr ""
+msgstr "Klasická hra všichni proti všem."
 
 # /templates/pages/new-game/index.latte:37
 # /templates/pages/new-game/index.latte:38
@@ -2193,7 +2193,7 @@ msgstr ""
 # /templates/pages/new-game/index.latte:44
 msgctxt "gameModes"
 msgid "Náročná hra o přežití se 3mi životy."
-msgstr ""
+msgstr "Náročná hra o přežití se 3mi životy."
 
 # /templates/pages/new-game/index.latte:37
 # /templates/pages/new-game/index.latte:38
@@ -2201,7 +2201,7 @@ msgstr ""
 # /templates/pages/new-game/index.latte:44
 msgctxt "gameModes"
 msgid "Strategická hra, kdy 2 týmy bojují proti sobě o zničení základny druhého týmu."
-msgstr ""
+msgstr "Strategická hra, kdy 2 týmy bojují proti sobě o zničení základny druhého týmu."
 
 # /templates/pages/new-game/index.latte:37
 # /templates/pages/new-game/index.latte:38
@@ -2209,7 +2209,7 @@ msgstr ""
 # /templates/pages/new-game/index.latte:44
 msgctxt "gameModes"
 msgid "Rychlá, šílená hra. Po pár smrtích se přebarvíš na barvu toho, kdo tě trefil."
-msgstr ""
+msgstr "Rychlá, šílená hra. Po pár smrtích se přebarvíš na barvu toho, kdo tě trefil."
 
 # /templates/pages/new-game/index.latte:37
 # /templates/pages/new-game/index.latte:38
@@ -2217,7 +2217,7 @@ msgstr ""
 # /templates/pages/new-game/index.latte:44
 msgctxt "gameModes"
 msgid "Klasická hra, ale tentokrát bez světel."
-msgstr ""
+msgstr "Klasická hra, ale tentokrát bez světel."
 
 # /templates/pages/new-game/index.latte:38
 # /templates/pages/new-game/index.latte:39
@@ -2225,7 +2225,7 @@ msgstr ""
 # /templates/pages/new-game/index.latte:45
 msgctxt "gameModes"
 msgid "T.M.A"
-msgstr ""
+msgstr "T.M.A"
 
 # /templates/pages/new-game/index.latte:37
 # /templates/pages/new-game/index.latte:38
@@ -2233,7 +2233,7 @@ msgstr ""
 # /templates/pages/new-game/index.latte:44
 msgctxt "gameModes"
 msgid "Hra na zombíky! Vybraní hráči jsou zombie, kteří se snaží infikovat ostatní hráče."
-msgstr ""
+msgstr "Hra na zombíky! Vybraní hráči jsou zombie, kteří se snaží infikovat ostatní hráče."
 
 # /templates/pages/new-game/index.latte:37
 # /templates/pages/new-game/index.latte:38
@@ -2241,7 +2241,7 @@ msgstr ""
 # /templates/pages/new-game/index.latte:44
 msgctxt "gameModes"
 msgid "Strategická hra s omezeným počtem životů a nábojů."
-msgstr ""
+msgstr "Strategická hra s omezeným počtem životů a nábojů."
 
 # /templates/pages/new-game/index.latte:38
 # /templates/pages/new-game/index.latte:39
@@ -2249,7 +2249,7 @@ msgstr ""
 # /templates/pages/new-game/index.latte:45
 msgctxt "gameModes"
 msgid "Team Survival"
-msgstr ""
+msgstr "Týmový Survival"
 
 # /templates/pages/new-game/index.latte:38
 # /templates/pages/new-game/index.latte:39
@@ -2257,7 +2257,7 @@ msgstr ""
 # /templates/pages/new-game/index.latte:45
 msgctxt "gameModes"
 msgid "Marco Polo"
-msgstr ""
+msgstr "Marco Polo"
 
 # /templates/pages/new-game/index.latte:38
 # /templates/pages/new-game/index.latte:39
@@ -2265,7 +2265,7 @@ msgstr ""
 # /templates/pages/new-game/index.latte:45
 msgctxt "gameModes"
 msgid "Zombie"
-msgstr ""
+msgstr "Zombie"
 
 # /templates/pages/new-game/index.latte:49
 # /templates/pages/new-game/index.latte:50
@@ -2274,7 +2274,7 @@ msgstr ""
 # /templates/pages/new-game/index.latte:57
 msgctxt "game"
 msgid "Hudební mód"
-msgstr ""
+msgstr "Hudební mód"
 
 # /templates/pages/new-game/index.latte:61
 # /templates/pages/new-game/index.latte:62
@@ -2283,7 +2283,7 @@ msgstr ""
 # /templates/pages/new-game/index.latte:70
 msgctxt "game"
 msgid "Náhodné rozdělení týmů"
-msgstr ""
+msgstr "Náhodné rozdělení týmů"
 
 # /templates/pages/new-game/index.latte:74
 # /templates/pages/new-game/index.latte:76
@@ -2299,7 +2299,7 @@ msgstr ""
 # /templates/pages/new-game/index.latte:84
 msgctxt "actions"
 msgid "Náhodně"
-msgstr ""
+msgstr "Náhodně"
 
 # /templates/pages/new-game/index.latte:78
 # /templates/pages/new-game/index.latte:80
@@ -2308,40 +2308,40 @@ msgstr ""
 # /templates/pages/new-game/index.latte:88
 msgctxt "actions"
 msgid "Náhodně fér"
-msgstr ""
+msgstr "Náhodně fér"
 
 # /templates/pages/new-game/index.latte:93
 # /templates/pages/new-game/index.latte:94
 msgctxt "game"
 msgid "Týmy"
-msgstr ""
+msgstr "Týmy"
 
 # /src/GameModels/Game/Evo5/Game.php:82
 msgctxt "team.names"
 msgid "Red team"
-msgstr ""
+msgstr "Červený tým"
 
 # /src/GameModels/Game/Evo5/Game.php:83
 msgctxt "team.names"
 msgid "Green team"
-msgstr ""
+msgstr "Zelený tým"
 
 # /src/GameModels/Game/Evo5/Game.php:84
 msgctxt "team.names"
 msgid "Blue team"
-msgstr ""
+msgstr "Modrý tým"
 
 # /src/GameModels/Game/Evo5/Game.php:85
 msgctxt "team.names"
 msgid "Pink team"
-msgstr ""
+msgstr "Růžový tým"
 
 # /src/GameModels/Game/Evo5/Game.php:86
 msgctxt "team.names"
 msgid "Yellow team"
-msgstr ""
+msgstr "Žlutý tým"
 
 # /src/GameModels/Game/Evo5/Game.php:87
 msgctxt "team.names"
 msgid "Ocean team"
-msgstr ""
+msgstr "Oceánový tým"

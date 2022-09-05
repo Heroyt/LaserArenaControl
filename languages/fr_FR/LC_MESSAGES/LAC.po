@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: French\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2022-06-30 09:00\n"
+"PO-Revision-Date: 2022-09-05 08:36\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -789,7 +789,7 @@ msgstr ""
 # /templates/pages/gate/@layout.latte:88
 msgctxt "tips"
 msgid "Vestu si oblečte vždy zbraní dobředu."
-msgstr ""
+msgstr "Portez toujours le gilet avec le pistolet devant."
 
 # /src/GameModels/Tip.php:26
 # /templates/pages/gate/@layout.latte:90
@@ -798,7 +798,7 @@ msgstr ""
 # /templates/pages/gate/@layout.latte:88
 msgctxt "tips"
 msgid "Při týmové hře není výhodné střílet do hráčů se stejnou barvou."
-msgstr ""
+msgstr "Dans un jeu d'équipe, il n'est pas avantageux de tirer sur des joueurs de la même couleur."
 
 # /src/GameModels/Tip.php:26
 # /templates/results/@printLayout.latte:108
@@ -814,7 +814,7 @@ msgstr ""
 # /src/GameModels/Tip.php:27
 msgctxt "tips"
 msgid "Nejlepší výherní taktika je strílet do protihráčů."
-msgstr ""
+msgstr "La meilleure tactique gagnante est de tirer sur les adversaires."
 
 # /src/GameModels/Tip.php:26
 # /src/GameModels/Tip.php:27
@@ -828,7 +828,7 @@ msgstr ""
 # /templates/pages/gate/@layout.latte:88
 msgctxt "tips"
 msgid "Všechny bonusy, kromě štítu, trvají 30s."
-msgstr ""
+msgstr "Tous les bonus, sauf le bouclier, durent 30s."
 
 # /src/GameModels/Tip.php:26
 # /templates/results/@printLayout.latte:108
@@ -885,7 +885,7 @@ msgstr "Allez, allez, allez, allez..."
 # /src/GameModels/Tip.php:27
 msgctxt "tips"
 msgid "Ramenní čidla se trefují nejlépe, zádová nejhůř."
-msgstr ""
+msgstr "Les épaules sont les plus faciles à toucher; le dos est le plus dur."
 
 # /templates/results/@printLayout.latte:112
 # /src/GameModels/Tip.php:26
@@ -925,7 +925,7 @@ msgstr "LASER TAG - SUIT UP!"
 # /src/GameModels/Tip.php:27
 msgctxt "tips"
 msgid "Když tě bolí nohy, kempi!"
-msgstr ""
+msgstr "Quand vos pieds vous font mal, campez-vous!"
 
 # /src/GameModels/Tip.php:26
 # /src/GameModels/Tip.php:27
@@ -1361,19 +1361,19 @@ msgstr "Erreur de base de données s’est produite."
 # /templates/pages/settings/print.latte:15
 msgctxt "results.style.settings"
 msgid "Print defaults"
-msgstr ""
+msgstr "Paramètres d'impression"
 
 # /templates/pages/settings/print.latte:21
 # /templates/pages/settings/print.latte:18
 msgctxt "results.style.settings"
 msgid "Default print style"
-msgstr ""
+msgstr "Style d'impression de base"
 
 # /templates/pages/settings/print.latte:32
 # /templates/pages/settings/print.latte:29
 msgctxt "results.style.settings"
 msgid "Default template"
-msgstr ""
+msgstr "Modèle par défaut"
 
 # /src/Controllers/Cli/Help.php:145
 # /src/Controllers/Cli/Help.php:152
@@ -1417,12 +1417,12 @@ msgstr "Information"
 
 msgctxt "cli.help.arguments"
 msgid "Optional filter for command groups."
-msgstr ""
+msgstr "Filtre optionnel pour les groupes de commandes."
 
 # /src/Services/CliHelper.php:91
 msgctxt "cli.help.arguments"
 msgid "Optional filter for command groups"
-msgstr ""
+msgstr "Filtre optionnel pour les groupes de commandes"
 
 # /templates/pages/new-game/index.latte:38
 # /templates/pages/new-game/index.latte:39
@@ -1516,7 +1516,7 @@ msgstr "Cible"
 
 msgctxt "results.bests.description"
 msgid "Staň se hráčem s největším skóre hry."
-msgstr ""
+msgstr "Devenez le joueur avec le score le plus élevé du jeu."
 
 msgctxt "results.bests.description"
 msgid "Staň se hráčem s největším počtem zásahů hry."
@@ -1817,7 +1817,7 @@ msgstr "Paramètres de la tableau de bord"
 # /templates/pages/settings/gate.latte:11
 msgctxt "settings"
 msgid "Trigger events"
-msgstr ""
+msgstr "Événements déclencheurs"
 
 # /templates/pages/settings/gate.latte:22
 # /templates/pages/settings/gate.latte:14
@@ -1956,11 +1956,11 @@ msgstr "Trophées acquises"
 
 msgctxt "results.bests"
 msgid "Zobrazit dostupné trofeje"
-msgstr ""
+msgstr "Afficher les trophées disponibles"
 
 msgctxt "results"
 msgid "Střely do prázdna"
-msgstr ""
+msgstr "Coups ratés"
 
 msgctxt "results.hits"
 msgid "Zásahy do hráčů"
@@ -1971,7 +1971,7 @@ msgid "Smrti od hráčů"
 msgstr ""
 
 msgid "Bohužel tady nic není..."
-msgstr ""
+msgstr "Malheureusement, il n'y a rien à voir ici…"
 
 msgctxt "results.bests"
 msgid "Dostupné trofeje"
@@ -2087,7 +2087,7 @@ msgstr ""
 
 # /templates/pages/game/index.latte:126
 msgid "Domluv si trénink s profíky!"
-msgstr ""
+msgstr "Réservez une session de formation avec nos pros !"
 
 # /templates/pages/game/leaderboard.latte:24
 # /templates/pages/new-game/index.latte:38
@@ -2329,3 +2329,4 @@ msgstr ""
 msgctxt "team.names"
 msgid "Ocean team"
 msgstr ""
+

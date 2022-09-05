@@ -65,7 +65,7 @@
 				</button>
 			</div>
 		</section>
-		<section id="teams-random" class="text-center">
+		<section id="teams-random" class="text-center solo-hide">
 			<h4>
 				{lang 'Náhodné rozdělení týmů', context: 'game'}:
 			</h4>
@@ -90,7 +90,7 @@
 				</button>
 			</div>
 		</section>
-		<section id="teams">
+		<section id="teams" class="solo-hide">
 			<h4 class="text-center">
 				{lang 'Týmy', context: 'game'}
 			</h4>
@@ -135,7 +135,7 @@
 			<input class="team-color-input" type="radio" name="player[{$vest->vestNum}][team]" value="{$key}"
 				   id="team-color-{$vest->vestNum}-{$key}" data-text="{\App\Tools\Color::getFontColor($color)}"
 				   data-color="{$color|noescape}">
-			<label class="team-color" style="background-color: {$color|noescape};"
+			<label class="team-color solo-hide" style="background-color: {$color|noescape};"
 				   for="team-color-{$vest->vestNum}-{$key}">&nbsp;</label>
 		{/foreach}
 		<input type="radio" name="player[{$vest->vestNum}][skill]" value="1" class="player-skill-input"

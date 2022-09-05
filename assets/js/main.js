@@ -126,12 +126,16 @@ window.addEventListener("load", () => {
 		if (option && option.dataset.description) {
 			console.log(option, target.dataset.description);
 			element.innerText = option.dataset.description;
+		} else {
+			element.innerText = '';
 		}
 		target.addEventListener('change', () => {
 			const option = target.querySelector(`option[value="${target.value}"]`);
 			if (option && option.dataset.description) {
 				console.log(option, target.dataset.description);
 				element.innerText = option.dataset.description;
+			} else {
+				element.innerText = '';
 			}
 		});
 	});

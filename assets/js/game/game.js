@@ -28,6 +28,8 @@ export default class Game {
 		this.$shuffleTeams = document.getElementById('random-teams');
 		this.$shuffleFairTeams = document.getElementById('random-fair-teams');
 
+		this.$soloHide = document.querySelectorAll('.solo-hide');
+
 		this.$clearAll = document.getElementById('clear-all');
 
 		this.teamShuffleTooltip = new Tooltip(
@@ -69,6 +71,19 @@ export default class Game {
 			this.players.forEach(player => {
 				player.clear();
 			})
+		});
+
+		this.$gameMode.addEventListener('change', () => {
+			const type = this.$gameMode.querySelector(`option[value="${this.$gameMode.value}"]`).dataset.type;
+			console.log(type, this.$soloHide);
+
+			this.$soloHide.forEach(elem => {
+				if (type === 'SOLO') {
+					elem.classList.add('d-none');
+				} else {
+					elem.classList.remove('d-none');
+				}
+			});
 		});
 
 		this.$shuffleTeams.addEventListener('click', () => {

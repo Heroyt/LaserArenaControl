@@ -5,10 +5,11 @@
 {varType string[] $colors}
 {varType string[] $teamNames}
 {varType App\GameModels\Game\GameModes\AbstractMode[] $gameModes}
+{varType App\GameModels\Game\Game|null $loadGame}
 
 {block content}
 	<div id="new-game-content" class="w-100">
-		<section id="controls">
+		<section id="controls" class="d-flex justify-content-between">
 			<div class="btn-group">
 				<button type="submit" name="action" value="load" class="btn btn-warning">
 					<i class="fa-solid fa-circle-chevron-up"></i>
@@ -22,6 +23,14 @@
 					<i class="fa-solid fa-circle-stop"></i>
 					{lang 'Ukončit hru', context: 'game.actions'}
 				</button>
+			</div>
+
+			<div class="form-floating">
+				<select class="form-select" id="last-games" aria-label="{lang 'Poslední hry', context: 'game'}"
+						style="max-width: 300px;">
+					<option value="" disabled selected>{lang 'Vybrat hru', context: 'game.select'}</option>
+				</select>
+				<label for="last-games">{lang 'Poslední hry', context: 'game'}</label>
 			</div>
 		</section>
 		<section id="vests">
@@ -101,7 +110,7 @@
 					0
 				</label>
 				<input type="text" name="team" maxlength="12" class="form-control team-name" id="team-{$key}-name"
-					   value="{$teamNames[$key]}">
+					   value="{$teamNames[$key]}" data-default="{$teamNames[$key]}">
 			</div>
 		</section>
 	</div>
@@ -115,6 +124,7 @@
 			vestBroken: '{lang 'Nefunkční', context: 'settings.vests.status'}',
 			vestFailure: '{lang 'Porucha', context: 'settings.vests'}',
 		}
+		const gameData = {$loadGame};
 	</script>
 {/block}
 

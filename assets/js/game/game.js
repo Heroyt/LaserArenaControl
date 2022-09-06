@@ -70,7 +70,13 @@ export default class Game {
 		this.$clearAll.addEventListener('click', () => {
 			this.players.forEach(player => {
 				player.clear();
-			})
+			});
+			this.teams.forEach(team => {
+				team.clear();
+			});
+
+			const e = new Event('clear-all');
+			document.dispatchEvent(e);
 		});
 
 		this.$gameMode.addEventListener('change', () => {
@@ -299,4 +305,30 @@ export default class Game {
 		});
 	}
 
+	/**
+	 * @param data {GameData}
+	 */
+	import(data) {
+		Object.values(data.players).forEach(playerData => {
+			const player = this.players.get(playerData.vest.toString());
+			if (!player) {
+				return;
+			}
+			player.$name.value = playerData.name;
+			player.setTeam(playerData.color.toString());
+			player.update();
+		});
+		Object.values(data.teams).forEach(teamData => {
+			const team = this.teams.get(teamData.color.toString());
+			if (!team) {
+				return;
+			}
+			team.$name.value = teamData.name;
+			team.update();
+		});
+
+		this.$gameMode.value = data.mode.id.toString();
+		const e = new Event('change');
+		this.$gameMode.dispatchEvent(e);
+	}
 }

@@ -45,6 +45,10 @@
 			</td>
 			<td class="text-end">
 				<div class="btn-group">
+					<a href="{link ['system' => $game::SYSTEM, 'game' => $game->code]}"
+					   class="btn btn-success" data-toggle="tooltip" title="{lang 'Použít pro novou hru'}">
+						<i class="fa-solid fa-plus"></i>
+					</a>
 					<a href="{trailingSlashIt(\App\Core\Info::get('liga_api_url')) . 'g/' . $game->code}"
 					   target="_blank"
 					   class="btn btn-primary" data-toggle="tooltip" title="{lang 'Výsledky on-line'}">

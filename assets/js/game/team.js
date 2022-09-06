@@ -20,6 +20,11 @@ export default class Team {
 		this.$name = row.querySelector('.team-name');
 	}
 
+	clear() {
+		this.$name.value = this.$name.dataset.default;
+		this.update();
+	}
+
 	initEvents() {
 		this.$name.addEventListener('input', () => {
 			this.name = this.$name.value;

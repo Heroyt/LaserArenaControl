@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: Russian\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2022-09-05 11:40\n"
+"PO-Revision-Date: 2022-09-06 09:27\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=4; plural=((n%10==1 && n%100!=11) ? 0 : ((n%10 >= 2 && n%10 <=4 && (n%100 < 12 || n%100 > 14)) ? 1 : ((n%10 == 0 || (n%10 >= 5 && n%10 <=9)) || (n%100 >= 11 && n%100 <= 14)) ? 2 : 3));\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -1476,24 +1476,28 @@ msgstr ""
 
 # /templates/pages/settings/vests.latte:69
 # /templates/pages/settings/vests.latte:68
+# /templates/pages/new-game/index.latte:116
 msgctxt "settings.vests"
 msgid "Porucha"
 msgstr ""
 
 # /templates/pages/settings/vests.latte:54
 # /templates/pages/settings/vests.latte:53
+# /templates/pages/new-game/index.latte:113
 msgctxt "settings.vests.status"
 msgid "V pořádku"
 msgstr ""
 
 # /templates/pages/settings/vests.latte:68
 # /templates/pages/settings/vests.latte:65
+# /templates/pages/new-game/index.latte:115
 msgctxt "settings.vests.status"
 msgid "Nefunkční"
 msgstr ""
 
 # /templates/pages/settings/vests.latte:60
 # /templates/pages/settings/vests.latte:59
+# /templates/pages/new-game/index.latte:114
 msgctxt "settings.vests.status"
 msgid "Hratelná"
 msgstr ""
@@ -2297,6 +2301,7 @@ msgstr ""
 # /templates/pages/new-game/index.latte:48
 # /templates/pages/new-game/index.latte:62
 # /templates/pages/new-game/index.latte:84
+# /templates/pages/new-game/index.latte:85
 msgctxt "actions"
 msgid "Náhodně"
 msgstr ""
@@ -2306,12 +2311,14 @@ msgstr ""
 # /templates/pages/new-game/index.latte:82
 # /templates/pages/new-game/index.latte:87
 # /templates/pages/new-game/index.latte:88
+# /templates/pages/new-game/index.latte:89
 msgctxt "actions"
 msgid "Náhodně fér"
 msgstr ""
 
 # /templates/pages/new-game/index.latte:93
 # /templates/pages/new-game/index.latte:94
+# /templates/pages/new-game/index.latte:95
 msgctxt "game"
 msgid "Týmy"
 msgstr ""
@@ -2347,11 +2354,13 @@ msgid "Ocean team"
 msgstr ""
 
 # /templates/pages/new-game/index.latte:110
+# /templates/pages/new-game/index.latte:111
 msgctxt "errors"
 msgid "Musíte vybrat alespoň 2 týmy."
 msgstr ""
 
 # /templates/pages/new-game/index.latte:111
+# /templates/pages/new-game/index.latte:112
 msgctxt "errors"
 msgid "Musíte zadat alespoň 2 hráče."
 msgstr ""

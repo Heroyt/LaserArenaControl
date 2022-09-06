@@ -1462,24 +1462,28 @@ msgstr "evo5"
 
 # /templates/pages/settings/vests.latte:69
 # /templates/pages/settings/vests.latte:68
+# /templates/pages/new-game/index.latte:116
 msgctxt "settings.vests"
 msgid "Porucha"
 msgstr "Defect"
 
 # /templates/pages/settings/vests.latte:54
 # /templates/pages/settings/vests.latte:53
+# /templates/pages/new-game/index.latte:113
 msgctxt "settings.vests.status"
 msgid "V pořádku"
 msgstr "OK"
 
 # /templates/pages/settings/vests.latte:68
 # /templates/pages/settings/vests.latte:65
+# /templates/pages/new-game/index.latte:115
 msgctxt "settings.vests.status"
 msgid "Nefunkční"
 msgstr "Broken"
 
 # /templates/pages/settings/vests.latte:60
 # /templates/pages/settings/vests.latte:59
+# /templates/pages/new-game/index.latte:114
 msgctxt "settings.vests.status"
 msgid "Hratelná"
 msgstr "Playable"
@@ -2281,6 +2285,7 @@ msgstr "Random teams"
 # /templates/pages/new-game/index.latte:48
 # /templates/pages/new-game/index.latte:62
 # /templates/pages/new-game/index.latte:84
+# /templates/pages/new-game/index.latte:85
 msgctxt "actions"
 msgid "Náhodně"
 msgstr "Randomize"
@@ -2290,12 +2295,14 @@ msgstr "Randomize"
 # /templates/pages/new-game/index.latte:82
 # /templates/pages/new-game/index.latte:87
 # /templates/pages/new-game/index.latte:88
+# /templates/pages/new-game/index.latte:89
 msgctxt "actions"
 msgid "Náhodně fér"
 msgstr "Randomize fairly"
 
 # /templates/pages/new-game/index.latte:93
 # /templates/pages/new-game/index.latte:94
+# /templates/pages/new-game/index.latte:95
 msgctxt "game"
 msgid "Týmy"
 msgstr "Teams"
@@ -2331,11 +2338,13 @@ msgid "Ocean team"
 msgstr "Ocean team"
 
 # /templates/pages/new-game/index.latte:110
+# /templates/pages/new-game/index.latte:111
 msgctxt "errors"
 msgid "Musíte vybrat alespoň 2 týmy."
 msgstr ""
 
 # /templates/pages/new-game/index.latte:111
+# /templates/pages/new-game/index.latte:112
 msgctxt "errors"
 msgid "Musíte zadat alespoň 2 hráče."
 msgstr ""

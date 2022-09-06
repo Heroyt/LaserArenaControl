@@ -1,6 +1,7 @@
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CompressionPlugin = require("compression-webpack-plugin");
+const CopyPlugin = require("copy-webpack-plugin");
 const isDevelopment = true;
 
 module.exports = {
@@ -10,7 +11,7 @@ module.exports = {
 		'./assets/scss/main.scss',
 	],
 	output: {
-		filename: 'main.js',
+		filename: '[name].js',
 		path: path.resolve(__dirname, 'dist'),
 		publicPath: "/dist/"
 	},
@@ -57,29 +58,32 @@ module.exports = {
 		}),
 		new CompressionPlugin({
 			test: /\.(js|css)/
-		})
+		}),
+		new CopyPlugin({
+			patterns: [
+				{
+					from: path.resolve(__dirname, "node_modules") + "/flatpickr/dist/l10n",
+					to: "flatpickr/l10n"
+				},
+			],
+		}),
 	],
+	cache: {
+		type: 'filesystem',
+		cacheDirectory: path.resolve(__dirname, 'temp/webpack'),
+	},
 	devtool: "source-map",
 	optimization: {
+		runtimeChunk: 'single',
+		moduleIds: 'deterministic',
 		splitChunks: {
-			chunks: 'async',
-			minSize: 20000,
-			minRemainingSize: 0,
-			minChunks: 1,
-			maxAsyncRequests: 30,
-			maxInitialRequests: 30,
-			enforceSizeThreshold: 50000,
+			chunks: 'all',
 			cacheGroups: {
-				defaultVendors: {
+				vendor: {
 					test: /[\\/]node_modules[\\/]/,
-					priority: -10,
-					reuseExistingChunk: true,
-				},
-				default: {
-					minChunks: 2,
-					priority: -20,
-					reuseExistingChunk: true,
-				},
+					name: 'vendors',
+					chunks: 'all',
+				}
 			},
 		},
 	},

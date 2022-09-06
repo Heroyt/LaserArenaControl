@@ -19,6 +19,8 @@ jscolor.presets.default = {
 	uppercase: false,
 };
 
+flatpickr.localize(flatpickr.l10ns[lang]);
+
 window.addEventListener("load", () => {
 
 	// Auto-format tel

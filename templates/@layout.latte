@@ -67,7 +67,7 @@
 </div>
 
 <script>
-	const lang = {\Lsr\Core\App::getShortLanguageCode()|noescape};
+	const lang = {\Lsr\Core\App::getShortLanguageCode()};
 	const page = {\Lsr\Core\App::getRequest()};
 	const prettyUrl = {\Lsr\Core\App::isPrettyUrl()};
 	const webSocketEventURI = 'ws://' + window.location.hostname + ':' + {\App\Services\EventService::getEventPort()};

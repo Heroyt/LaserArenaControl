@@ -3,7 +3,7 @@ $custom-colors: (
 		"": #000,
 	),
 	"white": (
-		"": #fff,
+		"": ("color": #fff, "alias": 'background'),
 		"200": ("color": #f0f0f0, "alias": 'very-light'),
 		"300": ("color": #e0e0e0, "alias": 'light'),
 	),
@@ -17,6 +17,7 @@ $custom-colors: (
 		"700": ("color": #495057, "alias": 'dark-grey'),
 		"800": #343a40,
 		"900": ('color': #212529, 'alias': 'dark'),
+		"text": ('color': #212529, 'alias': 'text'),
 	),
 	"blue": (
 		"100": #d6f4fe,

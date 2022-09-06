@@ -10,3 +10,12 @@
 		}
 	}
 }
+
+.popover {
+	--#{$prefix}popover-bg: var(--background) !important;
+	--#{$prefix}popover-body-color: var(--text) !important;
+	--#{$prefix}popover-header-bg: var(--light) !important;
+	--#{$prefix}popover-header-color: var(--black) !important;
+	--#{$prefix}popover-border-color: var(--black) !important;
+	--#{$prefix}popover-arrow-border: var(--black) !important;
+}

@@ -110,6 +110,10 @@
 		const messages = {
 			missingShuffleTeam: '{lang 'Musíte vybrat alespoň 2 týmy.', context: 'errors'}',
 			noPlayersActive: '{lang 'Musíte zadat alespoň 2 hráče.', context: 'errors'}',
+			vestOk: '{lang 'V pořádku', context: 'settings.vests.status'}',
+			vestPlayable: '{lang 'Hratelná', context: 'settings.vests.status'}',
+			vestBroken: '{lang 'Nefunkční', context: 'settings.vests.status'}',
+			vestFailure: '{lang 'Porucha', context: 'settings.vests'}',
 		}
 	</script>
 {/block}
@@ -117,7 +121,8 @@
 {define vestRow}
 	{varType App\GameModels\Vest $vest}
 	<div class="input-group my-2 shadow-in-place vest-row rounded" data-vest="{$vest->vestNum}">
-		<label for="player-name-{$vest->vestNum}" class="input-group-text px-2 bg-light text-black vest-num">
+		<div class="input-group-text px-2 bg-light text-black vest-num cursor-pointer"
+			 data-status="{$vest->status->value}" data-info="{$vest->info}">
 			<div>
 				{$vest->vestNum}
 			</div>
@@ -128,7 +133,7 @@
 				<div class="fa-solid fa-circle-exclamation text-danger" data-toggle="tooltip"
 					 title="{$vest->info}"></div>
 			{/if}
-		</label>
+		</div>
 		<input id="player-name-{$vest->vestNum}" type="text" class="form-control player-name"
 			   name="player[{$vest->vestNum}][name]" maxlength="12">
 		{foreach $colors as $key => $color}

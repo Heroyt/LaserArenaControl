@@ -1,4 +1,4 @@
-import {Tooltip} from "bootstrap";
+import {Popover, Tooltip} from "bootstrap";
 import {startLoading, stopLoading} from "./loaders";
 import axios from "axios";
 import EventServerInstance from "./EventServer";
@@ -171,6 +171,13 @@ export function initTooltips(dom) {
 	const tooltipTriggerList = [].slice.call(dom.querySelectorAll('[data-toggle="tooltip"]'))
 	const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
 		return new Tooltip(tooltipTriggerEl)
+	});
+}
+
+export function initPopover(dom) {
+	const tooltipTriggerList = [].slice.call(dom.querySelectorAll('[data-toggle="popover"]'))
+	const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+		return new Popover(tooltipTriggerEl)
 	});
 }
 

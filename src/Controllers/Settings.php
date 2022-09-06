@@ -111,7 +111,7 @@ class Settings extends Controller
 			$this->respond([
 											 'success' => empty($request->passErrors),
 											 'errors'  => $request->passErrors,
-										 ]);
+										 ], empty($request->passErrors) ? 200 : 400);
 		}
 		App::redirect('settings', $request);
 	}

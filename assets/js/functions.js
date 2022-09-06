@@ -411,3 +411,25 @@ export function shuffle(array) {
 
 	return array;
 }
+
+/**
+ * Translate a string
+ * @param string {String}
+ * @param plural {String|null}
+ * @param count {Number}
+ * @param context {String}
+ * @return Promise<AxiosResponse<String>>
+ */
+export function lang(string, plural = null, count = 1, context = null) {
+	return axios.get(
+		'/api/helpers/translate',
+		{
+			params: {
+				string,
+				plural,
+				count,
+				context
+			}
+		}
+	);
+}

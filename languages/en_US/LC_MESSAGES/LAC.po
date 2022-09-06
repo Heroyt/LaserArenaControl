@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: English\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2022-09-05 08:51\n"
+"PO-Revision-Date: 2022-09-06 16:58\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -2291,7 +2291,7 @@ msgstr "A strategic game where two teams fight against each other, trying to des
 # /templates/pages/new-game/index.latte:53
 msgctxt "gameModes"
 msgid "Rychlá, šílená hra. Po pár smrtích se přebarvíš na barvu toho, kdo tě trefil."
-msgstr "A fast-paced, crazy game mode where you change your team after only a few hits."
+msgstr "A fast-paced, crazy game mode where you change your team after only a few hits. "
 
 # /templates/pages/new-game/index.latte:37
 # /templates/pages/new-game/index.latte:38
@@ -2493,7 +2493,7 @@ msgstr "Ocean team"
 # /templates/pages/new-game/index.latte:120
 msgctxt "errors"
 msgid "Musíte vybrat alespoň 2 týmy."
-msgstr ""
+msgstr "You need to choose at least two teams."
 
 # /templates/pages/new-game/index.latte:111
 # /templates/pages/new-game/index.latte:112
@@ -2503,7 +2503,7 @@ msgstr ""
 # /templates/pages/new-game/index.latte:121
 msgctxt "errors"
 msgid "Musíte zadat alespoň 2 hráče."
-msgstr ""
+msgstr "You need to fill in at least two players."
 
 # /templates/pages/new-game/index.latte:28
 # /templates/pages/new-game/index.latte:30
@@ -2513,29 +2513,30 @@ msgstr ""
 # /templates/pages/new-game/index.latte:33
 msgctxt "game"
 msgid "Poslední hry"
-msgstr ""
+msgstr "Last games"
 
 # /templates/pages/new-game/index.latte:29
 # /templates/pages/new-game/index.latte:30
 # /templates/pages/new-game/index.latte:31
 msgctxt "game.select"
 msgid "Vybrat hru"
-msgstr ""
+msgstr "Choose game"
 
 # /src/Controllers/Api/Helpers.php:20
 msgctxt "game"
 msgid "%d player"
 msgid_plural "%d players"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d player"
+msgstr[1] "%d players"
 
 # /src/Controllers/Api/Helpers.php:20
 msgctxt "game"
 msgid "%d team"
 msgid_plural "%d teams"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d team"
+msgstr[1] "%d teams"
 
 # /templates/pages/games-list/index.latte:49
 msgid "Použít pro novou hru"
-msgstr ""
+msgstr "Use for a new game"
+

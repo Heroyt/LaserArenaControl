@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: Czech\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2022-09-05 08:51\n"
+"PO-Revision-Date: 2022-09-06 16:57\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=4; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 3;\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -2509,7 +2509,7 @@ msgstr "Oceánový tým"
 # /templates/pages/new-game/index.latte:120
 msgctxt "errors"
 msgid "Musíte vybrat alespoň 2 týmy."
-msgstr ""
+msgstr "Musíte vybrat alespoň 2 týmy."
 
 # /templates/pages/new-game/index.latte:111
 # /templates/pages/new-game/index.latte:112
@@ -2519,7 +2519,7 @@ msgstr ""
 # /templates/pages/new-game/index.latte:121
 msgctxt "errors"
 msgid "Musíte zadat alespoň 2 hráče."
-msgstr ""
+msgstr "Musíte zadat alespoň 2 hráče."
 
 # /templates/pages/new-game/index.latte:28
 # /templates/pages/new-game/index.latte:30
@@ -2529,33 +2529,34 @@ msgstr ""
 # /templates/pages/new-game/index.latte:33
 msgctxt "game"
 msgid "Poslední hry"
-msgstr ""
+msgstr "Poslední hry"
 
 # /templates/pages/new-game/index.latte:29
 # /templates/pages/new-game/index.latte:30
 # /templates/pages/new-game/index.latte:31
 msgctxt "game.select"
 msgid "Vybrat hru"
-msgstr ""
+msgstr "Vybrat hru"
 
 # /src/Controllers/Api/Helpers.php:20
 msgctxt "game"
 msgid "%d player"
 msgid_plural "%d players"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "%d hráč"
+msgstr[1] "%d hráči"
+msgstr[2] "%d hráčů"
+msgstr[3] "%d hráčů"
 
 # /src/Controllers/Api/Helpers.php:20
 msgctxt "game"
 msgid "%d team"
 msgid_plural "%d teams"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "%d tým"
+msgstr[1] "%d týmy"
+msgstr[2] "%d týmů"
+msgstr[3] "%d týmů"
 
 # /templates/pages/games-list/index.latte:49
 msgid "Použít pro novou hru"
-msgstr ""
+msgstr "Použít pro novou hru"
+

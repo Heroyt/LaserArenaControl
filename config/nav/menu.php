@@ -8,6 +8,7 @@ return [
 	[
 		'name'  => lang('New game'),
 		'route' => 'dashboard',
+		'icon'  => 'fa-solid fa-plus',
 	],
 	[
 		'name'  => lang('Games'),

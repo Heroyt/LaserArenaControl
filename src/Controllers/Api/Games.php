@@ -49,8 +49,33 @@ class Games extends ApiController
 			}
 		}
 		// TODO: Possibly more filters
-		$query = GameFactory::queryGames(false, $date);
+		$query = GameFactory::queryGames(isset($request->get['excludeFinished']), $date);
+		if (!empty($request->get['limit']) && is_numeric($request->get['limit'])) {
+			$query->limit((int) $request->get['limit']);
+		}
+		if (!empty($request->get['offset']) && is_numeric($request->get['offset'])) {
+			$query->offset((int) $request->get['offset']);
+		}
+		if (!empty($request->get['system'])) {
+			$query->where('[system] = %s', $request->get['system']);
+		}
+		if (!empty($request->get['orderBy'])) {
+			if (!in_array($request->get['orderBy'], ['start', 'end', 'code', 'id_game'], true)) {
+				$this->respond(['error' => 'Invalid orderBy field: '.$request->get['orderBy']], 400);
+			}
+			$query->orderBy($request->get['orderBy']);
+			if (!empty($request->get['desc'])) {
+				$query->desc();
+			}
+		}
 		$games = $query->fetchAll();
+		if (!empty($request->get['expand'])) {
+			$objects = [];
+			foreach ($games as $row) {
+				$objects[] = GameFactory::getByCode($row->code);
+			}
+			$this->respond($objects);
+		}
 		$this->respond($games);
 	}
 

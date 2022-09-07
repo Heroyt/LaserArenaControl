@@ -24,6 +24,16 @@
 			"args": []
 		},
 		{
+			"name": "lint/latte",
+			"description": "Lint check all template files in the template directory",
+			"args": [
+				{
+					"name": "debug",
+					"isOptional": true
+				}
+			]
+		},
+		{
 			"name": "list",
 			"description": "Lists all available CLI commands.",
 			"args": [
@@ -99,6 +109,11 @@
 		{
 			"name": "translations/compile",
 			"description": "Compile all translation files.",
+			"args": []
+		},
+		{
+			"name": "translations/removeComments",
+			"description": "Remove all comments from translation files.",
 			"args": []
 		},
 		{

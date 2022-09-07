@@ -107,6 +107,9 @@ if (PHP_SAPI === 'cli') {
 	CliRoute::cli('translations/compile', [Translations::class, 'compile'])
 					->description('Compile all translation files.');
 
+	CliRoute::cli('translations/removeComments', [Translations::class, 'removeComments'])
+					->description('Remove all comments from translation files.');
+
 	CliRoute::cli('translations/merge', [Translations::class, 'merge'])
 					->description('Merge translations from this and one other project.')
 					->usage('<dir> [contextSkip]')

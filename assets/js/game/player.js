@@ -1,4 +1,4 @@
-import {Popover} from "bootstrap";
+import {Popover, Tooltip} from "bootstrap";
 import axios from "axios";
 import {startLoading, stopLoading} from "../loaders";
 import {initTooltips} from "../functions";
@@ -44,8 +44,16 @@ export default class Player {
 				html: true,
 			}
 		);
+		this.selectTeamTooltip = new Tooltip(
+			this.row.querySelector('.team-select'),
+			{
+				title: messages.missingPlayerTeam,
+				trigger: 'manual',
+				customClass: 'tooltip-danger',
+			}
+		)
+
 		const input = tmp.querySelector(`input[value="${this.$vest.dataset.status.toLowerCase()}"]`);
-		console.log(`input[value="${this.$vest.dataset.status.toLowerCase()}"]`, input);
 		if (input) {
 			input.checked = true;
 		}
@@ -57,9 +65,20 @@ export default class Player {
 		});
 
 		this.$teams.forEach($team => {
+			const label = document.querySelector(`label[for="${$team.id}"]`);
 			$team.addEventListener('change', () => {
+				this.selectTeamTooltip.hide();
 				this.update();
 			});
+			if (label) {
+				label.addEventListener('click', e => {
+					if ($team.checked) {
+						e.preventDefault();
+						$team.checked = false;
+						this.update();
+					}
+				});
+			}
 		});
 
 		this.$skills.forEach($skill => {
@@ -83,7 +102,6 @@ export default class Player {
 
 			// Check the correct input
 			const input = this.popover._getTipElement().querySelector(`input[value="${this.$vest.dataset.status.toLowerCase()}"]`);
-			console.log(`input[value="${this.$vest.dataset.status.toLowerCase()}"]`, input);
 			if (input) {
 				input.checked = true;
 			}
@@ -216,10 +234,16 @@ export default class Player {
 			this.$skills[0].checked = true;
 		}
 
-		const e = new Event("update", {
-			bubbles: true,
-		});
-		this.row.dispatchEvent(e);
+		this.row.dispatchEvent(
+			new Event("update", {
+				bubbles: true,
+			})
+		);
+		this.row.dispatchEvent(
+			new Event("update-player", {
+				bubbles: true,
+			})
+		);
 	}
 
 	/**
@@ -230,6 +254,7 @@ export default class Player {
 		this.$teams.forEach($team => {
 			$team.checked = $team.value === team;
 		});
+		this.selectTeamTooltip.hide();
 		this.update();
 	}
 

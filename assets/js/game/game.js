@@ -80,7 +80,7 @@ export default class Game {
 		});
 
 		this.$gameMode.addEventListener('change', () => {
-			const type = this.$gameMode.querySelector(`option[value="${this.$gameMode.value}"]`).dataset.type;
+			const type = this.getModeType();
 			console.log(type, this.$soloHide);
 
 			this.$soloHide.forEach(elem => {
@@ -90,6 +90,12 @@ export default class Game {
 					elem.classList.remove('d-none');
 				}
 			});
+
+			this.$gameMode.dispatchEvent(
+				new Event("update", {
+					bubbles: true,
+				})
+			);
 		});
 
 		this.$shuffleTeams.addEventListener('click', () => {
@@ -105,6 +111,13 @@ export default class Game {
 				this.teamShuffleTooltip.hide();
 			});
 		})
+	}
+
+	/**
+	 * @return 'SOLO'|'TEAM'
+	 */
+	getModeType() {
+		return this.$gameMode.querySelector(`option[value="${this.$gameMode.value}"]`).dataset.type;
 	}
 
 	getSelectedTeams() {
@@ -128,6 +141,19 @@ export default class Game {
 			}
 		});
 		return players;
+	}
+
+	getActiveTeams() {
+		if (this.getModeType() === 'SOLO') {
+			return [];
+		}
+		const teams = [];
+		this.teams.forEach(team => {
+			if (team.playerCount > 0) {
+				teams.push(team);
+			}
+		});
+		return teams;
 	}
 
 	shuffleTeams() {
@@ -330,5 +356,43 @@ export default class Game {
 		this.$gameMode.value = data.mode.id.toString();
 		const e = new Event('change');
 		this.$gameMode.dispatchEvent(e);
+	}
+
+	export() {
+		const activePlayers = this.getActivePlayers();
+		const activeTeams = this.getActiveTeams();
+
+		/**
+		 * @type {GameData}
+		 */
+		const data = {
+			playerCount: activePlayers.length,
+			mode: {
+				id: parseInt(this.$gameMode.value),
+				name: this.$gameMode.querySelector(`option[value="${this.$gameMode.value}"]`).innerText.trim(),
+				type: this.getModeType(),
+			},
+			players: {},
+			teams: {},
+		};
+
+		activePlayers.forEach(player => {
+			data.players[player.vest] = {
+				name: player.name,
+				vest: parseInt(player.vest),
+				teamNum: parseInt(player.team),
+				color: parseInt(player.team),
+			}
+		});
+
+		activeTeams.forEach(team => {
+			data.teams[team.key] = {
+				name: team.name,
+				color: parseInt(team.key),
+				playerCount: team.playerCount,
+			}
+		});
+
+		return data;
 	}
 }

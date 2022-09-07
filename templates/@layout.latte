@@ -20,7 +20,7 @@
 {varType \Lsr\Core\Controller $page}
 
 <!DOCTYPE html>
-<html lang="cs">
+<html lang="{\Lsr\Core\App::getShortLanguageCode()}">
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport"
@@ -67,7 +67,7 @@
 </div>
 
 <script>
-	const lang = {\Lsr\Core\App::getShortLanguageCode()};
+	const activeLanguageCode = {\Lsr\Core\App::getShortLanguageCode()};
 	const page = {\Lsr\Core\App::getRequest()};
 	const prettyUrl = {\Lsr\Core\App::isPrettyUrl()};
 	const webSocketEventURI = 'ws://' + window.location.hostname + ':' + {\App\Services\EventService::getEventPort()};

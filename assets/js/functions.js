@@ -20,6 +20,18 @@ String.prototype.decodeEntities = function () {
 	element.textContent = '';
 	return str;
 }
+String.prototype.hashCode = function () {
+	let hash = 0, i, chr;
+	if (this.length === 0) return hash;
+	for (i = 0; i < this.length; i++) {
+		chr = this.charCodeAt(i);
+		hash = ((hash << 5) - hash) + chr;
+		hash |= 0; // Convert to 32bit integer
+	}
+	return hash;
+};
+
+
 /**
  * Finds a parent element
  *
@@ -414,14 +426,32 @@ export function shuffle(array) {
 
 /**
  * Translate a string
+ *
+ * Caches responses to localStorage object to prevent multiple repeated AJAX requests.
  * @param string {String}
  * @param plural {String|null}
  * @param count {Number}
  * @param context {String}
  * @return Promise<AxiosResponse<String>>
  */
-export function lang(string, plural = null, count = 1, context = null) {
-	return axios.get(
+export async function lang(string, plural = null, count = 1, context = null) {
+	let cacheKey = activeLanguageCode + '-';
+	if (context) {
+		cacheKey += context;
+	}
+	cacheKey += ':' + string;
+	if (plural) {
+		cacheKey += plural;
+	}
+	cacheKey += count.toString();
+	cacheKey = cacheKey.hashCode().toString(36);
+	const test = localStorage.getItem(cacheKey);
+	if (test) {
+		return new Promise((resolve, refuse) => {
+			resolve({data: test});
+		});
+	}
+	const response = await axios.get(
 		'/api/helpers/translate',
 		{
 			params: {
@@ -432,4 +462,14 @@ export function lang(string, plural = null, count = 1, context = null) {
 			}
 		}
 	);
+	if (response.status === 200) {
+		localStorage.setItem(cacheKey, response.data);
+	}
+	return new Promise((resolve, reject) => {
+		if (response.status < 300) {
+			resolve(response);
+			return;
+		}
+		reject(response);
+	})
 }

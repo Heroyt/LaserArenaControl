@@ -6,6 +6,8 @@ use App\GameModels\Factory\GameFactory;
 use App\GameModels\Factory\GameModeFactory;
 use App\GameModels\Vest;
 use Lsr\Core\Controller;
+use Lsr\Core\Requests\Request;
+use Lsr\Core\Routing\Attributes\Post;
 
 class NewGame extends Controller
 {
@@ -21,6 +23,19 @@ class NewGame extends Controller
 		$this->params['teamNames'] = GameFactory::getAllTeamsNames()[$this->params['system']];
 		$this->params['gameModes'] = GameModeFactory::getAll(['system' => $this->params['system']]);
 		$this->view('pages/new-game/index');
+	}
+
+	/**
+	 * Create a new game
+	 *
+	 * @param Request $request
+	 *
+	 * @return never
+	 */
+	#[Post('/')]
+	public function process(Request $request) : never {
+		bdump($request->post);
+		$this->respond('ok');
 	}
 
 }

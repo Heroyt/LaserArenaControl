@@ -2,12 +2,49 @@ import Game from "../game/game";
 import axios from "axios";
 import {lang} from "../functions";
 import EventServerInstance from "../EventServer";
+import {startLoading, stopLoading} from "../loaders";
 
 export default function initNewGamePage() {
+	/**
+	 * @type {HTMLFormElement}
+	 */
+	const form = document.getElementById('new-game-content');
+
+	// Send form via ajax
+	form.addEventListener('submit', e => {
+		e.preventDefault();
+
+		const data = new FormData(form);
+		console.log(data);
+
+		if (!validateForm(data)) {
+			return;
+		}
+
+		startLoading();
+		axios.post('/', data)
+			.then(response => {
+				stopLoading();
+			})
+			.catch(response => {
+				stopLoading(false);
+			});
+	});
+
+	// Autosave to local storage
+	form.addEventListener('update', () => {
+		const data = game.export();
+		console.log('saving data', data);
+		localStorage.setItem('new-game-data', JSON.stringify(data));
+	});
+
 	const game = new Game();
 
+	const localData = localStorage.getItem('new-game-data');
 	if (gameData) {
 		game.import(gameData);
+	} else if (localData) {
+		game.import(JSON.parse(localData));
 	}
 
 	/**
@@ -88,6 +125,37 @@ export default function initNewGamePage() {
 			.catch(response => {
 
 			})
+	}
+
+	/**
+	 * @param data {FormData}
+	 * @return boolean
+	 */
+	function validateForm(data) {
+		if (data.get('action') !== 'load') {
+			return true;
+		}
+
+		const activePlayers = game.getActivePlayers();
+		if (activePlayers.length < 2) {
+			game.noPlayersTooltip.show();
+			return false;
+		}
+
+		if (game.getModeType() === 'TEAM') {
+			let ok = true;
+			activePlayers.forEach(player => {
+				if (player.team === null) {
+					ok = false;
+					player.selectTeamTooltip.show();
+				}
+			});
+			if (!ok) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 }
 

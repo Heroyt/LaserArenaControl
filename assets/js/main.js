@@ -19,7 +19,7 @@ jscolor.presets.default = {
 	uppercase: false,
 };
 
-flatpickr.localize(flatpickr.l10ns[lang]);
+flatpickr.localize(flatpickr.l10ns[activeLanguageCode]);
 
 window.addEventListener("load", () => {
 

@@ -8,7 +8,7 @@
 {varType App\GameModels\Game\Game|null $loadGame}
 
 {block content}
-	<div id="new-game-content" class="w-100">
+	<form method="post" action="" id="new-game-content" class="w-100">
 		<section id="controls" class="d-flex justify-content-between">
 			<div class="btn-group">
 				<button type="submit" name="action" value="load" class="btn btn-warning">
@@ -109,15 +109,17 @@
 					   style="background-color: {$color|noescape}; color: {\App\Tools\Color::getFontColor($color)|noescape}; width: 2.5rem;">
 					0
 				</label>
-				<input type="text" name="team" maxlength="12" class="form-control team-name" id="team-{$key}-name"
+				<input type="text" name="team[{$key}][name]" maxlength="12" class="form-control team-name"
+					   id="team-{$key}-name"
 					   value="{$teamNames[$key]}" data-default="{$teamNames[$key]}">
 			</div>
 		</section>
-	</div>
+	</form>
 
 	<script>
 		const messages = {
 			missingShuffleTeam: '{lang 'Musíte vybrat alespoň 2 týmy.', context: 'errors'}',
+			missingPlayerTeam: '{lang 'Musíte vybrat tým hráče.', context: 'errors'}',
 			noPlayersActive: '{lang 'Musíte zadat alespoň 2 hráče.', context: 'errors'}',
 			vestOk: '{lang 'V pořádku', context: 'settings.vests.status'}',
 			vestPlayable: '{lang 'Hratelná', context: 'settings.vests.status'}',
@@ -146,28 +148,32 @@
 		</div>
 		<input id="player-name-{$vest->vestNum}" type="text" class="form-control player-name"
 			   name="player[{$vest->vestNum}][name]" maxlength="12">
-		{foreach $colors as $key => $color}
-			<input class="team-color-input" type="radio" name="player[{$vest->vestNum}][team]" value="{$key}"
-				   id="team-color-{$vest->vestNum}-{$key}" data-text="{\App\Tools\Color::getFontColor($color)}"
-				   data-color="{$color|noescape}">
-			<label class="team-color solo-hide" style="background-color: {$color|noescape};"
-				   for="team-color-{$vest->vestNum}-{$key}">&nbsp;</label>
-		{/foreach}
-		<input type="radio" name="player[{$vest->vestNum}][skill]" value="1" class="player-skill-input"
-			   id="player-skill-{$vest->vestNum}-1" checked/>
-		<label class="player-skill bg-grey" for="player-skill-{$vest->vestNum}-2">
-			{svgIcon '1-stars'}
-		</label>
-		<input type="radio" name="player[{$vest->vestNum}][skill]" value="2" class="player-skill-input"
-			   id="player-skill-{$vest->vestNum}-2"/>
-		<label class="player-skill bg-primary" for="player-skill-{$vest->vestNum}-3">
-			{svgIcon '2-stars'}
-		</label>
-		<input type="radio" name="player[{$vest->vestNum}][skill]" value="3" class="player-skill-input"
-			   id="player-skill-{$vest->vestNum}-3"/>
-		<label class="player-skill bg-danger" for="player-skill-{$vest->vestNum}-1">
-			{svgIcon '3-stars'}
-		</label>
+		<div class="team-select solo-hide d-flex">
+			{foreach $colors as $key => $color}
+				<input class="team-color-input" type="radio" name="player[{$vest->vestNum}][team]" value="{$key}"
+					   id="team-color-{$vest->vestNum}-{$key}" data-text="{\App\Tools\Color::getFontColor($color)}"
+					   data-color="{$color|noescape}">
+				<label class="team-color" style="background-color: {$color|noescape};"
+					   for="team-color-{$vest->vestNum}-{$key}">&nbsp;</label>
+			{/foreach}
+		</div>
+		<div data-toggle="tooltip" title="{lang 'Herní schopnost hráče', context: 'game.player'}">
+			<input type="radio" name="player[{$vest->vestNum}][skill]" value="1" class="player-skill-input"
+				   id="player-skill-{$vest->vestNum}-1" checked/>
+			<label class="player-skill bg-grey" for="player-skill-{$vest->vestNum}-2">
+				{svgIcon '1-stars'}
+			</label>
+			<input type="radio" name="player[{$vest->vestNum}][skill]" value="2" class="player-skill-input"
+				   id="player-skill-{$vest->vestNum}-2"/>
+			<label class="player-skill bg-primary" for="player-skill-{$vest->vestNum}-3">
+				{svgIcon '2-stars'}
+			</label>
+			<input type="radio" name="player[{$vest->vestNum}][skill]" value="3" class="player-skill-input"
+				   id="player-skill-{$vest->vestNum}-3"/>
+			<label class="player-skill bg-danger" for="player-skill-{$vest->vestNum}-1">
+				{svgIcon '3-stars'}
+			</label>
+		</div>
 		<button type="button" class="btn btn-danger clear">
 			<i class="fa-solid fa-trash"></i>
 		</button>

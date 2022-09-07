@@ -44,10 +44,17 @@ export default class Team {
 
 		this.name = this.$name.value;
 
-		const e = new Event("update", {
-			bubbles: true,
-		});
-		this.row.dispatchEvent(e);
+
+		this.row.dispatchEvent(
+			new Event("update", {
+				bubbles: true,
+			})
+		);
+		this.row.dispatchEvent(
+			new Event("update-team", {
+				bubbles: true,
+			})
+		);
 	}
 
 	recountPlayers() {

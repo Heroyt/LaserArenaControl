@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: Slovak\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2022-09-06 16:58\n"
+"PO-Revision-Date: 2022-09-07 09:46\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=4; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 3;\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -18,355 +18,231 @@ msgstr ""
 "X-Generator: Poedit 2.3\n"
 "X-Poedit-Basepath: .\n"
 
-# /src/Core/Controller.php:74
-# /vendor/lsr/core/src/Controller.php:79
-# /vendor/lsr/core/src/Controller.php:84
 msgctxt "pageTitles"
 msgid "Games list"
 msgstr "Zoznam hier"
 
-# /templates/header.latte:11
-# /templates/header.latte:6
-# /templates/header.latte:9
 msgid "Toggle navigation"
 msgstr "Prepnúť navigáciu"
 
-# /config/nav/menu.php:4
-# /config/nav/menu.php:9
 msgid "New game"
 msgstr "Nová hra"
 
-# /config/nav/menu.php:8
-# /config/nav/menu.php:13
-# /config/nav/menu.php:14
 msgid "Games"
 msgstr "Hry"
 
-# /config/nav/menu.php:13
-# /config/nav/menu.php:39
-# /templates/pages/games-list/index.latte:
-# /config/nav/menu.php:44
-# /templates/pages/games-list/index.latte:63
-# /config/nav/menu.php:18
-# /config/nav/menu.php:49
-# /templates/pages/games-list/index.latte:68
-# /templates/pages/games-list/index.latte:72
-# /config/nav/menu.php:19
-# /config/nav/menu.php:50
 msgid "Print"
 msgstr "Tlač"
 
-# /templates/pages/games-list/index.latte:15
-# /templates/pages/games-list/index.latte:12
 msgid "Games list"
 msgstr "Zoznam hier"
 
-# /templates/pages/games-list/index.latte:15
-# /templates/pages/games-list/index.latte:14
 msgid "Date"
 msgstr "Dátum"
 
-# /templates/pages/games-list/index.latte:34
-# /templates/pages/games-list/index.latte:27
 msgid "Time"
 msgstr "Čas"
 
-# /templates/pages/games-list/index.latte:34
-# /templates/pages/games-list/index.latte:28
 msgid "Game mode"
 msgstr "Herný mód"
 
-# /templates/pages/games-list/index.latte:34
-# /templates/pages/games-list/index.latte:29
 msgid "Players"
 msgstr "Hráči"
 
-# /templates/pages/games-list/index.latte:34
-# /templates/pages/games-list/index.latte:30
 msgid "Actions"
 msgstr "Akcia"
 
-# /templates/pages/games-list/index.latte:41
 msgid "%s score"
 msgstr "%s skóre"
 
-# /templates/debug/Db/panel.latte:7
-# /templates/../vendor/lsr/helpers/templates/Db/panel.latte:7
 msgctxt "debugPanel"
 msgid "Rows"
 msgstr "Riadky"
 
-# /templates/debug/Db/panel.latte:8
-# /templates/../vendor/lsr/helpers/templates/Db/panel.latte:8
 msgctxt "debugPanel"
 msgid "Takes"
 msgstr "Trvanie"
 
-# /templates/debug/Translation/tab.latte:
-# /templates/debug/Translation/panel.latte:8
-# /templates/debug/Translation/tab.latte:27
-# /templates/debug/Translation/panel.latte:3
-# /templates/../vendor/lsr/helpers/templates/Translation/tab.latte:27
-# /templates/../vendor/lsr/helpers/templates/Translation/panel.latte:3
 msgctxt "debugPanel"
 msgid "Translations"
 msgstr "Preklady"
 
-# /templates/debug/Translation/panel.latte:8
-# /templates/debug/Translation/panel.latte:6
-# /templates/../vendor/lsr/helpers/templates/Translation/panel.latte:6
 msgctxt "debugPanel"
 msgid "Language"
 msgstr "Jazyk"
 
-# /templates/debug/Translation/panel.latte:10
-# /templates/../vendor/lsr/helpers/templates/Translation/panel.latte:10
 msgctxt "debugPanel"
 msgid "HTTP header"
 msgstr "HTTP hlavička"
 
-# /templates/debug/Translation/panel.latte:17
-# /templates/debug/Translation/panel.latte:16
-# /templates/../vendor/lsr/helpers/templates/Translation/panel.latte:16
 msgctxt "debugPanel"
 msgid "Translated strings"
 msgstr "Preloženej reťazce"
 
-# /templates/debug/Translation/panel.latte:20
-# /templates/../vendor/lsr/helpers/templates/Translation/panel.latte:19
 msgctxt "debugPanel"
 msgid "Added a new string"
 msgstr "Pridaný reťazec"
 
-# /templates/debug/Translation/panel.latte:20
-# /templates/../vendor/lsr/helpers/templates/Translation/panel.latte:20
 msgctxt "debugPanel"
 msgid "String"
 msgstr "Reťazec"
 
-# /templates/debug/Translation/panel.latte:22
-# /templates/../vendor/lsr/helpers/templates/Translation/panel.latte:22
 msgctxt "debugPanel"
 msgid "Context"
 msgstr "Kontext"
 
-# /src/Core/Controller.php:74
-# /vendor/lsr/core/src/Controller.php:79
-# /vendor/lsr/core/src/Controller.php:84
 msgctxt "pageTitles"
 msgid "404"
 msgstr "404"
 
-# /templates/errors/E404.latte:
-# /templates/errors/E404.latte:3
 msgctxt "errors"
 msgid "stránka nenalezena"
 msgstr "stránka nenájdená"
 
-# /src/Core/Controller.php:74
-# /vendor/lsr/core/src/Controller.php:79
-# /vendor/lsr/core/src/Controller.php:84
 msgctxt "pageTitles"
 msgid "Results"
 msgstr "Výsledky"
 
-# /templates/results/templates/graphical.latte:106
-# /templates/results/templates/default.latte:66
-# /templates/results/templates/graphical.latte:105
 msgctxt "results.info"
 msgid "Datum"
 msgstr "Dátum"
 
-# /templates/results/templates/graphical.latte:116
-# /templates/results/templates/default.latte:72
-# /templates/results/templates/graphical.latte:109
 msgctxt "results.info"
 msgid "Herní mód"
 msgstr "Herný mód"
 
-# /templates/results/templates/graphical.latte:116
-# /templates/results/templates/default.latte:72
-# /templates/pages/new-game/index.latte:38
-# /templates/pages/new-game/index.latte:39
-# /templates/pages/new-game/index.latte:44
-# /templates/pages/new-game/index.latte:45
-# /templates/pages/new-game/index.latte:51
-# /templates/pages/new-game/index.latte:52
-# /templates/pages/new-game/index.latte:53
-# /templates/pages/new-game/index.latte:54
 msgctxt "gameModes"
 msgid "Základny"
 msgstr "Základne"
 
-# /templates/results/templates/default.latte:72
 msgctxt "results.info"
 msgid "Počet hráčů"
 msgstr "Počet hráčov"
 
-# /templates/results/templates/default.latte:74
 msgctxt "results.info"
 msgid "Počet týmů"
 msgstr "Počet tímov"
 
-# /templates/results/templates/default.latte:79
 msgctxt "results.scoring"
 msgid "Zásah protihráče"
 msgstr "Zásah protihráča"
 
-# /templates/results/templates/default.latte:80
 msgctxt "results.scoring"
 msgid "Zasažen protihráčem"
 msgstr "Zasiahnutý protihráčom"
 
-# /templates/results/templates/default.latte:81
 msgctxt "results.scoring"
 msgid "Zásah spoluhráče"
 msgstr "Zásah spoluhráča"
 
-# /templates/results/templates/default.latte:82
 msgctxt "results.scoring"
 msgid "Zasažen spouhráčem"
 msgstr "Zasiahnutý spoluhráčom"
 
-# /templates/results/templates/default.latte:83
 msgctxt "results.scoring"
 msgid "Zasažen minou"
 msgstr "Smrť minou"
 
-# /templates/results/templates/default.latte:86
 msgctxt "results.scoring"
 msgid "Body za výstřel"
 msgstr "Body za výstrel"
 
-# /templates/results/templates/default.latte:87
 msgctxt "results.scoring"
 msgid "Samopal"
 msgstr "Samopal"
 
-# /templates/results/templates/default.latte:88
 msgctxt "results.scoring"
 msgid "Neviditelnost"
 msgstr "Neviditeľnosť"
 
-# /templates/results/templates/default.latte:89
 msgctxt "results.scoring"
 msgid "Agent"
 msgstr "Agent"
 
-# /templates/results/templates/default.latte:90
 msgctxt "results.scoring"
 msgid "Štít"
 msgstr "Štít"
 
-# /templates/results/templates/default.latte:104
 msgctxt "results.player"
 msgid "Jméno"
 msgstr "Meno"
 
-# /templates/results/templates/default.latte:110
 msgctxt "results.player"
 msgid "Tým"
 msgstr "Tím"
 
-# /templates/results/templates/default.latte:120
 msgctxt "results.player"
 msgid "Skóre"
 msgstr "Skóre"
 
-# /templates/results/templates/default.latte:124
 msgctxt "results.player"
 msgid "Počet výstřelů"
 msgstr "Počet výstrelov"
 
-# /templates/results/templates/default.latte:130
 msgctxt "results.player"
 msgid "Počet střel do prázdna"
 msgstr "Počet striel do prázdna"
 
-# /templates/results/templates/default.latte:136
 msgctxt "results.player"
 msgid "Úspěšnost"
 msgstr "Úspešnosť"
 
-# /templates/results/templates/default.latte:176
 msgctxt "results.player"
 msgid "Hráči"
 msgstr "Hráči"
 
-# /templates/results/templates/graphical.latte:228
-# /templates/results/templates/default.latte:145
-# /templates/results/templates/default.latte:176
-# /templates/results/templates/default.latte:192
-# /templates/results/templates/default.latte:205
-# /templates/results/templates/graphical.latte:227
 msgctxt "results.player"
 msgid "Zásahy"
 msgstr "Zásahy"
 
-# /templates/results/templates/default.latte:145
-# /templates/results/templates/default.latte:182
-# /templates/results/templates/default.latte:198
-# /templates/results/templates/default.latte:211
 msgctxt "results.player"
 msgid "Smrti"
 msgstr "Úmrtie"
 
-# /templates/results/templates/default.latte:192
 msgctxt "results.player"
 msgid "Týmy"
 msgstr "Tímy"
 
-# /templates/results/templates/default.latte:192
 msgctxt "results.player"
 msgid "Soupeř"
 msgstr "Súper"
 
-# /templates/results/templates/default.latte:205
 msgctxt "results.player"
 msgid "Vlastní"
 msgstr "Spojenec"
 
-# /templates/results/templates/default.latte:291
 msgctxt "results.today"
 msgid "Umístění dne"
 msgstr "Umiestnenie dňa"
 
-# /templates/results/templates/default.latte:291
 msgctxt "results.today"
 msgid "Jméno"
 msgstr "Meno"
 
-# /templates/results/templates/default.latte:298
 msgctxt "results.today"
 msgid "Denní pořadí podle"
 msgstr "Denné poradie podľa"
 
-# /templates/results/templates/default.latte:298
 msgctxt "results.today"
 msgid "Skóre"
 msgstr "Skóre"
 
-# /templates/results/templates/default.latte:302
 msgctxt "results.today"
 msgid "Přesnosti"
 msgstr "Presnosti"
 
-# /templates/results/templates/default.latte:306
 msgctxt "results.today"
 msgid "Zásahů"
 msgstr "Zásahov"
 
-# /templates/results/templates/default.latte:310
 msgctxt "results.today"
 msgid "Smrtí"
 msgstr "Smrťou"
 
-# /templates/results/templates/default.latte:318
 msgctxt "results.today"
 msgid "Dnes odehráno"
 msgstr "Dnes odohrané"
 
-# /templates/results/templates/default.latte:318
 msgctxt "results.today"
 msgid "%d hra"
 msgid_plural "%d her"
@@ -375,7 +251,6 @@ msgstr[1] "%d hry"
 msgstr[2] "%d hier"
 msgstr[3] "%d hier"
 
-# /templates/results/templates/default.latte:319
 msgctxt "results.today"
 msgid "%d tým"
 msgid_plural "%d týmů"
@@ -384,7 +259,6 @@ msgstr[1] "%d tímy"
 msgstr[2] "%d tímov"
 msgstr[3] "%d tímov"
 
-# /templates/results/templates/default.latte:320
 msgctxt "results.today"
 msgid "%d hráč"
 msgid_plural "%d hráčů"
@@ -393,186 +267,101 @@ msgstr[1] "%d hráči"
 msgstr[2] "%d hráčov"
 msgstr[3] "%d hráčov"
 
-# /templates/results/templates/graphical.latte:341
-# /templates/results/templates/default.latte:226
 msgctxt "results.hits"
 msgid "Zásahy hráčů"
 msgstr "Zásahy hráčov"
 
-# /templates/results/templates/graphical.latte:352
-# /templates/results/templates/default.latte:226
 msgctxt "results.hits"
 msgid "Zasáhl si hráče"
 msgstr "Zasiahol si hráča"
 
-# /templates/results/templates/default.latte:248
 msgctxt "results.team"
 msgid "Výsledky týmů"
 msgstr "Výsledky tímov"
 
-# /templates/results/templates/default.latte:248
 msgctxt "results.team"
 msgid "Tým"
 msgstr "Tím"
 
-# /templates/results/templates/default.latte:256
 msgctxt "results.team"
 msgid "Zásahů"
 msgstr "Zásahov"
 
-# /templates/results/templates/default.latte:257
 msgctxt "results.team"
 msgid "Skóre"
 msgstr "Skóre"
 
-# /templates/results/templates/default.latte:258
 msgctxt "results.team"
 msgid "Úspěšnost"
 msgstr "Úspešnosť"
 
-# /templates/results/templates/default.latte:259
 msgctxt "results.team"
 msgid "Výstřelů"
 msgstr "Výstrelov"
 
-# /templates/results/templates/default.latte:331
 msgctxt "results.bests"
 msgid "Ti nej..."
 msgstr "Tí naj..."
 
-# /src/GameModels/Game/PlayerTrophy.php:38
-# /src/GameModels/Game/Game.php:264
-# /src/GameModels/Game/PlayerTrophy.php:39
-# /src/GameModels/Game/PlayerTrophy.php:44
 msgctxt "results.bests"
 msgid "Největší terminátor"
 msgstr "Najväčší terminátor"
 
-# /src/GameModels/Game/PlayerTrophy.php:43
-# /src/GameModels/Game/Game.php:265
-# /src/GameModels/Game/PlayerTrophy.php:44
-# /src/GameModels/Game/PlayerTrophy.php:49
 msgctxt "results.bests"
 msgid "Objekt největšího zájmu"
 msgstr "Objekt najväčšieho záujmu"
 
-# /src/GameModels/Game/PlayerTrophy.php:33
-# /src/GameModels/Game/Game.php:266
-# /src/GameModels/Game/PlayerTrophy.php:34
-# /src/GameModels/Game/PlayerTrophy.php:39
 msgctxt "results.bests"
 msgid "Absolutní vítěz"
 msgstr "Absolútny víťaz"
 
-# /src/GameModels/Game/PlayerTrophy.php:48
-# /src/GameModels/Game/Game.php:267
-# /src/GameModels/Game/PlayerTrophy.php:49
-# /src/GameModels/Game/PlayerTrophy.php:54
 msgctxt "results.bests"
 msgid "Hráč s nejlepší muškou"
 msgstr "Hráč s najlepšou muškou"
 
-# /src/GameModels/Game/PlayerTrophy.php:53
-# /src/GameModels/Game/Game.php:268
-# /src/GameModels/Game/PlayerTrophy.php:54
-# /src/GameModels/Game/PlayerTrophy.php:59
 msgctxt "results.bests"
 msgid "Nejúspornější střelec"
 msgstr "Najúspornejší strelec"
 
-# /src/GameModels/Game/PlayerTrophy.php:58
-# /src/GameModels/Game/Game.php:269
-# /src/GameModels/Game/PlayerTrophy.php:59
-# /src/GameModels/Game/PlayerTrophy.php:64
 msgctxt "results.bests"
 msgid "Největší mimoň"
 msgstr "Najväčšia mimoň"
 
-# /src/GameModels/Game/PlayerTrophy.php:63
-# /src/GameModels/Game/Evo5/Game.php:83
-# /src/GameModels/Game/PlayerTrophy.php:64
-# /src/GameModels/Game/PlayerTrophy.php:69
 msgctxt "results.bests"
 msgid "Zabiják vlastního týmu"
 msgstr "Zabijak vlastného tímu"
 
-# /src/GameModels/Game/PlayerTrophy.php:68
-# /src/GameModels/Game/Evo5/Game.php:86
-# /src/GameModels/Game/PlayerTrophy.php:69
-# /src/GameModels/Game/PlayerTrophy.php:74
 msgctxt "results.bests"
 msgid "Největší vlastňák"
 msgstr "Najväčší vlastniak"
 
-# /templates/../vendor/lsr/helpers/templates/Translation/panel.latte:21
 msgctxt "debugPanel"
 msgid "Plural"
 msgstr "Množné číslo"
 
-# /src/Core/Controller.php:74
-# /vendor/lsr/core/src/Controller.php:79
-# /vendor/lsr/core/src/Controller.php:84
 msgctxt "pageTitles"
 msgid "Dashboard"
 msgstr "Úvod"
 
-# /templates/pages/games-list/index.latte:34
-# /templates/pages/games-list/index.latte:22
 msgid "No games had been played on this date."
 msgstr "V tento deň sa nehrali žiadne hry."
 
-# /templates/pages/new-game/index.latte:38
-# /templates/pages/new-game/index.latte:39
-# /templates/pages/new-game/index.latte:44
-# /templates/pages/new-game/index.latte:45
-# /templates/pages/new-game/index.latte:51
-# /templates/pages/new-game/index.latte:52
-# /templates/pages/new-game/index.latte:53
-# /templates/pages/new-game/index.latte:54
 msgctxt "gameModes"
 msgid "CSGO"
 msgstr "CSGO"
 
-# /templates/results/templates/graphical.latte:116
-# /templates/results/templates/default.latte:72
-# /templates/results/templates/graphical.latte:110
-# /templates/pages/new-game/index.latte:38
-# /templates/pages/new-game/index.latte:39
-# /templates/pages/new-game/index.latte:44
-# /templates/pages/new-game/index.latte:45
-# /templates/pages/new-game/index.latte:51
-# /templates/pages/new-game/index.latte:52
-# /src/Controllers/Api/Helpers.php:20
-# /templates/pages/new-game/index.latte:53
-# /templates/pages/new-game/index.latte:54
 msgctxt "gameModes"
 msgid "Team deathmach"
 msgstr "Team deathmach"
 
-# /src/GameModels/Game/PlayerTrophy.php:73
-# /src/GameModels/Game/Evo5/Game.php:90
-# /src/GameModels/Game/PlayerTrophy.php:74
-# /src/GameModels/Game/PlayerTrophy.php:79
 msgctxt "results.bests"
 msgid "Drtič min"
 msgstr "Drvič min"
 
-# /templates/results/templates/graphical.latte:116
-# /templates/results/templates/default.latte:72
-# /templates/pages/new-game/index.latte:38
-# /templates/pages/new-game/index.latte:39
-# /templates/pages/new-game/index.latte:44
-# /templates/pages/new-game/index.latte:45
-# /templates/pages/new-game/index.latte:51
-# /templates/pages/new-game/index.latte:52
-# /templates/pages/new-game/index.latte:53
-# /templates/pages/new-game/index.latte:54
 msgctxt "gameModes"
 msgid "Deathmach"
 msgstr "Deathmach"
 
-# /templates/pages/results/index.latte:43
-# /templates/pages/results/index.latte:40
 msgid "Language"
 msgstr "Jazyk"
 
@@ -580,28 +369,20 @@ msgctxt "print"
 msgid "In color:"
 msgstr "Farebne:"
 
-# /templates/pages/results/index.latte:60
-# /templates/pages/results/index.latte:56
 msgctxt "print"
 msgid "In color"
 msgstr "Farebne"
 
-# /templates/pages/results/index.latte:79
-# /templates/pages/results/index.latte:75
 msgctxt "print"
 msgid "Black & white"
 msgstr "Čiernobiele"
 
-# /templates/pages/results/index.latte:16
-# /templates/pages/results/index.latte:14
 msgid "Game"
 msgstr "Hra"
 
 msgid "Style"
 msgstr "Štýl"
 
-# /templates/pages/results/index.latte:24
-# /templates/pages/results/index.latte:22
 msgctxt "results.style"
 msgid "Style"
 msgstr "Štýl"
@@ -610,109 +391,46 @@ msgctxt "results.style"
 msgid "Základní"
 msgstr "Základné"
 
-# /templates/pages/results/index.latte:31
-# /templates/pages/settings/print.latte:32
-# /templates/pages/settings/print.latte:59
-# /templates/pages/settings/print.latte:110
-# /templates/pages/results/index.latte:26
-# /templates/pages/settings/print.latte:23
-# /templates/pages/settings/print.latte:56
-# /templates/pages/settings/print.latte:92
 msgctxt "results.style"
 msgid "Čerti"
 msgstr "Čerti"
 
-# /templates/pages/results/index.latte:31
-# /templates/pages/settings/print.latte:32
-# /templates/pages/settings/print.latte:59
-# /templates/pages/settings/print.latte:110
-# /templates/pages/results/index.latte:26
-# /templates/pages/settings/print.latte:23
-# /templates/pages/settings/print.latte:56
-# /templates/pages/settings/print.latte:92
 msgctxt "results.style"
 msgid "Zima"
 msgstr "Zima"
 
-# /templates/pages/results/index.latte:31
-# /templates/pages/settings/print.latte:32
-# /templates/pages/settings/print.latte:59
-# /templates/pages/settings/print.latte:110
-# /templates/pages/results/index.latte:26
-# /templates/pages/settings/print.latte:23
-# /templates/pages/settings/print.latte:56
-# /templates/pages/settings/print.latte:92
 msgctxt "results.style"
 msgid "Valentýn"
 msgstr "Valentín"
 
-# /templates/pages/results/index.latte:31
-# /templates/pages/settings/print.latte:32
-# /templates/pages/settings/print.latte:59
-# /templates/pages/settings/print.latte:110
-# /templates/pages/results/index.latte:26
-# /templates/pages/settings/print.latte:23
-# /templates/pages/settings/print.latte:56
-# /templates/pages/settings/print.latte:92
 msgctxt "results.style"
 msgid "Vánoce"
 msgstr "Vianoce"
 
-# /templates/pages/results/index.latte:31
-# /templates/pages/settings/print.latte:32
-# /templates/pages/settings/print.latte:59
-# /templates/pages/settings/print.latte:110
-# /templates/pages/results/index.latte:26
-# /templates/pages/settings/print.latte:23
-# /templates/pages/settings/print.latte:56
-# /templates/pages/settings/print.latte:92
 msgctxt "results.style"
 msgid "Nový rok"
 msgstr "Nový rok"
 
-# /templates/pages/results/index.latte:31
-# /templates/pages/results/index.latte:29
 msgctxt "results.style"
 msgid "Template"
 msgstr "Šablóna"
 
-# /templates/pages/results/index.latte:31
-# /templates/pages/results/index.latte:43
-# /templates/pages/settings/print.latte:32
-# /templates/pages/settings/print.latte:41
-# /templates/pages/settings/print.latte:59
-# /templates/pages/settings/print.latte:110
-# /templates/pages/results/index.latte:26
-# /templates/pages/results/index.latte:33
-# /templates/pages/settings/print.latte:23
-# /templates/pages/settings/print.latte:34
-# /templates/pages/settings/print.latte:56
-# /templates/pages/settings/print.latte:92
 msgctxt "results.style"
 msgid "Default"
 msgstr "Štandardné"
 
-# /templates/results/templates/default.latte:145
 msgctxt "results.player"
 msgid "K:D"
 msgstr "K:D"
 
-# /templates/results/templates/graphical.latte:300
-# /templates/results/templates/default.latte:152
-# /templates/results/templates/graphical.latte:299
 msgctxt "results.player"
 msgid "Nejoblíbenější cíl"
 msgstr "Najobľúbenejší cieľ"
 
-# /templates/results/templates/graphical.latte:310
-# /templates/results/templates/default.latte:158
-# /templates/results/templates/graphical.latte:309
 msgctxt "results.player"
 msgid "Největší zabiják"
 msgstr "Najväčší zabijak"
 
-# /templates/results/templates/default.latte:52
-# /templates/results/templates/default.latte:56
 msgctxt "results"
 msgid "Vítězství"
 msgstr "Víťazstvo"
@@ -721,7 +439,6 @@ msgctxt "results"
 msgid "Remíza"
 msgstr "Remíza"
 
-# /templates/results/templates/default.latte:263
 msgctxt "results.team"
 msgid "Ztráty základny"
 msgstr "Straty základne"
@@ -730,316 +447,155 @@ msgctxt "results.player"
 msgid "Zbývá životů"
 msgstr "Zostáva životov"
 
-# /src/GameModels/Tip.php:26
-# /templates/results/@printLayout.latte:108
-# /src/GameModels/Tip.php:27
 msgctxt "tips"
 msgid "Jak se v aréně střílí, tak se v aréně umírá..."
 msgstr "Ako sa v aréne strieľa, tak sa v aréne umiera..."
 
-# /templates/results/@printLayout.latte:112
-# /src/GameModels/Tip.php:26
-# /templates/pages/gate/@layout.latte:90
-# /templates/pages/gate/@layout.latte:88
-# /src/GameModels/Tip.php:27
 msgctxt "tips"
 msgid "Trénink se vyplácí!"
 msgstr "Tréning sa vypláca!"
 
-# /templates/results/@printLayout.latte:108
-# /templates/pages/gate/@layout.latte:88
-# /src/GameModels/Tip.php:26
-# /src/GameModels/Tip.php:27
 msgctxt "tips"
 msgid "Tip #%d"
 msgstr "Tip #%d"
 
-# /src/GameModels/Tip.php:26
-# /src/GameModels/Tip.php:27
-# /templates/results/@printLayout.latte:108
 msgctxt "tips"
 msgid "Střílíme v Písku už od 31.12.2013!!!"
 msgstr "Strieľame v Písku už od 31.12.2013!!!"
 
-# /src/GameModels/Tip.php:26
-# /src/GameModels/Tip.php:27
-# /templates/pages/gate/@layout.latte:88
 msgctxt "tips"
 msgid "Ve hře vždy sleduj svoje okolí!"
 msgstr "V hre vždy sleduj svoje okolie!"
 
-# /src/GameModels/Tip.php:26
-# /templates/results/@printLayout.latte:108
-# /src/GameModels/Tip.php:27
-# /templates/pages/gate/@layout.latte:88
 msgctxt "tips"
 msgid "Čidlo na zbrani, ač nenápadné, se dá velmi dobře trefit."
 msgstr "Čidlo na zbrani, hoci nenápadné, sa dá veľmi dobre trafiť."
 
-# /src/GameModels/Tip.php:26
-# /templates/results/@printLayout.latte:112
-# /templates/results/@printLayout.latte:108
-# /src/GameModels/Tip.php:27
 msgctxt "tips"
 msgid "Zkušení hráči hrajou týmově!"
 msgstr "Skúsení hráči hrajú tímovo!"
 
-# /src/GameModels/Tip.php:26
-# /templates/pages/gate/@layout.latte:90
-# /templates/results/@printLayout.latte:112
-# /src/GameModels/Tip.php:27
-# /templates/pages/gate/@layout.latte:88
-# /templates/results/@printLayout.latte:108
 msgctxt "tips"
 msgid "Pro vyřízení osobních sporů je aréna ideální."
 msgstr "Na vybavenie osobných sporov je aréna ideálna."
 
-# /templates/pages/gate/@layout.latte:90
-# /src/GameModels/Tip.php:26
-# /templates/results/@printLayout.latte:108
-# /src/GameModels/Tip.php:27
-# /templates/pages/gate/@layout.latte:88
 msgctxt "tips"
 msgid "Dobití protihráče pažbou, vám žádné body nepřidá."
 msgstr "Dobitie protihráča pažbou, vám žiadne body nepridá."
 
-# /src/GameModels/Tip.php:26
-# /templates/results/@printLayout.latte:112
-# /templates/results/@printLayout.latte:108
-# /src/GameModels/Tip.php:27
 msgctxt "tips"
 msgid "Zabiják vlastního týmu, či největší vlasťnák... To je oč tu běží!"
 msgstr "Zabijak vlastného tímu, či najväčší vlastnák... To je o čo tu beží!"
 
-# /templates/results/@printLayout.latte:112
-# /src/GameModels/Tip.php:26
-# /src/GameModels/Tip.php:27
-# /templates/pages/gate/@layout.latte:88
 msgctxt "tips"
 msgid "Vestu si oblečte vždy zbraní dobředu."
 msgstr "Vestu si oblečte vždy zbraňou dobredu."
 
-# /src/GameModels/Tip.php:26
-# /templates/pages/gate/@layout.latte:90
-# /templates/results/@printLayout.latte:108
-# /src/GameModels/Tip.php:27
-# /templates/pages/gate/@layout.latte:88
 msgctxt "tips"
 msgid "Při týmové hře není výhodné střílet do hráčů se stejnou barvou."
 msgstr "Pri tímovej hre nie je výhodné strieľať do hráčov s rovnakou farbou."
 
-# /src/GameModels/Tip.php:26
-# /templates/results/@printLayout.latte:108
-# /src/GameModels/Tip.php:27
-# /templates/pages/gate/@layout.latte:88
 msgctxt "tips"
 msgid "Jen Chuck Norris vás může zastřelit baterkou na svém mobilu."
 msgstr "Len Chuck Norris vás môže zastreliť baterkou na svojom mobile."
 
-# /templates/results/@printLayout.latte:112
-# /src/GameModels/Tip.php:26
-# /templates/results/@printLayout.latte:108
-# /src/GameModels/Tip.php:27
 msgctxt "tips"
 msgid "Nejlepší výherní taktika je strílet do protihráčů."
 msgstr "Najlepšia výherná taktika je strieľať do protihráčov."
 
-# /src/GameModels/Tip.php:26
-# /src/GameModels/Tip.php:27
 msgctxt "tips"
 msgid "Nemá cenu umírat na tom samém místě. Když to nejde, uteč jinam!"
 msgstr "Nemá cenu umierať na tom istom mieste. Keď to nejde, uteč inam!"
 
-# /src/GameModels/Tip.php:26
-# /templates/results/@printLayout.latte:108
-# /src/GameModels/Tip.php:27
-# /templates/pages/gate/@layout.latte:88
 msgctxt "tips"
 msgid "Všechny bonusy, kromě štítu, trvají 30s."
 msgstr "Všetky bonusy, okrem štítu, trvajú 30s."
 
-# /src/GameModels/Tip.php:26
-# /templates/results/@printLayout.latte:108
-# /src/GameModels/Tip.php:27
-# /templates/pages/gate/@layout.latte:88
 msgctxt "tips"
 msgid "Držení zbraně v obou rukách je přesnější."
 msgstr "Držanie zbrane v oboch rukách je presnejšie."
 
-# /src/GameModels/Tip.php:26
-# /templates/results/@printLayout.latte:112
-# /templates/results/@printLayout.latte:108
-# /src/GameModels/Tip.php:27
 msgctxt "tips"
 msgid "Měl bys radši hrát laser game a být úžasný!"
 msgstr "Mal by si radšej hrať laser game a byť úžasný!"
 
-# /templates/results/@printLayout.latte:112
-# /src/GameModels/Tip.php:26
-# /templates/pages/gate/@layout.latte:90
-# /templates/results/@printLayout.latte:108
-# /src/GameModels/Tip.php:27
 msgctxt "tips"
 msgid "Spoluhráč je nejlepší cíl. Neutíká."
 msgstr "Spoluhráč je najlepší cieľ. Neuteká."
 
-# /src/GameModels/Tip.php:26
-# /templates/results/@printLayout.latte:112
-# /templates/results/@printLayout.latte:108
-# /src/GameModels/Tip.php:27
-# /templates/pages/gate/@layout.latte:88
 msgctxt "tips"
 msgid "#laserarenapísek"
 msgstr "#laserarenapísek"
 
-# /src/GameModels/Tip.php:26
-# /src/GameModels/Tip.php:27
-# /templates/pages/gate/@layout.latte:88
-# /templates/results/@printLayout.latte:108
 msgctxt "tips"
 msgid "Zabití: 100 bodů, Smrt: -50 bodů, Zabití vlastního hráče: -25 bodů"
 msgstr "Zabitie: 100 bodov, Smrť: -50 bodov, Zabitie vlastného hráča: -25 bodov"
 
-# /src/GameModels/Tip.php:26
-# /templates/results/@printLayout.latte:108
-# /src/GameModels/Tip.php:27
-# /templates/pages/gate/@layout.latte:88
 msgctxt "tips"
 msgid "Go, go, go, go..."
 msgstr "Go, go, go, go..."
 
-# /src/GameModels/Tip.php:26
-# /templates/results/@printLayout.latte:112
-# /src/GameModels/Tip.php:27
 msgctxt "tips"
 msgid "Ramenní čidla se trefují nejlépe, zádová nejhůř."
 msgstr "Ramenné čidlá sa triafajú najlepšie, chrbtové najhoršie."
 
-# /templates/results/@printLayout.latte:112
-# /src/GameModels/Tip.php:26
-# /templates/pages/gate/@layout.latte:90
-# /templates/results/@printLayout.latte:108
-# /src/GameModels/Tip.php:27
 msgctxt "tips"
 msgid "Pohyblivý cíl je vždycky těžší trefit."
 msgstr "Pohyblivý cieľ je vždy ťažšie trafiť."
 
-# /templates/results/@printLayout.latte:112
-# /src/GameModels/Tip.php:26
-# /src/GameModels/Tip.php:27
 msgctxt "tips"
 msgid "Na displeji vesty po zásahu vidíte kdo vás zasáhl do jakého čidla. To pomáhá při orientaci."
 msgstr "Na displeji vesty po zásahu vidíte kto vás zasiahol do akého čidla. To pomáha pri orientácii."
 
-# /templates/results/@printLayout.latte:112
-# /src/GameModels/Tip.php:26
-# /templates/pages/gate/@layout.latte:88
-# /src/GameModels/Tip.php:27
 msgctxt "tips"
 msgid "Při výstupu z arény vždy připni zbraň k vestě."
 msgstr "Pri výstupe z arény vždy pripni zbraň k veste."
 
-# /templates/results/@printLayout.latte:112
-# /src/GameModels/Tip.php:26
-# /templates/results/@printLayout.latte:108
-# /src/GameModels/Tip.php:27
-# /templates/pages/gate/@layout.latte:88
 msgctxt "tips"
 msgid "LASER TAG - SUIT UP!"
 msgstr "LASER TAG - SUIT UP!"
 
-# /src/GameModels/Tip.php:26
-# /templates/results/@printLayout.latte:108
-# /src/GameModels/Tip.php:27
 msgctxt "tips"
 msgid "Když tě bolí nohy, kempi!"
 msgstr "Keď ťa bolí nohy, kempy!"
 
-# /src/GameModels/Tip.php:26
-# /src/GameModels/Tip.php:27
-# /templates/pages/gate/@layout.latte:88
-# /templates/results/@printLayout.latte:108
 msgctxt "tips"
 msgid "Nikdy nejsi příliš starý na laser game."
 msgstr "Nikdy nie si príliš starý na laser game."
 
-# /src/GameModels/Tip.php:26
-# /templates/results/@printLayout.latte:112
-# /templates/results/@printLayout.latte:108
-# /src/GameModels/Tip.php:27
 msgctxt "tips"
 msgid "Nezapomeň každý květen a listopad registrovat svůj tým na turnaj!"
 msgstr "Nezabudni každý máj a november registrovať svoj tím na turnaj!"
 
-# /config/nav/menu.php:18
-# /config/nav/menu.php:23
-# /config/nav/menu.php:28
-# /config/nav/menu.php:29
 msgid "Settings"
 msgstr "Nastavenia"
 
-# /config/nav/menu.php:35
-# /config/nav/menu.php:40
-# /config/nav/menu.php:45
-# /config/nav/menu.php:46
 msgid "Game modes"
 msgstr "Herné módy"
 
-# /config/nav/menu.php:23
-# /config/nav/menu.php:28
-# /config/nav/menu.php:33
-# /config/nav/menu.php:34
 msgid "General"
 msgstr "Všeobecné"
 
-# /src/Core/Controller.php:74
-# /vendor/lsr/core/src/Controller.php:79
-# /vendor/lsr/core/src/Controller.php:84
 msgctxt "pageTitles"
 msgid "Settings"
 msgstr "Nastavenia"
 
-# /templates/pages/settings/print.latte:128
-# /templates/pages/settings/print.latte:215
-# /templates/pages/settings/print.latte:126
-# /templates/pages/settings/print.latte:202
-# /templates/pages/settings/print.latte:205
 msgctxt "results.style.settings"
 msgid "Name"
 msgstr "Meno"
 
-# /templates/pages/settings/print.latte:153
-# /templates/pages/settings/print.latte:
-# /templates/pages/settings/print.latte:151
-# /templates/pages/settings/print.latte:223
-# /templates/pages/settings/print.latte:226
 msgctxt "results.style.settings"
 msgid "Primary color"
 msgstr "Primárna farba"
 
-# /templates/pages/settings/print.latte:160
-# /templates/pages/settings/print.latte:
-# /templates/pages/settings/print.latte:159
-# /templates/pages/settings/print.latte:230
-# /templates/pages/settings/print.latte:233
 msgctxt "results.style.settings"
 msgid "Dark color"
 msgstr "Tmavá farba"
 
-# /templates/pages/settings/print.latte:167
-# /templates/pages/settings/print.latte:
-# /templates/pages/settings/print.latte:166
-# /templates/pages/settings/print.latte:238
-# /templates/pages/settings/print.latte:241
 msgctxt "results.style.settings"
 msgid "Light color"
 msgstr "Svetlá farba"
 
-# /templates/pages/settings/print.latte:135
-# /templates/pages/settings/print.latte:215
-# /templates/pages/settings/print.latte:133
-# /templates/pages/settings/print.latte:209
-# /templates/pages/settings/print.latte:212
 msgctxt "results.style.settings"
 msgid "Background"
 msgstr "Pozadie"
@@ -1047,41 +603,18 @@ msgstr "Pozadie"
 msgid "Print styles"
 msgstr "Tlačové štýly"
 
-# /templates/pages/settings/print.latte:110
-# /templates/pages/settings/print.latte:108
 msgctxt "results.style.settings"
 msgid "Print styles"
 msgstr "Tlačové štýly"
 
-# /templates/pages/settings/print.latte:215
-# /templates/pages/settings/print.latte:178
-# /templates/pages/settings/print.latte:181
 msgctxt "results.style.settings"
 msgid "Add style"
 msgstr "Pridať štýl"
 
-# /templates/pages/settings/index.latte:
-# /templates/pages/settings/gate.latte:
-# /templates/pages/settings/vests.latte:
-# /templates/pages/settings/print.latte:215
-# /templates/pages/settings/index.latte:17
-# /templates/pages/settings/gate.latte:31
-# /templates/pages/settings/vests.latte:76
-# /templates/pages/settings/print.latte:181
-# /templates/pages/settings/print.latte:184
 msgctxt "actions"
 msgid "Send"
 msgstr "Odoslať"
 
-# /templates/pages/settings/print.latte:49
-# /templates/pages/settings/print.latte:90
-# /templates/pages/settings/print.latte:119
-# /templates/pages/settings/print.latte:215
-# /templates/pages/settings/print.latte:44
-# /templates/pages/settings/print.latte:81
-# /templates/pages/settings/print.latte:113
-# /templates/pages/settings/print.latte:189
-# /templates/pages/settings/print.latte:192
 msgctxt "actions"
 msgid "Delete"
 msgstr "Zmazať"
@@ -1090,10 +623,6 @@ msgctxt "results.style"
 msgid "Test"
 msgstr "Test"
 
-# /templates/pages/settings/print.latte:52
-# /templates/pages/settings/print.latte:90
-# /templates/pages/settings/print.latte:50
-# /templates/pages/settings/print.latte:87
 msgctxt "results.style.settings"
 msgid "Style"
 msgstr "Štýl"
@@ -1114,10 +643,6 @@ msgctxt "dates"
 msgid "Date"
 msgstr "Dátum"
 
-# /templates/pages/settings/print.latte:63
-# /templates/pages/settings/print.latte:110
-# /templates/pages/settings/print.latte:60
-# /templates/pages/settings/print.latte:96
 msgctxt "dates"
 msgid "Dates"
 msgstr "Dáta"
@@ -1125,40 +650,22 @@ msgstr "Dáta"
 msgid "No games have been played yet."
 msgstr "Neboli odohrané žiadne hry."
 
-# /templates/pages/results/index.latte:43
-# /templates/pages/settings/print.latte:41
-# /templates/pages/results/index.latte:33
-# /templates/pages/settings/print.latte:34
 msgctxt "results.style"
 msgid "Graphical"
 msgstr "Grafický"
 
-# /src/GameModels/Tip.php:26
-# /templates/results/@printLayout.latte:112
-# /src/GameModels/Tip.php:27
-# /templates/pages/gate/@layout.latte:88
-# /templates/results/@printLayout.latte:108
 msgctxt "tips"
 msgid "Oživení trvá 5 sekund."
 msgstr "Oživenie trvá 5 sekúnd."
 
-# /src/GameModels/Game/PlayerTrophy.php:78
-# /src/GameModels/Game/PlayerTrophy.php:79
-# /src/GameModels/Game/PlayerTrophy.php:84
 msgctxt "results.bests"
 msgid "Nedotknutelný"
 msgstr "Nedotknuteľný"
 
-# /src/GameModels/Game/PlayerTrophy.php:83
-# /src/GameModels/Game/PlayerTrophy.php:84
-# /src/GameModels/Game/PlayerTrophy.php:89
 msgctxt "results.bests"
 msgid "Sniper"
 msgstr "Sniper"
 
-# /src/GameModels/Game/PlayerTrophy.php:153
-# /src/GameModels/Game/PlayerTrophy.php:154
-# /src/GameModels/Game/PlayerTrophy.php:159
 msgctxt "results.bests"
 msgid "Hráč"
 msgstr "Hráč"
@@ -1167,35 +674,22 @@ msgctxt "results"
 msgid "Výsledky hráčů"
 msgstr "Výsledky hráčov"
 
-# /templates/results/templates/graphical.latte:191
 msgctxt "results.player"
 msgid "Výstřely"
 msgstr "Výstrely"
 
-# /src/GameModels/Game/PlayerTrophy.php:98
-# /src/GameModels/Game/PlayerTrophy.php:99
-# /src/GameModels/Game/PlayerTrophy.php:104
 msgctxt "results.bests"
 msgid "Vyrovnaný"
 msgstr "Vyrovnaný"
 
-# /src/GameModels/Game/PlayerTrophy.php:88
-# /src/GameModels/Game/PlayerTrophy.php:89
-# /src/GameModels/Game/PlayerTrophy.php:94
 msgctxt "results.bests"
 msgid "Poloviční sniper"
 msgstr "Polovičný sniper"
 
-# /src/GameModels/Game/PlayerTrophy.php:103
-# /src/GameModels/Game/PlayerTrophy.php:104
-# /src/GameModels/Game/PlayerTrophy.php:109
 msgctxt "results.bests"
 msgid "Zabiják"
 msgstr "Zabijak"
 
-# /src/GameModels/Game/PlayerTrophy.php:113
-# /src/GameModels/Game/PlayerTrophy.php:114
-# /src/GameModels/Game/PlayerTrophy.php:119
 msgctxt "results.bests"
 msgid "Nula"
 msgstr "Nula"
@@ -1204,33 +698,22 @@ msgctxt "results.bests"
 msgid "Potahal tým"
 msgstr "Potiahal tím"
 
-# /src/GameModels/Game/PlayerTrophy.php:93
-# /src/GameModels/Game/PlayerTrophy.php:94
-# /src/GameModels/Game/PlayerTrophy.php:99
 msgctxt "results.bests"
 msgid "Občas se i trefí"
 msgstr "Občas sa aj trafí"
 
-# /src/GameModels/Game/PlayerTrophy.php:123
-# /src/GameModels/Game/PlayerTrophy.php:124
-# /src/GameModels/Game/PlayerTrophy.php:129
 msgctxt "results.bests"
 msgid "Zasedlý"
 msgstr "Zasadnutý"
 
-# /src/GameModels/Game/PlayerTrophy.php:128
-# /src/GameModels/Game/PlayerTrophy.php:129
-# /src/GameModels/Game/PlayerTrophy.php:134
 msgctxt "results.bests"
 msgid "Pronásledovaný"
 msgstr "Prenasledovaný"
 
-# /templates/results/templates/graphical.latte:305
 msgctxt "results"
 msgid "%d zabití"
 msgstr "%d zabitie"
 
-# /templates/results/templates/graphical.latte:315
 msgctxt "results"
 msgid "%d smrt"
 msgid_plural "%d smrtí"
@@ -1239,85 +722,53 @@ msgstr[1] "%d smtri"
 msgstr[2] "%d smrťou"
 msgstr[3] "%d smrťou"
 
-# /src/GameModels/Game/PlayerTrophy.php:118
-# /src/GameModels/Game/PlayerTrophy.php:119
-# /src/GameModels/Game/PlayerTrophy.php:124
 msgctxt "results.bests"
 msgid "Tahoun týmu"
 msgstr "Ťahúň tímu"
 
-# /src/GameModels/Game/PlayerTrophy.php:133
-# /src/GameModels/Game/PlayerTrophy.php:134
-# /src/GameModels/Game/PlayerTrophy.php:139
 msgctxt "results.bests"
 msgid "Ďábel"
 msgstr "Diabol"
 
-# /src/GameModels/Game/PlayerTrophy.php:138
-# /src/GameModels/Game/PlayerTrophy.php:139
-# /src/GameModels/Game/PlayerTrophy.php:144
 msgctxt "results.bests"
 msgid "Skóre nenalezeno"
 msgstr "Skóre nenájdené"
 
-# /src/GameModels/Game/PlayerTrophy.php:143
-# /src/GameModels/Game/PlayerTrophy.php:144
-# /src/GameModels/Game/PlayerTrophy.php:149
 msgctxt "results.bests"
 msgid "Výstřely nenalezeny"
 msgstr "Výstrely nenájdené"
 
-# /templates/results/templates/graphical.latte:102
-# /templates/results/templates/graphical.latte:101
 msgctxt "results.info"
 msgid "Kód hry"
 msgstr "Kód hry"
 
-# /templates/pages/games-list/index.latte:54
-# /templates/pages/results/index.latte:67
-# /templates/pages/results/index.latte:66
-# /templates/pages/games-list/index.latte:53
-# /templates/pages/games-list/index.latte:57
 msgid "Zobrazit na Gate"
 msgstr "Zobraziť na výsledkovej tabuli"
 
-# /templates/pages/gate/idle.latte:69
-# /templates/pages/gate/idle.latte:64
 msgctxt "results"
 msgid "Sniper"
 msgstr "Sniper"
 
-# /templates/pages/gate/idle.latte:82
-# /templates/pages/gate/idle.latte:78
 msgctxt "results"
 msgid "Mega střelec"
 msgstr "Mega strelec"
 
-# /templates/pages/gate/idle.latte:95
-# /templates/pages/gate/idle.latte:91
 msgctxt "results"
 msgid "Predátor"
 msgstr "Predátor"
 
-# /templates/pages/gate/idle.latte:110
-# /templates/pages/gate/idle.latte:105
 msgctxt "results"
 msgid "Cíl"
 msgstr "Cieľ"
 
-# /templates/pages/gate/idle.latte:28
-# /templates/pages/gate/idle.latte:26
 msgctxt "gate"
 msgid "Nejlepší skóre dne"
 msgstr "Najlepšie skóre dňa"
 
-# /templates/pages/gate/idle.latte:28
-# /templates/pages/gate/idle.latte:19
 msgctxt "gate"
 msgid "Výsledky dne"
 msgstr "Výsledky dňa"
 
-# /templates/pages/gate/idle.latte:83
 msgctxt "results"
 msgid "%d shot"
 msgid_plural "%d shots"
@@ -1326,7 +777,6 @@ msgstr[1] "%d výstrely"
 msgstr[2] "%d výstrelov"
 msgstr[3] "%d výstrelov"
 
-# /templates/pages/gate/idle.latte:96
 msgctxt "results"
 msgid "%d hit"
 msgid_plural "%d hits"
@@ -1335,7 +785,6 @@ msgstr[1] "%d zásahy"
 msgstr[2] "%d zásahov"
 msgstr[3] "%d zásahov"
 
-# /templates/pages/gate/idle.latte:111
 msgctxt "results"
 msgid "%d death"
 msgid_plural "%d deaths"
@@ -1344,45 +793,20 @@ msgstr[1] "%d smrti"
 msgstr[2] "%d smrťou"
 msgstr[3] "%d smrťou"
 
-# /templates/pages/settings/print.latte:41
-# /templates/pages/settings/print.latte:39
 msgctxt "results.style.settings"
 msgid "Print styles dates"
 msgstr "Dátumy tlačových štýlov"
 
-# /templates/pages/settings/print.latte:90
-# /templates/pages/settings/print.latte:74
 msgctxt "actions"
 msgid "Add date"
 msgstr "Pridať dátum"
 
-# /templates/pages/settings/index.latte:13
-# /templates/pages/settings/gate.latte:22
-# /templates/pages/settings/vests.latte:12
-# /templates/pages/settings/print.latte:21
-# /templates/pages/settings/index.latte:7
-# /templates/pages/settings/gate.latte:7
-# /templates/pages/settings/vests.latte:9
-# /templates/pages/settings/print.latte:11
 msgid "Last saved:"
 msgstr "Naposledy uložené:"
 
-# /templates/pages/settings/index.latte:13
-# /templates/pages/settings/gate.latte:22
-# /templates/pages/settings/vests.latte:12
-# /templates/pages/settings/print.latte:21
-# /templates/pages/settings/index.latte:7
-# /templates/pages/settings/gate.latte:7
-# /templates/pages/settings/vests.latte:9
-# /templates/pages/settings/print.latte:12
 msgid "never"
 msgstr "nikdy"
 
-# /templates/pages/settings/print.latte:143
-# /templates/pages/settings/print.latte:
-# /templates/pages/settings/print.latte:141
-# /templates/pages/settings/print.latte:216
-# /templates/pages/settings/print.latte:219
 msgctxt "results.style.settings"
 msgid "Landscape background"
 msgstr "Pozadie na šírku"
@@ -1391,66 +815,46 @@ msgctxt "errors"
 msgid "Uploaded file is too large"
 msgstr "Nahraný súbor je príliš veľký"
 
-# /src/Controllers/Settings.php:270
-# /src/Controllers/Settings.php:271
 msgctxt "errors"
 msgid "Database error occurred."
 msgstr "Nastala chyba databázy."
 
-# /templates/pages/settings/print.latte:21
-# /templates/pages/settings/print.latte:15
 msgctxt "results.style.settings"
 msgid "Print defaults"
 msgstr "Nastavenie tlače"
 
-# /templates/pages/settings/print.latte:21
-# /templates/pages/settings/print.latte:18
 msgctxt "results.style.settings"
 msgid "Default print style"
 msgstr "Predvolený tlačový štýl"
 
-# /templates/pages/settings/print.latte:32
-# /templates/pages/settings/print.latte:29
 msgctxt "results.style.settings"
 msgid "Default template"
 msgstr "Predvolená šablóna"
 
-# /src/Controllers/Cli/Help.php:145
-# /src/Controllers/Cli/Help.php:152
 msgctxt "cli.messages"
 msgid "Description"
 msgstr "Popis"
 
-# /src/Services/CliHelper.php:60
-# /vendor/lsr/helpers/src/Cli/CliHelper.php:60
 msgctxt "cli.messages"
 msgid "Usage"
 msgstr "Použitie"
 
-# /src/Services/CliHelper.php:88
-# /vendor/lsr/helpers/src/Cli/CliHelper.php:88
 msgctxt "cli.messages"
 msgid "Arguments"
 msgstr "Argumenty"
 
-# /src/Services/CliHelper.php:91
 msgctxt "cli.help.arguments"
 msgid "A command to get information about."
 msgstr "Príkaz na získanie informácií o."
 
-# /routes/cli.php:46
-# /routes/cli.php:23
-# /routes/cli.php:60
 msgctxt "cli.messages"
 msgid "Examples"
 msgstr "Príklady"
 
-# /src/Services/CliHelper.php:91
 msgctxt "cli.help.arguments"
 msgid "A valid results directory"
 msgstr "Platný adresár výsledkov"
 
-# /routes/cli.php:85
 msgctxt "cli.messages"
 msgid "Information"
 msgstr "Informácie"
@@ -1459,44 +863,25 @@ msgctxt "cli.help.arguments"
 msgid "Optional filter for command groups."
 msgstr "Voliteľný filter pre skupiny príkazov."
 
-# /src/Services/CliHelper.php:91
 msgctxt "cli.help.arguments"
 msgid "Optional filter for command groups"
 msgstr "Voliteľný filter pre skupiny príkazov"
 
-# /templates/pages/new-game/index.latte:38
-# /templates/pages/new-game/index.latte:39
-# /templates/pages/new-game/index.latte:44
-# /templates/pages/new-game/index.latte:45
-# /templates/pages/new-game/index.latte:51
-# /templates/pages/new-game/index.latte:52
-# /templates/pages/new-game/index.latte:53
-# /templates/pages/new-game/index.latte:54
 msgctxt "gameModes"
 msgid "Survival"
 msgstr "Survival"
 
-# /templates/pages/settings/index.latte:13
-# /templates/pages/settings/index.latte:11
 msgctxt "settings"
 msgid "API klíč"
 msgstr "API kľúč"
 
-# /templates/pages/settings/index.latte:13
-# /templates/pages/settings/index.latte:9
 msgctxt "settings"
 msgid "General settings"
 msgstr "Všeobecné nastavenia"
 
-# /config/nav/menu.php:31
-# /config/nav/menu.php:36
-# /config/nav/menu.php:41
-# /config/nav/menu.php:42
 msgid "Vests"
 msgstr "Vesty"
 
-# /templates/pages/settings/vests.latte:12
-# /templates/pages/settings/vests.latte:11
 msgctxt "settings"
 msgid "Vest settings"
 msgstr "Nastavenie vesty"
@@ -1505,46 +890,18 @@ msgctxt "systems"
 msgid "evo5"
 msgstr "evo5"
 
-# /templates/pages/settings/vests.latte:69
-# /templates/pages/settings/vests.latte:68
-# /templates/pages/new-game/index.latte:116
-# /templates/pages/new-game/index.latte:122
-# /templates/pages/new-game/index.latte:123
-# /templates/pages/new-game/index.latte:124
-# /templates/pages/new-game/index.latte:125
 msgctxt "settings.vests"
 msgid "Porucha"
 msgstr "Porucha"
 
-# /templates/pages/settings/vests.latte:54
-# /templates/pages/settings/vests.latte:53
-# /templates/pages/new-game/index.latte:113
-# /templates/pages/new-game/index.latte:119
-# /templates/pages/new-game/index.latte:120
-# /templates/pages/new-game/index.latte:121
-# /templates/pages/new-game/index.latte:122
 msgctxt "settings.vests.status"
 msgid "V pořádku"
 msgstr "V poriadku"
 
-# /templates/pages/settings/vests.latte:68
-# /templates/pages/settings/vests.latte:65
-# /templates/pages/new-game/index.latte:115
-# /templates/pages/new-game/index.latte:121
-# /templates/pages/new-game/index.latte:122
-# /templates/pages/new-game/index.latte:123
-# /templates/pages/new-game/index.latte:124
 msgctxt "settings.vests.status"
 msgid "Nefunkční"
 msgstr "Nefunkčná"
 
-# /templates/pages/settings/vests.latte:60
-# /templates/pages/settings/vests.latte:59
-# /templates/pages/new-game/index.latte:114
-# /templates/pages/new-game/index.latte:120
-# /templates/pages/new-game/index.latte:121
-# /templates/pages/new-game/index.latte:122
-# /templates/pages/new-game/index.latte:123
 msgctxt "settings.vests.status"
 msgid "Hratelná"
 msgstr "Hrateľná"
@@ -1553,14 +910,6 @@ msgctxt "errors"
 msgid "Failed to save settings."
 msgstr "Nepodarilo sa uložiť nastavenia."
 
-# /templates/pages/new-game/index.latte:38
-# /templates/pages/new-game/index.latte:39
-# /templates/pages/new-game/index.latte:44
-# /templates/pages/new-game/index.latte:45
-# /templates/pages/new-game/index.latte:51
-# /templates/pages/new-game/index.latte:52
-# /templates/pages/new-game/index.latte:53
-# /templates/pages/new-game/index.latte:54
 msgctxt "gameModes"
 msgid "T.M.A - solo"
 msgstr "T.M.A - solo"
@@ -1569,16 +918,10 @@ msgctxt "results.info"
 msgid "Podrobnější výsledky zde"
 msgstr "Podrobnejšie výsledky tu"
 
-# /src/GameModels/Game/PlayerTrophy.php:148
-# /src/GameModels/Game/PlayerTrophy.php:149
-# /src/GameModels/Game/PlayerTrophy.php:154
 msgctxt "results.bests"
 msgid "Férový hráč"
 msgstr "Férový hráč"
 
-# /src/GameModels/Game/PlayerTrophy.php:108
-# /src/GameModels/Game/PlayerTrophy.php:109
-# /src/GameModels/Game/PlayerTrophy.php:114
 msgctxt "results.bests"
 msgid "Terč"
 msgstr "Terč"
@@ -1599,201 +942,113 @@ msgctxt "results.bests.description"
 msgid "Staň se nejpřesnějším hráčem hry."
 msgstr "Staňte sa najpresnejším hráčom hry."
 
-# /src/GameModels/Game/PlayerTrophy.php:54
-# /src/GameModels/Game/PlayerTrophy.php:55
-# /src/GameModels/Game/PlayerTrophy.php:60
 msgctxt "results.bests.description"
 msgid "Staň se hráčem s nejméně výstřely z celé hry."
 msgstr "Staňte sa hráča s najmenej výstrely hry."
 
-# /src/GameModels/Game/PlayerTrophy.php:59
-# /src/GameModels/Game/PlayerTrophy.php:60
-# /src/GameModels/Game/PlayerTrophy.php:65
 msgctxt "results.bests.description"
 msgid "Staň se hráčem, který se nejvícekrát netrefil."
 msgstr "Staň sa hráčom, ktorý sa najviackrát netrefil."
 
-# /src/GameModels/Game/PlayerTrophy.php:64
-# /src/GameModels/Game/PlayerTrophy.php:65
-# /src/GameModels/Game/PlayerTrophy.php:70
 msgctxt "results.bests.description"
 msgid "Staň se hrářem, který nejvíckát zasáhnul spoluhráče."
 msgstr "Staň sa hráčom, ktorý najviac zasiahol spoluhráča."
 
-# /src/GameModels/Game/PlayerTrophy.php:69
-# /src/GameModels/Game/PlayerTrophy.php:70
-# /src/GameModels/Game/PlayerTrophy.php:75
 msgctxt "results.bests.description"
 msgid "Staň se hráčem, kterého nejvíckrát trefili spoluhráči."
 msgstr "Staňte sa hráčom, ktorého najviackrát trefili spoluhráči."
 
-# /src/GameModels/Game/PlayerTrophy.php:74
-# /src/GameModels/Game/PlayerTrophy.php:75
-# /src/GameModels/Game/PlayerTrophy.php:80
 msgctxt "results.bests.description"
 msgid "Získej nejvíce bonusů za hru."
 msgstr "Získaj najviac bonusov za hru."
 
-# /src/GameModels/Game/PlayerTrophy.php:79
-# /src/GameModels/Game/PlayerTrophy.php:80
-# /src/GameModels/Game/PlayerTrophy.php:85
 msgctxt "results.bests.description"
 msgid "Zemři méně než 10krát za hru."
 msgstr "Zomri menej ako 10-krát za hru."
 
-# /src/GameModels/Game/PlayerTrophy.php:84
-# /src/GameModels/Game/PlayerTrophy.php:85
-# /src/GameModels/Game/PlayerTrophy.php:90
 msgctxt "results.bests.description"
 msgid "Získej přesnost alespoň 95% za hru."
 msgstr "Získaj presnosť aspoň 95% za hru."
 
-# /src/GameModels/Game/PlayerTrophy.php:89
-# /src/GameModels/Game/PlayerTrophy.php:90
-# /src/GameModels/Game/PlayerTrophy.php:95
 msgctxt "results.bests.description"
 msgid "Získej přesnost alespoň 50% za hru."
 msgstr "Získaj presnosť aspoň 50% za hru."
 
-# /src/GameModels/Game/PlayerTrophy.php:94
-# /src/GameModels/Game/PlayerTrophy.php:95
-# /src/GameModels/Game/PlayerTrophy.php:100
 msgctxt "results.bests.description"
 msgid "Získej přesnost maximálně 5% za hru."
 msgstr "Získaj presnosť maximálne 5% za hru."
 
-# /src/GameModels/Game/PlayerTrophy.php:99
-# /src/GameModels/Game/PlayerTrophy.php:100
-# /src/GameModels/Game/PlayerTrophy.php:105
 msgctxt "results.bests.description"
 msgid "Měj téměř stejně zásahů a smrtí."
 msgstr "Maj takmer rovnako zásahov a smrťou."
 
-# /src/GameModels/Game/PlayerTrophy.php:104
-# /src/GameModels/Game/PlayerTrophy.php:105
-# /src/GameModels/Game/PlayerTrophy.php:110
 msgctxt "results.bests.description"
 msgid "Měj alespoň 2x tolik zásahů co smrtí."
 msgstr "Maj aspoň 2x toľko zásahov čo smrťou."
 
-# /src/GameModels/Game/PlayerTrophy.php:109
-# /src/GameModels/Game/PlayerTrophy.php:110
-# /src/GameModels/Game/PlayerTrophy.php:115
 msgctxt "results.bests.description"
 msgid "Měl alespoň přibližně 2x tolik smrtí co zásahů."
 msgstr "Mal aspoň približne 2x toľko smrťou čo zásahov."
 
-# /src/GameModels/Game/PlayerTrophy.php:114
-# /src/GameModels/Game/PlayerTrophy.php:115
-# /src/GameModels/Game/PlayerTrophy.php:120
 msgctxt "results.bests.description"
 msgid "Měj 0 skóre."
 msgstr "Maj 0 skóre."
 
-# /src/GameModels/Game/PlayerTrophy.php:119
-# /src/GameModels/Game/PlayerTrophy.php:120
-# /src/GameModels/Game/PlayerTrophy.php:125
 msgctxt "results.bests.description"
 msgid "Získej alespoň přibližně polovinu skóre celého tvého týmu."
 msgstr "Získaj aspoň približne polovicu skóre celého tvojho tímu."
 
-# /src/GameModels/Game/PlayerTrophy.php:124
-# /src/GameModels/Game/PlayerTrophy.php:125
-# /src/GameModels/Game/PlayerTrophy.php:130
 msgctxt "results.bests.description"
 msgid "Alespoň přibližně polovina všech tvých zásahů je jen jeden hráč."
 msgstr "Aspoň približne polovica všetkých tvojich zásahov je iba jeden hráč."
 
-# /src/GameModels/Game/PlayerTrophy.php:129
-# /src/GameModels/Game/PlayerTrophy.php:130
-# /src/GameModels/Game/PlayerTrophy.php:135
 msgctxt "results.bests.description"
 msgid "Alespoň přibližně polovina všech tvých smrtí je jen jeden hráč."
 msgstr "Aspoň približne polovica všetkých tvojich smrtí je len jeden hráč."
 
-# /src/GameModels/Game/PlayerTrophy.php:134
-# /src/GameModels/Game/PlayerTrophy.php:135
-# /src/GameModels/Game/PlayerTrophy.php:140
 msgctxt "results.bests.description"
 msgid "Získej 666 skóre nebo výstřelů."
 msgstr "Získaj 666 skóre alebo výstrelov."
 
-# /src/GameModels/Game/PlayerTrophy.php:139
-# /src/GameModels/Game/PlayerTrophy.php:140
-# /src/GameModels/Game/PlayerTrophy.php:145
 msgctxt "results.bests.description"
 msgid "Získej 404, 4040, nebo 40400 skóre."
 msgstr "Získaj 404, 4040, alebo 40400 skóre."
 
-# /src/GameModels/Game/PlayerTrophy.php:144
-# /src/GameModels/Game/PlayerTrophy.php:145
-# /src/GameModels/Game/PlayerTrophy.php:150
 msgctxt "results.bests.description"
 msgid "Vystřel 404krát."
 msgstr "Vystreľ 404krát."
 
-# /src/GameModels/Game/PlayerTrophy.php:149
-# /src/GameModels/Game/PlayerTrophy.php:150
-# /src/GameModels/Game/PlayerTrophy.php:155
 msgctxt "results.bests.description"
 msgid "Zasáhni všechny své nepřátele stejněkrát (přibližně)."
 msgstr "Zasiahni všetkých svojich nepriateľov rovnako (približne)."
 
-# /src/GameModels/Game/PlayerTrophy.php:154
-# /src/GameModels/Game/PlayerTrophy.php:155
-# /src/GameModels/Game/PlayerTrophy.php:160
 msgctxt "results.bests.description"
 msgid "Průměrný hráč. Bohužel na tebe nesedí žádná z trofejí."
 msgstr "Priemerný hráč. Bohužiaľ na teba nesedí žiadna z trofejí."
 
-# /templates/pages/games-list/index.latte:54
-# /templates/pages/games-list/index.latte:50
 msgid "Výsledky on-line"
 msgstr "Výsledky on-line"
 
-# /templates/results/templates/graphical.latte:116
-# /templates/results/templates/default.latte:72
-# /templates/pages/new-game/index.latte:38
-# /templates/pages/new-game/index.latte:39
-# /templates/pages/new-game/index.latte:44
-# /templates/pages/new-game/index.latte:45
-# /templates/pages/new-game/index.latte:51
-# /templates/pages/new-game/index.latte:52
-# /templates/pages/new-game/index.latte:53
-# /templates/pages/new-game/index.latte:54
 msgctxt "gameModes"
 msgid "100 nábojů"
 msgstr "100 nábojov"
 
-# /templates/results/templates/graphical.latte:116
-# /templates/pages/gate/results.latte:32
-# /templates/pages/gate/modes/100naboju.latte:32
-# /templates/results/templates/graphical.latte:115
-# /templates/pages/gate/results.latte:28
 msgctxt "results"
 msgid "On-line detailní výsledky"
 msgstr "On-line detailné výsledky"
 
-# /templates/results/templates/graphical.latte:59
-# /templates/results/templates/graphical.latte:45
 msgctxt "results"
 msgid "Skóre"
 msgstr "Skóre"
 
-# /templates/results/templates/graphical.latte:59
-# /templates/results/templates/graphical.latte:48
 msgctxt "results"
 msgid "Výstřely"
 msgstr "Výstrely"
 
-# /templates/results/templates/graphical.latte:59
-# /templates/results/templates/graphical.latte:51
 msgctxt "results"
 msgid "Zásahy"
 msgstr "Zásahy"
 
-# /templates/results/templates/graphical.latte:59
-# /templates/results/templates/graphical.latte:54
 msgctxt "results"
 msgid "Smrti"
 msgstr "Úmrtie"
@@ -1802,155 +1057,92 @@ msgctxt "results"
 msgid "Zásahy/Smrti od spoluhráčů"
 msgstr "Zásahy/Smrti od spoluhráčov"
 
-# /templates/results/templates/graphical.latte:80
-# /templates/results/templates/graphical.latte:61
 msgctxt "results"
 msgid "Bonusy"
 msgstr "Bonusy"
 
-# /templates/results/templates/graphical.latte:80
-# /templates/results/templates/graphical.latte:64
 msgctxt "results.bonus"
 msgid "Agent"
 msgstr "Agent"
 
-# /templates/results/templates/graphical.latte:80
-# /templates/results/templates/graphical.latte:67
 msgctxt "results.bonus"
 msgid "Neviditelnost"
 msgstr "Neviditeľnosť"
 
-# /templates/results/templates/graphical.latte:80
-# /templates/results/templates/graphical.latte:70
 msgctxt "results.bonus"
 msgid "Samopal"
 msgstr "Samopal"
 
-# /templates/results/templates/graphical.latte:80
-# /templates/results/templates/graphical.latte:73
 msgctxt "results.bonus"
 msgid "Štít"
 msgstr "Štít"
 
-# /src/GameModels/Game/PlayerTrophy.php:34
-# /src/GameModels/Game/PlayerTrophy.php:35
-# /src/GameModels/Game/PlayerTrophy.php:40
 msgctxt "results.bests.description"
 msgid "Staň se hráčem s největším skóre."
 msgstr "Staň sa hráčom s najväčším skóre."
 
-# /src/GameModels/Game/PlayerTrophy.php:39
-# /src/GameModels/Game/PlayerTrophy.php:40
-# /src/GameModels/Game/PlayerTrophy.php:45
 msgctxt "results.bests.description"
 msgid "Staň se hráčem s největším počtem zásahů."
 msgstr "Staň sa hráčom s najväčším počtom zásahov."
 
-# /src/GameModels/Game/PlayerTrophy.php:44
-# /src/GameModels/Game/PlayerTrophy.php:45
-# /src/GameModels/Game/PlayerTrophy.php:50
 msgctxt "results.bests.description"
 msgid "Staň se hráčem s největším počtem smrtí."
 msgstr "Staň sa hráčom s najväčším počtom smrťou."
 
-# /src/GameModels/Game/PlayerTrophy.php:49
-# /src/GameModels/Game/PlayerTrophy.php:50
-# /src/GameModels/Game/PlayerTrophy.php:55
 msgctxt "results.bests.description"
 msgid "Staň se nejpřesnějším hráčem."
 msgstr "Staň sa najpresnejším hráčom."
 
-# /templates/results/templates/graphical.latte:59
-# /templates/results/templates/graphical.latte:57
 msgctxt "results"
 msgid "Zásahy od/do spoluhráčů"
 msgstr "Zásahy od/do spoluhráčov"
 
-# /templates/pages/games-list/index.latte:59
-# /templates/pages/games-list/index.latte:58
-# /templates/pages/games-list/index.latte:63
-# /templates/pages/games-list/index.latte:67
 msgid "Zobrazit vesty na Gate"
 msgstr "Zobraziť vesty na výsledkovej tabuli"
 
-# /config/nav/menu.php:27
-# /config/nav/menu.php:18
-# /config/nav/menu.php:32
-# /config/nav/menu.php:23
-# /config/nav/menu.php:37
-# /config/nav/menu.php:24
-# /config/nav/menu.php:38
 msgid "Gate"
 msgstr "Výsledková tabuľa"
 
-# /templates/pages/settings/gate.latte:22
-# /templates/pages/settings/gate.latte:9
 msgctxt "settings"
 msgid "Gate settings"
 msgstr "Nastavenie výsledkovej tabule"
 
-# /templates/pages/settings/gate.latte:22
-# /templates/pages/settings/gate.latte:11
 msgctxt "settings"
 msgid "Trigger events"
 msgstr "Vyvolať udalosti"
 
-# /templates/pages/settings/gate.latte:22
-# /templates/pages/settings/gate.latte:14
 msgctxt "events"
 msgid "Reload gate"
 msgstr "Znovu načítať výsledkovú tabuľu"
 
-# /templates/pages/settings/gate.latte:22
-# /templates/pages/settings/gate.latte:20
 msgctxt "settings"
 msgid "Game timer offset in seconds"
 msgstr "Posunutie časovača hry v sekundách"
 
-# /templates/pages/settings/gate.latte:27
-# /templates/pages/settings/gate.latte:25
 msgctxt "settings"
 msgid "Show timer from minute"
 msgstr "Zobraziť časovač od minúty"
 
-# /templates/pages/settings/gate.latte:22
-# /templates/pages/settings/gate.latte:18
 msgctxt "settings"
 msgid "Settings"
 msgstr "Nastavenia"
 
-# /src/Services/CliHelper.php:28
 msgctxt "cli.messages"
 msgid "Error"
 msgstr "Chyba"
 
-# /src/Services/CliHelper.php:29
 msgctxt "cli.errors"
 msgid "Missing the required path argument (1)"
 msgstr "Chýbajúca požadovaný argument cesty (1)"
 
-# /templates/pages/gate/idle.latte:53
-# /templates/pages/gate/idle.latte:49
 msgctxt "results"
 msgid "Odehráno her"
 msgstr "Odohrané hier"
 
-# /templates/results/templates/graphical.latte:116
-# /templates/results/templates/default.latte:72
-# /templates/pages/new-game/index.latte:38
-# /templates/pages/new-game/index.latte:39
-# /templates/pages/new-game/index.latte:44
-# /templates/pages/new-game/index.latte:45
-# /templates/pages/new-game/index.latte:51
-# /templates/pages/new-game/index.latte:52
-# /templates/pages/new-game/index.latte:53
-# /templates/pages/new-game/index.latte:54
 msgctxt "gameModes"
 msgid "Barvičky"
 msgstr "Dobývanie farieb"
 
-# /src/Services/CliHelper.php:91
-# /vendor/lsr/helpers/src/Cli/CliHelper.php:91
 msgctxt "cli.help.arguments"
 msgid "If set, output will be written to the [out] file. Otherwise, output will be written to stdout."
 msgstr "Ak je nastavené, výstup bude zapísaný do [out] súboru. V opačnom prípade bude výstup zapísaný do stdout."
@@ -2144,55 +1336,37 @@ msgctxt "results"
 msgid "Bodování"
 msgstr "Bodovanie"
 
-# /src/Services/CliHelper.php:29
 msgctxt "cli.errors"
 msgid "Cannot find any translation files in \"%s\" for language \"%s\" - skipping"
 msgstr "Nie je možné nájsť žiadne prekladové súbory v \"%s\" pre jazyk \"%s\" - preskakujem"
 
-# /templates/pages/game/index.latte:126
 msgid "Velký květnový turnaj 2022!"
 msgstr "Veľký májový turnaj 2022!"
 
-# /templates/pages/game/index.latte:126
 msgid "Přihlaš i svůj (vý)herní tým na pravidelný turnaj!"
 msgstr "Prihlás aj svoj (vý)herný tím na pravidelný turnaj!"
 
-# /templates/pages/game/index.latte:126
 msgid "3 kategorie - začátečníci, pokročilí a mazáci"
 msgstr "3 kategórie - začiatočníci, pokročilí a mazáci"
 
-# /templates/pages/game/index.latte:126
 msgid "Možnost tréninkových her za 50 Kč / hráč / hra"
 msgstr "Možnosť tréningových hier za 50 Kč / hráč / hra"
 
-# /templates/pages/game/index.latte:126
 msgid "Domluv si trénink s profíky!"
 msgstr "Dohovor si tréning s profíkmi!"
 
-# /templates/pages/game/leaderboard.latte:24
-# /templates/pages/new-game/index.latte:38
-# /templates/pages/new-game/index.latte:39
-# /templates/pages/new-game/index.latte:44
-# /templates/pages/new-game/index.latte:45
-# /templates/pages/new-game/index.latte:51
-# /templates/pages/new-game/index.latte:52
-# /templates/pages/new-game/index.latte:53
-# /templates/pages/new-game/index.latte:54
 msgctxt "gameModes"
 msgid "Apokalypsa"
 msgstr "Apokalypsa"
 
-# /vendor/lsr/helpers/src/Cli/CliHelper.php:91
 msgctxt "cli.help.arguments"
 msgid "If set, only the records with specified tags will be removed"
 msgstr "Ak je nastavené, budú odstránené iba záznamy so zadanými štítkami"
 
-# /templates/../vendor/lsr/helpers/templates/Caching/tab.latte:28
 msgctxt "debugPanel"
 msgid "Invalid cache class"
 msgstr "Neplatná trieda vyrovnávacej pamäte"
 
-# /templates/../vendor/lsr/helpers/templates/Caching/tab.latte:28
 msgctxt "debugPanel"
 msgid "%d call"
 msgid_plural "%d calls"
@@ -2201,344 +1375,137 @@ msgstr[1] "%d volanie"
 msgstr[2] "%d volaní"
 msgstr[3] "%d volaní"
 
-# /templates/pages/games-list/index.latte:58
-# /templates/pages/games-list/index.latte:62
 msgid "Znovu importovat ze souboru"
 msgstr "Znovu importovať zo súboru"
 
-# /vendor/lsr/core/src/Controller.php:84
 msgctxt "pageTitles"
 msgid "New game"
 msgstr "Nová hra"
 
-# /templates/pages/new-game/index.latte:12
-# /templates/pages/new-game/index.latte:13
-# /templates/pages/new-game/index.latte:14
-# /templates/pages/new-game/index.latte:15
-# /templates/pages/new-game/index.latte:16
 msgctxt "game.actions"
 msgid "Nahrát hru"
 msgstr "Nahrať hru"
 
-# /templates/pages/new-game/index.latte:15
-# /templates/pages/new-game/index.latte:17
-# /templates/pages/new-game/index.latte:18
-# /templates/pages/new-game/index.latte:19
-# /templates/pages/new-game/index.latte:20
 msgctxt "game.actions"
 msgid "Spustit hru"
 msgstr "Spustiť hru"
 
-# /templates/pages/new-game/index.latte:18
-# /templates/pages/new-game/index.latte:21
-# /templates/pages/new-game/index.latte:22
-# /templates/pages/new-game/index.latte:23
-# /templates/pages/new-game/index.latte:24
 msgctxt "game.actions"
 msgid "Ukončit hru"
 msgstr "Ukončiť hru"
 
-# /templates/pages/new-game/index.latte:33
-# /templates/pages/new-game/index.latte:38
-# /templates/pages/new-game/index.latte:39
-# /templates/pages/new-game/index.latte:45
-# /templates/pages/new-game/index.latte:46
-# /templates/pages/new-game/index.latte:47
-# /templates/pages/new-game/index.latte:48
 msgctxt "game"
 msgid "Herní mód"
 msgstr "Herný mód"
 
-# /templates/pages/new-game/index.latte:37
-# /templates/pages/new-game/index.latte:38
-# /templates/pages/new-game/index.latte:43
-# /templates/pages/new-game/index.latte:44
-# /templates/pages/new-game/index.latte:50
-# /templates/pages/new-game/index.latte:51
-# /templates/pages/new-game/index.latte:52
-# /templates/pages/new-game/index.latte:53
 msgctxt "gameModes"
 msgid "Classic team game."
 msgstr "Klasická tímová hra."
 
-# /templates/pages/new-game/index.latte:37
-# /templates/pages/new-game/index.latte:38
-# /templates/pages/new-game/index.latte:43
-# /templates/pages/new-game/index.latte:44
-# /templates/pages/new-game/index.latte:50
-# /templates/pages/new-game/index.latte:51
-# /templates/pages/new-game/index.latte:52
-# /templates/pages/new-game/index.latte:53
 msgctxt "gameModes"
 msgid "Classic free for all game."
 msgstr "Klasická hra všetci proti všetkým."
 
-# /templates/pages/new-game/index.latte:37
-# /templates/pages/new-game/index.latte:38
-# /templates/pages/new-game/index.latte:43
-# /templates/pages/new-game/index.latte:44
-# /templates/pages/new-game/index.latte:50
-# /templates/pages/new-game/index.latte:51
-# /templates/pages/new-game/index.latte:52
-# /templates/pages/new-game/index.latte:53
 msgctxt "gameModes"
 msgid "Náročná hra o přežití se 3mi životy."
 msgstr "Náročná hra o prežití s 3 životmi."
 
-# /templates/pages/new-game/index.latte:37
-# /templates/pages/new-game/index.latte:38
-# /templates/pages/new-game/index.latte:43
-# /templates/pages/new-game/index.latte:44
-# /templates/pages/new-game/index.latte:50
-# /templates/pages/new-game/index.latte:51
-# /templates/pages/new-game/index.latte:52
-# /templates/pages/new-game/index.latte:53
 msgctxt "gameModes"
 msgid "Strategická hra, kdy 2 týmy bojují proti sobě o zničení základny druhého týmu."
 msgstr "Strategická hra, kedy 2 tímy bojujú proti sebe o zničení základne druhého tímu."
 
-# /templates/pages/new-game/index.latte:37
-# /templates/pages/new-game/index.latte:38
-# /templates/pages/new-game/index.latte:43
-# /templates/pages/new-game/index.latte:44
-# /templates/pages/new-game/index.latte:50
-# /templates/pages/new-game/index.latte:51
-# /templates/pages/new-game/index.latte:52
-# /templates/pages/new-game/index.latte:53
 msgctxt "gameModes"
 msgid "Rychlá, šílená hra. Po pár smrtích se přebarvíš na barvu toho, kdo tě trefil."
 msgstr "Rýchla, šialená hra. Po pár smrtiach sa prefarbíš na farbu toho, kto ťa trafil."
 
-# /templates/pages/new-game/index.latte:37
-# /templates/pages/new-game/index.latte:38
-# /templates/pages/new-game/index.latte:43
-# /templates/pages/new-game/index.latte:44
-# /templates/pages/new-game/index.latte:50
-# /templates/pages/new-game/index.latte:51
-# /templates/pages/new-game/index.latte:52
-# /templates/pages/new-game/index.latte:53
 msgctxt "gameModes"
 msgid "Klasická hra, ale tentokrát bez světel."
 msgstr "Klasická hra, ale tentoraz bez svetiel."
 
-# /templates/pages/new-game/index.latte:38
-# /templates/pages/new-game/index.latte:39
-# /templates/pages/new-game/index.latte:44
-# /templates/pages/new-game/index.latte:45
-# /templates/pages/new-game/index.latte:51
-# /templates/pages/new-game/index.latte:52
-# /templates/pages/new-game/index.latte:53
-# /templates/pages/new-game/index.latte:54
 msgctxt "gameModes"
 msgid "T.M.A"
 msgstr "T.M.A"
 
-# /templates/pages/new-game/index.latte:37
-# /templates/pages/new-game/index.latte:38
-# /templates/pages/new-game/index.latte:43
-# /templates/pages/new-game/index.latte:44
-# /templates/pages/new-game/index.latte:50
-# /templates/pages/new-game/index.latte:51
-# /templates/pages/new-game/index.latte:52
-# /templates/pages/new-game/index.latte:53
 msgctxt "gameModes"
 msgid "Hra na zombíky! Vybraní hráči jsou zombie, kteří se snaží infikovat ostatní hráče."
 msgstr "Hra na zombíky! Vybraní hráči sú zombie, ktorí sa snažia infikovať ostatných hráčov."
 
-# /templates/pages/new-game/index.latte:37
-# /templates/pages/new-game/index.latte:38
-# /templates/pages/new-game/index.latte:43
-# /templates/pages/new-game/index.latte:44
-# /templates/pages/new-game/index.latte:50
-# /templates/pages/new-game/index.latte:51
-# /templates/pages/new-game/index.latte:52
-# /templates/pages/new-game/index.latte:53
 msgctxt "gameModes"
 msgid "Strategická hra s omezeným počtem životů a nábojů."
 msgstr "Strategická hra s obmedzeným počtom životov a nábojov."
 
-# /templates/pages/new-game/index.latte:38
-# /templates/pages/new-game/index.latte:39
-# /templates/pages/new-game/index.latte:44
-# /templates/pages/new-game/index.latte:45
-# /templates/pages/new-game/index.latte:51
-# /templates/pages/new-game/index.latte:52
-# /templates/pages/new-game/index.latte:53
-# /templates/pages/new-game/index.latte:54
 msgctxt "gameModes"
 msgid "Team Survival"
 msgstr "Tímový Survival"
 
-# /templates/pages/new-game/index.latte:38
-# /templates/pages/new-game/index.latte:39
-# /templates/pages/new-game/index.latte:44
-# /templates/pages/new-game/index.latte:45
-# /templates/pages/new-game/index.latte:51
-# /templates/pages/new-game/index.latte:52
-# /templates/pages/new-game/index.latte:53
-# /templates/pages/new-game/index.latte:54
 msgctxt "gameModes"
 msgid "Marco Polo"
 msgstr "Marco Polo"
 
-# /templates/pages/new-game/index.latte:38
-# /templates/pages/new-game/index.latte:39
-# /templates/pages/new-game/index.latte:44
-# /templates/pages/new-game/index.latte:45
-# /templates/pages/new-game/index.latte:51
-# /templates/pages/new-game/index.latte:52
-# /templates/pages/new-game/index.latte:53
-# /templates/pages/new-game/index.latte:54
 msgctxt "gameModes"
 msgid "Zombie"
 msgstr "Zombie"
 
-# /templates/pages/new-game/index.latte:49
-# /templates/pages/new-game/index.latte:50
-# /templates/pages/new-game/index.latte:51
-# /templates/pages/new-game/index.latte:56
-# /templates/pages/new-game/index.latte:57
-# /templates/pages/new-game/index.latte:63
-# /templates/pages/new-game/index.latte:64
-# /templates/pages/new-game/index.latte:65
-# /templates/pages/new-game/index.latte:66
 msgctxt "game"
 msgid "Hudební mód"
 msgstr "Hudobný mód"
 
-# /templates/pages/new-game/index.latte:61
-# /templates/pages/new-game/index.latte:62
-# /templates/pages/new-game/index.latte:64
-# /templates/pages/new-game/index.latte:69
-# /templates/pages/new-game/index.latte:70
-# /templates/pages/new-game/index.latte:76
-# /templates/pages/new-game/index.latte:77
-# /templates/pages/new-game/index.latte:78
-# /templates/pages/new-game/index.latte:79
 msgctxt "game"
 msgid "Náhodné rozdělení týmů"
 msgstr "Náhodné rozdelenie tímov"
 
-# /templates/pages/new-game/index.latte:74
-# /templates/pages/new-game/index.latte:76
-# /templates/pages/new-game/index.latte:42
-# /templates/pages/new-game/index.latte:55
-# /templates/pages/new-game/index.latte:56
-# /templates/pages/new-game/index.latte:78
-# /templates/pages/new-game/index.latte:47
-# /templates/pages/new-game/index.latte:61
-# /templates/pages/new-game/index.latte:83
-# /templates/pages/new-game/index.latte:48
-# /templates/pages/new-game/index.latte:62
-# /templates/pages/new-game/index.latte:84
-# /templates/pages/new-game/index.latte:85
-# /templates/pages/new-game/index.latte:54
-# /templates/pages/new-game/index.latte:68
-# /templates/pages/new-game/index.latte:91
-# /templates/pages/new-game/index.latte:69
-# /templates/pages/new-game/index.latte:92
-# /templates/pages/new-game/index.latte:70
-# /templates/pages/new-game/index.latte:93
-# /templates/pages/new-game/index.latte:57
-# /templates/pages/new-game/index.latte:71
-# /templates/pages/new-game/index.latte:94
 msgctxt "actions"
 msgid "Náhodně"
 msgstr "Náhodne"
 
-# /templates/pages/new-game/index.latte:78
-# /templates/pages/new-game/index.latte:80
-# /templates/pages/new-game/index.latte:82
-# /templates/pages/new-game/index.latte:87
-# /templates/pages/new-game/index.latte:88
-# /templates/pages/new-game/index.latte:89
-# /templates/pages/new-game/index.latte:95
-# /templates/pages/new-game/index.latte:96
-# /templates/pages/new-game/index.latte:97
-# /templates/pages/new-game/index.latte:98
 msgctxt "actions"
 msgid "Náhodně fér"
 msgstr "Náhodne fér"
 
-# /templates/pages/new-game/index.latte:93
-# /templates/pages/new-game/index.latte:94
-# /templates/pages/new-game/index.latte:95
-# /templates/pages/new-game/index.latte:101
-# /templates/pages/new-game/index.latte:102
-# /templates/pages/new-game/index.latte:103
-# /templates/pages/new-game/index.latte:104
 msgctxt "game"
 msgid "Týmy"
 msgstr "Tímy"
 
-# /src/GameModels/Game/Evo5/Game.php:82
 msgctxt "team.names"
 msgid "Red team"
 msgstr "Červený tím"
 
-# /src/GameModels/Game/Evo5/Game.php:83
 msgctxt "team.names"
 msgid "Green team"
 msgstr "Zelený tím"
 
-# /src/GameModels/Game/Evo5/Game.php:84
 msgctxt "team.names"
 msgid "Blue team"
 msgstr "Modrý tím"
 
-# /src/GameModels/Game/Evo5/Game.php:85
 msgctxt "team.names"
 msgid "Pink team"
 msgstr "Ružový tím"
 
-# /src/GameModels/Game/Evo5/Game.php:86
 msgctxt "team.names"
 msgid "Yellow team"
 msgstr "Žltý tím"
 
-# /src/GameModels/Game/Evo5/Game.php:87
 msgctxt "team.names"
 msgid "Ocean team"
 msgstr "Oceánový tím"
 
-# /templates/pages/new-game/index.latte:110
-# /templates/pages/new-game/index.latte:111
-# /templates/pages/new-game/index.latte:117
-# /templates/pages/new-game/index.latte:118
-# /templates/pages/new-game/index.latte:119
-# /templates/pages/new-game/index.latte:120
 msgctxt "errors"
 msgid "Musíte vybrat alespoň 2 týmy."
 msgstr "Musíte vybrať aspoň 2 tímy."
 
-# /templates/pages/new-game/index.latte:111
-# /templates/pages/new-game/index.latte:112
-# /templates/pages/new-game/index.latte:118
-# /templates/pages/new-game/index.latte:119
-# /templates/pages/new-game/index.latte:120
-# /templates/pages/new-game/index.latte:121
 msgctxt "errors"
 msgid "Musíte zadat alespoň 2 hráče."
 msgstr "Musíte zadať aspoň 2 hráčov."
 
-# /templates/pages/new-game/index.latte:28
-# /templates/pages/new-game/index.latte:30
-# /templates/pages/new-game/index.latte:31
-# /templates/pages/new-game/index.latte:29
-# /templates/pages/new-game/index.latte:32
-# /templates/pages/new-game/index.latte:33
 msgctxt "game"
 msgid "Poslední hry"
 msgstr "Posledné hry"
 
-# /templates/pages/new-game/index.latte:29
-# /templates/pages/new-game/index.latte:30
-# /templates/pages/new-game/index.latte:31
 msgctxt "game.select"
 msgid "Vybrat hru"
 msgstr "Vybrať hru"
 
-# /src/Controllers/Api/Helpers.php:20
 msgctxt "game"
 msgid "%d player"
 msgid_plural "%d players"
@@ -2547,7 +1514,6 @@ msgstr[1] "%d hráči"
 msgstr[2] "%d hráčov"
 msgstr[3] "%d hráčov"
 
-# /src/Controllers/Api/Helpers.php:20
 msgctxt "game"
 msgid "%d team"
 msgid_plural "%d teams"
@@ -2556,7 +1522,14 @@ msgstr[1] "%d tímy"
 msgstr[2] "%d tímov"
 msgstr[3] "%d tímov"
 
-# /templates/pages/games-list/index.latte:49
 msgid "Použít pro novou hru"
 msgstr "Použiť pre novú hru"
+
+msgctxt "errors"
+msgid "Musíte vybrat tým hráče."
+msgstr ""
+
+msgctxt "game.player"
+msgid "Herní schopnost hráče"
+msgstr ""
 

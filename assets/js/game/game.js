@@ -68,15 +68,7 @@ export default class Game {
 
 	initEvents() {
 		this.$clearAll.addEventListener('click', () => {
-			this.players.forEach(player => {
-				player.clear();
-			});
-			this.teams.forEach(team => {
-				team.clear();
-			});
-
-			const e = new Event('clear-all');
-			document.dispatchEvent(e);
+			this.clearAll();
 		});
 
 		this.$gameMode.addEventListener('change', () => {
@@ -111,6 +103,18 @@ export default class Game {
 				this.teamShuffleTooltip.hide();
 			});
 		})
+	}
+
+	clearAll() {
+		this.players.forEach(player => {
+			player.clear();
+		});
+		this.teams.forEach(team => {
+			team.clear();
+		});
+
+		const e = new Event('clear-all');
+		document.dispatchEvent(e);
 	}
 
 	/**
@@ -335,6 +339,8 @@ export default class Game {
 	 * @param data {GameData}
 	 */
 	import(data) {
+		this.clearAll();
+
 		const skills = Object.values(data.players).map(playerData => {
 			return playerData.skill;
 		});

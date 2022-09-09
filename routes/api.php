@@ -41,6 +41,9 @@ Route::get('/api/debug/glob', [Debug::class, 'glob']);
 
 Route::get('/api/game/loaded', [GameHelpers::class, 'getLoadedGameInfo']);
 Route::get('/api/game/gate', [GameHelpers::class, 'getGateGameInfo']);
+Route::post('/api/game/{code}/recalcSkill', [GameHelpers::class, 'recalcSkill']);
+Route::post('/api/game/{code}/recalcScores', [GameHelpers::class, 'recalcScores']);
+Route::post('/api/game/{code}/changeMode', [GameHelpers::class, 'changeGameMode']);
 
 Route::get('api/games', [Games::class, 'listGames']);
 Route::post('api/games/sync', [Games::class, 'syncGames']);

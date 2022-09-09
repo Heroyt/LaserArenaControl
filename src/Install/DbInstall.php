@@ -149,8 +149,10 @@ class DbInstall implements InstallInterface
 				`id_player` int(11) unsigned NOT NULL AUTO_INCREMENT,
 				`id_game` int(11) unsigned NOT NULL,
 				`id_team` int(11) unsigned DEFAULT NULL,
+				`id_user` int(11) unsigned DEFAULT NULL,
 				`name` varchar(20) NOT NULL DEFAULT '',
 				`score` int(11) NOT NULL DEFAULT 0,
+				`skill` int(11) NOT NULL DEFAULT 0,
 				`vest` int(10) unsigned NOT NULL DEFAULT 0,
 				`shots` int(10) unsigned NOT NULL DEFAULT 0,
 				`accuracy` int(10) unsigned NOT NULL DEFAULT 0,
@@ -175,11 +177,13 @@ class DbInstall implements InstallInterface
 				KEY `id_game` (`id_game`),
 				KEY `id_team` (`id_team`),
 				CONSTRAINT `evo5_players_ibfk_1` FOREIGN KEY (`id_game`) REFERENCES `evo5_games` (`id_game`) ON DELETE CASCADE ON UPDATE CASCADE,
-				CONSTRAINT `evo5_players_ibfk_2` FOREIGN KEY (`id_team`) REFERENCES `evo5_teams` (`id_team`) ON DELETE SET NULL ON UPDATE CASCADE
+				CONSTRAINT `evo5_players_ibfk_2` FOREIGN KEY (`id_team`) REFERENCES `evo5_teams` (`id_team`) ON DELETE SET NULL ON UPDATE CASCADE,
+				CONSTRAINT `evo5_players_ibfk_3` FOREIGN KEY (`id_user`) REFERENCES `players` (`id_user`) ON DELETE SET NULL ON UPDATE CASCADE
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;",
 			'modifications' => [
 				'0.1.0' => [
 					'ADD `id_user` INT(11)  UNSIGNED  NULL  DEFAULT NULL  AFTER `id_team`',
+					'ADD `skill` INT(11)  NOT NULL DEFAULT 0  AFTER `score`',
 					'ADD FOREIGN KEY (`id_user`) REFERENCES `players` (`id_user`) ON DELETE SET NULL ON UPDATE CASCADE'
 				]
 			],

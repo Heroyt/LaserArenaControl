@@ -3,13 +3,19 @@
 namespace App\Controllers\Api;
 
 use App\Core\Info;
+use App\Exceptions\GameModeNotFoundException;
 use App\GameModels\Factory\GameFactory;
+use App\GameModels\Factory\GameModeFactory;
+use App\GameModels\Game\Enums\GameModeType;
 use App\GameModels\Game\Game;
+use App\GameModels\Game\Player;
 use JsonException;
 use Lsr\Core\ApiController;
 use Lsr\Core\Constants;
 use Lsr\Core\Exceptions\ModelNotFoundException;
 use Lsr\Core\Exceptions\ValidationException;
+use Lsr\Core\Requests\Request;
+use Throwable;
 
 /**
  * Used for getting information about current games
@@ -107,6 +113,123 @@ class GameHelpers extends ApiController
 				'mode'              => $game->mode,
 			]
 		);
+	}
+
+	/**
+	 * @param Request $request
+	 *
+	 * @return never
+	 * @throws JsonException
+	 * @throws Throwable
+	 */
+	public function recalcSkill(Request $request) : never {
+		$code = $request->params['code'] ?? '';
+		if (empty($code)) {
+			$this->respond(['error' => 'Invalid code'], 400);
+		}
+		$game = GameFactory::getByCode($code);
+		if (!isset($game)) {
+			$this->respond(['error' => 'Game not found'], 404);
+		}
+
+		try {
+			/** @var Player $player */
+			foreach ($game->getPlayers() as $player) {
+				$player->calculateSkill();
+				$player->save();
+			}
+		} catch (ModelNotFoundException|ValidationException $e) {
+			$this->respond(['error' => 'Error while saving the player data', 'exception' => $e], 500);
+		}
+
+		$this->respond(['status' => 'OK']);
+	}
+
+	/**
+	 * @param Request $request
+	 *
+	 * @return never
+	 * @throws JsonException
+	 * @throws Throwable
+	 * @throws GameModeNotFoundException
+	 */
+	public function changeGameMode(Request $request) : never {
+		$code = $request->params['code'] ?? '';
+		if (empty($code)) {
+			$this->respond(['error' => 'Invalid code'], 400);
+		}
+
+		// Find game
+		$game = GameFactory::getByCode($code);
+		if (!isset($game)) {
+			$this->respond(['error' => 'Game not found'], 404);
+		}
+
+		// Find game mode
+		$gameModeId = (int) ($request->post['mode'] ?? 0);
+		if ($gameModeId < 1) {
+			$this->respond(['error' => 'Invalid game mode ID'], 400);
+		}
+		$gameMode = GameModeFactory::getById($gameModeId, ['system' => $game::SYSTEM]);
+		if (!isset($gameMode)) {
+			$this->respond(['error' => 'Game mode not found'], 404);
+		}
+
+		$previousType = $game->gameType;
+
+		// Set the new mode
+		$game->gameType = $gameMode->type;
+		$game->mode = $gameMode;
+
+		// Check mode type change
+		if ($previousType !== $game->mode) {
+			if ($previousType === GameModeType::SOLO) {
+				$this->respond(['error' => 'Cannot change mode from solo to team'], 400);
+			}
+
+			// Assign all players to one team
+			$team = $game->getTeams()->first();
+			if (!isset($team)) {
+				$this->respond(['error' => 'Error while getting a team from a game'], 500);
+			}
+			/** @var Player $player */
+			foreach ($game->getPlayers() as $player) {
+				$player->setTeam($team);
+			}
+		}
+
+		$game->recalculateScores();
+
+		if (!$game->save()) {
+			$this->respond(['error' => 'Error saving game'], 500);
+		}
+
+		$this->respond(['status' => 'OK']);
+	}
+
+	/**
+	 * @param Request $request
+	 *
+	 * @return never
+	 * @throws JsonException
+	 * @throws Throwable
+	 */
+	public function recalcScores(Request $request) : never {
+		$code = $request->params['code'] ?? '';
+		if (empty($code)) {
+			$this->respond(['error' => 'Invalid code'], 400);
+		}
+		$game = GameFactory::getByCode($code);
+		if (!isset($game)) {
+			$this->respond(['error' => 'Game not found'], 404);
+		}
+
+		$game->recalculateScores();
+		if (!$game->save()) {
+			$this->respond(['error' => 'Error saving game'], 500);
+		}
+
+		$this->respond(['status' => 'OK']);
 	}
 
 }

@@ -21,4 +21,22 @@ export default function initGamesList() {
 				});
 		});
 	});
+	const recalcPointsBtns = document.querySelectorAll('.recalc-skill');
+	recalcPointsBtns.forEach(btn => {
+		const gameCode = btn.dataset.code;
+		if (!gameCode || gameCode === '') {
+			btn.remove();
+			return;
+		}
+		btn.addEventListener('click', () => {
+			startLoading();
+			axios.post('/api/game/' + gameCode + '/recalcSkill', {})
+				.then(response => {
+					stopLoading(true);
+				})
+				.catch(() => {
+					stopLoading(false);
+				});
+		});
+	});
 }

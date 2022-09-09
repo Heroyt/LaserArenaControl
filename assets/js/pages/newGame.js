@@ -167,6 +167,7 @@ export default function initNewGamePage() {
  * 			id: Number,
  * 			name: String,
  * 			score: Number,
+ * 			skill: Number,
  * 			vest: Number,
  * 			position: Number,
  * 			accuracy: Number,

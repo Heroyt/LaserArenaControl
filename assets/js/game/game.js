@@ -335,13 +335,22 @@ export default class Game {
 	 * @param data {GameData}
 	 */
 	import(data) {
+		const skills = Object.values(data.players).map(playerData => {
+			return playerData.skill;
+		});
+		const maxSkill = Math.max(3, ...skills);
+		const minSkill = Math.min(0, ...skills);
+		const skillStep = (minSkill + maxSkill) / 3;
 		Object.values(data.players).forEach(playerData => {
 			const player = this.players.get(playerData.vest.toString());
 			if (!player) {
 				return;
 			}
 			player.$name.value = playerData.name;
-			player.setTeam(playerData.color.toString());
+			if (playerData.color) {
+				player.setTeam(playerData.color.toString());
+			}
+			player.setSkill(Math.ceil((minSkill + playerData.skill) / skillStep));
 			player.update();
 		});
 		Object.values(data.teams).forEach(teamData => {
@@ -382,6 +391,7 @@ export default class Game {
 				vest: parseInt(player.vest),
 				teamNum: parseInt(player.team),
 				color: parseInt(player.team),
+				skill: player.skill,
 			}
 		});
 

@@ -63,11 +63,19 @@
 							data-code="{$game->code}">
 						<i class="fa-solid fa-arrows-rotate"></i>
 					</button>
-					<button n:if="!\Lsr\Core\App::isProduction()" class="btn btn-danger" data-toggle="gate-loaded"
-																  title="{lang 'Zobrazit vesty na Gate'}"
-																  data-id="{$game->id}" data-system="{$game::SYSTEM}">
-						{svgIcon 'Vesta', '1em'}
-					</button>
+					{if !\Lsr\Core\App::isProduction()}
+						<button class="btn btn-danger" data-toggle="gate-loaded"
+								title="{lang 'Zobrazit vesty na Gate'}"
+								data-id="{$game->id}" data-system="{$game::SYSTEM}">
+							{svgIcon 'Vesta', '1em'}
+						</button>
+						<button class="btn btn-warning recalc-skill" data-toggle="tooltip"
+								title="{lang 'Znovu spočítat herní úroveň'}"
+								data-code="{$game->code}">
+							<i class="fa-solid fa-star"></i>
+						</button>
+						{* TODO: Add "change to solo mode" and "recalculate scores" actions *}
+					{/if}
 					<a href="{link ['results', $game->code]}" class="btn btn-info" data-toggle="tooltip"
 					   title="{lang 'Print'}"><i class="fas fa-print"></i></a>
 				</div>

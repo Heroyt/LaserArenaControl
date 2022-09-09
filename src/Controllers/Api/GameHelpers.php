@@ -133,11 +133,8 @@ class GameHelpers extends ApiController
 		}
 
 		try {
-			/** @var Player $player */
-			foreach ($game->getPlayers() as $player) {
-				$player->calculateSkill();
-				$player->save();
-			}
+			$game->calculateSkills();
+			$game->save();
 		} catch (ModelNotFoundException|ValidationException $e) {
 			$this->respond(['error' => 'Error while saving the player data', 'exception' => $e], 500);
 		}

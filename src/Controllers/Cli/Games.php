@@ -2,12 +2,14 @@
 
 namespace App\Controllers\Cli;
 
+use App\GameModels\Factory\GameFactory;
 use App\Services\ImportService;
 use App\Services\SyncService;
 use Lsr\Core\CliController;
 use Lsr\Core\Exceptions\ModelNotFoundException;
 use Lsr\Core\Exceptions\ValidationException;
 use Lsr\Core\Requests\CliRequest;
+use Lsr\Core\Routing\Attributes\Cli;
 use Lsr\Helpers\Cli\CliHelper;
 use Throwable;
 
@@ -49,6 +51,19 @@ class Games extends CliController
 		$limit = (int) ($request->args[0] ?? 5);
 		$timeout = isset($request->args[1]) ? (float) $request->args[1] : null;
 		SyncService::syncGames($limit, $timeout);
+	}
+
+	#[Cli('games/skill')]
+	public function recalcSkill(CliRequest $request) : void {
+		foreach (GameFactory::queryGames(true)->orderBy('start')->desc()->getIterator((int) ($request->args[0] ?? 0), (int) ($request->args[1] ?? 200)) as $row) {
+			$game = GameFactory::getByCode($row->code);
+			if (!isset($game)) {
+				continue;
+			}
+			$game->calculateSkills();
+			$game->save();
+			unset($game);
+		}
 	}
 
 }

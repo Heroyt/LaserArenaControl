@@ -76,6 +76,15 @@
 						</button>
 						{* TODO: Add "change to solo mode" and "recalculate scores" actions *}
 					{/if}
+					<button n:if="!$page->checkGameTeamScores($game)"
+							type="button"
+							class="btn btn-secondary solo-switch"
+							data-toggle="tooltip"
+							title="{lang 'Přepnout na sólo mód'}"
+							data-code="{$game->code}"
+							data-mode="{\App\GameModels\Factory\GameModeFactory::getIdByObject($game->mode->getSoloAlternative())}">
+						<i class="fa-solid fa-wrench"></i>
+					</button>
 					<a href="{link ['results', $game->code]}" class="btn btn-info" data-toggle="tooltip"
 					   title="{lang 'Print'}"><i class="fas fa-print"></i></a>
 				</div>

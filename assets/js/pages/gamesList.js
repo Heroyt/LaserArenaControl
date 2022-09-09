@@ -39,4 +39,26 @@ export default function initGamesList() {
 				});
 		});
 	});
+	const soloSwitchBtns = document.querySelectorAll('.solo-switch');
+	soloSwitchBtns.forEach(btn => {
+		const gameCode = btn.dataset.code;
+		const mode = btn.dataset.mode;
+		if (!gameCode || gameCode === '') {
+			btn.remove();
+			return;
+		}
+		btn.addEventListener('click', () => {
+			startLoading();
+			axios.post('/api/game/' + gameCode + '/changeMode', {
+				mode
+			})
+				.then(response => {
+					stopLoading(true);
+					location.reload();
+				})
+				.catch(() => {
+					stopLoading(false);
+				});
+		});
+	});
 }

@@ -107,7 +107,8 @@ export default function initNewGamePage() {
 							return player.name;
 						}).join(', ');
 
-						option.innerText = `${game.fileNumber} - [${gameDate.getHours()}:${gameDate.getMinutes()}] ${players}`;
+
+						option.innerText = `${game.fileNumber} - [${gameDate.getHours().toString().padStart(2, '0')}:${gameDate.getMinutes().toString().padStart(2, '0')}] ${players}`;
 
 						Promise.all([
 							lang('%d player', '%d players', game.playerCount, 'game'),
@@ -117,7 +118,7 @@ export default function initNewGamePage() {
 							.then(values => {
 								const playerString = values[0].data.replace('%d', game.playerCount.toString());
 								const teamString = game.mode.type === 'TEAM' ? values[1].data.replace('%d', teamCount) + ', ' : '';
-								option.innerText = `${game.fileNumber} - [${gameDate.getHours()}:${gameDate.getMinutes()}] ${values[2].data}: ${playerString}, ${teamString} ${players}`;
+								option.innerText = `${game.fileNumber} - [${gameDate.getHours().toString().padStart(2, '0')}:${gameDate.getMinutes().toString().padStart(2, '0')}] ${values[2].data}: ${playerString}, ${teamString} ${players}`;
 							})
 					}
 				);

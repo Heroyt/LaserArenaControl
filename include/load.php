@@ -66,6 +66,9 @@ if (!PRODUCTION) {
 if (!is_dir(LOG_DIR) && !mkdir(LOG_DIR) && (!file_exists(LOG_DIR) || !is_dir(LOG_DIR))) {
 	throw new RuntimeException(sprintf('Directory "%s" was not created', LOG_DIR));
 }
+if (!is_dir(UPLOAD_DIR) && !mkdir(UPLOAD_DIR) && (!file_exists(UPLOAD_DIR) || !is_dir(UPLOAD_DIR))) {
+	throw new RuntimeException(sprintf('Directory "%s" was not created', UPLOAD_DIR));
+}
 
 // Enable tracy
 Debugger::enable(PRODUCTION ? Debugger::PRODUCTION : Debugger::DEVELOPMENT, LOG_DIR);

@@ -91,6 +91,7 @@ class DbInstall implements InstallInterface
 			'definition' => "(
 				`id_game` int(11) unsigned NOT NULL AUTO_INCREMENT,
 				`id_mode` int(11) unsigned DEFAULT NULL,
+				`id_music` int(11) unsigned DEFAULT NULL,
 				`game_type` enum('TEAM','SOLO') NOT NULL DEFAULT 'TEAM',
 				`mode_name` varchar(100) DEFAULT NULL,
 				`file_time` datetime DEFAULT NULL,
@@ -118,15 +119,20 @@ class DbInstall implements InstallInterface
 				`sync` TINYINT(1)  NOT NULL  DEFAULT 0,
 				PRIMARY KEY (`id_game`),
 				KEY `id_mode` (`id_mode`),
-				CONSTRAINT `evo5_games_ibfk_1` FOREIGN KEY (`id_mode`) REFERENCES `game_modes` (`id_mode`) ON DELETE SET NULL ON UPDATE CASCADE
+				CONSTRAINT `evo5_games_ibfk_1` FOREIGN KEY (`id_mode`) REFERENCES `game_modes` (`id_mode`) ON DELETE SET NULL ON UPDATE CASCADE,
+				CONSTRAINT `evo5_games_ibfk_2` FOREIGN KEY (`id_music`) REFERENCES `music` (`id_music`) ON DELETE SET NULL ON UPDATE CASCADE
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;",
 			'modifications' => [
-				'0.2' => [
+				'0.2'   => [
 					"ADD `sync` TINYINT(1)  NOT NULL  DEFAULT 0  AFTER `ammo`",
 					"ADD `game_type` enum('TEAM','SOLO') NOT NULL DEFAULT 'TEAM' AFTER `id_mode`",
 				],
-				'0.3' => [
+				'0.3'   => [
 					"ADD `import_time` datetime DEFAULT NULL AFTER `file_time`",
+				],
+				'0.4.0' => [
+					"ADD `id_music` int(11) unsigned DEFAULT NULL AFTER `id_mode`",
+					"ADD FOREIGN KEY (`id_music`) REFERENCES `music` (`id_music`) ON DELETE SET NULL ON UPDATE CASCADE",
 				],
 			],
 		],

@@ -32,3 +32,12 @@ tables:
               CONSTRAINT `user_connected_accounts_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `players` (`id_user`) ON DELETE CASCADE ON UPDATE CASCADE
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
             '''
+	App\Models\MusicMode:
+		definition: '''
+    		(
+    			`id_music` int(11) unsigned NOT NULL AUTO_INCREMENT,
+    			`name` varchar(20) NOT NULL,
+    			`file_name` varchar(100) NOT NULL DEFAULT '',
+    			PRIMARY KEY (`id_music`)
+    		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+    	'''

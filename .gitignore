@@ -39,3 +39,4 @@ entr/
 docker-compose.yml
 docs/
 !assets/icon/
+upload/

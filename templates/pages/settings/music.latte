@@ -1,0 +1,41 @@
+{layout '../../@layout.latte'}
+
+{varType array $notices}
+{varType App\Models\MusicMode[] $music}
+
+{block content}
+
+	{foreach $notices as $notice}
+		{alert $notice['content'], $notice['type']}
+	{/foreach}
+
+	<div class="me-4 last-save-wrapper text-end position-fixed end-0">
+		{lang 'Last saved:'} <span class="last-save" data-target="#music-settings-form">{lang 'never'}</span>
+	</div>
+
+	<h2>{lang 'Hudební módy', context: 'game'}:</h2>
+
+
+	<form action="{link ['settings', 'music', 'upload']}" multiple="multiple" enctype="multipart/form-data"
+		  method="post"
+		  class="text-center">
+		<input type="hidden" name="test" value="dalsdjna">
+		<div class="form-group">
+			<label for="media" class="form-label">{lang 'Upload', context: 'actions'}:</label>
+			<input type="file" name="media" accept="audio/mpeg" required class="form-control" id="media">
+			<button type="submit" class="btn btn-success my-3" name="action" value="upload">
+				{lang 'Upload', context: 'actions'}
+			</button>
+		</div>
+	</form>
+	<form action="{link ['settings', 'music']}" enctype="multipart/form-data" method="post" class="text-center autosave"
+		  id="music-settings-form">
+		<div class="input-group" n:foreach="$music as $musicMode">
+			<div class="input-group-text">{$iterator->counter}</div>
+			<input type="text" name="music[{$musicMode->id}][name]" id="music-{$musicMode->id}-name"
+				   class="form-control" value="{$musicMode->name}">
+			{* TODO: Delete music mode *}
+			{* TODO: Play music mode *}
+		</div>
+	</form>
+{/block}

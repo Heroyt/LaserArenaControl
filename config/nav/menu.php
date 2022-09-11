@@ -50,6 +50,10 @@ return [
 				'name'  => lang('Print'),
 				'route' => 'settings-print',
 			],
+			[
+				'name'  => lang('Music'),
+				'route' => 'settings-music',
+			],
 		],
 	],
 ];

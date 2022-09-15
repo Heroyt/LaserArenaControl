@@ -161,10 +161,10 @@ export default function initNewGamePage() {
 }
 
 /**
- * @typedef {date: String, timezone_type: Number, timezone: String} PhpDateTime
+ * @typedef {{date: String, timezone_type: Number, timezone: String}} PhpDateTime
  */
 /**
- * @typedef {
+ * @typedef {{
  * 			id: Number,
  * 			name: String,
  * 			score: Number,
@@ -177,21 +177,28 @@ export default function initNewGamePage() {
  * 			shots: Number,
  * 			teamNum: Number,
  * 			color: Number
- * 		} PlayerData
+ * 		}} PlayerData
  */
 /**
- * @typedef {
+ * @typedef {{
  * 			id: Number,
  * 			name: String,
  * 			score: Number,
  * 			color: Number,
  * 			playerCount: Number,
  * 			position: Number
- * 		} TeamData
+ * 		}} TeamData
  */
 /**
- * @typedef {
- * 	{
+ * @typedef {{
+ *     id: Number,
+ *     name: String,
+ *     fileName: String,
+ *     order: Number
+ * }} MusicMode
+ */
+/**
+ * @typedef {{
  * 		id: Number,
  * 		code: String,
  * 		fileNumber: Number|String,
@@ -202,6 +209,6 @@ export default function initNewGamePage() {
  * 		mode: {id: Number, name: String, description: String, type: 'TEAM'|'SOLO'},
  * 		players: Object.<string, PlayerData>,
  * 		teams: Object.<string, TeamData>,
- * 	}
- * 	} GameData
+ * 		music: MusicMode|null
+ * 	}} GameData
  */

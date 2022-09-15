@@ -115,6 +115,9 @@ $utilities: map.deep-merge(
 					not-allowed: not-allowed,
 					copy: copy,
 					crosshair: crosshair,
+					move: move,
+					grab: grab,
+					grabbing: grabbing,
 				),
 			),
 			'font-size': (

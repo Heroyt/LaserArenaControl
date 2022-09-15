@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Lsr\Core\App;
+use Lsr\Core\Exceptions\ValidationException;
 use Lsr\Core\Models\Attributes\PrimaryKey;
 use Lsr\Core\Models\Attributes\Validation\Required;
 use Lsr\Core\Models\Attributes\Validation\StringLength;
@@ -18,5 +20,18 @@ class MusicMode extends Model
 	public string $name;
 	#[Required]
 	public string $fileName = '';
+	public int    $order    = 0;
+
+	/**
+	 * @return MusicMode[]
+	 * @throws ValidationException
+	 */
+	public static function getAll() : array {
+		return self::query()->orderBy('order')->get();
+	}
+
+	public function getMediaUrl() : string {
+		return str_replace(ROOT, App::getUrl(), $this->fileName);
+	}
 
 }

@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\GameModels\Factory\GameFactory;
 use App\GameModels\Factory\GameModeFactory;
 use App\GameModels\Vest;
+use App\Models\MusicMode;
 use Lsr\Core\Controller;
 use Lsr\Core\Requests\Request;
 use Lsr\Core\Routing\Attributes\Post;
@@ -22,6 +23,7 @@ class NewGame extends Controller
 		$this->params['colors'] = GameFactory::getAllTeamsColors()[$this->params['system']];
 		$this->params['teamNames'] = GameFactory::getAllTeamsNames()[$this->params['system']];
 		$this->params['gameModes'] = GameModeFactory::getAll(['system' => $this->params['system']]);
+		$this->params['musicModes'] = MusicMode::getAll();
 		$this->view('pages/new-game/index');
 	}
 

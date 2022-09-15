@@ -7,7 +7,7 @@ definer_user=root
 definer_host=%
 suid=2
 with_check_option=0
-timestamp=2022-09-03 16:00:03
+timestamp=2022-09-13 14:05:13
 create-version=2
 source=SELECT\n   `a`.`id_mode` AS `id_mode`,\n   `a`.`system` AS `system`,\n   `a`.`name` AS `name`,\n   `a`.`description` AS `description`,\n   `a`.`type` AS `type`,\n   `b`.`sysName` AS `sysName`\nFROM (`game_modes` `a` left join `game_modes-names` `b` on(`a`.`id_mode` = `b`.`id_mode`))
 client_cs_name=utf8mb4

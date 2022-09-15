@@ -38,6 +38,7 @@ tables:
     			`id_music` int(11) unsigned NOT NULL AUTO_INCREMENT,
     			`name` varchar(20) NOT NULL,
     			`file_name` varchar(100) NOT NULL DEFAULT '',
+    			`order` int(10) unsigned, NOT NULL DEFAULT 0,
     			PRIMARY KEY (`id_music`)
     		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
     	'''

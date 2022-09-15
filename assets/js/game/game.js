@@ -90,6 +90,14 @@ export default class Game {
 			);
 		});
 
+		this.$musicMode.addEventListener('change', () => {
+			this.$musicMode.dispatchEvent(
+				new Event("update", {
+					bubbles: true,
+				})
+			);
+		});
+
 		this.$shuffleTeams.addEventListener('click', () => {
 			this.shuffleTeams();
 		})
@@ -112,6 +120,11 @@ export default class Game {
 		this.teams.forEach(team => {
 			team.clear();
 		});
+
+		this.$gameMode.value = this.$gameMode.firstElementChild.value;
+		this.$musicMode.value = this.$musicMode.firstElementChild.value;
+
+		this.$gameMode.dispatchEvent(new Event('update', {bubbles: true}));
 
 		const e = new Event('clear-all');
 		document.dispatchEvent(e);
@@ -368,9 +381,13 @@ export default class Game {
 			team.update();
 		});
 
-		this.$gameMode.value = data.mode.id.toString();
 		const e = new Event('change');
+		this.$gameMode.value = data.mode.id.toString();
 		this.$gameMode.dispatchEvent(e);
+		if (data.music) {
+			this.$musicMode.value = data.music.id.toString();
+			this.$musicMode.dispatchEvent(e);
+		}
 	}
 
 	export() {
@@ -386,6 +403,9 @@ export default class Game {
 				id: parseInt(this.$gameMode.value),
 				name: this.$gameMode.querySelector(`option[value="${this.$gameMode.value}"]`).innerText.trim(),
 				type: this.getModeType(),
+			},
+			music: {
+				id: parseInt(this.$musicMode.value),
 			},
 			players: {},
 			teams: {},

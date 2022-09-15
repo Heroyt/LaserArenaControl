@@ -42,9 +42,8 @@
 	<title>{$page->getTitle()}</title>
 	{\Tracy\Debugger::renderLoader()|noescape}
 	{include addHead}
-	<script src="/dist/runtime.js?{\Lsr\Core\App::getCacheVersion()}"></script>
+	<script src="/dist/runtime~main.js?{\Lsr\Core\App::getCacheVersion()}"></script>
 	<script src="/dist/vendors.js?{\Lsr\Core\App::getCacheVersion()}"></script>
-	<script src="{getUrl}dist/flatpickr/l10n/{\Lsr\Core\App::getShortLanguageCode()}.js?{\Lsr\Core\App::getCacheVersion()}"></script>
 </head>
 <body>
 {include header}

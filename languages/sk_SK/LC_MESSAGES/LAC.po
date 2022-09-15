@@ -146,6 +146,7 @@ msgid "Herní mód"
 msgstr "Herný mód"
 
 # /templates/pages/new-game/index.latte:54
+# /templates/pages/new-game/index.latte:55
 msgctxt "gameModes"
 msgid "Základny"
 msgstr "Základne"
@@ -394,12 +395,14 @@ msgid "No games had been played on this date."
 msgstr "V tento deň sa nehrali žiadne hry."
 
 # /templates/pages/new-game/index.latte:54
+# /templates/pages/new-game/index.latte:55
 msgctxt "gameModes"
 msgid "CSGO"
 msgstr "CSGO"
 
 # /templates/pages/new-game/index.latte:54
 # /templates/results/templates/graphical.latte:110
+# /templates/pages/new-game/index.latte:55
 msgctxt "gameModes"
 msgid "Team deathmach"
 msgstr "Team deathmach"
@@ -412,6 +415,7 @@ msgstr "Drvič min"
 # /templates/pages/new-game/index.latte:54
 # /src/Controllers/Api/Helpers.php:20
 # /templates/results/templates/graphical.latte:110
+# /templates/pages/new-game/index.latte:55
 msgctxt "gameModes"
 msgid "Deathmach"
 msgstr "Deathmach"
@@ -920,12 +924,14 @@ msgstr "Pridať dátum"
 # /templates/pages/settings/music.latte:10
 # /templates/pages/settings/music.latte:8
 # /templates/pages/settings/music.latte:13
+# /templates/pages/settings/music.latte:15
 msgid "Last saved:"
 msgstr "Naposledy uložené:"
 
 # /templates/pages/settings/music.latte:10
 # /templates/pages/settings/music.latte:8
 # /templates/pages/settings/music.latte:13
+# /templates/pages/settings/music.latte:15
 msgid "never"
 msgstr "nikdy"
 
@@ -990,6 +996,7 @@ msgid "Optional filter for command groups"
 msgstr "Voliteľný filter pre skupiny príkazov"
 
 # /templates/pages/new-game/index.latte:54
+# /templates/pages/new-game/index.latte:55
 msgctxt "gameModes"
 msgid "Survival"
 msgstr "Survival"
@@ -1015,21 +1022,25 @@ msgid "evo5"
 msgstr "evo5"
 
 # /templates/pages/new-game/index.latte:127
+# /templates/pages/new-game/index.latte:129
 msgctxt "settings.vests"
 msgid "Porucha"
 msgstr "Porucha"
 
 # /templates/pages/new-game/index.latte:124
+# /templates/pages/new-game/index.latte:126
 msgctxt "settings.vests.status"
 msgid "V pořádku"
 msgstr "V poriadku"
 
 # /templates/pages/new-game/index.latte:126
+# /templates/pages/new-game/index.latte:128
 msgctxt "settings.vests.status"
 msgid "Nefunkční"
 msgstr "Nefunkčná"
 
 # /templates/pages/new-game/index.latte:125
+# /templates/pages/new-game/index.latte:127
 msgctxt "settings.vests.status"
 msgid "Hratelná"
 msgstr "Hrateľná"
@@ -1039,6 +1050,7 @@ msgid "Failed to save settings."
 msgstr "Nepodarilo sa uložiť nastavenia."
 
 # /templates/pages/new-game/index.latte:54
+# /templates/pages/new-game/index.latte:55
 msgctxt "gameModes"
 msgid "T.M.A - solo"
 msgstr "T.M.A - solo"
@@ -1183,6 +1195,7 @@ msgid "Výsledky on-line"
 msgstr "Výsledky on-line"
 
 # /templates/pages/new-game/index.latte:54
+# /templates/pages/new-game/index.latte:55
 msgctxt "gameModes"
 msgid "100 nábojů"
 msgstr "100 nábojov"
@@ -1308,6 +1321,7 @@ msgid "Odehráno her"
 msgstr "Odohrané hier"
 
 # /templates/pages/new-game/index.latte:54
+# /templates/pages/new-game/index.latte:55
 msgctxt "gameModes"
 msgid "Barvičky"
 msgstr "Dobývanie farieb"
@@ -1525,6 +1539,7 @@ msgid "Domluv si trénink s profíky!"
 msgstr "Dohovor si tréning s profíkmi!"
 
 # /templates/pages/new-game/index.latte:54
+# /templates/pages/new-game/index.latte:55
 msgctxt "gameModes"
 msgid "Apokalypsa"
 msgstr "Apokalypsa"
@@ -1556,91 +1571,109 @@ msgid "New game"
 msgstr "Nová hra"
 
 # /templates/pages/new-game/index.latte:16
+# /templates/pages/new-game/index.latte:17
 msgctxt "game.actions"
 msgid "Nahrát hru"
 msgstr "Nahrať hru"
 
 # /templates/pages/new-game/index.latte:20
+# /templates/pages/new-game/index.latte:21
 msgctxt "game.actions"
 msgid "Spustit hru"
 msgstr "Spustiť hru"
 
 # /templates/pages/new-game/index.latte:24
+# /templates/pages/new-game/index.latte:25
 msgctxt "game.actions"
 msgid "Ukončit hru"
 msgstr "Ukončiť hru"
 
 # /templates/pages/new-game/index.latte:48
+# /templates/pages/new-game/index.latte:49
 msgctxt "game"
 msgid "Herní mód"
 msgstr "Herný mód"
 
 # /templates/pages/new-game/index.latte:53
+# /templates/pages/new-game/index.latte:54
 msgctxt "gameModes"
 msgid "Classic team game."
 msgstr "Klasická tímová hra."
 
 # /templates/pages/new-game/index.latte:53
+# /templates/pages/new-game/index.latte:54
 msgctxt "gameModes"
 msgid "Classic free for all game."
 msgstr "Klasická hra všetci proti všetkým."
 
 # /templates/pages/new-game/index.latte:53
+# /templates/pages/new-game/index.latte:54
 msgctxt "gameModes"
 msgid "Náročná hra o přežití se 3mi životy."
 msgstr "Náročná hra o prežití s 3 životmi."
 
 # /templates/pages/new-game/index.latte:53
+# /templates/pages/new-game/index.latte:54
 msgctxt "gameModes"
 msgid "Strategická hra, kdy 2 týmy bojují proti sobě o zničení základny druhého týmu."
 msgstr "Strategická hra, kedy 2 tímy bojujú proti sebe o zničení základne druhého tímu."
 
 # /templates/pages/new-game/index.latte:53
+# /templates/pages/new-game/index.latte:54
 msgctxt "gameModes"
 msgid "Rychlá, šílená hra. Po pár smrtích se přebarvíš na barvu toho, kdo tě trefil."
 msgstr "Rýchla, šialená hra. Po pár smrtiach sa prefarbíš na farbu toho, kto ťa trafil."
 
 # /templates/pages/new-game/index.latte:53
+# /templates/pages/new-game/index.latte:54
 msgctxt "gameModes"
 msgid "Klasická hra, ale tentokrát bez světel."
 msgstr "Klasická hra, ale tentoraz bez svetiel."
 
 # /templates/pages/new-game/index.latte:54
+# /templates/pages/new-game/index.latte:55
 msgctxt "gameModes"
 msgid "T.M.A"
 msgstr "T.M.A"
 
 # /templates/pages/new-game/index.latte:53
+# /templates/pages/new-game/index.latte:54
 msgctxt "gameModes"
 msgid "Hra na zombíky! Vybraní hráči jsou zombie, kteří se snaží infikovat ostatní hráče."
 msgstr "Hra na zombíky! Vybraní hráči sú zombie, ktorí sa snažia infikovať ostatných hráčov."
 
 # /templates/pages/new-game/index.latte:53
+# /templates/pages/new-game/index.latte:54
 msgctxt "gameModes"
 msgid "Strategická hra s omezeným počtem životů a nábojů."
 msgstr "Strategická hra s obmedzeným počtom životov a nábojov."
 
 # /templates/pages/new-game/index.latte:54
+# /templates/pages/new-game/index.latte:55
 msgctxt "gameModes"
 msgid "Team Survival"
 msgstr "Tímový Survival"
 
 # /templates/pages/new-game/index.latte:54
+# /templates/pages/new-game/index.latte:55
 msgctxt "gameModes"
 msgid "Marco Polo"
 msgstr "Marco Polo"
 
 # /templates/pages/new-game/index.latte:54
+# /templates/pages/new-game/index.latte:55
 msgctxt "gameModes"
 msgid "Zombie"
 msgstr "Zombie"
 
 # /templates/pages/new-game/index.latte:66
+# /templates/pages/new-game/index.latte:67
 msgctxt "game"
 msgid "Hudební mód"
 msgstr "Hudobný mód"
 
 # /templates/pages/new-game/index.latte:79
+# /templates/pages/new-game/index.latte:81
 msgctxt "game"
 msgid "Náhodné rozdělení týmů"
 msgstr "Náhodné rozdelenie tímov"
@@ -1648,16 +1681,21 @@ msgstr "Náhodné rozdelenie tímov"
 # /templates/pages/new-game/index.latte:57
 # /templates/pages/new-game/index.latte:71
 # /templates/pages/new-game/index.latte:94
+# /templates/pages/new-game/index.latte:58
+# /templates/pages/new-game/index.latte:73
+# /templates/pages/new-game/index.latte:96
 msgctxt "actions"
 msgid "Náhodně"
 msgstr "Náhodne"
 
 # /templates/pages/new-game/index.latte:98
+# /templates/pages/new-game/index.latte:100
 msgctxt "actions"
 msgid "Náhodně fér"
 msgstr "Náhodne fér"
 
 # /templates/pages/new-game/index.latte:104
+# /templates/pages/new-game/index.latte:106
 msgctxt "game"
 msgid "Týmy"
 msgstr "Tímy"
@@ -1693,22 +1731,27 @@ msgid "Ocean team"
 msgstr "Oceánový tím"
 
 # /templates/pages/new-game/index.latte:121
+# /templates/pages/new-game/index.latte:123
 msgctxt "errors"
 msgid "Musíte vybrat alespoň 2 týmy."
 msgstr "Musíte vybrať aspoň 2 tímy."
 
 # /templates/pages/new-game/index.latte:123
+# /templates/pages/new-game/index.latte:125
 msgctxt "errors"
 msgid "Musíte zadat alespoň 2 hráče."
 msgstr "Musíte zadať aspoň 2 hráčov."
 
 # /templates/pages/new-game/index.latte:29
 # /templates/pages/new-game/index.latte:33
+# /templates/pages/new-game/index.latte:30
+# /templates/pages/new-game/index.latte:34
 msgctxt "game"
 msgid "Poslední hry"
 msgstr "Posledné hry"
 
 # /templates/pages/new-game/index.latte:31
+# /templates/pages/new-game/index.latte:32
 msgctxt "game.select"
 msgid "Vybrat hru"
 msgstr "Vybrať hru"
@@ -1736,11 +1779,13 @@ msgid "Použít pro novou hru"
 msgstr "Použiť pre novú hru"
 
 # /templates/pages/new-game/index.latte:122
+# /templates/pages/new-game/index.latte:124
 msgctxt "errors"
 msgid "Musíte vybrat tým hráče."
 msgstr "Musíte vybrať tím hráča."
 
 # /templates/pages/new-game/index.latte:160
+# /templates/pages/new-game/index.latte:162
 msgctxt "game.player"
 msgid "Herní schopnost hráče"
 msgstr "Herná schopnosť hráča"
@@ -1761,6 +1806,7 @@ msgstr ""
 # /templates/pages/settings/music.latte:13
 # /templates/pages/settings/music.latte:11
 # /templates/pages/settings/music.latte:16
+# /templates/pages/settings/music.latte:18
 msgctxt "game"
 msgid "Hudební módy"
 msgstr ""
@@ -1773,6 +1819,7 @@ msgstr ""
 # /templates/pages/settings/music.latte:23
 # /templates/pages/settings/music.latte:26
 # /templates/pages/settings/music.latte:27
+# /templates/pages/settings/music.latte:28
 msgctxt "actions"
 msgid "Upload"
 msgstr ""
@@ -1784,11 +1831,61 @@ msgstr ""
 # /src/Controllers/MusicSettings.php:92
 # /src/Controllers/MusicSettings.php:93
 # /src/Controllers/MusicSettings.php:132
+# /src/Controllers/MusicSettings.php:133
+# /src/Controllers/MusicSettings.php:135
+# /src/Controllers/MusicSettings.php:141
 msgctxt "form"
 msgid "Saved successfully"
 msgstr ""
 
 # /src/Controllers/MusicSettings.php:81
+# /src/Controllers/MusicSettings.php:84
 msgctxt "errors"
 msgid "No file uploaded"
+msgstr ""
+
+# /src/Controllers/MusicSettings.php:55
+msgctxt "errors"
+msgid "Error while uploading a file."
+msgstr ""
+
+# /src/Controllers/MusicSettings.php:63
+msgctxt "errors"
+msgid "Uploaded file already exists"
+msgstr ""
+
+# /templates/pages/settings/music.latte:50
+# /templates/pages/settings/music.latte:52
+# /templates/pages/settings/music.latte:53
+# /templates/pages/settings/music.latte:56
+# /templates/pages/settings/music.latte:58
+# /templates/pages/settings/music.latte:60
+msgctxt "actions"
+msgid "Smazat"
+msgstr ""
+
+# /src/Controllers/MusicSettings.php:167
+msgctxt "errors"
+msgid "Failed to delete the music file"
+msgstr ""
+
+# /templates/pages/settings/music.latte:41
+msgctxt "actions"
+msgid "Uložit"
+msgstr ""
+
+# /templates/pages/settings/music.latte:41
+msgctxt "actions"
+msgid "Save"
+msgstr ""
+
+# /templates/pages/settings/music.latte:57
+# /src/Controllers/Api/Helpers.php:20
+msgctxt "actions"
+msgid "Přehrát"
+msgstr ""
+
+# /src/Controllers/Api/Helpers.php:20
+msgctxt "actions"
+msgid "Zastavit"
 msgstr ""

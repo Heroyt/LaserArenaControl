@@ -1,14 +1,8 @@
 import {formatPhoneNumber, gameTimer, getLink, initAutoSaveForm, initTooltips} from './functions.js';
 import axios from 'axios';
-import flatpickr from "flatpickr";
-import initPrintSettings from "./pages/settings/print";
-import initResultsReload from "./pages/resultsReload";
-import initGate from "./pages/gate";
 import {startLoading, stopLoading} from "./loaders";
 import * as bootstrap from "bootstrap";
-import initVestsSettings from "./pages/settings/vests";
-import initGamesList from "./pages/gamesList";
-import initNewGamePage from "./pages/newGame";
+import jscolor from "@eastdesire/jscolor";
 
 axios.defaults.headers.post['X-Requested-With'] = 'XMLHttpRequest';
 axios.defaults.headers.get['X-Requested-With'] = 'XMLHttpRequest';
@@ -18,8 +12,6 @@ jscolor.presets.default = {
 	format: 'hex',
 	uppercase: false,
 };
-
-flatpickr.localize(flatpickr.l10ns[activeLanguageCode]);
 
 window.addEventListener("load", () => {
 
@@ -34,78 +26,6 @@ window.addEventListener("load", () => {
 		});
 		input.addEventListener("change", () => {
 			input.value = formatPhoneNumber(input.value);
-		});
-	});
-
-	// Datepicker
-	document.querySelectorAll('input[type="date"]:not([data-input]), .date-picker').forEach(input => {
-		let value = '', wrap = input.classList.contains("date-picker");
-		if (wrap) {
-			value = input.querySelector("[data-input]").value;
-		} else {
-			value = input.value;
-		}
-		let options = {
-			defaultDate: value,
-			dateFormat: "d.m.Y",
-			position: "auto center",
-			positionElement: input,
-			static: true,
-			appendTo: input.parentNode,
-			wrap,
-		};
-		if (input.dataset.events) {
-			const events = JSON.parse(input.dataset.events);
-			options.enable = Object.keys(events);
-		}
-		flatpickr(input, options);
-	});
-	document.querySelectorAll('input[type="datetime"]:not([data-input]), .datetime-picker').forEach(input => {
-		let value = '', wrap = input.classList.contains("datetime-picker");
-		if (wrap) {
-			value = input.querySelector("[data-input]").value;
-		} else {
-			value = input.value;
-		}
-		flatpickr(input, {
-			defaultDate: value,
-			dateFormat: "d.m.Y H:i",
-			position: "auto center",
-			positionElement: input,
-			enableTime: true,
-			time_24hr: true,
-			appendTo: input.parentNode,
-			wrap: wrap,
-		});
-	});
-	document.querySelectorAll('input[type="time"]:not([data-input]), .time-picker').forEach(input => {
-		let value = '', wrap = input.classList.contains("time-picker");
-		if (wrap) {
-			value = input.querySelector("[data-input]").value;
-		} else {
-			value = input.value;
-		}
-		flatpickr(input, {
-			defaultDate: value,
-			dateFormat: "H:i",
-			position: "auto center",
-			positionElement: input,
-			enableTime: true,
-			noCalendar: true,
-			time_24hr: true,
-			appendTo: input.parentNode,
-			wrap: wrap,
-			onOpen: (e) => {
-				document.querySelectorAll('.numInput').forEach((pickerInput) => {
-					pickerInput.name = "flatpickr[]";
-					pickerInput.type = "number";
-				});
-			},
-			onClose: (e) => {
-				document.querySelectorAll('.numInput').forEach((pickerInput) => {
-					pickerInput.type = "text";
-				});
-			}
 		});
 	});
 
@@ -184,18 +104,57 @@ window.addEventListener("load", () => {
 	// Pages
 	console.log(page.routeName);
 	if (page.routeName && page.routeName === 'settings-print') {
-		initPrintSettings();
+		import(
+			/* webpackChunkName: "resultsReload" */
+			'./pages/settings/print'
+			).then(module => {
+			module.default();
+		});
 	} else if (page.routeName && page.routeName === 'settings-vests') {
-		initVestsSettings();
+		import(
+			/* webpackChunkName: "resultsReload" */
+			'./pages/settings/vests'
+			).then(module => {
+			module.default();
+		});
 	} else if (page.routeName && page.routeName === 'games-list') {
-		initResultsReload();
-		initGamesList();
+		console.log('games-list');
+		Promise.all(
+			[
+				import(
+					/* webpackChunkName: "resultsReload" */
+					'./pages/resultsReload'
+					),
+				import(
+					/* webpackChunkName: "gamesList" */
+					'./pages/gamesList'
+					)
+			]
+		)
+			.then(([resultsReload, gamesList]) => {
+				console.log(resultsReload, gamesList);
+				resultsReload.default();
+				gamesList.default();
+			});
 	} else if (page.routeName && (page.routeName === 'results' || page.routeName === 'results-game')) {
-		initResultsReload(getLink(['results']));
+		import(
+			/* webpackChunkName: "resultsReload" */
+			'./pages/resultsReload'
+			).then(module => {
+			module.default(getLink(['results']));
+		});
 	} else if (page.routeName && page.routeName === 'gate') {
-		initGate();
+		import(/* webpackChunkName: "gate" */ './pages/gate').then(module => {
+			module.default();
+		})
 	} else if (page.routeName && page.routeName === 'dashboard') {
-		initNewGamePage();
+		import(/* webpackChunkName: "dashboard" */ './pages/newGame').then(module => {
+			module.default();
+		})
+	} else if (page.routeName && page.routeName === 'settings-music') {
+		import(/* webpackChunkName: "musicSettings" */ './pages/settings/music').then(initMusicSettings => {
+			initMusicSettings.default();
+		});
 	}
 
 	// Game timer

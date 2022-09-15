@@ -1,7 +1,8 @@
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CompressionPlugin = require("compression-webpack-plugin");
-const CopyPlugin = require("copy-webpack-plugin");
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const isDevelopment = true;
 
 module.exports = {
@@ -17,6 +18,10 @@ module.exports = {
 	},
 	module: {
 		rules: [
+			{
+				test: /\.tsx?$/,
+				loader: 'ts-loader'
+			},
 			{
 				test: /\.(scss)$/,
 				use: [
@@ -49,23 +54,19 @@ module.exports = {
 			"node_modules",
 			path.resolve(__dirname, "dist")
 		],
-		extensions: [".js", ".json", ".jsx", ".css", ".scss"]
+		extensions: [".ts", ".tsx", ".js", ".json", ".jsx", ".css", ".scss"]
 	},
 	plugins: [
+		new BundleAnalyzerPlugin({
+			analyzerMode: 'json',
+		}),
+		new ForkTsCheckerWebpackPlugin(),
 		new MiniCssExtractPlugin({
 			filename: isDevelopment ? '[name].css' : '[name].[hash].css',
 			chunkFilename: isDevelopment ? '[id].css' : '[id].[hash].css'
 		}),
 		new CompressionPlugin({
 			test: /\.(js|css)/
-		}),
-		new CopyPlugin({
-			patterns: [
-				{
-					from: path.resolve(__dirname, "node_modules") + "/flatpickr/dist/l10n",
-					to: "flatpickr/l10n"
-				},
-			],
 		}),
 	],
 	cache: {
@@ -74,7 +75,8 @@ module.exports = {
 	},
 	devtool: "source-map",
 	optimization: {
-		runtimeChunk: 'single',
+		usedExports: true,
+		runtimeChunk: true,
 		moduleIds: 'deterministic',
 		splitChunks: {
 			chunks: 'all',
@@ -82,7 +84,7 @@ module.exports = {
 				vendor: {
 					test: /[\\/]node_modules[\\/]/,
 					name: 'vendors',
-					chunks: 'all',
+					//chunks: 'all',
 				}
 			},
 		},

@@ -93,6 +93,19 @@ export default class Player {
 
 		// Hide all other popovers on show
 		this.$vest.addEventListener('show.bs.popover', () => {
+			const closeTrigger = document.createElement('div');
+			closeTrigger.classList.add('position-fixed', 'vw-100', 'vh-100', 'cursor-pointer');
+			closeTrigger.style.zIndex = '1069';
+			closeTrigger.style.backgroundColor = 'rgba(0,0,0,0.3)';
+			closeTrigger.style.top = '0';
+			closeTrigger.style.left = '0';
+			document.body.appendChild(closeTrigger);
+
+			closeTrigger.addEventListener('click', () => {
+				closeTrigger.remove();
+				this.popover.hide();
+			});
+
 			this.game.players.forEach(player => {
 				if (player === this) {
 					return;

@@ -5,9 +5,11 @@
 
 {block content}
 
-	{foreach $notices as $notice}
-		{alert $notice['content'], $notice['type']}
-	{/foreach}
+	<div id="notices">
+		{foreach $notices as $notice}
+			{alert $notice['content'], $notice['type']}
+		{/foreach}
+	</div>
 
 	<div class="me-4 last-save-wrapper text-end position-fixed end-0">
 		{lang 'Last saved:'} <span class="last-save" data-target="#music-settings-form">{lang 'never'}</span>
@@ -16,13 +18,12 @@
 	<h2>{lang 'Hudební módy', context: 'game'}:</h2>
 
 
-	<form action="{link ['settings', 'music', 'upload']}" multiple="multiple" enctype="multipart/form-data"
+	<form action="{link ['settings', 'music', 'upload']}" enctype="multipart/form-data" id="upload-form"
 		  method="post"
 		  class="text-center">
-		<input type="hidden" name="test" value="dalsdjna">
 		<div class="form-group">
 			<label for="media" class="form-label">{lang 'Upload', context: 'actions'}:</label>
-			<input type="file" name="media" accept="audio/mpeg" required class="form-control" id="media">
+			<input type="file" name="media[]" accept="audio/mpeg" required class="form-control" id="media" multiple>
 			<button type="submit" class="btn btn-success my-3" name="action" value="upload">
 				{lang 'Upload', context: 'actions'}
 			</button>
@@ -30,12 +31,36 @@
 	</form>
 	<form action="{link ['settings', 'music']}" enctype="multipart/form-data" method="post" class="text-center autosave"
 		  id="music-settings-form">
-		<div class="input-group" n:foreach="$music as $musicMode">
-			<div class="input-group-text">{$iterator->counter}</div>
-			<input type="text" name="music[{$musicMode->id}][name]" id="music-{$musicMode->id}-name"
-				   class="form-control" value="{$musicMode->name}">
-			{* TODO: Delete music mode *}
-			{* TODO: Play music mode *}
+		<div id="musicInputsWrapper">
+			{foreach $music as $musicMode}
+				{include musicTemplate $iterator->counter, $musicMode->id, $musicMode->name, $musicMode->getMediaUrl()}
+			{/foreach}
 		</div>
+		<p class="text-center">
+			<button type="submit" class="btn btn-success btn-large">
+				<i class="fa-solid fa-save"></i> {lang 'Uložit', context: 'actions'}
+			</button>
+		</p>
 	</form>
+
+	<template id="musicInputTemplate">
+		{include musicTemplate '#counter#', '#id#', '#name#', '#file#'}
+	</template>
 {/block}
+
+{define musicTemplate int $counter, string|int $id, string $name, string $musicFile}
+	<div class="input-group music-input my-2" data-id="{$id}">
+		<div class="input-group-text counter cursor-grab">{$counter}</div>
+		<input type="hidden" name="music[{$id}][order]" value="{$counter}" class="order-input">
+		<input type="text" name="music[{$id}][name]" id="music-{$id}-name"
+			   class="form-control" value="{$name}">
+		<button type="button" class="btn btn-success play-music" data-file="{$musicFile}" data-toggle="tooltip"
+				title="{lang 'Přehrát', context: 'actions'}">
+			<i class="fa-solid fa-play"></i>
+		</button>
+		<button type="button" class="btn btn-danger remove" data-toggle="tooltip"
+				title="{lang 'Smazat', context: 'actions'}">
+			<i class="fa-solid fa-trash"></i>
+		</button>
+	</div>
+{/define}

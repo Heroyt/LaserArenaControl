@@ -1,6 +1,3 @@
-const EventServerInstance = new EventServer();
-export default EventServerInstance;
-
 /**
  * Singleton class for handling connection to WS event server
  */
@@ -95,3 +92,6 @@ class EventServer {
 		}
 	}
 }
+
+const EventServerInstance = new EventServer();
+export default EventServerInstance;

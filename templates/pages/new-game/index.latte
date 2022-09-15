@@ -6,6 +6,7 @@
 {varType string[] $teamNames}
 {varType App\GameModels\Game\GameModes\AbstractMode[] $gameModes}
 {varType App\GameModels\Game\Game|null $loadGame}
+{varType App\Models\MusicMode[] $musicModes}
 
 {block content}
 	<form method="post" action="" id="new-game-content" class="w-100">
@@ -67,6 +68,7 @@
 			</label>
 			<div class="input-group">
 				<select name="music" id="music-select" class="form-select">
+					<option n:foreach="$musicModes as $musicMode" value="{$musicMode->id}">{$musicMode->name}</option>
 				</select>
 				<button type="button" data-toggle="shuffle" title="{lang 'Náhodně', context: 'actions'}"
 						data-target="#music-select" class="btn btn-purple-500">

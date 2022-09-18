@@ -373,6 +373,11 @@ export function gameTimer() {
 					time.dataset.length = '0';
 				}
 				setTimes();
+			})
+			.catch(response => {
+				if (response.data) {
+					console.error(response.data);
+				}
 			});
 	}
 

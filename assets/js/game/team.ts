@@ -1,11 +1,23 @@
+import Game from "./game";
+
 export default class Team {
+
+	key: string;
+	row: HTMLElement;
+	game: Game;
+
+	playerCount: number;
+	name: string;
+
+	$playerCount: HTMLDivElement;
+	$name: HTMLInputElement;
 
 	/**
 	 * @param key {String}
 	 * @param row {HTMLDivElement}
 	 * @param game {Game}
 	 */
-	constructor(key, row, game) {
+	constructor(key: string, row: HTMLElement, game: Game) {
 		this.key = key;
 		this.row = row;
 		this.game = game;
@@ -13,25 +25,24 @@ export default class Team {
 		this.playerCount = 0;
 		this.name = '';
 
-		/**
-		 * @type {HTMLDivElement}
-		 */
 		this.$playerCount = row.querySelector('.player-count');
 		this.$name = row.querySelector('.team-name');
+
+		this.initEvents();
 	}
 
-	clear() {
+	clear(): void {
 		this.$name.value = this.$name.dataset.default;
 		this.update();
 	}
 
-	initEvents() {
+	initEvents(): void {
 		this.$name.addEventListener('input', () => {
 			this.name = this.$name.value;
 		});
 	}
 
-	update() {
+	update(): void {
 		this.recountPlayers();
 
 		if (this.playerCount === 0) {
@@ -57,7 +68,7 @@ export default class Team {
 		);
 	}
 
-	recountPlayers() {
+	recountPlayers(): number {
 		this.playerCount = 0;
 		this.game.players.forEach(player => {
 			if (player.team === this.key) {

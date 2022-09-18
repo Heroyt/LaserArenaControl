@@ -2,15 +2,40 @@ import {Popover, Tooltip} from "bootstrap";
 import axios from "axios";
 import {startLoading, stopLoading} from "../loaders";
 import {initTooltips} from "../functions";
+import Game from "./game";
+
+declare module "bootstrap" {
+	class Popover {
+		_getTipElement(): HTMLElement;
+	}
+}
 
 export default class Player {
+
+	vest: number | string;
+	row: HTMLElement;
+	game: Game;
+
+	skill: number;
+	team: string | null;
+	name: string;
+
+	$vest: HTMLElement;
+	$name: HTMLInputElement;
+
+	$teams: NodeListOf<HTMLInputElement>;
+	$skills: NodeListOf<HTMLInputElement>;
+	$clear: HTMLButtonElement;
+
+	popover: Popover;
+	selectTeamTooltip: Tooltip;
 
 	/**
 	 * @param vest {String}
 	 * @param row {HTMLDivElement|Node}
 	 * @param game {Game}
 	 */
-	constructor(vest, row, game) {
+	constructor(vest: number | string, row: HTMLElement, game: Game) {
 		this.vest = vest;
 		this.row = row;
 		this.game = game;
@@ -21,13 +46,7 @@ export default class Player {
 
 		this.$vest = row.querySelector('.vest-num');
 		this.$name = row.querySelector('.player-name');
-		/**
-		 * @type {RadioNodeList}
-		 */
 		this.$teams = row.querySelectorAll('.team-color-input');
-		/**
-		 * @type {RadioNodeList}
-		 */
 		this.$skills = row.querySelectorAll('.player-skill-input');
 		this.$clear = row.querySelector('.clear');
 
@@ -53,13 +72,13 @@ export default class Player {
 			}
 		)
 
-		const input = tmp.querySelector(`input[value="${this.$vest.dataset.status.toLowerCase()}"]`);
+		const input = tmp.querySelector(`input[value="${this.$vest.dataset.status.toLowerCase()}"]`) as HTMLInputElement;
 		if (input) {
 			input.checked = true;
 		}
 	}
 
-	initEvents() {
+	initEvents(): void {
 		this.$name.addEventListener('input', () => {
 			this.update();
 		});
@@ -114,7 +133,7 @@ export default class Player {
 			})
 
 			// Check the correct input
-			const input = this.popover._getTipElement().querySelector(`input[value="${this.$vest.dataset.status.toLowerCase()}"]`);
+			const input = this.popover._getTipElement().querySelector(`input[value="${this.$vest.dataset.status.toLowerCase()}"]`) as HTMLInputElement;
 			if (input) {
 				input.checked = true;
 			}
@@ -126,10 +145,10 @@ export default class Player {
 			this.popover._getTipElement().querySelectorAll('input, textarea').forEach(input => {
 				input.addEventListener(input.tagName === 'input' ? 'change' : 'input', () => {
 					startLoading(true);
-					let data = {
+					let data: { vest: { [index: string | number]: { status: string, info: string } } } = {
 						vest: {}
 					};
-					const status = this.popover._getTipElement().querySelector(`input:checked`).value;
+					const status = (this.popover._getTipElement().querySelector(`input:checked`) as HTMLInputElement).value;
 					data.vest[this.vest] = {
 						status,
 						info: textarea.value,
@@ -171,7 +190,7 @@ export default class Player {
 		});
 	}
 
-	clear() {
+	clear(): void {
 		this.$name.value = '';
 		this.$teams.forEach($team => {
 			$team.checked = false;
@@ -186,7 +205,7 @@ export default class Player {
 		this.update();
 	}
 
-	update() {
+	update(): void {
 		if (this.name.trim() === '' && this.$name.value.trim() !== '') {
 			const e = new Event("player-activate", {
 				bubbles: true,
@@ -259,11 +278,7 @@ export default class Player {
 		);
 	}
 
-	/**
-	 *
-	 * @param team {String}
-	 */
-	setTeam(team) {
+	setTeam(team: string): void {
 		this.$teams.forEach($team => {
 			$team.checked = $team.value === team;
 		});
@@ -271,21 +286,14 @@ export default class Player {
 		this.update();
 	}
 
-	/**
-	 *
-	 * @param skill {Number}
-	 */
-	setSkill(skill) {
+	setSkill(skill: number): void {
 		this.$skills.forEach($skill => {
 			$skill.checked = parseInt($skill.value) === skill;
 		});
 		this.update();
 	}
 
-	/**
-	 * @returns {boolean}
-	 */
-	isActive() {
+	isActive(): boolean {
 		return this.name.trim() !== '';
 	}
 }

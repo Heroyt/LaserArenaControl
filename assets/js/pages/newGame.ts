@@ -1,14 +1,16 @@
 import Game from "../game/game";
-import axios from "axios";
+import axios, {AxiosResponse} from "axios";
 import {lang} from "../functions";
 import EventServerInstance from "../EventServer";
 import {startLoading, stopLoading} from "../loaders";
+import {GameData} from "../game/gameInterfaces";
+
+declare global {
+	const gameData: GameData;
+}
 
 export default function initNewGamePage() {
-	/**
-	 * @type {HTMLFormElement}
-	 */
-	const form = document.getElementById('new-game-content');
+	const form = document.getElementById('new-game-content') as HTMLFormElement;
 
 	// Send form via ajax
 	form.addEventListener('submit', e => {
@@ -23,10 +25,10 @@ export default function initNewGamePage() {
 
 		startLoading();
 		axios.post('/', data)
-			.then(response => {
+			.then(() => {
 				stopLoading();
 			})
-			.catch(response => {
+			.catch(() => {
 				stopLoading(false);
 			});
 	});
@@ -47,13 +49,10 @@ export default function initNewGamePage() {
 		game.import(JSON.parse(localData));
 	}
 
-	/**
-	 * @type {HTMLSelectElement}
-	 */
-	const lastGamesSelect = document.getElementById('last-games');
+	const lastGamesSelect = document.getElementById('last-games') as HTMLSelectElement;
 
 	lastGamesSelect.addEventListener('change', () => {
-		const option = lastGamesSelect.querySelector(`option[value="${lastGamesSelect.value}"]`);
+		const option = lastGamesSelect.querySelector(`option[value="${lastGamesSelect.value}"]`) as HTMLOptionElement;
 		if (!option) {
 			return;
 		}
@@ -78,12 +77,8 @@ export default function initNewGamePage() {
 				expand: true,
 			},
 		})
-			.then((response) => {
-				response.data.forEach(
-					/**
-					 * @param game {GameData}
-					 */
-					game => {
+			.then((response: AxiosResponse<GameData[]>) => {
+				response.data.forEach(game => {
 						const test = lastGamesSelect.querySelector(`option[value="${game.code}"]`);
 						if (test) {
 							return; // Do not add duplicates
@@ -123,16 +118,12 @@ export default function initNewGamePage() {
 					}
 				);
 			})
-			.catch(response => {
+			.catch(() => {
 
 			})
 	}
 
-	/**
-	 * @param data {FormData}
-	 * @return boolean
-	 */
-	function validateForm(data) {
+	function validateForm(data: FormData): boolean {
 		if (data.get('action') !== 'load') {
 			return true;
 		}
@@ -159,56 +150,3 @@ export default function initNewGamePage() {
 		return true;
 	}
 }
-
-/**
- * @typedef {{date: String, timezone_type: Number, timezone: String}} PhpDateTime
- */
-/**
- * @typedef {{
- * 			id: Number,
- * 			name: String,
- * 			score: Number,
- * 			skill: Number,
- * 			vest: Number,
- * 			position: Number,
- * 			accuracy: Number,
- * 			hits: Number,
- * 			deaths: Number,
- * 			shots: Number,
- * 			teamNum: Number,
- * 			color: Number
- * 		}} PlayerData
- */
-/**
- * @typedef {{
- * 			id: Number,
- * 			name: String,
- * 			score: Number,
- * 			color: Number,
- * 			playerCount: Number,
- * 			position: Number
- * 		}} TeamData
- */
-/**
- * @typedef {{
- *     id: Number,
- *     name: String,
- *     fileName: String,
- *     order: Number
- * }} MusicMode
- */
-/**
- * @typedef {{
- * 		id: Number,
- * 		code: String,
- * 		fileNumber: Number|String,
- * 		playerCount: Number,
- * 		fileTime: PhpDateTime,
- * 		start: PhpDateTime,
- * 		end: PhpDateTime,
- * 		mode: {id: Number, name: String, description: String, type: 'TEAM'|'SOLO'},
- * 		players: Object.<string, PlayerData>,
- * 		teams: Object.<string, TeamData>,
- * 		music: MusicMode|null
- * 	}} GameData
- */

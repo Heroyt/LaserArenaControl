@@ -1,8 +1,9 @@
-import {formatPhoneNumber, gameTimer, getLink, initAutoSaveForm, initTooltips} from './functions.js';
+import {formatPhoneNumber, gameTimer, initAutoSaveForm, initTooltips} from './functions.js';
 import axios from 'axios';
 import {startLoading, stopLoading} from "./loaders";
 import * as bootstrap from "bootstrap";
 import jscolor from "@eastdesire/jscolor";
+import route from "./router";
 
 axios.defaults.headers.post['X-Requested-With'] = 'XMLHttpRequest';
 axios.defaults.headers.get['X-Requested-With'] = 'XMLHttpRequest';
@@ -102,60 +103,7 @@ window.addEventListener("load", () => {
 	});
 
 	// Pages
-	console.log(page.routeName);
-	if (page.routeName && page.routeName === 'settings-print') {
-		import(
-			/* webpackChunkName: "resultsReload" */
-			'./pages/settings/print'
-			).then(module => {
-			module.default();
-		});
-	} else if (page.routeName && page.routeName === 'settings-vests') {
-		import(
-			/* webpackChunkName: "resultsReload" */
-			'./pages/settings/vests'
-			).then(module => {
-			module.default();
-		});
-	} else if (page.routeName && page.routeName === 'games-list') {
-		console.log('games-list');
-		Promise.all(
-			[
-				import(
-					/* webpackChunkName: "resultsReload" */
-					'./pages/resultsReload'
-					),
-				import(
-					/* webpackChunkName: "gamesList" */
-					'./pages/gamesList'
-					)
-			]
-		)
-			.then(([resultsReload, gamesList]) => {
-				console.log(resultsReload, gamesList);
-				resultsReload.default();
-				gamesList.default();
-			});
-	} else if (page.routeName && (page.routeName === 'results' || page.routeName === 'results-game')) {
-		import(
-			/* webpackChunkName: "resultsReload" */
-			'./pages/resultsReload'
-			).then(module => {
-			module.default(getLink(['results']));
-		});
-	} else if (page.routeName && page.routeName === 'gate') {
-		import(/* webpackChunkName: "gate" */ './pages/gate').then(module => {
-			module.default();
-		})
-	} else if (page.routeName && page.routeName === 'dashboard') {
-		import(/* webpackChunkName: "dashboard" */ './pages/newGame').then(module => {
-			module.default();
-		})
-	} else if (page.routeName && page.routeName === 'settings-music') {
-		import(/* webpackChunkName: "musicSettings" */ './pages/settings/music').then(initMusicSettings => {
-			initMusicSettings.default();
-		});
-	}
+	route(page);
 
 	// Game timer
 	gameTimer();

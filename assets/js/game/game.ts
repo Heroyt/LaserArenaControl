@@ -2,35 +2,53 @@ import Player from "./player";
 import Team from "./team";
 import {shuffle} from "../functions";
 import {Tooltip} from "bootstrap";
+import {GameData} from './gameInterfaces';
+
+declare global {
+	const messages: { [index: string]: string };
+}
+
+interface PlayerGroup {
+	team: string,
+	skill: number,
+	players: Player[]
+}
 
 export default class Game {
 
+	players: Map<String, Player>;
+	teams: Map<String, Team>;
+
+	$gameMode: HTMLSelectElement;
+	$musicMode: HTMLSelectElement;
+	$teams: NodeListOf<HTMLInputElement>;
+
+	$shuffleTeams: HTMLButtonElement;
+	$shuffleFairTeams: HTMLButtonElement;
+
+	$soloHide: NodeListOf<HTMLElement>;
+
+	$clearAll: HTMLButtonElement;
+
+	teamShuffleTooltip: Tooltip;
+	noPlayersTooltip: Tooltip;
+
 	constructor() {
 
-		/**
-		 * @type {Map<String, Player>}
-		 */
 		this.players = new Map;
 		this.teams = new Map;
 
-		/**
-		 * @type {HTMLSelectElement}
-		 */
-		this.$gameMode = document.getElementById('game-mode-select');
-		/**
-		 * @type {HTMLSelectElement}
-		 */
-		this.$musicMode = document.getElementById('music-select');
-		/**
-		 * @type {NodeListOf<HTMLInputElement>}
-		 */
+
+		this.$gameMode = document.getElementById('game-mode-select') as HTMLSelectElement;
+		this.$musicMode = document.getElementById('music-select') as HTMLSelectElement;
 		this.$teams = document.querySelectorAll('#teams-random .team-color-input');
-		this.$shuffleTeams = document.getElementById('random-teams');
-		this.$shuffleFairTeams = document.getElementById('random-fair-teams');
+
+		this.$shuffleTeams = document.getElementById('random-teams') as HTMLButtonElement;
+		this.$shuffleFairTeams = document.getElementById('random-fair-teams') as HTMLButtonElement;
 
 		this.$soloHide = document.querySelectorAll('.solo-hide');
 
-		this.$clearAll = document.getElementById('clear-all');
+		this.$clearAll = document.getElementById('clear-all') as HTMLButtonElement;
 
 		this.teamShuffleTooltip = new Tooltip(
 			document.getElementById('team-random-select'),
@@ -39,7 +57,7 @@ export default class Game {
 				trigger: 'manual',
 				customClass: 'tooltip-danger',
 			}
-		)
+		);
 		this.noPlayersTooltip = new Tooltip(
 			document.querySelector('.vest-row'),
 			{
@@ -47,9 +65,9 @@ export default class Game {
 				trigger: 'manual',
 				customClass: 'tooltip-danger',
 			}
-		)
+		);
 
-		document.querySelectorAll('.vest-row').forEach(row => {
+		(document.querySelectorAll('.vest-row') as NodeListOf<HTMLDivElement>).forEach(row => {
 			const vestNum = row.dataset.vest;
 			this.players.set(vestNum, new Player(vestNum, row, this));
 
@@ -57,7 +75,7 @@ export default class Game {
 				this.noPlayersTooltip.hide();
 			})
 		});
-		document.querySelectorAll('.team-row').forEach(row => {
+		(document.querySelectorAll('.team-row') as NodeListOf<HTMLDivElement>).forEach(row => {
 			const key = row.dataset.key;
 			this.teams.set(key, new Team(key, row, this));
 		});
@@ -121,8 +139,8 @@ export default class Game {
 			team.clear();
 		});
 
-		this.$gameMode.value = this.$gameMode.firstElementChild.value;
-		this.$musicMode.value = this.$musicMode.firstElementChild.value;
+		this.$gameMode.value = (this.$gameMode.firstElementChild as HTMLOptionElement).value;
+		this.$musicMode.value = (this.$musicMode.firstElementChild as HTMLOptionElement).value;
 
 		this.$gameMode.dispatchEvent(new Event('update', {bubbles: true}));
 
@@ -133,12 +151,16 @@ export default class Game {
 	/**
 	 * @return 'SOLO'|'TEAM'
 	 */
-	getModeType() {
-		return this.$gameMode.querySelector(`option[value="${this.$gameMode.value}"]`).dataset.type;
+	getModeType(): 'SOLO' | 'TEAM' {
+		const type = (this.$gameMode.querySelector(`option[value="${this.$gameMode.value}"]`) as HTMLOptionElement).dataset.type.toUpperCase();
+		if (type === 'SOLO') {
+			return type;
+		}
+		return 'TEAM';
 	}
 
-	getSelectedTeams() {
-		const teams = [];
+	getSelectedTeams(): string[] {
+		const teams: string[] = [];
 		this.$teams.forEach($team => {
 			if ($team.checked) {
 				teams.push($team.value);
@@ -150,8 +172,8 @@ export default class Game {
 	/**
 	 * @returns {Player[]}
 	 */
-	getActivePlayers() {
-		const players = [];
+	getActivePlayers(): Player[] {
+		const players: Player[] = [];
 		this.players.forEach(player => {
 			if (player.isActive()) {
 				players.push(player);
@@ -160,11 +182,11 @@ export default class Game {
 		return players;
 	}
 
-	getActiveTeams() {
+	getActiveTeams(): Team[] {
 		if (this.getModeType() === 'SOLO') {
 			return [];
 		}
-		const teams = [];
+		const teams: Team[] = [];
 		this.teams.forEach(team => {
 			if (team.playerCount > 0) {
 				teams.push(team);
@@ -173,7 +195,7 @@ export default class Game {
 		return teams;
 	}
 
-	shuffleTeams() {
+	shuffleTeams(): void {
 		// Clear all teams
 		this.players.forEach(player => {
 			player.setTeam('');
@@ -202,7 +224,7 @@ export default class Game {
 		});
 	}
 
-	shuffleFairTeams() {
+	shuffleFairTeams(): void {
 		// Clear all teams
 		this.players.forEach(player => {
 			player.setTeam('');
@@ -227,7 +249,7 @@ export default class Game {
 		}
 
 		// Create group objects for each team created
-		let groups = [];
+		let groups: PlayerGroup[] = [];
 		teams.forEach(team => {
 			groups.push({
 				team,
@@ -237,7 +259,7 @@ export default class Game {
 		});
 
 		// Sort players into 3 groups by their skill
-		const skills = {
+		const skills: { [index: number]: Player[] } = {
 			1: [],
 			2: [],
 			3: [],
@@ -351,7 +373,7 @@ export default class Game {
 	/**
 	 * @param data {GameData}
 	 */
-	import(data) {
+	import(data: GameData) {
 		this.clearAll();
 
 		const skills = Object.values(data.players).map(playerData => {
@@ -394,14 +416,11 @@ export default class Game {
 		const activePlayers = this.getActivePlayers();
 		const activeTeams = this.getActiveTeams();
 
-		/**
-		 * @type {GameData}
-		 */
-		const data = {
+		const data: GameData = {
 			playerCount: activePlayers.length,
 			mode: {
 				id: parseInt(this.$gameMode.value),
-				name: this.$gameMode.querySelector(`option[value="${this.$gameMode.value}"]`).innerText.trim(),
+				name: (this.$gameMode.querySelector(`option[value="${this.$gameMode.value}"]`) as HTMLOptionElement).innerText.trim(),
 				type: this.getModeType(),
 			},
 			music: {
@@ -414,7 +433,7 @@ export default class Game {
 		activePlayers.forEach(player => {
 			data.players[player.vest] = {
 				name: player.name,
-				vest: parseInt(player.vest),
+				vest: typeof player.vest === 'string' ? parseInt(player.vest) : player.vest,
 				teamNum: parseInt(player.team),
 				color: parseInt(player.team),
 				skill: player.skill,

@@ -26,6 +26,7 @@
 	"devDependencies": {
 		"@types/bootstrap": "^5.2.4",
 		"@types/sortablejs": "^1.13.0",
+		"@types/web": "^0.0.72",
 		"autoprefixer": "^10.4.8",
 		"compression-webpack-plugin": "^10.0.0",
 		"copy-webpack-plugin": "^11.0.0",

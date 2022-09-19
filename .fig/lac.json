@@ -1,7 +1,31 @@
 {
+	"scriptCompletions": {
+		"lac": "autocomplete/src/lac"
+	},
 	"name": "lac",
 	"description": "Laser arena control CLI tools",
 	"subcommands": [
+		{
+			"name": "games/skill",
+			"description": "",
+			"args": []
+		},
+		{
+			"name": "games/sync",
+			"description": "Synchronize not synchronized games from DB to public API.",
+			"args": [
+				{
+					"name": "limit",
+					"isOptional": true,
+					"description": "Maximum number of games to synchronize"
+				},
+				{
+					"name": "timeout",
+					"isOptional": true,
+					"description": "Timeout for each curl request"
+				}
+			]
+		},
 		{
 			"name": "cache/clean",
 			"description": "Clean server cache",
@@ -70,22 +94,6 @@
 					"name": "dir",
 					"isOptional": false,
 					"description": "A valid results directory"
-				}
-			]
-		},
-		{
-			"name": "games/sync",
-			"description": "Synchronize not synchronized games from DB to public API.",
-			"args": [
-				{
-					"name": "limit",
-					"isOptional": true,
-					"description": "Maximum number of games to synchronize"
-				},
-				{
-					"name": "timeout",
-					"isOptional": true,
-					"description": "Timeout for each curl request"
 				}
 			]
 		},

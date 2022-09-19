@@ -14,11 +14,13 @@ use App\GameModels\Game\Evo5\Player;
 use App\GameModels\Game\Evo5\Team;
 use App\GameModels\Game\Scoring;
 use App\GameModels\Game\Timing;
+use App\Models\MusicMode;
 use App\Tools\AbstractResultsParser;
 use DateTime;
 use JsonException;
 use Lsr\Core\Exceptions\ModelNotFoundException;
 use Lsr\Core\Exceptions\ValidationException;
+use Lsr\Logging\Exceptions\DirectoryCreationException;
 
 /**
  * Result parser for the EVO5 system
@@ -34,10 +36,11 @@ class ResultsParser extends AbstractResultsParser
 	 *
 	 * @return Game
 	 * @throws GameModeNotFoundException
+	 * @throws JsonException
 	 * @throws ModelNotFoundException
 	 * @throws ResultsParseException
 	 * @throws ValidationException
-	 * @throws JsonException
+	 * @throws DirectoryCreationException
 	 */
 	public function parse() : Game {
 		$game = new Game();
@@ -60,6 +63,9 @@ class ResultsParser extends AbstractResultsParser
 		if (empty($titles) || empty($argsAll)) {
 			throw new ResultsParseException('The results file cannot be parsed: '.$this->fileName);
 		}
+
+		/** @var array<string,string> $meta Meta data from game */
+		$meta = [];
 
 		$keysVests = [];
 		$currKey = 1;
@@ -248,9 +254,22 @@ class ResultsParser extends AbstractResultsParser
 					// - Pod name
 				case 'MINESTYLE':
 					// GROUP contains additional game notes
-					// - 2 arguments
+					// - Game title
+					// _ Game note (meta data)
 				case 'GROUP':
-					// TODO: Maybe parse additional info
+					if ($argsCount !== 2) {
+						throw new ResultsParseException('Invalid argument count in GROUP');
+					}
+					// Parse metadata
+					$decodedJson = base64_decode($args[1], true);
+					if ($decodedJson !== false) {
+						try {
+							/** @var array<string,string> $meta Meta data from game */
+							$meta = json_decode($decodedJson, false, 512, JSON_THROW_ON_ERROR);
+						} catch (JsonException) {
+							// Ignore meta
+						}
+					}
 					break;
 
 				// PACK contains information about vest settings
@@ -407,6 +426,56 @@ class ResultsParser extends AbstractResultsParser
 				if ($player->teamNum === $team->color) {
 					$player->setTeam($team);
 					break;
+				}
+			}
+		}
+
+		// Process metadata
+		if (!empty($meta) && !empty($meta['hash'])) {
+			// Validate metadata
+			$players = [];
+			/** @var Player $player */
+			foreach ($game->getPlayers() as $player) {
+				$players[] = [
+					'vest' => $player->vest,
+					'name' => $player->name,
+					'team' => (string) $player->getTeamColor(),
+					'vip'  => $player->vip,
+				];
+			}
+			// Calculate hash
+			$hash = md5(json_encode($players, JSON_THROW_ON_ERROR));
+
+			// Compare
+			if ($hash !== $meta['hash']) {
+				// Hashes don't match -> ignore metadata
+				return $game;
+			}
+
+			if (!empty($meta['music'])) {
+				try {
+					$game->music = MusicMode::get((int) $meta['music']);
+				} catch (ModelNotFoundException) {
+					// Ignore
+				}
+			}
+
+			/** @var Player $player */
+			foreach ($game->getPlayers() as $player) {
+				// Names from game are strictly ASCII
+				// If a name contained any non ASCII character, it is coded in the metadata
+				if (!empty($meta['p'.$player->vest.'n'])) {
+					$player->name = $meta['p'.$player->vest.'n'];
+				}
+				// TODO: Add userId to metadata
+			}
+
+			/** @var Team $team */
+			foreach ($game->getTeams() as $team) {
+				// Names from game are strictly ASCII
+				// If a name contained any non ASCII character, it is coded in the metadata
+				if (!empty($meta['t'.$team->color.'n'])) {
+					$team->name = $meta['t'.$team->color.'n'];
 				}
 			}
 		}

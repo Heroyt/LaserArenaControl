@@ -20,6 +20,7 @@ use DateTime;
 use JsonException;
 use Lsr\Core\Exceptions\ModelNotFoundException;
 use Lsr\Core\Exceptions\ValidationException;
+use Lsr\Helpers\Tools\Strings;
 use Lsr\Logging\Exceptions\DirectoryCreationException;
 
 /**
@@ -253,19 +254,20 @@ class ResultsParser extends AbstractResultsParser
 					// - Team number (6 = all)
 					// - Pod name
 				case 'MINESTYLE':
-					// GROUP contains additional game notes
-					// - Game title
-					// _ Game note (meta data)
+					break;
+				// GROUP contains additional game notes
+				// - Game title
+				// _ Game note (meta data)
 				case 'GROUP':
 					if ($argsCount !== 2) {
-						throw new ResultsParseException('Invalid argument count in GROUP');
+						throw new ResultsParseException('Invalid argument count in GROUP - '.$argsCount.' '.json_encode($args));
 					}
 					// Parse metadata
 					$decodedJson = base64_decode($args[1], true);
 					if ($decodedJson !== false) {
 						try {
 							/** @var array<string,string> $meta Meta data from game */
-							$meta = json_decode($decodedJson, false, 512, JSON_THROW_ON_ERROR);
+							$meta = json_decode($decodedJson, true, 512, JSON_THROW_ON_ERROR);
 						} catch (JsonException) {
 							// Ignore meta
 						}
@@ -438,8 +440,8 @@ class ResultsParser extends AbstractResultsParser
 			foreach ($game->getPlayers() as $player) {
 				$players[] = [
 					'vest' => $player->vest,
-					'name' => $player->name,
-					'team' => (string) $player->getTeamColor(),
+					'name' => Strings::toAscii($player->name),
+					'team' => (string) $player->teamNum,
 					'vip'  => $player->vip,
 				];
 			}

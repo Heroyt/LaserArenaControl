@@ -20,7 +20,6 @@ use DateTime;
 use JsonException;
 use Lsr\Core\Exceptions\ModelNotFoundException;
 use Lsr\Core\Exceptions\ValidationException;
-use Lsr\Helpers\Tools\Strings;
 use Lsr\Logging\Exceptions\DirectoryCreationException;
 
 /**
@@ -440,7 +439,7 @@ class ResultsParser extends AbstractResultsParser
 			foreach ($game->getPlayers() as $player) {
 				$players[] = [
 					'vest' => $player->vest,
-					'name' => Strings::toAscii($player->name),
+					'name' => $player->name,
 					'team' => (string) $player->teamNum,
 					'vip'  => $player->vip,
 				];

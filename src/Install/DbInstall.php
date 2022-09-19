@@ -179,6 +179,7 @@ class DbInstall implements InstallInterface
 				`bonus_invisibility` int(10) unsigned NOT NULL DEFAULT 0,
 				`bonus_machine_gun` int(10) unsigned NOT NULL DEFAULT 0,
 				`bonus_shield` int(10) unsigned NOT NULL DEFAULT 0,
+				`vip` tinyint(1) unsigned NOT NULL DEFAULT 0,
 				PRIMARY KEY (`id_player`),
 				KEY `id_game` (`id_game`),
 				KEY `id_team` (`id_team`),
@@ -191,7 +192,10 @@ class DbInstall implements InstallInterface
 					'ADD `id_user` INT(11)  UNSIGNED  NULL  DEFAULT NULL  AFTER `id_team`',
 					'ADD `skill` INT(11)  NOT NULL DEFAULT 0  AFTER `score`',
 					'ADD FOREIGN KEY (`id_user`) REFERENCES `players` (`id_user`) ON DELETE SET NULL ON UPDATE CASCADE'
-				]
+				],
+				'0.2.0' => [
+					'ADD `vip` tinyint(1) unsigned NOT NULL DEFAULT 0 AFTER `bonus_shield`',
+				],
 			],
 		],
 		'evo5_hits'                => [

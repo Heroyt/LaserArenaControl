@@ -22,6 +22,7 @@ export default class Game {
 	$gameMode: HTMLSelectElement;
 	$musicMode: HTMLSelectElement;
 	$teams: NodeListOf<HTMLInputElement>;
+	$maxSkill: NodeListOf<HTMLInputElement>;
 
 	$shuffleTeams: HTMLButtonElement;
 	$shuffleFairTeams: HTMLButtonElement;
@@ -33,6 +34,8 @@ export default class Game {
 	teamShuffleTooltip: Tooltip;
 	noPlayersTooltip: Tooltip;
 
+	maxSkill: 3 | 6 = 3;
+
 	constructor() {
 
 		this.players = new Map;
@@ -42,6 +45,7 @@ export default class Game {
 		this.$gameMode = document.getElementById('game-mode-select') as HTMLSelectElement;
 		this.$musicMode = document.getElementById('music-select') as HTMLSelectElement;
 		this.$teams = document.querySelectorAll('#teams-random .team-color-input');
+		this.$maxSkill = document.querySelectorAll('.maxSkill');
 
 		this.$shuffleTeams = document.getElementById('random-teams') as HTMLButtonElement;
 		this.$shuffleFairTeams = document.getElementById('random-fair-teams') as HTMLButtonElement;
@@ -129,6 +133,12 @@ export default class Game {
 				this.teamShuffleTooltip.hide();
 			});
 		})
+
+		this.$maxSkill.forEach(input => {
+			input.addEventListener('change', () => {
+				this.updateMaxSkill();
+			});
+		});
 	}
 
 	clearAll() {
@@ -258,31 +268,36 @@ export default class Game {
 			});
 		});
 
-		// Sort players into 3 groups by their skill
-		const skills: { [index: number]: Player[] } = {
-			1: [],
-			2: [],
-			3: [],
-		};
+		// Sort players into N groups by their skill
+		const skills: { [index: number]: Player[] } = {};
 		players.forEach(player => {
+			if (!skills[player.skill]) {
+				skills[player.skill] = [];
+			}
 			skills[player.skill].push(player);
 		});
 
-		if (skills[1].length === players.length || skills[2].length === players.length || skills[3].length === players.length) {
+		const skillKeys = Object.keys(skills).map(key => parseInt(key));
+
+		if (skillKeys.length === 1) {
 			// All players are in one skill group
 			// It makes sense to shuffle the players normally
 			this.shuffleTeams();
 			return;
 		}
 
+		let skillSum = 0;
 		// Shuffle skill sets - players
-		skills[1] = shuffle(skills[1]);
-		skills[2] = shuffle(skills[2]);
-		skills[3] = shuffle(skills[3]);
+		skillKeys.forEach(key => {
+			skills[key] = shuffle(skills[key]);
+			skillSum += key * skills[key].length;
+		});
 
-		const skillSum = skills[1].length + (2 * skills[2].length) + (3 * skills[3].length);
 		const teamAverage = skillSum / teamCount;
-		const sortedPlayers = skills[3].concat(skills[2]).concat(skills[1]);
+		let sortedPlayers: Player[] = [];
+		skillKeys.reverse().forEach(key => {
+			sortedPlayers = sortedPlayers.concat(skills[key]);
+		});
 		console.log('sorted players', sortedPlayers);
 
 		// Fill the teams with players
@@ -370,38 +385,47 @@ export default class Game {
 		});
 	}
 
-	/**
-	 * @param data {GameData}
-	 */
 	import(data: GameData) {
 		this.clearAll();
 
-		const skills = Object.values(data.players).map(playerData => {
-			return playerData.skill;
-		});
-		const maxSkill = Math.max(3, ...skills);
-		const minSkill = Math.min(0, ...skills);
-		const skillStep = (minSkill + maxSkill) / 3;
-		Object.values(data.players).forEach(playerData => {
-			const player = this.players.get(playerData.vest.toString());
-			if (!player) {
-				return;
+		if (data.playerCount > 0) {
+			const skills = Object.values(data.players).map(playerData => {
+				return playerData.skill;
+			});
+			const maxSkill = Math.max(3, ...skills);
+			const minSkill = Math.min(...skills);
+			const skillStep = (maxSkill - minSkill) / this.maxSkill;
+			Object.values(data.players).forEach(playerData => {
+				const player = this.players.get(playerData.vest.toString());
+				if (!player) {
+					return;
+				}
+				player.$name.value = playerData.name;
+				if (playerData.color) {
+					player.setTeam(playerData.color.toString());
+				}
+				player.setSkill(Math.ceil((playerData.skill - minSkill) / skillStep));
+				player.realSkill = playerData.skill;
+
+				if (playerData.vip) {
+					player.setVip(playerData.vip);
+				}
+			});
+			Object.values(data.teams).forEach(teamData => {
+				const team = this.teams.get(teamData.color.toString());
+				if (!team) {
+					return;
+				}
+				team.$name.value = teamData.name;
+				team.update();
+			});
+
+			if (maxSkill > 3) {
+				this.$maxSkill[0].checked = false;
+				this.$maxSkill[1].checked = true;
+				this.updateMaxSkill();
 			}
-			player.$name.value = playerData.name;
-			if (playerData.color) {
-				player.setTeam(playerData.color.toString());
-			}
-			player.setSkill(Math.ceil((minSkill + playerData.skill) / skillStep));
-			player.update();
-		});
-		Object.values(data.teams).forEach(teamData => {
-			const team = this.teams.get(teamData.color.toString());
-			if (!team) {
-				return;
-			}
-			team.$name.value = teamData.name;
-			team.update();
-		});
+		}
 
 		const e = new Event('change');
 		this.$gameMode.value = data.mode.id.toString();
@@ -412,7 +436,22 @@ export default class Game {
 		}
 	}
 
-	export() {
+	reassignPlayerSkills(): void {
+		const players = this.getActivePlayers();
+		const skills = players.map(player => player.realSkill);
+
+		const maxSkill = Math.max(3, ...skills);
+		const minSkill = Math.min(...skills);
+		const skillStep = (maxSkill - minSkill) / this.maxSkill;
+
+		players.forEach(player => {
+			const skill = player.realSkill;
+			player.setSkill(Math.ceil((skill - minSkill) / skillStep));
+			player.realSkill = skill; // Keep the real value after update
+		});
+	}
+
+	export(): GameData {
 		const activePlayers = this.getActivePlayers();
 		const activeTeams = this.getActiveTeams();
 
@@ -433,6 +472,7 @@ export default class Game {
 		activePlayers.forEach(player => {
 			data.players[player.vest] = {
 				name: player.name,
+				vip: player.vip,
 				vest: typeof player.vest === 'string' ? parseInt(player.vest) : player.vest,
 				teamNum: parseInt(player.team),
 				color: parseInt(player.team),
@@ -449,5 +489,25 @@ export default class Game {
 		});
 
 		return data;
+	}
+
+	updateMaxSkill() {
+		let skill = 3;
+		this.$maxSkill.forEach(input => {
+			if (input.checked) {
+				skill = parseInt(input.value);
+			}
+		});
+		if (skill === 3 || skill === 6) {
+			this.setMaxSkill(skill);
+		}
+	}
+
+	setMaxSkill(max: 3 | 6) {
+		this.maxSkill = max;
+		this.players.forEach(player => {
+			player.setMaxSkill(max);
+		});
+		this.reassignPlayerSkills();
 	}
 }

@@ -16,15 +16,18 @@ export default class Player {
 	row: HTMLElement;
 	game: Game;
 
-	skill: number;
-	team: string | null;
-	name: string;
+	skill: number = 1;
+	realSkill: number = 1;
+	team: string | null = null;
+	name: string = '';
+	vip: boolean = false;
 
 	$vest: HTMLElement;
 	$name: HTMLInputElement;
 
 	$teams: NodeListOf<HTMLInputElement>;
 	$skills: NodeListOf<HTMLInputElement>;
+	$vip: NodeListOf<HTMLInputElement>;
 	$clear: HTMLButtonElement;
 
 	popover: Popover;
@@ -40,14 +43,11 @@ export default class Player {
 		this.row = row;
 		this.game = game;
 
-		this.skill = 1;
-		this.team = null;
-		this.name = '';
-
 		this.$vest = row.querySelector('.vest-num');
 		this.$name = row.querySelector('.player-name');
 		this.$teams = row.querySelectorAll('.team-color-input');
 		this.$skills = row.querySelectorAll('.player-skill-input');
+		this.$vip = row.querySelectorAll('.player-vip-input');
 		this.$clear = row.querySelector('.clear');
 
 		this.initEvents();
@@ -81,6 +81,7 @@ export default class Player {
 	initEvents(): void {
 		this.$name.addEventListener('input', () => {
 			this.update();
+			this.realSkill = this.skill;
 		});
 
 		this.$teams.forEach($team => {
@@ -102,6 +103,13 @@ export default class Player {
 
 		this.$skills.forEach($skill => {
 			$skill.addEventListener('change', () => {
+				this.update();
+				this.realSkill = this.skill;
+			});
+		});
+
+		this.$vip.forEach($vip => {
+			$vip.addEventListener('change', () => {
 				this.update();
 			});
 		});
@@ -199,6 +207,11 @@ export default class Player {
 			$skill.checked = false;
 		});
 		this.$skills[0].checked = true;
+		this.$vip.forEach($vip => {
+			$vip.checked = false;
+		});
+		this.$vip[0].checked = true;
+		this.realSkill = 1;
 		this.row.style.removeProperty('--shadow-color');
 		this.$vest.style.removeProperty('color');
 		this.$vest.style.removeProperty('background-color');
@@ -266,6 +279,18 @@ export default class Player {
 			this.$skills[0].checked = true;
 		}
 
+		found = false;
+		this.$vip.forEach($vip => {
+			if ($vip.checked) {
+				this.vip = parseInt($vip.value) > 0;
+				found = true;
+			}
+		});
+		if (!found) {
+			this.vip = false;
+			this.$vip[0].checked = true;
+		}
+
 		this.row.dispatchEvent(
 			new Event("update", {
 				bubbles: true,
@@ -291,9 +316,28 @@ export default class Player {
 			$skill.checked = parseInt($skill.value) === skill;
 		});
 		this.update();
+		this.realSkill = this.skill;
+	}
+
+	setVip(vip: boolean): void {
+		const value = vip ? 1 : 0;
+		this.$vip.forEach($vip => {
+			$vip.checked = parseInt($vip.value) === value;
+		});
+		this.update();
 	}
 
 	isActive(): boolean {
 		return this.name.trim() !== '';
+	}
+
+	setMaxSkill(max: 3 | 6): void {
+		const label: HTMLLabelElement = this.row.querySelector('.maxSkillSwitch');
+
+		if (max === 3) {
+			label.setAttribute('for', `player-skill-${this.vest}-1`);
+		} else {
+			label.setAttribute('for', `player-skill-${this.vest}-4`);
+		}
 	}
 }

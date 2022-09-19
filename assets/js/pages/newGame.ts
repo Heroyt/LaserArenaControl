@@ -17,7 +17,13 @@ export default function initNewGamePage() {
 		e.preventDefault();
 
 		const data = new FormData(form);
-		console.log(data);
+		//data.forEach((value, key) => {
+		//	console.log(key, value)
+		//});
+
+		if (!data.get('action')) {
+			data.set('action', (e.submitter as HTMLButtonElement).value)
+		}
 
 		if (!validateForm(data)) {
 			return;
@@ -36,7 +42,6 @@ export default function initNewGamePage() {
 	// Autosave to local storage
 	form.addEventListener('update', () => {
 		const data = game.export();
-		console.log('saving data', data);
 		localStorage.setItem('new-game-data', JSON.stringify(data));
 	});
 
@@ -124,11 +129,13 @@ export default function initNewGamePage() {
 	}
 
 	function validateForm(data: FormData): boolean {
+		console.log(data.get('action'));
 		if (data.get('action') !== 'load') {
 			return true;
 		}
 
 		const activePlayers = game.getActivePlayers();
+		console.log(activePlayers);
 		if (activePlayers.length < 2) {
 			game.noPlayersTooltip.show();
 			return false;

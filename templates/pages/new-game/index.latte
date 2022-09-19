@@ -35,8 +35,21 @@
 			</div>
 		</section>
 		<section id="vests">
-			<div class="text-end">
-				<button type="button" class="btn btn-danger" id="clear-all">
+			<div class="d-flex justify-content-end align-items-center">
+				<input type="radio" name="maxSkill" value="3" checked class="player-skill-input maxSkill"
+					   id="player-skill-3"/>
+				<label class="player-skill bg-danger rounded px-2" style="height: 2.5rem; width: auto;"
+					   for="player-skill-6">
+					{lang 'Maximální herní úroveň', context:'game.player'}: {svgIcon '3-stars', 'auto', '100%'}
+				</label>
+				<input type="radio" name="maxSkill" value="6" class="player-skill-input maxSkill"
+					   id="player-skill-6"/>
+				<label class="player-skill bg-purple-500 rounded px-2" style="height: 2.5rem; width: auto;"
+					   for="player-skill-3">
+					{lang 'Maximální herní úroveň', context:'game.player'}: {svgIcon '6-stars', 'auto', '100%'}
+				</label>
+				<button type="button" class="btn btn-danger ms-2" id="clear-all" data-toggle="tooltip"
+						title="{lang 'Smazat vše', context: 'actions'}">
 					<i class="fa-solid fa-trash"></i>
 				</button>
 			</div>
@@ -159,6 +172,18 @@
 					   for="team-color-{$vest->vestNum}-{$key}">&nbsp;</label>
 			{/foreach}
 		</div>
+		<div>
+			<input type="radio" name="player[{$vest->vestNum}][vip]" value="0" class="player-vip-input"
+				   id="player-vip-{$vest->vestNum}-0" checked/>
+			<label class="player-vip bg-secondary" for="player-vip-{$vest->vestNum}-1">
+				VIP
+			</label>
+			<input type="radio" name="player[{$vest->vestNum}][vip]" value="1" class="player-vip-input"
+				   id="player-vip-{$vest->vestNum}-1"/>
+			<label class="player-vip bg-gold" for="player-vip-{$vest->vestNum}-0">
+				VIP
+			</label>
+		</div>
 		<div data-toggle="tooltip" title="{lang 'Herní schopnost hráče', context: 'game.player'}">
 			<input type="radio" name="player[{$vest->vestNum}][skill]" value="1" class="player-skill-input"
 				   id="player-skill-{$vest->vestNum}-1" checked/>
@@ -172,8 +197,23 @@
 			</label>
 			<input type="radio" name="player[{$vest->vestNum}][skill]" value="3" class="player-skill-input"
 				   id="player-skill-{$vest->vestNum}-3"/>
-			<label class="player-skill bg-danger" for="player-skill-{$vest->vestNum}-1">
+			<label class="player-skill bg-danger maxSkillSwitch" for="player-skill-{$vest->vestNum}-1">
 				{svgIcon '3-stars'}
+			</label>
+			<input type="radio" name="player[{$vest->vestNum}][skill]" value="4" class="player-skill-input"
+				   id="player-skill-{$vest->vestNum}-4"/>
+			<label class="player-skill bg-green" for="player-skill-{$vest->vestNum}-5">
+				{svgIcon '4-stars'}
+			</label>
+			<input type="radio" name="player[{$vest->vestNum}][skill]" value="5" class="player-skill-input"
+				   id="player-skill-{$vest->vestNum}-5"/>
+			<label class="player-skill bg-gold-700" for="player-skill-{$vest->vestNum}-6">
+				{svgIcon '5-stars'}
+			</label>
+			<input type="radio" name="player[{$vest->vestNum}][skill]" value="6" class="player-skill-input"
+				   id="player-skill-{$vest->vestNum}-6"/>
+			<label class="player-skill bg-purple-500" for="player-skill-{$vest->vestNum}-1">
+				{svgIcon '6-stars'}
 			</label>
 		</div>
 		<button type="button" class="btn btn-danger clear">

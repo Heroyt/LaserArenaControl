@@ -271,6 +271,7 @@ class ResultsParser extends AbstractResultsParser
 					$keysVests[$player->vest] = $currKey++;
 					$player->name = $args[1];
 					$player->teamNum = (int) $args[2];
+					$player->vip = $args[4] === '1';
 					break;
 
 				// TEAM contains team info

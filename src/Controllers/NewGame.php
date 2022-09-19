@@ -2,13 +2,20 @@
 
 namespace App\Controllers;
 
+use App\Core\Info;
+use App\Exceptions\GameModeNotFoundException;
 use App\GameModels\Factory\GameFactory;
 use App\GameModels\Factory\GameModeFactory;
 use App\GameModels\Vest;
 use App\Models\MusicMode;
+use JsonException;
 use Lsr\Core\Controller;
+use Lsr\Core\Exceptions\ValidationException;
 use Lsr\Core\Requests\Request;
 use Lsr\Core\Routing\Attributes\Post;
+use Lsr\Exceptions\TemplateDoesNotExistException;
+use Lsr\Helpers\Tools\Strings;
+use Throwable;
 
 class NewGame extends Controller
 {
@@ -16,6 +23,13 @@ class NewGame extends Controller
 	protected string $title       = 'New game';
 	protected string $description = '';
 
+	/**
+	 * @return void
+	 * @throws GameModeNotFoundException
+	 * @throws ValidationException
+	 * @throws TemplateDoesNotExistException
+	 * @throws Throwable
+	 */
 	public function show() : void {
 		$this->params['loadGame'] = !empty($_GET['game']) ? GameFactory::getByCode($_GET['game']) : null;
 		$this->params['system'] = $_GET['system'] ?? first(GameFactory::getSupportedSystems());
@@ -33,10 +47,68 @@ class NewGame extends Controller
 	 * @param Request $request
 	 *
 	 * @return never
+	 * @throws JsonException
+	 * @throws TemplateDoesNotExistException
 	 */
 	#[Post('/')]
 	public function process(Request $request) : never {
 		bdump($request->post);
+		$data = [
+			'meta'    => [
+				'music' => empty($request->post['music']) ? null : (int) $request->post['music'],
+			],
+			'players' => [],
+			'teams'   => [],
+		];
+
+		$teams = [];
+
+		// Validate and parse players
+		foreach ($request->post['player'] as $vest => $player) {
+			if (empty(trim($player['name']))) {
+				continue;
+			}
+			$asciiName = substr(Strings::toAscii($player['name']), 0, 12);
+			if ($player['name'] !== $asciiName) {
+				$data['meta']['p'.$vest.'n'] = $player['name'];
+			}
+			$data['players'][] = [
+				'vest' => $vest,
+				'name' => $asciiName,
+				'team' => $player['team'],
+				'vip'  => ((int) $player['vip']) === 1,
+			];
+			if (!isset($teams[(string) $player['team']])) {
+				$teams[(string) $player['team']] = 0;
+			}
+			$teams[(string) $player['team']]++;
+		}
+
+		foreach ($request->post['team'] as $key => $team) {
+			if (!isset($teams[(string) $key])) {
+				continue;
+			}
+			$asciiName = Strings::toAscii($team['name']);
+			if ($team['name'] !== $asciiName) {
+				$data['meta']['t'.$key.'n'] = $team['name'];
+			}
+			$data['teams'][] = [
+				'key'         => $key,
+				'name'        => $asciiName,
+				'playerCount' => $teams[(string) $key],
+			];
+		}
+
+		$data['meta']['hash'] = md5(json_encode($data['players'], JSON_THROW_ON_ERROR));
+
+		bdump($data);
+		// Render the game info into a load file
+		$content = $this->latte->viewToString('gameFiles/evo5', $data);
+		$loadDir = LMX_DIR.Info::get('evo5_load_file', 'games/');
+		if (file_exists($loadDir) && is_dir($loadDir)) {
+			file_put_contents($loadDir.'0000.game', $content);
+		}
+		bdump($content);
 		$this->respond('ok');
 	}
 

@@ -7,6 +7,7 @@ export interface PhpDateTime {
 export interface PlayerData {
 	id?: number,
 	name: string,
+	vip?: boolean,
 	score?: number,
 	skill: number,
 	vest?: number,

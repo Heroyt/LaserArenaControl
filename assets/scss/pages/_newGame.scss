@@ -222,19 +222,22 @@ label.team-color {
 	display: none;
 }
 
-label.player-skill {
+label.player-skill,
+label.player-vip {
 	align-items: center;
 	cursor: pointer;
 	display: none;
+	height: 100%;
 	justify-content: center;
 	position: relative;
 	width: 2.5rem;
 
-	.player-skill-input:checked + & {
+	input[type="radio"]:checked + & {
 		display: flex;
 	}
 }
 
-.player-skill-input {
+.player-skill-input,
+.player-vip-input {
 	display: none;
 }

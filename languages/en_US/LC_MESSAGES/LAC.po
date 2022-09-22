@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: English\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2022-09-22 13:45\n"
+"PO-Revision-Date: 2022-09-22 14:52\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -1988,16 +1988,16 @@ msgstr "Player's skill level"
 
 # /templates/pages/games-list/index.latte:73
 msgid "Znovu spočítat herní úroveň"
-msgstr ""
+msgstr "Calculate players' skill level again"
 
 # /templates/pages/games-list/index.latte:80
 # /templates/pages/games-list/index.latte:83
 msgid "Přepnout na sólo mód"
-msgstr ""
+msgstr "Switch to solo mode"
 
 # /config/nav/menu.php:54
 msgid "Music"
-msgstr ""
+msgstr "Music"
 
 # /templates/pages/settings/music.latte:13
 # /templates/pages/settings/music.latte:11
@@ -2005,7 +2005,7 @@ msgstr ""
 # /templates/pages/settings/music.latte:18
 msgctxt "game"
 msgid "Hudební módy"
-msgstr ""
+msgstr "Music modes"
 
 # /templates/pages/settings/music.latte:16
 # /templates/pages/settings/music.latte:18
@@ -2018,7 +2018,7 @@ msgstr ""
 # /templates/pages/settings/music.latte:28
 msgctxt "actions"
 msgid "Upload"
-msgstr ""
+msgstr "Upload"
 
 # /src/Controllers/MusicSettings.php:46
 # /src/Controllers/MusicSettings.php:84
@@ -2032,23 +2032,23 @@ msgstr ""
 # /src/Controllers/MusicSettings.php:141
 msgctxt "form"
 msgid "Saved successfully"
-msgstr ""
+msgstr "Saved successfully"
 
 # /src/Controllers/MusicSettings.php:81
 # /src/Controllers/MusicSettings.php:84
 msgctxt "errors"
 msgid "No file uploaded"
-msgstr ""
+msgstr "No file was uploaded"
 
 # /src/Controllers/MusicSettings.php:55
 msgctxt "errors"
 msgid "Error while uploading a file."
-msgstr ""
+msgstr "Error while uploading a file."
 
 # /src/Controllers/MusicSettings.php:63
 msgctxt "errors"
 msgid "Uploaded file already exists"
-msgstr ""
+msgstr "Uploaded file already exists"
 
 # /templates/pages/settings/music.latte:50
 # /templates/pages/settings/music.latte:52
@@ -2058,12 +2058,12 @@ msgstr ""
 # /templates/pages/settings/music.latte:60
 msgctxt "actions"
 msgid "Smazat"
-msgstr ""
+msgstr "Delete"
 
 # /src/Controllers/MusicSettings.php:167
 msgctxt "errors"
 msgid "Failed to delete the music file"
-msgstr ""
+msgstr "Failed to delete the music file"
 
 # /templates/pages/settings/music.latte:41
 # /templates/pages/settings/modes.latte:77
@@ -2072,23 +2072,23 @@ msgstr ""
 # /templates/pages/settings/modes.latte:45
 msgctxt "actions"
 msgid "Uložit"
-msgstr ""
+msgstr "Save"
 
 # /templates/pages/settings/music.latte:41
 msgctxt "actions"
 msgid "Save"
-msgstr ""
+msgstr "Save"
 
 # /templates/pages/settings/music.latte:57
 # /src/Controllers/Api/Helpers.php:20
 msgctxt "actions"
 msgid "Přehrát"
-msgstr ""
+msgstr "Play"
 
 # /src/Controllers/Api/Helpers.php:20
 msgctxt "actions"
 msgid "Zastavit"
-msgstr ""
+msgstr "Stop"
 
 # /templates/pages/new-game/index.latte:42
 # /templates/pages/new-game/index.latte:47
@@ -2096,12 +2096,12 @@ msgstr ""
 # /templates/pages/new-game/index.latte:49
 msgctxt "game.player"
 msgid "Maximální herní úroveň"
-msgstr ""
+msgstr "Maximum skill level"
 
 # /templates/pages/new-game/index.latte:52
 msgctxt "actions"
 msgid "Smazat vše"
-msgstr ""
+msgstr "Delete all"
 
 # /templates/pages/settings/modes.latte:15
 # /templates/pages/settings/modes.latte:33
@@ -2113,7 +2113,7 @@ msgstr ""
 # /templates/pages/settings/modes.latte:203
 # /templates/pages/settings/modes.latte:213
 msgid "Název"
-msgstr ""
+msgstr "Name"
 
 # /templates/pages/settings/modes.latte:20
 # /templates/pages/settings/modes.latte:39
@@ -2125,7 +2125,7 @@ msgstr ""
 # /templates/pages/settings/modes.latte:210
 # /templates/pages/settings/modes.latte:220
 msgid "Název v konzoli"
-msgstr ""
+msgstr "Name in console"
 
 # /templates/pages/settings/modes.latte:26
 # /templates/pages/settings/modes.latte:60
@@ -2138,7 +2138,7 @@ msgstr ""
 # /templates/pages/settings/modes.latte:45
 msgctxt "actions"
 msgid "Odeslat"
-msgstr ""
+msgstr "Send"
 
 # /templates/pages/settings/modes.latte:48
 # /templates/pages/settings/modes.latte:49
@@ -2150,7 +2150,7 @@ msgstr ""
 # /templates/pages/settings/modes.latte:231
 msgctxt "game.modes"
 msgid "Upravit variace"
-msgstr ""
+msgstr "Edit variations"
 
 # /templates/pages/settings/modes.latte:52
 # /templates/pages/settings/modes.latte:54
@@ -2162,7 +2162,7 @@ msgstr ""
 # /templates/pages/settings/modes.latte:236
 msgctxt "game.modes"
 msgid "Upravit zobrazení výsledků"
-msgstr ""
+msgstr "Edit shown result statistics"
 
 # /templates/pages/settings/modes.latte:70
 # /templates/pages/settings/modes.latte:72
@@ -2173,7 +2173,7 @@ msgstr ""
 # /templates/pages/settings/modes.latte:56
 msgctxt "game.modes"
 msgid "Variace módu"
-msgstr ""
+msgstr "Mode variations"
 
 # /templates/pages/settings/modes.latte:87
 # /templates/pages/settings/modes.latte:118
@@ -2186,7 +2186,7 @@ msgstr ""
 # /templates/pages/settings/modes.latte:166
 msgctxt "game.modes"
 msgid "Název variace"
-msgstr ""
+msgstr "Variation name"
 
 # /templates/pages/settings/modes.latte:88
 # /templates/pages/settings/modes.latte:119
@@ -2199,7 +2199,7 @@ msgstr ""
 # /templates/pages/settings/modes.latte:167
 msgctxt "game.modes"
 msgid "Hodnota variace"
-msgstr ""
+msgstr "Variation value"
 
 # /templates/pages/settings/modes.latte:89
 # /templates/pages/settings/modes.latte:120
@@ -2212,7 +2212,7 @@ msgstr ""
 # /templates/pages/settings/modes.latte:168
 msgctxt "game.modes"
 msgid "Přípona variace k módu v konzoli"
-msgstr ""
+msgstr "Variation suffix in console"
 
 # /templates/pages/settings/modes.latte:90
 # /templates/pages/settings/modes.latte:121
@@ -2225,7 +2225,7 @@ msgstr ""
 # /templates/pages/settings/modes.latte:169
 msgctxt "game.modes"
 msgid "Existující variace"
-msgstr ""
+msgstr "Existing variations"
 
 # /templates/pages/settings/modes.latte:91
 # /templates/pages/settings/modes.latte:92
@@ -2239,7 +2239,7 @@ msgstr ""
 # /templates/pages/settings/modes.latte:171
 msgctxt "actions"
 msgid "Přidat"
-msgstr ""
+msgstr "Add"
 
 # /templates/pages/settings/modes.latte:92
 # /templates/pages/settings/modes.latte:93
@@ -2253,7 +2253,7 @@ msgstr ""
 # /templates/pages/settings/modes.latte:172
 msgctxt "actions"
 msgid "Vytvořit"
-msgstr ""
+msgstr "Create"
 
 # /templates/pages/settings/modes.latte:91
 # /templates/pages/settings/modes.latte:122
@@ -2266,7 +2266,7 @@ msgstr ""
 # /templates/pages/settings/modes.latte:170
 msgctxt "game.modes"
 msgid "Nová variace"
-msgstr ""
+msgstr "New variation"
 
 # /templates/pages/settings/modes.latte:94
 # /templates/pages/settings/modes.latte:125
@@ -2279,7 +2279,7 @@ msgstr ""
 # /templates/pages/settings/modes.latte:173
 msgctxt "errors"
 msgid "Název nesmí být prázdný"
-msgstr ""
+msgstr "The name cannot be empty"
 
 # /templates/pages/settings/modes.latte:95
 # /templates/pages/settings/modes.latte:126
@@ -2292,7 +2292,7 @@ msgstr ""
 # /templates/pages/settings/modes.latte:174
 msgctxt "errors"
 msgid "Variace v módu již existuje"
-msgstr ""
+msgstr "Variation already exists in this mode"
 
 # /templates/pages/settings/modes.latte:37
 # /templates/pages/settings/modes.latte:45
@@ -2306,7 +2306,7 @@ msgstr ""
 # /templates/pages/settings/modes.latte:219
 msgctxt "game.modes"
 msgid "Herní mód"
-msgstr ""
+msgstr "Game mode"
 
 # /templates/pages/settings/modes.latte:91
 # /templates/pages/settings/modes.latte:100
@@ -2316,7 +2316,7 @@ msgstr ""
 # /templates/pages/settings/modes.latte:75
 msgctxt "game.modes"
 msgid "Nastavení zobrazených statistik na výsledcích"
-msgstr ""
+msgstr "Settings of shown result statistics"
 
 # /templates/pages/settings/modes.latte:136
 # /templates/pages/settings/modes.latte:162
@@ -2329,7 +2329,7 @@ msgstr ""
 # /templates/pages/settings/modes.latte:249
 msgctxt "game.modes.settings"
 msgid "Veřejný"
-msgstr ""
+msgstr "Public"
 
 # /templates/pages/settings/modes.latte:138
 # /templates/pages/settings/modes.latte:139
@@ -2343,7 +2343,7 @@ msgstr ""
 # /templates/pages/settings/modes.latte:252
 msgctxt "game.modes.settings"
 msgid "Pokud má být herní mód zobrazován veřejně v rozhraní pro zadání hry hráči (na tabletu)."
-msgstr ""
+msgstr "Indicates if the game mode should be visible publically in the players' form interface (on the tablet)."
 
 # /templates/pages/settings/modes.latte:136
 # /templates/pages/settings/modes.latte:162
@@ -2356,7 +2356,7 @@ msgstr ""
 # /templates/pages/settings/modes.latte:249
 msgctxt "game.modes.settings"
 msgid "Miny"
-msgstr ""
+msgstr "Mines"
 
 # /templates/pages/settings/modes.latte:138
 # /templates/pages/settings/modes.latte:139
@@ -2370,7 +2370,7 @@ msgstr ""
 # /templates/pages/settings/modes.latte:252
 msgctxt "game.modes.settings"
 msgid "Pokud se mají zobrazovat statistiky min."
-msgstr ""
+msgstr "Indicates if pod statistics should be shown."
 
 # /templates/pages/settings/modes.latte:136
 # /templates/pages/settings/modes.latte:162
@@ -2383,7 +2383,7 @@ msgstr ""
 # /templates/pages/settings/modes.latte:249
 msgctxt "game.modes.settings"
 msgid "Vítěz"
-msgstr ""
+msgstr "Winner"
 
 # /templates/pages/settings/modes.latte:138
 # /templates/pages/settings/modes.latte:139
@@ -2410,7 +2410,7 @@ msgstr ""
 # /templates/pages/settings/modes.latte:249
 msgctxt "game.modes.settings"
 msgid "Týmy"
-msgstr ""
+msgstr "Teams"
 
 # /templates/pages/settings/modes.latte:138
 # /templates/pages/settings/modes.latte:139
@@ -2437,7 +2437,7 @@ msgstr ""
 # /templates/pages/settings/modes.latte:249
 msgctxt "game.modes.settings"
 msgid "Hráči"
-msgstr ""
+msgstr "Players"
 
 # /templates/pages/settings/modes.latte:138
 # /templates/pages/settings/modes.latte:139
@@ -2464,7 +2464,7 @@ msgstr ""
 # /templates/pages/settings/modes.latte:249
 msgctxt "game.modes.settings"
 msgid "Zásahy hráčů"
-msgstr ""
+msgstr "Player hits"
 
 # /templates/pages/settings/modes.latte:138
 # /templates/pages/settings/modes.latte:139
@@ -2498,7 +2498,7 @@ msgstr ""
 # /templates/pages/settings/modes.latte:148
 msgctxt "game.modes.settings"
 msgid "Ti nej"
-msgstr ""
+msgstr "The best"
 
 # /templates/pages/settings/modes.latte:138
 # /templates/pages/settings/modes.latte:139
@@ -2525,7 +2525,7 @@ msgstr ""
 # /templates/pages/settings/modes.latte:249
 msgctxt "game.modes.settings"
 msgid "Pořadí dne"
-msgstr ""
+msgstr "Today's leaderboard"
 
 # /templates/pages/settings/modes.latte:138
 # /templates/pages/settings/modes.latte:139
@@ -2552,7 +2552,7 @@ msgstr ""
 # /templates/pages/settings/modes.latte:249
 msgctxt "game.modes.settings"
 msgid "Skóre hráče"
-msgstr ""
+msgstr "Player's score"
 
 # /templates/pages/settings/modes.latte:138
 # /templates/pages/settings/modes.latte:139
@@ -2579,7 +2579,7 @@ msgstr ""
 # /templates/pages/settings/modes.latte:249
 msgctxt "game.modes.settings"
 msgid "Výstřely hráče"
-msgstr ""
+msgstr "Player's shots"
 
 # /templates/pages/settings/modes.latte:138
 # /templates/pages/settings/modes.latte:139
@@ -2605,7 +2605,7 @@ msgstr ""
 # /templates/pages/settings/modes.latte:249
 msgctxt "game.modes.settings"
 msgid "Výstřely mimo hráče"
-msgstr ""
+msgstr "Player's missed shots"
 
 # /templates/pages/settings/modes.latte:165
 # /templates/pages/settings/modes.latte:174
@@ -2629,7 +2629,7 @@ msgstr ""
 # /templates/pages/settings/modes.latte:249
 msgctxt "game.modes.settings"
 msgid "Přesnost hráče"
-msgstr ""
+msgstr "Player's accuracy"
 
 # /templates/pages/settings/modes.latte:165
 # /templates/pages/settings/modes.latte:174
@@ -2653,7 +2653,7 @@ msgstr ""
 # /templates/pages/settings/modes.latte:249
 msgctxt "game.modes.settings"
 msgid "Miny hráče"
-msgstr ""
+msgstr "Player's pods"
 
 # /templates/pages/settings/modes.latte:165
 # /templates/pages/settings/modes.latte:174
@@ -2677,7 +2677,7 @@ msgstr ""
 # /templates/pages/settings/modes.latte:249
 msgctxt "game.modes.settings"
 msgid "Zásahy hráče"
-msgstr ""
+msgstr "Player's hits"
 
 # /templates/pages/settings/modes.latte:165
 # /templates/pages/settings/modes.latte:174
@@ -2701,7 +2701,7 @@ msgstr ""
 # /templates/pages/settings/modes.latte:249
 msgctxt "game.modes.settings"
 msgid "Zásahy vlastních hráče"
-msgstr ""
+msgstr "Player's teammate hits"
 
 # /templates/pages/settings/modes.latte:165
 # /templates/pages/settings/modes.latte:174
@@ -2725,7 +2725,7 @@ msgstr ""
 # /templates/pages/settings/modes.latte:249
 msgctxt "game.modes.settings"
 msgid "K:D hráče"
-msgstr ""
+msgstr "Player's K:D"
 
 # /templates/pages/settings/modes.latte:165
 # /templates/pages/settings/modes.latte:174
@@ -2749,7 +2749,7 @@ msgstr ""
 # /templates/pages/settings/modes.latte:249
 msgctxt "game.modes.settings"
 msgid "Oblíbený cíl / Největší zabiják hráče"
-msgstr ""
+msgstr "Player's favourite target / the biggest killer"
 
 # /templates/pages/settings/modes.latte:165
 # /templates/pages/settings/modes.latte:174
@@ -2773,7 +2773,7 @@ msgstr ""
 # /templates/pages/settings/modes.latte:249
 msgctxt "game.modes.settings"
 msgid "Životy hráče"
-msgstr ""
+msgstr "Player's lives"
 
 # /templates/pages/settings/modes.latte:165
 # /templates/pages/settings/modes.latte:174
@@ -2797,7 +2797,7 @@ msgstr ""
 # /templates/pages/settings/modes.latte:249
 msgctxt "game.modes.settings"
 msgid "Skóre týmu"
-msgstr ""
+msgstr "Team's score"
 
 # /templates/pages/settings/modes.latte:165
 # /templates/pages/settings/modes.latte:174
@@ -2821,7 +2821,7 @@ msgstr ""
 # /templates/pages/settings/modes.latte:249
 msgctxt "game.modes.settings"
 msgid "Přesnost týmu"
-msgstr ""
+msgstr "Team's accuracy"
 
 # /templates/pages/settings/modes.latte:165
 # /templates/pages/settings/modes.latte:174
@@ -2845,7 +2845,7 @@ msgstr ""
 # /templates/pages/settings/modes.latte:249
 msgctxt "game.modes.settings"
 msgid "Výstřely týmu"
-msgstr ""
+msgstr "Team's shots"
 
 # /templates/pages/settings/modes.latte:165
 # /templates/pages/settings/modes.latte:174
@@ -2869,7 +2869,7 @@ msgstr ""
 # /templates/pages/settings/modes.latte:249
 msgctxt "game.modes.settings"
 msgid "Zásahy týmu"
-msgstr ""
+msgstr "Team's hits"
 
 # /templates/pages/settings/modes.latte:165
 # /templates/pages/settings/modes.latte:174
@@ -2893,7 +2893,7 @@ msgstr ""
 # /templates/pages/settings/modes.latte:249
 msgctxt "game.modes.settings"
 msgid "Ztráty základny týmu"
-msgstr ""
+msgstr "Team's lost bases"
 
 # /templates/pages/settings/modes.latte:165
 # /templates/pages/settings/modes.latte:174
@@ -2917,7 +2917,7 @@ msgstr ""
 # /templates/pages/settings/modes.latte:249
 msgctxt "game.modes.settings"
 msgid "Absolutní vítěz"
-msgstr ""
+msgstr "Absolute winner"
 
 # /templates/pages/settings/modes.latte:165
 # /templates/pages/settings/modes.latte:174
@@ -2941,7 +2941,7 @@ msgstr ""
 # /templates/pages/settings/modes.latte:249
 msgctxt "game.modes.settings"
 msgid "Největí terminátor"
-msgstr ""
+msgstr "Terminator"
 
 # /templates/pages/settings/modes.latte:165
 # /templates/pages/settings/modes.latte:174
@@ -2965,7 +2965,7 @@ msgstr ""
 # /templates/pages/settings/modes.latte:249
 msgctxt "game.modes.settings"
 msgid "Objekt největšího zájmu"
-msgstr ""
+msgstr "The biggest target"
 
 # /templates/pages/settings/modes.latte:165
 # /templates/pages/settings/modes.latte:174
@@ -2989,7 +2989,7 @@ msgstr ""
 # /templates/pages/settings/modes.latte:249
 msgctxt "game.modes.settings"
 msgid "Hráč s nejlepší muškou"
-msgstr ""
+msgstr "The best sniper"
 
 # /templates/pages/settings/modes.latte:165
 # /templates/pages/settings/modes.latte:174
@@ -3013,7 +3013,7 @@ msgstr ""
 # /templates/pages/settings/modes.latte:249
 msgctxt "game.modes.settings"
 msgid "Zabiják vlastního týmu"
-msgstr ""
+msgstr "Team-killer"
 
 # /templates/pages/settings/modes.latte:165
 # /templates/pages/settings/modes.latte:174
@@ -3037,7 +3037,7 @@ msgstr ""
 # /templates/pages/settings/modes.latte:249
 msgctxt "game.modes.settings"
 msgid "Největší vlasňák"
-msgstr ""
+msgstr "Hated by allies"
 
 # /templates/pages/settings/modes.latte:165
 # /templates/pages/settings/modes.latte:174
@@ -3061,7 +3061,7 @@ msgstr ""
 # /templates/pages/settings/modes.latte:249
 msgctxt "game.modes.settings"
 msgid "Nejúspornější střelec"
-msgstr ""
+msgstr "Most economical"
 
 # /templates/pages/settings/modes.latte:165
 # /templates/pages/settings/modes.latte:174
@@ -3085,7 +3085,7 @@ msgstr ""
 # /templates/pages/settings/modes.latte:249
 msgctxt "game.modes.settings"
 msgid "Největší mimoň"
-msgstr ""
+msgstr "Loves shooting the ground"
 
 # /templates/pages/settings/modes.latte:165
 # /templates/pages/settings/modes.latte:174
@@ -3109,7 +3109,7 @@ msgstr ""
 # /templates/pages/settings/modes.latte:249
 msgctxt "game.modes.settings"
 msgid "Drtič min"
-msgstr ""
+msgstr "Pod crusher"
 
 # /templates/pages/settings/modes.latte:165
 # /templates/pages/settings/modes.latte:174
@@ -3132,7 +3132,7 @@ msgstr ""
 # /templates/pages/settings/modes.latte:88
 msgctxt "game.modes.settings"
 msgid "Obecné"
-msgstr ""
+msgstr "General"
 
 # /templates/pages/settings/modes.latte:102
 # /templates/pages/settings/modes.latte:112
@@ -3143,7 +3143,7 @@ msgstr ""
 # /templates/pages/settings/modes.latte:97
 msgctxt "game.modes.settings"
 msgid "Části"
-msgstr ""
+msgstr "Parts"
 
 # /templates/pages/settings/modes.latte:103
 # /templates/pages/settings/modes.latte:112
@@ -3170,7 +3170,7 @@ msgstr ""
 # /templates/pages/settings/modes.latte:134
 # /templates/pages/settings/modes.latte:149
 msgid "Varování"
-msgstr ""
+msgstr "Warning"
 
 # /templates/pages/settings/modes.latte:103
 # /templates/pages/settings/modes.latte:112
@@ -3198,7 +3198,7 @@ msgstr ""
 # /templates/pages/settings/modes.latte:150
 msgctxt "game.modes.settings"
 msgid "Na výsledcích se nezobrazují vždy všechny kategorie, ale jen ty které se vejdou."
-msgstr ""
+msgstr "Not all categories are shown in the results."
 
 # /templates/pages/settings/modes.latte:111
 # /templates/pages/settings/modes.latte:124
@@ -3209,7 +3209,7 @@ msgstr ""
 # /templates/pages/settings/modes.latte:113
 msgctxt "game.modes.settings"
 msgid "Výsledky hráče"
-msgstr ""
+msgstr "Player's results"
 
 # /templates/pages/settings/modes.latte:124
 # /templates/pages/settings/modes.latte:140
@@ -3220,7 +3220,7 @@ msgstr ""
 # /templates/pages/settings/modes.latte:133
 msgctxt "game.modes.settings"
 msgid "Výsledky týmů"
-msgstr ""
+msgstr "Team's results"
 
 # /templates/pages/settings/modes.latte:52
 # /templates/pages/settings/modes.latte:200
@@ -3228,7 +3228,7 @@ msgstr ""
 # /templates/pages/settings/modes.latte:225
 msgctxt "game.modes"
 msgid "Popis"
-msgstr ""
+msgstr "Description"
 
 # /templates/pages/settings/modes.latte:55
 # /templates/pages/settings/modes.latte:53
@@ -3236,7 +3236,7 @@ msgstr ""
 # /templates/pages/settings/modes.latte:216
 # /templates/pages/settings/modes.latte:226
 msgid "Popis"
-msgstr ""
+msgstr "Description"
 
 # /templates/pages/settings/modes.latte:52
 # /templates/pages/settings/modes.latte:200
@@ -3244,7 +3244,7 @@ msgstr ""
 # /templates/pages/settings/modes.latte:225
 msgctxt "gameModes"
 msgid "Klasická týmová hra."
-msgstr ""
+msgstr "Classic team game."
 
 # /templates/pages/settings/modes.latte:52
 # /templates/pages/settings/modes.latte:200
@@ -3252,7 +3252,7 @@ msgstr ""
 # /templates/pages/settings/modes.latte:225
 msgctxt "gameModes"
 msgid "Klasická hra všichni proti všem."
-msgstr ""
+msgstr "Classic free for all game."
 
 # /templates/pages/settings/modes.latte:52
 # /templates/pages/settings/modes.latte:200
@@ -3260,60 +3260,55 @@ msgstr ""
 # /templates/pages/settings/modes.latte:225
 msgctxt "gameModes"
 msgid "Klasická hra. Jeden Marco má zavázané oči a hledá na vybrané části arény ostatní hráče. Kdykoliv může zakřičet \"Marco\", kdy potom musí ostatní hráči ztuhnout na místě, kde byly a zakřičet \"Polo\". Marco poté může udělat 3 kroky a vystřelit. Jakmile vystřelí, hráči se můžou zase pohybovat. Hra končí po vypršení času, pokud Marco chytí všechny hráče, nebo Marcovi dojdou náboje."
-msgstr ""
+msgstr "Classic game. One Marco is blindfolded and searches for other players in the selected arena space. After shouting \"Marco\" anytime during the game, other players must freeze on the spot and shout \"Polo\". Marco can then make three steps and shoot. As soon as Marco shoots, other players can move again. The game ends after the time limit if Marco catches all players or if Marco runs out of ammo."
 
 # /templates/pages/settings/modes.latte:36
 # /templates/pages/settings/modes.latte:37
 msgctxt "actions"
 msgid "Přidat týmový mód"
-msgstr ""
+msgstr "Add team mode"
 
 # /templates/pages/settings/modes.latte:39
 # /templates/pages/settings/modes.latte:40
 msgctxt "actions"
 msgid "Přidat sólo mód"
-msgstr ""
+msgstr "Add solo mode"
 
 # /templates/pages/settings/modes.latte:190
 # /templates/pages/settings/modes.latte:198
 msgctxt "game.modes.types"
 msgid "Týmový"
-msgstr ""
+msgstr "Team"
 
 # /templates/pages/settings/modes.latte:191
 # /templates/pages/settings/modes.latte:200
 msgctxt "game.modes.types"
 msgid "Sólo"
-msgstr ""
+msgstr "Solo"
 
 # /templates/pages/settings/modes.latte:193
 # /templates/pages/settings/modes.latte:202
 msgid "Typ"
-msgstr ""
+msgstr "Type"
 
 # /templates/pages/settings/modes.latte:171
 msgctxt "game.modes"
 msgid "Opravdu chcete herní mód vymazat? Akce nepůjde vrátit."
-msgstr ""
+msgstr "Are you sure you want to delete this game mode? This action is irreversible."
 
 # /src/Controllers/ModesSettings.php:314
 # /templates/pages/settings/modes.latte:212
 msgctxt "gameModes"
 msgid "Nový mód"
-msgstr ""
+msgstr "New game mode"
 
 # /templates/pages/settings/modes.latte:212
 msgctxt "gameModes"
 msgid "Test"
-msgstr ""
+msgstr "Test"
 
 # /templates/pages/settings/modes.latte:212
 msgctxt "gameModes"
 msgid "Test - solo"
-msgstr ""
-
-# /templates/pages/settings/modes.latte:225
-msgctxt "gameModes"
-msgid "kajsdnaksjdnasd"
-msgstr ""
+msgstr "Test - solo"
 

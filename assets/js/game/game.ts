@@ -2,7 +2,7 @@ import Player from "./player";
 import Team from "./team";
 import {shuffle} from "../functions";
 import {Tooltip} from "bootstrap";
-import {GameData} from './gameInterfaces';
+import {GameData, Variation, VariationsValue} from './gameInterfaces';
 
 declare global {
 	const messages: { [index: string]: string };
@@ -23,6 +23,7 @@ export default class Game {
 	$musicMode: HTMLSelectElement;
 	$teams: NodeListOf<HTMLInputElement>;
 	$maxSkill: NodeListOf<HTMLInputElement>;
+	$modeVariations: HTMLDivElement;
 
 	$shuffleTeams: HTMLButtonElement;
 	$shuffleFairTeams: HTMLButtonElement;
@@ -46,6 +47,7 @@ export default class Game {
 		this.$musicMode = document.getElementById('music-select') as HTMLSelectElement;
 		this.$teams = document.querySelectorAll('#teams-random .team-color-input');
 		this.$maxSkill = document.querySelectorAll('.maxSkill');
+		this.$modeVariations = document.getElementById('game-mode-variations') as HTMLDivElement;
 
 		this.$shuffleTeams = document.getElementById('random-teams') as HTMLButtonElement;
 		this.$shuffleFairTeams = document.getElementById('random-fair-teams') as HTMLButtonElement;
@@ -85,6 +87,10 @@ export default class Game {
 		});
 		console.log(this);
 
+		const variations: { [index: number]: VariationsValue[] } = JSON.parse((this.$gameMode.querySelector(`option[value="${this.$gameMode.value}"]`) as HTMLOptionElement).dataset.variations);
+		console.log(variations);
+		this.updateModeVariations(variations);
+
 		this.initEvents();
 	}
 
@@ -104,6 +110,10 @@ export default class Game {
 					elem.classList.remove('d-none');
 				}
 			});
+
+			const variations: { [index: number]: VariationsValue[] } = JSON.parse((this.$gameMode.querySelector(`option[value="${this.$gameMode.value}"]`) as HTMLOptionElement).dataset.variations);
+			console.log(variations);
+			this.updateModeVariations(variations);
 
 			this.$gameMode.dispatchEvent(
 				new Event("update", {
@@ -139,6 +149,63 @@ export default class Game {
 				this.updateMaxSkill();
 			});
 		});
+	}
+
+	updateModeVariations(variations: { [index: number]: VariationsValue[] }) {
+		// Clear
+		this.$modeVariations.innerHTML = '';
+
+		Object.values(variations).forEach(data => {
+			this.addVariation(data[0].variation, data);
+		});
+	}
+
+	addVariation(variation: Variation, values: VariationsValue[]) {
+		const wrapper = document.createElement('div');
+		wrapper.classList.add('mb-3', 'mx-3');
+		wrapper.innerHTML = `<h6 class="fw-light">${variation.name}:</h6>`;
+
+		if (values.length < 5) {
+			const group = document.createElement('div');
+			wrapper.appendChild(group);
+			group.classList.add('btn-group');
+			if (values.length === 4) {
+				group.classList.add('btn-group-sm');
+			}
+
+			values.forEach((value, key) => {
+				const input = document.createElement('input');
+				input.type = 'radio';
+				input.classList.add('btn-check');
+				input.name = `variation[${variation.id}]`;
+				input.id = `variation-${variation.id}-${key}`;
+				input.value = value.suffix;
+				if (key === 0) {
+					input.checked = true;
+				}
+				group.appendChild(input);
+				const label = document.createElement('label');
+				label.setAttribute('for', input.id);
+				label.classList.add('btn', 'btn-outline-warning');
+				label.innerText = value.value;
+				group.appendChild(label);
+			});
+		} else {
+			const select = document.createElement('select');
+			select.classList.add('form-select');
+			select.name = `variation[${variation.id}]`;
+			select.id = `variation-${variation.id}`;
+			wrapper.appendChild(select);
+
+			values.forEach((value, key) => {
+				const option = document.createElement('option');
+				option.value = value.suffix;
+				option.innerText = value.value;
+				select.appendChild(option);
+			});
+		}
+
+		this.$modeVariations.appendChild(wrapper);
 	}
 
 	clearAll() {

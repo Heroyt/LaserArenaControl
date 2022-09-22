@@ -64,6 +64,7 @@
 			<div class="input-group">
 				<select name="game-mode" id="game-mode-select" class="form-select">
 					<option n:foreach="$gameModes as $mode" value="{$mode->id}" data-type="{$mode->type->value}"
+															data-variations='{json_encode($mode->getVariations())}'
 															data-description="{lang $mode->description, context: 'gameModes'}">
 						{lang $mode->name, context: 'gameModes'}
 					</option>
@@ -75,6 +76,7 @@
 			</div>
 			<div id="game-mode-description" class="select-description text-muted" data-target="#game-mode-select"></div>
 		</section>
+		<section id="game-mode-variations"></section>
 		<section id="music">
 			<label for="music-select">
 				{lang 'Hudební mód', context: 'game'}:

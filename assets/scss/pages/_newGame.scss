@@ -2,7 +2,7 @@
 	display: grid;
 	grid-gap: 1rem;
 	grid-template-columns: repeat(12, 1fr);
-	grid-template-rows: repeat(10, 3rem);
+	grid-template-rows: repeat(10, auto);
 
 	#controls {
 		grid-column: 1 / 13;
@@ -17,22 +17,31 @@
 
 	#game-mode {
 		grid-column: 7 / 10;
-		grid-row: 2 / 4;
+		grid-row: 2 / 3;
+	}
+
+	#game-mode-variations {
+		align-items: center;
+		display: flex;
+		flex-wrap: wrap;
+		grid-column: 7 / 13;
+		grid-row: 3 / 4;
+		justify-content: space-between;
 	}
 
 	#music {
 		grid-column: 10 / 13;
-		grid-row: 2 / 4;
+		grid-row: 2 / 3;
 	}
 
 	#teams-random {
 		grid-column: 7 / 13;
-		grid-row: 4 / 6;
+		grid-row: 4 / 5;
 	}
 
 	#teams {
 		grid-column: 9 / 11;
-		grid-row: 6 / 13;
+		grid-row: 5 / 13;
 	}
 
 	.vest-num {
@@ -46,10 +55,6 @@
 	}
 
 	@include media-breakpoint-down(lg) {
-
-		& {
-			grid-template-rows: repeat(10, auto);
-		}
 
 		#controls {
 			grid-column: 1 / 13;
@@ -66,28 +71,29 @@
 			grid-row: 2 / 3;
 		}
 
-		#music {
+		#game-mode-variations {
 			grid-column: 9 / 13;
 			grid-row: 3 / 4;
 		}
 
-		#teams-random {
+		#music {
 			grid-column: 9 / 13;
 			grid-row: 4 / 5;
 		}
 
+		#teams-random {
+			grid-column: 9 / 13;
+			grid-row: 5 / 6;
+		}
+
 		#teams {
 			grid-column: 9 / 13;
-			grid-row: 5 / 11;
+			grid-row: 6 / 11;
 		}
 
 	}
 
 	@include media-breakpoint-down(md) {
-
-		& {
-			grid-template-rows: repeat(10, auto);
-		}
 
 		#controls {
 			grid-column: 1 / 13;
@@ -96,12 +102,17 @@
 
 		#vests {
 			grid-column: 1 / 13;
-			grid-row: 4 / 5;
+			grid-row: 5 / 6;
 		}
 
 		#game-mode {
 			grid-column: 1 / 7;
 			grid-row: 2 / 3;
+		}
+
+		#game-mode-variations {
+			grid-column: 1 / 13;
+			grid-row: 3 / 4;
 		}
 
 		#music {
@@ -111,12 +122,12 @@
 
 		#teams-random {
 			grid-column: 1 / 13;
-			grid-row: 3 / 4;
+			grid-row: 4 / 5;
 		}
 
 		#teams {
 			grid-column: 1 / 13;
-			grid-row: 5 / 6;
+			grid-row: 6 / 7;
 		}
 
 	}
@@ -135,7 +146,7 @@
 
 		#vests {
 			grid-column: 1 / 2;
-			grid-row: 5 / 6;
+			grid-row: 6 / 7;
 		}
 
 		#game-mode {
@@ -143,19 +154,24 @@
 			grid-row: 2 / 3;
 		}
 
-		#music {
+		#game-mode-variations {
 			grid-column: 1 / 2;
 			grid-row: 3 / 4;
 		}
 
-		#teams-random {
+		#music {
 			grid-column: 1 / 2;
 			grid-row: 4 / 5;
 		}
 
+		#teams-random {
+			grid-column: 1 / 2;
+			grid-row: 5 / 6;
+		}
+
 		#teams {
 			grid-column: 1 / 2;
-			grid-row: 6 / 7;
+			grid-row: 7 / 8;
 		}
 
 		label.team-color {

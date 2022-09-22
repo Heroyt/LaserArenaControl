@@ -49,3 +49,76 @@ export interface GameData {
 	teams: { [index: string]: TeamData },
 	music: MusicMode | null
 }
+
+interface ModeSettings {
+	public: boolean,
+	mines: boolean,
+	partWin: boolean,
+	partTeams: boolean,
+	partPlayers: boolean,
+	partHits: boolean,
+	partBest: boolean,
+	partBestDay: boolean,
+	playerScore: boolean,
+	playerShots: boolean,
+	playerMiss: boolean,
+	playerAccuracy: boolean,
+	playerMines: boolean,
+	playerPlayers: boolean,
+	playerPlayersTeams: boolean,
+	playerKd: boolean,
+	playerFavourites: boolean,
+	playerLives: boolean,
+	teamScore: boolean,
+	teamAccuracy: boolean,
+	teamShots: boolean,
+	teamHits: boolean,
+	teamZakladny: boolean,
+	bestScore: boolean,
+	bestHits: boolean,
+	bestDeaths: boolean,
+	bestAccuracy: boolean,
+	bestHitsOwn: boolean,
+	bestDeathsOwn: boolean,
+	bestShots: boolean,
+	bestMiss: boolean,
+	bestMines: boolean,
+
+	[index: string]: boolean,
+}
+
+interface GameMode {
+	id: number,
+	name: string,
+	description: string | null,
+	type: 'TEAM' | 'SOLO',
+	loadName: string
+	settings: ModeSettings,
+}
+
+interface Variation {
+	id: number,
+	name: string,
+}
+
+interface VariationsValue {
+	variation: Variation,
+	mode: GameMode,
+	value: string,
+	suffix: string,
+	order: number,
+}
+
+interface VariationCollection {
+	[index: number]: {
+		variation: Variation,
+		values: VariationsValue[]
+	}
+}
+
+interface Music {
+	id: number;
+	name: string;
+	fileName: string;
+	media: string;
+}

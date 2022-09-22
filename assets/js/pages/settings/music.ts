@@ -3,13 +3,8 @@ import axios, {AxiosResponse} from "axios";
 import {initTooltips, lang} from "../../functions";
 import Sortable from "sortablejs";
 import {Tooltip} from "bootstrap";
+import {Music} from "../../game/gameInterfaces";
 
-interface Music {
-	id: number;
-	name: string;
-	fileName: string;
-	media: string;
-}
 
 export default function initMusicSettings() {
 	const uploadInput = document.getElementById('media') as HTMLInputElement;

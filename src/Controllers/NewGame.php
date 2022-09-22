@@ -61,6 +61,18 @@ class NewGame extends Controller
 			'teams'   => [],
 		];
 
+		try {
+			$mode = GameModeFactory::getById($request->post['game-mode'] ?? 0);
+		} catch (GameModeNotFoundException $e) {
+		}
+
+		if (isset($mode)) {
+			$data['meta']['mode'] = $mode->loadName;
+			foreach ($request->post['variation'] ?? [] as $suffix) {
+				$data['meta']['mode'] .= $suffix;
+			}
+		}
+
 		$teams = [];
 
 		// Validate and parse players

@@ -1,19 +1,24 @@
 import {startLoading, stopLoading} from "../../loaders";
-import axios from "axios";
+import axios, {AxiosResponse} from "axios";
 import {initTooltips, lang} from "../../functions";
 import Sortable from "sortablejs";
+import {Tooltip} from "bootstrap";
+
+interface Music {
+	id: number;
+	name: string;
+	fileName: string;
+	media: string;
+}
 
 export default function initMusicSettings() {
-	/**
-	 * @type {HTMLInputElement}
-	 */
-	const uploadInput = document.getElementById('media');
-	const uploadForm = document.getElementById('upload-form');
+	const uploadInput = document.getElementById('media') as HTMLInputElement;
+	const uploadForm = document.getElementById('upload-form') as HTMLFormElement;
 
-	const musicForm = document.getElementById('music-settings-form');
-	const musicWrapper = document.getElementById('musicInputsWrapper');
+	const musicForm = document.getElementById('music-settings-form') as HTMLFormElement;
+	const musicWrapper = document.getElementById('musicInputsWrapper') as HTMLDivElement;
 
-	const notices = document.getElementById('notices');
+	const notices = document.getElementById('notices') as HTMLDivElement;
 	const musicTemplate = document.getElementById('musicInputTemplate').innerHTML;
 
 	if (uploadForm && uploadInput) {
@@ -25,7 +30,7 @@ export default function initMusicSettings() {
 		});
 	}
 
-	document.querySelectorAll('.music-input').forEach(initMusic);
+	(document.querySelectorAll('.music-input') as NodeListOf<HTMLDivElement>).forEach(initMusic);
 
 	const sortableMusic = new Sortable(musicWrapper, {
 		handle: '.counter',
@@ -34,11 +39,7 @@ export default function initMusicSettings() {
 		onSort: recountMusic,
 	});
 
-	/**
-	 * @param index {Number}
-	 * @param files {FileList}
-	 */
-	function upload(index, files) {
+	function upload(index: number, files: FileList) {
 		if (index >= files.length) {
 			stopLoading();
 			return;
@@ -58,10 +59,7 @@ export default function initMusicSettings() {
 			.then(handleResponse)
 			.catch(handleResponse)
 
-		/**
-		 * @param response {AxiosResponse<{errors: String[], notices: {type: String, content: String}[], music: {id: Number, name: String, fileName: String, media: String}[]}>}
-		 */
-		function handleResponse(response) {
+		function handleResponse(response: AxiosResponse<{ errors: string[], notices: { type: string, content: string }[], music: Music[] }>) {
 			if (response.data) {
 				if (response.data.errors) {
 					response.data.errors.forEach(error => {
@@ -83,21 +81,14 @@ export default function initMusicSettings() {
 		}
 	}
 
-	/**
-	 * @param type {String}
-	 * @param content {String}
-	 */
-	function addAlert(type, content) {
+	function addAlert(type: string, content: string) {
 		const div = document.createElement('div');
 		div.classList.add('alert', 'alert-' + type)
 		div.innerHTML = content;
 		notices.appendChild(div);
 	}
 
-	/**
-	 * @param info {{id: Number, name: String, fileName: String, media: String}}
-	 */
-	function addMusic(info) {
+	function addMusic(info: Music) {
 		const tmp = document.createElement('div');
 		console.log(musicTemplate);
 		const html = musicTemplate
@@ -109,26 +100,23 @@ export default function initMusicSettings() {
 		tmp.innerHTML = html;
 		console.log(info, tmp, tmp.firstElementChild);
 		musicWrapper.appendChild(tmp.firstElementChild);
-		initMusic(tmp.firstElementChild);
+		initMusic(tmp.firstElementChild as HTMLDivElement);
 		initTooltips(tmp.firstElementChild);
 		recountMusic();
 	}
 
 	function recountMusic() {
 		let counter = 1;
-		document.querySelectorAll('.music-input').forEach(elem => {
-			elem.querySelector('.counter').innerText = counter.toString();
-			elem.querySelector('.order-input').value = counter.toString();
+		(document.querySelectorAll('.music-input') as NodeListOf<HTMLDivElement>).forEach(elem => {
+			(elem.querySelector('.counter') as HTMLElement).innerText = counter.toString();
+			(elem.querySelector('.order-input') as HTMLInputElement).value = counter.toString();
 			counter++;
 		});
 	}
 
-	/**
-	 * @param elem {HTMLDivElement}
-	 */
-	function initMusic(elem) {
+	function initMusic(elem: HTMLDivElement) {
 		const id = elem.dataset.id;
-		const deleteBtn = elem.querySelector('.remove');
+		const deleteBtn = elem.querySelector('.remove') as HTMLButtonElement;
 		if (deleteBtn) {
 			deleteBtn.addEventListener('click', () => {
 				startLoading();
@@ -143,10 +131,11 @@ export default function initMusicSettings() {
 					})
 			});
 		}
-		const playBtn = elem.querySelector('.play-music');
+		const playBtn = elem.querySelector('.play-music') as HTMLButtonElement;
 		if (playBtn) {
 			const media = playBtn.dataset.file;
-			let audio;
+			let audio: HTMLAudioElement;
+			const tooltip = Tooltip.getInstance(playBtn);
 			playBtn.addEventListener('click', () => {
 				playBtn.innerHTML = `<div class="spinner-grow spinner-grow-sm" role="status"><span class="visually-hidden">Loading...</span></div>`;
 				if (!audio) {
@@ -157,7 +146,12 @@ export default function initMusicSettings() {
 					playBtn.classList.add('btn-success');
 					playBtn.classList.remove('btn-danger');
 					playBtn.innerHTML = `<i class="fa-solid fa-play"></i>`;
-					playBtn.title = lang('Přehrát', null, 1, 'actions');
+					lang('Přehrát', null, 1, 'actions')
+						.then((response: AxiosResponse<string>) => {
+							tooltip.setContent({
+								'.tooltip-inner': response.data,
+							});
+						});
 					// Stop
 					audio.pause();
 					return;
@@ -175,7 +169,12 @@ export default function initMusicSettings() {
 					playBtn.classList.remove('btn-success');
 					playBtn.classList.add('btn-danger');
 					playBtn.innerHTML = `<i class="fa-solid fa-stop"></i>`;
-					playBtn.title = lang('Zastavit', null, 1, 'actions');
+					lang('Zastavit', null, 1, 'actions')
+						.then((response: AxiosResponse<string>) => {
+							tooltip.setContent({
+								'.tooltip-inner': response.data,
+							});
+						});
 					// Reset playback
 					audio.load();
 					// Play

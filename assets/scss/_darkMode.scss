@@ -33,4 +33,16 @@ $theme-colors-dark: map.merge($theme-colors, functions.getThemeColors($custom-co
 	.form-select {
 		background-image: escape-svg($form-select-dark-indicator) !important;
 	}
+
+	$form-switch-dark-color: #{map.get($theme-colors-dark, 'text')};
+	$form-switch-dark-bg-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'><circle r='3' fill='#{$form-switch-dark-color}'/></svg>");
+	.form-switch {
+		.form-check-input {
+			background-image: escape-svg($form-switch-dark-bg-image) !important;
+
+			&:not(:checked) {
+				border-color: var(--text);
+			}
+		}
+	}
 }

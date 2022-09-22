@@ -32,7 +32,6 @@ Route::get('/settings', [Settings::class, 'show'])->name('settings');
 Route::post('/settings', [Settings::class, 'saveGeneral']);
 Route::get('/settings/gate', [Settings::class, 'gate'])->name('settings-gate');
 Route::post('/settings/gate', [Settings::class, 'saveGate']);
-Route::get('/settings/modes', [Settings::class, 'modes'])->name('settings-modes');
 Route::get('/settings/vests', [Settings::class, 'vests'])->name('settings-vests');
 Route::post('/settings/vests', [Settings::class, 'saveVests']);
 Route::get('/settings/print', [Settings::class, 'print'])->name('settings-print');

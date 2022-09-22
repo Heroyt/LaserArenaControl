@@ -9,8 +9,9 @@
 		"moduleResolution": "node",
 		"sourceMap": true,
 		"declaration": true,
+		"allowSyntheticDefaultImports": true,
 		"lib": [
-			"es2016",
+			"es2021",
 			"dom"
 		]
 	}

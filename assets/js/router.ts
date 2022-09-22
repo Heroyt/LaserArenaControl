@@ -71,5 +71,13 @@ export default function route(pageInfo: PageInfo): void {
 				module.default();
 			});
 			break;
+		case 'settings-modes':
+			import(
+				/* webpackChunkName: "modesSettings" */
+				'./pages/settings/modes'
+				).then(module => {
+				module.default();
+			});
+			break;
 	}
 }

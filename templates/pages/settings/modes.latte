@@ -1,6 +1,260 @@
 {layout '../../@layout.latte'}
 
+{varType string[] $errors}
+{varType array $notices}
+{varType string $system}
 {varType App\GameModels\Game\GameModes\AbstractMode[] $modes}
 
 {block content}
+
+	<div id="notices">
+		{foreach $errors as $error}
+			{alert $error, 'danger'}
+		{/foreach}
+		{foreach $notices as $notice}
+			{alert $notice['content'], $notice['type']}
+		{/foreach}
+	</div>
+
+	<div class="me-4 last-save-wrapper text-end position-fixed end-0">
+		{lang 'Last saved:'} <span class="last-save" data-target="#game-mode-form">{lang 'never'}</span>
+	</div>
+
+	<h2>{lang 'Game modes'}</h2>
+
+	<form action="{link ['settings', 'modes']}" method="post" class="autosave" id="game-mode-form">
+		<p class="text-center mt-4">
+			<button type="submit" class="btn btn-success btn-lg">{lang 'Uložit', context: 'actions'}</button>
+		</p>
+		<div class="d-flex flex-wrap justify-content-evenly align-items-center" id="modes">
+			{foreach $modes as $mode}
+				{include gameModeCard, $mode->id, $mode->type->value, $mode}
+			{/foreach}
+		</div>
+		<div class="text-center">
+			<div class="btn-group btn-group-lg">
+				<button type="button" class="btn btn-primary addMode" data-system="{$system}" data-type="TEAM"
+						id="addModeTeam">
+					<i class="fa-solid fa-plus"></i> {lang 'Přidat týmový mód', context: 'actions'}
+				</button>
+				<button type="button" class="btn btn-info addMode" data-system="{$system}" data-type="SOLO"
+						id="addModeSolo">
+					<i class="fa-solid fa-plus"></i> {lang 'Přidat sólo mód', context: 'actions'}
+				</button>
+			</div>
+		</div>
+		<p class="text-center mt-4">
+			<button type="submit" class="btn btn-success btn-lg">{lang 'Uložit', context: 'actions'}</button>
+		</p>
+	</form>
+	<template id="modeCardTemplate">
+		{include gameModeCard, '#id#', '#type#'}
+	</template>
+
+	<div class="modal" tabindex="-1" id="game-mode-variations-modal">
+		<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg">
+			<form class="modal-content" action="{link ['settings', 'modes', '#id#', 'variations']}" method="post">
+				<div class="modal-header">
+					<h5 class="modal-title">{lang 'Variace módu', context: 'game.modes'} - <span
+								class="mode-name"></span></h5>
+					<button type="button" class="btn btn-link text-text" data-bs-dismiss="modal" aria-label="Close">
+						<i class="fa-solid fa-xmark"></i>
+					</button>
+				</div>
+				<div class="modal-body">
+
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-success save">{lang 'Zavřít', context: 'actions'}</button>
+				</div>
+			</form>
+		</div>
+	</div>
+	<div class="modal" tabindex="-1" id="game-mode-results-modal">
+		<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg">
+			<form class="modal-content" action="{link ['settings', 'modes']}" method="post">
+				<div class="modal-header">
+					<h5 class="modal-title">{lang 'Nastavení zobrazených statistik na výsledcích', context: 'game.modes'}
+						- <span class="mode-name"></span></h5>
+					<button type="button" class="btn btn-link text-text" data-bs-dismiss="modal" aria-label="Close">
+						<i class="fa-solid fa-xmark"></i>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div class="form-check form-switch d-none" data-name="dummy">
+						<input class="form-check-input" type="checkbox" role="switch" name="mode[#id#][settings][dummy]"
+							   checked value="1"
+							   id="mode-#id#-dummy">
+						<label class="form-check-label" for="mode-#id#-dummy"></label>
+					</div>
+					<h5>{lang 'Obecné', context: 'game.modes.settings'}</h5>
+					{include modeSettingsCheck, 'public', 'Veřejný', 'Pokud má být herní mód zobrazován veřejně v rozhraní pro zadání hry hráči (na tabletu).'}
+					{include modeSettingsCheck, 'mines', 'Miny', 'Pokud se mají zobrazovat statistiky min.'}
+
+
+
+
+
+
+					<hr class="my-4">
+					<h5>{lang 'Části', context: 'game.modes.settings'}</h5>
+					<p class="text-sm text-muted"><strong>{lang 'Varování'}
+							:</strong> {lang 'Na výsledcích se nezobrazují vždy všechny kategorie, ale jen ty které se vejdou.', context: 'game.modes.settings'}
+					</p>
+					{include modeSettingsCheck, 'partWin', 'Vítěz', 'Pokud se má zobrazovat část "Vítěz".'}
+					{include modeSettingsCheck, 'partTeams', 'Týmy', 'Pokud se má zobrazovat část "Týmy".'}
+					{include modeSettingsCheck, 'partPlayers', 'Hráči', 'Pokud se má zobrazovat část "Hráči".'}
+					{include modeSettingsCheck, 'partHits', 'Zásahy hráčů', 'Pokud se má zobrazovat část "Zásahy hráčů" (kdo koho zasáhl).'}
+					{include modeSettingsCheck, 'partBest', 'Ti nej', 'Pokud se má zobrazovat část "Ti nej".'}
+					{include modeSettingsCheck, 'partBestDay', 'Pořadí dne', 'Pokud se má zobrazovat část "Pořadí dne".'}
+
+
+
+
+
+
+					<hr class="my-4">
+					<h5>{lang 'Výsledky hráče', context: 'game.modes.settings'}</h5>
+					<p class="text-sm text-muted"><strong>{lang 'Varování'}
+							:</strong> {lang 'Na výsledcích se nezobrazují vždy všechny kategorie, ale jen ty které se vejdou.', context: 'game.modes.settings'}
+					</p>
+					{include modeSettingsCheck, 'playerScore', 'Skóre hráče', 'Pokud se má zobrazovat skóre u jednotlivých hráčů.'}
+					{include modeSettingsCheck, 'playerShots', 'Výstřely hráče', 'Pokud se mají zobrazovat výstřely u jednotlivých hráčů.'}
+					{include modeSettingsCheck, 'playerMiss', 'Výstřely mimo hráče', 'Pokud se mají zobrazovat výstřely mimo u jednotlivých hráčů.'}
+					{include modeSettingsCheck, 'playerAccuracy', 'Přesnost hráče', 'Pokud se má zobrazovat přesnost u jednotlivých hráčů.'}
+					{include modeSettingsCheck, 'playerMines', 'Miny hráče', 'Pokud se mají zobrazovat statistiky min u jednotlivých hráčů.'}
+					{include modeSettingsCheck, 'playerPlayers', 'Zásahy hráče', 'Pokud se mají zobrazovat zásahy u jednotlivých hráčů.'}
+					{include modeSettingsCheck, 'playerPlayersTeams', 'Zásahy vlastních hráče', 'Pokud se mají zobrazovat zásahy rozdělené na vlastní a ostatní u jednotlivých hráčů.'}
+					{include modeSettingsCheck, 'playerKd', 'K:D hráče', 'Pokud se má zobrazovat K:D (poměr zabití a smrtí) u jednotlivých hráčů.'}
+					{include modeSettingsCheck, 'playerFavourites', 'Oblíbený cíl / Největší zabiják hráče', 'Pokud se mají zobrazovat oblíbení hráči ("Největší cíl", "Největší zabiják") u jednotlivých hráčů.'}
+					{include modeSettingsCheck, 'playerLives', 'Životy hráče', 'Pokud se mají zobrazovat zbývající životy u jednotlivých hráčů.'}
+
+
+
+
+
+
+					<hr class="my-4">
+					<h5>{lang 'Výsledky týmů', context: 'game.modes.settings'}</h5>
+					<p class="text-sm text-muted"><strong>{lang 'Varování'}
+							:</strong> {lang 'Na výsledcích se nezobrazují vždy všechny kategorie, ale jen ty které se vejdou.', context: 'game.modes.settings'}
+					</p>
+					{include modeSettingsCheck, 'teamScore', 'Skóre týmu', 'Pokud se má zobrazovat skóre u jednotlivých týmů.'}
+					{include modeSettingsCheck, 'teamAccuracy', 'Přesnost týmu', 'Pokud se má zobrazovat celková přesnost u jednotlivých týmů.'}
+					{include modeSettingsCheck, 'teamShots', 'Výstřely týmu', 'Pokud se mají zobrazovat výstřely u jednotlivých týmů.'}
+					{include modeSettingsCheck, 'teamHits', 'Zásahy týmu', 'Pokud se mají zobrazovat zásahy u jednotlivých týmů.'}
+					{include modeSettingsCheck, 'teamZakladny', 'Ztráty základny týmu', 'Pokud se mají zobrazovat ztráty základny u jednotlivých týmů (týká se jen módu Základny).'}
+
+
+
+
+
+
+					<hr class="my-4">
+					<h5>{lang 'Ti nej', context: 'game.modes.settings'}</h5>
+					<p class="text-sm text-muted"><strong>{lang 'Varování'}
+							:</strong> {lang 'Na výsledcích se nezobrazují vždy všechny kategorie, ale jen ty které se vejdou.', context: 'game.modes.settings'}
+					</p>
+					{include modeSettingsCheck, 'bestScore', 'Absolutní vítěz', 'Pokud se má zobrazovat "Absolutní vítěz" v tabulce "Ti nej".'}
+					{include modeSettingsCheck, 'bestHits', 'Největí terminátor', 'Pokud se má zobrazovat "Největí terminátor" v tabulce "Ti nej".'}
+					{include modeSettingsCheck, 'bestDeaths', 'Objekt největšího zájmu', 'Pokud se má zobrazovat "Objekt největšího zájmu" v tabulce "Ti nej".'}
+					{include modeSettingsCheck, 'bestAccuracy', 'Hráč s nejlepší muškou', 'Pokud se má zobrazovat "Hráč s nejlepší muškou" v tabulce "Ti nej".'}
+					{include modeSettingsCheck, 'bestHitsOwn', 'Zabiják vlastního týmu', 'Pokud se má zobrazovat "Zabiják vlastního týmu" v tabulce "Ti nej".'}
+					{include modeSettingsCheck, 'bestDeathsOwn', 'Největší vlasňák', 'Pokud se má zobrazovat "Největší vlastňák" v tabulce "Ti nej".'}
+					{include modeSettingsCheck, 'bestShots', 'Nejúspornější střelec', 'Pokud se má zobrazovat "Nejúspornější střelec" v tabulce "Ti nej".'}
+					{include modeSettingsCheck, 'bestMiss', 'Největší mimoň', 'Pokud se má zobrazovat "Největší mimooň" v tabulce "Ti nej".'}
+					{include modeSettingsCheck, 'bestMines', 'Drtič min', 'Pokud se má zobrazovat "Drtič min" v tabulce "Ti nej".'}
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-success save">{lang 'Zavřít', context: 'actions'}</button>
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<script>
+		const messages = {
+			areYouSureDelete: '{lang 'Opravdu chcete herní mód vymazat? Akce nepůjde vrátit.', context: 'game.modes'}',
+			variationName: '{lang 'Název variace', context: 'game.modes'}',
+			variationValue: '{lang 'Hodnota variace', context: 'game.modes'}',
+			variationSuffix: '{lang 'Přípona variace k módu v konzoli', context: 'game.modes'}',
+			existingVariations: '{lang 'Existující variace', context: 'game.modes'}',
+			newVariation: '{lang 'Nová variace', context: 'game.modes'}',
+			add: '{lang 'Přidat', context: 'actions'}',
+			create: '{lang 'Vytvořit', context: 'actions'}',
+			errorEmptyVariationName: '{lang 'Název nesmí být prázdný', context: 'errors'}',
+			errorDuplicateVariation: '{lang 'Variace v módu již existuje', context: 'errors'}',
+		};
+	</script>
 {/block}
+
+{define gameModeCard, string $id, string $type, App\GameModels\Game\GameModes\AbstractMode|null $mode}
+	<div class="card m-3 mode" data-id="{$id}" data-type="{$type}"
+		 data-mode='{ifset $mode}{json_encode($mode)}{/ifset}'>
+		<div class="card-body text-center">
+			{if !isset($mode) || $mode instanceof App\GameModels\Game\GameModes\CustomTeamMode || $mode instanceof App\GameModels\Game\GameModes\CustomSoloMode}
+				<div class="text-end mb-2">
+					<button type="button" class="btn btn-danger delete">
+						<i class="fa-solid fa-trash"></i>
+					</button>
+				</div>
+				<div class="form-floating mb-2">
+					<select name="mode[{$id}][type]" id="mode-type-{$id}" class="form-select modeType">
+						<option {if $type === 'TEAM'}selected{/if}
+								value="TEAM">{lang 'Týmový', context: 'game.modes.types'}</option>
+						<option {if $type === 'SOLO'}selected{/if}
+								value="SOLO">{lang 'Sólo', context: 'game.modes.types'}</option>
+					</select>
+					<label for="mode-type-{$id}">{lang 'Typ'}</label>
+				</div>
+			{/if}
+			<div class="form-floating mb-2">
+				<input type="text" class="form-control modeName" name="mode[{$id}][name]"
+					   id="mode-name-{$id}"
+						{if isset($mode) && !$mode instanceof App\GameModels\Game\GameModes\CustomTeamMode && !$mode instanceof App\GameModels\Game\GameModes\CustomSoloMode}
+							readonly
+						{/if}
+					   placeholder="{lang 'Herní mód', context: 'game.modes'}"
+					   value="{ifset $mode}{lang $mode->name, context: 'gameModes'}{/ifset}"/>
+				<label for="mode-name-{$id}">{lang 'Název'}</label>
+			</div>
+			<div class="form-floating mb-2">
+				<input type="text" class="form-control modeLoad" name="mode[{$id}][load]"
+					   id="mode-load-{$id}"
+					   value="{$mode?->loadName}"
+					   placeholder="{lang 'Herní mód', context: 'game.modes'}"/>
+				<label for="mode-load-{$id}">{lang 'Název v konzoli'}</label>
+			</div>
+			<div class="form-floating mb-2">
+						<textarea type="text" class="form-control modeDescription" name="mode[{$id}][description]"
+								  id="mode-description-{$id}" style="height: 100px;"
+								  placeholder="{lang 'Popis', context: 'game.modes'}">{ifset $mode}{lang $mode->description, context: 'gameModes'}{/ifset}</textarea>
+				<label for="mode-description-{$id}">{lang 'Popis'}</label>
+			</div>
+			<div class="btn-group btn-group-lg">
+				<button type="button" class="btn btn-primary edit-variations" data-toggle="tooltip"
+						data-id="{$id}"
+						title="{lang 'Upravit variace', context: 'game.modes'}">
+					<i class="fa-solid fa-list"></i>
+				</button>
+				<button type="button" class="btn btn-success edit-results" data-toggle="tooltip"
+						data-id="{$id}"
+						title="{lang 'Upravit zobrazení výsledků', context: 'game.modes'}">
+					<i class="fa-solid fa-eye"></i>
+				</button>
+			</div>
+		</div>
+	</div>
+{/define}
+
+{define modeSettingsCheck, string $name, string $label, string $info}
+	<div class="form-check form-switch" data-name="{$name}">
+		<input class="form-check-input" type="checkbox" role="switch" name="mode[#id#][settings][{$name}]" value="1"
+			   id="mode-#id#-{$name}">
+		<label class="form-check-label" for="mode-#id#-{$name}">
+			{lang $label, context: 'game.modes.settings'}
+		</label>
+		<i class="fa-solid fa-circle-info cursor-help" data-toggle="tooltip"
+		   title='{lang $info, context: 'game.modes.settings'}'></i>
+	</div>
+{/define}

@@ -14,3 +14,11 @@
 		width: var(--size, 30px);
 	}
 }
+
+input[readonly] {
+	cursor: not-allowed;
+}
+
+.last-save-wrapper.position-fixed {
+	z-index: 10;
+}

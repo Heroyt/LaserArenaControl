@@ -31,6 +31,10 @@ $theme-colors: map.merge($theme-colors, functions.getThemeColors($custom-colors)
 $utilities-bg-colors: map.merge($utilities-bg-colors, $utilityColors);
 $utilities-text-colors: map.merge($utilities-text-colors, $utilityColors);
 
+$modal-content-bg: var(--background);
+$modal-content-color: var(--text);
+$btn-close-color: var(--text);
+
 $font-sizes: map.merge(
 		$font-sizes,
 		(

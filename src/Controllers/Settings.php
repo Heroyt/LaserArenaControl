@@ -6,9 +6,7 @@
 namespace App\Controllers;
 
 use App\Core\Info;
-use App\Exceptions\GameModeNotFoundException;
 use App\GameModels\Factory\GameFactory;
-use App\GameModels\Factory\GameModeFactory;
 use App\GameModels\Game\PrintStyle;
 use App\GameModels\Game\PrintTemplate;
 use App\GameModels\Vest;
@@ -114,16 +112,6 @@ class Settings extends Controller
 										 ], empty($request->passErrors) ? 200 : 400);
 		}
 		App::redirect('settings', $request);
-	}
-
-	/**
-	 * @return void
-	 * @throws GameModeNotFoundException
-	 * @throws TemplateDoesNotExistException
-	 */
-	public function modes() : void {
-		$this->params['modes'] = GameModeFactory::getAll();
-		$this->view('pages/settings/modes');
 	}
 
 	/**

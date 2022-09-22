@@ -38,7 +38,7 @@ class E404 extends Controller
 	protected string $description = 'Page not found';
 
 	public function show(Request $request) : void {
-		if ($request->header('Accept') === 'application/json') {
+		if (str_contains($request->header('Accept'), 'application/json')) {
 			$this->respond(['error' => 'Resource not found'], 404);
 		}
 		http_response_code(404);

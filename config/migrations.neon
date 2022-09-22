@@ -42,3 +42,27 @@ tables:
     			PRIMARY KEY (`id_music`)
     		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
     	'''
+	App\Models\GameModeVariation:
+		definition: '''
+    	(
+			`id_variation` int(11) unsigned NOT NULL AUTO_INCREMENT,
+			`name` varchar(30) NOT NULL,
+          	PRIMARY KEY (`id_variation`)
+    	) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+		'''
+	game_modes_variations_values:
+		definition: '''
+		(
+			`id_variation` int(11) unsigned NOT NULL,
+			`id_mode` int(11) unsigned NOT NULL,
+			`value` varchar(30) NOT NULL,
+			`suffix` varchar(10) NOT NULL,
+			`order` int(10) unsigned NOT NULL DEFAULT 0,
+			PRIMARY KEY (`id_variation`,`id_mode`,`value`),
+			KEY `id_mode` (`id_mode`),
+			KEY `id_variation` (`id_variation`),
+			KEY `value` (`value`),
+			CONSTRAINT `game_modes_variations_values_ibfk_1` FOREIGN KEY (`id_variation`) REFERENCES `game_modes_variations` (`id_variation`) ON DELETE CASCADE ON UPDATE CASCADE,
+			CONSTRAINT `game_modes_variations_values_ibfk_2` FOREIGN KEY (`id_mode`) REFERENCES `game_modes` (`id_mode`) ON DELETE CASCADE ON UPDATE CASCADE
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+		'''

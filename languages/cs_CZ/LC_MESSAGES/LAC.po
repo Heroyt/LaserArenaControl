@@ -152,6 +152,10 @@ msgstr "Herní mód"
 # /templates/pages/new-game/index.latte:65
 # /templates/results/templates/graphical.latte:110
 # /templates/pages/new-game/index.latte:68
+# /templates/pages/settings/modes.latte:39
+# /templates/pages/settings/modes.latte:187
+# /templates/pages/settings/modes.latte:202
+# /templates/pages/settings/modes.latte:212
 msgctxt "gameModes"
 msgid "Základny"
 msgstr "Základny"
@@ -404,6 +408,10 @@ msgstr "Tento den se nehrály žádné hry."
 # /templates/pages/new-game/index.latte:59
 # /templates/pages/new-game/index.latte:65
 # /templates/pages/new-game/index.latte:68
+# /templates/pages/settings/modes.latte:39
+# /templates/pages/settings/modes.latte:187
+# /templates/pages/settings/modes.latte:202
+# /templates/pages/settings/modes.latte:212
 msgctxt "gameModes"
 msgid "CSGO"
 msgstr "CSGO"
@@ -414,6 +422,10 @@ msgstr "CSGO"
 # /templates/pages/new-game/index.latte:59
 # /templates/pages/new-game/index.latte:65
 # /templates/pages/new-game/index.latte:68
+# /templates/pages/settings/modes.latte:39
+# /templates/pages/settings/modes.latte:187
+# /templates/pages/settings/modes.latte:202
+# /templates/pages/settings/modes.latte:212
 msgctxt "gameModes"
 msgid "Team deathmach"
 msgstr "Team deathmach"
@@ -430,6 +442,10 @@ msgstr "Drtič min"
 # /templates/pages/new-game/index.latte:59
 # /templates/pages/new-game/index.latte:65
 # /templates/pages/new-game/index.latte:68
+# /templates/pages/settings/modes.latte:39
+# /templates/pages/settings/modes.latte:187
+# /templates/pages/settings/modes.latte:202
+# /templates/pages/settings/modes.latte:212
 msgctxt "gameModes"
 msgid "Deathmach"
 msgstr "Deathmach"
@@ -681,6 +697,8 @@ msgid "Settings"
 msgstr "Nastavení"
 
 # /config/nav/menu.php:46
+# /templates/pages/settings/modes.latte:22
+# /templates/pages/settings/modes.latte:23
 msgid "Game modes"
 msgstr "Herní módy"
 
@@ -940,6 +958,8 @@ msgstr "Přidat datum"
 # /templates/pages/settings/music.latte:8
 # /templates/pages/settings/music.latte:13
 # /templates/pages/settings/music.latte:15
+# /templates/pages/settings/modes.latte:19
+# /templates/pages/settings/modes.latte:20
 msgid "Last saved:"
 msgstr "Naposledy uloženo:"
 
@@ -947,6 +967,8 @@ msgstr "Naposledy uloženo:"
 # /templates/pages/settings/music.latte:8
 # /templates/pages/settings/music.latte:13
 # /templates/pages/settings/music.latte:15
+# /templates/pages/settings/modes.latte:19
+# /templates/pages/settings/modes.latte:20
 msgid "never"
 msgstr "nikdy"
 
@@ -1016,6 +1038,10 @@ msgstr "Optional filter for command groups"
 # /templates/pages/new-game/index.latte:59
 # /templates/pages/new-game/index.latte:65
 # /templates/pages/new-game/index.latte:68
+# /templates/pages/settings/modes.latte:39
+# /templates/pages/settings/modes.latte:187
+# /templates/pages/settings/modes.latte:202
+# /templates/pages/settings/modes.latte:212
 msgctxt "gameModes"
 msgid "Survival"
 msgstr "Survival"
@@ -1085,6 +1111,10 @@ msgstr "Nepodařilo se uložit nastavení."
 # /templates/pages/new-game/index.latte:59
 # /templates/pages/new-game/index.latte:65
 # /templates/pages/new-game/index.latte:68
+# /templates/pages/settings/modes.latte:39
+# /templates/pages/settings/modes.latte:187
+# /templates/pages/settings/modes.latte:202
+# /templates/pages/settings/modes.latte:212
 msgctxt "gameModes"
 msgid "T.M.A - solo"
 msgstr "T.M.A - solo"
@@ -1233,6 +1263,10 @@ msgstr "Výsledky on-line"
 # /templates/pages/new-game/index.latte:59
 # /templates/pages/new-game/index.latte:65
 # /templates/pages/new-game/index.latte:68
+# /templates/pages/settings/modes.latte:39
+# /templates/pages/settings/modes.latte:187
+# /templates/pages/settings/modes.latte:202
+# /templates/pages/settings/modes.latte:212
 msgctxt "gameModes"
 msgid "100 nábojů"
 msgstr "100 nábojů"
@@ -1362,6 +1396,10 @@ msgstr "Odehráno her"
 # /templates/pages/new-game/index.latte:59
 # /templates/pages/new-game/index.latte:65
 # /templates/pages/new-game/index.latte:68
+# /templates/pages/settings/modes.latte:39
+# /templates/pages/settings/modes.latte:187
+# /templates/pages/settings/modes.latte:202
+# /templates/pages/settings/modes.latte:212
 msgctxt "gameModes"
 msgid "Barvičky"
 msgstr "Barvičky"
@@ -1515,6 +1553,22 @@ msgctxt "actions"
 msgid "Začít"
 msgstr "Začít"
 
+# /templates/pages/settings/modes.latte:79
+# /templates/pages/settings/modes.latte:82
+# /templates/pages/settings/modes.latte:110
+# /templates/pages/settings/modes.latte:136
+# /templates/pages/settings/modes.latte:145
+# /templates/pages/settings/modes.latte:91
+# /templates/pages/settings/modes.latte:166
+# /templates/pages/settings/modes.latte:89
+# /templates/pages/settings/modes.latte:164
+# /templates/pages/settings/modes.latte:169
+# /templates/pages/settings/modes.latte:62
+# /templates/pages/settings/modes.latte:155
+# /templates/pages/settings/modes.latte:65
+# /templates/pages/settings/modes.latte:158
+# /templates/pages/settings/modes.latte:66
+# /templates/pages/settings/modes.latte:163
 msgctxt "actions"
 msgid "Zavřít"
 msgstr "Zavřít"
@@ -1583,6 +1637,10 @@ msgstr "Domluv si trénink s profíky!"
 # /templates/pages/new-game/index.latte:59
 # /templates/pages/new-game/index.latte:65
 # /templates/pages/new-game/index.latte:68
+# /templates/pages/settings/modes.latte:39
+# /templates/pages/settings/modes.latte:187
+# /templates/pages/settings/modes.latte:202
+# /templates/pages/settings/modes.latte:212
 msgctxt "gameModes"
 msgid "Apokalypsa"
 msgstr "Apokalypsa"
@@ -1645,6 +1703,7 @@ msgstr "Herní mód"
 # /templates/pages/new-game/index.latte:58
 # /templates/pages/new-game/index.latte:64
 # /templates/pages/new-game/index.latte:67
+# /templates/pages/settings/modes.latte:52
 msgctxt "gameModes"
 msgid "Classic team game."
 msgstr "Klasická týmová hra."
@@ -1654,6 +1713,7 @@ msgstr "Klasická týmová hra."
 # /templates/pages/new-game/index.latte:58
 # /templates/pages/new-game/index.latte:64
 # /templates/pages/new-game/index.latte:67
+# /templates/pages/settings/modes.latte:52
 msgctxt "gameModes"
 msgid "Classic free for all game."
 msgstr "Klasická hra všichni proti všem."
@@ -1663,6 +1723,10 @@ msgstr "Klasická hra všichni proti všem."
 # /templates/pages/new-game/index.latte:58
 # /templates/pages/new-game/index.latte:64
 # /templates/pages/new-game/index.latte:67
+# /templates/pages/settings/modes.latte:52
+# /templates/pages/settings/modes.latte:200
+# /templates/pages/settings/modes.latte:215
+# /templates/pages/settings/modes.latte:225
 msgctxt "gameModes"
 msgid "Náročná hra o přežití se 3mi životy."
 msgstr "Náročná hra o přežití se 3mi životy."
@@ -1672,6 +1736,10 @@ msgstr "Náročná hra o přežití se 3mi životy."
 # /templates/pages/new-game/index.latte:58
 # /templates/pages/new-game/index.latte:64
 # /templates/pages/new-game/index.latte:67
+# /templates/pages/settings/modes.latte:52
+# /templates/pages/settings/modes.latte:200
+# /templates/pages/settings/modes.latte:215
+# /templates/pages/settings/modes.latte:225
 msgctxt "gameModes"
 msgid "Strategická hra, kdy 2 týmy bojují proti sobě o zničení základny druhého týmu."
 msgstr "Strategická hra, kdy 2 týmy bojují proti sobě o zničení základny druhého týmu."
@@ -1681,6 +1749,10 @@ msgstr "Strategická hra, kdy 2 týmy bojují proti sobě o zničení základny 
 # /templates/pages/new-game/index.latte:58
 # /templates/pages/new-game/index.latte:64
 # /templates/pages/new-game/index.latte:67
+# /templates/pages/settings/modes.latte:52
+# /templates/pages/settings/modes.latte:200
+# /templates/pages/settings/modes.latte:215
+# /templates/pages/settings/modes.latte:225
 msgctxt "gameModes"
 msgid "Rychlá, šílená hra. Po pár smrtích se přebarvíš na barvu toho, kdo tě trefil."
 msgstr "Rychlá, šílená hra. Po pár smrtích se přebarvíš na barvu toho, kdo tě trefil."
@@ -1690,6 +1762,10 @@ msgstr "Rychlá, šílená hra. Po pár smrtích se přebarvíš na barvu toho, 
 # /templates/pages/new-game/index.latte:58
 # /templates/pages/new-game/index.latte:64
 # /templates/pages/new-game/index.latte:67
+# /templates/pages/settings/modes.latte:52
+# /templates/pages/settings/modes.latte:200
+# /templates/pages/settings/modes.latte:215
+# /templates/pages/settings/modes.latte:225
 msgctxt "gameModes"
 msgid "Klasická hra, ale tentokrát bez světel."
 msgstr "Klasická hra, ale tentokrát bez světel."
@@ -1700,6 +1776,10 @@ msgstr "Klasická hra, ale tentokrát bez světel."
 # /templates/pages/new-game/index.latte:59
 # /templates/pages/new-game/index.latte:65
 # /templates/pages/new-game/index.latte:68
+# /templates/pages/settings/modes.latte:39
+# /templates/pages/settings/modes.latte:187
+# /templates/pages/settings/modes.latte:202
+# /templates/pages/settings/modes.latte:212
 msgctxt "gameModes"
 msgid "T.M.A"
 msgstr "T.M.A"
@@ -1709,6 +1789,10 @@ msgstr "T.M.A"
 # /templates/pages/new-game/index.latte:58
 # /templates/pages/new-game/index.latte:64
 # /templates/pages/new-game/index.latte:67
+# /templates/pages/settings/modes.latte:52
+# /templates/pages/settings/modes.latte:200
+# /templates/pages/settings/modes.latte:215
+# /templates/pages/settings/modes.latte:225
 msgctxt "gameModes"
 msgid "Hra na zombíky! Vybraní hráči jsou zombie, kteří se snaží infikovat ostatní hráče."
 msgstr "Hra na zombíky! Vybraní hráči jsou zombie, kteří se snaží infikovat ostatní hráče."
@@ -1718,6 +1802,10 @@ msgstr "Hra na zombíky! Vybraní hráči jsou zombie, kteří se snaží infiko
 # /templates/pages/new-game/index.latte:58
 # /templates/pages/new-game/index.latte:64
 # /templates/pages/new-game/index.latte:67
+# /templates/pages/settings/modes.latte:52
+# /templates/pages/settings/modes.latte:200
+# /templates/pages/settings/modes.latte:215
+# /templates/pages/settings/modes.latte:225
 msgctxt "gameModes"
 msgid "Strategická hra s omezeným počtem životů a nábojů."
 msgstr "Strategická hra s omezeným počtem životů a nábojů."
@@ -1727,6 +1815,10 @@ msgstr "Strategická hra s omezeným počtem životů a nábojů."
 # /templates/pages/new-game/index.latte:59
 # /templates/pages/new-game/index.latte:65
 # /templates/pages/new-game/index.latte:68
+# /templates/pages/settings/modes.latte:39
+# /templates/pages/settings/modes.latte:187
+# /templates/pages/settings/modes.latte:202
+# /templates/pages/settings/modes.latte:212
 msgctxt "gameModes"
 msgid "Team Survival"
 msgstr "Týmový Survival"
@@ -1736,6 +1828,10 @@ msgstr "Týmový Survival"
 # /templates/pages/new-game/index.latte:59
 # /templates/pages/new-game/index.latte:65
 # /templates/pages/new-game/index.latte:68
+# /templates/pages/settings/modes.latte:39
+# /templates/pages/settings/modes.latte:187
+# /templates/pages/settings/modes.latte:202
+# /templates/pages/settings/modes.latte:212
 msgctxt "gameModes"
 msgid "Marco Polo"
 msgstr "Marco Polo"
@@ -1745,6 +1841,10 @@ msgstr "Marco Polo"
 # /templates/pages/new-game/index.latte:59
 # /templates/pages/new-game/index.latte:65
 # /templates/pages/new-game/index.latte:68
+# /templates/pages/settings/modes.latte:39
+# /templates/pages/settings/modes.latte:187
+# /templates/pages/settings/modes.latte:202
+# /templates/pages/settings/modes.latte:212
 msgctxt "gameModes"
 msgid "Zombie"
 msgstr "Zombie"
@@ -1986,6 +2086,10 @@ msgid "Failed to delete the music file"
 msgstr ""
 
 # /templates/pages/settings/music.latte:41
+# /templates/pages/settings/modes.latte:77
+# /templates/pages/settings/modes.latte:79
+# /templates/pages/settings/modes.latte:27
+# /templates/pages/settings/modes.latte:45
 msgctxt "actions"
 msgid "Uložit"
 msgstr ""
@@ -2017,4 +2121,1218 @@ msgstr ""
 # /templates/pages/new-game/index.latte:52
 msgctxt "actions"
 msgid "Smazat vše"
+msgstr ""
+
+# /templates/pages/settings/modes.latte:15
+# /templates/pages/settings/modes.latte:33
+# /templates/pages/settings/modes.latte:35
+# /templates/pages/settings/modes.latte:38
+# /templates/pages/settings/modes.latte:39
+# /templates/pages/settings/modes.latte:40
+# /templates/pages/settings/modes.latte:188
+# /templates/pages/settings/modes.latte:203
+# /templates/pages/settings/modes.latte:213
+msgid "Název"
+msgstr ""
+
+# /templates/pages/settings/modes.latte:20
+# /templates/pages/settings/modes.latte:39
+# /templates/pages/settings/modes.latte:41
+# /templates/pages/settings/modes.latte:44
+# /templates/pages/settings/modes.latte:46
+# /templates/pages/settings/modes.latte:47
+# /templates/pages/settings/modes.latte:195
+# /templates/pages/settings/modes.latte:210
+# /templates/pages/settings/modes.latte:220
+msgid "Název v konzoli"
+msgstr ""
+
+# /templates/pages/settings/modes.latte:26
+# /templates/pages/settings/modes.latte:60
+# /templates/pages/settings/modes.latte:62
+# /templates/pages/settings/modes.latte:64
+# /templates/pages/settings/modes.latte:73
+# /templates/pages/settings/modes.latte:71
+# /templates/pages/settings/modes.latte:44
+# /templates/pages/settings/modes.latte:27
+# /templates/pages/settings/modes.latte:45
+msgctxt "actions"
+msgid "Odeslat"
+msgstr ""
+
+# /templates/pages/settings/modes.latte:48
+# /templates/pages/settings/modes.latte:49
+# /templates/pages/settings/modes.latte:51
+# /templates/pages/settings/modes.latte:60
+# /templates/pages/settings/modes.latte:58
+# /templates/pages/settings/modes.latte:206
+# /templates/pages/settings/modes.latte:221
+# /templates/pages/settings/modes.latte:231
+msgctxt "game.modes"
+msgid "Upravit variace"
+msgstr ""
+
+# /templates/pages/settings/modes.latte:52
+# /templates/pages/settings/modes.latte:54
+# /templates/pages/settings/modes.latte:56
+# /templates/pages/settings/modes.latte:65
+# /templates/pages/settings/modes.latte:63
+# /templates/pages/settings/modes.latte:211
+# /templates/pages/settings/modes.latte:226
+# /templates/pages/settings/modes.latte:236
+msgctxt "game.modes"
+msgid "Upravit zobrazení výsledků"
+msgstr ""
+
+# /templates/pages/settings/modes.latte:70
+# /templates/pages/settings/modes.latte:72
+# /templates/pages/settings/modes.latte:81
+# /templates/pages/settings/modes.latte:79
+# /templates/pages/settings/modes.latte:52
+# /templates/pages/settings/modes.latte:55
+# /templates/pages/settings/modes.latte:56
+msgctxt "game.modes"
+msgid "Variace módu"
+msgstr ""
+
+# /templates/pages/settings/modes.latte:87
+# /templates/pages/settings/modes.latte:118
+# /templates/pages/settings/modes.latte:144
+# /templates/pages/settings/modes.latte:153
+# /templates/pages/settings/modes.latte:174
+# /templates/pages/settings/modes.latte:172
+# /templates/pages/settings/modes.latte:177
+# /templates/pages/settings/modes.latte:163
+# /templates/pages/settings/modes.latte:166
+msgctxt "game.modes"
+msgid "Název variace"
+msgstr ""
+
+# /templates/pages/settings/modes.latte:88
+# /templates/pages/settings/modes.latte:119
+# /templates/pages/settings/modes.latte:145
+# /templates/pages/settings/modes.latte:154
+# /templates/pages/settings/modes.latte:175
+# /templates/pages/settings/modes.latte:173
+# /templates/pages/settings/modes.latte:178
+# /templates/pages/settings/modes.latte:164
+# /templates/pages/settings/modes.latte:167
+msgctxt "game.modes"
+msgid "Hodnota variace"
+msgstr ""
+
+# /templates/pages/settings/modes.latte:89
+# /templates/pages/settings/modes.latte:120
+# /templates/pages/settings/modes.latte:146
+# /templates/pages/settings/modes.latte:155
+# /templates/pages/settings/modes.latte:176
+# /templates/pages/settings/modes.latte:174
+# /templates/pages/settings/modes.latte:179
+# /templates/pages/settings/modes.latte:165
+# /templates/pages/settings/modes.latte:168
+msgctxt "game.modes"
+msgid "Přípona variace k módu v konzoli"
+msgstr ""
+
+# /templates/pages/settings/modes.latte:90
+# /templates/pages/settings/modes.latte:121
+# /templates/pages/settings/modes.latte:147
+# /templates/pages/settings/modes.latte:156
+# /templates/pages/settings/modes.latte:177
+# /templates/pages/settings/modes.latte:175
+# /templates/pages/settings/modes.latte:180
+# /templates/pages/settings/modes.latte:166
+# /templates/pages/settings/modes.latte:169
+msgctxt "game.modes"
+msgid "Existující variace"
+msgstr ""
+
+# /templates/pages/settings/modes.latte:91
+# /templates/pages/settings/modes.latte:92
+# /templates/pages/settings/modes.latte:123
+# /templates/pages/settings/modes.latte:149
+# /templates/pages/settings/modes.latte:158
+# /templates/pages/settings/modes.latte:179
+# /templates/pages/settings/modes.latte:177
+# /templates/pages/settings/modes.latte:182
+# /templates/pages/settings/modes.latte:168
+# /templates/pages/settings/modes.latte:171
+msgctxt "actions"
+msgid "Přidat"
+msgstr ""
+
+# /templates/pages/settings/modes.latte:92
+# /templates/pages/settings/modes.latte:93
+# /templates/pages/settings/modes.latte:124
+# /templates/pages/settings/modes.latte:150
+# /templates/pages/settings/modes.latte:159
+# /templates/pages/settings/modes.latte:180
+# /templates/pages/settings/modes.latte:178
+# /templates/pages/settings/modes.latte:183
+# /templates/pages/settings/modes.latte:169
+# /templates/pages/settings/modes.latte:172
+msgctxt "actions"
+msgid "Vytvořit"
+msgstr ""
+
+# /templates/pages/settings/modes.latte:91
+# /templates/pages/settings/modes.latte:122
+# /templates/pages/settings/modes.latte:148
+# /templates/pages/settings/modes.latte:157
+# /templates/pages/settings/modes.latte:178
+# /templates/pages/settings/modes.latte:176
+# /templates/pages/settings/modes.latte:181
+# /templates/pages/settings/modes.latte:167
+# /templates/pages/settings/modes.latte:170
+msgctxt "game.modes"
+msgid "Nová variace"
+msgstr ""
+
+# /templates/pages/settings/modes.latte:94
+# /templates/pages/settings/modes.latte:125
+# /templates/pages/settings/modes.latte:151
+# /templates/pages/settings/modes.latte:160
+# /templates/pages/settings/modes.latte:181
+# /templates/pages/settings/modes.latte:179
+# /templates/pages/settings/modes.latte:184
+# /templates/pages/settings/modes.latte:170
+# /templates/pages/settings/modes.latte:173
+msgctxt "errors"
+msgid "Název nesmí být prázdný"
+msgstr ""
+
+# /templates/pages/settings/modes.latte:95
+# /templates/pages/settings/modes.latte:126
+# /templates/pages/settings/modes.latte:152
+# /templates/pages/settings/modes.latte:161
+# /templates/pages/settings/modes.latte:182
+# /templates/pages/settings/modes.latte:180
+# /templates/pages/settings/modes.latte:185
+# /templates/pages/settings/modes.latte:171
+# /templates/pages/settings/modes.latte:174
+msgctxt "errors"
+msgid "Variace v módu již existuje"
+msgstr ""
+
+# /templates/pages/settings/modes.latte:37
+# /templates/pages/settings/modes.latte:45
+# /templates/pages/settings/modes.latte:38
+# /templates/pages/settings/modes.latte:46
+# /templates/pages/settings/modes.latte:186
+# /templates/pages/settings/modes.latte:194
+# /templates/pages/settings/modes.latte:201
+# /templates/pages/settings/modes.latte:209
+# /templates/pages/settings/modes.latte:211
+# /templates/pages/settings/modes.latte:219
+msgctxt "game.modes"
+msgid "Herní mód"
+msgstr ""
+
+# /templates/pages/settings/modes.latte:91
+# /templates/pages/settings/modes.latte:100
+# /templates/pages/settings/modes.latte:98
+# /templates/pages/settings/modes.latte:71
+# /templates/pages/settings/modes.latte:74
+# /templates/pages/settings/modes.latte:75
+msgctxt "game.modes"
+msgid "Nastavení zobrazených statistik na výsledcích"
+msgstr ""
+
+# /templates/pages/settings/modes.latte:136
+# /templates/pages/settings/modes.latte:162
+# /templates/pages/settings/modes.latte:171
+# /templates/pages/settings/modes.latte:192
+# /templates/pages/settings/modes.latte:190
+# /templates/pages/settings/modes.latte:195
+# /templates/pages/settings/modes.latte:224
+# /templates/pages/settings/modes.latte:239
+# /templates/pages/settings/modes.latte:249
+msgctxt "game.modes.settings"
+msgid "Veřejný"
+msgstr ""
+
+# /templates/pages/settings/modes.latte:138
+# /templates/pages/settings/modes.latte:139
+# /templates/pages/settings/modes.latte:165
+# /templates/pages/settings/modes.latte:174
+# /templates/pages/settings/modes.latte:195
+# /templates/pages/settings/modes.latte:193
+# /templates/pages/settings/modes.latte:198
+# /templates/pages/settings/modes.latte:227
+# /templates/pages/settings/modes.latte:242
+# /templates/pages/settings/modes.latte:252
+msgctxt "game.modes.settings"
+msgid "Pokud má být herní mód zobrazován veřejně v rozhraní pro zadání hry hráči (na tabletu)."
+msgstr ""
+
+# /templates/pages/settings/modes.latte:136
+# /templates/pages/settings/modes.latte:162
+# /templates/pages/settings/modes.latte:171
+# /templates/pages/settings/modes.latte:192
+# /templates/pages/settings/modes.latte:190
+# /templates/pages/settings/modes.latte:195
+# /templates/pages/settings/modes.latte:224
+# /templates/pages/settings/modes.latte:239
+# /templates/pages/settings/modes.latte:249
+msgctxt "game.modes.settings"
+msgid "Miny"
+msgstr ""
+
+# /templates/pages/settings/modes.latte:138
+# /templates/pages/settings/modes.latte:139
+# /templates/pages/settings/modes.latte:165
+# /templates/pages/settings/modes.latte:174
+# /templates/pages/settings/modes.latte:195
+# /templates/pages/settings/modes.latte:193
+# /templates/pages/settings/modes.latte:198
+# /templates/pages/settings/modes.latte:227
+# /templates/pages/settings/modes.latte:242
+# /templates/pages/settings/modes.latte:252
+msgctxt "game.modes.settings"
+msgid "Pokud se mají zobrazovat statistiky min."
+msgstr ""
+
+# /templates/pages/settings/modes.latte:136
+# /templates/pages/settings/modes.latte:162
+# /templates/pages/settings/modes.latte:171
+# /templates/pages/settings/modes.latte:192
+# /templates/pages/settings/modes.latte:190
+# /templates/pages/settings/modes.latte:195
+# /templates/pages/settings/modes.latte:224
+# /templates/pages/settings/modes.latte:239
+# /templates/pages/settings/modes.latte:249
+msgctxt "game.modes.settings"
+msgid "Vítěz"
+msgstr ""
+
+# /templates/pages/settings/modes.latte:138
+# /templates/pages/settings/modes.latte:139
+# /templates/pages/settings/modes.latte:165
+# /templates/pages/settings/modes.latte:174
+# /templates/pages/settings/modes.latte:195
+# /templates/pages/settings/modes.latte:193
+# /templates/pages/settings/modes.latte:198
+# /templates/pages/settings/modes.latte:227
+# /templates/pages/settings/modes.latte:242
+# /templates/pages/settings/modes.latte:252
+msgctxt "game.modes.settings"
+msgid "Pokud se má zobrazovat část \"Vítěz\"."
+msgstr ""
+
+# /templates/pages/settings/modes.latte:136
+# /templates/pages/settings/modes.latte:162
+# /templates/pages/settings/modes.latte:171
+# /templates/pages/settings/modes.latte:192
+# /templates/pages/settings/modes.latte:190
+# /templates/pages/settings/modes.latte:195
+# /templates/pages/settings/modes.latte:224
+# /templates/pages/settings/modes.latte:239
+# /templates/pages/settings/modes.latte:249
+msgctxt "game.modes.settings"
+msgid "Týmy"
+msgstr ""
+
+# /templates/pages/settings/modes.latte:138
+# /templates/pages/settings/modes.latte:139
+# /templates/pages/settings/modes.latte:165
+# /templates/pages/settings/modes.latte:174
+# /templates/pages/settings/modes.latte:195
+# /templates/pages/settings/modes.latte:193
+# /templates/pages/settings/modes.latte:198
+# /templates/pages/settings/modes.latte:227
+# /templates/pages/settings/modes.latte:242
+# /templates/pages/settings/modes.latte:252
+msgctxt "game.modes.settings"
+msgid "Pokud se má zobrazovat část \"Týmy\"."
+msgstr ""
+
+# /templates/pages/settings/modes.latte:136
+# /templates/pages/settings/modes.latte:162
+# /templates/pages/settings/modes.latte:171
+# /templates/pages/settings/modes.latte:192
+# /templates/pages/settings/modes.latte:190
+# /templates/pages/settings/modes.latte:195
+# /templates/pages/settings/modes.latte:224
+# /templates/pages/settings/modes.latte:239
+# /templates/pages/settings/modes.latte:249
+msgctxt "game.modes.settings"
+msgid "Hráči"
+msgstr ""
+
+# /templates/pages/settings/modes.latte:138
+# /templates/pages/settings/modes.latte:139
+# /templates/pages/settings/modes.latte:165
+# /templates/pages/settings/modes.latte:174
+# /templates/pages/settings/modes.latte:195
+# /templates/pages/settings/modes.latte:193
+# /templates/pages/settings/modes.latte:198
+# /templates/pages/settings/modes.latte:227
+# /templates/pages/settings/modes.latte:242
+# /templates/pages/settings/modes.latte:252
+msgctxt "game.modes.settings"
+msgid "Pokud se má zobrazovat část \"Hráči\"."
+msgstr ""
+
+# /templates/pages/settings/modes.latte:136
+# /templates/pages/settings/modes.latte:162
+# /templates/pages/settings/modes.latte:171
+# /templates/pages/settings/modes.latte:192
+# /templates/pages/settings/modes.latte:190
+# /templates/pages/settings/modes.latte:195
+# /templates/pages/settings/modes.latte:224
+# /templates/pages/settings/modes.latte:239
+# /templates/pages/settings/modes.latte:249
+msgctxt "game.modes.settings"
+msgid "Zásahy hráčů"
+msgstr ""
+
+# /templates/pages/settings/modes.latte:138
+# /templates/pages/settings/modes.latte:139
+# /templates/pages/settings/modes.latte:165
+# /templates/pages/settings/modes.latte:174
+# /templates/pages/settings/modes.latte:195
+# /templates/pages/settings/modes.latte:193
+# /templates/pages/settings/modes.latte:198
+# /templates/pages/settings/modes.latte:227
+# /templates/pages/settings/modes.latte:242
+# /templates/pages/settings/modes.latte:252
+msgctxt "game.modes.settings"
+msgid "Pokud se má zobrazovat část \"Zásahy hráčů\" (kdo koho zasáhl)."
+msgstr ""
+
+# /templates/pages/settings/modes.latte:136
+# /templates/pages/settings/modes.latte:162
+# /templates/pages/settings/modes.latte:171
+# /templates/pages/settings/modes.latte:132
+# /templates/pages/settings/modes.latte:192
+# /templates/pages/settings/modes.latte:151
+# /templates/pages/settings/modes.latte:190
+# /templates/pages/settings/modes.latte:149
+# /templates/pages/settings/modes.latte:195
+# /templates/pages/settings/modes.latte:154
+# /templates/pages/settings/modes.latte:224
+# /templates/pages/settings/modes.latte:140
+# /templates/pages/settings/modes.latte:239
+# /templates/pages/settings/modes.latte:143
+# /templates/pages/settings/modes.latte:249
+# /templates/pages/settings/modes.latte:148
+msgctxt "game.modes.settings"
+msgid "Ti nej"
+msgstr ""
+
+# /templates/pages/settings/modes.latte:138
+# /templates/pages/settings/modes.latte:139
+# /templates/pages/settings/modes.latte:165
+# /templates/pages/settings/modes.latte:174
+# /templates/pages/settings/modes.latte:195
+# /templates/pages/settings/modes.latte:193
+# /templates/pages/settings/modes.latte:198
+# /templates/pages/settings/modes.latte:227
+# /templates/pages/settings/modes.latte:242
+# /templates/pages/settings/modes.latte:252
+msgctxt "game.modes.settings"
+msgid "Pokud se má zobrazovat část \"Ti nej\"."
+msgstr ""
+
+# /templates/pages/settings/modes.latte:136
+# /templates/pages/settings/modes.latte:162
+# /templates/pages/settings/modes.latte:171
+# /templates/pages/settings/modes.latte:192
+# /templates/pages/settings/modes.latte:190
+# /templates/pages/settings/modes.latte:195
+# /templates/pages/settings/modes.latte:224
+# /templates/pages/settings/modes.latte:239
+# /templates/pages/settings/modes.latte:249
+msgctxt "game.modes.settings"
+msgid "Pořadí dne"
+msgstr ""
+
+# /templates/pages/settings/modes.latte:138
+# /templates/pages/settings/modes.latte:139
+# /templates/pages/settings/modes.latte:165
+# /templates/pages/settings/modes.latte:174
+# /templates/pages/settings/modes.latte:195
+# /templates/pages/settings/modes.latte:193
+# /templates/pages/settings/modes.latte:198
+# /templates/pages/settings/modes.latte:227
+# /templates/pages/settings/modes.latte:242
+# /templates/pages/settings/modes.latte:252
+msgctxt "game.modes.settings"
+msgid "Pokud se má zobrazovat část \"Pořadí dne\"."
+msgstr ""
+
+# /templates/pages/settings/modes.latte:136
+# /templates/pages/settings/modes.latte:162
+# /templates/pages/settings/modes.latte:171
+# /templates/pages/settings/modes.latte:192
+# /templates/pages/settings/modes.latte:190
+# /templates/pages/settings/modes.latte:195
+# /templates/pages/settings/modes.latte:224
+# /templates/pages/settings/modes.latte:239
+# /templates/pages/settings/modes.latte:249
+msgctxt "game.modes.settings"
+msgid "Skóre hráče"
+msgstr ""
+
+# /templates/pages/settings/modes.latte:138
+# /templates/pages/settings/modes.latte:139
+# /templates/pages/settings/modes.latte:165
+# /templates/pages/settings/modes.latte:174
+# /templates/pages/settings/modes.latte:195
+# /templates/pages/settings/modes.latte:193
+# /templates/pages/settings/modes.latte:198
+# /templates/pages/settings/modes.latte:227
+# /templates/pages/settings/modes.latte:242
+# /templates/pages/settings/modes.latte:252
+msgctxt "game.modes.settings"
+msgid "Pokud se má zobrazovat skóre u jednotlivých hráčů."
+msgstr ""
+
+# /templates/pages/settings/modes.latte:136
+# /templates/pages/settings/modes.latte:162
+# /templates/pages/settings/modes.latte:171
+# /templates/pages/settings/modes.latte:192
+# /templates/pages/settings/modes.latte:190
+# /templates/pages/settings/modes.latte:195
+# /templates/pages/settings/modes.latte:224
+# /templates/pages/settings/modes.latte:239
+# /templates/pages/settings/modes.latte:249
+msgctxt "game.modes.settings"
+msgid "Výstřely hráče"
+msgstr ""
+
+# /templates/pages/settings/modes.latte:138
+# /templates/pages/settings/modes.latte:139
+# /templates/pages/settings/modes.latte:165
+# /templates/pages/settings/modes.latte:174
+# /templates/pages/settings/modes.latte:195
+# /templates/pages/settings/modes.latte:193
+# /templates/pages/settings/modes.latte:198
+# /templates/pages/settings/modes.latte:227
+# /templates/pages/settings/modes.latte:242
+# /templates/pages/settings/modes.latte:252
+msgctxt "game.modes.settings"
+msgid "Pokud se mají zobrazovat výstřely u jednotlivých hráčů."
+msgstr ""
+
+# /templates/pages/settings/modes.latte:162
+# /templates/pages/settings/modes.latte:171
+# /templates/pages/settings/modes.latte:192
+# /templates/pages/settings/modes.latte:190
+# /templates/pages/settings/modes.latte:195
+# /templates/pages/settings/modes.latte:224
+# /templates/pages/settings/modes.latte:239
+# /templates/pages/settings/modes.latte:249
+msgctxt "game.modes.settings"
+msgid "Výstřely mimo hráče"
+msgstr ""
+
+# /templates/pages/settings/modes.latte:165
+# /templates/pages/settings/modes.latte:174
+# /templates/pages/settings/modes.latte:195
+# /templates/pages/settings/modes.latte:193
+# /templates/pages/settings/modes.latte:198
+# /templates/pages/settings/modes.latte:227
+# /templates/pages/settings/modes.latte:242
+# /templates/pages/settings/modes.latte:252
+msgctxt "game.modes.settings"
+msgid "Pokud se mají zobrazovat výstřely mimo u jednotlivých hráčů."
+msgstr ""
+
+# /templates/pages/settings/modes.latte:162
+# /templates/pages/settings/modes.latte:171
+# /templates/pages/settings/modes.latte:192
+# /templates/pages/settings/modes.latte:190
+# /templates/pages/settings/modes.latte:195
+# /templates/pages/settings/modes.latte:224
+# /templates/pages/settings/modes.latte:239
+# /templates/pages/settings/modes.latte:249
+msgctxt "game.modes.settings"
+msgid "Přesnost hráče"
+msgstr ""
+
+# /templates/pages/settings/modes.latte:165
+# /templates/pages/settings/modes.latte:174
+# /templates/pages/settings/modes.latte:195
+# /templates/pages/settings/modes.latte:193
+# /templates/pages/settings/modes.latte:198
+# /templates/pages/settings/modes.latte:227
+# /templates/pages/settings/modes.latte:242
+# /templates/pages/settings/modes.latte:252
+msgctxt "game.modes.settings"
+msgid "Pokud se má zobrazovat přesnost u jednotlivých hráčů."
+msgstr ""
+
+# /templates/pages/settings/modes.latte:162
+# /templates/pages/settings/modes.latte:171
+# /templates/pages/settings/modes.latte:192
+# /templates/pages/settings/modes.latte:190
+# /templates/pages/settings/modes.latte:195
+# /templates/pages/settings/modes.latte:224
+# /templates/pages/settings/modes.latte:239
+# /templates/pages/settings/modes.latte:249
+msgctxt "game.modes.settings"
+msgid "Miny hráče"
+msgstr ""
+
+# /templates/pages/settings/modes.latte:165
+# /templates/pages/settings/modes.latte:174
+# /templates/pages/settings/modes.latte:195
+# /templates/pages/settings/modes.latte:193
+# /templates/pages/settings/modes.latte:198
+# /templates/pages/settings/modes.latte:227
+# /templates/pages/settings/modes.latte:242
+# /templates/pages/settings/modes.latte:252
+msgctxt "game.modes.settings"
+msgid "Pokud se mají zobrazovat statistiky min u jednotlivých hráčů."
+msgstr ""
+
+# /templates/pages/settings/modes.latte:162
+# /templates/pages/settings/modes.latte:171
+# /templates/pages/settings/modes.latte:192
+# /templates/pages/settings/modes.latte:190
+# /templates/pages/settings/modes.latte:195
+# /templates/pages/settings/modes.latte:224
+# /templates/pages/settings/modes.latte:239
+# /templates/pages/settings/modes.latte:249
+msgctxt "game.modes.settings"
+msgid "Zásahy hráče"
+msgstr ""
+
+# /templates/pages/settings/modes.latte:165
+# /templates/pages/settings/modes.latte:174
+# /templates/pages/settings/modes.latte:195
+# /templates/pages/settings/modes.latte:193
+# /templates/pages/settings/modes.latte:198
+# /templates/pages/settings/modes.latte:227
+# /templates/pages/settings/modes.latte:242
+# /templates/pages/settings/modes.latte:252
+msgctxt "game.modes.settings"
+msgid "Pokud se mají zobrazovat zásahy u jednotlivých hráčů."
+msgstr ""
+
+# /templates/pages/settings/modes.latte:162
+# /templates/pages/settings/modes.latte:171
+# /templates/pages/settings/modes.latte:192
+# /templates/pages/settings/modes.latte:190
+# /templates/pages/settings/modes.latte:195
+# /templates/pages/settings/modes.latte:224
+# /templates/pages/settings/modes.latte:239
+# /templates/pages/settings/modes.latte:249
+msgctxt "game.modes.settings"
+msgid "Zásahy vlastních hráče"
+msgstr ""
+
+# /templates/pages/settings/modes.latte:165
+# /templates/pages/settings/modes.latte:174
+# /templates/pages/settings/modes.latte:195
+# /templates/pages/settings/modes.latte:193
+# /templates/pages/settings/modes.latte:198
+# /templates/pages/settings/modes.latte:227
+# /templates/pages/settings/modes.latte:242
+# /templates/pages/settings/modes.latte:252
+msgctxt "game.modes.settings"
+msgid "Pokud se mají zobrazovat zásahy rozdělené na vlastní a ostatní u jednotlivých hráčů."
+msgstr ""
+
+# /templates/pages/settings/modes.latte:162
+# /templates/pages/settings/modes.latte:171
+# /templates/pages/settings/modes.latte:192
+# /templates/pages/settings/modes.latte:190
+# /templates/pages/settings/modes.latte:195
+# /templates/pages/settings/modes.latte:224
+# /templates/pages/settings/modes.latte:239
+# /templates/pages/settings/modes.latte:249
+msgctxt "game.modes.settings"
+msgid "K:D hráče"
+msgstr ""
+
+# /templates/pages/settings/modes.latte:165
+# /templates/pages/settings/modes.latte:174
+# /templates/pages/settings/modes.latte:195
+# /templates/pages/settings/modes.latte:193
+# /templates/pages/settings/modes.latte:198
+# /templates/pages/settings/modes.latte:227
+# /templates/pages/settings/modes.latte:242
+# /templates/pages/settings/modes.latte:252
+msgctxt "game.modes.settings"
+msgid "Pokud se má zobrazovat K:D (poměr zabití a smrtí) u jednotlivých hráčů."
+msgstr ""
+
+# /templates/pages/settings/modes.latte:162
+# /templates/pages/settings/modes.latte:171
+# /templates/pages/settings/modes.latte:192
+# /templates/pages/settings/modes.latte:190
+# /templates/pages/settings/modes.latte:195
+# /templates/pages/settings/modes.latte:224
+# /templates/pages/settings/modes.latte:239
+# /templates/pages/settings/modes.latte:249
+msgctxt "game.modes.settings"
+msgid "Oblíbený cíl / Největší zabiják hráče"
+msgstr ""
+
+# /templates/pages/settings/modes.latte:165
+# /templates/pages/settings/modes.latte:174
+# /templates/pages/settings/modes.latte:195
+# /templates/pages/settings/modes.latte:193
+# /templates/pages/settings/modes.latte:198
+# /templates/pages/settings/modes.latte:227
+# /templates/pages/settings/modes.latte:242
+# /templates/pages/settings/modes.latte:252
+msgctxt "game.modes.settings"
+msgid "Pokud se mají zobrazovat oblíbení hráči (\"Největší cíl\", \"Největší zabiják\") u jednotlivých hráčů."
+msgstr ""
+
+# /templates/pages/settings/modes.latte:162
+# /templates/pages/settings/modes.latte:171
+# /templates/pages/settings/modes.latte:192
+# /templates/pages/settings/modes.latte:190
+# /templates/pages/settings/modes.latte:195
+# /templates/pages/settings/modes.latte:224
+# /templates/pages/settings/modes.latte:239
+# /templates/pages/settings/modes.latte:249
+msgctxt "game.modes.settings"
+msgid "Životy hráče"
+msgstr ""
+
+# /templates/pages/settings/modes.latte:165
+# /templates/pages/settings/modes.latte:174
+# /templates/pages/settings/modes.latte:195
+# /templates/pages/settings/modes.latte:193
+# /templates/pages/settings/modes.latte:198
+# /templates/pages/settings/modes.latte:227
+# /templates/pages/settings/modes.latte:242
+# /templates/pages/settings/modes.latte:252
+msgctxt "game.modes.settings"
+msgid "Pokud se mají zobrazovat zbývající životy u jednotlivých hráčů."
+msgstr ""
+
+# /templates/pages/settings/modes.latte:162
+# /templates/pages/settings/modes.latte:171
+# /templates/pages/settings/modes.latte:192
+# /templates/pages/settings/modes.latte:190
+# /templates/pages/settings/modes.latte:195
+# /templates/pages/settings/modes.latte:224
+# /templates/pages/settings/modes.latte:239
+# /templates/pages/settings/modes.latte:249
+msgctxt "game.modes.settings"
+msgid "Skóre týmu"
+msgstr ""
+
+# /templates/pages/settings/modes.latte:165
+# /templates/pages/settings/modes.latte:174
+# /templates/pages/settings/modes.latte:195
+# /templates/pages/settings/modes.latte:193
+# /templates/pages/settings/modes.latte:198
+# /templates/pages/settings/modes.latte:227
+# /templates/pages/settings/modes.latte:242
+# /templates/pages/settings/modes.latte:252
+msgctxt "game.modes.settings"
+msgid "Pokud se má zobrazovat skóre u jednotlivých týmů."
+msgstr ""
+
+# /templates/pages/settings/modes.latte:162
+# /templates/pages/settings/modes.latte:171
+# /templates/pages/settings/modes.latte:192
+# /templates/pages/settings/modes.latte:190
+# /templates/pages/settings/modes.latte:195
+# /templates/pages/settings/modes.latte:224
+# /templates/pages/settings/modes.latte:239
+# /templates/pages/settings/modes.latte:249
+msgctxt "game.modes.settings"
+msgid "Přesnost týmu"
+msgstr ""
+
+# /templates/pages/settings/modes.latte:165
+# /templates/pages/settings/modes.latte:174
+# /templates/pages/settings/modes.latte:195
+# /templates/pages/settings/modes.latte:193
+# /templates/pages/settings/modes.latte:198
+# /templates/pages/settings/modes.latte:227
+# /templates/pages/settings/modes.latte:242
+# /templates/pages/settings/modes.latte:252
+msgctxt "game.modes.settings"
+msgid "Pokud se má zobrazovat celková přesnost u jednotlivých týmů."
+msgstr ""
+
+# /templates/pages/settings/modes.latte:162
+# /templates/pages/settings/modes.latte:171
+# /templates/pages/settings/modes.latte:192
+# /templates/pages/settings/modes.latte:190
+# /templates/pages/settings/modes.latte:195
+# /templates/pages/settings/modes.latte:224
+# /templates/pages/settings/modes.latte:239
+# /templates/pages/settings/modes.latte:249
+msgctxt "game.modes.settings"
+msgid "Výstřely týmu"
+msgstr ""
+
+# /templates/pages/settings/modes.latte:165
+# /templates/pages/settings/modes.latte:174
+# /templates/pages/settings/modes.latte:195
+# /templates/pages/settings/modes.latte:193
+# /templates/pages/settings/modes.latte:198
+# /templates/pages/settings/modes.latte:227
+# /templates/pages/settings/modes.latte:242
+# /templates/pages/settings/modes.latte:252
+msgctxt "game.modes.settings"
+msgid "Pokud se mají zobrazovat výstřely u jednotlivých týmů."
+msgstr ""
+
+# /templates/pages/settings/modes.latte:162
+# /templates/pages/settings/modes.latte:171
+# /templates/pages/settings/modes.latte:192
+# /templates/pages/settings/modes.latte:190
+# /templates/pages/settings/modes.latte:195
+# /templates/pages/settings/modes.latte:224
+# /templates/pages/settings/modes.latte:239
+# /templates/pages/settings/modes.latte:249
+msgctxt "game.modes.settings"
+msgid "Zásahy týmu"
+msgstr ""
+
+# /templates/pages/settings/modes.latte:165
+# /templates/pages/settings/modes.latte:174
+# /templates/pages/settings/modes.latte:195
+# /templates/pages/settings/modes.latte:193
+# /templates/pages/settings/modes.latte:198
+# /templates/pages/settings/modes.latte:227
+# /templates/pages/settings/modes.latte:242
+# /templates/pages/settings/modes.latte:252
+msgctxt "game.modes.settings"
+msgid "Pokud se mají zobrazovat zásahy u jednotlivých týmů."
+msgstr ""
+
+# /templates/pages/settings/modes.latte:162
+# /templates/pages/settings/modes.latte:171
+# /templates/pages/settings/modes.latte:192
+# /templates/pages/settings/modes.latte:190
+# /templates/pages/settings/modes.latte:195
+# /templates/pages/settings/modes.latte:224
+# /templates/pages/settings/modes.latte:239
+# /templates/pages/settings/modes.latte:249
+msgctxt "game.modes.settings"
+msgid "Ztráty základny týmu"
+msgstr ""
+
+# /templates/pages/settings/modes.latte:165
+# /templates/pages/settings/modes.latte:174
+# /templates/pages/settings/modes.latte:195
+# /templates/pages/settings/modes.latte:193
+# /templates/pages/settings/modes.latte:198
+# /templates/pages/settings/modes.latte:227
+# /templates/pages/settings/modes.latte:242
+# /templates/pages/settings/modes.latte:252
+msgctxt "game.modes.settings"
+msgid "Pokud se mají zobrazovat ztráty základny u jednotlivých týmů (týká se jen módu Základny)."
+msgstr ""
+
+# /templates/pages/settings/modes.latte:162
+# /templates/pages/settings/modes.latte:171
+# /templates/pages/settings/modes.latte:192
+# /templates/pages/settings/modes.latte:190
+# /templates/pages/settings/modes.latte:195
+# /templates/pages/settings/modes.latte:224
+# /templates/pages/settings/modes.latte:239
+# /templates/pages/settings/modes.latte:249
+msgctxt "game.modes.settings"
+msgid "Absolutní vítěz"
+msgstr ""
+
+# /templates/pages/settings/modes.latte:165
+# /templates/pages/settings/modes.latte:174
+# /templates/pages/settings/modes.latte:195
+# /templates/pages/settings/modes.latte:193
+# /templates/pages/settings/modes.latte:198
+# /templates/pages/settings/modes.latte:227
+# /templates/pages/settings/modes.latte:242
+# /templates/pages/settings/modes.latte:252
+msgctxt "game.modes.settings"
+msgid "Pokud se má zobrazovat \"Absolutní vítěz\" v tabulce \"Ti nej\"."
+msgstr ""
+
+# /templates/pages/settings/modes.latte:162
+# /templates/pages/settings/modes.latte:171
+# /templates/pages/settings/modes.latte:192
+# /templates/pages/settings/modes.latte:190
+# /templates/pages/settings/modes.latte:195
+# /templates/pages/settings/modes.latte:224
+# /templates/pages/settings/modes.latte:239
+# /templates/pages/settings/modes.latte:249
+msgctxt "game.modes.settings"
+msgid "Největí terminátor"
+msgstr ""
+
+# /templates/pages/settings/modes.latte:165
+# /templates/pages/settings/modes.latte:174
+# /templates/pages/settings/modes.latte:195
+# /templates/pages/settings/modes.latte:193
+# /templates/pages/settings/modes.latte:198
+# /templates/pages/settings/modes.latte:227
+# /templates/pages/settings/modes.latte:242
+# /templates/pages/settings/modes.latte:252
+msgctxt "game.modes.settings"
+msgid "Pokud se má zobrazovat \"Největí terminátor\" v tabulce \"Ti nej\"."
+msgstr ""
+
+# /templates/pages/settings/modes.latte:162
+# /templates/pages/settings/modes.latte:171
+# /templates/pages/settings/modes.latte:192
+# /templates/pages/settings/modes.latte:190
+# /templates/pages/settings/modes.latte:195
+# /templates/pages/settings/modes.latte:224
+# /templates/pages/settings/modes.latte:239
+# /templates/pages/settings/modes.latte:249
+msgctxt "game.modes.settings"
+msgid "Objekt největšího zájmu"
+msgstr ""
+
+# /templates/pages/settings/modes.latte:165
+# /templates/pages/settings/modes.latte:174
+# /templates/pages/settings/modes.latte:195
+# /templates/pages/settings/modes.latte:193
+# /templates/pages/settings/modes.latte:198
+# /templates/pages/settings/modes.latte:227
+# /templates/pages/settings/modes.latte:242
+# /templates/pages/settings/modes.latte:252
+msgctxt "game.modes.settings"
+msgid "Pokud se má zobrazovat \"Objekt největšího zájmu\" v tabulce \"Ti nej\"."
+msgstr ""
+
+# /templates/pages/settings/modes.latte:162
+# /templates/pages/settings/modes.latte:171
+# /templates/pages/settings/modes.latte:192
+# /templates/pages/settings/modes.latte:190
+# /templates/pages/settings/modes.latte:195
+# /templates/pages/settings/modes.latte:224
+# /templates/pages/settings/modes.latte:239
+# /templates/pages/settings/modes.latte:249
+msgctxt "game.modes.settings"
+msgid "Hráč s nejlepší muškou"
+msgstr ""
+
+# /templates/pages/settings/modes.latte:165
+# /templates/pages/settings/modes.latte:174
+# /templates/pages/settings/modes.latte:195
+# /templates/pages/settings/modes.latte:193
+# /templates/pages/settings/modes.latte:198
+# /templates/pages/settings/modes.latte:227
+# /templates/pages/settings/modes.latte:242
+# /templates/pages/settings/modes.latte:252
+msgctxt "game.modes.settings"
+msgid "Pokud se má zobrazovat \"Hráč s nejlepší muškou\" v tabulce \"Ti nej\"."
+msgstr ""
+
+# /templates/pages/settings/modes.latte:162
+# /templates/pages/settings/modes.latte:171
+# /templates/pages/settings/modes.latte:192
+# /templates/pages/settings/modes.latte:190
+# /templates/pages/settings/modes.latte:195
+# /templates/pages/settings/modes.latte:224
+# /templates/pages/settings/modes.latte:239
+# /templates/pages/settings/modes.latte:249
+msgctxt "game.modes.settings"
+msgid "Zabiják vlastního týmu"
+msgstr ""
+
+# /templates/pages/settings/modes.latte:165
+# /templates/pages/settings/modes.latte:174
+# /templates/pages/settings/modes.latte:195
+# /templates/pages/settings/modes.latte:193
+# /templates/pages/settings/modes.latte:198
+# /templates/pages/settings/modes.latte:227
+# /templates/pages/settings/modes.latte:242
+# /templates/pages/settings/modes.latte:252
+msgctxt "game.modes.settings"
+msgid "Pokud se má zobrazovat \"Zabiják vlastního týmu\" v tabulce \"Ti nej\"."
+msgstr ""
+
+# /templates/pages/settings/modes.latte:162
+# /templates/pages/settings/modes.latte:171
+# /templates/pages/settings/modes.latte:192
+# /templates/pages/settings/modes.latte:190
+# /templates/pages/settings/modes.latte:195
+# /templates/pages/settings/modes.latte:224
+# /templates/pages/settings/modes.latte:239
+# /templates/pages/settings/modes.latte:249
+msgctxt "game.modes.settings"
+msgid "Největší vlasňák"
+msgstr ""
+
+# /templates/pages/settings/modes.latte:165
+# /templates/pages/settings/modes.latte:174
+# /templates/pages/settings/modes.latte:195
+# /templates/pages/settings/modes.latte:193
+# /templates/pages/settings/modes.latte:198
+# /templates/pages/settings/modes.latte:227
+# /templates/pages/settings/modes.latte:242
+# /templates/pages/settings/modes.latte:252
+msgctxt "game.modes.settings"
+msgid "Pokud se má zobrazovat \"Největší vlastňák\" v tabulce \"Ti nej\"."
+msgstr ""
+
+# /templates/pages/settings/modes.latte:162
+# /templates/pages/settings/modes.latte:171
+# /templates/pages/settings/modes.latte:192
+# /templates/pages/settings/modes.latte:190
+# /templates/pages/settings/modes.latte:195
+# /templates/pages/settings/modes.latte:224
+# /templates/pages/settings/modes.latte:239
+# /templates/pages/settings/modes.latte:249
+msgctxt "game.modes.settings"
+msgid "Nejúspornější střelec"
+msgstr ""
+
+# /templates/pages/settings/modes.latte:165
+# /templates/pages/settings/modes.latte:174
+# /templates/pages/settings/modes.latte:195
+# /templates/pages/settings/modes.latte:193
+# /templates/pages/settings/modes.latte:198
+# /templates/pages/settings/modes.latte:227
+# /templates/pages/settings/modes.latte:242
+# /templates/pages/settings/modes.latte:252
+msgctxt "game.modes.settings"
+msgid "Pokud se má zobrazovat \"Nejúspornější střelec\" v tabulce \"Ti nej\"."
+msgstr ""
+
+# /templates/pages/settings/modes.latte:162
+# /templates/pages/settings/modes.latte:171
+# /templates/pages/settings/modes.latte:192
+# /templates/pages/settings/modes.latte:190
+# /templates/pages/settings/modes.latte:195
+# /templates/pages/settings/modes.latte:224
+# /templates/pages/settings/modes.latte:239
+# /templates/pages/settings/modes.latte:249
+msgctxt "game.modes.settings"
+msgid "Největší mimoň"
+msgstr ""
+
+# /templates/pages/settings/modes.latte:165
+# /templates/pages/settings/modes.latte:174
+# /templates/pages/settings/modes.latte:195
+# /templates/pages/settings/modes.latte:193
+# /templates/pages/settings/modes.latte:198
+# /templates/pages/settings/modes.latte:227
+# /templates/pages/settings/modes.latte:242
+# /templates/pages/settings/modes.latte:252
+msgctxt "game.modes.settings"
+msgid "Pokud se má zobrazovat \"Největší mimooň\" v tabulce \"Ti nej\"."
+msgstr ""
+
+# /templates/pages/settings/modes.latte:162
+# /templates/pages/settings/modes.latte:171
+# /templates/pages/settings/modes.latte:192
+# /templates/pages/settings/modes.latte:190
+# /templates/pages/settings/modes.latte:195
+# /templates/pages/settings/modes.latte:224
+# /templates/pages/settings/modes.latte:239
+# /templates/pages/settings/modes.latte:249
+msgctxt "game.modes.settings"
+msgid "Drtič min"
+msgstr ""
+
+# /templates/pages/settings/modes.latte:165
+# /templates/pages/settings/modes.latte:174
+# /templates/pages/settings/modes.latte:195
+# /templates/pages/settings/modes.latte:193
+# /templates/pages/settings/modes.latte:198
+# /templates/pages/settings/modes.latte:227
+# /templates/pages/settings/modes.latte:242
+# /templates/pages/settings/modes.latte:252
+msgctxt "game.modes.settings"
+msgid "Pokud se má zobrazovat \"Drtič min\" v tabulce \"Ti nej\"."
+msgstr ""
+
+# /templates/pages/settings/modes.latte:98
+# /templates/pages/settings/modes.latte:107
+# /templates/pages/settings/modes.latte:105
+# /templates/pages/settings/modes.latte:110
+# /templates/pages/settings/modes.latte:84
+# /templates/pages/settings/modes.latte:87
+# /templates/pages/settings/modes.latte:88
+msgctxt "game.modes.settings"
+msgid "Obecné"
+msgstr ""
+
+# /templates/pages/settings/modes.latte:102
+# /templates/pages/settings/modes.latte:112
+# /templates/pages/settings/modes.latte:110
+# /templates/pages/settings/modes.latte:115
+# /templates/pages/settings/modes.latte:92
+# /templates/pages/settings/modes.latte:95
+# /templates/pages/settings/modes.latte:97
+msgctxt "game.modes.settings"
+msgid "Části"
+msgstr ""
+
+# /templates/pages/settings/modes.latte:103
+# /templates/pages/settings/modes.latte:112
+# /templates/pages/settings/modes.latte:125
+# /templates/pages/settings/modes.latte:133
+# /templates/pages/settings/modes.latte:113
+# /templates/pages/settings/modes.latte:141
+# /templates/pages/settings/modes.latte:152
+# /templates/pages/settings/modes.latte:111
+# /templates/pages/settings/modes.latte:123
+# /templates/pages/settings/modes.latte:139
+# /templates/pages/settings/modes.latte:150
+# /templates/pages/settings/modes.latte:116
+# /templates/pages/settings/modes.latte:128
+# /templates/pages/settings/modes.latte:144
+# /templates/pages/settings/modes.latte:155
+# /templates/pages/settings/modes.latte:93
+# /templates/pages/settings/modes.latte:108
+# /templates/pages/settings/modes.latte:127
+# /templates/pages/settings/modes.latte:96
+# /templates/pages/settings/modes.latte:130
+# /templates/pages/settings/modes.latte:98
+# /templates/pages/settings/modes.latte:114
+# /templates/pages/settings/modes.latte:134
+# /templates/pages/settings/modes.latte:149
+msgid "Varování"
+msgstr ""
+
+# /templates/pages/settings/modes.latte:103
+# /templates/pages/settings/modes.latte:112
+# /templates/pages/settings/modes.latte:125
+# /templates/pages/settings/modes.latte:133
+# /templates/pages/settings/modes.latte:114
+# /templates/pages/settings/modes.latte:126
+# /templates/pages/settings/modes.latte:142
+# /templates/pages/settings/modes.latte:153
+# /templates/pages/settings/modes.latte:124
+# /templates/pages/settings/modes.latte:140
+# /templates/pages/settings/modes.latte:151
+# /templates/pages/settings/modes.latte:117
+# /templates/pages/settings/modes.latte:129
+# /templates/pages/settings/modes.latte:145
+# /templates/pages/settings/modes.latte:156
+# /templates/pages/settings/modes.latte:94
+# /templates/pages/settings/modes.latte:109
+# /templates/pages/settings/modes.latte:128
+# /templates/pages/settings/modes.latte:97
+# /templates/pages/settings/modes.latte:131
+# /templates/pages/settings/modes.latte:99
+# /templates/pages/settings/modes.latte:115
+# /templates/pages/settings/modes.latte:135
+# /templates/pages/settings/modes.latte:150
+msgctxt "game.modes.settings"
+msgid "Na výsledcích se nezobrazují vždy všechny kategorie, ale jen ty které se vejdou."
+msgstr ""
+
+# /templates/pages/settings/modes.latte:111
+# /templates/pages/settings/modes.latte:124
+# /templates/pages/settings/modes.latte:122
+# /templates/pages/settings/modes.latte:127
+# /templates/pages/settings/modes.latte:107
+# /templates/pages/settings/modes.latte:110
+# /templates/pages/settings/modes.latte:113
+msgctxt "game.modes.settings"
+msgid "Výsledky hráče"
+msgstr ""
+
+# /templates/pages/settings/modes.latte:124
+# /templates/pages/settings/modes.latte:140
+# /templates/pages/settings/modes.latte:138
+# /templates/pages/settings/modes.latte:143
+# /templates/pages/settings/modes.latte:126
+# /templates/pages/settings/modes.latte:129
+# /templates/pages/settings/modes.latte:133
+msgctxt "game.modes.settings"
+msgid "Výsledky týmů"
+msgstr ""
+
+# /templates/pages/settings/modes.latte:52
+# /templates/pages/settings/modes.latte:200
+# /templates/pages/settings/modes.latte:215
+# /templates/pages/settings/modes.latte:225
+msgctxt "game.modes"
+msgid "Popis"
+msgstr ""
+
+# /templates/pages/settings/modes.latte:55
+# /templates/pages/settings/modes.latte:53
+# /templates/pages/settings/modes.latte:201
+# /templates/pages/settings/modes.latte:216
+# /templates/pages/settings/modes.latte:226
+msgid "Popis"
+msgstr ""
+
+# /templates/pages/settings/modes.latte:52
+# /templates/pages/settings/modes.latte:200
+# /templates/pages/settings/modes.latte:215
+# /templates/pages/settings/modes.latte:225
+msgctxt "gameModes"
+msgid "Klasická týmová hra."
+msgstr ""
+
+# /templates/pages/settings/modes.latte:52
+# /templates/pages/settings/modes.latte:200
+# /templates/pages/settings/modes.latte:215
+# /templates/pages/settings/modes.latte:225
+msgctxt "gameModes"
+msgid "Klasická hra všichni proti všem."
+msgstr ""
+
+# /templates/pages/settings/modes.latte:52
+# /templates/pages/settings/modes.latte:200
+# /templates/pages/settings/modes.latte:215
+# /templates/pages/settings/modes.latte:225
+msgctxt "gameModes"
+msgid "Klasická hra. Jeden Marco má zavázané oči a hledá na vybrané části arény ostatní hráče. Kdykoliv může zakřičet \"Marco\", kdy potom musí ostatní hráči ztuhnout na místě, kde byly a zakřičet \"Polo\". Marco poté může udělat 3 kroky a vystřelit. Jakmile vystřelí, hráči se můžou zase pohybovat. Hra končí po vypršení času, pokud Marco chytí všechny hráče, nebo Marcovi dojdou náboje."
+msgstr ""
+
+# /templates/pages/settings/modes.latte:36
+# /templates/pages/settings/modes.latte:37
+msgctxt "actions"
+msgid "Přidat týmový mód"
+msgstr ""
+
+# /templates/pages/settings/modes.latte:39
+# /templates/pages/settings/modes.latte:40
+msgctxt "actions"
+msgid "Přidat sólo mód"
+msgstr ""
+
+# /templates/pages/settings/modes.latte:190
+# /templates/pages/settings/modes.latte:198
+msgctxt "game.modes.types"
+msgid "Týmový"
+msgstr ""
+
+# /templates/pages/settings/modes.latte:191
+# /templates/pages/settings/modes.latte:200
+msgctxt "game.modes.types"
+msgid "Sólo"
+msgstr ""
+
+# /templates/pages/settings/modes.latte:193
+# /templates/pages/settings/modes.latte:202
+msgid "Typ"
+msgstr ""
+
+# /templates/pages/settings/modes.latte:171
+msgctxt "game.modes"
+msgid "Opravdu chcete herní mód vymazat? Akce nepůjde vrátit."
+msgstr ""
+
+# /src/Controllers/ModesSettings.php:314
+# /templates/pages/settings/modes.latte:212
+msgctxt "gameModes"
+msgid "Nový mód"
+msgstr ""
+
+# /templates/pages/settings/modes.latte:212
+msgctxt "gameModes"
+msgid "Test"
+msgstr ""
+
+# /templates/pages/settings/modes.latte:212
+msgctxt "gameModes"
+msgid "Test - solo"
+msgstr ""
+
+# /templates/pages/settings/modes.latte:225
+msgctxt "gameModes"
+msgid "kajsdnaksjdnasd"
 msgstr ""

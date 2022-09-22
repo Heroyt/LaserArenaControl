@@ -2056,6 +2056,7 @@ msgstr ""
 # /templates/pages/settings/music.latte:56
 # /templates/pages/settings/music.latte:58
 # /templates/pages/settings/music.latte:60
+# /templates/pages/settings/music.latte:62
 msgctxt "actions"
 msgid "Smazat"
 msgstr ""
@@ -2081,6 +2082,7 @@ msgstr ""
 
 # /templates/pages/settings/music.latte:57
 # /src/Controllers/Api/Helpers.php:20
+# /templates/pages/settings/music.latte:58
 msgctxt "actions"
 msgid "Přehrát"
 msgstr ""

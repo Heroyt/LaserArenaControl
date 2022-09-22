@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: Czech\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2022-09-22 13:45\n"
+"PO-Revision-Date: 2022-09-22 14:53\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=4; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 3;\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -1534,468 +1534,468 @@ msgid "Herní schopnost hráče"
 msgstr "Herní schopnost hráče"
 
 msgid "Znovu spočítat herní úroveň"
-msgstr ""
+msgstr "Znovu spočítat herní úroveň"
 
 msgid "Přepnout na sólo mód"
-msgstr ""
+msgstr "Přepnout na sólo mód"
 
 msgid "Music"
-msgstr ""
+msgstr "Hudba"
 
 msgctxt "game"
 msgid "Hudební módy"
-msgstr ""
+msgstr "Hudební módy"
 
 msgctxt "actions"
 msgid "Upload"
-msgstr ""
+msgstr "Nahrát"
 
 msgctxt "form"
 msgid "Saved successfully"
-msgstr ""
+msgstr "Úspěšně úloženo"
 
 msgctxt "errors"
 msgid "No file uploaded"
-msgstr ""
+msgstr "Nebyl nahrán žádný soubor"
 
 msgctxt "errors"
 msgid "Error while uploading a file."
-msgstr ""
+msgstr "Při odesílání souboru došlo k chybě."
 
 msgctxt "errors"
 msgid "Uploaded file already exists"
-msgstr ""
+msgstr "Nahraný soubor již existuje"
 
 msgctxt "actions"
 msgid "Smazat"
-msgstr ""
+msgstr "Smazat"
 
 msgctxt "errors"
 msgid "Failed to delete the music file"
-msgstr ""
+msgstr "Nepodařilo se odstranit soubor hudby"
 
 msgctxt "actions"
 msgid "Uložit"
-msgstr ""
+msgstr "Uložit"
 
 msgctxt "actions"
 msgid "Save"
-msgstr ""
+msgstr "Uložit"
 
 msgctxt "actions"
 msgid "Přehrát"
-msgstr ""
+msgstr "Přehrát"
 
 msgctxt "actions"
 msgid "Zastavit"
-msgstr ""
+msgstr "Zastavit"
 
 msgctxt "game.player"
 msgid "Maximální herní úroveň"
-msgstr ""
+msgstr "Maximální herní úroveň"
 
 msgctxt "actions"
 msgid "Smazat vše"
-msgstr ""
+msgstr "Smazat vše"
 
 msgid "Název"
-msgstr ""
+msgstr "Název"
 
 msgid "Název v konzoli"
-msgstr ""
+msgstr "Název v konzoli"
 
 msgctxt "actions"
 msgid "Odeslat"
-msgstr ""
+msgstr "Odeslat"
 
 msgctxt "game.modes"
 msgid "Upravit variace"
-msgstr ""
+msgstr "Upravit variace"
 
 msgctxt "game.modes"
 msgid "Upravit zobrazení výsledků"
-msgstr ""
+msgstr "Upravit zobrazení výsledků"
 
 msgctxt "game.modes"
 msgid "Variace módu"
-msgstr ""
+msgstr "Variace módu"
 
 msgctxt "game.modes"
 msgid "Název variace"
-msgstr ""
+msgstr "Název variace"
 
 msgctxt "game.modes"
 msgid "Hodnota variace"
-msgstr ""
+msgstr "Hodnota variace"
 
 msgctxt "game.modes"
 msgid "Přípona variace k módu v konzoli"
-msgstr ""
+msgstr "Přípona variace k módu v konzoli"
 
 msgctxt "game.modes"
 msgid "Existující variace"
-msgstr ""
+msgstr "Existující variace"
 
 msgctxt "actions"
 msgid "Přidat"
-msgstr ""
+msgstr "Přidat"
 
 msgctxt "actions"
 msgid "Vytvořit"
-msgstr ""
+msgstr "Vytvořit"
 
 msgctxt "game.modes"
 msgid "Nová variace"
-msgstr ""
+msgstr "Nová variace"
 
 msgctxt "errors"
 msgid "Název nesmí být prázdný"
-msgstr ""
+msgstr "Název nesmí být prázdný"
 
 msgctxt "errors"
 msgid "Variace v módu již existuje"
-msgstr ""
+msgstr "Variace v módu již existuje"
 
 msgctxt "game.modes"
 msgid "Herní mód"
-msgstr ""
+msgstr "Herní mód"
 
 msgctxt "game.modes"
 msgid "Nastavení zobrazených statistik na výsledcích"
-msgstr ""
+msgstr "Nastavení zobrazených statistik na výsledcích"
 
 msgctxt "game.modes.settings"
 msgid "Veřejný"
-msgstr ""
+msgstr "Veřejný"
 
 msgctxt "game.modes.settings"
 msgid "Pokud má být herní mód zobrazován veřejně v rozhraní pro zadání hry hráči (na tabletu)."
-msgstr ""
+msgstr "Pokud má být herní mód zobrazován veřejně v rozhraní pro zadání hry hráči (na tabletu)."
 
 msgctxt "game.modes.settings"
 msgid "Miny"
-msgstr ""
+msgstr "Miny"
 
 msgctxt "game.modes.settings"
 msgid "Pokud se mají zobrazovat statistiky min."
-msgstr ""
+msgstr "Pokud se mají zobrazovat statistiky min."
 
 msgctxt "game.modes.settings"
 msgid "Vítěz"
-msgstr ""
+msgstr "Vítěz"
 
 msgctxt "game.modes.settings"
 msgid "Pokud se má zobrazovat část \"Vítěz\"."
-msgstr ""
+msgstr "Pokud se má zobrazovat část \"Vítěz\"."
 
 msgctxt "game.modes.settings"
 msgid "Týmy"
-msgstr ""
+msgstr "Týmy"
 
 msgctxt "game.modes.settings"
 msgid "Pokud se má zobrazovat část \"Týmy\"."
-msgstr ""
+msgstr "Pokud se má zobrazovat část \"Týmy\"."
 
 msgctxt "game.modes.settings"
 msgid "Hráči"
-msgstr ""
+msgstr "Hráči"
 
 msgctxt "game.modes.settings"
 msgid "Pokud se má zobrazovat část \"Hráči\"."
-msgstr ""
+msgstr "Pokud se má zobrazovat část \"Hráči\"."
 
 msgctxt "game.modes.settings"
 msgid "Zásahy hráčů"
-msgstr ""
+msgstr "Zásahy hráčů"
 
 msgctxt "game.modes.settings"
 msgid "Pokud se má zobrazovat část \"Zásahy hráčů\" (kdo koho zasáhl)."
-msgstr ""
+msgstr "Pokud se má zobrazovat část \"Zásahy hráčů\" (kdo koho zasáhl)."
 
 msgctxt "game.modes.settings"
 msgid "Ti nej"
-msgstr ""
+msgstr "Ti nej"
 
 msgctxt "game.modes.settings"
 msgid "Pokud se má zobrazovat část \"Ti nej\"."
-msgstr ""
+msgstr "Pokud se má zobrazovat část \"Ti nej\"."
 
 msgctxt "game.modes.settings"
 msgid "Pořadí dne"
-msgstr ""
+msgstr "Pořadí dne"
 
 msgctxt "game.modes.settings"
 msgid "Pokud se má zobrazovat část \"Pořadí dne\"."
-msgstr ""
+msgstr "Pokud se má zobrazovat část \"Pořadí dne\"."
 
 msgctxt "game.modes.settings"
 msgid "Skóre hráče"
-msgstr ""
+msgstr "Skóre hráče"
 
 msgctxt "game.modes.settings"
 msgid "Pokud se má zobrazovat skóre u jednotlivých hráčů."
-msgstr ""
+msgstr "Pokud se má zobrazovat skóre u jednotlivých hráčů."
 
 msgctxt "game.modes.settings"
 msgid "Výstřely hráče"
-msgstr ""
+msgstr "Výstřely hráče"
 
 msgctxt "game.modes.settings"
 msgid "Pokud se mají zobrazovat výstřely u jednotlivých hráčů."
-msgstr ""
+msgstr "Pokud se mají zobrazovat výstřely u jednotlivých hráčů."
 
 msgctxt "game.modes.settings"
 msgid "Výstřely mimo hráče"
-msgstr ""
+msgstr "Výstřely mimo hráče"
 
 msgctxt "game.modes.settings"
 msgid "Pokud se mají zobrazovat výstřely mimo u jednotlivých hráčů."
-msgstr ""
+msgstr "Pokud se mají zobrazovat výstřely mimo u jednotlivých hráčů."
 
 msgctxt "game.modes.settings"
 msgid "Přesnost hráče"
-msgstr ""
+msgstr "Přesnost hráče"
 
 msgctxt "game.modes.settings"
 msgid "Pokud se má zobrazovat přesnost u jednotlivých hráčů."
-msgstr ""
+msgstr "Pokud se má zobrazovat přesnost u jednotlivých hráčů."
 
 msgctxt "game.modes.settings"
 msgid "Miny hráče"
-msgstr ""
+msgstr "Miny hráče"
 
 msgctxt "game.modes.settings"
 msgid "Pokud se mají zobrazovat statistiky min u jednotlivých hráčů."
-msgstr ""
+msgstr "Pokud se mají zobrazovat statistiky min u jednotlivých hráčů."
 
 msgctxt "game.modes.settings"
 msgid "Zásahy hráče"
-msgstr ""
+msgstr "Zásahy hráče"
 
 msgctxt "game.modes.settings"
 msgid "Pokud se mají zobrazovat zásahy u jednotlivých hráčů."
-msgstr ""
+msgstr "Pokud se mají zobrazovat zásahy u jednotlivých hráčů."
 
 msgctxt "game.modes.settings"
 msgid "Zásahy vlastních hráče"
-msgstr ""
+msgstr "Zásahy vlastních hráčů"
 
 msgctxt "game.modes.settings"
 msgid "Pokud se mají zobrazovat zásahy rozdělené na vlastní a ostatní u jednotlivých hráčů."
-msgstr ""
+msgstr "Pokud se mají zobrazovat zásahy rozdělené na vlastní a ostatní u jednotlivých hráčů."
 
 msgctxt "game.modes.settings"
 msgid "K:D hráče"
-msgstr ""
+msgstr "K:D hráče"
 
 msgctxt "game.modes.settings"
 msgid "Pokud se má zobrazovat K:D (poměr zabití a smrtí) u jednotlivých hráčů."
-msgstr ""
+msgstr "Pokud se má zobrazovat K:D (poměr zabití a smrtí) u jednotlivých hráčů."
 
 msgctxt "game.modes.settings"
 msgid "Oblíbený cíl / Největší zabiják hráče"
-msgstr ""
+msgstr "Oblíbený cíl / Největší zabiják hráče"
 
 msgctxt "game.modes.settings"
 msgid "Pokud se mají zobrazovat oblíbení hráči (\"Největší cíl\", \"Největší zabiják\") u jednotlivých hráčů."
-msgstr ""
+msgstr "Pokud se mají zobrazovat oblíbení hráči (\"Největší cíl\", \"Největší zabiják\") u jednotlivých hráčů."
 
 msgctxt "game.modes.settings"
 msgid "Životy hráče"
-msgstr ""
+msgstr "Životy hráče"
 
 msgctxt "game.modes.settings"
 msgid "Pokud se mají zobrazovat zbývající životy u jednotlivých hráčů."
-msgstr ""
+msgstr "Pokud se mají zobrazovat zbývající životy u jednotlivých hráčů."
 
 msgctxt "game.modes.settings"
 msgid "Skóre týmu"
-msgstr ""
+msgstr "Skóre týmu"
 
 msgctxt "game.modes.settings"
 msgid "Pokud se má zobrazovat skóre u jednotlivých týmů."
-msgstr ""
+msgstr "Pokud se má zobrazovat skóre u jednotlivých týmů."
 
 msgctxt "game.modes.settings"
 msgid "Přesnost týmu"
-msgstr ""
+msgstr "Přesnost týmu"
 
 msgctxt "game.modes.settings"
 msgid "Pokud se má zobrazovat celková přesnost u jednotlivých týmů."
-msgstr ""
+msgstr "Pokud se má zobrazovat celková přesnost u jednotlivých týmů."
 
 msgctxt "game.modes.settings"
 msgid "Výstřely týmu"
-msgstr ""
+msgstr "Výstřely týmu"
 
 msgctxt "game.modes.settings"
 msgid "Pokud se mají zobrazovat výstřely u jednotlivých týmů."
-msgstr ""
+msgstr "Pokud se mají zobrazovat výstřely u jednotlivých týmů."
 
 msgctxt "game.modes.settings"
 msgid "Zásahy týmu"
-msgstr ""
+msgstr "Zásahy týmu"
 
 msgctxt "game.modes.settings"
 msgid "Pokud se mají zobrazovat zásahy u jednotlivých týmů."
-msgstr ""
+msgstr "Pokud se mají zobrazovat zásahy u jednotlivých týmů."
 
 msgctxt "game.modes.settings"
 msgid "Ztráty základny týmu"
-msgstr ""
+msgstr "Ztráty základny týmu"
 
 msgctxt "game.modes.settings"
 msgid "Pokud se mají zobrazovat ztráty základny u jednotlivých týmů (týká se jen módu Základny)."
-msgstr ""
+msgstr "Pokud se mají zobrazovat ztráty základny u jednotlivých týmů (týká se jen módu Základny)."
 
 msgctxt "game.modes.settings"
 msgid "Absolutní vítěz"
-msgstr ""
+msgstr "Absolutní vítěz"
 
 msgctxt "game.modes.settings"
 msgid "Pokud se má zobrazovat \"Absolutní vítěz\" v tabulce \"Ti nej\"."
-msgstr ""
+msgstr "Pokud se má zobrazovat \"Absolutní vítěz\" v tabulce \"Ti nej\"."
 
 msgctxt "game.modes.settings"
 msgid "Největí terminátor"
-msgstr ""
+msgstr "Největí terminátor"
 
 msgctxt "game.modes.settings"
 msgid "Pokud se má zobrazovat \"Největí terminátor\" v tabulce \"Ti nej\"."
-msgstr ""
+msgstr "Pokud se má zobrazovat \"Největí terminátor\" v tabulce \"Ti nej\"."
 
 msgctxt "game.modes.settings"
 msgid "Objekt největšího zájmu"
-msgstr ""
+msgstr "Objekt největšího zájmu"
 
 msgctxt "game.modes.settings"
 msgid "Pokud se má zobrazovat \"Objekt největšího zájmu\" v tabulce \"Ti nej\"."
-msgstr ""
+msgstr "Pokud se má zobrazovat \"Objekt největšího zájmu\" v tabulce \"Ti nej\"."
 
 msgctxt "game.modes.settings"
 msgid "Hráč s nejlepší muškou"
-msgstr ""
+msgstr "Hráč s nejlepší muškou"
 
 msgctxt "game.modes.settings"
 msgid "Pokud se má zobrazovat \"Hráč s nejlepší muškou\" v tabulce \"Ti nej\"."
-msgstr ""
+msgstr "Pokud se má zobrazovat \"Hráč s nejlepší muškou\" v tabulce \"Ti nej\"."
 
 msgctxt "game.modes.settings"
 msgid "Zabiják vlastního týmu"
-msgstr ""
+msgstr "Zabiják vlastního týmu"
 
 msgctxt "game.modes.settings"
 msgid "Pokud se má zobrazovat \"Zabiják vlastního týmu\" v tabulce \"Ti nej\"."
-msgstr ""
+msgstr "Pokud se má zobrazovat \"Zabiják vlastního týmu\" v tabulce \"Ti nej\"."
 
 msgctxt "game.modes.settings"
 msgid "Největší vlasňák"
-msgstr ""
+msgstr "Největší vlasňák"
 
 msgctxt "game.modes.settings"
 msgid "Pokud se má zobrazovat \"Největší vlastňák\" v tabulce \"Ti nej\"."
-msgstr ""
+msgstr "Pokud se má zobrazovat \"Největší vlastňák\" v tabulce \"Ti nej\"."
 
 msgctxt "game.modes.settings"
 msgid "Nejúspornější střelec"
-msgstr ""
+msgstr "Nejúspornější střelec"
 
 msgctxt "game.modes.settings"
 msgid "Pokud se má zobrazovat \"Nejúspornější střelec\" v tabulce \"Ti nej\"."
-msgstr ""
+msgstr "Pokud se má zobrazovat \"Nejúspornější střelec\" v tabulce \"Ti nej\"."
 
 msgctxt "game.modes.settings"
 msgid "Největší mimoň"
-msgstr ""
+msgstr "Největší mimoň"
 
 msgctxt "game.modes.settings"
 msgid "Pokud se má zobrazovat \"Největší mimooň\" v tabulce \"Ti nej\"."
-msgstr ""
+msgstr "Pokud se má zobrazovat \"Největší mimoň\" v tabulce \"Ti nej\"."
 
 msgctxt "game.modes.settings"
 msgid "Drtič min"
-msgstr ""
+msgstr "Drtič min"
 
 msgctxt "game.modes.settings"
 msgid "Pokud se má zobrazovat \"Drtič min\" v tabulce \"Ti nej\"."
-msgstr ""
+msgstr "Pokud se má zobrazovat \"Drtič min\" v tabulce \"Ti nej\"."
 
 msgctxt "game.modes.settings"
 msgid "Obecné"
-msgstr ""
+msgstr "Obecné"
 
 msgctxt "game.modes.settings"
 msgid "Části"
-msgstr ""
+msgstr "Části"
 
 msgid "Varování"
-msgstr ""
+msgstr "Varování"
 
 msgctxt "game.modes.settings"
 msgid "Na výsledcích se nezobrazují vždy všechny kategorie, ale jen ty které se vejdou."
-msgstr ""
+msgstr "Na výsledcích se nezobrazují vždy všechny kategorie, ale jen ty které se vejdou."
 
 msgctxt "game.modes.settings"
 msgid "Výsledky hráče"
-msgstr ""
+msgstr "Výsledky hráče"
 
 msgctxt "game.modes.settings"
 msgid "Výsledky týmů"
-msgstr ""
+msgstr "Výsledky týmů"
 
 msgctxt "game.modes"
 msgid "Popis"
-msgstr ""
+msgstr "Popis"
 
 msgid "Popis"
-msgstr ""
+msgstr "Popis"
 
 msgctxt "gameModes"
 msgid "Klasická týmová hra."
-msgstr ""
+msgstr "Klasická týmová hra."
 
 msgctxt "gameModes"
 msgid "Klasická hra všichni proti všem."
-msgstr ""
+msgstr "Klasická hra všichni proti všem."
 
 msgctxt "gameModes"
 msgid "Klasická hra. Jeden Marco má zavázané oči a hledá na vybrané části arény ostatní hráče. Kdykoliv může zakřičet \"Marco\", kdy potom musí ostatní hráči ztuhnout na místě, kde byly a zakřičet \"Polo\". Marco poté může udělat 3 kroky a vystřelit. Jakmile vystřelí, hráči se můžou zase pohybovat. Hra končí po vypršení času, pokud Marco chytí všechny hráče, nebo Marcovi dojdou náboje."
-msgstr ""
+msgstr "Klasická hra. Jeden Marco má zavázané oči a hledá na vybrané části arény ostatní hráče. Kdykoliv může zakřičet \"Marco\", kdy potom musí ostatní hráči ztuhnout na místě, kde byly a zakřičet \"Polo\". Marco poté může udělat 3 kroky a vystřelit. Jakmile vystřelí, hráči se můžou zase pohybovat. Hra končí po vypršení času, pokud Marco chytí všechny hráče, nebo Marcovi dojdou náboje."
 
 msgctxt "actions"
 msgid "Přidat týmový mód"
-msgstr ""
+msgstr "Přidat týmový mód"
 
 msgctxt "actions"
 msgid "Přidat sólo mód"
-msgstr ""
+msgstr "Přidat sólo mód"
 
 msgctxt "game.modes.types"
 msgid "Týmový"
-msgstr ""
+msgstr "Týmový"
 
 msgctxt "game.modes.types"
 msgid "Sólo"
-msgstr ""
+msgstr "Sólo"
 
 msgid "Typ"
-msgstr ""
+msgstr "Typ"
 
 msgctxt "game.modes"
 msgid "Opravdu chcete herní mód vymazat? Akce nepůjde vrátit."
-msgstr ""
+msgstr "Opravdu chcete herní mód vymazat? Akce nepůjde vrátit."
 
 msgctxt "gameModes"
 msgid "Nový mód"
-msgstr ""
+msgstr "Nový mód"
 
 msgctxt "gameModes"
 msgid "Test"
-msgstr ""
+msgstr "Test"
 
 msgctxt "gameModes"
 msgid "Test - solo"
-msgstr ""
+msgstr "Test - solo"
 
 msgctxt "gameModes"
 msgid "kajsdnaksjdnasd"

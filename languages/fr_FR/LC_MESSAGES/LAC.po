@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: French\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2022-09-07 09:46\n"
+"PO-Revision-Date: 2022-09-22 13:44\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -2056,7 +2056,6 @@ msgstr ""
 # /templates/pages/settings/music.latte:56
 # /templates/pages/settings/music.latte:58
 # /templates/pages/settings/music.latte:60
-# /templates/pages/settings/music.latte:62
 msgctxt "actions"
 msgid "Smazat"
 msgstr ""
@@ -2082,7 +2081,6 @@ msgstr ""
 
 # /templates/pages/settings/music.latte:57
 # /src/Controllers/Api/Helpers.php:20
-# /templates/pages/settings/music.latte:58
 msgctxt "actions"
 msgid "Přehrát"
 msgstr ""
@@ -3318,3 +3316,4 @@ msgstr ""
 msgctxt "gameModes"
 msgid "kajsdnaksjdnasd"
 msgstr ""
+

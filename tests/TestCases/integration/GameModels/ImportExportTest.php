@@ -201,11 +201,11 @@ class ImportExportTest extends TestCase
 						if (in_array($field2, self::SKIP_FIELDS, true)) {
 							continue;
 						}
-						self::assertEquals($player->{$field}->{$field2}, $decodedPlayer->{$field}->{$field2}, 'Failed asserting that the properties are the same: "player.'.$field.'.'.$field2.'"');
+						self::assertEquals($player->{$field}->{$field2}, $decodedPlayer->{$field}->{$field2}, 'Failed asserting that the properties are the same: "player.'.$field.'.'.$field2.'" - '.$json);
 					}
 				}
 				else {
-					self::assertEquals($player->{$field}, $decodedPlayer->{$field}, 'Failed asserting that the properties are the same: "player.'.$field.'"');
+					self::assertEquals($player->{$field}, $decodedPlayer->{$field}, 'Failed asserting that the properties are the same: "player.'.$field.'" - '.$json);
 				}
 			}
 			// Test hits
@@ -215,7 +215,7 @@ class ImportExportTest extends TestCase
 			}
 			// Test team
 			/* @phpstan-ignore-next-line */
-			self::assertEquals($player->getTeamColor(), $decodedPlayer->getTeamColor());
+			self::assertEquals($player->getTeamColor(), $decodedPlayer->getTeamColor(), 'Failed asserting that the team colors match.');
 		}
 
 		// Test teams

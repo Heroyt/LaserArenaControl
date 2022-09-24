@@ -40,3 +40,9 @@ docker-compose.yml
 docs/
 !assets/icon/
 upload/
+docker/*
+!docker/nginx
+!docker/nginx.conf
+!docker/docker-compose-nginx.yml
+!docker/DockerfileNginx
+!docker/DockerfileNginxServer

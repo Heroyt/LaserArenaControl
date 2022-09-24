@@ -2,6 +2,7 @@
 #include <StringConstants.au3>
 
 #include "TCPServer.au3"
+#include "functions.au3"
 #include "load.au3"
 #include "start.au3"
 #include "end.au3"
@@ -28,4 +29,6 @@ Func received($iSocket, $sIP, $sData, $sPar)
     	Case "end"
     		end()
     		_TCPServer_Send($iSocket, "done")
+    	Case "status"
+    		_TCPServer_Send($iSocket, GetGameStatus())
 EndFunc   ;==>received

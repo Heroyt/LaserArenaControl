@@ -37,6 +37,7 @@ lmx/
 results/
 entr/
 docker-compose.yml
+docker-compose-staging.yml
 docs/
 !assets/icon/
 upload/

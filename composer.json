@@ -30,7 +30,7 @@
 		"ext-zip": "*",
 		"gettext/gettext": "^5.7",
 		"guzzlehttp/guzzle": "^7.5",
-		"latte/latte": "^3.0.0",
+		"latte/latte": "^3.0",
 		"nette/di": "^3.0",
 		"nette/http": "^3.1",
 		"nette/security": "^3.1",

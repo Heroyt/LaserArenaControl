@@ -121,7 +121,7 @@ class NewGame extends Controller
 			file_put_contents($loadDir.'0000.game', $content);
 		}
 		bdump($content);
-		$this->respond('ok');
+		$this->respond(['status' => 'ok', 'mode' => $data['meta']['mode']]);
 	}
 
 }

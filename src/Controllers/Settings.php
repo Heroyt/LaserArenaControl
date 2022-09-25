@@ -125,6 +125,9 @@ class Settings extends Controller
 			if (isset($request->post['api_key'])) {
 				Info::set('liga_api_key', $request->post['api_key']);
 			}
+			if (isset($request->post['lmx_ip'])) {
+				Info::set('lmx_ip', $request->post['lmx_ip']);
+			}
 		} catch (Exception) {
 			$request->passErrors[] = lang('Failed to save settings.', context: 'errors');
 		}

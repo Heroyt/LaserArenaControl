@@ -17,9 +17,6 @@ export default function initNewGamePage() {
 		e.preventDefault();
 
 		const data = new FormData(form);
-		//data.forEach((value, key) => {
-		//	console.log(key, value)
-		//});
 
 		if (!data.get('action')) {
 			data.set('action', (e.submitter as HTMLButtonElement).value)
@@ -29,14 +26,17 @@ export default function initNewGamePage() {
 			return;
 		}
 
-		startLoading();
-		axios.post('/', data)
-			.then(() => {
-				stopLoading();
-			})
-			.catch(() => {
-				stopLoading(false);
-			});
+		switch (data.get('action')) {
+			case 'load':
+				loadGame(data);
+				break;
+			case 'start':
+				startGame(data);
+				break;
+			case 'stop':
+				stopGame(data);
+				break;
+		}
 	});
 
 	// Autosave to local storage
@@ -155,5 +155,116 @@ export default function initNewGamePage() {
 		}
 
 		return true;
+	}
+
+	function startGame(data: FormData) {
+		startLoading(true);
+		getCurrentStatus()
+			.then((response: AxiosResponse<{ status: string }>) => {
+				stopLoading(true, true);
+				if (response.data.status) {
+					switch (response.data.status) {
+						case 'STANDBY':
+							loadGame(data, sendStart);
+							break;
+						case 'ARMED':
+							sendStart();
+							break;
+						case 'PLAYING':
+							// Cannot start while playing the game
+							break;
+					}
+				}
+			})
+			.catch(error => {
+				console.error(error);
+				stopLoading(false, true);
+			})
+
+		function sendStart() {
+			startLoading(true);
+			axios.post('/control/start')
+				.then(() => {
+					stopLoading(true, true);
+				})
+				.catch(error => {
+					console.error(error);
+					stopLoading(false, true);
+				});
+		}
+	}
+
+	function stopGame(data: FormData) {
+		startLoading(true);
+		getCurrentStatus()
+			.then((response: AxiosResponse<{ status: string }>) => {
+				if (response.data.status) {
+					switch (response.data.status) {
+						case 'STANDBY':
+							break;
+						case 'ARMED':
+						case 'PLAYING':
+							axios.post('/control/stop')
+								.then(() => {
+									stopLoading(true, true);
+								})
+								.catch(error => {
+									console.error(error);
+									stopLoading(false, true);
+								});
+							break;
+					}
+				}
+			})
+			.catch(error => {
+				console.error(error);
+				stopLoading(false, true);
+			})
+	}
+
+	function loadGame(data: FormData, callback: null | (() => void) = null): void {
+		startLoading();
+		axios.post('/', data)
+			.then((response: AxiosResponse<{ status: string, mode?: string }>) => {
+				stopLoading();
+				if (!response.data.mode || response.data.mode === '') {
+					console.error('Got invalid mode');
+					return;
+				}
+				const mode = response.data.mode;
+
+				startLoading(true);
+				getCurrentStatus()
+					.then((response: AxiosResponse<{ status: string }>) => {
+						if (response.data.status && response.data.status !== 'PLAYING') {
+							axios
+								.post('/control/load', {
+									mode,
+								})
+								.then(() => {
+									stopLoading(true, true);
+									if (callback) {
+										callback();
+									}
+								})
+								.catch(error => {
+									stopLoading(false, true);
+									console.error(error);
+								});
+						}
+
+					})
+					.catch(error => {
+						stopLoading(false, true);
+						console.error(error);
+					})
+			})
+			.catch(() => {
+				stopLoading(false);
+			});
+	}
+
+	function getCurrentStatus() {
+		return axios.get('/control/status');
 	}
 }

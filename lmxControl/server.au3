@@ -22,13 +22,13 @@ Func received($iSocket, $sIP, $sData, $sPar)
     Switch $action
     	Case "load"
     		load($parameter)
-    		_TCPServer_Send($iSocket, "done")
+    		_TCPServer_Send($iSocket, "ok")
     	Case "start"
     		start()
-    		_TCPServer_Send($iSocket, "done")
+    		_TCPServer_Send($iSocket, "ok")
     	Case "end"
     		end()
-    		_TCPServer_Send($iSocket, "done")
+    		_TCPServer_Send($iSocket, "ok")
     	Case "status"
     		_TCPServer_Send($iSocket, GetGameStatus())
 EndFunc   ;==>received

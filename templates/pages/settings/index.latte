@@ -7,10 +7,15 @@
 			{lang 'Last saved:'} <span class="last-save" data-target="#general-settings-form">{lang 'never'}</span>
 		</div>
 		<h2>{lang 'General settings', context: 'settings'}:</h2>
-		<div class="form-group">
+		<div class="form-group my-3">
 			<label for="api_key">{lang 'API klíč', context: 'settings'}:</label>
 			<input type="text" name="api_key" class="form-control" id="api_key"
 				   value="{\App\Core\Info::get('liga_api_key', '')}">
+		</div>
+		<div class="form-group my-3">
+			<label for="lmx_ip">{lang 'IP adresa LaserMaxx konzole', context: 'settings'}:</label>
+			<input type="text" name="lmx_ip" class="form-control" id="lmx_ip"
+				   value="{\App\Core\Info::get('lmx_ip', '')}">
 		</div>
 		<p class="my-4">
 			<button class="btn btn-success btn-lg" type="submit" data-action="autosave" data-prevent="true">

@@ -16,7 +16,7 @@
 {/define}
 
 {define content}
-	<h1 class="title text-center text-white">{lang 'Výsledky dne', context: 'gate'}</h1>
+	<h1 class="title text-center text-white-forced">{lang 'Výsledky dne', context: 'gate'}</h1>
 
 	<div class="score d-flex flex-column justify-content-between align-items-stretch">
 
@@ -26,7 +26,7 @@
 				{lang 'Nejlepší skóre dne', context: 'gate'}
 			</div>
 			<div n:for="$i = 1; $i < 4; $i++"
-					class="text-center py-2 d-flex bg-white flex-fill {if $i === 3}rounded-bottom-10{else}bbd{/if}">
+					class="text-center py-2 d-flex bg-white-forced flex-fill {if $i === 3}rounded-bottom-10{else}bbd{/if}">
 				<div class="col-2 fw-light">{$i}.</div>
 				<div class="col-6">
 					{ifset $topScores[$i-1]}
@@ -49,7 +49,7 @@
 					{lang 'Odehráno her', context: 'results'}
 				</div>
 			</div>
-			<div class="bg-white rounded-end-10 d-flex align-items-center justify-content-center col-4">
+			<div class="bg-white-forced rounded-end-10 d-flex align-items-center justify-content-center col-4">
 				{$gameCount}
 			</div>
 		</div>
@@ -64,7 +64,7 @@
 					{lang 'Sniper', context: 'results'}
 				</div>
 			</div>
-			<div class="flex-fill-same bg-white py-1 d-flex align-items-center justify-content-center"
+			<div class="flex-fill-same bg-white-forced py-1 d-flex align-items-center justify-content-center"
 				 style="border-top-right-radius: 10px;">
 				{ifset $topAccuracy}
 					{$topAccuracy->name} ({$topAccuracy->accuracy}%)
@@ -78,7 +78,7 @@
 					{lang 'Mega střelec', context: 'results'}
 				</div>
 			</div>
-			<div class="flex-fill-same bg-white py-1 d-flex align-items-center justify-content-center">
+			<div class="flex-fill-same bg-white-forced py-1 d-flex align-items-center justify-content-center">
 				{ifset $topShots}
 					{$topShots->name} ({sprintf(lang('%d shot', '%d shots', $topShots->shots, 'results'), $topShots->shots)})
 				{/ifset}
@@ -91,7 +91,7 @@
 					{lang 'Predátor', context: 'results'}
 				</div>
 			</div>
-			<div class="flex-fill-same bg-white py-1 d-flex align-items-center justify-content-center">
+			<div class="flex-fill-same bg-white-forced py-1 d-flex align-items-center justify-content-center">
 				{ifset $topHits}
 					{$topHits->name} ({sprintf(lang('%d hit', '%d hits', $topHits->hits, 'results'), $topHits->hits)})
 				{/ifset}
@@ -105,7 +105,7 @@
 					{lang 'Cíl', context: 'results'}
 				</div>
 			</div>
-			<div class="flex-fill-same bg-white py-1 d-flex align-items-center justify-content-center"
+			<div class="flex-fill-same bg-white-forced py-1 d-flex align-items-center justify-content-center"
 				 style="border-bottom-right-radius: 10px;">
 				{ifset $topDeaths}
 					{$topDeaths->name} ({sprintf(lang('%d death', '%d deaths', $topDeaths->deaths, 'results'), $topDeaths->deaths)})
@@ -116,7 +116,7 @@
 
 	<div class="timer" n:if="isset($game) && !$game->finished">
 		{var int $left = ($game->timing->gameLength * 60) - (time() - $game->start->getTimestamp())}
-		<div class="time text-white {if $left < 0}d-none{/if}"
+		<div class="time text-white-forced {if $left < 0}d-none{/if}"
 			 data-start="{$game->start->getTimestamp()}"
 			 data-startdate="{$game->start->format('Y-m-d H:i')}"
 			 data-showafter="{\App\Core\Info::get('timer_show', 30)}"

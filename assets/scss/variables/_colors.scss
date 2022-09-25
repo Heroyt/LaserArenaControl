@@ -1,9 +1,11 @@
 $custom-colors: (
 	"black": (
 		"": #000,
+		"forced": #000,
 	),
 	"white": (
 		"": ("color": #fff, "alias": 'background'),
+		"forced": #fff,
 		"200": ("color": #f0f0f0, "alias": 'very-light'),
 		"300": ("color": #e0e0e0, "alias": 'light'),
 	),

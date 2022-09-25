@@ -77,7 +77,7 @@
 
 		.info {
 			align-items: center;
-			color: var(--white);
+			color: var(--white-forced);
 			display: flex;
 			flex-direction: column;
 			grid-area: info;
@@ -182,8 +182,8 @@
 				display: block;
 				margin: 0 auto;
 				max-width: calc(5rem * var(--multiplier));
-				width: 100%;
 				position: relative;
+				width: 100%;
 
 				* {
 					font-size: 64pt;
@@ -211,7 +211,7 @@
 			.name {
 				font-size: calc(1.4rem * var(--multiplier));
 				font-weight: bold;
-				text-shadow: 0 0 5px var(--white);
+				text-shadow: 0 0 5px var(--white-forced);
 				text-transform: uppercase;
 			}
 		}

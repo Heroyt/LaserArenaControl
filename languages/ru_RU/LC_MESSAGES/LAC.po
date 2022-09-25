@@ -2002,3 +2002,10 @@ msgstr ""
 
 msgid "Hodnoty variace můžete řadit. Jako výchozí se vždy použije první hodnota (nahoře v seznamu)."
 msgstr ""
+
+msgctxt "settings"
+msgid "IP adresa LaserMaxx konzole"
+msgstr ""
+
+msgid "Nepodařilo se připojit k TCP serveru (192.168.50.3:8081)."
+msgstr ""

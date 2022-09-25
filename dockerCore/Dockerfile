@@ -17,6 +17,7 @@ COPY php-staging.ini "$PHP_INI_DIR/php-staging.ini"
 # PHP extensions
 RUN apt-get install -y libzip-dev unzip
 RUN apt install -y curl libcurl4-openssl-dev
+RUN docker-php-ext-install opcache && docker-php-ext-enable opcache
 RUN docker-php-ext-install mysqli && docker-php-ext-enable mysqli
 RUN docker-php-ext-install curl && docker-php-ext-enable curl
 RUN docker-php-ext-install gettext && docker-php-ext-enable gettext

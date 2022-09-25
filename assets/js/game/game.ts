@@ -453,6 +453,7 @@ export default class Game {
 	}
 
 	import(data: GameData) {
+		console.log("import game", data);
 		this.clearAll();
 
 		if (data.playerCount > 0) {
@@ -468,7 +469,7 @@ export default class Game {
 					return;
 				}
 				player.$name.value = playerData.name;
-				if (playerData.color) {
+				if (playerData.color !== undefined && playerData.color !== null) {
 					player.setTeam(playerData.color.toString());
 				}
 				player.setSkill(Math.ceil((playerData.skill - minSkill) / skillStep));

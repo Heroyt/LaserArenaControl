@@ -10,11 +10,13 @@ use App\GameModels\Vest;
 use App\Models\MusicMode;
 use JsonException;
 use Lsr\Core\Controller;
+use Lsr\Core\Exceptions\ModelNotFoundException;
 use Lsr\Core\Exceptions\ValidationException;
 use Lsr\Core\Requests\Request;
 use Lsr\Core\Routing\Attributes\Post;
 use Lsr\Exceptions\TemplateDoesNotExistException;
 use Lsr\Helpers\Tools\Strings;
+use Lsr\Logging\Exceptions\DirectoryCreationException;
 use Throwable;
 
 class NewGame extends Controller
@@ -121,6 +123,18 @@ class NewGame extends Controller
 			file_put_contents($loadDir.'0000.game', $content);
 		}
 		bdump($content);
+
+		// Set up a correct music file
+		if (isset($data['meta']['music'])) {
+			try {
+				$music = MusicMode::get($data['meta']['music']);
+				if (isset($music)) {
+					copy($music->fileName, LMX_DIR.'music/evo5.mp3');
+				}
+			} catch (ModelNotFoundException|ValidationException|DirectoryCreationException $e) {
+				// Not critical, doesn't need to do anything
+			}
+		}
 		$this->respond(['status' => 'ok', 'mode' => $data['meta']['mode']]);
 	}
 

@@ -1,5 +1,8 @@
 FROM heroyt/lac_core:latest AS project
 
+# Update PHP ini file
+RUN mv "$PHP_INI_DIR/php-staging.ini" "$PHP_INI_DIR/php.ini"
+
 COPY cron /etc/cron.d/lac-cron
 RUN chmod 0644 /etc/cron.d/lac-cron &&\
     crontab /etc/cron.d/lac-cron

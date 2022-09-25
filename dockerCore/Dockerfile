@@ -10,7 +10,9 @@ RUN apt-get update && apt update && apt-get -y install apt-utils wget git build-
 SHELL ["/bin/bash", "-c"]
 RUN ln -s ../mods-available/{expires,headers,rewrite}.load /etc/apache2/mods-enabled/
 RUN sed -e '/<Directory \/var\/www\/>/,/<\/Directory>/s/AllowOverride None/AllowOverride All/' -i /etc/apache2/apache2.conf
-RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
+#RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
+COPY php.ini "$PHP_INI_DIR/php.ini"
+COPY php-staging.ini "$PHP_INI_DIR/php-staging.ini"
 
 # PHP extensions
 RUN apt-get install -y libzip-dev unzip

@@ -21,12 +21,5 @@ const LANGUAGE_DIR = ROOT.'languages/';
 const LANGUAGE_FILE_NAME = 'LAC';
 const ASSETS_DIR = ROOT.'assets/';
 const LMX_DIR = ROOT.'lmx/';
-/** App's default language */
-const DEFAULT_LANGUAGE = 'cs';
-/** Suffixes for language translations */
-const LANGUAGE_SUFFIXES = [
-	'cs' => 'CZ',
-	'en' => 'US',
-];
 
-const EVENT_PORT = 9999;
+define("EVENT_PORT", (int) ($_ENV['EVENT_SERVER_PORT'] ?? 9999));

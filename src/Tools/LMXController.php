@@ -7,7 +7,6 @@ namespace App\Tools;
 
 use Exception;
 use RuntimeException;
-use Socket;
 
 /**
  * Controller for sending TCP requests to control the LaserMaxx console
@@ -41,24 +40,16 @@ class LMXController
 	 * @return string Response
 	 */
 	public static function sendCommand(string $ip, string $command, string $parameters = '') : string {
-		/** @var Socket|false $sock */
-		$sock = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
-		if ($sock === false) {
-			throw new RuntimeException(lang('Nepodařilo se vytvořit socket.'));
+		$fp = fsockopen($ip, self::PORT, $errno, $errstr, 30);
+		if (!$fp) {
+			throw new RuntimeException(lang('Nepodařilo se připojit k TCP serveru ('.$ip.':'.self::PORT.'). '.$errstr.' ('.$errno.')'));
 		}
-		$res = socket_connect($sock, $ip, self::PORT);
-		if ($res === false) {
-			throw new RuntimeException(lang('Nepodařilo se připojit k TCP serveru ('.$ip.':'.self::PORT.').'));
-		}
-		/** @var int|false $a */
-		$a = socket_write($sock, $command.':'.$parameters);
+		fwrite($fp, $command.':'.$parameters);
 		$response = '';
-		if ($a !== false) {
-			while ($out = socket_read($sock, 2048)) {
-				$response .= $out;
-			}
+		while (!feof($fp)) {
+			$response .= fgets($fp, 128);
 		}
-		socket_close($sock);
+		fclose($fp);
 		return $response;
 	}
 

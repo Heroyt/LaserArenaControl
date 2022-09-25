@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: Russian\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2022-09-22 21:51\n"
+"PO-Revision-Date: 2022-09-25 15:10\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=4; plural=((n%10==1 && n%100!=11) ? 0 : ((n%10 >= 2 && n%10 <=4 && (n%100 < 12 || n%100 > 14)) ? 1 : ((n%10 == 0 || (n%10 >= 5 && n%10 <=9)) || (n%100 >= 11 && n%100 <= 14)) ? 2 : 3));\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -2001,5 +2001,12 @@ msgid "Variace herních módů označují malé změny v nastavení hry, jako na
 msgstr ""
 
 msgid "Hodnoty variace můžete řadit. Jako výchozí se vždy použije první hodnota (nahoře v seznamu)."
+msgstr ""
+
+msgctxt "settings"
+msgid "IP adresa LaserMaxx konzole"
+msgstr ""
+
+msgid "Nepodařilo se připojit k TCP serveru (192.168.50.3:8081)."
 msgstr ""
 

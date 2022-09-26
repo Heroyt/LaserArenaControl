@@ -245,6 +245,9 @@ class ModesSettings extends Controller
 					$mode->settings->$var = isset($values['settings'][$var]);
 				}
 			}
+			if (!empty($values['teams'])) {
+				$mode->teams = json_encode($values['teams'], JSON_THROW_ON_ERROR);
+			}
 			try {
 				if (!$mode->save()) {
 					$request->passErrors[] = lang('Nepodařilo se uložit herní mód', context: 'errors').': '.$mode->name;

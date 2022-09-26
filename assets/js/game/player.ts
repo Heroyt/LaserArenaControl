@@ -22,6 +22,8 @@ export default class Player {
 	name: string = '';
 	vip: boolean = false;
 
+	allowedTeams: string[] = ['0', '1', '2', '3', '4', '5'];
+
 	$vest: HTMLElement;
 	$name: HTMLInputElement;
 
@@ -76,6 +78,22 @@ export default class Player {
 		if (input) {
 			input.checked = true;
 		}
+	}
+
+	updateAllowedTeams(teams: string[]) {
+		this.allowedTeams = teams;
+		this.$teams.forEach(input => {
+			if (!teams.includes(input.value)) {
+				input.checked = false;
+				input.classList.add('hide');
+			} else {
+				input.classList.remove('hide');
+				if (teams.length === 1 && this.isActive()) {
+					input.checked = true;
+				}
+			}
+			input.dispatchEvent(new Event('change', {bubbles: true}));
+		});
 	}
 
 	initEvents(): void {
@@ -232,6 +250,11 @@ export default class Player {
 			this.$name.dispatchEvent(e);
 		}
 		this.name = this.$name.value;
+
+		if (this.allowedTeams.length === 1) {
+			this._setTeam(this.isActive() ? this.allowedTeams[0] : '');
+		}
+
 		let found = false;
 		const origTeam = this.team;
 		this.$teams.forEach($team => {
@@ -303,11 +326,15 @@ export default class Player {
 		);
 	}
 
-	setTeam(team: string): void {
+	_setTeam(team: string) {
 		this.$teams.forEach($team => {
 			$team.checked = $team.value === team;
 		});
 		this.selectTeamTooltip.hide();
+	}
+
+	setTeam(team: string): void {
+		this._setTeam(team);
 		this.update();
 	}
 

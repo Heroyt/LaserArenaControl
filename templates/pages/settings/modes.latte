@@ -5,6 +5,8 @@
 {varType string $system}
 {varType App\GameModels\Game\GameModes\AbstractMode[] $modes}
 
+{var string[] $colors = \App\GameModels\Factory\GameFactory::getAllTeamsColors()[$system]}
+
 {block content}
 
 	<div id="notices">
@@ -261,6 +263,21 @@
 								  id="mode-description-{$id}" style="height: 100px;"
 								  placeholder="{lang 'Popis', context: 'game.modes'}">{ifset $mode}{lang $mode->description, context: 'gameModes'}{/ifset}</textarea>
 				<label for="mode-description-{$id}">{lang 'Popis'}</label>
+			</div>
+			<div>
+				<h6>{lang 'Povolené barvy', context: 'game.modes'}:</h6>
+				<div class="team-colors d-flex align-items-stretch justify-content-center w-100 mb-3 mt-2"
+					 style="height: 2rem;">
+					{var string[] $teams = isset($mode) ? json_decode($mode->teams) : array_keys($colors)}
+					{foreach $colors as $key => $color}
+						<input class="team-color-input" type="checkbox" value="{$key}"
+							   {if in_array($key,$teams)}checked{/if}
+							   id="team-color-{$id}-{$key}" name="mode[{$id}][teams][]">
+						<label class="team-color {if $iterator->first}rounded-start{elseif $iterator->last}rounded-end{/if}"
+							   style="background-color: {$color|noescape}; width: 3rem;"
+							   for="team-color-{$id}-{$key}">&nbsp;</label>
+					{/foreach}
+				</div>
 			</div>
 			<div class="btn-group btn-group-lg">
 				<button type="button" class="btn btn-primary edit-variations" data-toggle="tooltip"

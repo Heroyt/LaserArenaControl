@@ -94,6 +94,37 @@ export default class Game {
 		this.initEvents();
 	}
 
+	updateAllowedTeams(teams: string[]) {
+		this.players.forEach(player => {
+			player.updateAllowedTeams(teams);
+		});
+
+		this.$teams.forEach(input => {
+			if (!teams.includes(input.value)) {
+				input.checked = false;
+				input.classList.add('hide');
+				input.classList.remove('show');
+			} else {
+				input.classList.remove('hide');
+				input.classList.add('show');
+			}
+			input.dispatchEvent(new Event('change', {bubbles: true}));
+		});
+
+		const shown = document.querySelectorAll('#teams-random .team-color-input:not(.hide) + label') as NodeListOf<HTMLLabelElement>;
+		shown.forEach((label, key) => {
+			if (key === 0) {
+				label.classList.add('rounded-start');
+				label.classList.remove('rounded-end');
+			} else if (key === shown.length - 1) {
+				label.classList.remove('rounded-start');
+				label.classList.add('rounded-end');
+			} else {
+				label.classList.remove('rounded-start', 'rounded-end');
+			}
+		})
+	}
+
 	initEvents() {
 		this.$clearAll.addEventListener('click', () => {
 			this.clearAll();
@@ -110,6 +141,11 @@ export default class Game {
 					elem.classList.remove('d-none');
 				}
 			});
+
+			const teams = JSON.parse(
+				(this.$gameMode.querySelector(`option[value="${this.$gameMode.value}"]`) as HTMLOptionElement).dataset.teams
+			);
+			this.updateAllowedTeams(teams);
 
 			const variations: { [index: number]: VariationsValue[] } = JSON.parse((this.$gameMode.querySelector(`option[value="${this.$gameMode.value}"]`) as HTMLOptionElement).dataset.variations);
 			console.log(variations);

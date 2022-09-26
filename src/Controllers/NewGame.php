@@ -54,7 +54,6 @@ class NewGame extends Controller
 	 */
 	#[Post('/')]
 	public function process(Request $request) : never {
-		bdump($request->post);
 		$data = [
 			'meta'    => [
 				'music' => empty($request->post['music']) ? null : (int) $request->post['music'],
@@ -119,14 +118,12 @@ class NewGame extends Controller
 
 		$data['meta']['hash'] = md5(json_encode($data['players'], JSON_THROW_ON_ERROR));
 
-		bdump($data);
 		// Render the game info into a load file
 		$content = $this->latte->viewToString('gameFiles/evo5', $data);
 		$loadDir = LMX_DIR.Info::get('evo5_load_file', 'games/');
 		if (file_exists($loadDir) && is_dir($loadDir)) {
 			file_put_contents($loadDir.'0000.game', $content);
 		}
-		bdump($content);
 
 		// Set up a correct music file
 		if (isset($data['meta']['music'])) {

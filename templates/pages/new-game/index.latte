@@ -64,6 +64,7 @@
 			<div class="input-group">
 				<select name="game-mode" id="game-mode-select" class="form-select">
 					<option n:foreach="$gameModes as $mode" value="{$mode->id}" data-type="{$mode->type->value}"
+															data-teams="{$mode->teams}"
 															data-variations='{json_encode($mode->getVariations())}'
 															data-description="{lang $mode->description, context: 'gameModes'}">
 						{lang $mode->name, context: 'gameModes'}
@@ -98,7 +99,7 @@
 			<div id="team-random-select" class="d-flex align-items-stretch justify-content-center w-100 mb-3 mt-2"
 				 style="height: 2rem;">
 				{foreach $colors as $key => $color}
-					<input class="team-color-input" type="checkbox" value="{$key}"
+					<input class="team-color-input show" type="checkbox" value="{$key}"
 						   id="team-color-{$key}">
 					<label class="team-color {if $iterator->first}rounded-start{elseif $iterator->last}rounded-end{/if}"
 						   style="background-color: {$color|noescape}; width: 3rem;"

@@ -9,7 +9,6 @@ use App\Core\Info;
 use App\GameModels\Game\Evo5\Game;
 use App\GameModels\Game\Evo5\Player;
 use App\GameModels\Game\Evo5\Team;
-use App\GameModels\Game\GameModes\AbstractMode;
 use App\GameModels\Game\PrintStyle;
 use App\GameModels\Game\PrintTemplate;
 use App\GameModels\Tip;
@@ -33,60 +32,6 @@ class DbInstall implements InstallInterface
 
 	/** @var array{definition:string, modifications:array<string,string[]>}[] */
 	public const TABLES = [
-		AbstractMode::TABLE  => [
-			'definition'    => "(
-				`id_mode` int(11) unsigned NOT NULL AUTO_INCREMENT,
-				`system` varchar(10) DEFAULT NULL,
-				`name` varchar(50) DEFAULT NULL,
-				`description` text DEFAULT NULL,
-				`load_name` varchar(50) DEFAULT NULL,
-				`type` enum('TEAM','SOLO') NOT NULL DEFAULT 'TEAM',
-				`public` tinyint(1) NOT NULL DEFAULT 0,
-				`mines` tinyint(1) NOT NULL DEFAULT 1 COMMENT 'Jestli automaticky detekovat miny nebo vůbec',
-				`part_win` tinyint(1) NOT NULL DEFAULT 1 COMMENT 'Jestli má být vložena část s tím kdo vyhrál.',
-				`part_teams` tinyint(1) NOT NULL DEFAULT 1 COMMENT 'Jestli se na výsledcích zobrazuje tabulka teamů',
-				`part_players` tinyint(1) NOT NULL DEFAULT 1 COMMENT 'Jestli se na výsledcích zobrazuje tabulka hráčů',
-				`part_hits` tinyint(1) NOT NULL DEFAULT 1 COMMENT 'Jestli se na výsledcích zobrazuje tabulka zabití',
-				`part_best` tinyint(1) NOT NULL DEFAULT 1 COMMENT 'Jestli se na výsledcích zobrazuje tabulka \"Ti nej\"',
-				`part_best_day` tinyint(1) NOT NULL DEFAULT 1,
-				`player_score` tinyint(1) NOT NULL DEFAULT 1 COMMENT 'Jestli se ve výsledcích hráče zobrazí skóre.',
-				`player_shots` tinyint(1) NOT NULL DEFAULT 1 COMMENT 'Jestli se ve výsledcích hráče zobrazí výstřely.',
-				`player_miss` tinyint(1) NOT NULL DEFAULT 1 COMMENT 'Jestli se ve výsledcích hráče zobrazí výstřely mimo.',
-				`player_accuracy` tinyint(1) NOT NULL DEFAULT 1 COMMENT 'Jestli se ve výsledcích hráče zobrazí přesnost',
-				`player_mines` tinyint(1) NOT NULL DEFAULT 1 COMMENT 'Jestli se ve výsledcích hráče zobrazí miny.',
-				`player_players` tinyint(1) NOT NULL DEFAULT 1 COMMENT 'Jestli se ve výsledcích hráče zobrazí Zásahy hráčů.',
-				`player_players_teams` tinyint(1) NOT NULL DEFAULT 1 COMMENT 'Jestli se ve výsledcích hráče zobrazí zabití na vlastní a protihráče.',
-				`player_kd` tinyint(1) NOT NULL DEFAULT 1,
-				`player_favourites` tinyint(1) NOT NULL DEFAULT 1,
-				`player_lives` tinyint(1) NOT NULL DEFAULT 0,
-				`team_score` tinyint(1) NOT NULL DEFAULT 1,
-				`team_accuracy` tinyint(1) NOT NULL DEFAULT 1,
-				`team_shots` tinyint(1) NOT NULL DEFAULT 1,
-				`team_hits` tinyint(1) NOT NULL DEFAULT 1,
-				`team_zakladny` tinyint(1) NOT NULL DEFAULT 0,
-				`best_score` tinyint(1) NOT NULL DEFAULT 1 COMMENT 'Jestli zobrazovat v tabulce \"Ti nej\" hodnotu',
-				`best_hits` tinyint(1) NOT NULL DEFAULT 1 COMMENT 'Jestli zobrazovat v tabulce \"Ti nej\" hodnotu',
-				`best_deaths` tinyint(1) NOT NULL DEFAULT 1 COMMENT 'Jestli zobrazovat v tabulce \"Ti nej\" hodnotu',
-				`best_accuracy` tinyint(1) NOT NULL DEFAULT 1 COMMENT 'Jestli zobrazovat v tabulce \"Ti nej\" hodnotu',
-				`best_hits_own` tinyint(1) NOT NULL DEFAULT 1 COMMENT 'Jestli zobrazovat v tabulce \"Ti nej\" hodnotu',
-				`best_deaths_own` tinyint(1) NOT NULL DEFAULT 1 COMMENT 'Jestli zobrazovat v tabulce \"Ti nej\" hodnotu',
-				`best_shots` tinyint(1) NOT NULL DEFAULT 1 COMMENT 'Jestli zobrazovat v tabulce \"Ti nej\" hodnotu',
-				`best_miss` tinyint(1) NOT NULL DEFAULT 1 COMMENT 'Jestli zobrazovat v tabulce \"Ti nej\" hodnotu',
-				`best_mines` tinyint(1) NOT NULL DEFAULT 1 COMMENT 'Jestli zobrazovat v tabulce \"Ti nej\" hodnotu',
-				PRIMARY KEY (`id_mode`)
-			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Seznam a nastavení módů.';",
-			'modifications' => [],
-		],
-		'game_modes-names'   => [
-			'definition'    => "(
-				`id_mode` int(11) unsigned NOT NULL,
-				`sysName` varchar(20) NOT NULL,
-				PRIMARY KEY (`sysName`,`id_mode`),
-				KEY `Mode` (`id_mode`),
-				CONSTRAINT `game_modes-names_ibfk_1` FOREIGN KEY (`id_mode`) REFERENCES `game_modes` (`id_mode`) ON DELETE CASCADE ON UPDATE CASCADE
-			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;",
-			'modifications' => [],
-		],
 		Game::TABLE          => [
 			'definition' => "(
 				`id_game` int(11) unsigned NOT NULL AUTO_INCREMENT,

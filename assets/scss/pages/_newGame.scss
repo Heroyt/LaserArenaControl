@@ -227,6 +227,10 @@ label.team-color {
 		opacity: 1;
 	}
 
+	.team-color-input.hide + & {
+		display: none;
+	}
+
 	@include media-breakpoint-down(sm) {
 		& {
 			height: 2.5rem;

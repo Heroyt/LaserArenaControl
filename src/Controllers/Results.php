@@ -93,7 +93,7 @@ class Results extends Controller
 		$this->params['colorless'] = ($request->params['type'] ?? 'color') === 'colorless';
 
 		// Get game
-		$game = GameFactory::getByCode($code);
+		$game = $code === 'last' ? GameFactory::getLastGame() : GameFactory::getByCode($code);
 		if (!isset($game)) {
 			http_response_code(404);
 			$this->view('results/gameDoesNotExist');

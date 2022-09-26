@@ -33,6 +33,24 @@
 				</select>
 				<label for="last-games">{lang 'Poslední hry', context: 'game'}</label>
 			</div>
+
+			<div class="btn-group pb-2 pb-sm-0">
+				<a href="{link ['results', 'last', 'print', \Lsr\Core\App::getShortLanguageCode(), 1, \App\GameModels\Game\PrintStyle::getActiveStyleId(), \App\Core\Info::get('default_print_template', 'default')]}"
+				   class="btn btn-info" target="_blank" data-toggle="tooltip"
+				   title="{lang 'Tisknout poslední hru', context: 'actions'} 1&times;">
+					<i class="fa-solid fa-print"></i> &times; 1
+				</a>
+				<a href="{link ['results', 'last', 'print', \Lsr\Core\App::getShortLanguageCode(), 2, \App\GameModels\Game\PrintStyle::getActiveStyleId(), \App\Core\Info::get('default_print_template', 'default')]}"
+				   class="btn btn-info" target="_blank" data-toggle="tooltip"
+				   title="{lang 'Tisknout poslední hru', context: 'actions'} 2&times;">
+					<i class="fa-solid fa-print"></i> &times; 2
+				</a>
+				<a href="{link ['results', 'last', 'print', \Lsr\Core\App::getShortLanguageCode(), 3, \App\GameModels\Game\PrintStyle::getActiveStyleId(), \App\Core\Info::get('default_print_template', 'default')]}"
+				   class="btn btn-info" target="_blank" data-toggle="tooltip"
+				   title="{lang 'Tisknout poslední hru', context: 'actions'} 3&times;">
+					<i class="fa-solid fa-print"></i> &times; 3
+				</a>
+			</div>
 		</section>
 		<section id="vests">
 			<div class="d-flex justify-content-end align-items-center">

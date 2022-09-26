@@ -70,6 +70,35 @@
 			</form>
 		</div>
 	</div>
+	<div class="modal" tabindex="-1" id="game-mode-names-modal">
+		<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg">
+			<form class="modal-content" action="{link ['settings', 'modes', '#id#', 'names']}" method="post">
+				<div class="modal-header">
+					<h5 class="modal-title">
+						{lang 'Názvy z konzole', context: 'game.modes'} - <span class="mode-name"></span>
+					</h5>
+					<button type="button" class="btn btn-link text-text" data-bs-dismiss="modal" aria-label="Close">
+						<i class="fa-solid fa-xmark"></i>
+					</button>
+				</div>
+				<div class="modal-body">
+					<p class="fs-sm">{lang 'Názvy nastavené zde se budou používat pro párování načtených her z konzole do systému.'}</p>
+					<p class="fs-sm">{lang 'Názvy nejsou kontrolované striktně. Nezáleží na velkých/malých písmenech. Zadaný název může být jen podřetězec celého názvu v konzoli.'}</p>
+					<p class="fs-sm">{lang 'Např. při módu "1-TEAM-DEATHMACH" stačí, aby byl zde zadaný text "1-TEAM" nebo "team-deathmach".'}</p>
+					<div id="modeNames"></div>
+					<div class="text-center" id="add-name-wrapper">
+						<button type="button" class="btn btn-primary w-100 add">
+							<i class="fa-solid fa-plus"></i>
+						</button>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button"
+							class="btn btn-success save w-100">{lang 'Zavřít', context: 'actions'}</button>
+				</div>
+			</form>
+		</div>
+	</div>
 	<div class="modal" tabindex="-1" id="game-mode-results-modal">
 		<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg">
 			<form class="modal-content" action="{link ['settings', 'modes']}" method="post">
@@ -243,6 +272,11 @@
 						data-id="{$id}"
 						title="{lang 'Upravit zobrazení výsledků', context: 'game.modes'}">
 					<i class="fa-solid fa-eye"></i>
+				</button>
+				<button type="button" class="btn btn-info edit-mode-names" data-toggle="tooltip"
+						data-id="{$id}"
+						title="{lang 'Upravit názvy z konzole', context: 'game.modes'}">
+					<i class="fa-solid fa-magnifying-glass"></i>
 				</button>
 			</div>
 		</div>

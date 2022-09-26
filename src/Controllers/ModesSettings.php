@@ -10,6 +10,7 @@ use App\GameModels\Game\GameModes\AbstractMode;
 use App\GameModels\Game\GameModes\CustomSoloMode;
 use App\GameModels\Game\GameModes\CustomTeamMode;
 use App\Models\GameModeVariation;
+use Dibi\DriverException;
 use Exception;
 use JsonException;
 use Lsr\Core\App;
@@ -33,6 +34,8 @@ class ModesSettings extends Controller
 {
 
 	/**
+	 * @param Request $request
+	 *
 	 * @return void
 	 * @throws GameModeNotFoundException
 	 * @throws TemplateDoesNotExistException
@@ -56,10 +59,7 @@ class ModesSettings extends Controller
 	 */
 	#[Get('settings/modes/{id}/variations')]
 	public function modeVariations(Request $request) : never {
-		$id = (int) ($request->params['id'] ?? 0);
-		if ($id <= 0) {
-			$this->respond(['error' => 'Invalid parameter id'], 400);
-		}
+		$id = $this->getRequestId($request);
 
 		try {
 			$mode = GameModeFactory::getById($id);
@@ -84,12 +84,29 @@ class ModesSettings extends Controller
 									 ]);
 	}
 
-	#[Get('settings/modes/{id}/settings')]
-	public function modeSettings(Request $request) : never {
+	/**
+	 * @param Request $request
+	 *
+	 * @return int
+	 * @throws JsonException
+	 */
+	protected function getRequestId(Request $request) : int {
 		$id = (int) ($request->params['id'] ?? 0);
 		if ($id <= 0) {
 			$this->respond(['error' => 'Invalid parameter id'], 400);
 		}
+		return $id;
+	}
+
+	/**
+	 * @param Request $request
+	 *
+	 * @return never
+	 * @throws JsonException
+	 */
+	#[Get('settings/modes/{id}/settings')]
+	public function modeSettings(Request $request) : never {
+		$id = $this->getRequestId($request);
 
 		try {
 			$mode = GameModeFactory::getById($id);
@@ -101,6 +118,53 @@ class ModesSettings extends Controller
 		}
 
 		$this->respond($mode->settings);
+	}
+
+	/**
+	 * @param Request $request
+	 *
+	 * @return never
+	 * @throws JsonException
+	 */
+	#[Get('settings/modes/{id}/names')]
+	public function modeNames(Request $request) : never {
+		$id = $this->getRequestId($request);
+
+		try {
+			$mode = GameModeFactory::getById($id);
+			if (!isset($mode)) {
+				throw new GameModeNotFoundException();
+			}
+		} catch (GameModeNotFoundException $e) {
+			$this->respond(['error' => 'Game mode not found', 'exception' => $e->getMessage()], 404);
+		}
+
+		$names = DB::select('[game_modes-names]', 'sysName')->where('id_mode = %i', $id)->fetchPairs();
+		$this->respond($names);
+	}
+
+	#[Post('/settings/modes/{id}/names')]
+	public function saveModeNames(Request $request) : never {
+		$id = $this->getRequestId($request);
+
+		/** @var string[] $names */
+		$names = $request->post['modeNames'] ?? [];
+
+		try {
+			DB::getConnection()->begin();
+			DB::delete('game_modes-names', ['id_mode = %i', $id]);
+			foreach ($names as $name) {
+				if ($name === '') {
+					continue;
+				}
+				DB::insert('game_modes-names', ['id_mode' => $id, 'sysName' => $name]);
+			}
+			DB::getConnection()->commit();
+		} catch (DriverException|\Dibi\Exception $e) {
+			DB::getConnection()->rollback();
+			$this->respond(['error' => 'Failed to save the data to database', 'exception' => $e->getMessage()], 500);
+		}
+		$this->respond(['status' => 'ok']);
 	}
 
 	/**
@@ -274,10 +338,7 @@ class ModesSettings extends Controller
 	 */
 	#[Delete('settings/modes/{id}')]
 	public function deleteGameMode(Request $request) : never {
-		$id = (int) ($request->params['id'] ?? 0);
-		if ($id <= 0) {
-			$this->respond(['error' => 'Invalid parameter id'], 400);
-		}
+		$id = $this->getRequestId($request);
 
 		try {
 			$mode = GameModeFactory::getById($id);

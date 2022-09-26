@@ -39,6 +39,15 @@ export default function initModesSettings() {
 	const resultsSubmitBtn = resultsModalElement.querySelector('.save') as HTMLButtonElement;
 	const resultsModal = new Modal(resultsModalElement);
 
+	// Names settings
+	const namesModalElement = document.getElementById('game-mode-names-modal') as HTMLDivElement;
+	const namesModalBody = namesModalElement.querySelector('.modal-body') as HTMLDivElement;
+	const addNameBtnWrapper = namesModalBody.querySelector('#add-name-wrapper') as HTMLDivElement;
+	const namesWrapper = namesModalBody.querySelector('#modeNames') as HTMLDivElement;
+	const namesModalForm = namesModalElement.querySelector('form') as HTMLFormElement;
+	const namesSubmitBtn = namesModalElement.querySelector('.save') as HTMLButtonElement;
+	const namesModal = new Modal(namesModalElement);
+
 	(modesWrapper.querySelectorAll('.mode') as NodeListOf<HTMLDivElement>).forEach(elem => {
 		initMode(elem);
 	});
@@ -79,11 +88,25 @@ export default function initModesSettings() {
 		resultsSubmitBtn.addEventListener('click', () => {
 			resultsModal.hide();
 		});
+		namesSubmitBtn.addEventListener('click', () => {
+			namesModal.hide();
+		});
 
 		variationsModalElement.addEventListener('hide.bs.modal', () => {
 			const data = new FormData(variationsModalForm);
 			startLoading(true);
 			axios.post(variationsModalForm.action, data)
+				.then(response => {
+					stopLoading(true, true);
+				})
+				.catch(error => {
+					stopLoading(false, true);
+				})
+		})
+		namesModalElement.addEventListener('hide.bs.modal', () => {
+			const data = new FormData(namesModalForm);
+			startLoading(true);
+			axios.post(namesModalForm.action, data)
 				.then(response => {
 					stopLoading(true, true);
 				})
@@ -114,6 +137,7 @@ export default function initModesSettings() {
 		const modeName = wrapper.querySelector('.modeName') as HTMLInputElement;
 		const editVariationsBtn = wrapper.querySelector('.edit-variations') as HTMLButtonElement;
 		const editResultsBtn = wrapper.querySelector('.edit-results') as HTMLButtonElement;
+		const editModeNamesBtn = wrapper.querySelector('.edit-mode-names') as HTMLButtonElement;
 		const deleteBtn = wrapper.querySelector('.delete') as HTMLButtonElement;
 
 		if (editVariationsBtn) {
@@ -377,6 +401,48 @@ export default function initModesSettings() {
 					.catch(error => {
 						stopLoading(false);
 					});
+			});
+		}
+		if (editModeNamesBtn) {
+			editModeNamesBtn.addEventListener('click', () => {
+				startLoading();
+				namesWrapper.innerHTML = ''; // Clear
+				axios.get(`/settings/modes/${modeId}/names`)
+					.then((response: AxiosResponse<string[]>) => {
+						namesModalForm.action = `/settings/modes/${modeId}/names`;
+						response.data.forEach(createNameGroup);
+
+						const addBtn = document.createElement('button');
+						addBtn.classList.add('btn', 'btn-primary', 'w-100');
+						addBtn.type = 'button';
+						addBtn.innerHTML = '<i class="fa-solid fa-plus"></i>';
+						addNameBtnWrapper.innerHTML = '';
+						addNameBtnWrapper.appendChild(addBtn);
+						addBtn.addEventListener('click', e => {
+							e.cancelBubble = true;
+							createNameGroup();
+						});
+
+						stopLoading();
+						namesModal.show();
+					})
+					.catch(error => {
+						console.error(error);
+						stopLoading(false);
+					});
+
+				function createNameGroup(name: string = '') {
+					const elem = document.createElement('div');
+					elem.classList.add('input-group', 'my-2');
+					elem.innerHTML = `<input type="text" name="modeNames[]" class="form-control" value="${name}" />` +
+						`<button type="button" class="btn btn-danger remove"><i class="fa-solid fa-trash"></i></button>`
+					const removeBtn = elem.querySelector('.remove') as HTMLButtonElement;
+					removeBtn.addEventListener('click', e => {
+						e.cancelBubble = true;
+						elem.remove();
+					});
+					namesWrapper.appendChild(elem);
+				}
 			});
 		}
 		if (deleteBtn) {

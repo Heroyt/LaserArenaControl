@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: Spanish\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2022-09-26 09:35\n"
+"PO-Revision-Date: 2022-09-26 12:52\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -2008,5 +2008,9 @@ msgid "Názvy nejsou kontrolované striktně. Nezáleží na velkých/malých p�
 msgstr ""
 
 msgid "Např. při módu \"1-TEAM-DEATHMACH\" stačí, aby byl zde zadaný text \"1-TEAM\" nebo \"team-deathmach\"."
+msgstr ""
+
+msgctxt "game.modes"
+msgid "Povolené barvy"
 msgstr ""
 

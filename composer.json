@@ -46,7 +46,8 @@
 		"lsr/routing": "^0.1",
 		"lsr/logging": "^0.1",
 		"lsr/request": "^0.1",
-		"ext-zend-opcache": "*"
+		"ext-zend-opcache": "*",
+		"ext-zlib": "*"
 	},
 	"require-dev": {
 		"roave/security-advisories": "dev-latest",

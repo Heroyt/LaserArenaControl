@@ -70,8 +70,12 @@ class NewGame extends Controller
 
 		if (isset($mode)) {
 			$data['meta']['mode'] = $mode->loadName;
-			foreach ($request->post['variation'] ?? [] as $suffix) {
-				$data['meta']['mode'] .= $suffix;
+			if (!empty($request->post['variation'])) {
+				$data['meta']['variations'] = [];
+				foreach ($request->post['variation'] as $id => $suffix) {
+					$data['meta']['variations'][$id] = $suffix;
+					$data['meta']['mode'] .= $suffix;
+				}
 			}
 		}
 

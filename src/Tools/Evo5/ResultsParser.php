@@ -262,7 +262,12 @@ class ResultsParser extends AbstractResultsParser
 						throw new ResultsParseException('Invalid argument count in GROUP - '.$argsCount.' '.json_encode($args));
 					}
 					// Parse metadata
-					$decodedJson = base64_decode($args[1], true);
+					/** @var string|false $decodedJson */
+					$decodedJson = gzinflate(
+						(string) gzinflate(
+							(string) base64_decode($args[1])
+						)
+					);
 					if ($decodedJson !== false) {
 						try {
 							/** @var array<string,string> $meta Meta data from game */

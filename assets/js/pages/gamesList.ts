@@ -6,7 +6,7 @@ export default function initGamesList() {
 		// Init date pickers
 		module.default()
 
-		const reImportBtns = document.querySelectorAll('.re-import');
+		const reImportBtns = document.querySelectorAll('.re-import') as NodeListOf<HTMLButtonElement>;
 		reImportBtns.forEach(btn => {
 			const gameCode = btn.dataset.code;
 			if (!gameCode || gameCode === '') {
@@ -25,7 +25,26 @@ export default function initGamesList() {
 					});
 			});
 		});
-		const recalcPointsBtns = document.querySelectorAll('.recalc-skill');
+
+		const syncBtns = document.querySelectorAll('.liga-sync') as NodeListOf<HTMLButtonElement>;
+		syncBtns.forEach(btn => {
+			const gameCode = btn.dataset.code;
+			if (!gameCode || gameCode === '') {
+				btn.remove();
+				return;
+			}
+			btn.addEventListener('click', () => {
+				startLoading();
+				axios.post(`/api/games/${gameCode}/sync`, {})
+					.then(response => {
+						stopLoading(true);
+					})
+					.catch(() => {
+						stopLoading(false);
+					});
+			});
+		});
+		const recalcPointsBtns = document.querySelectorAll('.recalc-skill') as NodeListOf<HTMLButtonElement>;
 		recalcPointsBtns.forEach(btn => {
 			const gameCode = btn.dataset.code;
 			if (!gameCode || gameCode === '') {
@@ -43,7 +62,7 @@ export default function initGamesList() {
 					});
 			});
 		});
-		const soloSwitchBtns = document.querySelectorAll('.solo-switch');
+		const soloSwitchBtns = document.querySelectorAll('.solo-switch') as NodeListOf<HTMLButtonElement>;
 		soloSwitchBtns.forEach(btn => {
 			const gameCode = btn.dataset.code;
 			const mode = btn.dataset.mode;

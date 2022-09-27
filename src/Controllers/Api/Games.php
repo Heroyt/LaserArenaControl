@@ -8,7 +8,9 @@ use DateTime;
 use Exception;
 use JsonException;
 use Lsr\Core\ApiController;
+use Lsr\Core\Exceptions\ModelNotFoundException;
 use Lsr\Core\Requests\Request;
+use Lsr\Core\Routing\Attributes\Post;
 use Throwable;
 
 /**
@@ -32,12 +34,42 @@ class Games extends ApiController
 	}
 
 	/**
+	 * @param Request $request
+	 *
+	 * @return never
+	 * @throws JsonException
+	 * @throws ModelNotFoundException
+	 */
+	#[Post('/api/games/{code}/sync')]
+	public function syncGame(Request $request) : never {
+		$code = $request->params['code'] ?? '';
+		if (empty($code)) {
+			$this->respond(['error' => 'Invalid code'], 400);
+		}
+		try {
+			$game = GameFactory::getByCode($code);
+			if (!isset($game)) {
+				throw new ModelNotFoundException('Game not found');
+			}
+		} catch (Throwable $e) {
+			$this->respond(['error' => 'Game not found', 'exception' => $e->getMessage()], 404);
+		}
+
+		if (!$game->sync()) {
+			$this->respond(['error' => 'Synchronization failed'], 500);
+		}
+
+		$this->respond(['status' => 'ok']);
+	}
+
+	/**
 	 * Get list of all games
 	 *
 	 * @param Request $request
 	 *
 	 * @return void
 	 * @throws JsonException
+	 * @throws Throwable
 	 */
 	public function listGames(Request $request) : void {
 		$date = null;

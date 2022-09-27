@@ -134,7 +134,9 @@ class GameHelpers extends ApiController
 
 		try {
 			$game->calculateSkills();
+			$game->sync = false;
 			$game->save();
+			$game->sync();
 		} catch (ModelNotFoundException|ValidationException $e) {
 			$this->respond(['error' => 'Error while saving the player data', 'exception' => $e], 500);
 		}
@@ -198,6 +200,7 @@ class GameHelpers extends ApiController
 		$game->recalculateScores();
 
 		if (!$game->save()) {
+			$game->sync();
 			$this->respond(['error' => 'Error saving game'], 500);
 		}
 
@@ -223,6 +226,7 @@ class GameHelpers extends ApiController
 
 		$game->recalculateScores();
 		if (!$game->save()) {
+			$game->sync();
 			$this->respond(['error' => 'Error saving game'], 500);
 		}
 

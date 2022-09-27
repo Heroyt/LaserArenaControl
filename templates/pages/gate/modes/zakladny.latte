@@ -38,7 +38,7 @@
 
 {define partPlayers}
 	{varType App\GameModels\Game\Evo5\Player[] $players}
-	<div n:foreach="$players as $player" class="player text-center">
+	<div n:foreach="$players as $player" class="player text-center text-grey-text">
 		<div class="name text-team-{$game::SYSTEM}-{$player->getTeamColor()}">
 			{$player->name}
 		</div>

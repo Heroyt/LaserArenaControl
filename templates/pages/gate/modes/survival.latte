@@ -30,7 +30,7 @@
 
 {define partPlayers}
 	{var int $playerCount = count($game->getPlayers())}
-	<div class="player" n:foreach="$game->getPlayersSorted() as $player"
+	<div class="player text-grey-text" n:foreach="$game->getPlayersSorted() as $player"
 			{var int $lives = $player->getRemainingLives()}
 			{var int $ammoRest = $player->ammoRest ?? 1}
 		 style="--multiplier: {((-0.05 * ($playerCount - 11)) + 1)|noescape}; {if $lives <= 0 || $ammoRest <= 0}background-color: rgba(255, 200, 200, 0.9);{/if}">

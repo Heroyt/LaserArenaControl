@@ -12,7 +12,7 @@
 	<div class="vest-grid pb-5" style="--cols: {$gridDimensions->cols}; --rows: {$gridDimensions->rows};">
 		<div n:foreach="App\GameModels\Vest::getForSystem($game::SYSTEM) as $vest"
 			{var App\GameModels\Game\Player|null $player = $game->getVestPlayer($vest->vestNum)}
-				class="vest shadow rounded-10 {ifset $player}bg-team-{$game::SYSTEM}-{$player->getTeamColor()}{else}bg-white-forced{/ifset}"
+				class="vest shadow rounded-10 {ifset $player}bg-team-{$game::SYSTEM}-{$player->getTeamColor()} text-bg-team-{$game::SYSTEM}-{$player->getTeamColor()}{else}bg-white-forced text-grey-text{/ifset}"
 				style="grid-column: {$vest->gridCol};grid-row: {$vest->gridRow};">
 			{svgIcon 'Vesta', '', 'calc(60vh / ' . $gridDimensions->rows . ')'}
 			{ifset $player}

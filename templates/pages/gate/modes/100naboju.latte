@@ -30,7 +30,7 @@
 
 {define partPlayers}
 	{var int $playerCount = count($game->getPlayers())}
-	<div class="player" n:foreach="$game->getPlayersSorted() as $player"
+	<div class="player text-grey-text" n:foreach="$game->getPlayersSorted() as $player"
 		 style="--multiplier: {((-0.05 * ($playerCount - 11)) + 1)|noescape};">
 		{var array $rank = $player->getBestAt()}
 		<div class="position">

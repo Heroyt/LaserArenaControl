@@ -33,7 +33,8 @@
 
 {define partPlayers}
 	{varType App\GameModels\Game\Evo5\Player[] $players}
-	<div n:foreach="$players as $player" class="player text-center {if $player->deaths >= $game->lives}dead{/if}">
+	<div n:foreach="$players as $player"
+			class="player text-center text-grey-text {if $player->deaths >= $game->lives}dead{/if}">
 		{svgIcon ($player->deaths < $game->lives ? 'Vesta' . $player->getTeamColor() : 'skull'), '', '2rem'}
 		<div class="name text-team-{$game::SYSTEM}-{$player->getTeamColor()}">
 			{$player->name}

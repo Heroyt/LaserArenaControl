@@ -2029,3 +2029,7 @@ msgstr ""
 
 msgid "Např. při módu \"1-TEAM-DEATHMACH\" stačí, aby byl zde zadaný text \"1-TEAM\" nebo \"team-deathmach\"."
 msgstr ""
+
+msgctxt "game.modes"
+msgid "Povolené barvy"
+msgstr ""

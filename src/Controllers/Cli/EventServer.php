@@ -6,9 +6,14 @@
 namespace App\Controllers\Cli;
 
 use App\Services\EventService;
+use Lsr\Core\App;
 use Lsr\Core\CliController;
+use Lsr\Interfaces\RequestInterface;
 use Socket;
 
+/**
+ *
+ */
 class EventServer extends CliController
 {
 
@@ -16,6 +21,13 @@ class EventServer extends CliController
 
 	/** @var Socket[] */
 	private array $clients = [];
+
+	private bool $dev = false;
+
+	public function init(RequestInterface $request) : void {
+		$this->dev = !App::isProduction();
+		parent::init($request);
+	}
 
 	/**
 	 * Start a WS server
@@ -250,14 +262,14 @@ class EventServer extends CliController
 	 * @return void
 	 */
 	private function sentUnsentMessages() : void {
-		$events = EventService::getUnsent();
+		$events = EventService::getUnsent($this->dev);
 		$ids = [];
 		foreach ($events as $event) {
 			$this->echo($event->message, 'event');
 			$this->broadcast($event->message);
 			$ids[] = $event->id_event;
 		}
-		if (!empty($ids) && !EventService::updateSent($ids)) {
+		if (!empty($ids) && !EventService::updateSent($ids, $this->dev)) {
 			$this->echo('Failed to flag events as sent', 'error');
 		}
 	}

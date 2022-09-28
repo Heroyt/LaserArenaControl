@@ -56,8 +56,8 @@ class EventService
 	 *
 	 * @return Row[] Array of events ordered by their date from the most recent (descending)
 	 */
-	public static function getUnsent() : array {
-		return DB::select('events', '*')->where('sent = 0')->orderBy('datetime')->desc()->fetchAll();
+	public static function getUnsent(bool $dev = false) : array {
+		return DB::select('events', '*')->where('%n = 0', $dev ? 'sent_dev' : 'sent')->orderBy('datetime')->desc()->fetchAll();
 	}
 
 	/**
@@ -67,9 +67,9 @@ class EventService
 	 *
 	 * @return bool Success
 	 */
-	public static function updateSent(array $ids) : bool {
+	public static function updateSent(array $ids, bool $dev = false) : bool {
 		try {
-			DB::update('events', ['sent' => 1], ['id_event IN %in', $ids]);
+			DB::update('events', [($dev ? 'sent_dev' : 'sent') => 1], ['id_event IN %in', $ids]);
 			return true;
 		} catch (Exception $e) {
 			self::getLogger()->error($e->getMessage());

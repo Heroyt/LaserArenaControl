@@ -20,6 +20,8 @@ export default function initNewGamePage() {
 	const form = document.getElementById('new-game-content') as HTMLFormElement;
 	let currentStatus: GameStatus = GameStatus.STANDBY;
 
+	let statusGettingInProgress = false;
+
 	// Toggle offcanvas
 	const helpOffcanvasElement = document.getElementById('help') as HTMLDivElement;
 	const helpOffcanvas = new Offcanvas(helpOffcanvasElement, {backdrop: true});
@@ -308,21 +310,20 @@ export default function initNewGamePage() {
 	// Update current status every minute
 	setInterval(updateCurrentStatus, 60000);
 
-	let statusGettingInProgress = false;
-
 	function updateCurrentStatus(): void {
-		if (!statusGettingInProgress) {
-			statusGettingInProgress = true;
-			getCurrentStatus()
-				.then((response: AxiosResponse<{ status: string }>) => {
-					statusGettingInProgress = false;
-					setCurrentStatus(response.data.status);
-				})
-				.catch(error => {
-					statusGettingInProgress = false;
-					console.error(error);
-				})
+		if (statusGettingInProgress) {
+			return;
 		}
+		statusGettingInProgress = true;
+		getCurrentStatus()
+			.then((response: AxiosResponse<{ status: string }>) => {
+				statusGettingInProgress = false;
+				setCurrentStatus(response.data.status);
+			})
+			.catch(error => {
+				statusGettingInProgress = false;
+				console.error(error);
+			})
 	}
 
 	function setCurrentStatus(status: string): void {

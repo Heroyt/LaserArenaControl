@@ -1,7 +1,22 @@
+export interface EvWindow extends Window {
+	EventServerInstance: EventServer
+}
+
+declare global {
+	const webSocketEventURI: string;
+}
+declare let window: EvWindow;
+
 /**
  * Singleton class for handling connection to WS event server
  */
 class EventServer {
+
+	ws: WebSocket | null;
+	listeners: {
+		[index: string]: ((ev?: MessageEvent) => {})[],
+	}
+
 	constructor() {
 		this.ws = null;
 		this.connect();
@@ -13,7 +28,7 @@ class EventServer {
 	 * Initializes all buttons that trigger events on the event server
 	 */
 	initTriggers() {
-		document.querySelectorAll(`[data-toggle="event"]`).forEach(btn => {
+		(document.querySelectorAll(`[data-toggle="event"]`) as NodeListOf<HTMLButtonElement>).forEach(btn => {
 			const event = btn.dataset.event;
 			if (!event || event === '') {
 				return;
@@ -52,7 +67,7 @@ class EventServer {
 				this.connect(); // Automatically reconnect on close
 			}, 500);
 		}
-		this.ws.onerror = err => {
+		this.ws.onerror = (err: ErrorEvent) => {
 			console.error('Socket encountered error: ', err.message, 'Closing socket');
 			this.ws.close();
 		}
@@ -60,16 +75,13 @@ class EventServer {
 
 	/**
 	 * Add a callback to event(s)
-	 *
-	 * @param {string|string[]} event
-	 * @param {handler} callback
 	 */
-	addEventListener(event, callback) {
+	addEventListener(event: string | string[], callback: (ev?: MessageEvent) => {}) {
 		if (typeof event === 'string') {
 			event = [event];
 		}
 		if (typeof event === 'object' && event.constructor.toString().indexOf("Array") > -1) {
-			event.forEach(e => {
+			event.forEach((e: string) => {
 				if (!this.listeners[e]) {
 					this.listeners[e] = [];
 				}
@@ -80,11 +92,8 @@ class EventServer {
 
 	/**
 	 * Trigger a specific event
-	 *
-	 * @param {string} event
-	 * @param {MessageEvent} data
 	 */
-	triggerEvent(event, data) {
+	triggerEvent(event: string, data: MessageEvent) {
 		if (this.listeners[event]) {
 			this.listeners[event].forEach(callback => {
 				callback(data);
@@ -94,4 +103,5 @@ class EventServer {
 }
 
 const EventServerInstance = new EventServer();
+window.EventServerInstance = EventServerInstance;
 export default EventServerInstance;

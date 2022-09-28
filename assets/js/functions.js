@@ -305,6 +305,9 @@ export function gameTimer() {
 		return;
 	}
 
+	// Auto-reload timer on game started
+	EventServerInstance.addEventListener(['game-started', 'game-imported', 'game-loaded'], loadGameInfo);
+
 	let offset = 0;
 	const serverTime = parseInt(time.dataset.servertime);
 	console.log(time.dataset.servertime, serverTime);
@@ -327,9 +330,6 @@ export function gameTimer() {
 	if (timerOffset && !isNaN(timerOffset)) {
 		endDate += timerOffset;
 	}
-
-	// Auto-reload timer on game started
-	EventServerInstance.addEventListener(['game-started', 'game-imported', 'game-loaded'], loadGameInfo);
 
 	startTimer();
 

@@ -33,6 +33,10 @@ export default function initNewGamePage() {
 	const startBtn = form.querySelector('#startGame') as HTMLButtonElement;
 	const stopBtn = form.querySelector('#stopGame') as HTMLButtonElement;
 
+	stopBtn.addEventListener('click', () => {
+		stopGame(new FormData(form));
+	})
+
 	updateCurrentStatus();
 
 	// Send form via ajax
@@ -40,6 +44,8 @@ export default function initNewGamePage() {
 		e.preventDefault();
 
 		const data = new FormData(form);
+
+		console.log(e.submitter);
 
 		if (!data.get('action')) {
 			data.set('action', (e.submitter as HTMLButtonElement).value)

@@ -14,7 +14,7 @@ class EventServer {
 
 	ws: WebSocket | null;
 	listeners: {
-		[index: string]: ((ev?: MessageEvent) => {})[],
+		[index: string]: (((ev?: MessageEvent) => void) | (() => void))[],
 	}
 
 	constructor() {
@@ -76,7 +76,7 @@ class EventServer {
 	/**
 	 * Add a callback to event(s)
 	 */
-	addEventListener(event: string | string[], callback: (ev?: MessageEvent) => {}) {
+	addEventListener(event: string | string[], callback: ((ev?: MessageEvent) => void) | (() => void)) {
 		if (typeof event === 'string') {
 			event = [event];
 		}

@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Core\Info;
 use App\Tools\LMXController;
+use Exception;
 use JsonException;
 use Lsr\Core\Controller;
 use Lsr\Core\Requests\Request;
@@ -27,7 +28,11 @@ class GameControl extends Controller
 		if (empty($ip)) {
 			$this->respond(['error' => 'LaserMaxx IP is not defined'], 500);
 		}
-		$response = LMXController::getStatus($ip);
+		try {
+			$response = LMXController::getStatus($ip);
+		} catch (Exception $e) {
+			$this->respond(['error' => 'Error while getting the game status', 'exception' => $e->getMessage()], 500);
+		}
 		$this->respond(['status' => $response]);
 	}
 

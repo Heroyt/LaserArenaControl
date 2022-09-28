@@ -4,13 +4,36 @@ import {lang} from "../functions";
 import EventServerInstance from "../EventServer";
 import {startLoading, stopLoading} from "../loaders";
 import {GameData} from "../game/gameInterfaces";
+import {Offcanvas} from "bootstrap";
 
 declare global {
 	const gameData: GameData;
 }
 
+enum GameStatus {
+	STANDBY,
+	ARMED,
+	PLAYING,
+}
+
 export default function initNewGamePage() {
 	const form = document.getElementById('new-game-content') as HTMLFormElement;
+	let currentStatus: GameStatus = GameStatus.STANDBY;
+
+	// Toggle offcanvas
+	const helpOffcanvasElement = document.getElementById('help') as HTMLDivElement;
+	const helpOffcanvas = new Offcanvas(helpOffcanvasElement, {backdrop: true});
+	(document.querySelectorAll('.trigger-help') as NodeListOf<HTMLButtonElement>).forEach(btn => {
+		btn.addEventListener('click', () => {
+			helpOffcanvas.show();
+		})
+	});
+
+	const loadBtn = form.querySelector('#loadGame') as HTMLButtonElement;
+	const startBtn = form.querySelector('#startGame') as HTMLButtonElement;
+	const stopBtn = form.querySelector('#stopGame') as HTMLButtonElement;
+
+	updateCurrentStatus();
 
 	// Send form via ajax
 	form.addEventListener('submit', e => {
@@ -45,6 +68,9 @@ export default function initNewGamePage() {
 		localStorage.setItem('new-game-data', JSON.stringify(data));
 	});
 
+	// Keyboard shortcuts
+	document.addEventListener('keyup', handleKeyboardShortcuts);
+
 	const game = new Game();
 
 	const localData = localStorage.getItem('new-game-data');
@@ -71,6 +97,7 @@ export default function initNewGamePage() {
 	loadLastGames();
 
 	EventServerInstance.addEventListener('game-imported', loadLastGames);
+	EventServerInstance.addEventListener(['game-imported', 'game-started', 'game-loaded'], updateCurrentStatus);
 
 	function loadLastGames() {
 		axios.get('/api/games', {
@@ -165,12 +192,15 @@ export default function initNewGamePage() {
 				if (response.data.status) {
 					switch (response.data.status) {
 						case 'STANDBY':
+							currentStatus = GameStatus.STANDBY;
 							loadGame(data, sendStart);
 							break;
 						case 'ARMED':
+							currentStatus = GameStatus.ARMED;
 							sendStart();
 							break;
 						case 'PLAYING':
+							currentStatus = GameStatus.PLAYING;
 							// Cannot start while playing the game
 							break;
 					}
@@ -186,6 +216,7 @@ export default function initNewGamePage() {
 			axios.post('/control/start')
 				.then(() => {
 					stopLoading(true, true);
+					setCurrentStatus('PLAYING');
 				})
 				.catch(error => {
 					console.error(error);
@@ -201,12 +232,15 @@ export default function initNewGamePage() {
 				if (response.data.status) {
 					switch (response.data.status) {
 						case 'STANDBY':
+							currentStatus = GameStatus.STANDBY;
 							break;
 						case 'ARMED':
 						case 'PLAYING':
+							currentStatus = response.data.status === 'ARMED' ? GameStatus.ARMED : GameStatus.PLAYING;
 							axios.post('/control/stop')
 								.then(() => {
 									stopLoading(true, true);
+									setCurrentStatus('STANDBY');
 								})
 								.catch(error => {
 									console.error(error);
@@ -243,6 +277,7 @@ export default function initNewGamePage() {
 								})
 								.then(() => {
 									stopLoading(true, true);
+									setCurrentStatus('ARMED');
 									if (callback) {
 										callback();
 									}
@@ -264,7 +299,62 @@ export default function initNewGamePage() {
 			});
 	}
 
+	// Update current status every minute
+	setInterval(updateCurrentStatus, 60000);
+
+	function updateCurrentStatus(): void {
+		getCurrentStatus()
+			.then((response: AxiosResponse<{ status: string }>) => {
+				setCurrentStatus(response.data.status);
+			})
+			.catch(error => {
+				console.error(error);
+			})
+	}
+
+	function setCurrentStatus(status: string): void {
+		loadBtn.disabled = false;
+		startBtn.disabled = false;
+		stopBtn.disabled = false;
+		switch (status) {
+			case 'STANDBY':
+				currentStatus = GameStatus.STANDBY;
+				stopBtn.disabled = true;
+				break;
+			case 'ARMED':
+				currentStatus = GameStatus.ARMED;
+				break;
+			case 'PLAYING':
+				currentStatus = GameStatus.PLAYING;
+				loadBtn.disabled = true;
+				startBtn.disabled = true;
+				break;
+		}
+		console.log(currentStatus);
+	}
+
 	function getCurrentStatus() {
 		return axios.get('/control/status');
+	}
+
+	function handleKeyboardShortcuts(e: KeyboardEvent) {
+		console.log('keyup', e.key, e.keyCode, e.altKey, e.ctrlKey);
+		switch (e.keyCode) {
+			case 32: // Space
+			case 13: // Enter
+				if (currentStatus === GameStatus.STANDBY) {
+					form.requestSubmit(loadBtn);
+				}
+				if (currentStatus === GameStatus.ARMED) {
+					form.requestSubmit(startBtn);
+				}
+				break;
+			case 8: // Backspace
+			case 46: // Delete
+				if (e.ctrlKey) {
+					game.clearAll();
+				}
+				break;
+		}
 	}
 }

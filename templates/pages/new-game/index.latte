@@ -12,15 +12,15 @@
 	<form method="post" action="" id="new-game-content" class="w-100">
 		<section id="controls" class="d-flex justify-content-between flex-column flex-sm-row align-items-center">
 			<div class="btn-group pb-2 pb-sm-0">
-				<button type="submit" name="action" value="load" class="btn btn-warning">
+				<button type="submit" name="action" value="load" class="btn btn-warning" id="loadGame">
 					<i class="fa-solid fa-circle-chevron-up"></i>
 					{lang 'Nahrát hru', context: 'game.actions'}
 				</button>
-				<button type="submit" name="action" value="start" class="btn btn-success">
+				<button type="submit" name="action" value="start" class="btn btn-success" id="startGame">
 					<i class="fa-solid fa-circle-play"></i>
 					{lang 'Spustit hru', context: 'game.actions'}
 				</button>
-				<button type="submit" name="action" value="stop" class="btn btn-danger">
+				<button type="submit" name="action" value="stop" class="btn btn-danger" id="stopGame">
 					<i class="fa-solid fa-circle-stop"></i>
 					{lang 'Ukončit hru', context: 'game.actions'}
 				</button>
@@ -151,6 +151,47 @@
 			</div>
 		</section>
 	</form>
+
+	<button type="button" class="btn btn-info position-fixed rounded-circle trigger-help"
+			data-toggle="tooltip" title="{lang 'Nápověda'}"
+			style="bottom: 2rem; left: 2rem; z-index: 10;">
+		<i class="fa-solid fa-circle-question"></i>
+	</button>
+
+	<div class="offcanvas offcanvas-start" tabindex="-1" id="help" aria-labelledby="helpLabel"
+		 style="--bs-offcanvas-width: 600px;">
+		<div class="offcanvas-header">
+			<h4 class="offcanvas-title" id="helpLabel">{lang 'Nápověda'}</h4>
+			<button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+		</div>
+		<div class="offcanvas-body">
+			<h5>{lang 'Klávesové zkratky', context: 'help'}</h5>
+			<table class="table table-striped align-middle">
+				<tbody>
+				<tr>
+					<th class="text-center py-3">
+						<span class="bg-primary text-bg-primary p-2 rounded">{lang 'Enter', context: 'help.keys'}</span>
+						|
+						<span class="bg-primary text-bg-primary p-2 rounded">{lang 'Mezerník', context: 'help.keys'}</span>
+					</th>
+					<td>
+						{lang 'Odeslat formulář. Nahraje / Spustí hru.', context: 'help'}
+					</td>
+				</tr>
+				<tr>
+					<th class="text-center py-3">
+						<span class="bg-primary text-bg-primary p-2 rounded">{lang 'CTRL', context: 'help.keys'}</span>
+						+
+						<span class="bg-primary text-bg-primary p-2 rounded">{lang 'Backspace', context: 'help.keys'}</span>
+					</th>
+					<td>
+						{lang 'Smaže celý formulář.', context: 'help'}
+					</td>
+				</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
 
 	<script>
 		const messages = {

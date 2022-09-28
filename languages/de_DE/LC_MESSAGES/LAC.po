@@ -2020,3 +2020,37 @@ msgstr ""
 
 msgid "Synchronizovat on-line"
 msgstr ""
+
+msgid "Nepodařilo se připojit k TCP serveru (192.168.50.3:8081). Operation timed out (60)"
+msgstr ""
+
+msgid "Nápověda"
+msgstr ""
+
+msgctxt "help"
+msgid "Klávesové zkratky"
+msgstr ""
+
+msgctxt "help.keys"
+msgid "Enter"
+msgstr ""
+
+msgctxt "help"
+msgid "Odeslat formulář. Nahraje / Spustí hru."
+msgstr ""
+
+msgctxt "help.keys"
+msgid "Mezerník"
+msgstr ""
+
+msgctxt "help.keys"
+msgid "CTRL"
+msgstr ""
+
+msgctxt "help.keys"
+msgid "Backspace"
+msgstr ""
+
+msgctxt "help"
+msgid "Smaže celý formulář."
+msgstr ""

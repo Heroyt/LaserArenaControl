@@ -35,6 +35,9 @@ $modal-content-bg: var(--background);
 $modal-content-color: var(--text);
 $btn-close-color: var(--text);
 
+$offcanvas-color: var(--text);
+$offcanvas-bg-color: var(--background);
+
 $font-sizes: map.merge(
 		$font-sizes,
 		(

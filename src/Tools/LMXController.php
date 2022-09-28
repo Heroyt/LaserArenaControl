@@ -5,8 +5,8 @@
 
 namespace App\Tools;
 
+use App\Exceptions\ConnectionTimeoutException;
 use Exception;
-use RuntimeException;
 
 /**
  * Controller for sending TCP requests to control the LaserMaxx console
@@ -19,6 +19,11 @@ class LMXController
 	public const START_COMMAND      = 'start';
 	public const END_COMMAND        = 'end';
 	public const GET_STATUS_COMMAND = 'status';
+
+	public const DEFAULT_TIMEOUT  = 30;
+	public const COMMAND_TIMEOUTS = [
+		self::GET_STATUS_COMMAND => 10,
+	];
 
 	/**
 	 * Get a current game status
@@ -38,11 +43,13 @@ class LMXController
 	 * @param string $parameters
 	 *
 	 * @return string Response
+	 * @throws ConnectionTimeoutException
 	 */
 	public static function sendCommand(string $ip, string $command, string $parameters = '') : string {
-		$fp = fsockopen($ip, self::PORT, $errno, $errstr, 30);
+		$timeout = self::COMMAND_TIMEOUTS[$command] ?? self::DEFAULT_TIMEOUT;
+		$fp = @fsockopen($ip, self::PORT, $errno, $errstr, $timeout);
 		if (!$fp) {
-			throw new RuntimeException(lang('Nepodařilo se připojit k TCP serveru ('.$ip.':'.self::PORT.'). '.$errstr.' ('.$errno.')'));
+			throw new ConnectionTimeoutException(lang('Nepodařilo se připojit k TCP serveru ('.$ip.':'.self::PORT.'). '.$errstr.' ('.$errno.')'), $errno, $timeout);
 		}
 		fwrite($fp, $command.':'.$parameters);
 		$response = '';

@@ -2033,3 +2033,10 @@ msgstr ""
 msgctxt "game.modes"
 msgid "Povolené barvy"
 msgstr ""
+
+msgctxt "actions"
+msgid "Tisknout poslední hru"
+msgstr ""
+
+msgid "Synchronizovat on-line"
+msgstr ""

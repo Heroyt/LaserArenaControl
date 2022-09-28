@@ -8,6 +8,14 @@
 {varType App\GameModels\Game\Game|null $loadGame}
 {varType App\Models\MusicMode[] $musicModes}
 
+{define addHead}
+	<style>
+		.game-timer {
+			left: 4rem;
+		}
+	</style>
+{/define}
+
 {block content}
 	<form method="post" action="" id="new-game-content" class="w-100">
 		<section id="controls" class="d-flex justify-content-between flex-column flex-sm-row align-items-center">
@@ -154,7 +162,7 @@
 
 	<button type="button" class="btn btn-info position-fixed rounded-circle trigger-help"
 			data-toggle="tooltip" title="{lang 'Nápověda'}"
-			style="bottom: 2rem; left: 2rem; z-index: 10;">
+			style="bottom: 2rem; left: 1rem; z-index: 10;">
 		<i class="fa-solid fa-circle-question"></i>
 	</button>
 

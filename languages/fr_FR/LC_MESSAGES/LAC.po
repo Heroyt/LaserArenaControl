@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: French\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2022-09-27 12:19\n"
+"PO-Revision-Date: 2022-09-28 14:41\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -55,26 +55,33 @@ msgstr "Actions"
 msgid "%s score"
 msgstr "%s score"
 
+# /templates/../vendor/lsr/helpers/templates/Db/panel.latte:7
 msgctxt "debugPanel"
 msgid "Rows"
 msgstr "Lignes"
 
+# /templates/../vendor/lsr/helpers/templates/Db/panel.latte:8
 msgctxt "debugPanel"
 msgid "Takes"
 msgstr "Durée"
 
+# /templates/../vendor/lsr/helpers/templates/Translation/tab.latte:27
+# /templates/../vendor/lsr/helpers/templates/Translation/panel.latte:3
 msgctxt "debugPanel"
 msgid "Translations"
 msgstr "Traductions"
 
+# /templates/../vendor/lsr/helpers/templates/Translation/panel.latte:6
 msgctxt "debugPanel"
 msgid "Language"
 msgstr "Langue"
 
+# /templates/../vendor/lsr/helpers/templates/Translation/panel.latte:10
 msgctxt "debugPanel"
 msgid "HTTP header"
 msgstr "En-tête HTTP"
 
+# /templates/../vendor/lsr/helpers/templates/Translation/panel.latte:16
 msgctxt "debugPanel"
 msgid "Translated strings"
 msgstr "Chaînes traduites"
@@ -1353,6 +1360,7 @@ msgctxt "debugPanel"
 msgid "Invalid cache class"
 msgstr ""
 
+# /templates/../vendor/lsr/helpers/templates/Caching/tab.latte:28
 msgctxt "debugPanel"
 msgid "%d call"
 msgid_plural "%d calls"
@@ -2019,5 +2027,40 @@ msgid "Tisknout poslední hru"
 msgstr ""
 
 msgid "Synchronizovat on-line"
+msgstr ""
+
+# /src/Tools/LMXController.php:52
+msgid "Nepodařilo se připojit k TCP serveru (192.168.50.3:8081). Operation timed out (60)"
+msgstr ""
+
+msgid "Nápověda"
+msgstr ""
+
+msgctxt "help"
+msgid "Klávesové zkratky"
+msgstr ""
+
+msgctxt "help.keys"
+msgid "Enter"
+msgstr ""
+
+msgctxt "help"
+msgid "Odeslat formulář. Nahraje / Spustí hru."
+msgstr ""
+
+msgctxt "help.keys"
+msgid "Mezerník"
+msgstr ""
+
+msgctxt "help.keys"
+msgid "CTRL"
+msgstr ""
+
+msgctxt "help.keys"
+msgid "Backspace"
+msgstr ""
+
+msgctxt "help"
+msgid "Smaže celý formulář."
 msgstr ""
 

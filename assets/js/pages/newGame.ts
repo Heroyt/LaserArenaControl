@@ -308,14 +308,21 @@ export default function initNewGamePage() {
 	// Update current status every minute
 	setInterval(updateCurrentStatus, 60000);
 
+	let statusGettingInProgress = false;
+
 	function updateCurrentStatus(): void {
-		getCurrentStatus()
-			.then((response: AxiosResponse<{ status: string }>) => {
-				setCurrentStatus(response.data.status);
-			})
-			.catch(error => {
-				console.error(error);
-			})
+		if (!statusGettingInProgress) {
+			statusGettingInProgress = true;
+			getCurrentStatus()
+				.then((response: AxiosResponse<{ status: string }>) => {
+					statusGettingInProgress = false;
+					setCurrentStatus(response.data.status);
+				})
+				.catch(error => {
+					statusGettingInProgress = false;
+					console.error(error);
+				})
+		}
 	}
 
 	function setCurrentStatus(status: string): void {

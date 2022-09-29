@@ -12,6 +12,8 @@ use App\Controllers\Api\Mount;
 use App\Controllers\Api\Results;
 use App\Controllers\Api\Updater;
 use Lsr\Core\Routing\Route;
+use Lsr\Enums\RequestMethod;
+use const Lsr\Enums\PUT;
 
 Route::post('/api/results/import', [Results::class, 'import']);
 Route::post('/api/results/import/{game}', [Results::class, 'importGame']);
@@ -37,6 +39,7 @@ Route::get('/api/debug/whoami', [Debug::class, 'whoami']);
 Route::post('/api/debug/enable', [Debug::class, 'enable']);
 Route::post('/api/debug/disable', [Debug::class, 'disable']);
 Route::update('/api/debug/incrementCache', [Debug::class, 'incrementCache']);
+Route::create(RequestMethod::PUT, '/api/debug/incrementCache', [Debug::class, 'incrementCache']);
 Route::get('/api/debug/glob', [Debug::class, 'glob']);
 
 Route::get('/api/game/loaded', [GameHelpers::class, 'getLoadedGameInfo']);

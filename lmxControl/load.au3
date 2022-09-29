@@ -15,7 +15,9 @@ Func load($mode)
 
    ControlSetText($win2, "", "[CLASS:Edit; INSTANCE:1]", "0000.game")
    Sleep(200)
-   Send("{ENTER}")
+   ControlClick($win2, "", "[CLASS:Button; INSTANCE:1]")
+
+   Sleep(500)
 
 	;Set mode
     $win = WinActivate("LaserMaxx EVO-5 Console")
@@ -25,11 +27,13 @@ Func load($mode)
 
     For $i = 0 To $iItemCnt - 1
 	  $c = 0
-	  $sText = _GUICtrlListView_GetItemText($hListView, $i, $c)
+	  $sText = _GUICtrlListView_GetItemTextString($hListView, $i)
 	  If $sText = $mode Then
 		 ControlListView($win, "", $hListView, "Select", $i, $c)
 	  EndIf
-    Next
+   Next
+
+   Sleep(200)
 
 	;Load Game
 	$status = GetGameStatus()
@@ -38,7 +42,7 @@ Func load($mode)
 			ControlClick($win, "", 361) ;Click - Run script
 		Case "ARMED"
 			ControlClick($win, "", 368) ;Click - Setup new game
-	  EndSwitch
-	  Sleep(6000)
-	  WinActivate($activeWin)
+	EndSwitch
+	Sleep(6000)
+	WinActivate($activeWin)
 EndFunc

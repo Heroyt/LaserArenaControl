@@ -55,7 +55,7 @@ class GameControl extends Controller
 		}
 		$response = LMXController::load($ip, $modeName);
 		if ($response !== 'ok') {
-			$this->respond(['error' => 'API call failed'], 500);
+			$this->respond(['error' => 'API call failed', 'message' => $response], 500);
 		}
 		$this->respond(['status' => 'ok']);
 	}
@@ -74,7 +74,7 @@ class GameControl extends Controller
 		}
 		$response = LMXController::start($ip);
 		if ($response !== 'ok') {
-			$this->respond(['error' => 'API call failed'], 500);
+			$this->respond(['error' => 'API call failed', 'message' => $response], 500);
 		}
 		$this->respond(['status' => 'ok']);
 	}
@@ -93,7 +93,45 @@ class GameControl extends Controller
 		}
 		$response = LMXController::end($ip);
 		if ($response !== 'ok') {
-			$this->respond(['error' => 'API call failed'], 500);
+			$this->respond(['error' => 'API call failed', 'message' => $response], 500);
+		}
+		$this->respond(['status' => 'ok']);
+	}
+
+	/**
+	 *
+	 * @return never
+	 * @throws JsonException
+	 */
+	#[Post('/control/retry', 'retryDownload')]
+	public function retryDownload() : never {
+		/** @var string|null $ip */
+		$ip = Info::get('lmx_ip');
+		if (empty($ip)) {
+			$this->respond(['error' => 'LaserMaxx IP is not defined'], 500);
+		}
+		$response = LMXController::retryDownload($ip);
+		if ($response !== 'ok') {
+			$this->respond(['error' => 'API call failed', 'message' => $response], 500);
+		}
+		$this->respond(['status' => 'ok']);
+	}
+
+	/**
+	 *
+	 * @return never
+	 * @throws JsonException
+	 */
+	#[Post('/control/cancel', 'cancelDownload')]
+	public function cancelDownload() : never {
+		/** @var string|null $ip */
+		$ip = Info::get('lmx_ip');
+		if (empty($ip)) {
+			$this->respond(['error' => 'LaserMaxx IP is not defined'], 500);
+		}
+		$response = LMXController::cancelDownload($ip);
+		if ($response !== 'ok') {
+			$this->respond(['error' => 'API call failed', 'message' => $response], 500);
 		}
 		$this->respond(['status' => 'ok']);
 	}

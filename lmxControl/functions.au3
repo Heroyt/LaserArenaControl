@@ -1,4 +1,10 @@
+#include-once
+
 Func GetGameStatus()
+	$downloadWin = WinExists("Downloading Scores from Packs")
+	If $downloadWin Then
+		Return "DOWNLOAD"
+	EndIf
 	$win = WinGetHandle("LaserMaxx EVO-5 Console")
 	$music = ControlGetText($win, "", 349)
 	If $music = "EVO-5 LaserMixx Standard Standby.mp3" Or $music = "EVO-5 LaserMixx Standard Gameover.mp3" Then

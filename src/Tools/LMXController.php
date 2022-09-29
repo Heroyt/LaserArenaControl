@@ -14,11 +14,16 @@ use Exception;
 class LMXController
 {
 
-	public const PORT               = 8081;
-	public const LOAD_COMMAND       = 'load';
-	public const START_COMMAND      = 'start';
-	public const END_COMMAND        = 'end';
-	public const GET_STATUS_COMMAND = 'status';
+	public const PORT                    = 8081;
+	public const LOAD_COMMAND            = 'load';
+	public const START_COMMAND           = 'start';
+	public const END_COMMAND             = 'end';
+	public const GET_STATUS_COMMAND      = 'status';
+	public const RETRY_DOWNLOAD_COMMAND  = 'retryDownload';
+	public const CANCEL_DOWNLOAD_COMMAND = 'cancelDownload';
+
+	public const OK_MESSAGE      = 'ok';
+	public const INVALID_MESSAGE = 'invalid command';
 
 	public const DEFAULT_TIMEOUT  = 30;
 	public const COMMAND_TIMEOUTS = [
@@ -26,15 +31,15 @@ class LMXController
 	];
 
 	/**
-	 * Get a current game status
+	 * Retry scores download
 	 *
 	 * @param string $ip
 	 *
-	 * @return string 'ARMED'|'STANDBY'|'PLAYING'
+	 * @return string 'ok'
 	 * @throws Exception
 	 */
-	public static function getStatus(string $ip) : string {
-		return self::sendCommand($ip, self::GET_STATUS_COMMAND);
+	public static function retryDownload(string $ip) : string {
+		return self::sendCommand($ip, self::RETRY_DOWNLOAD_COMMAND);
 	}
 
 	/**
@@ -58,6 +63,30 @@ class LMXController
 		}
 		fclose($fp);
 		return $response;
+	}
+
+	/**
+	 * Cancel scores download
+	 *
+	 * @param string $ip
+	 *
+	 * @return string 'ok'
+	 * @throws Exception
+	 */
+	public static function cancelDownload(string $ip) : string {
+		return self::sendCommand($ip, self::CANCEL_DOWNLOAD_COMMAND);
+	}
+
+	/**
+	 * Get a current game status
+	 *
+	 * @param string $ip
+	 *
+	 * @return string 'ARMED'|'STANDBY'|'PLAYING'
+	 * @throws Exception
+	 */
+	public static function getStatus(string $ip) : string {
+		return self::sendCommand($ip, self::GET_STATUS_COMMAND);
 	}
 
 	/**

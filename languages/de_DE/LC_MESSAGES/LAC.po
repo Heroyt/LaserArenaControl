@@ -2029,7 +2029,6 @@ msgstr ""
 msgid "Synchronizovat on-line"
 msgstr ""
 
-# /src/Tools/LMXController.php:52
 msgid "Nepodařilo se připojit k TCP serveru (192.168.50.3:8081). Operation timed out (60)"
 msgstr ""
 
@@ -2062,4 +2061,24 @@ msgstr ""
 
 msgctxt "help"
 msgid "Smaže celý formulář."
+msgstr ""
+
+msgid "Nepodařilo se připojit k TCP serveru (192.168.50.3:8081). Network is unreachable (51)"
+msgstr ""
+
+msgid "Stahují se výsledky"
+msgstr ""
+
+msgid "Systém detekoval nedokončené stahování z výsledků. Zkontrolujte vesty a případně klikěte na \"Opakovat\""
+msgstr ""
+
+msgid "Při kliknutí na \"Zrušit\" se výsledky z vest nestáhnout."
+msgstr ""
+
+msgctxt "actions"
+msgid "Opakovat"
+msgstr ""
+
+msgctxt "actions"
+msgid "Zrušit"
 msgstr ""

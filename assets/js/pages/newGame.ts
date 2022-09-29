@@ -4,13 +4,14 @@ import {lang} from "../functions";
 import EventServerInstance from "../EventServer";
 import {startLoading, stopLoading} from "../loaders";
 import {GameData} from "../game/gameInterfaces";
-import {Offcanvas} from "bootstrap";
+import {Modal, Offcanvas} from "bootstrap";
 
 declare global {
 	const gameData: GameData;
 }
 
 enum GameStatus {
+	DOWNLOAD,
 	STANDBY,
 	ARMED,
 	PLAYING,
@@ -35,11 +36,18 @@ export default function initNewGamePage() {
 	const startBtn = form.querySelector('#startGame') as HTMLButtonElement;
 	const stopBtn = form.querySelector('#stopGame') as HTMLButtonElement;
 
+	const downloadModalElem = document.getElementById('scoresDownloadModal') as HTMLDivElement;
+	const downloadModal = new Modal(downloadModalElem);
+	const retryDownloadBtn = document.getElementById('retryDownload') as HTMLButtonElement;
+	const cancelDownloadBtn = document.getElementById('cancelDownload') as HTMLButtonElement;
+
 	stopBtn.addEventListener('click', () => {
 		stopGame(new FormData(form));
 	})
 
 	updateCurrentStatus();
+	// Update current status every minute
+	let updateStatusInterval = setInterval(updateCurrentStatus, 60000);
 
 	// Send form via ajax
 	form.addEventListener('submit', e => {
@@ -106,6 +114,39 @@ export default function initNewGamePage() {
 
 	EventServerInstance.addEventListener('game-imported', loadLastGames);
 	EventServerInstance.addEventListener(['game-imported', 'game-started', 'game-loaded'], updateCurrentStatus);
+
+	retryDownloadBtn.addEventListener('click', () => {
+		if (currentStatus !== GameStatus.DOWNLOAD) {
+			cancelDownloadModal();
+			return;
+		}
+
+		startLoading(true);
+		axios.post('/control/retry')
+			.then(() => {
+				stopLoading(true, true);
+			})
+			.catch(error => {
+				console.error(error);
+				stopLoading(false, true);
+			});
+	})
+	cancelDownloadBtn.addEventListener('click', () => {
+		if (currentStatus !== GameStatus.DOWNLOAD) {
+			cancelDownloadModal();
+			return;
+		}
+
+		startLoading(true);
+		axios.post('/control/cancel')
+			.then(() => {
+				stopLoading(true, true);
+			})
+			.catch(error => {
+				console.error(error);
+				stopLoading(false, true);
+			});
+	})
 
 	function loadLastGames() {
 		axios.get('/api/games', {
@@ -211,6 +252,10 @@ export default function initNewGamePage() {
 							currentStatus = GameStatus.PLAYING;
 							// Cannot start while playing the game
 							break;
+						case 'DOWNLOAD':
+							setCurrentStatus('DOWNLOAD');
+							stopLoading(false, true);
+							break;
 					}
 				}
 			})
@@ -228,6 +273,9 @@ export default function initNewGamePage() {
 				})
 				.catch(error => {
 					console.error(error);
+					if (error.data && error.data.message && error.data.message === 'DOWNLOAD') {
+						setCurrentStatus('DOWNLOAD');
+					}
 					stopLoading(false, true);
 				});
 		}
@@ -252,8 +300,15 @@ export default function initNewGamePage() {
 								})
 								.catch(error => {
 									console.error(error);
+									if (error.data && error.data.message && error.data.message === 'DOWNLOAD') {
+										setCurrentStatus('DOWNLOAD');
+									}
 									stopLoading(false, true);
 								});
+							break;
+						case 'DOWNLOAD':
+							setCurrentStatus('DOWNLOAD');
+							stopLoading(false, true);
 							break;
 					}
 				}
@@ -278,6 +333,11 @@ export default function initNewGamePage() {
 				startLoading(true);
 				getCurrentStatus()
 					.then((response: AxiosResponse<{ status: string }>) => {
+						if (response.data.status && response.data.status === 'DOWNLOAD') {
+							setCurrentStatus('DOWNLOAD');
+							stopLoading(false);
+							return;
+						}
 						if (response.data.status && response.data.status !== 'PLAYING') {
 							axios
 								.post('/control/load', {
@@ -293,6 +353,9 @@ export default function initNewGamePage() {
 								.catch(error => {
 									stopLoading(false, true);
 									console.error(error);
+									if (error.data && error.data.message && error.data.message === 'DOWNLOAD') {
+										setCurrentStatus('DOWNLOAD');
+									}
 								});
 						}
 
@@ -306,9 +369,6 @@ export default function initNewGamePage() {
 				stopLoading(false);
 			});
 	}
-
-	// Update current status every minute
-	setInterval(updateCurrentStatus, 60000);
 
 	function updateCurrentStatus(): void {
 		if (statusGettingInProgress) {
@@ -330,7 +390,17 @@ export default function initNewGamePage() {
 		loadBtn.disabled = false;
 		startBtn.disabled = false;
 		stopBtn.disabled = false;
+		if (currentStatus === GameStatus.DOWNLOAD && status !== 'DOWNLOAD') {
+			cancelDownloadModal();
+		}
 		switch (status) {
+			case 'DOWNLOAD':
+				loadBtn.disabled = true;
+				startBtn.disabled = true;
+				stopBtn.disabled = true;
+				currentStatus = GameStatus.DOWNLOAD;
+				triggerDownloadModal();
+				break;
 			case 'STANDBY':
 				currentStatus = GameStatus.STANDBY;
 				stopBtn.disabled = true;
@@ -370,5 +440,21 @@ export default function initNewGamePage() {
 				}
 				break;
 		}
+	}
+
+	function cancelDownloadModal() {
+		downloadModal.hide();
+
+		// Reset the update status interval
+		clearInterval(updateStatusInterval);
+		updateStatusInterval = setInterval(updateCurrentStatus, 60000);
+	}
+
+	function triggerDownloadModal() {
+		downloadModal.show();
+
+		// Make the update status interval faster to fetch more real-time data
+		clearInterval(updateStatusInterval);
+		updateStatusInterval = setInterval(updateCurrentStatus, 5000);
 	}
 }

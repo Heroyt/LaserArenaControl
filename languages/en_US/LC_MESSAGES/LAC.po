@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: English\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2022-09-28 14:41\n"
+"PO-Revision-Date: 2022-09-29 12:26\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -2029,7 +2029,6 @@ msgstr ""
 msgid "Synchronizovat on-line"
 msgstr ""
 
-# /src/Tools/LMXController.php:52
 msgid "Nepodařilo se připojit k TCP serveru (192.168.50.3:8081). Operation timed out (60)"
 msgstr ""
 
@@ -2062,5 +2061,25 @@ msgstr ""
 
 msgctxt "help"
 msgid "Smaže celý formulář."
+msgstr ""
+
+msgid "Nepodařilo se připojit k TCP serveru (192.168.50.3:8081). Network is unreachable (51)"
+msgstr ""
+
+msgid "Stahují se výsledky"
+msgstr ""
+
+msgid "Systém detekoval nedokončené stahování z výsledků. Zkontrolujte vesty a případně klikěte na \"Opakovat\""
+msgstr ""
+
+msgid "Při kliknutí na \"Zrušit\" se výsledky z vest nestáhnout."
+msgstr ""
+
+msgctxt "actions"
+msgid "Opakovat"
+msgstr ""
+
+msgctxt "actions"
+msgid "Zrušit"
 msgstr ""
 

@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: English\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2022-09-22 14:53\n"
+"PO-Revision-Date: 2022-09-30 13:04\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -1666,7 +1666,7 @@ msgstr "Winner"
 
 msgctxt "game.modes.settings"
 msgid "Pokud se má zobrazovat část \"Vítěz\"."
-msgstr ""
+msgstr "Indicates if the part \"Winner\" should be shown."
 
 msgctxt "game.modes.settings"
 msgid "Týmy"
@@ -1674,7 +1674,7 @@ msgstr "Teams"
 
 msgctxt "game.modes.settings"
 msgid "Pokud se má zobrazovat část \"Týmy\"."
-msgstr ""
+msgstr "Indicates if the part \"Teams\" should be shown."
 
 msgctxt "game.modes.settings"
 msgid "Hráči"
@@ -1682,7 +1682,7 @@ msgstr "Players"
 
 msgctxt "game.modes.settings"
 msgid "Pokud se má zobrazovat část \"Hráči\"."
-msgstr ""
+msgstr "Indicates if the part \"Players\" should be shown."
 
 msgctxt "game.modes.settings"
 msgid "Zásahy hráčů"
@@ -1690,7 +1690,7 @@ msgstr "Player hits"
 
 msgctxt "game.modes.settings"
 msgid "Pokud se má zobrazovat část \"Zásahy hráčů\" (kdo koho zasáhl)."
-msgstr ""
+msgstr "Indicates if the part \"Players' hits\" should be shown (who hit who)."
 
 msgctxt "game.modes.settings"
 msgid "Ti nej"
@@ -1698,7 +1698,7 @@ msgstr "The best"
 
 msgctxt "game.modes.settings"
 msgid "Pokud se má zobrazovat část \"Ti nej\"."
-msgstr ""
+msgstr "Indicates if the part \"The best\" should be shown."
 
 msgctxt "game.modes.settings"
 msgid "Pořadí dne"
@@ -1706,7 +1706,7 @@ msgstr "Today's leaderboard"
 
 msgctxt "game.modes.settings"
 msgid "Pokud se má zobrazovat část \"Pořadí dne\"."
-msgstr ""
+msgstr "Indicates if the part \"Today's leaderboard\" should be shown."
 
 msgctxt "game.modes.settings"
 msgid "Skóre hráče"
@@ -1714,7 +1714,7 @@ msgstr "Player's score"
 
 msgctxt "game.modes.settings"
 msgid "Pokud se má zobrazovat skóre u jednotlivých hráčů."
-msgstr ""
+msgstr "Indicates if the player's score should be shown."
 
 msgctxt "game.modes.settings"
 msgid "Výstřely hráče"
@@ -1722,7 +1722,7 @@ msgstr "Player's shots"
 
 msgctxt "game.modes.settings"
 msgid "Pokud se mají zobrazovat výstřely u jednotlivých hráčů."
-msgstr ""
+msgstr "Indicates if the player's shots should be shown."
 
 msgctxt "game.modes.settings"
 msgid "Výstřely mimo hráče"
@@ -1730,7 +1730,7 @@ msgstr "Player's missed shots"
 
 msgctxt "game.modes.settings"
 msgid "Pokud se mají zobrazovat výstřely mimo u jednotlivých hráčů."
-msgstr ""
+msgstr "Indicates if the player's missed shots should be shown."
 
 msgctxt "game.modes.settings"
 msgid "Přesnost hráče"
@@ -1738,7 +1738,7 @@ msgstr "Player's accuracy"
 
 msgctxt "game.modes.settings"
 msgid "Pokud se má zobrazovat přesnost u jednotlivých hráčů."
-msgstr ""
+msgstr "Indicates if the player's accuracy should be shown."
 
 msgctxt "game.modes.settings"
 msgid "Miny hráče"
@@ -1746,7 +1746,7 @@ msgstr "Player's pods"
 
 msgctxt "game.modes.settings"
 msgid "Pokud se mají zobrazovat statistiky min u jednotlivých hráčů."
-msgstr ""
+msgstr "Indicates if the player's pod statistics should be shown."
 
 msgctxt "game.modes.settings"
 msgid "Zásahy hráče"
@@ -1754,7 +1754,7 @@ msgstr "Player's hits"
 
 msgctxt "game.modes.settings"
 msgid "Pokud se mají zobrazovat zásahy u jednotlivých hráčů."
-msgstr ""
+msgstr "Indicates if the player's hits should be shown."
 
 msgctxt "game.modes.settings"
 msgid "Zásahy vlastních hráče"
@@ -1762,7 +1762,7 @@ msgstr "Player's teammate hits"
 
 msgctxt "game.modes.settings"
 msgid "Pokud se mají zobrazovat zásahy rozdělené na vlastní a ostatní u jednotlivých hráčů."
-msgstr ""
+msgstr "Indicates if the player's hits should be shown divided into teammate hits and other hits."
 
 msgctxt "game.modes.settings"
 msgid "K:D hráče"
@@ -1770,7 +1770,7 @@ msgstr "Player's K:D"
 
 msgctxt "game.modes.settings"
 msgid "Pokud se má zobrazovat K:D (poměr zabití a smrtí) u jednotlivých hráčů."
-msgstr ""
+msgstr "Indicates if the player's K:D (kills/deaths ratio) should be shown."
 
 msgctxt "game.modes.settings"
 msgid "Oblíbený cíl / Největší zabiják hráče"
@@ -1778,7 +1778,7 @@ msgstr "Player's favourite target / the biggest killer"
 
 msgctxt "game.modes.settings"
 msgid "Pokud se mají zobrazovat oblíbení hráči (\"Největší cíl\", \"Největší zabiják\") u jednotlivých hráčů."
-msgstr ""
+msgstr "Indicates if the player's favourites ( \"Favourite target\", \"The biggest killer\") should be shown."
 
 msgctxt "game.modes.settings"
 msgid "Životy hráče"
@@ -1786,7 +1786,7 @@ msgstr "Player's lives"
 
 msgctxt "game.modes.settings"
 msgid "Pokud se mají zobrazovat zbývající životy u jednotlivých hráčů."
-msgstr ""
+msgstr "Indicates if the player's remaining lives should be shown."
 
 msgctxt "game.modes.settings"
 msgid "Skóre týmu"
@@ -1794,7 +1794,7 @@ msgstr "Team's score"
 
 msgctxt "game.modes.settings"
 msgid "Pokud se má zobrazovat skóre u jednotlivých týmů."
-msgstr ""
+msgstr "Indicates if the team's score should be shown."
 
 msgctxt "game.modes.settings"
 msgid "Přesnost týmu"
@@ -1802,7 +1802,7 @@ msgstr "Team's accuracy"
 
 msgctxt "game.modes.settings"
 msgid "Pokud se má zobrazovat celková přesnost u jednotlivých týmů."
-msgstr ""
+msgstr "Indicates if the team's combined accuracy should be shown."
 
 msgctxt "game.modes.settings"
 msgid "Výstřely týmu"
@@ -1810,7 +1810,7 @@ msgstr "Team's shots"
 
 msgctxt "game.modes.settings"
 msgid "Pokud se mají zobrazovat výstřely u jednotlivých týmů."
-msgstr ""
+msgstr "Indicates if the team's shots should be shown."
 
 msgctxt "game.modes.settings"
 msgid "Zásahy týmu"
@@ -1818,7 +1818,7 @@ msgstr "Team's hits"
 
 msgctxt "game.modes.settings"
 msgid "Pokud se mají zobrazovat zásahy u jednotlivých týmů."
-msgstr ""
+msgstr "Indicates if the team's hits should be shown."
 
 msgctxt "game.modes.settings"
 msgid "Ztráty základny týmu"
@@ -1826,7 +1826,7 @@ msgstr "Team's lost bases"
 
 msgctxt "game.modes.settings"
 msgid "Pokud se mají zobrazovat ztráty základny u jednotlivých týmů (týká se jen módu Základny)."
-msgstr ""
+msgstr "Indicates if the team's base lost count should be shown (only in the base defence game mode)."
 
 msgctxt "game.modes.settings"
 msgid "Absolutní vítěz"
@@ -1834,7 +1834,7 @@ msgstr "Absolute winner"
 
 msgctxt "game.modes.settings"
 msgid "Pokud se má zobrazovat \"Absolutní vítěz\" v tabulce \"Ti nej\"."
-msgstr ""
+msgstr "Indicates if the \"Absolute winner\" should be shown in \"The best\" table."
 
 msgctxt "game.modes.settings"
 msgid "Největí terminátor"
@@ -1842,7 +1842,7 @@ msgstr "Terminator"
 
 msgctxt "game.modes.settings"
 msgid "Pokud se má zobrazovat \"Největí terminátor\" v tabulce \"Ti nej\"."
-msgstr ""
+msgstr "Indicates if the \"Terminator\" should be shown in \"The best\" table."
 
 msgctxt "game.modes.settings"
 msgid "Objekt největšího zájmu"
@@ -1850,7 +1850,7 @@ msgstr "The biggest target"
 
 msgctxt "game.modes.settings"
 msgid "Pokud se má zobrazovat \"Objekt největšího zájmu\" v tabulce \"Ti nej\"."
-msgstr ""
+msgstr "Indicates if the \"The biggest target\" should be shown in \"The best\" table."
 
 msgctxt "game.modes.settings"
 msgid "Hráč s nejlepší muškou"
@@ -1858,7 +1858,7 @@ msgstr "The best sniper"
 
 msgctxt "game.modes.settings"
 msgid "Pokud se má zobrazovat \"Hráč s nejlepší muškou\" v tabulce \"Ti nej\"."
-msgstr ""
+msgstr "Indicates if the \"The best sniper\" should be shown in \"The best\" table."
 
 msgctxt "game.modes.settings"
 msgid "Zabiják vlastního týmu"
@@ -1866,7 +1866,7 @@ msgstr "Team-killer"
 
 msgctxt "game.modes.settings"
 msgid "Pokud se má zobrazovat \"Zabiják vlastního týmu\" v tabulce \"Ti nej\"."
-msgstr ""
+msgstr "Indicates if the \"Team killer\" should be shown in \"The best\" table."
 
 msgctxt "game.modes.settings"
 msgid "Největší vlasňák"
@@ -1874,7 +1874,7 @@ msgstr "Hated by allies"
 
 msgctxt "game.modes.settings"
 msgid "Pokud se má zobrazovat \"Největší vlastňák\" v tabulce \"Ti nej\"."
-msgstr ""
+msgstr "Indicates if the \"Hated by allies\" should be shown in \"The best\" table."
 
 msgctxt "game.modes.settings"
 msgid "Nejúspornější střelec"
@@ -1882,7 +1882,7 @@ msgstr "Most economical"
 
 msgctxt "game.modes.settings"
 msgid "Pokud se má zobrazovat \"Nejúspornější střelec\" v tabulce \"Ti nej\"."
-msgstr ""
+msgstr "Indicates if the \"Most economical\" should be shown in \"The best\" table."
 
 msgctxt "game.modes.settings"
 msgid "Největší mimoň"
@@ -1890,7 +1890,7 @@ msgstr "Loves shooting the ground"
 
 msgctxt "game.modes.settings"
 msgid "Pokud se má zobrazovat \"Největší mimooň\" v tabulce \"Ti nej\"."
-msgstr ""
+msgstr "Indicates if the \"Loves shooting the ground\" should be shown in \"The best\" table."
 
 msgctxt "game.modes.settings"
 msgid "Drtič min"
@@ -1898,7 +1898,7 @@ msgstr "Pod crusher"
 
 msgctxt "game.modes.settings"
 msgid "Pokud se má zobrazovat \"Drtič min\" v tabulce \"Ti nej\"."
-msgstr ""
+msgstr "Indicates if the \"Pod crusher\" should be shown in \"The best\" table."
 
 msgctxt "game.modes.settings"
 msgid "Obecné"
@@ -2145,3 +2145,4 @@ msgstr ""
 msgctxt "help"
 msgid "Přepne na předchozího hráče."
 msgstr ""
+

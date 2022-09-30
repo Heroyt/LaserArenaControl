@@ -55,33 +55,26 @@ msgstr "Actions"
 msgid "%s score"
 msgstr "%s score"
 
-# /templates/../vendor/lsr/helpers/templates/Db/panel.latte:7
 msgctxt "debugPanel"
 msgid "Rows"
 msgstr "Rows"
 
-# /templates/../vendor/lsr/helpers/templates/Db/panel.latte:8
 msgctxt "debugPanel"
 msgid "Takes"
 msgstr "Takes"
 
-# /templates/../vendor/lsr/helpers/templates/Translation/tab.latte:27
-# /templates/../vendor/lsr/helpers/templates/Translation/panel.latte:3
 msgctxt "debugPanel"
 msgid "Translations"
 msgstr "Translations"
 
-# /templates/../vendor/lsr/helpers/templates/Translation/panel.latte:6
 msgctxt "debugPanel"
 msgid "Language"
 msgstr "Language"
 
-# /templates/../vendor/lsr/helpers/templates/Translation/panel.latte:10
 msgctxt "debugPanel"
 msgid "HTTP header"
 msgstr "HTTP header"
 
-# /templates/../vendor/lsr/helpers/templates/Translation/panel.latte:16
 msgctxt "debugPanel"
 msgid "Translated strings"
 msgstr "Translated strings"
@@ -1360,7 +1353,6 @@ msgctxt "debugPanel"
 msgid "Invalid cache class"
 msgstr "Invalid cache class"
 
-# /templates/../vendor/lsr/helpers/templates/Caching/tab.latte:28
 msgctxt "debugPanel"
 msgid "%d call"
 msgid_plural "%d calls"
@@ -2081,4 +2073,11 @@ msgstr ""
 
 msgctxt "actions"
 msgid "Zrušit"
+msgstr ""
+
+msgid "Nepodařilo se připojit k TCP serveru (192.168.50.3:8081). Operation now in progress (36)"
+msgstr ""
+
+msgctxt "modes.settings"
+msgid "Skryté náhodné týmy"
 msgstr ""

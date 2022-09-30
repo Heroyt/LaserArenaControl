@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: English\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2022-09-30 13:04\n"
+"PO-Revision-Date: 2022-09-30 16:05\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -1978,155 +1978,155 @@ msgid "Test - solo"
 msgstr "Test - solo"
 
 msgid "Variace herních módů označují malé změny v nastavení hry, jako například délku hry. Při načtení hry do konzole se vybírá mód, jehož jméno se získá přidáním potřebných přípon za nastavený základní název v konzoli. Pokud je tedy mód \"TeamDeathmach\" a má vybranou variaci délky 15 minut, která má příponu \"-10\", výsledný vybraný mód z konzole bude mít název \"TeamDeathmach-15\"."
-msgstr ""
+msgstr "Game mode variations indicate small game setting changes like the game's length. After loading the game to the console, the game's mode name is created using the game mode's base name and appending all variation suffixes. If, for example, you chose the \"TeamDeathmach\" game mode and pick a 15-minute variation with a \"-15\" suffix, the resulting game mode's name will be \"TeamDeathmach-15\"."
 
 msgid "Hodnoty variace můžete řadit. Jako výchozí se vždy použije první hodnota (nahoře v seznamu)."
-msgstr ""
+msgstr "You can sort the variation values. The first (top) value will be used as a default."
 
 msgctxt "settings"
 msgid "IP adresa LaserMaxx konzole"
-msgstr ""
+msgstr "LaserMaxx console IP address"
 
 msgctxt "game.modes"
 msgid "Upravit názvy z konzole"
-msgstr ""
+msgstr "Edit console names"
 
 msgctxt "game.modes"
 msgid "Názvy z konzole"
-msgstr ""
+msgstr "Console names"
 
 msgid "Názvy nastavené zde se budou používat pro párování načtených her z konzole do systému."
-msgstr ""
+msgstr "Names set here will be used for pairing loaded games from the console to the system."
 
 msgid "Názvy nejsou kontrolované striktně. Nezáleží na velkých/malých písmenech. Zadaný název může být jen podřetězec celého názvu v konzoli."
-msgstr ""
+msgstr "Names aren't checked strictly. For example, uppercase and lowercase letters can be interchanged. A given string can be only a substring of the full game mode's name."
 
 msgid "Např. při módu \"1-TEAM-DEATHMACH\" stačí, aby byl zde zadaný text \"1-TEAM\" nebo \"team-deathmach\"."
-msgstr ""
+msgstr "For example, you can input only the string \"1-TEAM\" or \"team-deathmatch\" to match the game mode \"1-TEAM-DEATHMATCH\"."
 
 msgctxt "game.modes"
 msgid "Povolené barvy"
-msgstr ""
+msgstr "Allowed colours"
 
 msgctxt "actions"
 msgid "Tisknout poslední hru"
-msgstr ""
+msgstr "Print the last game"
 
 msgid "Synchronizovat on-line"
-msgstr ""
+msgstr "Synchronize online"
 
 msgid "Nápověda"
-msgstr ""
+msgstr "Help"
 
 msgctxt "help"
 msgid "Klávesové zkratky"
-msgstr ""
+msgstr "Keyboard shortcuts"
 
 msgctxt "help.keys"
 msgid "Enter"
-msgstr ""
+msgstr "Enter"
 
 msgctxt "help"
 msgid "Odeslat formulář. Nahraje / Spustí hru."
-msgstr ""
+msgstr "Send the form. Loads / Starts the game."
 
 msgctxt "help.keys"
 msgid "Mezerník"
-msgstr ""
+msgstr "Space"
 
 msgctxt "help.keys"
 msgid "CTRL"
-msgstr ""
+msgstr "CTRL"
 
 msgctxt "help.keys"
 msgid "Backspace"
-msgstr ""
+msgstr "Backspace"
 
 msgctxt "help"
 msgid "Smaže celý formulář."
-msgstr ""
+msgstr "Clears the whole form."
 
 msgid "Stahují se výsledky"
-msgstr ""
+msgstr "The results are downloading"
 
 msgid "Systém detekoval nedokončené stahování z výsledků. Zkontrolujte vesty a případně klikěte na \"Opakovat\""
-msgstr ""
+msgstr "The system detected an unfinished score download process. Check the vests and click \"Retry\""
 
 msgid "Při kliknutí na \"Zrušit\" se výsledky z vest nestáhnout."
-msgstr ""
+msgstr "After clicking \"Cancel\", game scores will be lost."
 
 msgctxt "actions"
 msgid "Opakovat"
-msgstr ""
+msgstr "Retry"
 
 msgctxt "actions"
 msgid "Zrušit"
-msgstr ""
+msgstr "Cancel"
 
 msgctxt "modes.settings"
 msgid "Skryté náhodné týmy"
-msgstr ""
+msgstr "Hidden random teams"
 
 msgctxt "gameModes"
 msgid "Variace"
-msgstr ""
+msgstr "Variations"
 
 msgctxt "help"
 msgid "Skryje / Odkryje variace."
-msgstr ""
+msgstr "Hides / Shows variations."
 
 msgctxt "help"
 msgid "Nastaví tým hráče."
-msgstr ""
+msgstr "Sets the player's team."
 
 msgctxt "help"
 msgid "Přepne nastavení VIP hráče."
-msgstr ""
+msgstr "Toggles the player's VIP setting."
 
 msgctxt "help"
 msgid "Globální"
-msgstr ""
+msgstr "Global"
 
 msgctxt "help"
 msgid "Zadávání hráče"
-msgstr ""
+msgstr "Players' setting"
 
 msgctxt "help"
 msgid "Smaže hráče."
-msgstr ""
+msgstr "Removes the player."
 
 msgctxt "help"
 msgid "Aktivní pouze při zadávání jména hráče."
-msgstr ""
+msgstr "Active only while setting the player's name."
 
 msgctxt "help"
 msgid "Zvýší herní úroveň hráče."
-msgstr ""
+msgstr "Raises the player's skill level."
 
 msgctxt "help"
 msgid "Sníží herní úroveň hráče."
-msgstr ""
+msgstr "Lowers the player's skill level."
 
 msgctxt "help"
 msgid "Skryje / Zobrazí variace."
-msgstr ""
+msgstr "Hides / Shows variations."
 
 msgctxt "help"
 msgid "Skryje / Zobrazí nápovědu."
-msgstr ""
+msgstr "Hides / Shows help."
 
 msgctxt "help.keys"
 msgid "TAB"
-msgstr ""
+msgstr "TAB"
 
 msgctxt "help"
 msgid "Přepne na dalšího hráče."
-msgstr ""
+msgstr "Switches to the next player."
 
 msgctxt "help.keys"
 msgid "SHIFT"
-msgstr ""
+msgstr "SHIFT"
 
 msgctxt "help"
 msgid "Přepne na předchozího hráče."
-msgstr ""
+msgstr "Switches to the previous player."

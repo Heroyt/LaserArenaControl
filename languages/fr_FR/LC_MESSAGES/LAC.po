@@ -2081,3 +2081,67 @@ msgstr ""
 msgctxt "modes.settings"
 msgid "Skryté náhodné týmy"
 msgstr ""
+
+msgctxt "gameModes"
+msgid "Variace"
+msgstr ""
+
+msgctxt "help"
+msgid "Skryje / Odkryje variace."
+msgstr ""
+
+msgctxt "help"
+msgid "Nastaví tým hráče."
+msgstr ""
+
+msgctxt "help"
+msgid "Přepne nastavení VIP hráče."
+msgstr ""
+
+msgctxt "help"
+msgid "Globální"
+msgstr ""
+
+msgctxt "help"
+msgid "Zadávání hráče"
+msgstr ""
+
+msgctxt "help"
+msgid "Smaže hráče."
+msgstr ""
+
+msgctxt "help"
+msgid "Aktivní pouze při zadávání jména hráče."
+msgstr ""
+
+msgctxt "help"
+msgid "Zvýší herní úroveň hráče."
+msgstr ""
+
+msgctxt "help"
+msgid "Sníží herní úroveň hráče."
+msgstr ""
+
+msgctxt "help"
+msgid "Skryje / Zobrazí variace."
+msgstr ""
+
+msgctxt "help"
+msgid "Skryje / Zobrazí nápovědu."
+msgstr ""
+
+msgctxt "help.keys"
+msgid "TAB"
+msgstr ""
+
+msgctxt "help"
+msgid "Přepne na dalšího hráče."
+msgstr ""
+
+msgctxt "help.keys"
+msgid "SHIFT"
+msgstr ""
+
+msgctxt "help"
+msgid "Přepne na předchozího hráče."
+msgstr ""

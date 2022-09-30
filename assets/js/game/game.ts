@@ -25,6 +25,7 @@ export default class Game {
 	$teams: NodeListOf<HTMLInputElement>;
 	$maxSkill: NodeListOf<HTMLInputElement>;
 	$modeVariations: HTMLDivElement;
+	$variationsHideBtn: HTMLButtonElement;
 
 	$shuffleTeams: HTMLButtonElement;
 	$shuffleFairTeams: HTMLButtonElement;
@@ -49,7 +50,8 @@ export default class Game {
 		this.$musicMode = document.getElementById('music-select') as HTMLSelectElement;
 		this.$teams = document.querySelectorAll('#teams-random .team-color-input');
 		this.$maxSkill = document.querySelectorAll('.maxSkill');
-		this.$modeVariations = document.getElementById('game-mode-variations') as HTMLDivElement;
+		this.$modeVariations = document.getElementById('game-mode-variations-wrapper') as HTMLDivElement;
+		this.$variationsHideBtn = document.getElementById('hide-variations') as HTMLButtonElement;
 
 		this.$shuffleTeams = document.getElementById('random-teams') as HTMLButtonElement;
 		this.$shuffleFairTeams = document.getElementById('random-fair-teams') as HTMLButtonElement;
@@ -207,13 +209,30 @@ export default class Game {
 				this.updateMaxSkill();
 			});
 		});
+
+		this.$modeVariations.parentElement.addEventListener('show.bs.collapse', () => {
+			console.log('show');
+			this.$variationsHideBtn.querySelector('.fa-eye-slash').classList.add('d-none');
+			this.$variationsHideBtn.querySelector('.fa-eye').classList.remove('d-none');
+		});
+		this.$modeVariations.parentElement.addEventListener('hide.bs.collapse', () => {
+			console.log('hide');
+			this.$variationsHideBtn.querySelector('.fa-eye-slash').classList.remove('d-none');
+			this.$variationsHideBtn.querySelector('.fa-eye').classList.add('d-none');
+		});
 	}
 
 	updateModeVariations(variations: { [index: number]: VariationsValue[] }) {
 		// Clear
 		this.$modeVariations.innerHTML = '';
 
-		Object.values(variations).forEach(data => {
+		const values = Object.values(variations);
+		if (values.length === 0) {
+			this.$variationsHideBtn.classList.add('d-none');
+		} else {
+			this.$variationsHideBtn.classList.remove('d-none');
+		}
+		values.forEach(data => {
 			this.addVariation(data[0].variation, data);
 		});
 	}

@@ -104,7 +104,17 @@
 			</div>
 			<div id="game-mode-description" class="select-description text-muted" data-target="#game-mode-select"></div>
 		</section>
-		<section id="game-mode-variations"></section>
+		<section id="game-mode-variations">
+			<button class="btn btn-info" type="button" id="hide-variations" data-bs-toggle="collapse"
+					data-bs-target="#game-mode-variations-collapse">
+				<i class="fa-solid fa-eye"></i>
+				<i class="fa-solid fa-eye-slash d-none"></i>
+				{lang 'Variace', context: 'gameModes'}
+			</button>
+			<div class="collapse show" id="game-mode-variations-collapse">
+				<div id="game-mode-variations-wrapper"></div>
+			</div>
+		</section>
 		<section id="music">
 			<label for="music-select">
 				{lang 'Hudební mód', context: 'game'}:
@@ -198,6 +208,7 @@
 		</div>
 		<div class="offcanvas-body">
 			<h5>{lang 'Klávesové zkratky', context: 'help'}</h5>
+			<h6>{lang 'Globální', context: 'help'}</h6>
 			<table class="table table-striped align-middle">
 				<tbody>
 				<tr>
@@ -218,6 +229,102 @@
 					</th>
 					<td>
 						{lang 'Smaže celý formulář.', context: 'help'}
+					</td>
+				</tr>
+				<tr>
+					<th class="text-center py-3">
+						<span class="bg-primary text-bg-primary p-2 rounded">V</span>
+					</th>
+					<td>
+						{lang 'Skryje / Zobrazí variace.', context: 'help'}
+					</td>
+				</tr>
+				<tr>
+					<th class="text-center py-3">
+						<span class="bg-primary text-bg-primary p-2 rounded">H</span>
+					</th>
+					<td>
+						{lang 'Skryje / Zobrazí nápovědu.', context: 'help'}
+					</td>
+				</tr>
+				</tbody>
+			</table>
+			<h6>{lang 'Zadávání hráče', context: 'help'}</h6>
+			<p class="text-muted">{lang 'Aktivní pouze při zadávání jména hráče.', context: 'help'}</p>
+			<table class="table table-striped align-middle">
+				<tbody>
+				<tr>
+					<th class="text-center py-3">
+						<span class="bg-primary text-bg-primary p-2 rounded">{lang 'CTRL', context: 'help.keys'}</span>
+						+
+						<span class="bg-primary text-bg-primary p-2 rounded">1-9</span>
+					</th>
+					<td>
+						{lang 'Nastaví tým hráče.', context: 'help'}
+					</td>
+				</tr>
+				<tr>
+					<th class="text-center py-3">
+						<span class="bg-primary text-bg-primary p-2 rounded">{lang 'CTRL', context: 'help.keys'}</span>
+						+
+						<span class="bg-primary text-bg-primary p-2 rounded">V</span>
+					</th>
+					<td>
+						{lang 'Přepne nastavení VIP hráče.', context: 'help'}
+					</td>
+				</tr>
+				<tr>
+					<th class="text-center py-3">
+						<span class="bg-primary text-bg-primary p-2 rounded">{lang 'CTRL', context: 'help.keys'}</span>
+						+
+						<span class="bg-primary text-bg-primary p-2 rounded">{lang 'Backspace', context: 'help.keys'}</span>
+					</th>
+					<td>
+						{lang 'Smaže hráče.', context: 'help'}
+					</td>
+				</tr>
+				<tr>
+					<th class="text-center py-3">
+						<span class="bg-primary text-bg-primary p-2 rounded"><i class="fa-solid fa-arrow-up"></i></span>
+					</th>
+					<td>
+						{lang 'Zvýší herní úroveň hráče.', context: 'help'}
+					</td>
+				</tr>
+				<tr>
+					<th class="text-center py-3">
+						<span class="bg-primary text-bg-primary p-2 rounded"><i
+									class="fa-solid fa-arrow-down"></i></span>
+					</th>
+					<td>
+						{lang 'Sníží herní úroveň hráče.', context: 'help'}
+					</td>
+				</tr>
+				<tr>
+					<th class="text-center py-3">
+						<span class="bg-primary text-bg-primary p-2 rounded"><i
+									class="fa-solid fa-arrow-down"></i></span>
+					</th>
+					<td>
+						{lang 'Sníží herní úroveň hráče.', context: 'help'}
+					</td>
+				</tr>
+				<tr>
+					<th class="text-center py-3">
+						<span class="bg-primary text-bg-primary p-2 rounded">{lang 'TAB', context: 'help.keys'}</span>
+					</th>
+					<td>
+						{lang 'Přepne na dalšího hráče.', context: 'help'}
+					</td>
+				</tr>
+				<tr>
+					<th class="text-center py-3">
+						<span class="bg-primary text-bg-primary p-2 rounded">{lang 'SHIFT', context: 'help.keys'}</span>
+						+
+						<span class="bg-primary text-bg-primary p-2 rounded">{lang 'TAB', context: 'help.keys'}</span>
+					</th>
+					<td>
+						{lang 'Přepne na předchozího hráče.', context: 'help'}
 					</td>
 				</tr>
 				</tbody>

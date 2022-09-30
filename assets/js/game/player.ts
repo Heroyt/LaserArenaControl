@@ -17,6 +17,7 @@ export default class Player {
 	game: Game;
 
 	skill: number = 1;
+	maxSkill: number = 3;
 	realSkill: number = 1;
 	team: string | null = null;
 	name: string = '';
@@ -214,6 +215,38 @@ export default class Player {
 				});
 			})
 		});
+
+		this.$name.addEventListener('keyup', e => {
+			if (e.keyCode === 38) { // Arrow up
+				if (this.skill === this.maxSkill) {
+					this.setSkill(1);
+				} else {
+					this.setSkill(this.skill + 1)
+				}
+				return;
+			} else if (e.keyCode === 40) { // Arrow down
+				if (this.skill === 1) {
+					this.setSkill(this.maxSkill);
+				} else {
+					this.setSkill(this.skill - 1)
+				}
+				return;
+			}
+			if (!e.ctrlKey) {
+				return;
+			}
+
+			if (e.code.includes('Digit')) {
+				const index = parseInt(e.code.replace('Digit', '')) - 1;
+				if (this.$teams[index]) {
+					this.setTeam(this.$teams[index].value);
+				}
+			} else if (e.keyCode === 86) { // v
+				this.setVip(!this.vip);
+			} else if (e.keyCode === 8 || e.keyCode === 46) { // Backspace or delete
+				this.clear();
+			}
+		});
 	}
 
 	clear(): void {
@@ -361,6 +394,7 @@ export default class Player {
 	setMaxSkill(max: 3 | 6): void {
 		const label: HTMLLabelElement = this.row.querySelector('.maxSkillSwitch');
 
+		this.maxSkill = max;
 		if (max === 3) {
 			label.setAttribute('for', `player-skill-${this.vest}-1`);
 		} else {

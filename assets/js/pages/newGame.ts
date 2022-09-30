@@ -423,6 +423,9 @@ export default function initNewGamePage() {
 
 	function handleKeyboardShortcuts(e: KeyboardEvent) {
 		console.log('keyup', e.key, e.keyCode, e.altKey, e.ctrlKey);
+		if (e.target instanceof HTMLElement && e.target.nodeName.toLowerCase() === 'input') {
+			return;
+		}
 		switch (e.keyCode) {
 			case 32: // Space
 			case 13: // Enter
@@ -438,6 +441,13 @@ export default function initNewGamePage() {
 				if (e.ctrlKey) {
 					game.clearAll();
 				}
+				break;
+			case 86: // v
+				(document.getElementById('hide-variations') as HTMLButtonElement)
+					.dispatchEvent(new Event('click', {bubbles: true}));
+				break;
+			case 72: // h
+				helpOffcanvas.toggle();
 				break;
 		}
 	}

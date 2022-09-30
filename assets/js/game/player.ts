@@ -216,6 +216,12 @@ export default class Player {
 			})
 		});
 
+		document.addEventListener('keydown', e => {
+			if (e.ctrlKey && (e.code.includes('Digit') || e.keyCode === 86 || e.keyCode === 8 || e.keyCode === 46)) {
+				e.preventDefault();
+			}
+		});
+
 		this.$name.addEventListener('keyup', e => {
 			if (e.keyCode === 38) { // Arrow up
 				if (this.skill === this.maxSkill) {

@@ -6,6 +6,7 @@ use App\Core\Info;
 use App\Exceptions\GameModeNotFoundException;
 use App\GameModels\Factory\GameFactory;
 use App\GameModels\Factory\GameModeFactory;
+use App\GameModels\Game\GameModes\CustomLoadMode;
 use App\GameModels\Vest;
 use App\Models\MusicMode;
 use JsonException;
@@ -102,9 +103,6 @@ class NewGame extends Controller
 		}
 
 		foreach ($request->post['team'] as $key => $team) {
-			if (!isset($teams[(string) $key])) {
-				continue;
-			}
 			$asciiName = Strings::toAscii($team['name']);
 			if ($team['name'] !== $asciiName) {
 				$data['meta']['t'.$key.'n'] = $team['name'];
@@ -112,9 +110,15 @@ class NewGame extends Controller
 			$data['teams'][] = [
 				'key'         => $key,
 				'name'        => $asciiName,
-				'playerCount' => $teams[(string) $key],
+				'playerCount' => $teams[(string) $key] ?? 0,
 			];
 		}
+
+		if (isset($mode) && $mode instanceof CustomLoadMode) {
+			$data = $mode->modifyGameDataBeforeLoad($data);
+		}
+
+		$data['teams'] = array_filter($data['teams'], static fn($team) => $team['playerCount'] > 0);
 
 		$data['meta']['hash'] = md5(json_encode($data['players'], JSON_THROW_ON_ERROR));
 
@@ -125,13 +129,12 @@ class NewGame extends Controller
 			file_put_contents($loadDir.'0000.game', $content);
 		}
 
+
 		// Set up a correct music file
 		if (isset($data['meta']['music'])) {
 			try {
 				$music = MusicMode::get($data['meta']['music']);
-				if (isset($music)) {
-					copy($music->fileName, LMX_DIR.'music/evo5.mp3');
-				}
+				copy($music->fileName, LMX_DIR.'music/evo5.mp3');
 			} catch (ModelNotFoundException|ValidationException|DirectoryCreationException $e) {
 				// Not critical, doesn't need to do anything
 			}

@@ -3,6 +3,7 @@ import Team from "./team";
 import {shuffle} from "../functions";
 import {Tooltip} from "bootstrap";
 import {GameData, Variation, VariationsValue} from './gameInterfaces';
+import CustomLoadMode from "./customLoadMode";
 
 declare global {
 	const messages: { [index: string]: string };
@@ -37,11 +38,12 @@ export default class Game {
 
 	maxSkill: 3 | 6 = 3;
 
+	loadedModeScript: CustomLoadMode | null = null;
+
 	constructor() {
 
 		this.players = new Map;
 		this.teams = new Map;
-
 
 		this.$gameMode = document.getElementById('game-mode-select') as HTMLSelectElement;
 		this.$musicMode = document.getElementById('music-select') as HTMLSelectElement;
@@ -131,6 +133,12 @@ export default class Game {
 		});
 
 		this.$gameMode.addEventListener('change', () => {
+			if (this.loadedModeScript !== null) {
+				this.loadedModeScript.cancel();
+				this.loadedModeScript = null;
+			}
+
+			const option = this.$gameMode.querySelector(`option[value="${this.$gameMode.value}"]`) as HTMLOptionElement;
 			const type = this.getModeType();
 			console.log(type, this.$soloHide);
 
@@ -143,13 +151,27 @@ export default class Game {
 			});
 
 			const teams = JSON.parse(
-				(this.$gameMode.querySelector(`option[value="${this.$gameMode.value}"]`) as HTMLOptionElement).dataset.teams
+				option.dataset.teams
 			);
 			this.updateAllowedTeams(teams);
 
 			const variations: { [index: number]: VariationsValue[] } = JSON.parse((this.$gameMode.querySelector(`option[value="${this.$gameMode.value}"]`) as HTMLOptionElement).dataset.variations);
 			console.log(variations);
 			this.updateModeVariations(variations);
+
+			if (option.dataset.script) {
+				import(
+					/* webpackChunkName: "modes" */
+					`./modes/${option.dataset.script}`
+					)
+					.then((module) => {
+						this.loadedModeScript = new module.default;
+						this.loadedModeScript.init();
+					})
+					.catch(error => {
+						console.error(error);
+					})
+			}
 
 			this.$gameMode.dispatchEvent(
 				new Event("update", {

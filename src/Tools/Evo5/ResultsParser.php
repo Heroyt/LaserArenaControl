@@ -442,10 +442,11 @@ class ResultsParser extends AbstractResultsParser
 			$players = [];
 			/** @var Player $player */
 			foreach ($game->getPlayers() as $player) {
+				$metaStartTeamKey = 'p'.$player->vest.'-startTeam';
 				$players[] = [
 					'vest' => $player->vest,
 					'name' => $player->name,
-					'team' => (string) $player->teamNum,
+					'team' => (string) ($meta[$metaStartTeamKey] ?? $player->teamNum),
 					'vip'  => $player->vip,
 				];
 			}

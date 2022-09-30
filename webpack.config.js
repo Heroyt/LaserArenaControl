@@ -1,16 +1,40 @@
 const path = require('path');
+const fs = require('fs');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CompressionPlugin = require("compression-webpack-plugin");
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const isDevelopment = true;
 
-module.exports = {
-	mode: isDevelopment ? 'development' : 'production',
-	entry: [
+const files = fs.readdirSync(path.resolve(__dirname, 'assets/js/game/modes'))
+	.map(file => [
+		file.replace('.ts', ''),
+		{
+			import: './assets/js/game/modes/' + file,
+			library: {
+				type: 'module',
+			}
+		}
+	]);
+console.log('mode files:', files);
+
+let entry = {
+	main: [
 		'./assets/js/main.js',
 		'./assets/scss/main.scss',
 	],
+};
+
+
+files.forEach(([name, file]) => {
+	entry['modes/' + name] = file;
+});
+
+console.log(entry);
+
+module.exports = {
+	mode: isDevelopment ? 'development' : 'production',
+	entry,
 	output: {
 		filename: '[name].js',
 		path: path.resolve(__dirname, 'dist'),
@@ -89,4 +113,7 @@ module.exports = {
 			},
 		},
 	},
+	experiments: {
+		outputModule: true,
+	}
 };

@@ -2007,12 +2007,6 @@ msgctxt "settings"
 msgid "IP adresa LaserMaxx konzole"
 msgstr ""
 
-msgid "Nepodařilo se připojit k TCP serveru (192.168.50.3:8081)."
-msgstr ""
-
-msgid "Nepodařilo se připojit k TCP serveru (192.168.50.3:8081). Connection refused (61)"
-msgstr ""
-
 msgctxt "game.modes"
 msgid "Upravit názvy z konzole"
 msgstr ""
@@ -2039,9 +2033,6 @@ msgid "Tisknout poslední hru"
 msgstr ""
 
 msgid "Synchronizovat on-line"
-msgstr ""
-
-msgid "Nepodařilo se připojit k TCP serveru (192.168.50.3:8081). Operation timed out (60)"
 msgstr ""
 
 msgid "Nápověda"
@@ -2075,9 +2066,6 @@ msgctxt "help"
 msgid "Smaže celý formulář."
 msgstr ""
 
-msgid "Nepodařilo se připojit k TCP serveru (192.168.50.3:8081). Network is unreachable (51)"
-msgstr ""
-
 msgid "Stahují se výsledky"
 msgstr ""
 
@@ -2093,9 +2081,6 @@ msgstr ""
 
 msgctxt "actions"
 msgid "Zrušit"
-msgstr ""
-
-msgid "Nepodařilo se připojit k TCP serveru (192.168.50.3:8081). Operation now in progress (36)"
 msgstr ""
 
 msgctxt "modes.settings"
@@ -2165,4 +2150,3 @@ msgstr ""
 msgctxt "help"
 msgid "Přepne na předchozího hráče."
 msgstr ""
-

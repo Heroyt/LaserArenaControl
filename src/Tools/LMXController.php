@@ -27,7 +27,7 @@ class LMXController
 
 	public const DEFAULT_TIMEOUT  = 30;
 	public const COMMAND_TIMEOUTS = [
-		self::GET_STATUS_COMMAND => 10,
+		self::GET_STATUS_COMMAND => 3,
 	];
 
 	/**

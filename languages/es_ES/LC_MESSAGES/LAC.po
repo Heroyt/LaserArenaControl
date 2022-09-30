@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: Spanish\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2022-09-30 11:47\n"
+"PO-Revision-Date: 2022-09-30 13:04\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -2080,5 +2080,69 @@ msgstr ""
 
 msgctxt "modes.settings"
 msgid "Skryté náhodné týmy"
+msgstr ""
+
+msgctxt "gameModes"
+msgid "Variace"
+msgstr ""
+
+msgctxt "help"
+msgid "Skryje / Odkryje variace."
+msgstr ""
+
+msgctxt "help"
+msgid "Nastaví tým hráče."
+msgstr ""
+
+msgctxt "help"
+msgid "Přepne nastavení VIP hráče."
+msgstr ""
+
+msgctxt "help"
+msgid "Globální"
+msgstr ""
+
+msgctxt "help"
+msgid "Zadávání hráče"
+msgstr ""
+
+msgctxt "help"
+msgid "Smaže hráče."
+msgstr ""
+
+msgctxt "help"
+msgid "Aktivní pouze při zadávání jména hráče."
+msgstr ""
+
+msgctxt "help"
+msgid "Zvýší herní úroveň hráče."
+msgstr ""
+
+msgctxt "help"
+msgid "Sníží herní úroveň hráče."
+msgstr ""
+
+msgctxt "help"
+msgid "Skryje / Zobrazí variace."
+msgstr ""
+
+msgctxt "help"
+msgid "Skryje / Zobrazí nápovědu."
+msgstr ""
+
+msgctxt "help.keys"
+msgid "TAB"
+msgstr ""
+
+msgctxt "help"
+msgid "Přepne na dalšího hráče."
+msgstr ""
+
+msgctxt "help.keys"
+msgid "SHIFT"
+msgstr ""
+
+msgctxt "help"
+msgid "Přepne na předchozího hráče."
 msgstr ""
 

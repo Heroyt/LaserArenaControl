@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: Czech\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2022-09-30 13:04\n"
+"PO-Revision-Date: 2022-09-30 16:05\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=4; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 3;\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -2005,164 +2005,149 @@ msgstr "Hodnoty variace můžete řadit. Jako výchozí se vždy použije první
 
 msgctxt "settings"
 msgid "IP adresa LaserMaxx konzole"
-msgstr ""
-
-msgid "Nepodařilo se připojit k TCP serveru (192.168.50.3:8081)."
-msgstr ""
-
-msgid "Nepodařilo se připojit k TCP serveru (192.168.50.3:8081). Connection refused (61)"
-msgstr ""
+msgstr "IP adresa LaserMaxx konzole"
 
 msgctxt "game.modes"
 msgid "Upravit názvy z konzole"
-msgstr ""
+msgstr "Upravit názvy z konzole"
 
 msgctxt "game.modes"
 msgid "Názvy z konzole"
-msgstr ""
+msgstr "Názvy z konzole"
 
 msgid "Názvy nastavené zde se budou používat pro párování načtených her z konzole do systému."
-msgstr ""
+msgstr "Názvy nastavené zde se budou používat pro párování načtených her z konzole do systému."
 
 msgid "Názvy nejsou kontrolované striktně. Nezáleží na velkých/malých písmenech. Zadaný název může být jen podřetězec celého názvu v konzoli."
-msgstr ""
+msgstr "Názvy nejsou kontrolované striktně. Nezáleží na velkých/malých písmenech. Zadaný název může být jen podřetězec celého názvu v konzoli."
 
 msgid "Např. při módu \"1-TEAM-DEATHMACH\" stačí, aby byl zde zadaný text \"1-TEAM\" nebo \"team-deathmach\"."
-msgstr ""
+msgstr "Např. při módu \"1-TEAM-DEATHMACH\" stačí, aby byl zde zadaný text \"1-TEAM\" nebo \"team-deathmach\"."
 
 msgctxt "game.modes"
 msgid "Povolené barvy"
-msgstr ""
+msgstr "Povolené barvy"
 
 msgctxt "actions"
 msgid "Tisknout poslední hru"
-msgstr ""
+msgstr "Tisknout poslední hru"
 
 msgid "Synchronizovat on-line"
-msgstr ""
-
-msgid "Nepodařilo se připojit k TCP serveru (192.168.50.3:8081). Operation timed out (60)"
-msgstr ""
+msgstr "Synchronizovat on-line"
 
 msgid "Nápověda"
-msgstr ""
+msgstr "Nápověda"
 
 msgctxt "help"
 msgid "Klávesové zkratky"
-msgstr ""
+msgstr "Klávesové zkratky"
 
 msgctxt "help.keys"
 msgid "Enter"
-msgstr ""
+msgstr "Enter"
 
 msgctxt "help"
 msgid "Odeslat formulář. Nahraje / Spustí hru."
-msgstr ""
+msgstr "Odeslat formulář. Nahraje / Spustí hru."
 
 msgctxt "help.keys"
 msgid "Mezerník"
-msgstr ""
+msgstr "Mezerník"
 
 msgctxt "help.keys"
 msgid "CTRL"
-msgstr ""
+msgstr "CTRL"
 
 msgctxt "help.keys"
 msgid "Backspace"
-msgstr ""
+msgstr "Backspace"
 
 msgctxt "help"
 msgid "Smaže celý formulář."
-msgstr ""
-
-msgid "Nepodařilo se připojit k TCP serveru (192.168.50.3:8081). Network is unreachable (51)"
-msgstr ""
+msgstr "Smaže celý formulář."
 
 msgid "Stahují se výsledky"
-msgstr ""
+msgstr "Stahují se výsledky"
 
 msgid "Systém detekoval nedokončené stahování z výsledků. Zkontrolujte vesty a případně klikěte na \"Opakovat\""
-msgstr ""
+msgstr "Systém detekoval nedokončené stahování z výsledků. Zkontrolujte vesty a případně klikěte na \"Opakovat\""
 
 msgid "Při kliknutí na \"Zrušit\" se výsledky z vest nestáhnout."
-msgstr ""
+msgstr "Při kliknutí na \"Zrušit\" se výsledky z vest nestáhnout."
 
 msgctxt "actions"
 msgid "Opakovat"
-msgstr ""
+msgstr "Opakovat"
 
 msgctxt "actions"
 msgid "Zrušit"
-msgstr ""
-
-msgid "Nepodařilo se připojit k TCP serveru (192.168.50.3:8081). Operation now in progress (36)"
-msgstr ""
+msgstr "Zrušit"
 
 msgctxt "modes.settings"
 msgid "Skryté náhodné týmy"
-msgstr ""
+msgstr "Skryté náhodné týmy"
 
 msgctxt "gameModes"
 msgid "Variace"
-msgstr ""
+msgstr "Variace"
 
 msgctxt "help"
 msgid "Skryje / Odkryje variace."
-msgstr ""
+msgstr "Skryje / Odkryje variace."
 
 msgctxt "help"
 msgid "Nastaví tým hráče."
-msgstr ""
+msgstr "Nastaví tým hráče."
 
 msgctxt "help"
 msgid "Přepne nastavení VIP hráče."
-msgstr ""
+msgstr "Přepne nastavení VIP hráče."
 
 msgctxt "help"
 msgid "Globální"
-msgstr ""
+msgstr "Globální"
 
 msgctxt "help"
 msgid "Zadávání hráče"
-msgstr ""
+msgstr "Zadávání hráče"
 
 msgctxt "help"
 msgid "Smaže hráče."
-msgstr ""
+msgstr "Smaže hráče."
 
 msgctxt "help"
 msgid "Aktivní pouze při zadávání jména hráče."
-msgstr ""
+msgstr "Aktivní pouze při zadávání jména hráče."
 
 msgctxt "help"
 msgid "Zvýší herní úroveň hráče."
-msgstr ""
+msgstr "Zvýší herní úroveň hráče."
 
 msgctxt "help"
 msgid "Sníží herní úroveň hráče."
-msgstr ""
+msgstr "Sníží herní úroveň hráče."
 
 msgctxt "help"
 msgid "Skryje / Zobrazí variace."
-msgstr ""
+msgstr "Skryje / Zobrazí variace."
 
 msgctxt "help"
 msgid "Skryje / Zobrazí nápovědu."
-msgstr ""
+msgstr "Skryje / Zobrazí nápovědu."
 
 msgctxt "help.keys"
 msgid "TAB"
-msgstr ""
+msgstr "TAB"
 
 msgctxt "help"
 msgid "Přepne na dalšího hráče."
-msgstr ""
+msgstr "Přepne na dalšího hráče."
 
 msgctxt "help.keys"
 msgid "SHIFT"
-msgstr ""
+msgstr "SHIFT"
 
 msgctxt "help"
 msgid "Přepne na předchozího hráče."
-msgstr ""
+msgstr "Přepne na předchozího hráče."
 

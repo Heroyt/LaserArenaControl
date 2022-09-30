@@ -26,9 +26,9 @@ let entry = {
 };
 
 
-files.forEach(([name, file]) => {
-	entry['modes/' + name] = file;
-});
+//files.forEach(([name, file]) => {
+//	entry['modes/' + name] = file;
+//});
 
 console.log(entry);
 

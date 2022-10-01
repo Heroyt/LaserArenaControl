@@ -219,12 +219,13 @@ export default function initNewGamePage() {
 
 		if (game.getModeType() === 'TEAM') {
 			let ok = true;
-			activePlayers.forEach(player => {
-				if (player.team === null) {
-					ok = false;
+			const disabledPlayers = activePlayers.filter(player => player.team === null);
+			if ((activePlayers.length - disabledPlayers.length) < 2) {
+				ok = false;
+				disabledPlayers.forEach(player => {
 					player.selectTeamTooltip.show();
-				}
-			});
+				});
+			}
 			if (!ok) {
 				return false;
 			}

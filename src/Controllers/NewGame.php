@@ -86,6 +86,12 @@ class NewGame extends Controller
 			if (empty(trim($player['name']))) {
 				continue;
 			}
+			if (empty($player['team'])) {
+				if (!isset($mode) || $mode->isTeam()) {
+					continue;
+				}
+				$player['team'] = '2';
+			}
 			$asciiName = substr(Strings::toAscii($player['name']), 0, 12);
 			if ($player['name'] !== $asciiName) {
 				$data['meta']['p'.$vest.'n'] = $player['name'];

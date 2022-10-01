@@ -15,6 +15,12 @@ interface PlayerGroup {
 	players: Player[]
 }
 
+interface VariationMemory {
+	[index: string]: {
+		[index: number]: string
+	}
+}
+
 export default class Game {
 
 	players: Map<String, Player>;
@@ -41,7 +47,15 @@ export default class Game {
 
 	loadedModeScript: CustomLoadMode | null = null;
 
+	variationMemory: VariationMemory;
+
 	constructor() {
+
+		this.variationMemory = JSON.parse(window.localStorage.getItem('modeVariationMemory'));
+		if (!this.variationMemory) {
+			this.variationMemory = {};
+			this.updateVariationMemory();
+		}
 
 		this.players = new Map;
 		this.teams = new Map;
@@ -242,6 +256,12 @@ export default class Game {
 		wrapper.classList.add('mb-3', 'mx-3');
 		wrapper.innerHTML = `<h6 class="fw-light">${variation.name}:</h6>`;
 
+		if (!this.variationMemory[this.$gameMode.value]) {
+			this.variationMemory[this.$gameMode.value] = {};
+		}
+
+		const selectedValue = this.variationMemory[this.$gameMode.value][variation.id] ?? null;
+
 		if (values.length < 5) {
 			const group = document.createElement('div');
 			wrapper.appendChild(group);
@@ -257,8 +277,9 @@ export default class Game {
 				input.name = `variation[${variation.id}]`;
 				input.id = `variation-${variation.id}-${key}`;
 				input.value = value.suffix;
-				if (key === 0) {
+				if ((selectedValue === null && key === 0) || selectedValue === value.suffix) {
 					input.checked = true;
+					this.variationMemory[this.$gameMode.value][variation.id] = value.suffix;
 				}
 				group.appendChild(input);
 				const label = document.createElement('label');
@@ -266,6 +287,13 @@ export default class Game {
 				label.classList.add('btn', 'btn-outline-warning');
 				label.innerText = value.value;
 				group.appendChild(label);
+
+				input.addEventListener('change', () => {
+					if (input.checked) {
+						this.variationMemory[this.$gameMode.value][variation.id] = input.value;
+						this.updateVariationMemory();
+					}
+				});
 			});
 		} else {
 			const select = document.createElement('select');
@@ -280,9 +308,21 @@ export default class Game {
 				option.innerText = value.value;
 				select.appendChild(option);
 			});
+
+			if (selectedValue !== null) {
+				select.value = selectedValue;
+			}
+			this.variationMemory[this.$gameMode.value][variation.id] = select.value;
+
+			select.addEventListener('change', () => {
+				this.variationMemory[this.$gameMode.value][variation.id] = select.value;
+				this.updateVariationMemory();
+			});
 		}
 
 		this.$modeVariations.appendChild(wrapper);
+
+		this.updateVariationMemory();
 	}
 
 	clearAll() {
@@ -654,5 +694,9 @@ export default class Game {
 			player.setMaxSkill(max);
 		});
 		this.reassignPlayerSkills();
+	}
+
+	updateVariationMemory(): void {
+		window.localStorage.setItem('modeVariationMemory', JSON.stringify(this.variationMemory));
 	}
 }

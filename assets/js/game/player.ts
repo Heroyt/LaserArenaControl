@@ -217,7 +217,7 @@ export default class Player {
 		});
 
 		document.addEventListener('keydown', e => {
-			if (e.ctrlKey && (e.code.includes('Digit') || e.keyCode === 86 || e.keyCode === 8 || e.keyCode === 46)) {
+			if (e.ctrlKey && (e.code.includes('Digit') || e.keyCode === 83 || e.keyCode === 8 || e.keyCode === 46)) {
 				e.preventDefault();
 			}
 		});
@@ -247,7 +247,7 @@ export default class Player {
 				if (this.$teams[index]) {
 					this.setTeam(this.$teams[index].value);
 				}
-			} else if (e.keyCode === 86) { // v
+			} else if (e.keyCode === 83) { // s
 				this.setVip(!this.vip);
 			} else if (e.keyCode === 8 || e.keyCode === 46) { // Backspace or delete
 				this.clear();

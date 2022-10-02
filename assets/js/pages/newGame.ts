@@ -259,6 +259,7 @@ export default function initNewGamePage() {
 							break;
 					}
 				}
+				stopLoading(true, true);
 			})
 			.catch(error => {
 				console.error(error);
@@ -269,15 +270,15 @@ export default function initNewGamePage() {
 			startLoading(true);
 			axios.post('/control/start')
 				.then(() => {
-					stopLoading(true, true);
 					setCurrentStatus('PLAYING');
+					stopLoading(true);
 				})
 				.catch(error => {
 					console.error(error);
 					if (error.data && error.data.message && error.data.message === 'DOWNLOAD') {
 						setCurrentStatus('DOWNLOAD');
 					}
-					stopLoading(false, true);
+					stopLoading(false);
 				});
 		}
 	}

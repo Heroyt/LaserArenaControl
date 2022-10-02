@@ -72,6 +72,7 @@ export default function initMusicSettings() {
 					});
 				}
 			}
+			recountMusic();
 			upload(++index, files);
 		}
 	}

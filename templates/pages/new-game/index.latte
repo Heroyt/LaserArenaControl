@@ -353,7 +353,8 @@
 					 title="{$vest->info}"></div>
 			{/if}
 		</div>
-		<input id="player-name-{$vest->vestNum}" type="text" class="form-control player-name"
+		<input id="player-name-{$vest->vestNum}" tabindex="{$vest->vestNum}" type="text"
+			   class="form-control player-name"
 			   name="player[{$vest->vestNum}][name]" maxlength="12">
 		<div class="team-select solo-hide d-flex">
 			{foreach $colors as $key => $color}

@@ -79,9 +79,11 @@
 					<i class="fa-solid fa-trash"></i>
 				</button>
 			</div>
-			{foreach $vests as $vest}
-				{include vestRow, $vest}
-			{/foreach}
+			<div id="vestsWrapper">
+				{foreach $vests as $vest}
+					{include vestRow, $vest}
+				{/foreach}
+			</div>
 		</section>
 		<section id="game-mode">
 			<label for="game-mode-select">
@@ -352,6 +354,9 @@
 				<div class="fa-solid fa-circle-exclamation text-danger" data-toggle="tooltip"
 					 title="{$vest->info}"></div>
 			{/if}
+		</div>
+		<div class="input-group-text handle cursor-grab bg-secondary text-bg-secondary px-2">
+			<i class="fa-solid fa-grip-lines"></i>
 		</div>
 		<input id="player-name-{$vest->vestNum}" tabindex="{$vest->vestNum}" type="text"
 			   class="form-control player-name"

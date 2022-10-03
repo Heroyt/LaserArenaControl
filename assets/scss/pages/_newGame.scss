@@ -264,3 +264,10 @@ label.player-vip {
 .player-vip-input {
 	display: none;
 }
+
+.vest-row {
+
+	&.highlight {
+		outline: 2px solid var(--danger);
+	}
+}

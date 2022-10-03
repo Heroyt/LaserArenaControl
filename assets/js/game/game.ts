@@ -4,6 +4,9 @@ import {shuffle} from "../functions";
 import {Tooltip} from "bootstrap";
 import {GameData, Variation, VariationsValue} from './gameInterfaces';
 import CustomLoadMode from "./customLoadMode";
+// @ts-ignore
+import Sortable from "sortablejs/modular/sortable.core.esm.js";
+import CustomSwapPlugin from "./customSwapPlugin";
 
 declare global {
 	const messages: { [index: string]: string };
@@ -48,6 +51,8 @@ export default class Game {
 	loadedModeScript: CustomLoadMode | null = null;
 
 	variationMemory: VariationMemory;
+
+	sortable: Sortable;
 
 	constructor() {
 
@@ -108,6 +113,16 @@ export default class Game {
 		const variations: { [index: number]: VariationsValue[] } = JSON.parse((this.$gameMode.querySelector(`option[value="${this.$gameMode.value}"]`) as HTMLOptionElement).dataset.variations);
 		console.log(variations);
 		this.updateModeVariations(variations);
+
+		// @ts-ignore
+		Sortable.mount(new CustomSwapPlugin());
+
+		this.sortable = new Sortable(document.getElementById('vestsWrapper'), {
+			handle: '.handle',
+			swap: true,
+			swapClass: 'highlight',
+			game: this,
+		});
 
 		this.initEvents();
 	}

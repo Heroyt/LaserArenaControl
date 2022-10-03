@@ -378,19 +378,27 @@ export default class Player {
 	}
 
 	setSkill(skill: number): void {
-		this.$skills.forEach($skill => {
-			$skill.checked = parseInt($skill.value) === skill;
-		});
+		this._setSkill(skill);
 		this.update();
 		this.realSkill = this.skill;
 	}
 
+	_setSkill(skill: number) {
+		this.$skills.forEach($skill => {
+			$skill.checked = parseInt($skill.value) === skill;
+		});
+	}
+
 	setVip(vip: boolean): void {
+		this._setVip(vip);
+		this.update();
+	}
+
+	_setVip(vip: boolean): void {
 		const value = vip ? 1 : 0;
 		this.$vip.forEach($vip => {
 			$vip.checked = parseInt($vip.value) === value;
 		});
-		this.update();
 	}
 
 	isActive(): boolean {

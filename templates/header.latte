@@ -45,7 +45,12 @@
 					{/foreach}
 				</ul>
 
-				<div class="btn-group ms-auto">
+				<div class="ms-auto d-flex align-items-stretch">
+					<button class="btn {if isset($_COOKIE['mode']) && $_COOKIE['mode'] === 'light'}btn-dark{else}btn-light{/if} btn-lg"
+							type="button" id="modeSwitch">
+						<i class="fa-solid fa-moon"></i>
+						<i class="fa-solid fa-sun"></i>
+					</button>
 					{var string $selectedLang = explode('_',$_GET['lang'] ?? Lsr\Core\App::$language->id)[0]}
 				{var string $selectedCountry = Lsr\Core\App::getSupportedLanguages()[$selectedLang]}
 					<button class="btn btn-light btn-lg dropdown-toggle" type="button" data-bs-toggle="dropdown"
@@ -68,6 +73,34 @@
 						{/foreach}
 					</ul>
 				</div>
+				<script>
+					let currentColorScheme = {ifset $_COOKIE['mode']}{$_COOKIE['mode']}{else}window.matchMedia("(prefers-color-scheme: dark)").matches ? 'dark' : 'light'{/ifset}
+					const modeSwitch = document.getElementById('modeSwitch');
+					console.log(currentColorScheme, modeSwitch.classList.entries());
+					if (currentColorScheme === 'dark') {
+						modeSwitch.classList.remove('btn-dark');
+						modeSwitch.classList.add('btn-light');
+					} else {
+						modeSwitch.classList.add('btn-dark');
+						modeSwitch.classList.remove('btn-light');
+					}
+					modeSwitch.addEventListener('click', () => {
+						if (currentColorScheme === 'dark') {
+							modeSwitch.classList.add('btn-dark');
+							modeSwitch.classList.remove('btn-light');
+							document.body.classList.remove('darkMode');
+							document.body.classList.add('lightMode');
+							currentColorScheme = 'light';
+						} else {
+							modeSwitch.classList.remove('btn-dark');
+							modeSwitch.classList.add('btn-light');
+							document.body.classList.add('darkMode');
+							document.body.classList.remove('lightMode');
+							currentColorScheme = 'dark';
+						}
+						document.cookie = `mode=` + currentColorScheme;
+					});
+				</script>
 			</div>
 		</div>
 	</header>

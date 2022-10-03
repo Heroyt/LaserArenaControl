@@ -349,7 +349,7 @@ export default class Game {
 		});
 
 		this.$gameMode.value = (this.$gameMode.firstElementChild as HTMLOptionElement).value;
-		this.$musicMode.value = (this.$musicMode.firstElementChild as HTMLOptionElement).value;
+		//this.$musicMode.value = (this.$musicMode.firstElementChild as HTMLOptionElement).value;
 
 		this.$gameMode.dispatchEvent(new Event('update', {bubbles: true}));
 

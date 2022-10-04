@@ -86,7 +86,7 @@ class NewGame extends Controller
 			if (empty(trim($player['name']))) {
 				continue;
 			}
-			if (empty($player['team'])) {
+			if (!isset($player['team']) || $player['team'] === '') {
 				if (!isset($mode) || $mode->isTeam()) {
 					continue;
 				}

@@ -161,7 +161,7 @@ export default function initMusicSettings() {
 			});
 
 			function triggerPlay() {
-				const timeWrap = elem.querySelector('.time') as HTMLDivElement;
+				const timeWrap = elem.querySelector('.time-music') as HTMLDivElement;
 				if (audio.paused) {
 					audio.addEventListener('timeupdate', () => {
 						timeWrap.innerText = `${Math.floor(audio.currentTime / 60)}:${Math.floor(audio.currentTime % 60).toString().padStart(2, '0')}`;

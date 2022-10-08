@@ -90,7 +90,7 @@
 	</div>
 	<div class="card bg-very-light shadow mt-4 p-4">
 		<iframe id="print-iframe"
-				src="{ifset $selected}{link ['results', $selected->code, 'print', $selectedLang, 1, $selectedStyle, $selectedTemplate, 'view' => 1]}{/ifset}"
+				src="{ifset $selected}{link ['results', $selected->code, 'print', $selectedLang, 1, $selectedStyle, $selectedTemplate, 'view' => 1, 'html' => 1]}{/ifset}"
 				class="w-100 min-vh-60"></iframe>
 	</div>
 	<script n:syntax="double">
@@ -121,7 +121,7 @@
 			printLinks.forEach(link => {
 				link.href = `{{link ['results', $selected->code, 'print']}}/${lang}/${link.dataset.value}/${selectStyle.value}/${selectTemplate.value}/${link.dataset.type}`;
 			});
-			iframe.src = `{{link ['results', $selected->code, 'print']}}/${lang}/1/${selectStyle.value}/${selectTemplate.value}?view=1`;
+			iframe.src = `{{link ['results', $selected->code, 'print']}}/${lang}/1/${selectStyle.value}/${selectTemplate.value}?view=1&html=1`;
 		}
 
 		{{/ifset}}

@@ -1,4 +1,9 @@
 extensions:
 	caching: Nette\Bridges\CacheDI\CacheExtension(%constants.tempDir%)
+parameters:
+	gotenberg:
+		host: gotenberg
+		port: 3000
 services:
 	liga: App\Services\LigaApi::getInstance()
+	gotenberg: App\Services\GotenbergService(%gotenberg.host%, %gotenberg.port%)

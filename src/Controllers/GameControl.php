@@ -115,7 +115,7 @@ class GameControl extends Controller
 		if ($response === 'STANDBY') {
 			$modeName = $request->post['mode'] ?? '';
 			if (empty($modeName)) {
-				$this->respond(['error' => 'Missing required parameter - mode'], 400);
+				$this->respond(['error' => 'Missing required parameter - mode', 'post' => $request->post], 400);
 			}
 			$response = LMXController::loadStart($ip, $modeName);
 		}

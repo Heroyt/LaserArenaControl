@@ -1,5 +1,4 @@
 .template-graphical {
-	--font-size: 7pt;
 	--size: 9pt;
 	align-items: center;
 	display: grid;
@@ -9,6 +8,7 @@
 	grid-template-rows: minmax(25mm, 33mm) auto 1fr 5mm 10mm;
 	height: 100%;
 	justify-content: start;
+	--font-size: 7pt;
 
 	&.solo {
 		grid-template-areas: 'info qr' 'players players' 'legend legend';
@@ -25,7 +25,7 @@
 	}
 
 	.fs-sm {
-		font-size: calc(var(--font-size) * .8);
+		font-size: calc(var(--font-size) * .8) !important;
 	}
 
 	> * {

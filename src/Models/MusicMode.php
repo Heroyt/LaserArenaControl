@@ -21,6 +21,10 @@ class MusicMode extends Model
 	#[Required]
 	public string $fileName = '';
 	public int    $order    = 0;
+	/** @var int Preview start time in seconds */
+	public int $previewStart = 0;
+	/** @var bool If the music mode should be synchronized and shown publically */
+	public bool $public = true;
 
 	/**
 	 * @return MusicMode[]
@@ -32,6 +36,22 @@ class MusicMode extends Model
 
 	public function getMediaUrl() : string {
 		return str_replace(ROOT, App::getUrl(), $this->fileName);
+	}
+
+	public function getFormattedPreviewStart() : string {
+		return floor($this->previewStart / 60).':'.str_pad((string) ($this->previewStart % 60), 2, '0', STR_PAD_LEFT);
+	}
+
+	public function setPreviewStartFromFormatted(string $formatted) : MusicMode {
+		$this->previewStart = 0;
+		/** @var int[] $exploded */
+		$exploded = array_reverse(array_map(static fn(string $part) => (int) trim($part), explode(':', $formatted)));
+		$multiplier = 1;
+		foreach ($exploded as $part) {
+			$this->previewStart += $part * $multiplier;
+			$multiplier *= 60;
+		}
+		return $this;
 	}
 
 }

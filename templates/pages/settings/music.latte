@@ -32,8 +32,9 @@
 	<form action="{link ['settings', 'music']}" enctype="multipart/form-data" method="post" class="text-center autosave"
 		  id="music-settings-form">
 		<div id="musicInputsWrapper">
+			{dump ROOT}
 			{foreach $music as $musicMode}
-				{include musicTemplate $iterator->counter, $musicMode->id, $musicMode->name, $musicMode->getMediaUrl()}
+				{include musicTemplate $iterator->counter, $musicMode->id, $musicMode->name, $musicMode->getMediaUrl(), $musicMode->public, $musicMode->getFormattedPreviewStart()}
 			{/foreach}
 		</div>
 		<p class="text-center">
@@ -44,20 +45,34 @@
 	</form>
 
 	<template id="musicInputTemplate">
-		{include musicTemplate '#counter#', '#id#', '#name#', '#file#'}
+		{include musicTemplate '#counter#', '#id#', '#name#', '#file#', true}
 	</template>
 {/block}
 
-{define musicTemplate int $counter, string|int $id, string $name, string $musicFile}
+{define musicTemplate int $counter, string|int $id, string $name, string $musicFile, bool $public, string $previewStart = '0:00'}
 	<div class="input-group music-input my-2" data-id="{$id}">
 		<div class="input-group-text counter cursor-grab">{$counter}</div>
 		<input type="hidden" name="music[{$id}][order]" value="{$counter}" class="order-input">
 		<input type="text" name="music[{$id}][name]" id="music-{$id}-name"
 			   class="form-control" value="{$name}">
+		<input type="checkbox" class="btn-check" name="music[{$id}][public]" id="music-{$id}-public" value="1"
+			   autocomplete="off" {if $public}checked{/if}>
+		<label for="music-{$id}-public" class="btn btn-outline-info d-flex align-items-center" data-toggle="tooltip"
+			   title="{lang 'Veřejný'}">
+			<i class="fa-solid fa-eye"></i>
+		</label>
+		<div class="form-floating">
+			<input type="text" class="form-control" id="music-{$id}-previewStart" name="music[{$id}][previewStart]"
+				   placeholder="0:00" value="{$previewStart}">
+			<label for="music-{$id}-previewStart">{lang 'Začátek ukázky'}</label>
+		</div>
 		<button type="button" class="btn btn-success play-music" data-file="{$musicFile}" data-toggle="tooltip"
 				title="{lang 'Přehrát', context: 'actions'}">
 			<i class="fa-solid fa-play"></i>
 		</button>
+		<div class="input-group-text time font-monospace">
+			0:00
+		</div>
 		<button type="button" class="btn btn-danger remove" data-toggle="tooltip"
 				title="{lang 'Smazat', context: 'actions'}">
 			<i class="fa-solid fa-trash"></i>

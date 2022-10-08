@@ -58,7 +58,7 @@
 				<div class="col-lg-9">
 					<div class="btn-group">
 						{for $i = 1; $i < 11; $i++}
-							<a href="{link ['results', $selected->code, 'print', $selectedLang, $i, $selectedStyle, $selectedTemplate, 'html' => 1]}"
+							<a href="{link ['results', $selected->code, 'print', $selectedLang, $i, $selectedStyle, $selectedTemplate, 'html' => 1, 'noCache' => 1]}"
 							   class="btn btn-success print-btn" target="_blank" data-value="{$i}" data-type="color">
 								{$i}&times;
 							</a>
@@ -77,7 +77,7 @@
 				<div class="col-lg-9">
 					<div class="btn-group">
 						{for $i = 1; $i < 11; $i++}
-							<a href="{link ['results', $selected->code, 'print', $selectedLang, $i, $selectedStyle, $selectedTemplate, 'colorless', 'html' => 1]}"
+							<a href="{link ['results', $selected->code, 'print', $selectedLang, $i, $selectedStyle, $selectedTemplate, 'colorless', 'html' => 1, 'noCache' => 1]}"
 							   class="btn btn-secondary print-btn" target="_blank" data-value="{$i}"
 							   data-type="colorless">
 								{$i}&times;
@@ -90,7 +90,7 @@
 	</div>
 	<div class="card bg-very-light shadow mt-4 p-4">
 		<iframe id="print-iframe"
-				src="{ifset $selected}{link ['results', $selected->code, 'print', $selectedLang, 1, $selectedStyle, $selectedTemplate, 'view' => 1, 'html' => 1]}{/ifset}"
+				src="{ifset $selected}{link ['results', $selected->code, 'print', $selectedLang, 1, $selectedStyle, $selectedTemplate, 'view' => 1, 'html' => 1, 'noCache' => 1]}{/ifset}"
 				class="w-100 min-vh-60"></iframe>
 	</div>
 	<script n:syntax="double">

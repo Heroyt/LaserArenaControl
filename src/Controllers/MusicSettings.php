@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\MusicMode;
+use App\Services\LigaApi;
 use JsonException;
 use Lsr\Core\App;
 use Lsr\Core\Controller;
@@ -105,6 +106,13 @@ class MusicSettings extends Controller
 			$request->passErrors[] = lang('No file uploaded', context: 'errors');
 		}
 
+		/** @var LigaApi $liga */
+		$liga = App::getService('ligaApi');
+		try {
+			$liga->syncMusicModes();
+		} catch (ValidationException $e) {
+		}
+
 		$this->customRespond($request, $allMusic);
 	}
 
@@ -133,6 +141,13 @@ class MusicSettings extends Controller
 				$request->passErrors[] = lang('Failed to validate data before saving', context: 'errors').': '.$e->getMessage();
 			} catch (DirectoryCreationException) {
 			}
+		}
+
+		/** @var LigaApi $liga */
+		$liga = App::getService('ligaApi');
+		try {
+			$liga->syncMusicModes();
+		} catch (ValidationException $e) {
 		}
 
 		$this->customRespond($request);

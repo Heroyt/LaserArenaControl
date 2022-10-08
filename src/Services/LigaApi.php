@@ -7,6 +7,7 @@ namespace App\Services;
 
 use App\Core\Info;
 use App\GameModels\Game\Game;
+use App\Models\MusicMode;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Handler\CurlFactory;
@@ -14,9 +15,11 @@ use GuzzleHttp\Handler\CurlHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\MessageFormatter;
 use GuzzleHttp\Middleware;
+use GuzzleHttp\Psr7\Utils;
 use InvalidArgumentException;
 use JsonException;
 use Lsr\Core\App;
+use Lsr\Core\Exceptions\ValidationException;
 use Lsr\Logging\Logger;
 
 /**
@@ -116,6 +119,131 @@ class LigaApi
 		} catch (GuzzleException $e) {
 			/* @phpstan-ignore-next-line */
 			$this->logger->exception($e);
+			return false;
+		}
+		return true;
+	}
+
+	public function syncMusicMode(MusicMode $mode) : bool {
+		try {
+			if (!$mode->public) {
+				$response = $this->client->delete('music/'.$mode->id);
+				$response->getBody()->rewind();
+				$body = $response->getBody()->getContents();
+				if ($response->getStatusCode() !== 200) {
+					$this->logger->error('Music delete failed: '.$body);
+					return false;
+				}
+				return true;
+			}
+
+			$response = $this->client->post('music', [
+				'json' => [
+					'music' => [
+						[
+							'id'           => $mode->id,
+							'name'         => $mode->name,
+							'order'        => $mode->order,
+							'previewStart' => $mode->previewStart,
+						],
+					],
+				]
+			]);
+			$response->getBody()->rewind();
+			$body = $response->getBody()->getContents();
+			if ($response->getStatusCode() !== 200) {
+				$this->logger->error('Music sync failed: '.$body);
+				return false;
+			}
+
+			$response = $this->client->post('music/'.$mode->id.'/upload', [
+				'multipart' => [
+					[
+						'name'     => 'media',
+						'contents' => Utils::tryFopen($mode->fileName, 'r'),
+					]
+				]
+			]);
+			$response->getBody()->rewind();
+			$body = $response->getBody()->getContents();
+			if ($response->getStatusCode() !== 200) {
+				$this->logger->error('Music upload failed: '.$body);
+				return false;
+			}
+		} catch (GuzzleException $e) {
+			$this->logger->error('Api request failed');
+			$this->logger->error($e->getMessage());
+			$this->logger->debug($e->getTraceAsString());
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
+	 * @return bool
+	 * @throws ValidationException
+	 */
+	public function syncMusicModes() : bool {
+		$musicModes = MusicMode::getAll();
+
+		// Sync data
+		$private = [];
+		$data = [];
+		foreach ($musicModes as $mode) {
+			if (!$mode->public) {
+				$private[] = $mode->id;
+				continue;
+			}
+			$data[] = [
+				'id'           => $mode->id,
+				'name'         => $mode->name,
+				'order'        => $mode->order,
+				'previewStart' => $mode->previewStart,
+			];
+		}
+
+		try {
+			$response = $this->client->post('music', [
+				'json' => [
+					'music' => $data,
+				]
+			]);
+			$response->getBody()->rewind();
+			$body = $response->getBody()->getContents();
+			if ($response->getStatusCode() !== 200) {
+				$this->logger->error('Music sync failed: '.$body);
+				return false;
+			}
+
+			foreach ($private as $id) {
+				$this->client->deleteAsync('music/'.$id);
+			}
+
+			// Upload files
+			foreach ($musicModes as $mode) {
+				if (!$mode->public) {
+					continue;
+				}
+				$response = $this->client->post('music/'.$mode->id.'/upload', [
+					'multipart' => [
+						[
+							'name'     => 'media',
+							'contents' => Utils::tryFopen($mode->fileName, 'r'),
+						]
+					]
+				]);
+				$response->getBody()->rewind();
+				$body = $response->getBody()->getContents();
+				if ($response->getStatusCode() !== 200) {
+					$this->logger->error('Music upload failed: '.$body);
+					return false;
+				}
+			}
+		} catch (GuzzleException $e) {
+			$this->logger->error('Api request failed');
+			$this->logger->error($e->getMessage());
+			$this->logger->debug($e->getTraceAsString());
 			return false;
 		}
 		return true;

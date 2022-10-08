@@ -107,7 +107,7 @@ class MusicSettings extends Controller
 		}
 
 		/** @var LigaApi $liga */
-		$liga = App::getService('ligaApi');
+		$liga = App::getService('liga');
 		try {
 			$liga->syncMusicModes();
 		} catch (ValidationException $e) {
@@ -144,7 +144,7 @@ class MusicSettings extends Controller
 		}
 
 		/** @var LigaApi $liga */
-		$liga = App::getService('ligaApi');
+		$liga = App::getService('liga');
 		try {
 			$liga->syncMusicModes();
 		} catch (ValidationException $e) {

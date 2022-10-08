@@ -98,7 +98,7 @@ class GameControl extends Controller
 	 * @throws JsonException
 	 */
 	#[Post('/control/startSafe', 'startGameSafe')]
-	public function startSafe() : never {
+	public function startSafe(Request $request) : never {
 		/** @var string|null $ip */
 		$ip = Info::get('lmx_ip');
 		if (empty($ip)) {

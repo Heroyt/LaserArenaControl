@@ -243,7 +243,7 @@ export default function initNewGamePage() {
 					switch (response.data.status) {
 						case 'STANDBY':
 							currentStatus = GameStatus.STANDBY;
-							loadGame(data, sendStart);
+							loadStartGame(data);
 							break;
 						case 'ARMED':
 							currentStatus = GameStatus.ARMED;
@@ -252,6 +252,7 @@ export default function initNewGamePage() {
 						case 'PLAYING':
 							currentStatus = GameStatus.PLAYING;
 							// Cannot start while playing the game
+							stopLoading(false, true);
 							break;
 						case 'DOWNLOAD':
 							setCurrentStatus('DOWNLOAD');
@@ -268,8 +269,13 @@ export default function initNewGamePage() {
 
 		function sendStart() {
 			startLoading(true);
-			axios.post('/control/start')
-				.then(() => {
+			axios.post('/control/startSafe')
+				.then((response: AxiosResponse<{ status: string }>) => {
+					if (response.data.status !== 'ok') {
+						setCurrentStatus(response.data.status);
+						stopLoading(false);
+						return;
+					}
 					setCurrentStatus('PLAYING');
 					stopLoading(true);
 				})
@@ -333,39 +339,70 @@ export default function initNewGamePage() {
 				const mode = response.data.mode;
 
 				startLoading(true);
-				getCurrentStatus()
+				axios
+					.post('/control/loadSafe', {
+						mode,
+					})
 					.then((response: AxiosResponse<{ status: string }>) => {
-						if (response.data.status && response.data.status === 'DOWNLOAD') {
-							setCurrentStatus('DOWNLOAD');
-							stopLoading(false);
+						if (response.data.status !== 'ok') {
+							setCurrentStatus(response.data.status);
+							stopLoading(false, true);
 							return;
 						}
-						if (response.data.status && response.data.status !== 'PLAYING') {
-							axios
-								.post('/control/load', {
-									mode,
-								})
-								.then(() => {
-									stopLoading(true, true);
-									setCurrentStatus('ARMED');
-									if (callback) {
-										callback();
-									}
-								})
-								.catch(error => {
-									stopLoading(false, true);
-									console.error(error);
-									if (error.data && error.data.message && error.data.message === 'DOWNLOAD') {
-										setCurrentStatus('DOWNLOAD');
-									}
-								});
+						setCurrentStatus('ARMED');
+						if (callback) {
+							callback();
 						}
-
+						stopLoading(true, true);
 					})
 					.catch(error => {
 						stopLoading(false, true);
 						console.error(error);
+						if (error.data && error.data.message && error.data.message === 'DOWNLOAD') {
+							setCurrentStatus('DOWNLOAD');
+						}
+					});
+			})
+			.catch(() => {
+				stopLoading(false);
+			});
+	}
+
+	function loadStartGame(data: FormData, callback: null | (() => void) = null): void {
+		startLoading();
+		axios.post('/', data)
+			.then((response: AxiosResponse<{ status: string, mode?: string }>) => {
+				stopLoading();
+				if (!response.data.mode || response.data.mode === '') {
+					console.error('Got invalid mode');
+					return;
+				}
+				const mode = response.data.mode;
+
+				startLoading(true);
+				axios
+					.post('/control/startSafe', {
+						mode,
 					})
+					.then((response: AxiosResponse<{ status: string }>) => {
+						if (response.data.status !== 'ok') {
+							setCurrentStatus(response.data.status);
+							stopLoading(false, true);
+							return;
+						}
+						setCurrentStatus('ARMED');
+						if (callback) {
+							callback();
+						}
+						stopLoading(true, true);
+					})
+					.catch(error => {
+						stopLoading(false, true);
+						console.error(error);
+						if (error.data && error.data.message && error.data.message === 'DOWNLOAD') {
+							setCurrentStatus('DOWNLOAD');
+						}
+					});
 			})
 			.catch(() => {
 				stopLoading(false);

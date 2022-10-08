@@ -16,6 +16,7 @@ class LMXController
 
 	public const PORT                    = 8081;
 	public const LOAD_COMMAND            = 'load';
+	public const LOAD_START_COMMAND      = 'loadStart';
 	public const START_COMMAND           = 'start';
 	public const END_COMMAND             = 'end';
 	public const GET_STATUS_COMMAND      = 'status';
@@ -111,6 +112,18 @@ class LMXController
 	 */
 	public static function load(string $ip, string $gameMode) : string {
 		return self::sendCommand($ip, self::LOAD_COMMAND, $gameMode);
+	}
+
+	/**
+	 * Load a new game and start it
+	 *
+	 * @param string $ip
+	 * @param string $gameMode Game mode to load
+	 *
+	 * @return string Response
+	 */
+	public static function loadStart(string $ip, string $gameMode) : string {
+		return self::sendCommand($ip, self::LOAD_START_COMMAND, $gameMode);
 	}
 
 	/**

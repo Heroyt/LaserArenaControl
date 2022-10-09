@@ -45,7 +45,7 @@ RUN mkdir -p lmx/games
 RUN composer update
 
 # Copy shell scripts
-COPY start.sh .
+COPY startApache.sh start.sh
 
 # Initialize crontab
 COPY cron.txt .

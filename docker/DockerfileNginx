@@ -45,7 +45,7 @@ RUN mkdir -p lmx/games
 RUN composer update
 
 # Copy shell scripts
-COPY startNginx.sh start.sh
+COPY start.sh start.sh
 
 # Initialize crontab
 COPY cron.txt .

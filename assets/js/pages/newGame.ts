@@ -462,7 +462,7 @@ export default function initNewGamePage() {
 
 	function handleKeyboardShortcuts(e: KeyboardEvent) {
 		console.log('keyup', e.key, e.keyCode, e.altKey, e.ctrlKey);
-		if (e.target instanceof HTMLElement && e.target.nodeName.toLowerCase() === 'input') {
+		if (e.target instanceof HTMLElement && (e.target.nodeName.toLowerCase() === 'input' || e.target.nodeName.toLowerCase() === 'textarea')) {
 			return;
 		}
 		switch (e.keyCode) {

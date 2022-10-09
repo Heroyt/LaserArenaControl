@@ -5,6 +5,7 @@ on:
         paths:
             - .github/workflows/docker-image.yml
             - Dockerfile
+            - docker/DockerfileNginx
             - DockerfileDev
             - dockerCore/*
         branches: [ master ]
@@ -12,6 +13,7 @@ on:
         paths:
             - .github/workflows/docker-image.yml
             - Dockerfile
+            - docker/DockerfileNginx
             - DockerfileDev
             - dockerCore/*
         branches: [ master ]
@@ -29,5 +31,7 @@ jobs:
                     username: ${{ secrets.DOCKERHUB_USERNAME }}
                     password: ${{ secrets.DOCKERHUB_TOKEN }}
             -   uses: actions/checkout@v2
-            -   name: Build the Docker image
+            -   name: Build the Docker image - apache
                 run: docker build . --file DockerfileDev --tag heroyt/laser-arena-control:dev-latest && docker push heroyt/laser-arena-control -a
+            -   name: Build the Docker image - nginx
+                run: docker build . --file docker/DockerfileNginx --tag heroyt/laser-arena-control:dev-nginx-latest && docker push heroyt/laser-arena-control -a

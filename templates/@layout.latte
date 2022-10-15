@@ -51,7 +51,7 @@
 
 {include smallLoader}
 
-<main class="container my-5 {include containerClasses}">
+<main class="container my-5 pt-4 {include containerClasses}">
 		{include errors}
 		{include content}
 </main>
@@ -60,10 +60,6 @@
 {include loader}
 
 <div class="toast-container position-absolute bottom-0 end-0 p-3" id="toasts"></div>
-
-<div class="game-timer" style="display:none;">
-		<div class="time" data-start="" data-length="">00:00</div>
-</div>
 
 <script>
 	const activeLanguageCode = {\Lsr\Core\App::getShortLanguageCode()};

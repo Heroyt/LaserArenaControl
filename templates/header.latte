@@ -1,7 +1,7 @@
 {varType array $_COOKIE}
 
 {define header}
-	<header class="navbar navbar-expand-lg navbar-light bg-light text-black py-1">
+	<header class="navbar navbar-expand-lg navbar-light bg-light text-black py-1 fixed-top">
 		<div class="container-fluid">
 			<a href="{getUrl}" class="navbar-brand text-black d-flex">
 				{svgIcon 'Vesta', width: 'auto', height: '1.75rem'}
@@ -45,6 +45,9 @@
 				</ul>
 			</div>
 			<div class="actions ms-auto d-flex align-items-stretch">
+				<div class="game-timer" style="display:none;">
+					<div class="time" data-start="" data-length="">00:00</div>
+				</div>
 				<button class="btn {if isset($_COOKIE['mode']) && $_COOKIE['mode'] === 'light'}btn-dark{else}btn-light{/if}"
 						type="button" id="modeSwitch">
 					<i class="fa-solid fa-moon"></i>

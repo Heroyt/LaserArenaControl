@@ -86,14 +86,15 @@
 @import '~@fortawesome/fontawesome-free/css/all.css';
 
 #modeSwitch {
+	font-size: 1.3rem;
 	overflow: hidden;
 	position: relative;
-	width: 3.5rem;
+	width: 3rem;
 
 	i {
 		left: 50%;
 		position: absolute;
-		top: 1rem;
+		top: .8rem;
 		transition: translate .3s ease;
 	}
 
@@ -114,6 +115,30 @@
 
 		.fa-sun {
 			translate: -4rem;
+		}
+	}
+}
+
+header.navbar {
+	> .container-fluid {
+		display: grid;
+		grid-template-areas: 'brand nav actions';
+		grid-template-columns: auto 1fr auto;
+
+		.navbar-brand {
+			grid-area: brand;
+		}
+
+		.navbar-collapse {
+			grid-area: nav;
+		}
+
+		.actions {
+			grid-area: actions;
+		}
+
+		@include media-breakpoint-down(lg) {
+			grid-template-areas: 'brand . actions' 'nav nav nav';
 		}
 	}
 }

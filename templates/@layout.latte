@@ -51,7 +51,6 @@
 
 {include smallLoader}
 
-
 <main class="container my-5 {include containerClasses}">
 		{include errors}
 		{include content}
@@ -74,6 +73,7 @@
 	const timerOffset = {\App\Core\Info::get('timer-offset', 0)};
 </script>
 {*{\Lsr\Core\App::getJs()|noescape}*}
+
 
 
 <script src="/dist/main.js?{\Lsr\Core\App::getCacheVersion()}"></script>

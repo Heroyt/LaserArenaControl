@@ -7,3 +7,4 @@ parameters:
 services:
 	liga: App\Services\LigaApi::getInstance()
 	gotenberg: App\Services\GotenbergService(%gotenberg.host%, %gotenberg.port%)
+	caching.journal: Nette\Caching\Storages\SQLiteJournal('%constants.tempDir%journal.s3db')

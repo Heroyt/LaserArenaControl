@@ -3,14 +3,17 @@
 namespace App\Controllers\Api;
 
 use App\GameModels\Factory\GameFactory;
+use App\Models\GameGroup;
 use App\Services\SyncService;
 use DateTime;
 use Exception;
 use JsonException;
 use Lsr\Core\ApiController;
 use Lsr\Core\Exceptions\ModelNotFoundException;
+use Lsr\Core\Exceptions\ValidationException;
 use Lsr\Core\Requests\Request;
 use Lsr\Core\Routing\Attributes\Post;
+use Lsr\Logging\Exceptions\DirectoryCreationException;
 use Throwable;
 
 /**
@@ -130,6 +133,48 @@ class Games extends ApiController
 			$this->respond(['error' => 'Game not found'], 404);
 		}
 		$this->respond($game);
+	}
+
+	/**
+	 * @param Request $request
+	 *
+	 * @return void
+	 * @throws JsonException
+	 */
+	#[Post('/api/games/{code}/group')]
+	public function setGroup(Request $request) : void {
+		$code = $request->params['code'] ?? '';
+		if (empty($code)) {
+			$this->respond(['error' => 'Invalid code'], 400);
+		}
+		try {
+			$game = GameFactory::getByCode($code);
+			if (!isset($game)) {
+				throw new ModelNotFoundException('Game not found');
+			}
+		} catch (Throwable $e) {
+			$this->respond(['error' => 'Game not found', 'exception' => $e->getMessage()], 404);
+		}
+
+		$group = $request->post['groupId'] ?? 0;
+		if ($group > 0) {
+			try {
+				$game->group = GameGroup::get($group);
+			} catch (ModelNotFoundException|ValidationException|DirectoryCreationException $e) {
+				$this->respond(['error' => 'Game group not found', 'exception' => $e->getMessage(), 'trace' => $e->getTrace()], 404);
+			}
+		}
+		else {
+			$game->group = null;
+		}
+
+		try {
+			$game->save();
+		} catch (ModelNotFoundException|ValidationException $e) {
+			$this->respond(['error' => 'Save failed', 'exception' => $e->getMessage()], 500);
+		}
+
+		$this->respond(['success' => true]);
 	}
 
 }

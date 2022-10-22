@@ -24,7 +24,8 @@
 	{else}
 		<div>
 			{lang 'Hromadné akce'}:
-			<div class="btn-group">
+			<div class="btn-group ms-2">
+				{include gameActionGroup}
 				{include gameActionLigaSync}
 				{include gameActionReImport}
 				{if !\Lsr\Core\App::isProduction()}
@@ -48,7 +49,8 @@
 				<td>
 					<label class="w-100 h-100 cursor-pointer">
 						<input type="checkbox" class="form-check-input game-select-check cursor-pointer"
-							   value="{$game->code}">
+							   value="{$game->code}" data-group="{$game->group?->id}"
+							   data-groupname="{$game->group?->name}">
 					</label>
 				</td>
 				<td>{$game->start->format('H:i')}</td>
@@ -67,6 +69,36 @@
 			</tr>
 			</tbody>
 		</table>
+
+		<div class="modal" tabindex="-1" id="game-group-modal">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title">{lang 'Skupiny'}</h5>
+						<button type="button" class="btn btn-link" data-bs-dismiss="modal" aria-label="Close">
+							<i class="fa-solid fa-close"></i>
+						</button>
+					</div>
+					<div class="modal-body">
+						<div class="form-floating mx-2">
+							<select name="groupSelect" id="group-select" class="form-select">
+								<option value="">{lang 'Bez skupiny'}</option>
+								<option value="new">{lang 'Nová skupina'}</option>
+							</select>
+							<label for="group-select">{lang 'Skupina'}</label>
+						</div>
+						<div class="form-group m-3 d-none" id="group-name">
+							<label for="group-name-input">{lang 'Název skupiny'}</label>
+							<input type="text" id="group-name-input" class="form-control">
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-primary"
+								data-bs-dismiss="modal">{lang 'Save', context: 'actions'}</button>
+					</div>
+				</div>
+			</div>
+		</div>
 	{/if}
 {/block}
 
@@ -76,6 +108,9 @@
 			{include gameActionNewGame, $game}
 			{include gameActionGate, $game}
 			{include gameActionResults, $game}
+		</div>
+		<div class="btn-group">
+			{include gameActionGroup, $game}
 		</div>
 		<div class="btn-group">
 			{include gameActionResultsOnline, $game}
@@ -92,6 +127,7 @@
 	</div>
 	<div class="btn-group d-none d-lg-flex">
 		{include gameActionNewGame, $game}
+		{include gameActionGroup, $game}
 		{include gameActionResultsOnline, $game}
 		{include gameActionLigaSync, $game}
 		{include gameActionGate, $game}

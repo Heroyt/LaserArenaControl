@@ -2148,3 +2148,24 @@ msgstr ""
 
 msgid "Začátek ukázky"
 msgstr ""
+
+msgid "Skupiny"
+msgstr ""
+
+msgid "Zobrazit hráče skupiny"
+msgstr ""
+
+msgid "Nahrát na vesty"
+msgstr ""
+
+msgid "Deaktivovat"
+msgstr ""
+
+msgid "Bez skupiny"
+msgstr ""
+
+msgid "Nová skupina"
+msgstr ""
+
+msgid "Skupina"
+msgstr ""

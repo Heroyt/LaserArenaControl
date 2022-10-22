@@ -1,0 +1,64 @@
+{varType App\Controllers\GamesList $page}
+
+{define gameActionNewGame, App\GameModels\Game\Game $game}
+	<a href="{link ['system' => $game::SYSTEM, 'game' => $game->code]}"
+	   class="btn btn-success" data-toggle="tooltip" title="{lang 'Použít pro novou hru'}">
+		<i class="fa-solid fa-plus"></i>
+	</a>
+{/define}
+{define gameActionResultsOnline, App\GameModels\Game\Game $game}
+	<a href="{trailingSlashIt(\App\Core\Info::get('liga_api_url')) . 'g/' . $game->code}"
+	   target="_blank"
+	   class="btn btn-primary" data-toggle="tooltip" title="{lang 'Výsledky on-line'}">
+		<i class="fa-solid fa-cloud"></i>
+	</a>
+{/define}
+{define gameActionLigaSync, App\GameModels\Game\Game|null $game = null}
+	<button class="btn btn-info liga-sync" data-toggle="tooltip"
+			title="{lang 'Synchronizovat on-line'}"
+			{ifset $game}data-code="{$game->code}"{/ifset}>
+		<i class="fa-solid fa-cloud-arrow-up"></i>
+	</button>
+{/define}
+{define gameActionGate, App\GameModels\Game\Game $game}
+	<button class="btn btn-danger" data-toggle="gate" title="{lang 'Zobrazit na Gate'}"
+			data-id="{$game->id}" data-system="{$game::SYSTEM}">
+		<i class="fas fa-bullseye"></i>
+	</button>
+{/define}
+{define gameActionReImport, App\GameModels\Game\Game|null $game = null}
+	<button class="btn btn-warning re-import" data-toggle="tooltip"
+			title="{lang 'Znovu importovat ze souboru'}"
+			{ifset $game}data-code="{$game->code}"{/ifset}>
+		<i class="fa-solid fa-arrows-rotate"></i>
+	</button>
+{/define}
+{define gameActionGateVests, App\GameModels\Game\Game $game}
+	<button class="btn btn-danger" data-toggle="gate-loaded"
+			title="{lang 'Zobrazit vesty na Gate'}"
+			data-id="{$game->id}" data-system="{$game::SYSTEM}">
+		{svgIcon 'Vesta', '1em'}
+	</button>
+{/define}
+{define gameActionRecalcSkill, App\GameModels\Game\Game|null $game = null}
+	<button class="btn btn-warning recalc-skill" data-toggle="tooltip"
+			title="{lang 'Znovu spočítat herní úroveň'}"
+			{ifset $game}data-code="{$game->code}"{/ifset}>
+		<i class="fa-solid fa-star"></i>
+	</button>
+{/define}
+{define gameActionSwitchToSolo, App\GameModels\Game\Game $game}
+	<button n:if="!$page->checkGameTeamScores($game)"
+			type="button"
+			class="btn btn-secondary solo-switch"
+			data-toggle="tooltip"
+			title="{lang 'Přepnout na sólo mód'}"
+			data-code="{$game->code}"
+			data-mode="{\App\GameModels\Factory\GameModeFactory::getIdByObject($game->mode->getSoloAlternative())}">
+		<i class="fa-solid fa-wrench"></i>
+	</button>
+{/define}
+{define gameActionResults, App\GameModels\Game\Game $game}
+	<a href="{link ['results', $game->code]}" class="btn btn-info" data-toggle="tooltip"
+	   title="{lang 'Print'}"><i class="fas fa-print"></i></a>
+{/define}

@@ -1,4 +1,5 @@
 {layout '../../@layout.latte'}
+{import './actions.latte'}
 
 {varType App\GameModels\Game\Game[] $games}
 {varType \DateTime $date}
@@ -20,80 +21,86 @@
 	</form>
 	{if empty($games)}
 		{alertWarning lang('No games had been played on this date.')}
-	{/if}
-	<table class="table">
-		<thead>
-		<tr>
-			<th>{lang 'Time'}</th>
-			<th>{lang 'Game mode'}</th>
-			<th>{lang 'Players'}</th>
-			<th class="text-end">{lang 'Actions'}</th>
-		</tr>
-		</thead>
-		<tbody>
-		<tr n:foreach="$games as $game">
-			{do $game->loadTeams()}
-			<td>{$game->start->format('H:i')}</td>
-			<td>{$game->mode?->name}</td>
-			<td>
+	{else}
+		<div>
+			{lang 'Hromadné akce'}:
+			<div class="btn-group">
+				{include gameActionLigaSync}
+				{include gameActionReImport}
+				{if !\Lsr\Core\App::isProduction()}
+					{include gameActionRecalcSkill}
+				{/if}
+			</div>
+		</div>
+		<table class="table">
+			<thead>
+			<tr>
+				<th></th>
+				<th>{lang 'Time'}</th>
+				<th>{lang 'Game mode'}</th>
+				<th>{lang 'Players'}</th>
+				<th class="text-end">{lang 'Actions'}</th>
+			</tr>
+			</thead>
+			<tbody>
+			<tr n:foreach="$games as $game">
+				{do $game->loadTeams()}
+				<td>
+					<label class="w-100 h-100 cursor-pointer">
+						<input type="checkbox" class="form-check-input game-select-check cursor-pointer"
+							   value="{$game->code}">
+					</label>
+				</td>
+				<td>{$game->start->format('H:i')}</td>
+				<td>{$game->mode?->name}</td>
+				<td>
 				<span n:foreach="$game->getPlayersSorted() as $player"
 						data-toggle="tooltip"
 						title="{sprintf(lang('%s score'), number_format($player->score, 0, ',', '&nbsp;'))|noescape}"
 						class="badge bg-{$player->getTeam() !== null ? $player->getTeam()->getTeamBgClass(true) : 'dark'}">
 					{$player->position}.&nbsp;{$player->name}
 				</span>
-			</td>
-			<td class="text-end">
-				<div class="btn-group">
-					<a href="{link ['system' => $game::SYSTEM, 'game' => $game->code]}"
-					   class="btn btn-success" data-toggle="tooltip" title="{lang 'Použít pro novou hru'}">
-						<i class="fa-solid fa-plus"></i>
-					</a>
-					<a href="{trailingSlashIt(\App\Core\Info::get('liga_api_url')) . 'g/' . $game->code}"
-					   target="_blank"
-					   class="btn btn-primary" data-toggle="tooltip" title="{lang 'Výsledky on-line'}">
-						<i class="fa-solid fa-cloud"></i>
-					</a>
-					<button class="btn btn-info liga-sync" data-toggle="tooltip" title="{lang 'Synchronizovat on-line'}"
-							data-code="{$game->code}">
-						<i class="fa-solid fa-cloud-arrow-up"></i>
-					</button>
-					<button class="btn btn-danger" data-toggle="gate" title="{lang 'Zobrazit na Gate'}"
-							data-id="{$game->id}" data-system="{$game::SYSTEM}">
-						<i class="fas fa-bullseye"></i>
-					</button>
-					<button class="btn btn-warning re-import" data-toggle="tooltip"
-							title="{lang 'Znovu importovat ze souboru'}"
-							data-code="{$game->code}">
-						<i class="fa-solid fa-arrows-rotate"></i>
-					</button>
-					{if !\Lsr\Core\App::isProduction()}
-						<button class="btn btn-danger" data-toggle="gate-loaded"
-								title="{lang 'Zobrazit vesty na Gate'}"
-								data-id="{$game->id}" data-system="{$game::SYSTEM}">
-							{svgIcon 'Vesta', '1em'}
-						</button>
-						<button class="btn btn-warning recalc-skill" data-toggle="tooltip"
-								title="{lang 'Znovu spočítat herní úroveň'}"
-								data-code="{$game->code}">
-							<i class="fa-solid fa-star"></i>
-						</button>
-						{* TODO: Add "recalculate scores" actions *}
-					{/if}
-					<button n:if="!$page->checkGameTeamScores($game)"
-							type="button"
-							class="btn btn-secondary solo-switch"
-							data-toggle="tooltip"
-							title="{lang 'Přepnout na sólo mód'}"
-							data-code="{$game->code}"
-							data-mode="{\App\GameModels\Factory\GameModeFactory::getIdByObject($game->mode->getSoloAlternative())}">
-						<i class="fa-solid fa-wrench"></i>
-					</button>
-					<a href="{link ['results', $game->code]}" class="btn btn-info" data-toggle="tooltip"
-					   title="{lang 'Print'}"><i class="fas fa-print"></i></a>
-				</div>
-			</td>
-		</tr>
-		</tbody>
-	</table>
+				</td>
+				<td class="text-end">
+					{include gameActions, $game}
+				</td>
+			</tr>
+			</tbody>
+		</table>
+	{/if}
 {/block}
+
+{define gameActions, App\GameModels\Game\Game $game}
+	<div class="d-lg-none d-flex flex-column">
+		<div class="btn-group">
+			{include gameActionNewGame, $game}
+			{include gameActionGate, $game}
+			{include gameActionResults, $game}
+		</div>
+		<div class="btn-group">
+			{include gameActionResultsOnline, $game}
+			{include gameActionLigaSync, $game}
+			{include gameActionReImport, $game}
+		</div>
+		<div class="btn-group">
+			{if !\Lsr\Core\App::isProduction()}
+				{include gameActionGateVests, $game}
+				{include gameActionRecalcSkill, $game}
+			{/if}
+			{include gameActionSwitchToSolo, $game}
+		</div>
+	</div>
+	<div class="btn-group d-none d-lg-flex">
+		{include gameActionNewGame, $game}
+		{include gameActionResultsOnline, $game}
+		{include gameActionLigaSync, $game}
+		{include gameActionGate, $game}
+		{include gameActionReImport, $game}
+		{if !\Lsr\Core\App::isProduction()}
+			{include gameActionGateVests, $game}
+			{include gameActionRecalcSkill, $game}
+		{/if}
+		{include gameActionSwitchToSolo, $game}
+		{include gameActionResults, $game}
+	</div>
+{/define}

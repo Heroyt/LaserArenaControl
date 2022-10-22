@@ -8,10 +8,10 @@
 $tmp-theme-colors: functions.getThemeColors($custom-colors);
 
 $link-color: var(--white);
-$link-hover-color: var(--danger);
+$link-hover-color: var(--primary);
 
 $navbar-dark-color: var(--white);
-$navbar-dark-hover-color: var(--danger);
+$navbar-dark-hover-color: var(--primary);
 
 $body-bg: map.get($tmp-theme-colors, "background");
 $body-color: map.get($tmp-theme-colors, "text");
@@ -20,7 +20,7 @@ $table-striped-bg-factor: .05;
 $table-striped-bg: rgba(#fff, $table-striped-bg-factor);
 
 $form-check-label-cursor: pointer;
-$form-check-input-border: 1px solid var(--white);
+$form-check-input-border: 1px solid var(--black);
 
 $nav-tabs-link-active-color: var(--white);
 

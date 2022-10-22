@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: French\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2022-10-08 17:22\n"
+"PO-Revision-Date: 2022-10-22 11:46\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -2147,5 +2147,26 @@ msgid "Veřejný"
 msgstr ""
 
 msgid "Začátek ukázky"
+msgstr ""
+
+msgid "Skupiny"
+msgstr ""
+
+msgid "Zobrazit hráče skupiny"
+msgstr ""
+
+msgid "Nahrát na vesty"
+msgstr ""
+
+msgid "Deaktivovat"
+msgstr ""
+
+msgid "Bez skupiny"
+msgstr ""
+
+msgid "Nová skupina"
+msgstr ""
+
+msgid "Skupina"
 msgstr ""
 

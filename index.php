@@ -26,7 +26,7 @@ if (PHP_SAPI === 'cli') {
 	// Async signals is necessary for interrupt handling
 	pcntl_async_signals(true);
 	/** @var string $_ command used to run the script */
-	$_ = $_SERVER['_'] ?? 'php';
+	$_ = $_SERVER['_'] ?? '/usr/local/bin/php';
 	if ($_ === '/bin/sh') {
 		$_ = '/usr/local/bin/php';
 	}

@@ -86,7 +86,7 @@ Debugger::getBar()
 
 Loader::init();
 
-if (defined('INDEX')) {
+if (defined('INDEX') && PHP_SAPI !== 'cli') {
 	// Register library tracy panels
 	if (!isset($_ENV['noDb'])) {
 		(new Panel())->register(DB::getConnection());

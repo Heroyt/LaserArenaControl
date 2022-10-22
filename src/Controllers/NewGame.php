@@ -8,8 +8,10 @@ use App\GameModels\Factory\GameFactory;
 use App\GameModels\Factory\GameModeFactory;
 use App\GameModels\Game\GameModes\CustomLoadMode;
 use App\GameModels\Vest;
+use App\Models\GameGroup;
 use App\Models\MusicMode;
 use JsonException;
+use Lsr\Core\App;
 use Lsr\Core\Controller;
 use Lsr\Core\Exceptions\ModelNotFoundException;
 use Lsr\Core\Exceptions\ValidationException;
@@ -154,7 +156,9 @@ class NewGame extends Controller
 		if (isset($data['meta']['music'])) {
 			try {
 				$music = MusicMode::get($data['meta']['music']);
-				copy($music->fileName, LMX_DIR.'music/evo5.mp3');
+				if (!copy($music->fileName, LMX_DIR.'music/evo5.mp3')) {
+					App::getLogger()->warning('Music copy failed - '.$music->fileName);
+				}
 			} catch (ModelNotFoundException|ValidationException|DirectoryCreationException $e) {
 				// Not critical, doesn't need to do anything
 			}

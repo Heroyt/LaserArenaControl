@@ -1,9 +1,9 @@
 import Game from "../game/game";
 import axios, {AxiosResponse} from "axios";
-import {lang} from "../functions";
+import {initTooltips, lang} from "../functions";
 import EventServerInstance from "../EventServer";
 import {startLoading, stopLoading} from "../loaders";
-import {GameData} from "../game/gameInterfaces";
+import {GameData, GameGroupData} from "../game/gameInterfaces";
 import {Modal, Offcanvas} from "bootstrap";
 
 declare global {
@@ -40,6 +40,9 @@ export default function initNewGamePage() {
 	const downloadModal = new Modal(downloadModalElem);
 	const retryDownloadBtn = document.getElementById('retryDownload') as HTMLButtonElement;
 	const cancelDownloadBtn = document.getElementById('cancelDownload') as HTMLButtonElement;
+
+	const gameGroupsWrapper = document.getElementById('game-groups') as HTMLDivElement;
+	const gameGroupTemplate = document.getElementById('new-game-group') as HTMLTemplateElement;
 
 	stopBtn.addEventListener('click', () => {
 		stopGame(new FormData(form));
@@ -114,6 +117,9 @@ export default function initNewGamePage() {
 
 	EventServerInstance.addEventListener('game-imported', loadLastGames);
 	EventServerInstance.addEventListener(['game-imported', 'game-started', 'game-loaded'], updateCurrentStatus);
+	EventServerInstance.addEventListener('game-imported', updateGroups);
+
+	document.getElementById('groups').addEventListener('show.bs.offcanvas', updateGroups);
 
 	retryDownloadBtn.addEventListener('click', () => {
 		if (currentStatus !== GameStatus.DOWNLOAD) {
@@ -130,7 +136,7 @@ export default function initNewGamePage() {
 				console.error(error);
 				stopLoading(false, true);
 			});
-	})
+	});
 	cancelDownloadBtn.addEventListener('click', () => {
 		if (currentStatus !== GameStatus.DOWNLOAD) {
 			cancelDownloadModal();
@@ -146,7 +152,9 @@ export default function initNewGamePage() {
 				console.error(error);
 				stopLoading(false, true);
 			});
-	})
+	});
+
+	(document.querySelectorAll('.game-group') as NodeListOf<HTMLDivElement>).forEach(initGroup);
 
 	function loadLastGames() {
 		axios.get('/api/games', {
@@ -505,5 +513,179 @@ export default function initNewGamePage() {
 		// Make the update status interval faster to fetch more real-time data
 		clearInterval(updateStatusInterval);
 		updateStatusInterval = setInterval(updateCurrentStatus, 5000);
+	}
+
+	function initGroup(group: HTMLDivElement): void {
+		const id = parseInt(group.dataset.id);
+		const loadBtn = group.querySelector('.loadPlayers') as HTMLButtonElement;
+		const deleteBtn = group.querySelector('.delete') as HTMLButtonElement;
+		const groupName = group.querySelector('.group-name') as HTMLInputElement;
+
+		let timeout: NodeJS.Timeout = null;
+
+		groupName.addEventListener('input', () => {
+			(game.$group.querySelector(`option[value="${id}"]`) as HTMLOptionElement).innerText = groupName.value;
+			if (timeout) {
+				clearTimeout(timeout);
+			}
+			timeout = setTimeout(() => {
+				startLoading(true);
+				axios
+					.post('/gameGroups/' + id.toString(), {
+						name: groupName.value,
+					})
+					.then(() => {
+						stopLoading(true, true);
+					})
+					.catch(() => {
+						stopLoading(false, true);
+					})
+			}, 1000);
+		});
+
+		deleteBtn.addEventListener('click', () => {
+			startLoading(true);
+			axios
+				.post('/gameGroups/' + id.toString(), {
+					active: '0',
+				})
+				.then(() => {
+					stopLoading(true, true);
+					game.$group.querySelector(`option[value="${id}"]`).remove();
+					group.remove();
+				})
+				.catch(() => {
+					stopLoading(false, true);
+				})
+		});
+
+		loadBtn.addEventListener('click', () => {
+			const players = group.querySelectorAll('.group-player-check:checked') as NodeListOf<HTMLInputElement>;
+
+			// Prepare data for import
+			const data: GameData = {
+				playerCount: players.length,
+				mode: {
+					id: parseInt(game.$gameMode.value),
+				},
+				players: {},
+				teams: {},
+				music: {id: parseInt(game.$musicMode.value)},
+				group: {
+					id,
+					name: groupName.value,
+					active: true,
+				}
+			};
+
+			const vests: (string | number)[] = [];
+			game.players.forEach(player => {
+				vests.push(player.vest);
+			});
+
+			// Add players
+			players.forEach(player => {
+				if (vests.length === 0) {
+					return; // No vest available
+				}
+				const vest = vests.pop();
+
+				data.players[vest] = {
+					name: player.dataset.name,
+					skill: parseInt(player.dataset.skill),
+					vest,
+				}
+			});
+
+			game.import(data);
+		});
+	}
+
+	function updateGroups() {
+		axios.get('/gameGroups')
+			.then((response: AxiosResponse<GameGroupData[]>) => {
+				const vestCount = parseInt(gameGroupsWrapper.dataset.vests);
+				response.data.forEach(groupData => {
+					// Find an existing group
+					let group = gameGroupsWrapper.querySelector(`.game-group[data-id="${groupData.id}"]`) as HTMLDivElement;
+					if (!group) {
+						const tmp = document.createElement('div');
+						tmp.innerHTML = gameGroupTemplate.innerHTML
+							.replaceAll('#id#', groupData.id.toString())
+							.replaceAll('#name#', groupData.name);
+						group = tmp.firstElementChild as HTMLDivElement;
+						gameGroupsWrapper.appendChild(group);
+						initGroup(group);
+						initTooltips(group);
+					}
+
+					const name = group.querySelector('.group-name') as HTMLInputElement;
+					name.value = groupData.name;
+
+					// Check select option
+					let option = game.$group.querySelector(`option[value="${groupData.id}"]`) as HTMLOptionElement;
+					if (!option) {
+						option = document.createElement('option');
+						option.value = groupData.id.toString();
+						game.$group.appendChild(option);
+					}
+					option.innerText = groupData.name;
+
+					// Check players
+					let playerCount = 0;
+					const existingPlayers: { [index: string]: HTMLLIElement } = {};
+					(group.querySelectorAll('.group-player') as NodeListOf<HTMLLIElement>).forEach(elem => {
+						existingPlayers[elem.dataset.player] = elem;
+						playerCount++;
+					});
+					const playersWrapper = group.querySelector('.group-players') as HTMLUListElement;
+					if (groupData.players) {
+						Object.entries(groupData.players).forEach(([name, player]) => {
+							const skill = (player.avgSkill ? player.avgSkill : player.skill).toString();
+							if (existingPlayers[name]) {
+								const input = existingPlayers[name].querySelector('.group-player-check') as HTMLInputElement;
+								input.dataset.skill = skill;
+								(existingPlayers[name].querySelector('.skill') as HTMLSpanElement).innerText = skill;
+								delete existingPlayers[name];
+							} else {
+								const li = document.createElement('li');
+								li.classList.add('list-group-item', 'group-player');
+								li.dataset.player = name;
+								li.setAttribute('data-player', name);
+								li.innerHTML = `<label class="h-100 w-100 d-flex align-items-center cursor-pointer">` +
+									`<strong class="col-2 counter">1.</strong>` +
+									`<input type="checkbox" class="form-check-input group-player-check mx-2 mt-0" data-name="${player.name}" data-skill="${skill}">` +
+									`<span class="flex-fill">${player.name}</span><span><span class="skill">${skill}</span><i class="fa-solid fa-star"></i></span></label>`;
+								playersWrapper.appendChild(li);
+								playerCount++;
+							}
+						});
+					}
+
+					// Clear removed players
+					Object.keys(existingPlayers).forEach(key => {
+						existingPlayers[key].remove();
+						playerCount--;
+					});
+
+					// Update counters
+					let counter = 1;
+					(playersWrapper.querySelectorAll('.counter') as NodeListOf<HTMLSpanElement>).forEach(elem => {
+						elem.innerText = counter.toString() + '.';
+						counter++;
+					});
+
+					// Update checked
+					let checked = playersWrapper.querySelectorAll(`.group-player-check:checked`).length;
+					if (checked < vestCount && checked < playerCount) {
+						(playersWrapper.querySelectorAll(`.group-player-check:not(:checked)`) as NodeListOf<HTMLInputElement>).forEach(input => {
+							if (checked < vestCount) {
+								input.checked = true;
+								checked++;
+							}
+						});
+					}
+				});
+			});
 	}
 }

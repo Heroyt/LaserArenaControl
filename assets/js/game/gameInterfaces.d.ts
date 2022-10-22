@@ -10,7 +10,8 @@ export interface PlayerData {
 	vip?: boolean,
 	score?: number,
 	skill: number,
-	vest?: number,
+	avgSkill?: number,
+	vest?: number | string,
 	position?: number,
 	accuracy?: number,
 	hits?: number,
@@ -47,7 +48,8 @@ export interface GameData {
 	mode: { id: number, name?: string, description?: string, type?: 'TEAM' | 'SOLO' },
 	players: { [index: string]: PlayerData },
 	teams: { [index: string]: TeamData },
-	music: MusicMode | null
+	music: MusicMode | null,
+	group?: GameGroupData,
 }
 
 interface ModeSettings {
@@ -85,6 +87,13 @@ interface ModeSettings {
 	bestMines: boolean,
 
 	[index: string]: boolean,
+}
+
+interface GameGroupData {
+	id: number,
+	name: string,
+	active?: boolean,
+	players?: { [index: string]: PlayerData },
 }
 
 interface GameMode {

@@ -44,6 +44,7 @@ class NewGame extends Controller
 		$this->params['teamNames'] = GameFactory::getAllTeamsNames()[$this->params['system']];
 		$this->params['gameModes'] = GameModeFactory::getAll(['system' => $this->params['system']]);
 		$this->params['musicModes'] = MusicMode::getAll();
+		$this->params['groups'] = GameGroup::getActive();
 		$this->view('pages/new-game/index');
 	}
 
@@ -66,6 +67,10 @@ class NewGame extends Controller
 			'players' => [],
 			'teams'   => [],
 		];
+
+		if (!empty($request->post['groupSelect'])) {
+			$data['meta']['group'] = $request->post['groupSelect'];
+		}
 
 		Timer::start('newGame.mode');
 		try {

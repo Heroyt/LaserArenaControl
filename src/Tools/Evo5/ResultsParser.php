@@ -14,6 +14,7 @@ use App\GameModels\Game\Evo5\Player;
 use App\GameModels\Game\Evo5\Team;
 use App\GameModels\Game\Scoring;
 use App\GameModels\Game\Timing;
+use App\Models\GameGroup;
 use App\Models\MusicMode;
 use App\Tools\AbstractResultsParser;
 use DateTime;
@@ -465,6 +466,28 @@ class ResultsParser extends AbstractResultsParser
 				} catch (ModelNotFoundException) {
 					// Ignore
 				}
+			}
+
+			// Set a game group if set
+			if (!empty($meta['group'])) {
+				if ($meta['group'] !== 'new') {
+					try {
+						// Find existing group
+						$group = GameGroup::get((int) $meta['group']);
+						// If found, clear its players cache to account for the newly-added (imported) game
+						$group->clearCache();
+					} catch (ModelNotFoundException) {
+					}
+				}
+
+				// Default to creating a new game group if the group was not found
+				if (!isset($group)) {
+					$group = new GameGroup();
+					$group->name = sprintf(lang('Skupina %s'), isset($game->start) ? $game->start->format('d.m.Y H:i') : '');
+					$group->save();
+				}
+
+				$game->group = $group;
 			}
 
 			/** @var Player $player */

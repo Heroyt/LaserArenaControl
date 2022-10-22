@@ -1,0 +1,71 @@
+{varType App\Models\GameGroup[] $groups}
+{varType App\GameModels\Vest[] $vests}
+
+{define groups}
+	{var int $vestCount = count($vests)}
+	<div class="offcanvas offcanvas-end border-blue-600 visible" tabindex="-1" id="groups"
+		 aria-labelledby="groupsLabel">
+		<div class="offcanvas-tag bg-blue-600 text-bg-blue-600" data-bs-toggle="offcanvas" data-bs-target="#groups">
+			<span>
+				{lang 'Skupiny'}
+			</span>
+		</div>
+		<div class="offcanvas-header">
+			<h5 class="offcanvas-title" id="groupsLabel">{lang 'Skupiny'}</h5>
+			<button type="button" class="btn btn-link" data-bs-dismiss="offcanvas" aria-label="Close"><i
+						class="fa-solid fa-xmark"></i></button>
+		</div>
+		<div class="offcanvas-body" id="game-groups" data-vests="{$vestCount}">
+			{foreach $groups as $group}
+				{include gameGroupCard, $group->id, $group->name, $group->getPlayers()}
+			{/foreach}
+		</div>
+	</div>
+	<template id="new-game-group">
+		{include gameGroupCard, '#id#', '#name#', []}
+	</template>
+{/define}
+
+{define gameGroupCard, int|string $id, string $name, App\GameModels\Game\Player[] $players}
+	{var int $vestCount = count($vests)}
+	<div class="card game-group mb-4" data-id="{$id}">
+		<div class="card-body">
+			<div class="input-group">
+				<input type="text" value="{$name}" class="form-control fs-5 group-name" maxlength="100">
+				<button type="button" data-bs-toggle="collapse" data-bs-target="#group-{$id}-players"
+						data-toggle="tooltip" title="{lang 'Zobrazit hráče skupiny'}"
+						class="btn btn-info">
+					<i class="fa-solid fa-user-group"></i>
+				</button>
+				<button type="button" data-toggle="tooltip" title="{lang 'Nahrát na vesty'}"
+						class="btn btn-success loadPlayers">
+					<i class="fa-solid fa-upload"></i>
+				</button>
+				<button type="button" data-toggle="tooltip" title="{lang 'Deaktivovat'}"
+						class="btn btn-danger delete">
+					<i class="fa-solid fa-trash"></i>
+				</button>
+			</div>
+			<div class="collapse" id="group-{$id}-players">
+				<ul class="list-group mt-1 group-players">
+					<li n:foreach="$players as $pName => $player" class="list-group-item group-player"
+																  data-player="{$pName}">
+						<label class="h-100 w-100 d-flex align-items-center cursor-pointer">
+							<strong class="col-2 counter">{$iterator->counter}.</strong>
+							<input type="checkbox" class="form-check-input group-player-check mx-2 mt-0"
+								   data-name="{$player->name}" data-skill="{$player->skill}"
+								   {if $iterator->counter0 < $vestCount}checked{/if}>
+							<span class="flex-fill">
+										{$player->name}
+									</span>
+							<span>
+										<span class="skill">{$player->skill}</span>
+										<i class="fa-solid fa-star"></i>
+									</span>
+						</label>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+{/define}

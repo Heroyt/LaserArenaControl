@@ -29,6 +29,8 @@ export default class Game {
 	players: Map<String, Player>;
 	teams: Map<String, Team>;
 
+	$group: HTMLSelectElement;
+
 	$gameMode: HTMLSelectElement;
 	$musicMode: HTMLSelectElement;
 	$teams: NodeListOf<HTMLInputElement>;
@@ -64,6 +66,8 @@ export default class Game {
 
 		this.players = new Map;
 		this.teams = new Map;
+
+		this.$group = document.getElementById('group-select') as HTMLSelectElement;
 
 		this.$gameMode = document.getElementById('game-mode-select') as HTMLSelectElement;
 		this.$musicMode = document.getElementById('music-select') as HTMLSelectElement;
@@ -227,6 +231,10 @@ export default class Game {
 			this.shuffleFairTeams();
 		})
 
+		this.$group.addEventListener('change', () => {
+			this.$group.dispatchEvent(new Event('update', {bubbles: true}));
+		})
+
 		this.$teams.forEach($team => {
 			$team.addEventListener('change', () => {
 				this.teamShuffleTooltip.hide();
@@ -352,6 +360,10 @@ export default class Game {
 		//this.$musicMode.value = (this.$musicMode.firstElementChild as HTMLOptionElement).value;
 
 		this.$gameMode.dispatchEvent(new Event('update', {bubbles: true}));
+		this.$gameMode.dispatchEvent(new Event('change', {bubbles: true}));
+
+		this.$group.value = '';
+		this.$group.dispatchEvent(new Event('change', {bubbles: true}));
 
 		const e = new Event('clear-all');
 		document.dispatchEvent(e);
@@ -590,6 +602,9 @@ export default class Game {
 
 		if (data.playerCount > 0) {
 			const skills = Object.values(data.players).map(playerData => {
+				if (playerData.avgSkill) {
+					return playerData.avgSkill;
+				}
 				return playerData.skill;
 			});
 			const maxSkill = Math.max(3, ...skills);
@@ -634,6 +649,22 @@ export default class Game {
 			this.$musicMode.value = data.music.id.toString();
 			this.$musicMode.dispatchEvent(e);
 		}
+		if (data.group) {
+			this.$group.value = data.group.id.toString();
+
+			// If the group is currently not active, it can still be loaded back.
+			// In that case an option should be appended because the group still exists, it's just not visible.
+			if (this.$group.value !== data.group.id.toString()) {
+				const option = document.createElement('option');
+				option.value = data.group.id.toString();
+				option.innerText = data.group.name;
+				this.$group.appendChild(option);
+				this.$group.value = data.group.id.toString();
+			}
+		} else {
+			this.$group.value = '';
+		}
+		this.$group.dispatchEvent(e);
 	}
 
 	reassignPlayerSkills(): void {
@@ -668,6 +699,14 @@ export default class Game {
 			players: {},
 			teams: {},
 		};
+
+		if (this.$group.value !== '' && this.$group.value !== 'new') {
+			data.group = {
+				id: parseInt(this.$group.value),
+				name: (this.$group.querySelector(`option[value="${this.$group.value}"]`) as HTMLOptionElement).innerText,
+				active: true,
+			};
+		}
 
 		activePlayers.forEach(player => {
 			data.players[player.vest] = {

@@ -130,3 +130,136 @@ tables:
 			CONSTRAINT `game_modes_variations_values_ibfk_2` FOREIGN KEY (`id_mode`) REFERENCES `game_modes` (`id_mode`) ON DELETE CASCADE ON UPDATE CASCADE
 		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 		'''
+	App\Models\GameGroup:
+		definition: '''
+		(
+			`id_group` int(11) unsigned NOT NULL AUTO_INCREMENT,
+			`name` varchar(100) NOT NULL DEFAULT '',
+			`active` tinyint(1) NOT NULL DEFAULT 1,
+			PRIMARY KEY (`id_group`)
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+		'''
+	App\GameModels\Game\Evo5\Game:
+		definition: '''
+		(
+			`id_game` int(11) unsigned NOT NULL AUTO_INCREMENT,
+			`id_mode` int(11) unsigned DEFAULT NULL,
+			`id_music` int(11) unsigned DEFAULT NULL,
+			`id_group` int(11) unsigned DEFAULT NULL,
+			`game_type` enum('TEAM','SOLO') NOT NULL DEFAULT 'TEAM',
+			`mode_name` varchar(100) DEFAULT NULL,
+			`file_time` datetime DEFAULT NULL,
+			`import_time` datetime DEFAULT NULL,
+			`start` datetime DEFAULT NULL,
+			`end` datetime DEFAULT NULL,
+			`file_number` int(11) DEFAULT NULL,
+			`timing_before` int(10) unsigned DEFAULT NULL,
+			`timing_game_length` int(10) unsigned DEFAULT NULL,
+			`timing_after` int(10) unsigned DEFAULT NULL,
+			`scoring_hit_other` int(11) DEFAULT NULL,
+			`scoring_hit_own` int(11) DEFAULT NULL,
+			`scoring_death_other` int(11) DEFAULT NULL,
+			`scoring_death_own` int(11) DEFAULT NULL,
+			`scoring_hit_pod` int(11) DEFAULT NULL,
+			`scoring_shot` int(11) DEFAULT NULL,
+			`scoring_power_machine_gun` int(11) DEFAULT NULL,
+			`scoring_power_invisibility` int(11) DEFAULT NULL,
+			`scoring_power_agent` int(11) DEFAULT NULL,
+			`scoring_power_shield` int(11) DEFAULT NULL,
+			`code` varchar(50) DEFAULT NULL,
+			`respawn` smallint(4) unsigned DEFAULT NULL,
+			`lives` int(10) unsigned DEFAULT NULL,
+			`ammo` int(10) unsigned DEFAULT NULL,
+			`sync` TINYINT(1)  NOT NULL  DEFAULT 0,
+			PRIMARY KEY (`id_game`),
+			KEY `id_mode` (`id_mode`),
+			CONSTRAINT `evo5_games_ibfk_1` FOREIGN KEY (`id_mode`) REFERENCES `game_modes` (`id_mode`) ON DELETE SET NULL ON UPDATE CASCADE,
+			CONSTRAINT `evo5_games_ibfk_2` FOREIGN KEY (`id_music`) REFERENCES `music` (`id_music`) ON DELETE SET NULL ON UPDATE CASCADE,
+			CONSTRAINT `evo5_games_ibfk_3` FOREIGN KEY (`id_group`) REFERENCES `game_groups` (`id_group`) ON DELETE SET NULL ON UPDATE CASCADE
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+		'''
+		modifications:
+			0.2.0:
+				- 'ADD `sync` TINYINT(1)  NOT NULL  DEFAULT 0  AFTER `ammo`'
+				- 'ADD `game_type` enum(''TEAM'',''SOLO'') NOT NULL DEFAULT ''TEAM'' AFTER `id_mode`'
+			0.3.0:
+				- 'ADD `import_time` datetime DEFAULT NULL AFTER `file_time`'
+			0.4.0:
+				- 'ADD `id_music` int(11) unsigned DEFAULT NULL AFTER `id_mode`'
+				- 'ADD FOREIGN KEY (`id_music`) REFERENCES `music` (`id_music`) ON DELETE SET NULL ON UPDATE CASCADE'
+			0.4.1:
+				- 'ADD `id_group` int(11) unsigned DEFAULT NULL AFTER `id_music`'
+				- 'ADD FOREIGN KEY (`id_group`) REFERENCES `game_groups` (`id_group`) ON DELETE SET NULL ON UPDATE CASCADE'
+	App\GameModels\Game\Evo5\Team:
+		definition: '''
+		(
+			`id_team` int(11) unsigned NOT NULL AUTO_INCREMENT,
+			`id_game` int(11) unsigned NOT NULL,
+			`color` int(10) unsigned DEFAULT NULL,
+			`score` int(11) NOT NULL DEFAULT 0,
+			`position` int(10) unsigned NOT NULL DEFAULT 0,
+			`name` varchar(20) DEFAULT NULL,
+			PRIMARY KEY (`id_team`),
+			KEY `id_game` (`id_game`),
+			CONSTRAINT `evo5_teams_ibfk_1` FOREIGN KEY (`id_game`) REFERENCES `evo5_games` (`id_game`) ON DELETE CASCADE ON UPDATE CASCADE
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+		'''
+	App\GameModels\Game\Evo5\Player:
+		definition: '''
+		(
+			`id_player` int(11) unsigned NOT NULL AUTO_INCREMENT,
+			`id_game` int(11) unsigned NOT NULL,
+			`id_team` int(11) unsigned DEFAULT NULL,
+			`id_user` int(11) unsigned DEFAULT NULL,
+			`name` varchar(20) NOT NULL DEFAULT '',
+			`score` int(11) NOT NULL DEFAULT 0,
+			`skill` int(11) NOT NULL DEFAULT 0,
+			`vest` int(10) unsigned NOT NULL DEFAULT 0,
+			`shots` int(10) unsigned NOT NULL DEFAULT 0,
+			`accuracy` int(10) unsigned NOT NULL DEFAULT 0,
+			`hits` int(10) unsigned NOT NULL DEFAULT 0,
+			`deaths` int(10) unsigned NOT NULL DEFAULT 0,
+			`position` int(10) unsigned NOT NULL DEFAULT 0,
+			`shot_points` int(11) NOT NULL DEFAULT 0,
+			`score_bonus` int(11) NOT NULL DEFAULT 0,
+			`score_powers` int(11) NOT NULL DEFAULT 0,
+			`score_mines` int(11) NOT NULL DEFAULT 0,
+			`ammo_rest` int(10) unsigned NOT NULL DEFAULT 0,
+			`mines_hits` int(10) unsigned NOT NULL DEFAULT 0,
+			`hits_other` int(10) unsigned NOT NULL DEFAULT 0,
+			`hits_own` int(10) unsigned NOT NULL DEFAULT 0,
+			`deaths_other` int(10) unsigned NOT NULL DEFAULT 0,
+			`deaths_own` int(10) unsigned NOT NULL DEFAULT 0,
+			`bonus_agent` int(10) unsigned NOT NULL DEFAULT 0,
+			`bonus_invisibility` int(10) unsigned NOT NULL DEFAULT 0,
+			`bonus_machine_gun` int(10) unsigned NOT NULL DEFAULT 0,
+			`bonus_shield` int(10) unsigned NOT NULL DEFAULT 0,
+			`vip` tinyint(1) unsigned NOT NULL DEFAULT 0,
+			PRIMARY KEY (`id_player`),
+			KEY `id_game` (`id_game`),
+			KEY `id_team` (`id_team`),
+			CONSTRAINT `evo5_players_ibfk_1` FOREIGN KEY (`id_game`) REFERENCES `evo5_games` (`id_game`) ON DELETE CASCADE ON UPDATE CASCADE,
+			CONSTRAINT `evo5_players_ibfk_2` FOREIGN KEY (`id_team`) REFERENCES `evo5_teams` (`id_team`) ON DELETE SET NULL ON UPDATE CASCADE,
+			CONSTRAINT `evo5_players_ibfk_3` FOREIGN KEY (`id_user`) REFERENCES `players` (`id_user`) ON DELETE SET NULL ON UPDATE CASCADE
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+		'''
+		modifications:
+			0.1.0:
+				- 'ADD `id_user` INT(11)  UNSIGNED  NULL  DEFAULT NULL  AFTER `id_team`'
+				- 'ADD `skill` INT(11)  NOT NULL DEFAULT 0  AFTER `score`'
+				- 'ADD FOREIGN KEY (`id_user`) REFERENCES `players` (`id_user`) ON DELETE SET NULL ON UPDATE CASCADE'
+			0.2.0:
+				- 'ADD `vip` tinyint(1) unsigned NOT NULL DEFAULT 0 AFTER `bonus_shield`'
+	evo5_hits:
+		definition: '''
+		(
+			`id_player` int(11) unsigned NOT NULL,
+			`id_target` int(11) unsigned NOT NULL,
+			`count` int(10) unsigned DEFAULT NULL,
+			PRIMARY KEY (`id_player`,`id_target`),
+			KEY `id_target` (`id_target`),
+			KEY `id_player` (`id_player`),
+			CONSTRAINT `evo5_hits_ibfk_1` FOREIGN KEY (`id_player`) REFERENCES `evo5_players` (`id_player`) ON DELETE CASCADE ON UPDATE CASCADE,
+			CONSTRAINT `evo5_hits_ibfk_2` FOREIGN KEY (`id_target`) REFERENCES `evo5_players` (`id_player`) ON DELETE CASCADE ON UPDATE CASCADE
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+		'''

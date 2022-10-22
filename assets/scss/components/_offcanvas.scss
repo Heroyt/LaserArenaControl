@@ -1,0 +1,70 @@
+.offcanvas {
+	--tag-height: 2rem;
+	--bs-offcanvas-zindex: 1029;
+	--tag-padding-x: 1rem;
+	--tag-padding-y: 0;
+	--tag-radius: 1rem;
+	--tag-width: 8rem;
+
+	&.show,
+	&.showing {
+		--bs-offcanvas-zindex: 1045;
+	}
+}
+
+.offcanvas-tag {
+	--order: 0;
+	cursor: pointer;
+	height: var(--tag-height, 2rem);
+	line-height: var(--tag-height, 2rem);
+	position: absolute;
+	text-align: center;
+	width: var(--tag-width, 7rem);
+	z-index: calc(50 - var(--order, 0));
+
+	span {
+		display: inline-block;
+		padding: var(--tag-padding-y, 0) var(--tag-padding-x, 1rem);
+		position: relative;
+	}
+}
+
+%rotated-tag {
+	height: var(--tag-width, 7rem);
+	top: calc(3.5rem + (var(--tag-width, 7rem) * 0.85 * var(--order, 0)));
+	width: var(--tag-height, 2rem);
+}
+
+.offcanvas-end {
+	.offcanvas-tag {
+		@extend %rotated-tag;
+		border-bottom-left-radius: var(--tag-radius, 2rem);
+		border-top-left-radius: var(--tag-radius, 2rem);
+		translate: -100%;
+
+		span {
+			display: inline-block;
+			rotate: -90deg;
+			top: 50%;
+			transform-origin: center;
+			translate: calc((var(--tag-height, 2rem) - 6rem) / 2) -50%;
+		}
+	}
+}
+
+.offcanvas-start {
+	.offcanvas-tag {
+		@extend %rotated-tag;
+		border-bottom-right-radius: var(--tag-radius, 2rem);
+		border-top-right-radius: var(--tag-radius, 2rem);
+		translate: 100%;
+
+		span {
+			display: inline-block;
+			rotate: 90deg;
+			top: 50%;
+			transform-origin: center;
+			translate: calc((6rem - var(--tag-height, 2rem)) / 2) -50%;
+		}
+	}
+}

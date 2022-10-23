@@ -161,6 +161,9 @@ class NewGame extends Controller
 		if (isset($data['meta']['music'])) {
 			try {
 				$music = MusicMode::get($data['meta']['music']);
+				if (!file_exists($music->fileName)) {
+					App::getLogger()->warning('Music file does not exist - '.$music->fileName);
+				}
 				if (!copy($music->fileName, LMX_DIR.'music/evo5.mp3')) {
 					App::getLogger()->warning('Music copy failed - '.$music->fileName);
 				}

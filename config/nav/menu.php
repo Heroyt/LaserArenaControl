@@ -54,6 +54,10 @@ return [
 				'name'  => lang('Music'),
 				'route' => 'settings-music',
 			],
+			[
+				'name'  => lang('Cache'),
+				'route' => 'settings-cache',
+			],
 		],
 	],
 ];

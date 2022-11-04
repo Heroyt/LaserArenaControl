@@ -1,0 +1,32 @@
+{layout '../../@layout.latte'}
+
+{block content}
+	<h2>{lang 'Cache', context: 'settings'}:</h2>
+
+	<div class="my-2">
+		<button id="clear-all" class="btn btn-lg btn-danger btn-clear-cache w-100"
+				data-href="{link ['cache', 'clear']}">
+			{lang 'Smazat vše', context: 'actions'}
+		</button>
+	</div>
+
+	<div class="text-center">
+		<div class="btn-group">
+			<button id="clear-system" class="btn btn-warning btn-clear-cache"
+					data-href="{link ['cache', 'clear', 'system']}">
+				{lang 'Smazat systémovou cache', context: 'actions'}
+			</button>
+			<button id="clear-di" class="btn btn-info btn-clear-cache" data-href="{link ['cache', 'clear', 'di']}">
+				{lang 'Smazat DI cache', context: 'actions'}
+			</button>
+			<button id="clear-results" class="btn btn-primary btn-clear-cache"
+					data-href="{link ['cache', 'clear', 'results']}">
+				{lang 'Smazat cache výsledků', context: 'actions'}
+			</button>
+			<button id="clear-latte" class="btn btn-success btn-clear-cache"
+					data-href="{link ['cache', 'clear', 'latte']}">
+				{lang 'Smazat cache šablon', context: 'actions'}
+			</button>
+		</div>
+	</div>
+{/block}

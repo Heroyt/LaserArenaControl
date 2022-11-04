@@ -20,6 +20,7 @@ use Lsr\Core\DB;
 use Lsr\Core\Exceptions\ModelNotFoundException;
 use Lsr\Core\Exceptions\ValidationException;
 use Lsr\Core\Requests\Request;
+use Lsr\Core\Routing\Attributes\Get;
 use Lsr\Exceptions\TemplateDoesNotExistException;
 
 /**
@@ -295,6 +296,11 @@ class Settings extends Controller
 		$this->params['defaultTemplateId'] = Info::get('default_print_template', 'default');
 		$this->params['dates'] = PrintStyle::getAllStyleDates();
 		$this->view('pages/settings/print');
+	}
+
+	#[Get('settings/cache', 'settings-cache')]
+	public function cache() : void {
+		$this->view('pages/settings/cache');
 	}
 
 }

@@ -25,7 +25,7 @@ export default function route(pageInfo: PageInfo): void {
 	switch (pageInfo.routeName ?? '') {
 		case 'settings-print':
 			import(
-				/* webpackChunkName: "resultsReload" */
+				/* webpackChunkName: "settingsPrint" */
 				'./pages/settings/print'
 				).then(module => {
 				module.default();
@@ -33,8 +33,16 @@ export default function route(pageInfo: PageInfo): void {
 			break;
 		case 'settings-vests':
 			import(
-				/* webpackChunkName: "resultsReload" */
+				/* webpackChunkName: "settingsVest" */
 				'./pages/settings/vests'
+				).then(module => {
+				module.default();
+			});
+			break;
+		case 'settings-cache':
+			import(
+				/* webpackChunkName: "settingsCache" */
+				'./pages/settings/cache'
 				).then(module => {
 				module.default();
 			});

@@ -3,11 +3,12 @@ import axios, {AxiosResponse} from "axios";
 import {initTooltips, lang} from "../functions";
 import EventServerInstance from "../EventServer";
 import {startLoading, stopLoading} from "../loaders";
-import {GameData, GameGroupData} from "../game/gameInterfaces";
+import {GameData, GameGroupData, PlayerData} from "../game/gameInterfaces";
 import {Modal, Offcanvas} from "bootstrap";
 
 declare global {
 	const gameData: GameData;
+	const vestIcon: string;
 }
 
 enum GameStatus {
@@ -578,22 +579,44 @@ export default function initNewGamePage() {
 				}
 			};
 
-			const vests: (string | number)[] = [];
+			const vests: { [index: number | string]: boolean } = {};
 			game.players.forEach(player => {
-				vests.push(player.vest);
+				vests[player.vest] = true;
 			});
 
+			const remainingPlayers: PlayerData[] = [];
 			// Add players
 			players.forEach(player => {
-				if (vests.length === 0) {
-					return; // No vest available
-				}
-				const vest = vests.pop();
+				const vest = isNaN(parseInt(player.dataset.vest)) ? player.dataset.vest : parseInt(player.dataset.vest);
 
-				data.players[vest] = {
-					name: player.dataset.name,
-					skill: parseInt(player.dataset.skill),
-					vest,
+				console.log(player.dataset.name, vest);
+
+				if (vests[vest]) {
+					data.players[vest] = {
+						name: player.dataset.name,
+						skill: parseInt(player.dataset.skill),
+						vest,
+					}
+					vests[vest] = false;
+					return;
+				}
+
+				remainingPlayers.push(
+					{
+						name: player.dataset.name,
+						skill: parseInt(player.dataset.skill),
+						vest: 0,
+					}
+				);
+			});
+
+			console.log(remainingPlayers);
+
+			Object.entries(vests).forEach(([vest, available]) => {
+				if (available) {
+					const player = remainingPlayers.pop();
+					player.vest = vest;
+					data.players[vest] = player;
 				}
 			});
 
@@ -654,8 +677,10 @@ export default function initNewGamePage() {
 								li.setAttribute('data-player', name);
 								li.innerHTML = `<label class="h-100 w-100 d-flex align-items-center cursor-pointer">` +
 									`<strong class="col-2 counter">1.</strong>` +
-									`<input type="checkbox" class="form-check-input group-player-check mx-2 mt-0" data-name="${player.name}" data-skill="${skill}">` +
-									`<span class="flex-fill">${player.name}</span><span><span class="skill">${skill}</span><i class="fa-solid fa-star"></i></span></label>`;
+									`<input type="checkbox" class="form-check-input group-player-check mx-2 mt-0" data-name="${player.name}" data-skill="${skill}" data-vest="${player.vest}">` +
+									`<span class="flex-fill">${player.name}</span>` +
+									`<span class="px-2">${player.vest}${vestIcon}</span>` +
+									`<span style="min-width:3rem;" class="text-end"><span class="skill">${skill}</span><i class="fa-solid fa-star"></i></span></label>`;
 								playersWrapper.appendChild(li);
 								playerCount++;
 							}

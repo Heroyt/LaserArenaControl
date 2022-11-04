@@ -54,14 +54,19 @@
 							<strong class="col-2 counter">{$iterator->counter}.</strong>
 							<input type="checkbox" class="form-check-input group-player-check mx-2 mt-0"
 								   data-name="{$player->name}" data-skill="{$player->skill}"
+								   data-vest="{$player->vest}"
 								   {if $iterator->counter0 < $vestCount}checked{/if}>
 							<span class="flex-fill">
-										{$player->name}
-									</span>
-							<span>
-										<span class="skill">{$player->skill}</span>
-										<i class="fa-solid fa-star"></i>
-									</span>
+								{$player->name}
+							</span>
+							<span class="px-2">
+								{$player->vest}
+								{svgIcon 'Vesta', 'auto', '1rem'}
+							</span>
+							<span style="min-width: 3rem;" class="text-end">
+								<span class="skill">{$player->skill}</span>
+								<i class="fa-solid fa-star"></i>
+							</span>
 						</label>
 					</li>
 				</ul>

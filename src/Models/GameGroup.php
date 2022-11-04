@@ -61,6 +61,7 @@ class GameGroup extends Model
 				$dependencies[CacheParent::EXPIRE] = '1 months';
 				$players = [];
 				$playerSkills = [];
+				$playerVests = [];
 				foreach ($games as $game) {
 					/** @var Player $player */
 					foreach ($game->getPlayers() as $player) {
@@ -68,11 +69,16 @@ class GameGroup extends Model
 						if (!isset($players[$asciiName])) {
 							$playerSkills[$asciiName] = [];
 							$players[$asciiName] = clone $player;
+							$playerVests[$asciiName] = [];
 						}
 						if ($players[$asciiName]->name === $asciiName && $player->name !== $asciiName) {
 							$players[$asciiName]->name = $player->name; // Prefer non-ascii (with diacritics) names
 						}
 						$playerSkills[$asciiName][] = $player->skill;
+						if (!isset($playerVests[$asciiName][$player->vest])) {
+							$playerVests[$asciiName][$player->vest] = 0;
+						}
+						$playerVests[$asciiName][$player->vest]++;
 					}
 				}
 
@@ -80,6 +86,9 @@ class GameGroup extends Model
 				foreach ($players as $player) {
 					$asciiName = Strings::toAscii($player->name);
 					$player->skill = (int) round(array_sum($playerSkills[$asciiName]) / count($playerSkills[$asciiName]));
+					// Sort player vests by his use count
+					arsort($playerVests[$asciiName]);
+					$player->vest = array_key_first($playerVests[$asciiName]);
 				}
 				return $players;
 			});

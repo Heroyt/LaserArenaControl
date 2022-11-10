@@ -613,7 +613,7 @@ export default function initNewGamePage() {
 			console.log(remainingPlayers);
 
 			Object.entries(vests).forEach(([vest, available]) => {
-				if (available) {
+				if (available && remainingPlayers.length > 0) {
 					const player = remainingPlayers.pop();
 					player.vest = vest;
 					data.players[vest] = player;

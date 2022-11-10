@@ -57,6 +57,7 @@ class GameGroup extends Model
 			$this->players = $cache->load('group/'.$this->id.'/players', function(array &$dependencies) use ($games) : array {
 				$dependencies[CacheParent::Tags] = [
 					'gameGroups',
+					'group/'.$this->id.'/players'
 				];
 				$dependencies[CacheParent::EXPIRE] = '1 months';
 				$players = [];
@@ -109,10 +110,11 @@ class GameGroup extends Model
 			$this->games = $cache->load('group/'.$this->id.'/games', function(array &$dependencies) : array {
 				$dependencies[CacheParent::Tags] = [
 					'gameGroups',
+					'group/'.$this->id.'/games',
 				];
 				$dependencies[CacheParent::EXPIRE] = '1 months';
 				$games = [];
-				$rows = GameFactory::queryGames(true, fields: ['id_group'])->where('[id_group] = %i', $this->id)->fetchAll();
+				$rows = GameFactory::queryGames(true, fields: ['id_group'])->where('[id_group] = %i', $this->id)->cacheTags('group/'.$this->id.'/games')->fetchAll();
 				foreach ($rows as $row) {
 					$games[] = GameFactory::getByCode($row->code);
 				}
@@ -123,16 +125,17 @@ class GameGroup extends Model
 		return $this->games;
 	}
 
-	public function save() : bool {
-		// Invalidate cache on update
-		$this->clearCache();
-		return parent::save();
-	}
-
 	public function clearCache() : void {
+		parent::clearCache();
 		if (isset($this->id)) {
 			/** @var Cache $cache */
 			$cache = App::getService('cache');
+			$cache->clean([
+											CacheParent::Tags => [
+												'group/'.$this->id.'/games',
+												'group/'.$this->id.'/players',
+											]
+										]);
 			$cache->remove('group/'.$this->id.'/players');
 			$cache->remove('group/'.$this->id.'/games');
 		}

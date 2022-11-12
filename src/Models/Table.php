@@ -52,6 +52,8 @@ class Table extends Model
 		$this->group->active = true;
 		$this->group->save();
 
+		$this->save();
+
 		return $this->group;
 	}
 

@@ -72,6 +72,10 @@ class NewGame extends Controller
 			$data['meta']['group'] = $request->post['groupSelect'];
 		}
 
+		if (!empty($request->post['tableSelect'])) {
+			$data['meta']['table'] = $request->post['tableSelect'];
+		}
+
 		Timer::start('newGame.mode');
 		try {
 			$mode = GameModeFactory::getById($request->post['game-mode'] ?? 0);

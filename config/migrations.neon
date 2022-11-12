@@ -161,6 +161,7 @@ tables:
 			`id_mode` int(11) unsigned DEFAULT NULL,
 			`id_music` int(11) unsigned DEFAULT NULL,
 			`id_group` int(11) unsigned DEFAULT NULL,
+			`id_table` int(11) unsigned DEFAULT NULL,
 			`game_type` enum('TEAM','SOLO') NOT NULL DEFAULT 'TEAM',
 			`mode_name` varchar(100) DEFAULT NULL,
 			`file_time` datetime DEFAULT NULL,
@@ -205,6 +206,9 @@ tables:
 			0.4.1:
 				- 'ADD `id_group` int(11) unsigned DEFAULT NULL AFTER `id_music`'
 				- 'ADD FOREIGN KEY IF NOT EXISTS (`id_group`) REFERENCES `game_groups` (`id_group`) ON DELETE SET NULL ON UPDATE CASCADE'
+			0.4.2:
+				- 'ADD `id_table` int(11) unsigned DEFAULT NULL AFTER `id_group`'
+				- 'ADD FOREIGN KEY IF NOT EXISTS (`id_table`) REFERENCES `tables` (`id_table`) ON DELETE SET NULL ON UPDATE CASCADE'
 	App\GameModels\Game\Evo5\Team:
 		definition: '''
 		(

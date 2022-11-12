@@ -16,6 +16,7 @@ use App\GameModels\Game\Scoring;
 use App\GameModels\Game\Timing;
 use App\Models\GameGroup;
 use App\Models\MusicMode;
+use App\Models\Table;
 use App\Tools\AbstractResultsParser;
 use DateTime;
 use JsonException;
@@ -488,6 +489,27 @@ class ResultsParser extends AbstractResultsParser
 				}
 
 				$game->group = $group;
+			}
+
+			// Assign game to the table
+			if (!empty($meta['table'])) {
+				try {
+					$table = Table::get((int) $meta['table']);
+					$game->table = $table;
+					if (!isset($table->group)) {
+						// Assign a group to the table if it doesn't have any
+						if (isset($game->group)) {
+							// Copy group from game
+							$table->group = $game->group;
+						}
+						else {
+							// Create a new group for the table
+							$game->group = $table->createGroup(date: $game->start);
+						}
+					}
+				} catch (ModelNotFoundException) {
+					// Ignore
+				}
 			}
 
 			/** @var Player $player */

@@ -55,6 +55,10 @@ return [
 				'route' => 'settings-music',
 			],
 			[
+				'name'  => lang('Tables'),
+				'route' => 'settings-tables',
+			],
+			[
 				'name'  => lang('Cache'),
 				'route' => 'settings-cache',
 			],

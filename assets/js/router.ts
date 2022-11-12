@@ -47,6 +47,14 @@ export default function route(pageInfo: PageInfo): void {
 				module.default();
 			});
 			break;
+		case 'settings-tables':
+			import(
+				/* webpackChunkName: "settingsTables" */
+				'./pages/settings/tables'
+				).then(module => {
+				module.default();
+			});
+			break;
 		case 'games-list':
 			import(
 				/* webpackChunkName: "gamesList" */

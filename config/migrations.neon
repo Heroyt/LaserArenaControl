@@ -139,6 +139,21 @@ tables:
 			PRIMARY KEY (`id_group`)
 		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 		'''
+	App\Models\Table:
+		definition: '''
+		(
+          `id_table` int(11) unsigned NOT NULL AUTO_INCREMENT,
+          `id_group` int(11) unsigned DEFAULT NULL,
+          `name` varchar(50) NOT NULL,
+          `grid_row` int(10) unsigned NOT NULL DEFAULT 1,
+          `grid_col` int(10) unsigned NOT NULL DEFAULT 1,
+          `grid_width` int(10) unsigned NOT NULL DEFAULT 1,
+          `grid_height` int(10) unsigned NOT NULL DEFAULT 1,
+          PRIMARY KEY (`id_table`),
+          KEY `id_group` (`id_group`),
+          CONSTRAINT `tables_ibfk_1` FOREIGN KEY (`id_group`) REFERENCES `game_groups` (`id_group`) ON DELETE SET NULL ON UPDATE CASCADE
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+		'''
 	App\GameModels\Game\Evo5\Game:
 		definition: '''
 		(

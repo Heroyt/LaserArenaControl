@@ -10,6 +10,7 @@ use App\GameModels\Factory\GameFactory;
 use App\GameModels\Game\PrintStyle;
 use App\GameModels\Game\PrintTemplate;
 use App\GameModels\Vest;
+use App\Models\Table;
 use DateTime;
 use Dibi\DriverException;
 use Dibi\Exception;
@@ -20,8 +21,11 @@ use Lsr\Core\DB;
 use Lsr\Core\Exceptions\ModelNotFoundException;
 use Lsr\Core\Exceptions\ValidationException;
 use Lsr\Core\Requests\Request;
+use Lsr\Core\Routing\Attributes\Delete;
 use Lsr\Core\Routing\Attributes\Get;
+use Lsr\Core\Routing\Attributes\Post;
 use Lsr\Exceptions\TemplateDoesNotExistException;
+use Lsr\Logging\Exceptions\DirectoryCreationException;
 
 /**
  *
@@ -48,11 +52,9 @@ class Settings extends Controller
 		$vests = Vest::getAll();
 		$this->params['vests'] = [];
 		foreach (GameFactory::getSupportedSystems() as $system) {
-			/** @phpstan-ignore-next-line */
 			$this->params['vests'][$system] = [];
 		}
 		foreach ($vests as $vest) {
-			/** @phpstan-ignore-next-line */
 			$this->params['vests'][$vest->system][] = $vest;
 		}
 		$this->view('pages/settings/vests');
@@ -286,9 +288,10 @@ class Settings extends Controller
 
 	/**
 	 * @return void
+	 * @throws ModelNotFoundException
 	 * @throws TemplateDoesNotExistException
 	 * @throws ValidationException
-	 * @throws ModelNotFoundException
+	 * @throws DirectoryCreationException
 	 */
 	public function print() : void {
 		$this->params['styles'] = PrintStyle::getAll();
@@ -301,6 +304,110 @@ class Settings extends Controller
 	#[Get('settings/cache', 'settings-cache')]
 	public function cache() : void {
 		$this->view('pages/settings/cache');
+	}
+
+	#[Get('settings/tables', 'settings-tables')]
+	public function tables() : void {
+		$this->params['tables'] = Table::getAll();
+		$this->params['cols'] = 1;
+		$this->params['rows'] = 1;
+		foreach ($this->params['tables'] as $table) {
+			$endCol = $table->grid->col + $table->grid->width - 1;
+			if ($this->params['cols'] < $endCol) {
+				$this->params['cols'] = $endCol;
+			}
+			$endRow = $table->grid->row + $table->grid->height - 1;
+			if ($this->params['rows'] < $endRow) {
+				$this->params['rows'] = $endRow;
+			}
+		}
+		$this->view('pages/settings/tables');
+	}
+
+	#[Post('settings/tables/new')]
+	public function addTable(Request $request) : never {
+		$table = new Table();
+		$table->name = lang('Stůl');
+		if (!$table->save()) {
+			if ($request->isAjax()) {
+				$this->respond(['error' => 'Failed to create the table'], 500);
+			}
+			$request->passErrors[] = lang('Nepodařilo se vytvořit objekt', context: 'errors');
+			App::redirect(['settings', 'tables'], $request);
+		}
+
+		if ($request->isAjax()) {
+			$this->respond(['status' => 'ok']);
+		}
+		$request->passNotices[] = ['type' => 'success', 'content' => lang('Úspěšně vytvořeno')];
+		App::redirect(['settings', 'tables'], $request);
+	}
+
+	#[Post('settings/tables/{id}/delete'), Delete('settings/tables/{id}')]
+	public function deleteTable(Request $request) : never {
+		$table = Table::get((int) ($request->params['id'] ?? 0));
+		if (!isset($table)) {
+			if ($request->isAjax()) {
+				$this->respond(['error' => 'Table not found'], 404);
+			}
+			$request->passErrors[] = lang('Objekt neexistuje', context: 'errors');
+			App::redirect(['settings', 'tables'], $request);
+		}
+
+		if (!$table->delete()) {
+			if ($request->isAjax()) {
+				$this->respond(['error' => 'Failed to delete the table'], 500);
+			}
+			$request->passErrors[] = lang('Nepodařilo se smazat objekt', context: 'errors');
+			App::redirect(['settings', 'tables'], $request);
+		}
+
+		if ($request->isAjax()) {
+			$this->respond(['status' => 'ok']);
+		}
+		$request->passNotices[] = ['type' => 'success', 'content' => lang('Úspěšně smazáno')];
+		App::redirect(['settings', 'tables'], $request);
+	}
+
+	#[Post('settings/tables')]
+	public function saveTables(Request $request) : never {
+		/** @var array<numeric, array{name:string,grid_col?:numeric,grid_row?:numeric,grid_width?:numeric,grid_height?:numeric}> $tables */
+		$tables = $request->post['table'] ?? [];
+		foreach ($tables as $id => $tableInfo) {
+			try {
+				$table = Table::get((int) $id);
+			} catch (ModelNotFoundException $e) {
+				$request->errors[] = sprintf(lang('Table #%d was not found', context: 'errors'), $id);
+				continue;
+			} catch (ValidationException|DirectoryCreationException $e) {
+				continue;
+			}
+
+			$table->name = $tableInfo['name'];
+			$table->grid->col = (int) ($tableInfo['grid_col'] ?? 1);
+			$table->grid->row = (int) ($tableInfo['grid_row'] ?? 1);
+			$table->grid->width = (int) ($tableInfo['grid_width'] ?? 1);
+			$table->grid->height = (int) ($tableInfo['grid_height'] ?? 1);
+
+			if (!$table->save()) {
+				$request->errors[] = sprintf(lang('Failed to save table #%d', context: 'errors'), $id);
+			}
+		}
+
+		if (empty($request->errors)) {
+			if ($request->isAjax()) {
+				$this->respond(['status' => 'ok']);
+			}
+			$request->passNotices[] = ['type' => 'success', 'content' => lang('Úspěšně uloženo')];
+			App::redirect(['settings', 'tables'], $request);
+		}
+
+		if ($request->isAjax()) {
+			$this->respond(['errors' => $request->errors], 500);
+		}
+
+		$request->passErrors = $request->errors;
+		App::redirect(['settings', 'tables'], $request);
 	}
 
 }

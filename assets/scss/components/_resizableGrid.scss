@@ -1,0 +1,6 @@
+.resizable-grid {
+	display: grid;
+	grid-gap: .5rem;
+	grid-template-columns: repeat(var(--cols, 10), min(1fr, 3rem));
+	grid-template-rows: repeat(var(--rows, 10), min(1fr, 5rem));
+}

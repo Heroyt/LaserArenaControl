@@ -201,10 +201,10 @@ tables:
 				- 'ADD `import_time` datetime DEFAULT NULL AFTER `file_time`'
 			0.4.0:
 				- 'ADD `id_music` int(11) unsigned DEFAULT NULL AFTER `id_mode`'
-				- 'ADD FOREIGN KEY (`id_music`) REFERENCES `music` (`id_music`) ON DELETE SET NULL ON UPDATE CASCADE'
+				- 'ADD FOREIGN KEY IF NOT EXISTS (`id_music`) REFERENCES `music` (`id_music`) ON DELETE SET NULL ON UPDATE CASCADE'
 			0.4.1:
 				- 'ADD `id_group` int(11) unsigned DEFAULT NULL AFTER `id_music`'
-				- 'ADD FOREIGN KEY (`id_group`) REFERENCES `game_groups` (`id_group`) ON DELETE SET NULL ON UPDATE CASCADE'
+				- 'ADD FOREIGN KEY IF NOT EXISTS (`id_group`) REFERENCES `game_groups` (`id_group`) ON DELETE SET NULL ON UPDATE CASCADE'
 	App\GameModels\Game\Evo5\Team:
 		definition: '''
 		(
@@ -262,7 +262,7 @@ tables:
 			0.1.0:
 				- 'ADD `id_user` INT(11)  UNSIGNED  NULL  DEFAULT NULL  AFTER `id_team`'
 				- 'ADD `skill` INT(11)  NOT NULL DEFAULT 0  AFTER `score`'
-				- 'ADD FOREIGN KEY (`id_user`) REFERENCES `players` (`id_user`) ON DELETE SET NULL ON UPDATE CASCADE'
+				- 'ADD FOREIGN KEY IF NOT EXISTS (`id_user`) REFERENCES `players` (`id_user`) ON DELETE SET NULL ON UPDATE CASCADE'
 			0.2.0:
 				- 'ADD `vip` tinyint(1) unsigned NOT NULL DEFAULT 0 AFTER `bonus_shield`'
 	evo5_hits:

@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: English\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2022-11-17 13:04\n"
+"PO-Revision-Date: 2022-11-17 13:19\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -2246,74 +2246,74 @@ msgid "Bez stolu"
 msgstr "No table"
 
 msgid "Filtry"
-msgstr ""
+msgstr "Filters"
 
 msgctxt "actions"
 msgid "Filtrovat"
-msgstr ""
+msgstr "Filter"
 
 msgid "Hráči"
-msgstr ""
+msgstr "Players"
 
 msgid "Průměrné ohodnocení hráče"
-msgstr ""
+msgstr "Average player rating"
 
 msgid "Oblíbená vesta"
-msgstr ""
+msgstr "Favourite vest"
 
 msgid "Odehráno her"
-msgstr ""
+msgstr "Games played"
 
 msgid "Průměrné skóre"
-msgstr ""
+msgstr "Average score"
 
 msgid "Celkové skóre"
-msgstr ""
+msgstr "Total score"
 
 msgid "Průměrný počet výstřelů"
-msgstr ""
+msgstr "Average shots"
 
 msgid "Celkem výstřelů"
-msgstr ""
+msgstr "Total shots"
 
 msgid "Průměrný počet zásahů"
-msgstr ""
+msgstr "Average hits"
 
 msgid "Celkem zásahů"
-msgstr ""
+msgstr "Total hits"
 
 msgid "Průměrný počet smrtí"
-msgstr ""
+msgstr "Average deaths"
 
 msgid "Celkem smrtí"
-msgstr ""
+msgstr "Total deaths"
 
 msgid "K:D"
-msgstr ""
+msgstr "K:D"
 
 msgid "Výsledky"
-msgstr ""
+msgstr "Results"
 
 msgid "Hry"
-msgstr ""
+msgstr "Games"
 
 msgctxt "results.info"
 msgid "Skupina"
-msgstr ""
+msgstr "Group"
 
 msgctxt "results.group"
 msgid "Předchozí hra"
-msgstr ""
+msgstr "Previous game"
 
 msgctxt "results.group"
 msgid "Následující hra"
-msgstr ""
+msgstr "Next game"
 
 msgctxt "cli.help.arguments"
 msgid "A language directory from the other project."
-msgstr ""
+msgstr "A language directory from the other project."
 
 msgctxt "cli.help.arguments"
 msgid "A comma separated list of context names to skip while merging."
-msgstr ""
+msgstr "A comma separated list of context names to skip while merging."
 

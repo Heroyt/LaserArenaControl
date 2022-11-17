@@ -63,18 +63,23 @@ msgctxt "debugPanel"
 msgid "Takes"
 msgstr "Trvání"
 
+# /templates/../vendor/lsr/helpers/templates/Translation/tab.latte:27
+# /templates/../vendor/lsr/helpers/templates/Translation/panel.latte:3
 msgctxt "debugPanel"
 msgid "Translations"
 msgstr "Překlady"
 
+# /templates/../vendor/lsr/helpers/templates/Translation/panel.latte:6
 msgctxt "debugPanel"
 msgid "Language"
 msgstr "Jazyk"
 
+# /templates/../vendor/lsr/helpers/templates/Translation/panel.latte:10
 msgctxt "debugPanel"
 msgid "HTTP header"
 msgstr "HTTP hlavička"
 
+# /templates/../vendor/lsr/helpers/templates/Translation/panel.latte:16
 msgctxt "debugPanel"
 msgid "Translated strings"
 msgstr "Přeložené řetězcce"
@@ -1367,6 +1372,7 @@ msgctxt "debugPanel"
 msgid "Invalid cache class"
 msgstr "Neplatná třída mezipaměti"
 
+# /templates/../vendor/lsr/helpers/templates/Caching/tab.latte:28
 msgctxt "debugPanel"
 msgid "%d call"
 msgid_plural "%d calls"
@@ -2259,3 +2265,74 @@ msgstr "Uvolnit"
 msgid "Bez stolu"
 msgstr "Bez stolu"
 
+msgid "Filtry"
+msgstr ""
+
+msgctxt "actions"
+msgid "Filtrovat"
+msgstr ""
+
+msgid "Hráči"
+msgstr ""
+
+msgid "Průměrné ohodnocení hráče"
+msgstr ""
+
+msgid "Oblíbená vesta"
+msgstr ""
+
+msgid "Odehráno her"
+msgstr ""
+
+msgid "Průměrné skóre"
+msgstr ""
+
+msgid "Celkové skóre"
+msgstr ""
+
+msgid "Průměrný počet výstřelů"
+msgstr ""
+
+msgid "Celkem výstřelů"
+msgstr ""
+
+msgid "Průměrný počet zásahů"
+msgstr ""
+
+msgid "Celkem zásahů"
+msgstr ""
+
+msgid "Průměrný počet smrtí"
+msgstr ""
+
+msgid "Celkem smrtí"
+msgstr ""
+
+msgid "K:D"
+msgstr ""
+
+msgid "Výsledky"
+msgstr ""
+
+msgid "Hry"
+msgstr ""
+
+msgctxt "results.info"
+msgid "Skupina"
+msgstr ""
+
+msgctxt "results.group"
+msgid "Předchozí hra"
+msgstr ""
+
+msgctxt "results.group"
+msgid "Následující hra"
+msgstr ""
+
+msgctxt "cli.help.arguments"
+msgid "A language directory from the other project."
+msgstr ""
+
+msgctxt "cli.help.arguments"
+msgid "A comma separated list of context names to skip while merging."
+msgstr ""

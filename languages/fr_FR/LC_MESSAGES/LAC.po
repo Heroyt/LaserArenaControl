@@ -2169,3 +2169,84 @@ msgstr ""
 
 msgid "Skupina"
 msgstr ""
+
+msgid "Hromadné akce"
+msgstr ""
+
+msgid "Vybrat skupinu"
+msgstr ""
+
+msgid "Název skupiny"
+msgstr ""
+
+msgid "Cache"
+msgstr ""
+
+msgctxt "settings"
+msgid "Cache"
+msgstr ""
+
+msgctxt "actions"
+msgid "Smazat systémovou cache"
+msgstr ""
+
+msgctxt "actions"
+msgid "Smazat DI cache"
+msgstr ""
+
+msgctxt "actions"
+msgid "Smazat cache výsledků"
+msgstr ""
+
+msgctxt "actions"
+msgid "Smazat cache šablon"
+msgstr ""
+
+msgid "Tables"
+msgstr ""
+
+msgctxt "settings"
+msgid "Tables"
+msgstr ""
+
+msgid "Name"
+msgstr ""
+
+msgid "Pozice"
+msgstr ""
+
+msgid "Sloupec"
+msgstr ""
+
+msgid "Řádek"
+msgstr ""
+
+msgid "Šířka"
+msgstr ""
+
+msgid "Výška"
+msgstr ""
+
+msgid "Úspěšně uloženo"
+msgstr ""
+
+msgid "Nový stůl"
+msgstr ""
+
+msgid "Stůl"
+msgstr ""
+
+msgid "Úspěšně vytvořeno"
+msgstr ""
+
+msgid "Stoly"
+msgstr ""
+
+msgid "Vybrat"
+msgstr ""
+
+msgid "Uvolnit"
+msgstr ""
+
+msgid "Bez stolu"
+msgstr ""

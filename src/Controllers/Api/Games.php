@@ -40,6 +40,7 @@ class Games extends ApiController
 	 * @param Request $request
 	 *
 	 * @return never
+	 * @throws DirectoryCreationException
 	 * @throws JsonException
 	 * @throws ModelNotFoundException
 	 */
@@ -103,7 +104,7 @@ class Games extends ApiController
 				$query->desc();
 			}
 		}
-		$games = $query->fetchAll();
+		$games = $query->fetchAll(cache: false);
 		if (!empty($request->get['expand'])) {
 			$objects = [];
 			foreach ($games as $row) {

@@ -55,7 +55,7 @@ class LMXController
 		$timeout = self::COMMAND_TIMEOUTS[$command] ?? self::DEFAULT_TIMEOUT;
 		$fp = @fsockopen($ip, self::PORT, $errno, $errstr, $timeout);
 		if (!$fp) {
-			throw new ConnectionTimeoutException(lang('Nepodařilo se připojit k TCP serveru ('.$ip.':'.self::PORT.'). '.$errstr.' ('.$errno.')'), $errno, $timeout);
+			throw new ConnectionTimeoutException(sprintf(lang('Nepodařilo se připojit k TCP serveru (%s:%d).'), $ip, self::PORT).' '.$errstr.' ('.$errno.')', $errno, $timeout);
 		}
 		fwrite($fp, $command.':'.$parameters);
 		$response = '';

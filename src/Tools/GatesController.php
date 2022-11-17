@@ -44,7 +44,7 @@ class GatesController
 		}
 		$res = socket_connect($sock, $ip, self::PORT);
 		if ($res === false) {
-			throw new RuntimeException(lang('Nepodařilo se připojit k socket serveru ('.$ip.':'.self::PORT.').'));
+			throw new RuntimeException(sprintf(lang('Nepodařilo se připojit k socket serveru (%s:%d).'), $ip, self::PORT));
 		}
 		$a = socket_write($sock, $command, 5);
 		socket_close($sock);

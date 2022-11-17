@@ -2151,18 +2151,6 @@ msgctxt "help"
 msgid "Přepne na předchozího hráče."
 msgstr ""
 
-msgid "Nepodařilo se připojit k TCP serveru (192.168.50.3:8081). Operation timed out (60)"
-msgstr ""
-
-msgid "Nepodařilo se připojit k TCP serveru (192.168.50.3:8081). Network is unreachable (51)"
-msgstr ""
-
-msgid "Nepodařilo se připojit k TCP serveru (192.168.50.3:8081). Connection timed out (110)"
-msgstr ""
-
-msgid "Nepodařilo se připojit k TCP serveru (192.168.50.3:8081). Connection refused (111)"
-msgstr ""
-
 msgid "Veřejný"
 msgstr ""
 

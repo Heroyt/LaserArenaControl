@@ -8,9 +8,11 @@
 {varType App\GameModels\Game\Game|null $loadGame}
 {varType App\Models\MusicMode[] $musicModes}
 {varType App\Models\GameGroup[] $groups}
+{varType App\Models\Table[] $tables}
 
 {import 'helpers/help.latte'}
 {import 'helpers/groups.latte'}
+{import 'helpers/tables.latte'}
 
 {block content}
 	<form method="post" action="" id="new-game-content" class="w-100">
@@ -39,6 +41,7 @@
 	{include scoreDownloadModal}
 	{include help}
 	{include groups}
+	{include tables}
 	<script>
 		const messages = {
 			missingShuffleTeam: '{lang 'Musíte vybrat alespoň 2 týmy.', context: 'errors'}',
@@ -99,6 +102,13 @@
 
 {define sectionVests}
 	<div class="d-flex justify-content-end align-items-center">
+		<div class="form-floating mx-2">
+			<select name="tableSelect" id="table-select" class="form-select">
+				<option value="">{lang 'Bez stolu'}</option>
+				<option n:foreach="$tables as $table" value="{$table->id}">{$table->name}</option>
+			</select>
+			<label for="table-select">{lang 'Stůl'}</label>
+		</div>
 		<div class="form-floating mx-2">
 			<select name="groupSelect" id="group-select" class="form-select">
 				<option value="">{lang 'Bez skupiny'}</option>

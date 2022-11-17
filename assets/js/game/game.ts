@@ -30,6 +30,7 @@ export default class Game {
 	teams: Map<String, Team>;
 
 	$group: HTMLSelectElement;
+	$table: HTMLSelectElement;
 
 	$gameMode: HTMLSelectElement;
 	$musicMode: HTMLSelectElement;
@@ -68,6 +69,7 @@ export default class Game {
 		this.teams = new Map;
 
 		this.$group = document.getElementById('group-select') as HTMLSelectElement;
+		this.$table = document.getElementById('table-select') as HTMLSelectElement;
 
 		this.$gameMode = document.getElementById('game-mode-select') as HTMLSelectElement;
 		this.$musicMode = document.getElementById('music-select') as HTMLSelectElement;
@@ -651,6 +653,7 @@ export default class Game {
 		}
 		if (data.group) {
 			this.$group.value = data.group.id.toString();
+			//console.log('group value', data.group.id.toString(), this.$group.value);
 
 			// If the group is currently not active, it can still be loaded back.
 			// In that case an option should be appended because the group still exists, it's just not visible.
@@ -660,9 +663,15 @@ export default class Game {
 				option.innerText = data.group.name;
 				this.$group.appendChild(option);
 				this.$group.value = data.group.id.toString();
+				//console.log('created option', option, this.$group.value);
 			}
 		} else {
 			this.$group.value = '';
+		}
+		if (data.table) {
+			this.$table.value = data.table.id.toString();
+		} else {
+			this.$table.value = '';
 		}
 		this.$group.dispatchEvent(e);
 	}
@@ -705,6 +714,13 @@ export default class Game {
 				id: parseInt(this.$group.value),
 				name: (this.$group.querySelector(`option[value="${this.$group.value}"]`) as HTMLOptionElement).innerText,
 				active: true,
+			};
+		}
+
+		if (this.$table.value !== '') {
+			data.table = {
+				id: parseInt(this.$table.value),
+				name: (this.$table.querySelector(`option[value="${this.$table.value}"]`) as HTMLOptionElement).innerText,
 			};
 		}
 

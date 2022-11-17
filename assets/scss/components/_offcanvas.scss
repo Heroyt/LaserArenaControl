@@ -26,6 +26,7 @@
 		display: inline-block;
 		padding: var(--tag-padding-y, 0) var(--tag-padding-x, 1rem);
 		position: relative;
+		width: var(--tag-width, 7rem);
 	}
 }
 
@@ -47,7 +48,7 @@
 			rotate: -90deg;
 			top: 50%;
 			transform-origin: center;
-			translate: calc((var(--tag-height, 2rem) - 6rem) / 2) -50%;
+			translate: calc((var(--tag-height, 2rem) - 8rem) / 2) -50%;
 		}
 	}
 }
@@ -64,7 +65,7 @@
 			rotate: 90deg;
 			top: 50%;
 			transform-origin: center;
-			translate: calc((6rem - var(--tag-height, 2rem)) / 2) -50%;
+			translate: calc((8rem - var(--tag-height, 2rem)) / 2) -50%;
 		}
 	}
 }

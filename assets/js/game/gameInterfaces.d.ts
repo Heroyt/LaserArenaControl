@@ -50,6 +50,7 @@ export interface GameData {
 	teams: { [index: string]: TeamData },
 	music: MusicMode | null,
 	group?: GameGroupData,
+	table?: TableData,
 }
 
 interface ModeSettings {
@@ -94,6 +95,18 @@ interface GameGroupData {
 	name: string,
 	active?: boolean,
 	players?: { [index: string]: PlayerData },
+}
+
+interface TableData {
+	id: number,
+	name: string,
+	group?: GameGroupData | null,
+	grid?: {
+		row: number,
+		col: number,
+		width: number,
+		height: number,
+	}
 }
 
 interface GameMode {

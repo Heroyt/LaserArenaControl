@@ -10,6 +10,7 @@ use App\GameModels\Game\GameModes\CustomLoadMode;
 use App\GameModels\Vest;
 use App\Models\GameGroup;
 use App\Models\MusicMode;
+use App\Models\Table;
 use JsonException;
 use Lsr\Core\App;
 use Lsr\Core\Controller;
@@ -45,6 +46,25 @@ class NewGame extends Controller
 		$this->params['gameModes'] = GameModeFactory::getAll(['system' => $this->params['system']]);
 		$this->params['musicModes'] = MusicMode::getAll();
 		$this->params['groups'] = GameGroup::getActive();
+		$this->params['tables'] = Table::getAll();
+		$this->params['tablesCols'] = 1;
+		$this->params['tablesRows'] = 1;
+		foreach ($this->params['tables'] as $table) {
+			$endCol = $table->grid->col + $table->grid->width - 1;
+			if ($this->params['tablesCols'] < $endCol) {
+				$this->params['tablesCols'] = $endCol;
+			}
+			$endRow = $table->grid->row + $table->grid->height - 1;
+			if ($this->params['tablesRows'] < $endRow) {
+				$this->params['tablesRows'] = $endRow;
+			}
+		}
+		usort($this->params['tables'], static function(Table $tableA, Table $tableB) {
+			if (is_numeric($tableA->name) && is_numeric($tableB->name)) {
+				return (int) $tableA->name - (int) $tableB->name;
+			}
+			return strcmp($tableA->name, $tableB->name);
+		});
 		$this->view('pages/new-game/index');
 	}
 

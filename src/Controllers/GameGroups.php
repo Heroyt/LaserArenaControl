@@ -31,6 +31,18 @@ class GameGroups extends Controller
 		$this->respond($data);
 	}
 
+	#[Get('/gameGroups/{id}')]
+	public function getGroup(Request $request) : never {
+		try {
+			$group = GameGroup::get((int) ($request->params['id'] ?? 0));
+		} catch (ModelNotFoundException|ValidationException|DirectoryCreationException $e) {
+			$this->respond(['error' => 'Model not found', 'exception' => $e->getMessage()], 404);
+		}
+		$groupData = $group->jsonSerialize();
+		$groupData['players'] = $group->getPlayers();
+		$this->respond($groupData);
+	}
+
 	/**
 	 * @param Request $request
 	 *

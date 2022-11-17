@@ -1,0 +1,45 @@
+{varType App\Models\Table[] $tables}
+{varType int $tablesCols}
+{varType int $tablesRows}
+
+{define tables}
+	<div class="offcanvas offcanvas-end border-purple-600 visible" tabindex="-1" id="tables"
+		 style="--bs-offcanvas-width: min(800px, calc(100vw - 3rem));"
+		 aria-labelledby="tablesLabel">
+		<div class="offcanvas-tag bg-purple-600 text-bg-purple-600" data-bs-toggle="offcanvas" data-bs-target="#tables"
+			 style="--order: 1;">
+			<span>
+				{lang 'Stoly'}
+			</span>
+		</div>
+		<div class="offcanvas-header">
+			<h5 class="offcanvas-title" id="tablesLabel">{lang 'Stoly'}</h5>
+			<button type="button" class="btn btn-link" data-bs-dismiss="offcanvas" aria-label="Close">
+				<i class="fa-solid fa-xmark"></i>
+			</button>
+		</div>
+		<div class="offcanvas-body w-100 h-100" id="game-tables">
+			<div class=" w-100 resizable-grid"
+				 style="--cols: {$tablesCols}; --rows: {$tablesRows}; min-height: 600px;">
+				{foreach $tables as $table}
+					{include gameTableCard, $table}
+				{/foreach}
+			</div>
+		</div>
+	</div>
+{/define}
+
+{define gameTableCard, App\Models\Table $table}
+	{var string $color = isset($table->group) ? 'purple-600' : 'purple-400'}
+	<div class="card game-table text-center bg-{$color} text-bg-{$color} cursor-pointer" data-id="{$table->id}"
+		 {ifset $table->group}data-group="{$table->group->id}"{/ifset}
+		 style="grid-column: {$table->grid->col} / span {$table->grid->width}; grid-row: {$table->grid->row} / span {$table->grid->height}; max-height: {8 * $table->grid->height}rem;">
+		<div class="card-body d-flex flex-column justify-content-center align-items-center">
+			<h5>{$table->name}</h5>
+			<button type="button" data-toggle="tooltip" title="{lang 'Uvolnit'}"
+					class="btn btn-danger clean {if !isset($table->group)}d-none{/if}">
+				<i class="fa-solid fa-soap"></i>
+			</button>
+		</div>
+	</div>
+{/define}

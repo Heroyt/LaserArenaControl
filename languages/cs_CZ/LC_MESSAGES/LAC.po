@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: Czech\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2022-09-30 16:05\n"
+"PO-Revision-Date: 2022-11-17 12:50\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=4; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 3;\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -2152,109 +2152,110 @@ msgid "Přepne na předchozího hráče."
 msgstr "Přepne na předchozího hráče."
 
 msgid "Veřejný"
-msgstr ""
+msgstr "Veřejný"
 
 msgid "Začátek ukázky"
-msgstr ""
+msgstr "Začátek ukázky"
 
 msgid "Skupiny"
-msgstr ""
+msgstr "Skupiny"
 
 msgid "Zobrazit hráče skupiny"
-msgstr ""
+msgstr "Zobrazit hráče skupiny"
 
 msgid "Nahrát na vesty"
-msgstr ""
+msgstr "Nahrát na vesty"
 
 msgid "Deaktivovat"
-msgstr ""
+msgstr "Deaktivovat"
 
 msgid "Bez skupiny"
-msgstr ""
+msgstr "Bez skupiny"
 
 msgid "Nová skupina"
-msgstr ""
+msgstr "Nová skupina"
 
 msgid "Skupina"
-msgstr ""
+msgstr "Skupina"
 
 msgid "Hromadné akce"
-msgstr ""
+msgstr "Hromadné akce"
 
 msgid "Vybrat skupinu"
-msgstr ""
+msgstr "Vybrat skupinu"
 
 msgid "Název skupiny"
-msgstr ""
+msgstr "Název skupiny"
 
 msgid "Cache"
-msgstr ""
+msgstr "Mezipaměť"
 
 msgctxt "settings"
 msgid "Cache"
-msgstr ""
+msgstr "Mezipaměť"
 
 msgctxt "actions"
 msgid "Smazat systémovou cache"
-msgstr ""
+msgstr "Smazat systémovou mezipaměť"
 
 msgctxt "actions"
 msgid "Smazat DI cache"
-msgstr ""
+msgstr "Smazat DI cache"
 
 msgctxt "actions"
 msgid "Smazat cache výsledků"
-msgstr ""
+msgstr "Smazat cache výsledků"
 
 msgctxt "actions"
 msgid "Smazat cache šablon"
-msgstr ""
+msgstr "Smazat cache šablon"
 
 msgid "Tables"
-msgstr ""
+msgstr "Stoly"
 
 msgctxt "settings"
 msgid "Tables"
-msgstr ""
+msgstr "Stoly"
 
 msgid "Name"
-msgstr ""
+msgstr "Název"
 
 msgid "Pozice"
-msgstr ""
+msgstr "Pozice"
 
 msgid "Sloupec"
-msgstr ""
+msgstr "Sloupec"
 
 msgid "Řádek"
-msgstr ""
+msgstr "Řádek"
 
 msgid "Šířka"
-msgstr ""
+msgstr "Šířka"
 
 msgid "Výška"
-msgstr ""
+msgstr "Výška"
 
 msgid "Úspěšně uloženo"
-msgstr ""
+msgstr "Úspěšně uloženo"
 
 msgid "Nový stůl"
-msgstr ""
+msgstr "Nový stůl"
 
 msgid "Stůl"
-msgstr ""
+msgstr "Stůl"
 
 msgid "Úspěšně vytvořeno"
-msgstr ""
+msgstr "Úspěšně vytvořeno"
 
 msgid "Stoly"
-msgstr ""
+msgstr "Stoly"
 
 msgid "Vybrat"
-msgstr ""
+msgstr "Vybrat"
 
 msgid "Uvolnit"
-msgstr ""
+msgstr "Uvolnit"
 
 msgid "Bez stolu"
-msgstr ""
+msgstr "Bez stolu"
+

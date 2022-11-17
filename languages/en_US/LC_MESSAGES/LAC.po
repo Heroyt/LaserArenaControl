@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: English\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2022-09-30 16:05\n"
+"PO-Revision-Date: 2022-11-17 12:50\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -2132,109 +2132,110 @@ msgid "Přepne na předchozího hráče."
 msgstr "Switches to the previous player."
 
 msgid "Veřejný"
-msgstr ""
+msgstr "Public"
 
 msgid "Začátek ukázky"
-msgstr ""
+msgstr "The beginning of the sample"
 
 msgid "Skupiny"
-msgstr ""
+msgstr "Groups"
 
 msgid "Zobrazit hráče skupiny"
-msgstr ""
+msgstr "Show group players"
 
 msgid "Nahrát na vesty"
-msgstr ""
+msgstr "Load on vests"
 
 msgid "Deaktivovat"
-msgstr ""
+msgstr "Disable"
 
 msgid "Bez skupiny"
-msgstr ""
+msgstr "No group"
 
 msgid "Nová skupina"
-msgstr ""
+msgstr "New group"
 
 msgid "Skupina"
-msgstr ""
+msgstr "Group"
 
 msgid "Hromadné akce"
-msgstr ""
+msgstr "Bulk actions"
 
 msgid "Vybrat skupinu"
-msgstr ""
+msgstr "Choose a group"
 
 msgid "Název skupiny"
-msgstr ""
+msgstr "Group name"
 
 msgid "Cache"
-msgstr ""
+msgstr "Cache"
 
 msgctxt "settings"
 msgid "Cache"
-msgstr ""
+msgstr "Cache"
 
 msgctxt "actions"
 msgid "Smazat systémovou cache"
-msgstr ""
+msgstr "Clear system cache"
 
 msgctxt "actions"
 msgid "Smazat DI cache"
-msgstr ""
+msgstr "Clear DI cache"
 
 msgctxt "actions"
 msgid "Smazat cache výsledků"
-msgstr ""
+msgstr "Clear results cache"
 
 msgctxt "actions"
 msgid "Smazat cache šablon"
-msgstr ""
+msgstr "Clear template cache"
 
 msgid "Tables"
-msgstr ""
+msgstr "Tables"
 
 msgctxt "settings"
 msgid "Tables"
-msgstr ""
+msgstr "Tables"
 
 msgid "Name"
-msgstr ""
+msgstr "Name"
 
 msgid "Pozice"
-msgstr ""
+msgstr "Position"
 
 msgid "Sloupec"
-msgstr ""
+msgstr "Column"
 
 msgid "Řádek"
-msgstr ""
+msgstr "Row"
 
 msgid "Šířka"
-msgstr ""
+msgstr "Width"
 
 msgid "Výška"
-msgstr ""
+msgstr "Height"
 
 msgid "Úspěšně uloženo"
-msgstr ""
+msgstr "Saved successfully"
 
 msgid "Nový stůl"
-msgstr ""
+msgstr "New table"
 
 msgid "Stůl"
-msgstr ""
+msgstr "Table"
 
 msgid "Úspěšně vytvořeno"
-msgstr ""
+msgstr "Created successfully"
 
 msgid "Stoly"
-msgstr ""
+msgstr "Tables"
 
 msgid "Vybrat"
-msgstr ""
+msgstr "Choose"
 
 msgid "Uvolnit"
-msgstr ""
+msgstr "Clear"
 
 msgid "Bez stolu"
-msgstr ""
+msgstr "No table"
+

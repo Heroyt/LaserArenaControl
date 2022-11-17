@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: Czech\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2022-11-17 13:04\n"
+"PO-Revision-Date: 2022-11-17 13:19\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=4; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 3;\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -82,7 +82,7 @@ msgstr "HTTP hlavička"
 # /templates/../vendor/lsr/helpers/templates/Translation/panel.latte:16
 msgctxt "debugPanel"
 msgid "Translated strings"
-msgstr "Přeložené řetězcce"
+msgstr "Přeložené řetězce"
 
 msgctxt "debugPanel"
 msgid "Added a new string"
@@ -2266,74 +2266,74 @@ msgid "Bez stolu"
 msgstr "Bez stolu"
 
 msgid "Filtry"
-msgstr ""
+msgstr "Filtry"
 
 msgctxt "actions"
 msgid "Filtrovat"
-msgstr ""
+msgstr "Filtrovat"
 
 msgid "Hráči"
-msgstr ""
+msgstr "Hráči"
 
 msgid "Průměrné ohodnocení hráče"
-msgstr ""
+msgstr "Průměrné ohodnocení hráče"
 
 msgid "Oblíbená vesta"
-msgstr ""
+msgstr "Oblíbená vesta"
 
 msgid "Odehráno her"
-msgstr ""
+msgstr "Odehráno her"
 
 msgid "Průměrné skóre"
-msgstr ""
+msgstr "Průměrné skóre"
 
 msgid "Celkové skóre"
-msgstr ""
+msgstr "Celkové skóre"
 
 msgid "Průměrný počet výstřelů"
-msgstr ""
+msgstr "Průměrný počet výstřelů"
 
 msgid "Celkem výstřelů"
-msgstr ""
+msgstr "Celkem výstřelů"
 
 msgid "Průměrný počet zásahů"
-msgstr ""
+msgstr "Průměrný počet zásahů"
 
 msgid "Celkem zásahů"
-msgstr ""
+msgstr "Celkem zásahů"
 
 msgid "Průměrný počet smrtí"
-msgstr ""
+msgstr "Průměrný počet smrtí"
 
 msgid "Celkem smrtí"
-msgstr ""
+msgstr "Celkem smrtí"
 
 msgid "K:D"
-msgstr ""
+msgstr "K:D"
 
 msgid "Výsledky"
-msgstr ""
+msgstr "Výsledky"
 
 msgid "Hry"
-msgstr ""
+msgstr "Hry"
 
 msgctxt "results.info"
 msgid "Skupina"
-msgstr ""
+msgstr "Skupina"
 
 msgctxt "results.group"
 msgid "Předchozí hra"
-msgstr ""
+msgstr "Předchozí hra"
 
 msgctxt "results.group"
 msgid "Následující hra"
-msgstr ""
+msgstr "Následující hra"
 
 msgctxt "cli.help.arguments"
 msgid "A language directory from the other project."
-msgstr ""
+msgstr "Adresář překladů z jiného projektu."
 
 msgctxt "cli.help.arguments"
 msgid "A comma separated list of context names to skip while merging."
-msgstr ""
+msgstr "Čárkou oddělený seznam kontextových jmen pro přeskočení při sloučení."
 

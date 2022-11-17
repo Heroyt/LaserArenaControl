@@ -2,9 +2,12 @@
 /**
  * @author Tomáš Vojík <xvojik00@stud.fit.vutbr.cz>, <vojik@wboy.cz>
  */
+
 namespace App\Core;
 
 use Dibi\Exception;
+use Lsr\Core\App;
+use Lsr\Core\Caching\Cache;
 use Lsr\Core\DB;
 
 /**
@@ -30,7 +33,10 @@ class Info
 			return self::$info[$key];
 		}
 		/** @var string|null $value */
-		$value = DB::select(self::TABLE, '[value]')->where('[key] = %s', $key)->fetchSingle();
+		$value = DB::select(self::TABLE, '[value]')
+							 ->where('[key] = %s', $key)
+							 ->cacheTags('info', 'info/'.$key)
+							 ->fetchSingle();
 		if (!isset($value)) {
 			return $default;
 		}
@@ -56,6 +62,9 @@ class Info
 				'value' => serialize($value),
 			]
 		]);
+		/** @var Cache $cache */
+		$cache = App::getService('cache');
+		$cache->clean([Cache::Tags => ['info/'.$key]]);
 	}
 
 }

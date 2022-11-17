@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: French\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2022-11-17 15:39\n"
+"PO-Revision-Date: 2022-11-17 16:41\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -1450,11 +1450,11 @@ msgstr "Aléatoirement"
 
 msgctxt "actions"
 msgid "Náhodně fér"
-msgstr ""
+msgstr "Randomiser équitablement"
 
 msgctxt "game"
 msgid "Týmy"
-msgstr ""
+msgstr "Équipes"
 
 msgctxt "team.names"
 msgid "Red team"
@@ -1490,7 +1490,7 @@ msgstr ""
 
 msgctxt "game"
 msgid "Poslední hry"
-msgstr ""
+msgstr "Derniers jeux"
 
 msgctxt "game.select"
 msgid "Vybrat hru"
@@ -1530,19 +1530,19 @@ msgstr "Musique"
 
 msgctxt "game"
 msgid "Hudební módy"
-msgstr ""
+msgstr "Modes de musique"
 
 msgctxt "actions"
 msgid "Upload"
-msgstr ""
+msgstr "Envoyer"
 
 msgctxt "form"
 msgid "Saved successfully"
-msgstr ""
+msgstr "Sauvegarde réussie"
 
 msgctxt "errors"
 msgid "No file uploaded"
-msgstr ""
+msgstr "Aucun fichier envoyé"
 
 msgctxt "errors"
 msgid "Error while uploading a file."
@@ -1554,7 +1554,7 @@ msgstr ""
 
 msgctxt "actions"
 msgid "Smazat"
-msgstr ""
+msgstr "Supprimer"
 
 msgctxt "errors"
 msgid "Failed to delete the music file"
@@ -1562,19 +1562,19 @@ msgstr ""
 
 msgctxt "actions"
 msgid "Uložit"
-msgstr ""
+msgstr "Sauvegarder"
 
 msgctxt "actions"
 msgid "Save"
-msgstr ""
+msgstr "Sauvegarder"
 
 msgctxt "actions"
 msgid "Přehrát"
-msgstr ""
+msgstr "Jouer"
 
 msgctxt "actions"
 msgid "Zastavit"
-msgstr ""
+msgstr "Arrêter"
 
 msgctxt "game.player"
 msgid "Maximální herní úroveň"
@@ -1582,21 +1582,21 @@ msgstr ""
 
 msgctxt "actions"
 msgid "Smazat vše"
-msgstr ""
+msgstr "Supprimer tous"
 
 msgid "Název"
-msgstr ""
+msgstr "Nom"
 
 msgid "Název v konzoli"
 msgstr ""
 
 msgctxt "actions"
 msgid "Odeslat"
-msgstr ""
+msgstr "Envoyer"
 
 msgctxt "game.modes"
 msgid "Upravit variace"
-msgstr ""
+msgstr "Modification"
 
 msgctxt "game.modes"
 msgid "Upravit zobrazení výsledků"
@@ -1604,15 +1604,15 @@ msgstr ""
 
 msgctxt "game.modes"
 msgid "Variace módu"
-msgstr ""
+msgstr "Variations de mode"
 
 msgctxt "game.modes"
 msgid "Název variace"
-msgstr ""
+msgstr "Nom de variation"
 
 msgctxt "game.modes"
 msgid "Hodnota variace"
-msgstr ""
+msgstr "Valuer de variation"
 
 msgctxt "game.modes"
 msgid "Přípona variace k módu v konzoli"
@@ -1624,11 +1624,11 @@ msgstr ""
 
 msgctxt "actions"
 msgid "Přidat"
-msgstr ""
+msgstr "Ajouter"
 
 msgctxt "actions"
 msgid "Vytvořit"
-msgstr ""
+msgstr "Créer"
 
 msgctxt "game.modes"
 msgid "Nová variace"
@@ -1652,7 +1652,7 @@ msgstr ""
 
 msgctxt "game.modes.settings"
 msgid "Veřejný"
-msgstr ""
+msgstr "Public"
 
 msgctxt "game.modes.settings"
 msgid "Pokud má být herní mód zobrazován veřejně v rozhraní pro zadání hry hráči (na tabletu)."
@@ -1676,7 +1676,7 @@ msgstr ""
 
 msgctxt "game.modes.settings"
 msgid "Týmy"
-msgstr ""
+msgstr "Équipes"
 
 msgctxt "game.modes.settings"
 msgid "Pokud se má zobrazovat část \"Týmy\"."
@@ -1684,7 +1684,7 @@ msgstr ""
 
 msgctxt "game.modes.settings"
 msgid "Hráči"
-msgstr ""
+msgstr "Joueurs"
 
 msgctxt "game.modes.settings"
 msgid "Pokud se má zobrazovat část \"Hráči\"."
@@ -1700,7 +1700,7 @@ msgstr ""
 
 msgctxt "game.modes.settings"
 msgid "Ti nej"
-msgstr ""
+msgstr "Les meilleurs"
 
 msgctxt "game.modes.settings"
 msgid "Pokud se má zobrazovat část \"Ti nej\"."
@@ -1716,7 +1716,7 @@ msgstr ""
 
 msgctxt "game.modes.settings"
 msgid "Skóre hráče"
-msgstr ""
+msgstr "Score de joueur"
 
 msgctxt "game.modes.settings"
 msgid "Pokud se má zobrazovat skóre u jednotlivých hráčů."
@@ -1796,7 +1796,7 @@ msgstr ""
 
 msgctxt "game.modes.settings"
 msgid "Skóre týmu"
-msgstr ""
+msgstr "Score de l'équipe"
 
 msgctxt "game.modes.settings"
 msgid "Pokud se má zobrazovat skóre u jednotlivých týmů."
@@ -1931,10 +1931,10 @@ msgstr ""
 
 msgctxt "game.modes"
 msgid "Popis"
-msgstr ""
+msgstr "Description"
 
 msgid "Popis"
-msgstr ""
+msgstr "Description"
 
 msgctxt "gameModes"
 msgid "Klasická týmová hra."
@@ -1977,7 +1977,7 @@ msgstr ""
 
 msgctxt "gameModes"
 msgid "Test"
-msgstr ""
+msgstr "Test"
 
 msgctxt "gameModes"
 msgid "Test - solo"
@@ -2022,7 +2022,7 @@ msgid "Synchronizovat on-line"
 msgstr ""
 
 msgid "Nápověda"
-msgstr ""
+msgstr "Aide"
 
 msgctxt "help"
 msgid "Klávesové zkratky"
@@ -2030,7 +2030,7 @@ msgstr ""
 
 msgctxt "help.keys"
 msgid "Enter"
-msgstr ""
+msgstr "Enter"
 
 msgctxt "help"
 msgid "Odeslat formulář. Nahraje / Spustí hru."
@@ -2038,11 +2038,11 @@ msgstr ""
 
 msgctxt "help.keys"
 msgid "Mezerník"
-msgstr ""
+msgstr "Barre d'espacement"
 
 msgctxt "help.keys"
 msgid "CTRL"
-msgstr ""
+msgstr "CTRL"
 
 msgctxt "help.keys"
 msgid "Backspace"
@@ -2063,11 +2063,11 @@ msgstr ""
 
 msgctxt "actions"
 msgid "Opakovat"
-msgstr ""
+msgstr "Réessayer"
 
 msgctxt "actions"
 msgid "Zrušit"
-msgstr ""
+msgstr "Annuler"
 
 msgctxt "modes.settings"
 msgid "Skryté náhodné týmy"
@@ -2123,7 +2123,7 @@ msgstr ""
 
 msgctxt "help.keys"
 msgid "TAB"
-msgstr ""
+msgstr "TAB"
 
 msgctxt "help"
 msgid "Přepne na dalšího hráče."
@@ -2131,20 +2131,20 @@ msgstr ""
 
 msgctxt "help.keys"
 msgid "SHIFT"
-msgstr ""
+msgstr "SHIFT"
 
 msgctxt "help"
 msgid "Přepne na předchozího hráče."
 msgstr ""
 
 msgid "Veřejný"
-msgstr ""
+msgstr "Public"
 
 msgid "Začátek ukázky"
 msgstr ""
 
 msgid "Skupiny"
-msgstr ""
+msgstr "Groupes"
 
 msgid "Zobrazit hráče skupiny"
 msgstr ""
@@ -2153,10 +2153,10 @@ msgid "Nahrát na vesty"
 msgstr ""
 
 msgid "Deaktivovat"
-msgstr ""
+msgstr "Désactiver"
 
 msgid "Bez skupiny"
-msgstr ""
+msgstr "Sans groupe"
 
 msgid "Nová skupina"
 msgstr ""
@@ -2234,10 +2234,10 @@ msgid "Úspěšně vytvořeno"
 msgstr ""
 
 msgid "Stoly"
-msgstr ""
+msgstr "Tables"
 
 msgid "Vybrat"
-msgstr ""
+msgstr "Choisir"
 
 msgid "Uvolnit"
 msgstr ""
@@ -2246,14 +2246,14 @@ msgid "Bez stolu"
 msgstr ""
 
 msgid "Filtry"
-msgstr ""
+msgstr "Filtres"
 
 msgctxt "actions"
 msgid "Filtrovat"
-msgstr ""
+msgstr "Filtrer"
 
 msgid "Hráči"
-msgstr ""
+msgstr "Joueurs"
 
 msgid "Průměrné ohodnocení hráče"
 msgstr ""
@@ -2289,25 +2289,25 @@ msgid "Celkem smrtí"
 msgstr ""
 
 msgid "K:D"
-msgstr ""
+msgstr "K:D"
 
 msgid "Výsledky"
-msgstr ""
+msgstr "Résultats"
 
 msgid "Hry"
-msgstr ""
+msgstr "Jeux"
 
 msgctxt "results.info"
 msgid "Skupina"
-msgstr ""
+msgstr "Groupe"
 
 msgctxt "results.group"
 msgid "Předchozí hra"
-msgstr ""
+msgstr "Jeu précédent"
 
 msgctxt "results.group"
 msgid "Následující hra"
-msgstr ""
+msgstr "Jeu suivant"
 
 msgctxt "cli.help.arguments"
 msgid "A language directory from the other project."

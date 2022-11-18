@@ -507,6 +507,9 @@ class ResultsParser extends AbstractResultsParser
 							$game->group = $table->createGroup(date: $game->start);
 						}
 					}
+					else if (!isset($game->group)) {
+						$game->group = $table->group;
+					}
 				} catch (ModelNotFoundException) {
 					// Ignore
 				}

@@ -367,6 +367,9 @@ export default class Game {
 		this.$group.value = '';
 		this.$group.dispatchEvent(new Event('change', {bubbles: true}));
 
+		this.$table.value = '';
+		this.$table.dispatchEvent(new Event('change', {bubbles: true}));
+
 		const e = new Event('clear-all');
 		document.dispatchEvent(e);
 	}
@@ -673,6 +676,7 @@ export default class Game {
 		} else {
 			this.$table.value = '';
 		}
+		this.$table.dispatchEvent(e);
 		this.$group.dispatchEvent(e);
 	}
 

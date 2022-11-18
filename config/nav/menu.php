@@ -55,6 +55,10 @@ return [
 				'route' => 'settings-music',
 			],
 			[
+				'name'  => lang('Skupiny'),
+				'route' => 'settings-groups',
+			],
+			[
 				'name'  => lang('Tables'),
 				'route' => 'settings-tables',
 			],

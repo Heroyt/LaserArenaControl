@@ -10,6 +10,7 @@ use App\GameModels\Factory\GameFactory;
 use App\GameModels\Game\PrintStyle;
 use App\GameModels\Game\PrintTemplate;
 use App\GameModels\Vest;
+use App\Models\GameGroup;
 use App\Models\Table;
 use DateTime;
 use Dibi\DriverException;
@@ -304,6 +305,14 @@ class Settings extends Controller
 	#[Get('settings/cache', 'settings-cache')]
 	public function cache() : void {
 		$this->view('pages/settings/cache');
+	}
+
+	#[Get('settings/groups', 'settings-groups')]
+	public function group() : void {
+		$this->params['groupsActive'] = GameGroup::getActive();
+		$this->params['groupsInactive'] = GameGroup::query()->where('active = 0')->orderBy('id_group')->desc()->get();
+
+		$this->view('pages/settings/groups');
 	}
 
 	#[Get('settings/tables', 'settings-tables')]

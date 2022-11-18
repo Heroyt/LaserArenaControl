@@ -1,0 +1,42 @@
+{layout '../../@layout.latte'}
+
+{varType App\Models\GameGroup[] $groupsActive}
+{varType App\Models\GameGroup[] $groupsInactive}
+
+{block content}
+	<h2>{lang 'Skupiny', context: 'settings'}:</h2>
+	<div class="active-groups" id="active-groups">
+		{foreach $groupsActive as $id => $group}
+			{include groupCard, $id, $group}
+		{/foreach}
+	</div>
+	<h3>{lang 'Neaktivní skupiny', context: 'settings'}</h3>
+	<p>
+		<button type="button" data-bs-toggle="collapse" data-bs-target="#inactive-groups" class="btn btn-info">
+			{lang 'Zobrazit', context: 'actions'}
+		</button>
+	</p>
+	<div class="inactive-groups collapse" id="inactive-groups">
+		{foreach $groupsInactive as $id => $group}
+			{include groupCard, $id, $group}
+		{/foreach}
+	</div>
+{/block}
+
+{define groupCard, int $id, App\Models\GameGroup $group}
+	<div class="card game-group mb-4" data-id="{$id}" data-active="{$group->active ? '1' : '0'}">
+		<div class="card-body">
+			<div class="input-group">
+				<input type="text" value="{$group->name}" class="form-control fs-5 group-name" maxlength="100">
+				<button type="button" data-toggle="tooltip" title="{lang 'Deaktivovat', context: 'actions'}"
+						class="btn btn-danger delete {if !$group->active}d-none{/if}">
+					<i class="fa-solid fa-trash"></i>
+				</button>
+				<button type="button" data-toggle="tooltip" title="{lang 'Aktivovat', context: 'actions'}"
+						class="btn btn-success enable {if $group->active}d-none{/if}">
+					<i class="fa-solid fa-eye"></i>
+				</button>
+			</div>
+		</div>
+	</div>
+{/define}

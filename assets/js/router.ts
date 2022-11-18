@@ -47,6 +47,14 @@ export default function route(pageInfo: PageInfo): void {
 				module.default();
 			});
 			break;
+		case 'settings-groups':
+			import(
+				/* webpackChunkName: "settingsGroups" */
+				'./pages/settings/groups'
+				).then(module => {
+				module.default();
+			});
+			break;
 		case 'settings-tables':
 			import(
 				/* webpackChunkName: "settingsTables" */

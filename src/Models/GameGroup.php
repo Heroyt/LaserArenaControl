@@ -51,50 +51,39 @@ class GameGroup extends Model
 			return [];
 		}
 		if (empty($this->players)) {
-			/** @var Cache $cache */
-			$cache = App::getService('cache');
-			/** @phpstan-ignore-next-line */
-			$this->players = $cache->load('group/'.$this->id.'/players', function(array &$dependencies) use ($games) : array {
-				$dependencies[CacheParent::Tags] = [
-					'gameGroups',
-					'group/'.$this->id.'/players'
-				];
-				$dependencies[CacheParent::EXPIRE] = '1 months';
-				$players = [];
-				$playerSkills = [];
-				$playerVests = [];
-				foreach ($games as $game) {
-					/** @var Player $player */
-					foreach ($game->getPlayers() as $player) {
-						$asciiName = Strings::toAscii($player->name);
-						if (!isset($players[$asciiName])) {
-							$playerSkills[$asciiName] = [];
-							$players[$asciiName] = clone $player;
-							$playerVests[$asciiName] = [];
-						}
-						if ($players[$asciiName]->name === $asciiName && $player->name !== $asciiName) {
-							$players[$asciiName]->name = $player->name; // Prefer non-ascii (with diacritics) names
-						}
-						$playerSkills[$asciiName][] = $player->skill;
-						if (!isset($playerVests[$asciiName][$player->vest])) {
-							$playerVests[$asciiName][$player->vest] = 0;
-						}
-						$playerVests[$asciiName][$player->vest]++;
-					}
-				}
-
-				// Set player's skill as average
-				foreach ($players as $player) {
+			$players = [];
+			$playerSkills = [];
+			$playerVests = [];
+			foreach ($games as $game) {
+				/** @var Player $player */
+				foreach ($game->getPlayers() as $player) {
 					$asciiName = Strings::toAscii($player->name);
-					$player->skill = (int) round(array_sum($playerSkills[$asciiName]) / count($playerSkills[$asciiName]));
-					// Sort player vests by his use count
-					arsort($playerVests[$asciiName]);
-					$player->vest = array_key_first($playerVests[$asciiName]);
+					if (!isset($players[$asciiName])) {
+						$playerSkills[$asciiName] = [];
+						$players[$asciiName] = clone $player;
+						$playerVests[$asciiName] = [];
+					}
+					if ($players[$asciiName]->name === $asciiName && $player->name !== $asciiName) {
+						$players[$asciiName]->name = $player->name; // Prefer non-ascii (with diacritics) names
+					}
+					$playerSkills[$asciiName][] = $player->skill;
+					if (!isset($playerVests[$asciiName][$player->vest])) {
+						$playerVests[$asciiName][$player->vest] = 0;
+					}
+					$playerVests[$asciiName][$player->vest]++;
 				}
-				return $players;
-			});
+			}
+
+			// Set player's skill as average
+			foreach ($players as $player) {
+				$asciiName = Strings::toAscii($player->name);
+				$player->skill = (int) round(array_sum($playerSkills[$asciiName]) / count($playerSkills[$asciiName]));
+				// Sort player vests by his use count
+				arsort($playerVests[$asciiName]);
+				$player->vest = array_key_first($playerVests[$asciiName]);
+			}
+			$this->players = $players;
 		}
-		/** @phpstan-ignore-next-line */
 		return $this->players;
 	}
 

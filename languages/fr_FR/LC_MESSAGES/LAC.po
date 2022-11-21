@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: French\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2022-11-21 17:54\n"
+"PO-Revision-Date: 2022-11-21 18:53\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -125,7 +125,7 @@ msgstr "Nombre d’ équipes"
 
 msgctxt "results.scoring"
 msgid "Zásah protihráče"
-msgstr "Touché par un adversaire"
+msgstr "Frappé un adversaire"
 
 msgctxt "results.scoring"
 msgid "Zasažen protihráčem"
@@ -133,7 +133,7 @@ msgstr "Touché par adversaire"
 
 msgctxt "results.scoring"
 msgid "Zásah spoluhráče"
-msgstr "Touché par un allié"
+msgstr "Frappé un allié"
 
 msgctxt "results.scoring"
 msgid "Zasažen spouhráčem"
@@ -263,11 +263,11 @@ msgstr[1] "%d joueurs"
 
 msgctxt "results.hits"
 msgid "Zásahy hráčů"
-msgstr "Touché"
+msgstr "Coups de joueurs"
 
 msgctxt "results.hits"
 msgid "Zasáhl si hráče"
-msgstr "Tu as touché le"
+msgstr "Vous frappez un joueur"
 
 msgctxt "results.team"
 msgid "Výsledky týmů"
@@ -1033,7 +1033,7 @@ msgstr "Tirs"
 
 msgctxt "results"
 msgid "Zásahy"
-msgstr "Coupes"
+msgstr "Coups"
 
 msgctxt "results"
 msgid "Smrti"
@@ -1194,7 +1194,7 @@ msgstr "Tirs"
 
 msgctxt "results.info"
 msgid "Body za zásah"
-msgstr ""
+msgstr "Points par coup"
 
 msgctxt "results.info"
 msgid "Body za smrt"
@@ -1202,7 +1202,7 @@ msgstr "Points par morts"
 
 msgctxt "results.info"
 msgid "Body za zásah vlastního"
-msgstr "Points par touche de allié"
+msgstr "Points par touché par un allié"
 
 msgctxt "results.info"
 msgid "Body za smrt od vlastního hráče"
@@ -1222,7 +1222,7 @@ msgstr "Coups ratés"
 
 msgctxt "results.hits"
 msgid "Zásahy do hráčů"
-msgstr "Joueur frappe"
+msgstr "Coups de joueurs"
 
 msgctxt "results.hits"
 msgid "Smrti od hráčů"
@@ -1614,7 +1614,7 @@ msgstr ""
 
 msgctxt "game.modes"
 msgid "Existující variace"
-msgstr ""
+msgstr "Variations existantes"
 
 msgctxt "actions"
 msgid "Přidat"
@@ -1686,7 +1686,7 @@ msgstr ""
 
 msgctxt "game.modes.settings"
 msgid "Zásahy hráčů"
-msgstr ""
+msgstr "Coups de joueurs"
 
 msgctxt "game.modes.settings"
 msgid "Pokud se má zobrazovat část \"Zásahy hráčů\" (kdo koho zasáhl)."
@@ -1750,7 +1750,7 @@ msgstr ""
 
 msgctxt "game.modes.settings"
 msgid "Zásahy hráče"
-msgstr ""
+msgstr "Coups de joueur"
 
 msgctxt "game.modes.settings"
 msgid "Pokud se mají zobrazovat zásahy u jednotlivých hráčů."
@@ -1766,7 +1766,7 @@ msgstr ""
 
 msgctxt "game.modes.settings"
 msgid "K:D hráče"
-msgstr ""
+msgstr "K:D du joueur"
 
 msgctxt "game.modes.settings"
 msgid "Pokud se má zobrazovat K:D (poměr zabití a smrtí) u jednotlivých hráčů."
@@ -1782,7 +1782,7 @@ msgstr ""
 
 msgctxt "game.modes.settings"
 msgid "Životy hráče"
-msgstr ""
+msgstr "Vies de joueur"
 
 msgctxt "game.modes.settings"
 msgid "Pokud se mají zobrazovat zbývající životy u jednotlivých hráčů."
@@ -1798,7 +1798,7 @@ msgstr ""
 
 msgctxt "game.modes.settings"
 msgid "Přesnost týmu"
-msgstr ""
+msgstr "Précision de tir de l'équipe"
 
 msgctxt "game.modes.settings"
 msgid "Pokud se má zobrazovat celková přesnost u jednotlivých týmů."
@@ -1806,7 +1806,7 @@ msgstr ""
 
 msgctxt "game.modes.settings"
 msgid "Výstřely týmu"
-msgstr ""
+msgstr "Tirs d'équipe"
 
 msgctxt "game.modes.settings"
 msgid "Pokud se mají zobrazovat výstřely u jednotlivých týmů."
@@ -1814,7 +1814,7 @@ msgstr ""
 
 msgctxt "game.modes.settings"
 msgid "Zásahy týmu"
-msgstr ""
+msgstr "Coups d'équipe"
 
 msgctxt "game.modes.settings"
 msgid "Pokud se mají zobrazovat zásahy u jednotlivých týmů."
@@ -1838,7 +1838,7 @@ msgstr ""
 
 msgctxt "game.modes.settings"
 msgid "Největí terminátor"
-msgstr ""
+msgstr "Le plus grand terminator"
 
 msgctxt "game.modes.settings"
 msgid "Pokud se má zobrazovat \"Největí terminátor\" v tabulce \"Ti nej\"."
@@ -1862,7 +1862,7 @@ msgstr ""
 
 msgctxt "game.modes.settings"
 msgid "Zabiják vlastního týmu"
-msgstr ""
+msgstr "Tueur de sa propre équipe"
 
 msgctxt "game.modes.settings"
 msgid "Pokud se má zobrazovat \"Zabiják vlastního týmu\" v tabulce \"Ti nej\"."
@@ -1906,10 +1906,10 @@ msgstr "Général"
 
 msgctxt "game.modes.settings"
 msgid "Části"
-msgstr ""
+msgstr "Parties"
 
 msgid "Varování"
-msgstr ""
+msgstr "Avertissement"
 
 msgctxt "game.modes.settings"
 msgid "Na výsledcích se nezobrazují vždy všechny kategorie, ale jen ty které se vejdou."
@@ -1921,7 +1921,7 @@ msgstr ""
 
 msgctxt "game.modes.settings"
 msgid "Výsledky týmů"
-msgstr ""
+msgstr "Résultats des équipes"
 
 msgctxt "game.modes"
 msgid "Popis"
@@ -1944,30 +1944,30 @@ msgstr ""
 
 msgctxt "actions"
 msgid "Přidat týmový mód"
-msgstr ""
+msgstr "Ajouter un mode équipe"
 
 msgctxt "actions"
 msgid "Přidat sólo mód"
-msgstr ""
+msgstr "Ajour un mode solo"
 
 msgctxt "game.modes.types"
 msgid "Týmový"
-msgstr ""
+msgstr "En équipe"
 
 msgctxt "game.modes.types"
 msgid "Sólo"
-msgstr ""
+msgstr "En solo"
 
 msgid "Typ"
-msgstr ""
+msgstr "Type"
 
 msgctxt "game.modes"
 msgid "Opravdu chcete herní mód vymazat? Akce nepůjde vrátit."
-msgstr ""
+msgstr "Êtes-vous sûr de vouloir supprimer ce mode de jeu ? Cette action est irréversible."
 
 msgctxt "gameModes"
 msgid "Nový mód"
-msgstr ""
+msgstr "Nouveau mode"
 
 msgctxt "gameModes"
 msgid "Test"
@@ -1975,7 +1975,7 @@ msgstr "Test"
 
 msgctxt "gameModes"
 msgid "Test - solo"
-msgstr ""
+msgstr "Test - solo"
 
 msgid "Variace herních módů označují malé změny v nastavení hry, jako například délku hry. Při načtení hry do konzole se vybírá mód, jehož jméno se získá přidáním potřebných přípon za nastavený základní název v konzoli. Pokud je tedy mód \"TeamDeathmach\" a má vybranou variaci délky 15 minut, která má příponu \"-10\", výsledný vybraný mód z konzole bude mít název \"TeamDeathmach-15\"."
 msgstr ""
@@ -1985,7 +1985,7 @@ msgstr ""
 
 msgctxt "settings"
 msgid "IP adresa LaserMaxx konzole"
-msgstr ""
+msgstr "L'adresse IP de la console LaserMaxx"
 
 msgctxt "game.modes"
 msgid "Upravit názvy z konzole"
@@ -2006,7 +2006,7 @@ msgstr ""
 
 msgctxt "game.modes"
 msgid "Povolené barvy"
-msgstr ""
+msgstr "Couleurs permises"
 
 msgctxt "actions"
 msgid "Tisknout poslední hru"
@@ -2040,11 +2040,11 @@ msgstr "CTRL"
 
 msgctxt "help.keys"
 msgid "Backspace"
-msgstr ""
+msgstr "Backspace"
 
 msgctxt "help"
 msgid "Smaže celý formulář."
-msgstr ""
+msgstr "Supprime tout le formulaire."
 
 msgid "Stahují se výsledky"
 msgstr ""
@@ -2069,7 +2069,7 @@ msgstr ""
 
 msgctxt "gameModes"
 msgid "Variace"
-msgstr ""
+msgstr "Variation"
 
 msgctxt "help"
 msgid "Skryje / Odkryje variace."
@@ -2085,7 +2085,7 @@ msgstr ""
 
 msgctxt "help"
 msgid "Globální"
-msgstr ""
+msgstr "Globale"
 
 msgctxt "help"
 msgid "Zadávání hráče"

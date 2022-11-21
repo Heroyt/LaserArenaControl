@@ -63,23 +63,18 @@ msgctxt "debugPanel"
 msgid "Takes"
 msgstr ""
 
-# /templates/../vendor/lsr/helpers/templates/Translation/tab.latte:27
-# /templates/../vendor/lsr/helpers/templates/Translation/panel.latte:3
 msgctxt "debugPanel"
 msgid "Translations"
 msgstr ""
 
-# /templates/../vendor/lsr/helpers/templates/Translation/panel.latte:6
 msgctxt "debugPanel"
 msgid "Language"
 msgstr ""
 
-# /templates/../vendor/lsr/helpers/templates/Translation/panel.latte:10
 msgctxt "debugPanel"
 msgid "HTTP header"
 msgstr ""
 
-# /templates/../vendor/lsr/helpers/templates/Translation/panel.latte:16
 msgctxt "debugPanel"
 msgid "Translated strings"
 msgstr ""
@@ -1358,7 +1353,6 @@ msgctxt "debugPanel"
 msgid "Invalid cache class"
 msgstr ""
 
-# /templates/../vendor/lsr/helpers/templates/Caching/tab.latte:28
 msgctxt "debugPanel"
 msgid "%d call"
 msgid_plural "%d calls"
@@ -2317,3 +2311,25 @@ msgctxt "cli.help.arguments"
 msgid "A comma separated list of context names to skip while merging."
 msgstr ""
 
+msgid "Nepodařilo se připojit k TCP serveru (%s:%d)."
+msgstr ""
+
+msgctxt "settings"
+msgid "Skupiny"
+msgstr ""
+
+msgctxt "actions"
+msgid "Deaktivovat"
+msgstr ""
+
+msgctxt "actions"
+msgid "Aktivovat"
+msgstr ""
+
+msgctxt "settings"
+msgid "Neaktivní skupiny"
+msgstr ""
+
+msgctxt "actions"
+msgid "Zobrazit"
+msgstr ""

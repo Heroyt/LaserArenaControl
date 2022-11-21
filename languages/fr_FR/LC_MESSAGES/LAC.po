@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: French\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2022-11-21 12:03\n"
+"PO-Revision-Date: 2022-11-21 15:03\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -193,7 +193,7 @@ msgstr "Joueurs"
 
 msgctxt "results.player"
 msgid "Zásahy"
-msgstr "Touches"
+msgstr "Coups"
 
 msgctxt "results.player"
 msgid "Smrti"
@@ -233,7 +233,7 @@ msgstr "Précision"
 
 msgctxt "results.today"
 msgid "Zásahů"
-msgstr "Touches"
+msgstr "Coups"
 
 msgctxt "results.today"
 msgid "Smrtí"
@@ -279,7 +279,7 @@ msgstr "Équipe"
 
 msgctxt "results.team"
 msgid "Zásahů"
-msgstr "Touches"
+msgstr "Coups"
 
 msgctxt "results.team"
 msgid "Skóre"
@@ -350,7 +350,7 @@ msgstr "Match à mort en équipe"
 
 msgctxt "results.bests"
 msgid "Drtič min"
-msgstr "Concasseur des mines"
+msgstr "Chasseur des mines"
 
 msgctxt "gameModes"
 msgid "Deathmach"
@@ -706,7 +706,7 @@ msgstr "Poursuivi"
 
 msgctxt "results"
 msgid "%d zabití"
-msgstr "%d atteintes"
+msgstr "%d coups"
 
 msgctxt "results"
 msgid "%d smrt"
@@ -770,8 +770,8 @@ msgstr[1] "%d tirs"
 msgctxt "results"
 msgid "%d hit"
 msgid_plural "%d hits"
-msgstr[0] "%d touche"
-msgstr[1] "%d touches"
+msgstr[0] "%d coups"
+msgstr[1] "%d coups"
 
 msgctxt "results"
 msgid "%d death"
@@ -1033,7 +1033,7 @@ msgstr "Tirs"
 
 msgctxt "results"
 msgid "Zásahy"
-msgstr "Touches"
+msgstr "Coupes"
 
 msgctxt "results"
 msgid "Smrti"
@@ -1182,7 +1182,7 @@ msgstr "Précision"
 
 msgctxt "leaderboard"
 msgid "Hits"
-msgstr "Touches"
+msgstr "Coupes"
 
 msgctxt "leaderboard"
 msgid "Deaths"
@@ -1582,7 +1582,7 @@ msgid "Název"
 msgstr "Nom"
 
 msgid "Název v konzoli"
-msgstr ""
+msgstr "Nom dans la console"
 
 msgctxt "actions"
 msgid "Odeslat"
@@ -1626,7 +1626,7 @@ msgstr "Créer"
 
 msgctxt "game.modes"
 msgid "Nová variace"
-msgstr ""
+msgstr "Nouvelle variante"
 
 msgctxt "errors"
 msgid "Název nesmí být prázdný"
@@ -1638,7 +1638,7 @@ msgstr ""
 
 msgctxt "game.modes"
 msgid "Herní mód"
-msgstr ""
+msgstr "Mode de jeu"
 
 msgctxt "game.modes"
 msgid "Nastavení zobrazených statistik na výsledcích"
@@ -1654,7 +1654,7 @@ msgstr ""
 
 msgctxt "game.modes.settings"
 msgid "Miny"
-msgstr ""
+msgstr "Mines"
 
 msgctxt "game.modes.settings"
 msgid "Pokud se mají zobrazovat statistiky min."
@@ -1662,7 +1662,7 @@ msgstr ""
 
 msgctxt "game.modes.settings"
 msgid "Vítěz"
-msgstr ""
+msgstr "Vainqueur"
 
 msgctxt "game.modes.settings"
 msgid "Pokud se má zobrazovat část \"Vítěz\"."
@@ -1742,7 +1742,7 @@ msgstr ""
 
 msgctxt "game.modes.settings"
 msgid "Miny hráče"
-msgstr ""
+msgstr "Mines de joueur"
 
 msgctxt "game.modes.settings"
 msgid "Pokud se mají zobrazovat statistiky min u jednotlivých hráčů."
@@ -1830,7 +1830,7 @@ msgstr ""
 
 msgctxt "game.modes.settings"
 msgid "Absolutní vítěz"
-msgstr ""
+msgstr "Vainqueur absolu"
 
 msgctxt "game.modes.settings"
 msgid "Pokud se má zobrazovat \"Absolutní vítěz\" v tabulce \"Ti nej\"."
@@ -1894,7 +1894,7 @@ msgstr ""
 
 msgctxt "game.modes.settings"
 msgid "Drtič min"
-msgstr ""
+msgstr "Chasseur des mines"
 
 msgctxt "game.modes.settings"
 msgid "Pokud se má zobrazovat \"Drtič min\" v tabulce \"Ti nej\"."
@@ -1902,7 +1902,7 @@ msgstr ""
 
 msgctxt "game.modes.settings"
 msgid "Obecné"
-msgstr ""
+msgstr "Général"
 
 msgctxt "game.modes.settings"
 msgid "Části"
@@ -2280,7 +2280,7 @@ msgid "Průměrný počet smrtí"
 msgstr ""
 
 msgid "Celkem smrtí"
-msgstr ""
+msgstr "Total des morts"
 
 msgid "K:D"
 msgstr "K:D"
@@ -2316,21 +2316,21 @@ msgstr ""
 
 msgctxt "settings"
 msgid "Skupiny"
-msgstr ""
+msgstr "Groupes"
 
 msgctxt "actions"
 msgid "Deaktivovat"
-msgstr ""
+msgstr "Désactiver"
 
 msgctxt "actions"
 msgid "Aktivovat"
-msgstr ""
+msgstr "Activer"
 
 msgctxt "settings"
 msgid "Neaktivní skupiny"
-msgstr ""
+msgstr "Groupes inactives"
 
 msgctxt "actions"
 msgid "Zobrazit"
-msgstr ""
+msgstr "Afficher"
 

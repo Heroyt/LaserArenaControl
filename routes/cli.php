@@ -124,4 +124,14 @@ if (PHP_SAPI === 'cli') {
 													'isOptional'  => true,
 													'description' => 'A comma separated list of context names to skip while merging.',
 												]);
+
+	CliRoute::cli('translations/deleteByContext', [Translations::class, 'removeContext'])
+					->description('Remove all translations from a specified context.')
+					->usage('<context>')
+					->addArgument(
+						[
+							'name'        => 'context',
+							'isOptional'  => true,
+							'description' => 'A comma separated list of context names to skip while merging.',
+						]);
 }

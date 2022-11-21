@@ -251,4 +251,62 @@ class Translations extends CliController
 		return false;
 	}
 
+	public function removeContext(CliRequest $request) : never {
+		/** @var GettextTranslations[] $translations */
+		global $translations;
+
+		$this->skipContext = array_map('trim', explode(',', $request->args[0] ?? ''));
+
+		if (empty($this->skipContext)) {
+			$this->errorPrint('Missing required argument <context>');
+			exit(1);
+		}
+
+		// Load current templates
+		$templateFiles = glob(LANGUAGE_DIR.'*.pot');
+		if (empty($templateFiles)) {
+			$this->errorPrint('No .pot template files were found in directory. "%s"', LANGUAGE_DIR);
+			exit(2);
+		}
+
+		$poLoader = new PoLoader();
+
+		/** @var array<string, GettextTranslations> $templates */
+		$templates = [];
+		foreach ($templateFiles as $templateFile) {
+			$name = str_replace([LANGUAGE_DIR, '.pot'], '', $templateFile);
+			$templates[$name] = $poLoader->loadFile($templateFile);
+		}
+
+		$poGenerator = new PoGenerator();
+		$moGenerator = new MoGenerator();
+
+		foreach ($translations as $lang => $translationLang) {
+			echo 'Scanning file: '.LANGUAGE_DIR.$lang.'/LC_MESSAGES/'.LANGUAGE_FILE_NAME.'.po'.PHP_EOL;
+			$this->removeTranslationsForContext($translationLang);
+			$poGenerator->generateFile($translationLang, LANGUAGE_DIR.$lang.'/LC_MESSAGES/'.LANGUAGE_FILE_NAME.'.po');
+			$moGenerator->generateFile($translationLang, LANGUAGE_DIR.$lang.'/LC_MESSAGES/'.LANGUAGE_FILE_NAME.'.mo');
+		}
+		foreach ($templates as $name => $template) {
+			echo 'Scanning file: '.LANGUAGE_DIR.$name.'.pot'.PHP_EOL;
+			$this->removeTranslationsForContext($template);
+			$poGenerator->generateFile($template, LANGUAGE_DIR.$name.'.pot');
+		}
+
+		exit(0);
+	}
+
+	private function removeTranslationsForContext(GettextTranslations $translationLang) : void {
+		$removed = 0;
+		$total = 0;
+		foreach ($translationLang->getTranslations() as $translation) {
+			if ($this->isSkipContext($translation->getContext())) {
+				$translationLang->remove($translation);
+				$removed++;
+			}
+			$total++;
+		}
+		echo 'Removed strings: '.$removed.'/'.$total.PHP_EOL;
+	}
+
 }

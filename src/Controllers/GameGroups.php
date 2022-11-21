@@ -79,7 +79,7 @@ class GameGroups extends Controller
 		try {
 			$group = GameGroup::get($id);
 		} catch (ModelNotFoundException|ValidationException|DirectoryCreationException $e) {
-			$this->respond(['error' => 'Game not found', 'exception' => $e->getMessage(), 'trace' => $e->getTrace()], 404);
+			$this->respond(['error' => 'Group not found', 'exception' => $e->getMessage(), 'trace' => $e->getTrace()], 404);
 		}
 
 		if (!empty($request->post['name'])) {

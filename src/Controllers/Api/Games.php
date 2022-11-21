@@ -171,6 +171,7 @@ class Games extends ApiController
 
 		try {
 			$game->save();
+			$game->sync();
 		} catch (ModelNotFoundException|ValidationException $e) {
 			$this->respond(['error' => 'Save failed', 'exception' => $e->getMessage()], 500);
 		}

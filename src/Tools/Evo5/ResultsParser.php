@@ -23,6 +23,7 @@ use JsonException;
 use Lsr\Core\Exceptions\ModelNotFoundException;
 use Lsr\Core\Exceptions\ValidationException;
 use Lsr\Logging\Exceptions\DirectoryCreationException;
+use Throwable;
 
 /**
  * Result parser for the EVO5 system
@@ -37,12 +38,13 @@ class ResultsParser extends AbstractResultsParser
 	 * Parse a game results file and return a parsed object
 	 *
 	 * @return Game
+	 * @throws DirectoryCreationException
 	 * @throws GameModeNotFoundException
 	 * @throws JsonException
 	 * @throws ModelNotFoundException
 	 * @throws ResultsParseException
 	 * @throws ValidationException
-	 * @throws DirectoryCreationException
+	 * @throws Throwable
 	 */
 	public function parse() : Game {
 		$game = new Game();
@@ -50,7 +52,7 @@ class ResultsParser extends AbstractResultsParser
 		// Results file info
 		$pathInfo = pathinfo($this->fileName);
 		preg_match('/(\d+)/', $pathInfo['filename'], $matches);
-		$game->fileNumber = $matches[0] ?? 0;
+		$game->fileNumber = (int) ($matches[0] ?? 0);
 		$fTime = filemtime($this->fileName);
 		if (is_int($fTime)) {
 			$game->fileTime = new DateTime();
@@ -485,7 +487,6 @@ class ResultsParser extends AbstractResultsParser
 				if (!isset($group)) {
 					$group = new GameGroup();
 					$group->name = sprintf(lang('Skupina %s'), isset($game->start) ? $game->start->format('d.m.Y H:i') : '');
-					$group->save();
 				}
 
 				$game->group = $group;

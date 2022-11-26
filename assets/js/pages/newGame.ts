@@ -48,6 +48,30 @@ export default function initNewGamePage() {
 
 	const gameTablesSelect = document.getElementById('table-select') as HTMLSelectElement;
 
+	const gatesStartBtn = document.getElementById('startGates') as HTMLButtonElement;
+	const gatesStopBtn = document.getElementById('stopGates') as HTMLButtonElement;
+
+	gatesStartBtn.addEventListener('click', () => {
+		startLoading();
+		axios.post('/api/gates/start', {})
+			.then(() => {
+				stopLoading();
+			})
+			.catch(() => {
+				stopLoading(false);
+			});
+	});
+	gatesStopBtn.addEventListener('click', () => {
+		startLoading();
+		axios.post('/api/gates/stop', {})
+			.then(() => {
+				stopLoading();
+			})
+			.catch(() => {
+				stopLoading(false);
+			});
+	});
+
 	gameTablesSelect.addEventListener('change', async () => {
 		await selectTable(gameTablesSelect.value);
 	});

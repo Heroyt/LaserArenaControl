@@ -132,6 +132,9 @@ class Settings extends Controller
 			if (isset($request->post['lmx_ip'])) {
 				Info::set('lmx_ip', $request->post['lmx_ip']);
 			}
+			if (isset($request->post['gates_ips'])) {
+				Info::set('gates_ips', array_map('trim', explode(',', $request->post['gates_ips'])));
+			}
 		} catch (Exception) {
 			$request->passErrors[] = lang('Failed to save settings.', context: 'errors');
 		}

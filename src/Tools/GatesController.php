@@ -15,6 +15,7 @@ use Socket;
 class GatesController
 {
 
+	public const TIMEOUT       = 10; // 10s
 	public const PORT          = 666;
 	public const START_COMMAND = '0105010080';
 	public const END_COMMAND   = '0105020080';
@@ -50,6 +51,12 @@ class GatesController
 		socket_close($sock);
 		if ($a === false) {
 			return 0;
+		}
+
+		if (socket_recv($sock, $reply, 2045, MSG_WAITALL) === false) {
+			$errCode = socket_last_error();
+			$errMsg = socket_strerror($errCode);
+			throw new RuntimeException(sprintf(lang('Nepodařilo se přijmout odpověď od serveru (%s - %s)'), $errCode, $errMsg));
 		}
 		return $a;
 	}

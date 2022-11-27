@@ -298,7 +298,7 @@ class ResultsParser extends AbstractResultsParser
 					$player->setGame($game);
 					$player->vest = (int) $args[0];
 					$keysVests[$player->vest] = $currKey++;
-					$player->name = $args[1];
+					$player->name = substr($args[1], 0, 15);
 					$player->teamNum = (int) $args[2];
 					$player->vip = $args[4] === '1';
 					break;

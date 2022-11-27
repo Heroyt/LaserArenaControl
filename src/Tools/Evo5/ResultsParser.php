@@ -314,7 +314,7 @@ class ResultsParser extends AbstractResultsParser
 					$team = new Team();
 					$game->getTeams()->set($team, (int) $args[0]);
 					$team->setGame($game);
-					$team->name = $args[1];
+					$team->name = substr($args[1], 0, 15);
 					$team->color = (int) $args[0];
 					$team->playerCount = (int) $args[2];
 					break;

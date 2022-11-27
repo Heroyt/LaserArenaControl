@@ -48,8 +48,8 @@ class GatesController
 			throw new RuntimeException(sprintf(lang('Nepodařilo se připojit k socket serveru (%s:%d).'), $ip, self::PORT));
 		}
 		$a = socket_write($sock, $command, 5);
-		socket_close($sock);
 		if ($a === false) {
+			socket_close($sock);
 			return 0;
 		}
 
@@ -58,6 +58,7 @@ class GatesController
 			$errMsg = socket_strerror($errCode);
 			throw new RuntimeException(sprintf(lang('Nepodařilo se přijmout odpověď od serveru (%s - %s)'), $errCode, $errMsg));
 		}
+		socket_close($sock);
 		return $a;
 	}
 

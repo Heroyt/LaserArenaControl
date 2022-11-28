@@ -15,7 +15,7 @@ use Socket;
 class GatesController
 {
 
-	public const TIMEOUT       = 10; // 10s
+	public const TIMEOUT       = ["sec" => 10, "usec" => 0];
 	public const PORT          = 666;
 	public const START_COMMAND = '0105010080';
 	public const END_COMMAND   = '0105020080';
@@ -43,6 +43,7 @@ class GatesController
 		if ($sock === false) {
 			throw new RuntimeException(lang('Nepodařilo se vytvořit socket.'));
 		}
+		socket_set_option($sock, SOL_SOCKET, SO_RCVTIMEO, self::TIMEOUT);
 		$res = socket_connect($sock, $ip, self::PORT);
 		if ($res === false) {
 			throw new RuntimeException(sprintf(lang('Nepodařilo se připojit k socket serveru (%s:%d).'), $ip, self::PORT));
@@ -59,6 +60,9 @@ class GatesController
 			throw new RuntimeException(sprintf(lang('Nepodařilo se přijmout odpověď od serveru (%s - %s)'), $errCode, $errMsg));
 		}
 		socket_close($sock);
+		if ($reply !== $command) {
+			throw new RuntimeException(sprintf(lang('Neočekávaná odpověď od serveru: "%s". Očekávaná: "%s".'), $reply, $command));
+		}
 		return $a;
 	}
 

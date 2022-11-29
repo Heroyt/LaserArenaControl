@@ -1,7 +1,7 @@
 services:
     web:
         restart: always
-        image: heroyt/laser-arena-control:v0.2.4
+        image: heroyt/laser-arena-control:v0.3.0
         ports:
             - "80:80"
             - "9999:9999"

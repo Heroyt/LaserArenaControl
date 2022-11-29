@@ -16,7 +16,6 @@ const files = fs.readdirSync(path.resolve(__dirname, 'assets/js/game/modes'))
 			}
 		}
 	]);
-console.log('mode files:', files);
 
 let entry = {
 	main: [
@@ -24,13 +23,6 @@ let entry = {
 		'./assets/scss/main.scss',
 	],
 };
-
-
-//files.forEach(([name, file]) => {
-//	entry['modes/' + name] = file;
-//});
-
-console.log(entry);
 
 module.exports = {
 	mode: isDevelopment ? 'development' : 'production',

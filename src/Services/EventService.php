@@ -57,7 +57,7 @@ class EventService
 	 * @return Row[] Array of events ordered by their date from the most recent (descending)
 	 */
 	public static function getUnsent(bool $dev = false) : array {
-		return DB::select('events', '*')->where('%n = 0', $dev ? 'sent_dev' : 'sent')->orderBy('datetime')->desc()->fetchAll();
+		return DB::select('events', '*')->where('%n = 0', $dev ? 'sent_dev' : 'sent')->orderBy('datetime')->desc()->fetchAll(cache: false);
 	}
 
 	/**

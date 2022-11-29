@@ -41,7 +41,7 @@ class Results extends Controller
 	 * @throws Throwable
 	 */
 	public function show(Request $request) : void {
-		$rows = GameFactory::queryGames(true)->orderBy('start')->desc()->limit(10)->fetchAll();
+		$rows = GameFactory::queryGames(true)->orderBy('start')->desc()->limit(10)->fetchAll(cache: false);
 		if (count($rows) === 0) {
 			$this->view('pages/results/noGames');
 			return;

@@ -2354,3 +2354,18 @@ msgctxt "actions"
 msgid "Zobrazit"
 msgstr "Zobrazit"
 
+msgctxt "settings"
+msgid "IP adresy brán"
+msgstr ""
+
+msgid "Brány"
+msgstr ""
+
+msgid "Zapnout brány"
+msgstr ""
+
+msgid "Vypnout brány"
+msgstr ""
+
+msgid "Nepodařilo se připojit k socket serveru (%s:%d)."
+msgstr ""

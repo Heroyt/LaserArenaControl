@@ -200,7 +200,7 @@ class Gate extends Controller
 	private function getIdle() : void {
 		$this->params['game'] = $this->game;
 		$today = new DateTime();
-		$games = GameFactory::queryGames(true, $today)->fetchAssoc('system|id_game');
+		$games = GameFactory::queryGames(true, $today)->fetchAssoc('system|id_game', cache: false);
 		/** @var array<string, int[]> $gameIds */
 		$gameIds = [];
 		$this->params['gameCount'] = 0;
@@ -222,11 +222,10 @@ class Gate extends Controller
 
 		if (!empty($gameIds)) {
 			$q = clone $playersQuery;
-			$topScores = $q->orderBy('[score]')->desc()->fetchAssoc('name');
+			$topScores = $q->orderBy('[score]')->desc()->fetchAssoc('name', cache: false);
 			if (!empty($topScores)) {
 				$count = 0;
 				foreach ($topScores as $score) {
-					/** @phpstan-ignore-next-line */
 					$this->params['topScores'][] = PlayerFactory::getById($score->id_player, ['system' => $score->system]);
 					if ((++$count) > 3) {
 						break;
@@ -235,25 +234,25 @@ class Gate extends Controller
 			}
 			$q = clone $playersQuery;
 			/** @var null|Row{id_player:int,system:string} $topHits */
-			$topHits = $q->orderBy('[hits]')->desc()->fetch();
+			$topHits = $q->orderBy('[hits]')->desc()->fetch(cache: false);
 			if (isset($topHits)) {
 				$this->params['topHits'] = PlayerFactory::getById($topHits->id_player, ['system' => $topHits->system]);
 			}
 			$q = clone $playersQuery;
 			/** @var null|Row{id_player:int,system:string} $topDeaths */
-			$topDeaths = $q->orderBy('[deaths]')->desc()->fetch();
+			$topDeaths = $q->orderBy('[deaths]')->desc()->fetch(cache: false);
 			if (isset($topDeaths)) {
 				$this->params['topDeaths'] = PlayerFactory::getById($topDeaths->id_player, ['system' => $topDeaths->system]);
 			}
 			$q = clone $playersQuery;
 			/** @var null|Row{id_player:int,system:string} $topAccuracy */
-			$topAccuracy = $q->orderBy('[accuracy]')->desc()->fetch();
+			$topAccuracy = $q->orderBy('[accuracy]')->desc()->fetch(cache: false);
 			if (isset($topAccuracy)) {
 				$this->params['topAccuracy'] = PlayerFactory::getById($topAccuracy->id_player, ['system' => $topAccuracy->system]);
 			}
 			$q = clone $playersQuery;
 			/** @var null|Row{id_player:int,system:string} $topShots */
-			$topShots = $q->orderBy('[shots]')->desc()->fetch();
+			$topShots = $q->orderBy('[shots]')->desc()->fetch(cache: false);
 			if (isset($topShots)) {
 				$this->params['topShots'] = PlayerFactory::getById($topShots->id_player, ['system' => $topShots->system]);
 			}

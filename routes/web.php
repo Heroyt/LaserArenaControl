@@ -16,29 +16,34 @@ use Lsr\Core\Routing\Route;
 Route::get('/lang/{lang}', [Lang::class, 'setLang']);
 
 Route::get('/', [NewGame::class, 'show'])->name('dashboard');
-Route::get('/results', [Results::class, 'show'])->name('results');
-Route::get('/results/{code}', [Results::class, 'show'])->name('results-game');
-Route::get('/results/{code}/print', [Results::class, 'printGame'])->name('print');
-Route::get('/results/{code}/print/{lang}', [Results::class, 'printGame']);
-Route::get('/results/{code}/print/{lang}/{copies}', [Results::class, 'printGame']);
-Route::get('/results/{code}/print/{lang}/{copies}/{style}', [Results::class, 'printGame']);
-Route::get('/results/{code}/print/{lang}/{copies}/{style}/{template}', [Results::class, 'printGame']);
-Route::get('/results/{code}/print/{lang}/{copies}/{style}/{template}/{type}', [Results::class, 'printGame']);
 
-Route::get('/list', [GamesList::class, 'show'])->name('games-list');
-Route::get('/list/{game}', [GamesList::class, 'game']);
+Route::group('/results')
+		 ->get('/', [Results::class, 'show'])->name('results')
+		 ->get('/{code}', [Results::class, 'show'])->name('results-game')
+		 ->get('/{code}/print', [Results::class, 'printGame'])->name('print')
+		 ->get('/{code}/print/{lang}', [Results::class, 'printGame'])
+		 ->get('/{code}/print/{lang}/{copies}', [Results::class, 'printGame'])
+		 ->get('/{code}/print/{lang}/{copies}/{style}', [Results::class, 'printGame'])
+		 ->get('/{code}/print/{lang}/{copies}/{style}/{template}', [Results::class, 'printGame'])
+		 ->get('/{code}/print/{lang}/{copies}/{style}/{template}/{type}', [Results::class, 'printGame']);
 
-Route::get('/settings', [Settings::class, 'show'])->name('settings');
-Route::post('/settings', [Settings::class, 'saveGeneral']);
-Route::get('/settings/gate', [Settings::class, 'gate'])->name('settings-gate');
-Route::post('/settings/gate', [Settings::class, 'saveGate']);
-Route::get('/settings/vests', [Settings::class, 'vests'])->name('settings-vests');
-Route::post('/settings/vests', [Settings::class, 'saveVests']);
-Route::get('/settings/print', [Settings::class, 'print'])->name('settings-print');
-Route::post('/settings/print', [Settings::class, 'savePrint']);
+Route::group('/list')
+		 ->get('/', [GamesList::class, 'show'])->name('games-list')
+		 ->get('/{game}', [GamesList::class, 'game']);
 
-Route::get('/gate', [Gate::class, 'show'])->name('gate');
-Route::post('/gate/set', [Gate::class, 'setGateGame']);      // Error
-Route::post('/gate/loaded', [Gate::class, 'setGateLoaded']); // Error
-Route::post('/gate/set/{system}', [Gate::class, 'setGateGame']);
-Route::post('/gate/loaded/{system}', [Gate::class, 'setGateLoaded']);
+Route::group('/settings')
+		 ->get('/', [Settings::class, 'show'])->name('settings')
+		 ->post('/', [Settings::class, 'saveGeneral'])
+		 ->get('/gate', [Settings::class, 'gate'])->name('settings-gate')
+		 ->post('/gate', [Settings::class, 'saveGate'])
+		 ->get('/vests', [Settings::class, 'vests'])->name('settings-vests')
+		 ->post('/vests', [Settings::class, 'saveVests'])
+		 ->get('/print', [Settings::class, 'print'])->name('settings-print')
+		 ->post('/print', [Settings::class, 'savePrint']);
+
+Route::group('/gate')
+		 ->get('/gate', [Gate::class, 'show'])->name('gate')
+		 ->post('/gate/set', [Gate::class, 'setGateGame'])      // Error
+		 ->post('/gate/loaded', [Gate::class, 'setGateLoaded']) // Error
+		 ->post('/gate/set/{system}', [Gate::class, 'setGateGame'])
+		 ->post('/gate/loaded/{system}', [Gate::class, 'setGateLoaded']);

@@ -12,43 +12,46 @@ use App\Controllers\Api\Mount;
 use App\Controllers\Api\Results;
 use App\Controllers\Api\Updater;
 use Lsr\Core\Routing\Route;
-use Lsr\Enums\RequestMethod;
-use const Lsr\Enums\PUT;
 
-Route::post('/api/results/import', [Results::class, 'import']);
-Route::post('/api/results/import/{game}', [Results::class, 'importGame']);
-Route::get('/api/results/last', [Results::class, 'getLastGameFile']);
-Route::get('/api/results/download', [Results::class, 'downloadLastGameFiles']);
-
-Route::post('/api/mount', [Mount::class, 'mount']);
-
-Route::post('/api/update', [Updater::class, 'update']);
-
-Route::post('/api/git/pull', [Updater::class, 'pull']);
-Route::post('/api/git/fetch', [Updater::class, 'fetch']);
-Route::post('/api/git/status', [Updater::class, 'status']);
-
-Route::post('/api/build', [Updater::class, 'build']);
-Route::post('/api/install', [Updater::class, 'install']);
-
-Route::get('/api/logs', [Logs::class, 'show']);
-Route::get('/api/logs/download', [Logs::class, 'download']);
-
-Route::get('/api/debug/pwd', [Debug::class, 'pwd']);
-Route::get('/api/debug/whoami', [Debug::class, 'whoami']);
-Route::post('/api/debug/enable', [Debug::class, 'enable']);
-Route::post('/api/debug/disable', [Debug::class, 'disable']);
-Route::update('/api/debug/incrementCache', [Debug::class, 'incrementCache']);
-Route::create(RequestMethod::PUT, '/api/debug/incrementCache', [Debug::class, 'incrementCache']);
-Route::get('/api/debug/glob', [Debug::class, 'glob']);
-
-Route::get('/api/game/loaded', [GameHelpers::class, 'getLoadedGameInfo']);
-Route::get('/api/game/gate', [GameHelpers::class, 'getGateGameInfo']);
-Route::post('/api/game/{code}/recalcSkill', [GameHelpers::class, 'recalcSkill']);
-Route::post('/api/game/{code}/recalcScores', [GameHelpers::class, 'recalcScores']);
-Route::post('/api/game/{code}/changeMode', [GameHelpers::class, 'changeGameMode']);
-
-Route::get('api/games', [Games::class, 'listGames']);
-Route::post('api/games/sync', [Games::class, 'syncGames']);
-Route::post('api/games/sync/{limit}', [Games::class, 'syncGames']);
-Route::get('api/games/{code}', [Games::class, 'getGame']);
+Route::group('/api')
+		 ->post('/mount', [Mount::class, 'mount'])
+		 ->post('/update', [Updater::class, 'update'])
+		 ->post('/build', [Updater::class, 'build'])
+		 ->post('/install', [Updater::class, 'install'])
+		 ->group('results')
+		 ->post('/import', [Results::class, 'import'])
+		 ->post('/import/{game}', [Results::class, 'importGame'])
+		 ->get('/last', [Results::class, 'getLastGameFile'])
+		 ->get('/download', [Results::class, 'downloadLastGameFiles'])
+		 ->endGroup()
+		 ->group('/git')
+		 ->post('/pull', [Updater::class, 'pull'])
+		 ->post('/fetch', [Updater::class, 'fetch'])
+		 ->post('/status', [Updater::class, 'status'])
+		 ->endGroup()
+		 ->group('/logs')
+		 ->get('/', [Logs::class, 'show'])
+		 ->get('/download', [Logs::class, 'download'])
+		 ->endGroup()
+		 ->group('/debug')
+		 ->get('/pwd', [Debug::class, 'pwd'])
+		 ->get('/whoami', [Debug::class, 'whoami'])
+		 ->post('/enable', [Debug::class, 'enable'])
+		 ->post('/disable', [Debug::class, 'disable'])
+		 ->update('/incrementCache', [Debug::class, 'incrementCache'])
+		 ->put('/incrementCache', [Debug::class, 'incrementCache'])
+		 ->get('/glob', [Debug::class, 'glob'])
+		 ->endGroup()
+		 ->group('/game')
+		 ->get('/loaded', [GameHelpers::class, 'getLoadedGameInfo'])
+		 ->get('/gate', [GameHelpers::class, 'getGateGameInfo'])
+		 ->post('/{code}/recalcSkill', [GameHelpers::class, 'recalcSkill'])
+		 ->post('/{code}/recalcScores', [GameHelpers::class, 'recalcScores'])
+		 ->post('/{code}/changeMode', [GameHelpers::class, 'changeGameMode'])
+		 ->endGroup()
+		 ->group('/games')
+		 ->get('/', [Games::class, 'listGames'])
+		 ->post('/sync', [Games::class, 'syncGames'])
+		 ->post('/sync/{limit}', [Games::class, 'syncGames'])
+		 ->get('/{code}', [Games::class, 'getGame'])
+		 ->endGroup();

@@ -79,6 +79,7 @@ export default function initNewGamePage() {
 	updateCurrentStatus();
 	// Update current status every minute
 	let updateStatusInterval = setInterval(updateCurrentStatus, 60000);
+	let resultsLoadRetryTimer: NodeJS.Timeout = null;
 
 	// Send form via ajax
 	form.addEventListener('submit', e => {
@@ -164,11 +165,14 @@ export default function initNewGamePage() {
 
 	EventServerInstance.addEventListener('game-imported', loadLastGames);
 	EventServerInstance.addEventListener(['game-imported', 'game-started', 'game-loaded'], updateCurrentStatus);
-	EventServerInstance.addEventListener('game-imported', groups.updateGroups);
 
 	retryDownloadBtn.addEventListener('click', () => {
 		if (currentStatus !== GameStatus.DOWNLOAD) {
 			cancelDownloadModal();
+			return;
+		}
+
+		if (retryDownloadBtn.disabled) {
 			return;
 		}
 
@@ -185,6 +189,10 @@ export default function initNewGamePage() {
 	cancelDownloadBtn.addEventListener('click', () => {
 		if (currentStatus !== GameStatus.DOWNLOAD) {
 			cancelDownloadModal();
+			return;
+		}
+
+		if (cancelDownloadBtn.disabled) {
 			return;
 		}
 
@@ -548,6 +556,12 @@ export default function initNewGamePage() {
 		// Reset the update status interval
 		clearInterval(updateStatusInterval);
 		updateStatusInterval = setInterval(updateCurrentStatus, 60000);
+
+		retryDownloadBtn.disabled = false;
+		cancelDownloadBtn.disabled = false;
+		if (resultsLoadRetryTimer) {
+			clearTimeout(resultsLoadRetryTimer);
+		}
 	}
 
 	function triggerDownloadModal() {
@@ -556,5 +570,14 @@ export default function initNewGamePage() {
 		// Make the update status interval faster to fetch more real-time data
 		clearInterval(updateStatusInterval);
 		updateStatusInterval = setInterval(updateCurrentStatus, 5000);
+
+		if (!resultsLoadRetryTimer) {
+			retryDownloadBtn.disabled = true;
+			cancelDownloadBtn.disabled = true;
+			resultsLoadRetryTimer = setTimeout(() => {
+				retryDownloadBtn.disabled = false;
+				cancelDownloadBtn.disabled = false;
+			}, 15000);
+		}
 	}
 }

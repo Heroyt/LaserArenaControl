@@ -1,10 +1,12 @@
 import Game from "../game/game";
 import axios, {AxiosResponse} from "axios";
-import {initTooltips, lang} from "../functions";
+import {lang} from "../functions";
 import EventServerInstance from "../EventServer";
 import {startLoading, stopLoading} from "../loaders";
-import {GameData, GameGroupData, PlayerData, TableData} from "../game/gameInterfaces";
-import {Collapse, Modal, Offcanvas} from "bootstrap";
+import {GameData} from "../game/gameInterfaces";
+import {Modal, Offcanvas} from "bootstrap";
+import NewGameGroup from "./newGame/groups";
+import NewGameTables from "./newGame/tables";
 
 declare global {
 	const gameData: GameData;
@@ -16,11 +18,6 @@ enum GameStatus {
 	STANDBY,
 	ARMED,
 	PLAYING,
-}
-
-enum GroupLoadType {
-	TEAMS,
-	PLAYERS,
 }
 
 export default function initNewGamePage() {
@@ -75,10 +72,6 @@ export default function initNewGamePage() {
 			.catch(() => {
 				stopLoading(false);
 			});
-	});
-
-	gameTablesSelect.addEventListener('change', async () => {
-		await selectTable(gameTablesSelect.value);
 	});
 
 	stopBtn.addEventListener('click', () => {
@@ -154,12 +147,12 @@ export default function initNewGamePage() {
 
 	loadLastGames();
 
+	const groups = new NewGameGroup(game, gameGroupsWrapper, gameGroupTemplate, gameGroupsSelect);
+	const tables = new NewGameTables(groups, gameTablesSelect);
+
 	EventServerInstance.addEventListener('game-imported', loadLastGames);
 	EventServerInstance.addEventListener(['game-imported', 'game-started', 'game-loaded'], updateCurrentStatus);
-	EventServerInstance.addEventListener('game-imported', updateGroups);
-
-	document.getElementById('groups').addEventListener('show.bs.offcanvas', updateGroups);
-	document.getElementById('tables').addEventListener('show.bs.offcanvas', updateTables);
+	EventServerInstance.addEventListener('game-imported', groups.updateGroups);
 
 	retryDownloadBtn.addEventListener('click', () => {
 		if (currentStatus !== GameStatus.DOWNLOAD) {
@@ -193,9 +186,6 @@ export default function initNewGamePage() {
 				stopLoading(false, true);
 			});
 	});
-
-	(document.querySelectorAll('.game-group') as NodeListOf<HTMLDivElement>).forEach(initGroup);
-	(document.querySelectorAll('.game-table') as NodeListOf<HTMLDivElement>).forEach(initTable);
 
 	function loadLastGames() {
 		axios.get('/api/games', {
@@ -554,435 +544,5 @@ export default function initNewGamePage() {
 		// Make the update status interval faster to fetch more real-time data
 		clearInterval(updateStatusInterval);
 		updateStatusInterval = setInterval(updateCurrentStatus, 5000);
-	}
-
-	function initGroup(group: HTMLDivElement): void {
-		let loadType: GroupLoadType = GroupLoadType.PLAYERS;
-		const id = parseInt(group.dataset.id);
-		const loadBtn = group.querySelector('.loadPlayers') as HTMLButtonElement;
-		const deleteBtn = group.querySelector('.delete') as HTMLButtonElement;
-		const groupName = group.querySelector('.group-name') as HTMLInputElement;
-
-		const showGroupBtn = group.querySelector('.show-group') as HTMLButtonElement;
-		const groupCollapse = new Collapse(group.querySelector(`#group-${id}-players`), {toggle: false});
-
-		showGroupBtn.addEventListener('click', () => {
-			groupCollapse.toggle();
-		});
-
-		const showTeamsBtn = group.querySelector('.show-teams') as HTMLButtonElement;
-		const showPlayersBtn = group.querySelector('.show-players') as HTMLButtonElement;
-		const playersCollapseDom = group.querySelector('.group-players') as HTMLUListElement;
-		const teamsCollapseDom = group.querySelector('.group-teams') as HTMLUListElement;
-		const playersCollapse = new Collapse(playersCollapseDom, {toggle: false});
-		playersCollapse.show();
-		const teamsCollapse = new Collapse(teamsCollapseDom, {toggle: false});
-		teamsCollapse.hide();
-
-		let timeout: NodeJS.Timeout = null;
-
-		showTeamsBtn.addEventListener('click', () => {
-			playersCollapse.hide();
-			teamsCollapse.show();
-			showTeamsBtn.classList.add('d-none');
-			showPlayersBtn.classList.remove('d-none');
-			loadType = GroupLoadType.TEAMS;
-		});
-		showPlayersBtn.addEventListener('click', () => {
-			playersCollapse.show();
-			teamsCollapse.hide();
-			showPlayersBtn.classList.add('d-none');
-			showTeamsBtn.classList.remove('d-none');
-			loadType = GroupLoadType.PLAYERS;
-		});
-
-		groupName.addEventListener('input', () => {
-			(game.$group.querySelector(`option[value="${id}"]`) as HTMLOptionElement).innerText = groupName.value;
-			if (timeout) {
-				clearTimeout(timeout);
-			}
-			timeout = setTimeout(() => {
-				startLoading(true);
-				axios
-					.post('/gameGroups/' + id.toString(), {
-						name: groupName.value,
-					})
-					.then(() => {
-						stopLoading(true, true);
-					})
-					.catch(() => {
-						stopLoading(false, true);
-					})
-			}, 1000);
-		});
-
-		deleteBtn.addEventListener('click', () => {
-			startLoading(true);
-			axios
-				.post('/gameGroups/' + id.toString(), {
-					active: '0',
-				})
-				.then(() => {
-					stopLoading(true, true);
-					game.$group.querySelector(`option[value="${id}"]`).remove();
-					group.remove();
-				})
-				.catch(() => {
-					stopLoading(false, true);
-				})
-		});
-
-		loadBtn.addEventListener('click', () => {
-			const players = loadType === GroupLoadType.PLAYERS ?
-				group.querySelectorAll('.group-players .group-player-check:checked') as NodeListOf<HTMLInputElement> :
-				group.querySelectorAll('.group-teams .group-player-check:checked') as NodeListOf<HTMLInputElement>;
-
-			// Prepare data for import
-			const data: GameData = {
-				playerCount: players.length,
-				mode: {
-					id: parseInt(game.$gameMode.value),
-				},
-				players: {},
-				teams: {},
-				music: {id: parseInt(game.$musicMode.value)},
-				group: {
-					id,
-					name: groupName.value,
-					active: true,
-				}
-			};
-
-			const vests: { [index: number | string]: boolean } = {};
-			game.players.forEach(player => {
-				vests[player.vest] = true;
-			});
-
-			const remainingPlayers: PlayerData[] = [];
-			// Add players
-			players.forEach(player => {
-				const vest = isNaN(parseInt(player.dataset.vest)) ? player.dataset.vest : parseInt(player.dataset.vest);
-
-				console.log(player.dataset.name, vest);
-
-				if (vests[vest]) {
-					data.players[vest] = {
-						name: player.dataset.name,
-						skill: parseInt(player.dataset.skill),
-						vest,
-					}
-					if (loadType === GroupLoadType.TEAMS) {
-						const team = player.dataset.teamColor;
-						if (team) {
-							const teamNum = parseInt(team);
-							data.players[vest].teamNum = teamNum;
-							data.players[vest].color = teamNum;
-							if (!data.teams[teamNum]) {
-								data.teams[teamNum] = {
-									name: player.dataset.teamName,
-									color: teamNum,
-								};
-							}
-						}
-					}
-					vests[vest] = false;
-					return;
-				}
-
-				let playerData: PlayerData = {
-					name: player.dataset.name,
-					skill: parseInt(player.dataset.skill),
-					vest: 0,
-				};
-
-				if (loadType === GroupLoadType.TEAMS) {
-					console.log(player.dataset.teamColor, player.dataset.team);
-					const team = player.dataset.teamColor;
-					if (team) {
-						const teamNum = parseInt(team);
-						playerData.teamNum = teamNum;
-						playerData.color = teamNum;
-						if (!data.teams[teamNum]) {
-							data.teams[teamNum] = {
-								name: player.dataset.teamName,
-								color: teamNum,
-							};
-						}
-					}
-				}
-
-				remainingPlayers.push(playerData);
-			});
-
-			console.log(remainingPlayers);
-
-			Object.entries(vests).forEach(([vest, available]) => {
-				if (available && remainingPlayers.length > 0) {
-					const player = remainingPlayers.pop();
-					player.vest = vest;
-					data.players[vest] = player;
-				}
-			});
-
-			game.import(data);
-		});
-
-		initGroupTeamChecks(group);
-	}
-
-	function updateGroups() {
-		axios.get('/gameGroups')
-			.then((response: AxiosResponse<GameGroupData[]>) => {
-				const vestCount = parseInt(gameGroupsWrapper.dataset.vests);
-				response.data.forEach(groupData => {
-					addGroup(groupData, vestCount);
-				});
-			});
-	}
-
-	async function loadGroup(id: number) {
-		const response: AxiosResponse<GameGroupData> = await axios.get(`/gameGroups/${id}`);
-		const vestCount = parseInt(gameGroupsWrapper.dataset.vests);
-		addGroup(response.data, vestCount);
-	}
-
-	function initGroupTeamChecks(group: HTMLDivElement) {
-		(group.querySelectorAll('.group-team-check') as NodeListOf<HTMLInputElement>).forEach(input => {
-			const teamId = input.dataset.id;
-
-			input.addEventListener('change', () => {
-				const players = document.querySelectorAll(`.group-player-check[data-team-id="${teamId}"]`) as NodeListOf<HTMLInputElement>;
-				players.forEach(player => {
-					player.checked = input.checked;
-				});
-			});
-		});
-	}
-
-	function addGroup(groupData: GameGroupData, vestCount: number | null = null) {
-		if (!vestCount) {
-			vestCount = parseInt(gameGroupsWrapper.dataset.vests);
-		}
-
-		// Find an existing group
-		let group = gameGroupsWrapper.querySelector(`.game-group[data-id="${groupData.id}"]`) as HTMLDivElement;
-		if (!group) {
-			const tmp = document.createElement('div');
-			tmp.innerHTML = gameGroupTemplate.innerHTML
-				.replaceAll('#id#', groupData.id.toString())
-				.replaceAll('#name#', groupData.name);
-			group = tmp.firstElementChild as HTMLDivElement;
-			gameGroupsWrapper.appendChild(group);
-			initGroup(group);
-			initTooltips(group);
-		}
-
-		const name = group.querySelector('.group-name') as HTMLInputElement;
-		name.value = groupData.name;
-
-		// Check select option
-		let option = game.$group.querySelector(`option[value="${groupData.id}"]`) as HTMLOptionElement;
-		if (!option) {
-			option = document.createElement('option');
-			option.value = groupData.id.toString();
-			game.$group.appendChild(option);
-		}
-		option.innerText = groupData.name;
-
-		// Check players
-		let playerCount = 0;
-		const existingPlayers: { [index: string]: HTMLLIElement } = {};
-		(group.querySelectorAll('.group-players .group-player') as NodeListOf<HTMLLIElement>).forEach(elem => {
-			existingPlayers[elem.dataset.player] = elem;
-			playerCount++;
-		});
-		const playersWrapper = group.querySelector('.group-players') as HTMLUListElement;
-		if (groupData.players) {
-			Object.entries(groupData.players).forEach(([name, player]) => {
-				const skill = player.skill.toString();
-				if (existingPlayers[name]) {
-					const input = existingPlayers[name].querySelector('.group-player-check') as HTMLInputElement;
-					input.dataset.skill = skill;
-					(existingPlayers[name].querySelector('.skill') as HTMLSpanElement).innerText = skill;
-					delete existingPlayers[name];
-				} else {
-					const li = document.createElement('li');
-					li.classList.add('list-group-item', 'group-player');
-					li.dataset.player = name;
-					li.setAttribute('data-player', name);
-					li.innerHTML = `<label class="h-100 w-100 d-flex align-items-center cursor-pointer">` +
-						`<strong class="col-2 counter">1.</strong>` +
-						`<input type="checkbox" class="form-check-input group-player-check mx-2 mt-0" data-name="${player.name}" data-skill="${skill}" data-vest="${player.vest}">` +
-						`<span class="flex-fill">${player.name}</span>` +
-						`<span class="px-2">${player.vest}${vestIcon}</span>` +
-						`<span style="min-width:3rem;" class="text-end"><span class="skill">${skill}</span><i class="fa-solid fa-star"></i></span></label>`;
-					playersWrapper.appendChild(li);
-					playerCount++;
-				}
-			});
-		}
-
-		// Clear removed players
-		Object.keys(existingPlayers).forEach(key => {
-			existingPlayers[key].remove();
-			playerCount--;
-		});
-
-		// Update counters
-		let counter = 1;
-		(playersWrapper.querySelectorAll('.counter') as NodeListOf<HTMLSpanElement>).forEach(elem => {
-			elem.innerText = counter.toString() + '.';
-			counter++;
-		});
-
-		// Update checked
-		let checked = playersWrapper.querySelectorAll(`.group-player-check:checked`).length;
-		if (checked < vestCount && checked < playerCount) {
-			(playersWrapper.querySelectorAll(`.group-player-check:not(:checked)`) as NodeListOf<HTMLInputElement>).forEach(input => {
-				if (checked < vestCount) {
-					input.checked = true;
-					checked++;
-				}
-			});
-		}
-
-		// Update teams
-		if (groupData.teams) {
-			const teamsWrapper = group.querySelector('.group-teams') as HTMLUListElement;
-			teamsWrapper.innerHTML = '';
-			Object.entries(groupData.teams).forEach(([id, team]) => {
-				const teamLi = document.createElement('li');
-				teamLi.classList.add('list-group-item', `bg-team-${team.system}-${team.color}`);
-				teamLi.innerHTML = `<label class="cursor-pointer">` +
-					`<input type="checkbox" class="form-check-input group-team-check mx-2 mt-0" data-id="${id}" data-team="${team.color}">` +
-					team.name +
-					`</label>`;
-				teamsWrapper.appendChild(teamLi);
-				let counter = 1;
-				Object.entries(team.players).forEach(([name, player]) => {
-					const li = document.createElement('li');
-					const skill = player.skill.toString();
-					li.classList.add('list-group-item', 'group-player');
-					li.dataset.player = name;
-					li.setAttribute('data-player', name);
-					li.innerHTML = `<label class="h-100 w-100 d-flex align-items-center cursor-pointer">` +
-						`<strong class="col-2 counter">${counter}.</strong>` +
-						`<input type="checkbox" class="form-check-input group-player-check mx-2 mt-0" data-name="${player.name}" data-skill="${skill}" data-vest="${player.vest}" data-team-id="${id}" data-team-color="${team.color}" data-team-name="${team.name}">` +
-						`<span class="flex-fill">${player.name}</span>` +
-						`<span class="px-2">${player.vest}${vestIcon}</span>` +
-						`<span style="min-width:3rem;" class="text-end"><span class="skill">${skill}</span><i class="fa-solid fa-star"></i></span>` +
-						`</label>`;
-					teamsWrapper.appendChild(li);
-					counter++;
-				});
-			});
-			initGroupTeamChecks(group);
-		}
-
-	}
-
-	function initTable(table: HTMLDivElement): void {
-		const id = parseInt(table.dataset.id);
-
-		const cleanBtn = table.querySelector('.clean') as HTMLButtonElement;
-
-		table.addEventListener('click', async (e: MouseEvent) => {
-			// Prevent trigger if clicked on the cleanBtn
-			const target = e.target as HTMLElement;
-			if (target === cleanBtn || target.parentElement === cleanBtn) {
-				return;
-			}
-			await selectTable(id);
-		});
-
-		cleanBtn.addEventListener('click', () => {
-			startLoading();
-			axios.post(`/tables/${id}/clean`, {})
-				.then(() => {
-					updateTable(id);
-					stopLoading();
-				})
-				.catch(() => {
-					stopLoading(false);
-				})
-		});
-	}
-
-	async function selectTable(id: number | string) {
-		console.log('Selecting table', id);
-		const activeTable = document.querySelector('.game-table.active') as HTMLDivElement | null;
-		if (activeTable) {
-			activeTable.classList.remove('active', 'bg-success', 'text-bg-success');
-			if (activeTable.dataset.group) {
-				activeTable.classList.add('bg-purple-600', 'text-bg-purple-600');
-			} else {
-				activeTable.classList.add('bg-purple-400', 'text-bg-purple-400');
-			}
-		}
-		const table = document.querySelector(`.game-table[data-id="${id}"]`) as HTMLDivElement | null;
-		if (!table) {
-			return;
-		}
-		console.log(table, table.dataset.group ?? "");
-		table.classList.remove('bg-purple-400', 'bg-purple-600', 'text-bg-purple-400', 'text-bg-purple-600');
-		table.classList.add('active', 'bg-success', 'text-bg-success');
-
-		if (table.dataset.group) {
-			const groupId = parseInt(table.dataset.group);
-			let groupDom = gameGroupsWrapper.querySelector(`.game-group[data-id="${groupId}"]`) as HTMLDivElement;
-			if (!groupDom) {
-				// Load group if it doesn't exist (for example if it's disabled)
-				startLoading(true);
-				await loadGroup(groupId);
-				groupDom = gameGroupsWrapper.querySelector(`.game-group[data-id="${groupId}"]`) as HTMLDivElement;
-				stopLoading(true, true);
-			}
-			// Dispatch a click event on the loadPlayers btn
-			groupDom.querySelector('.loadPlayers').dispatchEvent(new Event('click', {bubbles: true}));
-		} else {
-			gameGroupsSelect.value = "";
-		}
-
-		gameTablesSelect.value = id.toString();
-		gameTablesSelect.dispatchEvent(new Event('update', {bubbles: true}));
-	}
-
-	function updateTableData(table: TableData) {
-		const tableDom = document.querySelector(`.game-table[data-id="${table.id}"]`) as HTMLDivElement | null;
-		if (!tableDom) {
-			return;
-		}
-		const cleanBtn = tableDom.querySelector('.clean') as HTMLButtonElement;
-
-		if (table.group) {
-			tableDom.dataset.group = table.group.id.toString();
-			if (tableDom.classList.contains('bg-purple-400')) {
-				tableDom.classList.remove('bg-purple-400', 'text-bg-purple-400');
-				tableDom.classList.add('bg-purple-600', 'text-bg-purple-600');
-			}
-			cleanBtn.classList.remove('d-none');
-		} else {
-			tableDom.dataset.group = "";
-			if (tableDom.classList.contains('bg-purple-600')) {
-				tableDom.classList.remove('bg-purple-600', 'text-bg-purple-600');
-				tableDom.classList.add('bg-purple-400', 'text-bg-purple-400');
-			}
-			cleanBtn.classList.add('d-none');
-		}
-	}
-
-	function updateTable(id: number): void {
-		axios.get(`/tables/${id}`)
-			.then((response: AxiosResponse<TableData>) => {
-				const table = response.data;
-				updateTableData(table);
-			});
-	}
-
-	function updateTables(): void {
-		axios.get('/tables')
-			.then((response: AxiosResponse<{ tables: TableData[] }>) => {
-				response.data.tables.forEach(updateTableData);
-			})
 	}
 }

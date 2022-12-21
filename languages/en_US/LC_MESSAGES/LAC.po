@@ -2350,3 +2350,8 @@ msgstr "Turn gates off"
 msgid "Nepodařilo se připojit k socket serveru (%s:%d)."
 msgstr "Failed to connect to the socket server (%s:%d)."
 
+msgid "Zobrazit týmy"
+msgstr ""
+
+msgid "Zobrazit hráče"
+msgstr ""

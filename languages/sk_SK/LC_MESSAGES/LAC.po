@@ -2370,3 +2370,8 @@ msgstr ""
 msgid "Nepodařilo se připojit k socket serveru (%s:%d)."
 msgstr ""
 
+msgid "Zobrazit týmy"
+msgstr ""
+
+msgid "Zobrazit hráče"
+msgstr ""

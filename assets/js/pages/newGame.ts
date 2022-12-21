@@ -5,8 +5,6 @@ import EventServerInstance from "../EventServer";
 import {startLoading, stopLoading} from "../loaders";
 import {GameData} from "../game/gameInterfaces";
 import {Modal, Offcanvas} from "bootstrap";
-import NewGameGroup from "./newGame/groups";
-import NewGameTables from "./newGame/tables";
 
 declare global {
 	const gameData: GameData;
@@ -147,8 +145,22 @@ export default function initNewGamePage() {
 
 	loadLastGames();
 
-	const groups = new NewGameGroup(game, gameGroupsWrapper, gameGroupTemplate, gameGroupsSelect);
-	const tables = new NewGameTables(groups, gameTablesSelect);
+	import(
+		/* webpackChunkName: "newGame_groups" */
+		'./newGame/groups'
+		)
+		.then(module => {
+			const groups = new module.default(game, gameGroupsWrapper, gameGroupTemplate, gameGroupsSelect);
+			EventServerInstance.addEventListener('game-imported', groups.updateGroups);
+
+			import(
+				/* webpackChunkName: "newGame_tables" */
+				'./newGame/tables'
+				)
+				.then(module => {
+					new module.default(groups, gameTablesSelect);
+				});
+		});
 
 	EventServerInstance.addEventListener('game-imported', loadLastGames);
 	EventServerInstance.addEventListener(['game-imported', 'game-started', 'game-loaded'], updateCurrentStatus);

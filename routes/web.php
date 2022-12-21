@@ -42,8 +42,8 @@ Route::group('/settings')
 		 ->post('/print', [Settings::class, 'savePrint']);
 
 Route::group('/gate')
-		 ->get('/gate', [Gate::class, 'show'])->name('gate')
-		 ->post('/gate/set', [Gate::class, 'setGateGame'])      // Error
-		 ->post('/gate/loaded', [Gate::class, 'setGateLoaded']) // Error
-		 ->post('/gate/set/{system}', [Gate::class, 'setGateGame'])
-		 ->post('/gate/loaded/{system}', [Gate::class, 'setGateLoaded']);
+		 ->get('/', [Gate::class, 'show'])->name('gate')
+		 ->post('/set', [Gate::class, 'setGateGame'])      // Error
+		 ->post('/loaded', [Gate::class, 'setGateLoaded']) // Error
+		 ->post('/set/{system}', [Gate::class, 'setGateGame'])
+		 ->post('/loaded/{system}', [Gate::class, 'setGateLoaded']);

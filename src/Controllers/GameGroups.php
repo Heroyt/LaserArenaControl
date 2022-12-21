@@ -26,6 +26,7 @@ class GameGroups extends Controller
 		foreach ($groups as $group) {
 			$groupData = $group->jsonSerialize();
 			$groupData['players'] = $group->getPlayers();
+			$groupData['teams'] = $group->getTeams();
 			$data[] = $groupData;
 		}
 		$this->respond($data);

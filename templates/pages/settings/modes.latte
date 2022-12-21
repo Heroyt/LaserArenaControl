@@ -2,10 +2,10 @@
 
 {varType string[] $errors}
 {varType array $notices}
-{varType string $system}
+{varType string $colorSystem}
 {varType App\GameModels\Game\GameModes\AbstractMode[] $modes}
 
-{var string[] $colors = \App\GameModels\Factory\GameFactory::getAllTeamsColors()[$system]}
+{var string[] $colors = \App\GameModels\Factory\GameFactory::getAllTeamsColors()[$colorSystem]}
 
 {block content}
 
@@ -35,11 +35,11 @@
 		</div>
 		<div class="text-center">
 			<div class="btn-group btn-group-lg">
-				<button type="button" class="btn btn-primary addMode" data-system="{$system}" data-type="TEAM"
+				<button type="button" class="btn btn-primary addMode" data-system="{$colorSystem}" data-type="TEAM"
 						id="addModeTeam">
 					<i class="fa-solid fa-plus"></i> {lang 'Přidat týmový mód', context: 'actions'}
 				</button>
-				<button type="button" class="btn btn-info addMode" data-system="{$system}" data-type="SOLO"
+				<button type="button" class="btn btn-info addMode" data-system="{$colorSystem}" data-type="SOLO"
 						id="addModeSolo">
 					<i class="fa-solid fa-plus"></i> {lang 'Přidat sólo mód', context: 'actions'}
 				</button>

@@ -4,7 +4,7 @@ import {initTooltips, lang} from "../functions";
 import EventServerInstance from "../EventServer";
 import {startLoading, stopLoading} from "../loaders";
 import {GameData, GameGroupData, PlayerData, TableData} from "../game/gameInterfaces";
-import {Modal, Offcanvas} from "bootstrap";
+import {Collapse, Modal, Offcanvas} from "bootstrap";
 
 declare global {
 	const gameData: GameData;
@@ -16,6 +16,11 @@ enum GameStatus {
 	STANDBY,
 	ARMED,
 	PLAYING,
+}
+
+enum GroupLoadType {
+	TEAMS,
+	PLAYERS,
 }
 
 export default function initNewGamePage() {
@@ -552,12 +557,44 @@ export default function initNewGamePage() {
 	}
 
 	function initGroup(group: HTMLDivElement): void {
+		let loadType: GroupLoadType = GroupLoadType.PLAYERS;
 		const id = parseInt(group.dataset.id);
 		const loadBtn = group.querySelector('.loadPlayers') as HTMLButtonElement;
 		const deleteBtn = group.querySelector('.delete') as HTMLButtonElement;
 		const groupName = group.querySelector('.group-name') as HTMLInputElement;
 
+		const showGroupBtn = group.querySelector('.show-group') as HTMLButtonElement;
+		const groupCollapse = new Collapse(group.querySelector(`#group-${id}-players`), {toggle: false});
+
+		showGroupBtn.addEventListener('click', () => {
+			groupCollapse.toggle();
+		});
+
+		const showTeamsBtn = group.querySelector('.show-teams') as HTMLButtonElement;
+		const showPlayersBtn = group.querySelector('.show-players') as HTMLButtonElement;
+		const playersCollapseDom = group.querySelector('.group-players') as HTMLUListElement;
+		const teamsCollapseDom = group.querySelector('.group-teams') as HTMLUListElement;
+		const playersCollapse = new Collapse(playersCollapseDom, {toggle: false});
+		playersCollapse.show();
+		const teamsCollapse = new Collapse(teamsCollapseDom, {toggle: false});
+		teamsCollapse.hide();
+
 		let timeout: NodeJS.Timeout = null;
+
+		showTeamsBtn.addEventListener('click', () => {
+			playersCollapse.hide();
+			teamsCollapse.show();
+			showTeamsBtn.classList.add('d-none');
+			showPlayersBtn.classList.remove('d-none');
+			loadType = GroupLoadType.TEAMS;
+		});
+		showPlayersBtn.addEventListener('click', () => {
+			playersCollapse.show();
+			teamsCollapse.hide();
+			showPlayersBtn.classList.add('d-none');
+			showTeamsBtn.classList.remove('d-none');
+			loadType = GroupLoadType.PLAYERS;
+		});
 
 		groupName.addEventListener('input', () => {
 			(game.$group.querySelector(`option[value="${id}"]`) as HTMLOptionElement).innerText = groupName.value;
@@ -596,7 +633,9 @@ export default function initNewGamePage() {
 		});
 
 		loadBtn.addEventListener('click', () => {
-			const players = group.querySelectorAll('.group-player-check:checked') as NodeListOf<HTMLInputElement>;
+			const players = loadType === GroupLoadType.PLAYERS ?
+				group.querySelectorAll('.group-players .group-player-check:checked') as NodeListOf<HTMLInputElement> :
+				group.querySelectorAll('.group-teams .group-player-check:checked') as NodeListOf<HTMLInputElement>;
 
 			// Prepare data for import
 			const data: GameData = {
@@ -632,17 +671,47 @@ export default function initNewGamePage() {
 						skill: parseInt(player.dataset.skill),
 						vest,
 					}
+					if (loadType === GroupLoadType.TEAMS) {
+						const team = player.dataset.teamColor;
+						if (team) {
+							const teamNum = parseInt(team);
+							data.players[vest].teamNum = teamNum;
+							data.players[vest].color = teamNum;
+							if (!data.teams[teamNum]) {
+								data.teams[teamNum] = {
+									name: player.dataset.teamName,
+									color: teamNum,
+								};
+							}
+						}
+					}
 					vests[vest] = false;
 					return;
 				}
 
-				remainingPlayers.push(
-					{
-						name: player.dataset.name,
-						skill: parseInt(player.dataset.skill),
-						vest: 0,
+				let playerData: PlayerData = {
+					name: player.dataset.name,
+					skill: parseInt(player.dataset.skill),
+					vest: 0,
+				};
+
+				if (loadType === GroupLoadType.TEAMS) {
+					console.log(player.dataset.teamColor, player.dataset.team);
+					const team = player.dataset.teamColor;
+					if (team) {
+						const teamNum = parseInt(team);
+						playerData.teamNum = teamNum;
+						playerData.color = teamNum;
+						if (!data.teams[teamNum]) {
+							data.teams[teamNum] = {
+								name: player.dataset.teamName,
+								color: teamNum,
+							};
+						}
 					}
-				);
+				}
+
+				remainingPlayers.push(playerData);
 			});
 
 			console.log(remainingPlayers);
@@ -657,6 +726,8 @@ export default function initNewGamePage() {
 
 			game.import(data);
 		});
+
+		initGroupTeamChecks(group);
 	}
 
 	function updateGroups() {
@@ -673,6 +744,19 @@ export default function initNewGamePage() {
 		const response: AxiosResponse<GameGroupData> = await axios.get(`/gameGroups/${id}`);
 		const vestCount = parseInt(gameGroupsWrapper.dataset.vests);
 		addGroup(response.data, vestCount);
+	}
+
+	function initGroupTeamChecks(group: HTMLDivElement) {
+		(group.querySelectorAll('.group-team-check') as NodeListOf<HTMLInputElement>).forEach(input => {
+			const teamId = input.dataset.id;
+
+			input.addEventListener('change', () => {
+				const players = document.querySelectorAll(`.group-player-check[data-team-id="${teamId}"]`) as NodeListOf<HTMLInputElement>;
+				players.forEach(player => {
+					player.checked = input.checked;
+				});
+			});
+		});
 	}
 
 	function addGroup(groupData: GameGroupData, vestCount: number | null = null) {
@@ -708,14 +792,14 @@ export default function initNewGamePage() {
 		// Check players
 		let playerCount = 0;
 		const existingPlayers: { [index: string]: HTMLLIElement } = {};
-		(group.querySelectorAll('.group-player') as NodeListOf<HTMLLIElement>).forEach(elem => {
+		(group.querySelectorAll('.group-players .group-player') as NodeListOf<HTMLLIElement>).forEach(elem => {
 			existingPlayers[elem.dataset.player] = elem;
 			playerCount++;
 		});
 		const playersWrapper = group.querySelector('.group-players') as HTMLUListElement;
 		if (groupData.players) {
 			Object.entries(groupData.players).forEach(([name, player]) => {
-				const skill = (player.avgSkill ? player.avgSkill : player.skill).toString();
+				const skill = player.skill.toString();
 				if (existingPlayers[name]) {
 					const input = existingPlayers[name].querySelector('.group-player-check') as HTMLInputElement;
 					input.dataset.skill = skill;
@@ -761,6 +845,40 @@ export default function initNewGamePage() {
 				}
 			});
 		}
+
+		// Update teams
+		if (groupData.teams) {
+			const teamsWrapper = group.querySelector('.group-teams') as HTMLUListElement;
+			teamsWrapper.innerHTML = '';
+			Object.entries(groupData.teams).forEach(([id, team]) => {
+				const teamLi = document.createElement('li');
+				teamLi.classList.add('list-group-item', `bg-team-${team.system}-${team.color}`);
+				teamLi.innerHTML = `<label class="cursor-pointer">` +
+					`<input type="checkbox" class="form-check-input group-team-check mx-2 mt-0" data-id="${id}" data-team="${team.color}">` +
+					team.name +
+					`</label>`;
+				teamsWrapper.appendChild(teamLi);
+				let counter = 1;
+				Object.entries(team.players).forEach(([name, player]) => {
+					const li = document.createElement('li');
+					const skill = player.skill.toString();
+					li.classList.add('list-group-item', 'group-player');
+					li.dataset.player = name;
+					li.setAttribute('data-player', name);
+					li.innerHTML = `<label class="h-100 w-100 d-flex align-items-center cursor-pointer">` +
+						`<strong class="col-2 counter">${counter}.</strong>` +
+						`<input type="checkbox" class="form-check-input group-player-check mx-2 mt-0" data-name="${player.name}" data-skill="${skill}" data-vest="${player.vest}" data-team-id="${id}" data-team-color="${team.color}" data-team-name="${team.name}">` +
+						`<span class="flex-fill">${player.name}</span>` +
+						`<span class="px-2">${player.vest}${vestIcon}</span>` +
+						`<span style="min-width:3rem;" class="text-end"><span class="skill">${skill}</span><i class="fa-solid fa-star"></i></span>` +
+						`</label>`;
+					teamsWrapper.appendChild(li);
+					counter++;
+				});
+			});
+			initGroupTeamChecks(group);
+		}
+
 	}
 
 	function initTable(table: HTMLDivElement): void {

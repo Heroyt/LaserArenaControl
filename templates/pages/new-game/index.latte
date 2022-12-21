@@ -1,7 +1,7 @@
 {layout '../../@layout.latte'}
 
 {varType App\GameModels\Vest[] $vests}
-{varType string $system}
+{varType string $colorSystem}
 {varType string[] $colors}
 {varType string[] $teamNames}
 {varType App\GameModels\Game\GameModes\AbstractMode[] $gameModes}
@@ -13,6 +13,34 @@
 {import 'helpers/help.latte'}
 {import 'helpers/groups.latte'}
 {import 'helpers/tables.latte'}
+
+{define addHead}
+	{var string[][] $colors = App\GameModels\Factory\GameFactory::getAllTeamsColors()}
+	<style>
+		:root {
+		{foreach $colors as $colorSystem => $systemColors} {foreach $systemColors as $key => $color} {var string $varName1 = '--team-'.$colorSystem.'-'.$key} {var string $varName2 = '--team-'.$colorSystem.'-'.$key.'-text'} {$varName1}: {$color|noescape};
+		{$varName2}:{\App\Tools\Color::getFontColor($color)|noescape};
+		{/foreach} {/foreach}
+		}
+
+		{foreach $colors as $colorSystem => $systemColors}
+		{foreach $systemColors as $key => $color}
+		.bg-team-{$colorSystem}-{$key} {
+			--bg-color: var(--team-{$colorSystem}-{$key});
+			--bs-table-bg: var(--team-{$colorSystem}-{$key});
+			--text-color: var(--team-{$colorSystem}-{$key}-text);
+			background-color: var(--team-{$colorSystem}-{$key});
+			color: var(--team-{$colorSystem}-{$key}-text);
+		}
+
+		.text-team-{$colorSystem}-{$key} {
+			color: var(--team-{$colorSystem}-{$key});
+		}
+
+		{/foreach}
+		{/foreach}
+	</style>
+{/define}
 
 {block content}
 	<form method="post" action="" id="new-game-content" class="w-100">

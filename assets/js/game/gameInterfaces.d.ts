@@ -95,6 +95,15 @@ interface GameGroupData {
 	name: string,
 	active?: boolean,
 	players?: { [index: string]: PlayerData },
+	teams?: {
+		[index: string]: {
+			id: string,
+			name: string,
+			system: string,
+			color: number,
+			players: { [index: string]: PlayerData }
+		}
+	},
 }
 
 interface TableData {

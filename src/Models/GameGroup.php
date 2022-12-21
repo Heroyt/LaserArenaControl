@@ -5,6 +5,8 @@ namespace App\Models;
 use App\GameModels\Factory\GameFactory;
 use App\GameModels\Game\Game;
 use App\GameModels\Game\Player;
+use App\Models\Group\Player as GroupPlayer;
+use App\Models\Group\Team;
 use Lsr\Core\App;
 use Lsr\Core\Caching\Cache;
 use Lsr\Core\Exceptions\ValidationException;
@@ -30,8 +32,10 @@ class GameGroup extends Model
 	/** @var Game[] */
 	private array $games = [];
 
-	/** @var Player[] */
+	/** @var GroupPlayer[] */
 	private array $players = [];
+	/** @var array<string, Team> */
+	private array $teams = [];
 
 	/**
 	 * @return static[]
@@ -42,7 +46,26 @@ class GameGroup extends Model
 	}
 
 	/**
-	 * @return Player[]
+	 * @post Games are loaded
+	 * @post Teams are loaded
+	 * @post Players are loaded
+	 *
+	 * @return array<string, Team>
+	 * @throws Throwable
+	 */
+	public function getTeams() : array {
+		if (empty($this->teams) && empty($this->getPlayers())) {
+			return [];
+		}
+		return $this->teams;
+	}
+
+	/**
+	 * @post Games are loaded
+	 * @post Teams are loaded
+	 * @post Players are loaded
+	 *
+	 * @return GroupPlayer[]
 	 * @throws Throwable
 	 */
 	public function getPlayers() : array {
@@ -52,38 +75,55 @@ class GameGroup extends Model
 		}
 		if (empty($this->players)) {
 			$players = [];
-			$playerSkills = [];
-			$playerVests = [];
 			foreach ($games as $game) {
-				/** @var Player $player */
-				foreach ($game->getPlayers() as $player) {
-					$asciiName = Strings::toAscii($player->name);
-					if (!isset($players[$asciiName])) {
-						$playerSkills[$asciiName] = [];
-						$players[$asciiName] = clone $player;
-						$playerVests[$asciiName] = [];
+				foreach ($game->getTeams() as $team) {
+					$tPlayers = [];
+					$tPlayerNames = [];
+					/** @var Player $player */
+					foreach ($team->getPlayers() as $player) {
+						$asciiName = Strings::toAscii($player->name);
+						$tPlayerNames[] = $asciiName;
+						if (!isset($players[$asciiName])) {
+							$players[$asciiName] = new GroupPlayer(
+								$asciiName,
+								clone $player
+							);
+							$players[$asciiName]->name = $player->name;
+						}
+
+						// Add player to the team
+						if (!isset($tPlayers[$asciiName])) {
+							$tPlayers[$asciiName] = $players[$asciiName];
+						}
+
+						// Add game to the player
+						$players[$asciiName]->addGame($player, $game);
 					}
-					if ($players[$asciiName]->name === $asciiName && $player->name !== $asciiName) {
-						$players[$asciiName]->name = $player->name; // Prefer non-ascii (with diacritics) names
+					sort($tPlayerNames);
+					$id = md5(implode('', $tPlayerNames));
+					if (!isset($this->teams[$id])) {
+						$this->teams[$id] = new Team($id, $team->name, $team::SYSTEM);
 					}
-					$playerSkills[$asciiName][] = $player->skill;
-					if (!isset($playerVests[$asciiName][$player->vest])) {
-						$playerVests[$asciiName][$player->vest] = 0;
-					}
-					$playerVests[$asciiName][$player->vest]++;
+					$this->teams[$id]->addColor($team->color);
+					$this->teams[$id]->addPlayer(...$tPlayers);
 				}
 			}
 
-			// Set player's skill as average
+			// Copy some values to the base Player class
 			foreach ($players as $player) {
-				$asciiName = Strings::toAscii($player->name);
-				$player->skill = (int) round(array_sum($playerSkills[$asciiName]) / count($playerSkills[$asciiName]));
-				// Sort player vests by his use count
-				arsort($playerVests[$asciiName]);
-				$player->vest = array_key_first($playerVests[$asciiName]);
+				$player->player->skill = $player->getSkill();
+				$player->player->vest = $player->getFavouriteVest();
 			}
+
+			// Sort players by their skill in descending order
+			uasort(
+				$players,
+				static fn(GroupPlayer $playerA, GroupPlayer $playerB) => $playerB->getSkill() - $playerA->getSkill()
+			);
+
 			$this->players = $players;
 		}
+
 		return $this->players;
 	}
 
@@ -127,6 +167,7 @@ class GameGroup extends Model
 										]);
 			$cache->remove('group/'.$this->id.'/players');
 			$cache->remove('group/'.$this->id.'/games');
+			$cache->remove('group/'.$this->id.'/games/ids');
 		}
 	}
 

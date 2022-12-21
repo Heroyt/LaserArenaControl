@@ -11,19 +11,21 @@
 		<h2>{lang 'Vest settings', context: 'settings'}:</h2>
 		{if count($vests) > 1}
 			<ul class="nav nav-tabs" id="systems" role="tablist">
-				<li class="nav-item" role="presentation" n:foreach="$vests as $system => $v">
-					<button class="nav-link {if $iterator->first}active{/if}" id="system-tab-{$system}"
+				<li class="nav-item" role="presentation" n:foreach="$vests as $colorSystem => $v">
+					<button class="nav-link {if $iterator->first}active{/if}" id="system-tab-{$colorSystem}"
 							data-bs-toggle="tab"
-							data-bs-target="#vests-{$system}" type="button" role="tab" aria-controls="vests-{$system}"
+							data-bs-target="#vests-{$colorSystem}" type="button" role="tab"
+							aria-controls="vests-{$colorSystem}"
 							aria-selected="true">
-						{lang $system, context: 'systems'}
+						{lang $colorSystem, context: 'systems'}
 					</button>
 				</li>
 			</ul>
 			<div class="tab-content" id="systems-content">
-				<div n:foreach="$vests as $system => $systemVests"
-						class="tab-pane fade {if $iterator->first}show active{/if}" id="vests-{$system}" role="tabpanel"
-						aria-labelledby="system-tab-{$system}">
+				<div n:foreach="$vests as $colorSystem => $systemVests"
+						class="tab-pane fade {if $iterator->first}show active{/if}" id="vests-{$colorSystem}"
+						role="tabpanel"
+						aria-labelledby="system-tab-{$colorSystem}">
 					{include vestSettings}
 				</div>
 			</div>

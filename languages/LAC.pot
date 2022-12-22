@@ -2378,3 +2378,6 @@ msgstr ""
 
 msgid "Logo"
 msgstr ""
+
+msgid "Pozadí"
+msgstr ""

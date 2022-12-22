@@ -2358,3 +2358,6 @@ msgstr "Show players"
 
 msgid "Logo"
 msgstr ""
+
+msgid "Pozadí"
+msgstr ""

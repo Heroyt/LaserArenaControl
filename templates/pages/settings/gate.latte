@@ -1,7 +1,7 @@
 {layout '../../@layout.latte'}
 
 {block content}
-	<form action="{link ['settings', 'gate']}" method="post" class="text-center autosave"
+	<form action="{link ['settings', 'gate']}" method="post" class="text-center autosave" enctype="multipart/form-data"
 		  id="gate-settings-form">
 		<div class="me-4 last-save-wrapper text-end position-fixed end-0">
 			{lang 'Last saved:'} <span class="last-save" data-target="#gate-settings-form">{lang 'never'}</span>
@@ -25,6 +25,19 @@
 			<label for="timer_show">{lang 'Show timer from minute', context: 'settings'}:</label>
 			<input type="number" name="timer_show" class="form-control" id="timer_show"
 				   value="{\App\Core\Info::get('timer_show', 30)}">
+		</div>
+		<div class="row">
+			<div class="col-sm-6" style="max-height: 200px;" id="background-wrapper">
+				<img src="{\App\Services\GateStyleService::getGateBackgroundUrl()}" alt="Gate background"
+					 class="img-fluid" id="background-image">
+			</div>
+			<div class="col-sm-6">
+				<label class="form-label" for="background">
+					{lang 'Pozadí'}: (1920&times;1080px)
+				</label>
+				<input id="background" name="background" type="file"
+					   accept="image/jpeg,image/png" class="form-control">
+			</div>
 		</div>
 		<p class="my-4">
 			<button class="btn btn-success btn-lg" type="submit" data-action="autosave" data-prevent="true">

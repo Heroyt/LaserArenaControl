@@ -84,6 +84,17 @@ class Settings extends Controller
 			if (isset($request->post['timer_show'])) {
 				Info::set('timer_show', (int) $request->post['timer_show']);
 			}
+			if (isset($_FILES['background'])) {
+				$file = UploadedFile::parseUploaded('background');
+				if (isset($file)) {
+					// Remove old uploaded files
+					foreach (glob(UPLOAD_DIR.'gate.*') as $old) {
+						unlink($old);
+					}
+					// Save new file
+					$file->save(UPLOAD_DIR.'gate.'.$file->getExtension());
+				}
+			}
 		} catch (Exception) {
 			$request->passErrors[] = lang('Failed to save settings.', context: 'errors');
 		}
@@ -138,8 +149,12 @@ class Settings extends Controller
 			}
 			if (isset($_FILES['logo'])) {
 				$file = UploadedFile::parseUploaded('logo');
-				bdump($file);
 				if (isset($file)) {
+					// Remove old uploaded files
+					foreach (glob(UPLOAD_DIR.'logo.*') as $old) {
+						unlink($old);
+					}
+					// Save new file
 					$file->save(UPLOAD_DIR.'logo.'.$file->getExtension());
 				}
 			}

@@ -39,6 +39,14 @@ export default function route(pageInfo: PageInfo): void {
 				module.default();
 			});
 			break;
+		case 'settings-gate':
+			import(
+				/* webpackChunkName: "settingsGate" */
+				'./pages/settings/gate'
+				).then(module => {
+				module.default();
+			});
+			break;
 		case 'settings-vests':
 			import(
 				/* webpackChunkName: "settingsVest" */

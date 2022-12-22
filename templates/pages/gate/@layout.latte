@@ -52,6 +52,7 @@
 		{var string[][] $colors = App\GameModels\Factory\GameFactory::getAllTeamsColors()}
 		<style>
 				:root {
+					--gate-background: url('{\App\Services\GateStyleService::getGateBackgroundUrl()|noescape}');
 				{foreach $colors as $system => $systemColors} {foreach $systemColors as $key => $color} {var string $varName1 = '--team-'.$system.'-'.$key} {var string $varName2 = '--team-'.$system.'-'.$key.'-text'} {$varName1}: {$color|noescape};
 				{$varName2}:{\App\Tools\Color::getFontColor($color)|noescape};
 				{/foreach} {/foreach}

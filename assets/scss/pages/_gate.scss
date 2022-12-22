@@ -18,7 +18,7 @@
 
 #gate {
 	--multiplier: 1;
-	background-image: url('/assets/images/gate/bg.png');
+	background-image: var(--gate-background, url('/assets/images/gate/bg.png'));
 	background-position: center;
 	background-repeat: no-repeat;
 	background-size: cover;

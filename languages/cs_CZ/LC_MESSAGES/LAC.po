@@ -2376,3 +2376,5 @@ msgstr "Zobrazit týmy"
 msgid "Zobrazit hráče"
 msgstr "Zobrazit hráče"
 
+msgid "Logo"
+msgstr ""

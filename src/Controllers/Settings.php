@@ -26,6 +26,7 @@ use Lsr\Core\Routing\Attributes\Delete;
 use Lsr\Core\Routing\Attributes\Get;
 use Lsr\Core\Routing\Attributes\Post;
 use Lsr\Exceptions\TemplateDoesNotExistException;
+use Lsr\Helpers\Files\UploadedFile;
 use Lsr\Logging\Exceptions\DirectoryCreationException;
 
 /**
@@ -168,6 +169,9 @@ class Settings extends Controller
 
 				$printDir = 'assets/images/print/';
 
+				/** @var array<int,array{background:UploadedFile|null,background-landscape:UploadedFile|null}> $uploadedFiles */
+				$uploadedFiles = UploadedFile::parseUploadedMultiple('styles');
+				bdump($uploadedFiles);
 				/**
 				 * @var array{name:string,primary:string,dark:string,light:string,original-background?:string,original-background-landscape?:string} $info
 				 */
@@ -180,69 +184,11 @@ class Settings extends Controller
 					$style->colorLight = $info['light'];
 					$style->bg = $info['original-background'] ?? '';
 					$style->bgLandscape = $info['original-background-landscape'] ?? '';
-					if (!empty($_FILES['styles']['name'][$key]['background'])) {
-						if ($_FILES['styles']['error'][$key]['background'] !== UPLOAD_ERR_OK) {
-							$request->passErrors[] = match ($_FILES['styles']['error'][$key]['background']) {
-								UPLOAD_ERR_INI_SIZE => lang('Uploaded file is too large', context: 'errors'),
-								UPLOAD_ERR_FORM_SIZE => lang('Form size is to large', context: 'errors'),
-								UPLOAD_ERR_PARTIAL => lang('The uploaded file was only partially uploaded.', context: 'errors'),
-								UPLOAD_ERR_CANT_WRITE => lang('Failed to write file to disk.', context: 'errors'),
-								default => lang('Error while uploading a file.', context: 'errors'),
-							};
-						}
-						else {
-							$name = $printDir.basename($_FILES['styles']['name'][$key]['background']);
-							$imageFileType = strtolower(pathinfo($name, PATHINFO_EXTENSION));
-							$check = getimagesize($_FILES['styles']["tmp_name"][$key]['background']);
-							if ($check !== false) {
-								if (in_array($imageFileType, ['jpg', 'jpeg', 'png'], true)) {
-									if (move_uploaded_file($_FILES['styles']["tmp_name"][$key]['background'], ROOT.$name)) {
-										$style->bg = $name;
-									}
-									else {
-										$request->passErrors[] = lang('File upload failed.', context: 'errors');
-									}
-								}
-								else {
-									$request->passErrors[] = lang('File must be an image.', context: 'errors');
-								}
-							}
-							else {
-								$request->passErrors[] = lang('File upload failed.', context: 'errors');
-							}
-						}
+					if (isset($uploadedFiles[$key]['background'])) {
+						$this->processPrintFileUpload($uploadedFiles[$key]['background'], $request, $printDir, $style);
 					}
-					if (!empty($_FILES['styles']['name'][$key]['background-landscape'])) {
-						if ($_FILES['styles']['error'][$key]['background-landscape'] !== UPLOAD_ERR_OK) {
-							$request->passErrors[] = match ($_FILES['styles']['error'][$key]['background-landscape']) {
-								UPLOAD_ERR_INI_SIZE => lang('Uploaded file is too large', context: 'errors'),
-								UPLOAD_ERR_FORM_SIZE => lang('Form size is to large', context: 'errors'),
-								UPLOAD_ERR_PARTIAL => lang('The uploaded file was only partially uploaded.', context: 'errors'),
-								UPLOAD_ERR_CANT_WRITE => lang('Failed to write file to disk.', context: 'errors'),
-								default => lang('Error while uploading a file.', context: 'errors'),
-							};
-						}
-						else {
-							$name = $printDir.basename($_FILES['styles']['name'][$key]['background-landscape']);
-							$imageFileType = strtolower(pathinfo($name, PATHINFO_EXTENSION));
-							$check = getimagesize($_FILES['styles']["tmp_name"][$key]['background-landscape']);
-							if ($check !== false) {
-								if (in_array($imageFileType, ['jpg', 'jpeg', 'png'], true)) {
-									if (move_uploaded_file($_FILES['styles']["tmp_name"][$key]['background-landscape'], ROOT.$name)) {
-										$style->bgLandscape = $name;
-									}
-									else {
-										$request->passErrors[] = lang('File upload failed.', context: 'errors');
-									}
-								}
-								else {
-									$request->passErrors[] = lang('File must be an image.', context: 'errors');
-								}
-							}
-							else {
-								$request->passErrors[] = lang('File upload failed.', context: 'errors');
-							}
-						}
+					if (isset($uploadedFiles[$key]['background-landscape'])) {
+						$this->processPrintFileUpload($uploadedFiles[$key]['background-landscape'], $request, $printDir, $style);
 					}
 					$style->default = $style->id === (int) ($_POST['default-style'] ?? 0);
 					$style->insert();
@@ -288,6 +234,38 @@ class Settings extends Controller
 	private function validatePrint(Request $request) : bool {
 		// TODO: Actually validate request..
 		return count($request->passErrors) === 0;
+	}
+
+	/**
+	 * @param UploadedFile $file
+	 * @param Request      $request
+	 * @param string       $printDir
+	 * @param PrintStyle   $style
+	 */
+	private function processPrintFileUpload(UploadedFile $file, Request $request, string $printDir, PrintStyle $style) : void {
+		if ($file->error !== UPLOAD_ERR_OK) {
+			$request->passErrors[] = $file->getErrorMessage();
+		}
+		else {
+			$name = $printDir.$file->getBaseName().'.'.$file->getExtension();
+			$check = getimagesize($file->tmpName);
+			if ($check !== false) {
+				if ($file->validateExtension('jpg', 'jpeg', 'png')) {
+					if ($file->save(ROOT.$name)) {
+						$style->bg = $name;
+					}
+					else {
+						$request->passErrors[] = lang('File upload failed.', context: 'errors');
+					}
+				}
+				else {
+					$request->passErrors[] = lang('File must be an image.', context: 'errors');
+				}
+			}
+			else {
+				$request->passErrors[] = lang('File upload failed.', context: 'errors');
+			}
+		}
 	}
 
 	/**

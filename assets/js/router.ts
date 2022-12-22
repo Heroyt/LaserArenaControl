@@ -23,6 +23,14 @@ export default function route(pageInfo: PageInfo): void {
 		});
 	}
 	switch (pageInfo.routeName ?? '') {
+		case 'settings':
+			import(
+				/* webpackChunkName: "settingsGeneral" */
+				'./pages/settings/general'
+				).then(module => {
+				module.default();
+			});
+			break;
 		case 'settings-print':
 			import(
 				/* webpackChunkName: "settingsPrint" */

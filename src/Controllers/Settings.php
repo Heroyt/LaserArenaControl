@@ -136,6 +136,13 @@ class Settings extends Controller
 			if (isset($request->post['gates_ips'])) {
 				Info::set('gates_ips', array_map('trim', explode(',', $request->post['gates_ips'])));
 			}
+			if (isset($_FILES['logo'])) {
+				$file = UploadedFile::parseUploaded('logo');
+				bdump($file);
+				if (isset($file)) {
+					$file->save(UPLOAD_DIR.'logo.'.$file->getExtension());
+				}
+			}
 		} catch (Exception) {
 			$request->passErrors[] = lang('Failed to save settings.', context: 'errors');
 		}
@@ -171,7 +178,6 @@ class Settings extends Controller
 
 				/** @var array<int,array{background:UploadedFile|null,background-landscape:UploadedFile|null}> $uploadedFiles */
 				$uploadedFiles = UploadedFile::parseUploadedMultiple('styles');
-				bdump($uploadedFiles);
 				/**
 				 * @var array{name:string,primary:string,dark:string,light:string,original-background?:string,original-background-landscape?:string} $info
 				 */

@@ -2,10 +2,10 @@
 
 {varType string[] $errors}
 {varType array $notices}
-{varType string $colorSystem}
+{varType string $system}
 {varType App\GameModels\Game\GameModes\AbstractMode[] $modes}
 
-{var string[] $colors = \App\GameModels\Factory\GameFactory::getAllTeamsColors()[$colorSystem]}
+{var string[] $colors = \App\GameModels\Factory\GameFactory::getAllTeamsColors()[$system] ?? []}
 
 {block content}
 
@@ -35,11 +35,11 @@
 		</div>
 		<div class="text-center">
 			<div class="btn-group btn-group-lg">
-				<button type="button" class="btn btn-primary addMode" data-system="{$colorSystem}" data-type="TEAM"
+				<button type="button" class="btn btn-primary addMode" data-system="{$system}" data-type="TEAM"
 						id="addModeTeam">
 					<i class="fa-solid fa-plus"></i> {lang 'Přidat týmový mód', context: 'actions'}
 				</button>
-				<button type="button" class="btn btn-info addMode" data-system="{$colorSystem}" data-type="SOLO"
+				<button type="button" class="btn btn-info addMode" data-system="{$system}" data-type="SOLO"
 						id="addModeSolo">
 					<i class="fa-solid fa-plus"></i> {lang 'Přidat sólo mód', context: 'actions'}
 				</button>
@@ -127,6 +127,7 @@
 
 
 
+
 					<hr class="my-4">
 					<h5>{lang 'Části', context: 'game.modes.settings'}</h5>
 					<p class="text-sm text-muted"><strong>{lang 'Varování'}
@@ -138,6 +139,7 @@
 					{include modeSettingsCheck, 'partHits', 'Zásahy hráčů', 'Pokud se má zobrazovat část "Zásahy hráčů" (kdo koho zasáhl).'}
 					{include modeSettingsCheck, 'partBest', 'Ti nej', 'Pokud se má zobrazovat část "Ti nej".'}
 					{include modeSettingsCheck, 'partBestDay', 'Pořadí dne', 'Pokud se má zobrazovat část "Pořadí dne".'}
+
 
 
 
@@ -165,6 +167,7 @@
 
 
 
+
 					<hr class="my-4">
 					<h5>{lang 'Výsledky týmů', context: 'game.modes.settings'}</h5>
 					<p class="text-sm text-muted"><strong>{lang 'Varování'}
@@ -175,6 +178,7 @@
 					{include modeSettingsCheck, 'teamShots', 'Výstřely týmu', 'Pokud se mají zobrazovat výstřely u jednotlivých týmů.'}
 					{include modeSettingsCheck, 'teamHits', 'Zásahy týmu', 'Pokud se mají zobrazovat zásahy u jednotlivých týmů.'}
 					{include modeSettingsCheck, 'teamZakladny', 'Ztráty základny týmu', 'Pokud se mají zobrazovat ztráty základny u jednotlivých týmů (týká se jen módu Základny).'}
+
 
 
 
@@ -269,14 +273,16 @@
 				<div class="team-colors d-flex align-items-stretch justify-content-center w-100 mb-3 mt-2"
 					 style="height: 2rem;">
 					{var string[] $teams = isset($mode) ? json_decode($mode->teams) : array_keys($colors)}
-					{foreach $colors as $key => $color}
-						<input class="team-color-input" type="checkbox" value="{$key}"
-							   {if in_array($key,$teams)}checked{/if}
-							   id="team-color-{$id}-{$key}" name="mode[{$id}][teams][]">
-						<label class="team-color {if $iterator->first}rounded-start{elseif $iterator->last}rounded-end{/if}"
-							   style="background-color: {$color|noescape}; width: 3rem;"
-							   for="team-color-{$id}-{$key}">&nbsp;</label>
-					{/foreach}
+					{if !empty($colors)}
+						{foreach $colors as $key => $color}
+							<input class="team-color-input" type="checkbox" value="{$key}"
+								   {if in_array($key,$teams)}checked{/if}
+								   id="team-color-{$id}-{$key}" name="mode[{$id}][teams][]">
+							<label class="team-color {if $iterator->first}rounded-start{elseif $iterator->last}rounded-end{/if}"
+								   style="background-color: {$color|noescape}; width: 3rem;"
+								   for="team-color-{$id}-{$key}">&nbsp;</label>
+						{/foreach}
+					{/if}
 				</div>
 			</div>
 			<div class="btn-group btn-group-lg">

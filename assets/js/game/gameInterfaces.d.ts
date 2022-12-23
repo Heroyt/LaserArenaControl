@@ -104,6 +104,8 @@ interface GameGroupData {
 			players: { [index: string]: PlayerData }
 		}
 	},
+
+	table?: TableData | null,
 }
 
 interface TableData {
@@ -148,8 +150,8 @@ interface VariationCollection {
 }
 
 interface Music {
-	id: number;
-	name: string;
-	fileName: string;
-	media: string;
+	id: number,
+	name: string,
+	fileName: string,
+	media: string
 }

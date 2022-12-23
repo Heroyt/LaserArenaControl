@@ -128,6 +128,17 @@ export default class NewGameGroup {
 				}
 			};
 
+			if (group.dataset.table && group.dataset.tablename) {
+				const table = parseInt(group.dataset.table);
+				const tableName = group.dataset.tablename;
+				if (!isNaN(table)) {
+					data.table = {
+						id: table,
+						name: tableName,
+					}
+				}
+			}
+
 			const vests: { [index: number | string]: boolean } = {};
 			this.game.players.forEach(player => {
 				vests[player.vest] = true;
@@ -252,6 +263,13 @@ export default class NewGameGroup {
 			this.gameGroupsWrapper.appendChild(group);
 			this.initGroup(group);
 			initTooltips(group);
+		}
+
+		if (groupData.table && groupData.table.id && groupData.table.name) {
+			group.dataset.table = groupData.table.id.toString();
+			group.dataset.tablename = groupData.table.name;
+			group.setAttribute('data-table', groupData.table.id.toString());
+			group.setAttribute('data-tablename', groupData.table.name);
 		}
 
 		const name = group.querySelector('.group-name') as HTMLInputElement;

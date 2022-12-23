@@ -676,7 +676,9 @@ export default class Game {
 		} else {
 			this.$table.value = '';
 		}
-		this.$table.dispatchEvent(e);
+		if (!data.group) {
+			this.$table.dispatchEvent(e);
+		}
 		this.$group.dispatchEvent(e);
 	}
 

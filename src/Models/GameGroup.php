@@ -124,7 +124,7 @@ class GameGroup extends Model
 					}
 					$this->teams[$id]->name = $team->name;
 					$this->teams[$id]->addColor($team->color);
-					$this->teams[$id]->addPlayer(...$tPlayers);
+					$this->teams[$id]->addPlayer(...array_values($tPlayers));
 				}
 			}
 

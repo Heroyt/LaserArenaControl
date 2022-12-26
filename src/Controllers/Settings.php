@@ -209,7 +209,7 @@ class Settings extends Controller
 						$this->processPrintFileUpload($uploadedFiles[$key]['background'], $request, $printDir, $style);
 					}
 					if (isset($uploadedFiles[$key]['background-landscape'])) {
-						$this->processPrintFileUpload($uploadedFiles[$key]['background-landscape'], $request, $printDir, $style);
+						$this->processPrintFileUpload($uploadedFiles[$key]['background-landscape'], $request, $printDir, $style, true);
 					}
 					$style->default = $style->id === (int) ($_POST['default-style'] ?? 0);
 					$style->insert();
@@ -263,7 +263,7 @@ class Settings extends Controller
 	 * @param string       $printDir
 	 * @param PrintStyle   $style
 	 */
-	private function processPrintFileUpload(UploadedFile $file, Request $request, string $printDir, PrintStyle $style) : void {
+	private function processPrintFileUpload(UploadedFile $file, Request $request, string $printDir, PrintStyle $style, bool $landscape = false) : void {
 		if ($file->error !== UPLOAD_ERR_OK) {
 			$request->passErrors[] = $file->getErrorMessage();
 		}
@@ -273,7 +273,12 @@ class Settings extends Controller
 			if ($check !== false) {
 				if ($file->validateExtension('jpg', 'jpeg', 'png')) {
 					if ($file->save(ROOT.$name)) {
-						$style->bg = $name;
+						if ($landscape) {
+							$style->bgLandscape = $name;
+						}
+						else {
+							$style->bg = $name;
+						}
 					}
 					else {
 						$request->passErrors[] = lang('File upload failed.', context: 'errors');

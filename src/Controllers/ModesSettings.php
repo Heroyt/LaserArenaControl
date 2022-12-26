@@ -322,7 +322,7 @@ class ModesSettings extends Controller
 			// Delete empty variations
 			DB::delete(GameModeVariation::TABLE, [
 				'[id_variation] NOT IN %sql',
-				DB::select(GameModeVariation::TABLE_VALUES, 'id_variation')
+				DB::select(GameModeVariation::TABLE_VALUES, 'id_variation')->fluent
 			]);
 			DB::getConnection()->commit();
 		} catch (Throwable $e) {

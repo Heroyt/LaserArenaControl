@@ -51,26 +51,30 @@ export default function initNewGamePage() {
 	const gatesStartBtn = document.getElementById('startGates') as HTMLButtonElement;
 	const gatesStopBtn = document.getElementById('stopGates') as HTMLButtonElement;
 
-	gatesStartBtn.addEventListener('click', () => {
-		startLoading();
-		axios.post('/api/gates/start', {})
-			.then(() => {
-				stopLoading();
-			})
-			.catch(() => {
-				stopLoading(false);
-			});
-	});
-	gatesStopBtn.addEventListener('click', () => {
-		startLoading();
-		axios.post('/api/gates/stop', {})
-			.then(() => {
-				stopLoading();
-			})
-			.catch(() => {
-				stopLoading(false);
-			});
-	});
+	if (gatesStartBtn) {
+		gatesStartBtn.addEventListener('click', () => {
+			startLoading();
+			axios.post('/api/gates/start', {})
+				.then(() => {
+					stopLoading();
+				})
+				.catch(() => {
+					stopLoading(false);
+				});
+		});
+	}
+	if (gatesStopBtn) {
+		gatesStopBtn.addEventListener('click', () => {
+			startLoading();
+			axios.post('/api/gates/stop', {})
+				.then(() => {
+					stopLoading();
+				})
+				.catch(() => {
+					stopLoading(false);
+				});
+		});
+	}
 
 	stopBtn.addEventListener('click', () => {
 		stopGame(new FormData(form));

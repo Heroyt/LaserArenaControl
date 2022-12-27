@@ -2,8 +2,10 @@
 /**
  * @author Tomáš Vojík <xvojik00@stud.fit.vutbr.cz>, <vojik@wboy.cz>
  */
+
 namespace App\Install;
 
+use App\Core\Info;
 use App\GameModels\Game\GameModes\AbstractMode;
 use App\GameModels\Game\PrintStyle;
 use App\GameModels\Game\PrintTemplate;
@@ -12,6 +14,9 @@ use App\GameModels\Vest;
 use Dibi\Exception;
 use Lsr\Core\DB;
 
+/**
+ * Class that initially seeds the database
+ */
 class Seeder implements InstallInterface
 {
 
@@ -469,52 +474,8 @@ class Seeder implements InstallInterface
 			'color_light'   => '#a7d0f0',
 			'color_primary' => '#1b4799',
 			'bg'            => 'assets/images/print/bg.jpg',
+			'bg_landscape'  => 'assets/images/print/bg_landscape.jpg',
 			'default'       => true,
-		],
-		[
-			'id_style'      => 2,
-			'name'          => 'Čerti',
-			'color_dark'    => '#8d0d04',
-			'color_light'   => '#ddaa9b',
-			'color_primary' => '#260301',
-			'bg'            => 'assets/images/print/bg.jpg',
-			'default'       => false,
-		],
-		[
-			'id_style'      => 3,
-			'name'          => 'Zima',
-			'color_dark'    => '#304d99',
-			'color_light'   => '#a7d0f0',
-			'color_primary' => '#1b4799',
-			'bg'            => 'assets/images/print/bg.jpg',
-			'default'       => false,
-		],
-		[
-			'id_style'      => 4,
-			'name'          => 'Valentýn',
-			'color_dark'    => '#ae202d',
-			'color_light'   => '#ddaa9b',
-			'color_primary' => '#260301',
-			'bg'            => 'assets/images/print/bg.jpg',
-			'default'       => false,
-		],
-		[
-			'id_style'      => 5,
-			'name'          => 'Vánoce',
-			'color_dark'    => '#168740',
-			'color_light'   => '#c6f0d2',
-			'color_primary' => '#08602c',
-			'bg'            => 'assets/images/print/bg.jpg',
-			'default'       => false,
-		],
-		[
-			'id_style'      => 6,
-			'name'          => 'Nový rok',
-			'color_dark'    => '#304D99',
-			'color_light'   => '#a7d0f0',
-			'color_primary' => '#1b4799',
-			'bg'            => 'assets/images/print/bg.jpg',
-			'default'       => false,
 		],
 	];
 
@@ -524,6 +485,14 @@ class Seeder implements InstallInterface
 			'slug'        => 'default',
 			'name'        => 'Default',
 			'description' => 'Basic result template',
+			'orientation' => 'portrait',
+		],
+		[
+			'id_template' => 2,
+			'slug'        => 'graphical',
+			'name'        => 'Graphical',
+			'description' => 'Graphical template using graphs and other visualisations.',
+			'orientation' => 'landscape',
 		],
 	];
 
@@ -547,17 +516,16 @@ class Seeder implements InstallInterface
 		17 => 'Nezapomeň každý květen a listopad registrovat svůj tým na turnaj!',
 		18 => 'Zabití: 100 bodů, Smrt: -50 bodů, Zabití vlastního hráče: -25 bodů',
 		19 => 'Střílíme v Písku už od 31.12.2013!!!',
-		20 => '#laserarenapísek',
-		21 => 'Všechny bonusy, kromě štítu, trvají 30s.',
-		22 => 'Dobití protihráče pažbou, vám žádné body nepřidá.',
-		23 => 'LASER TAG - SUIT UP!',
-		24 => 'Měl bys radši hrát laser game a být úžasný!',
-		25 => 'Jen Chuck Norris vás může zastřelit baterkou na svém mobilu.',
-		26 => 'Oživení trvá 5 sekund.',
-		27 => 'Nikdy nejsi příliš starý na laser game.',
-		28 => 'Když tě bolí nohy, kempi!',
-		29 => 'Vestu si oblečte vždy zbraní dobředu.',
-		30 => 'Pro vyřízení osobních sporů je aréna ideální.',
+		20 => 'Všechny bonusy, kromě štítu, trvají 30s.',
+		21 => 'Dobití protihráče pažbou, vám žádné body nepřidá.',
+		22 => 'LASER TAG - SUIT UP!',
+		23 => 'Měl bys radši hrát laser game a být úžasný!',
+		24 => 'Jen Chuck Norris vás může zastřelit baterkou na svém mobilu.',
+		25 => 'Oživení trvá 5 sekund.',
+		26 => 'Nikdy nejsi příliš starý na laser game.',
+		27 => 'Když tě bolí nohy, kempi!',
+		28 => 'Vestu si oblečte vždy zbraní dobředu.',
+		29 => 'Pro vyřízení osobních sporů je aréna ideální.',
 	];
 
 	public const VESTS = [
@@ -693,6 +661,10 @@ class Seeder implements InstallInterface
 			foreach (self::VESTS as $row) {
 				DB::insertIgnore(Vest::TABLE, $row);
 			}
+
+			// Info
+			DB::insertIgnore(Info::TABLE, ['key' => 'liga_api_url', 'value' => 's:25:"https://new.laserliga.cz/";']);
+			DB::insertIgnore(Info::TABLE, ['key' => 'default_print_template', 'value' => 's:9:"graphical";']);
 		} catch (Exception $e) {
 			echo $e->getMessage().PHP_EOL.$e->getSql().PHP_EOL;
 			return false;

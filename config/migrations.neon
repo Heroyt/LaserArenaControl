@@ -57,7 +57,7 @@ tables:
         	`description` text DEFAULT NULL,
         	`load_name` varchar(50) DEFAULT NULL,
         	`type` enum('TEAM','SOLO') NOT NULL DEFAULT 'TEAM',
-        	`teams` text NOT NULL DEFAULT '0,1,2,3,4,5',
+        	`teams` text NOT NULL DEFAULT '["0","1","2","3","4","5"]',
         	`public` tinyint(1) NOT NULL DEFAULT 0,
         	`mines` tinyint(1) NOT NULL DEFAULT 1 COMMENT 'Jestli automaticky detekovat miny nebo vůbec',
         	`part_win` tinyint(1) NOT NULL DEFAULT 1 COMMENT 'Jestli má být vložena část s tím kdo vyhrál.',

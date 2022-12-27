@@ -98,7 +98,7 @@ export default function route(pageInfo: PageInfo): void {
 		case 'dashboard':
 			import(
 				/* webpackChunkName: "dashboard" */
-				'./pages/newGame'
+				'./pages/newGame/newGame'
 				).then(module => {
 				module.default();
 			});

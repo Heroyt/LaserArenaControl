@@ -1,9 +1,9 @@
-import Game from "../game/game";
+import Game from "../../game/game";
 import axios, {AxiosResponse} from "axios";
-import {lang} from "../functions";
-import EventServerInstance from "../EventServer";
-import {startLoading, stopLoading} from "../loaders";
-import {GameData} from "../game/gameInterfaces";
+import {lang} from "../../functions";
+import EventServerInstance from "../../EventServer";
+import {startLoading, stopLoading} from "../../loaders";
+import {GameData} from "../../game/gameInterfaces";
 import {Modal, Offcanvas} from "bootstrap";
 
 declare global {
@@ -152,7 +152,7 @@ export default function initNewGamePage() {
 
 	import(
 		/* webpackChunkName: "newGame_groups" */
-		'./newGame/groups'
+		'./groups'
 		)
 		.then(module => {
 			const groups = new module.default(game, gameGroupsWrapper, gameGroupTemplate, gameGroupsSelect);
@@ -160,7 +160,7 @@ export default function initNewGamePage() {
 
 			import(
 				/* webpackChunkName: "newGame_tables" */
-				'./newGame/tables'
+				'./tables'
 				)
 				.then(module => {
 					new module.default(groups, gameTablesSelect);

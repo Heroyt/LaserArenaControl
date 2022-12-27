@@ -36,10 +36,16 @@
 		 style="grid-column: {$table->grid->col} / span {$table->grid->width}; grid-row: {$table->grid->row} / span {$table->grid->height}; max-height: {8 * $table->grid->height}rem;">
 		<div class="card-body d-flex flex-column justify-content-center align-items-center">
 			<h5>{$table->name}</h5>
-			<button type="button" data-toggle="tooltip" title="{lang 'Uvolnit'}"
-					class="btn btn-danger clean {if !isset($table->group)}d-none{/if}">
-				<i class="fa-solid fa-soap"></i>
-			</button>
+			<div class="btn-group">
+				<button type="button" data-toggle="tooltip" title="{lang 'Uvolnit'}"
+						class="btn btn-danger clean {if !isset($table->group)}d-none{/if}">
+					<i class="fa-solid fa-soap"></i>
+				</button>
+				<button type="button" data-toggle="tooltip" title="{lang 'Nahrát'}"
+						class="btn btn-primary load {if !isset($table->group)}d-none{/if}">
+					<i class="fa-solid fa-upload"></i>
+				</button>
+			</div>
 		</div>
 	</div>
 {/define}

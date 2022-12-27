@@ -180,6 +180,10 @@ export default class Player {
 						status,
 						info: textarea.value,
 					};
+					this.$vest.dataset.status = status;
+					this.$vest.setAttribute('data-status', status);
+					this.$vest.dataset.info = textarea.value;
+					this.$vest.setAttribute('data-info', textarea.value);
 					axios.post('/settings/vests', data)
 						.then(response => {
 							stopLoading(response.data.success, true);

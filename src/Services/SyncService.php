@@ -29,7 +29,7 @@ class SyncService
 	public static function syncGames(int $limit = 5, ?float $timeout = null) : void {
 		$logger = new Logger(LOG_DIR, 'sync');
 		/** @var Row[] $gameRows */
-		$gameRows = GameFactory::queryGames(true)->where('[sync] = 0')->limit($limit)->orderBy('start')->desc()->fetchAll();
+		$gameRows = GameFactory::queryGames(true)->where('[sync] = 0')->limit($limit)->orderBy('start')->desc()->fetchAll(cache: false);
 
 		if (empty($gameRows)) {
 			if (PHP_SAPI === 'cli') {
@@ -38,8 +38,6 @@ class SyncService
 			$logger->info('No games to synchronize.');
 			return;
 		}
-
-		//$recreateClient = count($gameRows) > 10;
 
 		$message = 'Starting sync for games: '.implode(', ', array_map(static function(object $row) {
 				return $row->id_game.' - '.$row->code;
@@ -61,13 +59,9 @@ class SyncService
 			}
 		}
 
-		//$liga = App::getService('liga');
-
 		// Time it
 		$start = microtime(true);
 		$systemTimes = [];
-		//$apiTime = 0.0;
-		//$dbTime = 0.0;
 		// Sync each system individually
 		foreach ($systems as $system => $games) {
 			$systemStart = microtime(true);
@@ -80,21 +74,6 @@ class SyncService
 					$logger->warning('Failed to synchronize "'.$system.'" system (game '.$key.')');
 				}
 			}
-			/*do {
-				$batch = array_splice($games, 0, 2);
-				$apiStart = microtime(true);
-				if ($liga->syncGames($system, $batch, $timeout, $recreateClient)) {
-					$apiTime += microtime(true) - $apiStart;
-					$dbStart = microtime(true);
-					self::setSyncFlag($batch);
-					$dbTime += microtime(true) - $dbStart;
-				}
-				else {
-					$apiTime += microtime(true) - $apiStart;
-					$logger->warning('Failed to synchronize "'.$system.'" system (batch '.$batchNum.')');
-				}
-				$batchNum++;
-			} while (!empty($games));*/
 			$systemTimes[$system] += microtime(true) - $systemStart;
 		}
 		$message = 'Synchronization end. Times: ';
@@ -105,8 +84,6 @@ class SyncService
 		$logger->info($message);
 		if (PHP_SAPI === 'cli') {
 			echo $message.PHP_EOL;
-			//echo 'API time: '.$apiTime.'s'.PHP_EOL;
-			//echo 'DB time: '.$dbTime.'s'.PHP_EOL;
 		}
 	}
 

@@ -50,6 +50,7 @@ COPY startApache.sh start.sh
 # Initialize crontab
 COPY cron.txt .
 RUN crontab cron.txt
+RUN cron
 
 # Install
 RUN composer build

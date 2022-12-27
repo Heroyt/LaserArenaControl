@@ -2,6 +2,4 @@
 
 echo $PWD
 
-php index.php event/server &
-
-php-fpm
+php index.php event/server & cron & php-fpm

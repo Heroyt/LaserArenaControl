@@ -48,8 +48,8 @@ export default function initNewGamePage() {
 
 	const gameTablesSelect = document.getElementById('table-select') as HTMLSelectElement;
 
-	const gatesStartBtn = document.getElementById('startGates') as HTMLButtonElement;
-	const gatesStopBtn = document.getElementById('stopGates') as HTMLButtonElement;
+	const gatesStartBtn = document.getElementById('startGates') as HTMLButtonElement | null;
+	const gatesStopBtn = document.getElementById('stopGates') as HTMLButtonElement | null;
 
 	if (gatesStartBtn) {
 		gatesStartBtn.addEventListener('click', () => {

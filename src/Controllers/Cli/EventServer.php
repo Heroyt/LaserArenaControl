@@ -39,9 +39,10 @@ class EventServer extends CliController
 	public function start() : never {
 		$start = microtime(true);
 		$this->echo('Starting server', 'info');
-		$null = null;
+		$null = [];
 		// Create the master (=server) socket
 		// Using IPv4 and TCP
+		/** @var Socket|false $sock */
 		$sock = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
 		if ($sock === false) {
 			$this->errorPrint('Cannot open socket.');
@@ -101,6 +102,7 @@ class EventServer extends CliController
 
 			// If the main socket received a new connect message -> open a new client socket
 			if (in_array($sock, $newSockets, true)) {
+				/** @var Socket|false $client */
 				$client = socket_accept($sock);
 				if ($client === false) {
 					$this->errorPrint('Socker_accept failed');
@@ -109,9 +111,10 @@ class EventServer extends CliController
 
 				// Debug message
 				socket_getpeername($client, $clientIP);
-				$this->echo('Client connected.', $clientIP);
+				$this->echo('Client connected.', $clientIP ?? '');
 
 				// Send WebSocket handshake headers.
+				/** @var string|false $request */
 				$request = @socket_read($client, 10000);
 				if ($request === false) {
 					// Initial request failed
@@ -179,20 +182,21 @@ class EventServer extends CliController
 			// This can happen if the disconnect message is incorrectly read
 			$validUTF8 = mb_check_encoding($message, 'UTF-8');
 			if ($validUTF8) {
-				$this->echo($message, $clientIP);
+				$this->echo($message, $clientIP ?? '');
 				$this->broadcast($message);
 			}
 		}
 
 		// Check for disconnections
 		$test = [$client];
-		$null = null;
+		$null = [];
 		// Test the socket to prevent socket_read() from blocking the process
 		@socket_select($test, $null, $null, 0, 10);
+		/** @var string|false $socketData */
 		$socketData = @socket_read($client, 1024, PHP_NORMAL_READ);
 		// Error means the client is disconnected
 		if ($socketData === false) {
-			$this->echo('Client disconnected.', $clientIP);
+			$this->echo('Client disconnected.', $clientIP ?? '');
 			// Remove the client socket from the client-pool
 			$key = array_search($client, $this->clients, true);
 			if (isset($this->clients[$key])) {
@@ -240,7 +244,7 @@ class EventServer extends CliController
 	 * @return void
 	 */
 	public function broadcast(string $message) : void {
-		foreach ($this->clients as $key => $client) {
+		foreach ($this->clients as $client) {
 			// Send a message to socket
 			$this->sendTo($client, $message);
 		}
@@ -253,7 +257,7 @@ class EventServer extends CliController
 	 * @return bool
 	 */
 	public function sendTo(Socket $client, string $message) : bool {
-		return socket_write($client, chr(129).chr(strlen($message)).$message) > 0;
+		return @socket_write($client, chr(129).chr(strlen($message)).$message) > 0;
 	}
 
 	/**

@@ -360,7 +360,11 @@ class ResultsParser extends AbstractResultsParser
 				// - Teammate hits
 				// - Enemy deaths
 				// - Teammate deaths
-				// - 7 unknown arguments
+				// - Lives
+				// - ???
+				// - Score for hits
+				// - ???
+				// - VIP hits
 				case 'PACKY':
 					if ($argsCount !== 16 && $argsCount !== 22 && $argsCount !== 23) {
 						throw new ResultsParseException('Invalid argument count in PACKY');

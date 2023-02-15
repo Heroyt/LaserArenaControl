@@ -221,7 +221,7 @@ class Gate extends Controller
 		$this->params['topShots'] = null;
 
 		if (!empty($gameIds)) {
-			$q = clone $playersQuery;
+			$q = PlayerFactory::queryPlayers($gameIds);
 			$topScores = $q->orderBy('[score]')->desc()->fetchAssoc('name', cache: false);
 			if (!empty($topScores)) {
 				$count = 0;
@@ -232,25 +232,25 @@ class Gate extends Controller
 					}
 				}
 			}
-			$q = clone $playersQuery;
+			$q = PlayerFactory::queryPlayers($gameIds);
 			/** @var null|Row{id_player:int,system:string} $topHits */
 			$topHits = $q->orderBy('[hits]')->desc()->fetch(cache: false);
 			if (isset($topHits)) {
 				$this->params['topHits'] = PlayerFactory::getById($topHits->id_player, ['system' => $topHits->system]);
 			}
-			$q = clone $playersQuery;
+			$q = PlayerFactory::queryPlayers($gameIds);
 			/** @var null|Row{id_player:int,system:string} $topDeaths */
 			$topDeaths = $q->orderBy('[deaths]')->desc()->fetch(cache: false);
 			if (isset($topDeaths)) {
 				$this->params['topDeaths'] = PlayerFactory::getById($topDeaths->id_player, ['system' => $topDeaths->system]);
 			}
-			$q = clone $playersQuery;
+			$q = PlayerFactory::queryPlayers($gameIds);
 			/** @var null|Row{id_player:int,system:string} $topAccuracy */
 			$topAccuracy = $q->orderBy('[accuracy]')->desc()->fetch(cache: false);
 			if (isset($topAccuracy)) {
 				$this->params['topAccuracy'] = PlayerFactory::getById($topAccuracy->id_player, ['system' => $topAccuracy->system]);
 			}
-			$q = clone $playersQuery;
+			$q = PlayerFactory::queryPlayers($gameIds);
 			/** @var null|Row{id_player:int,system:string} $topShots */
 			$topShots = $q->orderBy('[shots]')->desc()->fetch(cache: false);
 			if (isset($topShots)) {

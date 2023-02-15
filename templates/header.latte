@@ -1,9 +1,9 @@
 {varType array $_COOKIE}
 
 {define header}
-	<header class="navbar navbar-expand-lg navbar-light bg-light text-black py-1 fixed-top">
+	<header class="navbar navbar-expand-lg navbar-light py-1 fixed-top bg-body-tertiary">
 		<div class="container-fluid">
-			<a href="{getUrl}" class="navbar-brand text-black d-flex">
+			<a href="{getUrl}" class="navbar-brand  d-flex">
 				{svgIcon 'Vesta', width: 'auto', height: '1.75rem'}
 				<div class="mx-2 d-none d-md-inline">LaserArenaControl</div>
 			</a>
@@ -12,7 +12,7 @@
 					{foreach Lsr\Core\App::getMenu() as $key => $menuItem}
 						<li class="nav-item{if count($menuItem->children) > 0} dropdown{/if}">
 							{if count($menuItem->children) > 0}
-								<a class="nav-link dropdown-toggle text-black" id="navbarDropdown{$key}"
+								<a class="nav-link dropdown-toggle" id="navbarDropdown{$key}"
 								   role="button"
 								   data-bs-toggle="dropdown" aria-expanded="false">
 									{if !empty($menuItem->icon)}
@@ -20,9 +20,9 @@
 									{/if}
 									{$menuItem->name}
 								</a>
-								<ul class="dropdown-menu bg-light" aria-labelledby="navbarDropdown{$key}">
+								<ul class="dropdown-menu" aria-labelledby="navbarDropdown{$key}">
 									<li n:foreach="$menuItem->children as $child">
-										<a class="dropdown-item text-black" href="{$child->url}">
+										<a class="dropdown-item " href="{$child->url}">
 											{if !empty($child->icon)}
 												<i class="{$child->icon}"></i>
 											{/if}
@@ -31,7 +31,7 @@
 									</li>
 								</ul>
 							{else}
-								<a class="nav-link{if $menuItem->active} active text-dark{else} text-black{/if}"
+								<a class="nav-link{if $menuItem->active} active{else} {/if}"
 								   aria-current="page"
 								   href="{$menuItem->url}">
 									{if !empty($menuItem->icon)}
@@ -74,7 +74,7 @@
 						</li>
 					{/foreach}
 				</ul>
-				<button class="navbar-toggler ms-2 text-black border-black" type="button" data-bs-toggle="collapse"
+				<button class="navbar-toggler ms-2  border-black" type="button" data-bs-toggle="collapse"
 						data-bs-target="#navBarContent"
 						aria-controls="navBarContent" aria-expanded="false" aria-label="{lang 'Toggle navigation'}">
 					<i class="fa-solid fa-bars"></i>
@@ -84,6 +84,7 @@
 				let currentColorScheme = {ifset $_COOKIE['mode']}{$_COOKIE['mode']}{else}window.matchMedia("(prefers-color-scheme: dark)").matches ? 'dark' : 'light'{/ifset}
 				const modeSwitch = document.getElementById('modeSwitch');
 				console.log(currentColorScheme, modeSwitch.classList.entries());
+				document.documentElement.setAttribute('data-bs-theme', currentColorScheme);
 				if (currentColorScheme === 'dark') {
 					modeSwitch.classList.remove('btn-dark');
 					modeSwitch.classList.add('btn-light');
@@ -105,6 +106,7 @@
 						document.body.classList.remove('lightMode');
 						currentColorScheme = 'dark';
 					}
+					document.documentElement.setAttribute('data-bs-theme', currentColorScheme);
 					document.cookie = `mode=` + currentColorScheme;
 				});
 			</script>

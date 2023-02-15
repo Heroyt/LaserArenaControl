@@ -5,16 +5,12 @@
 @use "sass:map";
 @use "../functions";
 
+$enable-dark-mode: true;
+$color-mode-type: data;
+
 $tmp-theme-colors: functions.getThemeColors($custom-colors);
 
-$link-color: var(--white);
-$link-hover-color: var(--primary);
-
-$navbar-dark-color: var(--white);
-$navbar-dark-hover-color: var(--primary);
-
-$body-bg: map.get($tmp-theme-colors, "background");
-$body-color: map.get($tmp-theme-colors, "text");
+$link-hover-color: map.get($tmp-theme-colors, "primary");
 
 $table-striped-bg-factor: .05;
 $table-striped-bg: rgba(#fff, $table-striped-bg-factor);
@@ -24,11 +20,6 @@ $form-check-input-border: 1px solid var(--black);
 
 $nav-tabs-link-active-color: var(--white);
 
-$input-group-addon-color: var(--background);
-
 $font-family-sans-serif: Montserrat, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-
-$input-bg: var(--background);
-$input-color: var(--text);
 
 $popover-max-width: 350px;

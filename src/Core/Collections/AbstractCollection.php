@@ -81,11 +81,8 @@ abstract class AbstractCollection implements CollectionInterface
 	 * @return bool
 	 */
 	public function contains(Model $model) : bool {
-		foreach ($this->data as $test) {
-			/** @noinspection TypeUnsafeComparisonInspection */
-			if ($test == $model) {
-				return true;
-			}
+		if (in_array($model, $this->data, true)) {
+			return true;
 		}
 		return false;
 	}

@@ -33,8 +33,6 @@ if (!defined('ROOT')) {
 
 date_default_timezone_set('Europe/Prague');
 
-session_start();
-
 // Autoload libraries
 require_once ROOT.'vendor/autoload.php';
 

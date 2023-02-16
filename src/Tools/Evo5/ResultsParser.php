@@ -14,6 +14,7 @@ use App\GameModels\Game\Evo5\Player;
 use App\GameModels\Game\Evo5\Team;
 use App\GameModels\Game\Scoring;
 use App\GameModels\Game\Timing;
+use App\Models\Auth\Player as User;
 use App\Models\GameGroup;
 use App\Models\MusicMode;
 use App\Models\Table;
@@ -45,6 +46,7 @@ class ResultsParser extends AbstractResultsParser
 	 * @throws ResultsParseException
 	 * @throws ValidationException
 	 * @throws Throwable
+	 * @noinspection PhpDuplicateSwitchCaseBodyInspection
 	 */
 	public function parse() : Game {
 		$game = new Game();
@@ -263,10 +265,11 @@ class ResultsParser extends AbstractResultsParser
 				// _ Game note (meta data)
 				case 'GROUP':
 					if ($argsCount !== 2) {
-						throw new ResultsParseException('Invalid argument count in GROUP - '.$argsCount.' '.json_encode($args));
+						throw new ResultsParseException('Invalid argument count in GROUP - '.$argsCount.' '.json_encode($args, JSON_THROW_ON_ERROR));
 					}
 					// Parse metadata
 					/** @var string|false $decodedJson */
+					/** @noinspection PhpCastIsUnnecessaryInspection */
 					$decodedJson = gzinflate(
 						(string) gzinflate(
 							(string) base64_decode($args[1])
@@ -527,7 +530,24 @@ class ResultsParser extends AbstractResultsParser
 				if (!empty($meta['p'.$player->vest.'n'])) {
 					$player->name = $meta['p'.$player->vest.'n'];
 				}
-				// TODO: Add userId to metadata
+
+				// Check for player's user code
+				if (!empty($meta['p'.$player->vest.'u'])) {
+					$code = $meta['p'.$player->vest.'u'];
+					$user = User::getByCode($code);
+
+					// Check the public API for user by code
+					if (!isset($user)) {
+						$user = $this->playerProvider->findPublicPlayerByCode($code);
+						if (isset($user) && !$user->save()) {
+							// User found, but the save failed
+							$user = null;
+						}
+					}
+					if (isset($user)) {
+						$player->user = $user;
+					}
+				}
 			}
 
 			/** @var Team $team */

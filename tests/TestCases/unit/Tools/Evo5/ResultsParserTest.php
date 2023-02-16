@@ -6,7 +6,9 @@ use App\Exceptions\ResultsParseException;
 use App\GameModels\Game\Evo5\Game;
 use App\GameModels\Game\Evo5\Player;
 use App\GameModels\Game\Evo5\Team;
+use App\Services\PlayerProvider;
 use App\Tools\Evo5\ResultsParser;
+use Lsr\Core\App;
 use Lsr\Exceptions\FileException;
 use Lsr\Helpers\Tracy\DbTracyPanel;
 use PHPUnit\Framework\TestCase;
@@ -42,7 +44,7 @@ class ResultsParserTest extends TestCase
 	 * @dataProvider getFiles
 	 */
 	public function testParserAndDbSave(string $file) : void {
-		$parser = new ResultsParser($file);
+		$parser = new ResultsParser($file, App::getContainer()->getByType(PlayerProvider::class));
 		$game = $parser->parse();
 
 		if (!$game->isFinished()) {
@@ -124,14 +126,14 @@ class ResultsParserTest extends TestCase
 	 * @throws FileException
 	 */
 	public function testParserError(string $file) : void {
-		$parser = new ResultsParser($file);
+		$parser = new ResultsParser($file, App::getContainer()->getByType(PlayerProvider::class));
 		$this->expectException(ResultsParseException::class);
 		$game = $parser->parse();
 	}
 
 	public function testUnknownFile() : void {
 		$this->expectException(FileException::class);
-		$parser = new ResultsParser(ROOT.'invalidFile');
+		$parser = new ResultsParser(ROOT.'invalidFile', App::getContainer()->getByType(PlayerProvider::class));
 	}
 
 }

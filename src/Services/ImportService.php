@@ -98,7 +98,7 @@ class ImportService
 				}
 				$logger->info('Importing file: '.$file);
 				try {
-					$parser = new ResultsParser($file);
+					$parser = new ResultsParser($file, App::getContainer()->getByType(PlayerProvider::class));
 					$game = $parser->parse();
 					if (!isset($game->importTime)) {
 						$logger->debug('Game is not finished');

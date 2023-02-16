@@ -4,6 +4,7 @@
  */
 namespace App\Tools;
 
+use App\Services\PlayerProvider;
 use App\Tools\Interfaces\ResultsParserInterface;
 use Lsr\Exceptions\FileException;
 
@@ -21,7 +22,8 @@ abstract class AbstractResultsParser implements ResultsParserInterface
 	 * @throws FileException
 	 */
 	public function __construct(
-		protected string $fileName,
+		protected string                  $fileName,
+		protected readonly PlayerProvider $playerProvider,
 	) {
 		if (!file_exists($this->fileName) || !is_readable($this->fileName)) {
 			throw new FileException('File "'.$this->fileName.'" does not exist or is not readable');

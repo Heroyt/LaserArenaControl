@@ -7,7 +7,9 @@ use App\GameModels\Game\Enums\GameModeType;
 use App\GameModels\Game\Game;
 use App\GameModels\Game\Player;
 use App\GameModels\Game\Team;
+use App\Services\PlayerProvider;
 use App\Tools\Evo5\ResultsParser;
+use Lsr\Core\App;
 use Lsr\Core\Models\Model;
 use PHPUnit\Framework\TestCase;
 use ReflectionProperty;
@@ -35,7 +37,7 @@ class ImportExportTest extends TestCase
 		/** @var string[] $files */
 		$files = glob(ROOT.'results-test/*_archive.game');
 		foreach ($files as $file) {
-			$parser = new ResultsParser($file);
+			$parser = new ResultsParser($file, App::getContainer()->getByType(PlayerProvider::class));
 			$parser->parse()->save();
 		}
 	}

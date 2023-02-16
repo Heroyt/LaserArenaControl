@@ -80,8 +80,15 @@ class NewGame extends Controller
 	#[Post('/')]
 	public function process(Request $request) : never {
 		Timer::start('newGame.process');
+		/** @var array{
+		 *   meta:array<string,string|numeric>,
+		 *   players:array{vest:int,name:string,vip:bool,team:int,code?:string}[],
+		 *   teams:array{key:int,name:string,playerCount:int}
+		 *   } $data
+		 */
 		$data = [
 			'meta'    => [
+				/** @phpstan-ignore-next-line */
 				'music' => empty($request->post['music']) ? null : (int) $request->post['music'],
 			],
 			'players' => [],
@@ -98,15 +105,21 @@ class NewGame extends Controller
 
 		Timer::start('newGame.mode');
 		try {
-			$mode = GameModeFactory::getById($request->post['game-mode'] ?? 0);
-		} catch (GameModeNotFoundException $e) {
+			/** @phpstan-ignore-next-line */
+			$mode = GameModeFactory::getById((int) ($request->getPost('game-mode', 0)));
+		} catch (GameModeNotFoundException) {
 		}
 
 		if (isset($mode)) {
 			$data['meta']['mode'] = $mode->loadName;
 			if (!empty($request->post['variation'])) {
 				$data['meta']['variations'] = [];
-				foreach ($request->post['variation'] as $id => $suffix) {
+				/**
+				 * @var int    $id
+				 * @var string $suffix
+				 * @phpstan-ignore-next-line
+				 */
+				foreach ($request->getPost('variation', []) as $id => $suffix) {
 					$data['meta']['variations'][$id] = $suffix;
 					$data['meta']['mode'] .= $suffix;
 				}
@@ -114,11 +127,17 @@ class NewGame extends Controller
 		}
 		Timer::start('newGame.mode');
 
+		/** @var array<numeric-string, int> $teams */
 		$teams = [];
 
 		// Validate and parse players
 		Timer::start('newGame.players');
-		foreach ($request->post['player'] as $vest => $player) {
+		/**
+		 * @var int                                                            $vest
+		 * @var array{name:string,team?:string,vip:numeric-string,code:string} $player
+		 * @phpstan-ignore-next-line
+		 */
+		foreach ($request->getPost('player', []) as $vest => $player) {
 			if (empty(trim($player['name']))) {
 				continue;
 			}
@@ -131,6 +150,9 @@ class NewGame extends Controller
 			$asciiName = substr(Strings::toAscii($player['name']), 0, 12);
 			if ($player['name'] !== $asciiName) {
 				$data['meta']['p'.$vest.'n'] = $player['name'];
+			}
+			if (!empty($player['code'])) {
+				$data['meta']['p'.$vest.'u'] = $player['code'];
 			}
 			$data['players'][] = [
 				'vest' => $vest,
@@ -146,7 +168,12 @@ class NewGame extends Controller
 		Timer::stop('newGame.players');
 
 		Timer::start('newGame.teams');
-		foreach ($request->post['team'] as $key => $team) {
+		/**
+		 * @var int                $key
+		 * @var array{name:string} $team
+		 * @phpstan-ignore-next-line
+		 */
+		foreach ($request->getPost('team', []) as $key => $team) {
 			$asciiName = Strings::toAscii($team['name']);
 			if ($team['name'] !== $asciiName) {
 				$data['meta']['t'.$key.'n'] = $team['name'];
@@ -184,14 +211,15 @@ class NewGame extends Controller
 		Timer::start('newGame.music');
 		if (isset($data['meta']['music'])) {
 			try {
-				$music = MusicMode::get($data['meta']['music']);
+				/** @phpstan-ignore-next-line */
+				$music = MusicMode::get((int) $data['meta']['music']);
 				if (!file_exists($music->fileName)) {
 					App::getLogger()->warning('Music file does not exist - '.$music->fileName);
 				}
 				if (!copy($music->fileName, LMX_DIR.'music/evo5.mp3')) {
 					App::getLogger()->warning('Music copy failed - '.$music->fileName);
 				}
-			} catch (ModelNotFoundException|ValidationException|DirectoryCreationException $e) {
+			} catch (ModelNotFoundException|ValidationException|DirectoryCreationException) {
 				// Not critical, doesn't need to do anything
 			}
 		}

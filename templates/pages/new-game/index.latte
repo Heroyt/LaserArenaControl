@@ -67,6 +67,7 @@
 		</section>
 	</form>
 	{include scoreDownloadModal}
+	{include userSearchModal}
 	{include help}
 	{include groups}
 	{include tables}
@@ -295,6 +296,11 @@
 		<input id="player-name-{$vest->vestNum}" tabindex="{$vest->vestNum}" type="text"
 			   class="form-control player-name"
 			   name="player[{$vest->vestNum}][name]" maxlength="12">
+		<button type="button" class="btn btn-info btn-sm search-user">
+			<i class="fa-solid fa-search"></i>
+		</button>
+		<input type="hidden" name="player[{$vest->vestNum}][code]" value="" class="user-code"
+			   id="user-{$vest->vestNum}-code">
 		<div class="team-select solo-hide d-flex">
 			{foreach $colors as $key => $color}
 				<input class="team-color-input" type="radio" name="player[{$vest->vestNum}][team]" value="{$key}"
@@ -372,6 +378,26 @@
 					<button id="cancelDownload" type="button" class="btn btn-danger">
 						{lang 'Zrušit', context: 'actions'}
 					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+{/define}
+
+{define userSearchModal}
+	<div class="modal" id="userSearchModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">{lang 'Vyhledat hráče'}</h5>
+				</div>
+				<div class="modal-body">
+					<div class="form-group">
+						<label for="user-search" class="form-label">{lang 'Hledat'}...</label>
+						<input type="search" id="user-search" class="form-control"
+							   placeholder="{lang 'Jméno, e-mail, kód hráče'}">
+					</div>
+					<div class="list-group" id="search-results"></div>
 				</div>
 			</div>
 		</div>

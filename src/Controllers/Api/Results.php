@@ -6,6 +6,7 @@ use App\Exceptions\ResultsParseException;
 use App\GameModels\Factory\GameFactory;
 use App\GameModels\Game\Player;
 use App\Services\ImportService;
+use App\Services\PlayerProvider;
 use App\Tools\Evo5\ResultsParser;
 use Exception;
 use JsonException;
@@ -14,6 +15,7 @@ use Lsr\Core\Constants;
 use Lsr\Core\Exceptions\ModelNotFoundException;
 use Lsr\Core\Exceptions\ValidationException;
 use Lsr\Core\Requests\Request;
+use Lsr\Core\Templating\Latte;
 use Lsr\Logging\Exceptions\ArchiveCreationException;
 use Lsr\Logging\Logger;
 use Throwable;
@@ -21,6 +23,13 @@ use ZipArchive;
 
 class Results extends ApiController
 {
+
+	public function __construct(
+		Latte                           $latte,
+		private readonly PlayerProvider $playerProvider,
+	) {
+		parent::__construct($latte);
+	}
 
 	/**
 	 * @param Request $request
@@ -73,7 +82,7 @@ class Results extends ApiController
 
 		try {
 			$logger->info('Importing file: '.$files[0]);
-			$parser = new ResultsParser($files[0]);
+			$parser = new ResultsParser($files[0], $this->playerProvider);
 			$game = $parser->parse();
 
 			$now = time();

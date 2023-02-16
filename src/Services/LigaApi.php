@@ -21,6 +21,7 @@ use JsonException;
 use Lsr\Core\App;
 use Lsr\Core\Exceptions\ValidationException;
 use Lsr\Logging\Logger;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * Singleton service for handling public API calls
@@ -75,6 +76,24 @@ class LigaApi
 	}
 
 	/**
+	 * Send a GET request to the liga API with all necessary settings, headers, etc.
+	 *
+	 * @param string                   $path
+	 * @param array<string,mixed>|null $params
+	 * @param array<string,mixed>      $config
+	 *
+	 * @return ResponseInterface
+	 * @throws GuzzleException
+	 */
+	public function get(string $path, ?array $params = null, array $config = []) : ResponseInterface {
+		$this->makeClient();
+		if (isset($params)) {
+			$config['query'] = $params;
+		}
+		return $this->client->get($path, $config);
+	}
+
+	/**
 	 * Synchronize games to public API
 	 *
 	 * @param string     $system
@@ -122,6 +141,24 @@ class LigaApi
 			return false;
 		}
 		return true;
+	}
+
+	/**
+	 * Send a POST request to the liga API with all necessary settings, headers, etc.
+	 *
+	 * @param string              $path
+	 * @param array|object|null   $data
+	 * @param array<string,mixed> $config
+	 *
+	 * @return ResponseInterface
+	 * @throws GuzzleException
+	 */
+	public function post(string $path, array|object|null $data = null, array $config = []) : ResponseInterface {
+		$this->makeClient();
+		if (isset($data)) {
+			$config['json'] = $data;
+		}
+		return $this->client->post($path, $config);
 	}
 
 	public function syncMusicMode(MusicMode $mode) : bool {
@@ -247,6 +284,18 @@ class LigaApi
 			return false;
 		}
 		return true;
+	}
+
+	/**
+	 * @param bool $remake
+	 *
+	 * @return Client
+	 */
+	public function getClient(bool $remake = false) : Client {
+		if (!isset($this->client) || $remake) {
+			$this->makeClient();
+		}
+		return $this->client;
 	}
 
 }

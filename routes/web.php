@@ -9,6 +9,7 @@ use App\Controllers\GamesList;
 use App\Controllers\Gate;
 use App\Controllers\Lang;
 use App\Controllers\NewGame;
+use App\Controllers\PlayersController;
 use App\Controllers\Results;
 use App\Controllers\Settings;
 use Lsr\Core\Routing\Route;
@@ -47,3 +48,10 @@ Route::group('/gate')
 		 ->post('/loaded', [Gate::class, 'setGateLoaded']) // Error
 		 ->post('/set/{system}', [Gate::class, 'setGateGame'])
 		 ->post('/loaded/{system}', [Gate::class, 'setGateLoaded']);
+
+Route::group('/players')
+		 ->get('/find', [PlayersController::class, 'find'])
+		 ->get('/find/{code}', [PlayersController::class, 'getPlayer'])
+		 ->get('/sync/{code}', [PlayersController::class, 'syncPlayer'])
+		 ->group('/public')
+		 ->get('/find', [PlayersController::class, 'findPublic']);

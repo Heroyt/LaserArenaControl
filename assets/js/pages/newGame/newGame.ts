@@ -5,6 +5,7 @@ import EventServerInstance from "../../EventServer";
 import {startLoading, stopLoading} from "../../loaders";
 import {GameData} from "../../game/gameInterfaces";
 import {Modal, Offcanvas} from "bootstrap";
+import Player from "../../game/player";
 
 declare global {
 	const gameData: GameData;
@@ -16,6 +17,15 @@ enum GameStatus {
 	STANDBY,
 	ARMED,
 	PLAYING,
+}
+
+interface UserSeachData {
+	id: number;
+	nickname: string;
+	code: string;
+	email: string;
+	rank: number;
+	connections: { type: string, identifier: string }[];
 }
 
 export default function initNewGamePage() {
@@ -36,6 +46,79 @@ export default function initNewGamePage() {
 	const loadBtn = form.querySelector('#loadGame') as HTMLButtonElement;
 	const startBtn = form.querySelector('#startGame') as HTMLButtonElement;
 	const stopBtn = form.querySelector('#stopGame') as HTMLButtonElement;
+
+	const userSearchModalElem = document.getElementById('userSearchModal') as HTMLDivElement;
+	const userSearchModal = new Modal(userSearchModalElem);
+	const userSearchInput = userSearchModalElem.querySelector('#user-search') as HTMLInputElement;
+	const userSearchResults = userSearchModalElem.querySelector('#search-results') as HTMLDivElement;
+	let searchedPlayer: Player | null = null;
+
+	userSearchModalElem.addEventListener('hide.bs.modal', () => {
+		searchedPlayer = null;
+	});
+
+	let userSearchTimeout: NodeJS.Timeout;
+	const userSearchLoader = document.createElement('div');
+	userSearchLoader.classList.add('list-group-item');
+	userSearchLoader.innerHTML = `<div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div>`;
+	let foundPlayers: { [index: string]: UserSeachData } = {};
+	userSearchInput.addEventListener('input', () => {
+		clearTimeout(userSearchTimeout);
+		userSearchResults.innerHTML = '';
+		userSearchTimeout = setTimeout(() => {
+			foundPlayers = {};
+			const searchParams = new URLSearchParams({
+				search: userSearchInput.value
+			});
+			userSearchResults.appendChild(userSearchLoader);
+			let finishedLocal = false;
+			let finishedPublic = false;
+			axios.get('/players/find?' + searchParams.toString())
+				.then((results: AxiosResponse<UserSeachData[]>) => {
+					results.data.forEach(createUserSearchResult);
+					if (finishedPublic) {
+						userSearchLoader.remove();
+					}
+				})
+				.finally(() => {
+					finishedLocal = true;
+				});
+			axios.get('/players/public/find?' + searchParams.toString())
+				.then((results: AxiosResponse<UserSeachData[]>) => {
+					results.data.forEach(createUserSearchResult);
+					if (finishedLocal) {
+						userSearchLoader.remove();
+					}
+				})
+				.finally(() => {
+					finishedPublic = true;
+				});
+		}, 500);
+	});
+
+	function createUserSearchResult(playerData: UserSeachData): void {
+		if (foundPlayers[playerData.code]) {
+			return;
+		}
+		foundPlayers[playerData.code] = playerData;
+		const elem = document.createElement('a');
+		elem.classList.add('list-group-item', 'list-group-item-action');
+		elem.dataset.code = playerData.code;
+		elem.setAttribute('data-code', playerData.code);
+		elem.innerText = playerData.code + ': ' + playerData.nickname + `(${playerData.email})`;
+		userSearchResults.insertBefore(elem, userSearchLoader);
+
+		elem.addEventListener('click', () => {
+			if (searchedPlayer) {
+				searchedPlayer.$name.value = playerData.nickname;
+				searchedPlayer.name = playerData.nickname;
+				searchedPlayer.realSkill = playerData.rank;
+				searchedPlayer.setUserCode(playerData.code);
+				searchedPlayer.update();
+			}
+			userSearchModal.hide();
+		});
+	}
 
 	const downloadModalElem = document.getElementById('scoresDownloadModal') as HTMLDivElement;
 	const downloadModal = new Modal(downloadModalElem);
@@ -146,6 +229,13 @@ export default function initNewGamePage() {
 		lastGamesSelect.value = '';
 		gameTablesSelect.value = '';
 		gameGroupsSelect.value = '';
+	});
+
+	game.players.forEach(player => {
+		player.row.addEventListener('user-search', (e: CustomEvent<Player>) => {
+			searchedPlayer = e.detail;
+			userSearchModal.show();
+		});
 	});
 
 	loadLastGames();

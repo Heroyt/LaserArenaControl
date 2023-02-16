@@ -630,6 +630,10 @@ export default class Game {
 				if (playerData.vip) {
 					player.setVip(playerData.vip);
 				}
+
+				if (playerData.code) {
+					player.setUserCode(playerData.code);
+				}
 			});
 			Object.values(data.teams).forEach(teamData => {
 				const team = this.teams.get(teamData.color.toString());
@@ -738,6 +742,7 @@ export default class Game {
 				teamNum: parseInt(player.team),
 				color: parseInt(player.team),
 				skill: player.skill,
+				code: player.userCode,
 			}
 		});
 

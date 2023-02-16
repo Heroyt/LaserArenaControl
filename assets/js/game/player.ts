@@ -16,6 +16,8 @@ export default class Player {
 	row: HTMLElement;
 	game: Game;
 
+	userCode: string = '';
+
 	skill: number = 1;
 	maxSkill: number = 3;
 	realSkill: number = 1;
@@ -27,6 +29,8 @@ export default class Player {
 
 	$vest: HTMLElement;
 	$name: HTMLInputElement;
+	$userCode: HTMLInputElement;
+	$findUserBtn: HTMLButtonElement;
 
 	$teams: NodeListOf<HTMLInputElement>;
 	$skills: NodeListOf<HTMLInputElement>;
@@ -47,6 +51,8 @@ export default class Player {
 		this.game = game;
 
 		this.$vest = row.querySelector('.vest-num');
+		this.$userCode = row.querySelector('.user-code');
+		this.$findUserBtn = row.querySelector('.search-user');
 		this.$name = row.querySelector('.player-name');
 		this.$teams = row.querySelectorAll('.team-color-input');
 		this.$skills = row.querySelectorAll('.player-skill-input');
@@ -99,6 +105,7 @@ export default class Player {
 
 	initEvents(): void {
 		this.$name.addEventListener('input', () => {
+			this.resetUserCode();
 			this.update();
 			this.realSkill = this.skill;
 		});
@@ -257,6 +264,16 @@ export default class Player {
 				this.clear();
 			}
 		});
+
+		this.$findUserBtn.addEventListener('click', () => {
+			let event = new CustomEvent<Player>(
+				'user-search',
+				{
+					detail: this,
+				}
+			);
+			this.row.dispatchEvent(event);
+		});
 	}
 
 	clear(): void {
@@ -276,6 +293,7 @@ export default class Player {
 		this.row.style.removeProperty('--shadow-color');
 		this.$vest.style.removeProperty('color');
 		this.$vest.style.removeProperty('background-color');
+		this.resetUserCode();
 		this.update();
 	}
 
@@ -417,6 +435,21 @@ export default class Player {
 			label.setAttribute('for', `player-skill-${this.vest}-1`);
 		} else {
 			label.setAttribute('for', `player-skill-${this.vest}-4`);
+		}
+	}
+
+	resetUserCode(): void {
+		this.setUserCode('')
+	}
+
+	setUserCode(code: string): void {
+		this.userCode = code;
+		this.$userCode.value = code;
+
+		if (code.length > 0) {
+			this.$name.classList.add('fw-semibold');
+		} else {
+			this.$name.classList.remove('fw-semibold');
 		}
 	}
 }

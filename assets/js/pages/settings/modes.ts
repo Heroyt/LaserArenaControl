@@ -2,7 +2,7 @@ import {Modal, Tooltip} from 'bootstrap';
 import axios, {AxiosResponse} from "axios";
 import {startLoading, stopLoading} from "../../loaders";
 import Sortable from "sortablejs";
-import {GameMode, ModeSettings, Variation, VariationCollection, VariationsValue} from '../../game/gameInterfaces';
+import {GameMode, ModeSettings, Variation, VariationCollection, VariationsValue} from '../../interfaces/gameInterfaces';
 
 interface VariationsData {
 	mode: GameMode,

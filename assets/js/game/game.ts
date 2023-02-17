@@ -2,7 +2,7 @@ import Player from "./player";
 import Team from "./team";
 import {shuffle} from "../functions";
 import {Tooltip} from "bootstrap";
-import {GameData, Variation, VariationsValue} from './gameInterfaces';
+import {GameData, Variation, VariationsValue} from '../interfaces/gameInterfaces';
 import CustomLoadMode from "./customLoadMode";
 // @ts-ignore
 import Sortable from "sortablejs/modular/sortable.core.esm.js";
@@ -327,7 +327,7 @@ export default class Game {
 			select.id = `variation-${variation.id}`;
 			wrapper.appendChild(select);
 
-			values.forEach((value, key) => {
+			values.forEach((value) => {
 				const option = document.createElement('option');
 				option.value = value.suffix;
 				option.innerText = value.value;

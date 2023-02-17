@@ -1,6 +1,6 @@
 import {startLoading, stopLoading} from "../../loaders";
 import axios, {AxiosResponse} from "axios";
-import {TableData} from "../../game/gameInterfaces";
+import {TableData} from "../../interfaces/gameInterfaces";
 import NewGameGroup from "./groups";
 
 export default class NewGameTables {

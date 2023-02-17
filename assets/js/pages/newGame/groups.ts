@@ -1,7 +1,7 @@
 import {Collapse} from "bootstrap";
 import {startLoading, stopLoading} from "../../loaders";
 import axios, {AxiosResponse} from "axios";
-import {GameData, GameGroupData, PlayerData} from "../../game/gameInterfaces";
+import {GameData, GameGroupData, PlayerData} from "../../interfaces/gameInterfaces";
 import {initTooltips} from "../../functions";
 import Game from "../../game/game";
 

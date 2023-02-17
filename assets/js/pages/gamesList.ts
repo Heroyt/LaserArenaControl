@@ -1,7 +1,7 @@
 import axios, {AxiosResponse} from "axios";
 import {startLoading, stopLoading} from "../loaders";
 import {Modal} from "bootstrap";
-import {GameGroupData} from "../game/gameInterfaces";
+import {GameGroupData} from "../interfaces/gameInterfaces";
 
 export default function initGamesList() {
 	import(/* webpackChunkName: "datePickers" */ '../datePickers').then(module => {

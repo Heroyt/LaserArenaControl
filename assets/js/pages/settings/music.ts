@@ -3,7 +3,7 @@ import axios, {AxiosResponse} from "axios";
 import {initTooltips, lang} from "../../functions";
 import Sortable from "sortablejs";
 import {Tooltip} from "bootstrap";
-import {Music} from "../../game/gameInterfaces";
+import {Music} from "../../interfaces/gameInterfaces";
 
 
 export default function initMusicSettings() {

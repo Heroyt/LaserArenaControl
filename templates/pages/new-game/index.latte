@@ -294,7 +294,7 @@
 			<i class="fa-solid fa-grip-lines"></i>
 		</div>
 		<input id="player-name-{$vest->vestNum}" tabindex="{$vest->vestNum}" type="text"
-			   class="form-control player-name"
+			   class="form-control player-name" autocomplete="off"
 			   name="player[{$vest->vestNum}][name]" maxlength="12">
 		<button type="button" class="btn btn-info btn-sm search-user">
 			<i class="fa-solid fa-search"></i>
@@ -390,6 +390,7 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<h5 class="modal-title">{lang 'Vyhledat hráče'}</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 				</div>
 				<div class="modal-body">
 					<div class="form-group">

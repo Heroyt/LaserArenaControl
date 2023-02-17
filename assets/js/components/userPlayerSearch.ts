@@ -7,7 +7,7 @@ interface UserSearchAutocompleteItem extends AutocompleteItem {
 	data: UserSearchData
 }
 
-export function initUserAutocomplete(input: HTMLInputElement, callback: (name: string, code: string) => void): void {
+export function initUserAutocomplete(input: HTMLInputElement, callback: (name: string, code: string, rank: number) => void): void {
 	autocomplete<UserSearchAutocompleteItem>({
 		input,
 		emptyMsg: '',
@@ -28,7 +28,7 @@ export function initUserAutocomplete(input: HTMLInputElement, callback: (name: s
 				});
 		},
 		onSelect: item => {
-			callback(item.data.nickname, item.data.code);
+			callback(item.data.nickname, item.data.code, item.data.rank);
 		}
 	});
 }

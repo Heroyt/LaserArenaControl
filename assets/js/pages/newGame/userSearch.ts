@@ -75,11 +75,13 @@ export default class UserSearch {
 				this.userSearchModal.show();
 			});
 
-			initUserAutocomplete(player.$name, (name, code) => {
+			initUserAutocomplete(player.$name, (name, code, rank) => {
 				player.name = name;
 				player.$name.value = name;
+				player.realSkill = rank;
 				player.setUserCode(code);
 				player.update();
+				player.game.reassignPlayerSkills();
 			});
 		});
 	}
@@ -105,6 +107,7 @@ export default class UserSearch {
 				this.searchedPlayer.realSkill = playerData.rank;
 				this.searchedPlayer.setUserCode(playerData.code);
 				this.searchedPlayer.update();
+				this.searchedPlayer.game.reassignPlayerSkills();
 			}
 			this.userSearchModal.hide();
 		});

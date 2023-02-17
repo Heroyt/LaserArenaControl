@@ -49,7 +49,8 @@ class PlayersController extends Controller
 		$this->respond(
 			array_values(
 				$this->playerProvider->findPlayersLocal(
-					(string) $request->getGet('search', '')
+					(string) $request->getGet('search', ''),
+					empty($request->getGet('nomail', ''))
 				)
 			)
 		);

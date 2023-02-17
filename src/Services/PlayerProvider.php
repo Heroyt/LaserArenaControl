@@ -19,24 +19,28 @@ class PlayerProvider
 
 	/**
 	 * @param string $search
+	 * @param bool   $includeMail If true, the search checks an user's email too
 	 *
 	 * @return Player[]
 	 * @throws ValidationException
 	 */
-	public function findPlayersLocal(string $search) : array {
+	public function findPlayersLocal(string $search, bool $includeMail = true) : array {
 		$query = Player::query();
 		// Check code format
 		if (preg_match('/^(\d+-[A-Z\d]{1,5})$/', trim($search), $matches) === 1) {
 			$query->where('[code] LIKE %like~', $matches[1]);
 		}
 		else {
+			$where = [
+				['[code] LIKE %~like~', $search],
+				['[nickname] LIKE %~like~', $search],
+			];
+			if ($includeMail) {
+				$where[] = ['[email] LIKE %~like~', $search];
+			}
 			$query->where(
 				'%or',
-				[
-					['[code] LIKE %~like~', $search],
-					['[nickname] LIKE %~like~', $search],
-					['[email] LIKE %~like~', $search],
-				]
+				$where
 			);
 		}
 

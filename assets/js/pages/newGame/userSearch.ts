@@ -42,7 +42,9 @@ export default class UserSearch {
 				let finishedPublic = false;
 				findPlayersLocal(this.userSearchInput.value)
 					.then(results => {
-						results.data.forEach(this.createUserSearchResult);
+						results.data.forEach(data => {
+							this.createUserSearchResult(data);
+						});
 						if (finishedPublic) {
 							this.userSearchLoader.remove();
 						}
@@ -52,7 +54,9 @@ export default class UserSearch {
 					});
 				findPlayersPublic(this.userSearchInput.value)
 					.then(results => {
-						results.data.forEach(this.createUserSearchResult);
+						results.data.forEach(data => {
+							this.createUserSearchResult(data);
+						});
 						if (finishedLocal) {
 							this.userSearchLoader.remove();
 						}
@@ -90,7 +94,7 @@ export default class UserSearch {
 		elem.classList.add('list-group-item', 'list-group-item-action');
 		elem.dataset.code = playerData.code;
 		elem.setAttribute('data-code', playerData.code);
-		elem.innerText = playerData.code + ': ' + playerData.nickname + `(${playerData.email})`;
+		elem.innerText = playerData.code + ': ' + playerData.nickname + ` (${playerData.email})`;
 
 		this.userSearchResults.insertBefore(elem, this.userSearchLoader);
 

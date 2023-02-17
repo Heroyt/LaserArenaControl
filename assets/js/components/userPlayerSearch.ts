@@ -8,14 +8,14 @@ interface UserSearchAutocompleteItem extends AutocompleteItem {
 }
 
 export function initUserAutocomplete(input: HTMLInputElement, callback: (name: string, code: string) => void): void {
-	const autoComplete = autocomplete<UserSearchAutocompleteItem>({
+	autocomplete<UserSearchAutocompleteItem>({
 		input,
 		emptyMsg: '',
 		minLength: 3,
 		preventSubmit: true,
 		debounceWaitMs: 100,
 		fetch: (search, update: (items: UserSearchAutocompleteItem[]) => void) => {
-			findPlayersLocal(search)
+			findPlayersLocal(search, true)
 				.then((response: AxiosResponse<UserSearchData[]>) => {
 					const autocompleteData: UserSearchAutocompleteItem[] = [];
 					response.data.forEach(playerData => {
@@ -33,8 +33,11 @@ export function initUserAutocomplete(input: HTMLInputElement, callback: (name: s
 	});
 }
 
-export function findPlayersLocal(search: string): Promise<AxiosResponse<UserSearchData[]>> {
+export function findPlayersLocal(search: string, noMail: boolean = false): Promise<AxiosResponse<UserSearchData[]>> {
 	const searchParams = new URLSearchParams({search});
+	if (noMail) {
+		searchParams.append('nomail', '1');
+	}
 	return axios.get('/players/find?' + searchParams.toString());
 }
 

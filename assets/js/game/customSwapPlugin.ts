@@ -115,6 +115,11 @@ class CustomSwap {
 					player1._setVip(player2.vip);
 					player2._setVip(v1);
 
+					// Swap player code
+					const u1 = player1.userCode;
+					player1.setUserCode(player2.userCode);
+					player2.setUserCode(u1);
+
 					player1.update();
 					player2.update();
 				}, 50);

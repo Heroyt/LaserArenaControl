@@ -141,6 +141,11 @@ class LigaApi
 								if (isset($player)) {
 									$player->user = $playerProvider->getPlayerObjectFromData($userData);
 									$player->save();
+
+									// Sync new user
+									if (isset($player->user) && !isset($player->user->id)) {
+										$player->user->save();
+									}
 									bdump($player);
 								}
 							}

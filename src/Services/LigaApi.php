@@ -19,6 +19,7 @@ use GuzzleHttp\Psr7\Utils;
 use InvalidArgumentException;
 use JsonException;
 use Lsr\Core\App;
+use Lsr\Core\Exceptions\ModelNotFoundException;
 use Lsr\Core\Exceptions\ValidationException;
 use Lsr\Logging\Logger;
 use Psr\Http\Message\ResponseInterface;
@@ -109,6 +110,12 @@ class LigaApi
 		if ($recreateClient) {
 			$this->makeClient();
 		}
+
+		$playerProvider = App::getContainer()->getByType(PlayerProvider::class);
+		if (!isset($playerProvider)) {
+			$playerProvider = new PlayerProvider($this);
+		}
+
 		// Validate each game
 		$gamesData = [];
 		foreach ($games as $key => $game) {
@@ -117,6 +124,31 @@ class LigaApi
 			}
 			// Remove unfinished games
 			if ($game->isFinished()) {
+
+				// Check assigned users
+				try {
+					// Get user data from game
+					$response = $this->client->get('games/'.$game->code.'/users');
+					if ($response->getStatusCode() === 200) {
+						$response->getBody()->rewind();
+						/** @var array<int,array{id:int,nickname:string,code:string,arena:int,email:string,stats:array{rank:int,gamesPlayed:int,arenasPlayed:int},connections:array{type:string,identifier:string}[]}> $users */
+						$users = json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
+						bdump($users);
+						if (!empty($users)) {
+							// Assign user objects for each user got
+							foreach ($users as $vest => $userData) {
+								$player = $game->getVestPlayer($vest);
+								if (isset($player)) {
+									$player->user = $playerProvider->getPlayerObjectFromData($userData);
+									$player->save();
+									bdump($player);
+								}
+							}
+						}
+					}
+				} catch (GuzzleException|ModelNotFoundException|ValidationException|JsonException) {
+				}
+
 				$gamesData[] = $game;
 			}
 		}

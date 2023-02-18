@@ -6,5 +6,6 @@ parameters:
 		port: 3000
 services:
 	liga: App\Services\LigaApi::getInstance()
+	playersProvider: App\Services\PlayerProvider
 	gotenberg: App\Services\GotenbergService(%gotenberg.host%, %gotenberg.port%)
 	caching.journal: Nette\Caching\Storages\SQLiteJournal('%constants.tempDir%journal.s3db')

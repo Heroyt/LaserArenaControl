@@ -124,6 +124,7 @@ class LigaApi
 			}
 			// Remove unfinished games
 			if ($game->isFinished()) {
+				bdump($game);
 
 				// Check assigned users
 				try {
@@ -140,12 +141,11 @@ class LigaApi
 								$player = $game->getVestPlayer($vest);
 								if (isset($player)) {
 									$player->user = $playerProvider->getPlayerObjectFromData($userData);
-									$player->save();
-
 									// Sync new user
 									if (isset($player->user) && !isset($player->user->id)) {
 										$player->user->save();
 									}
+									$player->save();
 									bdump($player);
 								}
 							}
@@ -154,6 +154,7 @@ class LigaApi
 				} catch (GuzzleException|ModelNotFoundException|ValidationException|JsonException) {
 				}
 
+				bdump($game);
 				$gamesData[] = $game;
 			}
 		}

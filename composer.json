@@ -2,7 +2,7 @@
 	"name": "heroyt/laser-arena-control",
 	"description": "Systém pro lepší zpracování a sjednocení výsledků LaserGame z různých arén a různých výrobců.",
 	"type": "project",
-	"version": "0.3.7",
+	"version": "0.4.0",
 	"repositories": [
 		{
 			"type": "composer",

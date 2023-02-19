@@ -2361,3 +2361,15 @@ msgstr ""
 
 msgid "Pozadí"
 msgstr ""
+
+msgid "Nahrát"
+msgstr ""
+
+msgid "Vyhledat hráče"
+msgstr ""
+
+msgid "Hledat"
+msgstr ""
+
+msgid "Jméno, e-mail, kód hráče"
+msgstr ""

@@ -69,6 +69,8 @@ class Results extends ApiController
 			$this->respond(['error' => 'Unknown game.'], 404);
 		}
 
+		$game->clearCache();
+
 		if (empty($game->fileNumber)) {
 			$this->respond(['error' => 'Cannot get game file number.', 'game' => $game], 404);
 		}

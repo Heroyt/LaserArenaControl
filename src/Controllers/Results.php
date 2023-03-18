@@ -126,7 +126,6 @@ class Results extends Controller
 			}
 		}
 		Debugger::$showBar = false;
-		Debugger::$showFireLogger = false;
 		echo $this->getResultsHtml($code, $style, $template);
 	}
 

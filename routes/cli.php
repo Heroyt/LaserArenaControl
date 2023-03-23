@@ -11,6 +11,7 @@ use App\Controllers\Cli\Games;
 use App\Controllers\Cli\Help;
 use App\Controllers\Cli\Regression;
 use App\Controllers\Cli\Translations;
+use App\Controllers\Cli\Version;
 use Lsr\Core\Routing\CliRoute;
 use Lsr\Helpers\Cli\CliHelper;
 
@@ -164,4 +165,13 @@ if (PHP_SAPI === 'cli') {
 
 	CliRoute::cli('regression/updateAll', [Regression::class, 'updateRegressionModels'])
 					->description('Recalculate and save all regression models.');
+
+	CliRoute::cli('version', [Version::class, 'getVersion'])
+					->description('Get current App version.');
+
+	CliRoute::cli('version/list', [Version::class, 'list'])
+					->description('List all versions.');
+
+	CliRoute::cli('version/checkUpdate', [Version::class, 'isUpdateAvailable'])
+					->description('Checks if update is available.');
 }

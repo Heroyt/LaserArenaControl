@@ -24,6 +24,7 @@ use JsonException;
 use Lsr\Core\Exceptions\ModelNotFoundException;
 use Lsr\Core\Exceptions\ValidationException;
 use Lsr\Logging\Exceptions\DirectoryCreationException;
+use Lsr\Logging\Logger;
 use Throwable;
 
 /**
@@ -467,6 +468,11 @@ class ResultsParser extends AbstractResultsParser
 			// Compare
 			if ($hash !== $meta['hash']) {
 				// Hashes don't match -> ignore metadata
+				try {
+					$logger = new Logger(LOG_DIR.'results/', 'import');
+					$logger->warning('Game meta hashes doesn\'t match.');
+				} catch (DirectoryCreationException) {
+				}
 				return $game;
 			}
 

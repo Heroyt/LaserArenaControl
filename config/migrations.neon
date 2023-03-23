@@ -254,6 +254,8 @@ tables:
 			`bonus_machine_gun` int(10) unsigned NOT NULL DEFAULT 0,
 			`bonus_shield` int(10) unsigned NOT NULL DEFAULT 0,
 			`vip` tinyint(1) unsigned NOT NULL DEFAULT 0,
+			`relative_hits` decimal(11,4) DEFAULT NULL,
+			`relative_deaths` decimal(11,4) DEFAULT NULL,
 			PRIMARY KEY (`id_player`),
 			KEY `id_game` (`id_game`),
 			KEY `id_team` (`id_team`),
@@ -269,6 +271,9 @@ tables:
 				- 'ADD FOREIGN KEY IF NOT EXISTS (`id_user`) REFERENCES `players` (`id_user`) ON DELETE SET NULL ON UPDATE CASCADE'
 			0.2.0:
 				- 'ADD `vip` tinyint(1) unsigned NOT NULL DEFAULT 0 AFTER `bonus_shield`'
+			0.3.0:
+				- 'ADD `relative_hits` decimal(11,4) DEFAULT NULL'
+				- 'ADD `relative_deaths` decimal(11,4) DEFAULT NULL'
 	evo5_hits:
 		definition: '''
 		(

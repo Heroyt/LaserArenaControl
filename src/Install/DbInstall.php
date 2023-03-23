@@ -180,7 +180,7 @@ AS SELECT
    `p`.`id_team` AS `id_team`,
    `g`.`game_type` AS `game_type`,
    TIMESTAMPDIFF(MINUTE,`g`.`start`, `g`.`end`) AS `game_length`,
-   (SELECT COUNT(0) FROM `evo5_players` `p2` WHERE `p2`.`id_team` = `p`.`id_team`) AS `teammates`,
+   (SELECT COUNT(0) - 1 FROM `evo5_players` `p2` WHERE `p2`.`id_team` = `p`.`id_team`) AS `teammates`,
    (SELECT COUNT(0) from `evo5_players` `p2` WHERE `p2`.`id_team` <> `p`.`id_team` AND `p2`.`id_game` = `p`.`id_game`) AS `enemies`,
    `m`.`id_mode` AS `id_mode`,
    `m`.`rankable` AS `rankable` 

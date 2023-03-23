@@ -6,27 +6,6 @@
 	"description": "Laser arena control CLI tools",
 	"subcommands": [
 		{
-			"name": "games/skill",
-			"description": "",
-			"args": []
-		},
-		{
-			"name": "games/sync",
-			"description": "Synchronize not synchronized games from DB to public API.",
-			"args": [
-				{
-					"name": "limit",
-					"isOptional": true,
-					"description": "Maximum number of games to synchronize"
-				},
-				{
-					"name": "timeout",
-					"isOptional": true,
-					"description": "Timeout for each curl request"
-				}
-			]
-		},
-		{
 			"name": "cache/clean",
 			"description": "Clean server cache",
 			"args": [
@@ -46,6 +25,27 @@
 			"name": "cache/clean/latte",
 			"description": "Clean latte cache",
 			"args": []
+		},
+		{
+			"name": "games/skill",
+			"description": "",
+			"args": []
+		},
+		{
+			"name": "games/sync",
+			"description": "Synchronize not synchronized games from DB to public API.",
+			"args": [
+				{
+					"name": "limit",
+					"isOptional": true,
+					"description": "Maximum number of games to synchronize"
+				},
+				{
+					"name": "timeout",
+					"isOptional": true,
+					"description": "Timeout for each curl request"
+				}
+			]
 		},
 		{
 			"name": "lint/latte",
@@ -140,6 +140,69 @@
 					"description": "A comma separated list of context names to skip while merging."
 				}
 			]
+		},
+		{
+			"name": "translations/deleteByContext",
+			"description": "Remove all translations from a specified context.",
+			"args": [
+				{
+					"name": "context",
+					"isOptional": true,
+					"description": "A comma separated list of context names to skip while merging."
+				}
+			]
+		},
+		{
+			"name": "regression/hits",
+			"description": "Calculate regression for player's hits.",
+			"args": [
+				{
+					"name": "type",
+					"isOptional": true,
+					"description": "Game type to calculate. Only \"TEAM\" or \"SOLO\" values are accepted. Default: \"TEAM\""
+				}
+			]
+		},
+		{
+			"name": "regression/deaths",
+			"description": "Calculate regression for player's deaths.",
+			"args": [
+				{
+					"name": "type",
+					"isOptional": true,
+					"description": "Game type to calculate. Only \"TEAM\" or \"SOLO\" values are accepted. Default: \"TEAM\""
+				}
+			]
+		},
+		{
+			"name": "regression/hitsOwn",
+			"description": "Calculate regression for player's teammate hits.",
+			"args": []
+		},
+		{
+			"name": "regression/deathsOwn",
+			"description": "Calculate regression for player's teammate deaths.",
+			"args": []
+		},
+		{
+			"name": "regression/updateAll",
+			"description": "Recalculate and save all regression models.",
+			"args": []
+		},
+		{
+			"name": "version",
+			"description": "Get current App version.",
+			"args": []
+		},
+		{
+			"name": "version/list",
+			"description": "List all versions.",
+			"args": []
+		},
+		{
+			"name": "version/checkUpdate",
+			"description": "Checks if update is available.",
+			"args": []
 		}
 	]
 }

@@ -9,7 +9,7 @@
  * @since     1.0
  */
 
-use Lsr\Core\App;
+use Lsr\Core\Config;
 
 require_once ROOT.'include/constants.php';
 const DEFAULT_RESULTS_DIR = ROOT.'lmx/results/';
@@ -19,7 +19,7 @@ if (!defined('JSON_THROW_ON_ERROR')) {
 	define('JSON_THROW_ON_ERROR', 4194304);
 }
 
+
 /** If in production */
-define('PRODUCTION', App::isProduction());
-define('CHECK_TRANSLATIONS', (bool) (App::getConfig()['General']['TRANSLATIONS'] ?? false));
+define('PRODUCTION', !(Config::getInstance()->getConfig('General')['DEBUG'] ?? false));
 

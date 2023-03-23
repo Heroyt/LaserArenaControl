@@ -46,41 +46,16 @@ class Loader
 	 * @version 1.0
 	 */
 	public static function init() : void {
-
-		if (defined('INDEX')) {
-			Timer::start('core.init.config');
-			// Initialize config
-			self::initConfig();
-			Timer::stop('core.init.config');
-
-			// Initialize app
-			Timer::start('core.init.app');
-			App::init();
-			Timer::stop('core.init.app');
-		}
+		// Initialize app
+		Timer::start('core.init.app');
+		App::init();
+		Timer::stop('core.init.app');
 
 		// Setup database connection
 		Timer::start('core.init.db');
 		self::initDB();
 		Timer::stop('core.init.db');
 
-	}
-
-	/**
-	 * Initialize configuration constants
-	 *
-	 * @since   1.0
-	 * @version 1.0
-	 */
-	private static function initConfig() : void {
-		$config = App::getConfig();
-
-		if ($config['General']['PRETTY_URL'] ?? false) {
-			App::prettyUrl();
-		}
-		else {
-			App::uglyUrl();
-		}
 	}
 
 	/**

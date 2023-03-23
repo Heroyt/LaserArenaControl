@@ -41,6 +41,32 @@ require_once ROOT.'include/config.php';
 
 Timer::start('core.init');
 
+if (!is_dir(LOG_DIR) && !mkdir(LOG_DIR) && (!file_exists(LOG_DIR) || !is_dir(LOG_DIR))) {
+	throw new RuntimeException(sprintf('Directory "%s" was not created', LOG_DIR));
+}
+if (!is_dir(UPLOAD_DIR) && !mkdir(UPLOAD_DIR) && (!file_exists(UPLOAD_DIR) || !is_dir(UPLOAD_DIR))) {
+	throw new RuntimeException(sprintf('Directory "%s" was not created', UPLOAD_DIR));
+}
+
+// Enable tracy
+Debugger::$editor = 'phpstorm://open?file=%file&line=%line';
+
+Debugger::$dumpTheme = 'dark';
+
+// Register custom tracy panels
+Debugger::getBar()
+				->addPanel(new TimerTracyPanel())
+				->addPanel(new CacheTracyPanel())
+				->addPanel(new DbTracyPanel())
+				->addPanel(new TranslationTracyPanel())
+				->addPanel(new RoutingTracyPanel());
+
+Loader::init();
+
+define('CHECK_TRANSLATIONS', (bool) (App::getConfig()['General']['TRANSLATIONS'] ?? false));
+
+Debugger::enable(PRODUCTION ? Debugger::PRODUCTION : Debugger::DEVELOPMENT, LOG_DIR);
+
 // Translations update
 $translationChange = false;
 if (!PRODUCTION) {
@@ -60,29 +86,6 @@ if (!PRODUCTION) {
 	}
 	Timer::stop('core.init.translations');
 }
-
-if (!is_dir(LOG_DIR) && !mkdir(LOG_DIR) && (!file_exists(LOG_DIR) || !is_dir(LOG_DIR))) {
-	throw new RuntimeException(sprintf('Directory "%s" was not created', LOG_DIR));
-}
-if (!is_dir(UPLOAD_DIR) && !mkdir(UPLOAD_DIR) && (!file_exists(UPLOAD_DIR) || !is_dir(UPLOAD_DIR))) {
-	throw new RuntimeException(sprintf('Directory "%s" was not created', UPLOAD_DIR));
-}
-
-// Enable tracy
-Debugger::enable(PRODUCTION ? Debugger::PRODUCTION : Debugger::DEVELOPMENT, LOG_DIR);
-Debugger::$editor = 'phpstorm://open?file=%file&line=%line';
-
-Debugger::$dumpTheme = 'dark';
-
-// Register custom tracy panels
-Debugger::getBar()
-				->addPanel(new TimerTracyPanel())
-				->addPanel(new CacheTracyPanel())
-				->addPanel(new DbTracyPanel())
-				->addPanel(new TranslationTracyPanel())
-				->addPanel(new RoutingTracyPanel());
-
-Loader::init();
 
 if (defined('INDEX') && PHP_SAPI !== 'cli') {
 	// Register library tracy panels

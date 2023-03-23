@@ -35,8 +35,16 @@ services:
             - cache
         volumes:
             - ./:/var/www
+            - ./fpm/:/etc/php/
         networks:
             - backend
+        environment:
+            APP_NAME: "Laser arena control"
+            DB_HOST: "db"
+            DB_PORT: 3306
+            DB_DATABASE: "lac"
+            DB_USER: "root"
+            DB_PASSWORD: "laser-arena-control"
     web:
         restart: always
         image: nginx

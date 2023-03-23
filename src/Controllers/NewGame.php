@@ -155,9 +155,9 @@ class NewGame extends Controller
 				$data['meta']['p'.$vest.'u'] = $player['code'];
 			}
 			$data['players'][] = [
-				'vest' => $vest,
+				'vest' => (string) $vest,
 				'name' => $asciiName,
-				'team' => $player['team'],
+				'team' => (string) $player['team'],
 				'vip'  => ((int) $player['vip']) === 1,
 			];
 			if (!isset($teams[(string) $player['team']])) {

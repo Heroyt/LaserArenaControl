@@ -5,6 +5,8 @@ parameters:
 		host: gotenberg
 		port: 3000
 services:
+	- App\Services\RegressionCalculator
+	regression.evo5: App\Tools\Evo5\RegressionStatCalculator
 	liga: App\Services\LigaApi::getInstance()
 	playersProvider: App\Services\PlayerProvider
 	gotenberg: App\Services\GotenbergService(%gotenberg.host%, %gotenberg.port%)

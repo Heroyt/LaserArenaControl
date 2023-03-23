@@ -9,6 +9,7 @@ use App\Cli\Enums\ForegroundColors;
 use App\Controllers\Cli\EventServer;
 use App\Controllers\Cli\Games;
 use App\Controllers\Cli\Help;
+use App\Controllers\Cli\Regression;
 use App\Controllers\Cli\Translations;
 use Lsr\Core\Routing\CliRoute;
 use Lsr\Helpers\Cli\CliHelper;
@@ -134,4 +135,33 @@ if (PHP_SAPI === 'cli') {
 							'isOptional'  => true,
 							'description' => 'A comma separated list of context names to skip while merging.',
 						]);
+
+	CliRoute::cli('regression/hits', [Regression::class, 'calculateHitRegression'])
+					->description('Calculate regression for player\'s hits.')
+					->usage('[TEAM|SOLO]')
+					->addArgument(
+						[
+							'name'        => 'type',
+							'isOptional'  => true,
+							'description' => 'Game type to calculate. Only "TEAM" or "SOLO" values are accepted. Default: "TEAM"',
+						]);
+
+	CliRoute::cli('regression/deaths', [Regression::class, 'calculateDeathRegression'])
+					->description('Calculate regression for player\'s deaths.')
+					->usage('[TEAM|SOLO]')
+					->addArgument(
+						[
+							'name'        => 'type',
+							'isOptional'  => true,
+							'description' => 'Game type to calculate. Only "TEAM" or "SOLO" values are accepted. Default: "TEAM"',
+						]);
+
+	CliRoute::cli('regression/hitsOwn', [Regression::class, 'calculateHitOwnRegression'])
+					->description('Calculate regression for player\'s teammate hits.');
+
+	CliRoute::cli('regression/deathsOwn', [Regression::class, 'calculateDeathOwnRegression'])
+					->description('Calculate regression for player\'s teammate deaths.');
+
+	CliRoute::cli('regression/updateAll', [Regression::class, 'updateRegressionModels'])
+					->description('Recalculate and save all regression models.');
 }

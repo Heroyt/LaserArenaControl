@@ -166,6 +166,29 @@ AS SELECT
    `b`.`sysName` AS `sysName`
 FROM (`game_modes` `a` left join `game_modes-names` `b` on(`a`.`id_mode` = `b`.`id_mode`));");
 
+			// RegressionData view
+			DB::getConnection()->query("DROP VIEW IF EXISTS `vEvo5RegressionData`");
+			DB::getConnection()->query("CREATE VIEW IF NOT EXISTS `vEvo5RegressionData`
+AS SELECT
+   `p`.`id_game` AS `id_game`,
+   `p`.`hits` AS `hits`,
+   `p`.`deaths` AS `deaths`,
+   `p`.`hits_other` AS `hits_other`,
+   `p`.`deaths_other` AS `deaths_other`,
+   `p`.`hits_own` AS `hits_own`,
+   `p`.`deaths_own` AS `deaths_own`,
+   `p`.`id_team` AS `id_team`,
+   `g`.`game_type` AS `game_type`,
+   TIMESTAMPDIFF(MINUTE,`g`.`start`, `g`.`end`) AS `game_length`,
+   (SELECT COUNT(0) FROM `evo5_players` `p2` WHERE `p2`.`id_team` = `p`.`id_team`) AS `teammates`,
+   (SELECT COUNT(0) from `evo5_players` `p2` WHERE `p2`.`id_team` <> `p`.`id_team` AND `p2`.`id_game` = `p`.`id_game`) AS `enemies`,
+   `m`.`id_mode` AS `id_mode`,
+   `m`.`rankable` AS `rankable` 
+FROM `evo5_players` `p` 
+JOIN `evo5_games` `g` ON (`p`.`id_game` = `g`.`id_game`)
+JOIN `game_modes` `m` ON (`g`.`id_mode` = `m`.`id_mode` OR `g`.`id_mode` is null AND `m`.`id_mode` = IF(`g`.`game_type` = 'TEAM',1,2))
+WHERE `g`.`start` is not null AND `g`.`end` is not null;");
+
 			if (!$fresh) {
 				/** @var array<string,string> $tableVersions */
 				$tableVersions = (array) Info::get('db_version', []);

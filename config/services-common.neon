@@ -7,7 +7,7 @@ parameters:
 services:
 	- App\Services\VersionService
 	- App\Services\RegressionCalculator
-	regression.evo5: App\Tools\Evo5\RegressionStatCalculator
+	regression.evo5: App\GameModels\Tools\Evo5\RegressionStatCalculator
 	liga: App\Services\LigaApi::getInstance()
 	playersProvider: App\Services\PlayerProvider
 	gotenberg: App\Services\GotenbergService(%gotenberg.host%, %gotenberg.port%)

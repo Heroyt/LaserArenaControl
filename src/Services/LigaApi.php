@@ -169,7 +169,8 @@ class LigaApi
 			}
 
 			$response = $this->client->post('games', $config);
-			if ($response->getStatusCode() !== 200) {
+			$status = $response->getStatusCode();
+			if ($status > 299) {
 				$this->logger->error('Request failed: '.json_encode($response->getBody()->getContents(), JSON_THROW_ON_ERROR));
 				return false;
 			}

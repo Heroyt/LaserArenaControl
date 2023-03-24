@@ -13,6 +13,16 @@
 				<button type="button" class="btn btn-warning" data-toggle="event" data-event="gate-reload">
 					{lang 'Reload gate', context: 'events'}
 				</button>
+				{if !\Lsr\Core\App::isProduction()}
+					{var string[] $systems = App\GameModels\Factory\GameFactory::getSupportedSystems()}
+					<button type="button" class="btn btn-danger" data-toggle="gate-idle" n:foreach="$systems as $system"
+							data-system="{$system}">
+						{lang 'Nastavit výsledkovou tabuli na souhrn'}
+						{if count($systems) > 1}
+							&nbsp;{$system}
+						{/if}
+					</button>
+				{/if}
 			</div>
 		</div>
 		<h4>{lang 'Settings', context: 'settings'}:</h4>

@@ -159,4 +159,26 @@ window.addEventListener("load", () => {
 				});
 		});
 	});
+	document.querySelectorAll('[data-toggle="gate-idle"]').forEach(btn => {
+		const system = btn.dataset.system;
+		// Allow for tooltips
+		if (btn.title) {
+			new bootstrap.Tooltip(btn);
+		}
+		btn.addEventListener('click', () => {
+			startLoading(true);
+			axios
+				.post('/gate/idle/' + system)
+				.then(response => {
+					stopLoading(true, true);
+					if (btn.classList.contains('btn-danger')) {
+						btn.classList.remove('btn-danger');
+						btn.classList.add('btn-success');
+					}
+				})
+				.catch(response => {
+					stopLoading(false, true);
+				});
+		});
+	});
 });

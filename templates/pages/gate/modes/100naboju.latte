@@ -31,7 +31,15 @@
 {define partPlayers}
 	{var int $playerCount = count($game->getPlayers())}
 	<div class="player text-grey-text" n:foreach="$game->getPlayersSorted() as $player"
-		 style="--multiplier: {((-0.05 * ($playerCount - 11)) + 1)|noescape};">
+		 data-team="{$player->getTeam()->id}"
+		 data-score="{$player->score}"
+		 data-position="{$iterator->counter}"
+		 data-accuracy="{$player->accuracy}"
+			{if property_exists($player,'ammoRest')}
+				data-ammo-start="{$game->ammo}"
+				data-ammo-rest="{$player->ammoRest}"
+			{/if}
+		 style="--multiplier: {((-0.05 * ($playerCount - 11)) + 1)|noescape}; --delay: {$iterator->counter * 30}ms;">
 		{var array $rank = $player->getBestAt()}
 		<div class="position">
 			{$iterator->counter}.
@@ -80,15 +88,25 @@
 				</svg>
 		</div>
 		<div class="ammo text-end" n:if="property_exists($player,'ammoRest')">
+			<span class="value">
 			{$player->ammoRest}
+			</span>
 			{svgIcon 'bullet', '', '1em'}
 		</div>
 		<div class="score text-end {switch $iterator->counter}
 			{case 1} text-gold
 			{case 2} text-dark-silver
 			{case 3} text-bronze
-		   {/switch}{if $player->score < 0}text-danger{/if}">{$player->score|number:0,',','&nbsp;'|noescape}
-			<i class="fas fa-star"></i></div>
+		   {/switch}
+			{if $player->score < 0}text-danger{/if}"
+			 data-class="{switch $iterator->counter}
+			{case 1} text-gold
+			{case 2} text-dark-silver
+			{case 3} text-bronze
+		   {/switch}{if $player->score < 0}text-danger{/if}">
+			<span class="value">{$player->score|number:0,',','&nbsp;'|noescape}</span>
+			<i class="fas fa-star"></i>
+		</div>
 	</div>
 {/define}
 
@@ -98,11 +116,13 @@
 	<div n:foreach="$game->getTeamsSorted() as $team" class="team bg-team-{$game::SYSTEM}-{$team->color}"
 													  style="height:calc({100*($team->score > 0 ? $team->score : 0) / ($totalScore > 0 ? $totalScore : 1)|noescape}% - .2rem);">
 		<div class="name">
-			<div class="text-center">
+			<div class="text-center crown">
 				{if is_null($win) || $win->id === $team->id}{svgIcon 'crown', '2rem'}{/if}
 			</div>
 			{$team->name}
 		</div>
-		<div class="score text-end">{$team->score|number:0,',','&nbsp;'|noescape} <i class="fas fa-star"></i></div>
+		<div class="score text-end" data-score="{$team->score}">
+			<span class="value">{$team->score|number:0,',','&nbsp;'|noescape}</span> <i class="fas fa-star"></i>
+		</div>
 	</div>
 {/define}

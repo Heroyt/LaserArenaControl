@@ -46,8 +46,10 @@ Route::group('/gate')
 		 ->get('/', [Gate::class, 'show'])->name('gate')
 		 ->post('/set', [Gate::class, 'setGateGame'])      // Error
 		 ->post('/loaded', [Gate::class, 'setGateLoaded']) // Error
+		 ->post('/idle', [Gate::class, 'setGateIdle']) // Error
 		 ->post('/set/{system}', [Gate::class, 'setGateGame'])
-		 ->post('/loaded/{system}', [Gate::class, 'setGateLoaded']);
+		 ->post('/loaded/{system}', [Gate::class, 'setGateLoaded'])
+		 ->post('/idle/{system}', [Gate::class, 'setGateIdle']);
 
 Route::group('/players')
 		 ->get('/find', [PlayersController::class, 'find'])

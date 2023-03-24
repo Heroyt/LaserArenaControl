@@ -30,12 +30,22 @@
 
 {define partPlayers}
 	{var int $playerCount = count($game->getPlayers())}
-	<div class="player text-grey-text" n:foreach="$game->getPlayersSorted() as $player"
-			{var int $lives = $player->getRemainingLives()}
+	<div n:foreach="$game->getPlayersSorted() as $player"
+			data-team="{$player->getTeam()->id}"
+			data-score="{$player->score}"
+			data-position="{$iterator->counter}"
+			{if property_exists($player,'ammoRest')}
+				data-ammo-start="{$game->ammo}"
+				data-ammo-rest="{$player->ammoRest}"
+			{/if}
+		{var int $lives = $player->getRemainingLives()}
+			data-lives-start="{$game->lives}"
+			data-lives-rest="{$lives}"
 			{var int $ammoRest = $player->ammoRest ?? 1}
-		 style="--multiplier: {((-0.05 * ($playerCount - 11)) + 1)|noescape}; {if $lives <= 0 || $ammoRest <= 0}background-color: rgba(255, 200, 200, 0.9);{/if}">
+			class="player text-grey-text {if $lives <= 0 || $ammoRest <= 0}dead{/if}"
+			style="--multiplier: {((-0.05 * ($playerCount - 11)) + 1)|noescape}; --delay: {$iterator->counter * 30}ms;">
 		{var array $rank = $player->getBestAt()}
-		<div class="position">
+		<div class="position" data-value="{$iterator->counter}">
 			{$iterator->counter}.
 		</div>
 		<div class="rank-name">
@@ -52,7 +62,9 @@
 			</div>
 		</div>
 		<div class="lives text-end" n:if="method_exists($player,'getRemainingLives')">
+			<span class="value">
 			{$lives}
+			</span>
 			{if $lives > 0}
 				<i class="fas fa-heart"></i>
 			{else}
@@ -60,14 +72,23 @@
 			{/if}
 		</div>
 		<div class="ammo text-end" n:if="property_exists($player,'ammoRest')">
+			<span class="value">
 			{$ammoRest}
+			</span>
 			{svgIcon $ammoRest > 0 ? 'bullet' : 'bullets', '', '1em'}
 		</div>
 		<div class="score text-end {switch $iterator->counter}
 			{case 1} text-gold
 			{case 2} text-dark-silver
 			{case 3} text-bronze
-		   {/switch}{if $player->score < 0}text-danger{/if}">{$player->score|number:0,',','&nbsp;'|noescape}
+		   {/switch}
+			{if $player->score < 0}text-danger{/if}"
+			 data-class="{switch $iterator->counter}
+			{case 1} text-gold
+			{case 2} text-dark-silver
+			{case 3} text-bronze
+		   {/switch}{if $player->score < 0}text-danger{/if}">
+			<span class="value">{$player->score|number:0,',','&nbsp;'|noescape}</span>
 			<i class="fas fa-star"></i></div>
 	</div>
 {/define}
@@ -78,11 +99,12 @@
 	<div n:foreach="$game->getTeamsSorted() as $team" class="team bg-team-{$game::SYSTEM}-{$team->color}"
 													  style="height:calc({100*($team->score > 0 ? $team->score : 0) / ($totalScore > 0 ? $totalScore : 1)|noescape}% - .2rem);">
 		<div class="name">
-			<div class="text-center">
+			<div class="text-center crown">
 				{if is_null($win) || $win->id === $team->id}{svgIcon 'crown', '2rem'}{/if}
 			</div>
 			{$team->name}
 		</div>
-		<div class="score text-end">{$team->score|number:0,',','&nbsp;'|noescape} <i class="fas fa-star"></i></div>
+		<div class="score text-end"><span class="value">{$team->score|number:0,',','&nbsp;'|noescape}</span> <i
+					class="fas fa-star"></i></div>
 	</div>
 {/define}

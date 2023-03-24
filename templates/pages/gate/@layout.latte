@@ -14,11 +14,8 @@
 {varType \Lsr\Core\Controller $page}
 
 {if \Lsr\Core\App::getRequest()->isAjax()}
-	<div id="arena-logo">
-		{logo}
-	</div>
 	{include content}
-	<meta name="container-classes" content="container-fluid {include containerClasses|noescape}"/>
+	<meta name="container-classes" content="{include containerClasses|noescape}"/>
 	{if \App\Core\Info::get('gate_force_reload', false)}
 		{do \App\Core\Info::set('gate_force_reload', false)}
 		<script>
@@ -76,17 +73,21 @@
 				{/foreach}
 		</style>
 		{$style->getCssClasses()|noescape}
+		<script src="/dist/runtime~main.js?{\Lsr\Core\App::getCacheVersion()}"></script>
+		<script src="/dist/vendors.js?{\Lsr\Core\App::getCacheVersion()}"></script>
 	</head>
 	<body id="gate">
-	<main class="container-fluid {include containerClasses}">
+	<main class="container-fluid">
 		<div id="arena-logo">
 			{logo}
 		</div>
-		{include content}
+		<div class="content {include containerClasses}">
+			{include content}
+		</div>
 	</main>
 	<div class="tip">
 		{var App\GameModels\Tip|null $tip = \App\GameModels\Tip::random()}
-		<span class="content">{sprintf(lang('Tip #%d', context: 'tips'), $tip?->id)}: {lang $tip?->text, context: 'tips'}</span>
+		<span class="content active">{sprintf(lang('Tip #%d', context: 'tips'), $tip?->id)}: {lang $tip?->text, context: 'tips'}</span>
 	</div>
 	{include loader}
 	{if \App\Core\Info::get('gate_force_reload', false)}
@@ -105,15 +106,8 @@
 		let reloadTimer = {ifset $reloadTimer}{$reloadTimer}{else}-1{/ifset};
 		const timerOffset = {\App\Core\Info::get('timer-offset', 0)};
 	</script>
-	{\Lsr\Core\App::getJs()|noescape}
 
-
-	<script src="{getUrl}node_modules/flatpickr/dist/l10n/{\Lsr\Core\App::getShortLanguageCode()}.js"></script>
-
-
-	<script>
-		flatpickr.localize(flatpickr.l10ns.{\Lsr\Core\App::getShortLanguageCode()|noescape});
-	</script>
+	<script src="/dist/main.js?{\Lsr\Core\App::getCacheVersion()}"></script>
 	{include svgSymbols}
 	</body>
 	</html>

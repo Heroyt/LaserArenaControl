@@ -320,4 +320,18 @@ class Gate extends Controller
 		$this->respond(['success' => true]);
 	}
 
+	public function setGateIdle(string $system = '') : void {
+		if (empty($system)) {
+			$this->respond(['error' => 'Missing / Incorrect system'], 400);
+		}
+		try {
+			Info::set('gate-game', null);
+			Info::set($system.'-game-loaded', null);
+			EventService::trigger('gate-reload');
+		} catch (Exception $e) {
+			$this->respond(['error' => 'Failed to save the game info', 'exception' => $e->getMessage()], 500);
+		}
+		$this->respond(['success' => true]);
+	}
+
 }

@@ -31,48 +31,57 @@ export default class UserSearch {
 			this.searchedPlayer = null;
 		});
 
+		/** Debounce timeout */
 		let userSearchTimeout: NodeJS.Timeout;
 		this.userSearchInput.addEventListener('input', () => {
 			clearTimeout(userSearchTimeout);
 			this.userSearchResults.innerHTML = '';
 			userSearchTimeout = setTimeout(() => {
-				this.foundPlayers = {};
-				this.userSearchResults.appendChild(this.userSearchLoader);
-				let finishedLocal = false;
-				let finishedPublic = false;
-				findPlayersLocal(this.userSearchInput.value)
-					.then(results => {
-						results.data.forEach(data => {
-							this.createUserSearchResult(data);
-						});
-						if (finishedPublic) {
-							this.userSearchLoader.remove();
-						}
-					})
-					.finally(() => {
-						finishedLocal = true;
-					});
-				findPlayersPublic(this.userSearchInput.value)
-					.then(results => {
-						results.data.forEach(data => {
-							this.createUserSearchResult(data);
-						});
-						if (finishedLocal) {
-							this.userSearchLoader.remove();
-						}
-					})
-					.finally(() => {
-						finishedPublic = true;
-					});
+				this.findPlayers();
 			}, 500);
 		});
+	}
+
+	findPlayers() {
+		this.foundPlayers = {};
+		this.userSearchResults.appendChild(this.userSearchLoader);
+		let finishedLocal = false;
+		let finishedPublic = false;
+		findPlayersLocal(this.userSearchInput.value)
+			.then(results => {
+				results.data.forEach(data => {
+					this.createUserSearchResult(data);
+				});
+				if (finishedPublic) {
+					this.userSearchLoader.remove();
+				}
+			})
+			.finally(() => {
+				finishedLocal = true;
+			});
+		findPlayersPublic(this.userSearchInput.value)
+			.then(results => {
+				results.data.forEach(data => {
+					this.createUserSearchResult(data);
+				});
+				if (finishedLocal) {
+					this.userSearchLoader.remove();
+				}
+			})
+			.finally(() => {
+				finishedPublic = true;
+			});
 	}
 
 	initGame(game: Game) {
 		game.players.forEach(player => {
 			player.row.addEventListener('user-search', (e: CustomEvent<Player>) => {
 				this.searchedPlayer = e.detail;
+				this.userSearchInput.value = e.detail.$name.value;
 				this.userSearchModal.show();
+				if (this.userSearchInput.value !== '') {
+					this.findPlayers();
+				}
 			});
 
 			initUserAutocomplete(player.$name, (name, code, rank) => {

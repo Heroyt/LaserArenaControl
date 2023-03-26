@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: Ukrainian\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2022-12-22 17:57\n"
+"PO-Revision-Date: 2023-03-26 17:12\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=4; plural=((n%10==1 && n%100!=11) ? 0 : ((n%10 >= 2 && n%10 <=4 && (n%100 < 12 || n%100 > 14)) ? 1 : ((n%10 == 0 || (n%10 >= 5 && n%10 <=9)) || (n%100 >= 11 && n%100 <= 14)) ? 2 : 3));\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -63,18 +63,23 @@ msgctxt "debugPanel"
 msgid "Takes"
 msgstr ""
 
+# /templates/../vendor/lsr/helpers/templates/Translation/tab.latte:27
+# /templates/../vendor/lsr/helpers/templates/Translation/panel.latte:3
 msgctxt "debugPanel"
 msgid "Translations"
 msgstr ""
 
+# /templates/../vendor/lsr/helpers/templates/Translation/panel.latte:6
 msgctxt "debugPanel"
 msgid "Language"
 msgstr ""
 
+# /templates/../vendor/lsr/helpers/templates/Translation/panel.latte:10
 msgctxt "debugPanel"
 msgid "HTTP header"
 msgstr ""
 
+# /templates/../vendor/lsr/helpers/templates/Translation/panel.latte:16
 msgctxt "debugPanel"
 msgid "Translated strings"
 msgstr ""
@@ -1367,6 +1372,7 @@ msgctxt "debugPanel"
 msgid "Invalid cache class"
 msgstr ""
 
+# /templates/../vendor/lsr/helpers/templates/Caching/tab.latte:28
 msgctxt "debugPanel"
 msgid "%d call"
 msgid_plural "%d calls"
@@ -2380,5 +2386,30 @@ msgid "Logo"
 msgstr ""
 
 msgid "Pozadí"
+msgstr ""
+
+msgid "Nahrát"
+msgstr ""
+
+msgid "Vyhledat hráče"
+msgstr ""
+
+msgid "Hledat"
+msgstr ""
+
+msgid "Jméno, e-mail, kód hráče"
+msgstr ""
+
+msgctxt "cli.errors"
+msgid "Insufficient data for game mode: %s (#%d)"
+msgstr ""
+
+msgid "Nastavit výsledkovou tabuli na souhrn"
+msgstr ""
+
+msgid "Obsazeno"
+msgstr ""
+
+msgid "Obsazený"
 msgstr ""
 

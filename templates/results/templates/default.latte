@@ -7,6 +7,10 @@
 {varType string $publicUrl}
 {default bool $colorless = false}
 
+{define addHead}
+	<link rel="stylesheet" href="{getUrl}dist/results/default.css?v={\Lsr\Core\App::getCacheVersion()}">
+{/define}
+
 {define teamColor}
 	{default int $teamColor = 0}
 	<span class="team-color bg-team-{$teamColor}"></span>
@@ -91,7 +95,7 @@
 		</tr>
 	</table>
 	<div class="results-qr text-end">
-		<a href="{$publicUrl}" class="d-block mb-2">{$publicUrl}</a>
+		<a href="{$publicUrl}" class="d-block mb-2 text-white">{$publicUrl}</a>
 		{$qr|noescape}
 	</div>
 {/define}

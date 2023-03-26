@@ -8,7 +8,7 @@ $custom-colors-dark: (
 		'1': ('color': #fff, 'alias': 'text'),
 		'100': ('color': #e6ecf2, 'alias': 'dark'),
 		'200': ('color': #262626, 'alias': 'very-light'),
-		'300': ('color': #444, 'alias': 'light'),
+		'300': ('color': #707070, 'alias': 'light'),
 	),
 	'grey': (
 		"100": ('color': #f1f3f5, 'alias': 'dark'),
@@ -20,7 +20,6 @@ $custom-colors-dark: (
 	'blue': (
 		'200': ('color': #ade6fd, 'alias': 'dark-blue'),
 		'bg': ('color': #192029, 'alias': 'background'),
-		'bg-s': ('color': #27303f, 'alias': 'background-subtle'),
 	),
 	'cyan': (
 		'200': ('color': #a6faf1, 'alias': 'dark-cyan'),

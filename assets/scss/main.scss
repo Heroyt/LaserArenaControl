@@ -3,21 +3,18 @@
 // Main stylesheet that is compiled into /dist/main.css
 
 @import '~bootstrap/scss/functions';
-@import 'variables/customVariables';
 @import '~bootstrap/scss/variables';
 @import '~bootstrap/scss/variables-dark';
+@import 'variables/customVariables';
 
 @import 'custom';
 
 // BS Configuration
-@import '~bootstrap/scss/mixins';
-
-@import 'maps';
+@import 'mixins';
 
 // Utilities
 //@import '~bootstrap/scss/utilities';
 
-// BS Layout & components
 @import '~bootstrap/scss/root';
 @import 'darkMode';
 @import '~bootstrap/scss/reboot';
@@ -46,7 +43,6 @@
 @import '~bootstrap/scss/popover';
 @import '~bootstrap/scss/spinners';
 @import '~bootstrap/scss/offcanvas';
-@import '~bootstrap/scss/placeholders';
 
 // BS Helpers
 @import '~bootstrap/scss/helpers';
@@ -76,15 +72,6 @@
 @import 'components/offcanvas';
 @import 'components/resizableGrid';
 @import 'components/autocomplete';
-
-// Pages
-@import 'pages/gate';
-@import 'pages/newGame';
-
-// Results
-@import 'results/general';
-@import 'results/default';
-@import 'results/graphical';
 
 // Font Awesome
 @import '~@fortawesome/fontawesome-free/css/all.css';

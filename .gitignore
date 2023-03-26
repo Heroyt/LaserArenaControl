@@ -40,6 +40,7 @@ docker-compose.yml
 docker-compose-staging.yml
 docs/
 !assets/icon/
+!assets/scss/results/
 upload/
 docker/*
 !docker/nginx

@@ -1,14 +1,13 @@
 export default function initVestsSettings() {
-	document.querySelectorAll('.vest').forEach(initVest);
+	(document.querySelectorAll('.vest') as NodeListOf<HTMLDivElement>).forEach(initVest);
 }
-
 
 /**
  *
  * @param dom {Element}
  */
-function initVest(dom) {
-	const statusSwitches = dom.querySelectorAll('.btn-check');
+function initVest(dom: HTMLDivElement): void {
+	const statusSwitches = dom.querySelectorAll('.btn-check') as NodeListOf<HTMLInputElement>;
 	statusSwitches.forEach(input => {
 		input.addEventListener('change', () => {
 			switch (input.value) {

@@ -97,7 +97,7 @@ export default function initMusicSettings() {
 		console.log(info, tmp, tmp.firstElementChild);
 		musicWrapper.appendChild(tmp.firstElementChild);
 		initMusic(tmp.firstElementChild as HTMLDivElement);
-		initTooltips(tmp.firstElementChild);
+		initTooltips(tmp.firstElementChild as HTMLElement);
 		recountMusic();
 	}
 

@@ -5,10 +5,12 @@
 @use "sass:map";
 @use "../functions";
 
+@import '../maps';
+
 $enable-dark-mode: true;
 $color-mode-type: data;
 
-$tmp-theme-colors: functions.getThemeColors($custom-colors);
+$tmp-theme-colors: functions.getThemeColors($custom-colors-light);
 
 $link-hover-color: map.get($tmp-theme-colors, "primary");
 
@@ -18,8 +20,33 @@ $table-striped-bg: rgba(#fff, $table-striped-bg-factor);
 $form-check-label-cursor: pointer;
 $form-check-input-border: 1px solid var(--black);
 
-$nav-tabs-link-active-color: var(--white);
-
 $font-family-sans-serif: Montserrat, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 
 $popover-max-width: 350px;
+
+$utilityColors: functions.getUtilityColors($custom-colors-light);
+$theme-colors: map.merge($theme-colors, functions.getThemeColors($custom-colors-light));
+
+:root {
+	@each $name, $values in $custom-colors-light {
+		@each $weight, $color in $values {
+			$separator: '-';
+			@if $weight == '' {
+				$separator: '';
+			}
+			@if type-of($color) == 'map' {
+				--#{map.get($color, 'alias')}: #{map.get($color, 'color')};
+				--#{$name}#{$separator}#{$weight}: #{map.get($color, 'color')};
+			} @else {
+				--#{$name}#{$separator}#{$weight}: #{$color};
+			}
+		}
+	}
+}
+
+$font-sizes: map.merge(
+		$font-sizes,
+		(
+			brand: $font-size-base * 4,
+		)
+);

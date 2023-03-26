@@ -1,9 +1,15 @@
 import {Popover, Tooltip} from "bootstrap";
 import {startLoading, stopLoading} from "./loaders";
-import axios from "axios";
+import axios, {AxiosHeaders, AxiosResponse} from "axios";
 import EventServerInstance from "./EventServer";
 
-String.prototype.replaceMultiple = function (chars) {
+declare global {
+	const activeLanguageCode: string;
+	const prettyUrl: boolean;
+}
+
+// @ts-ignore
+String.prototype.replaceMultiple = function (chars: string[]) {
 	let retStr = this;
 	chars.forEach(ch => {
 		retStr = retStr.replace(new RegExp(ch[0], 'g'), ch[1]);
@@ -11,6 +17,7 @@ String.prototype.replaceMultiple = function (chars) {
 	return retStr;
 };
 
+// @ts-ignore
 String.prototype.decodeEntities = function () {
 	const element = document.createElement('div');
 	let str = this;
@@ -22,6 +29,7 @@ String.prototype.decodeEntities = function () {
 	return str;
 }
 
+// @ts-ignore
 String.prototype.removeDiacritics = function () {
 	let str = this;
 
@@ -216,6 +224,7 @@ String.prototype.removeDiacritics = function () {
 
 }
 
+// @ts-ignore
 String.prototype.hashCode = function () {
 	let hash = 0, i, chr;
 	if (this.length === 0) return hash;
@@ -230,10 +239,9 @@ String.prototype.hashCode = function () {
 
 /**
  * Finds a parent element
- *
- * @param elemName {String}
  */
-Element.prototype.findParentElement = function (elemName) {
+// @ts-ignore
+Element.prototype.findParentElement = function (elemName: string): HTMLElement {
 	let currElem = this;
 	while (currElem.tagName.toLowerCase() !== elemName.toLowerCase()) {
 		currElem = currElem.parentNode;
@@ -245,12 +253,9 @@ Element.prototype.findParentElement = function (elemName) {
 }
 /**
  * Finds a parent element
- *
- * @param className {String}
- *
- * @return {Element}
  */
-Element.prototype.findParentElementByClassName = function (className) {
+// @ts-ignore
+Element.prototype.findParentElementByClassName = function (className: string): HTMLElement {
 	let currElem = this;
 	while (!currElem.classList.contains(className)) {
 		currElem = currElem.parentNode;
@@ -261,15 +266,8 @@ Element.prototype.findParentElementByClassName = function (className) {
 	return currElem;
 }
 
-/**
- * @param {number} t Current time
- * @param {number} b Start time
- * @param {number} c Change in value
- * @param {number} d Duration
- *
- * @return {number}
- */
-Math.easeInOutQuad = function (t, b, c, d) {
+// @ts-ignore
+Math.easeInOutQuad = function (t: number, b: number, c: number, d: number): number {
 	t /= d / 2;
 	if (t < 1) return c / 2 * t * t + b;
 	t--;
@@ -278,11 +276,9 @@ Math.easeInOutQuad = function (t, b, c, d) {
 
 /**
  * Smooth scroll element to y value
- *
- * @param {number} to Pixel value from top
- * @param {number} duration Time in ms
  */
-window.scrollSmooth = function (to, duration) {
+// @ts-ignore
+window.scrollSmooth = function (to: number, duration: number): void {
 	let start = window.scrollY,
 		change = to - start,
 		currentTime = 0,
@@ -290,6 +286,7 @@ window.scrollSmooth = function (to, duration) {
 
 	const animateScroll = function () {
 		currentTime += increment;
+		// @ts-ignore
 		window.scrollBy(0, Math.easeInOutQuad(currentTime, start, change, duration) - window.scrollY)
 		if (currentTime < duration) {
 			setTimeout(animateScroll, increment);
@@ -303,7 +300,7 @@ window.scrollSmooth = function (to, duration) {
  * @param {string} str
  * @returns {string|null}
  */
-export function formatPhoneNumber(str) {
+export function formatPhoneNumber(str: string): string | null {
 	//Filter only numbers from the input
 	const plus = str[0] === '+';
 	const cleaned = ('' + str).replace(/\D/g, '');
@@ -322,7 +319,7 @@ export function formatPhoneNumber(str) {
  * @param {string} email
  * @returns {boolean}
  */
-export function validateEmail(email) {
+export function validateEmail(email: string): boolean {
 	const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 	return re.test(String(email).toLowerCase());
 }
@@ -334,11 +331,11 @@ export function validateEmail(email) {
  *
  * @returns {string}
  */
-export function getLink(request) {
+export function getLink(request: string[]) {
 	if (prettyUrl) {
 		return window.location.origin + '/' + request.join('/');
 	} else {
-		let query = {
+		let query: { [index: string]: string } = {
 			lang: document.documentElement.lang
 		};
 		let i = 0;
@@ -359,12 +356,12 @@ export function getLink(request) {
  *
  * @param {Element} input
  */
-export function selectInputDescriptionSetup(input) {
+export function selectInputDescriptionSetup(input: HTMLSelectElement): void {
 	const id = input.id;
 	const descriptionElement = document.querySelectorAll(`.select-description[data-target="#${id}"]`);
 	const update = () => {
 		const val = input.value;
-		const description = input.querySelector(`option[value="${val}"]`).dataset.description;
+		const description = (input.querySelector(`option[value="${val}"]`) as HTMLOptionElement).dataset.description;
 		descriptionElement.forEach(elem => {
 			elem.innerHTML = description;
 		});
@@ -375,30 +372,30 @@ export function selectInputDescriptionSetup(input) {
 	}
 }
 
-export function initTooltips(dom) {
+export function initTooltips(dom: HTMLElement | Document): void {
 	const tooltipTriggerList = [].slice.call(dom.querySelectorAll('[data-toggle="tooltip"]'))
-	const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+	tooltipTriggerList.map(function (tooltipTriggerEl: HTMLElement) {
 		return new Tooltip(tooltipTriggerEl)
 	});
 }
 
-export function initPopover(dom) {
+export function initPopover(dom: HTMLElement | Document): void {
 	const tooltipTriggerList = [].slice.call(dom.querySelectorAll('[data-toggle="popover"]'))
-	const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+	tooltipTriggerList.map(function (tooltipTriggerEl: HTMLElement) {
 		return new Popover(tooltipTriggerEl)
 	});
 }
 
 export function initAutoSaveForm() {
 	// Autosave form
-	document.querySelectorAll('form.autosave').forEach(form => {
+	(document.querySelectorAll('form.autosave') as NodeListOf<HTMLFormElement>).forEach(form => {
 		const method = form.method;
 		const url = form.action;
 
 		let lastData = new FormData(form);
 		let autosaving = 0;
-		const lastSave = document.querySelectorAll(`.last-save[data-target="#${form.id}"]`);
-		const saveButtons = form.querySelectorAll(`[data-action="autosave"]`);
+		const lastSave = document.querySelectorAll(`.last-save[data-target="#${form.id}"]`) as NodeListOf<HTMLDivElement>;
+		const saveButtons = form.querySelectorAll(`[data-action="autosave"]`) as NodeListOf<HTMLButtonElement>;
 		const save = (smallLoader = true) => {
 			let newData = new FormData(form);
 			let changed = false;
@@ -413,7 +410,7 @@ export function initAutoSaveForm() {
 					console.log("Changed - new key", key, value)
 					changed = true;
 				} else if (value instanceof File) {
-					if (value.name !== lastData.get(key).name) {
+					if (value.name !== (lastData.get(key) as File).name) {
 						console.log("Changed - new file", key, value)
 						changed = true;
 					}
@@ -474,7 +471,7 @@ export function initAutoSaveForm() {
 			}
 		};
 
-		form.addEventListener("autosave", save);
+		form.addEventListener("autosave", () => save());
 
 		saveButtons.forEach(button => {
 			button.addEventListener("click", e => {
@@ -489,14 +486,14 @@ export function initAutoSaveForm() {
 	});
 }
 
-let timerInterval = null;
+let timerInterval: NodeJS.Timer | null = null;
 
 /**
  * Initialize a timer displaying the remaining game time
  */
 export function gameTimer() {
 	clearInterval(timerInterval);
-	const time = document.querySelector('.time');
+	const time = document.querySelector('.time') as HTMLDivElement | null;
 	if (!time) {
 		return;
 	}
@@ -553,10 +550,7 @@ export function gameTimer() {
 	 */
 	function loadGameInfo() {
 		axios.get('/api/game/loaded')
-			.then(response => {
-				/**
-				 * @type {{started:boolean,finished:boolean,currentServerTime:number,startTime:number|null,gameLength:number,loadTime:number,playerCount:number,teamCount:number,mode:object}}
-				 */
+			.then((response: AxiosResponse<{ started: boolean, finished: boolean, currentServerTime: number, startTime: number | null, gameLength: number, loadTime: number, playerCount: number, teamCount: number, mode: object }>) => {
 				const data = response.data;
 				if (data.currentServerTime) {
 					time.dataset.servertime = data.currentServerTime.toString();
@@ -570,17 +564,16 @@ export function gameTimer() {
 				}
 				setTimes();
 			})
-			.catch(response => {
-				if (response.data) {
-					console.error(response.data);
+			.catch(err => {
+				console.log(err);
+				if (err.data) {
+					console.error(err.data);
 				}
 			});
 	}
 
 	function setTimes() {
-		const parent = time.parentElement;
-		//const serverTime = parseInt(time.dataset.servertime);
-		//offset = (Date.now() / 1000) - (isNaN(serverTime) ? 0 : serverTime);
+		const parent = time.parentElement as HTMLDivElement;
 		start = parseInt(time.dataset.start);
 		length = parseInt(time.dataset.length);
 		if (isNaN(start) || isNaN(length)) {
@@ -607,7 +600,7 @@ export function gameTimer() {
  * @param array {Array}
  * @returns {Array}
  */
-export function shuffle(array) {
+export function shuffle(array: any[]): any[] {
 	let currentIndex = array.length, randomIndex;
 
 	// While there remain elements to shuffle.
@@ -635,7 +628,7 @@ export function shuffle(array) {
  * @param context {String}
  * @return Promise<AxiosResponse<String>>
  */
-export async function lang(string, plural = null, count = 1, context = null) {
+export async function lang(string: string, plural: string | null = null, count: number = 1, context: string | null = null): Promise<AxiosResponse<string>> {
 	let cacheKey = activeLanguageCode + '-';
 	if (context) {
 		cacheKey += context;
@@ -645,14 +638,23 @@ export async function lang(string, plural = null, count = 1, context = null) {
 		cacheKey += plural;
 	}
 	cacheKey += count.toString();
+	// @ts-ignore
 	cacheKey = cacheKey.hashCode().toString(36);
 	const test = localStorage.getItem(cacheKey);
 	if (test) {
-		return new Promise((resolve, refuse) => {
-			resolve({data: test});
+		return new Promise((resolve: ((response: AxiosResponse<string>) => void), refuse) => {
+			resolve({
+				data: test,
+				status: 200,
+				statusText: 'ok',
+				headers: new AxiosHeaders(),
+				config: {
+					headers: new AxiosHeaders()
+				},
+			});
 		});
 	}
-	const response = await axios.get(
+	const response: AxiosResponse<string> = await axios.get(
 		'/api/helpers/translate',
 		{
 			params: {

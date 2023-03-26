@@ -2,82 +2,23 @@
 // Author: Tomáš Vojík <xvojik00@stud.fit.vutbr.cz>
 // Bootstrap customizations.
 
-@use 'variables/colors' as *;
-@use "sass:map";
-@use "functions";
-@import '~bootstrap/scss/variables';
-@import '~bootstrap/scss/maps';
-
-$utilityColors: functions.getUtilityColors($custom-colors);
-$theme-colors: map.merge($theme-colors, functions.getThemeColors($custom-colors));
-
-:root {
-	@each $name, $values in $custom-colors {
-		@each $weight, $color in $values {
-			$separator: '-';
-			@if $weight == "" {
-				$separator: '';
-			}
-			@if type-of($color) == "map" {
-				--#{map.get($color, "alias")}: #{map.get($color, "color")};
-				--#{$name}#{$separator}#{$weight}: #{map.get($color, "color")};
-			} @else {
-				--#{$name}#{$separator}#{$weight}: #{$color};
-			}
-		}
-	}
-}
+@use 'sass:map';
+@use 'functions';
 
 $utilities-bg-colors: map.merge($utilities-bg-colors, $utilityColors);
 $utilities-text-colors: map.merge($utilities-text-colors, $utilityColors);
 
-$modal-content-bg: var(--background);
-$modal-content-color: var(--text);
-$btn-close-color: var(--text);
-
-$offcanvas-color: var(--text);
-$offcanvas-bg-color: var(--background);
-
-$font-sizes: map.merge(
-		$font-sizes,
-		(
-			brand: $font-size-base * 4,
-		)
-);
-
-$box-shadow: 0 .5rem 1rem var(--shadow-color, rgba($black, .15));
-$box-shadow-sm: 0 .125rem .25rem var(--shadow-color, rgba($black, .075));
-$box-shadow-lg: 0 1rem 3rem var(--shadow-color, rgba($black, .175));
-$box-shadow-in-place: 0 0 1rem var(--shadow-color, rgba($black, .175));
-$box-shadow-in-place-sm: 0 0 .25rem var(--shadow-color, rgba($black, .175));
-$box-shadow-in-place-lg: 0 0 3rem var(--shadow-color, rgba($black, .175));
-$box-shadow-inset: inset 0 1px 2px var(--shadow-color, rgba($black, .075));
-
 @import '~bootstrap/scss/utilities';
-@import '~bootstrap/scss/mixins';
 
-html,
-body {
-	height: 100%;
-	width: 100%;
-}
-
-$card-bg: map.get($theme-colors, "dark");
+//$card-bg: map.get($theme-colors, 'dark');
 
 $utilities: map.deep-merge(
 		$utilities,
 		(
-			"shadow": (
-				values: (
-					in-place: $box-shadow-in-place,
-					in-place-sm: $box-shadow-in-place-sm,
-					in-place-lg: $box-shadow-in-place-lg,
-				)
-			),
-			"border-color": (
+			'border-color': (
 				values: $utilityColors
 			),
-			"min-width": (
+			'min-width': (
 				property: min-width,
 				class: minw,
 				responsive: true,
@@ -92,6 +33,26 @@ $utilities: map.deep-merge(
 							xs: 50px,
 						)
 				),
+			),
+			'cursor': (
+				property: cursor,
+				class: cursor,
+				responsive: false,
+				print: false,
+				values: (
+					pointer: pointer,
+					default: default,
+					help: help,
+					not-allowed: not-allowed,
+					copy: copy,
+					crosshair: crosshair,
+				),
+			),
+			'font-size': (
+				values: (
+					sm: .8rem,
+				),
+				responsive: true,
 			),
 			"min-viewport-height": (
 				values: (
@@ -108,28 +69,6 @@ $utilities: map.deep-merge(
 					30: 30px,
 					35: 35px,
 					size: var(--size, 1),
-				),
-			),
-			'cursor': (
-				property: cursor,
-				class: cursor,
-				responsive: false,
-				print: false,
-				values: (
-					pointer: pointer,
-					default: default,
-					help: help,
-					not-allowed: not-allowed,
-					copy: copy,
-					crosshair: crosshair,
-					move: move,
-					grab: grab,
-					grabbing: grabbing,
-				),
-			),
-			'font-size': (
-				values: (
-					sm: .9rem,
 				),
 			),
 			"rounded": (

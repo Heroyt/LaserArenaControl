@@ -8,7 +8,11 @@ export default function initGamesList() {
 		// Init date pickers
 		module.default()
 
-		const groupModalElem = document.getElementById('game-group-modal') as HTMLDivElement;
+		const groupModalElem = document.getElementById('game-group-modal') as HTMLDivElement | null;
+		if (!groupModalElem) {
+			console.error('No group modal');
+			return;
+		}
 		const groupModalSelect = groupModalElem.querySelector('#group-select') as HTMLSelectElement;
 		const groupModalNameInputWrapper = groupModalElem.querySelector('#group-name') as HTMLDivElement;
 		const groupModalNameInput = groupModalNameInputWrapper.querySelector('input') as HTMLInputElement;

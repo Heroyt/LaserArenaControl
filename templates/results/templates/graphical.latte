@@ -7,6 +7,10 @@
 {varType string $publicUrl}
 {default bool $colorless = false}
 
+{define addHead}
+	<link rel="stylesheet" href="{getUrl}dist/results/graphical.css?v={\Lsr\Core\App::getCacheVersion()}">
+{/define}
+
 {var array $fontSize = [
 10 => 6,
 11 => 5,
@@ -113,7 +117,7 @@
 	<div class="results-qr text-end">
 		<div class="me-2">
 			<div class="fw-bold">{lang 'On-line detailní výsledky', context: 'results'}:</div>
-			<a href="{$publicUrl}" class="d-block mb-2">{$publicUrl}</a>
+			<a href="{$publicUrl}" class="d-block mb-2 text-white">{$publicUrl}</a>
 		</div>
 		{$qr|noescape}
 	</div>

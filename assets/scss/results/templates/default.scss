@@ -1,3 +1,5 @@
+@import '../general';
+
 .template-default {
 	--size: 9pt;
 	align-items: center;
@@ -141,11 +143,11 @@
 	}
 
 	.results-hits {
-		--size-x: 5rem;
-		--size-y: calc(var(--size-x) / 3);
-
 		grid-area: hits;
 		table-layout: fixed;
+
+		--size-x: 5rem;
+		--size-y: calc(var(--size-x) / 3);
 
 		thead {
 			th {

@@ -1,11 +1,11 @@
 import {Modal} from 'bootstrap'
 
-const smallLoader = document.getElementById("smallLoader");
-const loadingModalDom = document.getElementById("loader-modal");
+const smallLoader = document.getElementById("smallLoader") as HTMLDivElement;
+const loadingModalDom = document.getElementById("loader-modal") as HTMLDivElement;
 const loadingModal = new Modal(loadingModalDom, {backdrop: "static"});
 let loadingCounter = 0;
 
-export function startLoading(small = false) {
+export function startLoading(small: boolean = false): void {
 	loadingCounter++;
 	if (small) {
 		smallLoader.classList.remove("d-none");
@@ -16,12 +16,12 @@ export function startLoading(small = false) {
 	}
 }
 
-export function stopLoading(success = true, small = false) {
+export function stopLoading(success: boolean = true, small: boolean = false) {
 	loadingCounter--;
 	if (loadingCounter > 0) {
 		return;
 	}
-	const marker = (small ? smallLoader : loadingModalDom).querySelector(success ? ".successAnimation" : ".errorAnimation");
+	const marker = (small ? smallLoader : loadingModalDom).querySelector(success ? ".successAnimation" : ".errorAnimation") as HTMLDivElement;
 
 	if (small) {
 		smallLoader.querySelector('.loader').classList.add("d-none");

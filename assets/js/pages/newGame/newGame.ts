@@ -267,7 +267,7 @@ export default function initNewGamePage() {
 						])
 							.then(values => {
 								const playerString = values[0].data.replace('%d', game.playerCount.toString());
-								const teamString = game.mode.type === 'TEAM' ? values[1].data.replace('%d', teamCount) + ', ' : '';
+								const teamString = game.mode.type === 'TEAM' ? values[1].data.replace('%d', teamCount.toString()) + ', ' : '';
 								option.innerText = `${game.fileNumber} - [${gameDate.getHours().toString().padStart(2, '0')}:${gameDate.getMinutes().toString().padStart(2, '0')}] ${values[2].data}: ${playerString}, ${teamString} ${players}`;
 							})
 					}

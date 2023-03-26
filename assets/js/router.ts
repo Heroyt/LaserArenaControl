@@ -1,10 +1,5 @@
 import {getLink} from "./functions";
-
-interface PageInfo {
-	type: 'GET' | 'POST',
-	routeName?: string,
-	path: string[]
-}
+import {PageInfo} from "./interfaces/pageInfo";
 
 const resultsReloadPages: { [index: string]: string[] } = {
 	'games-list': [],

@@ -1,9 +1,11 @@
-import {formatPhoneNumber, gameTimer, initAutoSaveForm, initTooltips} from './functions.js';
+import {formatPhoneNumber, gameTimer, initAutoSaveForm, initTooltips} from './functions';
 import axios from 'axios';
 import {startLoading, stopLoading} from "./loaders";
 import * as bootstrap from "bootstrap";
+// @ts-ignore
 import jscolor from "@eastdesire/jscolor";
 import route from "./router";
+import {PageInfo} from "./interfaces/pageInfo";
 
 axios.defaults.headers.post['X-Requested-With'] = 'XMLHttpRequest';
 axios.defaults.headers.get['X-Requested-With'] = 'XMLHttpRequest';
@@ -14,10 +16,24 @@ jscolor.presets.default = {
 	uppercase: false,
 };
 
+declare global {
+	const page: PageInfo;
+}
+
+if ('serviceWorker' in navigator) {
+	window.addEventListener('load', () => {
+		navigator.serviceWorker.register('/dist/service-worker.js', {scope: '/'}).then(registration => {
+			console.log('SW registered: ', registration);
+		}).catch(registrationError => {
+			console.log('SW registration failed: ', registrationError);
+		});
+	});
+}
+
 window.addEventListener("load", () => {
 
 	// Auto-format tel
-	document.querySelectorAll('input[type="tel"]').forEach(input => {
+	(document.querySelectorAll('input[type="tel"]') as NodeListOf<HTMLInputElement>).forEach(input => {
 		if (input.classList.contains('not-format')) {
 			return;
 		}
@@ -31,21 +47,21 @@ window.addEventListener("load", () => {
 	});
 
 	// Select description
-	document.querySelectorAll('.select-description').forEach(element => {
+	(document.querySelectorAll('.select-description') as NodeListOf<HTMLElement>).forEach(element => {
 		if (!element.dataset.target) {
 			// Missing target
 			console.log('Missing target');
 			return;
 		}
 
-		const target = document.querySelector(element.dataset.target);
+		const target = document.querySelector(element.dataset.target) as HTMLSelectElement;
 		console.log(target, target.value);
 		if (!target) {
 			// Invalid target
 			console.log('Invalid target');
 			return;
 		}
-		const option = target.querySelector(`option[value="${target.value}"]`);
+		const option = target.querySelector(`option[value="${target.value}"]`) as HTMLOptionElement;
 		if (option && option.dataset.description) {
 			console.log(option, target.dataset.description);
 			element.innerText = option.dataset.description;
@@ -53,7 +69,7 @@ window.addEventListener("load", () => {
 			element.innerText = '';
 		}
 		target.addEventListener('change', () => {
-			const option = target.querySelector(`option[value="${target.value}"]`);
+			const option = target.querySelector(`option[value="${target.value}"]`) as HTMLOptionElement;
 			if (option && option.dataset.description) {
 				console.log(option, target.dataset.description);
 				element.innerText = option.dataset.description;
@@ -70,12 +86,13 @@ window.addEventListener("load", () => {
 	initAutoSaveForm();
 
 	// Toggles
-	document.querySelectorAll('[data-toggle="submit"]').forEach(element => {
+	(document.querySelectorAll('[data-toggle="submit"]') as NodeListOf<HTMLElement>).forEach(element => {
 		element.addEventListener("change", () => {
-			element.findParentElement("form").submit();
+			// @ts-ignore
+			(element.findParentElement("form") as HTMLFormElement).submit();
 		});
 	});
-	document.querySelectorAll('[data-toggle="shuffle"]').forEach(element => {
+	(document.querySelectorAll('[data-toggle="shuffle"]') as NodeListOf<HTMLButtonElement>).forEach(element => {
 		if (element.title) {
 			new bootstrap.Tooltip(element);
 		}
@@ -83,14 +100,14 @@ window.addEventListener("load", () => {
 			// Missing target
 			return;
 		}
-		const targets = document.querySelectorAll(element.dataset.target);
+		const targets = document.querySelectorAll(element.dataset.target) as NodeListOf<HTMLSelectElement>;
 		if (targets.length === 0) {
 			// Invalid target
 			return;
 		}
 		element.addEventListener("click", () => {
 			targets.forEach(target => {
-				const options = target.querySelectorAll('option');
+				const options = target.querySelectorAll('option') as NodeListOf<HTMLOptionElement>;
 				if (options.length === 0) {
 					return;
 				}
@@ -109,7 +126,7 @@ window.addEventListener("load", () => {
 	gameTimer();
 
 	// Setting a game to gate
-	document.querySelectorAll('[data-toggle="gate"]').forEach(btn => {
+	(document.querySelectorAll('[data-toggle="gate"]') as NodeListOf<HTMLButtonElement>).forEach(btn => {
 		const id = btn.dataset.id;
 		const system = btn.dataset.system;
 		// Allow for tooltips
@@ -134,7 +151,7 @@ window.addEventListener("load", () => {
 				});
 		});
 	});
-	document.querySelectorAll('[data-toggle="gate-loaded"]').forEach(btn => {
+	(document.querySelectorAll('[data-toggle="gate-loaded"]') as NodeListOf<HTMLButtonElement>).forEach(btn => {
 		const id = btn.dataset.id;
 		const system = btn.dataset.system;
 		// Allow for tooltips
@@ -159,7 +176,7 @@ window.addEventListener("load", () => {
 				});
 		});
 	});
-	document.querySelectorAll('[data-toggle="gate-idle"]').forEach(btn => {
+	(document.querySelectorAll('[data-toggle="gate-idle"]') as NodeListOf<HTMLButtonElement>).forEach(btn => {
 		const system = btn.dataset.system;
 		// Allow for tooltips
 		if (btn.title) {

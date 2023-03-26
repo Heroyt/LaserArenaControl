@@ -21,19 +21,19 @@
 		  content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<!-- Favicon -->
-	<link rel="apple-touch-icon" sizes="180x180" href="{getUrl}assets/icon/apple-touch-icon.png">
-	<link rel="icon" type="image/png" sizes="192x192" href="{getUrl}assets/icon/android-chrome-192x192.png">
-	<link rel="icon" type="image/png" sizes="32x32" href="{getUrl}assets/icon/favicon-32x32.png">
-	<link rel="icon" type="image/png" sizes="16x16" href="{getUrl}assets/icon/favicon-16x16.png">
-	<link rel="icon" href="{getUrl}assets/icon/favicon.ico">
-	<link rel="manifest" href="{getUrl}assets/icon/site.webmanifest">
-	<meta name="theme-color" content="#ffffff">
-	<!-- Font Awesome -->
-	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css"/>
+	<link rel="apple-touch-icon" sizes="180x180" href="{getUrl}assets/favicon/apple-touch-icon.png">
+	<link rel="icon" type="image/png" sizes="192x192" href="{getUrl}assets/favicon/android-chrome-192x192.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="{getUrl}assets/favicon/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="{getUrl}assets/favicon/favicon-16x16.png">
+	<link rel="icon" href="{getUrl}assets/favicon/favicon.ico">
+	<link rel="manifest" href="{getUrl}assets/manifest.json">
+	<meta name="theme-color" content="#192029">
+	<meta name="apple-mobile-web-app-capable" content="yes">
 	<!-- Google Fonts Montserrat -->
 	<link rel="stylesheet"
 		  href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"/>
-	{\Lsr\Core\App::getCss()|noescape}
+	<link rel="stylesheet" href="{getUrl}dist/main.css?v={\Lsr\Core\App::getCacheVersion()}">
+	{block addHead}{/block}
 	<title>{$page->getTitle()}</title>
 	{\Tracy\Debugger::renderLoader()|noescape}
 	{ifset $game}
@@ -71,10 +71,13 @@
 	<style n:if="$template->orientation === App\GameModels\Game\Enums\PrintOrientation::landscape">
 		@page {
 			size: A4 landscape;
+			margin: 3mm 3.5mm;
 		}
 
 		.container-print-wrapper {
 			aspect-ratio: 210 / 297;
+			height: 209mm;
+			width: 297mm;
 		}
 
 		.container-print-wrapper .tip {

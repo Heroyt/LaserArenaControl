@@ -1,16 +1,16 @@
 import {Toast} from "bootstrap";
 import EventServerInstance from "../EventServer";
 
-let activityTimer;
-let isActive = true;
-let newGame = false;
-let reloadUrl = window.location.href;
+let activityTimer: NodeJS.Timeout | number;
+let isActive: boolean = true;
+let newGame: boolean = false;
+let reloadUrl: string = window.location.href;
 
 /**
  *
  * @param {String|null} url
  */
-export default function initResultsReload(url = null) {
+export default function initResultsReload(url: string | null = null): void {
 
 	if (url) {
 		reloadUrl = url;
@@ -46,7 +46,7 @@ function triggerNewGame() {
 			if (reloadUrl === window.location.href) {
 				window.location.reload();
 			} else {
-				window.location = reloadUrl;
+				window.location.href = reloadUrl;
 			}
 		}, 10000);
 	}
@@ -59,7 +59,7 @@ function startActivityTimer() {
 			if (reloadUrl === window.location.href) {
 				window.location.reload();
 			} else {
-				window.location = reloadUrl;
+				window.location.href = reloadUrl;
 			}
 		}
 	}, 30000);

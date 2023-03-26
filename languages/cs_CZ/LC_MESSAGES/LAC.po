@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: Czech\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2023-03-26 17:11\n"
+"PO-Revision-Date: 2023-03-26 17:39\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=4; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 3;\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -2383,33 +2383,30 @@ msgid "Zobrazit hráče"
 msgstr "Zobrazit hráče"
 
 msgid "Logo"
-msgstr ""
+msgstr "Logo"
 
 msgid "Pozadí"
-msgstr ""
+msgstr "Pozadí"
 
 msgid "Nahrát"
-msgstr ""
+msgstr "Nahrát"
 
 msgid "Vyhledat hráče"
-msgstr ""
+msgstr "Vyhledat hráče"
 
 msgid "Hledat"
-msgstr ""
+msgstr "Hledat"
 
 msgid "Jméno, e-mail, kód hráče"
-msgstr ""
+msgstr "Jméno, e-mail, kód hráče"
 
 msgctxt "cli.errors"
 msgid "Insufficient data for game mode: %s (#%d)"
-msgstr ""
+msgstr "Nedostatek dat pro herní mód: %s (#%d)"
 
 msgid "Nastavit výsledkovou tabuli na souhrn"
-msgstr ""
-
-msgid "Obsazeno"
-msgstr ""
+msgstr "Nastavit výsledkovou tabuli na souhrn"
 
 msgid "Obsazený"
-msgstr ""
+msgstr "Obsazený"
 

@@ -2,6 +2,7 @@ import {startLoading, stopLoading} from "../../loaders";
 import axios, {AxiosResponse} from "axios";
 import {TableData} from "../../interfaces/gameInterfaces";
 import NewGameGroup from "./groups";
+import {lang} from "../../functions";
 
 export default class NewGameTables {
 
@@ -12,8 +13,8 @@ export default class NewGameTables {
 		this.groups = groups;
 		this.gameTablesSelect = gameTablesSelect;
 
-
 		this.gameTablesSelect.addEventListener('change', () => {
+			this.updateTables();
 			this.selectTable(this.gameTablesSelect.value);
 		});
 
@@ -136,6 +137,13 @@ export default class NewGameTables {
 			}
 			cleanBtn.classList.remove('d-none');
 			loadBtn.classList.remove('d-none');
+			const option = this.gameTablesSelect.querySelector(`[value="${table.id}"]`) as HTMLOptionElement | null;
+			if (option) {
+				lang('Obsazený')
+					.then(response => {
+						option.innerText = table.name + " " + response.data;
+					});
+			}
 		} else {
 			tableDom.dataset.group = "";
 			if (tableDom.classList.contains('bg-purple-600')) {
@@ -144,6 +152,10 @@ export default class NewGameTables {
 			}
 			cleanBtn.classList.add('d-none');
 			loadBtn.classList.add('d-none');
+			const option = this.gameTablesSelect.querySelector(`[value="${table.id}"]`) as HTMLOptionElement | null;
+			if (option) {
+				option.innerText = table.name;
+			}
 		}
 	}
 
@@ -158,7 +170,7 @@ export default class NewGameTables {
 	updateTables(): void {
 		axios.get('/tables')
 			.then((response: AxiosResponse<{ tables: TableData[] }>) => {
-				response.data.tables.forEach(this.updateTableData);
+				response.data.tables.forEach(table => this.updateTableData(table));
 			})
 	}
 

@@ -134,7 +134,12 @@
 		<div class="form-floating mx-2">
 			<select name="tableSelect" id="table-select" class="form-select">
 				<option value="">{lang 'Bez stolu'}</option>
-				<option n:foreach="$tables as $table" value="{$table->id}">{$table->name}</option>
+				<option n:foreach="$tables as $table" value="{$table->id}">
+					{$table->name}
+					{ifset $table->group}
+						- {lang 'Obsazeno'}
+					{/ifset}
+				</option>
 			</select>
 			<label for="table-select">{lang 'Stůl'}</label>
 		</div>

@@ -2410,33 +2410,3 @@ msgstr "Nastaviť výsledkovú tabuľu na súhrn"
 msgid "Obsazený"
 msgstr "Obsadený"
 
-msgid "Logo"
-msgstr ""
-
-msgid "Pozadí"
-msgstr ""
-
-msgid "Nahrát"
-msgstr ""
-
-msgid "Vyhledat hráče"
-msgstr ""
-
-msgid "Hledat"
-msgstr ""
-
-msgid "Jméno, e-mail, kód hráče"
-msgstr ""
-
-msgctxt "cli.errors"
-msgid "Insufficient data for game mode: %s (#%d)"
-msgstr ""
-
-msgid "Nastavit výsledkovou tabuli na souhrn"
-msgstr ""
-
-msgid "Obsazeno"
-msgstr ""
-
-msgid "Obsazený"
-msgstr ""

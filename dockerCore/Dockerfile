@@ -34,6 +34,7 @@ RUN apt-get install -y libicu-dev
 RUN docker-php-ext-install intl && docker-php-ext-enable intl
 RUN apt-get update && apt-get upgrade -y
 RUN apt-get install -y cifs-utils
+RUN apt-get install -y ffmpeg
 
 FROM setup as langs
 

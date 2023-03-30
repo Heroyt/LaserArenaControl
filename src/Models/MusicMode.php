@@ -8,6 +8,7 @@ use Lsr\Core\Models\Attributes\PrimaryKey;
 use Lsr\Core\Models\Attributes\Validation\Required;
 use Lsr\Core\Models\Attributes\Validation\StringLength;
 use Lsr\Core\Models\Model;
+use RuntimeException;
 
 #[PrimaryKey('id_music')]
 class MusicMode extends Model
@@ -38,8 +39,9 @@ class MusicMode extends Model
 		return str_replace(ROOT, App::getUrl(), $this->fileName);
 	}
 
-	public function getFormattedPreviewStart() : string {
-		return floor($this->previewStart / 60).':'.str_pad((string) ($this->previewStart % 60), 2, '0', STR_PAD_LEFT);
+	public function getFormattedPreviewStart(int $offset = 0) : string {
+		$start = $this->previewStart + $offset;
+		return floor($start / 60).':'.str_pad((string) ($start % 60), 2, '0', STR_PAD_LEFT);
 	}
 
 	public function setPreviewStartFromFormatted(string $formatted) : MusicMode {
@@ -52,6 +54,23 @@ class MusicMode extends Model
 			$multiplier *= 60;
 		}
 		return $this;
+	}
+
+	public function getPreviewFileName() : string {
+		return str_replace('.mp3', '.preview.mp3', $this->fileName);
+	}
+
+	public function getPreviewUrl() : string {
+		return str_replace(ROOT, App::getUrl(), $this->getPreviewFileName());
+	}
+
+	public function trimMediaToPreview() : string {
+		$outFile = $this->getPreviewFileName();
+		$out = exec('ffmpeg -i "'.$this->fileName.'" -ss '.$this->getFormattedPreviewStart().' -t 0:30 -acodec copy -y "'.$outFile.'" 2>&1', $output, $returnCode);
+		if ($out === false || $returnCode !== 0) {
+			throw new RuntimeException('FFMPEG failed to trim the preview ('.$returnCode.'). '.implode(';', $output));
+		}
+		return $outFile;
 	}
 
 }

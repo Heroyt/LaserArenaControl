@@ -301,11 +301,15 @@ class LigaApi
 				if (!$mode->public) {
 					continue;
 				}
+				$previewFile = $mode->getPreviewFileName();
+				if (!file_exists($previewFile)) {
+					$mode->trimMediaToPreview();
+				}
 				$response = $this->client->post('music/'.$mode->id.'/upload', [
 					'multipart' => [
 						[
 							'name'     => 'media',
-							'contents' => Utils::tryFopen($mode->fileName, 'r'),
+							'contents' => Utils::tryFopen($previewFile, 'r'),
 						]
 					]
 				]);

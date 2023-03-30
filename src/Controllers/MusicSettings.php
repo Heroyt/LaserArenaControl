@@ -131,7 +131,11 @@ class MusicSettings extends Controller
 				$music->name = $info['name'];
 				$music->order = (int) $info['order'];
 				$music->public = isset($info['public']);
+				$previewStart = $music->previewStart;
 				$music->setPreviewStartFromFormatted($info['previewStart'] ?? '0');
+				if ($previewStart !== $music->previewStart) {
+					$music->trimMediaToPreview();
+				}
 				if (!$music->save()) {
 					$request->passErrors[] = lang('Failed to save data to the database', context: 'errors');
 				}

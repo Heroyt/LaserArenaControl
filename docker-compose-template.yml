@@ -1,39 +1,85 @@
+version: "3"
 services:
-    web:
-        restart: always
-        image: heroyt/laser-arena-control:v0.3.0
-        ports:
-            - "80:80"
-            - "9999:9999"
-        links:
-            - "db"
-            - "cache"
-        depends_on:
-            - db
-            - cache
-        volumes:
-            - lmx:/var/www/html/lmx
-            - /home/vojik/lac/private:/var/www/html/private
-            - /home/vojik/lac/logs:/var/www/html/logs
     db:
         restart: always
-        image: "mariadb:latest"
+        image: "mariadb:10.6.9"
         ports:
             - "3307:3306"
         environment:
+            MYSQL_ROOT_PASSWORD: "laser-arena-control"
             MARIADB_ROOT_PASSWORD: "laser-arena-control"
+            MYSQL_DATABASE: "lac"
             MARIADB_DATABASE: "lac"
         volumes:
-            - /home/vojik/lac/mysql:/var/lib/mysql
+            - mariadb:/var/lib/mysql
+        networks:
+            - backend
     cache:
         restart: always
         image: memcached:alpine
         ports:
             - "11211:11211"
+        networks:
+            - backend
+    php:
+        restart: always
+        image: "heroyt/laser-arena-control:v0.4.2-nginx"
+        working_dir: /var/www/
+        ports:
+            - "9999:9999"
+        links:
+            - db
+            - cache
+        depends_on:
+            - db
+            - cache
+        volumes:
+            - lac-data:/var/www
+            - lmx:/var/www/lmx
+            - /home/lac/private:/var/www/private
+            - /home/lac/logs:/var/www/logs
+            - /home/lac/uploads:/var/www/upload
+        networks:
+            - backend
+        environment:
+            APP_NAME: "Laser arena control"
+            DB_HOST: "db"
+            DB_PORT: 3306
+            DB_DATABASE: "lac"
+            DB_USER: "root"
+            DB_PASSWORD: "laser-arena-control"
+    web:
+        restart: always
+        image: nginx
+        depends_on:
+            - php
+            - db
+            - cache
+        ports:
+            - "8001:80"
+        networks:
+            - backend
+            - frontend
+        links:
+            - php
+        volumes:
+            - app-data:/var/www
+            - /home/lac/nginx:/etc/nginx
+    gotenberg:
+        image: gotenberg/gotenberg:7
+        networks:
+            - backend
+        ports:
+            - "3000:3000"
 volumes:
+    mariadb:
+    app-data:
     lmx:
         driver: local
         driver_opts:
             type: cifs
             device: "//your.ip/lasermaxx/shared"
             o: username=xxxx,password=xxxxx,rw,file_mode=0777,dir_mode=0777
+networks:
+    backend:
+    frontend:

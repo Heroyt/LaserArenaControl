@@ -6,7 +6,9 @@ COPY --from=node_base / /
 # Setup
 RUN apt-get update && apt update && apt-get -y install apt-utils wget git build-essential gettext cron
 
-RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
+#RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
+COPY php.ini "$PHP_INI_DIR/php.ini"
+COPY php-staging.ini "$PHP_INI_DIR/php-staging.ini"
 
 # PHP extensions
 RUN apt-get install -y libzip-dev unzip

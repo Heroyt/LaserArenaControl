@@ -4,50 +4,16 @@ import {lang} from "../../functions";
 import EventServerInstance from "../../EventServer";
 import {startLoading, stopLoading} from "../../loaders";
 import {GameData} from "../../interfaces/gameInterfaces";
-import {Modal, Offcanvas} from "bootstrap";
+import {Offcanvas} from "bootstrap";
+import {isFeatureEnabled} from "../../featureConfig";
+import Control, {GameStatus} from "./control";
 
 declare global {
 	const gameData: GameData;
 	const vestIcon: string;
 }
 
-enum GameStatus {
-	DOWNLOAD,
-	STANDBY,
-	ARMED,
-	PLAYING,
-}
-
-export default function initNewGamePage() {
-	const form = document.getElementById('new-game-content') as HTMLFormElement;
-	let currentStatus: GameStatus = GameStatus.STANDBY;
-
-	let statusGettingInProgress = false;
-
-	// Toggle offcanvas
-	const helpOffcanvasElement = document.getElementById('help') as HTMLDivElement;
-	const helpOffcanvas = new Offcanvas(helpOffcanvasElement, {backdrop: true});
-	(document.querySelectorAll('.trigger-help') as NodeListOf<HTMLButtonElement>).forEach(btn => {
-		btn.addEventListener('click', () => {
-			helpOffcanvas.show();
-		})
-	});
-
-	const loadBtn = form.querySelector('#loadGame') as HTMLButtonElement;
-	const startBtn = form.querySelector('#startGame') as HTMLButtonElement;
-	const stopBtn = form.querySelector('#stopGame') as HTMLButtonElement;
-
-	const downloadModalElem = document.getElementById('scoresDownloadModal') as HTMLDivElement;
-	const downloadModal = new Modal(downloadModalElem);
-	const retryDownloadBtn = document.getElementById('retryDownload') as HTMLButtonElement;
-	const cancelDownloadBtn = document.getElementById('cancelDownload') as HTMLButtonElement;
-
-	const gameGroupsWrapper = document.getElementById('game-groups') as HTMLDivElement;
-	const gameGroupTemplate = document.getElementById('new-game-group') as HTMLTemplateElement;
-	const gameGroupsSelect = document.getElementById('group-select') as HTMLSelectElement;
-
-	const gameTablesSelect = document.getElementById('table-select') as HTMLSelectElement;
-
+function initGatesControls() {
 	const gatesStartBtn = document.getElementById('startGates') as HTMLButtonElement | null;
 	const gatesStopBtn = document.getElementById('stopGates') as HTMLButtonElement | null;
 
@@ -75,15 +41,38 @@ export default function initNewGamePage() {
 				});
 		});
 	}
+}
 
-	stopBtn.addEventListener('click', () => {
-		stopGame(new FormData(form));
-	})
+export default function initNewGamePage() {
+	const form = document.getElementById('new-game-content') as HTMLFormElement;
 
-	updateCurrentStatus();
-	// Update current status every minute
-	let updateStatusInterval = setInterval(updateCurrentStatus, 60000);
-	let resultsLoadRetryTimer: NodeJS.Timeout = null;
+	// Toggle offcanvas
+	const helpOffcanvasElement = document.getElementById('help') as HTMLDivElement;
+	const helpOffcanvas = new Offcanvas(helpOffcanvasElement, {backdrop: true});
+	(document.querySelectorAll('.trigger-help') as NodeListOf<HTMLButtonElement>).forEach(btn => {
+		btn.addEventListener('click', () => {
+			helpOffcanvas.show();
+		})
+	});
+
+	const loadBtn = form.querySelector('#loadGame') as HTMLButtonElement;
+	const startBtn = form.querySelector('#startGame') as HTMLButtonElement;
+	const stopBtn = form.querySelector('#stopGame') as HTMLButtonElement;
+
+	let control: Control | null = null;
+	if (isFeatureEnabled('control')) {
+		control = new Control(loadBtn, startBtn, stopBtn);
+	}
+
+	const gameGroupsWrapper = document.getElementById('game-groups') as HTMLDivElement | undefined;
+	const gameGroupTemplate = document.getElementById('new-game-group') as HTMLTemplateElement | undefined;
+	const gameGroupsSelect = document.getElementById('group-select') as HTMLSelectElement | undefined;
+
+	const gameTablesSelect = document.getElementById('table-select') as HTMLSelectElement | undefined;
+
+	if (isFeatureEnabled('gates')) {
+		initGatesControls();
+	}
 
 	// Send form via ajax
 	form.addEventListener('submit', e => {
@@ -106,10 +95,14 @@ export default function initNewGamePage() {
 				loadGame(data);
 				break;
 			case 'start':
-				startGame(data);
+				if (control) {
+					control.startGame(data, loadStartGame);
+				}
 				break;
 			case 'stop':
-				stopGame(data);
+				if (control) {
+					control.stopGame();
+				}
 				break;
 		}
 	});
@@ -144,8 +137,12 @@ export default function initNewGamePage() {
 
 	document.addEventListener('clear-all', () => {
 		lastGamesSelect.value = '';
-		gameTablesSelect.value = '';
-		gameGroupsSelect.value = '';
+		if (gameTablesSelect) {
+			gameTablesSelect.value = '';
+		}
+		if (gameGroupsSelect) {
+			gameGroupsSelect.value = '';
+		}
 	});
 
 	loadLastGames();
@@ -161,66 +158,28 @@ export default function initNewGamePage() {
 			}
 		);
 
-	import(
-		/* webpackChunkName: "newGame_groups" */
-		'./groups'
-		)
-		.then(module => {
-			const groups = new module.default(game, gameGroupsWrapper, gameGroupTemplate, gameGroupsSelect);
-			EventServerInstance.addEventListener('game-imported', groups.updateGroups);
+	if (isFeatureEnabled('groups')) {
+		import(
+			/* webpackChunkName: "newGame_groups" */
+			'./groups'
+			)
+			.then(module => {
+				const groups = new module.default(game, gameGroupsWrapper, gameGroupTemplate, gameGroupsSelect);
+				EventServerInstance.addEventListener('game-imported', groups.updateGroups);
 
-			import(
-				/* webpackChunkName: "newGame_tables" */
-				'./tables'
-				)
-				.then(module => {
-					new module.default(groups, gameTablesSelect);
-				});
-		});
+				if (isFeatureEnabled('tables')) {
+					import(
+						/* webpackChunkName: "newGame_tables" */
+						'./tables'
+						)
+						.then(module => {
+							new module.default(groups, gameTablesSelect);
+						});
+				}
+			});
+	}
 
 	EventServerInstance.addEventListener('game-imported', loadLastGames);
-	EventServerInstance.addEventListener(['game-imported', 'game-started', 'game-loaded'], updateCurrentStatus);
-
-	retryDownloadBtn.addEventListener('click', () => {
-		if (currentStatus !== GameStatus.DOWNLOAD) {
-			cancelDownloadModal();
-			return;
-		}
-
-		if (retryDownloadBtn.disabled) {
-			return;
-		}
-
-		startLoading(true);
-		axios.post('/control/retry')
-			.then(() => {
-				stopLoading(true, true);
-			})
-			.catch(error => {
-				console.error(error);
-				stopLoading(false, true);
-			});
-	});
-	cancelDownloadBtn.addEventListener('click', () => {
-		if (currentStatus !== GameStatus.DOWNLOAD) {
-			cancelDownloadModal();
-			return;
-		}
-
-		if (cancelDownloadBtn.disabled) {
-			return;
-		}
-
-		startLoading(true);
-		axios.post('/control/cancel')
-			.then(() => {
-				stopLoading(true, true);
-			})
-			.catch(error => {
-				console.error(error);
-				stopLoading(false, true);
-			});
-	});
 
 	function loadLastGames() {
 		axios.get('/api/games', {
@@ -308,99 +267,6 @@ export default function initNewGamePage() {
 		return true;
 	}
 
-	function startGame(data: FormData) {
-		startLoading(true);
-		getCurrentStatus()
-			.then((response: AxiosResponse<{ status: string }>) => {
-				stopLoading(true, true);
-				if (response.data.status) {
-					switch (response.data.status) {
-						case 'STANDBY':
-							currentStatus = GameStatus.STANDBY;
-							loadStartGame(data);
-							break;
-						case 'ARMED':
-							currentStatus = GameStatus.ARMED;
-							sendStart();
-							break;
-						case 'PLAYING':
-							currentStatus = GameStatus.PLAYING;
-							// Cannot start while playing the game
-							stopLoading(false, true);
-							break;
-						case 'DOWNLOAD':
-							setCurrentStatus('DOWNLOAD');
-							stopLoading(false, true);
-							break;
-					}
-				}
-				stopLoading(true, true);
-			})
-			.catch(error => {
-				console.error(error);
-				stopLoading(false, true);
-			})
-
-		function sendStart() {
-			startLoading(true);
-			axios.post('/control/startSafe')
-				.then((response: AxiosResponse<{ status: string }>) => {
-					if (response.data.status !== 'ok') {
-						setCurrentStatus(response.data.status);
-						stopLoading(false);
-						return;
-					}
-					setCurrentStatus('PLAYING');
-					stopLoading(true);
-				})
-				.catch(error => {
-					console.error(error);
-					if (error.data && error.data.message && error.data.message === 'DOWNLOAD') {
-						setCurrentStatus('DOWNLOAD');
-					}
-					stopLoading(false);
-				});
-		}
-	}
-
-	function stopGame(data: FormData) {
-		startLoading(true);
-		getCurrentStatus()
-			.then((response: AxiosResponse<{ status: string }>) => {
-				if (response.data.status) {
-					switch (response.data.status) {
-						case 'STANDBY':
-							currentStatus = GameStatus.STANDBY;
-							break;
-						case 'ARMED':
-						case 'PLAYING':
-							currentStatus = response.data.status === 'ARMED' ? GameStatus.ARMED : GameStatus.PLAYING;
-							axios.post('/control/stop')
-								.then(() => {
-									stopLoading(true, true);
-									setCurrentStatus('STANDBY');
-								})
-								.catch(error => {
-									console.error(error);
-									if (error.data && error.data.message && error.data.message === 'DOWNLOAD') {
-										setCurrentStatus('DOWNLOAD');
-									}
-									stopLoading(false, true);
-								});
-							break;
-						case 'DOWNLOAD':
-							setCurrentStatus('DOWNLOAD');
-							stopLoading(false, true);
-							break;
-					}
-				}
-			})
-			.catch(error => {
-				console.error(error);
-				stopLoading(false, true);
-			})
-	}
-
 	function loadGame(data: FormData, callback: null | (() => void) = null): void {
 		startLoading();
 		axios.post('/', data)
@@ -412,30 +278,9 @@ export default function initNewGamePage() {
 				}
 				const mode = response.data.mode;
 
-				startLoading(true);
-				axios
-					.post('/control/loadSafe', {
-						mode,
-					})
-					.then((response: AxiosResponse<{ status: string }>) => {
-						if (response.data.status !== 'ok') {
-							setCurrentStatus(response.data.status);
-							stopLoading(false, true);
-							return;
-						}
-						setCurrentStatus('ARMED');
-						if (callback) {
-							callback();
-						}
-						stopLoading(true, true);
-					})
-					.catch(error => {
-						stopLoading(false, true);
-						console.error(error);
-						if (error.data && error.data.message && error.data.message === 'DOWNLOAD') {
-							setCurrentStatus('DOWNLOAD');
-						}
-					});
+				if (control) {
+					control.loadGame(mode, callback);
+				}
 			})
 			.catch(() => {
 				stopLoading(false);
@@ -453,85 +298,13 @@ export default function initNewGamePage() {
 				}
 				const mode = response.data.mode;
 
-				startLoading(true);
-				axios
-					.post('/control/startSafe', {
-						mode,
-					})
-					.then((response: AxiosResponse<{ status: string }>) => {
-						if (response.data.status !== 'ok') {
-							setCurrentStatus(response.data.status);
-							stopLoading(false, true);
-							return;
-						}
-						setCurrentStatus('ARMED');
-						if (callback) {
-							callback();
-						}
-						stopLoading(true, true);
-					})
-					.catch(error => {
-						stopLoading(false, true);
-						console.error(error);
-						if (error.data && error.data.message && error.data.message === 'DOWNLOAD') {
-							setCurrentStatus('DOWNLOAD');
-						}
-					});
+				if (control) {
+					control.loadStart(mode, callback);
+				}
 			})
 			.catch(() => {
 				stopLoading(false);
 			});
-	}
-
-	function updateCurrentStatus(): void {
-		if (statusGettingInProgress) {
-			return;
-		}
-		statusGettingInProgress = true;
-		getCurrentStatus()
-			.then((response: AxiosResponse<{ status: string }>) => {
-				statusGettingInProgress = false;
-				setCurrentStatus(response.data.status);
-			})
-			.catch(error => {
-				statusGettingInProgress = false;
-				console.error(error);
-			})
-	}
-
-	function setCurrentStatus(status: string): void {
-		loadBtn.disabled = false;
-		startBtn.disabled = false;
-		stopBtn.disabled = false;
-		if (currentStatus === GameStatus.DOWNLOAD && status !== 'DOWNLOAD') {
-			cancelDownloadModal();
-		}
-		switch (status) {
-			case 'DOWNLOAD':
-				loadBtn.disabled = true;
-				startBtn.disabled = true;
-				stopBtn.disabled = true;
-				currentStatus = GameStatus.DOWNLOAD;
-				triggerDownloadModal();
-				break;
-			case 'STANDBY':
-				currentStatus = GameStatus.STANDBY;
-				stopBtn.disabled = true;
-				break;
-			case 'ARMED':
-				currentStatus = GameStatus.ARMED;
-				break;
-			case 'PLAYING':
-				currentStatus = GameStatus.PLAYING;
-				loadBtn.disabled = true;
-				startBtn.disabled = true;
-				break;
-		}
-		console.log(currentStatus);
-	}
-
-	function getCurrentStatus() {
-		return axios.get('/control/status');
 	}
 
 	function handleKeyboardShortcuts(e: KeyboardEvent) {
@@ -542,10 +315,10 @@ export default function initNewGamePage() {
 		switch (e.keyCode) {
 			case 32: // Space
 			case 13: // Enter
-				if (currentStatus === GameStatus.STANDBY) {
+				if (!control || control.currentStatus === GameStatus.STANDBY) {
 					form.requestSubmit(loadBtn);
 				}
-				if (currentStatus === GameStatus.ARMED) {
+				if (control && control.currentStatus === GameStatus.ARMED) {
 					form.requestSubmit(startBtn);
 				}
 				break;
@@ -562,37 +335,6 @@ export default function initNewGamePage() {
 			case 72: // h
 				helpOffcanvas.toggle();
 				break;
-		}
-	}
-
-	function cancelDownloadModal() {
-		downloadModal.hide();
-
-		// Reset the update status interval
-		clearInterval(updateStatusInterval);
-		updateStatusInterval = setInterval(updateCurrentStatus, 60000);
-
-		retryDownloadBtn.disabled = false;
-		cancelDownloadBtn.disabled = false;
-		if (resultsLoadRetryTimer) {
-			clearTimeout(resultsLoadRetryTimer);
-		}
-	}
-
-	function triggerDownloadModal() {
-		downloadModal.show();
-
-		// Make the update status interval faster to fetch more real-time data
-		clearInterval(updateStatusInterval);
-		updateStatusInterval = setInterval(updateCurrentStatus, 5000);
-
-		if (!resultsLoadRetryTimer) {
-			retryDownloadBtn.disabled = true;
-			cancelDownloadBtn.disabled = true;
-			resultsLoadRetryTimer = setTimeout(() => {
-				retryDownloadBtn.disabled = false;
-				cancelDownloadBtn.disabled = false;
-			}, 15000);
 		}
 	}
 }

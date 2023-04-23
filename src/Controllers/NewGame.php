@@ -11,6 +11,7 @@ use App\GameModels\Vest;
 use App\Models\GameGroup;
 use App\Models\MusicMode;
 use App\Models\Table;
+use App\Services\FeatureConfig;
 use JsonException;
 use Lsr\Core\App;
 use Lsr\Core\Controller;
@@ -18,6 +19,7 @@ use Lsr\Core\Exceptions\ModelNotFoundException;
 use Lsr\Core\Exceptions\ValidationException;
 use Lsr\Core\Requests\Request;
 use Lsr\Core\Routing\Attributes\Post;
+use Lsr\Core\Templating\Latte;
 use Lsr\Exceptions\TemplateDoesNotExistException;
 use Lsr\Helpers\Tools\Strings;
 use Lsr\Helpers\Tools\Timer;
@@ -27,8 +29,15 @@ use Throwable;
 class NewGame extends Controller
 {
 
-	protected string $title       = 'New game';
+	protected string $title = 'New game';
 	protected string $description = '';
+
+	public function __construct(
+		Latte                          $latte,
+		private readonly FeatureConfig $featureConfig
+	) {
+		parent::__construct($latte);
+	}
 
 	/**
 	 * @return void
@@ -37,7 +46,8 @@ class NewGame extends Controller
 	 * @throws TemplateDoesNotExistException
 	 * @throws Throwable
 	 */
-	public function show() : void {
+	public function show(): void {
+		$this->params['featureConfig'] = $this->featureConfig;
 		$this->params['addCss'] = ['pages/newGame.css'];
 		$this->params['loadGame'] = !empty($_GET['game']) ? GameFactory::getByCode($_GET['game']) : null;
 		$this->params['system'] = $_GET['system'] ?? first(GameFactory::getSupportedSystems());

@@ -45,6 +45,12 @@ services:
             DB_DATABASE: "lac"
             DB_USER: "root"
             DB_PASSWORD: "laser-arena-control"
+            FEATURE_EVENT_SERVER: true
+            FEATURE_LEAGUE: true
+            FEATURE_CONTROL: false
+            FEATURE_GATES: false
+            FEATURE_TABLES: true
+            FEATURE_GROUPS: true
     web:
         restart: always
         image: nginx

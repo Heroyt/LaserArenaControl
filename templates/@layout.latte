@@ -68,7 +68,7 @@
 
 <main class="container my-5 pt-4 {include containerClasses}">
 		{include errors}
-		{include content}
+	{include content}
 </main>
 
 {include footer}
@@ -78,6 +78,7 @@
 
 <script>
 	const activeLanguageCode = {\Lsr\Core\App::getShortLanguageCode()};
+	const features = {\Lsr\Core\App::getServiceByType(App\Services\FeatureConfig::class)->getFeatures()};
 	const page = {\Lsr\Core\App::getRequest()};
 	const prettyUrl = {\Lsr\Core\App::isPrettyUrl()};
 	const webSocketEventURI = 'ws://' + window.location.hostname + ':' + {\App\Services\EventService::getEventPort()};

@@ -7,6 +7,7 @@ parameters:
 services:
 	- App\Services\VersionService
 	- App\Services\RegressionCalculator
+	features: App\Services\FeatureConfig
 	regression.evo5: App\GameModels\Tools\Evo5\RegressionStatCalculator
 	liga: App\Services\LigaApi::getInstance()
 	playersProvider: App\Services\PlayerProvider

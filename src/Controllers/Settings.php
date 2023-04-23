@@ -12,6 +12,7 @@ use App\GameModels\Game\PrintTemplate;
 use App\GameModels\Vest;
 use App\Models\GameGroup;
 use App\Models\Table;
+use App\Services\FeatureConfig;
 use DateTime;
 use Dibi\DriverException;
 use Dibi\Exception;
@@ -22,11 +23,11 @@ use Lsr\Core\DB;
 use Lsr\Core\Exceptions\ModelNotFoundException;
 use Lsr\Core\Exceptions\ValidationException;
 use Lsr\Core\Requests\Request;
-use Lsr\Core\Routing\Attributes\Delete;
 use Lsr\Core\Routing\Attributes\Get;
-use Lsr\Core\Routing\Attributes\Post;
+use Lsr\Core\Templating\Latte;
 use Lsr\Exceptions\TemplateDoesNotExistException;
 use Lsr\Helpers\Files\UploadedFile;
+use Lsr\Interfaces\RequestInterface;
 use Lsr\Logging\Exceptions\DirectoryCreationException;
 
 /**
@@ -37,11 +38,23 @@ class Settings extends Controller
 
 	protected string $title = 'Settings';
 
+	public function __construct(
+		private readonly FeatureConfig $featureConfig,
+		Latte                          $latte
+	) {
+		parent::__construct($latte);
+	}
+
+	public function init(RequestInterface $request): void {
+		parent::init($request);
+		$this->params['featureConfig'] = $this->featureConfig;
+	}
+
 	/**
 	 * @return void
 	 * @throws TemplateDoesNotExistException
 	 */
-	public function show() : void {
+	public function show(): void {
 		$this->view('pages/settings/index');
 	}
 
@@ -314,7 +327,6 @@ class Settings extends Controller
 		$this->view('pages/settings/cache');
 	}
 
-	#[Get('settings/groups', 'settings-groups')]
 	public function group() : void {
 		$this->params['groupsActive'] = GameGroup::getActive();
 		$this->params['groupsInactive'] = GameGroup::query()->where('active = 0')->orderBy('id_group')->desc()->get();
@@ -322,7 +334,6 @@ class Settings extends Controller
 		$this->view('pages/settings/groups');
 	}
 
-	#[Get('settings/tables', 'settings-tables')]
 	public function tables() : void {
 		$this->params['tables'] = Table::getAll();
 		$this->params['cols'] = 1;
@@ -340,7 +351,6 @@ class Settings extends Controller
 		$this->view('pages/settings/tables');
 	}
 
-	#[Post('settings/tables/new')]
 	public function addTable(Request $request) : never {
 		$table = new Table();
 		$table->name = lang('Stůl');
@@ -359,7 +369,6 @@ class Settings extends Controller
 		App::redirect(['settings', 'tables'], $request);
 	}
 
-	#[Post('settings/tables/{id}/delete'), Delete('settings/tables/{id}')]
 	public function deleteTable(Request $request) : never {
 		$table = Table::get((int) ($request->params['id'] ?? 0));
 		if (!isset($table)) {
@@ -385,7 +394,6 @@ class Settings extends Controller
 		App::redirect(['settings', 'tables'], $request);
 	}
 
-	#[Post('settings/tables')]
 	public function saveTables(Request $request) : never {
 		/** @var array<numeric, array{name:string,grid_col?:numeric,grid_row?:numeric,grid_width?:numeric,grid_height?:numeric}> $tables */
 		$tables = $request->post['table'] ?? [];

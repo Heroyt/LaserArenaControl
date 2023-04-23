@@ -1,5 +1,6 @@
 {layout '../../@layout.latte'}
 
+{varType App\Services\FeatureConfig $featureConfig}
 {varType App\GameModels\Vest[] $vests}
 {varType string $colorSystem}
 {varType string[] $colors}
@@ -69,8 +70,12 @@
 	{include scoreDownloadModal}
 	{include userSearchModal}
 	{include help}
-	{include groups}
-	{include tables}
+	{if $featureConfig->isFeatureEnabled('groups')}
+		{include groups}
+	{/if}
+	{if $featureConfig->isFeatureEnabled('tables')}
+		{include tables}
+	{/if}
 	<script>
 		const messages = {
 			missingShuffleTeam: '{lang 'Musíte vybrat alespoň 2 týmy.', context: 'errors'}',
@@ -131,7 +136,7 @@
 
 {define sectionVests}
 	<div class="d-flex justify-content-end align-items-center">
-		<div class="form-floating mx-2">
+		<div n:if="$featureConfig->isFeatureEnabled('tables')" class="form-floating mx-2">
 			<select name="tableSelect" id="table-select" class="form-select">
 				<option value="">{lang 'Bez stolu'}</option>
 				<option n:foreach="$tables as $table" value="{$table->id}">
@@ -143,7 +148,7 @@
 			</select>
 			<label for="table-select">{lang 'Stůl'}</label>
 		</div>
-		<div class="form-floating mx-2">
+		<div n:if="$featureConfig->isFeatureEnabled('groups')" class="form-floating mx-2">
 			<select name="groupSelect" id="group-select" class="form-select">
 				<option value="">{lang 'Bez skupiny'}</option>
 				<option value="new">{lang 'Nová skupina'}</option>
@@ -207,7 +212,7 @@
 	<div class="collapse show" id="game-mode-variations-collapse">
 		<div id="game-mode-variations-wrapper"></div>
 	</div>
-	{if !empty(App\Core\Info::get('gates_ips'))}
+	{if $featureConfig->isFeatureEnabled('games') && !empty(App\Core\Info::get('gates_ips'))}
 		<div class="mt-3" id="gatesControl">
 			<h3>{lang 'Brány'}</h3>
 			<div class="btn-group">

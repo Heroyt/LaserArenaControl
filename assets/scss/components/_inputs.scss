@@ -22,3 +22,43 @@ input[readonly] {
 .last-save-wrapper.position-fixed {
 	z-index: 10;
 }
+
+label.team-color {
+	content: ' ';
+	cursor: pointer;
+	display: flex;
+	opacity: .4;
+	position: relative;
+	transition: opacity .1s ease;
+	width: 2rem;
+
+	.team-color-input:checked + & {
+		align-items: center;
+		display: flex;
+		justify-content: center;
+		opacity: 1;
+
+		&:after {
+			background-color: var(--white-forced);
+			border-radius: 50%;
+			content: '';
+			height: .5rem;
+			position: absolute;
+			width: .5rem;
+		}
+	}
+
+	.team-color-input.hide + & {
+		display: none;
+	}
+
+	@include media-breakpoint-down(sm) {
+		& {
+			height: 2.5rem;
+		}
+	}
+}
+
+.team-color-input {
+	display: none;
+}

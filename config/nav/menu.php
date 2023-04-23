@@ -4,16 +4,19 @@
  * @brief Definition of the main menu items
  */
 
-return [
+use App\Services\FeatureConfig;
+use Lsr\Core\App;
+
+$menu = [
 	[
-		'name'  => lang('New game'),
+		'name' => lang('New game'),
 		'route' => 'dashboard',
-		'icon'  => 'fa-solid fa-plus',
+		'icon' => 'fa-solid fa-plus',
 	],
 	[
-		'name'  => lang('Games'),
+		'name' => lang('Games'),
 		'route' => 'games-list',
-		'icon'  => 'fas fa-list',
+		'icon' => 'fas fa-list',
 	],
 	[
 		'name'  => lang('Print'),
@@ -25,17 +28,17 @@ return [
 		'route' => 'gate',
 		'icon'  => 'fas fa-display',
 	],
-	[
-		'name'     => lang('Settings'),
-		'route'    => 'settings',
-		'icon'     => 'fas fa-cog',
+	'settings' => [
+		'name' => lang('Settings'),
+		'route' => 'settings',
+		'icon' => 'fas fa-cog',
 		'children' => [
 			[
-				'name'  => lang('General'),
+				'name' => lang('General'),
 				'route' => 'settings',
 			],
 			[
-				'name'  => lang('Gate'),
+				'name' => lang('Gate'),
 				'route' => 'settings-gate',
 			],
 			[
@@ -47,25 +50,35 @@ return [
 				'route' => 'settings-modes',
 			],
 			[
-				'name'  => lang('Print'),
+				'name' => lang('Print'),
 				'route' => 'settings-print',
 			],
 			[
-				'name'  => lang('Music'),
+				'name' => lang('Music'),
 				'route' => 'settings-music',
-			],
-			[
-				'name'  => lang('Skupiny'),
-				'route' => 'settings-groups',
-			],
-			[
-				'name'  => lang('Tables'),
-				'route' => 'settings-tables',
-			],
-			[
-				'name'  => lang('Cache'),
-				'route' => 'settings-cache',
 			],
 		],
 	],
 ];
+
+$featureConfig = App::getServiceByType(FeatureConfig::class);
+
+if ($featureConfig->isFeatureEnabled('groups')) {
+	$menu['settings']['children'][] = [
+		'name' => lang('Skupiny'),
+		'route' => 'settings-groups',
+	];
+}
+if ($featureConfig->isFeatureEnabled('tables')) {
+	$menu['settings']['children'][] = [
+		'name' => lang('Tables'),
+		'route' => 'settings-tables',
+	];
+}
+
+$menu['settings']['children'][] = [
+	'name' => lang('Cache'),
+	'route' => 'settings-cache',
+];
+
+return $menu;

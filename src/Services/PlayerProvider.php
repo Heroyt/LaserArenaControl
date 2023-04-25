@@ -120,7 +120,7 @@ class PlayerProvider
 			$player->addConnection($connection);
 		}
 
-		if ($changed) {
+		if ($changed || !isset($player->id)) {
 			// Update player data from public
 			$player->save();
 		}

@@ -14,3 +14,4 @@ services:
 	tournamentProvider: App\Services\TournamentProvider
 	gotenberg: App\Services\GotenbergService(%gotenberg.host%, %gotenberg.port%)
 	caching.journal: Nette\Caching\Storages\SQLiteJournal('%constants.tempDir%journal.s3db')
+	evo5.simulator: App\Services\Evo5\GameSimulator

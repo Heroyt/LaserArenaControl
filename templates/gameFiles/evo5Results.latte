@@ -1,0 +1,60 @@
+{block |trim|replace:"\t",''}
+	{varType array $meta}
+	{varType array $players}
+	{varType array $teams}
+	{varType \DateTimeImmutable $start}
+	{varType \DateTimeImmutable $end}
+	{syntax double}
+		SITE{53874,0504011,EVO-5 MAXX}#
+		GAME{12345,,{{$start->format('YmdHis')}},{{$end->format('YmdHis')}},{{count($players)}}}#
+		TIMING{15, 15, 10, {{$start->format('YmdHis')}},{{$end->format('YmdHis')}},{{$end->format('YmdHis')}}}#
+		STYLE{{{$meta['mode']}},,1,15, 0}#
+		STYLEX{5,9999,9999,0,0}#
+		STYLELEDS{0,15,15,15,15,15,1,5,1,0,15}#
+		STYLEFLAGS{0,0,1,1,0,1,0,0,0,1,0,1,0,1,1,1,1,1,0,0,0,1,0,0,1,0,0}#
+		STYLESOUNDS{255}#
+		SCORING{-50,100,-50,-25,-50,0,100,100,100,100,3550,0,0,0,0,0}#
+		ENVIRONMENT{ , , , ,,C:\LaserMaxx\shared\music\EVO-5 LaserMixx Standard\hraci\Best Gaming Dubstep Mix.mp3, ,,,,}#
+		VIPSTYLE{1,4,999,1,1,0,100}#
+		VAMPIRESTYLE{0,1,0,3,99,0}#
+		SWITCHSTYLE{0,0}#
+		ASSISTEDSTYLE{0,0,0,0,0,0,0,0}#
+		HITSTREAKSTYLE{0,5,15}#
+		SHOWDOWNSTYLE{0,3,1,3,2}#
+		ACTIVITYSTYLE{0,0,0}#
+		TERMINATESTYLE{0}#
+		MINESTYLE{0,0,0,0,Unnamed Unit}#
+		MINESTYLE{1,0,0,0,Unnamed Unit}#
+		MINESTYLE{2,0,0,0,Unnamed Unit}#
+		MINESTYLE{3,0,0,0,Unnamed Unit}#
+		MINESTYLE{4,0,0,0,Unnamed Unit}#
+		MINESTYLE{5,0,0,0,Unnamed Unit}#
+		MINESTYLE{6,0,20,6,Mina}#
+		MINESTYLE{7,0,20,6,Mina}#
+
+		GROUP{,{{base64_encode(gzdeflate(gzdeflate(json_encode($meta), 9), 9))}}}#
+
+		{{foreach $players as $player}}
+		PACK{{{$player['vest']}},{{$player['name']}},{{$player['team']}},0,{{$player['vip'] ? 1 : 0}},0,0}#
+		{{/foreach}}
+
+		{{foreach $teams as $team}}
+		TEAM{{{$team['key']}},{{$team['name']}},{{$team['playerCount']}}}#
+		{{/foreach}}
+
+		{{foreach $players as $player}}
+		PACKX{{{$player['vest']}},{{$player['score']}},{{$player['shots']}},{{$player['hits']}},{{$player['deaths']}},{{$player['position']}},0,0}#
+		{{/foreach}}
+		{{foreach $players as $player}}
+		PACKY{{{$player['vest']}},{{$player['scoreForShots']}},{{$player['scoreForBonuses']}},{{$player['scoreForPowers']}},{{$player['scoreForPodDeaths']}},{{$player['ammoRemaining']}},{{$player['accuracy']}},{{$player['podHits']}},{{$player['agent']}},{{$player['invisibility']}},{{$player['machineGun']}},{{$player['shield']}},{{$player['enemyHits']}},{{$player['teammateHits']}},{{$player['enemyDeaths']}},{{$player['teammateDeaths']}},{{$player['lives']}},0,{{$player['scoreForHits']}},0,{{$player['vipHits']}},0,0}#
+		{{/foreach}}
+		{{foreach $teams as $team}}
+		TEAMX{{{$team['key']}},{{$team['score']}},{{$team['position']}}}#
+		{{/foreach}}
+		{{foreach $players as $player}}
+		HITS{{{$player['vest']}}{{foreach $player['playerHits'] as $hit}},{{$hit}}{{/foreach}}}#
+		{{/foreach}}
+
+		GAMECLONES{0}#
+		{{/syntax}}
+{/block}

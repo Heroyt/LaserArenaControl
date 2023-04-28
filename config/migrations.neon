@@ -216,13 +216,22 @@ tables:
 			`id_game` int(11) unsigned NOT NULL,
 			`color` int(10) unsigned DEFAULT NULL,
 			`score` int(11) NOT NULL DEFAULT 0,
+			`bonus` int(11) DEFAULT NULL,
 			`position` int(10) unsigned NOT NULL DEFAULT 0,
 			`name` varchar(20) DEFAULT NULL,
 			PRIMARY KEY (`id_team`),
 			KEY `id_game` (`id_game`),
-			CONSTRAINT `evo5_teams_ibfk_1` FOREIGN KEY (`id_game`) REFERENCES `evo5_games` (`id_game`) ON DELETE CASCADE ON UPDATE CASCADE
+			KEY `id_tournament_team` (`id_tournament_team`),
+			CONSTRAINT `evo5_teams_ibfk_1` FOREIGN KEY (`id_game`) REFERENCES `evo5_games` (`id_game`) ON DELETE CASCADE ON UPDATE CASCADE,
+			CONSTRAINT `evo5_teams_ibfk_2` FOREIGN KEY (`id_tournament_team`) REFERENCES `tournament_teams` (`id_team`) ON DELETE SET NULL ON UPDATE CASCADE
 		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 		'''
+		modifications:
+			0.1.0:
+				- 'ADD `id_tournament_team` int(10) unsigned DEFAULT NULL AFTER `id_game`'
+				- 'ADD KEY IF NOT EXISTS `id_tournament_team` (`id_tournament_team`)'
+				- 'ADD FOREIGN KEY IF NOT EXISTS (`id_tournament_team`) REFERENCES `tournament_teams` (`id_team`) ON DELETE SET NULL ON UPDATE CASCADE'
+				- 'ADD `bonus` int(11) DEFAULT NULL AFTER `score`'
 	App\GameModels\Game\Evo5\Player:
 		definition: '''
 		(
@@ -230,6 +239,7 @@ tables:
 			`id_game` int(11) unsigned NOT NULL,
 			`id_team` int(11) unsigned DEFAULT NULL,
 			`id_user` int(11) unsigned DEFAULT NULL,
+			`id_tournament_player` int(10) unsigned DEFAULT NULL,
 			`name` varchar(20) NOT NULL DEFAULT '',
 			`score` int(11) NOT NULL DEFAULT 0,
 			`skill` int(11) NOT NULL DEFAULT 0,
@@ -259,9 +269,11 @@ tables:
 			PRIMARY KEY (`id_player`),
 			KEY `id_game` (`id_game`),
 			KEY `id_team` (`id_team`),
+			KEY `id_tournament_player` (`id_tournament_player`),
 			CONSTRAINT `evo5_players_ibfk_1` FOREIGN KEY (`id_game`) REFERENCES `evo5_games` (`id_game`) ON DELETE CASCADE ON UPDATE CASCADE,
 			CONSTRAINT `evo5_players_ibfk_2` FOREIGN KEY (`id_team`) REFERENCES `evo5_teams` (`id_team`) ON DELETE SET NULL ON UPDATE CASCADE,
-			CONSTRAINT `evo5_players_ibfk_3` FOREIGN KEY (`id_user`) REFERENCES `players` (`id_user`) ON DELETE SET NULL ON UPDATE CASCADE
+			CONSTRAINT `evo5_players_ibfk_3` FOREIGN KEY (`id_user`) REFERENCES `players` (`id_user`) ON DELETE SET NULL ON UPDATE CASCADE,
+			CONSTRAINT `evo5_players_ibfk_4` FOREIGN KEY (`id_tournament_player`) REFERENCES `tournament_players` (`id_player`) ON DELETE SET NULL ON UPDATE CASCADE
 		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 		'''
 		modifications:
@@ -274,6 +286,10 @@ tables:
 			0.3.0:
 				- 'ADD `relative_hits` decimal(11,4) DEFAULT NULL'
 				- 'ADD `relative_deaths` decimal(11,4) DEFAULT NULL'
+			0.4.0:
+				- 'ADD `id_tournament_player` int(10) unsigned DEFAULT NULL AFTER `id_user`'
+				- 'ADD KEY IF NOT EXISTS `id_tournament_player` (`id_tournament_player`)'
+				- 'ADD FOREIGN KEY IF NOT EXISTS (`id_tournament_player`) REFERENCES `tournament_players` (`id_player`) ON DELETE SET NULL ON UPDATE CASCADE'
 	evo5_hits:
 		definition: '''
 		(
@@ -287,7 +303,6 @@ tables:
 			CONSTRAINT `evo5_hits_ibfk_2` FOREIGN KEY (`id_target`) REFERENCES `evo5_players` (`id_player`) ON DELETE CASCADE ON UPDATE CASCADE
 		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 		'''
-
 	App\Models\Tournament\League:
 		definition: '''
 		(
@@ -306,6 +321,7 @@ tables:
           `id_tournament` int(11) unsigned NOT NULL AUTO_INCREMENT,
           `id_public` int(11) unsigned DEFAULT NULL,
           `id_league` int(11) unsigned DEFAULT NULL,
+          `id_group` int(10) unsigned DEFAULT NULL,
           `name` varchar(100) NOT NULL,
           `description` text,
           `image` varchar(200) DEFAULT NULL,
@@ -315,10 +331,16 @@ tables:
           `team_size` int(10) unsigned NOT NULL DEFAULT '1',
           `sub_count` int(10) unsigned NOT NULL DEFAULT '0',
           `active` tinyint(1) NOT NULL DEFAULT '1',
+          `points_win` int(11) NOT NULL DEFAULT 3,
+          `points_loss` int(11) NOT NULL DEFAULT 0,
+          `points_draw` int(11) NOT NULL DEFAULT 1,
+          `points_other` varchar(300) NOT NULL DEFAULT '[]',
           PRIMARY KEY (`id_tournament`),
           KEY `id_league` (`id_league`),
           KEY `id_public` (`id_public`),
+          KEY `id_group` (`id_group`),
           CONSTRAINT `tournaments_ibfk_1` FOREIGN KEY (`id_league`) REFERENCES `leagues` (`id_league`) ON DELETE SET NULL ON UPDATE CASCADE
+          CONSTRAINT `tournaments_ibfk_2` FOREIGN KEY (`id_group`) REFERENCES `game_groups` (`id_group`) ON DELETE SET NULL ON UPDATE CASCADE
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
         '''
 	App\Models\Tournament\Group:
@@ -342,6 +364,7 @@ tables:
           `id_tournament` int(11) unsigned NOT NULL,
           `name` varchar(100) NOT NULL,
           `image` varchar(200) DEFAULT NULL,
+          `points` int(11) NOT NULL DEFAULT 0,
           `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
           `updated_at` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
           PRIMARY KEY (`id_team`),

@@ -1,0 +1,14 @@
+{layout '../../@layout.latte'}
+
+{varType App\Models\Tournament\Tournament[] $tournaments}
+
+{block content}
+	<h2>{lang 'Plánované turnaje'}</h2>
+	<p><a href="{link 'tournament', 'sync'}" class="btn btn-primary">{lang 'Synchronizovat'}</a></p>
+	<div class="list-group">
+		<a n:foreach="$tournaments as $tournament" href="{link 'tournament', $tournament->id}"
+												   class="list-group-item list-group-item-action">
+			{$tournament->start->format('d.m.Y H:i')}: {$tournament->name}
+		</a>
+	</div>
+{/block}

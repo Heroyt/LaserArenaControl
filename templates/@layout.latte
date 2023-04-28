@@ -4,6 +4,7 @@
 {import 'symbols.latte'}
 
 {varType string[] $errors}
+{varType array $notices}
 {varType array $_COOKIE}
 
 {default string[] $addCss = []}
@@ -67,14 +68,41 @@
 {include smallLoader}
 
 <main class="container my-5 pt-4 {include containerClasses}">
-		{include errors}
+	{include errors}
 	{include content}
 </main>
 
 {include footer}
 {include loader}
 
-<div class="toast-container position-absolute bottom-0 end-0 p-3" id="toasts"></div>
+<div class="toast-container position-absolute bottom-0 end-0 p-3" id="toasts">
+	{foreach $notices as $notice}
+		{var string $type = 'info'}
+		{var string $content = ''}
+		{var string $title = ''}
+		{if is_string($notice)}
+			{do $content = $notice}
+		{else}
+			{do $type = $notice['type'] ?? 'info'}
+			{do $content = $notice['content'] ?? ''}
+			{do $title = $notice['title'] ?? ''}
+		{/if}
+		<div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
+			<div class="toast-header">
+				<svg class="bd-placeholder-img rounded me-2 text-{$type}" width="20" height="20"
+					 xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice"
+					 focusable="false">
+					<rect width="100%" height="100%" style="fill: currentcolor;"></rect>
+				</svg>
+				<strong class="me-auto" n:if="!empty($title)">{$title}</strong>
+				<button type="button" class="btn-close ms-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+			</div>
+			<div class="toast-body">
+				{$content}
+			</div>
+		</div>
+	{/foreach}
+</div>
 
 <script>
 	const activeLanguageCode = {\Lsr\Core\App::getShortLanguageCode()};

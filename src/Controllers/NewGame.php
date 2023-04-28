@@ -227,8 +227,8 @@ class NewGame extends Controller
 				if (!file_exists($music->fileName)) {
 					App::getLogger()->warning('Music file does not exist - '.$music->fileName);
 				}
-				if (!copy($music->fileName, LMX_DIR.'music/evo5.mp3')) {
-					App::getLogger()->warning('Music copy failed - '.$music->fileName);
+				else if (!copy($music->fileName, LMX_DIR . 'music/evo5.mp3')) {
+					App::getLogger()->warning('Music copy failed - ' . $music->fileName);
 				}
 			} catch (ModelNotFoundException|ValidationException|DirectoryCreationException) {
 				// Not critical, doesn't need to do anything

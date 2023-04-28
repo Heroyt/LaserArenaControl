@@ -75,21 +75,8 @@ abstract class AbstractCollectionQuery implements CollectionQueryInterface
 		if (empty($this->sortBy)) {
 			return $this;
 		}
-		if (property_exists($this->getType(), $this->sortBy)) {
-			$collection->sort(function(Model $modelA, Model $modelB) {
-				$paramA = $modelA->{$this->sortBy};
-				$paramB = $modelB->{$this->sortBy};
-				if (is_numeric($paramA)) {
-					return $this->sortDirection === Constants::SORT_ASC ? $paramA - $paramB : $paramB - $paramA;
-				}
-				if (is_string($paramA)) {
-					return $this->sortDirection === Constants::SORT_ASC ? strcmp($paramA, $paramB) : strcmp($paramB, $paramA);
-				}
-				throw new InvalidQueryParameterException('Invalid orderBy type '.gettype($paramA).'. Sort expects numeric or string values.');
-			});
-		}
-		else if (method_exists($this->getType(), $this->sortBy)) {
-			$collection->sort(function(Model $modelA, Model $modelB) {
+		if (method_exists($this->getType(), $this->sortBy)) {
+			$collection->sort(function (Model $modelA, Model $modelB) {
 				$paramA = $modelA->{$this->sortBy}();
 				$paramB = $modelB->{$this->sortBy}();
 				if (is_numeric($paramA)) {
@@ -98,8 +85,20 @@ abstract class AbstractCollectionQuery implements CollectionQueryInterface
 				if (is_string($paramA)) {
 					return $this->sortDirection === Constants::SORT_ASC ? strcmp($paramA, $paramB) : strcmp($paramB, $paramA);
 				}
-				throw new InvalidQueryParameterException('Invalid orderBy type '.gettype($paramA).'. Sort expects numeric or string values.');
+				throw new InvalidQueryParameterException('Invalid orderBy type ' . gettype($paramA) . '. Sort expects numeric or string values.');
 
+			});
+		} else if (property_exists($this->getType(), $this->sortBy)) {
+			$collection->sort(function (Model $modelA, Model $modelB) {
+				$paramA = $modelA->{$this->sortBy};
+				$paramB = $modelB->{$this->sortBy};
+				if (is_numeric($paramA)) {
+					return $this->sortDirection === Constants::SORT_ASC ? $paramA - $paramB : $paramB - $paramA;
+				}
+				if (is_string($paramA)) {
+					return $this->sortDirection === Constants::SORT_ASC ? strcmp($paramA, $paramB) : strcmp($paramB, $paramA);
+				}
+				throw new InvalidQueryParameterException('Invalid orderBy type ' . gettype($paramA) . '. Sort expects numeric or string values.');
 			});
 		}
 		return $this;
@@ -130,16 +129,16 @@ abstract class AbstractCollectionQuery implements CollectionQueryInterface
 	 * @return CollectionQueryInterface<T>
 	 */
 	public function sortBy(string $param) : CollectionQueryInterface {
-		if (property_exists($this->getType(), $param)) {
-			$this->sortBy = $param;
-			return $this;
-		}
-		$method = 'get'.Strings::firstUpper($param);
+		$method = 'get' . Strings::firstUpper($param);
 		if (method_exists($this->getType(), $method)) {
 			$this->sortBy = $method;
 			return $this;
 		}
-		throw new InvalidQueryParameterException('Invalid query parameter. Neither '.$this->getType().'::$'.$param.' or '.$this->getType().'::'.$method.'() does not exist.');
+		if (property_exists($this->getType(), $param)) {
+			$this->sortBy = $param;
+			return $this;
+		}
+		throw new InvalidQueryParameterException('Invalid query parameter. Neither ' . $this->getType() . '::$' . $param . ' or ' . $this->getType() . '::' . $method . '() does not exist.');
 	}
 
 	/**

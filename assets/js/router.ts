@@ -114,5 +114,22 @@ export default function route(pageInfo: PageInfo): void {
 				module.default();
 			});
 			break;
+		case 'tournament-rozlos':
+			import(
+				/* webpackChunkName: "tournamentRozlos" */
+				'./pages/tournaments/rozlos'
+				).then(module => {
+				module.default();
+			});
+			break;
+		case 'tournament-play':
+		case 'tournament-play-game':
+			import(
+				/* webpackChunkName: "tournamentPlay" */
+				'./pages/tournaments/play'
+				).then(module => {
+				module.default();
+			});
+			break;
 	}
 }

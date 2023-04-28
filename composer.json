@@ -46,7 +46,8 @@
 		"lsr/routing": "^0.2",
 		"lsr/logging": "^0.2",
 		"lsr/request": "^0.2",
-		"ext-zlib": "*"
+		"ext-zlib": "*",
+		"heroyt/tournament-generator": "^0.5.1"
 	},
 	"require-dev": {
 		"roave/security-advisories": "dev-latest",

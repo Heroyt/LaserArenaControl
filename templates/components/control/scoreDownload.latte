@@ -1,0 +1,23 @@
+{define scoreDownloadModal}
+	<div class="modal" id="scoresDownloadModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">{lang 'Stahují se výsledky'}</h5>
+				</div>
+				<div class="modal-body">
+					<p>{lang 'Systém detekoval nedokončené stahování z výsledků. Zkontrolujte vesty a případně klikěte na "Opakovat"'}</p>
+					<p>{lang 'Při kliknutí na "Zrušit" se výsledky z vest nestáhnout.'}</p>
+				</div>
+				<div class="modal-footer">
+					<button id="retryDownload" type="button" class="btn btn-primary">
+						{lang 'Opakovat', context: 'actions'}
+					</button>
+					<button id="cancelDownload" type="button" class="btn btn-danger">
+						{lang 'Zrušit', context: 'actions'}
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+{/define}

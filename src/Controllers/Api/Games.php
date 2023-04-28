@@ -4,6 +4,7 @@ namespace App\Controllers\Api;
 
 use App\GameModels\Factory\GameFactory;
 use App\Models\GameGroup;
+use App\Services\Evo5\GameSimulator;
 use App\Services\SyncService;
 use DateTime;
 use Exception;
@@ -13,6 +14,7 @@ use Lsr\Core\Exceptions\ModelNotFoundException;
 use Lsr\Core\Exceptions\ValidationException;
 use Lsr\Core\Requests\Request;
 use Lsr\Core\Routing\Attributes\Post;
+use Lsr\Core\Templating\Latte;
 use Lsr\Logging\Exceptions\DirectoryCreationException;
 use Throwable;
 
@@ -22,6 +24,13 @@ use Throwable;
 class Games extends ApiController
 {
 
+	public function __construct(
+		Latte                          $latte,
+		private readonly GameSimulator $gameSimulator,
+	) {
+		parent::__construct($latte);
+	}
+
 	/**
 	 * @param Request $request
 	 *
@@ -29,8 +38,8 @@ class Games extends ApiController
 	 * @throws JsonException
 	 * @throws Throwable
 	 */
-	public function syncGames(Request $request) : void {
-		$limit = (int) ($request->params['limit'] ?? 5);
+	public function syncGames(Request $request): void {
+		$limit = (int)($request->params['limit'] ?? 5);
 		$timeout = isset($request->get['timeout']) ? (float) $request->get['timeout'] : null;
 		SyncService::syncGames($limit, $timeout);
 		$this->respond(['success' => true]);
@@ -176,6 +185,11 @@ class Games extends ApiController
 			$this->respond(['error' => 'Save failed', 'exception' => $e->getMessage()], 500);
 		}
 
+		$this->respond(['success' => true]);
+	}
+
+	public function simulate(): never {
+		$this->gameSimulator->simulate();
 		$this->respond(['success' => true]);
 	}
 

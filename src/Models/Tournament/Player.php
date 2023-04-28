@@ -3,6 +3,8 @@
 namespace App\Models\Tournament;
 
 use App\Models\Auth\Player as LigaPlayer;
+use DateTimeImmutable;
+use DateTimeInterface;
 use Lsr\Core\App;
 use Lsr\Core\Models\Attributes\ManyToOne;
 use Lsr\Core\Models\Attributes\PrimaryKey;
@@ -16,7 +18,6 @@ class Player extends Model
 
 	public const TABLE = 'tournament_players';
 
-	public ?int $idPublic = null;
 	public string $nickname;
 	public ?string $name = null;
 	public ?string $surname = null;
@@ -39,18 +40,18 @@ class Player extends Model
 	#[ManyToOne]
 	public ?LigaPlayer $user = null;
 
-	public \DateTimeInterface  $createdAt;
-	public ?\DateTimeInterface $updatedAt = null;
+	public DateTimeInterface  $createdAt;
+	public ?DateTimeInterface $updatedAt = null;
 
 	public function insert() : bool {
 		if (!isset($this->createdAt)) {
-			$this->createdAt = new \DateTimeImmutable();
+			$this->createdAt = new DateTimeImmutable();
 		}
 		return parent::insert();
 	}
 
 	public function update(): bool {
-		$this->updatedAt = new \DateTimeImmutable();
+		$this->updatedAt = new DateTimeImmutable();
 		return parent::update();
 	}
 

@@ -48,6 +48,7 @@ class Loader
 	public static function init() : void {
 		// Initialize app
 		Timer::start('core.init.app');
+		App::prettyUrl();
 		App::init();
 		Timer::stop('core.init.app');
 

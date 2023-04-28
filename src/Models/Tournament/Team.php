@@ -2,6 +2,8 @@
 
 namespace App\Models\Tournament;
 
+use DateTimeImmutable;
+use DateTimeInterface;
 use Lsr\Core\App;
 use Lsr\Core\Exceptions\ValidationException;
 use Lsr\Core\Models\Attributes\ManyToOne;
@@ -15,27 +17,28 @@ class Team extends Model
 
 	public const TABLE = 'tournament_teams';
 
-	public ?int $idPublic = null;
 	public string $name;
 
 	public ?string $image = null;
 
+	public int $points = 0;
+
 	#[ManyToOne]
 	public Tournament $tournament;
-	public \DateTimeInterface $createdAt;
-	public ?\DateTimeInterface $updatedAt = null;
+	public DateTimeInterface $createdAt;
+	public ?DateTimeInterface $updatedAt = null;
 	/** @var Player[] */
 	private array $players = [];
 
 	public function insert(): bool {
 		if (!isset($this->createdAt)) {
-			$this->createdAt = new \DateTimeImmutable();
+			$this->createdAt = new DateTimeImmutable();
 		}
 		return parent::insert();
 	}
 
 	public function update(): bool {
-		$this->updatedAt = new \DateTimeImmutable();
+		$this->updatedAt = new DateTimeImmutable();
 		return parent::update();
 	}
 

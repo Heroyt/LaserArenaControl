@@ -4,6 +4,7 @@ namespace App\Models\Tournament;
 
 use JsonException;
 use Lsr\Core\Models\Attributes\ManyToOne;
+use Lsr\Core\Models\Attributes\NoDB;
 use Lsr\Core\Models\Attributes\PrimaryKey;
 use Lsr\Core\Models\Model;
 
@@ -27,6 +28,9 @@ class Progression extends Model
 	public ?string $filters = null;
 	public ?string $keys = null;
 	public int $points = 0;
+
+	#[NoDB]
+	public ?\TournamentGenerator\Progression $progression = null;
 
 	/** @var int[] */
 	private array $keysParsed = [];

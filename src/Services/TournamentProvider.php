@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\GameModels\Game\Enums\GameModeType;
+use App\Models\Tournament\Group;
 use App\Models\Tournament\League;
 use App\Models\Tournament\Player;
 use App\Models\Tournament\PlayerSkill;
@@ -263,13 +264,13 @@ class TournamentProvider
 	 * @return TournamentGenerator
 	 * @throws ValidationException
 	 */
-	public function createTournamentFromPreset(TournamentPresetType $type, Tournament $tournament, int $gameLength = 15, int $gamePause = 5): TournamentGenerator {
+	public function createTournamentFromPreset(TournamentPresetType $type, Tournament $tournament): TournamentGenerator {
 		$tournamentRozlos = new TournamentGenerator();
 		foreach ($tournament->getTeams() as $team) {
 			$tournamentRozlos->team($team->name, $team->id);
 		}
 
-		$tournamentRozlos->setPlay($gameLength)->setGameWait($gamePause);
+		$tournamentRozlos->setPlay($tournament->gameLength)->setGameWait($tournament->gamePause);
 
 		switch ($type) {
 			case TournamentPresetType::ROUND_ROBIN:
@@ -284,9 +285,9 @@ class TournamentProvider
 				$groupB = $round1->group('B');
 				$groupC = $round2->group('C');
 				$groupD = $round2->group('D');
-				$groupA->progression($groupC, 0, $half);
+				$groupA->progression($groupC, 0, $half)->setPoints(50);
 				$groupA->progression($groupD, $half);
-				$groupB->progression($groupC, 0, $half);
+				$groupB->progression($groupC, 0, $half)->setPoints(50);
 				$groupB->progression($groupD, $half);
 				$tournamentRozlos->splitTeams($round1);
 				break;
@@ -295,6 +296,158 @@ class TournamentProvider
 		$tournamentRozlos->genGamesSimulate();
 
 		return $tournamentRozlos;
+	}
+
+	public function progress(Tournament $tournament): int {
+		$progressed = 0;
+		$tournamentRozlos = $this->reconstructTournament($tournament);
+
+		foreach ($tournamentRozlos->getGroups() as $groupRozlos) {
+			bdump($groupRozlos);
+			bdump($groupRozlos->isPlayed());
+
+			// If the group is not finished, there is no need to progress teams
+			if (!$groupRozlos->isPlayed()) {
+				continue;
+			}
+
+			$groupChanged = false;
+
+			// Get all progressions from this group
+			$group = Group::get($groupRozlos->getId());
+			foreach ($group->getProgressionsFrom() as $progression) {
+				$progressionRozlos = $progression->progression;
+
+				// Skip if already progressed
+				if (!isset($progressionRozlos) || $progressionRozlos->isProgressed()) {
+					continue;
+				}
+
+				$groupChanged = true;
+
+				// Do the progression
+				$progressionRozlos->progress();
+
+				// Find progressed teams
+				/** @var Team[] $progressedTeams */
+				$progressedTeams = [];
+				$keys = $progression->getKeys();
+				foreach ($progressionRozlos->getProgressedTeams() as $team) {
+					$key = array_shift($keys);
+					$progressedTeams[$key] = Team::get($team->getId());
+					if (empty($keys)) {
+						break;
+					}
+				}
+
+				// Update the games
+				$to = $progression->to;
+				foreach ($to->getGames() as $game) {
+					$changed = false;
+					// Assign progressed teams to games
+					foreach ($game->teams as $team) {
+						if (isset($progressedTeams[$team->key])) {
+							$team->team = $progressedTeams[$team->key];
+							$changed = true;
+						}
+					}
+					if ($changed) {
+						$game->save();
+					}
+				}
+			}
+
+			if (!$groupChanged) {
+				continue; // Do not update the teams if no progression occured
+			}
+
+			$progressed++;
+
+			// Update group's teams
+			foreach ($groupRozlos->getTeams() as $teamRozlos) {
+				$team = Team::get($teamRozlos->getId());
+				if (!isset($team)) {
+					continue;
+				}
+				// Update points
+				$team->points = $teamRozlos->getSumPoints();
+				$team->save();
+			}
+		}
+
+		return $progressed;
+	}
+
+	public function reconstructTournament(Tournament $tournament): TournamentGenerator {
+		$tournamentGenerator = new TournamentGenerator($tournament->name);
+
+		$tournamentGenerator
+			->setPlay($tournament->gameLength)
+			->setGameWait($tournament->gamePause);
+		$teams = [];
+		foreach ($tournament->getTeams() as $team) {
+			$teams[$team->id] = $tournamentGenerator->team($team->name, $team->id);
+		}
+
+		bdump($teams);
+
+		$rounds = [];
+		$groups = [];
+		$games = [];
+		foreach ($tournament->groups as $group) {
+			if (!isset($rounds[$group->round])) {
+				$rounds[$group->round] = $tournamentGenerator->round($group->round);
+			}
+			$groups[$group->id] = $rounds[$group->round]->group(str_replace($group->round . ' - ', '', $group->name), $group->id)
+				->setWinPoints($tournament->points->win)
+				->setDrawPoints($tournament->points->draw)
+				->setLostPoints($tournament->points->loss);
+
+			foreach ($group->getGames() as $game) {
+				if (count(array_filter($game->teams, static fn($team) => isset($team->team))) < 2) {
+					continue; // Skip planned games without any teams
+				}
+				$gameTeams = [];
+				$results = [];
+				foreach ($game->teams as $team) {
+					$gameTeams[] = $teams[$team->team->id];
+					$results[$team->team->id] = $team->score;
+				}
+				$groups[$group->id]->addTeam(...$gameTeams);
+				$games[$game->id] = $groups[$group->id]->game($gameTeams)->setId($game->id);
+				if (isset($game->code)) {
+					$games[$game->id]->setResults($results);
+				}
+			}
+		}
+
+		foreach ($tournament->getProgressions() as $progression) {
+			$from = $groups[$progression->from->id];
+			$to = $groups[$progression->to->id];
+			$progressionRozlos = $from->progression($to, $progression->start, $progression->length)->setPoints($progression->points);
+			// TODO: Reconstruct filters
+
+			// Check if not already progressed
+			$keys = $progression->getKeys();
+			foreach ($progression->to->getGames() as $game) {
+				foreach ($game->teams as $team) {
+					if (!isset($team->team) || !in_array($team->key, $keys, true)) {
+						continue;
+					}
+					unset($keys[array_search($team->key, $keys)]);
+					if (empty($keys)) {
+						break;
+					}
+				}
+				if (empty($keys)) {
+					break;
+				}
+			}
+			$progressionRozlos->setProgressed(empty($keys));
+			$progression->progression = $progressionRozlos;
+		}
+
+		return $tournamentGenerator;
 	}
 
 }

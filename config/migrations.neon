@@ -452,3 +452,25 @@ tables:
           CONSTRAINT `tournament_game_players_ibfk_2` FOREIGN KEY (`id_player`) REFERENCES `tournament_players` (`id_player`) ON DELETE CASCADE ON UPDATE CASCADE
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 		'''
+	App\Models\Tournament\Progression:
+		definitions: '''
+		CREATE TABLE `tournament_progressions` (
+          `id_progression` int(11) unsigned NOT NULL AUTO_INCREMENT,
+          `id_public` int(11) unsigned DEFAULT NULL,
+          `id_tournament` int(11) unsigned NOT NULL,
+          `id_group_from` int(11) unsigned NOT NULL,
+          `id_group_to` int(11) unsigned NOT NULL,
+          `start` int(11) DEFAULT NULL,
+          `length` int(11) DEFAULT NULL,
+          `filters` text DEFAULT NULL,
+          `keys` text DEFAULT NULL,
+          `points` int(11) NOT NULL DEFAULT 0,
+          PRIMARY KEY (`id_progression`),
+          KEY `id_tournament` (`id_tournament`),
+          KEY `id_group_from` (`id_group_from`),
+          KEY `id_group_to` (`id_group_to`),
+          CONSTRAINT `tournament_progressions_ibfk_1` FOREIGN KEY (`id_tournament`) REFERENCES `tournaments` (`id_tournament`) ON DELETE CASCADE ON UPDATE CASCADE,
+          CONSTRAINT `tournament_progressions_ibfk_2` FOREIGN KEY (`id_group_from`) REFERENCES `tournament_groups` (`id_group`) ON DELETE CASCADE ON UPDATE CASCADE,
+          CONSTRAINT `tournament_progressions_ibfk_3` FOREIGN KEY (`id_group_to`) REFERENCES `tournament_groups` (`id_group`) ON DELETE CASCADE ON UPDATE CASCADE
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+		'''

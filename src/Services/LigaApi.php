@@ -6,14 +6,8 @@
 namespace App\Services;
 
 use App\Core\Info;
-use App\GameModels\Game\Enums\GameModeType;
 use App\GameModels\Game\Game;
 use App\Models\MusicMode;
-use App\Models\Tournament\League;
-use App\Models\Tournament\Player;
-use App\Models\Tournament\PlayerSkill;
-use App\Models\Tournament\Team;
-use App\Models\Tournament\Tournament;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Handler\CurlFactory;
@@ -25,7 +19,6 @@ use GuzzleHttp\Psr7\Utils;
 use InvalidArgumentException;
 use JsonException;
 use Lsr\Core\App;
-use Lsr\Core\Exceptions\ModelNotFoundException;
 use Lsr\Core\Exceptions\ValidationException;
 use Lsr\Logging\Logger;
 use Psr\Http\Message\ResponseInterface;
@@ -38,7 +31,7 @@ class LigaApi
 
 	public static LigaApi $instance;
 
-	public Client  $client;
+	public Client $client;
 	private Logger $logger;
 
 	public function __construct(
@@ -49,7 +42,7 @@ class LigaApi
 		$this->makeClient();
 	}
 
-	private function makeClient() : void {
+	private function makeClient(): void {
 		// Add logging to handler and set handler to cUrl
 		$stack = new HandlerStack();
 		$stack->setHandler(new CurlHandler(['handle_factory' => new CurlFactory(99)]));
@@ -57,21 +50,21 @@ class LigaApi
 
 		// Initialize client
 		$this->client = new Client([
-																 'handler'         => $stack,
-																 'base_uri'        => trailingSlashIt($this->url).'api/',
-																 'timeout'         => 60.0, // 1 minute
-																 'allow_redirects' => true,
-																 'headers'         => [
-																	 'Accept'        => 'application/json',
-																	 'Authorization' => 'Bearer '.$this->apiKey,
-																 ]
-															 ]);
+			'handler' => $stack,
+			'base_uri' => trailingSlashIt($this->url) . 'api/',
+			'timeout' => 60.0, // 1 minute
+			'allow_redirects' => true,
+			'headers' => [
+				'Accept' => 'application/json',
+				'Authorization' => 'Bearer ' . $this->apiKey,
+			]
+		]);
 	}
 
 	/**
 	 * @return LigaApi
 	 */
-	public static function getInstance() : LigaApi {
+	public static function getInstance(): LigaApi {
 		if (!isset(self::$instance)) {
 			/** @var string $url */
 			$url = Info::get('liga_api_url', '');
@@ -85,14 +78,14 @@ class LigaApi
 	/**
 	 * Send a GET request to the liga API with all necessary settings, headers, etc.
 	 *
-	 * @param string                   $path
+	 * @param string $path
 	 * @param array<string,mixed>|null $params
-	 * @param array<string,mixed>      $config
+	 * @param array<string,mixed> $config
 	 *
 	 * @return ResponseInterface
 	 * @throws GuzzleException
 	 */
-	public function get(string $path, ?array $params = null, array $config = []) : ResponseInterface {
+	public function get(string $path, ?array $params = null, array $config = []): ResponseInterface {
 		$this->makeClient();
 		if (isset($params)) {
 			$config['query'] = $params;
@@ -103,16 +96,16 @@ class LigaApi
 	/**
 	 * Synchronize games to public API
 	 *
-	 * @param string     $system
-	 * @param Game[]     $games
+	 * @param string $system
+	 * @param Game[] $games
 	 * @param float|null $timeout
-	 * @param bool       $recreateClient
+	 * @param bool $recreateClient
 	 *
 	 * @return bool
 	 * @throws JsonException
 	 * @post All finished games will be sent to public
 	 */
-	public function syncGames(string $system, array $games, ?float $timeout = null, bool $recreateClient = false) : bool {
+	public function syncGames(string $system, array $games, ?float $timeout = null, bool $recreateClient = false): bool {
 		if ($recreateClient) {
 			$this->makeClient();
 		}
@@ -124,23 +117,21 @@ class LigaApi
 
 		// Validate each game
 		$gamesData = [];
+		$tournaments = [];
 		foreach ($games as $key => $game) {
 			if ($game::SYSTEM !== $system) {
-				throw new InvalidArgumentException('Game #'.$key.' (code: '.$game->code.') is not an '.$system.' game.');
+				throw new InvalidArgumentException('Game #' . $key . ' (code: ' . $game->code . ') is not an ' . $system . ' game.');
 			}
 			// Remove unfinished games
 			if ($game->isFinished()) {
-				bdump($game);
-
 				// Check assigned users
 				try {
 					// Get user data from game
-					$response = $this->client->get('games/'.$game->code.'/users');
+					$response = $this->client->get('games/' . $game->code . '/users');
 					if ($response->getStatusCode() === 200) {
 						$response->getBody()->rewind();
 						/** @var array<int,array{id:int,nickname:string,code:string,arena:int,email:string,stats:array{rank:int,gamesPlayed:int,arenasPlayed:int},connections:array{type:string,identifier:string}[]}> $users */
 						$users = json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
-						bdump($users);
 						if (!empty($users)) {
 							// Assign user objects for each user got
 							foreach ($users as $vest => $userData) {
@@ -152,16 +143,18 @@ class LigaApi
 										$player->user->save();
 									}
 									$player->save();
-									bdump($player);
 								}
 							}
 						}
 					}
-				} catch (GuzzleException|ModelNotFoundException|ValidationException|JsonException) {
+				} catch (GuzzleException|ValidationException|JsonException) {
 				}
 
-				bdump($game);
 				$gamesData[] = $game;
+				if ($game->getTournamentGame() !== null) {
+					$tournament = $game->getTournamentGame()->tournament;
+					$tournaments[$tournament->id] = $tournament;
+				}
 			}
 		}
 
@@ -177,7 +170,7 @@ class LigaApi
 			$response = $this->client->post('games', $config);
 			$status = $response->getStatusCode();
 			if ($status > 299) {
-				$this->logger->error('Request failed: '.json_encode($response->getBody()->getContents(), JSON_THROW_ON_ERROR));
+				$this->logger->error('Request failed: ' . json_encode($response->getBody()->getContents(), JSON_THROW_ON_ERROR));
 				return false;
 			}
 		} catch (GuzzleException $e) {
@@ -185,20 +178,33 @@ class LigaApi
 			$this->logger->exception($e);
 			return false;
 		}
+
+		if (!empty($tournaments)) {
+			bdump($tournaments);
+			$tournamentProvider = App::getServiceByType(TournamentProvider::class);
+			foreach ($tournaments as $tournament) {
+				try {
+					$tournamentProvider->syncGames($tournament);
+				} catch (JsonException|ValidationException $e) {
+					bdump($e);
+				}
+			}
+		}
+
 		return true;
 	}
 
 	/**
 	 * Send a POST request to the liga API with all necessary settings, headers, etc.
 	 *
-	 * @param string              $path
-	 * @param array|object|null   $data
+	 * @param string $path
+	 * @param array|object|null $data
 	 * @param array<string,mixed> $config
 	 *
 	 * @return ResponseInterface
 	 * @throws GuzzleException
 	 */
-	public function post(string $path, array|object|null $data = null, array $config = []) : ResponseInterface {
+	public function post(string $path, array|object|null $data = null, array $config = []): ResponseInterface {
 		$this->makeClient();
 		if (isset($data)) {
 			$config['json'] = $data;
@@ -206,14 +212,14 @@ class LigaApi
 		return $this->client->post($path, $config);
 	}
 
-	public function syncMusicMode(MusicMode $mode) : bool {
+	public function syncMusicMode(MusicMode $mode): bool {
 		try {
 			if (!$mode->public) {
-				$response = $this->client->delete('music/'.$mode->id);
+				$response = $this->client->delete('music/' . $mode->id);
 				$response->getBody()->rewind();
 				$body = $response->getBody()->getContents();
 				if ($response->getStatusCode() !== 200) {
-					$this->logger->error('Music delete failed: '.$body);
+					$this->logger->error('Music delete failed: ' . $body);
 					return false;
 				}
 				return true;
@@ -223,9 +229,9 @@ class LigaApi
 				'json' => [
 					'music' => [
 						[
-							'id'           => $mode->id,
-							'name'         => $mode->name,
-							'order'        => $mode->order,
+							'id' => $mode->id,
+							'name' => $mode->name,
+							'order' => $mode->order,
 							'previewStart' => $mode->previewStart,
 						],
 					],
@@ -234,14 +240,14 @@ class LigaApi
 			$response->getBody()->rewind();
 			$body = $response->getBody()->getContents();
 			if ($response->getStatusCode() !== 200) {
-				$this->logger->error('Music sync failed: '.$body);
+				$this->logger->error('Music sync failed: ' . $body);
 				return false;
 			}
 
-			$response = $this->client->post('music/'.$mode->id.'/upload', [
+			$response = $this->client->post('music/' . $mode->id . '/upload', [
 				'multipart' => [
 					[
-						'name'     => 'media',
+						'name' => 'media',
 						'contents' => Utils::tryFopen($mode->fileName, 'r'),
 					]
 				]
@@ -249,7 +255,7 @@ class LigaApi
 			$response->getBody()->rewind();
 			$body = $response->getBody()->getContents();
 			if ($response->getStatusCode() !== 200) {
-				$this->logger->error('Music upload failed: '.$body);
+				$this->logger->error('Music upload failed: ' . $body);
 				return false;
 			}
 		} catch (GuzzleException $e) {
@@ -266,7 +272,7 @@ class LigaApi
 	 * @return bool
 	 * @throws ValidationException
 	 */
-	public function syncMusicModes() : bool {
+	public function syncMusicModes(): bool {
 		$musicModes = MusicMode::getAll();
 
 		// Sync data
@@ -278,9 +284,9 @@ class LigaApi
 				continue;
 			}
 			$data[] = [
-				'id'           => $mode->id,
-				'name'         => $mode->name,
-				'order'        => $mode->order,
+				'id' => $mode->id,
+				'name' => $mode->name,
+				'order' => $mode->order,
 				'previewStart' => $mode->previewStart,
 			];
 		}
@@ -294,12 +300,12 @@ class LigaApi
 			$response->getBody()->rewind();
 			$body = $response->getBody()->getContents();
 			if ($response->getStatusCode() !== 200) {
-				$this->logger->error('Music sync failed: '.$body);
+				$this->logger->error('Music sync failed: ' . $body);
 				return false;
 			}
 
 			foreach ($private as $id) {
-				$this->client->deleteAsync('music/'.$id);
+				$this->client->deleteAsync('music/' . $id);
 			}
 
 			// Upload files
@@ -311,10 +317,10 @@ class LigaApi
 				if (!file_exists($previewFile)) {
 					$mode->trimMediaToPreview();
 				}
-				$response = $this->client->post('music/'.$mode->id.'/upload', [
+				$response = $this->client->post('music/' . $mode->id . '/upload', [
 					'multipart' => [
 						[
-							'name'     => 'media',
+							'name' => 'media',
 							'contents' => Utils::tryFopen($previewFile, 'r'),
 						]
 					]
@@ -322,7 +328,7 @@ class LigaApi
 				$response->getBody()->rewind();
 				$body = $response->getBody()->getContents();
 				if ($response->getStatusCode() !== 200) {
-					$this->logger->error('Music upload failed: '.$body);
+					$this->logger->error('Music upload failed: ' . $body);
 					return false;
 				}
 			}
@@ -340,7 +346,7 @@ class LigaApi
 	 *
 	 * @return Client
 	 */
-	public function getClient(bool $remake = false) : Client {
+	public function getClient(bool $remake = false): Client {
 		if (!isset($this->client) || $remake) {
 			$this->makeClient();
 		}

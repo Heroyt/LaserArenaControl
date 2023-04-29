@@ -133,6 +133,122 @@ class TournamentProvider
 		return true;
 	}
 
+	/**
+	 * Synchronize tournament games to public
+	 *
+	 * @param Tournament $tournament
+	 * @return bool
+	 * @throws JsonException
+	 * @throws ValidationException
+	 */
+	public function syncGames(Tournament $tournament): bool {
+		$this->logger->info('Starting game synchronization - #' . $tournament->id);
+		if (!isset($tournament->idPublic)) {
+			$this->logger->debug('No public ID - #' . $tournament->id);
+			// TODO: Sync tournament to liga
+			return false;
+		}
+		$data = [
+			'group' => null,
+			'groups' => [],
+			'games' => [],
+			'teams' => [],
+			'progressions' => [],
+		];
+		$group = $tournament->getGroup();
+		if (isset($group)) {
+			$data['group'] = [
+				'id' => $group->id,
+				'name' => $group->name,
+			];
+		}
+
+		foreach ($tournament->groups as $group) {
+			$data['groups'][] = [
+				'id_local' => $group->id,
+				'id_public' => $group->idPublic,
+				'name' => $group->name,
+			];
+		}
+		foreach ($tournament->getTeams() as $team) {
+			$data['teams'][] = [
+				'id_local' => $team->id,
+				'id_public' => $team->idPublic,
+				'points' => $team->points,
+			];
+		}
+		foreach ($tournament->getGames() as $game) {
+			$teams = [];
+			foreach ($game->teams as $team) {
+				$teams[] = [
+					'key' => $team->key,
+					'team' => $team->team?->idPublic,
+					'position' => $team->position,
+					'points' => $team->points,
+					'score' => $team->score,
+				];
+			}
+			$data['games'][] = [
+				'id_local' => $game->id,
+				'id_public' => $game->idPublic,
+				'group' => $game->group?->id,
+				'code' => $game->code,
+				'start' => $game->start->format('Y-m-d H:i:s'),
+				'teams' => $teams,
+			];
+		}
+
+		foreach ($tournament->getProgressions() as $progression) {
+			$data['progressions'][] = [
+				'id_local' => $progression->id,
+				'id_public' => $progression->idPublic,
+				'from' => $progression->from->id,
+				'to' => $progression->to->id,
+				'start' => $progression->start,
+				'length' => $progression->length,
+				'filters' => $progression->filters,
+				'keys' => $progression->keys,
+				'points' => $progression->points,
+			];
+		}
+
+		try {
+			$response = $this->api->post('/api/tournament/' . $tournament->idPublic, $data);
+			$response->getBody()->rewind();
+		} catch (GuzzleException $e) {
+			$this->logger->exception($e);
+			return false;
+		}
+		if ($response->getStatusCode() !== 200) {
+			$this->logger->warning($response->getBody()->getContents());
+			return false;
+		}
+
+		$responseData = json_decode($response->getBody(), true, 512, JSON_THROW_ON_ERROR);
+
+		// Assign new public IDs
+		foreach ($tournament->groups as $group) {
+			if (isset($responseData['groups'][$group->id])) {
+				$group->idPublic = $responseData['groups'][$group->id];
+				$group->save();
+			}
+		}
+		foreach ($tournament->getGames() as $game) {
+			if (isset($responseData['games'][$game->id])) {
+				$game->idPublic = $responseData['games'][$game->id];
+				$game->save();
+			}
+		}
+		foreach ($tournament->getProgressions() as $progression) {
+			if (isset($responseData['progressions'][$progression->id])) {
+				$progression->idPublic = $responseData['progressions'][$progression->id];
+				$progression->save();
+			}
+		}
+
+		return true;
+	}
+
 	public function reset(Tournament $tournament): void {
 		$tournament->clearProgressions();
 		$tournament->clearGroups();

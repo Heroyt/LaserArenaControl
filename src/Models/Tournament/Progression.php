@@ -11,6 +11,8 @@ use Lsr\Core\Models\Model;
 class Progression extends Model
 {
 
+	use WithPublicId;
+
 	public const TABLE = 'tournament_progressions';
 
 	#[ManyToOne]

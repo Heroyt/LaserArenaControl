@@ -31,15 +31,17 @@ class SyncService
 		/** @var Row[] $gameRows */
 		$gameRows = GameFactory::queryGames(true)->where('[sync] = 0')->limit($limit)->orderBy('start')->desc()->fetchAll(cache: false);
 
+		$tournaments = [];
+
 		if (empty($gameRows)) {
 			if (PHP_SAPI === 'cli') {
-				echo 'No games to synchronize.'.PHP_EOL;
+				echo 'No games to synchronize.' . PHP_EOL;
 			}
 			$logger->info('No games to synchronize.');
 			return;
 		}
 
-		$message = 'Starting sync for games: '.implode(', ', array_map(static function(object $row) {
+		$message = 'Starting sync for games: ' . implode(', ', array_map(static function (object $row) {
 				return $row->id_game.' - '.$row->code;
 			}, $gameRows));
 		$logger->info($message);

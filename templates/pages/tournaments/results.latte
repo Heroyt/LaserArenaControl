@@ -1,0 +1,153 @@
+{layout '../../@layout.latte'}
+
+{varType App\Models\Tournament\Tournament $tournament}
+{varType App\Models\Tournament\Team[] $teams}
+{varType array $bestPlayers}
+{varType array $accuracyPlayers}
+{varType array $shotsPlayers}
+{varType array $hitsOwnPlayers}
+
+{block content}
+	<p>
+		<a href="{link 'tournament', $tournament->id}" class="btn btn-warning">
+			<i class="fa-solid fa-caret-left"></i> {lang 'Zpět'}
+		</a>
+	</p>
+	<h2>{lang 'Turnaj'} - {$tournament->name}</h2>
+	<h3>{lang 'Výsledky'}</h3>
+
+	<ul class="nav nav-tabs mt-4" id="results-tabs-control" role="tablist">
+		<li class="nav-item" role="presentation">
+			<a class="nav-link active" id="summary-tab-control" data-bs-toggle="tab"
+			   data-bs-target="#summary-tab"
+			   href="#summary-tab"
+			   role="tab" aria-controls="summary-tab" aria-selected="true">
+				{lang 'Celkové'}
+			</a>
+		</li>
+		<li class="nav-item" role="presentation">
+			<a class="nav-link" id="individual-tab-control" data-bs-toggle="tab"
+			   data-bs-target="#individual-tab"
+			   href="#individual-tab"
+			   role="tab" aria-controls="individual-tab" aria-selected="true">
+				{lang 'Individální'}
+			</a>
+		</li>
+	</ul>
+
+	<div class="tab-content" id="results-tabs">
+		<div class="tab-pane fade show active" id="summary-tab" role="tabpanel" aria-labelledby="summary-tab-control"
+			 tabindex="0">
+			<table class="table table-striped">
+				<thead>
+				<tr>
+					<th></th>
+					<th>{lang 'Tým'}</th>
+					<th>{lang 'Výhry'}</th>
+					<th>{lang 'Remízy'}</th>
+					<th>{lang 'Prohry'}</th>
+					<th>{lang 'Body'}</th>
+					<th>{lang 'Skóre'}</th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr n:foreach="$teams as $team">
+					<td>{$iterator->counter}.</td>
+					<td>
+						<img src="{ifset $team->image}{$team->getImageUrl()}{else}{getUrl}assets/images/gate/questionmark.jpg{/ifset}"
+							 alt="{$team->name}" class="team-logo object-fit-cover rounded-circle" style="width: 2rem;">
+						<span class="team-name">{$team->name}</span>
+					</td>
+					<td>{$team->getWins()}</td>
+					<td>{$team->getDraws()}</td>
+					<td>{$team->getLosses()}</td>
+					<td>{$team->points}</td>
+					<td>{$team->getScore()|number:0,',','&nbsp;'|noescape}</td>
+				</tr>
+				</tbody>
+			</table>
+		</div>
+		<div class="tab-pane fade" id="individual-tab" role="tabpanel" aria-labelledby="individual-tab-control"
+			 tabindex="0">
+			<div class="row">
+				<div class="col-md-6 col-lg-3 pt-4">
+					<h3 class="text-center">{lang 'Nejlepší hráči'}</h3>
+					<table class="table table-striped">
+						<thead>
+						<tr>
+							<th></th>
+							<th>{lang 'Hráč'}</th>
+							<th>{lang 'Body'}</th>
+						</tr>
+						</thead>
+						<tbody>
+						<tr n:foreach="$bestPlayers as $info">
+							<td>{$iterator->counter}.</td>
+							<td>{$info['player']->name}</td>
+							<td>{$info['value']|number:2,',','&nbsp;'|noescape}</td>
+						</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="col-md-6 col-lg-3 pt-4">
+					<h3 class="text-center">{lang 'Nejpřesnější hráči'}</h3>
+					<table class="table table-striped">
+						<thead>
+						<tr>
+							<th></th>
+							<th>{lang 'Hráč'}</th>
+							<th>{lang 'Body'}</th>
+						</tr>
+						</thead>
+						<tbody>
+						<tr n:foreach="$accuracyPlayers as $info">
+							<td>{$iterator->counter}.</td>
+							<td>{$info['player']->name}</td>
+							<td>{$info['value']}%</td>
+						</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="col-md-6 col-lg-3 pt-4">
+					<h3 class="text-center">{lang 'Největší mimoňi'}</h3>
+					<table class="table table-striped">
+						<thead>
+						<tr>
+							<th></th>
+							<th>{lang 'Hráč'}</th>
+							<th>{lang 'Výstřely'}</th>
+						</tr>
+						</thead>
+						<tbody>
+						<tr n:foreach="$shotsPlayers as $info">
+							<td>{$iterator->counter}.</td>
+							<td>{$info['player']->name}</td>
+							<td>{$info['value']|number:0,',','&nbsp;'|noescape}</td>
+						</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="col-md-6 col-lg-3 pt-4">
+					<h3 class="text-center">{lang 'Zabijáci vlastních'}</h3>
+					<table class="table table-striped">
+						<thead>
+						<tr>
+							<th></th>
+							<th>{lang 'Hráč'}</th>
+							<th>{lang 'Body'}</th>
+						</tr>
+						</thead>
+						<tbody>
+						<tr n:foreach="$hitsOwnPlayers as $info">
+							<td>{$iterator->counter}.</td>
+							<td>{$info['player']->name}</td>
+							<td>{$info['value']|number:0,',','&nbsp;'|noescape}</td>
+						</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+
+{/block}

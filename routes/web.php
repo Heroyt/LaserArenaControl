@@ -68,6 +68,7 @@ if ($featureConfig->isFeatureEnabled('tournaments')) {
 		->get('/sync', [TournamentController::class, 'sync'])
 		->get('/{id}', [TournamentController::class, 'show'])
 		->get('/{id}/rozlos', [TournamentController::class, 'rozlos'])->name('tournament-rozlos')
+		->get('/{id}/results', [TournamentResults::class, 'results'])->name('tournament-results')
 		->get('/{id}/gate', [TournamentResults::class, 'gate'])->name('tournament-gate')
 		->post('/{id}/rozlos', [TournamentController::class, 'rozlosProcess'])
 		->get('/{id}/rozlos/clear', [TournamentController::class, 'rozlosClear'])

@@ -12,4 +12,7 @@
 	<h3>{$tournament->start->format('d.m.Y H:i')}</h3>
 	<p><a href="{link 'tournament', $tournament->id, 'rozlos'}" class="btn btn-primary">{lang 'Rozlosování'}</a></p>
 	<p><a href="{link 'tournament', $tournament->id, 'play'}" class="btn btn-success">{lang 'Hrát'}</a></p>
+	<p><a href="{link 'tournament', $tournament->id, 'results'}" class="btn btn-info">{lang 'Výsledky'}</a></p>
+	<p><a href="{link 'tournament', $tournament->id, 'gate'}" class="btn btn-secondary">{lang 'Výsledková tabule'}</a>
+	</p>
 {/block}

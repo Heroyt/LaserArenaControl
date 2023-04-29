@@ -19,49 +19,58 @@ $menu = [
 		'icon' => 'fas fa-list',
 	],
 	[
-		'name'  => lang('Print'),
+		'name' => lang('Print'),
 		'route' => 'results',
-		'icon'  => 'fas fa-print',
+		'icon' => 'fas fa-print',
 	],
 	[
-		'name'  => lang('Gate'),
+		'name' => lang('Gate'),
 		'route' => 'gate',
-		'icon'  => 'fas fa-display',
-	],
-	'settings' => [
-		'name' => lang('Settings'),
-		'route' => 'settings',
-		'icon' => 'fas fa-cog',
-		'children' => [
-			[
-				'name' => lang('General'),
-				'route' => 'settings',
-			],
-			[
-				'name' => lang('Gate'),
-				'route' => 'settings-gate',
-			],
-			[
-				'name'  => lang('Vests'),
-				'route' => 'settings-vests',
-			],
-			[
-				'name'  => lang('Game modes'),
-				'route' => 'settings-modes',
-			],
-			[
-				'name' => lang('Print'),
-				'route' => 'settings-print',
-			],
-			[
-				'name' => lang('Music'),
-				'route' => 'settings-music',
-			],
-		],
+		'icon' => 'fas fa-display',
 	],
 ];
 
 $featureConfig = App::getServiceByType(FeatureConfig::class);
+
+if ($featureConfig->isFeatureEnabled('tournaments')) {
+	$menu['tournaments'] = [
+		'name' => lang('Turnaje'),
+		'icon' => 'fa-solid fa-trophy',
+		'route' => 'tournaments',
+	];
+}
+
+$menu['settings'] = [
+	'name' => lang('Settings'),
+	'route' => 'settings',
+	'icon' => 'fas fa-cog',
+	'children' => [
+		[
+			'name' => lang('General'),
+			'route' => 'settings',
+		],
+		[
+			'name' => lang('Gate'),
+			'route' => 'settings-gate',
+		],
+		[
+			'name' => lang('Vests'),
+			'route' => 'settings-vests',
+		],
+		[
+			'name' => lang('Game modes'),
+			'route' => 'settings-modes',
+		],
+		[
+			'name' => lang('Print'),
+			'route' => 'settings-print',
+		],
+		[
+			'name' => lang('Music'),
+			'route' => 'settings-music',
+		],
+	],
+];
 
 if ($featureConfig->isFeatureEnabled('groups')) {
 	$menu['settings']['children'][] = [

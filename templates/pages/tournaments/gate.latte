@@ -26,12 +26,12 @@
 				<tbody>
 				<tr n:foreach="$games as $gameTournament">
 					{var string[] $scores = []}
-					<td>{$gameTournament->start->format('H:i')}</td>
-					<td n:foreach="$gameTournament->teams as $team">
+					<td class="col-3">{$gameTournament->start->format('H:i')}</td>
+					<td class="col-3" n:foreach="$gameTournament->teams as $team">
 						{$team->getName()}
 						{do $scores[] = number_format($team->score ?? 0, 0, ',', '&nbsp;')}
 					</td>
-					<td>{ifset $gameTournament->code}{$scores|implode:'&nbsp;:&nbsp;'|noescape}{/ifset}</td>
+					<td class="col-3">{ifset $gameTournament->code}{$scores|implode:'&nbsp;:&nbsp;'|noescape}{/ifset}</td>
 				</tr>
 				</tbody>
 			</table>

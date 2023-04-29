@@ -1,0 +1,41 @@
+{layout '../../@layout.latte'}
+
+{varType App\Models\Tournament\Tournament $tournament}
+{varType App\Models\Tournament\Game[] $games}
+
+{block content}
+	<p>
+		<a href="{link 'tournament', $tournament->id, 'play'}" class="btn btn-warning">
+			<i class="fa-solid fa-caret-left"></i> {lang 'Zpět'}
+		</a>
+	</p>
+	<h2>{lang 'Turnaj'} - {$tournament->name}</h2>
+
+	<table class="table table-striped">
+		<thead>
+		<tr>
+			<th>{lang 'Začátek'}</th>
+			<th>{lang 'Domácí'}</th>
+			<th>{lang 'Hosté'}</th>
+			<th>{lang 'Skupina'}</th>
+			<th></th>
+		</tr>
+		</thead>
+		<tbody>
+		<tr n:foreach="$games as $game">
+			<td>{$game->start->format('H:i')}</td>
+			<td n:foreach="$game->teams as $team">
+				{$team->getName()}
+				{ifset $team->score}
+					<br>
+					<i class="fa-solid fa-star"></i>
+					{$team->score|number:0,',','&nbsp;'|noescape}
+				{/ifset}
+			</td>
+			<td>{$game->group->name}</td>
+			<td><a href="{link 'tournament', $tournament->id, 'play', $game->id}" class="btn btn-info"><i
+							class="fa-solid fa-eye"></i></a></td>
+		</tr>
+		</tbody>
+	</table>
+{/block}

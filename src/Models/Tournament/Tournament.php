@@ -42,6 +42,9 @@ class Tournament extends Model
 	#[Instantiate]
 	public TournamentPoints $points;
 
+	public int $gameLength = 15;
+	public int $gamePause = 5;
+
 	public bool $active = true;
 
 	public DateTimeInterface $start;

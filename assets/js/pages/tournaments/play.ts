@@ -3,6 +3,7 @@ import Control from "../newGame/control";
 import {isFeatureEnabled} from "../../featureConfig";
 import {startLoading, stopLoading} from "../../loaders";
 import axios, {AxiosResponse} from "axios";
+import EventServerInstance from "../../EventServer"
 
 declare global {
 	const vests: {
@@ -12,6 +13,37 @@ declare global {
 }
 
 export default function initTournamentPlay() {
+	const form = document.getElementById('tournament-play-form') as HTMLFormElement;
+	initContent(form);
+
+	EventServerInstance.addEventListener('game-imported', updateContent);
+
+	function updateContent() {
+		axios.get(form.dataset.results)
+			.then((response: AxiosResponse<{ status: string, view?: string }>) => {
+				if (response.data.view) {
+					form.innerHTML = response.data.view;
+					initContent(form);
+				}
+			});
+	}
+}
+
+function initContent(form: HTMLFormElement) {
+	const progressTeams = document.getElementById('progressTeams') as HTMLButtonElement;
+	progressTeams.addEventListener('click', () => {
+		startLoading(true);
+		axios.post(progressTeams.dataset.action, {})
+			.then((response: AxiosResponse<{ progressed: number }>) => {
+				stopLoading(true, true);
+				alert(progressTeams.dataset.alert + ' ' + response.data.progressed);
+			})
+			.catch(e => {
+				console.error(e);
+				stopLoading(false, true);
+			});
+	});
+
 	const results = document.getElementById('results') as HTMLDivElement | undefined;
 	if (results) {
 		const resetBtn = document.getElementById('reset-game') as HTMLButtonElement;
@@ -76,7 +108,6 @@ export default function initTournamentPlay() {
 
 	const players: Map<number, Player> = new Map();
 
-	const form = document.getElementById('tournament-play-form') as HTMLFormElement;
 	const loadBtn = document.getElementById('load') as HTMLButtonElement;
 	const startBtn = document.getElementById('start') as HTMLButtonElement;
 	const stopBtn = document.getElementById('stop') as HTMLButtonElement;
@@ -87,7 +118,7 @@ export default function initTournamentPlay() {
 	}
 
 	// Send form via ajax
-	form.addEventListener('submit', e => {
+	form.onsubmit = e => {
 		e.preventDefault();
 
 		const data = new FormData(form);
@@ -113,7 +144,7 @@ export default function initTournamentPlay() {
 				}
 				break;
 		}
-	});
+	};
 
 	const playersDom = document.querySelectorAll('.player') as NodeListOf<HTMLDivElement>;
 	playersDom.forEach(dom => {

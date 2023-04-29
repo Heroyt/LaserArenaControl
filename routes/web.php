@@ -70,7 +70,10 @@ if ($featureConfig->isFeatureEnabled('tournaments')) {
 		->post('/{id}/rozlos', [TournamentController::class, 'rozlosProcess'])
 		->get('/{id}/rozlos/clear', [TournamentController::class, 'rozlosClear'])
 		->get('/{id}/play', [TournamentController::class, 'play'])->name('tournament-play')
+		->get('/{id}/play/list', [TournamentController::class, 'playList'])->name('tournament-play-list')
+		->post('/{id}/progress', [TournamentController::class, 'progress'])
 		->get('/{id}/play/{gameId}', [TournamentController::class, 'play'])->name('tournament-play-game')
+		->get('/{id}/play/{gameId}/results', [TournamentController::class, 'playResults'])
 		->post('/{id}/play/{gameId}', [TournamentController::class, 'playProcess'])
 		->post('/{id}/play/{gameId}/bonus', [TournamentController::class, 'updateBonusScore'])
 		->post('/{id}/play/{gameId}/reset', [TournamentController::class, 'resetGame']);

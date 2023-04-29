@@ -14,6 +14,7 @@ class Group extends Model
 
 	public const TABLE = 'tournament_groups';
 
+	public ?string $round = null;
 	public string $name;
 	#[ManyToOne]
 	public Tournament $tournament;
@@ -21,6 +22,9 @@ class Group extends Model
 
 	/** @var Progression[] */
 	private array $progressionsFrom = [];
+
+	/** @var Game[] */
+	private array $games = [];
 
 	/**
 	 * @return Progression[]
@@ -46,6 +50,17 @@ class Group extends Model
 			$this->progressionsTo = Progression::query()->where('id_group_to = %i', $this->id)->get();
 		}
 		return $this->progressionsTo;
+	}
+
+	/**
+	 * @return Game[]
+	 * @throws ValidationException
+	 */
+	public function getGames(): array {
+		if (empty($this->games)) {
+			$this->games = Game::query()->where('[id_group] = %i', $this->id)->get();
+		}
+		return $this->games;
 	}
 
 }

@@ -64,11 +64,11 @@ class TournamentController extends Controller
 			$request->addPassError(lang('Neplatný typ turnaje'));
 			App::redirect(['tournament', $tournament->id, 'rozlos'], $request);
 		}
-		$gameLength = (int)$request->getPost('game-length', 15);
-		$gamePause = (int)$request->getPost('game-pause', 5);
+		$tournament->gameLength = (int)$request->getPost('game-length', 15);
+		$tournament->gamePause = (int)$request->getPost('game-pause', 5);
 		$tournamentStart = (int)$request->getPost('tournament-start', 30);
 
-		$tournamentRozlos = $this->tournamentProvider->createTournamentFromPreset($type, $tournament, $gameLength, $gamePause);
+		$tournamentRozlos = $this->tournamentProvider->createTournamentFromPreset($type, $tournament);
 
 		$this->tournamentProvider->reset($tournament);
 
@@ -81,6 +81,7 @@ class TournamentController extends Controller
 			foreach ($round->getGroups() as $groupRozlos) {
 				$group = new Group();
 				$roundName = $round->getName();
+				$group->round = !empty($roundName) ? $roundName : null;
 				$group->name = (!empty($roundName) ? $roundName . ' - ' : '') . $groupRozlos->getName();
 				$group->tournament = $tournament;
 				$group->save();
@@ -93,7 +94,7 @@ class TournamentController extends Controller
 		}
 
 		$start = new DateTimeImmutable($tournament->start->format('Y-m-d H:i:s') . ' + ' . $tournamentStart . ' minutes');
-		$addInterval = new DateInterval('PT' . ($gameLength + $gamePause) . 'M');
+		$addInterval = new DateInterval('PT' . ($tournament->gameLength + $tournament->gamePause) . 'M');
 
 		$groupTeamKey = [];
 		foreach ($tournamentRozlos->getRounds() as $round) {
@@ -156,6 +157,7 @@ class TournamentController extends Controller
 			$progression->start = $progressionRozlos->getStart();
 			$progression->length = $progressionRozlos->getLen();
 			$progression->filters = serialize($progressionRozlos->getFilters());
+			$progression->points = $progressionRozlos->getPoints() ?? 0;
 
 			$keys = [];
 			$count = $progression->length;
@@ -206,6 +208,24 @@ class TournamentController extends Controller
 		$this->params['teamColors'] = $this::EVO5_TEAM_COLORS;
 
 		$this->view('pages/tournaments/play');
+	}
+
+	public function playList(Tournament $tournament): void {
+		$this->params['tournament'] = $tournament;
+		$this->params['games'] = $tournament->getGames();
+		$this->view('pages/tournaments/playList');
+	}
+
+	public function playResults(Tournament $tournament, Game $game): never {
+		if ($game->getGame() === null) {
+			$this->respond(['status' => 'not yet finished']);
+		}
+		$this->params['tournament'] = $tournament;
+		$this->params['game'] = $game;
+		$this->params['musicModes'] = MusicMode::getAll();
+		$this->params['teamColors'] = $this::EVO5_TEAM_COLORS;
+		$view = $this->latte->viewToString('components/tournament/play', $this->params);
+		$this->respond(['status' => 'results', 'view' => $view]);
 	}
 
 	public function playProcess(Tournament $tournament, Game $game, Request $request): never {
@@ -361,5 +381,9 @@ class TournamentController extends Controller
 			$player->save();
 		}
 		$this->respond(['status' => 'ok']);
+	}
+
+	public function progress(Tournament $tournament): never {
+		$this->respond(['progressed' => $this->tournamentProvider->progress($tournament)]);
 	}
 }

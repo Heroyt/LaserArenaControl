@@ -1,0 +1,81 @@
+{layout '../gate/@layout.latte'}
+
+{varType App\Models\Tournament\Tournament $tournament}
+{varType App\GameModels\Game\Game|null $game}
+{varType App\Models\Tournament\Game[] $games}
+{varType App\Models\Tournament\Team[] $teams}
+
+{define containerClasses}
+	tournament
+{/define}
+
+{define content}
+	<section class="games">
+		<table class="table table-striped tournament-games-content-header">
+			<thead>
+			<tr>
+				<th>{lang 'Začátek'}</th>
+				<th>{lang 'Domácí'}</th>
+				<th>{lang 'Hosté'}</th>
+				<th>{lang 'Výsledky'}</th>
+			</tr>
+			</thead>
+		</table>
+		<div class="tournament-games-content-wrapper">
+			<table class="table table-striped tournament-games-content">
+				<tbody>
+				<tr n:foreach="$games as $gameTournament">
+					{var string[] $scores = []}
+					<td>{$gameTournament->start->format('H:i')}</td>
+					<td n:foreach="$gameTournament->teams as $team">
+						{$team->getName()}
+						{do $scores[] = number_format($team->score ?? 0, 0, ',', '&nbsp;')}
+					</td>
+					<td>{ifset $gameTournament->code}{$scores|implode:'&nbsp;:&nbsp;'|noescape}{/ifset}</td>
+				</tr>
+				</tbody>
+			</table>
+	</section>
+
+	<section class="tournament-results">
+		<table class="table table-striped">
+			<thead>
+			<tr>
+				<th></th>
+				<th>{lang 'Tým'}</th>
+				<th>{lang 'Výhry'}</th>
+				<th>{lang 'Remízy'}</th>
+				<th>{lang 'Prohry'}</th>
+				<th>{lang 'Body'}</th>
+				<th>{lang 'Skóre'}</th>
+			</tr>
+			</thead>
+			<tbody>
+			<tr n:foreach="$teams as $team">
+				<td>{$iterator->counter}.</td>
+				<td>
+					<img src="{ifset $team->image}{$team->getImageUrl()}{else}{getUrl}assets/images/gate/questionmark.jpg{/ifset}"
+						 alt="{$team->name}" class="team-logo object-fit-cover rounded-circle" style="width: 2rem;">
+					<span class="team-name">{$team->name}</span>
+				</td>
+				<td>{$team->getWins()}</td>
+				<td>{$team->getDraws()}</td>
+				<td>{$team->getLosses()}</td>
+				<td>{$team->points}</td>
+				<td>{$team->getScore()|number:0,',','&nbsp;'|noescape}</td>
+			</tr>
+			</tbody>
+		</table>
+	</section>
+
+	<div class="timer" n:if="isset($game) && !$game->finished">
+		{var int $left = ($game->timing->gameLength * 60) - (time() - $game->start->getTimestamp())}
+		<div class="time text-white-forced {if $left < 0}d-none{/if}"
+			 data-start="{$game->start->getTimestamp()}"
+			 data-startdate="{$game->start->format('Y-m-d H:i')}"
+			 data-showafter="{\App\Core\Info::get('timer_show', 30)}"
+			 data-length="{$game->timing->gameLength * 60}" data-serverTime="{time()}">
+			{floor($left / 60)|padLeft:2,'0'}:{($left % 60)|padLeft:2,'0'}
+		</div>
+	</div>
+{/define}

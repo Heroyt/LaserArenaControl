@@ -90,6 +90,14 @@ export default function route(pageInfo: PageInfo): void {
 				module.default();
 			});
 			break;
+		case 'tournament-gate':
+			import(
+				/* webpackChunkName: "tournamentGate" */
+				'./pages/tournaments/gate'
+				).then(module => {
+				module.default();
+			});
+			break;
 		case 'dashboard':
 			import(
 				/* webpackChunkName: "dashboard" */

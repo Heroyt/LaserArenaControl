@@ -13,6 +13,7 @@ use App\Controllers\PlayersController;
 use App\Controllers\Results;
 use App\Controllers\Settings;
 use App\Controllers\TournamentController;
+use App\Controllers\TournamentResults;
 use App\Services\FeatureConfig;
 use Lsr\Core\App;
 use Lsr\Core\Routing\Route;
@@ -67,6 +68,7 @@ if ($featureConfig->isFeatureEnabled('tournaments')) {
 		->get('/sync', [TournamentController::class, 'sync'])
 		->get('/{id}', [TournamentController::class, 'show'])
 		->get('/{id}/rozlos', [TournamentController::class, 'rozlos'])->name('tournament-rozlos')
+		->get('/{id}/gate', [TournamentResults::class, 'gate'])->name('tournament-gate')
 		->post('/{id}/rozlos', [TournamentController::class, 'rozlosProcess'])
 		->get('/{id}/rozlos/clear', [TournamentController::class, 'rozlosClear'])
 		->get('/{id}/play', [TournamentController::class, 'play'])->name('tournament-play')

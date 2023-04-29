@@ -4,7 +4,7 @@ namespace App\Models\Tournament;
 
 use DateTimeImmutable;
 use DateTimeInterface;
-use Lsr\Core\App;
+use Lsr\Core\DB;
 use Lsr\Core\Exceptions\ValidationException;
 use Lsr\Core\Models\Attributes\ManyToOne;
 use Lsr\Core\Models\Attributes\PrimaryKey;
@@ -29,6 +29,18 @@ class Team extends Model
 	public ?DateTimeInterface $updatedAt = null;
 	/** @var Player[] */
 	private array $players = [];
+
+	private int $score;
+	private int $wins;
+	private int $draws;
+	private int $losses;
+
+	public function getScore(): int {
+		if (!isset($this->score)) {
+			$this->score = DB::select(GameTeam::TABLE, 'SUM([score])')->where('[id_team] = %i', $this->id)->fetchSingle(false) ?? 0;
+		}
+		return $this->score;
+	}
 
 	public function insert(): bool {
 		if (!isset($this->createdAt)) {
@@ -60,7 +72,37 @@ class Team extends Model
 		if (empty($this->image)) {
 			return null;
 		}
-		return App::getUrl() . $this->image;
+		return $this->image;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getWins(): int {
+		if (!isset($this->wins)) {
+			$this->wins = DB::select(GameTeam::TABLE, 'COUNT(*)')->where('[id_team] = %i AND [points] = %i', $this->id, $this->tournament->points->win)->fetchSingle(false) ?? 0;
+		}
+		return $this->wins;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getLosses(): int {
+		if (!isset($this->losses)) {
+			$this->losses = DB::select(GameTeam::TABLE, 'COUNT(*)')->where('[id_team] = %i AND [points] = %i', $this->id, $this->tournament->points->loss)->fetchSingle(false) ?? 0;
+		}
+		return $this->losses;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getDraws(): int {
+		if (!isset($this->draws)) {
+			$this->draws = DB::select(GameTeam::TABLE, 'COUNT(*)')->where('[id_team] = %i AND [points] = %i', $this->id, $this->tournament->points->draw)->fetchSingle(false) ?? 0;
+		}
+		return $this->draws;
 	}
 
 }

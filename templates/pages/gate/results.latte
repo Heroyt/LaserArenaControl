@@ -8,7 +8,7 @@
 {var bool $includeTeams = $game->mode->isTeam() && $game->mode->settings->partTeams}
 
 {define containerClasses}
-	results {if !$includeTeams}no-teams{/if}
+	results results-game-{$game->id} {if !$includeTeams}no-teams{/if}
 {/define}
 
 {define content}

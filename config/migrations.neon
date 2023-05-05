@@ -58,6 +58,7 @@ tables:
         	`load_name` varchar(50) DEFAULT NULL,
         	`type` enum('TEAM','SOLO') NOT NULL DEFAULT 'TEAM',
         	`teams` text NOT NULL DEFAULT '["0","1","2","3","4","5"]',
+        	`rankable` tinyint(1) NOT NULL DEFAULT '1',
         	`public` tinyint(1) NOT NULL DEFAULT 0,
         	`mines` tinyint(1) NOT NULL DEFAULT 1 COMMENT 'Jestli automaticky detekovat miny nebo vůbec',
         	`part_win` tinyint(1) NOT NULL DEFAULT 1 COMMENT 'Jestli má být vložena část s tím kdo vyhrál.',
@@ -96,6 +97,8 @@ tables:
 		modifications:
 			0.1:
 				- 'ADD `teams` text NOT NULL DEFAULT ''["0","1","2","3","4","5"]'' AFTER `type`'
+			0.2:
+				- 'ADD `rankable` tinyint(1) NOT NULL DEFAULT ''1'' AFTER `teams`'
 	game_modes-names:
 		definition: '''
 		(
@@ -339,7 +342,7 @@ tables:
           KEY `id_league` (`id_league`),
           KEY `id_public` (`id_public`),
           KEY `id_group` (`id_group`),
-          CONSTRAINT `tournaments_ibfk_1` FOREIGN KEY (`id_league`) REFERENCES `leagues` (`id_league`) ON DELETE SET NULL ON UPDATE CASCADE
+          CONSTRAINT `tournaments_ibfk_1` FOREIGN KEY (`id_league`) REFERENCES `leagues` (`id_league`) ON DELETE SET NULL ON UPDATE CASCADE,
           CONSTRAINT `tournaments_ibfk_2` FOREIGN KEY (`id_group`) REFERENCES `game_groups` (`id_group`) ON DELETE SET NULL ON UPDATE CASCADE
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
         '''
@@ -453,8 +456,8 @@ tables:
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 		'''
 	App\Models\Tournament\Progression:
-		definitions: '''
-		CREATE TABLE `tournament_progressions` (
+		definition: '''
+		(
           `id_progression` int(11) unsigned NOT NULL AUTO_INCREMENT,
           `id_public` int(11) unsigned DEFAULT NULL,
           `id_tournament` int(11) unsigned NOT NULL,

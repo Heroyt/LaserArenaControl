@@ -83,7 +83,7 @@
 						<tbody>
 						<tr n:foreach="$bestPlayers as $info">
 							<td>{$iterator->counter}.</td>
-							<td>{$info['player']->name}</td>
+							<td>{$info['player']->nickname}</td>
 							<td>{$info['value']|number:2,',','&nbsp;'|noescape}</td>
 						</tr>
 						</tbody>
@@ -102,7 +102,7 @@
 						<tbody>
 						<tr n:foreach="$accuracyPlayers as $info">
 							<td>{$iterator->counter}.</td>
-							<td>{$info['player']->name}</td>
+							<td>{$info['player']->nickname}</td>
 							<td>{$info['value']}%</td>
 						</tr>
 						</tbody>
@@ -121,7 +121,7 @@
 						<tbody>
 						<tr n:foreach="$shotsPlayers as $info">
 							<td>{$iterator->counter}.</td>
-							<td>{$info['player']->name}</td>
+							<td>{$info['player']->nickname}</td>
 							<td>{$info['value']|number:0,',','&nbsp;'|noescape}</td>
 						</tr>
 						</tbody>
@@ -140,7 +140,7 @@
 						<tbody>
 						<tr n:foreach="$hitsOwnPlayers as $info">
 							<td>{$iterator->counter}.</td>
-							<td>{$info['player']->name}</td>
+							<td>{$info['player']->nickname}</td>
 							<td>{$info['value']|number:0,',','&nbsp;'|noescape}</td>
 						</tr>
 						</tbody>

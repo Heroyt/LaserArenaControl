@@ -69,10 +69,10 @@ export function loadContent(path: string, reloadTimeout: { timeout: null | NodeJ
 			}
 			container.appendChild(contentNew);
 			setTimeout(() => {
-				contentActive.remove();
+				removePreviousContent();
 				contentNew.classList.remove('in');
 			}, 2000);
-			if (contentNew.classList.contains('results')) {
+			if (contentNew.classList.contains('results') && contentNew.className !== contentActive.className) {
 				animateResults(contentNew);
 			}
 			gameTimer();
@@ -80,6 +80,14 @@ export function loadContent(path: string, reloadTimeout: { timeout: null | NodeJ
 		.catch(response => {
 			console.error(response);
 		});
+
+	function removePreviousContent() {
+		const elements = container.querySelectorAll('.content') as NodeListOf<HTMLDivElement>;
+		for (let i = 0; i < elements.length - 1; i++) {
+			elements[i].remove();
+		}
+
+	}
 }
 
 function animateResults(wrapper: HTMLDivElement) {

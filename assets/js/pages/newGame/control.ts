@@ -31,10 +31,14 @@ export default class Control {
 
 		this.updateCurrentStatus();
 		// Update current status every minute
-		this.updateStatusInterval = setInterval(this.updateCurrentStatus, 60000);
+		this.updateStatusInterval = setInterval(() => {
+			this.updateCurrentStatus();
+		}, 60000);
 		this.resultsLoadRetryTimer = null;
 
-		EventServerInstance.addEventListener(['game-imported', 'game-started', 'game-loaded'], this.updateCurrentStatus);
+		EventServerInstance.addEventListener(['game-imported', 'game-started', 'game-loaded'], () => {
+			this.updateCurrentStatus();
+		});
 
 		this.stopBtn.addEventListener('click', () => {
 			this.stopGame();
@@ -295,7 +299,9 @@ export default class Control {
 
 		// Reset the update status interval
 		clearInterval(this.updateStatusInterval);
-		this.updateStatusInterval = setInterval(this.updateCurrentStatus, 60000);
+		this.updateStatusInterval = setInterval(() => {
+			this.updateCurrentStatus();
+		}, 60000);
 
 		this.retryDownloadBtn.disabled = false;
 		this.cancelDownloadBtn.disabled = false;
@@ -309,7 +315,9 @@ export default class Control {
 
 		// Make the update status interval faster to fetch more real-time data
 		clearInterval(this.updateStatusInterval);
-		this.updateStatusInterval = setInterval(this.updateCurrentStatus, 5000);
+		this.updateStatusInterval = setInterval(() => {
+			this.updateCurrentStatus();
+		}, 5000);
 
 		if (!this.resultsLoadRetryTimer) {
 			this.retryDownloadBtn.disabled = true;

@@ -161,8 +161,10 @@ class LigaApi
 		// Build a request
 		try {
 			$config = [
-				'json' => ['system' => $system, 'games' => $gamesData],
+				'body' => \GuzzleHttp\Utils::jsonEncode(['system' => $system, 'games' => $gamesData]),
 			];
+			$config['headers']['Content-Type'] = 'application/json';
+			$config['headers']['Content-Length'] = strlen($config['body']);
 			if (isset($timeout)) {
 				$config['timeout'] = $timeout;
 			}
@@ -207,7 +209,9 @@ class LigaApi
 	public function post(string $path, array|object|null $data = null, array $config = []): ResponseInterface {
 		$this->makeClient();
 		if (isset($data)) {
-			$config['json'] = $data;
+			$config['body'] = \GuzzleHttp\Utils::jsonEncode($data);
+			$config['headers']['Content-Type'] = 'application/json';
+			$config['headers']['Content-Length'] = strlen($config['body']);
 		}
 		return $this->client->post($path, $config);
 	}
@@ -225,8 +229,8 @@ class LigaApi
 				return true;
 			}
 
-			$response = $this->client->post('music', [
-				'json' => [
+			$config = [
+				'body' => \GuzzleHttp\Utils::jsonEncode([
 					'music' => [
 						[
 							'id' => $mode->id,
@@ -235,8 +239,12 @@ class LigaApi
 							'previewStart' => $mode->previewStart,
 						],
 					],
-				]
-			]);
+				]),
+			];
+			$config['headers']['Content-Type'] = 'application/json';
+			$config['headers']['Content-Length'] = strlen($config['body']);
+
+			$response = $this->client->post('music', $config);
 			$response->getBody()->rewind();
 			$body = $response->getBody()->getContents();
 			if ($response->getStatusCode() !== 200) {
@@ -292,11 +300,14 @@ class LigaApi
 		}
 
 		try {
-			$response = $this->client->post('music', [
-				'json' => [
+			$config = [
+				'body' => \GuzzleHttp\Utils::jsonEncode([
 					'music' => $data,
-				]
-			]);
+				]),
+			];
+			$config['headers']['Content-Type'] = 'application/json';
+			$config['headers']['Content-Length'] = strlen($config['body']);
+			$response = $this->client->post('music', $config);
 			$response->getBody()->rewind();
 			$body = $response->getBody()->getContents();
 			if ($response->getStatusCode() !== 200) {

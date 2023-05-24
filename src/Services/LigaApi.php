@@ -343,6 +343,7 @@ class LigaApi
 					CURLOPT_RETURNTRANSFER => true,
 					CURLOPT_POSTFIELDS => $post_data,
 					CURLOPT_HTTPHEADER => [
+						'Authorization: Bearer ' . $this->apiKey,
 						'Content-Type: multipart/form-data; boundary=' . $delimiter,
 						"Content-Length: " . strlen($post_data),
 						"Accept: application/json",

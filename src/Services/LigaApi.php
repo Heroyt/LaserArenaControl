@@ -328,13 +328,16 @@ class LigaApi
 				if (!file_exists($previewFile)) {
 					$mode->trimMediaToPreview();
 				}
+				$size = filesize($previewFile);
+				$media = Utils::tryGetContents(Utils::tryFopen($previewFile, 'r'));
 				$response = $this->client->post('music/' . $mode->id . '/upload', [
 					'multipart' => [
 						[
 							'name' => 'media',
-							'contents' => Utils::tryFopen($previewFile, 'r'),
-						]
-					]
+							'contents' => $media,
+							'headers' => ['Content-Length' => $size],
+						],
+					],
 				]);
 				$response->getBody()->rewind();
 				$body = $response->getBody()->getContents();

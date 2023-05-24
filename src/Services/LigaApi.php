@@ -331,11 +331,11 @@ class LigaApi
 				$size = filesize($previewFile);
 				$media = Utils::tryGetContents(Utils::tryFopen($previewFile, 'r'));
 				$response = $this->client->post('music/' . $mode->id . '/upload', [
+					'headers' => ['Content-Length' => $size],
 					'multipart' => [
 						[
 							'name' => 'media',
 							'contents' => $media,
-							'headers' => ['Content-Length' => $size],
 						],
 					],
 				]);

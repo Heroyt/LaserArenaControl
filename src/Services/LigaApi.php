@@ -57,7 +57,7 @@ class LigaApi
 			'headers' => [
 				'Accept' => 'application/json',
 				'Authorization' => 'Bearer ' . $this->apiKey,
-			]
+			],
 		]);
 	}
 
@@ -257,8 +257,8 @@ class LigaApi
 					[
 						'name' => 'media',
 						'contents' => Utils::tryFopen($mode->fileName, 'r'),
-					]
-				]
+					],
+				],
 			]);
 			$response->getBody()->rewind();
 			$body = $response->getBody()->getContents();
@@ -328,21 +328,30 @@ class LigaApi
 				if (!file_exists($previewFile)) {
 					$mode->trimMediaToPreview();
 				}
-				$size = filesize($previewFile);
 				$media = Utils::tryGetContents(Utils::tryFopen($previewFile, 'r'));
-				$response = $this->client->post('music/' . $mode->id . '/upload', [
-					//'headers' => ['Content-Length' => $size],
-					'multipart' => [
-						[
-							'name' => 'media',
-							'contents' => $media,
-						],
+
+				$boundary = uniqid('', true);
+				$delimiter = '-------------' . $boundary;
+
+				$fileName = basename($previewFile);
+				$post_data = $this->build_data_files($boundary, [], [['name' => 'media', 'fileName' => $fileName, 'contents' => $media, 'type' => 'audio/mpeg']]);
+
+				$ch = curl_init(trailingSlashIt($this->url) . 'api/music/' . $mode->id . '/upload');
+				curl_setopt_array($ch, [
+					CURLOPT_POST => 1,
+					CURLOPT_TIMEOUT => 60,
+					CURLOPT_RETURNTRANSFER => true,
+					CURLOPT_POSTFIELDS => $post_data,
+					CURLOPT_HTTPHEADER => [
+						'Content-Type: multipart/form-data; boundary=' . $delimiter,
+						"Content-Length: " . strlen($post_data),
+						"Accept: application/json",
 					],
 				]);
-				$response->getBody()->rewind();
-				$body = $response->getBody()->getContents();
-				if ($response->getStatusCode() !== 200) {
-					$this->logger->error('Music upload failed: ' . $body);
+				$body = curl_exec($ch);
+				$info = curl_getinfo($ch);
+				if ($info['http_code'] !== 200) {
+					$this->logger->error('Music upload failed: ' . $body . ' ' . json_encode($info));
 					return false;
 				}
 			}
@@ -353,6 +362,36 @@ class LigaApi
 			return false;
 		}
 		return true;
+	}
+
+	private function build_data_files(string $boundary, array $fields, array $files): string {
+		$data = '';
+		$eol = "\r\n";
+
+		$delimiter = '-------------' . $boundary;
+
+		foreach ($fields as $name => $content) {
+			$data .= "--" . $delimiter . $eol
+				. 'Content-Disposition: form-data; name="' . $name . "\"" . $eol . $eol
+				. $content . $eol;
+		}
+
+		foreach ($files as $file) {
+			$name = $file['name'];
+			$fileName = $file['fileName'];
+			$content = $file['contents'];
+			$type = $file['type'];
+			$data .= "--" . $delimiter . $eol
+				. 'Content-Disposition: form-data; name="' . $name . '"; filename="' . $fileName . '"' . $eol
+				. 'Content-Type: ' . $type . $eol
+				. 'Content-Transfer-Encoding: binary' . $eol;
+
+			$data .= $eol;
+			$data .= $content . $eol;
+		}
+		$data .= "--" . $delimiter . "--" . $eol;
+
+		return $data;
 	}
 
 	/**

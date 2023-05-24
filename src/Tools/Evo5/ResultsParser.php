@@ -21,9 +21,11 @@ use App\Models\Table;
 use App\Models\Tournament\Game as TournamentGame;
 use App\Models\Tournament\Player as TournamentPlayer;
 use App\Models\Tournament\Tournament;
+use App\Services\TournamentProvider;
 use App\Tools\AbstractResultsParser;
 use DateTime;
 use JsonException;
+use Lsr\Core\App;
 use Lsr\Core\Exceptions\ModelNotFoundException;
 use Lsr\Core\Exceptions\ValidationException;
 use Lsr\Logging\Exceptions\DirectoryCreationException;
@@ -513,7 +515,6 @@ class ResultsParser extends AbstractResultsParser
 								$gameTeam->points = $tournament->points->loss;
 							}
 							if (isset($gameTeam->team)) {
-								$gameTeam->team->points += $gameTeam->points;
 								$team->tournamentTeam = $gameTeam->team;
 							}
 						}
@@ -525,6 +526,10 @@ class ResultsParser extends AbstractResultsParser
 						}
 						$player->tournamentPlayer = TournamentPlayer::get((int)$meta['p' . $player->vest . 'tournament']);
 					}
+
+					// Recalculate points for all tournament teams
+					$tournamentProvider = App::getServiceByType(TournamentProvider::class);
+					$tournamentProvider->recalcTeamPoints($tournament);
 				} catch (ModelNotFoundException) {
 				}
 			}

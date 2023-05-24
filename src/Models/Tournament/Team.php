@@ -34,6 +34,10 @@ class Team extends Model
 	private int $wins;
 	private int $draws;
 	private int $losses;
+	/**
+	 * @var array<int,int>
+	 */
+	private array $keys;
 
 	public function getScore(): int {
 		if (!isset($this->score)) {
@@ -103,6 +107,14 @@ class Team extends Model
 			$this->draws = DB::select(GameTeam::TABLE, 'COUNT(*)')->where('[id_team] = %i AND [points] = %i', $this->id, $this->tournament->points->draw)->fetchSingle(false) ?? 0;
 		}
 		return $this->draws;
+	}
+
+	/**
+	 * @return array<int,int>
+	 */
+	public function getGroupKeys(): array {
+		$this->keys ??= DB::select([GameTeam::TABLE, 'a'], 'b.id_group, a.key')->join(Game::TABLE, 'b')->on('a.id_game = b.id_game')->where('a.id_team = %i', $this->id)->groupBy('id_group')->fetchPairs('id_group', 'key', false);
+		return $this->keys;
 	}
 
 }

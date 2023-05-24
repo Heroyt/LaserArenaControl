@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\GameModels\Game\Enums\GameModeType;
+use App\Models\Tournament\GameTeam;
 use App\Models\Tournament\Group;
 use App\Models\Tournament\League;
 use App\Models\Tournament\Player;
@@ -14,6 +15,7 @@ use DateTimeImmutable;
 use Exception;
 use GuzzleHttp\Exception\GuzzleException;
 use JsonException;
+use Lsr\Core\DB;
 use Lsr\Core\Exceptions\ValidationException;
 use Lsr\Logging\Logger;
 use TournamentGenerator\Tournament as TournamentGenerator;
@@ -448,6 +450,28 @@ class TournamentProvider
 		}
 
 		return $tournamentGenerator;
+	}
+
+	public function recalcTeamPoints(Tournament $tournament): void {
+		$teams = $tournament->getTeams();
+		$progressions = $tournament->getProgressions();
+		/** @var array<int,int> $points Sum points for games for each team */
+		$points = DB::select(GameTeam::TABLE, 'id_team, SUM(points) as points')->groupBy('id_team')->fetchPairs('id_team', 'points', false);
+		foreach ($teams as $team) {
+			$team->points = $points[$team->id] ?? 0;
+
+			// Check progressions
+			$keys = $team->getGroupKeys();
+			foreach ($progressions as $progression) {
+				$progressionKeys = $progression->getKeys();
+				if (in_array($keys[$progression->to->id] ?? null, $progressionKeys, true)) {
+					$team->points += $progression->points;
+				}
+			}
+
+			// Save changes
+			$team->save();
+		}
 	}
 
 }

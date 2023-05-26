@@ -10,9 +10,11 @@
 {varType App\Models\MusicMode[] $musicModes}
 {varType App\Models\GameGroup[] $groups}
 {varType App\Models\Table[] $tables}
+{varType string $system}
 
 {import 'helpers/help.latte'}
 {import 'helpers/groups.latte'}
+{import 'helpers/preparedGames.latte'}
 {import 'helpers/tables.latte'}
 {import '../../components/control/scoreDownload.latte'}
 
@@ -71,11 +73,18 @@
 	{include scoreDownloadModal}
 	{include userSearchModal}
 	{include help}
+	{var int $order = 0}
+	{if $featureConfig->isFeatureEnabled('preparedGames')}
+		{include preparedGames, $order}
+		{do $order++}
+	{/if}
 	{if $featureConfig->isFeatureEnabled('groups')}
-		{include groups}
+		{include groups, $order}
+		{do $order++}
 	{/if}
 	{if $featureConfig->isFeatureEnabled('tables')}
-		{include tables}
+		{include tables, $order}
+		{do $order++}
 	{/if}
 	<script>
 		const messages = {
@@ -86,8 +95,11 @@
 			vestPlayable: '{lang 'Hratelná', context: 'settings.vests.status'}',
 			vestBroken: '{lang 'Nefunkční', context: 'settings.vests.status'}',
 			vestFailure: '{lang 'Porucha', context: 'settings.vests'}',
+			load: '{lang 'Nahrát', context: 'newGame.preparedGames.actions'}',
+			delete: '{lang 'Smazat', context: 'actions'}',
 		}
 		const gameData = {$loadGame};
+		const system = {$system};
 		const vestIcon = {svgIcon('Vesta', 'auto', '1rem')|replace:"\n", ''};
 	</script>
 {/block}
@@ -105,6 +117,11 @@
 		<button type="button" name="action" value="stop" class="btn btn-danger" id="stopGame">
 			<i class="fa-solid fa-circle-stop"></i>
 			{lang 'Ukončit hru', context: 'game.actions'}
+		</button>
+		<button n:if="$featureConfig->isFeatureEnabled('preparedGames')" type="button" class="btn btn-primary"
+																		 id="prepareGame">
+			<i class="fa-solid fa-save"></i>
+			{lang 'Připravit hru', context: 'game.actions'}
 		</button>
 	</div>
 

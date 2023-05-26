@@ -1,0 +1,25 @@
+{define preparedGames, int $order = 0}
+	<div class="offcanvas offcanvas-end border-danger visible" tabindex="-1" id="preparedGames"
+		 aria-labelledby="preparedGamesLabel">
+		<div class="offcanvas-tag bg-danger text-bg-danger" data-bs-toggle="offcanvas" data-bs-target="#preparedGames"
+			 style="--order:{$order};">
+			<span>
+				{lang 'Připravené'}
+			</span>
+		</div>
+		<div class="offcanvas-header">
+			<h5 class="offcanvas-title" id="preparedGamesLabel">{lang 'Připravené hry'}</h5>
+			<button type="button" class="btn btn-link" data-bs-dismiss="offcanvas" aria-label="Close">
+				<i class="fa-solid fa-xmark"></i>
+			</button>
+		</div>
+		<div class="offcanvas-actions p-3">
+			<button type="button" class="btn btn-danger btn-lg" id="deleteAllPreparedGames">
+				<i class="fa-solid fa-trash"></i>
+				{lang 'Smazat vše'}
+			</button>
+		</div>
+		<div class="offcanvas-body" id="game-preparedGames">
+		</div>
+	</div>
+{/define}

@@ -1,11 +1,12 @@
 {varType App\Models\GameGroup[] $groups}
 {varType App\GameModels\Vest[] $vests}
 
-{define groups}
+{define groups, int $order = 0}
 	{var int $vestCount = count($vests)}
 	<div class="offcanvas offcanvas-end border-blue-600 visible" tabindex="-1" id="groups"
 		 aria-labelledby="groupsLabel">
-		<div class="offcanvas-tag bg-blue-600 text-bg-blue-600" data-bs-toggle="offcanvas" data-bs-target="#groups">
+		<div class="offcanvas-tag bg-blue-600 text-bg-blue-600" data-bs-toggle="offcanvas" data-bs-target="#groups"
+			 style="--order:{$order};">
 			<span>
 				{lang 'Skupiny'}
 			</span>

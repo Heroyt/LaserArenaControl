@@ -477,3 +477,13 @@ tables:
           CONSTRAINT `tournament_progressions_ibfk_3` FOREIGN KEY (`id_group_to`) REFERENCES `tournament_groups` (`id_group`) ON DELETE CASCADE ON UPDATE CASCADE
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 		'''
+	'prepared_games':
+		definition: '''
+		(
+			`id_game` int(11) unsigned NOT NULL AUTO_INCREMENT,
+			`datetime` datetime NOT NULL DEFAULT current_timestamp(),
+			`data` text NOT NULL,
+			`active` tinyint(1) NOT NULL DEFAULT 1,
+			PRIMARY KEY (`id_game`)
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+		'''

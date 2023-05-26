@@ -2,12 +2,12 @@
 {varType int $tablesCols}
 {varType int $tablesRows}
 
-{define tables}
+{define tables, int $order = 0}
 	<div class="offcanvas offcanvas-end border-purple-600 visible" tabindex="-1" id="tables"
 		 style="--bs-offcanvas-width: min(800px, calc(100vw - 3rem));"
 		 aria-labelledby="tablesLabel">
 		<div class="offcanvas-tag bg-purple-600 text-bg-purple-600" data-bs-toggle="offcanvas" data-bs-target="#tables"
-			 style="--order: 1;">
+			 style="--order:{$order};">
 			<span>
 				{lang 'Stoly'}
 			</span>

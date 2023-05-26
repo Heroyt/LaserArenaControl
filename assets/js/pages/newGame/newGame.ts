@@ -179,6 +179,18 @@ export default function initNewGamePage() {
 			});
 	}
 
+	if (isFeatureEnabled('preparedGames')) {
+		import(
+			/* webpackChunkName: "newGame_preparedGames" */
+			'./preparedGames'
+			)
+			.then(module => {
+				const preparedGamesWrapper = document.getElementById('game-preparedGames') as HTMLDivElement;
+				const preparedGamesBtn = document.getElementById('prepareGame') as HTMLButtonElement;
+				const preparedGames = new module.default(game, preparedGamesWrapper, preparedGamesBtn);
+			});
+	}
+
 	EventServerInstance.addEventListener('game-imported', loadLastGames);
 
 	function loadLastGames() {

@@ -92,6 +92,7 @@ export function loadContent(path: string, reloadTimeout: { timeout: null | NodeJ
 
 function animateResults(wrapper: HTMLDivElement) {
 	const info = wrapper.querySelector('.info') as HTMLDivElement;
+	const playersWrapper = wrapper.querySelector('section.players') as HTMLDivElement;
 	const players = wrapper.querySelectorAll('.player') as NodeListOf<HTMLDivElement>;
 	const teams = wrapper.querySelectorAll('.team') as NodeListOf<HTMLDivElement>;
 	const playersArray: HTMLDivElement[] = shuffle(Array.from(players));
@@ -104,6 +105,7 @@ function animateResults(wrapper: HTMLDivElement) {
 		currentScore: number
 	}> = new Map();
 	let maxLength = 0;
+	let minScore = 99999;
 	let maxScore = 0;
 
 	info.classList.add('hide');
@@ -112,6 +114,9 @@ function animateResults(wrapper: HTMLDivElement) {
 		const score = parseInt(player.dataset.score);
 		if (score > maxScore) {
 			maxScore = score;
+		}
+		if (score < minScore) {
+			minScore = score;
 		}
 	});
 	teams.forEach(team => {
@@ -139,7 +144,7 @@ function animateResults(wrapper: HTMLDivElement) {
 		scoreValueEl.innerText = `0`;
 		scoreEl.classList.remove('text-danger', 'text-gold', 'text-dark-silver', 'text-bronze');
 		const score = parseInt(player.dataset.score);
-		const length = (8000 + (Math.random() * 4000) + (4000 * (score / maxScore)));
+		const length = (3000 + (Math.random() * 4000) + (2000 * ((score - minScore) / (maxScore - minScore))));
 		if (length > maxLength) {
 			maxLength = length;
 		}
@@ -190,10 +195,14 @@ function animateResults(wrapper: HTMLDivElement) {
 		playersData.push(playerData);
 	});
 
+	console.log(maxLength);
+
 	// Start animation
+	let now = Date.now();
 	setTimeout(() => {
 		const playerCount = playersData.length;
 		let counter = 0;
+		let sortCounter = 200;
 		let done = 0;
 		console.log(playersData);
 
@@ -203,7 +212,10 @@ function animateResults(wrapper: HTMLDivElement) {
 			playerData.player.classList.remove('animate-in');
 			playerData.player.style.top = `calc(${key} * (100% - (.2rem * var(--multiplier) * ${playerCount - 1})) / ${playerCount})`;
 			playerData.player.style.height = `calc(((100% - (.2rem * var(--multiplier) * ${playerCount - 1})) / ${playerCount}) - 0.4rem * var(--multiplier))`;
-		})
+			console.log(playerData.player, playerData.player.style.top, playerData.player.classList.value);
+		});
+
+		playersWrapper.style.display = 'block';
 
 		setTimeout(() => {
 			incrementStep(20);
@@ -211,7 +223,10 @@ function animateResults(wrapper: HTMLDivElement) {
 
 		function incrementStep(increment: number) {
 			let totalScore = 0;
-			counter += increment;
+			const realIncrement = Date.now().valueOf() - now.valueOf();
+			counter += realIncrement;
+			sortCounter -= realIncrement;
+			now = Date.now();
 			//increment = maxIncrement * (Math.pow((counter / maxLength * 1.1), 2) + 0.2);
 			if (done === playerCount) {
 				// All animations are done
@@ -296,7 +311,7 @@ function animateResults(wrapper: HTMLDivElement) {
 					playerData.accuracy.svgEl.setAttribute('stroke-dasharray', `${Math.round(playerData.accuracy.current * Math.PI * 2 * playerData.accuracy.radius * 100) / 10000} ${playerData.accuracy.secondDashArray}`);
 				}
 			});
-			if (counter % 200 === 0) {
+			if (sortCounter <= 0) {
 				playersData.sort((a, b) => {
 					return b.currentScore - a.currentScore;
 				});
@@ -306,6 +321,7 @@ function animateResults(wrapper: HTMLDivElement) {
 					playerData.positionEl.innerText = `${key + 1}.`;
 					playerData.player.style.top = `calc(${key} * (100% - (.2rem * var(--multiplier) * ${playerCount})) / ${playerCount})`;
 				});
+				sortCounter = 200;
 			}
 
 			teamsData.forEach(teamData => {
@@ -333,6 +349,7 @@ function animateResults(wrapper: HTMLDivElement) {
 					playerData.scoreEl.classList.add(playerData.scoreEl.dataset.class.trim());
 				}
 			});
+			playersWrapper.style.display = null;
 			teamsData.forEach(teamData => {
 				teamData.scoreValueEl.innerText = Math.round(teamData.score).toLocaleString();
 				teamData.team.style.height = `calc(${100 * (teamData.score > 0 ? teamData.score : 0) / (totalScore > 0 ? totalScore : 1)}% - .2rem)`;
@@ -343,7 +360,7 @@ function animateResults(wrapper: HTMLDivElement) {
 				info.classList.remove('hide');
 			}, 200)
 		}
-	}, 2000);
+	}, 1000);
 }
 
 export function tipsRotations() {

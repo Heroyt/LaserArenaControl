@@ -205,7 +205,7 @@ class TournamentProvider
 			$data['progressions'][] = [
 				'id_local' => $progression->id,
 				'id_public' => $progression->idPublic,
-				'from' => $progression->from->id,
+				'from' => $progression->from?->id,
 				'to' => $progression->to->id,
 				'start' => $progression->start,
 				'length' => $progression->length,
@@ -261,8 +261,6 @@ class TournamentProvider
 	/**
 	 * @param TournamentPresetType $type
 	 * @param Tournament $tournament
-	 * @param int $gameLength
-	 * @param int $gamePause
 	 * @return TournamentGenerator
 	 * @throws ValidationException
 	 */
@@ -291,6 +289,22 @@ class TournamentProvider
 				$groupA->progression($groupD, $half);
 				$groupB->progression($groupC, 0, $half)->setPoints(50);
 				$groupB->progression($groupD, $half);
+				$tournamentRozlos->splitTeams($round1);
+				break;
+			case TournamentPresetType::TWO_GROUPS_ROBIN_10:
+				$half = (int)floor(count($tournament->getTeams()) / 4);
+				$round1 = $tournamentRozlos->round(lang('Kvalifikace'));
+				$round2 = $tournamentRozlos->round(lang('Finále'));
+				$groupA = $round1->group('A');
+				$groupB = $round1->group('B');
+				$groupC = $round2->group('C');
+				$groupD = $round2->group('D');
+				$groupA->progression($groupC, 0, $half)->setPoints(50);
+				$groupA->progression($groupC, $half, 1)->setPoints(50);
+				$groupA->progression($groupD, $half + 1);
+				$groupB->progression($groupC, 0, $half)->setPoints(50);
+				$groupB->progression($groupD, $half, 1);
+				$groupB->progression($groupD, $half + 1);
 				$tournamentRozlos->splitTeams($round1);
 				break;
 		}
@@ -424,6 +438,9 @@ class TournamentProvider
 		}
 
 		foreach ($tournament->getProgressions() as $progression) {
+			if (!isset($progression->from)) {
+				continue;
+			}
 			$from = $groups[$progression->from->id];
 			$to = $groups[$progression->to->id];
 			$progressionRozlos = $from->progression($to, $progression->start, $progression->length)->setPoints($progression->points);

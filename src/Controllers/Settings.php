@@ -130,6 +130,8 @@ class Settings extends Controller
 		try {
 			foreach ($request->post['vest'] ?? [] as $id => $info) {
 				DB::update(Vest::TABLE, $info, ['%n = %i', Vest::getPrimaryKey(), $id]);
+				$vest = Vest::get($id);
+				$vest->clearCache();
 			}
 		} catch (Exception) {
 			$request->passErrors[] = lang('Failed to save settings.', context: 'errors');

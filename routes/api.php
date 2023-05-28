@@ -62,4 +62,5 @@ Route::group('/api')
 	->get('/{id}', [Tournaments::class, 'get'])
 	->post('/sync', [Tournaments::class, 'sync'])
 	->post('/{id}/sync/games', [Tournaments::class, 'syncGames'])
+	->post('/{id}/recalc', [Tournaments::class, 'recalculatePoints'])
 	->endGroup();

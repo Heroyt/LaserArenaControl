@@ -32,6 +32,14 @@ class Tournaments extends ApiController
 		$this->respond(['status' => 'error'], 500);
 	}
 
+	public function recalculatePoints(Tournament $tournament): never {
+		$this->tournamentProvider->recalcTeamPoints($tournament);
+
+		$this->tournamentProvider->syncGames($tournament);
+
+		$this->respond(['status' => 'ok']);
+	}
+
 	public function syncGames(Tournament $tournament): never {
 		if ($this->tournamentProvider->syncGames($tournament)) {
 			$this->respond(['status' => 'ok']);

@@ -3,9 +3,9 @@
 namespace App\Controllers\Api;
 
 use App\Models\Tournament\Tournament;
+use App\Services\TournamentProvider;
 use Lsr\Core\ApiController;
 use Lsr\Core\Templating\Latte;
-use App\Services\TournamentProvider;
 
 class Tournaments extends ApiController
 {
@@ -21,12 +21,19 @@ class Tournaments extends ApiController
 		$this->respond(Tournament::getAll());
 	}
 
-	public function get(Tournament $tournament) : never {
+	public function get(Tournament $tournament): never {
 		$this->respond($tournament);
 	}
 
-	public function sync() : never {
+	public function sync(): never {
 		if ($this->tournamentProvider->sync()) {
+			$this->respond(['status' => 'ok']);
+		}
+		$this->respond(['status' => 'error'], 500);
+	}
+
+	public function syncGames(Tournament $tournament): never {
+		if ($this->tournamentProvider->syncGames($tournament)) {
 			$this->respond(['status' => 'ok']);
 		}
 		$this->respond(['status' => 'error'], 500);

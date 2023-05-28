@@ -30,6 +30,7 @@ export default function initTournamentRozlos(): void {
 				gamesPerTeam = teamCount - 1;
 				break;
 			case '2grr':
+			case '2grr10':
 				const half = teamCount / 2;
 				gamesPerTeam = (half - 1) * 2;
 				games = (half * (half - 1) / 2) * 4;

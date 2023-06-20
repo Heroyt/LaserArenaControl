@@ -1,5 +1,6 @@
 import EventServerInstance from "../EventServer";
 import {loadContent, tipsRotations} from "../components/gate";
+import {gameTimer} from "../functions";
 
 export let reloadTimeout: { timeout: null | NodeJS.Timeout } = {timeout: null};
 export default function initGate() {
@@ -16,4 +17,6 @@ export default function initGate() {
 	});
 
 	tipsRotations();
+
+	gameTimer();
 }

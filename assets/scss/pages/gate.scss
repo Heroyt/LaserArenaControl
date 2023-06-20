@@ -97,6 +97,16 @@
 			width: calc((100% - (4 * 1.5rem)) / 5);
 		}
 
+
+		.timer {
+			position: fixed;
+			font-size: 7rem;
+			font-weight: bold;
+			text-align: center;
+			bottom: 2.5rem;
+			width: 100%;
+		}
+
 		.results {
 			grid-column-gap: 1.5rem;
 			grid-template-areas: 'logo logo players players players players players players players teams'
@@ -478,14 +488,6 @@
 
 			.bbd {
 				border-bottom: 2px solid var(--print-dark);
-			}
-
-			.timer {
-				align-self: center;
-				font-size: 7rem;
-				font-weight: bold;
-				grid-area: timer;
-				text-align: center;
 			}
 
 			.text-center svg {

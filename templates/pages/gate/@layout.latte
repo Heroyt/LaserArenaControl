@@ -38,21 +38,28 @@
 		<link rel="icon" href="{getUrl}assets/favicon/favicon.ico">
 		<link rel="manifest" href="{getUrl}assets/manifest.json">
 		<meta name="theme-color" content="#192029">
-		<!-- Font Awesome -->
-		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css"/>
 		<!-- Google Fonts Montserrat -->
-		<link rel="stylesheet"
+		<link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'"
 			  href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"/>
+		<noscript>
+			<link rel="stylesheet"
+				  href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"/>
+		</noscript>
+		<link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'"
+			  href="{getUrl}dist/vendors.css?v={\Lsr\Core\App::getCacheVersion()}">
+		<noscript>
+			<link rel="stylesheet" href="{getUrl}dist/vendors.css?v={\Lsr\Core\App::getCacheVersion()}">
+		</noscript>
 		<title>{$page->getTitle()}</title>
 		<link rel="stylesheet" href="{getUrl}dist/main.css?v={\Lsr\Core\App::getCacheVersion()}">
 		<link rel="stylesheet" href="{getUrl}dist/pages/gate.css?v={\Lsr\Core\App::getCacheVersion()}">
 		{\Tracy\Debugger::renderLoader()|noescape}
 		{var string[][] $colors = App\GameModels\Factory\GameFactory::getAllTeamsColors()}
 		<style>
-				:root {
-					--gate-background: url('{\App\Services\GateStyleService::getGateBackgroundUrl()|noescape}');
-				{foreach $colors as $system => $systemColors} {foreach $systemColors as $key => $color} {var string $varName1 = '--team-'.$system.'-'.$key} {var string $varName2 = '--team-'.$system.'-'.$key.'-text'} {$varName1}: {$color|noescape};
-				{$varName2}:{\App\Tools\Color::getFontColor($color)|noescape};
+			:root {
+				--gate-background: url('{\App\Services\GateStyleService::getGateBackgroundUrl()|noescape}');
+			{foreach $colors as $system => $systemColors} {foreach $systemColors as $key => $color} {var string $varName1 = '--team-'.$system.'-'.$key} {var string $varName2 = '--team-'.$system.'-'.$key.'-text'} {$varName1}: {$color|noescape};
+			{$varName2}:{\App\Tools\Color::getFontColor($color)|noescape};
 				{/foreach} {/foreach}
 				}
 
@@ -83,7 +90,17 @@
 		<div class="content {include containerClasses}">
 			{include content}
 		</div>
+
+		<div class="timer">
+			<div class="time text-white-forced d-none"
+				 data-start="0"
+				 data-showafter="{\App\Core\Info::get('timer_show', 30)}"
+				 data-serverTime="{time()}">
+				00:00
+			</div>
+		</div>
 	</main>
+
 	<div class="tip">
 		{var App\GameModels\Tip|null $tip = \App\GameModels\Tip::random()}
 		<span class="content active">{sprintf(lang('Tip #%d', context: 'tips'), $tip?->id)}: {lang $tip?->text, context: 'tips'}</span>
@@ -108,11 +125,8 @@
 
 
 	<script src="{getUrl}dist/runtime~main.js?{\Lsr\Core\App::getCacheVersion()}"></script>
-
 	<script src="{getUrl}dist/bootstrap.js?{\Lsr\Core\App::getCacheVersion()}"></script>
-
 	<script src="{getUrl}dist/vendors.js?{\Lsr\Core\App::getCacheVersion()}"></script>
-
 	<script src="{getUrl}dist/main.js?{\Lsr\Core\App::getCacheVersion()}"></script>
 	{include svgSymbols}
 	</body>

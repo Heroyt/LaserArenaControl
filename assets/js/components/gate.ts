@@ -1,11 +1,13 @@
 import axios, {AxiosResponse} from "axios";
-import {gameTimer, shuffle} from "../functions";
+import {shuffle} from "../functions";
 
 declare global {
 	const tips: string[]
 	let reloadTimer: number
 	const timerOffset: number
 }
+
+const gameResultsExp = /results-game-(\d+)/;
 
 interface PlayerData {
 	player: HTMLDivElement,
@@ -49,8 +51,6 @@ export function loadContent(path: string, reloadTimeout: { timeout: null | NodeJ
 		return;
 	}
 	const contentNew = document.createElement('div');
-	contentNew.classList.add('content', 'in');
-	contentActive.classList.add('out');
 	axios.get(path)
 		.then((response: AxiosResponse<string>) => {
 			clearTimeout(reloadTimeout.timeout);
@@ -67,15 +67,27 @@ export function loadContent(path: string, reloadTimeout: { timeout: null | NodeJ
 			if (meta) {
 				contentNew.className += meta.getAttribute('content');
 			}
+			const isResults = contentNew.classList.contains('results');
+			if (isResults) {
+				const matchNew = contentNew.className.match(gameResultsExp);
+				const matchActive = contentActive.className.match(gameResultsExp);
+				if (matchNew !== null && matchActive !== null && (matchNew[1] ?? '') === (matchActive[1] ?? '')) {
+					console.log("Results are the same", matchNew, matchActive);
+					return; // Do not animate results in if the game is the same
+				}
+			}
+
+			// Animate the new content in
+			contentNew.classList.add('content', 'in');
+			contentActive.classList.add('out');
 			container.appendChild(contentNew);
 			setTimeout(() => {
 				removePreviousContent();
 				contentNew.classList.remove('in');
 			}, 2000);
-			if (contentNew.classList.contains('results') && contentNew.className !== contentActive.className) {
+			if (isResults) {
 				animateResults(contentNew);
 			}
-			gameTimer();
 		})
 		.catch(response => {
 			console.error(response);

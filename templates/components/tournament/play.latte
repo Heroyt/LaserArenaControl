@@ -58,7 +58,7 @@
 
 <div class="row">
 
-	<div class="col col-md-8 col-lg-9">
+	<div class="col-12 col-md-8 col-lg-9">
 		{ifset $game->code}
 			{var App\GameModels\Game\Game $results = $game->getGame()}
 			<section id="results" class="text-center p-3 my-3 rounded border text-dark">
@@ -132,26 +132,27 @@
 		{/if}
 	</div>
 
-	<aside id="upcomingGames" class="col col-md-4 col-lg-3 overflow-y-auto" style="max-height: 50vh;">
-		<table class="table table-striped">
-			<tbody>
-			<tr n:foreach="$upcomingGames as $upcomingGame">
-				<td>{$upcomingGame->start->format('H:i')}</td>
-				<th n:foreach="$upcomingGame->teams as $team">
-					{$team->getName()}
-					{ifset $team->score}
-						<br>
-						{$team->score}
-					{/ifset}
-				</th>
-				<td>
+	<aside id="upcomingGames" class="col-12 col-md-4 col-lg-3 overflow-y-auto" style="max-height: 650px;">
+		<div class="list-group">
+			<div n:foreach="$upcomingGames as $upcomingGame" class="list-group-item py-2">
+				<div class="text-center mb-1">{$upcomingGame->start->format('H:i')}</div>
+				<div class="d-flex justify-content-evenly text-center flex-wrap align-items-center">
+					<div n:foreach="$upcomingGame->teams as $team"
+							class="m-2  text-team-evo5-{$teamColors[$iterator->counter0]}" style="min-width: 80px;">
+						{$team->getName()}
+						{ifset $team->score}
+							<br>
+							{$team->score}
+						{/ifset}
+					</div>
+				</div>
+				<div class="text-center">
 					<a href="{link 'tournament', $tournament->id, 'play', $upcomingGame->id}" class="btn btn-info">
 						<i class="fa-solid fa-eye"></i>
 					</a>
-				</td>
-			</tr>
-			</tbody>
-		</table>
+				</div>
+			</div>
+		</div>
 	</aside>
 
 </div>

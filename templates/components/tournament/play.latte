@@ -134,7 +134,9 @@
 
 	<aside id="upcomingGames" class="col-12 col-md-4 col-lg-3 overflow-y-auto" style="max-height: 650px;">
 		<div class="list-group">
-			<div n:foreach="$upcomingGames as $upcomingGame" class="list-group-item py-2">
+			<a n:foreach="$upcomingGames as $upcomingGame"
+					class="list-group-item list-group-item-light py-2 list-group-item-action"
+					href="{link 'tournament', $tournament->id, 'play', $upcomingGame->id}">
 				<div class="text-center mb-1">{$upcomingGame->start->format('H:i')}</div>
 				<div class="d-flex justify-content-evenly text-center flex-wrap align-items-center">
 					<div n:foreach="$upcomingGame->teams as $team"
@@ -146,12 +148,7 @@
 						{/ifset}
 					</div>
 				</div>
-				<div class="text-center">
-					<a href="{link 'tournament', $tournament->id, 'play', $upcomingGame->id}" class="btn btn-info">
-						<i class="fa-solid fa-eye"></i>
-					</a>
-				</div>
-			</div>
+			</a>
 		</div>
 	</aside>
 

@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\GameModels\Game\Enums\GameModeType;
+use App\Models\Tournament\Game;
 use App\Models\Tournament\GameTeam;
 use App\Models\Tournament\Group;
 use App\Models\Tournament\League;
@@ -134,6 +135,21 @@ class TournamentProvider
 		}
 
 		return true;
+	}
+
+	/**
+	 * @return bool
+	 * @throws JsonException
+	 * @throws ValidationException
+	 */
+	public function syncUpcomingGames(): bool {
+		$tournamentsWithGames = Tournament::query()->where('DATE([start]) >= CURDATE() AND [id_tournament] IN %sql', DB::select(Game::TABLE, '[id_tournament]')->distinct()->fluent)->get();
+
+		$success = true;
+		foreach ($tournamentsWithGames as $tournament) {
+			$success = $success && $this->syncGames($tournament);
+		}
+		return $success;
 	}
 
 	/**

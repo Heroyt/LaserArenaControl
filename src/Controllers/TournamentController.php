@@ -184,11 +184,12 @@ class TournamentController extends Controller
 	}
 
 	public function sync(Request $request): void {
-		if ($this->tournamentProvider->sync()) {
+		if ($this->tournamentProvider->sync() && $this->tournamentProvider->syncUpcomingGames()) {
 			$request->passNotices[] = ['type' => 'success', 'content' => lang('Synchronizováno')];
 		} else {
 			$request->addPassError(lang('Synchronizace se nezdařila'));
 		}
+
 		App::redirect(['tournament'], $request);
 	}
 

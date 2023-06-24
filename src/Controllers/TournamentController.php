@@ -204,6 +204,7 @@ class TournamentController extends Controller
 		}
 
 		$this->params['game'] = $game;
+		$this->params['upcomingGames'] = Game::query()->where('[id_tournament] = %i AND [code] IS NULL', $tournament->id)->limit(20)->get();
 		$this->params['vests'] = array_values(Vest::getForSystem('evo5'));
 		$this->params['musicModes'] = MusicMode::getAll();
 		$this->params['teamColors'] = $this::EVO5_TEAM_COLORS;

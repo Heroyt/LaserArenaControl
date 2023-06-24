@@ -1,5 +1,6 @@
 {varType App\Models\Tournament\Tournament $tournament}
 {varType App\Models\Tournament\Game $game}
+{varType App\Models\Tournament\Game[] $upcomingGames}
 {varType App\Models\MusicMode[] $musicModes}
 {varType array < int,int > $teamColors}
 
@@ -55,75 +56,102 @@
 	</div>
 </section>
 
+<div class="row">
 
-{ifset $game->code}
-	{var App\GameModels\Game\Game $results = $game->getGame()}
-	<section id="results" class="text-center p-3 my-3 rounded border text-dark">
-		{var App\GameModels\Game\Team|null $win = $results->getMode()->getWin($results)}
-		<h4>{lang 'Vítěz'}: {ifset $win}<span
-				class="text-team-evo5-{$win->color}">{$win->name}</span>{else}{lang 'Remíza'}{/ifset}</h4>
-		<div id="teams-results" class="d-flex rounded">
-			<div n:foreach="$results->getTeamsSorted() as $team"
-					{varType App\GameModels\Game\Team $team}
-					class="flex-fill bg-team-evo5-{$team->color} p-2 {if $iterator->first}rounded-start{elseif $iterator->last}rounded-end{/if}">
-				<div class="fs-5 fw-bold">{$team->name}</div>
-				<div class="fs-3">{$team->getScore()|number:0,',','&nbsp;'|noescape}</div>
-				<label for="team-{$team->color}-bonus" class="form-label mt-2 mb-1">{lang 'Bonus/Penalizace'}
-					:</label>
-				<input type="number"
-					   class="team-bonus form-control {if $team->bonus > 0}text-success{elseif $team->bonus < 0}text-danger{/if}"
-					   id="team-{$team->color}-bonus" value="{$team->bonus}" placeholder="0"
-					   data-team="{$team->tournamentTeam->id}">
-			</div>
-		</div>
-		<button data-action="{link 'tournament', $tournament->id, 'play', $game->id, 'bonus'}" type="button"
-				class="btn btn-success mt-3" id="updateBonus">{lang 'Odeslat'}</button>
-	</section>
-{/ifset}
-
-{if !isset($game->code)}
-	<section id="tournament-settings" class="d-flex justify-content-center flex-wrap mb-3">
-		<div class="music-select-wrapper">
-			<label for="music-select">
-				{lang 'Hudební mód', context: 'game'}:
-			</label>
-			<div class="input-group">
-				<select name="music" id="music-select" class="form-select">
-					<option n:foreach="$musicModes as $musicMode"
-							value="{$musicMode->id}">{$musicMode->name}</option>
-				</select>
-				<button type="button" data-toggle="shuffle" title="{lang 'Náhodně', context: 'actions'}"
-						data-target="#music-select" class="btn btn-purple-500">
-					<i class="fa-solid fa-shuffle"></i>
-				</button>
-			</div>
-		</div>
-	</section>
-
-	<section id="tournament-players">
-		{dump $game->teams}
-		{var $i = 0}
-		<div n:foreach="$game->teams as $team" class="card">
-			<div class="card-body">
-				{var int $key = $iterator->counter0}
-				<h4 class="text-center text-team-evo5-{$teamColors[$key]}">{$team->getName()}</h4>
-				<div n:ifset="$team->team" class="d-flex justify-content-evenly flex-wrap">
-					<div n:foreach="$team->team->getPlayers() as $player"
-							class="player text-center m-2 bg-team-evo5-{$teamColors[$key]} py-2 px-4 rounded"
-							data-id="{$player->id}" data-captain="{$player->captain}" data-sub="{$player->sub}">
-						{$player->nickname}
-						<input type="hidden" name="player[{$player->id}][team]" value="{$teamColors[$key]}">
-						<input type="hidden" name="player[{$player->id}][name]" value="{$player->nickname}">
-						<select name="player[{$player->id}][vest]" class="form-select vest-select">
-							<option value="">{lang 'Žádná'}</option>
-							{if !$player->sub}
-								<option value="{$vests[$i]->vestNum}" selected>{$vests[$i]->vestNum}</option>
-								{do $i++}
-							{/if}
-						</select>
+	<div class="col col-md-8 col-lg-9">
+		{ifset $game->code}
+			{var App\GameModels\Game\Game $results = $game->getGame()}
+			<section id="results" class="text-center p-3 my-3 rounded border text-dark">
+				{var App\GameModels\Game\Team|null $win = $results->getMode()->getWin($results)}
+				<h4>{lang 'Vítěz'}: {ifset $win}<span
+						class="text-team-evo5-{$win->color}">{$win->name}</span>{else}{lang 'Remíza'}{/ifset}</h4>
+				<div id="teams-results" class="d-flex rounded">
+					<div n:foreach="$results->getTeamsSorted() as $team"
+							{varType App\GameModels\Game\Team $team}
+							class="flex-fill bg-team-evo5-{$team->color} p-2 {if $iterator->first}rounded-start{elseif $iterator->last}rounded-end{/if}">
+						<div class="fs-5 fw-bold">{$team->name}</div>
+						<div class="fs-3">{$team->getScore()|number:0,',','&nbsp;'|noescape}</div>
+						<label for="team-{$team->color}-bonus" class="form-label mt-2 mb-1">{lang 'Bonus/Penalizace'}
+							:</label>
+						<input type="number"
+							   class="team-bonus form-control {if $team->bonus > 0}text-success{elseif $team->bonus < 0}text-danger{/if}"
+							   id="team-{$team->color}-bonus" value="{$team->bonus}" placeholder="0"
+							   data-team="{$team->tournamentTeam->id}">
 					</div>
 				</div>
-			</div>
-		</div>
-	</section>
-{/if}
+				<button data-action="{link 'tournament', $tournament->id, 'play', $game->id, 'bonus'}" type="button"
+						class="btn btn-success mt-3" id="updateBonus">{lang 'Odeslat'}</button>
+			</section>
+		{/ifset}
+
+		{if !isset($game->code)}
+			<section id="tournament-settings" class="d-flex justify-content-center flex-wrap mb-3">
+				<div class="music-select-wrapper">
+					<label for="music-select">
+						{lang 'Hudební mód', context: 'game'}:
+					</label>
+					<div class="input-group">
+						<select name="music" id="music-select" class="form-select">
+							<option n:foreach="$musicModes as $musicMode"
+									value="{$musicMode->id}">{$musicMode->name}</option>
+						</select>
+						<button type="button" data-toggle="shuffle" title="{lang 'Náhodně', context: 'actions'}"
+								data-target="#music-select" class="btn btn-purple-500">
+							<i class="fa-solid fa-shuffle"></i>
+						</button>
+					</div>
+				</div>
+			</section>
+
+			<section id="tournament-players">
+				{dump $game->teams}
+				{var $i = 0}
+				<div n:foreach="$game->teams as $team" class="card">
+					<div class="card-body">
+						{var int $key = $iterator->counter0}
+						<h4 class="text-center text-team-evo5-{$teamColors[$key]}">{$team->getName()}</h4>
+						<div n:ifset="$team->team" class="d-flex justify-content-evenly flex-wrap">
+							<div n:foreach="$team->team->getPlayers() as $player"
+									class="player text-center m-2 bg-team-evo5-{$teamColors[$key]} py-2 px-4 rounded"
+									data-id="{$player->id}" data-captain="{$player->captain}" data-sub="{$player->sub}">
+								{$player->nickname}
+								<input type="hidden" name="player[{$player->id}][team]" value="{$teamColors[$key]}">
+								<input type="hidden" name="player[{$player->id}][name]" value="{$player->nickname}">
+								<select name="player[{$player->id}][vest]" class="form-select vest-select">
+									<option value="">{lang 'Žádná'}</option>
+									{if !$player->sub}
+										<option value="{$vests[$i]->vestNum}" selected>{$vests[$i]->vestNum}</option>
+										{do $i++}
+									{/if}
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+		{/if}
+	</div>
+
+	<aside id="upcomingGames" class="col col-md-4 col-lg-3 overflow-y-auto" style="max-height: 50vh;">
+		<table class="table table-striped">
+			<tbody>
+			<tr n:foreach="$upcomingGames as $upcomingGame">
+				<td>{$upcomingGame->start->format('H:i')}</td>
+				<th n:foreach="$upcomingGame->teams as $team">
+					{$team->getName()}
+					{ifset $team->score}
+						<br>
+						{$team->score}
+					{/ifset}
+				</th>
+				<td>
+					<a href="{link 'tournament', $tournament->id, 'play', $upcomingGame->id}" class="btn btn-info">
+						<i class="fa-solid fa-eye"></i>
+					</a>
+				</td>
+			</tr>
+			</tbody>
+		</table>
+	</aside>
+
+</div>

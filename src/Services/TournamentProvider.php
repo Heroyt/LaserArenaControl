@@ -143,7 +143,7 @@ class TournamentProvider
 	 * @throws ValidationException
 	 */
 	public function syncUpcomingGames(): bool {
-		$tournamentsWithGames = Tournament::query()->where('DATE([start]) >= CURDATE() AND [id_tournament] IN %sql', DB::select(Game::TABLE, '[id_tournament]')->distinct()->fluent)->get();
+		$tournamentsWithGames = Tournament::query()->where('DATE([start]) >= CURDATE() AND [id_tournament] IN %sql', DB::select(Game::TABLE, '[id_tournament]')->fluent)->get();
 
 		$success = true;
 		foreach ($tournamentsWithGames as $tournament) {

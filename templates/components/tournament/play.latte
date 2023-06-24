@@ -58,7 +58,7 @@
 
 <div class="row">
 
-	<div class="col-12 col-md-8 col-lg-9">
+	<div class="col-12 col-md-8 col-lg-9 col-xl-10">
 		{ifset $game->code}
 			{var App\GameModels\Game\Game $results = $game->getGame()}
 			<section id="results" class="text-center p-3 my-3 rounded border text-dark">
@@ -132,7 +132,7 @@
 		{/if}
 	</div>
 
-	<aside id="upcomingGames" class="col-12 col-md-4 col-lg-3 overflow-y-auto" style="max-height: 650px;">
+	<aside id="upcomingGames" class="col-12 col-md-4 col-lg-3 col-xl-2 overflow-y-auto" style="max-height: 650px;">
 		<div class="list-group">
 			<a n:foreach="$upcomingGames as $upcomingGame"
 					class="list-group-item py-2 list-group-item-action {if $upcomingGame->id === $game->id}active{/if}"

@@ -159,6 +159,7 @@ class Tournament extends Model
 			$this->group->name = $this->name;
 			$this->group->active = false;
 			$this->group->save();
+			$this->save();
 		}
 		return $this->group;
 	}

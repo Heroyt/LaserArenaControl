@@ -5,6 +5,7 @@
  */
 
 use App\Services\FeatureConfig;
+use LAC\Modules\Core\MenuExtensionInterface;
 use Lsr\Core\App;
 
 $menu = [
@@ -78,16 +79,16 @@ if ($featureConfig->isFeatureEnabled('groups')) {
 		'route' => 'settings-groups',
 	];
 }
-if ($featureConfig->isFeatureEnabled('tables')) {
-	$menu['settings']['children'][] = [
-		'name' => lang('Tables'),
-		'route' => 'settings-tables',
-	];
-}
 
 $menu['settings']['children'][] = [
 	'name' => lang('Cache'),
 	'route' => 'settings-cache',
 ];
+
+foreach (App::getContainer()->findByType(MenuExtensionInterface::class) as $name) {
+	/** @var MenuExtensionInterface $extension */
+	$extension = App::getService($name);
+	$extension->extend($menu);
+}
 
 return $menu;

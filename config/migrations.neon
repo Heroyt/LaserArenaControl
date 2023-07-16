@@ -142,21 +142,6 @@ tables:
 			PRIMARY KEY (`id_group`)
 		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 		'''
-	App\Models\Table:
-		definition: '''
-		(
-          `id_table` int(11) unsigned NOT NULL AUTO_INCREMENT,
-          `id_group` int(11) unsigned DEFAULT NULL,
-          `name` varchar(50) NOT NULL,
-          `grid_row` int(10) unsigned NOT NULL DEFAULT 1,
-          `grid_col` int(10) unsigned NOT NULL DEFAULT 1,
-          `grid_width` int(10) unsigned NOT NULL DEFAULT 1,
-          `grid_height` int(10) unsigned NOT NULL DEFAULT 1,
-          PRIMARY KEY (`id_table`),
-          KEY `id_group` (`id_group`),
-          CONSTRAINT `tables_ibfk_1` FOREIGN KEY (`id_group`) REFERENCES `game_groups` (`id_group`) ON DELETE SET NULL ON UPDATE CASCADE
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-		'''
 	App\GameModels\Game\Evo5\Game:
 		definition: '''
 		(
@@ -164,7 +149,6 @@ tables:
 			`id_mode` int(11) unsigned DEFAULT NULL,
 			`id_music` int(11) unsigned DEFAULT NULL,
 			`id_group` int(11) unsigned DEFAULT NULL,
-			`id_table` int(11) unsigned DEFAULT NULL,
 			`game_type` enum('TEAM','SOLO') NOT NULL DEFAULT 'TEAM',
 			`mode_name` varchar(100) DEFAULT NULL,
 			`file_time` datetime DEFAULT NULL,
@@ -209,9 +193,6 @@ tables:
 			0.4.1:
 				- 'ADD `id_group` int(11) unsigned DEFAULT NULL AFTER `id_music`'
 				- 'ADD FOREIGN KEY IF NOT EXISTS (`id_group`) REFERENCES `game_groups` (`id_group`) ON DELETE SET NULL ON UPDATE CASCADE'
-			0.4.2:
-				- 'ADD `id_table` int(11) unsigned DEFAULT NULL AFTER `id_group`'
-				- 'ADD FOREIGN KEY IF NOT EXISTS (`id_table`) REFERENCES `tables` (`id_table`) ON DELETE SET NULL ON UPDATE CASCADE'
 	App\GameModels\Game\Evo5\Team:
 		definition: '''
 		(

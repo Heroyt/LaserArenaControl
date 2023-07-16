@@ -53,14 +53,14 @@ if ($featureConfig->isFeatureEnabled('groups')) {
 		->get('/groups', [Settings::class, 'group'])->name('settings-groups');
 }
 
-if ($featureConfig->isFeatureEnabled('tables')) {
+/*if ($featureConfig->isFeatureEnabled('tables')) {
 	$settings
 		->get('/tables', [Settings::class, 'tables'])->name('settings-tables')
 		->post('/tables', [Settings::class, 'saveTables'])
 		->post('/tables/new', [Settings::class, 'addTable'])
 		->post('/tables/{id}/delete', [Settings::class, 'deleteTable'])
 		->delete('/tables/{id}', [Settings::class, 'deleteTable']);
-}
+}*/
 
 if ($featureConfig->isFeatureEnabled('tournaments')) {
 	Route::group('/tournament')

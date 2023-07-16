@@ -4,6 +4,11 @@ parameters:
 	gotenberg:
 		host: gotenberg
 		port: 3000
+	routing:
+		routeFiles:
+			- %constants.appDir%routes
+		controllers:
+			- %constants.appDir%src/Controllers
 services:
 	- App\Services\VersionService
 	- App\Services\RegressionCalculator

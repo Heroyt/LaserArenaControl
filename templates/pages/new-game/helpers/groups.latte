@@ -18,7 +18,7 @@
 		</div>
 		<div class="offcanvas-body" id="game-groups" data-vests="{$vestCount}">
 			{foreach $groups as $group}
-				{include gameGroupCard, $group->id, $group->name, $group->getPlayers(), $group->getTeams(), $group->getTable()}
+				{include gameGroupCard, $group->id, $group->name, $group->getPlayers(), $group->getTeams()}
 			{/foreach}
 		</div>
 	</div>
@@ -27,9 +27,9 @@
 	</template>
 {/define}
 
-{define gameGroupCard, int|string $id, string $name, App\Models\Group\Player[] $players, App\Models\Group\Team[] $teams, App\Models\Table|null $table}
+{define gameGroupCard, int|string $id, string $name, App\Models\Group\Player[] $players, App\Models\Group\Team[] $teams}
 	{var int $vestCount = count($vests)}
-	<div class="card game-group mb-4" data-id="{$id}" data-table="{$table?->id}" data-tablename="{$table?->name}">
+	<div class="card game-group mb-4" data-id="{$id}">
 		<div class="card-body">
 			<div class="input-group">
 				<input type="text" value="{$name}" class="form-control fs-5 group-name" maxlength="100">

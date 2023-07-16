@@ -37,24 +37,6 @@ class GameGroup extends Model
 	/** @var array<string, Team> */
 	private array $teams = [];
 
-	private ?Table $table;
-
-	public function getTable() : ?Table {
-		if (!isset($this->table)) {
-			$this->table = Table::query()->where('id_group = %i', $this->id)->first();
-		}
-		return $this->table;
-	}
-
-	public function jsonSerialize() : array {
-		$data = parent::jsonSerialize();
-		$data['table'] = [
-			'id'   => $this->getTable()?->id,
-			'name' => $this->getTable()?->name,
-		];
-		return $data;
-	}
-
 	/**
 	 * @return static[]
 	 * @throws ValidationException

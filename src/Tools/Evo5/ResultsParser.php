@@ -17,7 +17,6 @@ use App\GameModels\Game\Timing;
 use App\Models\Auth\Player as User;
 use App\Models\GameGroup;
 use App\Models\MusicMode;
-use App\Models\Table;
 use App\Models\Tournament\Game as TournamentGame;
 use App\Models\Tournament\Player as TournamentPlayer;
 use App\Models\Tournament\Tournament;
@@ -38,6 +37,8 @@ use Throwable;
 class ResultsParser extends AbstractResultsParser
 {
 
+	public const REGEXP = '/([A-Z]+){([^{}]*)}#/';
+
 	/** @var string Default LMX date string passed when no distinct date should be used (= null) */
 	public const EMPTY_DATE = '20000101000000';
 
@@ -48,7 +49,6 @@ class ResultsParser extends AbstractResultsParser
 	 * @throws DirectoryCreationException
 	 * @throws GameModeNotFoundException
 	 * @throws JsonException
-	 * @throws ModelNotFoundException
 	 * @throws ResultsParseException
 	 * @throws ValidationException
 	 * @throws Throwable
@@ -68,8 +68,7 @@ class ResultsParser extends AbstractResultsParser
 		}
 
 		// Parse file into lines and arguments
-		preg_match_all('/([A-Z]+){([^{}]*)}#/', $this->fileContents, $matches);
-		[, $titles, $argsAll] = $matches;
+		[, $titles, $argsAll] = $this->matchAll($this::REGEXP);
 
 		// Check if parsing is successful and lines were found
 		if (empty($titles) || empty($argsAll)) {
@@ -480,6 +479,8 @@ class ResultsParser extends AbstractResultsParser
 					$logger->warning('Game meta hashes doesn\'t match.');
 				} catch (DirectoryCreationException) {
 				}
+
+				$this->processExtensions($game, []);
 				return $game;
 			}
 
@@ -498,7 +499,7 @@ class ResultsParser extends AbstractResultsParser
 					$meta['group'] = $group->id;
 					$game->tournamentGame = TournamentGame::get((int)$meta['tournament_game']);
 
-					$win = $game->mode->getWin($game);
+					$win = $game->mode?->getWin($game);
 
 					foreach ($game->getTeams() as $team) {
 						foreach ($game->tournamentGame->teams as $gameTeam) {
@@ -509,9 +510,11 @@ class ResultsParser extends AbstractResultsParser
 							$gameTeam->position = $team->position;
 							if (!isset($win)) {
 								$gameTeam->points = $tournament->points->draw;
-							} else if ($win === $team) {
+							}
+							else if ($win === $team) {
 								$gameTeam->points = $tournament->points->win;
-							} else {
+							}
+							else {
 								$gameTeam->points = $tournament->points->loss;
 							}
 							if (isset($gameTeam->team)) {
@@ -555,28 +558,6 @@ class ResultsParser extends AbstractResultsParser
 				$game->group = $group;
 			}
 
-			// Assign game to the table
-			if (!empty($meta['table'])) {
-				try {
-					$table = Table::get((int)$meta['table']);
-					$game->table = $table;
-					if (!isset($table->group)) {
-						// Assign a group to the table if it doesn't have any
-						if (isset($game->group)) {
-							// Copy group from game
-							$table->group = $game->group;
-						} else {
-							// Create a new group for the table
-							$game->group = $table->createGroup(date: $game->start);
-						}
-					} else if (!isset($game->group)) {
-						$game->group = $table->group;
-					}
-				} catch (ModelNotFoundException) {
-					// Ignore
-				}
-			}
-
 			/** @var Player $player */
 			foreach ($game->getPlayers() as $player) {
 				// Names from game are strictly ASCII
@@ -613,6 +594,8 @@ class ResultsParser extends AbstractResultsParser
 				}
 			}
 		}
+
+		$this->processExtensions($game, $meta);
 
 		return $game;
 	}

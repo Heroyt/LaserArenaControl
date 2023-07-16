@@ -672,6 +672,7 @@ export default class Game {
 				this.$group.value = data.group.id.toString();
 				//console.log('created option', option, this.$group.value);
 			}
+			document.dispatchEvent(new CustomEvent('game-group-import', {detail: data.group}));
 		} else {
 			this.$group.value = '';
 		}

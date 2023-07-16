@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Core\Info;
+use App\DataObjects\NewGame\HookedTemplates;
 use App\Exceptions\GameModeNotFoundException;
 use App\GameModels\Factory\GameFactory;
 use App\GameModels\Factory\GameModeFactory;
@@ -10,9 +11,9 @@ use App\GameModels\Game\GameModes\CustomLoadMode;
 use App\GameModels\Vest;
 use App\Models\GameGroup;
 use App\Models\MusicMode;
-use App\Models\Table;
 use App\Services\FeatureConfig;
 use JsonException;
+use LAC\Modules\Core\ControllerDecoratorInterface;
 use Lsr\Core\App;
 use Lsr\Core\Controller;
 use Lsr\Core\Exceptions\ModelNotFoundException;
@@ -23,20 +24,38 @@ use Lsr\Core\Templating\Latte;
 use Lsr\Exceptions\TemplateDoesNotExistException;
 use Lsr\Helpers\Tools\Strings;
 use Lsr\Helpers\Tools\Timer;
+use Lsr\Interfaces\RequestInterface;
 use Lsr\Logging\Exceptions\DirectoryCreationException;
 use Throwable;
 
 class NewGame extends Controller
 {
 
+	public HookedTemplates $hookedTemplates;
 	protected string $title = 'New game';
 	protected string $description = '';
+	/** @var ControllerDecoratorInterface[] */
+	private array $decorators = [];
 
 	public function __construct(
 		Latte                          $latte,
 		private readonly FeatureConfig $featureConfig
 	) {
 		parent::__construct($latte);
+	}
+
+	public function init(RequestInterface $request): void {
+		$this->params['addCss'] = [];
+		$this->params['addJs'] = [];
+		parent::init($request);
+		/** @var array<string, mixed> $decorators */
+		$decorators = App::getContainer()->findByTag('newGameDecorator');
+		bdump($decorators);
+		foreach ($decorators as $name => $attributes) {
+			/** @var ControllerDecoratorInterface $decorator */
+			$this->decorators[] = $decorator = App::getService($name);
+			$decorator->setController($this)->init();
+		}
 	}
 
 	/**
@@ -47,6 +66,8 @@ class NewGame extends Controller
 	 * @throws Throwable
 	 */
 	public function show(): void {
+		$this->hookedTemplates = new HookedTemplates();
+		$this->params['addedTemplates'] = $this->hookedTemplates;
 		$this->params['featureConfig'] = $this->featureConfig;
 		$this->params['addCss'] = ['pages/newGame.css'];
 		$this->params['loadGame'] = !empty($_GET['game']) ? GameFactory::getByCode($_GET['game']) : null;
@@ -57,25 +78,11 @@ class NewGame extends Controller
 		$this->params['gameModes'] = GameModeFactory::getAll(['system' => $this->params['system']]);
 		$this->params['musicModes'] = MusicMode::getAll();
 		$this->params['groups'] = GameGroup::getActive();
-		$this->params['tables'] = Table::getAll();
-		$this->params['tablesCols'] = 1;
-		$this->params['tablesRows'] = 1;
-		foreach ($this->params['tables'] as $table) {
-			$endCol = $table->grid->col + $table->grid->width - 1;
-			if ($this->params['tablesCols'] < $endCol) {
-				$this->params['tablesCols'] = $endCol;
-			}
-			$endRow = $table->grid->row + $table->grid->height - 1;
-			if ($this->params['tablesRows'] < $endRow) {
-				$this->params['tablesRows'] = $endRow;
+		foreach ($this->decorators as $decorator) {
+			if ($decorator->decorates('show') && method_exists($decorator, 'decorateShow')) {
+				$decorator->decorateShow();
 			}
 		}
-		usort($this->params['tables'], static function(Table $tableA, Table $tableB) {
-			if (is_numeric($tableA->name) && is_numeric($tableB->name)) {
-				return (int) $tableA->name - (int) $tableB->name;
-			}
-			return strcmp($tableA->name, $tableB->name);
-		});
 		$this->view('pages/new-game/index');
 	}
 
@@ -89,7 +96,7 @@ class NewGame extends Controller
 	 * @throws TemplateDoesNotExistException
 	 */
 	#[Post('/')]
-	public function process(Request $request) : never {
+	public function process(Request $request): never {
 		Timer::start('newGame.process');
 		/** @var array{
 		 *   meta:array<string,string|numeric>,
@@ -98,12 +105,12 @@ class NewGame extends Controller
 		 *   } $data
 		 */
 		$data = [
-			'meta'    => [
+			'meta' => [
 				/** @phpstan-ignore-next-line */
-				'music' => empty($request->post['music']) ? null : (int) $request->post['music'],
+				'music' => empty($request->post['music']) ? null : (int)$request->post['music'],
 			],
 			'players' => [],
-			'teams'   => [],
+			'teams' => [],
 		];
 
 		if (!empty($request->post['groupSelect'])) {
@@ -117,7 +124,7 @@ class NewGame extends Controller
 		Timer::start('newGame.mode');
 		try {
 			/** @phpstan-ignore-next-line */
-			$mode = GameModeFactory::getById((int) ($request->getPost('game-mode', 0)));
+					$mode = GameModeFactory::getById((int)($request->getPost('game-mode', 0)));
 		} catch (GameModeNotFoundException) {
 		}
 
@@ -125,11 +132,11 @@ class NewGame extends Controller
 			$data['meta']['mode'] = $mode->loadName;
 			if (!empty($request->post['variation'])) {
 				$data['meta']['variations'] = [];
-				/**
-				 * @var int    $id
-				 * @var string $suffix
-				 * @phpstan-ignore-next-line
-				 */
+							/**
+							 * @var int $id
+							 * @var string $suffix
+							 * @phpstan-ignore-next-line
+							 */
 				foreach ($request->getPost('variation', []) as $id => $suffix) {
 					$data['meta']['variations'][$id] = $suffix;
 					$data['meta']['mode'] .= $suffix;
@@ -144,7 +151,7 @@ class NewGame extends Controller
 		// Validate and parse players
 		Timer::start('newGame.players');
 		/**
-		 * @var int                                                            $vest
+		 * @var int $vest
 		 * @var array{name:string,team?:string,vip:numeric-string,code:string} $player
 		 * @phpstan-ignore-next-line
 		 */
@@ -160,40 +167,40 @@ class NewGame extends Controller
 			}
 			$asciiName = substr(Strings::toAscii($player['name']), 0, 12);
 			if ($player['name'] !== $asciiName) {
-				$data['meta']['p'.$vest.'n'] = $player['name'];
-			}
-			if (!empty($player['code'])) {
-				$data['meta']['p'.$vest.'u'] = $player['code'];
-			}
-			$data['players'][] = [
-				'vest' => (string) $vest,
-				'name' => $asciiName,
-				'team' => (string) $player['team'],
-				'vip'  => ((int) $player['vip']) === 1,
-			];
-			if (!isset($teams[(string) $player['team']])) {
-				$teams[(string) $player['team']] = 0;
-			}
-			$teams[(string) $player['team']]++;
-		}
+							$data['meta']['p' . $vest . 'n'] = $player['name'];
+						}
+					if (!empty($player['code'])) {
+						$data['meta']['p' . $vest . 'u'] = $player['code'];
+					}
+					$data['players'][] = [
+						'vest' => (string)$vest,
+						'name' => $asciiName,
+						'team' => (string)$player['team'],
+						'vip' => ((int)$player['vip']) === 1,
+					];
+					if (!isset($teams[(string)$player['team']])) {
+						$teams[(string)$player['team']] = 0;
+					}
+					$teams[(string)$player['team']]++;
+				}
 		Timer::stop('newGame.players');
 
 		Timer::start('newGame.teams');
 		/**
-		 * @var int                $key
+		 * @var int $key
 		 * @var array{name:string} $team
 		 * @phpstan-ignore-next-line
 		 */
 		foreach ($request->getPost('team', []) as $key => $team) {
 			$asciiName = Strings::toAscii($team['name']);
 			if ($team['name'] !== $asciiName) {
-				$data['meta']['t'.$key.'n'] = $team['name'];
+							$data['meta']['t' . $key . 'n'] = $team['name'];
 			}
 			$data['teams'][] = [
-				'key'         => $key,
-				'name'        => $asciiName,
-				'playerCount' => $teams[(string) $key] ?? 0,
-			];
+							'key' => $key,
+							'name' => $asciiName,
+							'playerCount' => $teams[(string)$key] ?? 0,
+						];
 		}
 		Timer::stop('newGame.teams');
 
@@ -211,9 +218,9 @@ class NewGame extends Controller
 		// Render the game info into a load file
 		Timer::start('newGame.render');
 		$content = $this->latte->viewToString('gameFiles/evo5', $data);
-		$loadDir = LMX_DIR.Info::get('evo5_load_file', 'games/');
+		$loadDir = LMX_DIR . Info::get('evo5_load_file', 'games/');
 		if (file_exists($loadDir) && is_dir($loadDir)) {
-			file_put_contents($loadDir.'0000.game', $content);
+					file_put_contents($loadDir . '0000.game', $content);
 		}
 		Timer::stop('newGame.render');
 
@@ -223,9 +230,9 @@ class NewGame extends Controller
 		if (isset($data['meta']['music'])) {
 			try {
 				/** @phpstan-ignore-next-line */
-				$music = MusicMode::get((int) $data['meta']['music']);
+							$music = MusicMode::get((int)$data['meta']['music']);
 				if (!file_exists($music->fileName)) {
-					App::getLogger()->warning('Music file does not exist - '.$music->fileName);
+									App::getLogger()->warning('Music file does not exist - ' . $music->fileName);
 				}
 				else if (!copy($music->fileName, LMX_DIR . 'music/evo5.mp3')) {
 					App::getLogger()->warning('Music copy failed - ' . $music->fileName);

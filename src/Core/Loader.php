@@ -16,6 +16,7 @@
 namespace App\Core;
 
 use Dibi\Exception;
+use LAC\Modules\Core\Module;
 use Lsr\Core\App;
 use Lsr\Core\DB;
 use Lsr\Helpers\Tools\Timer;
@@ -57,6 +58,19 @@ class Loader
 		self::initDB();
 		Timer::stop('core.init.db');
 
+		Timer::start('core.init.modules');
+		self::loadModules();
+		Timer::stop('core.init.modules');
+	}
+
+	public static function loadModules(): void {
+		/** @var string[] $modules */
+		$modules = App::getContainer()->findByType(Module::class);
+		foreach ($modules as $moduleName) {
+			/** @var Module $module */
+			$module = App::getService($moduleName);
+			$module->init();
+		}
 	}
 
 	/**

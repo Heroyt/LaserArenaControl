@@ -29,8 +29,8 @@ class DbInstall implements InstallInterface
 
 	/** @var array{definition:string, modifications:array<string,string[]>}[] */
 	public const TABLES = [
-		PrintStyle::TABLE          => [
-			'definition'    => "(
+		PrintStyle::TABLE => [
+			'definition' => "(
 				`id_style` int(10) unsigned NOT NULL AUTO_INCREMENT,
 				`name` varchar(50) COLLATE utf8_czech_ci DEFAULT NULL,
 				`color_dark` varchar(7) COLLATE utf8_czech_ci NOT NULL DEFAULT '#304D99',
@@ -43,12 +43,12 @@ class DbInstall implements InstallInterface
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;",
 			'modifications' => [
 				'0.1' => [
-					"ADD `bg_landscape` VARCHAR(100)  NOT NULL  DEFAULT 'assets/images/print/bg_landscape.jpg' AFTER `bg`;"
+					"ADD `bg_landscape` VARCHAR(100)  NOT NULL  DEFAULT 'assets/images/print/bg_landscape.jpg' AFTER `bg`;",
 				],
 			],
 		],
-		PrintStyle::TABLE.'_dates' => [
-			'definition'    => "(
+		PrintStyle::TABLE . '_dates' => [
+			'definition' => "(
 				`id_style` int(10) unsigned NOT NULL,
 				`date_from` date NOT NULL,
 				`date_to` date NOT NULL,
@@ -58,7 +58,7 @@ class DbInstall implements InstallInterface
 			'modifications' => [],
 		],
 		PrintTemplate::TABLE => [
-			'definition'    => "(
+			'definition' => "(
 				`id_template` int(11) unsigned NOT NULL AUTO_INCREMENT,
 				`slug` varchar(50) NOT NULL DEFAULT '',
 				`name` varchar(50) DEFAULT NULL,
@@ -69,16 +69,16 @@ class DbInstall implements InstallInterface
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;",
 			'modifications' => [],
 		],
-		Tip::TABLE           => [
-			'definition'    => "(
+		Tip::TABLE => [
+			'definition' => "(
 				`id_tip` int(11) unsigned NOT NULL AUTO_INCREMENT,
 				`text` text DEFAULT NULL,
 				PRIMARY KEY (`id_tip`)
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;",
 			'modifications' => [],
 		],
-		EventService::TABLE  => [
-			'definition'    => "(
+		EventService::TABLE => [
+			'definition' => "(
 				`id_event` int(11) unsigned NOT NULL AUTO_INCREMENT,
 				`datetime` datetime NOT NULL DEFAULT current_timestamp(),
 				`message` text NOT NULL,
@@ -88,12 +88,12 @@ class DbInstall implements InstallInterface
 			) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=utf8mb4;",
 			'modifications' => [
 				'0.1' => [
-					'ADD `sent_dev` tinyint(1) NOT NULL DEFAULT 0 AFTER `sent`'
-				]
+					'ADD `sent_dev` tinyint(1) NOT NULL DEFAULT 0 AFTER `sent`',
+				],
 			],
 		],
-		Vest::TABLE          => [
-			'definition'    => "(
+		Vest::TABLE => [
+			'definition' => "(
 				`id_vest` int(11) unsigned NOT NULL AUTO_INCREMENT,
 				`vest_num` int(11) NOT NULL,
 				`system` varchar(50) NOT NULL DEFAULT '',
@@ -115,13 +115,17 @@ class DbInstall implements InstallInterface
 	 *
 	 * @return bool
 	 */
-	public static function install(bool $fresh = false) : bool {
+	public static function install(bool $fresh = false): bool {
 		// Load migration files
-		$loader = new MigrationLoader(ROOT.'config/migrations.neon');
+		$loader = new MigrationLoader(ROOT . 'config/migrations.neon');
 		try {
 			$loader->load();
+			$modules = glob(ROOT . 'modules/*/config/migrations.neon');
+			foreach ($modules as $module) {
+				$loader->loadFile($module);
+			}
 		} catch (CyclicDependencyException|FileException|\Nette\Neon\Exception|AssertionException $e) {
-			echo "\e[0;31m".$e->getMessage()."\e[m\n".$e->getTraceAsString()."\n";
+			echo "\e[0;31m" . $e->getMessage() . "\e[m\n" . $e->getTraceAsString() . "\n";
 			return false;
 		}
 
@@ -191,7 +195,7 @@ WHERE `g`.`start` is not null AND `g`.`end` is not null;");
 
 			if (!$fresh) {
 				/** @var array<string,string> $tableVersions */
-				$tableVersions = (array) Info::get('db_version', []);
+				$tableVersions = (array)Info::get('db_version', []);
 
 				// Update all tables if there have been any changes to the tables
 				foreach ($tables as $tableName => $info) {
@@ -205,17 +209,19 @@ WHERE `g`.`start` is not null AND `g`.`end` is not null;");
 					$maxVersion = $currTableVersion;
 					foreach ($info['modifications'] ?? [] as $version => $queries) {
 						// Check versions
-						if (version_compare($currTableVersion, $version) > 0) {
-							// Skip if this version have already been processed
-							continue;
-						}
-						if (version_compare($maxVersion, $version) < 0) {
-							$maxVersion = $version;
+						if ($version !== 'always') {
+							if (version_compare($currTableVersion, $version) > 0) {
+								// Skip if this version have already been processed
+								continue;
+							}
+							if (version_compare($maxVersion, $version) < 0) {
+								$maxVersion = $version;
+							}
 						}
 
 						// Run ALTER TABLE queries for current version
 						foreach ($queries as $query) {
-							echo 'Altering table: '.$tableName.' - '.$query.PHP_EOL;
+							echo 'Altering table: ' . $tableName . ' - ' . $query . PHP_EOL;
 							try {
 								DB::getConnection()->query("ALTER TABLE %n $query;", $tableName);
 							} catch (Exception $e) {
@@ -237,7 +243,7 @@ WHERE `g`.`start` is not null AND `g`.`end` is not null;");
 				}
 			}
 		} catch (Exception $e) {
-			echo "\e[0;31m".$e->getMessage()."\e[m\n".$e->getSql()."\n";
+			echo "\e[0;31m" . $e->getMessage() . "\e[m\n" . $e->getSql() . "\n";
 			return false;
 		}
 
@@ -251,7 +257,7 @@ WHERE `g`.`start` is not null AND `g`.`end` is not null;");
 	 *
 	 * @return string|null
 	 */
-	protected static function getTableNameFromClass(string $className) : ?string {
+	protected static function getTableNameFromClass(string $className): ?string {
 		// Check static cache
 		if (isset(static::$classTables[$className])) {
 			return static::$classTables[$className];

@@ -8,6 +8,7 @@
 {varType array $_COOKIE}
 
 {default string[] $addCss = []}
+{default string[] $addJs = []}
 
 {define containerClasses}
 {/define}
@@ -114,6 +115,7 @@
 </script>
 
 <script src="{getUrl}dist/main.js?v={\Lsr\Core\App::getCacheVersion()}" type="module"></script>
+<script n:foreach="$addJs as $js" src="{getUrl}dist/{$js}?v={\Lsr\Core\App::getCacheVersion()}" type="module"></script>
 {include svgSymbols}
 </body>
 </html>

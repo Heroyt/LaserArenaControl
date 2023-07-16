@@ -1,5 +1,6 @@
 {layout '../../@layout.latte'}
 
+{varType App\DataObjects\NewGame\HookedTemplates $addedTemplates}
 {varType App\Services\FeatureConfig $featureConfig}
 {varType App\GameModels\Vest[] $vests}
 {varType string $colorSystem}
@@ -9,14 +10,15 @@
 {varType App\GameModels\Game\Game|null $loadGame}
 {varType App\Models\MusicMode[] $musicModes}
 {varType App\Models\GameGroup[] $groups}
-{varType App\Models\Table[] $tables}
 {varType string $system}
 
 {import 'helpers/help.latte'}
 {import 'helpers/groups.latte'}
 {import 'helpers/preparedGames.latte'}
-{import 'helpers/tables.latte'}
 {import '../../components/control/scoreDownload.latte'}
+{foreach $addedTemplates->import as $import}
+	{import $import}
+{/foreach}
 
 {define addHead}
 	{var string[][] $colors = App\GameModels\Factory\GameFactory::getAllTeamsColors()}
@@ -70,6 +72,9 @@
 			{include sectionTeams}
 		</section>
 	</form>
+	{foreach $addedTemplates->afterForm as $include}
+		{block $include}{/block}
+	{/foreach}
 	{include scoreDownloadModal}
 	{include userSearchModal}
 	{include help}
@@ -82,10 +87,12 @@
 		{include groups, $order}
 		{do $order++}
 	{/if}
-	{if $featureConfig->isFeatureEnabled('tables')}
-		{include tables, $order}
+
+	{foreach $addedTemplates->offcanvas as $include}
+		{block $include}{/block}
 		{do $order++}
-	{/if}
+	{/foreach}
+
 	<script>
 		const messages = {
 			missingShuffleTeam: '{lang 'Musíte vybrat alespoň 2 týmy.', context: 'errors'}',
@@ -123,7 +130,14 @@
 			<i class="fa-solid fa-save"></i>
 			{lang 'Připravit hru', context: 'game.actions'}
 		</button>
+		{foreach $addedTemplates->controlButtons as $include}
+			{block $include}{/block}
+		{/foreach}
 	</div>
+
+	{foreach $addedTemplates->controlAfterButtons as $include}
+		{block $include}{/block}
+	{/foreach}
 
 	<div class="form-floating">
 		<select class="form-select" id="last-games" aria-label="{lang 'Poslední hry', context: 'game'}"
@@ -132,6 +146,10 @@
 		</select>
 		<label for="last-games">{lang 'Poslední hry', context: 'game'}</label>
 	</div>
+
+	{foreach $addedTemplates->controlAfterGames as $include}
+		{block $include}{/block}
+	{/foreach}
 
 	<div class="btn-group pb-2 pb-sm-0">
 		<a href="{link ['results', 'last', 'print', \Lsr\Core\App::getShortLanguageCode(), 1, \App\GameModels\Game\PrintStyle::getActiveStyleId(), \App\Core\Info::get('default_print_template', 'default'), 'html' => 1, 'noCache' => 1]}"
@@ -150,22 +168,17 @@
 			<i class="fa-solid fa-print"></i> &times; 3
 		</a>
 	</div>
+
+	{foreach $addedTemplates->controlAfterPrint as $include}
+		{block $include}{/block}
+	{/foreach}
 {/define}
 
 {define sectionVests}
 	<div class="d-flex justify-content-end align-items-center">
-		<div n:if="$featureConfig->isFeatureEnabled('tables')" class="form-floating mx-2">
-			<select name="tableSelect" id="table-select" class="form-select">
-				<option value="">{lang 'Bez stolu'}</option>
-				<option n:foreach="$tables as $table" value="{$table->id}">
-					{$table->name}
-					{ifset $table->group}
-						- {lang 'Obsazený'}
-					{/ifset}
-				</option>
-			</select>
-			<label for="table-select">{lang 'Stůl'}</label>
-		</div>
+		{foreach $addedTemplates->vestsControl as $include}
+			{block $include}{/block}
+		{/foreach}
 		<div n:if="$featureConfig->isFeatureEnabled('groups')" class="form-floating mx-2">
 			<select name="groupSelect" id="group-select" class="form-select">
 				<option value="">{lang 'Bez skupiny'}</option>

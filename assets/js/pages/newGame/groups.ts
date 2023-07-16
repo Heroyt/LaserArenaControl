@@ -113,6 +113,11 @@ export default class NewGameGroup {
 				group.querySelectorAll('.group-teams .group-player-check:checked') as NodeListOf<HTMLInputElement>;
 
 			// Prepare data for import
+			const groupData: GameGroupData = {
+				id,
+				name: groupName.value,
+				active: true,
+			}
 			const data: GameData = {
 				playerCount: players.length,
 				mode: {
@@ -121,23 +126,8 @@ export default class NewGameGroup {
 				players: {},
 				teams: {},
 				music: {id: parseInt(this.game.$musicMode.value)},
-				group: {
-					id,
-					name: groupName.value,
-					active: true,
-				}
+				group: groupData
 			};
-
-			if (group.dataset.table && group.dataset.tablename) {
-				const table = parseInt(group.dataset.table);
-				const tableName = group.dataset.tablename;
-				if (!isNaN(table)) {
-					data.table = {
-						id: table,
-						name: tableName,
-					}
-				}
-			}
 
 			const vests: { [index: number | string]: boolean } = {};
 			this.game.players.forEach(player => {
@@ -211,6 +201,8 @@ export default class NewGameGroup {
 			});
 
 			this.game.import(data);
+
+			document.dispatchEvent(new CustomEvent('game-group-loaded', {detail: groupData}));
 		});
 
 		this.initGroupTeamChecks(group);

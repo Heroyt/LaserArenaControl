@@ -68,8 +68,6 @@ export default function initNewGamePage() {
 	const gameGroupTemplate = document.getElementById('new-game-group') as HTMLTemplateElement | undefined;
 	const gameGroupsSelect = document.getElementById('group-select') as HTMLSelectElement | undefined;
 
-	const gameTablesSelect = document.getElementById('table-select') as HTMLSelectElement | undefined;
-
 	if (isFeatureEnabled('gates')) {
 		initGatesControls();
 	}
@@ -137,9 +135,6 @@ export default function initNewGamePage() {
 
 	document.addEventListener('clear-all', () => {
 		lastGamesSelect.value = '';
-		if (gameTablesSelect) {
-			gameTablesSelect.value = '';
-		}
 		if (gameGroupsSelect) {
 			gameGroupsSelect.value = '';
 		}
@@ -167,15 +162,7 @@ export default function initNewGamePage() {
 				const groups = new module.default(game, gameGroupsWrapper, gameGroupTemplate, gameGroupsSelect);
 				EventServerInstance.addEventListener('game-imported', groups.updateGroups);
 
-				if (isFeatureEnabled('tables')) {
-					import(
-						/* webpackChunkName: "newGame_tables" */
-						'./tables'
-						)
-						.then(module => {
-							new module.default(groups, gameTablesSelect);
-						});
-				}
+				document.dispatchEvent(new CustomEvent('groups-module-loaded', {detail: groups}));
 			});
 	}
 
@@ -187,7 +174,7 @@ export default function initNewGamePage() {
 			.then(module => {
 				const preparedGamesWrapper = document.getElementById('game-preparedGames') as HTMLDivElement;
 				const preparedGamesBtn = document.getElementById('prepareGame') as HTMLButtonElement;
-				const preparedGames = new module.default(game, preparedGamesWrapper, preparedGamesBtn);
+				new module.default(game, preparedGamesWrapper, preparedGamesBtn);
 			});
 	}
 

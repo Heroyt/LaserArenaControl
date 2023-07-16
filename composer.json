@@ -7,6 +7,10 @@
 		{
 			"type": "composer",
 			"url": "https://packages.laserliga.cz"
+		},
+		{
+			"type": "path",
+			"url": "./modules/*"
 		}
 	],
 	"scripts": {
@@ -47,7 +51,8 @@
 		"lsr/logging": "^0.2",
 		"lsr/request": "^0.2",
 		"ext-zlib": "*",
-		"heroyt/tournament-generator": "^0.5.1"
+		"heroyt/tournament-generator": "^0.5.1",
+		"laser-arena-control/tables_module": "@dev"
 	},
 	"require-dev": {
 		"roave/security-advisories": "dev-latest",

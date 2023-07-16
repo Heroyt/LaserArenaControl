@@ -33,6 +33,50 @@ const resultFiles = fs.readdirSync(path.resolve(__dirname, 'assets/scss/results/
 		]
 	});
 
+const moduleFiles = fs.readdirSync(path.resolve(__dirname, 'modules/'))
+	.map(module => {
+		const assetPath = path.resolve(__dirname, 'modules/' + module + '/assets');
+		console.log('path', assetPath);
+		const moduleAssets = {};
+		let count = 0;
+		if (!fs.existsSync(assetPath)) return [];
+		const assets = fs.readdirSync(assetPath);
+		console.log('assets', assets);
+		if (assets.includes('js')) {
+			fs.readdirSync(assetPath + "/js")
+				.forEach(file => {
+					if ((file.endsWith('.js') || file.endsWith('.ts')) && !file.startsWith('_')) {
+						const name = file.replace('.js', '').replace('.ts', '');
+						if (!moduleAssets[name]) {
+							moduleAssets[name] = [];
+						}
+						moduleAssets[name].push(`./modules/${module}/assets/js/${file}`);
+						count++;
+					}
+				});
+		}
+		if (assets.includes('css')) {
+			fs.readdirSync(assetPath + "/css")
+				.forEach(file => {
+					if ((file.endsWith('.css') || file.endsWith('.scss')) && !file.startsWith('_')) {
+						const name = file.replace('.css', '').replace('.scss', '');
+						if (!moduleAssets[name]) {
+							moduleAssets[name] = [];
+						}
+						moduleAssets[name].push(`./modules/${module}/assets/css/${file}`);
+						count++;
+					}
+				});
+		}
+
+		if (count > 0) {
+			return [module, moduleAssets];
+		}
+		return [];
+	});
+
+console.log('modules', moduleFiles);
+
 let entry = {
 	main: [
 		'./assets/js/main.ts',
@@ -46,6 +90,17 @@ files.forEach(([name, data]) => {
 resultFiles.forEach(([name, data]) => {
 	entry[name] = data;
 });
+
+moduleFiles.forEach(module => {
+	if (module.length < 2) return;
+	const [moduleName, files] = module;
+	const name = 'modules/' + moduleName.toLowerCase();
+	Object.entries(files).forEach(([fileName, data]) => {
+		entry[name + '/' + fileName] = data;
+	})
+})
+
+console.log(entry);
 
 module.exports = {
 	mode: isDevelopment ? 'development' : 'production',

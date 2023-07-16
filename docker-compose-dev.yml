@@ -23,7 +23,7 @@ services:
             - backend
     php:
         restart: always
-        image: "heroyt/laser-arena-control:nginx-latest"
+        image: "heroyt/laser-arena-control:dev-nginx-latest"
         working_dir: /var/www/
         ports:
             - "9999:9999"
@@ -74,6 +74,16 @@ services:
             - backend
         ports:
             - "3000:3000"
+    redis:
+        restart: always
+        image: redis/redis-stack-server:latest
+        ports:
+            - "6379:6379"
+        networks:
+            - backend
+            - frontend
+        volumes:
+            - /Users/Heroyt/Projects/LaserArenaControl/docker/redis/data:/data
 volumes:
     mariadb-dev:
 networks:

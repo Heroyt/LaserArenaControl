@@ -1,3 +1,6 @@
 [submodule "src/GameModels"]
 	path = src/GameModels
 	url = https://github.com/Heroyt/LACModels
+[submodule "modules/Core"]
+	path = modules/Core
+	url = https://github.com/LaserLiga/lac_modules_core.git

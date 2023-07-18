@@ -17,14 +17,9 @@ use App\GameModels\Game\Timing;
 use App\Models\Auth\Player as User;
 use App\Models\GameGroup;
 use App\Models\MusicMode;
-use App\Models\Tournament\Game as TournamentGame;
-use App\Models\Tournament\Player as TournamentPlayer;
-use App\Models\Tournament\Tournament;
-use App\Services\TournamentProvider;
 use App\Tools\AbstractResultsParser;
 use DateTime;
 use JsonException;
-use Lsr\Core\App;
 use Lsr\Core\Exceptions\ModelNotFoundException;
 use Lsr\Core\Exceptions\ValidationException;
 use Lsr\Logging\Exceptions\DirectoryCreationException;
@@ -489,51 +484,6 @@ class ResultsParser extends AbstractResultsParser
 					$game->music = MusicMode::get((int)$meta['music']);
 				} catch (ModelNotFoundException) {
 					// Ignore
-				}
-			}
-
-			if (!empty($meta['tournament'])) {
-				try {
-					$tournament = Tournament::get((int)$meta['tournament']);
-					$group = $tournament->getGroup();
-					$meta['group'] = $group->id;
-					$game->tournamentGame = TournamentGame::get((int)$meta['tournament_game']);
-
-					$win = $game->mode?->getWin($game);
-
-					foreach ($game->getTeams() as $team) {
-						foreach ($game->tournamentGame->teams as $gameTeam) {
-							if (((int)($meta['t' . $team->color . 'tournament'] ?? 0)) !== $gameTeam->id) {
-								continue;
-							}
-							$gameTeam->score = $team->score;
-							$gameTeam->position = $team->position;
-							if (!isset($win)) {
-								$gameTeam->points = $tournament->points->draw;
-							}
-							else if ($win === $team) {
-								$gameTeam->points = $tournament->points->win;
-							}
-							else {
-								$gameTeam->points = $tournament->points->loss;
-							}
-							if (isset($gameTeam->team)) {
-								$team->tournamentTeam = $gameTeam->team;
-							}
-						}
-					}
-
-					foreach ($game->getPlayers() as $player) {
-						if (empty($meta['p' . $player->vest . 'tournament'])) {
-							continue;
-						}
-						$player->tournamentPlayer = TournamentPlayer::get((int)$meta['p' . $player->vest . 'tournament']);
-					}
-
-					// Recalculate points for all tournament teams
-					$tournamentProvider = App::getServiceByType(TournamentProvider::class);
-					$tournamentProvider->recalcTeamPoints($tournament);
-				} catch (ModelNotFoundException) {
 				}
 			}
 

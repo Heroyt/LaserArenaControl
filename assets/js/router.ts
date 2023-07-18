@@ -82,14 +82,6 @@ export default function route(pageInfo: PageInfo): void {
 				module.default();
 			});
 			break;
-		case 'tournament-gate':
-			import(
-				/* webpackChunkName: "tournamentGate" */
-				'./pages/tournaments/gate'
-				).then(module => {
-				module.default();
-			});
-			break;
 		case 'dashboard':
 			import(
 				/* webpackChunkName: "dashboard" */
@@ -110,23 +102,6 @@ export default function route(pageInfo: PageInfo): void {
 			import(
 				/* webpackChunkName: "modesSettings" */
 				'./pages/settings/modes'
-				).then(module => {
-				module.default();
-			});
-			break;
-		case 'tournament-rozlos':
-			import(
-				/* webpackChunkName: "tournamentRozlos" */
-				'./pages/tournaments/rozlos'
-				).then(module => {
-				module.default();
-			});
-			break;
-		case 'tournament-play':
-		case 'tournament-play-game':
-			import(
-				/* webpackChunkName: "tournamentPlay" */
-				'./pages/tournaments/play'
 				).then(module => {
 				module.default();
 			});

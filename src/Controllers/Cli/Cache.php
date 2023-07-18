@@ -4,6 +4,8 @@ namespace App\Controllers\Cli;
 
 use App\Cli\Colors;
 use App\Cli\Enums\ForegroundColors;
+use App\Core\Info;
+use App\GameModels\Factory\GameFactory;
 use Lsr\Core\CliController;
 use Lsr\Core\Requests\CliRequest;
 use Lsr\Core\Routing\Attributes\Cli;
@@ -49,13 +51,26 @@ class Cache extends CliController
 	}
 
 	#[Cli('cache/clean/latte', description: 'Clean latte cache')]
-	public function cleanLatte() : never {
+	public function cleanLatte(): never {
 		/** @var string[] $files */
-		$files = glob(TMP_DIR.'latte/*');
+		$files = glob(TMP_DIR . 'latte/*');
 		foreach ($files as $file) {
 			unlink($file);
 		}
-		echo Colors::color(ForegroundColors::GREEN).sprintf('Successfully removed %d files', count($files)).Colors::reset().PHP_EOL;
+		echo Colors::color(ForegroundColors::GREEN) . sprintf('Successfully removed %d files', count($files)) . Colors::reset() . PHP_EOL;
+		exit(0);
+	}
+
+	#[Cli('cache/clean/info', description: 'Clean temporary rows from the Info key-value store.')]
+	public function cleanInfo(): never {
+		foreach (GameFactory::getSupportedSystems() as $system) {
+			Info::set($system . '-game-loaded', null);
+			Info::set($system . '-game-started', null);
+		}
+
+		Info::set('gate-game', null);
+		Info::set('gate-time', 0);
+		echo Colors::color(ForegroundColors::GREEN) . 'Cleared values.' . Colors::reset() . PHP_EOL;
 		exit(0);
 	}
 

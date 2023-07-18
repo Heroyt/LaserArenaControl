@@ -10,7 +10,6 @@ use App\Controllers\Api\Games;
 use App\Controllers\Api\Logs;
 use App\Controllers\Api\Mount;
 use App\Controllers\Api\Results;
-use App\Controllers\Api\Tournaments;
 use App\Controllers\Api\Updater;
 use Lsr\Core\Routing\Route;
 
@@ -56,11 +55,4 @@ Route::group('/api')
 	->post('/sync/{limit}', [Games::class, 'syncGames'])
 	->get('/{code}', [Games::class, 'getGame'])
 	->post('/simulate', [Games::class, 'simulate'])
-	->endGroup()
-	->group('/tournament')
-	->get('/', [Tournaments::class, 'getAll'])
-	->get('/{id}', [Tournaments::class, 'get'])
-	->post('/sync', [Tournaments::class, 'sync'])
-	->post('/{id}/sync/games', [Tournaments::class, 'syncGames'])
-	->post('/{id}/recalc', [Tournaments::class, 'recalculatePoints'])
 	->endGroup();

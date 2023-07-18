@@ -39,7 +39,7 @@
 		"nette/http": "^3.1",
 		"nette/security": "^3.1",
 		"nette/utils": "^3.2",
-		"php": "^8.1",
+		"php": "^8.2",
 		"psr/log": "^3.0",
 		"tracy/tracy": "^2.9",
 		"endroid/qr-code": "^4.5",
@@ -52,7 +52,8 @@
 		"lsr/request": "^0.2",
 		"ext-zlib": "*",
 		"heroyt/tournament-generator": "^0.5.1",
-		"laser-arena-control/tables_module": "@dev"
+		"laser-arena-control/tables_module": "@dev",
+		"laser-arena-control/tournament_module": "@dev"
 	},
 	"require-dev": {
 		"roave/security-advisories": "dev-latest",

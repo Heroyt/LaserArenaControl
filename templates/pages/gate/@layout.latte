@@ -6,6 +6,9 @@
 {varType App\GameModels\Game\Game $game}
 {varType int|null $reloadTimer}
 
+{default string[] $addCss = []}
+{default string[] $addJs = []}
+
 {define containerClasses}
 {/define}
 {define content}
@@ -53,6 +56,8 @@
 		<title>{$page->getTitle()}</title>
 		<link rel="stylesheet" href="{getUrl}dist/main.css?v={\Lsr\Core\App::getCacheVersion()}">
 		<link rel="stylesheet" href="{getUrl}dist/pages/gate.css?v={\Lsr\Core\App::getCacheVersion()}">
+		<link n:foreach="$addCss as $file" rel="stylesheet"
+										   href="{getUrl}dist/{$file}?v={\Lsr\Core\App::getCacheVersion()}">
 		{\Tracy\Debugger::renderLoader()|noescape}
 		{var string[][] $colors = App\GameModels\Factory\GameFactory::getAllTeamsColors()}
 		<style>
@@ -60,25 +65,25 @@
 				--gate-background: url('{\App\Services\GateStyleService::getGateBackgroundUrl()|noescape}');
 			{foreach $colors as $system => $systemColors} {foreach $systemColors as $key => $color} {var string $varName1 = '--team-'.$system.'-'.$key} {var string $varName2 = '--team-'.$system.'-'.$key.'-text'} {$varName1}: {$color|noescape};
 			{$varName2}:{\App\Tools\Color::getFontColor($color)|noescape};
-				{/foreach} {/foreach}
-				}
+			{/foreach} {/foreach}
+			}
 
-				{foreach $colors as $system => $systemColors}
-				{foreach $systemColors as $key => $color}
-				.bg-team-{$system}-{$key} {
-					--bg-color: var(--team-{$system}-{$key});
-					--bs-table-bg: var(--team-{$system}-{$key});
-					--text-color: var(--team-{$system}-{$key}-text);
-					background-color: var(--team-{$system}-{$key});
-					color: var(--team-{$system}-{$key}-text);
-				}
+			{foreach $colors as $system => $systemColors}
+			{foreach $systemColors as $key => $color}
+			.bg-team-{$system}-{$key} {
+				--bg-color: var(--team-{$system}-{$key});
+				--bs-table-bg: var(--team-{$system}-{$key});
+				--text-color: var(--team-{$system}-{$key}-text);
+				background-color: var(--team-{$system}-{$key});
+				color: var(--team-{$system}-{$key}-text);
+			}
 
-				.text-team-{$system}-{$key} {
-					color: var(--team-{$system}-{$key});
-				}
+			.text-team-{$system}-{$key} {
+				color: var(--team-{$system}-{$key});
+			}
 
-				{/foreach}
-				{/foreach}
+			{/foreach}
+			{/foreach}
 		</style>
 		{$style->getCssClasses()|noescape}
 	</head>
@@ -128,6 +133,8 @@
 	<script src="{getUrl}dist/bootstrap.js?{\Lsr\Core\App::getCacheVersion()}"></script>
 	<script src="{getUrl}dist/vendors.js?{\Lsr\Core\App::getCacheVersion()}"></script>
 	<script src="{getUrl}dist/main.js?{\Lsr\Core\App::getCacheVersion()}"></script>
+	<script n:foreach="$addJs as $js" src="{getUrl}dist/{$js}?v={\Lsr\Core\App::getCacheVersion()}"
+									  type="module"></script>
 	{include svgSymbols}
 	</body>
 	</html>

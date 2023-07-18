@@ -31,8 +31,6 @@ class SyncService
 		/** @var Row[] $gameRows */
 		$gameRows = GameFactory::queryGames(true)->where('[sync] = 0')->limit($limit)->orderBy('start')->desc()->fetchAll(cache: false);
 
-		$tournaments = [];
-
 		if (empty($gameRows)) {
 			if (PHP_SAPI === 'cli') {
 				echo 'No games to synchronize.' . PHP_EOL;

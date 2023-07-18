@@ -18,6 +18,7 @@ use GuzzleHttp\Middleware;
 use GuzzleHttp\Psr7\Utils;
 use InvalidArgumentException;
 use JsonException;
+use LAC\Modules\Core\LigaApiExtensionInterface;
 use Lsr\Core\App;
 use Lsr\Core\Exceptions\ValidationException;
 use Lsr\Logging\Logger;
@@ -33,6 +34,9 @@ class LigaApi
 
 	public Client $client;
 	private Logger $logger;
+
+	/** @var LigaApiExtensionInterface[] */
+	private array $extensions;
 
 	public function __construct(
 		public string $url,
@@ -110,6 +114,10 @@ class LigaApi
 			$this->makeClient();
 		}
 
+		foreach ($this->getExtensions() as $extension) {
+			$extension->beforeGameSync($system, $games);
+		}
+
 		$playerProvider = App::getContainer()->getByType(PlayerProvider::class);
 		if (!isset($playerProvider)) {
 			$playerProvider = new PlayerProvider($this);
@@ -117,7 +125,6 @@ class LigaApi
 
 		// Validate each game
 		$gamesData = [];
-		$tournaments = [];
 		foreach ($games as $key => $game) {
 			if ($game::SYSTEM !== $system) {
 				throw new InvalidArgumentException('Game #' . $key . ' (code: ' . $game->code . ') is not an ' . $system . ' game.');
@@ -150,11 +157,11 @@ class LigaApi
 				} catch (GuzzleException|ValidationException|JsonException) {
 				}
 
-				$gamesData[] = $game;
-				if ($game->getTournamentGame() !== null) {
-					$tournament = $game->getTournamentGame()->tournament;
-					$tournaments[$tournament->id] = $tournament;
+				foreach ($this->getExtensions() as $extension) {
+					$extension->processGameBeforeSync($game);
 				}
+
+				$gamesData[] = $game;
 			}
 		}
 
@@ -181,16 +188,8 @@ class LigaApi
 			return false;
 		}
 
-		if (!empty($tournaments)) {
-			bdump($tournaments);
-			$tournamentProvider = App::getServiceByType(TournamentProvider::class);
-			foreach ($tournaments as $tournament) {
-				try {
-					$tournamentProvider->syncGames($tournament);
-				} catch (JsonException|ValidationException $e) {
-					bdump($e);
-				}
-			}
+		foreach ($this->getExtensions() as $extension) {
+			$extension->afterGameSync($system, $games);
 		}
 
 		return true;
@@ -404,6 +403,20 @@ class LigaApi
 			$this->makeClient();
 		}
 		return $this->client;
+	}
+
+	/**
+	 * @return LigaApiExtensionInterface[]
+	 */
+	public function getExtensions(): array {
+		if (!isset($this->extensions)) {
+			$this->extensions = [];
+			foreach (App::getContainer()->findByType(LigaApiExtensionInterface::class) as $name) {
+				// @phpstan-ignore-next-line
+				$this->extensions[] = App::getService($name);
+			}
+		}
+		return $this->extensions;
 	}
 
 }

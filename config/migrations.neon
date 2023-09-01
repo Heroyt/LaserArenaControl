@@ -204,7 +204,7 @@ tables:
 			`position` int(10) unsigned NOT NULL DEFAULT 0,
 			`name` varchar(20) DEFAULT NULL,
 			PRIMARY KEY (`id_team`),
-			KEY `id_game` (`id_game`),
+			KEY `id_game` (`id_game`)
 		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 		'''
 		modifications:
@@ -248,7 +248,7 @@ tables:
 			KEY `id_team` (`id_team`),
 			CONSTRAINT `evo5_players_ibfk_1` FOREIGN KEY (`id_game`) REFERENCES `evo5_games` (`id_game`) ON DELETE CASCADE ON UPDATE CASCADE,
 			CONSTRAINT `evo5_players_ibfk_2` FOREIGN KEY (`id_team`) REFERENCES `evo5_teams` (`id_team`) ON DELETE SET NULL ON UPDATE CASCADE,
-			CONSTRAINT `evo5_players_ibfk_3` FOREIGN KEY (`id_user`) REFERENCES `players` (`id_user`) ON DELETE SET NULL ON UPDATE CASCADE,
+			CONSTRAINT `evo5_players_ibfk_3` FOREIGN KEY (`id_user`) REFERENCES `players` (`id_user`) ON DELETE SET NULL ON UPDATE CASCADE
 		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 		'''
 		modifications:

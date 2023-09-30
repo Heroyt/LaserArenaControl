@@ -19,11 +19,11 @@ ENV LAC_MODELS_VERSION="0.4.3"
 
 # Initialize git and download project
 RUN git init
+RUN mkdir -p modules
 RUN git remote add origin https://github.com/Heroyt/LaserArenaControl.git
 RUN git fetch --all --tags
 RUN git checkout -t origin/master
 RUN git config pull.ff only --autostash
-RUN mkdir -p modules
 RUN git pull --recurse-submodules=yes
 RUN git submodule init
 RUN git submodule update
@@ -54,7 +54,10 @@ RUN crontab cron.txt
 RUN cron
 
 # Install
-RUN composer build
+ENV COMPOSER_ALLOW_SUPERUSER=1
+RUN composer dump-autoload
+RUN npm install
+RUN npm run build
 
 RUN chmod 0777 -R logs
 RUN chmod 0777 -R temp

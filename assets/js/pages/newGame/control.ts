@@ -19,8 +19,8 @@ export default class Control {
 	private downloadModal: Modal;
 	private retryDownloadBtn: HTMLButtonElement;
 	private cancelDownloadBtn: HTMLButtonElement;
-	private updateStatusInterval: NodeJS.Timer;
-	private resultsLoadRetryTimer: NodeJS.Timeout;
+    private updateStatusInterval: NodeJS.Timer | number;
+    private resultsLoadRetryTimer: NodeJS.Timeout | number;
 
 	constructor(loadBtn: HTMLButtonElement, startBtn: HTMLButtonElement, stopBtn: HTMLButtonElement) {
 		this.loadBtn = loadBtn;

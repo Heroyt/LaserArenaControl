@@ -486,7 +486,7 @@ export function initAutoSaveForm() {
 	});
 }
 
-let timerInterval: NodeJS.Timer | null = null;
+let timerInterval: NodeJS.Timer | null | number = null;
 
 /**
  * Initialize a timer displaying the remaining game time

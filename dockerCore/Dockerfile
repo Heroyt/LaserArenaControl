@@ -1,5 +1,5 @@
 FROM node:19-slim AS node_base
-FROM php:8.1-apache as setup
+FROM php:8.2-apache as setup
 
 COPY --from=node_base / /
 

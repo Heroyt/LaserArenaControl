@@ -23,6 +23,7 @@ RUN git remote add origin https://github.com/Heroyt/LaserArenaControl.git
 RUN git fetch --all --tags
 RUN git checkout -t origin/master
 RUN git config pull.ff only --autostash
+RUN mkdir -p modules
 RUN git pull --recurse-submodules=yes
 RUN git submodule init
 RUN git submodule update

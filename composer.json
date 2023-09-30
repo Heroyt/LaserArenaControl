@@ -51,7 +51,7 @@
 		"lsr/logging": "^0.2",
 		"lsr/request": "^0.2",
 		"ext-zlib": "*",
-		"heroyt/tournament-generator": "^0.5.1",
+		"heroyt/tournament-generator": "^0.5.4",
 		"laser-arena-control/tables_module": "@dev",
 		"laser-arena-control/tournament_module": "@dev"
 	},

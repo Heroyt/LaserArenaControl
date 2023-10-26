@@ -63,8 +63,6 @@ export function loadContent(path: string, reloadTimeout: { timeout: null | NodeJ
     const contentNew = document.createElement('div');
     axios.get(path)
         .then((response: AxiosResponse<string>) => {
-            tips = tipsDefault;
-            tipsHighlights = false;
             clearTimeout(reloadTimeout.timeout);
             if (response.headers['x-reload-time']) {
                 const time = parseInt(response.headers['x-reload-time']);
@@ -88,6 +86,9 @@ export function loadContent(path: string, reloadTimeout: { timeout: null | NodeJ
                     return; // Do not animate results in if the game is the same
                 }
             }
+
+            tips = tipsDefault;
+            tipsHighlights = false;
 
             // Animate the new content in
             contentNew.classList.add('content', 'in');

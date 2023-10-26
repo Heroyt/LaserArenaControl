@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: Czech\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2023-03-26 17:39\n"
+"PO-Revision-Date: 2023-10-26 10:09\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=4; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 3;\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -63,23 +63,18 @@ msgctxt "debugPanel"
 msgid "Takes"
 msgstr "Trvání"
 
-# /templates/../vendor/lsr/helpers/templates/Translation/tab.latte:27
-# /templates/../vendor/lsr/helpers/templates/Translation/panel.latte:3
 msgctxt "debugPanel"
 msgid "Translations"
 msgstr "Překlady"
 
-# /templates/../vendor/lsr/helpers/templates/Translation/panel.latte:6
 msgctxt "debugPanel"
 msgid "Language"
 msgstr "Jazyk"
 
-# /templates/../vendor/lsr/helpers/templates/Translation/panel.latte:10
 msgctxt "debugPanel"
 msgid "HTTP header"
 msgstr "HTTP hlavička"
 
-# /templates/../vendor/lsr/helpers/templates/Translation/panel.latte:16
 msgctxt "debugPanel"
 msgid "Translated strings"
 msgstr "Přeložené řetězce"
@@ -1372,7 +1367,6 @@ msgctxt "debugPanel"
 msgid "Invalid cache class"
 msgstr "Neplatná třída mezipaměti"
 
-# /templates/../vendor/lsr/helpers/templates/Caching/tab.latte:28
 msgctxt "debugPanel"
 msgid "%d call"
 msgid_plural "%d calls"
@@ -2409,4 +2403,233 @@ msgstr "Nastavit výsledkovou tabuli na souhrn"
 
 msgid "Obsazený"
 msgstr "Obsazený"
+
+msgid "Plánované turnaje"
+msgstr ""
+
+msgid "Turnaj"
+msgstr ""
+
+msgid "Rozlosování"
+msgstr ""
+
+msgid "Typ turnaje"
+msgstr ""
+
+msgctxt "tournament.presets"
+msgid "Každý s každým"
+msgstr ""
+
+msgctxt "tournament.presets"
+msgid "Každý s každým na poloviny"
+msgstr ""
+
+msgid "Délka hry"
+msgstr ""
+
+msgid "v minutách"
+msgstr ""
+
+msgid "Přestávka mezi hrami"
+msgstr ""
+
+msgid "Předpokládaná délka turnaje"
+msgstr ""
+
+msgid "Počet her na tým"
+msgstr ""
+
+msgid "Čas ve hře na tým"
+msgstr ""
+
+msgid "Týmy"
+msgstr ""
+
+msgid "Zpět"
+msgstr ""
+
+msgid "Synchronizovat"
+msgstr ""
+
+msgid "Synchronizováno"
+msgstr ""
+
+msgid "Počet her"
+msgstr ""
+
+msgid "Čas na začátku turnaje"
+msgstr ""
+
+msgid "Odeslat"
+msgstr ""
+
+msgid "Kvalifikace"
+msgstr ""
+
+msgid "Finále"
+msgstr ""
+
+msgid "Vygenerováno"
+msgstr ""
+
+msgid "Turnaj už byl rozlosován"
+msgstr ""
+
+msgid "Začátek"
+msgstr ""
+
+msgid "Domácí"
+msgstr ""
+
+msgid "Hosté"
+msgstr ""
+
+msgid "Tým %s"
+msgstr ""
+
+msgid "Smazat rozlosování"
+msgstr ""
+
+msgid "Rozlosování bylo smazáno"
+msgstr ""
+
+msgid "Tým ze skupiny: %s"
+msgstr ""
+
+msgid "Tým #%d ze skupiny: %s"
+msgstr ""
+
+msgid "%d. tým ze skupiny: %s"
+msgstr ""
+
+msgid "Hra"
+msgstr ""
+
+msgid "Žádná"
+msgstr ""
+
+msgid "Další hra"
+msgstr ""
+
+msgid "Předchozí hra"
+msgstr ""
+
+msgid "Hrát"
+msgstr ""
+
+msgid "Vítěz"
+msgstr ""
+
+msgid "Bonus/Penalizace"
+msgstr ""
+
+msgctxt "game.actions"
+msgid "Opakovat hru"
+msgstr ""
+
+msgid "Opravdu chcete hru opakovat?"
+msgstr ""
+
+msgid "Postoupeno týmů:"
+msgstr ""
+
+msgid "Postoupit týmy"
+msgstr ""
+
+msgid "Postoupeno skupin:"
+msgstr ""
+
+msgid "Všechny hry"
+msgstr ""
+
+msgctxt "gate"
+msgid "Výsledky turnaje"
+msgstr ""
+
+msgid "Tým"
+msgstr ""
+
+msgid "Výhry"
+msgstr ""
+
+msgid "Remízy"
+msgstr ""
+
+msgid "Prohry"
+msgstr ""
+
+msgid "Body"
+msgstr ""
+
+msgid "Skóre"
+msgstr ""
+
+msgid "Celkové"
+msgstr ""
+
+msgid "Individální"
+msgstr ""
+
+msgid "Nejlepší hráči"
+msgstr ""
+
+msgid "Hráč"
+msgstr ""
+
+msgid "Nejpřesnější hráči"
+msgstr ""
+
+msgid "Největší mimoňi"
+msgstr ""
+
+msgid "Výstřely"
+msgstr ""
+
+msgid "Zabijáci vlastních"
+msgstr ""
+
+msgid "Turnaje"
+msgstr ""
+
+msgid "Seznam"
+msgstr ""
+
+msgid "Výsledková tabule"
+msgstr ""
+
+msgid "Připravené hry"
+msgstr ""
+
+msgid "Připravené"
+msgstr ""
+
+msgctxt "game.actions"
+msgid "Připravit hru"
+msgstr ""
+
+msgctxt "newGame.preparedGames.actions"
+msgid "Nahrát"
+msgstr ""
+
+msgid "Smazat vše"
+msgstr ""
+
+msgid "Nebyla nalezena žádná hra"
+msgstr ""
+
+msgctxt "tournament.presets"
+msgid "Každý s každým na poloviny - 10 týmů"
+msgstr ""
+
+msgid "Odehrané turnaje"
+msgstr ""
+
+msgid "Odehráno her:"
+msgstr ""
+
+msgid "Počet vzájemných her"
+msgstr ""
+
+msgid "Dostupné vesty"
+msgstr ""
 

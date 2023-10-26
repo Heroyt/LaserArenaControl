@@ -8,6 +8,7 @@
 use App\Controllers\GamesList;
 use App\Controllers\Gate;
 use App\Controllers\Lang;
+use App\Controllers\LaserLigaController;
 use App\Controllers\NewGame;
 use App\Controllers\PlayersController;
 use App\Controllers\Results;
@@ -66,3 +67,10 @@ Route::group('/players')
 	->get('/sync/{code}', [PlayersController::class, 'syncPlayer'])
 	->group('/public')
 	->get('/find', [PlayersController::class, 'findPublic']);
+
+Route::group('laserliga')
+     ->group('games')
+     ->group('{code}')
+     ->get('highlights', [LaserLigaController::class, 'highlights'])
+     ->endGroup()
+     ->endGroup();

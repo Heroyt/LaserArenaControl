@@ -1,4 +1,5 @@
 @import 'gate/animations';
+@import '../components/titles';
 
 %players-teams {
 	display: flex;
@@ -69,6 +70,10 @@
 				animation: tip-slide-in 1s ease;
 			}
 		}
+
+    .player-name {
+      color: var(--bs-primary);
+    }
 	}
 
 	main {
@@ -323,6 +328,11 @@
 					}
 				}
 			}
+
+      .player-avatar {
+        height: 100%;
+        max-height: 4rem;
+      }
 
 			.rank-name {
 				display: flex;

@@ -12,7 +12,7 @@
 {/define}
 
 {define content}
-	<section class="info">
+    <section class="info" data-game="{$game->code}">
 		{include partInfo}
 	</section>
 	<section class="players">
@@ -38,6 +38,9 @@
 		<div class="position" data-value="{$iterator->counter}">
 			{$iterator->counter}.
 		</div>
+        {ifset $player->user}
+            <img src="https://laserliga.cz/user/{$player->user->getCode()}/avatar" alt="Avatar" class="player-avatar"/>
+        {/ifset}
 		<div class="rank-name">
 			<div class="name text-team-{$game::SYSTEM}-{$player->getTeamColor()}">
 				{$player->name}
@@ -51,6 +54,9 @@
 				{/if}
 			</div>
 		</div>
+        {ifset $player->user}
+            <img src="https://laserliga.cz/user/{$player->user->getCode()}/title/svg" alt="title" class="title"/>
+        {/ifset}
 		<div class="score text-end {switch $iterator->counter}
 			{case 1} text-gold
 			{case 2} text-dark-silver

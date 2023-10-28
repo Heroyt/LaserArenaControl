@@ -424,6 +424,12 @@ export function tipsRotations() {
         const tipActive = tipWrapper.querySelectorAll('.content') as NodeListOf<HTMLSpanElement>;
         const tipNew = document.createElement('span');
         tipNew.classList.add('content', 'next');
+        if (!tips[counter]) {
+            if (tips.length === 0) {
+                tips = tipsDefault;
+            }
+            counter = counter / tips.length;
+        }
         tipNew.innerHTML = tips[counter];
         tipWrapper.appendChild(tipNew);
         tipActive.forEach(el => {

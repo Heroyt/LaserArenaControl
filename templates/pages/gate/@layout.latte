@@ -124,6 +124,7 @@
 		const prettyUrl = {\Lsr\Core\App::isPrettyUrl()};
 		const webSocketEventURI = 'ws://' + window.location.hostname + ':' + {\App\Services\EventService::getEventPort()};
         let tips = {\App\GameModels\Tip::shuffledFormatted()};
+        const tipsDefault = tips;
 		let reloadTimer = {ifset $reloadTimer}{$reloadTimer}{else}-1{/ifset};
 		const timerOffset = {\App\Core\Info::get('timer-offset', 0)};
 	</script>

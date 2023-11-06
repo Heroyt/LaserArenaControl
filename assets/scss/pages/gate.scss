@@ -3,8 +3,10 @@
 
 %players-teams {
 	display: flex;
+  position: relative;
 	flex-direction: column;
 	padding-bottom: 2.5rem;
+  width: 100%;
 }
 
 %gate-wrapper {
@@ -166,8 +168,6 @@
 				@extend %players-teams;
 				grid-area: players;
 				justify-content: flex-end;
-				position: relative;
-				width: 100%;
 			}
 
 			.teams {
@@ -237,6 +237,10 @@
 				}
 
 				&.animating {
+          position: absolute;
+          top: 0;
+          transition: top 200ms ease-in-out, height 200ms linear;
+
 					.crown {
 						max-height: 0;
 						opacity: 0;

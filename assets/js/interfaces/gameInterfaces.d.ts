@@ -52,6 +52,7 @@ export interface GameData {
 	music: MusicMode | null,
 	group?: GameGroupData,
 	table?: TableData,
+    system?: string,
 }
 
 interface ModeSettings {

@@ -1,0 +1,74 @@
+export default class ActivityMonitor {
+
+    private inactiveTimer: number | NodeJS.Timeout;
+    private screen: HTMLDivElement;
+    private players: HTMLDivElement;
+    private shown: boolean = false;
+
+    constructor() {
+        this.screen = document.getElementById('inactiveScreen') as HTMLDivElement;
+        this.players = this.screen.querySelector('.game-players');
+
+        document.addEventListener('mousemove', () => {
+            this.reset();
+        });
+        document.addEventListener('touchstart', () => {
+            this.reset();
+        });
+        document.addEventListener('keydown', e => {
+            if (e.ctrlKey && e.key === 'h') {
+                this.show();
+                return;
+            }
+            this.reset();
+        });
+        document.addEventListener('active-game-data-loaded', () => {
+            if (this.shown) {
+                if (activeGame) {
+                    this.show();
+                } else {
+                    this.hide();
+                }
+            }
+            this.setupGame();
+        });
+    }
+
+    reset() {
+        if (this.inactiveTimer) {
+            clearTimeout(this.inactiveTimer);
+        }
+        if (this.shown) {
+            this.hide();
+        }
+        this.inactiveTimer = setTimeout(() => this.show(), 15000);
+    }
+
+    show() {
+        this.shown = true;
+        if (!activeGame) {
+            return;
+        }
+        this.screen.style.display = 'block';
+        this.screen.classList.remove('hidden');
+    }
+
+    hide() {
+        this.shown = false;
+        this.screen.classList.add('hidden');
+        setTimeout(() => {
+            this.screen.style.display = 'none';
+        }, 300);
+    }
+
+    private setupGame() {
+        this.players.innerHTML = '';
+        if (!activeGame) {
+            return;
+        }
+        Object.values(activeGame.players).forEach(player => {
+            this.players.innerHTML += `<div class="badge bg-team-${activeGame.system}-${player.teamNum}">${player.name}</div>`;
+        });
+    }
+
+}

@@ -17,9 +17,9 @@
 {define addHead}
 {/define}
 {define errors}
-	{foreach $errors as $error}
-		{alert $error, 'danger'}
-	{/foreach}
+    {foreach $errors as $error}
+        {alert $error, 'danger'}
+    {/foreach}
 {/define}
 
 {varType \Lsr\Core\Controller $page}
@@ -27,41 +27,41 @@
 <!DOCTYPE html>
 <html lang="{\Lsr\Core\App::getShortLanguageCode()}" data-bs-theme="{$_COOKIE['mode'] ?? 'light'}">
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport"
-		  content="width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=0.5">
-	<meta http-equiv="X-UA-Compatible" content="ie=edge">
-	<!-- Favicon -->
-	<link rel="apple-touch-icon" sizes="180x180" href="{getUrl}assets/favicon/apple-touch-icon.png">
-	<link rel="icon" type="image/png" sizes="192x192" href="{getUrl}assets/favicon/android-chrome-192x192.png">
-	<link rel="icon" type="image/png" sizes="32x32" href="{getUrl}assets/favicon/favicon-32x32.png">
-	<link rel="icon" type="image/png" sizes="16x16" href="{getUrl}assets/favicon/favicon-16x16.png">
-	<link rel="icon" href="{getUrl}assets/favicon/favicon.ico">
-	<link rel="manifest" href="{getUrl}assets/manifest.json">
-	<meta name="theme-color" content="#192029">
-	<meta name="apple-mobile-web-app-capable" content="yes">
-	<!-- Google Fonts Montserrat -->
-	<link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'"
-		  href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"/>
-	<noscript>
-		<link rel="stylesheet"
-			  href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"/>
-	</noscript>
-	<link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'"
-		  href="{getUrl}dist/vendors.css?v={\Lsr\Core\App::getCacheVersion()}">
-	<noscript>
-		<link rel="stylesheet" href="{getUrl}dist/vendors.css?v={\Lsr\Core\App::getCacheVersion()}">
-	</noscript>
-	<link rel="stylesheet" href="{getUrl}dist/main.css?v={\Lsr\Core\App::getCacheVersion()}">
-	<link n:foreach="$addCss as $file" rel="stylesheet"
-									   href="{getUrl}dist/{$file}?v={\Lsr\Core\App::getCacheVersion()}">
-	<title>{$page->getTitle()}</title>
-	{\Tracy\Debugger::renderLoader()|noescape}
-	{include addHead}
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=0.5">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="{getUrl}assets/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="{getUrl}assets/favicon/android-chrome-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="{getUrl}assets/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="{getUrl}assets/favicon/favicon-16x16.png">
+    <link rel="icon" href="{getUrl}assets/favicon/favicon.ico">
+    <link rel="manifest" href="{getUrl}assets/manifest.json">
+    <meta name="theme-color" content="#192029">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <!-- Google Fonts Montserrat -->
+    <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'"
+          href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"/>
+    <noscript>
+        <link rel="stylesheet"
+              href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"/>
+    </noscript>
+    <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'"
+          href="{getUrl}dist/vendors.css?v={\Lsr\Core\App::getCacheVersion()}">
+    <noscript>
+        <link rel="stylesheet" href="{getUrl}dist/vendors.css?v={\Lsr\Core\App::getCacheVersion()}">
+    </noscript>
+    <link rel="stylesheet" href="{getUrl}dist/main.css?v={\Lsr\Core\App::getCacheVersion()}">
+    <link n:foreach="$addCss as $file" rel="stylesheet"
+                                       href="{getUrl}dist/{$file}?v={\Lsr\Core\App::getCacheVersion()}">
+    <title>{$page->getTitle()}</title>
+    {\Tracy\Debugger::renderLoader()|noescape}
+    {include addHead}
 
-	<script src="{getUrl}dist/runtime~main.js?v={\Lsr\Core\App::getCacheVersion()}"></script>
-	<script src="{getUrl}dist/bootstrap.js?v={\Lsr\Core\App::getCacheVersion()}"></script>
-	<script src="{getUrl}dist/vendors.js?v={\Lsr\Core\App::getCacheVersion()}"></script>
+    <script src="{getUrl}dist/runtime~main.js?v={\Lsr\Core\App::getCacheVersion()}"></script>
+    <script src="{getUrl}dist/bootstrap.js?v={\Lsr\Core\App::getCacheVersion()}"></script>
+    <script src="{getUrl}dist/vendors.js?v={\Lsr\Core\App::getCacheVersion()}"></script>
 </head>
 <body {ifset $_COOKIE['mode']}class="{$_COOKIE['mode']}Mode"{/ifset}>
 {include header}
@@ -69,49 +69,59 @@
 {include smallLoader}
 
 <main class="container my-5 pt-4 {include containerClasses}">
-	{include errors}
-	{include content}
+    {include errors}
+    {include content}
 </main>
 
 {include footer}
 {include loader}
 
 <div class="toast-container position-absolute bottom-0 end-0 p-3" id="toasts">
-	{foreach $notices as $notice}
-		{var string $type = 'info'}
-		{var string $content = ''}
-		{var string $title = ''}
-		{if is_string($notice)}
-			{do $content = $notice}
-		{else}
-			{do $type = $notice['type'] ?? 'info'}
-			{do $content = $notice['content'] ?? ''}
-			{do $title = $notice['title'] ?? ''}
-		{/if}
-		<div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
-			<div class="toast-header">
-				<svg class="bd-placeholder-img rounded me-2 text-{$type}" width="20" height="20"
-					 xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice"
-					 focusable="false">
-					<rect width="100%" height="100%" style="fill: currentcolor;"></rect>
-				</svg>
-				<strong class="me-auto" n:if="!empty($title)">{$title}</strong>
-				<button type="button" class="btn-close ms-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-			</div>
-			<div class="toast-body">
-				{$content}
-			</div>
-		</div>
-	{/foreach}
+    {foreach $notices as $notice}
+        {var string $type = 'info'}
+        {var string $content = ''}
+        {var string $title = ''}
+        {if is_string($notice)}
+            {do $content = $notice}
+        {else}
+            {do $type = $notice['type'] ?? 'info'}
+            {do $content = $notice['content'] ?? ''}
+            {do $title = $notice['title'] ?? ''}
+        {/if}
+        <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <svg class="bd-placeholder-img rounded me-2 text-{$type}" width="20" height="20"
+                     xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice"
+                     focusable="false">
+                    <rect width="100%" height="100%" style="fill: currentcolor;"></rect>
+                </svg>
+                <strong class="me-auto" n:if="!empty($title)">{$title}</strong>
+                <button type="button" class="btn-close ms-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                {$content}
+            </div>
+        </div>
+    {/foreach}
+</div>
+
+<div id="inactiveScreen" class="hidden" style="display: none;">
+    <div class="game-info">
+        <div class="game-timer" style="display:none;">
+            <div class="time" data-start="" data-length="">00:00</div>
+        </div>
+        <div class="game-players"></div>
+    </div>
 </div>
 
 <script>
-	const activeLanguageCode = {\Lsr\Core\App::getShortLanguageCode()};
-	const features = {\Lsr\Core\App::getServiceByType(App\Services\FeatureConfig::class)->getFeatures()};
-	const page = {\Lsr\Core\App::getRequest()};
-	const prettyUrl = {\Lsr\Core\App::isPrettyUrl()};
-	const webSocketEventURI = 'ws://' + window.location.hostname + ':' + {\App\Services\EventService::getEventPort()};
-	const timerOffset = {\App\Core\Info::get('timer-offset', 0)};
+    let activeGame = null;
+    const activeLanguageCode = {\Lsr\Core\App::getShortLanguageCode()};
+    const features = {\Lsr\Core\App::getServiceByType(App\Services\FeatureConfig::class)->getFeatures()};
+    const page = {\Lsr\Core\App::getRequest()};
+    const prettyUrl = {\Lsr\Core\App::isPrettyUrl()};
+    const webSocketEventURI = 'ws://' + window.location.hostname + ':' + {\App\Services\EventService::getEventPort()};
+    const timerOffset = {\App\Core\Info::get('timer-offset', 0)};
 </script>
 
 <script src="{getUrl}dist/main.js?v={\Lsr\Core\App::getCacheVersion()}" type="module"></script>

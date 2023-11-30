@@ -1,4 +1,4 @@
-import {formatPhoneNumber, gameTimer, initAutoSaveForm, initTooltips} from './functions';
+import {gameTimer, initAutoSaveForm, initTooltips} from './functions';
 import axios from 'axios';
 import {startLoading, stopLoading} from "./loaders";
 import * as bootstrap from "bootstrap";
@@ -6,6 +6,8 @@ import * as bootstrap from "bootstrap";
 import jscolor from "@eastdesire/jscolor";
 import route from "./router";
 import {PageInfo} from "./interfaces/pageInfo";
+import ActivityMonitor from "./activityMonitor";
+import {GameData} from "./interfaces/gameInterfaces";
 
 axios.defaults.headers.post['X-Requested-With'] = 'XMLHttpRequest';
 axios.defaults.headers.get['X-Requested-With'] = 'XMLHttpRequest';
@@ -18,6 +20,7 @@ jscolor.presets.default = {
 
 declare global {
 	const page: PageInfo;
+    let activeGame: GameData | null;
 }
 
 if ('serviceWorker' in navigator) {
@@ -30,21 +33,9 @@ if ('serviceWorker' in navigator) {
 	});
 }
 
-window.addEventListener("load", () => {
+activeGame = null;
 
-	// Auto-format tel
-	(document.querySelectorAll('input[type="tel"]') as NodeListOf<HTMLInputElement>).forEach(input => {
-		if (input.classList.contains('not-format')) {
-			return;
-		}
-		input.value = formatPhoneNumber(input.value);
-		input.addEventListener("keydown", () => {
-			input.value = formatPhoneNumber(input.value);
-		});
-		input.addEventListener("change", () => {
-			input.value = formatPhoneNumber(input.value);
-		});
-	});
+window.addEventListener("load", () => {
 
 	// Select description
 	(document.querySelectorAll('.select-description') as NodeListOf<HTMLElement>).forEach(element => {
@@ -124,6 +115,7 @@ window.addEventListener("load", () => {
 
 	// Game timer
 	gameTimer();
+    const activityMonitor = new ActivityMonitor();
 
 	// Setting a game to gate
 	(document.querySelectorAll('[data-toggle="gate"]') as NodeListOf<HTMLButtonElement>).forEach(btn => {

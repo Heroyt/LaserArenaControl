@@ -81,6 +81,7 @@ class GameHelpers extends ApiController
 				'playerCount'       => $game->playerCount,
 				'teamCount'         => count($game->getTeams()),
 				'mode'              => $game->mode,
+				'game' => $game,
 			]
 		);
 	}

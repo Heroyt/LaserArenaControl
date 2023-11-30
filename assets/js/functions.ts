@@ -498,11 +498,13 @@ export function gameTimer() {
                     return;
                 }
             });
-            const minutes = Math.floor(remaining / 60).toString().padStart(2, '0');
-            const seconds = Math.floor(remaining % 60).toString().padStart(2, '0');
-            times.forEach(time => {
-                time.innerHTML = `${minutes}:${seconds}`;
-            });
+            if (remaining > 0) {
+                const minutes = Math.floor(remaining / 60).toString().padStart(2, '0');
+                const seconds = Math.floor(remaining % 60).toString().padStart(2, '0');
+                times.forEach(time => {
+                    time.innerHTML = `${minutes}:${seconds}`;
+                });
+            }
         }, 50);
     }
 

@@ -30,6 +30,7 @@ export default class ActivityMonitor {
                     this.show();
                 } else {
                     this.hide();
+                    this.shown = true;
                 }
             }
             this.setupGame();

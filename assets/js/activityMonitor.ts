@@ -9,6 +9,8 @@ export default class ActivityMonitor {
         this.screen = document.getElementById('inactiveScreen') as HTMLDivElement;
         this.players = this.screen.querySelector('.game-players');
 
+        this.reset();
+
         document.addEventListener('mousemove', () => {
             this.reset();
         });

@@ -1,6 +1,6 @@
 #inactiveScreen {
   backdrop-filter: blur(10px);
-  background-color: rgba(0, 0, 0, .4);
+  background-color: rgba(0, 0, 0, .6);
   position: fixed;
   top: 0;
   left: 0;
@@ -23,6 +23,9 @@
     text-align: center;
     margin-top: 38.197vh; // Golden ratio
     transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 
     .game-timer {
       font-size: max(19rem, 3rem + 1vmin);

@@ -16,7 +16,7 @@ export default class ActivityMonitor {
             this.reset();
         });
         document.addEventListener('keydown', e => {
-            if (e.ctrlKey && e.key === 'h') {
+            if (e.ctrlKey && e.key === 'x') {
                 this.show();
                 return;
             }
@@ -49,7 +49,7 @@ export default class ActivityMonitor {
         if (!activeGame) {
             return;
         }
-        this.screen.style.display = 'block';
+        this.screen.style.display = 'flex';
         this.screen.classList.remove('hidden');
     }
 

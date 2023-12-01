@@ -108,7 +108,14 @@
 <div id="inactiveScreen" class="hidden" style="display: none;">
     <div class="game-info">
         <div class="game-timer text-white-forced" style="display:none;">
-            <div class="time" data-start="" data-length="">00:00</div>
+            <div class="time"
+                 data-start=""
+                    {if App\Core\Info::get('timer_on_inactive_screen', false)}
+                        data-showafter="{\App\Core\Info::get('timer_show', 30)}"
+                    {/if}
+                 data-length="">
+                00:00
+            </div>
         </div>
         <div class="game-players"></div>
     </div>

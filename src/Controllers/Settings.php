@@ -96,6 +96,7 @@ class Settings extends Controller
 			if (isset($request->post['timer_show'])) {
 				Info::set('timer_show', (int)$request->post['timer_show']);
 			}
+			Info::set('timer_on_inactive_screen', !empty($request->post['timer_on_inactive_screen']));
 			if (isset($_FILES['background'])) {
 				$file = UploadedFile::parseUploaded('background');
 				if (isset($file)) {

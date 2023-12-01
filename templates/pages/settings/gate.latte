@@ -26,17 +26,27 @@
 			</div>
 		</div>
 		<h4>{lang 'Settings', context: 'settings'}:</h4>
-		<div class="form-group">
-			<label for="timer_offset">{lang 'Game timer offset in seconds', context: 'settings'}:</label>
+        <div class="form-group my-3">
+            <label class="form-label" for="timer_offset">{lang 'Game timer offset in seconds', context: 'settings'}
+                :</label>
 			<input type="number" name="timer_offset" class="form-control" id="timer_offset"
 				   value="{\App\Core\Info::get('timer-offset', 0)}">
 		</div>
-		<div class="form-group">
-			<label for="timer_show">{lang 'Show timer from minute', context: 'settings'}:</label>
+        <hr>
+        <div class="form-group my-3">
+            <label class="form-label" for="timer_show">{lang 'Show timer from minute', context: 'settings'}:</label>
 			<input type="number" name="timer_show" class="form-control" id="timer_show"
 				   value="{\App\Core\Info::get('timer_show', 30)}">
 		</div>
-		<div class="row">
+        <div class="form-check form-switch d-flex justify-content-center">
+            <input class="form-check-input" type="checkbox" role="switch" name="timer_on_inactive_screen"
+                   id="timer_on_inactive_screen"
+                   value="1" n:attr="checked: (bool) App\Core\Info::get('timer_on_inactive_screen', false)">
+            <label class="form-check-label ms-2"
+                   for="timer_on_inactive_screen">{lang 'Platí i pro časovač na neaktivní obrazovce', context: 'settings'}</label>
+        </div>
+        <hr>
+        <div class="row my-3">
 			<div class="col-sm-6" style="max-height: 200px;" id="background-wrapper">
 				<img src="{\App\Services\GateStyleService::getGateBackgroundUrl()}" alt="Gate background"
 					 class="img-fluid" id="background-image">

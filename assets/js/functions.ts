@@ -451,6 +451,7 @@ let timerInterval: ReturnType<typeof setInterval> | null = null;
 export function gameTimer() {
     clearInterval(timerInterval);
     const times: NodeListOf<HTMLDivElement> = document.querySelectorAll('.time');
+    const showAfterTimes: { [index: number]: number } = {};
     if (times.length === 0) {
         return;
     }
@@ -462,11 +463,14 @@ export function gameTimer() {
     const serverTime = parseInt(times[0].dataset.servertime);
     console.log(times[0].dataset.servertime, serverTime);
     //offset = (Date.now() / 1000) - (isNaN(serverTime) ? 0 : serverTime);
-    let showAfter = parseInt(times[0].dataset.showafter);
-    if (isNaN(showAfter)) {
-        showAfter = 30;
-    }
-    showAfter *= 60; // Convert to seconds
+    times.forEach((time, key) => {
+        let showAfter = parseInt(time.dataset.showafter);
+        if (isNaN(showAfter)) {
+            showAfter = 30;
+        }
+        showAfter *= 60; // Convert to seconds
+        showAfterTimes[key] = showAfter;
+    })
     let start = parseInt(times[0].dataset.start);
     let length = parseInt(times[0].dataset.length);
     let endDate = 0;
@@ -487,8 +491,8 @@ export function gameTimer() {
         console.log('Starting timer...', endDate, offset);
         timerInterval = setInterval(() => {
             const remaining = endDate - (Date.now() / 1000) + offset;
-            times.forEach(time => {
-                if (remaining > showAfter) {
+            times.forEach((time, key) => {
+                if (remaining > (showAfterTimes[key] ?? 1800)) {
                     time.classList.add('d-none');
                 } else {
                     time.classList.remove('d-none');

@@ -1,12 +1,15 @@
 export default class ActivityMonitor {
 
     private inactiveTimer: number | NodeJS.Timeout;
-    private screen: HTMLDivElement;
+    private readonly screen: HTMLDivElement;
     private players: HTMLDivElement;
     private shown: boolean = false;
 
     constructor() {
         this.screen = document.getElementById('inactiveScreen') as HTMLDivElement;
+        if (!this.screen) {
+            return;
+        }
         this.players = this.screen.querySelector('.game-players');
 
         this.reset();

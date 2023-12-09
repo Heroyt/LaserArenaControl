@@ -122,7 +122,7 @@ class DbInstall implements InstallInterface
 			$loader->load();
 			$modules = glob(ROOT . 'modules/*/config/migrations.neon');
 			foreach ($modules as $module) {
-				$loader->loadFile($module);
+				$loader->migrations = $loader::merge($loader->migrations, $loader->loadFile($module));
 			}
 		} catch (CyclicDependencyException|FileException|\Nette\Neon\Exception|AssertionException $e) {
 			echo "\e[0;31m" . $e->getMessage() . "\e[m\n" . $e->getTraceAsString() . "\n";

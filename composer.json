@@ -2,7 +2,7 @@
 	"name": "heroyt/laser-arena-control",
 	"description": "Systém pro lepší zpracování a sjednocení výsledků LaserGame z různých arén a různých výrobců.",
 	"type": "project",
-  "version": "0.4.5",
+  "version": "0.4.6",
 	"repositories": [
 		{
 			"type": "composer",
@@ -51,7 +51,9 @@
 		"lsr/logging": "^0.2",
 		"lsr/request": "^0.2",
 		"ext-zlib": "*",
-    "heroyt/tournament-generator": "^0.5.4"
+    "heroyt/tournament-generator": "^0.5.4",
+    "laser-arena-control/tables_module": "@dev",
+    "laser-arena-control/tournament_module": "@dev"
 	},
 	"require-dev": {
 		"roave/security-advisories": "dev-latest",

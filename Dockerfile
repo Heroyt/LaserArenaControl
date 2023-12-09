@@ -14,8 +14,8 @@ USER www-data
 # Move to project directory
 WORKDIR /var/www/html/
 
-ENV LAC_VERSION="0.4.5"
-ENV LAC_MODELS_VERSION="0.4.3"
+ENV LAC_VERSION="0.4.6"
+ENV LAC_MODELS_VERSION="0.4.4"
 
 # Initialize git and download project
 RUN git init

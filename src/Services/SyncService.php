@@ -29,7 +29,12 @@ class SyncService
 	public static function syncGames(int $limit = 5, ?float $timeout = null) : void {
 		$logger = new Logger(LOG_DIR, 'sync');
 		/** @var Row[] $gameRows */
-		$gameRows = GameFactory::queryGames(true)->where('[sync] = 0')->limit($limit)->orderBy('start')->desc()->fetchAll(cache: false);
+		$gameRows = GameFactory::queryGames(true, fields: ['sync'])
+		                       ->where('[sync] = 0')
+		                       ->limit($limit)
+		                       ->orderBy('start')
+		                       ->desc()
+		                       ->fetchAll(cache: false);
 
 		if (empty($gameRows)) {
 			if (PHP_SAPI === 'cli') {

@@ -36,7 +36,7 @@ tables:
 		definition: '''
     		(
     			`id_music` int(11) unsigned NOT NULL AUTO_INCREMENT,
-    			`name` varchar(20) NOT NULL,
+    			`name` varchar(80) NOT NULL,
     			`file_name` varchar(100) NOT NULL DEFAULT '',
     			`order` int(10) unsigned NOT NULL DEFAULT 0,
     			`preview_start` int(10) unsigned NOT NULL DEFAULT 0,
@@ -48,6 +48,8 @@ tables:
 			0.1:
 				- 'ADD `preview_start` int(10) unsigned NOT NULL DEFAULT 0 AFTER `order`'
 				- 'ADD `public` tinyint(1) NOT NULL DEFAULT 1 AFTER `preview_start`'
+			0.2:
+				- 'CHANGE `name` `name` VARCHAR(80)  CHARACTER SET utf8mb4  COLLATE utf8mb4_general_ci  NOT NULL;'
 	App\GameModels\Game\GameModes\AbstractMode:
 		definition: '''
 		(

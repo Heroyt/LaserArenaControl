@@ -17,7 +17,7 @@ class MusicMode extends Model
 	public const TABLE = 'music';
 
 	#[Required]
-	#[StringLength(1, 20)]
+	#[StringLength(1, 80)]
 	public string $name;
 	#[Required]
 	public string $fileName = '';

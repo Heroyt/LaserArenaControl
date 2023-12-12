@@ -63,7 +63,7 @@ class MusicSettings extends Controller
 				// Check for duplicates
 				if (file_exists(UPLOAD_DIR.$name)) {
 					$request->passNotices[] = ['type' => 'info', 'content' => lang('Uploaded file already exists', context: 'errors').' - '.$name];
-					$musicCheck = MusicMode::query()->where('fileName = %s', UPLOAD_DIR . $name)->first();
+					$musicCheck = MusicMode::query()->where('file_name = %s', UPLOAD_DIR . $name)->first();
 					if (isset($musicCheck)) {
 						$music = $musicCheck;
 					}

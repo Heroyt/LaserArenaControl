@@ -44,7 +44,7 @@ class ModesSettings extends Controller
 	#[Get('settings/modes/{system}')]
 	public function modes(Request $request) : void {
 		$this->params['system'] = $request->params['system'] ?? first(GameFactory::getSupportedSystems());
-		$this->params['modes'] = GameModeFactory::getAll(['system' => $this->params['system']]);
+		$this->params['modes'] = GameModeFactory::getAll(['system' => $this->params['system'], 'all' => true]);
 		$this->view('pages/settings/modes');
 	}
 
@@ -234,6 +234,9 @@ class ModesSettings extends Controller
 					$mode->type = GameModeType::tryFrom($values['type']) ?? $mode->type;
 				}
 			}
+			else if (isset($values['name'])) {
+				$mode->alias = $values['name'] === $mode->name ? '' : $values['name'];
+			}
 			if (isset($values['load'])) {
 				$mode->loadName = $values['load'];
 			}
@@ -245,6 +248,7 @@ class ModesSettings extends Controller
 					$mode->settings->$var = isset($values['settings'][$var]);
 				}
 			}
+			$mode->active = !empty($values['active']);
 			if (!empty($values['teams'])) {
 				$mode->teams = json_encode($values['teams'], JSON_THROW_ON_ERROR);
 			}

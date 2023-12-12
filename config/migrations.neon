@@ -54,12 +54,14 @@ tables:
         	`id_mode` int(11) unsigned NOT NULL AUTO_INCREMENT,
         	`system` varchar(10) DEFAULT NULL,
         	`name` varchar(50) DEFAULT NULL,
+        	`alias` varchar(50) DEFAULT NULL,
         	`description` text DEFAULT NULL,
         	`load_name` varchar(50) DEFAULT NULL,
         	`type` enum('TEAM','SOLO') NOT NULL DEFAULT 'TEAM',
         	`teams` text NOT NULL DEFAULT '["0","1","2","3","4","5"]',
         	`rankable` tinyint(1) NOT NULL DEFAULT '1',
         	`public` tinyint(1) NOT NULL DEFAULT 0,
+        	`active` tinyint(1) NOT NULL DEFAULT 1,
         	`mines` tinyint(1) NOT NULL DEFAULT 1 COMMENT 'Jestli automaticky detekovat miny nebo vůbec',
         	`part_win` tinyint(1) NOT NULL DEFAULT 1 COMMENT 'Jestli má být vložena část s tím kdo vyhrál.',
         	`part_teams` tinyint(1) NOT NULL DEFAULT 1 COMMENT 'Jestli se na výsledcích zobrazuje tabulka teamů',
@@ -98,7 +100,10 @@ tables:
 			0.1:
 				- 'ADD `teams` text NOT NULL DEFAULT ''["0","1","2","3","4","5"]'' AFTER `type`'
 			0.2:
-				- 'ADD `rankable` tinyint(1) NOT NULL DEFAULT ''1'' AFTER `teams`'
+				- 'ADD `rankable` tinyint(1) NOT NULL DEFAULT 1 AFTER `teams`'
+			0.3:
+				- 'ADD `active` tinyint(1) NOT NULL DEFAULT 1 AFTER `public`'
+				- 'ADD `alias` varchar(50) DEFAULT '''' AFTER `name`'
 	game_modes-names:
 		definition: '''
 		(

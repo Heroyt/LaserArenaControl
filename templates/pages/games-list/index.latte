@@ -54,7 +54,7 @@
 					</label>
 				</td>
 				<td>{$game->start->format('H:i')}</td>
-				<td>{$game->mode?->name}</td>
+                <td>{$game->mode?->getName()}</td>
 				<td>
 				<span n:foreach="$game->getPlayersSorted() as $player"
 						data-toggle="tooltip"

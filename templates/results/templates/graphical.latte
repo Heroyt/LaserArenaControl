@@ -111,7 +111,7 @@
 		</div>
 		<div>
 			<strong>{lang 'Herní mód', context: 'results.info'}:</strong>
-			{lang $game->mode->name, context: 'gameModes'}
+            {lang $game->mode?->getName(), context: 'gameModes'}
 		</div>
 	</div>
 	<div class="results-qr text-end">

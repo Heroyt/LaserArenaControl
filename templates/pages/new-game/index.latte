@@ -221,8 +221,9 @@
 													data-teams="{$mode->teams}"
 													data-variations='{json_encode($mode->getVariations())}'
 													data-description="{lang $mode->description, context: 'gameModes'}"
+                                                    data-active="{json_encode($mode->active)}"
 					{if $mode instanceof App\GameModels\Game\GameModes\CustomLoadMode}data-script="{$mode->getNewGameScriptToRun()}"{/if}>
-				{lang $mode->name, context: 'gameModes'}
+                {lang $mode->getName(), context: 'gameModes'}
 			</option>
 		</select>
 		<button type="button" data-toggle="shuffle" title="{lang 'Náhodně', context: 'actions'}"

@@ -122,12 +122,6 @@
 					{include modeSettingsCheck, 'public', 'Veřejný', 'Pokud má být herní mód zobrazován veřejně v rozhraní pro zadání hry hráči (na tabletu).'}
 					{include modeSettingsCheck, 'mines', 'Miny', 'Pokud se mají zobrazovat statistiky min.'}
 
-
-
-
-
-
-
 					<hr class="my-4">
 					<h5>{lang 'Části', context: 'game.modes.settings'}</h5>
 					<p class="text-sm text-muted"><strong>{lang 'Varování'}
@@ -139,12 +133,6 @@
 					{include modeSettingsCheck, 'partHits', 'Zásahy hráčů', 'Pokud se má zobrazovat část "Zásahy hráčů" (kdo koho zasáhl).'}
 					{include modeSettingsCheck, 'partBest', 'Ti nej', 'Pokud se má zobrazovat část "Ti nej".'}
 					{include modeSettingsCheck, 'partBestDay', 'Pořadí dne', 'Pokud se má zobrazovat část "Pořadí dne".'}
-
-
-
-
-
-
 
 					<hr class="my-4">
 					<h5>{lang 'Výsledky hráče', context: 'game.modes.settings'}</h5>
@@ -162,12 +150,6 @@
 					{include modeSettingsCheck, 'playerFavourites', 'Oblíbený cíl / Největší zabiják hráče', 'Pokud se mají zobrazovat oblíbení hráči ("Největší cíl", "Největší zabiják") u jednotlivých hráčů.'}
 					{include modeSettingsCheck, 'playerLives', 'Životy hráče', 'Pokud se mají zobrazovat zbývající životy u jednotlivých hráčů.'}
 
-
-
-
-
-
-
 					<hr class="my-4">
 					<h5>{lang 'Výsledky týmů', context: 'game.modes.settings'}</h5>
 					<p class="text-sm text-muted"><strong>{lang 'Varování'}
@@ -178,12 +160,6 @@
 					{include modeSettingsCheck, 'teamShots', 'Výstřely týmu', 'Pokud se mají zobrazovat výstřely u jednotlivých týmů.'}
 					{include modeSettingsCheck, 'teamHits', 'Zásahy týmu', 'Pokud se mají zobrazovat zásahy u jednotlivých týmů.'}
 					{include modeSettingsCheck, 'teamZakladny', 'Ztráty základny týmu', 'Pokud se mají zobrazovat ztráty základny u jednotlivých týmů (týká se jen módu Základny).'}
-
-
-
-
-
-
 
 					<hr class="my-4">
 					<h5>{lang 'Ti nej', context: 'game.modes.settings'}</h5>
@@ -248,11 +224,8 @@
 			<div class="form-floating mb-2">
 				<input type="text" class="form-control modeName" name="mode[{$id}][name]"
 					   id="mode-name-{$id}"
-						{if isset($mode) && !$mode instanceof App\GameModels\Game\GameModes\CustomTeamMode && !$mode instanceof App\GameModels\Game\GameModes\CustomSoloMode}
-							readonly
-						{/if}
 					   placeholder="{lang 'Herní mód', context: 'game.modes'}"
-					   value="{ifset $mode}{lang $mode->name, context: 'gameModes'}{/ifset}"/>
+                       value="{ifset $mode}{lang $mode->getName(), context: 'gameModes'}{/ifset}"/>
 				<label for="mode-name-{$id}">{lang 'Název'}</label>
 			</div>
 			<div class="form-floating mb-2">
@@ -294,13 +267,20 @@
 				<button type="button" class="btn btn-success edit-results" data-toggle="tooltip"
 						data-id="{$id}"
 						title="{lang 'Upravit zobrazení výsledků', context: 'game.modes'}">
-					<i class="fa-solid fa-eye"></i>
+                    <i class="fa-solid fa-table-cells-large"></i>
 				</button>
 				<button type="button" class="btn btn-info edit-mode-names" data-toggle="tooltip"
 						data-id="{$id}"
 						title="{lang 'Upravit názvy z konzole', context: 'game.modes'}">
 					<i class="fa-solid fa-magnifying-glass"></i>
 				</button>
+                <input type="checkbox" class="btn-check" id="mode-{$id}-active" autocomplete="off"
+                       name="mode[{$id}][active]" value="1" n:attr="checked: !isset($mode) || $mode?->active">
+                <label data-toggle="tooltip"
+                       title="{lang 'Zda je herní mód aktivní (zobrazí se ve výběru módu)', context: 'game.modes'}"
+                       class="btn btn-outline-success" for="mode-{$id}-active">
+                    <i class="fa-solid fa-eye"></i>
+                </label>
 			</div>
 		</div>
 	</div>

@@ -71,7 +71,7 @@
 		</tr>
 		<tr>
 			<th>{lang 'Herní mód', context: 'results.info'}:</th>
-			<td>{lang $game->mode->name, context: 'gameModes'}</td>
+            <td>{lang $game->mode?->getName(), context: 'gameModes'}</td>
 			<th>{lang 'Počet hráčů', context: 'results.info'}:</th>
 			<td>{$game->getPlayersSorted()|length}</td>
 			<th>{lang 'Počet týmů', context: 'results.info'}:</th>

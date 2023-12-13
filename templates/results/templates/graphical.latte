@@ -336,7 +336,8 @@
 {/define}
 
 {define resultsHits}
-	{var float $width = 87.5 / count($game->getPlayers())}
+    {var int $playerCount = count($game->getPlayers())}
+    {var float $width = 87.5 / ($playerCount === 0 ? 1 : $playerCount)}
 	<section class="results-hits">
 		<h4 class="caption">
 			{svgIcon 'kill', '', '1rem'}

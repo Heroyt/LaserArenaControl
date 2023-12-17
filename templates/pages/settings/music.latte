@@ -34,7 +34,7 @@
 		<div id="musicInputsWrapper">
 			{dump ROOT}
 			{foreach $music as $musicMode}
-				{include musicTemplate $iterator->counter, $musicMode->id, $musicMode->name, $musicMode->getMediaUrl(), $musicMode->public, $musicMode->getFormattedPreviewStart()}
+                {include musicTemplate $iterator->counter, $musicMode->id, $musicMode->name, $musicMode->group, $musicMode->getMediaUrl(), $musicMode->public, $musicMode->getFormattedPreviewStart()}
 			{/foreach}
 		</div>
 		<p class="text-center">
@@ -45,16 +45,24 @@
 	</form>
 
 	<template id="musicInputTemplate">
-		{include musicTemplate '#counter#', '#id#', '#name#', '#file#', true}
+        {include musicTemplate '#counter#', '#id#', '#name#', '', '#file#', true}
 	</template>
 {/block}
 
-{define musicTemplate int $counter, string|int $id, string $name, string $musicFile, bool $public, string $previewStart = '0:00'}
+{define musicTemplate int $counter, string|int $id, string $name, string|null $group, string $musicFile, bool $public, string $previewStart = '0:00'}
 	<div class="input-group music-input my-2" data-id="{$id}">
 		<div class="input-group-text counter cursor-grab">{$counter}</div>
 		<input type="hidden" name="music[{$id}][order]" value="{$counter}" class="order-input">
 		<input type="text" name="music[{$id}][name]" id="music-{$id}-name"
 			   class="form-control" value="{$name}">
+        <div class="form-floating" data-toggle="tooltip"
+             title="{lang 'Hudební módy se slučují do skupin. Při zadávání hry se pak spustí jeden náhodně výbraný hudební mód z vybrané hudební skupiny.'}">
+            <input type="text" name="music[{$id}][group]" id="music-{$id}-group"
+                   class="form-control music-group" value="{$group ?? ''}" placeholder="{lang 'Skupina'}">
+            <label for="music-{$id}-group">
+                {lang 'Skupina'}
+            </label>
+        </div>
 		<input type="checkbox" class="btn-check" name="music[{$id}][public]" id="music-{$id}-public" value="1"
 			   autocomplete="off" {if $public}checked{/if}>
 		<label for="music-{$id}-public" class="btn btn-outline-info d-flex align-items-center" data-toggle="tooltip"

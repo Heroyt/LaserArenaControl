@@ -34,6 +34,7 @@ export interface TeamData {
 export interface MusicMode {
 	id: number,
 	name?: string,
+    group?: string,
 	fileName?: string,
 	order?: number
 }

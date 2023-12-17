@@ -1,9 +1,10 @@
 import {startLoading, stopLoading} from "../../loaders";
 import axios, {AxiosResponse} from "axios";
-import {initTooltips, lang} from "../../functions";
+import {initTooltips, lang, toAscii} from "../../functions";
 import Sortable from "sortablejs";
 import {Tooltip} from "bootstrap";
 import {Music} from "../../interfaces/gameInterfaces";
+import autocomplete, {AutocompleteItem} from "autocompleter";
 
 
 export default function initMusicSettings() {
@@ -15,6 +16,8 @@ export default function initMusicSettings() {
 
 	const notices = document.getElementById('notices') as HTMLDivElement;
 	const musicTemplate = document.getElementById('musicInputTemplate').innerHTML;
+
+    const musicGroups: Set<string> = new Set;
 
 	if (uploadForm && uploadInput) {
 		uploadForm.addEventListener('submit', e => {
@@ -110,8 +113,46 @@ export default function initMusicSettings() {
 		});
 	}
 
+    function refreshMusicGroups() {
+        musicGroups.clear();
+
+        (document.querySelectorAll('.music-input') as NodeListOf<HTMLDivElement>).forEach(music => {
+            const group = music.querySelector('.music-group') as HTMLInputElement;
+            if (group.value) {
+                musicGroups.add(group.value);
+            }
+        });
+    }
+
 	function initMusic(elem: HTMLDivElement) {
 		const id = elem.dataset.id;
+
+        const group = elem.querySelector('.music-group') as HTMLInputElement;
+        if (group.value) {
+            musicGroups.add(group.value);
+        }
+        group.addEventListener('change', refreshMusicGroups);
+        autocomplete({
+            input: group,
+            emptyMsg: 'Nová skupina',
+            minLength: 1,
+            preventSubmit: 1,
+            fetch: (search, update) => {
+                search = toAscii(search.toLocaleLowerCase());
+                const data: AutocompleteItem[] = [];
+                musicGroups.forEach(value => {
+                    if (toAscii(value.toLocaleLowerCase()).startsWith(search)) {
+                        data.push({label: value});
+                    }
+                })
+                update(data);
+            },
+            onSelect: item => {
+                group.value = item.label;
+                refreshMusicGroups();
+            }
+        });
+
 		const deleteBtn = elem.querySelector('.remove') as HTMLButtonElement;
 		if (deleteBtn) {
 			deleteBtn.addEventListener('click', () => {

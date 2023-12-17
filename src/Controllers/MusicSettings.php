@@ -132,6 +132,7 @@ class MusicSettings extends Controller
 			try {
 				$music = MusicMode::get((int) $id);
 				$music->name = $info['name'];
+				$music->group = empty($info['group']) ? null : $info['group'];
 				$music->order = (int) $info['order'];
 				$music->public = isset($info['public']);
 				$previewStart = $music->previewStart;

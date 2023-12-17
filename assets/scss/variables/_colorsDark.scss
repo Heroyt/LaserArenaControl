@@ -1,33 +1,38 @@
 $custom-colors-dark: (
-	'black': (
-		'0': ('color': #080a0d, 'alias': 'white'),
-		'200': ('color': #fff, 'alias': 'not-so-dark'),
-	),
-	'white': (
-		'0': ('color': #fff, 'alias': 'black'),
-		'1': ('color': #fff, 'alias': 'text'),
-		'100': ('color': #e6ecf2, 'alias': 'dark'),
-		'200': ('color': #262626, 'alias': 'very-light'),
-		'300': ('color': #707070, 'alias': 'light'),
-	),
-	'grey': (
-		"100": ('color': #f1f3f5, 'alias': 'dark'),
-		'400': ('color': #ced4da, 'alias': 'dark-grey'),
-		'600': ('color': #868e96, 'alias': 'grey'),
-		'700': ('color': #495057, 'alias': 'light-grey'),
-		'bg': ('color': #c7cbd3, 'alias': 'light-background'),
-	),
-	'blue': (
-		'200': ('color': #ade6fd, 'alias': 'dark-blue'),
-		'bg': ('color': #192029, 'alias': 'background'),
-	),
-	'cyan': (
-		'200': ('color': #a6faf1, 'alias': 'dark-cyan'),
-	),
-	"table": (
-		"background": transparent,
-		"striped-background": rgba(255, 255, 255, 0.05),
-		"color": ('color': #dae5f2, 'alias': 'table-text-color'),
-		"striped-color": #dae5f2,
-	),
+        'black': (
+                '0': ('color': #080a0d, 'alias': 'white'),
+                '200': ('color': #fff, 'alias': 'not-so-dark'),
+        ),
+        'white': (
+                '0': ('color': #fff, 'alias': 'black'),
+                '1': ('color': #fff, 'alias': 'text'),
+                '100': ('color': #e6ecf2, 'alias': 'dark'),
+                '200': ('color': #262626, 'alias': 'very-light'),
+                '300': ('color': #707070, 'alias': 'light'),
+        ),
+        "background": (
+                '0': ('color': #090e15, 'alias': 'background'),
+                '1': #161f2f, //#1a2538,
+                '2': #323c4e,
+        ),
+        'grey': (
+                "100": ('color': #f1f3f5, 'alias': 'dark'),
+                '400': ('color': #ced4da, 'alias': 'dark-grey'),
+                '600': ('color': #868e96, 'alias': 'grey'),
+                '700': ('color': #495057, 'alias': 'light-grey'),
+                'bg': ('color': #c7cbd3, 'alias': 'light-background'),
+        ),
+        'blue': (
+                '200': ('color': #ade6fd, 'alias': 'dark-blue'),
+                'bg': #192029,
+        ),
+        'cyan': (
+                '200': ('color': #a6faf1, 'alias': 'dark-cyan'),
+        ),
+        "table": (
+                "background": transparent,
+                "striped-background": rgba(255, 255, 255, 0.05),
+                "color": ('color': #dae5f2, 'alias': 'table-text-color'),
+                "striped-color": #dae5f2,
+        ),
 );

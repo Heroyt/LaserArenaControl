@@ -19,6 +19,7 @@ class MusicMode extends Model
 	#[Required]
 	#[StringLength(1, 80)]
 	public string $name;
+	public ?string $group = null;
 	#[Required]
 	public string $fileName = '';
 	public int    $order    = 0;

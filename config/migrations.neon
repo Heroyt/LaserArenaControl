@@ -37,11 +37,13 @@ tables:
     		(
     			`id_music` int(11) unsigned NOT NULL AUTO_INCREMENT,
     			`name` varchar(80) NOT NULL,
+    			`group` VARCHAR(80)  CHARACTER SET utf8mb4  COLLATE utf8mb4_general_ci DEFAULT NULL,
     			`file_name` varchar(100) NOT NULL DEFAULT '',
     			`order` int(10) unsigned NOT NULL DEFAULT 0,
     			`preview_start` int(10) unsigned NOT NULL DEFAULT 0,
     			`public` tinyint(1) NOT NULL DEFAULT 1,
-    			PRIMARY KEY (`id_music`)
+    			PRIMARY KEY (`id_music`),
+    			INDEX `group` (`group`)
     		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
     	'''
 		modifications:
@@ -50,6 +52,9 @@ tables:
 				- 'ADD `public` tinyint(1) NOT NULL DEFAULT 1 AFTER `preview_start`'
 			0.2:
 				- 'CHANGE `name` `name` VARCHAR(80)  CHARACTER SET utf8mb4  COLLATE utf8mb4_general_ci  NOT NULL;'
+			0.3:
+				- 'ADD `group` VARCHAR(80)  CHARACTER SET utf8mb4  COLLATE utf8mb4_general_ci DEFAULT NULL AFTER `name`;'
+				- 'ADD INDEX `group` (`group`);'
 	App\GameModels\Game\GameModes\AbstractMode:
 		definition: '''
 		(
@@ -289,5 +294,25 @@ tables:
 			`data` text NOT NULL,
 			`active` tinyint(1) NOT NULL DEFAULT 1,
 			PRIMARY KEY (`id_game`)
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+		'''
+	App\Models\Playlist:
+		definition: '''
+		(
+			`id_playlist` int(11) unsigned NOT NULL AUTO_INCREMENT,
+			`name` varchar(80) NOT NULL,
+			PRIMARY KEY (`id_playlist`)
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+		'''
+	playlist_music:
+		definition: '''
+		(
+			`id_playlist` int(11) unsigned NOT NULL,
+			`id_music` int(11) unsigned NOT NULL,
+			PRIMARY KEY (`id_playlist`, `id_music`),
+			KEY `id_playlist` (`id_playlist`),
+			KEY `id_music` (`id_music`),
+			CONSTRAINT `playlist_music_ibfk_1` FOREIGN KEY (`id_music`) REFERENCES `music` (`id_music`) ON DELETE CASCADE ON UPDATE CASCADE,
+			CONSTRAINT `playlist_music_ibfk_2` FOREIGN KEY (`id_playlist`) REFERENCES `playlists` (`id_playlist`) ON DELETE CASCADE ON UPDATE CASCADE
 		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 		'''

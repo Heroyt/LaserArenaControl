@@ -1,12 +1,12 @@
 .autocomplete {
-	background: var(--background);
+  background: var(--background-1);
 	border: none;
 	border-bottom-left-radius: var(--bs-border-radius);
 	border-bottom-right-radius: var(--bs-border-radius);
 	box-sizing: border-box;
 	font-size: .9rem;
 	max-height: 150px !important;
-	opacity: .9;
+  opacity: 1;
 	overflow: auto;
 	z-index: 1000;
 
@@ -20,7 +20,7 @@
 
 		&:hover:not(.group),
 		&.selected {
-			background: var(--background-subtle);
+      background: var(--background-2);
 			cursor: pointer;
 			font-weight: bold;
 		}

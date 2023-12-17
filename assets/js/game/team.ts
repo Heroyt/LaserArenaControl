@@ -59,11 +59,11 @@ export default class Team {
 
 	initEvents(): void {
 		this.$name.addEventListener('input', () => {
-			this.name = this.$name.value;
-		});
+            this.updateName();
+        });
 	}
 
-	update(): void {
+    update(): void {
 		this.recountPlayers();
 
 		if (this.playerCount === 0) {
@@ -74,18 +74,7 @@ export default class Team {
 
 		this.$playerCount.innerText = this.playerCount.toString();
 
-		this.name = this.$name.value;
-
-        if (this.name.length < this.$name.minLength) {
-            this.emptyNameTooltip.show();
-        } else {
-            this.emptyNameTooltip.hide();
-        }
-        if (this.name.length > this.$name.maxLength) {
-            this.nameTooLongTooltip.show();
-        } else {
-            this.nameTooLongTooltip.hide();
-        }
+        this.updateName();
 
 		this.row.dispatchEvent(
 			new Event("update", {
@@ -98,6 +87,21 @@ export default class Team {
 			})
 		);
 	}
+
+    private updateName() {
+        this.name = this.$name.value;
+
+        if (this.name.length < this.$name.minLength) {
+            this.emptyNameTooltip.show();
+        } else {
+            this.emptyNameTooltip.hide();
+        }
+        if (this.name.length > this.$name.maxLength) {
+            this.nameTooLongTooltip.show();
+        } else {
+            this.nameTooLongTooltip.hide();
+        }
+    }
 
 	recountPlayers(): number {
 		this.playerCount = 0;

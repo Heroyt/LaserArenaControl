@@ -97,6 +97,8 @@
 		const messages = {
 			missingShuffleTeam: '{lang 'Musíte vybrat alespoň 2 týmy.', context: 'errors'}',
 			missingPlayerTeam: '{lang 'Musíte vybrat tým hráče.', context: 'errors'}',
+            emptyTeamName: '{lang 'Vyplňte název týmu', context: 'errors'}',
+            teamNameTooLong: '{lang 'Název týmu je moc dlouhý', context: 'errors'}',
 			noPlayersActive: '{lang 'Musíte zadat alespoň 2 hráče.', context: 'errors'}',
 			vestOk: '{lang 'V pořádku', context: 'settings.vests.status'}',
 			vestPlayable: '{lang 'Hratelná', context: 'settings.vests.status'}',
@@ -309,7 +311,7 @@
 				   style="background-color: {$color|noescape}; color: {\App\Tools\Color::getFontColor($color)|noescape}; width: 2.5rem;">
 				0
 			</label>
-			<input type="text" name="team[{$key}][name]" maxlength="12" class="form-control team-name"
+            <input type="text" name="team[{$key}][name]" minlength="1" maxlength="99" class="form-control team-name"
 				   id="team-{$key}-name"
 				   value="{$teamNames[$key]}" data-default="{$teamNames[$key]}">
 		</div>

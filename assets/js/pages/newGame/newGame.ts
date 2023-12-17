@@ -263,7 +263,18 @@ export default function initNewGamePage() {
 			}
 		}
 
-		return true;
+        let ok = true;
+        game.getActiveTeams().forEach(team => {
+            if (team.name.length < team.$name.minLength) {
+                ok = false;
+                team.emptyNameTooltip.show();
+            } else if (team.name.length > team.$name.maxLength) {
+                ok = false;
+                team.nameTooLongTooltip.show();
+            }
+        });
+
+        return ok;
 	}
 
 	function loadGame(data: FormData, callback: null | (() => void) = null): void {

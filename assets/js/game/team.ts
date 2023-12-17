@@ -1,4 +1,5 @@
 import Game from "./game";
+import {Tooltip} from "bootstrap";
 
 export default class Team {
 
@@ -11,6 +12,9 @@ export default class Team {
 
 	$playerCount: HTMLDivElement;
 	$name: HTMLInputElement;
+
+    emptyNameTooltip: Tooltip;
+    nameTooLongTooltip: Tooltip;
 
 	/**
 	 * @param key {String}
@@ -27,6 +31,23 @@ export default class Team {
 
 		this.$playerCount = row.querySelector('.player-count');
 		this.$name = row.querySelector('.team-name');
+
+        this.emptyNameTooltip = new Tooltip(
+            this.$name,
+            {
+                title: messages.emptyTeamName,
+                trigger: 'manual',
+                customClass: 'tooltip-danger',
+            }
+        );
+        this.nameTooLongTooltip = new Tooltip(
+            this.$name,
+            {
+                title: messages.teamNameTooLong,
+                trigger: 'manual',
+                customClass: 'tooltip-danger',
+            }
+        );
 
 		this.initEvents();
 	}
@@ -55,6 +76,16 @@ export default class Team {
 
 		this.name = this.$name.value;
 
+        if (this.name.length < this.$name.minLength) {
+            this.emptyNameTooltip.show();
+        } else {
+            this.emptyNameTooltip.hide();
+        }
+        if (this.name.length > this.$name.maxLength) {
+            this.nameTooLongTooltip.show();
+        } else {
+            this.nameTooLongTooltip.hide();
+        }
 
 		this.row.dispatchEvent(
 			new Event("update", {

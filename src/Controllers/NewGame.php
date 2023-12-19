@@ -214,6 +214,15 @@ class NewGame extends Controller
 		$data['meta']['hash'] = md5(json_encode($data['players'], JSON_THROW_ON_ERROR));
 		Timer::stop('newGame.finish');
 
+
+		// Choose random music ID if a group is selected
+		if (isset($data['meta']['music']) && str_starts_with($data['meta']['music'], 'g-')) {
+			$musicIds = array_slice(explode('-', $data['meta']['music']), 1);
+			$data['meta']['music'] = $musicIds[array_rand($musicIds)];
+
+			$data['meta']['music'] = (int)$data['meta']['music'];
+		}
+
 		// Render the game info into a load file
 		Timer::start('newGame.render');
 		$content = $this->latte->viewToString('gameFiles/evo5', $data);
@@ -227,14 +236,6 @@ class NewGame extends Controller
 		// Set up a correct music file
 		Timer::start('newGame.music');
 		if (isset($data['meta']['music'])) {
-			// Choose random music ID if a group is selected
-			if (str_starts_with($data['meta']['music'], 'g-')) {
-				$musicIds = array_slice(explode('-', $data['meta']['music']), 1);
-				$data['meta']['music'] = $musicIds[array_rand($musicIds)];
-			}
-
-			$data['meta']['music'] = (int)$data['meta']['music'];
-
 			try {
 				/** @phpstan-ignore-next-line */
 				$music = MusicMode::get($data['meta']['music']);

@@ -32,7 +32,7 @@ class NewGame extends Controller
 {
 
 	public HookedTemplates $hookedTemplates;
-	protected string $title = 'New game';
+	protected string $title       = 'New game';
 	protected string $description = '';
 	/** @var ControllerDecoratorInterface[] */
 	private array $decorators = [];
@@ -105,9 +105,8 @@ class NewGame extends Controller
 		 *   } $data
 		 */
 		$data = [
-			'meta' => [
-				/** @phpstan-ignore-next-line */
-				'music' => empty($request->post['music']) ? null : (int)$request->post['music'],
+			'meta'  => [
+				'music' => empty($request->post['music']) ? null : $request->post['music'],
 			],
 			'players' => [],
 			'teams' => [],
@@ -124,7 +123,7 @@ class NewGame extends Controller
 		Timer::start('newGame.mode');
 		try {
 			/** @phpstan-ignore-next-line */
-					$mode = GameModeFactory::getById((int)($request->getPost('game-mode', 0)));
+			$mode = GameModeFactory::getById((int)($request->getPost('game-mode', 0)));
 		} catch (GameModeNotFoundException) {
 		}
 
@@ -132,11 +131,11 @@ class NewGame extends Controller
 			$data['meta']['mode'] = $mode->loadName;
 			if (!empty($request->post['variation'])) {
 				$data['meta']['variations'] = [];
-							/**
-							 * @var int $id
-							 * @var string $suffix
-							 * @phpstan-ignore-next-line
-							 */
+				/**
+				 * @var int    $id
+				 * @var string $suffix
+				 * @phpstan-ignore-next-line
+				 */
 				foreach ($request->getPost('variation', []) as $id => $suffix) {
 					$data['meta']['variations'][$id] = $suffix;
 					$data['meta']['mode'] .= $suffix;
@@ -167,22 +166,22 @@ class NewGame extends Controller
 			}
 			$asciiName = substr(Strings::toAscii($player['name']), 0, 12);
 			if ($player['name'] !== $asciiName) {
-							$data['meta']['p' . $vest . 'n'] = $player['name'];
-						}
-					if (!empty($player['code'])) {
-						$data['meta']['p' . $vest . 'u'] = $player['code'];
-					}
-					$data['players'][] = [
-						'vest' => (string)$vest,
-						'name' => $asciiName,
-						'team' => (string)$player['team'],
-						'vip' => ((int)$player['vip']) === 1,
-					];
-					if (!isset($teams[(string)$player['team']])) {
-						$teams[(string)$player['team']] = 0;
-					}
-					$teams[(string)$player['team']]++;
-				}
+				$data['meta']['p' . $vest . 'n'] = $player['name'];
+			}
+			if (!empty($player['code'])) {
+				$data['meta']['p' . $vest . 'u'] = $player['code'];
+			}
+			$data['players'][] = [
+				'vest' => (string)$vest,
+				'name' => $asciiName,
+				'team' => (string)$player['team'],
+				'vip'  => ((int)$player['vip']) === 1,
+			];
+			if (!isset($teams[(string)$player['team']])) {
+				$teams[(string)$player['team']] = 0;
+			}
+			$teams[(string)$player['team']]++;
+		}
 		Timer::stop('newGame.players');
 
 		Timer::start('newGame.teams');
@@ -194,13 +193,13 @@ class NewGame extends Controller
 		foreach ($request->getPost('team', []) as $key => $team) {
 			$asciiName = Strings::toAscii($team['name']);
 			if ($team['name'] !== $asciiName) {
-							$data['meta']['t' . $key . 'n'] = $team['name'];
+				$data['meta']['t' . $key . 'n'] = $team['name'];
 			}
 			$data['teams'][] = [
-							'key' => $key,
-							'name' => $asciiName,
-							'playerCount' => $teams[(string)$key] ?? 0,
-						];
+				'key'         => $key,
+				'name'        => $asciiName,
+				'playerCount' => $teams[(string)$key] ?? 0,
+			];
 		}
 		Timer::stop('newGame.teams');
 
@@ -220,7 +219,7 @@ class NewGame extends Controller
 		$content = $this->latte->viewToString('gameFiles/evo5', $data);
 		$loadDir = LMX_DIR . Info::get('evo5_load_file', 'games/');
 		if (file_exists($loadDir) && is_dir($loadDir)) {
-					file_put_contents($loadDir . '0000.game', $content);
+			file_put_contents($loadDir . '0000.game', $content);
 		}
 		Timer::stop('newGame.render');
 
@@ -228,11 +227,19 @@ class NewGame extends Controller
 		// Set up a correct music file
 		Timer::start('newGame.music');
 		if (isset($data['meta']['music'])) {
+			// Choose random music ID if a group is selected
+			if (str_starts_with($data['meta']['music'], 'g-')) {
+				$musicIds = array_slice(explode('-', $data['meta']['music']), 1);
+				$data['meta']['music'] = $musicIds[array_rand($musicIds)];
+			}
+
+			$data['meta']['music'] = (int)$data['meta']['music'];
+
 			try {
 				/** @phpstan-ignore-next-line */
-							$music = MusicMode::get((int)$data['meta']['music']);
+				$music = MusicMode::get($data['meta']['music']);
 				if (!file_exists($music->fileName)) {
-									App::getLogger()->warning('Music file does not exist - ' . $music->fileName);
+					App::getLogger()->warning('Music file does not exist - ' . $music->fileName);
 				}
 				else if (!copy($music->fileName, LMX_DIR . 'music/evo5.mp3')) {
 					App::getLogger()->warning('Music copy failed - ' . $music->fileName);

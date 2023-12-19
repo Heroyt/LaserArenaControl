@@ -479,7 +479,7 @@ class ResultsParser extends AbstractResultsParser
 				return $game;
 			}
 
-			if (!empty($meta['music'])) {
+			if (!empty($meta['music']) && ((int)$meta['music']) > 0) {
 				try {
 					$game->music = MusicMode::get((int)$meta['music']);
 				} catch (ModelNotFoundException) {

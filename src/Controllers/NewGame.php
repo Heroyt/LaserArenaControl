@@ -171,7 +171,7 @@ class NewGame extends Controller
 			if (!empty($player['code'])) {
 				$data['meta']['p' . $vest . 'u'] = $player['code'];
 			}
-			$data['players'][] = [
+			$data['players'][(string)$vest] = [
 				'vest' => (string)$vest,
 				'name' => $asciiName,
 				'team' => (string)$player['team'],
@@ -211,6 +211,8 @@ class NewGame extends Controller
 
 		Timer::start('newGame.finish');
 		$data['teams'] = array_filter($data['teams'], static fn($team) => $team['playerCount'] > 0);
+		ksort($data['players']);
+		$data['players'] = array_values($data['players']);
 		$data['meta']['hash'] = md5(json_encode($data['players'], JSON_THROW_ON_ERROR));
 		Timer::stop('newGame.finish');
 

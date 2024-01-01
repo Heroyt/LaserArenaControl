@@ -455,14 +455,15 @@ class ResultsParser extends AbstractResultsParser
 			/** @var Player $player */
 			foreach ($game->getPlayers() as $player) {
 				$metaStartTeamKey = 'p' . $player->vest . '-startTeam';
-				$players[] = [
+				$players[(string)$player->vest] = [
 					'vest' => (string)$player->vest,
 					'name' => $player->name,
 					'team' => (string)($meta[$metaStartTeamKey] ?? $player->teamNum),
 					'vip' => $player->vip,
 				];
 			}
-			usort($players, static fn($player1, $player2) => ((int)$player1['vest']) - ((int)$player2['vest']));
+			ksort($players);
+			$players = array_values($players);
 			// Calculate hash
 			$hash = md5(json_encode($players, JSON_THROW_ON_ERROR));
 

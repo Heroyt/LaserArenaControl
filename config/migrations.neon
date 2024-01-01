@@ -9,6 +9,21 @@ tables:
     			PRIMARY KEY (`key`)
     		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
     		'''
+	App\GameModels\Vest:
+		definition: '''
+			(
+            	`id_vest` int(11) unsigned NOT NULL AUTO_INCREMENT,
+            	`vest_num` int(11) NOT NULL,
+            	`system` varchar(50) NOT NULL DEFAULT '',
+            	`grid_col` int(10) unsigned DEFAULT NULL,
+            	`grid_row` int(10) unsigned DEFAULT NULL,
+            	`updated_at` datetime DEFAULT NULL ON UPDATE current_timestamp(),
+            	PRIMARY KEY (`id_vest`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+		'''
+		modifications:
+			0.1:
+				- 'ADD `updated_at` datetime DEFAULT NULL ON UPDATE current_timestamp();'
 	App\Models\Auth\Player:
 		definition: '''
 			(
@@ -187,6 +202,7 @@ tables:
 			`ammo` int(10) unsigned DEFAULT NULL,
 			`sync` TINYINT(1)  NOT NULL  DEFAULT 0,
 			PRIMARY KEY (`id_game`),
+			UNIQUE KEY `code` (`code`),
 			KEY `id_mode` (`id_mode`),
 			CONSTRAINT `evo5_games_ibfk_1` FOREIGN KEY (`id_mode`) REFERENCES `game_modes` (`id_mode`) ON DELETE SET NULL ON UPDATE CASCADE,
 			CONSTRAINT `evo5_games_ibfk_2` FOREIGN KEY (`id_music`) REFERENCES `music` (`id_music`) ON DELETE SET NULL ON UPDATE CASCADE,
@@ -201,10 +217,12 @@ tables:
 				- 'ADD `import_time` datetime DEFAULT NULL AFTER `file_time`'
 			0.4.0:
 				- 'ADD `id_music` int(11) unsigned DEFAULT NULL AFTER `id_mode`'
-				- 'ADD FOREIGN KEY IF NOT EXISTS (`id_music`) REFERENCES `music` (`id_music`) ON DELETE SET NULL ON UPDATE CASCADE'
+				- 'ADD `evo5_games_ibfk_2` FOREIGN KEY IF NOT EXISTS (`id_music`) REFERENCES `music` (`id_music`) ON DELETE SET NULL ON UPDATE CASCADE'
 			0.4.1:
 				- 'ADD `id_group` int(11) unsigned DEFAULT NULL AFTER `id_music`'
-				- 'ADD FOREIGN KEY IF NOT EXISTS (`id_group`) REFERENCES `game_groups` (`id_group`) ON DELETE SET NULL ON UPDATE CASCADE'
+				- 'ADD `evo5_games_ibfk_3` FOREIGN KEY IF NOT EXISTS (`id_group`) REFERENCES `game_groups` (`id_group`) ON DELETE SET NULL ON UPDATE CASCADE'
+			0.4.2:
+				- 'ADD UNIQUE INDEX (`code`);'
 	App\GameModels\Game\Evo5\Team:
 		definition: '''
 		(

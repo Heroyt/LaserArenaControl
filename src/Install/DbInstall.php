@@ -9,7 +9,6 @@ use App\Core\Info;
 use App\GameModels\Game\PrintStyle;
 use App\GameModels\Game\PrintTemplate;
 use App\GameModels\Tip;
-use App\GameModels\Vest;
 use App\Services\EventService;
 use Dibi\Exception;
 use Lsr\Core\DB;
@@ -91,17 +90,6 @@ class DbInstall implements InstallInterface
 					'ADD `sent_dev` tinyint(1) NOT NULL DEFAULT 0 AFTER `sent`',
 				],
 			],
-		],
-		Vest::TABLE => [
-			'definition' => "(
-				`id_vest` int(11) unsigned NOT NULL AUTO_INCREMENT,
-				`vest_num` int(11) NOT NULL,
-				`system` varchar(50) NOT NULL DEFAULT '',
-				`grid_col` int(10) unsigned DEFAULT NULL,
-				`grid_row` int(10) unsigned DEFAULT NULL,
-				PRIMARY KEY (`id_vest`)
-			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;",
-			'modifications' => [],
 		],
 	];
 

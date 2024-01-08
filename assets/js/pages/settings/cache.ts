@@ -1,5 +1,5 @@
-import axios from "axios";
 import {startLoading, stopLoading} from "../../loaders";
+import {fetchPost} from "../../includes/apiClient";
 
 export default function initCacheSettings() {
 
@@ -12,7 +12,7 @@ export default function initCacheSettings() {
 		const href = btn.dataset.href;
 		btn.addEventListener('click', () => {
 			startLoading();
-			axios.post(href, {})
+            fetchPost(href)
 				.then(() => {
 					stopLoading();
 				})

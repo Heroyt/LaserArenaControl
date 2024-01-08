@@ -1,12 +1,13 @@
 import Game from "../../game/game";
-import axios, {AxiosResponse} from "axios";
-import {lang} from "../../functions";
+import {lang} from "../../includes/functions";
 import EventServerInstance from "../../EventServer";
 import {startLoading, stopLoading} from "../../loaders";
 import {GameData} from "../../interfaces/gameInterfaces";
 import {Offcanvas} from "bootstrap";
 import {isFeatureEnabled} from "../../featureConfig";
 import Control, {GameStatus} from "./control";
+import {gatesStart, gatesStop} from "../../api/endpoints/gates";
+import {getLastGames, sendLoadGame} from "../../api/endpoints/games";
 
 declare global {
 	const gameData: GameData;
@@ -20,7 +21,7 @@ function initGatesControls() {
 	if (gatesStartBtn) {
 		gatesStartBtn.addEventListener('click', () => {
 			startLoading();
-			axios.post('/api/gates/start', {})
+            gatesStart()
 				.then(() => {
 					stopLoading();
 				})
@@ -32,7 +33,7 @@ function initGatesControls() {
 	if (gatesStopBtn) {
 		gatesStopBtn.addEventListener('click', () => {
 			startLoading();
-			axios.post('/api/gates/stop', {})
+            gatesStop()
 				.then(() => {
 					stopLoading();
 				})
@@ -181,17 +182,9 @@ export default function initNewGamePage() {
 	EventServerInstance.addEventListener('game-imported', loadLastGames);
 
 	function loadLastGames() {
-		axios.get('/api/games', {
-			params: {
-				limit: 10,
-				orderBy: 'start',
-				desc: true,
-				excludeFinished: true,
-				expand: true,
-			},
-		})
-			.then((response: AxiosResponse<GameData[]>) => {
-				response.data.forEach(game => {
+        getLastGames()
+            .then(response => {
+                response.forEach(game => {
 						const test = lastGamesSelect.querySelector(`option[value="${game.code}"]`);
 						if (test) {
 							return; // Do not add duplicates
@@ -224,9 +217,9 @@ export default function initNewGamePage() {
 							lang(game.mode.name, null, 1, 'gameModes')
 						])
 							.then(values => {
-								const playerString = values[0].data.replace('%d', game.playerCount.toString());
-								const teamString = game.mode.type === 'TEAM' ? values[1].data.replace('%d', teamCount.toString()) + ', ' : '';
-								option.innerText = `${game.fileNumber} - [${gameDate.getHours().toString().padStart(2, '0')}:${gameDate.getMinutes().toString().padStart(2, '0')}] ${values[2].data}: ${playerString}, ${teamString} ${players}`;
+                                const playerString = values[0].replace('%d', game.playerCount.toString());
+                                const teamString = game.mode.type === 'TEAM' ? values[1].replace('%d', teamCount.toString()) + ', ' : '';
+                                option.innerText = `${game.fileNumber} - [${gameDate.getHours().toString().padStart(2, '0')}:${gameDate.getMinutes().toString().padStart(2, '0')}] ${values[2]}: ${playerString}, ${teamString} ${players}`;
 							})
 					}
 				);
@@ -279,14 +272,14 @@ export default function initNewGamePage() {
 
 	function loadGame(data: FormData, callback: null | (() => void) = null): void {
 		startLoading();
-		axios.post('/', data)
-			.then((response: AxiosResponse<{ status: string, mode?: string }>) => {
+        sendLoadGame(data)
+            .then(response => {
 				stopLoading();
-				if (!response.data.mode || response.data.mode === '') {
+                if (!response.mode || response.mode === '') {
 					console.error('Got invalid mode');
 					return;
 				}
-				const mode = response.data.mode;
+                const mode = response.mode;
 
 				if (control) {
 					control.loadGame(mode, callback);
@@ -299,14 +292,14 @@ export default function initNewGamePage() {
 
 	function loadStartGame(data: FormData, callback: null | (() => void) = null): void {
 		startLoading();
-		axios.post('/', data)
-			.then((response: AxiosResponse<{ status: string, mode?: string }>) => {
+        sendLoadGame(data)
+            .then(response => {
 				stopLoading();
-				if (!response.data.mode || response.data.mode === '') {
+                if (!response.mode || response.mode === '') {
 					console.error('Got invalid mode');
 					return;
 				}
-				const mode = response.data.mode;
+                const mode = response.mode;
 
 				if (control) {
 					control.loadStart(mode, callback);
@@ -318,13 +311,13 @@ export default function initNewGamePage() {
 	}
 
 	function handleKeyboardShortcuts(e: KeyboardEvent) {
-		console.log('keyup', e.key, e.keyCode, e.altKey, e.ctrlKey);
+        console.log('keyup', e.key, e.code, e.altKey, e.ctrlKey);
 		if (e.target instanceof HTMLElement && (e.target.nodeName.toLowerCase() === 'input' || e.target.nodeName.toLowerCase() === 'textarea')) {
 			return;
 		}
-		switch (e.keyCode) {
-			case 32: // Space
-			case 13: // Enter
+        switch (e.code) {
+            case 'Space': // Space
+            case 'Enter': // Enter
 				if (!control || control.currentStatus === GameStatus.STANDBY) {
 					form.requestSubmit(loadBtn);
 				}
@@ -332,17 +325,17 @@ export default function initNewGamePage() {
 					form.requestSubmit(startBtn);
 				}
 				break;
-			case 8: // Backspace
-			case 46: // Delete
+            case 'Backspace': // Backspace
+            case 'Delete': // Delete
 				if (e.ctrlKey) {
 					game.clearAll();
 				}
 				break;
-			case 86: // v
+            case 'KeyV': // v
 				(document.getElementById('hide-variations') as HTMLButtonElement)
 					.dispatchEvent(new Event('click', {bubbles: true}));
 				break;
-			case 72: // h
+            case 'KeyH': // h
 				helpOffcanvas.toggle();
 				break;
 		}

@@ -1,8 +1,8 @@
 import {Popover, Tooltip} from "bootstrap";
-import axios from "axios";
 import {startLoading, stopLoading} from "../loaders";
-import {initTooltips} from "../functions";
+import {initTooltips} from "../includes/functions";
 import Game from "./game";
+import {updateVests, VestData} from "../api/endpoints/settings/vests";
 
 declare module "bootstrap" {
 	class Popover {
@@ -179,7 +179,7 @@ export default class Player {
 			this.popover._getTipElement().querySelectorAll('input, textarea').forEach(input => {
 				input.addEventListener(input.tagName === 'input' ? 'change' : 'input', () => {
 					startLoading(true);
-					let data: { vest: { [index: string | number]: { status: string, info: string } } } = {
+                    let data: VestData = {
 						vest: {}
 					};
 					const status = (this.popover._getTipElement().querySelector(`input:checked`) as HTMLInputElement).value;
@@ -191,9 +191,9 @@ export default class Player {
 					this.$vest.setAttribute('data-status', status);
 					this.$vest.dataset.info = textarea.value;
 					this.$vest.setAttribute('data-info', textarea.value);
-					axios.post('/settings/vests', data)
+                    updateVests(data)
 						.then(response => {
-							stopLoading(response.data.success, true);
+                            stopLoading(response.success, true);
 						})
 						.catch(() => {
 							stopLoading(false, true);
@@ -228,20 +228,20 @@ export default class Player {
 		});
 
 		document.addEventListener('keydown', e => {
-			if (e.ctrlKey && (e.code.includes('Digit') || e.keyCode === 83 || e.keyCode === 8 || e.keyCode === 46)) {
+            if (e.ctrlKey && (e.code.includes('Digit') || e.code === 'KeyS' || e.code === 'Backspace' || e.code === 'Delete')) {
 				e.preventDefault();
 			}
 		});
 
 		this.$name.addEventListener('keyup', e => {
-			if (e.keyCode === 38) { // Arrow up
+            if (e.code === 'ArrowUp') { // Arrow up
 				if (this.skill === this.maxSkill) {
 					this.setSkill(1);
 				} else {
 					this.setSkill(this.skill + 1)
 				}
 				return;
-			} else if (e.keyCode === 40) { // Arrow down
+            } else if (e.code === 'ArrowUp') { // Arrow down
 				if (this.skill === 1) {
 					this.setSkill(this.maxSkill);
 				} else {
@@ -258,9 +258,9 @@ export default class Player {
 				if (this.$teams[index]) {
 					this.setTeam(this.$teams[index].value);
 				}
-			} else if (e.keyCode === 83) { // s
+            } else if (e.code === 'KeyS') { // s
 				this.setVip(!this.vip);
-			} else if (e.keyCode === 8 || e.keyCode === 46) { // Backspace or delete
+            } else if (e.code === 'Backspace' || e.code === 'Delete') { // Backspace or delete
 				this.clear();
 			}
 		});

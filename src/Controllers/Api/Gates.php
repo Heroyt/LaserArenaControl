@@ -26,7 +26,7 @@ class Gates extends ApiController
 			try {
 				GatesController::start($ip);
 			} catch (Exception $e) {
-				$this->respond(['error' => $e->getMessage()], 500);
+				$this->respond(['status' => 'error', 'error' => $e->getMessage()], 500);
 			}
 		}
 		$this->respond(['status' => 'ok']);
@@ -38,7 +38,7 @@ class Gates extends ApiController
 			try {
 				GatesController::end($ip);
 			} catch (Exception $e) {
-				$this->respond(['error' => $e->getMessage()], 500);
+				$this->respond(['status' => 'error', 'error' => $e->getMessage()], 500);
 			}
 		}
 		$this->respond(['status' => 'ok']);

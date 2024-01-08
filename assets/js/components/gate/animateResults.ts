@@ -1,4 +1,4 @@
-import {shuffle} from "../../functions";
+import {shuffle} from "../../includes/functions";
 import {PlayerData, TeamData} from "./types";
 
 /**

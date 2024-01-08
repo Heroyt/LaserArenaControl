@@ -1,55 +1,65 @@
 {
-	"name": "laserarenacontrol",
+  "name": "laserarenacontrol",
+  "sideEffects": [
+    "./assets/main.ts",
+    "./assets/loaders.ts",
+    "./assets/EventServer.ts",
+    "./assets/pages/*.ts",
+    "*.scss",
+    "*.css"
+  ],
   "version": "0.4.6",
-	"description": "",
-	"main": "index.php",
-	"directories": {
-		"test": "tests"
-	},
-	"scripts": {
-		"test": "phpunit",
-		"buildDev": "webpack --stats-children --config webpack.config.js --mode=development",
-		"build": "webpack --stats-children --config webpack.config.js --mode=production",
-		"watch": "webpack --watch --stats-children --config webpack.config.js --mode=production",
-		"watchDev": "webpack --watch --stats-children --config webpack.config.js --mode=development"
-	},
-	"dependencies": {
-		"@eastdesire/jscolor": "^2.5.1",
+  "description": "",
+  "main": "index.php",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "phpunit",
+    "buildDev": "webpack --stats-children --config webpack.config.js --mode=development",
+    "build": "webpack --stats-children --config webpack.config.js --mode=production",
+    "watch": "webpack --watch --stats-children --config webpack.config.js --mode=production",
+    "watchDev": "webpack --watch --stats-children --config webpack.config.js --mode=development"
+  },
+  "dependencies": {
+    "@eastdesire/jscolor": "^2.5.2",
     "@fortawesome/fontawesome-free": "^6.5.1",
-		"@popperjs/core": "^2.11.8",
+    "@popperjs/core": "^2.11.8",
     "autocompleter": "^9.1.2",
-    "axios": "^1.6.2",
     "bootstrap": "^5.3.2",
-		"flatpickr": "^4.6.13",
+    "flatpickr": "^4.6.13",
     "sortablejs": "^1.15.1",
-		"taggle": "^1.15.0"
-	},
-	"devDependencies": {
+    "taggle": "^1.15.0"
+  },
+  "devDependencies": {
     "@types/bootstrap": "^5.2.10",
     "@types/sortablejs": "^1.15.7",
-    "@types/web": "^0.0.123",
+    "@types/web": "^0.0.134",
     "autoprefixer": "^10.4.16",
-		"compression-webpack-plugin": "^10.0.0",
-		"copy-webpack-plugin": "^11.0.0",
-		"css-loader": "^6.8.1",
-		"file-loader": "^6.2.0",
+    "compression-webpack-plugin": "^10.0.0",
+    "copy-webpack-plugin": "^11.0.0",
+    "css-loader": "^6.8.1",
+    "css-minimizer-webpack-plugin": "^5.0.1",
+    "cssnano": "^6.0.3",
+    "file-loader": "^6.2.0",
     "fork-ts-checker-webpack-plugin": "^9.0.2",
-		"image-webpack-loader": "^8.1.0",
-		"mini-css-extract-plugin": "^2.7.6",
-    "postcss": "^8.4.31",
-		"postcss-loader": "^7.3.3",
+    "image-webpack-loader": "^8.1.0",
+    "mini-css-extract-plugin": "^2.7.6",
+    "postcss": "^8.4.33",
+    "postcss-loader": "^7.3.4",
     "postcss-scss": "^4.0.9",
-    "sass": "^1.69.5",
-		"sass-loader": "^13.3.2",
-		"style-loader": "^3.3.3",
-    "stylelint": "^15.11.0",
+    "sass": "^1.69.7",
+    "sass-loader": "^13.3.3",
+    "style-loader": "^3.3.3",
+    "stylelint": "^16.1.0",
+    "terser-webpack-plugin": "^5.3.10",
     "ts-loader": "^9.5.1",
-    "typescript": "^5.3.2",
+    "typescript": "^5.3.3",
     "webpack": "^5.89.0",
     "webpack-bundle-analyzer": "^4.10.1",
-		"webpack-cli": "^5.1.4",
-		"workbox-webpack-plugin": "^7.0.0"
-	},
-	"author": "Tomáš Vojík <vojik@wboy.cz>",
-	"license": "GPL-3.0"
+    "webpack-cli": "^5.1.4",
+    "workbox-webpack-plugin": "^7.0.0"
+  },
+  "author": "Tomáš Vojík <vojik@wboy.cz>",
+  "license": "GPL-3.0"
 }

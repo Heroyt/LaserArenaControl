@@ -1,6 +1,6 @@
 import Player from "./player";
 import Team from "./team";
-import {shuffle} from "../functions";
+import {shuffle} from "../includes/functions";
 import {Tooltip} from "bootstrap";
 import {GameData, Variation, VariationsValue} from '../interfaces/gameInterfaces';
 import CustomLoadMode from "./customLoadMode";

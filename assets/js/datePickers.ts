@@ -10,8 +10,8 @@ export default function initDatePickers(elem: HTMLElement | HTMLDocument = null)
 		elem = document;
 	}
 
-	import(`/node_modules/flatpickr/dist/l10n/${activeLanguageCode}.js`).then(localizationModule => {
-		const lang = localizationModule.default[activeLanguageCode];
+    import(`flatpickr/dist/l10n/cs`).then(localizationModule => {
+        const lang = localizationModule.default.cs;
 		flatpickr.localize(lang);
 
 		(elem.querySelectorAll('input[type="date"]:not([data-input]), .date-picker') as NodeListOf<HTMLInputElement | HTMLDivElement>).forEach(input => {

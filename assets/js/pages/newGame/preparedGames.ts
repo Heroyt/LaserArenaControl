@@ -1,9 +1,14 @@
 import {Offcanvas} from "bootstrap";
 import {startLoading, stopLoading} from "../../loaders";
-import axios, {AxiosResponse} from "axios";
 import {GameData, PhpDateTime} from "../../interfaces/gameInterfaces";
-import {initTooltips} from "../../functions";
+import {initTooltips} from "../../includes/functions";
 import Game from "../../game/game";
+import {
+    deleteAllPreparedGames,
+    deletePreparedGame,
+    getPreparedGames,
+    sendPreparedGame
+} from "../../api/endpoints/preparedGames";
 
 declare global {
 	const system: string;
@@ -31,7 +36,7 @@ export default class NewGamesPrepared {
 
 		document.getElementById('deleteAllPreparedGames').addEventListener('click', () => {
 			startLoading();
-			axios.delete('/prepared')
+            deleteAllPreparedGames()
 				.then(() => {
 					stopLoading(true);
 					this.updatePreparedGames();
@@ -46,7 +51,7 @@ export default class NewGamesPrepared {
 			const data = this.game.export();
 
 			startLoading();
-			axios.post('/prepared', data)
+            sendPreparedGame(data)
 				.then(() => {
 					stopLoading(true);
 					this.updatePreparedGames();
@@ -76,7 +81,7 @@ export default class NewGamesPrepared {
 
 		deleteBtn.addEventListener('click', () => {
 			startLoading();
-			axios.delete(`/prepared/${id}`)
+            deletePreparedGame(id)
 				.then(() => {
 					stopLoading(true);
 					preparedGameWrapper.remove();
@@ -89,10 +94,10 @@ export default class NewGamesPrepared {
 	}
 
 	updatePreparedGames() {
-		axios.get('/prepared')
-			.then((response: AxiosResponse<PreparedGameData[]>) => {
+        getPreparedGames()
+            .then(response => {
 				this.gamesPreparedWrapper.innerHTML = '';
-				response.data.forEach(groupData => {
+                response.forEach(groupData => {
 					this.addPreparedGame(groupData);
 				});
 			});

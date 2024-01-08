@@ -1,16 +1,5 @@
 @use "sass:map";
 
-.w-fill {
-	left: calc((100% - 100vw) / 2);
-	//overflow: hidden !important;
-	position: relative;
-	width: 100vw;
-
-	/*.container {
-		max-width: 1140px !important;
-	}*/
-}
-
 .flex-fill-same {
 	flex: 1 1 0 !important;
 }

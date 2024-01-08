@@ -5,7 +5,7 @@
 
 {varType string[] $errors}
 {varType array $notices}
-{varType array $_COOKIE}
+{varType array < string,string > $_COOKIE}
 
 {default string[] $addCss = []}
 {default string[] $addJs = []}
@@ -59,9 +59,9 @@
     {\Tracy\Debugger::renderLoader()|noescape}
     {include addHead}
 
-    <script src="{getUrl}dist/runtime~main.js?v={\Lsr\Core\App::getCacheVersion()}"></script>
-    <script src="{getUrl}dist/bootstrap.js?v={\Lsr\Core\App::getCacheVersion()}"></script>
-    <script src="{getUrl}dist/vendors.js?v={\Lsr\Core\App::getCacheVersion()}"></script>
+    <script src="{getUrl}dist/bootstrap.js?v={\Lsr\Core\App::getCacheVersion()}" defer></script>
+    <script src="{getUrl}dist/vendors.js?v={\Lsr\Core\App::getCacheVersion()}" defer></script>
+    <script src="{getUrl}dist/common.js?v={\Lsr\Core\App::getCacheVersion()}" defer></script>
 </head>
 <body {ifset $_COOKIE['mode']}class="{$_COOKIE['mode']}Mode"{/ifset}>
 {include header}

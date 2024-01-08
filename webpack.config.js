@@ -5,7 +5,9 @@ const CompressionPlugin = require("compression-webpack-plugin");
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const WorkboxPlugin = require('workbox-webpack-plugin');
-const isDevelopment = true;
+const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
+const TerserPlugin = require("terser-webpack-plugin");
+const isDevelopment = false;
 
 const genRanHex = (size = 24) => [...Array(size)].map(() => Math.floor(Math.random() * 16).toString(16)).join('');
 
@@ -48,9 +50,12 @@ const moduleFiles = fs.readdirSync(path.resolve(__dirname, 'modules/'))
 					if ((file.endsWith('.js') || file.endsWith('.ts')) && !file.startsWith('_')) {
 						const name = file.replace('.js', '').replace('.ts', '');
 						if (!moduleAssets[name]) {
-							moduleAssets[name] = [];
+                            moduleAssets[name] = {
+                                import: [],
+                                runtime: false,
+                            };
 						}
-						moduleAssets[name].push(`./modules/${module}/assets/js/${file}`);
+                        moduleAssets[name].import.push(`./modules/${module}/assets/js/${file}`);
 						count++;
 					}
 				});
@@ -61,9 +66,12 @@ const moduleFiles = fs.readdirSync(path.resolve(__dirname, 'modules/'))
 					if ((file.endsWith('.css') || file.endsWith('.scss')) && !file.startsWith('_')) {
 						const name = file.replace('.css', '').replace('.scss', '');
 						if (!moduleAssets[name]) {
-							moduleAssets[name] = [];
+                            moduleAssets[name] = {
+                                import: [],
+                                runtime: false,
+                            };
 						}
-						moduleAssets[name].push(`./modules/${module}/assets/css/${file}`);
+                        moduleAssets[name].import.push(`./modules/${module}/assets/css/${file}`);
 						count++;
 					}
 				});
@@ -103,7 +111,7 @@ moduleFiles.forEach(module => {
 console.log(entry);
 
 module.exports = {
-	mode: isDevelopment ? 'development' : 'production',
+    mode: isDevelopment ? 'development' : 'production',
 	entry,
 	output: {
 		filename: '[name].js',
@@ -117,7 +125,7 @@ module.exports = {
 				loader: 'ts-loader'
 			},
 			{
-				test: /\.(scss)$/,
+                test: /\.(s?css)$/,
 				use: [
 					MiniCssExtractPlugin.loader,
 					{
@@ -185,15 +193,17 @@ module.exports = {
 	},
 	devtool: "source-map",
 	optimization: {
+        minimize: true,
 		usedExports: true,
-		runtimeChunk: true,
-		moduleIds: 'deterministic',
-		splitChunks: {
-			//chunks: 'all',
+        runtimeChunk: false,
+        removeAvailableModules: true,
+        moduleIds: 'deterministic',
+        splitChunks: {
+            chunks: 'all',
 			usedExports: true,
 			cacheGroups: {
 				vendor: {
-					test: /[\\/]node_modules[\\/](axios|flatpickr|@fortawesome)[\\/]/,
+                    test: /[\\/]node_modules[\\/](flatpickr|@fortawesome|sortablejs)[\\/]/,
 					name: 'vendors',
 					chunks: 'all',
 				},
@@ -201,8 +211,24 @@ module.exports = {
 					test: /[\\/]node_modules[\\/](bootstrap|@popperjs)[\\/]/,
 					name: 'bootstrap',
 					chunks: 'all',
-				}
-			},
-		},
-	}
+                },
+                common: {
+                    test: /[\\/]assets[\\/]js[\\/]includes[\\/]/,
+                    name: 'common',
+                    chunks: 'all',
+                },
+            },
+        },
+        minimizer: [
+            new TerserPlugin({
+                parallel: true,
+                terserOptions: {
+                    compress: {
+                        passes: 2,
+                    },
+                },
+            }),
+            new CssMinimizerPlugin(),
+        ]
+    },
 };

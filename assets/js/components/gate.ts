@@ -1,6 +1,6 @@
-import axios, {AxiosResponse} from "axios";
 import {animateResults} from "./gate/animateResults";
-import {Highlight} from "./gate/types";
+import {prepareFetch, processResponse} from "../includes/apiClient";
+import {getGameHighlights} from "../api/endpoints/games";
 
 declare global {
     let tips: string[]
@@ -34,13 +34,13 @@ export function loadContent(path: string, reloadTimeout: { timeout: null | NodeJ
 
     const contentNew = document.createElement('div');
     // Load content
-    axios.get(path)
-        .then((response: AxiosResponse<string>) => {
+    prepareFetch(path, 'GET')
+        .then(async (response) => {
 
             // Setup next auto-reload
             clearTimeout(reloadTimeout.timeout);
-            if (response.headers['x-reload-time']) {
-                const time = parseInt(response.headers['x-reload-time']);
+            if (response.headers.has('x-reload-time')) {
+                const time = parseInt(response.headers.get('x-reload-time'));
                 if (!isNaN(time)) {
                     reloadTimeout.timeout = setTimeout(() => {
                         loadContent(path, reloadTimeout);
@@ -49,7 +49,7 @@ export function loadContent(path: string, reloadTimeout: { timeout: null | NodeJ
             }
 
             // Copy content
-            contentNew.innerHTML = response.data;
+            contentNew.innerHTML = await processResponse(response.headers.get('Content-Type'), response);
 
             // Find new container classes
             const meta = contentNew.querySelector('meta[name="container-classes"]');
@@ -85,8 +85,8 @@ export function loadContent(path: string, reloadTimeout: { timeout: null | NodeJ
             // Load game highlights and animate results
             if (isResults) {
                 // noinspection JSIgnoredPromiseFromCall
-                replaceTipsWithHighlights(contentNew);
                 animateResults(contentNew);
+                await replaceTipsWithHighlights(contentNew);
             }
 
         })
@@ -119,13 +119,13 @@ export async function replaceTipsWithHighlights(wrapper: HTMLElement | Document 
     console.log(gameInfo, code);
 
     // Load highlights for game
-    const response: AxiosResponse<Highlight[]> = await axios.get(`/laserliga/games/${code}/highlights`)
+    const highlightsData = await getGameHighlights(code);
 
     // Parse highlights.
     // Highlights contain player names with their inflection, where the inflection is optional - '(name)<inflection>'
     const highlights: string[] = [];
-    response.data.forEach(highlight => {
-        highlights.push(highlight.description.replace(/@([^@]+)@(?:<([^@]+)>)?/g, (match, group1: string, group2: string | undefined) => {
+    highlightsData.forEach(highlight => {
+        highlights.push(highlight.description.replace(/@([^@]+)@(?:<([^@]+)>)?/g, (_, group1: string, group2: string | undefined) => {
             return `<strong class="player-name">${group2 ? group2 : group1}</strong>`;
         }));
     });

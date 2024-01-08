@@ -1,4 +1,4 @@
-import {getLink} from "./functions";
+import {getLink} from "./includes/functions";
 import {PageInfo} from "./interfaces/pageInfo";
 
 const resultsReloadPages: { [index: string]: string[] } = {

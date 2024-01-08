@@ -1,22 +1,10 @@
-import {gameTimer, initAutoSaveForm, initTooltips} from './functions';
-import axios from 'axios';
-import {startLoading, stopLoading} from "./loaders";
+import {gameTimer, initAutoSaveForm, initTooltips, toAscii} from './includes/functions';
 import * as bootstrap from "bootstrap";
-// @ts-ignore
-import jscolor from "@eastdesire/jscolor";
 import route from "./router";
 import {PageInfo} from "./interfaces/pageInfo";
 import ActivityMonitor from "./activityMonitor";
 import {GameData} from "./interfaces/gameInterfaces";
-
-axios.defaults.headers.post['X-Requested-With'] = 'XMLHttpRequest';
-axios.defaults.headers.get['X-Requested-With'] = 'XMLHttpRequest';
-axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-
-jscolor.presets.default = {
-	format: 'hex',
-	uppercase: false,
-};
+import {gateActions} from "./components/gateActions";
 
 declare global {
 	const page: PageInfo;
@@ -116,78 +104,57 @@ window.addEventListener("load", () => {
 	// Game timer
 	gameTimer();
     const activityMonitor = new ActivityMonitor();
+    activityMonitor.reset(); // Start the activity monitor
 
 	// Setting a game to gate
-	(document.querySelectorAll('[data-toggle="gate"]') as NodeListOf<HTMLButtonElement>).forEach(btn => {
-		const id = btn.dataset.id;
-		const system = btn.dataset.system;
-		// Allow for tooltips
-		if (btn.title) {
-			new bootstrap.Tooltip(btn);
-		}
-		btn.addEventListener('click', () => {
-			startLoading(true);
-			axios
-				.post('/gate/set/' + system, {
-					game: id
-				})
-				.then(response => {
-					stopLoading(true, true);
-					if (btn.classList.contains('btn-danger')) {
-						btn.classList.remove('btn-danger');
-						btn.classList.add('btn-success');
-					}
-				})
-				.catch(response => {
-					stopLoading(false, true);
-				});
-		});
-	});
-	(document.querySelectorAll('[data-toggle="gate-loaded"]') as NodeListOf<HTMLButtonElement>).forEach(btn => {
-		const id = btn.dataset.id;
-		const system = btn.dataset.system;
-		// Allow for tooltips
-		if (btn.title) {
-			new bootstrap.Tooltip(btn);
-		}
-		btn.addEventListener('click', () => {
-			startLoading(true);
-			axios
-				.post('/gate/loaded/' + system, {
-					game: id
-				})
-				.then(response => {
-					stopLoading(true, true);
-					if (btn.classList.contains('btn-danger')) {
-						btn.classList.remove('btn-danger');
-						btn.classList.add('btn-success');
-					}
-				})
-				.catch(response => {
-					stopLoading(false, true);
-				});
-		});
-	});
-	(document.querySelectorAll('[data-toggle="gate-idle"]') as NodeListOf<HTMLButtonElement>).forEach(btn => {
-		const system = btn.dataset.system;
-		// Allow for tooltips
-		if (btn.title) {
-			new bootstrap.Tooltip(btn);
-		}
-		btn.addEventListener('click', () => {
-			startLoading(true);
-			axios
-				.post('/gate/idle/' + system)
-				.then(response => {
-					stopLoading(true, true);
-					if (btn.classList.contains('btn-danger')) {
-						btn.classList.remove('btn-danger');
-						btn.classList.add('btn-success');
-					}
-				})
-				.catch(response => {
-					stopLoading(false, true);
-				});
-		});
-	});
+    gateActions();
 });
+
+
+// @ts-ignore
+String.prototype.removeDiacritics = function () {
+    return toAscii(this);
+
+}
+
+// @ts-ignore
+String.prototype.hashCode = function () {
+    let hash = 0, i, chr;
+    if (this.length === 0) return hash;
+    for (i = 0; i < this.length; i++) {
+        chr = this.charCodeAt(i);
+        hash = ((hash << 5) - hash) + chr;
+        hash |= 0; // Convert to 32bit integer
+    }
+    return hash;
+};
+
+
+/**
+ * Finds a parent element
+ */
+// @ts-ignore
+Element.prototype.findParentElement = function (elemName: string): HTMLElement {
+    let currElem = this;
+    while (currElem.tagName.toLowerCase() !== elemName.toLowerCase()) {
+        currElem = currElem.parentNode;
+        if (currElem === document.body) {
+            return null;
+        }
+    }
+    return currElem;
+}
+/**
+ * Finds a parent element
+ */
+// @ts-ignore
+Element.prototype.findParentElementByClassName = function (className: string): HTMLElement {
+    let currElem = this;
+    while (!currElem.classList.contains(className)) {
+        currElem = currElem.parentNode;
+        if (currElem === document.body) {
+            return null;
+        }
+    }
+    return currElem;
+}

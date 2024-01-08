@@ -1,6 +1,5 @@
 import CustomLoadMode from "../customLoadMode";
-import {lang} from "../../functions";
-import {AxiosResponse} from "axios";
+import {lang} from "../../includes/functions";
 
 export default class Barvicky extends CustomLoadMode {
 
@@ -26,8 +25,8 @@ export default class Barvicky extends CustomLoadMode {
 		this.randomHiddenTeamsSwitch.classList.add('btn', this.randomHiddenTeams ? 'btn-primary' : 'btn-outline-primary');
 		this.randomHiddenTeamsSwitch.innerText = 'Skryté náhodné týmy';
 		lang('Skryté náhodné týmy', null, 1, 'modes.settings')
-			.then((response: AxiosResponse<string>) => {
-				this.randomHiddenTeamsSwitch.innerText = response.data;
+			.then(translated => {
+				this.randomHiddenTeamsSwitch.innerText = translated;
 			})
 		modeVariations.appendChild(this.randomHiddenTeamsSwitch);
 

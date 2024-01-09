@@ -42,7 +42,9 @@ docs/
 !assets/icon/
 !assets/scss/results/
 upload/
-docker/*
+docker/mysql
+docker/private
+docker/redis
 !docker/nginx
 !docker/nginx.conf
 !docker/docker-compose-nginx.yml

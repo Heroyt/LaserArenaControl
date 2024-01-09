@@ -3,7 +3,7 @@ name: Docker Image Core build
 on:
     push:
         paths:
-            - dockerCore/*
+          - docker/core/*
             - .github/workflows/docker-core.yml
         branches: [ master ]
         tags:
@@ -11,7 +11,7 @@ on:
     pull_request:
         branches: [ master ]
         paths:
-            - dockerCore/*
+          - docker/core/*
 
 jobs:
     build:
@@ -23,9 +23,7 @@ jobs:
                     username: ${{ secrets.DOCKERHUB_USERNAME }}
                     password: ${{ secrets.DOCKERHUB_TOKEN }}
             -   uses: actions/checkout@v2
-            -   name: Build the Docker core image Apache
-                run: docker build dockerCore --file dockerCore/Dockerfile --tag heroyt/lac_core:$(date +%s) --tag heroyt/lac_core:latest --tag heroyt/lac_core:apache
-            -   name: Build the Docker core image Nginx
-                run: docker build dockerCore --file dockerCore/DockerfileNginx --tag heroyt/lac_core:nginx-$(date +%s) --tag heroyt/lac_core:nginx-latest --tag heroyt/lac_core:nginx
+            - name: Build the Docker core image
+              run: docker build dockerCore --file docker/core/Dockerfile --tag heroyt/lac_core:$(date +%s) --tag heroyt/lac_core:latest --tag heroyt/lac_core:nginx-latest --tag heroyt/lac_core:nginx
             -   name: Push docker image
                 run: docker push heroyt/lac_core -a

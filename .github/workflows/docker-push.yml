@@ -8,9 +8,7 @@ on:
 jobs:
 
     build:
-
         runs-on: ubuntu-latest
-
         steps:
             -   uses: actions/checkout@master
             -   name: Get tag
@@ -23,9 +21,7 @@ jobs:
                     password: ${{ secrets.DOCKERHUB_TOKEN }}
             -   name: Use tag
                 run: echo ${{steps.tag.outputs.tag}}
-            -   name: Build the Docker image - apache
-                run: docker build . --file Dockerfile --tag heroyt/laser-arena-control:latest --tag heroyt/laser-arena-control:${{steps.tag.outputs.tag}}
-            -   name: Build the Docker image - nginx
-                run: docker build . --file docker/DockerfileNginx --tag heroyt/laser-arena-control:nginx-latest --tag heroyt/laser-arena-control:${{steps.tag.outputs.tag}}-nginx
+            - name: Build the Docker image
+              run: docker build . --file docker/Dockerfile --tag heroyt/laser-arena-control:latest --tag heroyt/laser-arena-control:${{steps.tag.outputs.tag}} --tag heroyt/laser-arena-control:nginx-latest --tag heroyt/laser-arena-control:${{steps.tag.outputs.tag}}-nginx
             -   name: Push images
                 run: docker push heroyt/laser-arena-control -a

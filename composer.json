@@ -53,40 +53,11 @@
     "ext-zlib": "*",
     "heroyt/tournament-generator": "^0.5",
     "laser-arena-control/tables_module": "@dev",
-    "laser-arena-control/tournament_module": "@dev"
-	},
-	"require-dev": {
-		"roave/security-advisories": "dev-latest",
-		"phpunit/phpunit": "^9.5",
-		"phpstan/phpstan": "^1.8",
-		"phpstan/extension-installer": "^1.1",
-		"phpstan/phpstan-dibi": "^1.0",
-		"phpstan/phpstan-nette": "^1.0"
-	},
-	"license": "GPL-3.0-or-later",
-	"autoload": {
-		"psr-4": {
-			"App\\": "src/"
-		},
-		"files": [
-			"include/functions.php"
-		]
-	},
-	"authors": [
-		{
-			"name": "Tomáš Vojík",
-			"email": "vojik@wboy.cz"
-		}
-	],
-	"config": {
-		"allow-plugins": {
-			"phpstan/extension-installer": true
-		}
-	}
     "laser-arena-control/tournament_module": "@dev",
     "orisai/scheduler": "^1.0",
     "orisai/nette-scheduler": "^1.0",
-    "symfony/lock": "^6"
+    "symfony/lock": "^6",
+    "diego-ninja/composer-preload": "^1.0"
   },
   "require-dev": {
     "roave/security-advisories": "dev-latest",

@@ -1,5 +1,5 @@
 FROM node:19-slim AS node_base
-FROM php:8.2-apache-bullseye as setup
+FROM php:8.2-fpm-bullseye as setup
 
 #COPY --from=node_base / /
 COPY --from=node_base /usr/local/lib/node_modules /usr/local/lib/node_modules
@@ -7,20 +7,32 @@ COPY --from=node_base /usr/local/bin/node /usr/local/bin/node
 RUN ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm
 
 # Setup
-RUN apt-get update && apt update && apt-get -y install apt-utils wget git build-essential gettext cron
+RUN apt-get update
+RUN apt-get -y install apt-utils wget git build-essential gettext cron zlib1g-dev
 
-# Apache
-SHELL ["/bin/bash", "-c"]
-RUN ln -s ../mods-available/{expires,headers,rewrite}.load /etc/apache2/mods-enabled/
-RUN sed -e '/<Directory \/var\/www\/>/,/<\/Directory>/s/AllowOverride None/AllowOverride All/' -i /etc/apache2/apache2.conf
 #RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
 COPY php.ini "$PHP_INI_DIR/php.ini"
 COPY php-staging.ini "$PHP_INI_DIR/php-staging.ini"
 
+# SPX
+
+WORKDIR /home
+RUN git clone https://github.com/NoiseByNorthwest/php-spx.git
+WORKDIR /home/php-spx
+RUN git checkout release/latest
+RUN phpize
+RUN ./configure
+RUN make
+RUN make install
+RUN docker-php-ext-enable spx
+
+COPY spx.ini "$PHP_INI_DIR/conf.d/docker-php-ext-spx.ini"
+
+FROM setup as extensions
+
 # PHP extensions
 RUN apt-get install -y libzip-dev unzip
 RUN apt install -y curl libcurl4-openssl-dev
-RUN docker-php-ext-install opcache && docker-php-ext-enable opcache
 RUN docker-php-ext-install mysqli && docker-php-ext-enable mysqli
 RUN docker-php-ext-install curl && docker-php-ext-enable curl
 RUN docker-php-ext-install gettext && docker-php-ext-enable gettext
@@ -30,8 +42,12 @@ RUN docker-php-ext-install zip && docker-php-ext-enable zip
 RUN docker-php-ext-install pcntl && docker-php-ext-enable pcntl
 # Memcached
 RUN apt-get -y install libmemcached11 libmemcachedutil2 libmemcached-dev libz-dev
-RUN pecl install memcached
+RUN apt-get -y install sudo
+RUN sudo pecl install memcached
 RUN echo extension=memcached.so >> /usr/local/etc/php/conf.d/memcached.ini
+# Redis
+RUN pecl install redis
+RUN docker-php-ext-enable redis
 
 RUN apt-get install -y libicu-dev
 RUN docker-php-ext-install intl && docker-php-ext-enable intl
@@ -39,7 +55,9 @@ RUN apt-get update && apt-get upgrade -y
 RUN apt-get install -y cifs-utils
 RUN apt-get install -y ffmpeg
 
-FROM setup as langs
+RUN docker-php-ext-enable opcache
+
+FROM extensions as langs
 
 # Setup gettext languages
 RUN apt-get install -y locales \

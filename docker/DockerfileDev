@@ -3,10 +3,6 @@ FROM heroyt/lac_core:nginx-latest AS project
 # Update PHP ini file
 RUN mv "$PHP_INI_DIR/php-staging.ini" "$PHP_INI_DIR/php.ini"
 
-COPY cron /etc/cron.d/lac-cron
-RUN chmod 0644 /etc/cron.d/lac-cron &&\
-    crontab /etc/cron.d/lac-cron
-
 # Project files
 RUN mkdir -p "/var/www/.npm" && chown -R 33:33 "/var/www/.npm"
 RUN apt-get -y install sudo
@@ -18,9 +14,8 @@ WORKDIR /var/www/html/
 ENV LAC_VERSION="dev"
 
 # Initialize crontab
-COPY cron.txt .
-RUN crontab cron.txt
+RUN crontab -l | { cat; echo "* * * * * /usr/local/bin/php /var/www/bin/scheduler.php >> /var/www/logs/cron.log 2>&1"; } | crontab -
 
 # Start command
 # Updates project, builds it and runs a start script which starts WS event server and Apache
-CMD php install.php && sh ./start.sh
+CMD sh ./start.sh

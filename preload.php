@@ -6,25 +6,6 @@
 
 const ROOT = __DIR__.'/';
 
-opcache_compile_file(ROOT.'index.php');
-
-foreach (glob(ROOT.'include*.php') as $file) {
-	opcache_compile_file($file);
-}
-foreach (glob(ROOT.'src/Core/*.php') as $file) {
-	opcache_compile_file($file);
-}
-foreach (glob(ROOT.'src/Controllers/*.php') as $file) {
-	opcache_compile_file($file);
-}
-foreach (glob(ROOT.'src/Controllers/*/*.php') as $file) {
-	opcache_compile_file($file);
-}
-
-$Directory = new RecursiveDirectoryIterator(ROOT.'vendor/lsr/');
-$Iterator = new RecursiveIteratorIterator($Directory);
-$Regex = new RegexIterator($Iterator, '/^.+\.php$/i', RegexIterator::GET_MATCH);
-
-foreach ($Regex as [$file]) {
-	opcache_compile_file($file);
+if (file_exists(ROOT . 'vendor/preload.php')) {
+	require_once ROOT . 'vendor/preload.php';
 }

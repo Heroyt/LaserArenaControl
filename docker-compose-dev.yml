@@ -30,12 +30,15 @@ services:
         links:
             - db
             - cache
+            - redis
         depends_on:
             - db
             - cache
+            - redis
         volumes:
             - ./:/var/www
             - ./fpm/:/etc/php/
+            - ./docker/core/php.ini:/usr/local/etc/php/php.ini
         networks:
             - backend
         environment:

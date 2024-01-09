@@ -1,5 +1,6 @@
 extensions:
 	caching: Nette\Bridges\CacheDI\CacheExtension(%constants.tempDir%)
+	orisai.scheduler: OriNette\Scheduler\DI\SchedulerExtension
 parameters:
 	gotenberg:
 		host: gotenberg
@@ -9,9 +10,35 @@ parameters:
 			- %constants.appDir%routes
 		controllers:
 			- %constants.appDir%src/Controllers
+	gamesSync:
+		limit: 5
+		timeout: 15.0
+	redis:
+		host: redis
+orisai.scheduler:
+	errorHandler: tracy
+	jobs:
+		gamesSync:
+			expression: */5 * * * *
+			callback: [@cron.gamesSync, 'run']
+		vestSync:
+			expression: */15 * * * *
+			callback: [@cron.vestSync, 'run']
+		logArchive:
+			expression: 0 6 * * *
+			callback: [@cron.logArchive, 'run']
 services:
 	- App\Services\VersionService
 	- App\Services\RegressionCalculator
+
+	redis:
+		create: \Redis
+		setup:
+			- connect(%redis.host%)
+
+	symfony.lock.store: Symfony\Component\Lock\Store\RedisStore(@redis)
+	symfony.lock.factory: Symfony\Component\Lock\LockFactory(@symfony.lock.store)
+
 	features: App\Services\FeatureConfig
 	regression.evo5: App\GameModels\Tools\Evo5\RegressionStatCalculator
 	liga: App\Services\LigaApi::getInstance()
@@ -19,3 +46,7 @@ services:
 	gotenberg: App\Services\GotenbergService(%gotenberg.host%, %gotenberg.port%)
 	caching.journal: Nette\Caching\Storages\SQLiteJournal('%constants.tempDir%journal.s3db')
 	evo5.simulator: App\Services\Evo5\GameSimulator
+
+	cron.gamesSync: App\Cron\GamesSyncJob(%gamesSync.limit%, %gamesSync.timeout%)
+	cron.vestSync: App\Cron\VestSyncJob
+	cron.logArchive: App\Cron\LogArchiveJob

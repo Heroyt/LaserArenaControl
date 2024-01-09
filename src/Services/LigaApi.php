@@ -6,8 +6,12 @@
 namespace App\Services;
 
 use App\Core\Info;
+use App\GameModels\Game\Enums\VestStatus;
 use App\GameModels\Game\Game;
+use App\GameModels\Vest;
 use App\Models\MusicMode;
+use DateTimeImmutable;
+use DateTimeZone;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Handler\CurlFactory;
@@ -421,6 +425,50 @@ class LigaApi
 			}
 		}
 		return $this->extensions;
+	}
+
+	/**
+	 * Synchronize all vests to laser liga
+	 *
+	 * @param bool $recreateClient
+	 *
+	 * @return bool
+	 * @throws GuzzleException
+	 * @throws JsonException
+	 * @throws ValidationException
+	 */
+	public function syncVests(bool $recreateClient = false): bool {
+		if ($recreateClient) {
+			$this->makeClient();
+		}
+
+		$vestsAll = Vest::getAll();
+		$vests = [];
+		foreach ($vestsAll as $vest) {
+			$vests[$vest->system] ??= [];
+			$vests[$vest->system][$vest->vestNum] = $vest;
+		}
+
+		// Get updates from laser liga
+		$response = $this->get('/api/vests');
+		/** @var array{vestNum:string,system:string,status:string,info:string|null,updatedAt:array{date:string,timezone_type:int,timezone:string}}[] $data */
+		$data = json_decode($response->getBody(), true, 512, JSON_THROW_ON_ERROR);
+		foreach ($data as $vestData) {
+			if (!isset($vests[$vestData['system']][$vestData['vestNum']])) {
+				continue;
+			}
+			$vest = $vests[$vestData['system']][$vestData['vestNum']];
+			$updated = new DateTimeImmutable($vestData['date'], new DateTimeZone($vestData['date']['timezone']));
+			if ($vest->updatedAt < $updated) {
+				$vest->status = VestStatus::tryFrom($vestData['status']) ?? $vest->status;
+				$vest->info = $vestData['info'] ?? null;
+				$vest->save();
+			}
+		}
+
+		// Send all updates to laser liga
+		$response = $this->post('/api/vests', $vestsAll);
+		return $response->getStatusCode() < 300;
 	}
 
 }

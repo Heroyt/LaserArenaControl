@@ -19,7 +19,6 @@ if (!defined('JSON_THROW_ON_ERROR')) {
 	define('JSON_THROW_ON_ERROR', 4194304);
 }
 
-
 /** If in production */
 define('PRODUCTION', !(Config::getInstance()->getConfig('General')['DEBUG'] ?? false));
 

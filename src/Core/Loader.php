@@ -15,6 +15,7 @@
 
 namespace App\Core;
 
+use Dibi\DriverException;
 use Dibi\Exception;
 use LAC\Modules\Core\Module;
 use Lsr\Core\App;
@@ -88,8 +89,8 @@ class Loader
 		}
 		try {
 			DB::init();
-		} catch (Exception $e) {
-			App::getLogger()->error('Cannot connect to the database!'.$e->getMessage());
+		} catch (Exception|DriverException $e) {
+			App::getLogger()->error('Cannot connect to the database! (' . $e->getCode() . ') ' . $e->getMessage());
 			throw new RuntimeException('Cannot connect to the database!'.PHP_EOL.$e->getMessage().PHP_EOL.$e->getTraceAsString().PHP_EOL.json_encode(App::getConfig()), $e->getCode(), $e);
 		}
 	}

@@ -93,11 +93,12 @@ if (defined('INDEX') && PHP_SAPI !== 'cli') {
 	if (!isset($_ENV['noDb'])) {
 		(new Panel())->register(DB::getConnection());
 	}
-	/** @noinspection PhpParamsInspection */
-	Debugger::getBar()
-					->addPanel(new ContainerPanel(App::getContainer()))
-					->addPanel(new LattePanel(App::getService('templating.latte.engine'))) // @phpstan-ignore-line
-					->addPanel(new SessionPanel());
+	if (!PRODUCTION) {
+		Debugger::getBar()
+		        ->addPanel(new ContainerPanel(App::getContainer()))
+		        ->addPanel(new LattePanel(App::getService('templating.latte.engine'))) // @phpstan-ignore-line
+		        ->addPanel(new SessionPanel());
+	}
 }
 
 BlueScreenPanel::initialize();

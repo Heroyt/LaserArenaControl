@@ -9,7 +9,6 @@ use App\GameModels\Factory\GameFactory;
 use App\GameModels\Factory\GameModeFactory;
 use App\GameModels\Game\GameModes\CustomLoadMode;
 use App\GameModels\Vest;
-use App\Models\GameGroup;
 use App\Models\MusicMode;
 use App\Services\FeatureConfig;
 use JsonException;
@@ -77,7 +76,6 @@ class NewGame extends Controller
 		$this->params['teamNames'] = GameFactory::getAllTeamsNames()[$this->params['system']];
 		$this->params['gameModes'] = GameModeFactory::getAll(['system' => $this->params['system']]);
 		$this->params['musicModes'] = MusicMode::getAll();
-		$this->params['groups'] = GameGroup::getActive();
 		foreach ($this->decorators as $decorator) {
 			if ($decorator->decorates('show') && method_exists($decorator, 'decorateShow')) {
 				$decorator->decorateShow();

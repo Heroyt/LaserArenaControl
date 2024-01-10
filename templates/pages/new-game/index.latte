@@ -9,7 +9,6 @@
 {varType App\GameModels\Game\GameModes\AbstractMode[] $gameModes}
 {varType App\GameModels\Game\Game|null $loadGame}
 {varType App\Models\MusicMode[] $musicModes}
-{varType App\Models\GameGroup[] $groups}
 {varType string $system}
 
 {import 'helpers/help.latte'}
@@ -20,54 +19,73 @@
     {import $import}
 {/foreach}
 
+{var string[] $icons = [
+'1-stars' => svgIcon('1-stars'),
+'2-stars' => svgIcon('2-stars'),
+'3-stars' => svgIcon('3-stars'),
+'4-stars' => svgIcon('4-stars'),
+'5-stars' => svgIcon('5-stars'),
+'6-stars' => svgIcon('6-stars'),
+]}
+
 {define addHead}
-    {var string[][] $colors = App\GameModels\Factory\GameFactory::getAllTeamsColors()}
-    <style>
-        :root {
-        {foreach $colors as $colorSystem => $systemColors} {foreach $systemColors as $key => $color} {var string $varName1 = '--team-'.$colorSystem.'-'.$key} {var string $varName2 = '--team-'.$colorSystem.'-'.$key.'-text'} {$varName1}: {$color|noescape};
-        {$varName2}:{\App\Tools\Color::getFontColor($color)|noescape};
-        {/foreach} {/foreach}
-        }
+    {cache 'newGame-addHead', tags: ['templates.newGame', 'templates']}
+        {var string[][] $colors = App\GameModels\Factory\GameFactory::getAllTeamsColors()}
+        <style>
+            :root {
+            {foreach $colors as $colorSystem => $systemColors} {foreach $systemColors as $key => $color} {var string $varName1 = '--team-'.$colorSystem.'-'.$key} {var string $varName2 = '--team-'.$colorSystem.'-'.$key.'-text'} {$varName1}: {$color|noescape};
+            {$varName2}:{\App\Tools\Color::getFontColor($color)|noescape};
+            {/foreach} {/foreach}
+            }
 
-        {foreach $colors as $colorSystem => $systemColors}
-        {foreach $systemColors as $key => $color}
-        .bg-team-{$colorSystem}-{$key} {
-            --bg-color: var(--team-{$colorSystem}-{$key});
-            --bs-table-bg: var(--team-{$colorSystem}-{$key});
-            --text-color: var(--team-{$colorSystem}-{$key}-text);
-            background-color: var(--team-{$colorSystem}-{$key});
-            color: var(--team-{$colorSystem}-{$key}-text);
-        }
+            {foreach $colors as $colorSystem => $systemColors}
+            {foreach $systemColors as $key => $color}
+            .bg-team-{$colorSystem}-{$key} {
+                --bg-color: var(--team-{$colorSystem}-{$key});
+                --bs-table-bg: var(--team-{$colorSystem}-{$key});
+                --text-color: var(--team-{$colorSystem}-{$key}-text);
+                background-color: var(--team-{$colorSystem}-{$key});
+                color: var(--team-{$colorSystem}-{$key}-text);
+            }
 
-        .text-team-{$colorSystem}-{$key} {
-            color: var(--team-{$colorSystem}-{$key});
-        }
+            .text-team-{$colorSystem}-{$key} {
+                color: var(--team-{$colorSystem}-{$key});
+            }
 
-        {/foreach}
-        {/foreach}
-    </style>
+            {/foreach}
+            {/foreach}
+        </style>
+    {/cache}
 {/define}
 
 {block content}
     <form method="post" action="" id="new-game-content" class="w-100">
-        <section id="controls" class="d-flex justify-content-between flex-column flex-sm-row align-items-center">
-            {include sectionControls}
-        </section>
+        {cache 'newGame-controls', tags: ['templates.newGame', 'templates']}
+            <section id="controls" class="d-flex justify-content-between flex-column flex-sm-row align-items-center">
+                {include sectionControls}
+            </section>
+        {/cache}
         <section id="vests">
             {include sectionVests}
         </section>
-        <section id="game-mode">
-            {include sectionGameMode}
-        </section>
-        <section id="game-mode-variations">
-            {include sectionGameModeVariations}
-        </section>
-        <section id="music">
-            {include sectionMusic}
-        </section>
+        {cache 'newGame-game-mode', tags: ['templates.newGame', 'templates', App\GameModels\Game\GameModes\AbstractMode::TABLE]}
+            <section id="game-mode">
+                {include sectionGameMode}
+            </section>
+            <section id="game-mode-variations">
+                {include sectionGameModeVariations}
+            </section>
+        {/cache}
+        {cache 'newGame-music', tags: ['templates.newGame', 'templates', App\Models\MusicMode::TABLE]}
+            <section id="music">
+                {include sectionMusic}
+            </section>
+        {/cache}
+        {*{cache 'newGame-teams', tags: ['templates.newGame', 'templates']}*}
         <section id="teams-random" class="text-center solo-hide">
             {include sectionTeamsRandom}
         </section>
+        {*{/cache}*}
         <section id="teams" class="solo-hide">
             {include sectionTeams}
         </section>
@@ -154,18 +172,18 @@
     {/foreach}
 
     <div class="btn-group pb-2 pb-sm-0">
-        <a href="{link ['results', 'last', 'print', \Lsr\Core\App::getShortLanguageCode(), 1, \App\GameModels\Game\PrintStyle::getActiveStyleId(), \App\Core\Info::get('default_print_template', 'default'), 'html' => 1, 'noCache' => 1]}"
-           class="btn btn-info" target="_blank" data-toggle="tooltip"
+        <a href="{link ['results', 'last', 'print', \Lsr\Core\App::getShortLanguageCode(), 1, \App\GameModels\Game\PrintStyle::getActiveStyleId(), \App\Core\Info::get('default_print_template', 'default')]}"
+           class="btn btn-info print-btn" target="_blank" data-toggle="tooltip"
            title="{lang 'Tisknout poslední hru', context: 'actions'} 1&times;">
             <i class="fa-solid fa-print"></i> &times; 1
         </a>
-        <a href="{link ['results', 'last', 'print', \Lsr\Core\App::getShortLanguageCode(), 2, \App\GameModels\Game\PrintStyle::getActiveStyleId(), \App\Core\Info::get('default_print_template', 'default'), 'html' => 1, 'noCache' => 1]}"
-           class="btn btn-info" target="_blank" data-toggle="tooltip"
+        <a href="{link ['results', 'last', 'print', \Lsr\Core\App::getShortLanguageCode(), 2, \App\GameModels\Game\PrintStyle::getActiveStyleId(), \App\Core\Info::get('default_print_template', 'default')]}"
+           class="btn btn-info print-btn" target="_blank" data-toggle="tooltip"
            title="{lang 'Tisknout poslední hru', context: 'actions'} 2&times;">
             <i class="fa-solid fa-print"></i> &times; 2
         </a>
-        <a href="{link ['results', 'last', 'print', \Lsr\Core\App::getShortLanguageCode(), 3, \App\GameModels\Game\PrintStyle::getActiveStyleId(), \App\Core\Info::get('default_print_template', 'default'), 'html' => 1, 'noCache' => 1]}"
-           class="btn btn-info" target="_blank" data-toggle="tooltip"
+        <a href="{link ['results', 'last', 'print', \Lsr\Core\App::getShortLanguageCode(), 3, \App\GameModels\Game\PrintStyle::getActiveStyleId(), \App\Core\Info::get('default_print_template', 'default')]}"
+           class="btn btn-info print-btn" target="_blank" data-toggle="tooltip"
            title="{lang 'Tisknout poslední hru', context: 'actions'} 3&times;">
             <i class="fa-solid fa-print"></i> &times; 3
         </a>
@@ -185,7 +203,6 @@
             <select name="groupSelect" id="group-select" class="form-select">
                 <option value="">{lang 'Bez skupiny'}</option>
                 <option value="new">{lang 'Nová skupina'}</option>
-                <option n:foreach="$groups as $group" value="{$group->id}">{$group->name}</option>
             </select>
             <label for="group-select">{lang 'Skupina'}</label>
         </div>
@@ -391,32 +408,32 @@
             <input type="radio" name="player[{$vest->vestNum}][skill]" value="1" class="player-skill-input"
                    id="player-skill-{$vest->vestNum}-1" checked/>
             <label class="player-skill bg-grey" for="player-skill-{$vest->vestNum}-2">
-                {svgIcon '1-stars'}
+                {$icons['1-stars']|noescape}
             </label>
             <input type="radio" name="player[{$vest->vestNum}][skill]" value="2" class="player-skill-input"
                    id="player-skill-{$vest->vestNum}-2"/>
             <label class="player-skill bg-primary" for="player-skill-{$vest->vestNum}-3">
-                {svgIcon '2-stars'}
+                {$icons['2-stars']|noescape}
             </label>
             <input type="radio" name="player[{$vest->vestNum}][skill]" value="3" class="player-skill-input"
                    id="player-skill-{$vest->vestNum}-3"/>
             <label class="player-skill bg-danger maxSkillSwitch" for="player-skill-{$vest->vestNum}-1">
-                {svgIcon '3-stars'}
+                {$icons['3-stars']|noescape}
             </label>
             <input type="radio" name="player[{$vest->vestNum}][skill]" value="4" class="player-skill-input"
                    id="player-skill-{$vest->vestNum}-4"/>
             <label class="player-skill bg-green" for="player-skill-{$vest->vestNum}-5">
-                {svgIcon '4-stars'}
+                {$icons['4-stars']|noescape}
             </label>
             <input type="radio" name="player[{$vest->vestNum}][skill]" value="5" class="player-skill-input"
                    id="player-skill-{$vest->vestNum}-5"/>
             <label class="player-skill bg-gold-700" for="player-skill-{$vest->vestNum}-6">
-                {svgIcon '5-stars'}
+                {$icons['5-stars']|noescape}
             </label>
             <input type="radio" name="player[{$vest->vestNum}][skill]" value="6" class="player-skill-input"
                    id="player-skill-{$vest->vestNum}-6"/>
             <label class="player-skill bg-purple-500" for="player-skill-{$vest->vestNum}-1">
-                {svgIcon '6-stars'}
+                {$icons['6-stars']|noescape}
             </label>
         </div>
         <button type="button" class="btn btn-danger clear">

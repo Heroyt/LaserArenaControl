@@ -2,6 +2,7 @@
 {varType App\GameModels\Vest[] $vests}
 
 {define groups, int $order = 0}
+    {var string $vestIcon = svgIcon('Vesta', 'auto', '1rem')}
 	{var int $vestCount = count($vests)}
 	<div class="offcanvas offcanvas-end border-blue-600 visible" tabindex="-1" id="groups"
 		 aria-labelledby="groupsLabel">
@@ -17,17 +18,17 @@
 						class="fa-solid fa-xmark"></i></button>
 		</div>
 		<div class="offcanvas-body" id="game-groups" data-vests="{$vestCount}">
-			{foreach $groups as $group}
-				{include gameGroupCard, $group->id, $group->name, $group->getPlayers(), $group->getTeams()}
-			{/foreach}
+            {*{foreach $groups as $group}
+                {include gameGroupCard, $group->id, $group->name, $group->getPlayers(), $group->getTeams(), $vestIcon}
+            {/foreach}*}
 		</div>
 	</div>
 	<template id="new-game-group">
-		{include gameGroupCard, '#id#', '#name#', [], [], null}
+        {include gameGroupCard, '#id#', '#name#', [], [], null, $vestIcon}
 	</template>
 {/define}
 
-{define gameGroupCard, int|string $id, string $name, App\Models\Group\Player[] $players, App\Models\Group\Team[] $teams}
+{define gameGroupCard, int|string $id, string $name, App\Models\Group\Player[] $players, App\Models\Group\Team[] $teams, string $vestIcon}
 	{var int $vestCount = count($vests)}
 	<div class="card game-group mb-4" data-id="{$id}">
 		<div class="card-body">
@@ -80,7 +81,7 @@
 							</span>
 								<span class="px-2">
 								{$player->getFavouriteVest()}
-								{svgIcon 'Vesta', 'auto', '1rem'}
+                                    {$vestIcon|noescape}
 							</span>
 								<span style="min-width: 3rem;" class="text-end">
 								<span class="skill">{$player->getSkill()}</span>
@@ -104,7 +105,7 @@
 							</span>
 							<span class="px-2">
 								{$player->getFavouriteVest()}
-								{svgIcon 'Vesta', 'auto', '1rem'}
+                                {$vestIcon|noescape}
 							</span>
 							<span style="min-width: 3rem;" class="text-end">
 								<span class="skill">{$player->getSkill()}</span>

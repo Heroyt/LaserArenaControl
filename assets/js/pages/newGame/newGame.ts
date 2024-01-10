@@ -161,6 +161,7 @@ export default function initNewGamePage() {
 			)
 			.then(module => {
 				const groups = new module.default(game, gameGroupsWrapper, gameGroupTemplate, gameGroupsSelect);
+                groups.updateGroups();
 				EventServerInstance.addEventListener('game-imported', groups.updateGroups);
 
 				document.dispatchEvent(new CustomEvent('groups-module-loaded', {detail: groups}));

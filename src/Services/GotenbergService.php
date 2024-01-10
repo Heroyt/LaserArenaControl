@@ -45,7 +45,7 @@ class GotenbergService
 			[
 				'handler'         => $stack,
 				'base_uri'        => trailingUnSlashIt($this->host).':'.$this->port,
-				'timeout'         => 10.0, // 10 seconds
+				'timeout' => 30.0, // 10 seconds
 				'allow_redirects' => true,
 				'headers'         => [
 				]

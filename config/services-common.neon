@@ -49,6 +49,8 @@ services:
 	gotenberg: App\Services\GotenbergService(%gotenberg.host%, %gotenberg.port%)
 	caching.journal: Nette\Caching\Storages\SQLiteJournal('%constants.tempDir%journal.s3db')
 	evo5.simulator: App\Services\Evo5\GameSimulator
+	resultPrint: App\Services\ResultPrintService
+	resultPrecache: App\Services\ResultsPrecacheService
 
 	cron.gamesSync: App\Cron\GamesSyncJob(%gamesSync.limit%, %gamesSync.timeout%)
 	cron.vestSync: App\Cron\VestSyncJob

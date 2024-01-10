@@ -84,6 +84,7 @@ class ImportService
 		$lastUnfinishedGame = null;
 		$lastEvent = '';
 
+		/** @var Game[] $finishedGames */
 		$finishedGames = [];
 
 		// Import all files
@@ -219,6 +220,9 @@ class ImportService
 			else {
 				$logger->warning('Failed to synchronize games to public');
 			}
+
+			$precacheService = App::getServiceByType(ResultsPrecacheService::class);
+			$precacheService->prepareGamePrecache(...array_map(static fn(Game $game) => $game->code, $finishedGames));
 		}
 		else {
 			$logger->info('No games to synchronize to public');

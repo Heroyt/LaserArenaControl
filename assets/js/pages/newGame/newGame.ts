@@ -8,6 +8,7 @@ import {isFeatureEnabled} from "../../featureConfig";
 import Control, {GameStatus} from "./control";
 import {gatesStart, gatesStop} from "../../api/endpoints/gates";
 import {getLastGames, sendLoadGame} from "../../api/endpoints/games";
+import {initPrintButtons} from "../../components/resultsPrinting";
 
 declare global {
 	const gameData: GameData;
@@ -181,6 +182,8 @@ export default function initNewGamePage() {
 	}
 
 	EventServerInstance.addEventListener('game-imported', loadLastGames);
+
+    initPrintButtons();
 
 	function loadLastGames() {
         getLastGames()

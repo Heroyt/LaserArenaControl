@@ -58,7 +58,7 @@
 				<div class="col-lg-9">
 					<div class="btn-group">
 						{for $i = 1; $i < 11; $i++}
-							<a href="{link ['results', $selected->code, 'print', $selectedLang, $i, $selectedStyle, $selectedTemplate, 'html' => 1, 'noCache' => 1]}"
+                            <a href="{link ['results', $selected->code, 'print', $selectedLang, $i, $selectedStyle, $selectedTemplate]}"
 							   class="btn btn-success print-btn" target="_blank" data-value="{$i}" data-type="color">
 								{$i}&times;
 							</a>
@@ -77,7 +77,7 @@
 				<div class="col-lg-9">
 					<div class="btn-group">
 						{for $i = 1; $i < 11; $i++}
-							<a href="{link ['results', $selected->code, 'print', $selectedLang, $i, $selectedStyle, $selectedTemplate, 'colorless', 'html' => 1, 'noCache' => 1]}"
+                            <a href="{link ['results', $selected->code, 'print', $selectedLang, $i, $selectedStyle, $selectedTemplate, 'colorless']}"
 							   class="btn btn-secondary print-btn" target="_blank" data-value="{$i}"
 							   data-type="colorless">
 								{$i}&times;
@@ -119,11 +119,10 @@
 		function updateIframe() {
 			const lang = document.querySelector('[name="lang"]:checked').value;
 			printLinks.forEach(link => {
-				link.href = `{{link ['results', $selected->code, 'print']}}/${lang}/${link.dataset.value}/${selectStyle.value}/${selectTemplate.value}/${link.dataset.type}?html=1`;
+                link.href = `{{link ['results', $selected->code, 'print']}}/${lang}/${link.dataset.value}/${selectStyle.value}/${selectTemplate.value}/${link.dataset.type}`;
 			});
 			iframe.src = `{{link ['results', $selected->code, 'print']}}/${lang}/1/${selectStyle.value}/${selectTemplate.value}?view=1&html=1`;
 		}
-
 		{{/ifset}}
 	</script>
 {/block}

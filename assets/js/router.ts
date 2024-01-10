@@ -106,5 +106,14 @@ export default function route(pageInfo: PageInfo): void {
 				module.default();
 			});
 			break;
+        case 'results':
+        case 'results-game':
+            import(
+                /* webpackChunkName: "results" */
+                './pages/results'
+                ).then(module => {
+                module.default();
+            });
+            break;
 	}
 }

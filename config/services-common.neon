@@ -1,5 +1,6 @@
 extensions:
 	caching: Nette\Bridges\CacheDI\CacheExtension(%constants.tempDir%)
+	orisai.console: OriNette\Console\DI\ConsoleExtension
 	orisai.scheduler: OriNette\Scheduler\DI\SchedulerExtension
 parameters:
 	gotenberg:
@@ -16,6 +17,8 @@ parameters:
 	redis:
 		host: redis
 orisai.scheduler:
+	console:
+		script: '%constants.appDir%bin/console'
 	errorHandler: tracy
 	jobs:
 		gamesSync:

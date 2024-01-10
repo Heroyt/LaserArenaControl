@@ -57,7 +57,8 @@
     "orisai/scheduler": "^1.0",
     "orisai/nette-scheduler": "^1.0",
     "symfony/lock": "^6",
-    "diego-ninja/composer-preload": "^1.0"
+    "diego-ninja/composer-preload": "^1.0",
+    "orisai/nette-console": "^1.4"
   },
   "require-dev": {
     "roave/security-advisories": "dev-latest",

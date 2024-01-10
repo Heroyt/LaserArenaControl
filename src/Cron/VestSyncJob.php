@@ -3,6 +3,7 @@
 namespace App\Cron;
 
 use App\Services\LigaApi;
+use Lsr\Logging\Logger;
 use Orisai\Scheduler\Job\Job;
 use Orisai\Scheduler\Job\JobLock;
 
@@ -17,10 +18,10 @@ final readonly class VestSyncJob implements Job
 	public function run(JobLock $lock): void {
 		$lock->refresh(120.0);
 		if ($this->api->syncVests()) {
-			echo date('[Y-m-d H:i:s] ') . 'Vest sync successful' . PHP_EOL;
+			(new Logger(LOG_DIR, 'cron'))->debug('Vest sync successful');
 			return;
 		}
-		echo date('[Y-m-d H:i:s] ') . 'Vest sync failed' . PHP_EOL;
+		(new Logger(LOG_DIR, 'cron'))->warning('Vest sync failed');
 	}
 
 	public function getName(): string {

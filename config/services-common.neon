@@ -24,6 +24,9 @@ orisai.scheduler:
 		gamesSync:
 			expression: */5 * * * *
 			callback: [@cron.gamesSync, 'run']
+		gamesPrecache:
+			expression: * * * * *
+			callback: [@cron.gamesPrecache, 'run']
 		vestSync:
 			expression: */15 * * * *
 			callback: [@cron.vestSync, 'run']
@@ -55,3 +58,4 @@ services:
 	cron.gamesSync: App\Cron\GamesSyncJob(%gamesSync.limit%, %gamesSync.timeout%)
 	cron.vestSync: App\Cron\VestSyncJob
 	cron.logArchive: App\Cron\LogArchiveJob
+	cron.gamesPrecache: App\Cron\GamesPrecacheJob

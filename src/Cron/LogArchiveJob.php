@@ -4,6 +4,7 @@ namespace App\Cron;
 
 use Lsr\Logging\Exceptions\ArchiveCreationException;
 use Lsr\Logging\LogArchiver;
+use Lsr\Logging\Logger;
 use Orisai\Scheduler\Job\Job;
 use Orisai\Scheduler\Job\JobLock;
 use RecursiveDirectoryIterator;
@@ -21,6 +22,7 @@ final readonly class LogArchiveJob implements Job
 		$it = new RecursiveIteratorIterator($it, RecursiveIteratorIterator::LEAVES_ONLY);
 		$it = new RegexIterator($it, '/.*-\\d{4}-\\d{2}-\\d{2}\\.log/');
 		$processed = [];
+		$logger = new Logger(LOG_DIR, 'cron');
 		foreach ($it as $file) {
 			$fileName = pathinfo($file, PATHINFO_BASENAME);
 			preg_match('/(.*)-\d{4}-\d{2}-\d{2}\.log/', $fileName, $matches);
@@ -32,11 +34,11 @@ final readonly class LogArchiveJob implements Job
 			try {
 				$this->archiver->archiveOld($path, $name, LOG_DIR . 'archive/');
 			} catch (ArchiveCreationException $e) {
-				echo date('[Y-m-d H:i:s] ') . 'Archive creation failed: ' . $e->getMessage() . PHP_EOL;
+				$logger->exception($e);
 			}
 			$processed[$name] = true;
 		}
-		echo date('[Y-m-d H:i:s] ') . 'Log archive done' . PHP_EOL;
+		$logger->debug('Log archive done');
 	}
 
 	public function getName(): string {

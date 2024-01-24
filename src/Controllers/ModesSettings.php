@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Core\App;
 use App\Exceptions\GameModeNotFoundException;
 use App\GameModels\Factory\GameFactory;
 use App\GameModels\Factory\GameModeFactory;
@@ -13,8 +14,7 @@ use App\Models\GameModeVariation;
 use Dibi\DriverException;
 use Exception;
 use JsonException;
-use Lsr\Core\App;
-use Lsr\Core\Controller;
+use Lsr\Core\Controllers\Controller;
 use Lsr\Core\DB;
 use Lsr\Core\Exceptions\ModelNotFoundException;
 use Lsr\Core\Exceptions\ValidationException;

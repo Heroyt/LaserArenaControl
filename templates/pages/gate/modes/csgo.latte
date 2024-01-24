@@ -10,7 +10,7 @@
 
 {define content}
 	<section class="teams">
-		{var App\GameModels\Game\Team|null $win = $game->mode->getWin($game)}
+        {var App\GameModels\Game\Team|null $win = $game->getMode()?->getWin($game)}
 		<div class="team" n:foreach="$game->getTeamsSorted() as $team">
 			<div class="name bg-team-{$game::SYSTEM}-{$team->getTeamColor()}">
 				<div class="text-center">

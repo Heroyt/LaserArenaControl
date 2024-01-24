@@ -25,7 +25,7 @@
 {varType \Lsr\Core\Controller $page}
 
 <!DOCTYPE html>
-<html lang="{\Lsr\Core\App::getShortLanguageCode()}" data-bs-theme="{$_COOKIE['mode'] ?? 'light'}">
+<html lang="{\App\Core\App::getShortLanguageCode()}" data-bs-theme="{$_COOKIE['mode'] ?? 'light'}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -48,20 +48,20 @@
               href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"/>
     </noscript>
     <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'"
-          href="{getUrl}dist/vendors.css?v={\Lsr\Core\App::getCacheVersion()}">
+          href="{getUrl}dist/vendors.css?v={\App\Core\App::getCacheVersion()}">
     <noscript>
-        <link rel="stylesheet" href="{getUrl}dist/vendors.css?v={\Lsr\Core\App::getCacheVersion()}">
+        <link rel="stylesheet" href="{getUrl}dist/vendors.css?v={\App\Core\App::getCacheVersion()}">
     </noscript>
-    <link rel="stylesheet" href="{getUrl}dist/main.css?v={\Lsr\Core\App::getCacheVersion()}">
+    <link rel="stylesheet" href="{getUrl}dist/main.css?v={\App\Core\App::getCacheVersion()}">
     <link n:foreach="$addCss as $file" rel="stylesheet"
-                                       href="{getUrl}dist/{$file}?v={\Lsr\Core\App::getCacheVersion()}">
+                                       href="{getUrl}dist/{$file}?v={\App\Core\App::getCacheVersion()}">
     <title>{$page->getTitle()}</title>
     {\Tracy\Debugger::renderLoader()|noescape}
     {include addHead}
 
-    <script src="{getUrl}dist/bootstrap.js?v={\Lsr\Core\App::getCacheVersion()}" defer></script>
-    <script src="{getUrl}dist/vendors.js?v={\Lsr\Core\App::getCacheVersion()}" defer></script>
-    <script src="{getUrl}dist/common.js?v={\Lsr\Core\App::getCacheVersion()}" defer></script>
+    <script src="{getUrl}dist/bootstrap.js?v={\App\Core\App::getCacheVersion()}" defer></script>
+    <script src="{getUrl}dist/vendors.js?v={\App\Core\App::getCacheVersion()}" defer></script>
+    <script src="{getUrl}dist/common.js?v={\App\Core\App::getCacheVersion()}" defer></script>
 </head>
 <body {ifset $_COOKIE['mode']}class="{$_COOKIE['mode']}Mode"{/ifset}>
 {include header}
@@ -123,16 +123,16 @@
 
 <script>
     let activeGame = null;
-    const activeLanguageCode = {\Lsr\Core\App::getShortLanguageCode()};
-    const features = {\Lsr\Core\App::getServiceByType(App\Services\FeatureConfig::class)->getFeatures()};
-    const page = {\Lsr\Core\App::getRequest()};
-    const prettyUrl = {\Lsr\Core\App::isPrettyUrl()};
+    const activeLanguageCode = {\App\Core\App::getShortLanguageCode()};
+    const features = {\App\Core\App::getServiceByType(App\Services\FeatureConfig::class)->getFeatures()};
+    const page = {\App\Core\App::getRequest()};
+    const prettyUrl = {\App\Core\App::isPrettyUrl()};
     const webSocketEventURI = 'ws://' + window.location.hostname + ':' + {\App\Services\EventService::getEventPort()};
     const timerOffset = {\App\Core\Info::get('timer-offset', 0)};
 </script>
 
-<script src="{getUrl}dist/main.js?v={\Lsr\Core\App::getCacheVersion()}" type="module"></script>
-<script n:foreach="$addJs as $js" src="{getUrl}dist/{$js}?v={\Lsr\Core\App::getCacheVersion()}" type="module"></script>
+<script src="{getUrl}dist/main.js?v={\App\Core\App::getCacheVersion()}" type="module"></script>
+<script n:foreach="$addJs as $js" src="{getUrl}dist/{$js}?v={\App\Core\App::getCacheVersion()}" type="module"></script>
 {include svgSymbols}
 </body>
 </html>

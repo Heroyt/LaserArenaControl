@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Core\App;
 use App\Core\Info;
 use App\GameModels\Game\Game;
 use App\GameModels\Game\Player;
@@ -13,7 +14,6 @@ use Endroid\QrCode\Builder\Builder;
 use Endroid\QrCode\Encoding\Encoding;
 use Endroid\QrCode\ErrorCorrectionLevel;
 use Endroid\QrCode\Writer\SvgWriter;
-use Lsr\Core\App;
 use Lsr\Core\Exceptions\ModelNotFoundException;
 use Lsr\Core\Exceptions\ValidationException;
 use Lsr\Core\Templating\Latte;
@@ -126,6 +126,7 @@ readonly class ResultPrintService
 			'today'     => new Today($game, $player, $team),
 			'publicUrl' => $this->getPublicUrl($game),
 			'qr'        => $this->getQR($game),
+			'lang' => App::getShortLanguageCode(),
 		];
 
 		try {

@@ -63,11 +63,11 @@ class Player implements JsonSerializable
 		$this->vests[$player->vest]++;
 
 		// Add aggregate values for game mode
-		if (isset($game->mode->id)) {
-			if (!isset($this->gameModes[$game->mode->id])) {
-				$this->gameModes[$game->mode->id] = new PlayerModeAggregate($game->mode);
+		if (isset($game->getMode()?->id)) {
+			if (!isset($this->gameModes[$game->getMode()->id])) {
+				$this->gameModes[$game->getMode()->id] = new PlayerModeAggregate($game->getMode());
 			}
-			$this->gameModes[$game->mode->id]->addGame($player, $game);
+			$this->gameModes[$game->getMode()->id]->addGame($player, $game);
 		}
 
 		// Log game code

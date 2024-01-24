@@ -5,7 +5,7 @@
 {varType App\GameModels\Game\Today $today}
 {varType string $qr}
 
-{var bool $includeTeams = $game->mode->isTeam() && $game->mode->settings->partTeams}
+{var bool $includeTeams = $game->getMode()?->isTeam() && $game->getMode()?->settings?->partTeams}
 
 {define containerClasses}
 	results results-game-{$game->id} {if !$includeTeams}no-teams{/if}
@@ -75,8 +75,8 @@
 {/define}
 
 {define partTeams}
-	{var int $totalScore = array_sum(array_map(function($team){ return $team->score > 0 ? $team->score : 0;},$game->getTeams()->getAll()))}
-	{var App\GameModels\Game\Team|null $win = $game->mode->getWin($game)}
+    {var int $totalScore = array_sum(array_map(function(App\GameModels\Game\Team $team){ return $team->score > 0 ? $team->score : 0;},$game->getTeams()->getAll()))}
+    {var App\GameModels\Game\Team|null $win = $game->getMode()?->getWin($game)}
 	<div n:foreach="$game->getTeamsSorted() as $team" class="team bg-team-{$game::SYSTEM}-{$team->color}"
 													  style="height:calc({100*($team->score > 0 ? $team->score : 0) / ($totalScore > 0 ? $totalScore : 1)|noescape}% - .2rem);"
 													  data-team="{$team->id}">

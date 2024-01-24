@@ -13,7 +13,7 @@
 /** Root directory */
 
 use App\Controllers\E404;
-use Lsr\Core\App;
+use App\Core\App;
 use Lsr\Core\Requests\Exceptions\RouteNotFoundException;
 use Lsr\Helpers\Tools\Timer;
 

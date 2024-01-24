@@ -5,9 +5,9 @@
 
 namespace App\Controllers\Cli;
 
+use App\Core\App;
 use App\Services\EventService;
-use Lsr\Core\App;
-use Lsr\Core\CliController;
+use Lsr\Core\Controllers\CliController;
 use Lsr\Interfaces\RequestInterface;
 use Socket;
 

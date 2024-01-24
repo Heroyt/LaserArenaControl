@@ -28,7 +28,7 @@
 				{include gameActionGroup}
 				{include gameActionLigaSync}
 				{include gameActionReImport}
-				{if !\Lsr\Core\App::isProduction()}
+                {if !\App\Core\App::isProduction()}
 					{include gameActionRecalcSkill}
 				{/if}
 			</div>
@@ -49,12 +49,12 @@
 				<td>
 					<label class="w-100 h-100 cursor-pointer">
 						<input type="checkbox" class="form-check-input game-select-check cursor-pointer"
-							   value="{$game->code}" data-group="{$game->group?->id}"
-							   data-groupname="{$game->group?->name}">
+                               value="{$game->code}" data-group="{$game->getGroup()?->id}"
+                               data-groupname="{$game->getGroup()?->name}">
 					</label>
 				</td>
-				<td>{$game->start->format('H:i')}</td>
-                <td>{$game->mode?->getName()}</td>
+                <td>{$game->start?->format('H:i')}</td>
+                <td>{$game->getMode()?->getName()}</td>
 				<td>
 				<span n:foreach="$game->getPlayersSorted() as $player"
 						data-toggle="tooltip"
@@ -118,7 +118,7 @@
 			{include gameActionReImport, $game}
 		</div>
 		<div class="btn-group">
-			{if !\Lsr\Core\App::isProduction()}
+            {if !\App\Core\App::isProduction()}
 				{include gameActionGateVests, $game}
 				{include gameActionRecalcSkill, $game}
 			{/if}
@@ -132,7 +132,7 @@
 		{include gameActionLigaSync, $game}
 		{include gameActionGate, $game}
 		{include gameActionReImport, $game}
-		{if !\Lsr\Core\App::isProduction()}
+        {if !\App\Core\App::isProduction()}
 			{include gameActionGateVests, $game}
 			{include gameActionRecalcSkill, $game}
 		{/if}

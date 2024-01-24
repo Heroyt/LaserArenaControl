@@ -6,7 +6,7 @@ use App\Cli\Colors;
 use App\Cli\Enums\ForegroundColors;
 use App\Core\Info;
 use App\GameModels\Factory\GameFactory;
-use Lsr\Core\CliController;
+use Lsr\Core\Controllers\CliController;
 use Lsr\Core\Requests\CliRequest;
 use Lsr\Core\Routing\Attributes\Cli;
 

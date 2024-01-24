@@ -50,7 +50,9 @@ services:
 	liga: App\Services\LigaApi::getInstance()
 	playersProvider: App\Services\PlayerProvider
 	gotenberg: App\Services\GotenbergService(%gotenberg.host%, %gotenberg.port%)
-	caching.journal: Nette\Caching\Storages\SQLiteJournal('%constants.tempDir%journal.s3db')
+	caching.journal: Lsr\Core\Caching\RedisJournal(@redis)
+	cache.storage: Lsr\Core\Caching\RedisStorage(@redis, '', @caching.journal)
+	cache: Lsr\Core\Caching\Cache(@cache.storage, null, %constants.debug%)
 	evo5.simulator: App\Services\Evo5\GameSimulator
 	resultPrint: App\Services\ResultPrintService
 	resultPrecache: App\Services\ResultsPrecacheService

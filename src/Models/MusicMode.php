@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use Lsr\Core\App;
+use App\Core\App;
 use Lsr\Core\Exceptions\ValidationException;
 use Lsr\Core\Models\Attributes\PrimaryKey;
 use Lsr\Core\Models\Attributes\Validation\Required;

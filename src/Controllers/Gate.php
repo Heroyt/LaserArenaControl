@@ -16,7 +16,7 @@ use DateTime;
 use Dibi\Exception;
 use Dibi\Row;
 use Lsr\Core\Constants;
-use Lsr\Core\Controller;
+use Lsr\Core\Controllers\Controller;
 use Lsr\Core\Exceptions\ModelNotFoundException;
 use Lsr\Core\Exceptions\ValidationException;
 use Lsr\Core\Requests\Request;

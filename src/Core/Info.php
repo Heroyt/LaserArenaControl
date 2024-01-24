@@ -6,7 +6,6 @@
 namespace App\Core;
 
 use Dibi\Exception;
-use Lsr\Core\App;
 use Lsr\Core\Caching\Cache;
 use Lsr\Core\DB;
 

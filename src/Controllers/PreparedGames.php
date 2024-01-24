@@ -3,7 +3,7 @@
 namespace App\Controllers;
 
 use Lsr\Core\Caching\Cache;
-use Lsr\Core\Controller;
+use Lsr\Core\Controllers\Controller;
 use Lsr\Core\DB;
 use Lsr\Core\Requests\Request;
 use Lsr\Core\Routing\Attributes\Delete;

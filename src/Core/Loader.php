@@ -18,7 +18,6 @@ namespace App\Core;
 use Dibi\DriverException;
 use Dibi\Exception;
 use LAC\Modules\Core\Module;
-use Lsr\Core\App;
 use Lsr\Core\DB;
 use Lsr\Helpers\Tools\Timer;
 use RuntimeException;

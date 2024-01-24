@@ -13,8 +13,8 @@ use App\Controllers\NewGame;
 use App\Controllers\PlayersController;
 use App\Controllers\Results;
 use App\Controllers\Settings;
+use App\Core\App;
 use App\Services\FeatureConfig;
-use Lsr\Core\App;
 use Lsr\Core\Routing\Route;
 
 $featureConfig = App::getServiceByType(FeatureConfig::class);
@@ -37,19 +37,18 @@ Route::group('/list')
 	->get('/', [GamesList::class, 'show'])->name('games-list')
 	->get('/{game}', [GamesList::class, 'game']);
 
-$settings = Route::group('/settings')
-	->get('/', [Settings::class, 'show'])->name('settings')
-	->post('/', [Settings::class, 'saveGeneral'])
-	->get('/gate', [Settings::class, 'gate'])->name('settings-gate')
-	->post('/gate', [Settings::class, 'saveGate'])
-	->get('/vests', [Settings::class, 'vests'])->name('settings-vests')
-	->post('/vests', [Settings::class, 'saveVests'])
-	->get('/print', [Settings::class, 'print'])->name('settings-print')
-	->post('/print', [Settings::class, 'savePrint']);
+$settings = Route::group('settings')
+                 ->get('', [Settings::class, 'show'])->name('settings')
+                 ->post('', [Settings::class, 'saveGeneral'])
+                 ->get('gate', [Settings::class, 'gate'])->name('settings-gate')
+                 ->post('gate', [Settings::class, 'saveGate'])
+                 ->get('vests', [Settings::class, 'vests'])->name('settings-vests')
+                 ->post('vests', [Settings::class, 'saveVests'])
+                 ->get('print', [Settings::class, 'print'])->name('settings-print')
+                 ->post('print', [Settings::class, 'savePrint']);
 
 if ($featureConfig->isFeatureEnabled('groups')) {
-	$settings
-		->get('/groups', [Settings::class, 'group'])->name('settings-groups');
+	$settings->get('groups', [Settings::class, 'group'])->name('settings-groups');
 }
 
 Route::group('/gate')

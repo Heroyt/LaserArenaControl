@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use Lsr\Core\App;
+use App\Core\App;
 
 class GateStyleService
 {

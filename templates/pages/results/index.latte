@@ -16,7 +16,7 @@
 				<option n:foreach="$games as $game" {if $selected?->code === $game->code}selected{/if}
 						value="{$game->code}">
 					{ifset $game->fileNumber}{$game->fileNumber}: {/ifset}
-                    {$game->start?->format('H:i')} - {$game->mode?->getName()} ({$game->getPlayers()|length})
+                    {$game->start?->format('H:i')} - {$game->getMode()?->getName()} ({$game->getPlayers()|length})
 				</option>
 			</select>
 			<label for="selectStyle">{lang 'Style', context: 'results.style'}:</label>
@@ -40,8 +40,8 @@
 					<strong>{lang 'Language'}:</strong>
 				</div>
 				<div class="col-lg-9">
-					{var string $selectedLang = explode('_',$_GET['lang'] ?? Lsr\Core\App::$language->id)[0]}
-					{foreach Lsr\Core\App::getSupportedLanguages() as $lang => $country}
+                    {var string $selectedLang = explode('_',$_GET['lang'] ?? App\Core\App::$language->id)[0]}
+                    {foreach App\Core\App::getSupportedLanguages() as $lang => $country}
 						<input type="radio" id="lang-{$lang}" name="lang" class="country-select-input" value="{$lang}"
 							   {if $selectedLang === $lang}checked{/if}>
 						<label class="country-select" for="lang-{$lang}">

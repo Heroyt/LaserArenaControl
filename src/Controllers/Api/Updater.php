@@ -4,7 +4,7 @@ namespace App\Controllers\Api;
 
 use App\Install\Install;
 use JsonException;
-use Lsr\Core\ApiController;
+use Lsr\Core\Controllers\ApiController;
 use Lsr\Core\Requests\Request;
 use Lsr\Logging\Exceptions\DirectoryCreationException;
 use Lsr\Logging\Logger;

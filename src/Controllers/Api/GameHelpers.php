@@ -10,8 +10,8 @@ use App\GameModels\Game\Enums\GameModeType;
 use App\GameModels\Game\Game;
 use App\GameModels\Game\Player;
 use JsonException;
-use Lsr\Core\ApiController;
 use Lsr\Core\Constants;
+use Lsr\Core\Controllers\ApiController;
 use Lsr\Core\Exceptions\ModelNotFoundException;
 use Lsr\Core\Exceptions\ValidationException;
 use Lsr\Core\Requests\Request;
@@ -78,9 +78,9 @@ class GameHelpers extends ApiController
 				'loadTime'          => $game->fileTime?->getTimestamp(),
 				'startTime'         => $game->start?->getTimestamp(),
 				'gameLength'        => !isset($game->timing) ? 0 : ($game->timing->gameLength * 60),
-				'playerCount'       => $game->playerCount,
+				'playerCount' => $game->getPlayerCount(),
 				'teamCount'         => count($game->getTeams()),
-				'mode'              => $game->mode,
+				'mode'        => $game->getMode(),
 				'game' => $game,
 			]
 		);
@@ -111,7 +111,7 @@ class GameHelpers extends ApiController
 				'gameLength'        => !isset($game->timing) ? 0 : ($game->timing->gameLength * 60),
 				'playerCount'       => count($game->getPlayers()),
 				'teamCount'         => count($game->getTeams()),
-				'mode'              => $game->mode,
+				'mode' => $game->getMode(),
 			]
 		);
 	}
@@ -182,7 +182,7 @@ class GameHelpers extends ApiController
 		$game->mode = $gameMode;
 
 		// Check mode type change
-		if ($previousType !== $game->mode) {
+		if ($previousType !== $game->getMode()) {
 			if ($previousType === GameModeType::SOLO) {
 				$this->respond(['error' => 'Cannot change mode from solo to team'], 400);
 			}

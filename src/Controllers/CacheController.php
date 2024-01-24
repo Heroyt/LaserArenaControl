@@ -3,7 +3,7 @@
 namespace App\Controllers;
 
 use Lsr\Core\Caching\Cache;
-use Lsr\Core\Controller;
+use Lsr\Core\Controllers\Controller;
 use Lsr\Core\Routing\Attributes\Post;
 use Lsr\Core\Templating\Latte;
 
@@ -19,10 +19,14 @@ class CacheController extends Controller
 		$this->cache->clean([\Nette\Caching\Cache::All => true]);
 		/** @var string[] $files */
 		$files = array_merge(
+			glob(TMP_DIR . '*.cache'),
+			glob(TMP_DIR . '*.php'),
+			glob(TMP_DIR . '*.php.lock'),
 			glob(TMP_DIR.'di/*'),
 			glob(TMP_DIR.'results/*'),
 			glob(TMP_DIR.'resultCaches/*'),
 			glob(TMP_DIR.'latte/*'),
+			glob(TMP_DIR . 'models/*'),
 		);
 		$deleted = 0;
 		foreach ($files as $file) {
@@ -42,7 +46,37 @@ class CacheController extends Controller
 	#[Post('/cache/clear/di', 'cache-clear-di')]
 	public function clearDi() : void {
 		/** @var string[] $files */
-		$files = glob(TMP_DIR.'di/*');
+		$files = array_merge(
+			glob(TMP_DIR . '*.php'),
+			glob(TMP_DIR . '*.php.lock'),
+			glob(TMP_DIR . 'di/*'),
+		);
+		$deleted = 0;
+		foreach ($files as $file) {
+			if (unlink($file)) {
+				$deleted++;
+			}
+		}
+		$this->respond(['status' => 'ok', 'deleted' => $deleted, 'total' => count($files)]);
+	}
+
+	#[Post('/cache/clear/models', 'cache-clear-models')]
+	public function clearModels(): void {
+		/** @var string[] $files */
+		$files = glob(TMP_DIR . 'models/*');
+		$deleted = 0;
+		foreach ($files as $file) {
+			if (unlink($file)) {
+				$deleted++;
+			}
+		}
+		$this->respond(['status' => 'ok', 'deleted' => $deleted, 'total' => count($files)]);
+	}
+
+	#[Post('/cache/clear/config', 'cache-clear-config')]
+	public function clearConfig(): void {
+		/** @var string[] $files */
+		$files = glob(TMP_DIR . '*.cache');
 		$deleted = 0;
 		foreach ($files as $file) {
 			if (unlink($file)) {

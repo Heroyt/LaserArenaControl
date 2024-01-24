@@ -2,9 +2,9 @@
 
 namespace App\Controllers\Api;
 
+use App\Core\App;
 use JsonException;
-use Lsr\Core\ApiController;
-use Lsr\Core\App;
+use Lsr\Core\Controllers\ApiController;
 use Lsr\Core\Requests\Request;
 use Lsr\Logging\Exceptions\DirectoryCreationException;
 use Lsr\Logging\Logger;

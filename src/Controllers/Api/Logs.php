@@ -3,7 +3,7 @@
 namespace App\Controllers\Api;
 
 use JsonException;
-use Lsr\Core\ApiController;
+use Lsr\Core\Controllers\ApiController;
 use Lsr\Core\Requests\Request;
 use Lsr\Logging\Exceptions\ArchiveCreationException;
 use Lsr\Logging\Exceptions\DirectoryCreationException;

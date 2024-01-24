@@ -4,9 +4,9 @@
  * @brief Definition of the main menu items
  */
 
+use App\Core\App;
 use App\Services\FeatureConfig;
 use LAC\Modules\Core\MenuExtensionInterface;
-use Lsr\Core\App;
 
 $menu = [
 	[

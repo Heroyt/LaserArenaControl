@@ -9,13 +9,13 @@
  * @since   1.0
  */
 
+use App\Core\App;
 use App\Core\Loader;
 use Dibi\Bridges\Tracy\Panel;
 use Gettext\Loader\PoLoader;
 use Gettext\Translations;
 use Latte\Bridges\Tracy\BlueScreenPanel;
 use Latte\Bridges\Tracy\LattePanel;
-use Lsr\Core\App;
 use Lsr\Core\DB;
 use Lsr\Helpers\Tools\Timer;
 use Lsr\Helpers\Tracy\CacheTracyPanel;

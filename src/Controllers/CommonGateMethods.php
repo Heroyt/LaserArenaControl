@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Core\App;
 use App\Core\Info;
 use App\GameModels\Game\Game;
 use App\GameModels\Game\GameModes\CustomResultsMode;
@@ -12,7 +13,6 @@ use Endroid\QrCode\Builder\Builder;
 use Endroid\QrCode\Encoding\Encoding;
 use Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelLow;
 use Endroid\QrCode\Writer\SvgWriter;
-use Lsr\Core\App;
 use Lsr\Exceptions\TemplateDoesNotExistException;
 use Lsr\Helpers\Tools\Strings;
 
@@ -46,10 +46,8 @@ trait CommonGateMethods
 		/** @var Team $team */
 		$team = new $teamClass;
 		$this->params['today'] = new Today($this->game, $player, $team);
-		if (isset($this->game->mode) && $this->game->mode instanceof CustomResultsMode) {
-			$this->view(
-				$this->game->mode->getCustomGateTemplate($this)
-			);
+		if ($this->game->getMode() !== null && $this->game->getMode() instanceof CustomResultsMode) {
+			$this->view($this->game->getMode()->getCustomGateTemplate($this));
 		} else {
 			$this->view('pages/gate/results');
 		}

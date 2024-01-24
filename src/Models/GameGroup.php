@@ -2,12 +2,12 @@
 
 namespace App\Models;
 
+use App\Core\App;
 use App\GameModels\Factory\GameFactory;
 use App\GameModels\Game\Game;
 use App\GameModels\Game\Player;
 use App\Models\Group\Player as GroupPlayer;
 use App\Models\Group\Team;
-use Lsr\Core\App;
 use Lsr\Core\Caching\Cache;
 use Lsr\Core\Exceptions\ValidationException;
 use Lsr\Core\Models\Attributes\PrimaryKey;
@@ -25,7 +25,7 @@ class GameGroup extends Model
 
 	public const TABLE = 'game_groups';
 
-	public string $name   = '';
+	public string $name = '';
 	public bool   $active = true;
 
 	// TODO: Fix this so that OneToMany connection uses a factory when available
@@ -41,7 +41,7 @@ class GameGroup extends Model
 	 * @return static[]
 	 * @throws ValidationException
 	 */
-	public static function getActive() : array {
+	public static function getActive(): array {
 		return static::query()->where('[active] = 1')->get();
 	}
 
@@ -53,7 +53,7 @@ class GameGroup extends Model
 	 * @return array<string, Team>
 	 * @throws Throwable
 	 */
-	public function getTeams() : array {
+	public function getTeams(): array {
 		if (empty($this->teams) && empty($this->getPlayers())) {
 			return [];
 		}
@@ -68,61 +68,75 @@ class GameGroup extends Model
 	 * @return GroupPlayer[]
 	 * @throws Throwable
 	 */
-	public function getPlayers() : array {
+	public function getPlayers(): array {
 		$games = $this->getGames();
 		if (empty($games)) {
 			return [];
 		}
 		if (empty($this->players)) {
-			$players = [];
-			foreach ($games as $game) {
-				foreach ($game->getTeams() as $team) {
-					$tPlayers = [];
-					$tPlayerNames = [];
-					/** @var Player $player */
-					foreach ($team->getPlayers() as $player) {
-						$asciiName = Strings::toAscii($player->name);
-						$tPlayerNames[] = $asciiName;
-						if (!isset($players[$asciiName])) {
-							$players[$asciiName] = new GroupPlayer(
-								$asciiName,
-								clone $player
-							);
-							$players[$asciiName]->name = $player->name;
+			/** @var Cache $cache */
+			$cache = App::getService('cache');
+			// @phpstan-ignore-next-line
+			$this->players = $cache->load(
+				'group/' . $this->id . '/players',
+				function () use ($games): array {
+					$players = [];
+					foreach ($games as $game) {
+						/** @var \App\GameModels\Game\Team[] $team */
+						foreach ($game->getTeams() as $team) {
+							$tPlayers = [];
+							$tPlayerNames = [];
+							/** @var Player $player */
+							foreach ($team->getPlayers() as $player) {
+								$asciiName = Strings::toAscii($player->name);
+								$tPlayerNames[] = $asciiName;
+								if (!isset($players[$asciiName])) {
+									$players[$asciiName] = new GroupPlayer(
+										$asciiName,
+										clone $player
+									);
+									$players[$asciiName]->name = $player->name;
+								}
+
+								// Add player to the team
+								if (!isset($tPlayers[$asciiName])) {
+									$tPlayers[$asciiName] = $players[$asciiName];
+								}
+
+								// Add game to the player
+								$players[$asciiName]->addGame($player, $game);
+							}
+							sort($tPlayerNames);
+							$id = md5(implode('', $tPlayerNames));
+							if (!isset($this->teams[$id])) {
+								$this->teams[$id] = new Team($id, $team->name, $team::SYSTEM);
+							}
+							$this->teams[$id]->name = $team->name;
+							$this->teams[$id]->addColor($team->color);
+							$this->teams[$id]->addPlayer(...array_values($tPlayers));
 						}
-
-						// Add player to the team
-						if (!isset($tPlayers[$asciiName])) {
-							$tPlayers[$asciiName] = $players[$asciiName];
-						}
-
-						// Add game to the player
-						$players[$asciiName]->addGame($player, $game);
 					}
-					sort($tPlayerNames);
-					$id = md5(implode('', $tPlayerNames));
-					if (!isset($this->teams[$id])) {
-						$this->teams[$id] = new Team($id, $team->name, $team::SYSTEM);
+
+					// Copy some values to the base Player class
+					foreach ($players as $player) {
+						$player->player->skill = $player->getSkill();
+						$player->player->vest = $player->getFavouriteVest();
 					}
-					$this->teams[$id]->name = $team->name;
-					$this->teams[$id]->addColor($team->color);
-					$this->teams[$id]->addPlayer(...array_values($tPlayers));
-				}
-			}
 
-			// Copy some values to the base Player class
-			foreach ($players as $player) {
-				$player->player->skill = $player->getSkill();
-				$player->player->vest = $player->getFavouriteVest();
-			}
+					// Sort players by their skill in descending order
+					uasort(
+						$players,
+						static fn(GroupPlayer $playerA, GroupPlayer $playerB) => $playerB->getSkill(
+							) - $playerA->getSkill()
+					);
 
-			// Sort players by their skill in descending order
-			uasort(
-				$players,
-				static fn(GroupPlayer $playerA, GroupPlayer $playerB) => $playerB->getSkill() - $playerA->getSkill()
+					return $players;
+				},
+				[
+					CacheParent::Tags   => ['gameGroups', 'group/' . $this->id . '/players'],
+					CacheParent::Expire => '1 months',
+				]
 			);
-
-			$this->players = $players;
 		}
 
 		return $this->players;
@@ -132,43 +146,48 @@ class GameGroup extends Model
 	 * @return Game[]
 	 * @throws Throwable
 	 */
-	public function getGames() : array {
+	public function getGames(): array {
 		if (empty($this->games)) {
 			/** @var Cache $cache */
 			$cache = App::getService('cache');
 			/** @phpstan-ignore-next-line */
-			$this->games = $cache->load('group/'.$this->id.'/games', function(array &$dependencies) : array {
-				$dependencies[CacheParent::Tags] = [
-					'gameGroups',
-					'group/'.$this->id.'/games',
-				];
-				$dependencies[CacheParent::EXPIRE] = '1 months';
+			$this->games = $cache->load(
+				'group/' . $this->id . '/games',
+				function (): array {
 				$games = [];
-				$rows = GameFactory::queryGames(true, fields: ['id_group'])->where('[id_group] = %i', $this->id)->cacheTags('group/'.$this->id.'/games')->fetchAll();
+					$rows = GameFactory::queryGames(true, fields: ['id_group'])
+					                   ->where('[id_group] = %i', $this->id)
+					                   ->cacheTags('group/' . $this->id . '/games')
+					                   ->fetchAll();
 				foreach ($rows as $row) {
 					$games[] = GameFactory::getByCode($row->code);
 				}
 				return $games;
-			});
+				},
+				[
+					CacheParent::Tags   => ['gameGroups', 'group/' . $this->id . '/games'],
+					CacheParent::Expire => '1 months',
+				]
+			);
 		}
 		/** @phpstan-ignore-next-line */
 		return $this->games;
 	}
 
-	public function clearCache() : void {
+	public function clearCache(): void {
 		parent::clearCache();
 		if (isset($this->id)) {
 			/** @var Cache $cache */
 			$cache = App::getService('cache');
 			$cache->clean([
-											CacheParent::Tags => [
-												'group/'.$this->id.'/games',
-												'group/'.$this->id.'/players',
-											]
-										]);
-			$cache->remove('group/'.$this->id.'/players');
-			$cache->remove('group/'.$this->id.'/games');
-			$cache->remove('group/'.$this->id.'/games/ids');
+				              CacheParent::Tags => [
+					              'group/' . $this->id . '/games',
+					              'group/' . $this->id . '/players',
+				              ],
+			              ]);
+			$cache->remove('group/' . $this->id . '/players');
+			$cache->remove('group/' . $this->id . '/games');
+			$cache->remove('group/' . $this->id . '/games/ids');
 		}
 	}
 

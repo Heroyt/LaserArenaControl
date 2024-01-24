@@ -5,7 +5,7 @@ namespace App\Controllers;
 use App\Models\Auth\Player;
 use App\Services\PlayerProvider;
 use InvalidArgumentException;
-use Lsr\Core\Controller;
+use Lsr\Core\Controllers\Controller;
 use Lsr\Core\Requests\Request;
 use Lsr\Core\Templating\Latte;
 

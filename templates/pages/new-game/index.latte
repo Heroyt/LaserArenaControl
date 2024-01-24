@@ -10,6 +10,7 @@
 {varType App\GameModels\Game\Game|null $loadGame}
 {varType App\Models\MusicMode[] $musicModes}
 {varType string $system}
+{default string $lang = App\Core\App::getShortLanguageCode()}
 
 {import 'helpers/help.latte'}
 {import 'helpers/groups.latte'}
@@ -60,7 +61,7 @@
 
 {block content}
     <form method="post" action="" id="new-game-content" class="w-100">
-        {cache 'newGame-controls', tags: ['templates.newGame', 'templates']}
+        {cache 'newGame-'.$lang.'-controls', tags: ['templates.newGame', 'templates', 'templates.'.$lang]}
             <section id="controls" class="d-flex justify-content-between flex-column flex-sm-row align-items-center">
                 {include sectionControls}
             </section>
@@ -68,7 +69,7 @@
         <section id="vests">
             {include sectionVests}
         </section>
-        {cache 'newGame-game-mode', tags: ['templates.newGame', 'templates', App\GameModels\Game\GameModes\AbstractMode::TABLE]}
+        {cache 'newGame-'.$lang.'-game-mode', tags: ['templates.newGame', 'templates', 'templates.'.$lang, App\GameModels\Game\GameModes\AbstractMode::TABLE]}
             <section id="game-mode">
                 {include sectionGameMode}
             </section>
@@ -76,12 +77,12 @@
                 {include sectionGameModeVariations}
             </section>
         {/cache}
-        {cache 'newGame-music', tags: ['templates.newGame', 'templates', App\Models\MusicMode::TABLE]}
+        {cache 'newGame-'.$lang.'-music', tags: ['templates.newGame', 'templates', 'templates.'.$lang, App\Models\MusicMode::TABLE]}
             <section id="music">
                 {include sectionMusic}
             </section>
         {/cache}
-        {*{cache 'newGame-teams', tags: ['templates.newGame', 'templates']}*}
+        {*{cache 'newGame-teams', tags: ['templates.newGame', 'templates', 'templates.'.$lang]}*}
         <section id="teams-random" class="text-center solo-hide">
             {include sectionTeamsRandom}
         </section>
@@ -172,17 +173,17 @@
     {/foreach}
 
     <div class="btn-group pb-2 pb-sm-0">
-        <a href="{link ['results', 'last', 'print', \Lsr\Core\App::getShortLanguageCode(), 1, \App\GameModels\Game\PrintStyle::getActiveStyleId(), \App\Core\Info::get('default_print_template', 'default')]}"
+        <a href="{link ['results', 'last', 'print', \App\Core\App::getShortLanguageCode(), 1, \App\GameModels\Game\PrintStyle::getActiveStyleId(), \App\Core\Info::get('default_print_template', 'default')]}"
            class="btn btn-info print-btn" target="_blank" data-toggle="tooltip"
            title="{lang 'Tisknout poslední hru', context: 'actions'} 1&times;">
             <i class="fa-solid fa-print"></i> &times; 1
         </a>
-        <a href="{link ['results', 'last', 'print', \Lsr\Core\App::getShortLanguageCode(), 2, \App\GameModels\Game\PrintStyle::getActiveStyleId(), \App\Core\Info::get('default_print_template', 'default')]}"
+        <a href="{link ['results', 'last', 'print', \App\Core\App::getShortLanguageCode(), 2, \App\GameModels\Game\PrintStyle::getActiveStyleId(), \App\Core\Info::get('default_print_template', 'default')]}"
            class="btn btn-info print-btn" target="_blank" data-toggle="tooltip"
            title="{lang 'Tisknout poslední hru', context: 'actions'} 2&times;">
             <i class="fa-solid fa-print"></i> &times; 2
         </a>
-        <a href="{link ['results', 'last', 'print', \Lsr\Core\App::getShortLanguageCode(), 3, \App\GameModels\Game\PrintStyle::getActiveStyleId(), \App\Core\Info::get('default_print_template', 'default')]}"
+        <a href="{link ['results', 'last', 'print', \App\Core\App::getShortLanguageCode(), 3, \App\GameModels\Game\PrintStyle::getActiveStyleId(), \App\Core\Info::get('default_print_template', 'default')]}"
            class="btn btn-info print-btn" target="_blank" data-toggle="tooltip"
            title="{lang 'Tisknout poslední hru', context: 'actions'} 3&times;">
             <i class="fa-solid fa-print"></i> &times; 3
@@ -311,7 +312,7 @@
 {/define}
 
 {define sectionTeamsRandom}
-    {cache $system . 'newGameTeamsRandom', tags => ['templates', 'newGame']}
+    {cache $system . 'newGameTeamsRandom-'.$lang, tags => ['templates', 'templates.'.$lang, 'newGame']}
         <h4>
             {lang 'Náhodné rozdělení týmů', context: 'game'}:
         </h4>
@@ -339,7 +340,7 @@
 {/define}
 
 {define sectionTeams}
-    {cache $system . 'newGameTeams', tags => ['templates', 'newGame']}
+    {cache $system . 'newGameTeams-'.$lang, tags => ['templates', 'templates.'.$lang, 'newGame']}
         <h4 class="text-center">
             {lang 'Týmy', context: 'game'}
         </h4>

@@ -3,7 +3,7 @@
 namespace App\Controllers;
 
 use App\Services\LigaApi;
-use Lsr\Core\Controller;
+use Lsr\Core\Controllers\Controller;
 use Lsr\Core\Templating\Latte;
 
 class LaserLigaController extends Controller

@@ -2,11 +2,11 @@
 
 namespace App\Controllers;
 
+use App\Core\App;
 use App\Models\MusicMode;
 use App\Services\LigaApi;
 use JsonException;
-use Lsr\Core\App;
-use Lsr\Core\Controller;
+use Lsr\Core\Controllers\Controller;
 use Lsr\Core\Exceptions\ModelNotFoundException;
 use Lsr\Core\Exceptions\ValidationException;
 use Lsr\Core\Requests\Request;

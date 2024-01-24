@@ -5,6 +5,7 @@
 
 namespace App\Services;
 
+use App\Core\App;
 use App\Core\Info;
 use App\Exceptions\GameModeNotFoundException;
 use App\Exceptions\ResultsParseException;
@@ -14,10 +15,9 @@ use App\GameModels\Game\Player;
 use App\Tools\Evo5\ResultsParser;
 use Dibi\Exception;
 use JsonException;
-use Lsr\Core\ApiController;
-use Lsr\Core\App;
-use Lsr\Core\CliController;
 use Lsr\Core\Constants;
+use Lsr\Core\Controllers\ApiController;
+use Lsr\Core\Controllers\CliController;
 use Lsr\Core\Exceptions\ModelNotFoundException;
 use Lsr\Core\Exceptions\ValidationException;
 use Lsr\Exceptions\FileException;

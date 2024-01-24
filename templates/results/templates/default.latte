@@ -8,7 +8,7 @@
 {default bool $colorless = false}
 
 {define addHead}
-	<link rel="stylesheet" href="{getUrl}dist/results/default.css?v={\Lsr\Core\App::getCacheVersion()}">
+    <link rel="stylesheet" href="{getUrl}dist/results/default.css?v={\App\Core\App::getCacheVersion()}">
 {/define}
 
 {define teamColor}
@@ -17,47 +17,47 @@
 {/define}
 
 {define containerClasses}
-	template-default {if $game->mode->isSolo()}solo{/if}
+    template-default {if $game->getMode()?->isSolo()}solo{/if}
 {/define}
 
 {define content}
 	{dump $style}
-	{dump $game->mode}
+    {dump $game->getMode()?}
 	{include resultsHeader}
-	{if $game->mode->settings->partWin}
+    {if $game->getMode()?->settings?->partWin}
 		{include resultsWin}
 	{/if}
-	{if $game->mode->settings->partPlayers}
+    {if $game->getMode()?->settings?->partPlayers}
 		{include resultsPlayers}
 	{/if}
-	{if $game->mode->settings->partBestDay}
+    {if $game->getMode()?->settings?->partBestDay}
 		{include resultsBestDay}
 	{/if}
-	{if $game->mode->settings->partHits}
+    {if $game->getMode()?->settings?->partHits}
 		{include resultsHits}
 	{/if}
-	{if $game->mode->isTeam() && $game->mode->settings->partTeams}
+    {if $game->getMode()?->isTeam() && $game->getMode()?->settings?->partTeams}
 		{include resultsTeams}
 	{/if}
-	{if $game->mode->settings->partBest}
+    {if $game->getMode()?->settings?->partBest}
 		{include resultsBests}
 	{/if}
 {/define}
 
 {define resultsWin}
-	{var App\GameModels\Game\Player|App\GameModels\Game\Team|null $win = $game->mode->getWin($game)}
+    {var App\GameModels\Game\Player|App\GameModels\Game\Team|null $win = $game->getMode()?->getWin($game)}
 	<div class="results-win">
 		{if is_null($win)}
 			<div class="print-primary">
 				{lang 'Remíza', context: 'results'}
 			</div>
 		{elseif $win instanceof App\GameModels\Game\Team}
-			<div class="bg-team-{$win->color}">
-				{lang 'Vítězství', context: 'results'}: {$win->name}
+            <div class="bg-team-{$win?->color}">
+                {lang 'Vítězství', context: 'results'}: {$win?->name}
 			</div>
 		{elseif $win instanceof App\GameModels\Game\Player}
-			<div class="{if $game->mode->isSolo()}print-primary{else}bg-team-{$win->getTeam()->color}{/if}">
-				{lang 'Vítězství', context: 'results'}: {$win->name}
+            <div class="{if $game->getMode()?->isSolo()}print-primary{else}bg-team-{$win?->getTeam()?->color}{/if}">
+                {lang 'Vítězství', context: 'results'}: {$win?->name}
 			</div>
 		{/if}
 	</div>
@@ -67,11 +67,11 @@
 	<table class="results-header text-print-primary colorless">
 		<tr>
 			<th>{lang 'Datum', context: 'results.info'}:</th>
-			<td>{$game->start->format('d.m.Y H:i:s')}</td>
+            <td>{$game->start?->format('d.m.Y H:i:s')}</td>
 		</tr>
 		<tr>
 			<th>{lang 'Herní mód', context: 'results.info'}:</th>
-            <td>{lang $game->mode?->getName(), context: 'gameModes'}</td>
+            <td>{lang $game->getMode()??->getName(), context: 'gameModes'}</td>
 			<th>{lang 'Počet hráčů', context: 'results.info'}:</th>
 			<td>{$game->getPlayersSorted()|length}</td>
 			<th>{lang 'Počet týmů', context: 'results.info'}:</th>
@@ -109,7 +109,7 @@
 		</tr>
 		</thead>
 		<tbody>
-		<tr n:if="$game->mode->isTeam()">
+        <tr n:if="$game->getMode()?->isTeam()">
 			<th colspan="3">{lang 'Tým', context: 'results.player'}</th>
 			<td n:foreach="$game->getPlayersSorted() as $player">
 				{if $colorless}
@@ -119,30 +119,30 @@
 				{/if}
 			</td>
 		</tr>
-		<tr n:if="$game->mode->settings->playerScore">
+        <tr n:if="$game->getMode()?->settings->playerScore">
 			<th colspan="3">{lang 'Skóre', context: 'results.player'}</th>
 			<td n:foreach="$game->getPlayersSorted() as $player">{$player->score|number:0,',','&nbsp;'|noescape}</td>
 		</tr>
-		<tr n:if="$game->mode->settings->playerShots">
+        <tr n:if="$game->getMode()?->settings->playerShots">
 			<th colspan="3">{lang 'Počet výstřelů', context: 'results.player'}</th>
 			<td n:foreach="$game->getPlayersSorted() as $player">
 				{$player->shots|number:0,',','&nbsp;'|noescape}
 			</td>
 		</tr>
-		<tr n:if="$game->mode->settings->playerMiss">
+        <tr n:if="$game->getMode()?->settings->playerMiss">
 			<th colspan="3">{lang 'Počet střel do prázdna', context: 'results.player'}</th>
 			<td n:foreach="$game->getPlayersSorted() as $player">
 				{($player->shots-$player->hits)|number:0,',','&nbsp;'|noescape}
 			</td>
 		</tr>
-		<tr n:if="$game->mode->settings->playerAccuracy">
+        <tr n:if="$game->getMode()?->settings->playerAccuracy">
 			<th colspan="3">{lang 'Úspěšnost', context: 'results.player'}</th>
 			<td n:foreach="$game->getPlayersSorted() as $player">
 				{$player->accuracy}%
 			</td>
 		</tr>
-		{if $game->mode->isSolo() || !$game->mode->settings->playerPlayersTeams}
-			<tr n:if="$game->mode->settings->playerKd">
+        {if $game->getMode()?->isSolo() || !$game->getMode()?->settings->playerPlayersTeams}
+            <tr n:if="$game->getMode()?->settings->playerKd">
 				<th colspan="3">{lang 'K:D', context: 'results.player'} ({lang 'Zásahy', context:'results.player'}:{lang 'Smrti', context:'results.player'}
 					)
 				</th>
@@ -151,13 +151,13 @@
 					({($player->hits / ($player->deaths === 0 ? 1 : $player->deaths))|round:2})
 				</td>
 			</tr>
-			<tr n:if="$game->mode->settings->playerFavourites">
+            <tr n:if="$game->getMode()?->settings->playerFavourites">
 				<th colspan="3">{lang 'Nejoblíbenější cíl', context: 'results.player'}</th>
 				<td n:foreach="$game->getPlayersSorted() as $player">
 					{$player->getFavouriteTarget()?->name}
 				</td>
 			</tr>
-			<tr n:if="$game->mode->settings->playerFavourites">
+            <tr n:if="$game->getMode()?->settings->playerFavourites">
 				<th colspan="3">{lang 'Největší zabiják', context: 'results.player'}</th>
 				<td n:foreach="$game->getPlayersSorted() as $player">
 					{$player->getFavouriteTargetOf()?->name}
@@ -166,14 +166,13 @@
 		{/if}
 
 
-
-		<tr n:if="$game->mode->settings->playerLives && $game instanceof App\GameModels\Game\Evo5\Game">
+        <tr n:if="$game->getMode()?->settings->playerLives && $game instanceof App\GameModels\Game\Evo5\Game">
 				<th colspan="3">{lang 'Zbývá životů', context: 'results.player'}</th>
 				<td n:foreach="$game->getPlayersSorted() as $player">
 					{$player->getRemainingLives()}
 				</td>
 		</tr>
-		{if $game->mode->settings->playerPlayers}
+        {if $game->getMode()?->settings->playerPlayers}
 			<tr>
 				<th rowspan="2">{lang 'Hráči', context: 'results.player'}</th>
 				<th colspan="2">{lang 'Zásahy', context: 'results.player'}</th>
@@ -188,7 +187,7 @@
 				</td>
 			</tr>
 		{/if}
-		{if $game->mode->isTeam() && $game->mode->settings->playerPlayersTeams}
+        {if $game->getMode()?->isTeam() && $game->getMode()?->settings->playerPlayersTeams}
 			<tr>
 				<th rowspan="4">{lang 'Týmy', context: 'results.player'}</th>
 				<th rowspan="2">{lang 'Soupeř', context: 'results.player'}</th>
@@ -256,11 +255,11 @@
 					{include teamColor, teamColor: $team->color}
 				{/if}
 			</th>
-			<th n:if="$game->mode->settings->teamHits">{lang 'Zásahů', context: 'results.team'}</th>
-			<th n:if="$game->mode->settings->teamScore">{lang 'Skóre', context: 'results.team'}</th>
-			<th n:if="$game->mode->settings->teamAccuracy">{lang 'Úspěšnost', context: 'results.team'}</th>
-			<th n:if="$game->mode->settings->teamShots">{lang 'Výstřelů', context: 'results.team'}</th>
-			<th n:if="$game->mode->settings->teamZakladny && $game->mode instanceof App\GameModels\Game\Evo5\GameModes\Zakladny">
+            <th n:if="$game->getMode()?->settings->teamHits">{lang 'Zásahů', context: 'results.team'}</th>
+            <th n:if="$game->getMode()?->settings->teamScore">{lang 'Skóre', context: 'results.team'}</th>
+            <th n:if="$game->getMode()?->settings->teamAccuracy">{lang 'Úspěšnost', context: 'results.team'}</th>
+            <th n:if="$game->getMode()?->settings->teamShots">{lang 'Výstřelů', context: 'results.team'}</th>
+            <th n:if="$game->getMode()?->settings->teamZakladny && $game->getMode()? instanceof App\GameModels\Game\Evo5\GameModes\Zakladny">
 				{lang 'Ztráty základny', context: 'results.team'}
 			</th>
 		</tr>
@@ -273,12 +272,14 @@
 				{/if}
 			</th>
 			<td n:foreach="$game->getTeamsSorted()->getAll() as $team2" {if $team === $team2}class="disabled"{/if}>{$team->getHitsTeam($team2)}</td>
-			<td n:if="$game->mode->settings->teamHits">{$team->getHits()|number:0,',','&nbsp;'|noescape}</td>
-			<td n:if="$game->mode->settings->teamScore">{$team->score|number:0,',','&nbsp;'|noescape}</td>
-			<td n:if="$game->mode->settings->teamAccuracy">{$team->getAccuracy()|number:2,',','&nbsp;'|noescape}%</td>
-			<td n:if="$game->mode->settings->teamShots">{$team->getShots()|number:0,',','&nbsp;'|noescape}</td>
-			<td n:if="$game->mode->settings->teamZakladny && $game->mode instanceof App\GameModels\Game\Evo5\GameModes\Zakladny">
-				{$game->mode->getBasesDestroyed($team)}
+            <td n:if="$game->getMode()?->settings->teamHits">{$team->getHits()|number:0,',','&nbsp;'|noescape}</td>
+            <td n:if="$game->getMode()?->settings->teamScore">{$team->score|number:0,',','&nbsp;'|noescape}</td>
+            <td n:if="$game->getMode()?->settings->teamAccuracy">{$team->getAccuracy()|number:2,',','&nbsp;'|noescape}
+                %
+            </td>
+            <td n:if="$game->getMode()?->settings->teamShots">{$team->getShots()|number:0,',','&nbsp;'|noescape}</td>
+            <td n:if="$game->getMode()?->settings->teamZakladny && $game->getMode()? instanceof App\GameModels\Game\Evo5\GameModes\Zakladny">
+                {$game->getMode()?->getBasesDestroyed($team)}
 			</td>
 		</tr>
 		</thead>
@@ -341,7 +342,7 @@
 				{continueIf !isset($player)}
 				<div class="w-50 p-1 print-dark">{$name}:</div>
 				<div class="w-50 p-1 {if $iterator->counter0 % 4 < 2}print-light{/if}">
-					{if $game->mode->isTeam()}
+                    {if $game->getMode()?->isTeam()}
 						{if !$colorless}
 							{include teamColor, teamColor: $player->getTeam()->color}
 						{/if}

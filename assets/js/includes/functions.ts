@@ -405,8 +405,15 @@ export function gameTimer() {
             .catch(err => {
                 activeGame = null;
                 console.log(err);
-                if (err.data) {
-                    console.error(err.data);
+                if (err instanceof Promise) {
+                    err.then(e => {
+                        if (e.data) {
+                            console.error(e.data);
+                        } else {
+                            console.error(e);
+                        }
+                    })
+                    return;
                 }
             })
             .finally(() => {

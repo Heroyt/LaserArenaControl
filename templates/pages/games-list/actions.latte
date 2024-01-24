@@ -61,7 +61,7 @@
 			data-toggle="tooltip"
 			title="{lang 'Přepnout na sólo mód'}"
 			data-code="{$game->code}"
-			data-mode="{\App\GameModels\Factory\GameModeFactory::getIdByObject($game->mode->getSoloAlternative())}">
+            data-mode="{\App\GameModels\Factory\GameModeFactory::getIdByObject($game->getMode()?->getSoloAlternative())}">
 		<i class="fa-solid fa-wrench"></i>
 	</button>
 {/define}
@@ -72,10 +72,10 @@
 {/define}
 
 {define gameActionGroup, App\GameModels\Game\Game|null $game = null}
-	<button type="button" class="btn btn-{ifset $game->group}success{else}primary{/ifset} select-group"
+    <button type="button" class="btn btn-{if $game?->getGroup() !== null}success{else}primary{/if} select-group"
 			data-toggle="tooltip" title="{lang 'Vybrat skupinu'}"
-			{ifset $game}data-code="{$game->code}" data-group="{$game->group?->id}"
-			data-groupname="{$game->group?->name}"{/ifset}>
+            {ifset $game}data-code="{$game?->code}" data-group="{$game?->getGroup()?->id}"
+            data-groupname="{$game?->getGroup()?->name}"{/ifset}>
 		<i class="fa-solid fa-user-group"></i>
 	</button>
 {/define}

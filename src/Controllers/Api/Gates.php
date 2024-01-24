@@ -5,7 +5,7 @@ namespace App\Controllers\Api;
 use App\Core\Info;
 use App\Tools\GatesController;
 use Exception;
-use Lsr\Core\ApiController;
+use Lsr\Core\Controllers\ApiController;
 use Lsr\Core\Routing\Attributes\Post;
 use Lsr\Core\Templating\Latte;
 

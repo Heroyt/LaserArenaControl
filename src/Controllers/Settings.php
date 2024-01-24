@@ -5,6 +5,7 @@
 
 namespace App\Controllers;
 
+use App\Core\App;
 use App\Core\Info;
 use App\GameModels\Factory\GameFactory;
 use App\GameModels\Game\PrintStyle;
@@ -16,8 +17,7 @@ use DateTime;
 use Dibi\DriverException;
 use Dibi\Exception;
 use JsonException;
-use Lsr\Core\App;
-use Lsr\Core\Controller;
+use Lsr\Core\Controllers\Controller;
 use Lsr\Core\DB;
 use Lsr\Core\Exceptions\ModelNotFoundException;
 use Lsr\Core\Exceptions\ValidationException;

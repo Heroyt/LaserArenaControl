@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Core\App;
 use App\Services\Gotenberg\Chromium;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
@@ -11,7 +12,6 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\MessageFormatter;
 use GuzzleHttp\Middleware;
 use JsonException;
-use Lsr\Core\App;
 use Lsr\Logging\Logger;
 use Psr\Http\Message\ResponseInterface;
 

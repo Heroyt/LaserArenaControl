@@ -3,7 +3,7 @@
 namespace App\Controllers\Cli;
 
 use App\Services\VersionService;
-use Lsr\Core\CliController;
+use Lsr\Core\Controllers\CliController;
 use Lsr\Helpers\Cli\Colors;
 use Lsr\Helpers\Cli\Enums\ForegroundColors;
 

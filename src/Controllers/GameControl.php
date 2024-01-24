@@ -6,7 +6,7 @@ use App\Core\Info;
 use App\Tools\LMXController;
 use Exception;
 use JsonException;
-use Lsr\Core\Controller;
+use Lsr\Core\Controllers\Controller;
 use Lsr\Core\Requests\Request;
 use Lsr\Core\Routing\Attributes\Get;
 use Lsr\Core\Routing\Attributes\Post;

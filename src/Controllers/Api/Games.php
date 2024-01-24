@@ -3,13 +3,14 @@
 namespace App\Controllers\Api;
 
 use App\GameModels\Factory\GameFactory;
+use App\GameModels\Game\Team;
 use App\Models\GameGroup;
 use App\Services\Evo5\GameSimulator;
 use App\Services\SyncService;
 use DateTime;
 use Exception;
 use JsonException;
-use Lsr\Core\ApiController;
+use Lsr\Core\Controllers\ApiController;
 use Lsr\Core\Exceptions\ModelNotFoundException;
 use Lsr\Core\Exceptions\ValidationException;
 use Lsr\Core\Requests\Request;
@@ -29,6 +30,54 @@ class Games extends ApiController
 		private readonly GameSimulator $gameSimulator,
 	) {
 		parent::__construct($latte);
+	}
+
+	public function cheat(Request $request): never {
+		$code = $request->params['code'] ?? '';
+		if (empty($code)) {
+			$this->respond(['error' => 'Invalid code'], 400);
+		}
+		try {
+			$game = GameFactory::getByCode($code);
+			if (!isset($game)) {
+				throw new ModelNotFoundException('Game not found');
+			}
+		} catch (Throwable $e) {
+			$this->respond(['error' => 'Game not found', 'exception' => $e->getMessage()], 404);
+		}
+
+		$player = $request->post['player'] ?? 0;
+		if (empty($player)) {
+			$this->respond(['error' => 'Invalid player'], 400);
+		}
+
+		$playerObj = $game->getPlayers()->get($player);
+		if (!isset($playerObj)) {
+			$this->respond(['error' => 'Player not found'], 404);
+		}
+
+		$enemies = [];
+		if ($game->getMode()->isTeam()) {
+			/** @var Team $team */
+			foreach ($game->getTeams() as $team) {
+				if ($team->color === $playerObj->getTeam()->color) {
+					continue;
+				}
+				foreach ($team->getPlayers() as $player2) {
+					$enemies[] = $player2;
+				}
+			}
+		}
+
+		if (isset($request->get['addHits'])) {
+			$hits = (int)$request->get['addHits'];
+			$playerObj->hits += $hits;
+			for ($i = 0; $i < $hits; $i++) {
+				$enemy = $enemies[array_rand($enemies)];
+			}
+		}
+
+		$this->respond($game);
 	}
 
 	/**

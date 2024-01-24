@@ -195,6 +195,9 @@ export default class NewGameGroup {
                 response.forEach(groupData => {
                     this.addGroup(groupData, vestCount);
                 });
+            })
+            .catch(e => {
+                console.error(e);
             });
     }
 

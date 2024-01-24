@@ -2,13 +2,13 @@
 
 namespace TestCases\unit\Tools\Evo5;
 
+use App\Core\App;
 use App\Exceptions\ResultsParseException;
 use App\GameModels\Game\Evo5\Game;
 use App\GameModels\Game\Evo5\Player;
 use App\GameModels\Game\Evo5\Team;
 use App\Services\PlayerProvider;
 use App\Tools\Evo5\ResultsParser;
-use Lsr\Core\App;
 use Lsr\Exceptions\FileException;
 use Lsr\Helpers\Tracy\DbTracyPanel;
 use PHPUnit\Framework\TestCase;

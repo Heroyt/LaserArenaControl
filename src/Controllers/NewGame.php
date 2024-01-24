@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Core\App;
 use App\Core\Info;
 use App\DataObjects\NewGame\HookedTemplates;
 use App\Exceptions\GameModeNotFoundException;
@@ -13,8 +14,7 @@ use App\Models\MusicMode;
 use App\Services\FeatureConfig;
 use JsonException;
 use LAC\Modules\Core\ControllerDecoratorInterface;
-use Lsr\Core\App;
-use Lsr\Core\Controller;
+use Lsr\Core\Controllers\Controller;
 use Lsr\Core\Exceptions\ModelNotFoundException;
 use Lsr\Core\Exceptions\ValidationException;
 use Lsr\Core\Requests\Request;

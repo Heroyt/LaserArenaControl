@@ -84,6 +84,8 @@
     }
   ],
   "config": {
+    "optimize-autoloader": true,
+    "apcu-autoloader": true,
     "allow-plugins": {
       "phpstan/extension-installer": true,
       "diego-ninja/composer-preload": true

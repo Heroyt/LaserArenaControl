@@ -1,8 +1,5 @@
 FROM heroyt/lac_core:nginx-latest AS project
 
-# Update PHP ini file
-RUN mv "$PHP_INI_DIR/php-staging.ini" "$PHP_INI_DIR/php.ini"
-
 # Project files
 RUN mkdir -p "/var/www/.npm" && chown -R 33:33 "/var/www/.npm"
 RUN apt-get -y install sudo

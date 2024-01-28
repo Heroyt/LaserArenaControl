@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: Czech\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2024-01-28 21:05\n"
+"PO-Revision-Date: 2024-01-28 22:00\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=4; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 3;\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -2506,93 +2506,93 @@ msgid "Hra"
 msgstr "Hra"
 
 msgid "Žádná"
-msgstr ""
+msgstr "Žádná"
 
 msgid "Další hra"
-msgstr ""
+msgstr "Další hra"
 
 msgid "Předchozí hra"
-msgstr ""
+msgstr "Předchozí hra"
 
 msgid "Hrát"
-msgstr ""
+msgstr "Hrát"
 
 msgid "Vítěz"
-msgstr ""
+msgstr "Vítěz"
 
 msgid "Bonus/Penalizace"
-msgstr ""
+msgstr "Bonus/Penalizace"
 
 msgctxt "game.actions"
 msgid "Opakovat hru"
-msgstr ""
+msgstr "Opakovat hru"
 
 msgid "Opravdu chcete hru opakovat?"
-msgstr ""
+msgstr "Opravdu chcete hru opakovat?"
 
 msgid "Postoupeno týmů:"
-msgstr ""
+msgstr "Postoupeno týmů:"
 
 msgid "Postoupit týmy"
-msgstr ""
+msgstr "Postoupit týmy"
 
 msgid "Postoupeno skupin:"
-msgstr ""
+msgstr "Postoupeno skupin:"
 
 msgid "Všechny hry"
-msgstr ""
+msgstr "Všechny hry"
 
 msgctxt "gate"
 msgid "Výsledky turnaje"
-msgstr ""
+msgstr "Výsledky turnaje"
 
 msgid "Tým"
-msgstr ""
+msgstr "Tým"
 
 msgid "Výhry"
 msgstr "Výhry"
 
 msgid "Remízy"
-msgstr ""
+msgstr "Remízy"
 
 msgid "Prohry"
-msgstr ""
+msgstr "Prohry"
 
 msgid "Body"
-msgstr ""
+msgstr "Body"
 
 msgid "Skóre"
-msgstr ""
+msgstr "Skóre"
 
 msgid "Celkové"
-msgstr ""
+msgstr "Celkové"
 
 msgid "Individální"
-msgstr ""
+msgstr "Individální"
 
 msgid "Nejlepší hráči"
-msgstr ""
+msgstr "Nejlepší hráči"
 
 msgid "Hráč"
-msgstr ""
+msgstr "Hráč"
 
 msgid "Nejpřesnější hráči"
-msgstr ""
+msgstr "Nejpřesnější hráči"
 
 msgid "Největší mimoňi"
-msgstr ""
+msgstr "Největší mimoňi"
 
 msgid "Výstřely"
-msgstr ""
+msgstr "Výstřely"
 
 msgid "Zabijáci vlastních"
-msgstr ""
+msgstr "Zabijáci vlastních"
 
 msgid "Turnaje"
-msgstr ""
+msgstr "Turnaje"
 
 msgid "Seznam"
-msgstr ""
+msgstr "Seznam"
 
 msgid "Výsledková tabule"
 msgstr "Výsledková tabule"
@@ -2601,11 +2601,11 @@ msgid "Připravené hry"
 msgstr "Připravené hry"
 
 msgid "Připravené"
-msgstr ""
+msgstr "Připravené"
 
 msgctxt "game.actions"
 msgid "Připravit hru"
-msgstr ""
+msgstr "Připravit hru"
 
 msgctxt "newGame.preparedGames.actions"
 msgid "Nahrát"
@@ -2634,788 +2634,804 @@ msgid "Dostupné vesty"
 msgstr "Dostupné vesty"
 
 msgid "Nový turnaj"
-msgstr ""
+msgstr "Nový turnaj"
 
 msgid "Název turnaje"
-msgstr ""
+msgstr "Název turnaje"
 
 msgid "Turnaj XYZ"
-msgstr ""
+msgstr "Turnaj XYZ"
 
 msgid "Formát"
-msgstr ""
+msgstr "Formát"
 
 msgid "Týmový"
-msgstr ""
+msgstr "Týmový"
 
 msgid "Sólo"
-msgstr ""
+msgstr "Sólo"
 
 msgid "Začátek turnaje"
-msgstr ""
+msgstr "Začátek turnaje"
 
 msgid "Velikost týmu"
-msgstr ""
+msgstr "Velikost týmu"
 
 msgid "Týmů ve hře"
-msgstr ""
+msgstr "Týmů ve hře"
 
 msgid "Turnaj se nepodařilo uložit."
-msgstr ""
+msgstr "Turnaj se nepodařilo uložit."
 
 msgid "Název týmu"
-msgstr ""
+msgstr "Název týmu"
 
 msgid "Jméno"
-msgstr ""
+msgstr "Jméno"
 
 msgid "Příjmení"
-msgstr ""
+msgstr "Příjmení"
 
 msgid "Přezdívka"
-msgstr ""
+msgstr "Přezdívka"
 
 msgid "Náhradník"
-msgstr ""
+msgstr "Náhradník"
 
 msgid "Přidat tým"
-msgstr ""
+msgstr "Přidat tým"
 
 msgid "Uloženo"
-msgstr ""
+msgstr "Uloženo"
 
 msgid "Uložit"
-msgstr ""
+msgstr "Uložit"
 
 msgid "Tým 1"
-msgstr ""
+msgstr "Tým 1"
 
 msgid "Tým 2"
-msgstr ""
+msgstr "Tým 2"
 
 msgid "Tým 3"
-msgstr ""
+msgstr "Tým 3"
 
 msgctxt "settings"
 msgid "Platí i pro časovač na neaktivní obrazovce"
-msgstr ""
+msgstr "Platí i pro časovač na neaktivní obrazovce"
 
 msgctxt "tournament.presets"
 msgid "3 základní hry a baráž"
-msgstr ""
+msgstr "3 základní hry a baráž"
 
 msgctxt "tournament"
 msgid "Základní skupina"
-msgstr ""
+msgstr "Základní skupina"
 
 msgid "Semifinále"
-msgstr ""
+msgstr "Semifinále"
 
 msgid "Čtvrtfinále"
-msgstr ""
+msgstr "Čtvrtfinále"
 
 msgid "Osmifinále"
-msgstr ""
+msgstr "Osmifinále"
 
 msgid "Předkolo"
-msgstr ""
+msgstr "Předkolo"
 
 msgctxt "tournament.presets"
 msgid "X základních her a baráž"
-msgstr ""
+msgstr "X základních her a baráž"
 
 msgid "Týmů ve hře: %d"
-msgstr ""
+msgstr "Týmů ve hře: %d"
 
 msgid "Počet her na tým v základní skupině"
-msgstr ""
+msgstr "Počet her na tým v základní skupině"
 
 msgid "Maximální počet kol baráže"
-msgstr ""
+msgstr "Maximální počet kol baráže"
 
 msgid "Předpokládaný počet her na tým"
-msgstr ""
+msgstr "Předpokládaný počet her na tým"
 
 msgid "Předpokládaný čas ve hře na tým"
-msgstr ""
+msgstr "Předpokládaný čas ve hře na tým"
 
 msgid "Celkem her"
-msgstr ""
+msgstr "Celkem her"
 
 msgctxt "tournament.presets"
 msgid "3 základní hry na poloviny a baráž"
-msgstr ""
+msgstr "3 základní hry na poloviny a baráž"
 
 msgid "Play-off"
-msgstr ""
+msgstr "Play-off"
 
 msgid "Nejlepší %d týmy z %d. týmů ze skupin: %s"
-msgstr ""
+msgstr "Nejlepší %d týmy z %d. týmů ze skupin: %s"
 
 msgid "Pořadí"
-msgstr ""
+msgstr "Pořadí"
 
 msgid "Body za výhru"
-msgstr ""
+msgstr "Body za výhru"
 
 msgid "Body za remízu"
-msgstr ""
+msgstr "Body za remízu"
 
 msgid "Body za prohru"
-msgstr ""
+msgstr "Body za prohru"
 
 msgid "Poslední místo. Ve hře 3 týmů je to 3. místo, ve hře čtyř týmů je to 4. místo."
-msgstr ""
+msgstr "Poslední místo. Ve hře 3 týmů je to 3. místo, ve hře čtyř týmů je to 4. místo."
 
 msgid "Body za druhé místo"
-msgstr ""
+msgstr "Body za druhé místo"
 
 msgid "Jen pro hru 3 a 4 týmů ve hře."
-msgstr ""
+msgstr "Jen pro hru 3 a 4 týmů ve hře."
 
 msgid "Body za třetí místo"
-msgstr ""
+msgstr "Body za třetí místo"
 
 msgid "Jen pro hru 4 týmů ve hře."
-msgstr ""
+msgstr "Jen pro hru 4 týmů ve hře."
 
 msgid "Turnajový herní mód"
-msgstr ""
+msgstr "Turnajový herní mód"
 
 msgid "Přesný název herního módu, který se bude načítat při spouštění her přes modul turnaje."
-msgstr ""
+msgstr "Přesný název herního módu, který se bude načítat při spouštění her přes modul turnaje."
 
 msgctxt "settings"
 msgid "Turnaje"
-msgstr ""
+msgstr "Turnaje"
 
 msgctxt "game.modes"
 msgid "Zda je herní mód aktivní (zobrazí se ve výběru módu)"
-msgstr ""
+msgstr "Zda je herní mód aktivní (zobrazí se ve výběru módu)"
 
 msgctxt "gameModes"
 msgid "SHADOW"
-msgstr ""
+msgstr "SHADOW"
 
 msgctxt "gameModes"
 msgid "Týmový Survival"
-msgstr ""
+msgstr "Týmový Survival"
 
 msgctxt "errors"
 msgid "Vyplňte název týmu"
-msgstr ""
+msgstr "Vyplňte název týmu"
 
 msgctxt "errors"
 msgid "Název týmu je moc dlouhý"
-msgstr ""
+msgstr "Název týmu je moc dlouhý"
 
 msgid "Hudební módy se slučují do skupin. Při výběru hudební skupiny při zadávání hry se pak spustí jeden náhodně výbraný hudební mód."
-msgstr ""
+msgstr "Hudební módy se slučují do skupin. Při výběru hudební skupiny při zadávání hry se pak spustí jeden náhodně výbraný hudební mód."
 
 msgid "Hudební módy se slučují do skupin. Při zadávání hry se pak spustí jeden náhodně výbraný hudební mód z vybrané hudební skupiny."
-msgstr ""
+msgstr "Hudební módy se slučují do skupin. Při zadávání hry se pak spustí jeden náhodně výbraný hudební mód z vybrané hudební skupiny."
 
 msgid "Slučovat hudební skupiny"
-msgstr ""
+msgstr "Slučovat hudební skupiny"
 
 msgctxt "questionnaire"
 msgid "Dotazník"
-msgstr ""
+msgstr "Dotazník"
 
 msgctxt "questionnaire"
 msgid "Víte, že tyto výsledky jsou vytvářeny v rámci bakalářské práce?"
-msgstr ""
+msgstr "Víte, že tyto výsledky jsou vytvářeny v rámci bakalářské práce?"
 
 msgctxt "questionnaire"
 msgid "Prosím Vás tedy o vyplnění krátkého dotazníku týkající se tištěných i on-line výsledků ze hry laser game."
-msgstr ""
+msgstr "Prosím Vás tedy o vyplnění krátkého dotazníku týkající se tištěných i on-line výsledků ze hry laser game."
 
 msgctxt "questionnaire"
 msgid "K dispozici jsou 2 varianty dotazníku. Krátká a dlouhá. Nemusíte vyplňovat obě varianty, všechny otázky z krátké jsou zahrnuté v dlouhé."
-msgstr ""
+msgstr "K dispozici jsou 2 varianty dotazníku. Krátká a dlouhá. Nemusíte vyplňovat obě varianty, všechny otázky z krátké jsou zahrnuté v dlouhé."
 
 msgctxt "questionnaire"
 msgid "Krátký dotazník"
-msgstr ""
+msgstr "Krátký dotazník"
 
 msgctxt "questionnaire"
 msgid "Dlouhý dotazník"
-msgstr ""
+msgstr "Dlouhý dotazník"
 
 msgctxt "questionnaire.errors"
 msgid "Questionnaire is empty."
-msgstr ""
+msgstr "Questionnaire is empty."
 
 msgctxt "questionnaire"
 msgid "A"
-msgstr ""
+msgstr "A"
 
 msgctxt "questionnaire"
 msgid "B"
-msgstr ""
+msgstr "B"
 
 msgctxt "questionnaire"
 msgid "C"
-msgstr ""
+msgstr "C"
 
 msgctxt "questionnaire"
 msgid "Vlastní odpověď"
-msgstr ""
+msgstr "Vlastní odpověď"
 
 msgctxt "questionnaire"
 msgid "Dotazník je anonymní a neuchovává žádné citlivé údaje. Vyplnění dotazníku je zcela dobrovolné. Své odpovědi můžete změnit po dobu 30ti dnů ze zařízení, na kterém jste dotazník vyplnili. Stačí dotazník otevřít znovu pomocí tlačítka na začátku výsledků."
-msgstr ""
+msgstr "Dotazník je anonymní a neuchovává žádné citlivé údaje. Vyplnění dotazníku je zcela dobrovolné. Své odpovědi můžete změnit po dobu 30ti dnů ze zařízení, na kterém jste dotazník vyplnili. Stačí dotazník otevřít znovu pomocí tlačítka na začátku výsledků."
 
 msgctxt "questionnaire.question"
 msgid "<h4>O Vás</h4>"
-msgstr ""
+msgstr "<h4>O Vás</h4>"
 
 msgctxt "questionnaire.question"
 msgid "Do jaké věkové skupiny patříte?"
-msgstr ""
+msgstr "Do jaké věkové skupiny patříte?"
 
 msgctxt "questionnaire"
 msgid "Méně než 18 let"
-msgstr ""
+msgstr "Méně než 18 let"
 
 msgctxt "questionnaire"
 msgid "18-30 let"
-msgstr ""
+msgstr "18-30 let"
 
 msgctxt "questionnaire"
 msgid "31-50 let"
-msgstr ""
+msgstr "31-50 let"
 
 msgctxt "questionnaire"
 msgid "Více než 50 let"
-msgstr ""
+msgstr "Více než 50 let"
 
 msgctxt "questionnaire.question"
 msgid "<h4>O Vás</h4>\n"
 "<p>Pro začátek prosím vyplňte základní údaje o Vás a vašem hraní laser game.</p>"
-msgstr ""
+msgstr "<h4>O Vás</h4>\n"
+"<p>Pro začátek prosím vyplňte základní údaje o Vás a vašem hraní laser game.</p>"
 
 msgctxt "questionnaire"
 msgid "Děkuji, Váše odpovědi byly úspěšně zaznamenány."
-msgstr ""
+msgstr "Děkuji, Váše odpovědi byly úspěšně zaznamenány."
 
 msgctxt "questionnaire.question"
 msgid "Jak často hrajete laser game?"
-msgstr ""
+msgstr "Jak často hrajete laser game?"
 
 msgctxt "questionnaire"
 msgid "Nikdy jsem nehrál/a"
-msgstr ""
+msgstr "Nikdy jsem nehrál/a"
 
 msgctxt "questionnaire"
 msgid "Jen párkrát za celou dobu"
-msgstr ""
+msgstr "Jen párkrát za celou dobu"
 
 msgctxt "questionnaire"
 msgid "Maximálně 4&times; do roka"
-msgstr ""
+msgstr "Maximálně 4&times; do roka"
 
 msgctxt "questionnaire"
 msgid "Alespoň jednou ročně"
-msgstr ""
+msgstr "Alespoň jednou ročně"
 
 msgctxt "questionnaire"
 msgid "Alespoň jednou měsíčně"
-msgstr ""
+msgstr "Alespoň jednou měsíčně"
 
 msgctxt "questionnaire"
 msgid "Alespoň jednou týdně"
-msgstr ""
+msgstr "Alespoň jednou týdně"
 
 msgctxt "questionnaire.question"
 msgid "Hráli jste někdy i v jiné aréně?"
-msgstr ""
+msgstr "Hráli jste někdy i v jiné aréně?"
 
 msgctxt "questionnaire"
 msgid "Ano"
-msgstr ""
+msgstr "Ano"
 
 msgctxt "questionnaire"
 msgid "Ne"
-msgstr ""
+msgstr "Ne"
 
 msgctxt "questionnaire.question"
 msgid "Hrál/a jste někdy i v jiné aréně?"
-msgstr ""
+msgstr "Hrál/a jste někdy i v jiné aréně?"
 
 msgctxt "questionnaire"
 msgid "Pokud jste si on-line výsledky otevřeli poprvé, nejprve si je v klidu projděte a k dotazníku se můžete vrátit později."
-msgstr ""
+msgstr "Pokud jste si on-line výsledky otevřeli poprvé, nejprve si je v klidu projděte a k dotazníku se můžete vrátit později."
 
 msgctxt "questionnaire"
 msgid "Pokud jste on-line výsledky ještě nikdy neviděli, nejprve si je v klidu projděte a k dotazníku se můžete vrátit později."
-msgstr ""
+msgstr "Pokud jste on-line výsledky ještě nikdy neviděli, nejprve si je v klidu projděte a k dotazníku se můžete vrátit později."
 
 msgctxt "questionnaire"
 msgid "Jen jednou"
-msgstr ""
+msgstr "Jen jednou"
 
 msgctxt "questionnaire.question"
 msgid "<h4>Výsledky obecně</h4><p>V této části prosím vypňte jak moc Vás zajímají jednotlivé statistiky z výsledků.</p><p class=\"text-muted\">(1 = Potřebuju to vědět, 5 = Vůbec mě to nezajímá)</p>"
-msgstr ""
+msgstr "<h4>Výsledky obecně</h4><p>V této části prosím vypňte jak moc Vás zajímají jednotlivé statistiky z výsledků.</p><p class=\"text-muted\">(1 = Potřebuju to vědět, 5 = Vůbec mě to nezajímá)</p>"
 
 msgctxt "questionnaire.question"
 msgid "Moje skóre a celkové pořadí (individuální)"
-msgstr ""
+msgstr "Moje skóre a celkové pořadí (individuální)"
 
 msgctxt "questionnaire"
 msgid "Jako známkování ve škole. (1 = nejlepší, 5 = nejhorší)"
-msgstr ""
+msgstr "Jako známkování ve škole. (1 = nejlepší, 5 = nejhorší)"
 
 msgctxt "questionnaire.question"
 msgid "Skóre a pořadí týmů"
-msgstr ""
+msgstr "Skóre a pořadí týmů"
 
 msgctxt "questionnaire.question"
 msgid "Moje přesnost střelby"
-msgstr ""
+msgstr "Moje přesnost střelby"
 
 msgctxt "questionnaire.question"
 msgid "Můj počet výstřelů"
-msgstr ""
+msgstr "Můj počet výstřelů"
 
 msgctxt "questionnaire.question"
 msgid "Můj počet střel do prázdna"
-msgstr ""
+msgstr "Můj počet střel do prázdna"
 
 msgctxt "questionnaire.question"
 msgid "Můj celkový počet zásahů a smrtí"
-msgstr ""
+msgstr "Můj celkový počet zásahů a smrtí"
 
 msgctxt "questionnaire.question"
 msgid "Trofeje (= tabulka \"Ti nej\")"
-msgstr ""
+msgstr "Trofeje (= tabulka \"Ti nej\")"
 
 msgctxt "questionnaire.question"
 msgid "Můj nejoblíbenější cíl a největší zabiják"
-msgstr ""
+msgstr "Můj nejoblíbenější cíl a největší zabiják"
 
 msgctxt "questionnaire.question"
 msgid "Můj poměr zásahů a smrtí (K:D)"
-msgstr ""
+msgstr "Můj poměr zásahů a smrtí (K:D)"
 
 msgctxt "questionnaire.question"
 msgid "Moje dnešní umístění"
-msgstr ""
+msgstr "Moje dnešní umístění"
 
 msgctxt "questionnaire.question"
 msgid "Zásahy do jednotlivých hráčů"
-msgstr ""
+msgstr "Zásahy do jednotlivých hráčů"
 
 msgctxt "questionnaire"
 msgid "Vlastní odpověď (chcete něco dodat?)"
-msgstr ""
+msgstr "Vlastní odpověď (chcete něco dodat?)"
 
 msgctxt "questionnaire.question"
 msgid "<h4>Papírové výsledky</h4><p>V této části prosím o zhodnocení výsledků, které se tisknou na papír.</p>"
-msgstr ""
+msgstr "<h4>Papírové výsledky</h4><p>V této části prosím o zhodnocení výsledků, které se tisknou na papír.</p>"
 
 msgctxt "questionnaire.question"
 msgid "Můj pohled na tiskuté výsledky"
-msgstr ""
+msgstr "Můj pohled na tiskuté výsledky"
 
 msgctxt "questionnaire"
 msgid "Výsledky si vždycky rád projdu"
-msgstr ""
+msgstr "Výsledky si vždycky rád projdu"
 
 msgctxt "questionnaire"
 msgid "Výsledky si procházím, jen když mě opravdu něco zajímá"
-msgstr ""
+msgstr "Výsledky si procházím, jen když mě opravdu něco zajímá"
 
 msgctxt "questionnaire"
 msgid "Radši si procházím výsledky on-line"
-msgstr ""
+msgstr "Radši si procházím výsledky on-line"
 
 msgctxt "questionnaire"
 msgid "Výsledky mě většinou vůbec nezajímají (stačí mi skóre z tabule)"
-msgstr ""
+msgstr "Výsledky mě většinou vůbec nezajímají (stačí mi skóre z tabule)"
 
 msgctxt "questionnaire.question"
 msgid "Detailnost výsledků"
-msgstr ""
+msgstr "Detailnost výsledků"
 
 msgctxt "questionnaire"
 msgid "Tisknuté výsledky jsou dostatečně detailní"
-msgstr ""
+msgstr "Tisknuté výsledky jsou dostatečně detailní"
 
 msgctxt "questionnaire"
 msgid "Tiskuté výsledky jsou málo detailní"
-msgstr ""
+msgstr "Tiskuté výsledky jsou málo detailní"
 
 msgctxt "questionnaire"
 msgid "Na výsledcích je detailů až moc"
-msgstr ""
+msgstr "Na výsledcích je detailů až moc"
 
 msgctxt "questionnaire.question"
 msgid "Ohodnoťte vizuální stránku výsledků"
-msgstr ""
+msgstr "Ohodnoťte vizuální stránku výsledků"
 
 msgctxt "questionnaire.question"
 msgid "Ohodnoťte aktuální vzhled výsledků"
-msgstr ""
+msgstr "Ohodnoťte aktuální vzhled výsledků"
 
 msgctxt "questionnaire.question"
 msgid "<h4>Papírové výsledky - srozumitelnost</h4>\n"
 "<p>V této části budete hodnotit jednotlivé části tisknutch výsledků a jejich srozumitelnost.</p>\n"
 "<p class=\"text-muted\">(1 = Nemám problém s pochopením, 5 = Vůbec tomu nerozumím / nevím, že tam něco takového je)</p> "
-msgstr ""
+msgstr "<h4>Papírové výsledky - srozumitelnost</h4>\n"
+"<p>V této části budete hodnotit jednotlivé části tisknutch výsledků a jejich srozumitelnost.</p>\n"
+"<p class=\"text-muted\">(1 = Nemám problém s pochopením, 5 = Vůbec tomu nerozumím / nevím, že tam něco takového je)</p> "
 
 msgctxt "questionnaire.question"
 msgid "Týmové skóre"
-msgstr ""
+msgstr "Týmové skóre"
 
 msgctxt "questionnaire.question"
 msgid "Individuální skóre"
-msgstr ""
+msgstr "Individuální skóre"
 
 msgctxt "questionnaire.question"
 msgid "Trofeje"
-msgstr ""
+msgstr "Trofeje"
 
 msgctxt "questionnaire.question"
 msgid "Přesnost"
-msgstr ""
+msgstr "Přesnost"
 
 msgctxt "questionnaire.question"
 msgid "Výstřely"
-msgstr ""
+msgstr "Výstřely"
 
 msgctxt "questionnaire.question"
 msgid "Zásahy a smrti"
-msgstr ""
+msgstr "Zásahy a smrti"
 
 msgctxt "questionnaire.question"
 msgid "Nejoblíbenější cíl / Největší zabiják"
-msgstr ""
+msgstr "Nejoblíbenější cíl / Největší zabiják"
 
 msgctxt "questionnaire.question"
 msgid "Bonusy (ve hře s minami)"
-msgstr ""
+msgstr "Bonusy (ve hře s minami)"
 
 msgctxt "questionnaire.question"
 msgid "Bonusy (ve hře s minami - pokud jste nehrál/a s minami, vyberte možnost 3)"
-msgstr ""
+msgstr "Bonusy (ve hře s minami - pokud jste nehrál/a s minami, vyberte možnost 3)"
 
 msgctxt "questionnaire.question"
 msgid "<h4>Papírové výsledky - vzhled</h4>\n"
 "<p>V této části budete hodnotit jednotlivé části tisknutch výsledků a jejich vzhled.</p>\n"
 "<p class=\"text-muted\">(1 = Moc se mi to líbí, 5 = Nelíbí se mi to)</p> "
-msgstr ""
+msgstr "<h4>Papírové výsledky - vzhled</h4>\n"
+"<p>V této části budete hodnotit jednotlivé části tisknutch výsledků a jejich vzhled.</p>\n"
+"<p class=\"text-muted\">(1 = Moc se mi to líbí, 5 = Nelíbí se mi to)</p> "
 
 msgctxt "questionnaire.question"
 msgid "<h4>On-line výsledky</h4><p>V této části prosím o zhodnocení detailních výsledků, které jsou pod QR kódem.</p>"
-msgstr ""
+msgstr "<h4>On-line výsledky</h4><p>V této části prosím o zhodnocení detailních výsledků, které jsou pod QR kódem.</p>"
 
 msgctxt "questionnaire.question"
 msgid "Můj pohled na online výsledky"
-msgstr ""
+msgstr "Můj pohled na online výsledky"
 
 msgctxt "questionnaire"
 msgid "On-line výsledky upřednostňuji před tisknutými"
-msgstr ""
+msgstr "On-line výsledky upřednostňuji před tisknutými"
 
 msgctxt "questionnaire"
 msgid "On-line výsledky si otevírám, jen když chci vědět nějaký detail hry"
-msgstr ""
+msgstr "On-line výsledky si otevírám, jen když chci vědět nějaký detail hry"
 
 msgctxt "questionnaire"
 msgid "On-line výsledky nikdy neotevírám"
-msgstr ""
+msgstr "On-line výsledky nikdy neotevírám"
 
 msgctxt "questionnaire"
 msgid "On-line výsledky jsou dostatečně detailní"
-msgstr ""
+msgstr "On-line výsledky jsou dostatečně detailní"
 
 msgctxt "questionnaire"
 msgid "On-line výsledky jsou málo detailní"
-msgstr ""
+msgstr "On-line výsledky jsou málo detailní"
 
 msgctxt "questionnaire.question"
 msgid "<h4>On-line výsledky - srozumitelnost</h4>\n"
 "<p>V této části budete hodnotit jednotlivé části on-line výsledků a jejich srozumitelnost.</p>\n"
 "<p class=\"text-muted\">(1 = Nemám problém s pochopením, 5 = Vůbec tomu nerozumím / nevím, že tam něco takového je)</p> "
-msgstr ""
+msgstr "<h4>On-line výsledky - srozumitelnost</h4>\n"
+"<p>V této části budete hodnotit jednotlivé části on-line výsledků a jejich srozumitelnost.</p>\n"
+"<p class=\"text-muted\">(1 = Nemám problém s pochopením, 5 = Vůbec tomu nerozumím / nevím, že tam něco takového je)</p> "
 
 msgctxt "questionnaire.question"
 msgid "Zásahy hráčů"
-msgstr ""
+msgstr "Zásahy hráčů"
 
 msgctxt "questionnaire.question"
 msgid "Dnešní pořadí podle"
-msgstr ""
+msgstr "Dnešní pořadí podle"
 
 msgctxt "questionnaire.question"
 msgid "<h4>On-line výsledky - vzhled</h4>\n"
 "<p>V této části budete hodnotit jednotlivé části on-line výsledků a jejich vzhled.</p>\n"
 "<p class=\"text-muted\">(1 = Moc se mi to líbí, 5 = Nelíbí se mi to)</p> "
-msgstr ""
+msgstr "<h4>On-line výsledky - vzhled</h4>\n"
+"<p>V této části budete hodnotit jednotlivé části on-line výsledků a jejich vzhled.</p>\n"
+"<p class=\"text-muted\">(1 = Moc se mi to líbí, 5 = Nelíbí se mi to)</p> "
 
 msgctxt "questionnaire.question"
 msgid "<h4>Výsledková tabule</h4><p>V této části prosím o zhodnocení výsledků, které se zobrazují při východu z arény na výsledkové tabuli.</p>"
-msgstr ""
+msgstr "<h4>Výsledková tabule</h4><p>V této části prosím o zhodnocení výsledků, které se zobrazují při východu z arény na výsledkové tabuli.</p>"
 
 msgctxt "questionnaire"
 msgid "Výsledková tabule je dostatečně detailní"
-msgstr ""
+msgstr "Výsledková tabule je dostatečně detailní"
 
 msgctxt "questionnaire"
 msgid "Výsledková tabule jsou málo detailní"
-msgstr ""
+msgstr "Výsledková tabule jsou málo detailní"
 
 msgctxt "questionnaire"
 msgid "Na výsledkové tabuli je detailů až moc"
-msgstr ""
+msgstr "Na výsledkové tabuli je detailů až moc"
 
 msgctxt "questionnaire.question"
 msgid "<h4>Výsledková tabule - srozumitelnost</h4>\n"
 "<p>V této části budete hodnotit jednotlivé části výsledkové tabule a jejich srozumitelnost.</p>\n"
 "<p class=\"text-muted\">(1 = Nemám problém s pochopením, 5 = Vůbec tomu nerozumím / nevím, že tam něco takového je)</p> "
-msgstr ""
+msgstr "<h4>Výsledková tabule - srozumitelnost</h4>\n"
+"<p>V této části budete hodnotit jednotlivé části výsledkové tabule a jejich srozumitelnost.</p>\n"
+"<p class=\"text-muted\">(1 = Nemám problém s pochopením, 5 = Vůbec tomu nerozumím / nevím, že tam něco takového je)</p> "
 
 msgctxt "questionnaire.question"
 msgid "<h4>Budoucnost</h4>\n"
 "<p>V této části se budeme zabývat budoucím stavem. Zde budou Vaše odpovědi pomáhat určivat prioritu implementace nových funkcí do výsledků.</p>\n"
 "<p>Známkujte jednotlivé podotázky podle toho, jak moc se vám daná funkce libí a jak moc byste chtěli funkci využívat</p>\n"
 "<p class=\"text-muted\">(1 = nemůžu se dočkat, 5 = vůbec mě to neláká)</p>"
-msgstr ""
+msgstr "<h4>Budoucnost</h4>\n"
+"<p>V této části se budeme zabývat budoucím stavem. Zde budou Vaše odpovědi pomáhat určivat prioritu implementace nových funkcí do výsledků.</p>\n"
+"<p>Známkujte jednotlivé podotázky podle toho, jak moc se vám daná funkce libí a jak moc byste chtěli funkci využívat</p>\n"
+"<p class=\"text-muted\">(1 = nemůžu se dočkat, 5 = vůbec mě to neláká)</p>"
 
 msgctxt "questionnaire.question"
 msgid "Vlastní účet hráče, na který sbírám výsledky a vidím statistiky hromadně (i z více arén, které využívají stejný systém výsledků)"
-msgstr ""
+msgstr "Vlastní účet hráče, na který sbírám výsledky a vidím statistiky hromadně (i z více arén, které využívají stejný systém výsledků)"
 
 msgctxt "questionnaire.question"
 msgid "Globální žebříček, kde by byli všichni hráči ze všech podporovaných arén"
-msgstr ""
+msgstr "Globální žebříček, kde by byli všichni hráči ze všech podporovaných arén"
 
 msgctxt "questionnaire.question"
 msgid "Možnost přidávání přátel, zakládání týmů (skupin) v rámci přihlášení"
-msgstr ""
+msgstr "Možnost přidávání přátel, zakládání týmů (skupin) v rámci přihlášení"
 
 msgctxt "questionnaire.question"
 msgid "Úroveň hráče - s odehranými hrami získávat zkušenosti a posouvat se do nových úrovní"
-msgstr ""
+msgstr "Úroveň hráče - s odehranými hrami získávat zkušenosti a posouvat se do nových úrovní"
 
 msgctxt "questionnaire.question"
 msgid "Nové trofeje - takové, které by se získavali průběžně (např. zahraj si alespoň ve dvou arénách, dosáhni alespoň 50% přesnosti,...)"
-msgstr ""
+msgstr "Nové trofeje - takové, které by se získavali průběžně (např. zahraj si alespoň ve dvou arénách, dosáhni alespoň 50% přesnosti,...)"
 
 msgctxt "questionnaire.question"
 msgid "Organizace a registrace na turnaje pomocí mého přihlášení"
-msgstr ""
+msgstr "Organizace a registrace na turnaje pomocí mého přihlášení"
 
 msgctxt "questionnaire.question"
 msgid "<h4>Je něco co byste chtěl/a dodat? (nepovinné)</h4>\n"
 "<p>V této části nám prosím napište jakoukoliv další kritiku, kterou chcete sdělit.</p>\n"
 "<p>Budu rád za jakékoliv další nápady na změny, připomínky, problémy, ale i pochvaly.</p>"
-msgstr ""
+msgstr "<h4>Je něco co byste chtěl/a dodat? (nepovinné)</h4>\n"
+"<p>V této části nám prosím napište jakoukoliv další kritiku, kterou chcete sdělit.</p>\n"
+"<p>Budu rád za jakékoliv další nápady na změny, připomínky, problémy, ale i pochvaly.</p>"
 
 msgctxt "questionnaire"
 msgid "<p>7 částí</p>"
-msgstr ""
+msgstr "<p>7 částí</p>"
 
 msgctxt "questionnaire"
 msgid "<p>12 kroků</p>"
-msgstr ""
+msgstr "<p>12 kroků</p>"
 
 msgctxt "questionnaire"
 msgid "<p>7 částí</p><p>Asi 6 minut</p>"
-msgstr ""
+msgstr "<p>7 částí</p><p>Asi 6 minut</p>"
 
 msgctxt "questionnaire"
 msgid "<p>12 částí</p><p>Asi 10 minut</p>"
-msgstr ""
+msgstr "<p>12 částí</p><p>Asi 10 minut</p>"
 
 msgctxt "questionnaire"
 msgid "<p>7 částí<br>Asi 6 minut</p>"
-msgstr ""
+msgstr "<p>7 částí<br>Asi 6 minut</p>"
 
 msgctxt "questionnaire"
 msgid "<p>12 částí<br>Asi 10 minut</p>"
-msgstr ""
+msgstr "<p>12 částí<br>Asi 10 minut</p>"
 
 msgctxt "questionnaire"
 msgid "Výsledky dotazníku"
-msgstr ""
+msgstr "Výsledky dotazníku"
 
 msgctxt "questionnaire"
 msgid "Prosím Vás o vyplnění krátkého dotazníku týkající se tištěných výsledků, on-line výsledků a výsledkové tabule ze hry laser game."
-msgstr ""
+msgstr "Prosím Vás o vyplnění krátkého dotazníku týkající se tištěných výsledků, on-line výsledků a výsledkové tabule ze hry laser game."
 
 msgctxt "questionnaire"
 msgid "Pokud jste žádné výsledky ještě nikdy neviděli, nejprve si je v klidu projděte a k dotazníku se můžete vrátit později."
-msgstr ""
+msgstr "Pokud jste žádné výsledky ještě nikdy neviděli, nejprve si je v klidu projděte a k dotazníku se můžete vrátit později."
 
 msgctxt "errors"
 msgid "Nebyla nalezena žádná hra"
-msgstr ""
+msgstr "Nebyla nalezena žádná hra"
 
 msgid "Přihlásit"
-msgstr ""
+msgstr "Přihlásit"
 
 msgid "E-mail"
-msgstr ""
+msgstr "E-mail"
 
 msgid "Heslo"
-msgstr ""
+msgstr "Heslo"
 
 msgid "Nemáte ještě účet?"
-msgstr ""
+msgstr "Nemáte ještě účet?"
 
 msgid "Vytvořit účet"
-msgstr ""
+msgstr "Vytvořit účet"
 
 msgctxt "errors"
 msgid "Pro přístup na tuto stránku se musíte přihlásit!"
-msgstr ""
+msgstr "Pro přístup na tuto stránku se musíte přihlásit!"
 
 msgid "Přihlášení bylo úspěšné."
-msgstr ""
+msgstr "Přihlášení bylo úspěšné."
 
 msgid "Profil"
-msgstr ""
+msgstr "Profil"
 
 msgid "Nastavení"
-msgstr ""
+msgstr "Nastavení"
 
 msgid "Odhlásit"
-msgstr ""
+msgstr "Odhlásit"
 
 msgid "Profil uživatele"
-msgstr ""
+msgstr "Profil uživatele"
 
 msgid "Domovská aréna"
-msgstr ""
+msgstr "Domovská aréna"
 
 msgid "Navštíveno arén"
-msgstr ""
+msgstr "Navštíveno arén"
 
 msgid "Úroveň"
-msgstr ""
+msgstr "Úroveň"
 
 msgid "Období"
-msgstr ""
+msgstr "Období"
 
 msgid "Den"
-msgstr ""
+msgstr "Den"
 
 msgid "Týden"
-msgstr ""
+msgstr "Týden"
 
 msgid "Měsíc"
-msgstr ""
+msgstr "Měsíc"
 
 msgid "3 měsíce"
-msgstr ""
+msgstr "3 měsíce"
 
 msgid "6 měsíců"
-msgstr ""
+msgstr "6 měsíců"
 
 msgid "Rok"
-msgstr ""
+msgstr "Rok"
 
 msgid "Historie úrovně"
-msgstr ""
+msgstr "Historie úrovně"
 
 msgid "Herní módy"
-msgstr ""
+msgstr "Herní módy"
 
 msgid "Poslední hry"
-msgstr ""
+msgstr "Poslední hry"
 
 msgid "Aréna"
-msgstr ""
+msgstr "Aréna"
 
 msgid "Herní úroveň"
-msgstr ""
+msgstr "Herní úroveň"
 
 msgid "Všechny hry hráče"
-msgstr ""
+msgstr "Všechny hry hráče"
 
 msgid "Kód není platný"
-msgstr ""
+msgstr "Kód není platný"
 
 msgid "Uživatel neexistuje"
-msgstr ""
+msgstr "Uživatel neexistuje"
 
 msgid "Kód"
-msgstr ""
+msgstr "Kód"
 
 msgid "Přesnost"
-msgstr ""
+msgstr "Přesnost"
 
 msgid "Počet výstřelů"
-msgstr ""
+msgstr "Počet výstřelů"
 
 msgid "Výstřelů za minutu"
-msgstr ""
+msgstr "Výstřelů za minutu"
 
 msgid "Čas ve hře"
-msgstr ""
+msgstr "Čas ve hře"
 
 msgid "Výstřelů"
-msgstr ""
+msgstr "Výstřelů"
 
 msgid "Zásahy"
-msgstr ""
+msgstr "Zásahy"
 
 msgid "Smrti"
-msgstr ""
+msgstr "Smrti"
 
 msgid "Průměry"
-msgstr ""
+msgstr "Průměry"
 
 msgid "Maxima"
-msgstr ""
+msgstr "Maxima"
 
 msgid "Sumy"
-msgstr ""
+msgstr "Sumy"
 
 msgid "Skočit na aktuálního uživatele"
-msgstr ""
+msgstr "Skočit na aktuálního uživatele"
 
 msgid "Jméno nebo kód hráče"
-msgstr ""
+msgstr "Jméno nebo kód hráče"
 
 msgid "Navigace"
-msgstr ""
+msgstr "Navigace"
 
 msgid "Zobrazeno %s z %d hráčů"
-msgstr ""
+msgstr "Zobrazeno %s z %d hráčů"
 
 msgid "%d den"
 msgid_plural "%d dní"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "%d den"
+msgstr[1] "%d dny"
+msgstr[2] "%d dní"
+msgstr[3] "%d dní"
 
 msgid "%d hodina"
 msgid_plural "%d hodin"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "%d hodina"
+msgstr[1] "%d hodiny"
+msgstr[2] "%d hodin"
+msgstr[3] "%d hodin"
 
 msgid "%d minuta"
 msgid_plural "%d minut"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "%d minuta"
+msgstr[1] "%d minuty"
+msgstr[2] "%d minut"
+msgstr[3] "%d minut"
 
 msgid "Žebříček"
-msgstr ""
+msgstr "Žebříček"
 
 msgid "Moje hry"
-msgstr ""
+msgstr "Moje hry"
 
 msgid "Profil hráče"
-msgstr ""
+msgstr "Profil hráče"
 
 msgid "Historie her hráče %s"
 msgstr ""
@@ -3448,94 +3464,94 @@ msgid "Smrtí"
 msgstr ""
 
 msgid "Průměrná pozice"
-msgstr ""
+msgstr "Průměrná pozice"
 
 msgid "Průměrná přesnost"
-msgstr ""
+msgstr "Průměrná přesnost"
 
 msgid "Průměrný počet výstřelů za minutu"
-msgstr ""
+msgstr "Průměrný počet výstřelů za minutu"
 
 msgid "Průměrný počet zásahů za minutu"
-msgstr ""
+msgstr "Průměrný počet zásahů za minutu"
 
 msgid "Průměrný počet smrtí za minutu"
-msgstr ""
+msgstr "Průměrný počet smrtí za minutu"
 
 msgid "Nejlepší přesnost"
-msgstr ""
+msgstr "Nejlepší přesnost"
 
 msgid "Nejlepší skóre"
-msgstr ""
+msgstr "Nejlepší skóre"
 
 msgid "Nejlepší hodnocení hráče ve hře"
-msgstr ""
+msgstr "Nejlepší hodnocení hráče ve hře"
 
 msgid "Další statistiky"
-msgstr ""
+msgstr "Další statistiky"
 
 msgid "Trendy za posledních 10 her"
-msgstr ""
+msgstr "Trendy za posledních 10 her"
 
 msgid "Za posledních 10 her se ti podařilo zvýšit svojí herní úroveň."
-msgstr ""
+msgstr "Za posledních 10 her se ti podařilo zvýšit svojí herní úroveň."
 
 msgid "Za posledních 10 her se ti bohužel herní úroveň snížila. Z toho si ale nic nedělej, příští hry se musíš trochu víc snažit!"
-msgstr ""
+msgstr "Za posledních 10 her se ti bohužel herní úroveň snížila. Z toho si ale nic nedělej, příští hry se musíš trochu víc snažit!"
 
 msgid "Tvoje herní úroveň se nezměnila."
-msgstr ""
+msgstr "Tvoje herní úroveň se nezměnila."
 
 msgid "Za posledních 10 her si měl vyšší přesnost, než dříve."
-msgstr ""
+msgstr "Za posledních 10 her si měl vyšší přesnost, než dříve."
 
 msgid "Za posledních 10 her si měl horší přesnost než dříve."
-msgstr ""
+msgstr "Za posledních 10 her si měl horší přesnost než dříve."
 
 msgid "Za posledních 10 her se ti nijak výrazně nezměnila tvá průměrná přesnost."
-msgstr ""
+msgstr "Za posledních 10 her se ti nijak výrazně nezměnila tvá průměrná přesnost."
 
 msgid "Za posledních 10 her si střílel/a více než je tvůj průměr."
-msgstr ""
+msgstr "Za posledních 10 her si střílel/a více než je tvůj průměr."
 
 msgid "Za posledních 10 her si střílel/a méně než je tvůj průměr."
-msgstr ""
+msgstr "Za posledních 10 her si střílel/a méně než je tvůj průměr."
 
 msgid "Za posledních 10 her si střílel/a průměrně stejně."
-msgstr ""
+msgstr "Za posledních 10 her si střílel/a průměrně stejně."
 
 msgid "Průměrný počet výstřelů za hru"
-msgstr ""
+msgstr "Průměrný počet výstřelů za hru"
 
 msgid "Trendy za posledních 30 dní"
-msgstr ""
+msgstr "Trendy za posledních 30 dní"
 
 msgid "Za posledních 30 dní si odehrál/a více her, než předchozí měsíc. Jen tak dál!"
-msgstr ""
+msgstr "Za posledních 30 dní si odehrál/a více her, než předchozí měsíc. Jen tak dál!"
 
 msgid "Za posledních 30 dní si odehrál/a méně her, než předchozí měsíc. Nechceš si jít zahrát?"
-msgstr ""
+msgstr "Za posledních 30 dní si odehrál/a méně her, než předchozí měsíc. Nechceš si jít zahrát?"
 
 msgid "Za posledních 30 dní si odehrál/a stejně her, jako předchozí měsíc."
-msgstr ""
+msgstr "Za posledních 30 dní si odehrál/a stejně her, jako předchozí měsíc."
 
 msgid "Za posledních 30 dní si odehrál/a více klasických her, než předchozí měsíc. Jen tak dál!"
-msgstr ""
+msgstr "Za posledních 30 dní si odehrál/a více klasických her, než předchozí měsíc. Jen tak dál!"
 
 msgid "Za posledních 30 dní si odehrál/a méně klasických her, než předchozí měsíc. Nechceš si jít zahrát?"
-msgstr ""
+msgstr "Za posledních 30 dní si odehrál/a méně klasických her, než předchozí měsíc. Nechceš si jít zahrát?"
 
 msgid "Za posledních 30 dní si odehrál/a stejně klasických her, jako předchozí měsíc."
-msgstr ""
+msgstr "Za posledních 30 dní si odehrál/a stejně klasických her, jako předchozí měsíc."
 
 msgid "Počet klasických her"
-msgstr ""
+msgstr "Počet klasických her"
 
 msgid "Za posledních 30 dní si vystřelil/a vícekrát, než předchozí měsíc."
-msgstr ""
+msgstr "Za posledních 30 dní si vystřelil/a vícekrát, než předchozí měsíc."
 
 msgid "Za posledních 30 dní si vystřelil/a méněkrát, než předchozí měsíc."
-msgstr ""
+msgstr "Za posledních 30 dní si vystřelil/a méněkrát, než předchozí měsíc."
 
 msgid "Za posledních 30 dní si vystřelil/a stejně, jako předchozí měsíc."
 msgstr ""
@@ -3584,49 +3600,49 @@ msgstr ""
 
 msgctxt "login"
 msgid "Pamatovat si mě"
-msgstr ""
+msgstr "Pamatovat si mě"
 
 msgid "Friday"
-msgstr ""
+msgstr "Pátek"
 
 msgid "Saturday"
-msgstr ""
+msgstr "Sobota"
 
 msgid "Sunday"
-msgstr ""
+msgstr "Neděle"
 
 msgid "Monday"
-msgstr ""
+msgstr "Pondělí"
 
 msgid "Tuesday"
-msgstr ""
+msgstr "Úterý"
 
 msgid "Wednesday"
-msgstr ""
+msgstr "Středa"
 
 msgid "Thursday"
-msgstr ""
+msgstr "Čtvrtek"
 
 msgid "CSGO"
-msgstr ""
+msgstr "CSGO"
 
 msgid "Survival"
-msgstr ""
+msgstr "Survival"
 
 msgid "100 nábojů"
-msgstr ""
+msgstr "100 nábojů"
 
 msgid "T.M.A"
-msgstr ""
+msgstr "T.M.A"
 
 msgid "March"
-msgstr ""
+msgstr "Březen"
 
 msgid "April"
-msgstr ""
+msgstr "Duben"
 
 msgid "May"
-msgstr ""
+msgstr "Květen"
 
 msgid "June"
 msgstr ""
@@ -3678,53 +3694,53 @@ msgid "Arény"
 msgstr ""
 
 msgid "Výsledky ze hry - %s"
-msgstr ""
+msgstr "Výsledky ze hry - %s"
 
 msgctxt "pageTitles"
 msgid "Výsledky laser game - %s %s (%s)"
-msgstr ""
+msgstr "Výsledky laser game - %s %s (%s)"
 
 msgctxt "pageDescription"
 msgid "Výsledky ze hry laser game z data %s z arény %s v herním módu %s."
-msgstr ""
+msgstr "Výsledky ze hry laser game z data %s z arény %s v herním módu %s."
 
 msgid "Close navigation"
-msgstr ""
+msgstr "Close navigation"
 
 msgid "Plánované akce"
-msgstr ""
+msgstr "Plánované akce"
 
 msgid "Výsledky laser game"
-msgstr ""
+msgstr "Výsledky laser game"
 
 msgid "Informace o hře"
-msgstr ""
+msgstr "Informace o hře"
 
 msgid "Zobrazit stránku arény"
-msgstr ""
+msgstr "Zobrazit stránku arény"
 
 msgctxt "results.info"
 msgid "Hudební mód"
-msgstr ""
+msgstr "Hudební mód"
 
 msgctxt "musicModes"
 msgid "Requiem"
-msgstr ""
+msgstr "Requiem"
 
 msgid "Analýza hry - zajímavosti"
-msgstr ""
+msgstr "Analýza hry - zajímavosti"
 
 msgid "Žádné zajímavosti"
-msgstr ""
+msgstr "Žádné zajímavosti"
 
 msgid "více"
-msgstr ""
+msgstr "více"
 
 msgid "méně"
-msgstr ""
+msgstr "méně"
 
 msgid "Zobrazit"
-msgstr ""
+msgstr "Zobrazit"
 
 msgid "Výsledky ze hry - %s %s"
 msgstr ""
@@ -3776,51 +3792,51 @@ msgstr ""
 
 msgctxt "results"
 msgid "Umístění"
-msgstr ""
+msgstr "Umístění"
 
 msgid "Počet hráčů, který je lepší/horší než vy. Např. pokud jste v %s 10%%, znamená to, že 90%% hráčů mělo nižší hodnotu, než vy. %s 10 %% znamená, že 90 %% hráčů mělo vyšší hodnotu, než vy."
-msgstr ""
+msgstr "Počet hráčů, který je lepší/horší než vy. Např. pokud jste v %s 10%%, znamená to, že 90%% hráčů mělo nižší hodnotu, než vy. %s 10 %% znamená, že 90 %% hráčů mělo vyšší hodnotu, než vy."
 
 msgctxt "distribution"
 msgid "Nejlepší"
-msgstr ""
+msgstr "Nejlepší"
 
 msgctxt "distribution"
 msgid "Nejhorší"
-msgstr ""
+msgstr "Nejhorší"
 
 msgid "Od počátku věků"
-msgstr ""
+msgstr "Od počátku věků"
 
 msgid "Tento rok"
-msgstr ""
+msgstr "Tento rok"
 
 msgid "Tento měsíc"
-msgstr ""
+msgstr "Tento měsíc"
 
 msgid "Tento týden"
-msgstr ""
+msgstr "Tento týden"
 
 msgid "Tento den"
-msgstr ""
+msgstr "Tento den"
 
 msgid "Počet"
-msgstr ""
+msgstr "Počet"
 
 msgid "Kontakt"
-msgstr ""
+msgstr "Kontakt"
 
 msgid "Formát a bodování"
-msgstr ""
+msgstr "Formát a bodování"
 
 msgid "Podle počtu týmů může být turnaj rozdělen do dvou skupin, kde každá skupina hraje ve formátu každý s každým. Po odehrání kvalifikačního kola postoupí nejlepší týmy do finále a ostatní týmy do druhé skupiny, kde si opět zahrají každý s každým. Body do celkového pořadí se počítají ze všech her (i z kvalifikační skupiny)."
-msgstr ""
+msgstr "Podle počtu týmů může být turnaj rozdělen do dvou skupin, kde každá skupina hraje ve formátu každý s každým. Po odehrání kvalifikačního kola postoupí nejlepší týmy do finále a ostatní týmy do druhé skupiny, kde si opět zahrají každý s každým. Body do celkového pořadí se počítají ze všech her (i z kvalifikační skupiny)."
 
 msgid "Hodnocení"
-msgstr ""
+msgstr "Hodnocení"
 
 msgid "Výhra"
-msgstr ""
+msgstr "Výhra"
 
 msgid "%d bod"
 msgid_plural "%d body"

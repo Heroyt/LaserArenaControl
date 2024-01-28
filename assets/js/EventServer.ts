@@ -83,6 +83,7 @@ class EventServer {
         this.source.onerror = (err: ErrorEvent) => {
             console.error('SSE encountered error: ', err.message, 'Closing SEE');
             this.source.close();
+            setTimeout(this.connect, 1000); // Retry in one second
 		}
 	}
 

@@ -27,6 +27,7 @@ class Results extends ApiController
 	public function __construct(
 		Latte                           $latte,
 		private readonly PlayerProvider $playerProvider,
+		private readonly ImportService $importService,
 	) {
 		parent::__construct($latte);
 	}
@@ -45,7 +46,7 @@ class Results extends ApiController
 			$this->respond(['error' => 'Missing required argument "dir". Valid results directory is expected.'], 400);
 		}
 
-		ImportService::import($resultsDir, $this);
+		$this->importService->import($resultsDir, $this);
 	}
 
 	/**

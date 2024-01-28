@@ -45,6 +45,7 @@ services:
 	symfony.lock.store: Symfony\Component\Lock\Store\RedisStore(@redis)
 	symfony.lock.factory: Symfony\Component\Lock\LockFactory(@symfony.lock.store)
 
+	events: App\Services\EventService
 	features: App\Services\FeatureConfig
 	regression.evo5: App\GameModels\Tools\Evo5\RegressionStatCalculator
 	liga: App\Services\LigaApi::getInstance()
@@ -56,6 +57,7 @@ services:
 	evo5.simulator: App\Services\Evo5\GameSimulator
 	resultPrint: App\Services\ResultPrintService
 	resultPrecache: App\Services\ResultsPrecacheService
+	gamesImport: App\Services\ImportService
 
 	cron.gamesSync: App\Cron\GamesSyncJob(%gamesSync.limit%, %gamesSync.timeout%)
 	cron.vestSync: App\Cron\VestSyncJob

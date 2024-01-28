@@ -127,7 +127,7 @@
     const features = {\App\Core\App::getServiceByType(App\Services\FeatureConfig::class)->getFeatures()};
     const page = {\App\Core\App::getRequest()};
     const prettyUrl = {\App\Core\App::isPrettyUrl()};
-    const webSocketEventURI = 'ws://' + window.location.hostname + ':' + {\App\Services\EventService::getEventPort()};
+    const eventSourceURI = 'http://' + window.location.hostname + ':' + {\App\Services\EventService::getEventPort()} +'/events';
     const timerOffset = {\App\Core\Info::get('timer-offset', 0)};
 </script>
 

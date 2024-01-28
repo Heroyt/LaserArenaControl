@@ -1,9 +1,11 @@
+import {triggerEvent} from "./api/endpoints/events";
+
 export interface EvWindow extends Window {
 	EventServerInstance: EventServer
 }
 
 declare global {
-	const webSocketEventURI: string;
+    const eventSourceURI: string;
 }
 declare let window: EvWindow;
 
@@ -12,13 +14,17 @@ declare let window: EvWindow;
  */
 class EventServer {
 
-	ws: WebSocket | null;
+    source: EventSource | null;
 	listeners: {
-		[index: string]: (((ev?: MessageEvent) => void) | (() => void))[],
+        [index: string]: { callback: (((ev?: MessageEvent) => void) | (() => void)), wait: boolean }[],
 	}
 
+    private events: Set<string> = new Set;
+
+    private waitingListeners: (((ev?: MessageEvent) => void) | (() => void))[] = [];
+
 	constructor() {
-		this.ws = null;
+        this.source = null;
 		this.connect();
 		this.listeners = {};
 		this.initTriggers();
@@ -34,12 +40,12 @@ class EventServer {
 				return;
 			}
 			console.log("Found event trigger:", event, btn);
-			btn.addEventListener('click', () => {
-				this.ws.send(event + '\n');
+            btn.addEventListener('click', async () => {
+                await triggerEvent(event);
 				console.log("Event trigger:", event);
 			});
-			btn.addEventListener('trigger-event', () => {
-				this.ws.send(event + '\n');
+            btn.addEventListener('trigger-event', async () => {
+                await triggerEvent(event);
 				console.log("Event trigger:", event);
 			});
 		});
@@ -52,40 +58,53 @@ class EventServer {
 	 */
 	connect() {
 		try {
-			this.ws = new WebSocket(webSocketEventURI);
+            this.source = new EventSource(eventSourceURI);
+            console.log(this.source.readyState);
 		} catch (e) {
 			console.error(e.message);
 			setTimeout(this.connect, 1000); // Retry in one second
 		}
-		this.ws.onmessage = e => {
+        this.source.onopen = e => {
+            console.log('Event source open', e);
+        }
+        this.source.onmessage = e => {
+            console.log(e.data);
 			const message = e.data.trim();
 			this.triggerEvent(message, e);
 		};
-		this.ws.onclose = e => {
-			console.log('Socket is closed. Reconnect will be attempted in 1 second.', e.reason);
-			setTimeout(() => {
-				this.connect(); // Automatically reconnect on close
-			}, 500);
-		}
-		this.ws.onerror = (err: ErrorEvent) => {
-			console.error('Socket encountered error: ', err.message, 'Closing socket');
-			this.ws.close();
+        this.source.addEventListener('event', (e: MessageEvent<string>) => {
+            console.log(e);
+            this.triggerEvent(e.data.replace('events:', ''), e)
+        });
+        this.source.addEventListener('data', (e: MessageEvent<string>) => {
+            console.log(e);
+            this.triggerData(e)
+        });
+        this.source.onerror = (err: ErrorEvent) => {
+            console.error('SSE encountered error: ', err.message, 'Closing SEE');
+            this.source.close();
 		}
 	}
 
 	/**
 	 * Add a callback to event(s)
 	 */
-	addEventListener(event: string | string[], callback: ((ev?: MessageEvent) => void) | (() => void)) {
+    addEventListener(event: string | string[], callback: ((ev?: MessageEvent) => void) | (() => void), wait: boolean = false) {
 		if (typeof event === 'string') {
 			event = [event];
 		}
 		if (typeof event === 'object' && event.constructor.toString().indexOf("Array") > -1) {
 			event.forEach((e: string) => {
+                if (!this.events.has(e)) {
+                    this.source.addEventListener('events:' + e, ev => {
+                        this.triggerEvent(e, ev);
+                    });
+                    this.events.add(e);
+                }
 				if (!this.listeners[e]) {
 					this.listeners[e] = [];
 				}
-				this.listeners[e].push(callback);
+                this.listeners[e].push({callback, wait});
 			})
 		}
 	}
@@ -95,11 +114,22 @@ class EventServer {
 	 */
 	triggerEvent(event: string, data: MessageEvent) {
 		if (this.listeners[event]) {
-			this.listeners[event].forEach(callback => {
-				callback(data);
-			});
-		}
-	}
+            this.listeners[event].forEach(listener => {
+                if (listener.wait) {
+                    this.waitingListeners.push(listener.callback);
+                    return;
+                }
+                listener.callback(data);
+            });
+        }
+    }
+
+    private triggerData(data: MessageEvent) {
+        this.waitingListeners.forEach(callback => {
+            callback(data);
+        });
+        this.waitingListeners = [];
+    }
 }
 
 const EventServerInstance = new EventServer();

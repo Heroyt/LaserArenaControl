@@ -19,6 +19,11 @@ use Throwable;
 class Games extends CliController
 {
 
+	public function __construct(
+		private readonly ImportService $importService
+	) {
+	}
+
 	/**
 	 * Import games from a given directory
 	 *
@@ -36,7 +41,7 @@ class Games extends CliController
 			exit(1);
 		}
 
-		ImportService::import($resultsDir, $this);
+		$this->importService->import($resultsDir, $this);
 	}
 
 	/**

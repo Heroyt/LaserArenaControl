@@ -32,11 +32,16 @@ class ImportService
 {
 
 	/** @var array{error?:string,exception?:string,sql?:string}[]|string[] */
-	private static array                       $errors = [];
-	private static ApiController|CliController $controller;
+	private array                       $errors = [];
+	private ApiController|CliController $controller;
 
-	private static bool $cliFlag = false;
-	private static bool $apiFlag = false;
+	private bool $cliFlag = false;
+	private bool $apiFlag = false;
+
+	public function __construct(
+		private readonly EventService $eventService
+	) {
+	}
 
 	/**
 	 * Unified import method for CLI or API controller
@@ -50,21 +55,22 @@ class ImportService
 	 * @throws ModelNotFoundException
 	 * @throws ValidationException
 	 * @throws Throwable
+	 * @noinspection PhpToStringImplementationInspection
 	 */
-	public static function import(string $resultsDir, ApiController|CliController $controller) : void {
-		self::$controller = $controller;
-		self::$apiFlag = $controller instanceof ApiController;
-		self::$cliFlag = $controller instanceof CliController;
+	public function import(string $resultsDir, ApiController|CliController $controller): void {
+		$this->controller = $controller;
+		$this->apiFlag = $controller instanceof ApiController;
+		$this->cliFlag = $controller instanceof CliController;
 
 		try {
 			$logger = new Logger(LOG_DIR.'results/', 'import');
 		} catch (DirectoryCreationException $e) {
-			self::errorHandle($e, 500);
+			$this->errorHandle($e, 500);
 			return;
 		}
 
 		if (!file_exists($resultsDir) || !is_dir($resultsDir) || !is_readable($resultsDir)) {
-			self::errorHandle('Results directory does not exist.', 400);
+			$this->errorHandle('Results directory does not exist.', 400);
 			return;
 		}
 
@@ -94,7 +100,7 @@ class ImportService
 			}
 			if (filemtime($file) > $lastCheck) {
 				$total++;
-				if (self::$cliFlag) {
+				if ($this->cliFlag) {
 					echo 'Importing: '.$file.PHP_EOL;
 				}
 				$logger->info('Importing file: '.$file);
@@ -171,7 +177,7 @@ class ImportService
 				} catch (FileException|GameModeNotFoundException|ResultsParseException|ValidationException $e) {
 					$logger->error($e->getMessage());
 					$logger->debug($e->getTraceAsString());
-					self::errorHandle($e);
+					$this->errorHandle($e);
 				}
 			}
 		}
@@ -179,7 +185,7 @@ class ImportService
 			try {
 				Info::set($resultsDir.'check', $now);
 			} catch (Exception $e) {
-				self::errorHandle($e);
+				$this->errorHandle($e);
 			}
 		}
 
@@ -188,15 +194,16 @@ class ImportService
 			$logger->debug('Setting last unfinished game: "'.$lastUnfinishedGame::SYSTEM.'-'.$lastEvent.'" - '.$lastUnfinishedGame->fileNumber);
 			try {
 				Info::set($lastUnfinishedGame::SYSTEM.'-'.$lastEvent, $lastUnfinishedGame);
-				EventService::trigger($lastEvent);
+				/* @phpstan-ignore-next-line */
+				$this->eventService->trigger($lastEvent, ['game' => $lastUnfinishedGame->fileNumber]);
 			} catch (Exception $e) {
-				self::errorHandle($e);
+				$this->errorHandle($e);
 			}
 		}
 
 		// Send event on new import
 		if ($imported > 0) {
-			EventService::trigger('game-imported');
+			$this->eventService->trigger('game-imported', ['count' => $imported]);
 		}
 
 		// Try to synchronize finished games to public
@@ -228,18 +235,18 @@ class ImportService
 			$logger->info('No games to synchronize to public');
 		}
 
-		if (self::$cliFlag) {
+		if ($this->cliFlag) {
 			echo 'Successfully imported: '.$imported.'/'.$total.' in '.round(microtime(true) - $start, 2).'s'.PHP_EOL;
 			exit(0);
 		}
-		if (self::$apiFlag) {
+		if ($this->apiFlag) {
 			/* @phpstan-ignore-next-line */
-			self::$controller->respond(
+			$this->controller->respond(
 				[
 					'imported' => $imported,
 					'total'    => $total,
 					'time'     => round(microtime(true) - $start, 2),
-					'errors'   => self::$errors,
+					'errors' => $this->errors,
 				]
 			);
 		}
@@ -254,8 +261,8 @@ class ImportService
 	 * @return void
 	 * @throws JsonException
 	 */
-	private static function errorHandle(string|\Exception $data, int $statusCode = 0) : void {
-		if (self::$cliFlag) {
+	private function errorHandle(string|\Exception $data, int $statusCode = 0): void {
+		if ($this->cliFlag) {
 			$info = '';
 			if (is_string($data)) {
 				$info = $data;
@@ -267,12 +274,12 @@ class ImportService
 				}
 			}
 			/* @phpstan-ignore-next-line */
-			self::$controller->errorPrint($info);
+			$this->controller->errorPrint($info);
 			if ($statusCode !== 0) {
 				exit($statusCode);
 			}
 		}
-		else if (self::$apiFlag) {
+		else if ($this->apiFlag) {
 			$info = [];
 			if (is_string($data)) {
 				$info['error'] = $data;
@@ -288,11 +295,11 @@ class ImportService
 			}
 			if ($statusCode === 0) {
 				/* @phpstan-ignore-next-line */
-				self::$errors[] = $info;
+				$this->errors[] = $info;
 			}
 			else {
 				/* @phpstan-ignore-next-line */
-				self::$controller->respond($info, $statusCode);
+				$this->controller->respond($info, $statusCode);
 			}
 		}
 	}

@@ -11,8 +11,8 @@ RUN apt-get update
 RUN apt-get -y install apt-utils wget git build-essential gettext cron zlib1g-dev
 
 #RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
-COPY php.ini "$PHP_INI_DIR/php.ini"
-COPY php-staging.ini "$PHP_INI_DIR/php-staging.ini"
+COPY docker/core/php.ini "$PHP_INI_DIR/php.ini"
+COPY docker/core/php-staging.ini "$PHP_INI_DIR/php-staging.ini"
 
 # SPX
 WORKDIR /home
@@ -25,7 +25,7 @@ RUN make
 RUN make install
 RUN docker-php-ext-enable spx
 
-COPY spx.ini "$PHP_INI_DIR/conf.d/docker-php-ext-spx.ini"
+COPY docker/core/spx.ini "$PHP_INI_DIR/conf.d/docker-php-ext-spx.ini"
 
 FROM setup as extensions
 

@@ -14,25 +14,40 @@ services:
             - mariadb:/var/lib/mysql
         networks:
             - backend
-    cache:
-        restart: always
-        image: memcached:alpine
-        ports:
-            - "11211:11211"
-        networks:
-            - backend
+    redis:
+      restart: always
+      image: redis/redis-stack-server:latest
+      ports:
+        - "6379:6379"
+      networks:
+        - backend
+        - frontend
+      volumes:
+        - redis-data:/data
+    eventServer:
+      restart: always
+      image: heroyt/lac-event-server:latest
+      ports:
+        - "9999:8080"
+      networks:
+        - backend
+        - frontend
+      depends_on:
+        - redis
+      links:
+        - redis
+      environment:
+        REDIS_HOST: "redis"
     php:
         restart: always
-        image: "heroyt/laser-arena-control:v0.4.2-nginx"
+        image: "heroyt/laser-arena-control:latest"
         working_dir: /var/www/
-        ports:
-            - "9999:9999"
         links:
             - db
-            - cache
+            - redis
         depends_on:
             - db
-            - cache
+            - redis
         volumes:
             - lac-data:/var/www
             - lmx:/var/www/lmx
@@ -48,6 +63,12 @@ services:
             DB_DATABASE: "lac"
             DB_USER: "root"
             DB_PASSWORD: "laser-arena-control"
+            FEATURE_EVENT_SERVER: true
+            FEATURE_LEAGUE: true
+            FEATURE_CONTROL: false
+            FEATURE_GATES: false
+            FEATURE_TABLES: true
+            FEATURE_GROUPS: true
     web:
         restart: always
         image: nginx
@@ -66,6 +87,7 @@ services:
             - app-data:/var/www
             - /home/lac/nginx:/etc/nginx
     gotenberg:
+      restart: always
         image: gotenberg/gotenberg:7
         networks:
             - backend
@@ -74,6 +96,7 @@ services:
 volumes:
     mariadb:
     app-data:
+    redis-data:
     lmx:
         driver: local
         driver_opts:

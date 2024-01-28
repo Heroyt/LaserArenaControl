@@ -12,4 +12,4 @@ else
 fi
 
 # Run project
-php index.php event/server & cron & php-fpm
+php cron & php-fpm

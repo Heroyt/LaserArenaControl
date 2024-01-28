@@ -64,8 +64,9 @@ Debugger::getBar()
 Loader::init();
 
 define('CHECK_TRANSLATIONS', (bool) (App::getConfig()['General']['TRANSLATIONS'] ?? false));
+define('TRANSLATIONS_COMMENTS', (bool)(App::getConfig()['General']['TRANSLATIONS_COMMENTS'] ?? false));
 
-Debugger::enable(PRODUCTION ? Debugger::PRODUCTION : Debugger::DEVELOPMENT, LOG_DIR);
+Debugger::enable(PRODUCTION ? Debugger::Production : Debugger::Development, LOG_DIR);
 
 // Translations update
 $translationChange = false;

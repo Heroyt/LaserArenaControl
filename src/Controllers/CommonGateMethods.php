@@ -11,7 +11,7 @@ use App\GameModels\Game\Team;
 use App\GameModels\Game\Today;
 use Endroid\QrCode\Builder\Builder;
 use Endroid\QrCode\Encoding\Encoding;
-use Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelLow;
+use Endroid\QrCode\ErrorCorrectionLevel;
 use Endroid\QrCode\Writer\SvgWriter;
 use Lsr\Exceptions\TemplateDoesNotExistException;
 use Lsr\Helpers\Tools\Strings;
@@ -65,7 +65,7 @@ trait CommonGateMethods
 			->data($this->getPublicUrl($game))
 			->writer(new SvgWriter())
 			->encoding(new Encoding('UTF-8'))
-			->errorCorrectionLevel(new ErrorCorrectionLevelLow())
+			->errorCorrectionLevel(ErrorCorrectionLevel::Low)
 			->build();
 		return $result->getString();
 	}

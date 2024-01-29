@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: Czech\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2024-01-28 23:05\n"
+"PO-Revision-Date: 2024-01-29 00:46\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=4; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 3;\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -3951,31 +3951,31 @@ msgid "Nefér chování (držení zbraně, blokování soupeřovi únikové cest
 msgstr "Nefér chování (držení zbraně, blokování soupeřovi únikové cesty, střelba do hráče na zemi – pád…"
 
 msgid "Úmyslné ohrožení zdraví (loket ve výši obličeje, naskakování na soupeře, úder zbraní, rukou, nebezpečné točení s otočnou překážkou…)"
-msgstr ""
+msgstr "Úmyslné ohrožení zdraví (loket ve výši obličeje, naskakování na soupeře, úder zbraní, rukou, nebezpečné točení s otočnou překážkou…)"
 
 msgid "Nedodržování všeobecných základních herních, bezpečnostních a provozních pravidel (např. špatné zacházení se zbraní, ležení na zemi, přeskakování překážek, nerespektování váhových, věkových a výškových rozdílů hráčů (děti a dospělý)..."
-msgstr ""
+msgstr "Nedodržování všeobecných základních herních, bezpečnostních a provozních pravidel (např. špatné zacházení se zbraní, ležení na zemi, přeskakování překážek, nerespektování váhových, věkových a výškových rozdílů hráčů (děti a dospělý)..."
 
 msgid "Výrazné naklánění z cílem krytí čidel na vestě (po dobu delší, než je nutná k úhybu = hráč musí zůstat v pohybu)."
-msgstr ""
+msgstr "Výrazné naklánění z cílem krytí čidel na vestě (po dobu delší, než je nutná k úhybu = hráč musí zůstat v pohybu)."
 
 msgid "Povolené taktiky"
-msgstr ""
+msgstr "Povolené taktiky"
 
 msgid "Taktika skupiny či jednotlivce, která není v rozporu s výše uvedenými pravidly a možnost ji využít či se naučit má každý, není zakázána."
-msgstr ""
+msgstr "Taktika skupiny či jednotlivce, která není v rozporu s výše uvedenými pravidly a možnost ji využít či se naučit má každý, není zakázána."
 
 msgid "Kempení"
-msgstr ""
+msgstr "Kempení"
 
 msgid "Lehké náklony, úhyby, krčení,.."
-msgstr ""
+msgstr "Lehké náklony, úhyby, krčení,.."
 
 msgid "Skákání, které neohrožuje protihráče"
-msgstr ""
+msgstr "Skákání, které neohrožuje protihráče"
 
 msgid "Pronásledování protihráče (není úplně fér, ale není zakázáno)"
-msgstr ""
+msgstr "Pronásledování protihráče (není úplně fér, ale není zakázáno)"
 
 msgid "Nekontaktní (neúmyslné) krytí se spoluhráčů navzájem"
 msgstr "Nekontaktní (neúmyslné) krytí se spoluhráčů navzájem"
@@ -4025,49 +4025,49 @@ msgid "Zpět na ligu"
 msgstr "Zpět na ligu"
 
 msgid "Zpět na arénu"
-msgstr ""
+msgstr "Zpět na arénu"
 
 msgid "Informace o turnaji laser game, který se bude odehrávat %s v %s."
-msgstr ""
+msgstr "Informace o turnaji laser game, který se bude odehrávat %s v %s."
 
 msgid "Registrace"
-msgstr ""
+msgstr "Registrace"
 
 msgid "Laser game turnaj: %s"
-msgstr ""
+msgstr "Laser game turnaj: %s"
 
 msgid "Informace"
-msgstr ""
+msgstr "Informace"
 
 msgid "Pravidla turnaje"
-msgstr ""
+msgstr "Pravidla turnaje"
 
 msgid "Konec"
-msgstr ""
+msgstr "Konec"
 
 msgid "Maximum týmů"
-msgstr ""
+msgstr "Maximum týmů"
 
 msgid "Počet hráčů v týmu"
-msgstr ""
+msgstr "Počet hráčů v týmu"
 
 msgid "Náhradníků"
-msgstr ""
+msgstr "Náhradníků"
 
 msgid "Cena"
-msgstr ""
+msgstr "Cena"
 
 msgid "Seznam přihlášených týmů na turnaj laser game."
-msgstr ""
+msgstr "Seznam přihlášených týmů na turnaj laser game."
 
 msgid "Průměrná herní úroveň registrovaných hráčů"
-msgstr ""
+msgstr "Průměrná herní úroveň registrovaných hráčů"
 
 msgid "Začátečník"
-msgstr ""
+msgstr "Začátečník"
 
 msgid "Upravit přihlášku"
-msgstr ""
+msgstr "Upravit přihlášku"
 
 msgid "Často kladené dotazy"
 msgstr "Často kladené dotazy"
@@ -4125,50 +4125,50 @@ msgid "Dnes odehráno hráčů"
 msgstr "Dnes odehráno hráčů"
 
 msgid "Hudební módy"
-msgstr ""
+msgstr "Hudební módy"
 
 msgid "Informace a kontakty"
-msgstr ""
+msgstr "Informace a kontakty"
 
 msgid "Zajímavé statistiky o hrách laser game z této arény."
-msgstr ""
+msgstr "Zajímavé statistiky o hrách laser game z této arény."
 
 msgid "Dnešní nejlepší hráči"
-msgstr ""
+msgstr "Dnešní nejlepší hráči"
 
 msgid "Nejlepší dnešní hráči laser game podle jejich herní úrovně."
-msgstr ""
+msgstr "Nejlepší dnešní hráči laser game podle jejich herní úrovně."
 
 msgctxt "leaderboard"
 msgid "Herní úroveň"
-msgstr ""
+msgstr "Herní úroveň"
 
 msgid "Za celou dobu"
-msgstr ""
+msgstr "Za celou dobu"
 
 msgid "Období dat pro následující grafy."
-msgstr ""
+msgstr "Období dat pro následující grafy."
 
 msgid "Souhrn herních módů laser game, které se hráli v této aréně."
-msgstr ""
+msgstr "Souhrn herních módů laser game, které se hráli v této aréně."
 
 msgid "Počet her s daným hudebním módem v této aréně."
-msgstr ""
+msgstr "Počet her s daným hudebním módem v této aréně."
 
 msgid "Seznam a ukázky hudebních módů nabízených do hry."
-msgstr ""
+msgstr "Seznam a ukázky hudebních módů nabízených do hry."
 
 msgid "Hudební mód dokáže úplně změnit zážitek z laser game. Vybírejte proto tak, aby vás co nejvíce nabudil a vy si svou hru co nejvíce užili."
-msgstr ""
+msgstr "Hudební mód dokáže úplně změnit zážitek z laser game. Vybírejte proto tak, aby vás co nejvíce nabudil a vy si svou hru co nejvíce užili."
 
 msgid "Historie her arény %s"
-msgstr ""
+msgstr "Historie her arény %s"
 
 msgid "Všechny výsledky laser game z arény."
-msgstr ""
+msgstr "Všechny výsledky laser game z arény."
 
 msgid "Upravit zobrazené sloupce"
-msgstr ""
+msgstr "Upravit zobrazené sloupce"
 
 msgid "Vše"
 msgstr "Vše"
@@ -4225,57 +4225,57 @@ msgid "Další stránka"
 msgstr "Další stránka"
 
 msgid "Liga"
-msgstr ""
+msgstr "Liga"
 
 msgid "Informace o aréně"
-msgstr ""
+msgstr "Informace o aréně"
 
 msgid "Web"
-msgstr ""
+msgstr "Web"
 
 msgid "Telefon"
-msgstr ""
+msgstr "Telefon"
 
 msgid "Adresa"
-msgstr ""
+msgstr "Adresa"
 
 msgid "Hráči hráli všichni proti všem."
-msgstr ""
+msgstr "Hráči hráli všichni proti všem."
 
 msgid "Celkem hrál %d hráč."
 msgid_plural "Celkem hrálo %d hráčů."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "Celkem hrál %d hráč."
+msgstr[1] "Celkem hráli %d hráči."
+msgstr[2] "Celkem hrálo %d hráčů."
+msgstr[3] "Celkem hrálo %d hráčů."
 
 msgctxt "musicModes"
 msgid "Albatroz"
-msgstr ""
+msgstr "Albatroz"
 
 msgctxt "musicModes"
 msgid "Undertale"
-msgstr ""
+msgstr "Undertale"
 
 msgctxt "pageTitles"
 msgid "Žebříček - %s"
-msgstr ""
+msgstr "Žebříček - %s"
 
 msgctxt "pageDescription"
 msgid "Žebříček všech hráčů laser game podle různých statistik. Žebříček arény: %s"
-msgstr ""
+msgstr "Žebříček všech hráčů laser game podle různých statistik. Žebříček arény: %s"
 
 msgid "Zpět na stránku arény"
-msgstr ""
+msgstr "Zpět na stránku arény"
 
 msgid "Zpět na celkový žebříček"
-msgstr ""
+msgstr "Zpět na celkový žebříček"
 
 msgid "Pořadí hráčů"
-msgstr ""
+msgstr "Pořadí hráčů"
 
 msgid "Žebříček všech registrovaných hráčů laser ligy."
-msgstr ""
+msgstr "Žebříček všech registrovaných hráčů laser ligy."
 
 msgid "Základní zobrazení. Hráči jsou seřazeni podle jejich herní úrovně."
 msgstr "Základní zobrazení. Hráči jsou seřazeni podle jejich herní úrovně."
@@ -4323,55 +4323,55 @@ msgid "Zobrazit profil hráče %s"
 msgstr "Zobrazit profil hráče %s"
 
 msgid "her"
-msgstr ""
+msgstr "her"
 
 msgctxt "pageTitles"
 msgid "Plánované akce"
-msgstr ""
+msgstr "Plánované akce"
 
 msgctxt "pageDescription"
 msgid "Akce plánované v laser arénách, které budou probíhat v následujících měsících."
-msgstr ""
+msgstr "Akce plánované v laser arénách, které budou probíhat v následujících měsících."
 
 msgid "Plánované akce laser game"
-msgstr ""
+msgstr "Plánované akce laser game"
 
 msgid "Poměřte síly s dalšími hráči laser game! Následující akce jsou organizovány v arénách využívající Laser Ligu."
-msgstr ""
+msgstr "Poměřte síly s dalšími hráči laser game! Následující akce jsou organizovány v arénách využívající Laser Ligu."
 
 msgid "Ligy / turnaje laser game"
-msgstr ""
+msgstr "Ligy / turnaje laser game"
 
 msgid "Turnaje laser game"
-msgstr ""
+msgstr "Turnaje laser game"
 
 msgid "%d. se umístila %s s celkovým skóre %s."
-msgstr ""
+msgstr "%d. se umístila %s s celkovým skóre %s."
 
 msgctxt "musicModes"
 msgid "StarWars"
-msgstr ""
+msgstr "StarWars"
 
 msgctxt "results.hits"
 msgid "Zasáhla si hráče"
-msgstr ""
+msgstr "Zasáhla si hráče"
 
 msgid "Ligy laser game"
-msgstr ""
+msgstr "Ligy laser game"
 
 msgctxt "pageTitles"
 msgid "Ligy laser game"
-msgstr ""
+msgstr "Ligy laser game"
 
 msgctxt "pageDescription"
 msgid "Organizované laser game ligy - skupiny turnajů, které na sebe navazují."
-msgstr ""
+msgstr "Organizované laser game ligy - skupiny turnajů, které na sebe navazují."
 
 msgid "Organizované ligy laser game"
-msgstr ""
+msgstr "Organizované ligy laser game"
 
 msgid "Liga laser game je dlouhodobá soutěž skládající se z několika turnajů. Výsledky jsou vyhodnocovány z každého turnaje zvlášť, ale zároveň mezi turnaji. Na konci ligového období jsou vyhlášeny celkové výsledky."
-msgstr ""
+msgstr "Liga laser game je dlouhodobá soutěž skládající se z několika turnajů. Výsledky jsou vyhodnocovány z každého turnaje zvlášť, ale zároveň mezi turnaji. Na konci ligového období jsou vyhlášeny celkové výsledky."
 
 msgctxt "pageTitles"
 msgid "Liga %s"
@@ -4425,52 +4425,52 @@ msgid "Seznam turnajů ligy v kategorii %s."
 msgstr "Seznam turnajů ligy v kategorii %s."
 
 msgid "Seznam dalších akcí pořádaných jako součást ligy."
-msgstr ""
+msgstr "Seznam dalších akcí pořádaných jako součást ligy."
 
 msgid "Celkové výsledky ze všech turnajů v kategorii."
-msgstr ""
+msgstr "Celkové výsledky ze všech turnajů v kategorii."
 
 msgid "Průměrná herní úroveň"
-msgstr ""
+msgstr "Průměrná herní úroveň"
 
 msgid "Statistiky týmu %s"
-msgstr ""
+msgstr "Statistiky týmu %s"
 
 msgid "Individuální výsledky"
-msgstr ""
+msgstr "Individuální výsledky"
 
 msgctxt "musicModes"
 msgid "Marvel"
-msgstr ""
+msgstr "Marvel"
 
 msgid "Legendární válečník"
-msgstr ""
+msgstr "Legendární válečník"
 
 msgid "Mistr sniperských taktik"
-msgstr ""
+msgstr "Mistr sniperských taktik"
 
 msgid "Stínový chodec"
-msgstr ""
+msgstr "Stínový chodec"
 
 msgctxt "pageTitles"
 msgid "%s - Registrace na ligu"
-msgstr ""
+msgstr "%s - Registrace na ligu"
 
 msgctxt "pageDescription"
 msgid "Registrace na ligu %s v %s."
-msgstr ""
+msgstr "Registrace na ligu %s v %s."
 
 msgid "Registrace týmu"
-msgstr ""
+msgstr "Registrace týmu"
 
 msgid "Kategorie"
-msgstr ""
+msgstr "Kategorie"
 
 msgid "Registrovat předchozí tým"
-msgstr ""
+msgstr "Registrovat předchozí tým"
 
 msgid "Nový tým"
-msgstr ""
+msgstr "Nový tým"
 
 msgid "Logo týmu"
 msgstr "Logo týmu"
@@ -4518,726 +4518,726 @@ msgid "Herní úroveň hráče"
 msgstr "Herní úroveň hráče"
 
 msgid "Jak poznám svou herní úroveň?"
-msgstr ""
+msgstr "Jak poznám svou herní úroveň?"
 
 msgid "Herní úroveň označuje odhadovanou schopnost hráče v aréně.<br>Pro registrované hráče se snaží odhadnout sama na základě jejich hodnocení."
-msgstr ""
+msgstr "Herní úroveň označuje odhadovanou schopnost hráče v aréně.<br>Pro registrované hráče se snaží odhadnout sama na základě jejich hodnocení."
 
 msgid "<strong>Začátečník</strong> je někdo, kdo má většinou odehráno jen pár her a v aréně se stále rozkoukává."
-msgstr ""
+msgstr "<strong>Začátečník</strong> je někdo, kdo má většinou odehráno jen pár her a v aréně se stále rozkoukává."
 
 msgid "<strong>Částečně pokročilý</strong> už má pár her za sebou. Zvládá lépe střílet a neběhá jen slepě po aréně."
-msgstr ""
+msgstr "<strong>Částečně pokročilý</strong> už má pár her za sebou. Zvládá lépe střílet a neběhá jen slepě po aréně."
 
 msgid "<strong>Pokročilý hráč</strong> většinou hraje alespoň trochu pravidelně. Nad svou hrou přemýšlí a nemá problém svůj cíl trefit i na větší vzdálenost."
-msgstr ""
+msgstr "<strong>Pokročilý hráč</strong> většinou hraje alespoň trochu pravidelně. Nad svou hrou přemýšlí a nemá problém svůj cíl trefit i na větší vzdálenost."
 
 msgid "<strong>Profík</strong> je ztělesněním laseru samotného. Své cíle trefuje s chirurgicou přesností a aréna je jeho domovem. Někteří legendární střelcí prý ohýbají laser i za roh.<br>Každopádně je to pravidelný hráč s bohatou zkušeností."
-msgstr ""
+msgstr "<strong>Profík</strong> je ztělesněním laseru samotného. Své cíle trefuje s chirurgicou přesností a aréna je jeho domovem. Někteří legendární střelci prý ohýbají laser i za roh.<br>Každopádně je to pravidelný hráč s bohatou zkušeností."
 
 msgid "Částečně pokročilý"
-msgstr ""
+msgstr "Částečně pokročilý"
 
 msgid "Pokročilý"
-msgstr ""
+msgstr "Pokročilý"
 
 msgid "Profík"
-msgstr ""
+msgstr "Profík"
 
 msgid "Speciální tréninková akce"
-msgstr ""
+msgstr "Speciální tréninková akce"
 
 msgid "Informace o akci"
-msgstr ""
+msgstr "Informace o akci"
 
 msgid "Automatické přihlášení na propojenou akci."
-msgstr ""
+msgstr "Automatické přihlášení na propojenou akci."
 
 msgid "Náhradníci"
-msgstr ""
+msgstr "Náhradníci"
 
 msgid "nepovinné"
-msgstr ""
+msgstr "nepovinné"
 
 msgid "Souhlasím se <a href=\"%s\" target=\"_blank\">zpracováním osobních údajů</a>"
-msgstr ""
+msgstr "Souhlasím se <a href=\"%s\" target=\"_blank\">zpracováním osobních údajů</a>"
 
 msgid "Nemáš tým, ale rád by sis zahrál? Nech nám na sebe kontakt a pokud pro tebe budeme mít tým, tak se ti ozveme."
-msgstr ""
+msgstr "Nemáš tým, ale rád by sis zahrál? Nech nám na sebe kontakt a pokud pro tebe budeme mít tým, tak se ti ozveme."
 
 msgctxt "pageTitles"
 msgid "Nástěnka hráče - %s"
-msgstr ""
+msgstr "Nástěnka hráče - %s"
 
 msgctxt "pageDescription"
 msgid "Profil a statistiky všech laser game her hráče %s"
-msgstr ""
+msgstr "Profil a statistiky všech laser game her hráče %s"
 
 msgid "Profil hráče %s na portálu Laser liga"
-msgstr ""
+msgstr "Profil hráče %s na portálu Laser liga"
 
 msgid "Herní kód hráče"
-msgstr ""
+msgstr "Herní kód hráče"
 
 msgid "Tvůj kód %s je unikátní identifikátor, pod kterým tě aréna vždy při zadávání hry najde."
-msgstr ""
+msgstr "Tvůj kód %s je unikátní identifikátor, pod kterým tě aréna vždy při zadávání hry najde."
 
 msgid "Upravit"
-msgstr ""
+msgstr "Upravit"
 
 msgid "%s začal svou cestu laser game hráče svou první hrou %s."
-msgstr ""
+msgstr "%s začal svou cestu laser game hráče svou první hrou %s."
 
 msgid "Od té doby má za sebou neuvěřitelných %d her!"
-msgstr ""
+msgstr "Od té doby má za sebou neuvěřitelných %d her!"
 
 msgid "Základní statistiky"
-msgstr ""
+msgstr "Základní statistiky"
 
 msgid "Pozice v žebříčku"
-msgstr ""
+msgstr "Pozice v žebříčku"
 
 msgid "Herní úroveň se zvyšuje a klesá s každou odehranou klasickou hrou. Při výpočtu se přihlíží k úrovni protihráčů - pokud hrajete schválně se slabšími spoluhráči, herní úroveň roste pomalu."
-msgstr ""
+msgstr "Herní úroveň se zvyšuje a klesá s každou odehranou klasickou hrou. Při výpočtu se přihlíží k úrovni protihráčů - pokud hrajete schválně se slabšími spoluhráči, herní úroveň roste pomalu."
 
 msgid "Zobrazit statistiky domovské arény"
-msgstr ""
+msgstr "Zobrazit statistiky domovské arény"
 
 msgid "Trofeje"
-msgstr ""
+msgstr "Trofeje"
 
 msgid "Ocenění"
-msgstr ""
+msgstr "Ocenění"
 
 msgid "Souhrnné statistiky"
-msgstr ""
+msgstr "Souhrnné statistiky"
 
 msgid "Poměr zabití a smrtí. Např. hodnota 2 znamená, že máš 2x tolik zásahů než smrtí."
-msgstr ""
+msgstr "Poměr zabití a smrtí. Např. hodnota 2 znamená, že máš 2x tolik zásahů než smrtí."
 
 msgid "Vývoj pozice v žebříčku"
-msgstr ""
+msgstr "Vývoj pozice v žebříčku"
 
 msgid "Souhrn herních schopností"
-msgstr ""
+msgstr "Souhrn herních schopností"
 
 msgid "Data v tomto grafu jsou uváděna v rozmezí 0-100."
-msgstr ""
+msgstr "Data v tomto grafu jsou uváděna v rozmezí 0-100."
 
 msgid "K:D a počet zásahů je relativní. Hodnota 50 na grafu odpovídá obecnému průměru."
-msgstr ""
+msgstr "K:D a počet zásahů je relativní. Hodnota 50 na grafu odpovídá obecnému průměru."
 
 msgid "Výstřely za minutu"
-msgstr ""
+msgstr "Výstřely za minutu"
 
 msgid "%s trendy zobrazují posun za poslední hry a měsíc."
-msgstr ""
+msgstr "%s trendy zobrazují posun za poslední hry a měsíc."
 
 msgid "Za posledních 30 dní si se v žebříčku posunul/a nahoru. Jen tak dál!"
-msgstr ""
+msgstr "Za posledních 30 dní si se v žebříčku posunul/a nahoru. Jen tak dál!"
 
 msgid "Za posledních 30 dní tě v žebříčku někdo přeskočil. Co takhle si jít zahrát?"
-msgstr ""
+msgstr "Za posledních 30 dní tě v žebříčku někdo přeskočil. Co takhle si jít zahrát?"
 
 msgid "Za posledních 30 dní si se v žebříčku vůbec neposunul/a. Co takhle si jít zahrát a změnit to?"
-msgstr ""
+msgstr "Za posledních 30 dní si se v žebříčku vůbec neposunul/a. Co takhle si jít zahrát a změnit to?"
 
 msgid "Trofeje, které %s získal ve svých hrách. Trofeje jsou speciální ohodnocení, které vyjadřují úspěchy, kterých %s během hry dosáhl."
-msgstr ""
+msgstr "Trofeje, které %s získal ve svých hrách. Trofeje jsou speciální ohodnocení, které vyjadřují úspěchy, kterých %s během hry dosáhl."
 
 msgid "Všechny módy"
-msgstr ""
+msgstr "Všechny módy"
 
 msgid "Jen klasické módy"
-msgstr ""
+msgstr "Jen klasické módy"
 
 msgid "Ocenění jsou úspěchy získané během celé %s laser-hráčské kariéry. Odemčením většiny ocenění získá hráč nový titul na profil."
-msgstr ""
+msgstr "Ocenění jsou úspěchy získané během celé %s laser-hráčské kariéry. Odemčením většiny ocenění získá hráč nový titul na profil."
 
 msgid "Ocenění, která odemykají titul jsou označená:"
-msgstr ""
+msgstr "Ocenění, která odemykají titul jsou označená:"
 
 msgid "Získáno"
-msgstr ""
+msgstr "Získáno"
 
 msgid "Ocenění získáno"
-msgstr ""
+msgstr "Ocenění získáno"
 
 msgid "Ocenění získalo %s hráčů"
-msgstr ""
+msgstr "Ocenění získalo %s hráčů"
 
 msgid "Zbývající ocenění"
-msgstr ""
+msgstr "Zbývající ocenění"
 
 msgid "Najít další hry"
-msgstr ""
+msgstr "Najít další hry"
 
 msgid "Sdílet profil hráče"
-msgstr ""
+msgstr "Sdílet profil hráče"
 
 msgid "Statistiky hráče"
-msgstr ""
+msgstr "Statistiky hráče"
 
 msgid "Kliknutím na tlačítko níže můžete stáhnout obrázek profilu, nebo profil sdílet."
-msgstr ""
+msgstr "Kliknutím na tlačítko níže můžete stáhnout obrázek profilu, nebo profil sdílet."
 
 msgid "Stáhnout obrázek"
-msgstr ""
+msgstr "Stáhnout obrázek"
 
 msgid "Nápověda?"
-msgstr ""
+msgstr "Nápověda?"
 
 msgid "Jak dostanu své hry do Laser ligy?"
-msgstr ""
+msgstr "Jak dostanu své hry do Laser ligy?"
 
 msgid "Nové hry"
-msgstr ""
+msgstr "Nové hry"
 
 msgid "Pokud jdu hrát v podporované aréně a mám registrovaný účet v Laser lize, můžu obsluze nahlásit své jméno (%s) nebo hráčský kód (%s). Obsluha si mě najde v systému a jakmile skončí hra, mám výsledky uložené na svém účtu."
-msgstr ""
+msgstr "Pokud jdu hrát v podporované aréně a mám registrovaný účet v Laser lize, můžu obsluze nahlásit své jméno (%s) nebo hráčský kód (%s). Obsluha si mě najde v systému a jakmile skončí hra, mám výsledky uložené na svém účtu."
 
 msgid "Staré hry"
-msgstr ""
+msgstr "Staré hry"
 
 msgid "Mé staré hry si můžu také přiřadit na svůj účet v Laser lize."
-msgstr ""
+msgstr "Mé staré hry si můžu také přiřadit na svůj účet v Laser lize."
 
 msgid "Potřebuji ale 2 věci:"
-msgstr ""
+msgstr "Potřebuji ale 2 věci:"
 
 msgid "Být přihlášený v aplikaci Laser liga"
-msgstr ""
+msgstr "Být přihlášený v aplikaci Laser liga"
 
 msgid "Najít své online výsledky"
-msgstr ""
+msgstr "Najít své online výsledky"
 
 msgid "Výsledky můžete mít naskenované přes QR kód na tištěných výsledcích, nebo můžete své výsledky najít na podle data na <a href=\"%s\">stránce arény</a> v záložce \"Všechny hry.\""
-msgstr ""
+msgstr "Výsledky můžete mít naskenované přes QR kód na tištěných výsledcích, nebo můžete své výsledky najít na podle data na <a href=\"%s\">stránce arény</a> v záložce \"Všechny hry.\""
 
 msgid "Pokud otevřu výsledky ve kterých je hráč s mým jménem, zobrazí se vedle jména hráče tlačítko přiřadit. Po kliknutí na tlačítko se mi hra přiřadí do profilu."
-msgstr ""
+msgstr "Pokud otevřu výsledky ve kterých je hráč s mým jménem, zobrazí se vedle jména hráče tlačítko přiřadit. Po kliknutí na tlačítko se mi hra přiřadí do profilu."
 
 msgctxt "musicModes"
 msgid "Narozeniny"
-msgstr ""
+msgstr "Narozeniny"
 
 msgid "Don't give up"
-msgstr ""
+msgstr "Don't give up"
 
 msgid "Vytrvalec"
-msgstr ""
+msgstr "Vytrvalec"
 
 msgctxt "results.hits"
 msgid "Zásahy do týmů"
-msgstr ""
+msgstr "Zásahy do týmů"
 
 msgctxt "results.hits"
 msgid "Smrti od týmů"
-msgstr ""
+msgstr "Smrti od týmů"
 
 msgid "Rozpad skóre a herní úrovně"
-msgstr ""
+msgstr "Rozpad skóre a herní úrovně"
 
 msgid "Smrti od min"
-msgstr ""
+msgstr "Smrti od min"
 
 msgid "Bonusy"
-msgstr ""
+msgstr "Bonusy"
 
 msgid "%s k herní úrovni hráče"
-msgstr ""
+msgstr "%s k herní úrovni hráče"
 
 msgid "Umístění"
-msgstr ""
+msgstr "Umístění"
 
 msgid "Zohlednění vašich protihráčů. Pokud hrajete proti slabším, vaše herní úroveň se sníží. Naopak, pokud hrajete proti silným hráčům, vaše herní úroveň se zvýší."
-msgstr ""
+msgstr "Zohlednění vašich protihráčů. Pokud hrajete proti slabším, vaše herní úroveň se sníží. Naopak, pokud hrajete proti silným hráčům, vaše herní úroveň se zvýší."
 
 msgid "Srovnání s protihráči"
-msgstr ""
+msgstr "Srovnání s protihráči"
 
 msgid "Zásahy protihráčů"
-msgstr ""
+msgstr "Zásahy protihráčů"
 
 msgid "Zásahy spoluhráčů"
-msgstr ""
+msgstr "Zásahy spoluhráčů"
 
 msgid "Smrti od protihráčů"
-msgstr ""
+msgstr "Smrti od protihráčů"
 
 msgid "Smrti od spoluhráčů"
-msgstr ""
+msgstr "Smrti od spoluhráčů"
 
 msgid "Agent"
-msgstr ""
+msgstr "Agent"
 
 msgid "Neviditelnost"
-msgstr ""
+msgstr "Neviditelnost"
 
 msgid "Samopal"
-msgstr ""
+msgstr "Samopal"
 
 msgid "Štít"
-msgstr ""
+msgstr "Štít"
 
 msgid "Umístění v žebříčku"
-msgstr ""
+msgstr "Umístění v žebříčku"
 
 msgctxt "results.today"
 msgid "Klikněte níže na okénko pro zobrazení grafu vašeho umístění."
-msgstr ""
+msgstr "Klikněte níže na okénko pro zobrazení grafu vašeho umístění."
 
 msgctxt "results.today"
 msgid "Zobrazit umístění"
-msgstr ""
+msgstr "Zobrazit umístění"
 
 msgid "Nastavení profilu"
-msgstr ""
+msgstr "Nastavení profilu"
 
 msgctxt "pageTitles"
 msgid "Nastavení profilu hráče - %s"
-msgstr ""
+msgstr "Nastavení profilu hráče - %s"
 
 msgctxt "pageDescription"
 msgid "Nastavení osobních údajů a profilu hráče laser game - %s."
-msgstr ""
+msgstr "Nastavení osobních údajů a profilu hráče laser game - %s."
 
 msgid "Nastavení hráče"
-msgstr ""
+msgstr "Nastavení hráče"
 
 msgid "Unikátní kód hráče"
-msgstr ""
+msgstr "Unikátní kód hráče"
 
 msgid "Avatar"
-msgstr ""
+msgstr "Avatar"
 
 msgid "Typ avatara"
-msgstr ""
+msgstr "Typ avatara"
 
 msgid "Vyberte"
-msgstr ""
+msgstr "Vyberte"
 
 msgctxt "avatar"
 msgid "Dobrodruh"
-msgstr ""
+msgstr "Dobrodruh"
 
 msgctxt "avatar"
 msgid "Dobrodruh - obličej"
-msgstr ""
+msgstr "Dobrodruh - obličej"
 
 msgctxt "avatar"
 msgid "Avataaar"
-msgstr ""
+msgstr "Avataaar"
 
 msgctxt "avatar"
 msgid "Avataaar - obličej"
-msgstr ""
+msgstr "Avataaar - obličej"
 
 msgctxt "avatar"
 msgid "Ušáci"
-msgstr ""
+msgstr "Ušáci"
 
 msgctxt "avatar"
 msgid "Ušáci - obličej"
-msgstr ""
+msgstr "Ušáci - obličej"
 
 msgctxt "avatar"
 msgid "Vysmátý"
-msgstr ""
+msgstr "Vysmátý"
 
 msgctxt "avatar"
 msgid "Roboti"
-msgstr ""
+msgstr "Roboti"
 
 msgctxt "avatar"
 msgid "Roboti - obličej"
-msgstr ""
+msgstr "Roboti - obličej"
 
 msgctxt "avatar"
 msgid "Čmáranice"
-msgstr ""
+msgstr "Čmáranice"
 
 msgctxt "avatar"
 msgid "Čmáranice - obličej"
-msgstr ""
+msgstr "Čmáranice - obličej"
 
 msgctxt "avatar"
 msgid "Emoji"
-msgstr ""
+msgstr "Emoji"
 
 msgctxt "avatar"
 msgid "Lorelei"
-msgstr ""
+msgstr "Lorelei"
 
 msgctxt "avatar"
 msgid "Lorelei - obličej"
-msgstr ""
+msgstr "Lorelei - obličej"
 
 msgctxt "avatar"
 msgid "Micah"
-msgstr ""
+msgstr "Micah"
 
 msgctxt "avatar"
 msgid "Mini avataři"
-msgstr ""
+msgstr "Mini avataři"
 
 msgctxt "avatar"
 msgid "Notionist"
-msgstr ""
+msgstr "Notionist"
 
 msgctxt "avatar"
 msgid "Notionist - obličej"
-msgstr ""
+msgstr "Notionist - obličej"
 
 msgctxt "avatar"
 msgid "Lidičky"
-msgstr ""
+msgstr "Lidičky"
 
 msgctxt "avatar"
 msgid "Persony"
-msgstr ""
+msgstr "Persony"
 
 msgctxt "avatar"
 msgid "Pixel art"
-msgstr ""
+msgstr "Pixel art"
 
 msgctxt "avatar"
 msgid "Pixel art - obličej"
-msgstr ""
+msgstr "Pixel art - obličej"
 
 msgctxt "avatar"
 msgid "Palečky"
-msgstr ""
+msgstr "Palečky"
 
 msgid "Seed"
-msgstr ""
+msgstr "Seed"
 
 msgid "Podle čeho se avatar generuje. Ideálně tvůj kód hráče, nebo přezdívka."
-msgstr ""
+msgstr "Podle čeho se avatar generuje. Ideálně tvůj kód hráče, nebo přezdívka."
 
 msgid "Uložit avatar"
-msgstr ""
+msgstr "Uložit avatar"
 
 msgid "Titul"
-msgstr ""
+msgstr "Titul"
 
 msgctxt "rarity"
 msgid "Mýtický"
-msgstr ""
+msgstr "Mýtický"
 
 msgctxt "rarity"
 msgid "Vzácný"
-msgstr ""
+msgstr "Vzácný"
 
 msgid "Drtič min"
-msgstr ""
+msgstr "Drtič min"
 
 msgctxt "rarity"
 msgid "Legendární"
-msgstr ""
+msgstr "Legendární"
 
 msgid "Neúnavný"
-msgstr ""
+msgstr "Neúnavný"
 
 msgctxt "rarity"
 msgid "Epický"
-msgstr ""
+msgstr "Epický"
 
 msgid "Stříbro"
-msgstr ""
+msgstr "Stříbro"
 
 msgid "Přesný sniper"
-msgstr ""
+msgstr "Přesný sniper"
 
 msgid "Ostrostřelec"
-msgstr ""
+msgstr "Ostrostřelec"
 
 msgid "Laserový maniak"
-msgstr ""
+msgstr "Laserový maniak"
 
 msgctxt "rarity"
 msgid "Běžný"
-msgstr ""
+msgstr "Běžný"
 
 msgid "Nejúspornější střelec"
-msgstr ""
+msgstr "Nejúspornější střelec"
 
 msgctxt "rarity"
 msgid "Neobvyklý"
-msgstr ""
+msgstr "Neobvyklý"
 
 msgid "Agent 47"
-msgstr ""
+msgstr "Agent 47"
 
 msgid "Pravidelný vítěz"
-msgstr ""
+msgstr "Pravidelný vítěz"
 
 msgid "Hrdinský vytrvalec"
-msgstr ""
+msgstr "Hrdinský vytrvalec"
 
 msgid "Střelec z dálky"
-msgstr ""
+msgstr "Střelec z dálky"
 
 msgid "Největší vlastňák"
-msgstr ""
+msgstr "Největší vlastňák"
 
 msgid "Hráč s nejlepší muškou"
-msgstr ""
+msgstr "Hráč s nejlepší muškou"
 
 msgid "Zabiják vlastního týmu"
-msgstr ""
+msgstr "Zabiják vlastního týmu"
 
 msgid "Spray and Pray"
-msgstr ""
+msgstr "Spray and Pray"
 
 msgid "Nedotknutelný"
-msgstr ""
+msgstr "Nedotknutelný"
 
 msgid "Absolutní vítěz"
-msgstr ""
+msgstr "Absolutní vítěz"
 
 msgid "Největší terminátor"
-msgstr ""
+msgstr "Největší terminátor"
 
 msgid "Vyrovnaný"
-msgstr ""
+msgstr "Vyrovnaný"
 
 msgid "Zkušený střelec"
-msgstr ""
+msgstr "Zkušený střelec"
 
 msgid "Nadšenec"
-msgstr ""
+msgstr "Nadšenec"
 
 msgid "Na plný výkon"
-msgstr ""
+msgstr "Na plný výkon"
 
 msgid "Nezastavitelná síla"
-msgstr ""
+msgstr "Nezastavitelná síla"
 
 msgid "Herní maratón"
-msgstr ""
+msgstr "Herní maratón"
 
 msgid "Maximální obrana"
-msgstr ""
+msgstr "Maximální obrana"
 
 msgid "Tahoun týmu"
-msgstr ""
+msgstr "Tahoun týmu"
 
 msgid "Neporazitelný"
-msgstr ""
+msgstr "Neporazitelný"
 
 msgid "Pravidelný hráč"
-msgstr ""
+msgstr "Pravidelný hráč"
 
 msgid "Turnajový hráč"
-msgstr ""
+msgstr "Turnajový hráč"
 
 msgid "Kulometář"
-msgstr ""
+msgstr "Kulometář"
 
 msgid "Vládce zásahů"
-msgstr ""
+msgstr "Vládce zásahů"
 
 msgid "Férový hráč"
-msgstr ""
+msgstr "Férový hráč"
 
 msgid "Stínový střelec"
-msgstr ""
+msgstr "Stínový střelec"
 
 msgid "Netrefitelný"
-msgstr ""
+msgstr "Netrefitelný"
 
 msgid "Exekutor"
-msgstr ""
+msgstr "Exekutor"
 
 msgid "Neporazitelný střelec"
-msgstr ""
+msgstr "Neporazitelný střelec"
 
 msgid "Stínový mistr"
-msgstr ""
+msgstr "Stínový mistr"
 
 msgid "Energický hráč"
-msgstr ""
+msgstr "Energický hráč"
 
 msgid "Zasedlý"
-msgstr ""
+msgstr "Zasedlý"
 
 msgid "Drtič nepřátel"
-msgstr ""
+msgstr "Drtič nepřátel"
 
 msgid "Pronásledovaný"
-msgstr ""
+msgstr "Pronásledovaný"
 
 msgid "Přeživší"
-msgstr ""
+msgstr "Přeživší"
 
 msgid "Zabiják"
-msgstr ""
+msgstr "Zabiják"
 
 msgid "Střelec"
-msgstr ""
+msgstr "Střelec"
 
 msgid "Shoot to win"
-msgstr ""
+msgstr "Shoot to win"
 
 msgid "Používám nejlepší výherní taktiku"
-msgstr ""
+msgstr "Používám nejlepší výherní taktiku"
 
 msgid "#LaserArenaPísek"
-msgstr ""
+msgstr "#LaserArenaPísek"
 
 msgid "#FunSpaceČB"
-msgstr ""
+msgstr "#FunSpaceČB"
 
 msgid "Údaje"
-msgstr ""
+msgstr "Údaje"
 
 msgid "Vaše jméno/přezdívka do hry."
-msgstr ""
+msgstr "Vaše jméno/přezdívka do hry."
 
 msgid "Domovskou arénu sice vyplňovat nemusíte, ale pokud je na seznamu, doporučujeme jí vyplnit."
-msgstr ""
+msgstr "Domovskou arénu sice vyplňovat nemusíte, ale pokud je na seznamu, doporučujeme jí vyplnit."
 
 msgid "Změna hesla"
-msgstr ""
+msgstr "Změna hesla"
 
 msgid "Aktuální heslo"
-msgstr ""
+msgstr "Aktuální heslo"
 
 msgid "Nové heslo"
-msgstr ""
+msgstr "Nové heslo"
 
 msgid "Notifikace"
-msgstr ""
+msgstr "Notifikace"
 
 msgid "Zapnout notifikace"
-msgstr ""
+msgstr "Zapnout notifikace"
 
 msgid "Obnovit notifikace"
-msgstr ""
+msgstr "Obnovit notifikace"
 
 msgid "Odeslat testovací notifikaci"
-msgstr ""
+msgstr "Odeslat testovací notifikaci"
 
 msgid "Ostatní"
-msgstr ""
+msgstr "Ostatní"
 
 msgctxt "pageTitles"
 msgid "Skupina - %s %s"
-msgstr ""
+msgstr "Skupina - %s %s"
 
 msgctxt "pageDescription"
 msgid "Všechny výsledky laser game skupiny %s v aréně - %s."
-msgstr ""
+msgstr "Všechny výsledky laser game skupiny %s v aréně - %s."
 
 msgid "Skupina - %s"
-msgstr ""
+msgstr "Skupina - %s"
 
 msgid "Průměrný počet výstřelů mimo"
-msgstr ""
+msgstr "Průměrný počet výstřelů mimo"
 
 msgid "Celkem výstřelů mimo"
-msgstr ""
+msgstr "Celkem výstřelů mimo"
 
 msgid "Průměrný počet zásahů do spoluhráčů"
-msgstr ""
+msgstr "Průměrný počet zásahů do spoluhráčů"
 
 msgid "Celkem zásahů do spoluhráčů"
-msgstr ""
+msgstr "Celkem zásahů do spoluhráčů"
 
 msgid "Průměrný počet smrtí od spoluhráčů"
-msgstr ""
+msgstr "Průměrný počet smrtí od spoluhráčů"
 
 msgid "Celkem smrtí od spoluhráčů"
-msgstr ""
+msgstr "Celkem smrtí od spoluhráčů"
 
 msgid "zásah proti sobě"
 msgid_plural "zásahů proti sobě"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "zásah proti sobě"
+msgstr[1] "zásahy proti sobě"
+msgstr[2] "zásahů proti sobě"
+msgstr[3] "zásahů proti sobě"
 
 msgid "hře"
 msgid_plural "hrách"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "hře"
+msgstr[1] "hrách"
+msgstr[2] "hrách"
+msgstr[3] "hrách"
 
 msgid "zásah spolu"
 msgid_plural "zásahů spolu"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "zásah spolu"
+msgstr[1] "zásahy spolu"
+msgstr[2] "zásahů spolu"
+msgstr[3] "zásahů spolu"
 
 msgid "smrt proti sobě"
 msgid_plural "smrtí proti sobě"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "smrt proti sobě"
+msgstr[1] "smrti proti sobě"
+msgstr[2] "smrtí proti sobě"
+msgstr[3] "smrtí proti sobě"
 
 msgid "smrt spolu"
 msgid_plural "smrtí spolu"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "smrt spolu"
+msgstr[1] "smrti spolu"
+msgstr[2] "smrtí spolu"
+msgstr[3] "smrtí spolu"
 
 msgid "Počet výher / Remíz / Proher"
-msgstr ""
+msgstr "Počet výher / Remíz / Proher"
 
 msgid "Průměrné ohodnocení týmu"
-msgstr ""
+msgstr "Průměrné ohodnocení týmu"
 
 msgctxt "results.hits"
 msgid "Hry proti dalším týmům"
-msgstr ""
+msgstr "Hry proti dalším týmům"
 
 msgid "hra proti týmu"
 msgid_plural "her proti týmu"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "hra proti týmu"
+msgstr[1] "hry proti týmu"
+msgstr[2] "hry proti týmu"
+msgstr[3] "hry proti týmu"
 
 msgid "zásah"
 msgid_plural "zásahů"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "zásah"
+msgstr[1] "zásahy"
+msgstr[2] "zásahů"
+msgstr[3] "zásahů"
 
 msgid "smrt"
 msgid_plural "smrtí"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "smrt"
+msgstr[1] "smrti"
+msgstr[2] "smrtí"
+msgstr[3] "smrtí"
 
 msgid "výhra"
 msgid_plural "výher"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "výhra"
+msgstr[1] "výhry"
+msgstr[2] "výher"
+msgstr[3] "výher"
 
 msgid "remíza"
 msgid_plural "remíz"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "remíza"
+msgstr[1] "remízy"
+msgstr[2] "remíz"
+msgstr[3] "remíz"
 
 msgid "prohra"
 msgid_plural "proher"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "prohra"
+msgstr[1] "prohry"
+msgstr[2] "proher"
+msgstr[3] "proher"
 
 msgid "Výsledky hry"
-msgstr ""
+msgstr "Výsledky hry"
 

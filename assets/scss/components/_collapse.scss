@@ -1,0 +1,17 @@
+.collapse {
+  display: grid;
+  grid-template-rows: 0fr;
+
+  @media (prefers-reduced-motion: no-preference) {
+    transition: grid-template-rows 200ms ease;
+  }
+
+  &.show {
+    display: grid;
+    grid-template-rows: 1fr;
+  }
+
+  .collapse-inner {
+    overflow: hidden;
+  }
+}

@@ -5,6 +5,27 @@ const loadingModalDom = document.getElementById("loader-modal") as HTMLDivElemen
 const loadingModal = new Modal(loadingModalDom, {backdrop: "static"});
 let loadingCounter = 0;
 
+export function initLoaders(): void {
+    document.addEventListener('loading.start', () => {
+        startLoading();
+    });
+    document.addEventListener('loading.small.start', () => {
+        startLoading(true);
+    });
+    document.addEventListener('loading.stop', () => {
+        stopLoading();
+    });
+    document.addEventListener('loading.error', () => {
+        stopLoading(false);
+    });
+    document.addEventListener('loading.small.stop', () => {
+        stopLoading(true, true);
+    });
+    document.addEventListener('loading.small.error', () => {
+        stopLoading(false, true);
+    });
+}
+
 export function startLoading(small: boolean = false): void {
 	loadingCounter++;
 	if (small) {

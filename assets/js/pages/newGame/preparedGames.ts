@@ -1,7 +1,6 @@
 import {Offcanvas} from "bootstrap";
 import {startLoading, stopLoading} from "../../loaders";
 import {GameData, PhpDateTime} from "../../interfaces/gameInterfaces";
-import {initTooltips} from "../../includes/functions";
 import Game from "../../game/game";
 import {
     deleteAllPreparedGames,
@@ -9,6 +8,7 @@ import {
     getPreparedGames,
     sendPreparedGame
 } from "../../api/endpoints/preparedGames";
+import {initTooltips} from '../../includes/tooltips';
 
 declare global {
 	const system: string;

@@ -1,4 +1,4 @@
-import * as bootstrap from 'bootstrap';
+import {Tooltip} from 'bootstrap';
 import {startLoading, stopLoading} from '../loaders';
 import {setGate, setGateIdle, setGateLoaded} from '../api/endpoints/gate';
 
@@ -8,7 +8,7 @@ export function gateActions() {
         const system = btn.dataset.system;
         // Allow for tooltips
         if (btn.title) {
-            new bootstrap.Tooltip(btn);
+            new Tooltip(btn);
         }
         btn.addEventListener('click', () => {
             startLoading(true);
@@ -31,7 +31,7 @@ export function gateActions() {
         const system = btn.dataset.system;
         // Allow for tooltips
         if (btn.title) {
-            new bootstrap.Tooltip(btn);
+            new Tooltip(btn);
         }
         btn.addEventListener('click', () => {
             startLoading(true);
@@ -53,7 +53,7 @@ export function gateActions() {
         const system = btn.dataset.system;
         // Allow for tooltips
         if (btn.title) {
-            new bootstrap.Tooltip(btn);
+            new Tooltip(btn);
         }
         btn.addEventListener('click', () => {
             startLoading(true);

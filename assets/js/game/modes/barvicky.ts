@@ -1,5 +1,6 @@
 import CustomLoadMode from "../customLoadMode";
-import {lang} from "../../includes/functions";
+
+import {lang} from '../../includes/frameworkFunctions';
 
 export default class Barvicky extends CustomLoadMode {
 

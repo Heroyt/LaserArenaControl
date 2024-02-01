@@ -1,6 +1,6 @@
-import {initTooltips} from "../../includes/functions";
 import flatpickr from "flatpickr";
 import {Options} from "flatpickr/dist/types/options.js";
+import {initTooltips} from '../../includes/tooltips';
 
 export default async function initPrintSettings() {
     (document.querySelectorAll('.print-style') as NodeListOf<HTMLDivElement>).forEach(dom => {

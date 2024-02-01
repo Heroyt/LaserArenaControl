@@ -4,12 +4,12 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CompressionPlugin = require("compression-webpack-plugin");
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-const WorkboxPlugin = require('workbox-webpack-plugin');
+//const WorkboxPlugin = require('workbox-webpack-plugin');
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
 const isDevelopment = false;
 
-const genRanHex = (size = 24) => [...Array(size)].map(() => Math.floor(Math.random() * 16).toString(16)).join('');
+//const genRanHex = (size = 24) => [...Array(size)].map(() => Math.floor(Math.random() * 16).toString(16)).join('');
 
 const files = fs.readdirSync(path.resolve(__dirname, 'assets/scss/pages/'))
 	.map(file => {
@@ -159,20 +159,20 @@ module.exports = {
 		extensions: [".ts", ".tsx", ".js", ".json", ".jsx", ".css", ".scss"]
 	},
 	plugins: [
-		new WorkboxPlugin.GenerateSW({
-			swDest: 'service-worker.js',
-			//navigationPreload: true,
-			clientsClaim: true,
-			//skipWaiting: true,
-			cleanupOutdatedCaches: true,
-			cacheId: genRanHex(),
-			runtimeCaching: [
-				{
-					handler: 'NetworkFirst',
-					urlPattern: /\.(?:webm|ogg|oga|mp3|wav|aiff|flac|mp4|m4a|aac|opus|webp)/
-				}
-			]
-		}),
+        /*new WorkboxPlugin.GenerateSW({
+            swDest: 'service-worker.js',
+            //navigationPreload: true,
+            clientsClaim: true,
+            //skipWaiting: true,
+            cleanupOutdatedCaches: true,
+            cacheId: genRanHex(),
+            runtimeCaching: [
+                {
+                    handler: 'NetworkFirst',
+                    urlPattern: /\.(?:webm|ogg|oga|mp3|wav|aiff|flac|mp4|m4a|aac|opus|webp)/
+                }
+            ]
+        }),*/
 		new ForkTsCheckerWebpackPlugin(),
 		new MiniCssExtractPlugin({
 			filename: '[name].css',

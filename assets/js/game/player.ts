@@ -1,8 +1,8 @@
 import {Popover, Tooltip} from "bootstrap";
 import {startLoading, stopLoading} from "../loaders";
-import {initTooltips} from "../includes/functions";
 import Game from "./game";
 import {updateVests, VestData} from "../api/endpoints/settings/vests";
+import {initTooltips} from '../includes/tooltips';
 
 declare module "bootstrap" {
 	class Popover {

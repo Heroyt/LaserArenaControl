@@ -1,17 +1,22 @@
-import {gameTimer, initAutoSaveForm, initTooltips, toAscii} from './includes/functions';
-import * as bootstrap from "bootstrap";
+import {toAscii} from './includes/functions';
+import {Tooltip} from "bootstrap";
 import route from "./router";
 import {PageInfo} from "./interfaces/pageInfo";
 import ActivityMonitor from "./activityMonitor";
 import {GameData} from "./interfaces/gameInterfaces";
 import {gateActions} from "./components/gateActions";
+import {initTooltips} from "./includes/tooltips";
+import {initCollapse} from "./includes/collapse";
+import {initAutoSaveForm} from "./includes/autoSaveForm";
+import {gameTimer} from "./includes/gameTimer";
+import {initLoaders} from "./loaders";
 
 declare global {
 	const page: PageInfo;
     let activeGame: GameData | null;
 }
 
-if ('serviceWorker' in navigator) {
+/*if ('serviceWorker' in navigator) {
 	window.addEventListener('load', () => {
 		navigator.serviceWorker.register('/dist/service-worker.js', {scope: '/'}).then(registration => {
 			console.log('SW registered: ', registration);
@@ -19,7 +24,7 @@ if ('serviceWorker' in navigator) {
 			console.log('SW registration failed: ', registrationError);
 		});
 	});
-}
+}*/
 
 activeGame = null;
 
@@ -58,8 +63,14 @@ window.addEventListener("load", () => {
 		});
 	});
 
+    // Loaders
+    initLoaders();
+
 	// Tooltips
-	initTooltips(document);
+    initTooltips();
+
+    // Collapse
+    initCollapse();
 
 	// Auto-save
 	initAutoSaveForm();
@@ -73,7 +84,7 @@ window.addEventListener("load", () => {
 	});
 	(document.querySelectorAll('[data-toggle="shuffle"]') as NodeListOf<HTMLButtonElement>).forEach(element => {
 		if (element.title) {
-			new bootstrap.Tooltip(element);
+            new Tooltip(element);
 		}
 		if (!element.dataset.target) {
 			// Missing target

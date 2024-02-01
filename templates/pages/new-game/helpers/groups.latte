@@ -3,118 +3,124 @@
 
 {define groups, int $order = 0}
     {var string $vestIcon = svgIcon('Vesta', 'auto', '1rem')}
-	{var int $vestCount = count($vests)}
-	<div class="offcanvas offcanvas-end border-blue-600 visible" tabindex="-1" id="groups"
-		 aria-labelledby="groupsLabel">
-		<div class="offcanvas-tag bg-blue-600 text-bg-blue-600" data-bs-toggle="offcanvas" data-bs-target="#groups"
-			 style="--order:{$order};">
+    {var int $vestCount = count($vests)}
+    <div class="offcanvas offcanvas-end border-blue-600 visible" tabindex="-1" id="groups"
+         aria-labelledby="groupsLabel">
+        <div class="offcanvas-tag bg-blue-600 text-bg-blue-600" data-bs-toggle="offcanvas" data-bs-target="#groups"
+             style="--order:{$order};">
 			<span>
 				{lang 'Skupiny'}
 			</span>
-		</div>
-		<div class="offcanvas-header">
-			<h5 class="offcanvas-title" id="groupsLabel">{lang 'Skupiny'}</h5>
-			<button type="button" class="btn btn-link" data-bs-dismiss="offcanvas" aria-label="Close"><i
-						class="fa-solid fa-xmark"></i></button>
-		</div>
-		<div class="offcanvas-body" id="game-groups" data-vests="{$vestCount}">
+        </div>
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="groupsLabel">{lang 'Skupiny'}</h5>
+            <button type="button" class="btn btn-link" data-bs-dismiss="offcanvas" aria-label="Close"><i
+                        class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="offcanvas-body" id="game-groups" data-vests="{$vestCount}">
             {*{foreach $groups as $group}
                 {include gameGroupCard, $group->id, $group->name, $group->getPlayers(), $group->getTeams(), $vestIcon}
             {/foreach}*}
-		</div>
-	</div>
-	<template id="new-game-group">
+        </div>
+    </div>
+    <template id="new-game-group">
         {include gameGroupCard, '#id#', '#name#', [], [], null, $vestIcon}
-	</template>
+    </template>
 {/define}
 
 {define gameGroupCard, int|string $id, string $name, App\Models\Group\Player[] $players, App\Models\Group\Team[] $teams, string $vestIcon}
-	{var int $vestCount = count($vests)}
-	<div class="card game-group mb-4" data-id="{$id}">
-		<div class="card-body">
-			<div class="input-group">
-				<input type="text" value="{$name}" class="form-control fs-5 group-name" maxlength="100">
-				<button type="button"
-						data-toggle="tooltip" title="{lang 'Zobrazit hráče skupiny'}"
-						class="btn btn-info show-group">
-					<i class="fa-solid fa-user-group"></i>
-				</button>
-				<button type="button" data-toggle="tooltip" title="{lang 'Nahrát na vesty'}"
-						class="btn btn-success loadPlayers">
-					<i class="fa-solid fa-upload"></i>
-				</button>
-				<button type="button" data-toggle="tooltip" title="{lang 'Deaktivovat'}"
-						class="btn btn-danger delete">
-					<i class="fa-solid fa-trash"></i>
-				</button>
-			</div>
-			<div class="collapse" id="group-{$id}-players">
-				<div class="text-end mt-2">
-					<button type="button" class="btn btn-info show-teams">
-						<i class="fa-solid fa-people-group"></i>
-						{lang 'Zobrazit týmy'}
-					</button>
-					<button type="button" class="btn btn-info show-players d-none">
-						<i class="fa-solid fa-person"></i>
-						{lang 'Zobrazit hráče'}
-					</button>
-				</div>
-				<ul class="list-group mt-1 group-teams collapse" id="group-{$id}-teams-collapse">
-					{foreach $teams as $teamId => $team}
-						<li class="list-group-item bg-team-{$team->system}-{$team->getColor()}">
-							<label class="cursor-pointer">
-								<input type="checkbox" class="form-check-input group-team-check mx-2 mt-0"
-									   data-id="{$teamId}" data-team="{$team->getColor()}">
-								{$team->name}
-							</label>
-						</li>
-						<li n:foreach="$team->getPlayers() as $pName => $player"
-								class="list-group-item group-player" data-player="{$pName}">
-							<label class="h-100 w-100 d-flex align-items-center cursor-pointer">
-								<strong class="col-2 counter">{$iterator->counter}.</strong>
-								<input type="checkbox" class="form-check-input group-player-check mx-2 mt-0"
-									   data-name="{$player->name}" data-skill="{$player->getSkill()}"
-									   data-vest="{$player->getFavouriteVest()}" data-team-id="{$teamId}"
-									   data-team-color="{$team->getColor()}" data-team-name="{$team->name}">
-								<span class="flex-fill">
+    {var int $vestCount = count($vests)}
+    <div class="card game-group mb-4" data-id="{$id}">
+        <div class="card-body">
+            <div class="input-group">
+                <input type="text" value="{$name}" class="form-control fs-5 group-name" maxlength="100">
+                <button type="button"
+                        data-toggle="tooltip" title="{lang 'Zobrazit hráče skupiny'}"
+                        class="btn btn-info show-group">
+                    <i class="fa-solid fa-user-group"></i>
+                </button>
+                <button type="button" data-toggle="tooltip" title="{lang 'Nahrát na vesty'}"
+                        class="btn btn-success loadPlayers">
+                    <i class="fa-solid fa-upload"></i>
+                </button>
+                <button type="button" data-toggle="tooltip" title="{lang 'Deaktivovat'}"
+                        class="btn btn-danger delete">
+                    <i class="fa-solid fa-trash"></i>
+                </button>
+            </div>
+            <div class="collapse" id="group-{$id}-players">
+                <div class="collapse-inner">
+                    <div class="text-end mt-2">
+                        <button type="button" class="btn btn-info show-teams">
+                            <i class="fa-solid fa-people-group"></i>
+                            {lang 'Zobrazit týmy'}
+                        </button>
+                        <button type="button" class="btn btn-info show-players d-none">
+                            <i class="fa-solid fa-person"></i>
+                            {lang 'Zobrazit hráče'}
+                        </button>
+                    </div>
+                    <div class="collapse">
+                        <ul class="list-group mt-1 group-teams collapse-inner" id="group-{$id}-teams-collapse">
+                            {foreach $teams as $teamId => $team}
+                                <li class="list-group-item bg-team-{$team->system}-{$team->getColor()}">
+                                    <label class="cursor-pointer">
+                                        <input type="checkbox" class="form-check-input group-team-check mx-2 mt-0"
+                                               data-id="{$teamId}" data-team="{$team->getColor()}">
+                                        {$team->name}
+                                    </label>
+                                </li>
+                                <li n:foreach="$team->getPlayers() as $pName => $player"
+                                        class="list-group-item group-player" data-player="{$pName}">
+                                    <label class="h-100 w-100 d-flex align-items-center cursor-pointer">
+                                        <strong class="col-2 counter">{$iterator->counter}.</strong>
+                                        <input type="checkbox" class="form-check-input group-player-check mx-2 mt-0"
+                                               data-name="{$player->name}" data-skill="{$player->getSkill()}"
+                                               data-vest="{$player->getFavouriteVest()}" data-team-id="{$teamId}"
+                                               data-team-color="{$team->getColor()}" data-team-name="{$team->name}">
+                                        <span class="flex-fill">
 								{$player->name}
 							</span>
-								<span class="px-2">
+                                        <span class="px-2">
 								{$player->getFavouriteVest()}
-                                    {$vestIcon|noescape}
+                                            {$vestIcon|noescape}
 							</span>
-								<span style="min-width: 3rem;" class="text-end">
+                                        <span style="min-width: 3rem;" class="text-end">
 								<span class="skill">{$player->getSkill()}</span>
 								<i class="fa-solid fa-star"></i>
 							</span>
-							</label>
-						</li>
-					{/foreach}
-				</ul>
-				<ul class="list-group mt-1 group-players collapse" id="group-{$id}-players-collapse">
-					<li n:foreach="$players as $pName => $player" class="list-group-item group-player"
-																  data-player="{$pName}">
-						<label class="h-100 w-100 d-flex align-items-center cursor-pointer">
-							<strong class="col-2 counter">{$iterator->counter}.</strong>
-							<input type="checkbox" class="form-check-input group-player-check mx-2 mt-0"
-								   data-name="{$player->name}" data-skill="{$player->getSkill()}"
-								   data-vest="{$player->getFavouriteVest()}"
-								   {if $iterator->counter0 < $vestCount}checked{/if}>
-							<span class="flex-fill">
+                                    </label>
+                                </li>
+                            {/foreach}
+                        </ul>
+                    </div>
+                    <div class="collapse">
+                        <ul class="list-group mt-1 group-players collapse-inner" id="group-{$id}-players-collapse">
+                            <li n:foreach="$players as $pName => $player" class="list-group-item group-player"
+                                                                          data-player="{$pName}">
+                                <label class="h-100 w-100 d-flex align-items-center cursor-pointer">
+                                    <strong class="col-2 counter">{$iterator->counter}.</strong>
+                                    <input type="checkbox" class="form-check-input group-player-check mx-2 mt-0"
+                                           data-name="{$player->name}" data-skill="{$player->getSkill()}"
+                                           data-vest="{$player->getFavouriteVest()}"
+                                           {if $iterator->counter0 < $vestCount}checked{/if}>
+                                    <span class="flex-fill">
 								{$player->name}
 							</span>
-							<span class="px-2">
+                                    <span class="px-2">
 								{$player->getFavouriteVest()}
-                                {$vestIcon|noescape}
+                                        {$vestIcon|noescape}
 							</span>
-							<span style="min-width: 3rem;" class="text-end">
+                                    <span style="min-width: 3rem;" class="text-end">
 								<span class="skill">{$player->getSkill()}</span>
 								<i class="fa-solid fa-star"></i>
 							</span>
-						</label>
-					</li>
-				</ul>
-			</div>
-		</div>
-	</div>
+                                </label>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 {/define}

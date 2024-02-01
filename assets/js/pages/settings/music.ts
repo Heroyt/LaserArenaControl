@@ -1,11 +1,13 @@
 import {startLoading, stopLoading} from "../../loaders";
-import {initTooltips, lang, toAscii} from "../../includes/functions";
+import {toAscii} from "../../includes/functions";
 import Sortable from "sortablejs";
 import {Tooltip} from "bootstrap";
 import {Music} from "../../interfaces/gameInterfaces";
 import autocomplete, {AutocompleteItem} from "autocompleter";
 import {fetchPost, ResponseError} from "../../includes/apiClient";
 import {deleteMusic, MusicUploadResponse} from "../../api/endpoints/settings/music";
+import {initTooltips} from '../../includes/tooltips';
+import {lang} from "../../includes/frameworkFunctions";
 
 
 export default function initMusicSettings() {

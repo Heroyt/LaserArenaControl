@@ -1,15 +1,11 @@
-import {Collapse} from "bootstrap";
-import {startLoading, stopLoading} from "../../loaders";
 import {GameData, GameGroupData, PlayerData} from "../../interfaces/gameInterfaces";
-import {initTooltips} from "../../includes/functions";
 import Game from "../../game/game";
 import {getGameGroup, getGameGroups, updateGameGroup} from "../../api/endpoints/gameGroups";
+import {initTooltips} from "../../includes/tooltips";
+import {collapseClose, collapseShow, collapseToggle, initCollapse} from "../../includes/collapse";
+import {GroupLoadType, NewGameGroupInterface} from "../../interfaces/groups";
 
-export enum GroupLoadType {
-    TEAMS, PLAYERS,
-}
-
-export default class NewGameGroup {
+export default class NewGameGroup implements NewGameGroupInterface {
 
     game: Game;
     gameGroupsWrapper: HTMLDivElement;
@@ -38,33 +34,31 @@ export default class NewGameGroup {
         const groupName = group.querySelector('.group-name') as HTMLInputElement;
 
         const showGroupBtn = group.querySelector('.show-group') as HTMLButtonElement;
-        const groupCollapse = new Collapse(group.querySelector(`#group-${id}-players`), {toggle: false});
+        const groupCollapse = group.querySelector(`#group-${id}-players`) as HTMLDivElement;
 
         showGroupBtn.addEventListener('click', () => {
-            groupCollapse.toggle();
+            collapseToggle(groupCollapse);
         });
 
         const showTeamsBtn = group.querySelector('.show-teams') as HTMLButtonElement;
         const showPlayersBtn = group.querySelector('.show-players') as HTMLButtonElement;
         const playersCollapseDom = group.querySelector('.group-players') as HTMLUListElement;
         const teamsCollapseDom = group.querySelector('.group-teams') as HTMLUListElement;
-        const playersCollapse = new Collapse(playersCollapseDom, {toggle: false});
-        playersCollapse.show();
-        const teamsCollapse = new Collapse(teamsCollapseDom, {toggle: false});
-        teamsCollapse.hide();
+        collapseShow(playersCollapseDom)
+        collapseClose(teamsCollapseDom);
 
         let timeout: NodeJS.Timeout = null;
 
         showTeamsBtn.addEventListener('click', () => {
-            playersCollapse.hide();
-            teamsCollapse.show();
+            collapseClose(playersCollapseDom)
+            collapseShow(teamsCollapseDom);
             showTeamsBtn.classList.add('d-none');
             showPlayersBtn.classList.remove('d-none');
             loadType = GroupLoadType.TEAMS;
         });
         showPlayersBtn.addEventListener('click', () => {
-            playersCollapse.show();
-            teamsCollapse.hide();
+            collapseShow(playersCollapseDom)
+            collapseClose(teamsCollapseDom);
             showPlayersBtn.classList.add('d-none');
             showTeamsBtn.classList.remove('d-none');
             loadType = GroupLoadType.PLAYERS;
@@ -76,29 +70,29 @@ export default class NewGameGroup {
                 clearTimeout(timeout);
             }
             timeout = setTimeout(() => {
-                startLoading(true);
+                document.dispatchEvent(new CustomEvent('loading.small.start'));
                 updateGameGroup(id, {
                     name: groupName.value,
                 })
                     .then(() => {
-                        stopLoading(true, true);
+                        document.dispatchEvent(new CustomEvent('loading.small.stop'));
                     })
                     .catch(() => {
-                        stopLoading(false, true);
+                        document.dispatchEvent(new CustomEvent('loading.small.error'));
                     })
             }, 1000);
         });
 
         deleteBtn.addEventListener('click', () => {
-            startLoading(true);
+            document.dispatchEvent(new CustomEvent('loading.small.start'));
             updateGameGroup(id, {active: false})
                 .then(() => {
-                    stopLoading(true, true);
+                    document.dispatchEvent(new CustomEvent('loading.small.stop'));
                     this.game.$group.querySelector(`option[value="${id}"]`).remove();
                     group.remove();
                 })
                 .catch(() => {
-                    stopLoading(false, true);
+                    document.dispatchEvent(new CustomEvent('loading.small.error'));
                 })
         });
 
@@ -195,6 +189,7 @@ export default class NewGameGroup {
                 response.forEach(groupData => {
                     this.addGroup(groupData, vestCount);
                 });
+                initCollapse(this.gameGroupsWrapper);
             })
             .catch(e => {
                 console.error(e);

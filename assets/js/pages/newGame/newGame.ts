@@ -1,5 +1,4 @@
 import Game from "../../game/game";
-import {lang} from "../../includes/functions";
 import EventServerInstance from "../../EventServer";
 import {startLoading, stopLoading} from "../../loaders";
 import {GameData} from "../../interfaces/gameInterfaces";
@@ -9,6 +8,7 @@ import Control, {GameStatus} from "./control";
 import {gatesStart, gatesStop} from "../../api/endpoints/gates";
 import {getLastGames, sendLoadGame} from "../../api/endpoints/games";
 import {initPrintButtons} from "../../components/resultsPrinting";
+import {lang} from '../../includes/frameworkFunctions';
 
 declare global {
 	const gameData: GameData;

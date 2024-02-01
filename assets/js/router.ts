@@ -1,5 +1,5 @@
-import {getLink} from "./includes/functions";
 import {PageInfo} from "./interfaces/pageInfo";
+import {getLink} from './includes/frameworkFunctions';
 
 const resultsReloadPages: { [index: string]: string[] } = {
 	'games-list': [],

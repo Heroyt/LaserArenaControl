@@ -333,7 +333,7 @@ export default class Game {
                 group.appendChild(input);
                 const label = document.createElement('label');
                 label.setAttribute('for', input.id);
-                label.classList.add('btn', 'btn-outline-warning');
+                label.classList.add('btn', 'btn-outline-primary');
                 label.innerText = value.value;
                 group.appendChild(label);
 

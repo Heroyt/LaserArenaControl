@@ -67,7 +67,9 @@ export async function fetchPost(path: string, body: string | FormData | object |
         },
     };
 
-    if (typeof (body) === 'object') {
+    if (body instanceof FormData) {
+        options.body = body;
+    } else if (typeof (body) === 'object') {
         options.body = JSON.stringify(body);
         // @ts-ignore
         options.headers['Content-Type'] = 'application/json';

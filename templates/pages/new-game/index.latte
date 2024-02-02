@@ -136,20 +136,20 @@
 {define sectionControls}
     <div id="control-btns" class="btn-group pb-2 pb-sm-0">
         <button type="submit" name="action" value="load" class="btn btn-warning" id="loadGame">
-            <i class="fa-solid fa-circle-chevron-up"></i>
+            <i class="fa-solid mx-1 fa-circle-chevron-up"></i>
             <span>{lang 'Nahrát hru', context: 'game.actions'}</span>
         </button>
         <button type="submit" name="action" value="start" class="btn btn-success" id="startGame">
-            <i class="fa-solid fa-circle-play"></i>
+            <i class="fa-solid mx-1 fa-circle-play"></i>
             <span>{lang 'Spustit hru', context: 'game.actions'}</span>
         </button>
         <button type="button" name="action" value="stop" class="btn btn-danger" id="stopGame">
-            <i class="fa-solid fa-circle-stop"></i>
+            <i class="fa-solid mx-1 fa-circle-stop"></i>
             <span>{lang 'Ukončit hru', context: 'game.actions'}</span>
         </button>
         <button n:if="$featureConfig->isFeatureEnabled('preparedGames')" type="button" class="btn btn-primary"
                                                                          id="prepareGame">
-            <i class="fa-solid fa-save"></i>
+            <i class="fa-solid mx-1 fa-save"></i>
             <span>{lang 'Připravit hru', context: 'game.actions'}</span>
         </button>
         {foreach $addedTemplates->controlButtons as $include}

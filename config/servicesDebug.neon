@@ -1,8 +1,13 @@
 includes:
 	- services-common.neon
 parameters:
-	memcached:
-		host: 'cache'
-		port: 11211
-		prefix: ''
 services:
+	templating.latte.engine:
+		create: Latte\Engine()
+		setup:
+			- setTempDirectory(%templating.tmpPath%)
+			- addExtension(@templating.latte.extension)
+			- addExtension(@cache.extension.latte)
+			- setAutoRefresh(true)
+		tags:
+			- templating

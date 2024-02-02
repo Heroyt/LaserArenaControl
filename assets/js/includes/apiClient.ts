@@ -64,13 +64,10 @@ export async function fetchPost(path: string, body: string | FormData | object |
         method: 'POST',
         headers: {
             'X-Requested-With': 'XMLHttpRequest',
-            'Content-Type': 'application/x-www-form-urlencoded',
         },
     };
 
-    if (body instanceof FormData) {
-        options.body = body;
-    } else if (typeof (body) === 'object') {
+    if (typeof (body) === 'object') {
         options.body = JSON.stringify(body);
         // @ts-ignore
         options.headers['Content-Type'] = 'application/json';

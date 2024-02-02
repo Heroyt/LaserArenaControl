@@ -12,11 +12,11 @@
     </div>
     <h3>{lang 'Neaktivní skupiny', context: 'settings'}</h3>
     <p>
-        <button type="button" data-toggle="collapse" data-target="#inactive-groups" class="btn btn-info">
+        <button type="button" data-toggle="collapse" data-target="#inactive-groups-collapse" class="btn btn-info">
             {lang 'Zobrazit', context: 'actions'}
         </button>
     </p>
-    <div class="collapse-grid">
+    <div class="collapse-grid" id="inactive-groups-collapse">
         <div class="inactive-groups collapse-inner" id="inactive-groups">
             {foreach $groupsInactive as $id => $group}
                 {include groupCard, $id, $group}

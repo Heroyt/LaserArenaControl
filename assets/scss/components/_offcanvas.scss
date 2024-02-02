@@ -4,7 +4,7 @@
 	--tag-padding-x: 1rem;
 	--tag-padding-y: 0;
 	--tag-radius: 1rem;
-	--tag-width: 8rem;
+  --tag-width: 9rem;
 
 	&.show,
 	&.showing {
@@ -22,12 +22,32 @@
 	width: var(--tag-width, 7rem);
 	z-index: calc(50 - var(--order, 0));
 
+  i {
+    margin-top: .5rem;
+    position: absolute;
+    width: 100%;
+  }
+
 	span {
 		display: inline-block;
 		padding: var(--tag-padding-y, 0) var(--tag-padding-x, 1rem);
 		position: relative;
 		width: var(--tag-width, 7rem);
 	}
+
+  @include media-breakpoint-down(sm) {
+    --tag-width: 5rem;
+
+    i {
+      margin: 0;
+      position: relative;
+      top: 50%;
+      translate: 0 -100%;
+    }
+    span {
+      display: none !important;
+    }
+  }
 }
 
 %rotated-tag {
@@ -48,7 +68,7 @@
 			rotate: -90deg;
 			top: 50%;
 			transform-origin: center;
-			translate: calc((var(--tag-height, 2rem) - 8rem) / 2) -50%;
+      translate: calc((var(--tag-height, 2rem) - var(--tag-width, 7rem)) / 2) -50%;
 		}
 	}
 }

@@ -8,6 +8,7 @@
          aria-labelledby="groupsLabel">
         <div class="offcanvas-tag bg-blue-600 text-bg-blue-600" data-bs-toggle="offcanvas" data-bs-target="#groups"
              style="--order:{$order};">
+            <i class="fa-solid fa-people-group"></i>
 			<span>
 				{lang 'Skupiny'}
 			</span>
@@ -18,9 +19,6 @@
                         class="fa-solid fa-xmark"></i></button>
         </div>
         <div class="offcanvas-body" id="game-groups" data-vests="{$vestCount}">
-            {*{foreach $groups as $group}
-                {include gameGroupCard, $group->id, $group->name, $group->getPlayers(), $group->getTeams(), $vestIcon}
-            {/foreach}*}
         </div>
     </div>
     <template id="new-game-group">
@@ -48,7 +46,7 @@
                     <i class="fa-solid fa-trash"></i>
                 </button>
             </div>
-            <div class="collapse" id="group-{$id}-players">
+            <div class="collapse-grid" id="group-{$id}-players">
                 <div class="collapse-inner">
                     <div class="text-end mt-2">
                         <button type="button" class="btn btn-info show-teams">
@@ -60,7 +58,7 @@
                             {lang 'Zobrazit hráče'}
                         </button>
                     </div>
-                    <div class="collapse">
+                    <div class="collapse-grid">
                         <ul class="list-group mt-1 group-teams collapse-inner" id="group-{$id}-teams-collapse">
                             {foreach $teams as $teamId => $team}
                                 <li class="list-group-item bg-team-{$team->system}-{$team->getColor()}">
@@ -94,7 +92,7 @@
                             {/foreach}
                         </ul>
                     </div>
-                    <div class="collapse">
+                    <div class="collapse-grid">
                         <ul class="list-group mt-1 group-players collapse-inner" id="group-{$id}-players-collapse">
                             <li n:foreach="$players as $pName => $player" class="list-group-item group-player"
                                                                           data-player="{$pName}">

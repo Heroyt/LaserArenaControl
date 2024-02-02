@@ -328,11 +328,14 @@ export default class Player {
 						this.$vest.style.setProperty('color', $team.dataset.text, 'important');
 					}
 				}
+
+                this.row.dataset.team = this.team;
 				found = true;
 			}
 		});
 		if (!found) {
 			this.team = null;
+            this.row.dataset.team = '0';
 
 			this.row.style.removeProperty('--shadow-color');
 			this.$vest.style.removeProperty('background-color');

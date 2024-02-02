@@ -7,6 +7,7 @@ import CustomLoadMode from "./customLoadMode";
 // @ts-ignore
 import Sortable from "sortablejs/modular/sortable.core.esm.js";
 import CustomSwapPlugin from "./customSwapPlugin";
+import {collapseClose, collapseShow} from "../includes/collapse";
 
 declare global {
     const messages: { [index: string]: string };
@@ -289,8 +290,10 @@ export default class Game {
         const values = Object.values(variations);
         if (values.length === 0) {
             this.$variationsHideBtn.classList.add('d-none');
+            collapseClose(this.$modeVariations.parentElement);
         } else {
             this.$variationsHideBtn.classList.remove('d-none');
+            collapseShow(this.$modeVariations.parentElement);
         }
         values.forEach(data => {
             this.addVariation(data[0].variation, data);

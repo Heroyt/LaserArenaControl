@@ -23,6 +23,10 @@ input[readonly] {
 	z-index: 10;
 }
 
+.team-select-wrapper {
+  --width: 2rem;
+}
+
 label.team-color {
 	content: ' ';
 	cursor: pointer;
@@ -30,7 +34,7 @@ label.team-color {
 	opacity: .4;
 	position: relative;
 	transition: opacity .1s ease;
-	width: 2rem;
+  width: var(--width, 2rem);
 
 	.team-color-input:checked + & {
 		align-items: center;
@@ -52,11 +56,9 @@ label.team-color {
 		display: none;
 	}
 
-	@include media-breakpoint-down(sm) {
-		& {
-			height: 2.5rem;
-		}
-	}
+  @include media-breakpoint-down(sm) {
+    height: 2.5rem;
+  }
 }
 
 .team-color-input {

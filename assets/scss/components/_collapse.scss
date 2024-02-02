@@ -1,4 +1,4 @@
-.collapse {
+.collapse-grid {
   display: grid;
   grid-template-rows: 0fr;
 
@@ -13,5 +13,13 @@
 
   .collapse-inner {
     overflow: hidden;
+    transition: padding 200ms ease;
+  }
+
+  &:not(.show) {
+    .collapse-inner {
+      padding-bottom: 0 !important;
+      padding-top: 0 !important;
+    }
   }
 }

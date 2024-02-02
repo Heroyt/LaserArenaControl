@@ -70,8 +70,6 @@ export async function fetchPost(path: string, body: string | FormData | object |
 
     if (body instanceof FormData) {
         options.body = body;
-        // @ts-ignore
-        options.headers['Content-Type'] = 'multipart/form-data';
     } else if (typeof (body) === 'object') {
         options.body = JSON.stringify(body);
         // @ts-ignore

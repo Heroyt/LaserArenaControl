@@ -26,19 +26,19 @@ class Chromium
 		],
 		[
 			'name'     => 'marginTop',
-			'contents' => '0',
+			'contents' => '0.2',
 		],
 		[
 			'name'     => 'marginLeft',
-			'contents' => '0',
+			'contents' => '0.2',
 		],
 		[
 			'name'     => 'marginRight',
-			'contents' => '0',
+			'contents' => '0.2',
 		],
 		[
 			'name'     => 'marginBottom',
-			'contents' => '0',
+			'contents' => '0.2',
 		],
 		[
 			'name'     => 'emulatedMediaType',

@@ -85,7 +85,7 @@ services:
       - /Users/Heroyt/Projects/LaserArenaControl/docker/nginx:/etc/nginx
   gotenberg:
     restart: always
-    image: gotenberg/gotenberg:7
+    image: gotenberg/gotenberg:8
     networks:
       - backend
     ports:

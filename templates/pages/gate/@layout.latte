@@ -131,12 +131,12 @@
 	</script>
 
 
-    <script src="{getUrl}dist/runtime~main.js?{\App\Core\App::getCacheVersion()}"></script>
-    <script src="{getUrl}dist/bootstrap.js?{\App\Core\App::getCacheVersion()}"></script>
-    <script src="{getUrl}dist/vendors.js?{\App\Core\App::getCacheVersion()}"></script>
-    <script src="{getUrl}dist/main.js?{\App\Core\App::getCacheVersion()}"></script>
-    <script n:foreach="$addJs as $js" src="{getUrl}dist/{$js}?v={\App\Core\App::getCacheVersion()}"
-									  type="module"></script>
+    <script src="{getUrl}dist/main.js?v={\App\Core\App::getCacheVersion()}" type="module"></script>
+    <script n:foreach="$addJs as $js" src="{getUrl}dist/{$js}?v={\App\Core\App::getCacheVersion()}" type="module"
+                                      defer></script>
+    <script src="{getUrl}dist/bootstrap.js?v={\App\Core\App::getCacheVersion()}" type="module" defer></script>
+    <script src="{getUrl}dist/vendors.js?v={\App\Core\App::getCacheVersion()}" type="module" defer></script>
+    <script src="{getUrl}dist/common.js?v={\App\Core\App::getCacheVersion()}" type="module" defer></script>
 	{include svgSymbols}
 	</body>
 	</html>

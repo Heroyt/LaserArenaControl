@@ -5,7 +5,9 @@
 
 namespace App\Services;
 
+use App\Core\App;
 use JsonException;
+use Lsr\Core\Config;
 use Redis;
 
 /**
@@ -16,7 +18,21 @@ class EventService
 
 	public const TABLE = 'events';
 
+	private static string $eventUrl;
+
 	public function __construct(private readonly Redis $redis) {
+	}
+
+	public static function getEventUrl(): string {
+		if (!isset(self::$eventUrl)) {
+			/** @var Config $config */
+			$config = App::getContainer()->getServiceType(Config::class);
+			self::$eventUrl = (App::isSecure() ? 'https://' : 'http://') .
+				($config->getConfig(
+					'ENV'
+				)['EVENT_URL'] ?? ($_SERVER['HTTP_HOST'] ?? 'localhost') . ':' . self::getEventPort());
+		}
+		return self::$eventUrl;
 	}
 
 	public static function getEventPort(): int {

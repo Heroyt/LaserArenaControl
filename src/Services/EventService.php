@@ -26,7 +26,7 @@ class EventService
 	public static function getEventUrl(): string {
 		if (!isset(self::$eventUrl)) {
 			/** @var Config $config */
-			$config = App::getContainer()->getServiceType(Config::class);
+			$config = App::getServiceByType(Config::class);
 			self::$eventUrl = (App::isSecure() ? 'https://' : 'http://') .
 				($config->getConfig(
 					'ENV'

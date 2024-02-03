@@ -16,7 +16,7 @@ declare global {
     let activeGame: GameData | null;
 }
 
-/*if ('serviceWorker' in navigator) {
+if ('serviceWorker' in navigator) {
 	window.addEventListener('load', () => {
 		navigator.serviceWorker.register('/dist/service-worker.js', {scope: '/'}).then(registration => {
 			console.log('SW registered: ', registration);
@@ -24,7 +24,7 @@ declare global {
 			console.log('SW registration failed: ', registrationError);
 		});
 	});
-}*/
+}
 
 activeGame = null;
 

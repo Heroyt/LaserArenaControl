@@ -59,7 +59,7 @@ class EventServer {
 	connect() {
 		try {
             this.source = new EventSource(eventSourceURI);
-            console.log(this.source.readyState);
+            console.log('SSE connecting', this.source.readyState);
 		} catch (e) {
 			console.error(e.message);
 			setTimeout(this.connect, 1000); // Retry in one second
@@ -83,7 +83,10 @@ class EventServer {
         this.source.onerror = (err: ErrorEvent) => {
             console.error('SSE encountered error: ', err.message, 'Closing SEE');
             this.source.close();
-            setTimeout(this.connect, 1000); // Retry in one second
+            setTimeout(() => {
+                console.log('Reconnecting SSE');
+                this.connect();
+            }, 1000); // Retry in one second
 		}
 	}
 

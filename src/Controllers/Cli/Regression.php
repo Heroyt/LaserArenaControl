@@ -5,7 +5,7 @@ namespace App\Controllers\Cli;
 use App\Exceptions\InsuficientRegressionDataException;
 use App\GameModels\Factory\GameModeFactory;
 use App\GameModels\Game\Enums\GameModeType;
-use App\GameModels\Tools\Evo5\RegressionStatCalculator;
+use App\GameModels\Tools\Lasermaxx\RegressionStatCalculator;
 use App\Services\RegressionCalculator;
 use Lsr\Core\Controllers\CliController;
 use Lsr\Core\Requests\CliRequest;

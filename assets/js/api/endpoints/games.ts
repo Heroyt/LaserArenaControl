@@ -19,8 +19,8 @@ export type LastGamesResponse = GameData[];
 
 export type LoadGameResponse = { status: string, mode?: string };
 
-export async function sendLoadGame(data: FormData): Promise<LoadGameResponse> {
-    return fetchPost('/', data);
+export async function sendLoadGame(system: string, data: FormData): Promise<LoadGameResponse> {
+    return fetchPost(`/api/game/load/${system}`, data);
 }
 
 export async function getLoadedGame(): Promise<LoadedGameResponse> {

@@ -10,10 +10,6 @@ import {
 } from "../../api/endpoints/preparedGames";
 import {initTooltips} from '../../includes/tooltips';
 
-declare global {
-	const system: string;
-}
-
 interface PreparedGameData {
 	id_game: number,
 	datetime: PhpDateTime,

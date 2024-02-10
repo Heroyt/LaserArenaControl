@@ -5,7 +5,7 @@ namespace App\Services\Evo5;
 use App\Core\Info;
 use App\GameModels\Factory\GameModeFactory;
 use App\GameModels\Game\Enums\GameModeType;
-use App\GameModels\Tools\Evo5\RegressionStatCalculator;
+use App\GameModels\Tools\Lasermaxx\RegressionStatCalculator;
 use App\Services\RegressionCalculator;
 use DateTimeImmutable;
 use JsonException;

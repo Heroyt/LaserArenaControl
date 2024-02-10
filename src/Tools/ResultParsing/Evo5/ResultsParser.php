@@ -3,7 +3,7 @@
  * @author Tomáš Vojík <xvojik00@stud.fit.vutbr.cz>, <vojik@wboy.cz>
  */
 
-namespace App\Tools\Evo5;
+namespace App\Tools\ResultParsing\Evo5;
 
 use App\Exceptions\GameModeNotFoundException;
 use App\Exceptions\ResultsParseException;
@@ -11,16 +11,13 @@ use App\GameModels\Factory\GameModeFactory;
 use App\GameModels\Game\Enums\GameModeType;
 use App\GameModels\Game\Evo5\Game;
 use App\GameModels\Game\Evo5\Player;
+use App\GameModels\Game\Evo5\Scoring;
 use App\GameModels\Game\Evo5\Team;
-use App\GameModels\Game\Scoring;
 use App\GameModels\Game\Timing;
-use App\Models\Auth\Player as User;
-use App\Models\GameGroup;
-use App\Models\MusicMode;
 use App\Tools\AbstractResultsParser;
+use App\Tools\ResultParsing\WithMetadata;
 use DateTime;
 use JsonException;
-use Lsr\Core\Exceptions\ModelNotFoundException;
 use Lsr\Core\Exceptions\ValidationException;
 use Lsr\Logging\Exceptions\DirectoryCreationException;
 use Lsr\Logging\Logger;
@@ -31,6 +28,7 @@ use Throwable;
  */
 class ResultsParser extends AbstractResultsParser
 {
+	use WithMetadata;
 
 	public const REGEXP = '/([A-Z]+){([^{}]*)}#/';
 
@@ -55,6 +53,7 @@ class ResultsParser extends AbstractResultsParser
 		// Results file info
 		$pathInfo = pathinfo($this->fileName);
 		preg_match('/(\d+)/', $pathInfo['filename'], $matches);
+		$game->resultsFile = $pathInfo['filename'];
 		$game->fileNumber = (int)($matches[0] ?? 0);
 		$fTime = filemtime($this->fileName);
 		if (is_int($fTime)) {
@@ -268,21 +267,7 @@ class ResultsParser extends AbstractResultsParser
 						throw new ResultsParseException('Invalid argument count in GROUP - ' . $argsCount . ' ' . json_encode($args, JSON_THROW_ON_ERROR));
 					}
 					// Parse metadata
-					/** @var string|false $decodedJson */
-					/** @noinspection PhpCastIsUnnecessaryInspection */
-					$decodedJson = gzinflate(
-						(string)gzinflate(
-							(string)base64_decode($args[1])
-						)
-					);
-					if ($decodedJson !== false) {
-						try {
-							/** @var array<string,string> $meta Meta data from game */
-							$meta = json_decode($decodedJson, true, 512, JSON_THROW_ON_ERROR);
-						} catch (JsonException) {
-							// Ignore meta
-						}
-					}
+					$meta = $this->decodeMetadata($args[1]);
 					break;
 
 				// PACK contains information about vest settings
@@ -329,7 +314,7 @@ class ResultsParser extends AbstractResultsParser
 				// - Hits
 				// - Deaths
 				// - Position
-				// - ???
+				// - MyLasermaxx URL
 				// - ???
 				case 'PACKX':
 					if ($argsCount !== 7 && $argsCount !== 8) {
@@ -345,6 +330,7 @@ class ResultsParser extends AbstractResultsParser
 					$player->hits = (int)$args[3];
 					$player->deaths = (int)$args[4];
 					$player->position = (int)$args[5];
+					$player->myLasermaxx = $args[6];
 					break;
 
 				// PACKY contains player's additional results
@@ -449,100 +435,17 @@ class ResultsParser extends AbstractResultsParser
 		}
 
 		// Process metadata
-		if (!empty($meta) && !empty($meta['hash'])) {
-			// Validate metadata
-			$players = [];
-			/** @var Player $player */
-			foreach ($game->getPlayers() as $player) {
-				$metaStartTeamKey = 'p' . $player->vest . '-startTeam';
-				$players[(string)$player->vest] = [
-					'vest' => (string)$player->vest,
-					'name' => $player->name,
-					'team' => (string)($meta[$metaStartTeamKey] ?? $player->teamNum),
-					'vip' => $player->vip,
-				];
-			}
-			ksort($players);
-			$players = array_values($players);
-			// Calculate hash
-			$hash = md5(json_encode($players, JSON_THROW_ON_ERROR));
-
-			// Compare
-			if ($hash !== $meta['hash']) {
-				// Hashes don't match -> ignore metadata
-				try {
-					$logger = new Logger(LOG_DIR . 'results/', 'import');
-					$logger->warning('Game meta hashes doesn\'t match.');
-				} catch (DirectoryCreationException) {
-				}
-
-				$this->processExtensions($game, []);
-				return $game;
-			}
-
-			if (!empty($meta['music']) && ((int)$meta['music']) > 0) {
-				try {
-					$game->music = MusicMode::get((int)$meta['music']);
-				} catch (ModelNotFoundException) {
-					// Ignore
-				}
-			}
-
-			// Set a game group if set
-			if (!empty($meta['group'])) {
-				if ($meta['group'] !== 'new') {
-					try {
-						// Find existing group
-						$group = GameGroup::get((int)$meta['group']);
-						// If found, clear its players cache to account for the newly-added (imported) game
-						$group->clearCache();
-					} catch (ModelNotFoundException) {
-					}
-				}
-
-				// Default to creating a new game group if the group was not found
-				if (!isset($group)) {
-					$group = new GameGroup();
-					$group->name = sprintf(lang('Skupina %s'), isset($game->start) ? $game->start->format('d.m.Y H:i') : '');
-				}
-
-				$game->group = $group;
-			}
-
-			/** @var Player $player */
-			foreach ($game->getPlayers() as $player) {
-				// Names from game are strictly ASCII
-				// If a name contained any non ASCII character, it is coded in the metadata
-				if (!empty($meta['p' . $player->vest . 'n'])) {
-					$player->name = $meta['p' . $player->vest . 'n'];
-				}
-
-				// Check for player's user code
-				if (!empty($meta['p' . $player->vest . 'u'])) {
-					$code = $meta['p' . $player->vest . 'u'];
-					$user = User::getByCode($code);
-
-					// Check the public API for user by code
-					if (!isset($user)) {
-						$user = $this->playerProvider->findPublicPlayerByCode($code);
-						if (isset($user) && !$user->save()) {
-							// User found, but the save failed
-							$user = null;
-						}
-					}
-					if (isset($user)) {
-						$player->user = $user;
-					}
-				}
-			}
-
-			/** @var Team $team */
-			foreach ($game->getTeams() as $team) {
-				// Names from game are strictly ASCII
-				// If a name contained any non ASCII character, it is coded in the metadata
-				if (!empty($meta['t' . $team->color . 'n'])) {
-					$team->name = $meta['t' . $team->color . 'n'];
-				}
+		if ($this->validateMetadata($meta, $game)) {
+			$this->setMusicModeFromMeta($game, $meta);
+			$this->setGroupFromMeta($game, $meta);
+			$this->setPlayersMeta($game, $meta);
+			$this->setTeamsMeta($game, $meta);
+		}
+		else {
+			try {
+				$logger = new Logger(LOG_DIR . 'results/', 'import');
+				$logger->warning('Game meta is not valid.', $meta);
+			} catch (DirectoryCreationException) {
 			}
 		}
 

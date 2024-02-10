@@ -7,6 +7,7 @@
 use App\Controllers\Api\Debug;
 use App\Controllers\Api\Events;
 use App\Controllers\Api\GameHelpers;
+use App\Controllers\Api\GameLoading;
 use App\Controllers\Api\Games;
 use App\Controllers\Api\Logs;
 use App\Controllers\Api\Mount;
@@ -21,23 +22,16 @@ $apiGroup = Route::group('api')
                  ->post('install', [Updater::class, 'install'])
                  ->post('events', [Events::class, 'triggerEvent']);
 
-$resultGroup = $apiGroup->group('results')
-                        ->post('import', [Results::class, 'import'])
-                        ->post(
-	                        'import/{game}',
-	                        [Results::class, 'importGame']
-                        )
-                        ->get('last', [Results::class, 'getLastGameFile'])
-                        ->get('download', [Results::class, 'downloadLastGameFiles']);
+$resultGroup = $apiGroup->group('results')->post('import', [Results::class, 'import'])->post(
+	'import/{game}', [Results::class, 'importGame']
+)->get('last', [Results::class, 'getLastGameFile'])->get('download', [Results::class, 'downloadLastGameFiles']);
 
 $gitGroup = $apiGroup->group('git')
                      ->post('pull', [Updater::class, 'pull'])
                      ->post('fetch', [Updater::class, 'fetch'])
                      ->post('status', [Updater::class, 'status']);
 
-$logGroup = $apiGroup->group('logs')
-                     ->get('', [Logs::class, 'show'])
-                     ->get('download', [Logs::class, 'download']);
+$logGroup = $apiGroup->group('logs')->get('', [Logs::class, 'show'])->get('download', [Logs::class, 'download']);
 
 $debugGroup = $apiGroup->group('debug')
                        ->get('pwd', [Debug::class, 'pwd'])
@@ -49,6 +43,7 @@ $debugGroup = $apiGroup->group('debug')
                        ->get('glob', [Debug::class, 'glob']);
 
 $gameGroup = $apiGroup->group('game')
+	->post('load/{system}', [GameLoading::class, 'loadGame'])
                       ->get('loaded', [GameHelpers::class, 'getLoadedGameInfo'])
                       ->get('gate', [GameHelpers::class, 'getGateGameInfo'])
                       ->post('{code}/recalcSkill', [GameHelpers::class, 'recalcSkill'])

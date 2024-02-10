@@ -7,7 +7,7 @@ use App\GameModels\Factory\GameFactory;
 use App\GameModels\Game\Player;
 use App\Services\ImportService;
 use App\Services\PlayerProvider;
-use App\Tools\Evo5\ResultsParser;
+use App\Tools\ResultParsing\Evo5\ResultsParser;
 use Exception;
 use JsonException;
 use Lsr\Core\Constants;

@@ -45,19 +45,23 @@ services:
 	symfony.lock.store: Symfony\Component\Lock\Store\RedisStore(@redis)
 	symfony.lock.factory: Symfony\Component\Lock\LockFactory(@symfony.lock.store)
 
-	events: App\Services\EventService
-	features: App\Services\FeatureConfig
-	regression.evo5: App\GameModels\Tools\Evo5\RegressionStatCalculator
-	liga: App\Services\LigaApi::getInstance()
-	playersProvider: App\Services\PlayerProvider
-	gotenberg: App\Services\GotenbergService(%gotenberg.host%, %gotenberg.port%)
 	caching.journal: Lsr\Core\Caching\RedisJournal(@redis)
 	cache.storage: Lsr\Core\Caching\RedisStorage(@redis, '', @caching.journal)
 	cache: Lsr\Core\Caching\Cache(@cache.storage, null, %constants.debug%)
-	evo5.simulator: App\Services\Evo5\GameSimulator
+
+	events: App\Services\EventService
+	features: App\Services\FeatureConfig
+
+	liga: App\Services\LigaApi::getInstance()
+	playersProvider: App\Services\PlayerProvider
+	gotenberg: App\Services\GotenbergService(%gotenberg.host%, %gotenberg.port%)
 	resultPrint: App\Services\ResultPrintService
 	resultPrecache: App\Services\ResultsPrecacheService
 	gamesImport: App\Services\ImportService
+
+	lasermaxx.regression: App\GameModels\Tools\Lasermaxx\RegressionStatCalculator
+	evo5.simulator: App\Services\Evo5\GameSimulator
+	evo5.gameLoader: App\Tools\GameLoading\Evo5GameLoader
 
 	cron.gamesSync: App\Cron\GamesSyncJob(%gamesSync.limit%, %gamesSync.timeout%)
 	cron.vestSync: App\Cron\VestSyncJob

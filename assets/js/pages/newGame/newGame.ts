@@ -12,6 +12,7 @@ import {lang} from '../../includes/frameworkFunctions';
 
 declare global {
 	const gameData: GameData;
+    const system: string;
 	const vestIcon: string;
 }
 
@@ -276,7 +277,7 @@ export default function initNewGamePage() {
 
 	function loadGame(data: FormData, callback: null | (() => void) = null): void {
 		startLoading();
-        sendLoadGame(data)
+        sendLoadGame(system, data)
             .then(response => {
 				stopLoading();
                 if (!response.mode || response.mode === '') {
@@ -296,7 +297,7 @@ export default function initNewGamePage() {
 
 	function loadStartGame(data: FormData, callback: null | (() => void) = null): void {
 		startLoading();
-        sendLoadGame(data)
+        sendLoadGame(system, data)
             .then(response => {
 				stopLoading();
                 if (!response.mode || response.mode === '') {

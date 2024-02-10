@@ -9,7 +9,7 @@ use App\GameModels\Game\Game;
 use App\GameModels\Game\Player;
 use App\GameModels\Game\Team;
 use App\Services\PlayerProvider;
-use App\Tools\Evo5\ResultsParser;
+use App\Tools\ResultParsing\Evo5\ResultsParser;
 use Lsr\Core\Models\Model;
 use PHPUnit\Framework\TestCase;
 use ReflectionProperty;

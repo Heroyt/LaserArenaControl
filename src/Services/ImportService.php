@@ -7,12 +7,11 @@ namespace App\Services;
 
 use App\Core\App;
 use App\Core\Info;
-use App\Exceptions\GameModeNotFoundException;
 use App\Exceptions\ResultsParseException;
 use App\GameModels\Factory\GameFactory;
 use App\GameModels\Game\Game;
 use App\GameModels\Game\Player;
-use App\Tools\Evo5\ResultsParser;
+use App\Tools\ResultParsing\Evo5\ResultsParser;
 use Dibi\Exception;
 use JsonException;
 use Lsr\Core\Constants;
@@ -20,7 +19,6 @@ use Lsr\Core\Controllers\ApiController;
 use Lsr\Core\Controllers\CliController;
 use Lsr\Core\Exceptions\ModelNotFoundException;
 use Lsr\Core\Exceptions\ValidationException;
-use Lsr\Exceptions\FileException;
 use Lsr\Logging\Exceptions\DirectoryCreationException;
 use Lsr\Logging\Logger;
 use Throwable;
@@ -38,9 +36,7 @@ class ImportService
 	private bool $cliFlag = false;
 	private bool $apiFlag = false;
 
-	public function __construct(
-		private readonly EventService $eventService
-	) {
+	public function __construct(private readonly EventService $eventService) {
 	}
 
 	/**
@@ -63,7 +59,7 @@ class ImportService
 		$this->cliFlag = $controller instanceof CliController;
 
 		try {
-			$logger = new Logger(LOG_DIR.'results/', 'import');
+			$logger = new Logger(LOG_DIR . 'results/', 'import');
 		} catch (DirectoryCreationException $e) {
 			$this->errorHandle($e, 500);
 			return;
@@ -76,9 +72,9 @@ class ImportService
 
 		$resultsDir = trailingSlashIt($resultsDir);
 		/** @var string[] $resultFiles */
-		$resultFiles = glob($resultsDir.'*.game');
+		$resultFiles = glob($resultsDir . '*.game');
 		/** @var int $lastCheck */
-		$lastCheck = Info::get($resultsDir.'check', 0);
+		$lastCheck = Info::get($resultsDir . 'check', 0);
 
 		$now = time();
 
@@ -101,9 +97,9 @@ class ImportService
 			if (filemtime($file) > $lastCheck) {
 				$total++;
 				if ($this->cliFlag) {
-					echo 'Importing: '.$file.PHP_EOL;
+					echo 'Importing: ' . $file . PHP_EOL;
 				}
-				$logger->info('Importing file: '.$file);
+				$logger->info('Importing file: ' . $file);
 				try {
 					$parser = new ResultsParser($file, App::getContainer()->getByType(PlayerProvider::class));
 					$game = $parser->parse();
@@ -121,14 +117,16 @@ class ImportService
 						// TODO: Detect manually stopped game and delete game-started
 
 						// The game is started
-						if ($game->started && isset($game->fileTime) && ($now - $game->fileTime->getTimestamp()) <= Constants::GAME_STARTED_TIME) {
+						if ($game->started && isset($game->fileTime) && ($now - $game->fileTime->getTimestamp(
+								)) <= Constants::GAME_STARTED_TIME) {
 							$lastUnfinishedGame = $game;
 							$lastEvent = 'game-started';
 							$logger->debug('Game is started');
 							continue;
 						}
 						// The game is loaded
-						if (!$game->started && isset($game->fileTime) && ($now - $game->fileTime->getTimestamp()) <= Constants::GAME_LOADED_TIME) {
+						if (!$game->started && isset($game->fileTime) && ($now - $game->fileTime->getTimestamp(
+								)) <= Constants::GAME_LOADED_TIME) {
 							// Check if the last unfinished game is not created later
 							if (isset($lastUnfinishedGame) && $game->fileTime < $lastUnfinishedGame->fileTime) {
 								continue;
@@ -160,11 +158,11 @@ class ImportService
 
 					// Refresh the started-game info to stop the game timer
 					/** @var Game $startedGame */
-					$startedGame = Info::get($game::SYSTEM.'-game-started');
+					$startedGame = Info::get($game::SYSTEM . '-game-started');
 					/* @phpstan-ignore-next-line */
 					if (isset($startedGame) && $game->fileNumber === $startedGame->fileNumber) {
 						try {
-							Info::set($game::SYSTEM.'-game-started', null);
+							Info::set($game::SYSTEM . '-game-started', null);
 						} catch (Exception) {
 						}
 					}
@@ -174,7 +172,7 @@ class ImportService
 						$finishedGames[] = $gameModel;
 					}
 					$imported++;
-				} catch (FileException|GameModeNotFoundException|ResultsParseException|ValidationException $e) {
+				} catch (Throwable $e) {
 					$logger->error($e->getMessage());
 					$logger->debug($e->getTraceAsString());
 					$this->errorHandle($e);
@@ -183,17 +181,18 @@ class ImportService
 		}
 		if ($imported > 0) {
 			try {
-				Info::set($resultsDir.'check', $now);
+				Info::set($resultsDir . 'check', $now);
 			} catch (Exception $e) {
 				$this->errorHandle($e);
 			}
 		}
 
 		if (isset($lastUnfinishedGame)) {
-			/* @phpstan-ignore-next-line */
-			$logger->debug('Setting last unfinished game: "'.$lastUnfinishedGame::SYSTEM.'-'.$lastEvent.'" - '.$lastUnfinishedGame->fileNumber);
+			$logger->debug(
+				'Setting last unfinished game: "' . $lastUnfinishedGame::SYSTEM . '-' . $lastEvent . '" - ' . $lastUnfinishedGame->resultsFile
+			);
 			try {
-				Info::set($lastUnfinishedGame::SYSTEM.'-'.$lastEvent, $lastUnfinishedGame);
+				Info::set($lastUnfinishedGame::SYSTEM . '-' . $lastEvent, $lastUnfinishedGame);
 				/* @phpstan-ignore-next-line */
 				$this->eventService->trigger($lastEvent, ['game' => $lastUnfinishedGame->fileNumber]);
 			} catch (Exception $e) {
@@ -228,6 +227,7 @@ class ImportService
 				$logger->warning('Failed to synchronize games to public');
 			}
 
+			/** @var ResultsPrecacheService $precacheService */
 			$precacheService = App::getServiceByType(ResultsPrecacheService::class);
 			$precacheService->prepareGamePrecache(...array_map(static fn(Game $game) => $game->code, $finishedGames));
 		}
@@ -236,7 +236,10 @@ class ImportService
 		}
 
 		if ($this->cliFlag) {
-			echo 'Successfully imported: '.$imported.'/'.$total.' in '.round(microtime(true) - $start, 2).'s'.PHP_EOL;
+			echo 'Successfully imported: ' . $imported . '/' . $total . ' in ' . round(
+					microtime(true) - $start,
+					2
+				) . 's' . PHP_EOL;
 			exit(0);
 		}
 		if ($this->apiFlag) {
@@ -268,9 +271,9 @@ class ImportService
 				$info = $data;
 			}
 			else if ($data instanceof \Exception) {
-				$info = 'An exception has occurred: '.$data->getMessage();
+				$info = 'An exception has occurred: ' . $data->getMessage();
 				if ($data instanceof Exception) {
-					$info .= ' - '.$data->getSql();
+					$info .= ' - ' . $data->getSql();
 				}
 			}
 			/* @phpstan-ignore-next-line */

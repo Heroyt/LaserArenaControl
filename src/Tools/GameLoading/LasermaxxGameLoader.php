@@ -1,0 +1,162 @@
+<?php
+
+namespace App\Tools\GameLoading;
+
+
+use App\Core\App;
+use App\Exceptions\GameModeNotFoundException;
+use App\GameModels\Factory\GameModeFactory;
+use App\GameModels\Game\GameModes\CustomLoadMode;
+use App\Models\MusicMode;
+use Lsr\Core\Exceptions\ModelNotFoundException;
+use Lsr\Core\Exceptions\ValidationException;
+use Lsr\Helpers\Tools\Strings;
+use Lsr\Logging\Exceptions\DirectoryCreationException;
+
+abstract class LasermaxxGameLoader implements LoaderInterface
+{
+
+	/**
+	 * @param array{
+	 *      music?: numeric,
+	 *      groupSelect?:numeric|'new',
+	 *      tableSelect?:numeric,
+	 *      game-mode?:numeric,
+	 *      variation?:array<numeric,string>,
+	 *      player?:array{name:string,team?:string,vip?:numeric-string,code:string}[],
+	 *      team?:array{name:string}[]
+	 *  } $data
+	 *
+	 * @return array{
+	 *    meta:array<string,string|numeric>,
+	 *    players:array{vest:int,name:string,vip:bool,team:int,code?:string}[],
+	 *    teams:array{key:int,name:string,playerCount:int}
+	 *    }
+	 */
+	protected function loadLasermaxxGame(array $data): array {
+		/** @var array{
+		 *   meta:array<string,string|numeric>,
+		 *   players:array{vest:int,name:string,vip:bool,team:int,code?:string}[],
+		 *   teams:array{key:int,name:string,playerCount:int}
+		 *   } $loadData
+		 */
+		$loadData = [
+			'meta'    => [
+				'music'    => empty($data['music']) ? null : $data['music'],
+				'mode'     => '',
+				'loadTime' => time(),
+			],
+			'players' => [],
+			'teams'   => [],
+		];
+
+		/** @var array<int,string> $hashData */
+		$hashData = [];
+
+		if (!empty($data['groupSelect'])) {
+			$loadData['meta']['group'] = $data['groupSelect'];
+		}
+
+		if (!empty($data['tableSelect'])) {
+			$loadData['meta']['table'] = $data['tableSelect'];
+		}
+
+		try {
+			$mode = GameModeFactory::getById((int)($data['game-mode'] ?? 0));
+		} catch (GameModeNotFoundException) {
+		}
+
+		if (isset($mode)) {
+			$loadData['meta']['mode'] = $mode->loadName;
+			if (!empty($data['variation'])) {
+				$loadData['meta']['variations'] = [];
+				foreach ($data['variation'] as $id => $suffix) {
+					$loadData['meta']['variations'][$id] = $suffix;
+					$loadData['meta']['mode'] .= $suffix;
+				}
+			}
+		}
+
+		/** @var array<numeric-string, int> $teams */
+		$teams = [];
+
+		// Validate and parse players
+		foreach ($data['player'] ?? [] as $vest => $player) {
+			if (empty(trim($player['name']))) {
+				continue;
+			}
+			if (!isset($player['team']) || $player['team'] === '') {
+				if (!isset($mode) || $mode->isTeam()) {
+					continue;
+				}
+				// Default team for solo game
+				$player['team'] = '2';
+			}
+
+			$asciiName = substr(Strings::toAscii($player['name']), 0, 12);
+			if ($player['name'] !== $asciiName) {
+				$loadData['meta']['p' . $vest . 'n'] = $player['name'];
+			}
+			if (!empty($player['code'])) {
+				$loadData['meta']['p' . $vest . 'u'] = $player['code'];
+			}
+			$hashData[(int)$vest] = $vest . '-' . $asciiName;
+			$loadData['players'][(int)$vest] = [
+				'vest' => (string)$vest,
+				'name' => $asciiName,
+				'team' => (string)$player['team'],
+				'vip'  => ((int)($player['vip'] ?? 0)) === 1,
+			];
+			if (!isset($teams[(string)$player['team']])) {
+				$teams[(string)$player['team']] = 0;
+			}
+			$teams[(string)$player['team']]++;
+		}
+
+		foreach ($data['team'] ?? [] as $key => $team) {
+			$asciiName = Strings::toAscii($team['name']);
+			if ($team['name'] !== $asciiName) {
+				$loadData['meta']['t' . $key . 'n'] = $team['name'];
+			}
+			$loadData['teams'][] = [
+				'key'         => $key,
+				'name'        => $asciiName,
+				'playerCount' => (int)($teams[(string)$key] ?? 0),
+			];
+		}
+
+		if (isset($mode) && $mode instanceof CustomLoadMode) {
+			$loadData = $mode->modifyGameDataBeforeLoad($loadData);
+		}
+
+		$loadData['teams'] = array_filter($loadData['teams'], static fn($team) => $team['playerCount'] > 0);
+		ksort($hashData);
+		ksort($loadData['players']);
+		$loadData['players'] = array_values($loadData['players']);
+		$loadData['meta']['hash'] = md5($loadData['meta']['mode'] . ';' . implode(';', $hashData));
+
+
+		// Choose random music ID if a group is selected
+		if (isset($loadData['meta']['music']) && str_starts_with($loadData['meta']['music'], 'g-')) {
+			$musicIds = array_slice(explode('-', $loadData['meta']['music']), 1);
+			$loadData['meta']['music'] = $musicIds[array_rand($musicIds)];
+
+			$loadData['meta']['music'] = (int)$loadData['meta']['music'];
+		}
+		return $loadData;
+	}
+
+	protected function loadMusic(int $musicId, string $musicFile): void {
+		try {
+			$music = MusicMode::get($musicId);
+			if (!file_exists($music->fileName)) {
+				App::getLogger()->warning('Music file does not exist - ' . $music->fileName);
+			}
+			else if (!copy($music->fileName, $musicFile)) {
+				App::getLogger()->warning('Music copy failed - ' . $music->fileName);
+			}
+		} catch (ModelNotFoundException|ValidationException|DirectoryCreationException) {
+			// Not critical, doesn't need to do anything
+		}
+	}
+}

@@ -28,9 +28,10 @@ class EventService
 			/** @var Config $config */
 			$config = App::getServiceByType(Config::class);
 			self::$eventUrl = (App::isSecure() ? 'https://' : 'http://') .
-				($config->getConfig(
-					'ENV'
-				)['EVENT_URL'] ?? ($_SERVER['HTTP_HOST'] ?? 'localhost') . ':' . self::getEventPort());
+				($config->getConfig('ENV')['EVENT_URL'] ?? explode(
+					                                           ':',
+					                                           ($_SERVER['HTTP_HOST'] ?? 'localhost')
+				                                           )[0] . ':' . self::getEventPort());
 		}
 		return self::$eventUrl;
 	}

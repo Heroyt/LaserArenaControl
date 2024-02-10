@@ -182,6 +182,7 @@ tables:
 			`import_time` datetime DEFAULT NULL,
 			`start` datetime DEFAULT NULL,
 			`end` datetime DEFAULT NULL,
+			`results_file` varchar(255) DEFAULT NULL,
 			`file_number` int(11) DEFAULT NULL,
 			`timing_before` int(10) unsigned DEFAULT NULL,
 			`timing_game_length` int(10) unsigned DEFAULT NULL,
@@ -223,6 +224,8 @@ tables:
 				- 'ADD `evo5_games_ibfk_3` FOREIGN KEY IF NOT EXISTS (`id_group`) REFERENCES `game_groups` (`id_group`) ON DELETE SET NULL ON UPDATE CASCADE'
 			0.4.2:
 				- 'ADD UNIQUE INDEX (`code`);'
+			0.5.0:
+				- 'ADD `results_file` varchar(255) DEFAULT NULL AFTER `end`'
 	App\GameModels\Game\Evo5\Team:
 		definition: '''
 		(

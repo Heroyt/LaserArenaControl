@@ -13,6 +13,9 @@ use Lsr\Exceptions\FileException;
 
 /**
  * Abstract base for any result parser class
+ *
+ * @template G of Game
+ * @implements ResultsParserInterface<G>
  */
 abstract class AbstractResultsParser implements ResultsParserInterface
 {
@@ -74,8 +77,9 @@ abstract class AbstractResultsParser implements ResultsParserInterface
 	}
 
 	/**
-	 * @param Game $game
+	 * @param G $game
 	 * @param array<string, mixed> $meta
+	 *
 	 * @return void
 	 */
 	protected function processExtensions(Game $game, array $meta): void {

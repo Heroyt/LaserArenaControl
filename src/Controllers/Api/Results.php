@@ -4,13 +4,14 @@ namespace App\Controllers\Api;
 
 use App\Exceptions\ResultsParseException;
 use App\GameModels\Factory\GameFactory;
+use App\GameModels\Game\Lasermaxx\Game;
 use App\GameModels\Game\Player;
 use App\Services\ImportService;
 use App\Services\PlayerProvider;
-use App\Tools\ResultParsing\Evo5\ResultsParser;
+use App\Tools\Interfaces\ResultsParserInterface;
 use Exception;
 use JsonException;
-use Lsr\Core\Constants;
+use Lsr\Core\Config;
 use Lsr\Core\Controllers\ApiController;
 use Lsr\Core\Exceptions\ModelNotFoundException;
 use Lsr\Core\Exceptions\ValidationException;
@@ -23,13 +24,18 @@ use ZipArchive;
 
 class Results extends ApiController
 {
+	private int $gameLoadedTime;
+	private int $gameStartedTime;
 
 	public function __construct(
 		Latte                           $latte,
 		private readonly PlayerProvider $playerProvider,
 		private readonly ImportService $importService,
+		Config                         $config
 	) {
 		parent::__construct($latte);
+		$this->gameLoadedTime = (int)($config->getConfig('ENV')['GAME_LOADED_TIME'] ?? 300);
+		$this->gameStartedTime = (int)($config->getConfig('ENV')['GAME_STARTED_TIME'] ?? 1800);
 	}
 
 	/**
@@ -40,7 +46,7 @@ class Results extends ApiController
 	 * @throws ModelNotFoundException
 	 * @throws ValidationException
 	 */
-	public function import(Request $request) : void {
+	public function import(Request $request): void {
 		$resultsDir = $request->post['dir'] ?? '';
 		if (empty($resultsDir)) {
 			$this->respond(['error' => 'Missing required argument "dir". Valid results directory is expected.'], 400);
@@ -57,8 +63,8 @@ class Results extends ApiController
 	 * @return void
 	 * @throws Throwable
 	 */
-	public function importGame(Request $request) : void {
-		$logger = new Logger(LOG_DIR.'results/', 'import');
+	public function importGame(Request $request): void {
+		$logger = new Logger(LOG_DIR . 'results/', 'import');
 		$resultsDir = trailingSlashIt($request->post['dir'] ?? DEFAULT_RESULTS_DIR);
 
 		try {
@@ -72,20 +78,37 @@ class Results extends ApiController
 
 		$game->clearCache();
 
-		if (empty($game->fileNumber)) {
+		if (isset($game->resultsFile) && file_exists($game->resultsFile)) {
+			$file = $game->resultsFile;
+		}
+		else if ($game instanceof Game && !empty($game->fileNumber)) {
+			$files = glob($resultsDir . str_pad($game->fileNumber, 4, '0', STR_PAD_LEFT) . '*.game');
+			if (empty($files)) {
+				$this->respond(
+					['error' => 'Cannot find game file.', 'path' => $resultsDir . $game->fileNumber . '*.game'],
+					404
+				);
+			}
+			if (count($files) > 1) {
+				$this->respond(['error' => 'Found more than one suitable game file.'], 500);
+			}
+			$file = $files[0];
+		}
+		else {
 			$this->respond(['error' => 'Cannot get game file number.', 'game' => $game], 404);
-		}
-		$files = glob($resultsDir.str_pad($game->fileNumber, 4, '0', STR_PAD_LEFT).'*.game');
-		if (empty($files)) {
-			$this->respond(['error' => 'Cannot find game file.', 'path' => $resultsDir.$game->fileNumber.'*.game'], 404);
-		}
-		if (count($files) > 1) {
-			$this->respond(['error' => 'Found more than one suitable game file.'], 500);
 		}
 
 		try {
-			$logger->info('Importing file: '.$files[0]);
-			$parser = new ResultsParser($files[0], $this->playerProvider);
+			$logger->info('Importing file: ' . $file);
+			/** @var class-string<ResultsParserInterface> $class */
+			$class = 'App\\Tools\\ResultParsing\\' . ucfirst($game::SYSTEM) . '\\ResultsParser';
+			if (!class_exists($class)) {
+				$this->respond(['error' => 'No parser for this game (' . $game::SYSTEM . ')'], 500);
+			}
+			if (!$class::checkFile($file)) {
+				$this->respond(['error' => 'Game file cannot be parsed: ' . $file], 500);
+			}
+			$parser = new $class($file, $this->playerProvider);
 			$game = $parser->parse();
 
 			$now = time();
@@ -102,11 +125,19 @@ class Results extends ApiController
 				// But only the latest game should be considered
 
 				// The game is started
-				if ($game->started && isset($game->fileTime) && ($now - $game->fileTime->getTimestamp()) <= Constants::GAME_STARTED_TIME) {
+				if (
+					$game->started &&
+					isset($game->fileTime) &&
+					($now - $game->fileTime->getTimestamp()) <= $this->gameStartedTime
+				) {
 					$logger->debug('Game is started');
 				}
 				// The game is loaded
-				if (!$game->started && isset($game->fileTime) && ($now - $game->fileTime->getTimestamp()) <= Constants::GAME_LOADED_TIME) {
+				if (
+					!$game->started &&
+					isset($game->fileTime) &&
+					($now - $game->fileTime->getTimestamp()) <= $this->gameLoadedTime
+				) {
 					$logger->debug('Game is loaded');
 				}
 				$this->respond(['error' => 'Game is not finished'], 400);
@@ -142,23 +173,40 @@ class Results extends ApiController
 	 * @return never
 	 * @throws JsonException
 	 */
-	public function getLastGameFile(Request $request) : never {
+	public function getLastGameFile(Request $request): never {
 		$resultsDir = urldecode($request->get['dir'] ?? '');
 		if (empty($resultsDir)) {
 			$this->respond(['error' => 'Missing required argument "dir". Valid results directory is expected.'], 400);
 		}
 		$resultsDir = trailingSlashIt($resultsDir);
+		/** @var string[][] $resultFiles */
+		$resultFilesAll = [];
+		foreach (GameFactory::getSupportedSystems() as $system) {
+			/** @var class-string<ResultsParserInterface> $class */
+			$class = 'App\\Tools\\ResultParsing\\' . ucfirst($system) . '\\ResultsParser';
+			if (!class_exists($class)) {
+				continue;
+			}
+			$resultFilesAll[] = glob(ROOT . $resultsDir . $class::getFileGlob());
+		}
+
 		/** @var string[] $resultFiles */
-		$resultFiles = glob(ROOT.$resultsDir.'*.game');
+		$resultFiles = array_unique(array_merge(...$resultFilesAll));
+
 		// Sort by time
-		usort($resultFiles, static function(string $a, string $b) {
-			return filemtime($b) - filemtime($a);
-		});
+		usort($resultFiles, static fn(string $a, string $b) => filemtime($b) - filemtime($a));
+
 		/** @var string $resultsContent1 */
 		$resultsContent1 = file_get_contents($resultFiles[0]);
 		/** @var string $resultsContent2 */
 		$resultsContent2 = file_get_contents($resultFiles[1]);
-		$this->respond(['files' => $resultFiles, 'contents1' => utf8_encode($resultsContent1), 'contents2' => utf8_encode($resultsContent2)]);
+		$this->respond(
+			[
+				'files'     => $resultFiles,
+				'contents1' => utf8_encode($resultsContent1),
+				'contents2' => utf8_encode($resultsContent2),
+			]
+		);
 	}
 
 	/**
@@ -168,33 +216,43 @@ class Results extends ApiController
 	 * @throws ArchiveCreationException
 	 * @throws JsonException
 	 */
-	public function downloadLastGameFiles(Request $request) : never {
+	public function downloadLastGameFiles(Request $request): never {
 		/** TODO: Secure.. this is really bad.. and would allow for downloading of any files */
 		$resultsDir = urldecode($request->get['dir'] ?? '');
 		if (empty($resultsDir)) {
 			$this->respond(['error' => 'Missing required argument "dir". Valid results directory is expected.'], 400);
 		}
 		$resultsDir = trailingSlashIt($resultsDir);
+		/** @var string[][] $resultFiles */
+		$resultFilesAll = [];
+		foreach (GameFactory::getSupportedSystems() as $system) {
+			/** @var class-string<ResultsParserInterface> $class */
+			$class = 'App\\Tools\\ResultParsing\\' . ucfirst($system) . '\\ResultsParser';
+			if (!class_exists($class)) {
+				continue;
+			}
+			$resultFilesAll[] = glob(ROOT . $resultsDir . $class::getFileGlob());
+		}
 		/** @var string[] $resultFiles */
-		$resultFiles = glob(ROOT.$resultsDir.'*.game');
+		$resultFiles = array_unique(array_merge(...$resultFilesAll));
 
 		$archive = new ZipArchive();
-		$test = $archive->open(TMP_DIR.'games.zip', ZipArchive::CREATE); // Create or open a zip file
+		$test = $archive->open(TMP_DIR . 'games.zip', ZipArchive::CREATE); // Create or open a zip file
 		if ($test !== true) {
 			throw new ArchiveCreationException($test);
 		}
 
 		foreach ($resultFiles as $file) {
-			$fileName = str_replace(ROOT.$resultsDir, '', $file);
+			$fileName = str_replace(ROOT . $resultsDir, '', $file);
 			$archive->addFile($file, $fileName);
 		}
 		$archive->close();
 
 		header('Content-Type: application/zip');
 		header('Content-Disposition: attachment; filename="games.zip"');
-		header("Content-Length: ".filesize(TMP_DIR.'games.zip'));
+		header("Content-Length: " . filesize(TMP_DIR . 'games.zip'));
 		http_response_code(200);
-		readfile(TMP_DIR.'games.zip');
+		readfile(TMP_DIR . 'games.zip');
 		exit;
 	}
 

@@ -3,34 +3,34 @@
  * @author Tomáš Vojík <xvojik00@stud.fit.vutbr.cz>, <vojik@wboy.cz>
  */
 
-namespace App\Tools\Evo6;
+namespace App\Tools\ResultParsing\Evo6;
 
 use App\Exceptions\GameModeNotFoundException;
 use App\Exceptions\ResultsParseException;
 use App\GameModels\Factory\GameModeFactory;
 use App\GameModels\Game\Enums\GameModeType;
-use App\GameModels\Game\Evo5\Game;
-use App\GameModels\Game\Evo5\Player;
-use App\GameModels\Game\Evo5\Team;
-use App\GameModels\Game\Scoring;
+use App\GameModels\Game\Evo6\Game;
+use App\GameModels\Game\Evo6\Player;
+use App\GameModels\Game\Evo6\Scoring;
+use App\GameModels\Game\Evo6\Team;
 use App\GameModels\Game\Timing;
-use App\Models\Auth\Player as User;
-use App\Models\GameGroup;
-use App\Models\MusicMode;
 use App\Tools\AbstractResultsParser;
+use App\Tools\ResultParsing\WithMetadata;
 use DateTime;
 use JsonException;
-use Lsr\Core\Exceptions\ModelNotFoundException;
 use Lsr\Core\Exceptions\ValidationException;
 use Lsr\Logging\Exceptions\DirectoryCreationException;
 use Lsr\Logging\Logger;
 use Throwable;
 
 /**
- * Result parser for the EVO5 system
+ * Result parser for the EVO6 system
+ *
+ * @extends AbstractResultsParser<Game>
  */
 class ResultsParser extends AbstractResultsParser
 {
+	use WithMetadata;
 
 	public const REGEXP = '/([A-Z]+){([^{}]*)}#/';
 
@@ -55,6 +55,7 @@ class ResultsParser extends AbstractResultsParser
 		// Results file info
 		$pathInfo = pathinfo($this->fileName);
 		preg_match('/(\d+)/', $pathInfo['filename'], $matches);
+		$game->resultsFile = $pathInfo['filename'];
 		$game->fileNumber = (int)($matches[0] ?? 0);
 		$fTime = filemtime($this->fileName);
 		if (is_int($fTime)) {
@@ -163,7 +164,7 @@ class ResultsParser extends AbstractResultsParser
 				// - ??
 				// - ??
 				case 'STYLE':
-					if ($argsCount !== 5 && $argsCount !== 4) {
+					if ($argsCount !== 7) {
 						throw new ResultsParseException('Invalid argument count in STYLE');
 					}
 					$game->modeName = $args[0];
@@ -216,7 +217,7 @@ class ResultsParser extends AbstractResultsParser
 				// - ???
 				// - ???
 				case 'SCORING':
-					if ($argsCount !== 16) {
+					if ($argsCount !== 18) {
 						throw new ResultsParseException('Invalid argument count in SCORING');
 					}
 					/** @var int[] $args */
@@ -302,7 +303,7 @@ class ResultsParser extends AbstractResultsParser
 				// - Game note (meta data)
 				// - ???
 				case 'GROUP':
-					if ($argsCount !== 2) {
+					if ($argsCount !== 3) {
 						throw new ResultsParseException(
 							'Invalid argument count in GROUP - ' . $argsCount . ' ' . json_encode(
 								$args,
@@ -311,21 +312,7 @@ class ResultsParser extends AbstractResultsParser
 						);
 					}
 					// Parse metadata
-					/** @var string|false $decodedJson */
-					/** @noinspection PhpCastIsUnnecessaryInspection */
-					$decodedJson = gzinflate(
-						(string)gzinflate(
-							(string)base64_decode($args[1])
-						)
-					);
-					if ($decodedJson !== false) {
-						try {
-							/** @var array<string,string> $meta Meta data from game */
-							$meta = json_decode($decodedJson, true, 512, JSON_THROW_ON_ERROR);
-						} catch (JsonException) {
-							// Ignore meta
-						}
-					}
+					$meta = $this->decodeMetadata($args[1]);
 					break;
 
 				// PACK contains information about vest settings
@@ -338,7 +325,7 @@ class ResultsParser extends AbstractResultsParser
 				// - ???
 				// - ???
 				case 'PACK':
-					if ($argsCount !== 4 && $argsCount !== 7) {
+					if ($argsCount !== 8) {
 						throw new ResultsParseException('Invalid argument count in PACK');
 					}
 					$player = new Player();
@@ -396,38 +383,40 @@ class ResultsParser extends AbstractResultsParser
 					$player->hits = (int)$args[3];
 					$player->deaths = (int)$args[4];
 					$player->position = (int)$args[5];
+					$player->myLasermaxx = $args[6];
+					$player->calories = (int)$args[8];
 					break;
 
 				// PACKY contains player's additional results
-				// - Vest number
-				// - ?Score for shots
-				// - ?Score for bonuses
-				// - Score for powers
-				// - Score for pod deaths
-				// - Ammo remaining
-				// - Accuracy
-				// - Pod deaths
-				// - ???
-				// - ???
-				// - ???
-				// - ???
-				// - Enemy hits
-				// - Teammate hits
-				// - Enemy deaths
-				// - Teammate deaths
-				// - Lives
-				// - ???
-				// - Score for hits
-				// - ???
-				// - ???
-				// - ???
-				// - ???
-				// - ??? (930)
-				// - ???
-				// - ???
-				// - ??? (shield / bonus)
-				// - ???
-				// - ???
+				// - [0] Vest number
+				// - [1] ?Score for shots
+				// - [2] ?Score for bonuses
+				// - [3] Score for powers
+				// - [4] Score for pod deaths
+				// - [5] Ammo remaining
+				// - [6] Accuracy
+				// - [7] Pod deaths
+				// - [8] ???
+				// - [9] ???
+				// - [10] ???
+				// - [11] ???
+				// - [12] Enemy hits
+				// - [13] Teammate hits
+				// - [14] Enemy deaths
+				// - [15] Teammate deaths
+				// - [16] Lives
+				// - [17] ???
+				// - [18] Score for hits
+				// - [19] ???
+				// - [20] ???
+				// - [21] ???
+				// - [22] ???
+				// - [23] ??? (930)
+				// - [24] ???
+				// - [25] ???
+				// - [26] bonus count
+				// - [27] ???
+				// - [29] ???
 				case 'PACKY':
 					if ($argsCount !== 29) {
 						throw new ResultsParseException('Invalid argument count in PACKY');
@@ -446,17 +435,17 @@ class ResultsParser extends AbstractResultsParser
 					$player->scoreBonus = (int)($args[2] ?? 0);
 					$player->scorePowers = (int)($args[3] ?? 0);
 					$player->scoreMines = (int)($args[4] ?? 0);
+
 					$player->ammoRest = (int)($args[5] ?? 0);
 					$player->accuracy = (int)($args[6] ?? 0);
 					$player->minesHits = (int)($args[7] ?? 0);
-					$player->bonus->agent = (int)($args[8] ?? 0);
-					$player->bonus->invisibility = (int)($args[9] ?? 0);
-					$player->bonus->machineGun = (int)($args[10] ?? 0);
-					$player->bonus->shield = (int)($args[11] ?? 0);
+
 					$player->hitsOther = (int)($args[12] ?? 0);
 					$player->hitsOwn = (int)($args[13] ?? 0);
 					$player->deathsOther = (int)($args[14] ?? 0);
 					$player->deathsOwn = (int)($args[15] ?? 0);
+
+					$player->bonuses = (int)($args[26] ?? 0);
 					break;
 
 				// PACKZ contains some player's additional results - probably player's deaths (duplicate from PACKY)
@@ -531,107 +520,23 @@ class ResultsParser extends AbstractResultsParser
 		}
 
 		// Process metadata
-		if (!empty($meta) && !empty($meta['hash'])) {
-			// Validate metadata
-			$players = [];
-			/** @var Player $player */
-			foreach ($game->getPlayers() as $player) {
-				$metaStartTeamKey = 'p' . $player->vest . '-startTeam';
-				$players[(string)$player->vest] = [
-					'vest' => (string)$player->vest,
-					'name' => $player->name,
-					'team' => (string)($meta[$metaStartTeamKey] ?? $player->teamNum),
-					'vip'  => $player->vip,
-				];
-			}
-			ksort($players);
-			$players = array_values($players);
-			// Calculate hash
-			$hash = md5(json_encode($players, JSON_THROW_ON_ERROR));
+		if ($this->validateMetadata($meta, $game)) {
+			$this->setMusicModeFromMeta($game, $meta);
+			$this->setGroupFromMeta($game, $meta);
+			$this->setPlayersMeta($game, $meta);
+			$this->setTeamsMeta($game, $meta);
 
-			// Compare
-			if ($hash !== $meta['hash']) {
-				// Hashes don't match -> ignore metadata
-				try {
-					$logger = new Logger(LOG_DIR . 'results/', 'import');
-					$logger->warning('Game meta hashes doesn\'t match.');
-				} catch (DirectoryCreationException) {
-				}
-
-				$this->processExtensions($game, []);
-				return $game;
-			}
-
-			if (!empty($meta['music']) && ((int)$meta['music']) > 0) {
-				try {
-					$game->music = MusicMode::get((int)$meta['music']);
-				} catch (ModelNotFoundException) {
-					// Ignore
-				}
-			}
-
-			// Set a game group if set
-			if (!empty($meta['group'])) {
-				if ($meta['group'] !== 'new') {
-					try {
-						// Find existing group
-						$group = GameGroup::get((int)$meta['group']);
-						// If found, clear its players cache to account for the newly-added (imported) game
-						$group->clearCache();
-					} catch (ModelNotFoundException) {
-					}
-				}
-
-				// Default to creating a new game group if the group was not found
-				if (!isset($group)) {
-					$group = new GameGroup();
-					$group->name = sprintf(
-						lang('Skupina %s'),
-						isset($game->start) ? $game->start->format('d.m.Y H:i') : ''
-					);
-				}
-
-				$game->group = $group;
-			}
-
-			/** @var Player $player */
-			foreach ($game->getPlayers() as $player) {
-				// Names from game are strictly ASCII
-				// If a name contained any non ASCII character, it is coded in the metadata
-				if (!empty($meta['p' . $player->vest . 'n'])) {
-					$player->name = $meta['p' . $player->vest . 'n'];
-				}
-
-				// Check for player's user code
-				if (!empty($meta['p' . $player->vest . 'u'])) {
-					$code = $meta['p' . $player->vest . 'u'];
-					$user = User::getByCode($code);
-
-					// Check the public API for user by code
-					if (!isset($user)) {
-						$user = $this->playerProvider->findPublicPlayerByCode($code);
-						if (isset($user) && !$user->save()) {
-							// User found, but the save failed
-							$user = null;
-						}
-					}
-					if (isset($user)) {
-						$player->user = $user;
-					}
-				}
-			}
-
-			/** @var Team $team */
-			foreach ($game->getTeams() as $team) {
-				// Names from game are strictly ASCII
-				// If a name contained any non ASCII character, it is coded in the metadata
-				if (!empty($meta['t' . $team->color . 'n'])) {
-					$team->name = $meta['t' . $team->color . 'n'];
-				}
-			}
+			$this->processExtensions($game, $meta);
 		}
+		else {
+			try {
+				$logger = new Logger(LOG_DIR . 'results/', 'import');
+				$logger->warning('Game meta is not valid.', $meta);
+			} catch (DirectoryCreationException) {
+			}
 
-		$this->processExtensions($game, $meta);
+			$this->processExtensions($game, []);
+		}
 
 		return $game;
 	}
@@ -649,4 +554,26 @@ class ResultsParser extends AbstractResultsParser
 		return array_map('trim', explode(',', $args));
 	}
 
+	/**
+	 * @inheritDoc
+	 */
+	public static function getFileGlob(): string {
+		return '*.game';
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public static function checkFile(string $fileName): bool {
+		$extension = pathinfo($fileName, PATHINFO_EXTENSION);
+		if ($extension !== 'game') {
+			return false;
+		}
+
+		$contents = file_get_contents($fileName);
+		if (!$contents) {
+			return false;
+		}
+		return (bool)preg_match('/SITE{.*EVO-6 MAXX}#/', $contents);
+	}
 }

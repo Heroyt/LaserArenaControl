@@ -1,0 +1,17 @@
+{block |trim|replace:"\t",''}
+	{varType array $meta}
+	{varType array $players}
+	{varType array $teams}
+
+	{syntax double}
+		GROUP{,{{base64_encode(gzdeflate(gzdeflate(json_encode($meta), 9), 9))}}}#
+
+		{{foreach $players as $player}}
+		PACK{{{$player['vest']}},{{$player['name']}},{{$player['team']}},0,{{$player['vip'] ? 1 : 0}},0,0}#
+		{{/foreach}}
+
+		{{foreach $teams as $team}}
+		TEAM{{{$team['key']}},{{$team['name']}},{{$team['playerCount']}}}#
+		{{/foreach}}
+		{{/syntax}}
+{/block}

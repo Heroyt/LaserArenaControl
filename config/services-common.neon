@@ -54,14 +54,18 @@ services:
 
 	liga: App\Services\LigaApi::getInstance()
 	playersProvider: App\Services\PlayerProvider
+
+	gamesImport: App\Services\ImportService
+	gamesLoad: App\Tools\GameLoading\GameLoader
+
 	gotenberg: App\Services\GotenbergService(%gotenberg.host%, %gotenberg.port%)
 	resultPrint: App\Services\ResultPrintService
 	resultPrecache: App\Services\ResultsPrecacheService
-	gamesImport: App\Services\ImportService
 
 	lasermaxx.regression: App\GameModels\Tools\Lasermaxx\RegressionStatCalculator
 	evo5.simulator: App\Services\Evo5\GameSimulator
 	evo5.gameLoader: App\Tools\GameLoading\Evo5GameLoader
+	evo6.gameLoader: App\Tools\GameLoading\Evo6GameLoader
 
 	cron.gamesSync: App\Cron\GamesSyncJob(%gamesSync.limit%, %gamesSync.timeout%)
 	cron.vestSync: App\Cron\VestSyncJob

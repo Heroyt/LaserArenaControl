@@ -226,6 +226,49 @@ tables:
 				- 'ADD UNIQUE INDEX (`code`);'
 			0.5.0:
 				- 'ADD `results_file` varchar(255) DEFAULT NULL AFTER `end`'
+	App\GameModels\Game\Evo6\Game:
+		definition: '''
+		(
+			`id_game` int(11) unsigned NOT NULL AUTO_INCREMENT,
+			`id_mode` int(11) unsigned DEFAULT NULL,
+			`id_music` int(11) unsigned DEFAULT NULL,
+			`id_group` int(11) unsigned DEFAULT NULL,
+			`game_type` enum('TEAM','SOLO') NOT NULL DEFAULT 'TEAM',
+			`mode_name` varchar(100) DEFAULT NULL,
+			`file_time` datetime DEFAULT NULL,
+			`import_time` datetime DEFAULT NULL,
+			`start` datetime DEFAULT NULL,
+			`end` datetime DEFAULT NULL,
+			`results_file` varchar(255) DEFAULT NULL,
+			`file_number` int(11) DEFAULT NULL,
+			`timing_before` int(10) unsigned DEFAULT NULL,
+			`timing_game_length` int(10) unsigned DEFAULT NULL,
+			`timing_after` int(10) unsigned DEFAULT NULL,
+			`scoring_hit_other` int(11) DEFAULT NULL,
+			`scoring_hit_own` int(11) DEFAULT NULL,
+			`scoring_death_other` int(11) DEFAULT NULL,
+			`scoring_death_own` int(11) DEFAULT NULL,
+			`scoring_hit_pod` int(11) DEFAULT NULL,
+			`scoring_shot` int(11) DEFAULT NULL,
+			`scoring_power_machine_gun` int(11) DEFAULT NULL,
+			`scoring_power_invisibility` int(11) DEFAULT NULL,
+			`scoring_power_agent` int(11) DEFAULT NULL,
+			`scoring_power_shield` int(11) DEFAULT NULL,
+			`scoring_highscore` int(11) DEFAULT NULL,
+			`code` varchar(50) DEFAULT NULL,
+			`respawn` smallint(4) unsigned DEFAULT NULL,
+			`lives` int(10) unsigned DEFAULT NULL,
+			`ammo` int(10) unsigned DEFAULT NULL,
+			`sync` TINYINT(1)  NOT NULL  DEFAULT 0,
+			PRIMARY KEY (`id_game`),
+			UNIQUE KEY `code` (`code`),
+			KEY `id_mode` (`id_mode`),
+			CONSTRAINT `evo6_games_ibfk_1` FOREIGN KEY (`id_mode`) REFERENCES `game_modes` (`id_mode`) ON DELETE SET NULL ON UPDATE CASCADE,
+			CONSTRAINT `evo6_games_ibfk_2` FOREIGN KEY (`id_music`) REFERENCES `music` (`id_music`) ON DELETE SET NULL ON UPDATE CASCADE,
+			CONSTRAINT `evo6_games_ibfk_3` FOREIGN KEY (`id_group`) REFERENCES `game_groups` (`id_group`) ON DELETE SET NULL ON UPDATE CASCADE
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+		'''
+		modifications:
 	App\GameModels\Game\Evo5\Team:
 		definition: '''
 		(
@@ -244,6 +287,22 @@ tables:
 		modifications:
 			0.1.0:
 				- 'ADD `bonus` int(11) DEFAULT NULL AFTER `score`'
+	App\GameModels\Game\Evo6\Team:
+		definition: '''
+		(
+			`id_team` int(11) unsigned NOT NULL AUTO_INCREMENT,
+			`id_game` int(11) unsigned NOT NULL,
+			`color` int(10) unsigned DEFAULT NULL,
+			`score` int(11) NOT NULL DEFAULT 0,
+			`bonus` int(11) DEFAULT NULL,
+			`position` int(10) unsigned NOT NULL DEFAULT 0,
+			`name` varchar(20) DEFAULT NULL,
+			PRIMARY KEY (`id_team`),
+			KEY `id_game` (`id_game`),
+			CONSTRAINT `evo6_teams_ibfk_1` FOREIGN KEY (`id_game`) REFERENCES `evo6_games` (`id_game`) ON DELETE CASCADE ON UPDATE CASCADE
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+		'''
+		modifications:
 	App\GameModels\Game\Evo5\Player:
 		definition: '''
 		(
@@ -298,6 +357,47 @@ tables:
 				- 'ADD `relative_deaths` decimal(11,4) DEFAULT NULL'
 			0.4.0:
 				- 'ADD `my_lasermaxx` varchar(100) NOT NULL DEFAULT '''''
+	App\GameModels\Game\Evo6\Player:
+		definition: '''
+		(
+			`id_player` int(11) unsigned NOT NULL AUTO_INCREMENT,
+			`id_game` int(11) unsigned NOT NULL,
+			`id_team` int(11) unsigned DEFAULT NULL,
+			`id_user` int(11) unsigned DEFAULT NULL,
+			`name` varchar(20) NOT NULL DEFAULT '',
+			`score` int(11) NOT NULL DEFAULT 0,
+			`skill` int(11) NOT NULL DEFAULT 0,
+			`vest` int(10) unsigned NOT NULL DEFAULT 0,
+			`shots` int(10) unsigned NOT NULL DEFAULT 0,
+			`accuracy` int(10) unsigned NOT NULL DEFAULT 0,
+			`hits` int(10) unsigned NOT NULL DEFAULT 0,
+			`deaths` int(10) unsigned NOT NULL DEFAULT 0,
+			`position` int(10) unsigned NOT NULL DEFAULT 0,
+			`shot_points` int(11) NOT NULL DEFAULT 0,
+			`score_bonus` int(11) NOT NULL DEFAULT 0,
+			`score_powers` int(11) NOT NULL DEFAULT 0,
+			`score_mines` int(11) NOT NULL DEFAULT 0,
+			`ammo_rest` int(10) unsigned NOT NULL DEFAULT 0,
+			`mines_hits` int(10) unsigned NOT NULL DEFAULT 0,
+			`hits_other` int(10) unsigned NOT NULL DEFAULT 0,
+			`hits_own` int(10) unsigned NOT NULL DEFAULT 0,
+			`deaths_other` int(10) unsigned NOT NULL DEFAULT 0,
+			`deaths_own` int(10) unsigned NOT NULL DEFAULT 0,
+			`bonuses_agent` int(10) unsigned NOT NULL DEFAULT 0,
+			`vip` tinyint(1) unsigned NOT NULL DEFAULT 0,
+			`relative_hits` decimal(11,4) DEFAULT NULL,
+			`relative_deaths` decimal(11,4) DEFAULT NULL,
+			`my_lasermaxx` varchar(100) NOT NULL DEFAULT '',
+			`calories` int(10) unsigned NOT NULL DEFAULT 0,
+			PRIMARY KEY (`id_player`),
+			KEY `id_game` (`id_game`),
+			KEY `id_team` (`id_team`),
+			CONSTRAINT `evo6_players_ibfk_1` FOREIGN KEY (`id_game`) REFERENCES `evo6_games` (`id_game`) ON DELETE CASCADE ON UPDATE CASCADE,
+			CONSTRAINT `evo6_players_ibfk_2` FOREIGN KEY (`id_team`) REFERENCES `evo6_teams` (`id_team`) ON DELETE SET NULL ON UPDATE CASCADE,
+			CONSTRAINT `evo6_players_ibfk_3` FOREIGN KEY (`id_user`) REFERENCES `players` (`id_user`) ON DELETE SET NULL ON UPDATE CASCADE
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+		'''
+		modifications:
 	evo5_hits:
 		definition: '''
 		(
@@ -309,6 +409,19 @@ tables:
 			KEY `id_player` (`id_player`),
 			CONSTRAINT `evo5_hits_ibfk_1` FOREIGN KEY (`id_player`) REFERENCES `evo5_players` (`id_player`) ON DELETE CASCADE ON UPDATE CASCADE,
 			CONSTRAINT `evo5_hits_ibfk_2` FOREIGN KEY (`id_target`) REFERENCES `evo5_players` (`id_player`) ON DELETE CASCADE ON UPDATE CASCADE
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+		'''
+	evo6_hits:
+		definition: '''
+		(
+			`id_player` int(11) unsigned NOT NULL,
+			`id_target` int(11) unsigned NOT NULL,
+			`count` int(10) unsigned DEFAULT NULL,
+			PRIMARY KEY (`id_player`,`id_target`),
+			KEY `id_target` (`id_target`),
+			KEY `id_player` (`id_player`),
+			CONSTRAINT `evo6_hits_ibfk_1` FOREIGN KEY (`id_player`) REFERENCES `evo6_players` (`id_player`) ON DELETE CASCADE ON UPDATE CASCADE,
+			CONSTRAINT `evo6_hits_ibfk_2` FOREIGN KEY (`id_target`) REFERENCES `evo6_players` (`id_player`) ON DELETE CASCADE ON UPDATE CASCADE
 		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 		'''
 	'prepared_games':

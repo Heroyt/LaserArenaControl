@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controllers;
+namespace App\Controllers\Settings;
 
 use App\Core\App;
 use App\Exceptions\GameModeNotFoundException;
@@ -30,7 +30,7 @@ use Throwable;
 /**
  *
  */
-class ModesSettings extends Controller
+class Modes extends Controller
 {
 
 	/**

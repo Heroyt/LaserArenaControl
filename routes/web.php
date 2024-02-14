@@ -6,13 +6,12 @@
  */
 
 use App\Controllers\GamesList;
-use App\Controllers\Gate;
+use App\Controllers\Gate\Gate;
 use App\Controllers\Lang;
-use App\Controllers\LaserLigaController;
 use App\Controllers\NewGame;
-use App\Controllers\PlayersController;
+use App\Controllers\Players;
 use App\Controllers\Results;
-use App\Controllers\Settings;
+use App\Controllers\Settings\Settings;
 use App\Core\App;
 use App\Services\FeatureConfig;
 use Lsr\Core\Routing\Route;
@@ -61,15 +60,8 @@ Route::group('/gate')
 	->post('/idle/{system}', [Gate::class, 'setGateIdle']);
 
 Route::group('/players')
-	->get('/find', [PlayersController::class, 'find'])
-	->get('/find/{code}', [PlayersController::class, 'getPlayer'])
-	->get('/sync/{code}', [PlayersController::class, 'syncPlayer'])
+	->get('/find', [Players::class, 'find'])
+	->get('/find/{code}', [Players::class, 'getPlayer'])
+	->get('/sync/{code}', [Players::class, 'syncPlayer'])
 	->group('/public')
-	->get('/find', [PlayersController::class, 'findPublic']);
-
-Route::group('laserliga')
-     ->group('games')
-     ->group('{code}')
-     ->get('highlights', [LaserLigaController::class, 'highlights'])
-     ->endGroup()
-     ->endGroup();
+	->get('/find', [Players::class, 'findPublic']);

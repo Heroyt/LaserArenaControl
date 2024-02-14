@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Controllers;
+namespace App\Controllers\Api;
 
 use App\Services\LigaApi;
 use Lsr\Core\Controllers\Controller;
 use Lsr\Core\Templating\Latte;
 
-class LaserLigaController extends Controller
+class LaserLiga extends Controller
 {
 
 	public function __construct(

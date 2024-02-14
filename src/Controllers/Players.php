@@ -9,7 +9,7 @@ use Lsr\Core\Controllers\Controller;
 use Lsr\Core\Requests\Request;
 use Lsr\Core\Templating\Latte;
 
-class PlayersController extends Controller
+class Players extends Controller
 {
 
 	public function __construct(

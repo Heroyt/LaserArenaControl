@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controllers;
+namespace App\Controllers\Settings;
 
 use App\Core\App;
 use App\Models\MusicMode;
@@ -19,7 +19,7 @@ use Lsr\Logging\Exceptions\DirectoryCreationException;
 /**
  *
  */
-class MusicSettings extends Controller
+class Music extends Controller
 {
 
 	/**

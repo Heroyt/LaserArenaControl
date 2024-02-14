@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controllers;
+namespace App\Controllers\Gate;
 
 use App\Core\App;
 use App\Core\Info;

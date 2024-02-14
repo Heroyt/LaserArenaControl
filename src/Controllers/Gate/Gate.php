@@ -3,7 +3,7 @@
  * @author Tomáš Vojík <xvojik00@stud.fit.vutbr.cz>, <vojik@wboy.cz>
  */
 
-namespace App\Controllers;
+namespace App\Controllers\Gate;
 
 use App\Core\Info;
 use App\GameModels\Factory\GameFactory;

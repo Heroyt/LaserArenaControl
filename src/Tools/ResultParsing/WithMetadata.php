@@ -27,6 +27,10 @@ trait WithMetadata
 	 * @return array<string,string|numeric>
 	 */
 	protected function decodeMetadata(string $encoded): array {
+		$encoded = trim($encoded);
+		if ($encoded === '') {
+			return [];
+		}
 		/** @var string|false $decodedJson */
 		$decodedJson = base64_decode($encoded);
 		/** @var string|false $decodedJson */

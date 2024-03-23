@@ -38,6 +38,35 @@ class ResultsParser extends AbstractResultsParser
 	public const EMPTY_DATE = '20000101000000';
 
 	/**
+	 * @inheritDoc
+	 */
+	public static function getFileGlob(): string {
+		return '*.game';
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public static function checkFile(string $fileName = '', string $contents = ''): bool {
+		if (empty($fileName) && empty($contents)) {
+			return false;
+		}
+
+		if (empty($contents)) {
+			$extension = pathinfo($fileName, PATHINFO_EXTENSION);
+			if ($extension !== 'game') {
+				return false;
+			}
+
+			$contents = file_get_contents($fileName);
+		}
+		if (!$contents) {
+			return false;
+		}
+		return (bool)preg_match('/SITE{.*EVO-6 MAXX}#/', $contents);
+	}
+
+	/**
 	 * Parse a game results file and return a parsed object
 	 *
 	 * @return Game
@@ -352,6 +381,19 @@ class ResultsParser extends AbstractResultsParser
 					$team->name = substr($args[1], 0, 15);
 					$team->color = (int)$args[0];
 					$team->playerCount = (int)$args[2];
+
+					// Default team name
+					if ($team->name === '') {
+						$team->name = match ($team->color) {
+							0       => lang('Red team'),
+							1       => lang('Green team'),
+							2       => lang('Blue team'),
+							3       => lang('Pink team'),
+							4       => lang('Yellow team'),
+							5       => lang('Ocean team'),
+							default => lang('Team')
+						};
+					}
 					break;
 
 				// PACKX contains player's results
@@ -552,28 +594,5 @@ class ResultsParser extends AbstractResultsParser
 	 */
 	private function getArgs(string $args): array {
 		return array_map('trim', explode(',', $args));
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public static function getFileGlob(): string {
-		return '*.game';
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public static function checkFile(string $fileName): bool {
-		$extension = pathinfo($fileName, PATHINFO_EXTENSION);
-		if ($extension !== 'game') {
-			return false;
-		}
-
-		$contents = file_get_contents($fileName);
-		if (!$contents) {
-			return false;
-		}
-		return (bool)preg_match('/SITE{.*EVO-6 MAXX}#/', $contents);
 	}
 }

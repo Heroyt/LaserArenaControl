@@ -2,6 +2,7 @@
 /**
  * @author Tomáš Vojík <xvojik00@stud.fit.vutbr.cz>, <vojik@wboy.cz>
  */
+
 namespace App\Tools;
 
 use App\Core\App;
@@ -20,9 +21,9 @@ use Lsr\Exceptions\FileException;
 abstract class AbstractResultsParser implements ResultsParserInterface
 {
 
-	protected string $fileContents;
-
-	protected array $matches = [];
+	protected array  $matches      = [];
+	protected string $fileName     = '';
+	protected string $fileContents = '';
 
 	/**
 	 * @param string $fileName
@@ -30,24 +31,8 @@ abstract class AbstractResultsParser implements ResultsParserInterface
 	 * @throws FileException
 	 */
 	public function __construct(
-		protected string                  $fileName,
 		protected readonly PlayerProvider $playerProvider,
 	) {
-		if (!file_exists($this->fileName) || !is_readable($this->fileName)) {
-			throw new FileException('File "' . $this->fileName . '" does not exist or is not readable');
-		}
-		$contents = file_get_contents($this->fileName);
-		if ($contents === false) {
-			throw new FileException('File "' . $this->fileName . '" read failed');
-		}
-		$this->fileContents = utf8_encode($contents);
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getFileContents(): string {
-		return $this->fileContents;
 	}
 
 	/**
@@ -64,7 +49,15 @@ abstract class AbstractResultsParser implements ResultsParserInterface
 	}
 
 	/**
+	 * @return string
+	 */
+	public function getFileContents(): string {
+		return $this->fileContents;
+	}
+
+	/**
 	 * @param string $pattern
+	 *
 	 * @return string[][]
 	 */
 	public function matchAll(string $pattern): array {
@@ -74,6 +67,37 @@ abstract class AbstractResultsParser implements ResultsParserInterface
 		preg_match_all($pattern, $this->getFileContents(), $matches);
 		$this->matches[$pattern] = $matches;
 		return $matches;
+	}
+
+	/**
+	 * @param string $fileName
+	 *
+	 * @return $this
+	 * @throws FileException
+	 */
+	public function setFile(string $fileName): static {
+		if (!file_exists($fileName) || !is_readable($fileName)) {
+			throw new FileException('File "' . $fileName . '" does not exist or is not readable');
+		}
+
+		$this->fileName = $fileName;
+
+		$contents = file_get_contents($this->fileName);
+		if ($contents === false) {
+			throw new FileException('File "' . $this->fileName . '" read failed');
+		}
+		$this->fileContents = mb_convert_encoding($contents, 'UTF-8');
+		return $this;
+	}
+
+	/**
+	 * @param string $fileContents
+	 *
+	 * @return $this
+	 */
+	public function setContents(string $fileContents): static {
+		$this->fileContents = $fileContents;
+		return $this;
 	}
 
 	/**

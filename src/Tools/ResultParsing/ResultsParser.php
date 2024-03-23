@@ -8,6 +8,7 @@ use App\GameModels\Game\Game;
 use App\Services\PlayerProvider;
 use App\Tools\Interfaces\ResultsParserInterface;
 use Lsr\Exceptions\FileException;
+use RuntimeException;
 
 /**
  * @template G of Game
@@ -15,6 +16,8 @@ use Lsr\Exceptions\FileException;
 class ResultsParser
 {
 
+	protected string $fileName = '';
+	protected string $contents = '';
 	/** @var ResultsParserInterface<G> */
 	private ResultsParserInterface $parser;
 
@@ -25,12 +28,8 @@ class ResultsParser
 	 * @throws FileException
 	 */
 	public function __construct(
-		protected string                  $fileName,
 		protected readonly PlayerProvider $playerProvider,
 	) {
-		if (!file_exists($this->fileName) || !is_readable($this->fileName)) {
-			throw new FileException('File "' . $this->fileName . '" does not exist or is not readable');
-		}
 	}
 
 	/**
@@ -52,14 +51,36 @@ class ResultsParser
 			$baseNamespace = 'App\\Tools\\ResultParsing\\';
 			foreach (GameFactory::getSupportedSystems() as $system) {
 				/** @var class-string<ResultsParserInterface<G>> $class */
-				$class = $baseNamespace . ucfirst($system) . 'ResultsParser';
-				if (class_exists($class) && $class::checkFile($this->fileName)) {
-					$this->parser = new $class($this->fileName, $this->playerProvider);
+				$class = $baseNamespace . ucfirst($system) . '\\ResultsParser';
+				if (class_exists($class) && $class::checkFile($this->fileName, $this->contents)) {
+					$this->parser = new $class();
+					if (!empty($this->fileName)) {
+						$this->parser->setFile($this->fileName);
+					}
+					else if (!empty($this->contents)) {
+						$this->parser->setContents($this->contents);
+					}
+					else {
+						throw new RuntimeException('File or content must be set for parsing.');
+					}
 					return $this->parser;
 				}
 			}
 			throw new ResultsParseException('Cannot find parser for given results file: ' . $this->fileName);
 		}
 		return $this->parser;
+	}
+
+	public function setFile(string $fileName): ResultsParser {
+		if (!file_exists($fileName) || !is_readable($fileName)) {
+			throw new FileException('File "' . $fileName . '" does not exist or is not readable');
+		}
+		$this->fileName = $fileName;
+		return $this;
+	}
+
+	public function setContents(string $contents): ResultsParser {
+		$this->contents = $contents;
+		return $this;
 	}
 }

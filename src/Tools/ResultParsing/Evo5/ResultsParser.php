@@ -45,15 +45,24 @@ class ResultsParser extends AbstractResultsParser
 	}
 
 	/**
+	 * @param string $fileName
+	 * @param string $contents *
+	 *
 	 * @inheritDoc
 	 */
-	public static function checkFile(string $fileName): bool {
+	public static function checkFile(string $fileName = '', string $contents = ''): bool {
+		if (empty($fileName) && empty($contents)) {
+			return false;
+		}
+
+		if (empty($contents)) {
 		$extension = pathinfo($fileName, PATHINFO_EXTENSION);
 		if ($extension !== 'game') {
 			return false;
 		}
 
 		$contents = file_get_contents($fileName);
+		}
 		if (!$contents) {
 			return false;
 		}

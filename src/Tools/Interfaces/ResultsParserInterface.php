@@ -6,6 +6,7 @@
 namespace App\Tools\Interfaces;
 
 use App\GameModels\Game\Game;
+use Lsr\Exceptions\FileException;
 
 /**
  * Interface for all result parsers
@@ -14,6 +15,21 @@ use App\GameModels\Game\Game;
  */
 interface ResultsParserInterface
 {
+
+	/**
+	 * @param string $fileName
+	 *
+	 * @return $this
+	 * @throws FileException
+	 */
+	public function setFile(string $fileName): static;
+
+	/**
+	 * @param string $contents
+	 *
+	 * @return $this
+	 */
+	public function setContents(string $contents): static;
 
 	/**
 	 * Parse a game results file and return a parsed object

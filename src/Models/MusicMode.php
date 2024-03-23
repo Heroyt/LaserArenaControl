@@ -58,7 +58,8 @@ class MusicMode extends Model
 	}
 
 	public function getPreviewFileName() : string {
-		return str_replace('.mp3', '.preview.mp3', $this->fileName);
+		$extension = pathinfo($this->fileName, PATHINFO_EXTENSION);
+		return str_replace('.' . $extension, '.preview.mp3', $this->fileName);
 	}
 
 	public function getPreviewUrl() : string {

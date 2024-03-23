@@ -121,7 +121,7 @@
 	<div class="toast-container position-absolute bottom-0 end-0 p-3" id="toasts"></div>
 	<script>
         let activeGame = null;
-        const page = {\App\Core\App::getRequest()};
+        const page = {\App\Core\App::getPageInfo()};
         const prettyUrl = {\App\Core\App::isPrettyUrl()};
         const eventSourceURI = {\App\Services\EventService::getEventUrl()};
         let tips = {\App\GameModels\Tip::shuffledFormatted()};

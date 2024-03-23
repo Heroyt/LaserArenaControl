@@ -5256,3 +5256,7 @@ msgstr[3] "proher"
 
 msgid "Výsledky hry"
 msgstr "Výsledky hry"
+
+msgctxt "systems"
+msgid "evo6"
+msgstr ""

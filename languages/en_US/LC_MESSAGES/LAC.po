@@ -5200,3 +5200,7 @@ msgstr[1] "losses"
 
 msgid "Výsledky hry"
 msgstr "Game results"
+
+msgctxt "systems"
+msgid "evo6"
+msgstr ""

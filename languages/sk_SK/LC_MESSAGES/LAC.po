@@ -5232,3 +5232,7 @@ msgstr[3] ""
 
 msgid "Výsledky hry"
 msgstr ""
+
+msgctxt "systems"
+msgid "evo6"
+msgstr ""

@@ -30,7 +30,7 @@ jobs:
         strategy:
             matrix:
                 operating-system: [ ubuntu-latest ]
-                php-version: [ '8.1' ]
+                php-version: [ '8.2' ]
                 dependencies: [ '' ]
                 coverage-driver: [ xdebug ]
 

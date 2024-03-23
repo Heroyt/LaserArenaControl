@@ -11,6 +11,26 @@ export type FormSaveResponse = {
     errors?: string | string[],
 }
 
+export type ErrorResponseType =
+    'validation_error'
+    | 'database_error'
+    | 'internal_error'
+    | 'resource_not_found_error'
+    | 'resource_access_error';
+export type ExceptionResponse = {
+    message: string,
+    code: number,
+    trace: { file: string, line: number, function?: string, args?: string[] }[]
+}
+
+export type ErrorResponse<Values = { [index: string]: any }> = {
+    title: string,
+    type: ErrorResponseType,
+    detail?: string,
+    exception?: null | ExceptionResponse,
+    values?: Values | null
+};
+
 export class ResponseError extends Error {
     public response: Response;
 
@@ -57,13 +77,15 @@ export async function customFetch(path: string, method: RequestMethod, options: 
  * Call a fetch POST method with some pre-processing
  * @param path
  * @param body
+ * @param headers
  * @throws ResponseError
  */
-export async function fetchPost(path: string, body: string | FormData | object | URLSearchParams = '') {
+export async function fetchPost(path: string, body: string | FormData | object | URLSearchParams = '', headers: HeadersInit | null = null) {
     const options: RequestInit = {
         method: 'POST',
         headers: {
             'X-Requested-With': 'XMLHttpRequest',
+            ...headers
         },
     };
 
@@ -90,9 +112,12 @@ export async function fetchPost(path: string, body: string | FormData | object |
  *
  * @param path
  * @param params
+ * @param headers
  * @throws ResponseError
  */
-export async function fetchGet(path: string, params: { [key: string]: any } | URLSearchParams | string = {}) {
+export async function fetchGet(path: string, params: {
+    [key: string]: any
+} | URLSearchParams | string = {}, headers: HeadersInit | null = null) {
     if (params) {
         const searchParams = new URLSearchParams(params);
         path += '?' + searchParams.toString();
@@ -102,6 +127,7 @@ export async function fetchGet(path: string, params: { [key: string]: any } | UR
         {
             headers: {
                 'X-Requested-With': 'XMLHttpRequest',
+                ...headers
             }
         }
     );

@@ -24,9 +24,11 @@ $apiGroup = Route::group('api')
                  ->post('install', [Updater::class, 'install'])
                  ->post('events', [Events::class, 'triggerEvent']);
 
-$resultGroup = $apiGroup->group('results')->post('import', [Results::class, 'import'])->post(
-	'import/{game}', [Results::class, 'importGame']
-)->get('last', [Results::class, 'getLastGameFile'])->get('download', [Results::class, 'downloadLastGameFiles']);
+$resultGroup = $apiGroup->group('results')
+                        ->post('import', [Results::class, 'import'])
+                        ->post('import/{game}', [Results::class, 'importGame'])
+                        ->get('last', [Results::class, 'getLastGameFile'])
+                        ->get('download', [Results::class, 'downloadLastGameFiles']);
 
 $gitGroup = $apiGroup->group('git')
                      ->post('pull', [Updater::class, 'pull'])

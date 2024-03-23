@@ -26,7 +26,7 @@ class SyncService
 	 * @throws Throwable
 	 * @noinspection PhpIllegalArrayKeyTypeInspection
 	 */
-	public static function syncGames(int $limit = 5, ?float $timeout = null) : void {
+	public static function syncGames(int $limit = 5, ?float $timeout = null): int {
 		$logger = new Logger(LOG_DIR, 'sync');
 		/** @var Row[] $gameRows */
 		$gameRows = GameFactory::queryGames(true, fields: ['sync'])
@@ -37,20 +37,14 @@ class SyncService
 		                       ->fetchAll(cache: false);
 
 		if (empty($gameRows)) {
-			if (PHP_SAPI === 'cli') {
-				echo 'No games to synchronize.' . PHP_EOL;
-			}
 			$logger->info('No games to synchronize.');
-			return;
+			return 0;
 		}
 
 		$message = 'Starting sync for games: ' . implode(', ', array_map(static function (object $row) {
 				return $row->id_game.' - '.$row->code;
 			}, $gameRows));
 		$logger->info($message);
-		if (PHP_SAPI === 'cli') {
-			echo $message.PHP_EOL;
-		}
 
 		// Split games by their system
 		$systems = [];
@@ -63,6 +57,8 @@ class SyncService
 				$systems[$row->system][] = $game;
 			}
 		}
+
+		$synced = 0;
 
 		// Time it
 		$start = microtime(true);
@@ -77,7 +73,9 @@ class SyncService
 			foreach ($games as $key => $game) {
 				if (!$game->sync()) {
 					$logger->warning('Failed to synchronize "'.$system.'" system (game '.$key.')');
+					continue;
 				}
+				$synced++;
 			}
 			$systemTimes[$system] += microtime(true) - $systemStart;
 		}
@@ -87,9 +85,8 @@ class SyncService
 		}
 		$message .= 'total: '.(microtime(true) - $start).'s.';
 		$logger->info($message);
-		if (PHP_SAPI === 'cli') {
-			echo $message.PHP_EOL;
-		}
+
+		return $synced;
 	}
 
 }

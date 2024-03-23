@@ -5,12 +5,12 @@
 	<div class="tracy-inner-container">
 		<p><strong>{lang 'Language', context: 'debugPanel'}:</strong></p>
 		<div class="p-3 my-2 border rounded">
-            <h5>{\App\Core\App::$language?->name}</h5>
+            <h5>{\App\Core\App::getLanguage()?->name}</h5>
 			{ifset $_SERVER['HTTP_ACCEPT_LANGUAGE']}
 				<p><strong>{lang 'HTTP header', context: 'debugPanel'}:</strong> {$_SERVER['HTTP_ACCEPT_LANGUAGE']}</p>
 			{/ifset}
             {tracyDump \App\Core\App::$activeLanguageCode}
-            {tracyDump \App\Core\App::$language}
+            {tracyDump \App\Core\App::getLanguage()}
             {tracyDump \App\Core\App::getSupportedLanguages()}
 		</div>
 		<p><strong>{lang 'Translated strings', context: 'debugPanel'}

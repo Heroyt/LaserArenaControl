@@ -53,7 +53,7 @@
 					<i class="fa-solid fa-moon"></i>
 					<i class="fa-solid fa-sun"></i>
 				</button>
-                {var string $selectedLang = explode('_',$_GET['lang'] ?? App\Core\App::$language->id)[0]}
+                {var string $selectedLang = explode('_',$_GET['lang'] ?? App\Core\App::getLanguage()?->id ?? 'cs')[0]}
                 {var string $selectedCountry = App\Core\App::getSupportedLanguages()[$selectedLang]}
 				<button class="btn btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown"
 						aria-expanded="false">

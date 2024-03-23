@@ -27,11 +27,24 @@ class EventService
 		if (!isset(self::$eventUrl)) {
 			/** @var Config $config */
 			$config = App::getServiceByType(Config::class);
-			self::$eventUrl = (App::isSecure() ? 'https://' : 'http://') .
-				($config->getConfig('ENV')['EVENT_URL'] ?? explode(
-					                                           ':',
-					                                           ($_SERVER['HTTP_HOST'] ?? 'localhost')
-				                                           )[0] . ':' . self::getEventPort());
+
+			$url = $config->getConfig('ENV')['EVENT_URL'] ??
+				explode(':', ($_SERVER['HTTP_HOST'] ?? '{host}'))[0] . ':' . self::getEventPort();
+
+			$host = App::getUrl();
+			if (str_contains(strtolower($url), '{host}')) {
+				$url = str_replace(['{host}', '{HOST}'], $host, $url);
+			}
+			else {
+				$url = (App::isSecure() ? 'https://' : 'http://') . $url;
+			}
+
+			// Remove double slashes
+			if (str_ends_with($host, '/')) {
+				$host = substr($host, 0, -1);
+			}
+
+			self::$eventUrl = str_replace($host . '//', $host . '/', $url);
 		}
 		return self::$eventUrl;
 	}

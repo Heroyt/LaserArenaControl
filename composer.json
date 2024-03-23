@@ -58,7 +58,8 @@
     "symfony/lock": "^6",
     "diego-ninja/composer-preload": "^1.0",
     "orisai/nette-console": "^1.4",
-    "ext-redis": "*"
+    "ext-redis": "*",
+    "zircote/swagger-php": "^4.8"
   },
   "require-dev": {
     "roave/security-advisories": "dev-latest",

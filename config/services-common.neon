@@ -74,6 +74,10 @@ services:
 	cron.logArchive: App\Cron\LogArchiveJob
 	cron.gamesPrecache: App\Cron\GamesPrecacheJob
 
+	result.parser: App\Tools\ResultParsing\ResultsParser
+	result.parser.evo5: App\Tools\ResultParsing\Evo5\ResultsParser
+	result.parser.evo6: App\Tools\ResultParsing\Evo6\ResultsParser
+
 	# Commands
 	command.cache.clean: App\Cli\Commands\Cache\CleanCacheCommand
 	command.games.import: App\Cli\Commands\Games\ImportGameCommand

@@ -48,11 +48,11 @@
 			<link rel="stylesheet"
 				  href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"/>
 		</noscript>
-		<link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'"
-              href="{getUrl}dist/vendors.css?v={\App\Core\App::getCacheVersion()}">
-		<noscript>
-            <link rel="stylesheet" href="{getUrl}dist/vendors.css?v={\App\Core\App::getCacheVersion()}">
-		</noscript>
+        <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'"
+              href="{getUrl}dist/fontawesome.css?v={\App\Core\App::getCacheVersion()}">
+        <noscript>
+            <link rel="stylesheet" href="{getUrl}dist/fontawesome.css?v={\App\Core\App::getCacheVersion()}">
+        </noscript>
 		<title>{$page->getTitle()}</title>
         <link rel="stylesheet" href="{getUrl}dist/main.css?v={\App\Core\App::getCacheVersion()}">
         <link rel="stylesheet" href="{getUrl}dist/pages/gate.css?v={\App\Core\App::getCacheVersion()}">
@@ -134,9 +134,6 @@
     <script src="{getUrl}dist/main.js?v={\App\Core\App::getCacheVersion()}" type="module"></script>
     <script n:foreach="$addJs as $js" src="{getUrl}dist/{$js}?v={\App\Core\App::getCacheVersion()}" type="module"
                                       defer></script>
-    <script src="{getUrl}dist/bootstrap.js?v={\App\Core\App::getCacheVersion()}" type="module" defer></script>
-    <script src="{getUrl}dist/vendors.js?v={\App\Core\App::getCacheVersion()}" type="module" defer></script>
-    <script src="{getUrl}dist/common.js?v={\App\Core\App::getCacheVersion()}" type="module" defer></script>
 	{include svgSymbols}
 	</body>
 	</html>

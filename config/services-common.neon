@@ -16,6 +16,8 @@ parameters:
 		timeout: 15.0
 	redis:
 		host: redis
+orisai.console:
+	name: 'Laser arena Control'
 orisai.scheduler:
 	console:
 		script: '%constants.appDir%bin/console'
@@ -71,3 +73,16 @@ services:
 	cron.vestSync: App\Cron\VestSyncJob
 	cron.logArchive: App\Cron\LogArchiveJob
 	cron.gamesPrecache: App\Cron\GamesPrecacheJob
+
+	# Commands
+	command.cache.clean: App\Cli\Commands\Cache\CleanCacheCommand
+	command.games.import: App\Cli\Commands\Games\ImportGameCommand
+	command.games.sync: App\Cli\Commands\Games\SyncGameCommand
+	command.games.skills: App\Cli\Commands\Games\RecalculateSkillsGameCommand
+	command.regression.hits: App\Cli\Commands\Regression\CalculateHitsRegressionCommand
+	command.regression.hitsOwn: App\Cli\Commands\Regression\CalculateHitsOwnRegressionCommand
+	command.regression.deaths: App\Cli\Commands\Regression\CalculateDeathsRegressionCommand
+	command.regression.deathsOwn: App\Cli\Commands\Regression\CalculateDeathsOwnRegressionCommand
+	command.regression.update: App\Cli\Commands\Regression\UpdateRegressionModelsCommand
+	command.translation.compile: App\Cli\Commands\Translation\CompileTranslationsCommand
+	command.translation.removeComments: App\Cli\Commands\Translation\RemoveCommentsCommand

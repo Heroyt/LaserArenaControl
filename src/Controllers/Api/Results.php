@@ -2,6 +2,8 @@
 
 namespace App\Controllers\Api;
 
+use App\Api\Response\ErrorDto;
+use App\Api\Response\ErrorType;
 use App\Exceptions\ResultsParseException;
 use App\GameModels\Factory\GameFactory;
 use App\GameModels\Game\Lasermaxx\Game;
@@ -16,9 +18,12 @@ use Lsr\Core\Controllers\ApiController;
 use Lsr\Core\Exceptions\ModelNotFoundException;
 use Lsr\Core\Exceptions\ValidationException;
 use Lsr\Core\Requests\Request;
+use Lsr\Core\Requests\Response;
 use Lsr\Core\Templating\Latte;
 use Lsr\Logging\Exceptions\ArchiveCreationException;
 use Lsr\Logging\Logger;
+use OpenApi\Attributes as OA;
+use Psr\Http\Message\ResponseInterface;
 use Throwable;
 use ZipArchive;
 
@@ -27,12 +32,7 @@ class Results extends ApiController
 	private int $gameLoadedTime;
 	private int $gameStartedTime;
 
-	public function __construct(
-		Latte                           $latte,
-		private readonly PlayerProvider $playerProvider,
-		private readonly ImportService $importService,
-		Config                         $config
-	) {
+	public function __construct(Latte $latte, private readonly PlayerProvider $playerProvider, private readonly ImportService $importService, Config $config) {
 		parent::__construct($latte);
 		$this->gameLoadedTime = (int)($config->getConfig('ENV')['GAME_LOADED_TIME'] ?? 300);
 		$this->gameStartedTime = (int)($config->getConfig('ENV')['GAME_STARTED_TIME'] ?? 1800);
@@ -41,79 +41,135 @@ class Results extends ApiController
 	/**
 	 * @param Request $request
 	 *
-	 * @return void
-	 * @throws Throwable
+	 * @return ResponseInterface
+	 * @throws JsonException
 	 * @throws ModelNotFoundException
+	 * @throws Throwable
 	 * @throws ValidationException
 	 */
-	public function import(Request $request): void {
-		$resultsDir = $request->post['dir'] ?? '';
+	#[OA\Post('/api/results/import')]
+	public function import(Request $request): ResponseInterface {
+		$resultsDir = $request->getPost('dir', '');
 		if (empty($resultsDir)) {
-			$this->respond(['error' => 'Missing required argument "dir". Valid results directory is expected.'], 400);
+			return $this->respond(
+				new ErrorDto(
+					      'Missing required argument "dir". Valid results directory is expected.',
+					type: ErrorType::VALIDATION
+				),
+				400
+			);
 		}
 
-		$this->importService->import($resultsDir, $this);
+		$response = $this->importService->import($resultsDir);
+		if ($response instanceof ErrorDto) {
+			return $this->respond(
+				$response,
+				match ($response->type) {
+					ErrorType::VALIDATION => 400,
+					ErrorType::NOT_FOUND  => 404,
+					default               => 500,
+				}
+			);
+		}
+		return $this->respond($response);
 	}
 
 	/**
 	 * Import one game (again)
 	 *
 	 * @param Request $request
+	 * @param string $game
 	 *
-	 * @return void
+	 * @return ResponseInterface
+	 * @throws JsonException
 	 * @throws Throwable
 	 */
-	public function importGame(Request $request): void {
+	#[OA\Post('/api/results/import/{game}')]
+	public function importGame(Request $request, string $game = ''): ResponseInterface {
 		$logger = new Logger(LOG_DIR . 'results/', 'import');
-		$resultsDir = trailingSlashIt($request->post['dir'] ?? DEFAULT_RESULTS_DIR);
+		$resultsDir = trailingSlashIt($request->getPost('dir', DEFAULT_RESULTS_DIR));
 
 		try {
-			$game = GameFactory::getByCode($request->params['game'] ?? '');
+			$gameObj = GameFactory::getByCode($game);
 		} catch (Throwable $e) {
-			$this->respond(['error' => 'Error while getting the game by code.', 'exception' => $e->getMessage()], 500);
+			return $this->respond(
+				new ErrorDto(
+					           'Error while getting the game by code.',
+					type     : ErrorType::INTERNAL,
+					exception: $e
+				),
+				500
+			);
 		}
-		if (!isset($game)) {
-			$this->respond(['error' => 'Unknown game.'], 404);
+		if (!isset($gameObj)) {
+			return $this->respond(
+				new ErrorDto('Unknown game.', type: ErrorType::NOT_FOUND),
+				404
+			);
 		}
 
-		$game->clearCache();
+		$gameObj->clearCache();
 
-		if (isset($game->resultsFile) && file_exists($game->resultsFile)) {
-			$file = $game->resultsFile;
+		if (isset($gameObj->resultsFile) && file_exists($gameObj->resultsFile)) {
+			$file = $gameObj->resultsFile;
 		}
-		else if ($game instanceof Game && !empty($game->fileNumber)) {
-			$files = glob($resultsDir . str_pad($game->fileNumber, 4, '0', STR_PAD_LEFT) . '*.game');
+		else if ($gameObj instanceof Game && !empty($gameObj->fileNumber)) {
+			$files = glob($resultsDir . str_pad($gameObj->fileNumber, 4, '0', STR_PAD_LEFT) . '*.game');
 			if (empty($files)) {
-				$this->respond(
-					['error' => 'Cannot find game file.', 'path' => $resultsDir . $game->fileNumber . '*.game'],
+				return $this->respond(
+					new ErrorDto(
+						        'Cannot find game file.',
+						type  : ErrorType::NOT_FOUND,
+						values: ['path' => $resultsDir . $gameObj->fileNumber . '*.game']
+					),
 					404
 				);
 			}
 			if (count($files) > 1) {
-				$this->respond(['error' => 'Found more than one suitable game file.'], 500);
+				return $this->respond(
+					new ErrorDto(
+						        'Found more than one suitable game file.',
+						type  : ErrorType::INTERNAL,
+						values: ['path' => $resultsDir . $gameObj->fileNumber . '*.game']
+					),
+					500
+				);
 			}
 			$file = $files[0];
 		}
 		else {
-			$this->respond(['error' => 'Cannot get game file number.', 'game' => $game], 404);
+			return $this->respond(
+				new ErrorDto(
+					        'Cannot get game file number.',
+					type  : ErrorType::NOT_FOUND,
+					values: ['game' => $gameObj]
+				),
+				417,
+			);
 		}
 
 		try {
 			$logger->info('Importing file: ' . $file);
 			/** @var class-string<ResultsParserInterface> $class */
-			$class = 'App\\Tools\\ResultParsing\\' . ucfirst($game::SYSTEM) . '\\ResultsParser';
+			$class = 'App\\Tools\\ResultParsing\\' . ucfirst($gameObj::SYSTEM) . '\\ResultsParser';
 			if (!class_exists($class)) {
-				$this->respond(['error' => 'No parser for this game (' . $game::SYSTEM . ')'], 500);
+				return $this->respond(
+					new ErrorDto('No parser for this game (' . $gameObj::SYSTEM . ')', type: ErrorType::INTERNAL),
+					500,
+				);
 			}
 			if (!$class::checkFile($file)) {
-				$this->respond(['error' => 'Game file cannot be parsed: ' . $file], 500);
+				return $this->respond(
+					new ErrorDto('Game file cannot be parsed: ' . $file, type: ErrorType::INTERNAL),
+					500,
+				);
 			}
 			$parser = new $class($file, $this->playerProvider);
-			$game = $parser->parse();
+			$gameObj = $parser->parse();
 
 			$now = time();
 
-			if (!isset($game->importTime)) {
+			if (!isset($gameObj->importTime)) {
 				$logger->debug('Game is not finished');
 
 				// The game is not finished and does not contain any results
@@ -125,28 +181,22 @@ class Results extends ApiController
 				// But only the latest game should be considered
 
 				// The game is started
-				if (
-					$game->started &&
-					isset($game->fileTime) &&
-					($now - $game->fileTime->getTimestamp()) <= $this->gameStartedTime
-				) {
+				if ($gameObj->started && isset($gameObj->fileTime) && ($now - $gameObj->fileTime->getTimestamp(
+						)) <= $this->gameStartedTime) {
 					$logger->debug('Game is started');
 				}
 				// The game is loaded
-				if (
-					!$game->started &&
-					isset($game->fileTime) &&
-					($now - $game->fileTime->getTimestamp()) <= $this->gameLoadedTime
-				) {
+				if (!$gameObj->started && isset($gameObj->fileTime) && ($now - $gameObj->fileTime->getTimestamp(
+						)) <= $this->gameLoadedTime) {
 					$logger->debug('Game is loaded');
 				}
-				$this->respond(['error' => 'Game is not finished'], 400);
+				return $this->respond(new ErrorDto('Game is not finished', type: ErrorType::VALIDATION), 400);
 			}
 
 			// Check players
 			$null = true;
 			/** @var Player $player */
-			foreach ($game->getPlayers() as $player) {
+			foreach ($gameObj->getPlayers() as $player) {
 				if ($player->score !== 0 || $player->shots !== 0) {
 					$null = false;
 					break;
@@ -155,28 +205,38 @@ class Results extends ApiController
 			if ($null) {
 				$logger->warning('Game is empty');
 				// Empty game - no shots, no hits, etc..
-				$this->respond(['error' => 'Game is empty'], 400);
+				return $this->respond(new ErrorDto('Game is empty', type: ErrorType::VALIDATION), 400);
 			}
 
-			if (!$game->save()) {
+			if (!$gameObj->save()) {
 				throw new ResultsParseException('Failed saving game into DB.');
 			}
 		} catch (Exception $e) {
-			$this->respond(['error' => 'Error while parsing the game file.', 'exception' => $e->getMessage()], 500);
+			return $this->respond(
+				new ErrorDto('Error while parsing game file.', type: ErrorType::INTERNAL, exception: $e),
+				500
+			);
 		}
-		$this->respond(['success' => true]);
+		return $this->respond(['success' => true]);
 	}
 
 	/**
 	 * @param Request $request
 	 *
-	 * @return never
+	 * @return ResponseInterface
 	 * @throws JsonException
 	 */
-	public function getLastGameFile(Request $request): never {
-		$resultsDir = urldecode($request->get['dir'] ?? '');
+	#[OA\Get('/api/results/last')]
+	public function getLastGameFile(Request $request): ResponseInterface {
+		$resultsDir = urldecode($request->getGet('dir', ''));
 		if (empty($resultsDir)) {
-			$this->respond(['error' => 'Missing required argument "dir". Valid results directory is expected.'], 400);
+			return $this->respond(
+				new ErrorDto(
+					      'Missing required argument "dir". Valid results directory is expected.',
+					type: ErrorType::VALIDATION
+				),
+				400
+			);
 		}
 		$resultsDir = trailingSlashIt($resultsDir);
 		/** @var string[][] $resultFiles */
@@ -200,7 +260,7 @@ class Results extends ApiController
 		$resultsContent1 = file_get_contents($resultFiles[0]);
 		/** @var string $resultsContent2 */
 		$resultsContent2 = file_get_contents($resultFiles[1]);
-		$this->respond(
+		return $this->respond(
 			[
 				'files'     => $resultFiles,
 				'contents1' => utf8_encode($resultsContent1),
@@ -212,15 +272,22 @@ class Results extends ApiController
 	/**
 	 * @param Request $request
 	 *
-	 * @return never
+	 * @return ResponseInterface
 	 * @throws ArchiveCreationException
 	 * @throws JsonException
 	 */
-	public function downloadLastGameFiles(Request $request): never {
+	#[OA\Get('/api/results/download')]
+	public function downloadLastGameFiles(Request $request): ResponseInterface {
 		/** TODO: Secure.. this is really bad.. and would allow for downloading of any files */
-		$resultsDir = urldecode($request->get['dir'] ?? '');
+		$resultsDir = urldecode($request->getGet('dir', ''));
 		if (empty($resultsDir)) {
-			$this->respond(['error' => 'Missing required argument "dir". Valid results directory is expected.'], 400);
+			return $this->respond(
+				new ErrorDto(
+					      'Missing required argument "dir". Valid results directory is expected.',
+					type: ErrorType::VALIDATION
+				),
+				400
+			);
 		}
 		$resultsDir = trailingSlashIt($resultsDir);
 		/** @var string[][] $resultFiles */
@@ -248,12 +315,16 @@ class Results extends ApiController
 		}
 		$archive->close();
 
-		header('Content-Type: application/zip');
-		header('Content-Disposition: attachment; filename="games.zip"');
-		header("Content-Length: " . filesize(TMP_DIR . 'games.zip'));
-		http_response_code(200);
-		readfile(TMP_DIR . 'games.zip');
-		exit;
+		return new Response(
+			new \Nyholm\Psr7\Response(
+				headers: [
+					         'Content-Type'        => 'application/zip',
+					         'Content-Disposition' => 'attachment; filename="games.zip"',
+					         'Content-Length'      => (string)filesize(TMP_DIR . 'games.zip'),
+				         ],
+				body   : fopen(TMP_DIR . 'games.zip', 'rb')
+			)
+		);
 	}
 
 }

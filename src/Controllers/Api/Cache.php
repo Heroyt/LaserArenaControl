@@ -5,6 +5,7 @@ namespace App\Controllers\Api;
 use Lsr\Core\Caching\Cache as CacheService;
 use Lsr\Core\Controllers\Controller;
 use Lsr\Core\Templating\Latte;
+use Psr\Http\Message\ResponseInterface;
 
 class Cache extends Controller
 {
@@ -13,7 +14,7 @@ class Cache extends Controller
 		parent::__construct($latte);
 	}
 
-	public function clearAll(): void {
+	public function clearAll(): ResponseInterface {
 		$this->cache->clean([\Nette\Caching\Cache::All => true]);
 		/** @var string[] $files */
 		$files = array_merge(
@@ -32,15 +33,15 @@ class Cache extends Controller
 				$deleted++;
 			}
 		}
-		$this->respond(['status' => 'ok', 'deleted' => $deleted, 'total' => count($files)]);
+		return $this->respond(['status' => 'ok', 'deleted' => $deleted, 'total' => count($files)]);
 	}
 
-	public function clearSystem(): void {
+	public function clearSystem(): ResponseInterface {
 		$this->cache->clean([\Nette\Caching\Cache::All => true]);
-		$this->respond(['status' => 'ok']);
+		return $this->respond(['status' => 'ok']);
 	}
 
-	public function clearDi(): void {
+	public function clearDi(): ResponseInterface {
 		/** @var string[] $files */
 		$files = array_merge(
 			glob(TMP_DIR . '*.php'),
@@ -53,10 +54,10 @@ class Cache extends Controller
 				$deleted++;
 			}
 		}
-		$this->respond(['status' => 'ok', 'deleted' => $deleted, 'total' => count($files)]);
+		return $this->respond(['status' => 'ok', 'deleted' => $deleted, 'total' => count($files)]);
 	}
 
-	public function clearModels(): void {
+	public function clearModels(): ResponseInterface {
 		/** @var string[] $files */
 		$files = glob(TMP_DIR . 'models/*');
 		$deleted = 0;
@@ -65,10 +66,10 @@ class Cache extends Controller
 				$deleted++;
 			}
 		}
-		$this->respond(['status' => 'ok', 'deleted' => $deleted, 'total' => count($files)]);
+		return $this->respond(['status' => 'ok', 'deleted' => $deleted, 'total' => count($files)]);
 	}
 
-	public function clearConfig(): void {
+	public function clearConfig(): ResponseInterface {
 		/** @var string[] $files */
 		$files = glob(TMP_DIR . '*.cache');
 		$deleted = 0;
@@ -77,10 +78,10 @@ class Cache extends Controller
 				$deleted++;
 			}
 		}
-		$this->respond(['status' => 'ok', 'deleted' => $deleted, 'total' => count($files)]);
+		return $this->respond(['status' => 'ok', 'deleted' => $deleted, 'total' => count($files)]);
 	}
 
-	public function clearResults(): void {
+	public function clearResults(): ResponseInterface {
 		/** @var string[] $files */
 		$files = array_merge(
 			glob(TMP_DIR . 'results/*'),
@@ -92,10 +93,10 @@ class Cache extends Controller
 				$deleted++;
 			}
 		}
-		$this->respond(['status' => 'ok', 'deleted' => $deleted, 'total' => count($files)]);
+		return $this->respond(['status' => 'ok', 'deleted' => $deleted, 'total' => count($files)]);
 	}
 
-	public function clearLatte(): void {
+	public function clearLatte(): ResponseInterface {
 		/** @var string[] $files */
 		$files = glob(TMP_DIR . 'latte/*');
 		$deleted = 0;
@@ -104,7 +105,7 @@ class Cache extends Controller
 				$deleted++;
 			}
 		}
-		$this->respond(['status' => 'ok', 'deleted' => $deleted, 'total' => count($files)]);
+		return $this->respond(['status' => 'ok', 'deleted' => $deleted, 'total' => count($files)]);
 	}
 
 }

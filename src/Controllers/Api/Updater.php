@@ -8,6 +8,7 @@ use Lsr\Core\Controllers\ApiController;
 use Lsr\Core\Requests\Request;
 use Lsr\Logging\Exceptions\DirectoryCreationException;
 use Lsr\Logging\Logger;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  *
@@ -20,9 +21,10 @@ class Updater extends ApiController
 	 *
 	 * @param Request $request
 	 *
-	 * @return void
+	 * @return ResponseInterface
+	 * @throws JsonException
 	 */
-	public function update(Request $request) : void {
+	public function update(Request $request): ResponseInterface {
 		try {
 			$logger = new Logger(LOG_DIR.'api/', 'update');
 			$logger->info('Updating LAC - ('.$request->getIp().')');
@@ -39,7 +41,10 @@ class Updater extends ApiController
 			$logger?->warning('Cannot execute command');
 			$logger?->debug(json_encode($out, JSON_THROW_ON_ERROR));
 			$logger?->debug(json_encode($output, JSON_THROW_ON_ERROR));
-			$this->respond(['error' => 'Cannot execute git pull', 'errorCode' => $returnCode, 'output' => $output], 500);
+			return $this->respond(
+				['error' => 'Cannot execute git pull', 'errorCode' => $returnCode, 'output' => $output],
+				500
+			);
 		}
 
 		/** @var string|false $out */
@@ -49,7 +54,8 @@ class Updater extends ApiController
 			$logger?->warning('Cannot execute command');
 			$logger?->debug(json_encode($out, JSON_THROW_ON_ERROR));
 			$logger?->debug(json_encode($output, JSON_THROW_ON_ERROR));
-			$this->respond(['error' => 'Cannot execute build', 'errorCode' => $returnCode, 'output' => $output], 500);
+			return $this->respond(['error' => 'Cannot execute build', 'errorCode' => $returnCode, 'output' => $output],
+			                      500);
 		}
 
 		ob_start();
@@ -60,10 +66,10 @@ class Updater extends ApiController
 		if (!$success) {
 			$logger?->warning('Install failed');
 			$logger?->debug($output);
-			$this->respond(['error' => 'Install failed', 'output' => $output], 500);
+			return $this->respond(['error' => 'Install failed', 'output' => $output], 500);
 		}
 
-		$this->respond(['success' => true, 'output' => $output]);
+		return $this->respond(['success' => true, 'output' => $output]);
 	}
 
 	/**
@@ -71,10 +77,10 @@ class Updater extends ApiController
 	 *
 	 * @param Request $request
 	 *
-	 * @return void
+	 * @return ResponseInterface
 	 * @throws JsonException
 	 */
-	public function install(Request $request) : void {
+	public function install(Request $request): ResponseInterface {
 		try {
 			$logger = new Logger(LOG_DIR.'api/', 'update');
 			$logger->info('Updating LAC - install ('.$request->getIp().')');
@@ -83,16 +89,17 @@ class Updater extends ApiController
 		}
 
 		ob_start();
-		$success = Install::install(isset($request->post['fresh']) && $request->post['fresh'] === 1);
+		$fresh = (int)$request->getPost('fresh', 0);
+		$success = Install::install($fresh === 1);
 		/** @var string|false $output */
 		$output = ob_get_clean();
 
 		if (!$success) {
 			$logger?->warning('Install failed');
 			$logger?->debug($output !== false ? $output : '');
-			$this->respond(['error' => 'Install failed', 'output' => $output], 500);
+			return $this->respond(['error' => 'Install failed', 'output' => $output], 500);
 		}
-		$this->respond(['success' => true, 'output' => $output]);
+		return $this->respond(['success' => true, 'output' => $output]);
 	}
 
 	/**
@@ -100,10 +107,10 @@ class Updater extends ApiController
 	 *
 	 * @param Request $request
 	 *
-	 * @return void
+	 * @return ResponseInterface
 	 * @throws JsonException
 	 */
-	public function pull(Request $request) : void {
+	public function pull(Request $request): ResponseInterface {
 		try {
 			$logger = new Logger(LOG_DIR.'api/', 'update');
 			$logger->info('Updating LAC - pull ('.$request->getIp().')');
@@ -120,9 +127,12 @@ class Updater extends ApiController
 			$logger?->warning('Cannot execute command');
 			$logger?->debug(json_encode($out, JSON_THROW_ON_ERROR));
 			$logger?->debug(json_encode($output, JSON_THROW_ON_ERROR));
-			$this->respond(['error' => 'Cannot execute git pull', 'errorCode' => $returnCode, 'output' => $output], 500);
+			return $this->respond(
+				['error' => 'Cannot execute git pull', 'errorCode' => $returnCode, 'output' => $output],
+				500
+			);
 		}
-		$this->respond(['success' => true, 'output' => $output]);
+		return $this->respond(['success' => true, 'output' => $output]);
 	}
 
 	/**
@@ -130,9 +140,10 @@ class Updater extends ApiController
 	 *
 	 * @param Request $request
 	 *
-	 * @return void
+	 * @return ResponseInterface
+	 * @throws JsonException
 	 */
-	public function fetch(Request $request) : void {
+	public function fetch(Request $request): ResponseInterface {
 		try {
 			$logger = new Logger(LOG_DIR.'api/', 'update');
 			$logger->info('Updating LAC - fetch ('.$request->getIp().')');
@@ -147,9 +158,12 @@ class Updater extends ApiController
 			$logger?->warning('Cannot execute command');
 			$logger?->debug(json_encode($out, JSON_THROW_ON_ERROR));
 			$logger?->debug(json_encode($output, JSON_THROW_ON_ERROR));
-			$this->respond(['error' => 'Cannot execute git fetch', 'errorCode' => $returnCode, 'output' => $output], 500);
+			return $this->respond(
+				['error' => 'Cannot execute git fetch', 'errorCode' => $returnCode, 'output' => $output],
+				500
+			);
 		}
-		$this->respond(['success' => true, 'output' => $output]);
+		return $this->respond(['success' => true, 'output' => $output]);
 	}
 
 	/**
@@ -157,9 +171,10 @@ class Updater extends ApiController
 	 *
 	 * @param Request $request
 	 *
-	 * @return void
+	 * @return ResponseInterface
+	 * @throws JsonException
 	 */
-	public function status(Request $request) : void {
+	public function status(Request $request): ResponseInterface {
 		try {
 			$logger = new Logger(LOG_DIR.'api/', 'update');
 			$logger->info('Updating LAC - pull ('.$request->getIp().')');
@@ -174,9 +189,12 @@ class Updater extends ApiController
 			$logger?->warning('Cannot execute command');
 			$logger?->debug(json_encode($out, JSON_THROW_ON_ERROR));
 			$logger?->debug(json_encode($output, JSON_THROW_ON_ERROR));
-			$this->respond(['error' => 'Cannot execute git status', 'errorCode' => $returnCode, 'output' => $output], 500);
+			return $this->respond(
+				['error' => 'Cannot execute git status', 'errorCode' => $returnCode, 'output' => $output],
+				500
+			);
 		}
-		$this->respond(['success' => true, 'output' => $output]);
+		return $this->respond(['success' => true, 'output' => $output]);
 	}
 
 	/**
@@ -184,10 +202,10 @@ class Updater extends ApiController
 	 *
 	 * @param Request $request
 	 *
-	 * @return void
+	 * @return ResponseInterface
 	 * @throws JsonException
 	 */
-	public function build(Request $request) : void {
+	public function build(Request $request): ResponseInterface {
 		try {
 			$logger = new Logger(LOG_DIR.'api/', 'update');
 			$logger->info('Updating LAC - build ('.$request->getIp().')');
@@ -195,11 +213,11 @@ class Updater extends ApiController
 			$logger = null;
 		}
 
-		if (isset($request->get['npmOnly'])) {
+		if ($request->getGet('npmOnly', false) === false) {
 			/** @var string|false $out */
 			$out = exec('npm run build 2>&1', $output, $returnCode);
 		}
-		else if (isset($request->get['composerOnly'])) {
+		else if ($request->getGet('composerOnly', false) === false) {
 			/** @var string|false $out */
 			$out = exec('COMPOSER_HOME=$(pwd) composer update 2>&1 && COMPOSER_HOME=$(pwd) composer dump-autoload 2>&1', $output, $returnCode);
 		}
@@ -212,9 +230,10 @@ class Updater extends ApiController
 			$logger?->warning('Cannot execute command');
 			$logger?->debug(json_encode($out, JSON_THROW_ON_ERROR));
 			$logger?->debug(json_encode($output, JSON_THROW_ON_ERROR));
-			$this->respond(['error' => 'Cannot execute build', 'errorCode' => $returnCode, 'output' => $output], 500);
+			return $this->respond(['error' => 'Cannot execute build', 'errorCode' => $returnCode, 'output' => $output],
+			                      500);
 		}
-		$this->respond(['success' => true]);
+		return $this->respond(['success' => true]);
 	}
 
 }

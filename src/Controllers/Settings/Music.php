@@ -15,6 +15,7 @@ use Lsr\Core\Routing\Attributes\Get;
 use Lsr\Core\Routing\Attributes\Post;
 use Lsr\Exceptions\TemplateDoesNotExistException;
 use Lsr\Logging\Exceptions\DirectoryCreationException;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  *
@@ -28,9 +29,9 @@ class Music extends Controller
 	 * @throws TemplateDoesNotExistException
 	 */
 	#[Get('settings/music', 'settings-music')]
-	public function show() : void {
+	public function show(): ResponseInterface {
 		$this->params['music'] = MusicMode::getAll();
-		$this->view('pages/settings/music');
+		return $this->view('pages/settings/music');
 	}
 
 	/**
@@ -40,7 +41,7 @@ class Music extends Controller
 	 * @throws JsonException
 	 */
 	#[Post('settings/music/upload')]
-	public function upload(Request $request) : never {
+	public function upload(Request $request): ResponseInterface {
 		$allMusic = [];
 
 		if (!empty($_FILES['media']['name'])) {
@@ -116,7 +117,7 @@ class Music extends Controller
 		} catch (ValidationException $e) {
 		}
 
-		$this->customRespond($request, $allMusic);
+		return $this->customRespond($request, $allMusic);
 	}
 
 	/**
@@ -126,7 +127,7 @@ class Music extends Controller
 	 * @throws JsonException
 	 */
 	#[Post('settings/music')]
-	public function save(Request $request) : never {
+	public function save(Request $request): ResponseInterface {
 
 		foreach ($_POST['music'] ?? [] as $id => $info) {
 			try {
@@ -158,7 +159,7 @@ class Music extends Controller
 		} catch (ValidationException $e) {
 		}
 
-		$this->customRespond($request);
+		return $this->customRespond($request);
 	}
 
 	/**
@@ -170,14 +171,19 @@ class Music extends Controller
 	 * @return never
 	 * @throws JsonException
 	 */
-	private function customRespond(Request $request, array $music = []) : never {
+	private function customRespond(Request $request, array $music = []): ResponseInterface {
 		if ($request->isAjax()) {
 			if (!empty($request->passErrors)) {
-				$this->respond(['errors' => $request->passErrors, 'notices' => $request->passNotices, 'music' => $music], 500);
+				return $this->respond(
+					['errors' => $request->passErrors, 'notices' => $request->passNotices, 'music' => $music],
+					500
+				);
 			}
-			$this->respond(['status' => 'ok', 'errors' => [], 'notices' => $request->passNotices, 'music' => $music]);
+			return $this->respond(
+				['status' => 'ok', 'errors' => [], 'notices' => $request->passNotices, 'music' => $music]
+			);
 		}
-		App::redirect(['settings', 'music'], $request);
+		return App::redirect(['settings', 'music'], $request);
 	}
 
 	/**
@@ -187,24 +193,24 @@ class Music extends Controller
 	 * @throws JsonException
 	 */
 	#[Delete('settings/music/{id}')]
-	public function delete(Request $request) : never {
+	public function delete(Request $request): ResponseInterface {
 		$id = (int) ($request->params['id'] ?? 0);
 		if ($id <= 0) {
-			$this->respond(['error' => lang('Invalid ID', context: 'errors')], 400);
+			return $this->respond(['error' => lang('Invalid ID', context: 'errors')], 400);
 		}
 		try {
 			$music = MusicMode::get($id);
 			if (file_exists($music->fileName) && !unlink($music->fileName)) {
-				$this->respond(['error' => lang('Failed to delete the music file', context: 'errors')], 500);
+				return $this->respond(['error' => lang('Failed to delete the music file', context: 'errors')], 500);
 			}
 			if (!$music->delete()) {
-				$this->respond(['error' => lang('Failed to delete the music mode', context: 'errors')], 500);
+				return $this->respond(['error' => lang('Failed to delete the music mode', context: 'errors')], 500);
 			}
 		} catch (ModelNotFoundException|ValidationException|DirectoryCreationException $e) {
-			$this->respond(['error' => lang('Music mode not found', context: 'errors')], 404);
+			return $this->respond(['error' => lang('Music mode not found', context: 'errors')], 404);
 		}
 
-		$this->respond(['status' => 'ok']);
+		return $this->respond(['status' => 'ok']);
 	}
 
 }

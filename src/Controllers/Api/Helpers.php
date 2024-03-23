@@ -5,19 +5,20 @@ namespace App\Controllers\Api;
 use Lsr\Core\Controllers\ApiController;
 use Lsr\Core\Requests\Request;
 use Lsr\Core\Routing\Attributes\Get;
+use Psr\Http\Message\ResponseInterface;
 
 class Helpers extends ApiController
 {
 
 
 	#[Get('/api/helpers/translate')]
-	public function translate(Request $request) : never {
-		$this->respond(
+	public function translate(Request $request): ResponseInterface {
+		return $this->respond(
 			lang(
-				$request->get['string'],
-				$request->get['plural'] ?? null,
-				(int) ($request->get['count'] ?? 1),
-				$request->get['context'] ?? ''
+				$request->getGet('string'),
+				$request->getGet('plural', null),
+				(int)($request->getGet('count', 1)),
+				$request->getGet('context', '')
 			)
 		);
 	}

@@ -36,13 +36,18 @@ require_once ROOT."include/load.php";
 
 Timer::start('app');
 try {
-	App::run();
+	$response = App::run();
 } catch (RouteNotFoundException $e) {
+	bdump($e);
 	// Handle 404 Error
 	$controller = App::getContainer()->getByType(E404::class);
 	$controller->init(App::getRequest());
-	$controller->show(App::getRequest());
+	$response = $controller->show(App::getRequest());
 }
 Timer::stop('app');
 
 updateTranslations();
+
+bdump($response);
+
+App::sendResponse($response);

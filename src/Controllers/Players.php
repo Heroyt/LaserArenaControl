@@ -8,6 +8,7 @@ use InvalidArgumentException;
 use Lsr\Core\Controllers\Controller;
 use Lsr\Core\Requests\Request;
 use Lsr\Core\Templating\Latte;
+use Psr\Http\Message\ResponseInterface;
 
 class Players extends Controller
 {
@@ -19,34 +20,34 @@ class Players extends Controller
 		parent::__construct($latte);
 	}
 
-	public function getPlayer(string $code) : never {
+	public function getPlayer(string $code): ResponseInterface {
 		try {
 			$player = Player::getByCode($code);
 		} catch (InvalidArgumentException $e) {
-			$this->respond(['error' => $e->getMessage(), 'code' => $code], 400);
+			return $this->respond(['error' => $e->getMessage(), 'code' => $code], 400);
 		}
 		if (!isset($player)) {
 			$player = $this->playerProvider->findPublicPlayerByCode($code);
 		}
 		if (!isset($player)) {
-			$this->respond(['error' => 'Player not found'], 404);
+			return $this->respond(['error' => 'Player not found'], 404);
 		}
-		$this->respond($player);
+		return $this->respond($player);
 	}
 
-	public function syncPlayer(string $code) : never {
+	public function syncPlayer(string $code): ResponseInterface {
 		$player = $this->playerProvider->findPublicPlayerByCode($code);
 		if (!isset($player)) {
-			$this->respond(['error' => 'Player not found'], 404);
+			return $this->respond(['error' => 'Player not found'], 404);
 		}
 		if (!$player->save()) {
-			$this->respond(['error' => 'Save failed'], 500);
+			return $this->respond(['error' => 'Save failed'], 500);
 		}
-		$this->respond($player);
+		return $this->respond($player);
 	}
 
-	public function find(Request $request) : never {
-		$this->respond(
+	public function find(Request $request): ResponseInterface {
+		return $this->respond(
 			array_values(
 				$this->playerProvider->findPlayersLocal(
 					(string) $request->getGet('search', ''),
@@ -56,8 +57,8 @@ class Players extends Controller
 		);
 	}
 
-	public function findPublic(Request $request) : never {
-		$this->respond(
+	public function findPublic(Request $request): ResponseInterface {
+		return $this->respond(
 			$this->playerProvider->findPlayersPublic(
 				(string) $request->getGet('search', '')
 			)

@@ -17,6 +17,7 @@ use Lsr\Core\Exceptions\ValidationException;
 use Lsr\Core\Templating\Latte;
 use Lsr\Exceptions\TemplateDoesNotExistException;
 use Lsr\Interfaces\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 use Throwable;
 
 class NewGame extends Controller
@@ -57,7 +58,7 @@ class NewGame extends Controller
 	 * @throws TemplateDoesNotExistException
 	 * @throws Throwable
 	 */
-	public function show(): void {
+	public function show(): ResponseInterface {
 		$this->hookedTemplates = new HookedTemplates();
 		$this->params['addedTemplates'] = $this->hookedTemplates;
 		$this->params['featureConfig'] = $this->featureConfig;
@@ -74,7 +75,7 @@ class NewGame extends Controller
 				$decorator->decorateShow();
 			}
 		}
-		$this->view('pages/new-game/index');
+		return $this->view('pages/new-game/index');
 	}
 
 }

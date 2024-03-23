@@ -10,6 +10,7 @@ use Lsr\Core\Routing\Attributes\Delete;
 use Lsr\Core\Routing\Attributes\Get;
 use Lsr\Core\Routing\Attributes\Post;
 use Lsr\Core\Templating\Latte;
+use Psr\Http\Message\ResponseInterface;
 
 class PreparedGames extends Controller
 {
@@ -26,24 +27,24 @@ class PreparedGames extends Controller
 	}
 
 	#[Delete('/prepared'), Post('/prepared/delete')]
-	public function deleteAll(): never {
+	public function deleteAll(): ResponseInterface {
 		DB::update($this::TABLE, ['active' => 0], ['active = 1']);
 		$this->cache->clean([Cache::Tags => $this::CACHE_TAGS]);
-		$this->respond(['status' => 'ok']);
+		return $this->respond(['status' => 'ok']);
 	}
 
 	#[Post('/prepared')]
-	public function save(Request $request): never {
-		DB::insert($this::TABLE, ['data' => json_encode($request->post, JSON_THROW_ON_ERROR)]);
+	public function save(Request $request): ResponseInterface {
+		DB::insert($this::TABLE, ['data' => json_encode($request->getParsedBody(), JSON_THROW_ON_ERROR)]);
 
 		$this->cache->clean([Cache::Tags => $this::CACHE_TAGS]);
 
-		$this->respond(['status' => 'ok']);
+		return $this->respond(['status' => 'ok']);
 	}
 
 	#[Get('/prepared')]
-	public function get(Request $request): never {
-		$all = !empty($request->get['all']);
+	public function get(Request $request): ResponseInterface {
+		$all = !empty($request->getGet('all'));
 
 		$query = DB::select($this::TABLE, '*')->cacheTags(...$this::CACHE_TAGS);
 		if (!$all) {
@@ -61,15 +62,15 @@ class PreparedGames extends Controller
 				'active' => (bool)$row->active,
 			];
 		}
-		$this->respond($games);
+		return $this->respond($games);
 	}
 
 	#[Post('/prepared/{id}/delete'), Delete('/prepared/{id}')]
-	public function delete(int $id): never {
+	public function delete(int $id): ResponseInterface {
 		DB::update($this::TABLE, ['active' => 0], ['id_game = %i', $id]);
 
 		$this->cache->clean([Cache::Tags => $this::CACHE_TAGS]);
-		$this->respond(['status' => 'ok']);
+		return $this->respond(['status' => 'ok']);
 	}
 
 }

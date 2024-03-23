@@ -8,6 +8,7 @@ use Lsr\Core\Requests\Request;
 use Lsr\Logging\Exceptions\ArchiveCreationException;
 use Lsr\Logging\Exceptions\DirectoryCreationException;
 use Lsr\Logging\Logger;
+use Psr\Http\Message\ResponseInterface;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use RegexIterator;
@@ -19,7 +20,7 @@ class Logs extends ApiController
 	/**
 	 * @throws JsonException
 	 */
-	public function show(Request $request) : void {
+	public function show(Request $request): ResponseInterface {
 		try {
 			$logger = new Logger(LOG_DIR.'api/', 'logs');
 			$logger->info('Showing logs ('.$request->getIp().')');
@@ -27,15 +28,15 @@ class Logs extends ApiController
 			$logger = null;
 		}
 
-		$logFile = $request->get['log'] ?? '';
+		$logFile = $request->getGet('log', '');
 		if (empty($logFile)) {
-			$this->respond('Missing required argument "log".', 400);
+			return $this->respond('Missing required argument "log".', 400);
 		}
 		if (!file_exists(LOG_DIR.$logFile.'.log')) {
-			$date = $request->get['date'] ?? date('Y-m-d');
+			$date = $request->getGet('date', date('Y-m-d'));
 			$logFile .= '-'.$date.'.log';
 			if (!file_exists(LOG_DIR.$logFile) || !is_readable(LOG_DIR.$logFile)) {
-				$this->respond('Log file "'.$logFile.'" does not exist or is not readable.', 404);
+				return $this->respond('Log file "' . $logFile . '" does not exist or is not readable.', 404);
 			}
 		}
 		else {
@@ -55,7 +56,7 @@ class Logs extends ApiController
 			];
 		}
 
-		$this->respond(['success' => true, 'lines' => $lines]);
+		return $this->respond(['success' => true, 'lines' => $lines]);
 	}
 
 	/**
@@ -65,7 +66,7 @@ class Logs extends ApiController
 	 * @throws ArchiveCreationException
 	 * @throws JsonException
 	 */
-	public function download(Request $request) : void {
+	public function download(Request $request): ResponseInterface {
 		try {
 			$logger = new Logger(LOG_DIR.'api/', 'logs');
 			$logger->info('Downloading logs ('.$request->getIp().')');
@@ -73,12 +74,12 @@ class Logs extends ApiController
 			$logger = null;
 		}
 
-		$logFile = $request->get['log'] ?? '';
-		$date = $request->get['date'] ?? date('Y-m-d');
+		$logFile = $request->getGet('log', '');
+		$date = $request->getGet('date', date('Y-m-d'));
 		if (!empty($logFile)) {
 			$logFile .= '-'.$date.'.log';
 			if (!file_exists(LOG_DIR.$logFile) || !is_readable(LOG_DIR.$logFile)) {
-				$this->respond('Log file "'.$logFile.'" does not exist or is not readable.', 404);
+				return $this->respond('Log file "' . $logFile . '" does not exist or is not readable.', 404);
 			}
 			header('Content-Type: text/plain');
 			header('Content-Disposition: attachment; filename="'.$logFile.'"');

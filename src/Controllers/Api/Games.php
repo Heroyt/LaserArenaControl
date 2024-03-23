@@ -7,9 +7,8 @@ use App\GameModels\Game\Team;
 use App\Models\GameGroup;
 use App\Services\Evo5\GameSimulator;
 use App\Services\SyncService;
-use DateTime;
+use DateTimeImmutable;
 use Exception;
-use JsonException;
 use Lsr\Core\Controllers\ApiController;
 use Lsr\Core\Exceptions\ModelNotFoundException;
 use Lsr\Core\Exceptions\ValidationException;
@@ -17,6 +16,7 @@ use Lsr\Core\Requests\Request;
 use Lsr\Core\Routing\Attributes\Post;
 use Lsr\Core\Templating\Latte;
 use Lsr\Logging\Exceptions\DirectoryCreationException;
+use Psr\Http\Message\ResponseInterface;
 use Throwable;
 
 /**
@@ -25,17 +25,14 @@ use Throwable;
 class Games extends ApiController
 {
 
-	public function __construct(
-		Latte                          $latte,
-		private readonly GameSimulator $gameSimulator,
-	) {
+	public function __construct(Latte $latte, private readonly GameSimulator $gameSimulator,) {
 		parent::__construct($latte);
 	}
 
-	public function cheat(Request $request): never {
+	public function cheat(Request $request): ResponseInterface {
 		$code = $request->params['code'] ?? '';
 		if (empty($code)) {
-			$this->respond(['error' => 'Invalid code'], 400);
+			return $this->respond(['error' => 'Invalid code'], 400);
 		}
 		try {
 			$game = GameFactory::getByCode($code);
@@ -43,21 +40,21 @@ class Games extends ApiController
 				throw new ModelNotFoundException('Game not found');
 			}
 		} catch (Throwable $e) {
-			$this->respond(['error' => 'Game not found', 'exception' => $e->getMessage()], 404);
+			return $this->respond(['error' => 'Game not found', 'exception' => $e->getMessage()], 404);
 		}
 
-		$player = $request->post['player'] ?? 0;
+		$player = $request->getPost('player', 0);
 		if (empty($player)) {
-			$this->respond(['error' => 'Invalid player'], 400);
+			return $this->respond(['error' => 'Invalid player'], 400);
 		}
 
 		$playerObj = $game->getPlayers()->get($player);
 		if (!isset($playerObj)) {
-			$this->respond(['error' => 'Player not found'], 404);
+			return $this->respond(['error' => 'Player not found'], 404);
 		}
 
 		$enemies = [];
-		if ($game->getMode()->isTeam()) {
+		if ($game->getMode()?->isTeam()) {
 			/** @var Team $team */
 			foreach ($game->getTeams() as $team) {
 				if ($team->color === $playerObj->getTeam()->color) {
@@ -69,44 +66,44 @@ class Games extends ApiController
 			}
 		}
 
-		if (isset($request->get['addHits'])) {
-			$hits = (int)$request->get['addHits'];
+		$addHits = $request->getGet('addHits');
+		if (isset($addHits)) {
+			$hits = (int)$addHits;
 			$playerObj->hits += $hits;
 			for ($i = 0; $i < $hits; $i++) {
 				$enemy = $enemies[array_rand($enemies)];
 			}
 		}
 
-		$this->respond($game);
+		return $this->respond($game);
 	}
 
 	/**
 	 * @param Request $request
 	 *
-	 * @return void
-	 * @throws JsonException
+	 * @return ResponseInterface
 	 * @throws Throwable
 	 */
-	public function syncGames(Request $request): void {
+	public function syncGames(Request $request): ResponseInterface {
 		$limit = (int)($request->params['limit'] ?? 5);
-		$timeout = isset($request->get['timeout']) ? (float) $request->get['timeout'] : null;
+		$timeout = $request->getGet('timeout');
+		$timeout = isset($timeout) ? (float)$timeout : null;
 		SyncService::syncGames($limit, $timeout);
-		$this->respond(['success' => true]);
+		return $this->respond(['success' => true]);
 	}
 
 	/**
 	 * @param Request $request
 	 *
-	 * @return never
-	 * @throws DirectoryCreationException
-	 * @throws JsonException
+	 * @return ResponseInterface
 	 * @throws ModelNotFoundException
+	 * @throws Throwable
 	 */
 	#[Post('/api/games/{code}/sync')]
-	public function syncGame(Request $request) : never {
+	public function syncGame(Request $request): ResponseInterface {
 		$code = $request->params['code'] ?? '';
 		if (empty($code)) {
-			$this->respond(['error' => 'Invalid code'], 400);
+			return $this->respond(['error' => 'Invalid code'], 400);
 		}
 		try {
 			$game = GameFactory::getByCode($code);
@@ -114,14 +111,14 @@ class Games extends ApiController
 				throw new ModelNotFoundException('Game not found');
 			}
 		} catch (Throwable $e) {
-			$this->respond(['error' => 'Game not found', 'exception' => $e->getMessage()], 404);
+			return $this->respond(['error' => 'Game not found', 'exception' => $e->getMessage()], 404);
 		}
 
 		if (!$game->sync()) {
-			$this->respond(['error' => 'Synchronization failed'], 500);
+			return $this->respond(['error' => 'Synchronization failed'], 500);
 		}
 
-		$this->respond(['status' => 'ok']);
+		return $this->respond(['status' => 'ok']);
 	}
 
 	/**
@@ -129,48 +126,57 @@ class Games extends ApiController
 	 *
 	 * @param Request $request
 	 *
-	 * @return void
-	 * @throws JsonException
+	 * @return ResponseInterface
 	 * @throws Throwable
 	 */
-	public function listGames(Request $request) : void {
-		$date = null;
-		if (!empty($request->get['date'])) {
+	public function listGames(Request $request): ResponseInterface {
+		$date = $request->getGet('date');
+		if (!empty($date)) {
 			try {
-				$date = new DateTime($request->get['date']);
+				$date = new DateTimeImmutable($date);
 			} catch (Exception $e) {
-				$this->respond(['error' => 'Invalid parameter: "date"', 'exception' => $e->getMessage()], 400);
+				return $this->respond(['error' => 'Invalid parameter: "date"', 'exception' => $e->getMessage()], 400);
 			}
+		}
+		else {
+			$date = null;
 		}
 		// TODO: Possibly more filters
-		$query = GameFactory::queryGames(isset($request->get['excludeFinished']), $date);
-		if (!empty($request->get['limit']) && is_numeric($request->get['limit'])) {
-			$query->limit((int) $request->get['limit']);
+		$query = GameFactory::queryGames($request->getGet('excludeFinished') !== null, $date);
+
+		$limit = $request->getGet('limit');
+		$offset = $request->getGet('offset');
+		$system = $request->getGet('system');
+		$orderBy = $request->getGet('orderBy');
+		$desc = $request->getGet('desc');
+
+		if (!empty($limit) && is_numeric($limit)) {
+			$query->limit((int)$limit);
 		}
-		if (!empty($request->get['offset']) && is_numeric($request->get['offset'])) {
-			$query->offset((int) $request->get['offset']);
+		if (!empty($offset) && is_numeric($offset)) {
+			$query->offset((int)$offset);
 		}
-		if (!empty($request->get['system'])) {
-			$query->where('[system] = %s', $request->get['system']);
+		if (!empty($system)) {
+			$query->where('[system] = %s', $system);
 		}
-		if (!empty($request->get['orderBy'])) {
-			if (!in_array($request->get['orderBy'], ['start', 'end', 'code', 'id_game'], true)) {
-				$this->respond(['error' => 'Invalid orderBy field: '.$request->get['orderBy']], 400);
+		if (!empty($orderBy)) {
+			if (!in_array($orderBy, ['start', 'end', 'code', 'id_game'], true)) {
+				return $this->respond(['error' => 'Invalid orderBy field: ' . $orderBy], 400);
 			}
-			$query->orderBy($request->get['orderBy']);
-			if (!empty($request->get['desc'])) {
+			$query->orderBy($orderBy);
+			if (!empty($desc)) {
 				$query->desc();
 			}
 		}
 		$games = $query->fetchAll(cache: false);
-		if (!empty($request->get['expand'])) {
+		if (!empty($request->getGet('expand'))) {
 			$objects = [];
 			foreach ($games as $row) {
 				$objects[] = GameFactory::getByCode($row->code);
 			}
-			$this->respond($objects);
+			return $this->respond($objects);
 		}
-		$this->respond($games);
+		return $this->respond($games);
 	}
 
 	/**
@@ -178,33 +184,32 @@ class Games extends ApiController
 	 *
 	 * @param Request $request
 	 *
-	 * @return void
-	 * @throws JsonException
+	 * @return ResponseInterface
 	 * @throws Throwable
 	 */
-	public function getGame(Request $request) : void {
+	public function getGame(Request $request): ResponseInterface {
 		$gameCode = $request->params['code'] ?? '';
 		if (empty($gameCode)) {
-			$this->respond(['error' => 'Invalid code'], 400);
+			return $this->respond(['error' => 'Invalid code'], 400);
 		}
 		$game = GameFactory::getByCode($gameCode);
 		if (!isset($game)) {
-			$this->respond(['error' => 'Game not found'], 404);
+			return $this->respond(['error' => 'Game not found'], 404);
 		}
-		$this->respond($game);
+		return $this->respond($game);
 	}
 
 	/**
 	 * @param Request $request
 	 *
-	 * @return void
-	 * @throws JsonException
+	 * @return ResponseInterface
+	 * @throws Throwable
 	 */
 	#[Post('/api/games/{code}/group')]
-	public function setGroup(Request $request) : void {
+	public function setGroup(Request $request): ResponseInterface {
 		$code = $request->params['code'] ?? '';
 		if (empty($code)) {
-			$this->respond(['error' => 'Invalid code'], 400);
+			return $this->respond(['error' => 'Invalid code'], 400);
 		}
 		try {
 			$game = GameFactory::getByCode($code);
@@ -212,15 +217,18 @@ class Games extends ApiController
 				throw new ModelNotFoundException('Game not found');
 			}
 		} catch (Throwable $e) {
-			$this->respond(['error' => 'Game not found', 'exception' => $e->getMessage()], 404);
+			return $this->respond(['error' => 'Game not found', 'exception' => $e->getMessage()], 404);
 		}
 
-		$group = $request->post['groupId'] ?? 0;
+		$group = $request->getPost('groupId', 0);
 		if ($group > 0) {
 			try {
 				$game->group = GameGroup::get($group);
 			} catch (ModelNotFoundException|ValidationException|DirectoryCreationException $e) {
-				$this->respond(['error' => 'Game group not found', 'exception' => $e->getMessage(), 'trace' => $e->getTrace()], 404);
+				return $this->respond(
+					['error' => 'Game group not found', 'exception' => $e->getMessage(), 'trace' => $e->getTrace()],
+					404
+				);
 			}
 		}
 		else {
@@ -231,15 +239,15 @@ class Games extends ApiController
 			$game->save();
 			$game->sync();
 		} catch (ModelNotFoundException|ValidationException $e) {
-			$this->respond(['error' => 'Save failed', 'exception' => $e->getMessage()], 500);
+			return $this->respond(['error' => 'Save failed', 'exception' => $e->getMessage()], 500);
 		}
 
-		$this->respond(['success' => true]);
+		return $this->respond(['success' => true]);
 	}
 
-	public function simulate(): never {
+	public function simulate(): ResponseInterface {
 		$this->gameSimulator->simulate();
-		$this->respond(['success' => true]);
+		return $this->respond(['success' => true]);
 	}
 
 }

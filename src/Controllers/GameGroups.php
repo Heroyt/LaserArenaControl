@@ -12,6 +12,7 @@ use Lsr\Core\Routing\Attributes\Get;
 use Lsr\Core\Routing\Attributes\Post;
 use Lsr\Core\Routing\Attributes\Update;
 use Lsr\Logging\Exceptions\DirectoryCreationException;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  *
@@ -20,7 +21,7 @@ class GameGroups extends Controller
 {
 
 	#[Get('/gameGroups')]
-	public function listGroups() : never {
+	public function listGroups(): ResponseInterface {
 		$groups = isset($_GET['all']) ? GameGroup::getAll() : GameGroup::getActive();
 		$data = [];
 		foreach ($groups as $group) {
@@ -29,19 +30,19 @@ class GameGroups extends Controller
 			$groupData['teams'] = $group->getTeams();
 			$data[] = $groupData;
 		}
-		$this->respond($data);
+		return $this->respond($data);
 	}
 
 	#[Get('/gameGroups/{id}')]
-	public function getGroup(Request $request) : never {
+	public function getGroup(Request $request): ResponseInterface {
 		try {
 			$group = GameGroup::get((int) ($request->params['id'] ?? 0));
 		} catch (ModelNotFoundException|ValidationException|DirectoryCreationException $e) {
-			$this->respond(['error' => 'Model not found', 'exception' => $e->getMessage()], 404);
+			return $this->respond(['error' => 'Model not found', 'exception' => $e->getMessage()], 404);
 		}
 		$groupData = $group->jsonSerialize();
 		$groupData['players'] = $group->getPlayers();
-		$this->respond($groupData);
+		return $this->respond($groupData);
 	}
 
 	/**
@@ -51,17 +52,17 @@ class GameGroups extends Controller
 	 * @throws JsonException
 	 */
 	#[Post('/gameGroups')]
-	public function create(Request $request) : never {
+	public function create(Request $request): ResponseInterface {
 		$group = new GameGroup();
-		$group->name = $request->post['name'] ?? sprintf(lang('Skupina %s'), date('d.m.Y H:i'));
+		$group->name = $request->getPost('name', sprintf(lang('Skupina %s'), date('d.m.Y H:i')));
 		try {
 			if (!$group->save()) {
-				$this->respond(['error' => 'Save failed'], 500);
+				return $this->respond(['error' => 'Save failed'], 500);
 			}
 		} catch (ValidationException $e) {
-			$this->respond(['error' => 'Validation failed', 'exception' => $e->getMessage()], 400);
+			return $this->respond(['error' => 'Validation failed', 'exception' => $e->getMessage()], 400);
 		}
-		$this->respond(['status' => 'ok', 'id' => $group->id]);
+		return $this->respond(['status' => 'ok', 'id' => $group->id]);
 	}
 
 	/**
@@ -72,33 +73,38 @@ class GameGroups extends Controller
 	 */
 	#[Update('/gameGroups/{id}')]
 	#[Post('/gameGroups/{id}')]
-	public function update(Request $request) : never {
+	public function update(Request $request): ResponseInterface {
 		$id = (int) ($request->params['id'] ?? 0);
 		if ($id < 1) {
-			$this->respond(['error' => 'Invalid id'], 400);
+			return $this->respond(['error' => 'Invalid id'], 400);
 		}
 		try {
 			$group = GameGroup::get($id);
 		} catch (ModelNotFoundException|ValidationException|DirectoryCreationException $e) {
-			$this->respond(['error' => 'Group not found', 'exception' => $e->getMessage(), 'trace' => $e->getTrace()], 404);
+			return $this->respond(
+				['error' => 'Group not found', 'exception' => $e->getMessage(), 'trace' => $e->getTrace()],
+				404
+			);
 		}
 
-		if (!empty($request->post['name'])) {
-			$group->name = $request->post['name'];
+		$name = $request->getPost('name', '');
+		if (!empty($name)) {
+			$group->name = $name;
 		}
-		if (isset($request->post['active'])) {
-			$group->active = (is_bool($request->post['active']) && $request->post['active'] === true) ||
-				(is_numeric($request->post['active']) && ((int) $request->post['active']) === 1) ||
-				$request->post['active'] === 'true';
+		$active = $request->getPost('active');
+		if ($active !== null) {
+			$group->active = (is_bool($active) && $active) ||
+				(is_numeric($active) && ((int)$active) === 1) ||
+				$active === 'true';
 		}
 		try {
 			if (!$group->save()) {
-				$this->respond(['error' => 'Save failed'], 500);
+				return $this->respond(['error' => 'Save failed'], 500);
 			}
 		} catch (ValidationException $e) {
-			$this->respond(['error' => 'Validation failed', 'exception' => $e->getMessage()], 400);
+			return $this->respond(['error' => 'Validation failed', 'exception' => $e->getMessage()], 400);
 		}
-		$this->respond(['status' => 'ok', 'id' => $group->id]);
+		return $this->respond(['status' => 'ok', 'id' => $group->id]);
 	}
 
 }

@@ -8,6 +8,7 @@ use Lsr\Core\Controllers\ApiController;
 use Lsr\Core\Requests\Request;
 use Lsr\Logging\Exceptions\DirectoryCreationException;
 use Lsr\Logging\Logger;
+use Psr\Http\Message\ResponseInterface;
 
 class Debug extends ApiController
 {
@@ -16,40 +17,40 @@ class Debug extends ApiController
 	 * @return void
 	 * @throws JsonException
 	 */
-	public function disable() : void {
+	public function disable(): ResponseInterface {
 		/** @var string $contents */
 		$contents = file_get_contents(PRIVATE_DIR.'config.ini');
 		if (file_put_contents(PRIVATE_DIR.'config.ini', str_replace('DEBUG = true', 'DEBUG = false', $contents)) === false) {
-			$this->respond(['error' => 'Cannot write to config file.'], 500);
+			return $this->respond(['error' => 'Cannot write to config file.'], 500);
 		}
-		$this->respond(['success' => true]);
+		return $this->respond(['success' => true]);
 	}
 
 	/**
 	 * @return void
 	 * @throws JsonException
 	 */
-	public function incrementCache() : void {
+	public function incrementCache(): ResponseInterface {
 		$version = App::getCacheVersion();
 		/** @var string $contents */
 		$contents = file_get_contents(PRIVATE_DIR.'config.ini');
 		if (file_put_contents(PRIVATE_DIR.'config.ini', str_replace('CACHE_VERSION = '.$version, 'CACHE_VERSION = '.($version + 1), $contents)) === false) {
-			$this->respond(['error' => 'Cannot write to config file.'], 500);
+			return $this->respond(['error' => 'Cannot write to config file.'], 500);
 		}
-		$this->respond(['success' => true]);
+		return $this->respond(['success' => true]);
 	}
 
 	/**
 	 * @return void
 	 * @throws JsonException
 	 */
-	public function enable() : void {
+	public function enable(): ResponseInterface {
 		/** @var string $contents */
 		$contents = file_get_contents(PRIVATE_DIR.'config.ini');
 		if (file_put_contents(PRIVATE_DIR.'config.ini', str_replace('DEBUG = false', 'DEBUG = true', $contents)) === false) {
-			$this->respond(['error' => 'Cannot write to config file.'], 500);
+			return $this->respond(['error' => 'Cannot write to config file.'], 500);
 		}
-		$this->respond(['success' => true]);
+		return $this->respond(['success' => true]);
 	}
 
 	/**
@@ -58,7 +59,7 @@ class Debug extends ApiController
 	 * @return void
 	 * @throws JsonException
 	 */
-	public function pwd(Request $request) : void {
+	public function pwd(Request $request): ResponseInterface {
 		try {
 			$logger = new Logger(LOG_DIR.'api/', 'mount');
 			$logger->info('Executing pwd ('.$request->getIp().')');
@@ -73,9 +74,9 @@ class Debug extends ApiController
 			$logger?->warning('Cannot execute command');
 			$logger?->debug(json_encode($out, JSON_THROW_ON_ERROR));
 			$logger?->debug(json_encode($output, JSON_THROW_ON_ERROR));
-			$this->respond(['error' => 'Cannot execute pwd', 'errorCode' => $returnCode], 500);
+			return $this->respond(['error' => 'Cannot execute pwd', 'errorCode' => $returnCode], 500);
 		}
-		$this->respond(['success' => true, 'output' => $out]);
+		return $this->respond(['success' => true, 'output' => $out]);
 	}
 
 	/**
@@ -84,12 +85,12 @@ class Debug extends ApiController
 	 * @return void
 	 * @throws JsonException
 	 */
-	public function glob(Request $request) : void {
-		$param = urldecode($request->get['param'] ?? '');
+	public function glob(Request $request): ResponseInterface {
+		$param = urldecode($request->getGet('param', ''));
 		if (empty($param)) {
-			$this->respond(['error' => 'Missing required argument "param".'], 400);
+			return $this->respond(['error' => 'Missing required argument "param".'], 400);
 		}
-		$this->respond(['success' => true, 'output' => glob($param)]);
+		return $this->respond(['success' => true, 'output' => glob($param)]);
 	}
 
 	/**
@@ -98,7 +99,7 @@ class Debug extends ApiController
 	 * @return void
 	 * @throws JsonException
 	 */
-	public function whoami(Request $request) : void {
+	public function whoami(Request $request): ResponseInterface {
 		try {
 			$logger = new Logger(LOG_DIR.'api/', 'mount');
 			$logger->info('Executing whoami ('.$request->getIp().')');
@@ -113,9 +114,9 @@ class Debug extends ApiController
 			$logger?->warning('Cannot execute command');
 			$logger?->debug(json_encode($out, JSON_THROW_ON_ERROR));
 			$logger?->debug(json_encode($output, JSON_THROW_ON_ERROR));
-			$this->respond(['error' => 'Cannot execute whoami', 'errorCode' => $returnCode], 500);
+			return $this->respond(['error' => 'Cannot execute whoami', 'errorCode' => $returnCode], 500);
 		}
-		$this->respond(['success' => true, 'output' => $out]);
+		return $this->respond(['success' => true, 'output' => $out]);
 	}
 
 }

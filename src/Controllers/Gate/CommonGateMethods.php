@@ -15,6 +15,7 @@ use Endroid\QrCode\ErrorCorrectionLevel;
 use Endroid\QrCode\Writer\SvgWriter;
 use Lsr\Exceptions\TemplateDoesNotExistException;
 use Lsr\Helpers\Tools\Strings;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  *
@@ -32,9 +33,9 @@ trait CommonGateMethods
 	 * @return void
 	 * @throws TemplateDoesNotExistException
 	 */
-	protected function getResults(): void {
+	protected function getResults(): ResponseInterface {
 		if (!isset($this->game)) {
-			App::redirect(['E404']);
+			return App::redirect(['E404']);
 		}
 		$this->params['game'] = $this->game;
 		$this->params['qr'] = $this->getQR($this->game);
@@ -47,10 +48,10 @@ trait CommonGateMethods
 		$team = new $teamClass;
 		$this->params['today'] = new Today($this->game, $player, $team);
 		if ($this->game->getMode() !== null && $this->game->getMode() instanceof CustomResultsMode) {
-			$this->view($this->game->getMode()->getCustomGateTemplate($this));
-		} else {
-			$this->view('pages/gate/results');
+			return $this->view($this->game->getMode()->getCustomGateTemplate($this));
 		}
+
+		return $this->view('pages/gate/results');
 	}
 
 	/**

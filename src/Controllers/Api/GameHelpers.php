@@ -15,6 +15,7 @@ use Lsr\Core\Controllers\ApiController;
 use Lsr\Core\Exceptions\ModelNotFoundException;
 use Lsr\Core\Exceptions\ValidationException;
 use Lsr\Core\Requests\Request;
+use Psr\Http\Message\ResponseInterface;
 use Throwable;
 
 /**
@@ -27,7 +28,7 @@ class GameHelpers extends ApiController
 	 * @return never
 	 * @throws JsonException
 	 */
-	public function getLoadedGameInfo() : never {
+	public function getLoadedGameInfo(): ResponseInterface {
 		// Allow for filtering games just from one system
 		$system = $_GET['system'] ?? 'all';
 		$systems = [$system];
@@ -67,10 +68,10 @@ class GameHelpers extends ApiController
 		}
 
 		if (!isset($game)) {
-			$this->respond(['error' => 'No game found'], 404);
+			return $this->respond(['error' => 'No game found'], 404);
 		}
 
-		$this->respond(
+		return $this->respond(
 			[
 				'currentServerTime' => time(),
 				'started'           => $game->started,
@@ -92,15 +93,15 @@ class GameHelpers extends ApiController
 	 * @throws ModelNotFoundException
 	 * @throws ValidationException
 	 */
-	public function getGateGameInfo() : never {
+	public function getGateGameInfo(): ResponseInterface {
 		/** @var Game|null $game */
 		$game = Info::get('gate-game');
 
 		if (!isset($game)) {
-			$this->respond(['error' => 'No game found'], 404);
+			return $this->respond(['error' => 'No game found'], 404);
 		}
 
-		$this->respond(
+		return $this->respond(
 			[
 				'currentServerTime' => time(),
 				'gateTime'          => Info::get('gate-time'),
@@ -123,14 +124,14 @@ class GameHelpers extends ApiController
 	 * @throws JsonException
 	 * @throws Throwable
 	 */
-	public function recalcSkill(Request $request) : never {
+	public function recalcSkill(Request $request): ResponseInterface {
 		$code = $request->params['code'] ?? '';
 		if (empty($code)) {
-			$this->respond(['error' => 'Invalid code'], 400);
+			return $this->respond(['error' => 'Invalid code'], 400);
 		}
 		$game = GameFactory::getByCode($code);
 		if (!isset($game)) {
-			$this->respond(['error' => 'Game not found'], 404);
+			return $this->respond(['error' => 'Game not found'], 404);
 		}
 
 		try {
@@ -139,10 +140,10 @@ class GameHelpers extends ApiController
 			$game->save();
 			$game->sync();
 		} catch (ModelNotFoundException|ValidationException $e) {
-			$this->respond(['error' => 'Error while saving the player data', 'exception' => $e], 500);
+			return $this->respond(['error' => 'Error while saving the player data', 'exception' => $e], 500);
 		}
 
-		$this->respond(['status' => 'OK']);
+		return $this->respond(['status' => 'OK']);
 	}
 
 	/**
@@ -153,26 +154,26 @@ class GameHelpers extends ApiController
 	 * @throws Throwable
 	 * @throws GameModeNotFoundException
 	 */
-	public function changeGameMode(Request $request) : never {
+	public function changeGameMode(Request $request): ResponseInterface {
 		$code = $request->params['code'] ?? '';
 		if (empty($code)) {
-			$this->respond(['error' => 'Invalid code'], 400);
+			return $this->respond(['error' => 'Invalid code'], 400);
 		}
 
 		// Find game
 		$game = GameFactory::getByCode($code);
 		if (!isset($game)) {
-			$this->respond(['error' => 'Game not found'], 404);
+			return $this->respond(['error' => 'Game not found'], 404);
 		}
 
 		// Find game mode
-		$gameModeId = (int) ($request->post['mode'] ?? 0);
+		$gameModeId = (int)$request->getPost('mode', 0);
 		if ($gameModeId < 1) {
-			$this->respond(['error' => 'Invalid game mode ID'], 400);
+			return $this->respond(['error' => 'Invalid game mode ID'], 400);
 		}
 		$gameMode = GameModeFactory::getById($gameModeId, ['system' => $game::SYSTEM]);
 		if (!isset($gameMode)) {
-			$this->respond(['error' => 'Game mode not found'], 404);
+			return $this->respond(['error' => 'Game mode not found'], 404);
 		}
 
 		$previousType = $game->gameType;
@@ -184,13 +185,13 @@ class GameHelpers extends ApiController
 		// Check mode type change
 		if ($previousType !== $game->getMode()) {
 			if ($previousType === GameModeType::SOLO) {
-				$this->respond(['error' => 'Cannot change mode from solo to team'], 400);
+				return $this->respond(['error' => 'Cannot change mode from solo to team'], 400);
 			}
 
 			// Assign all players to one team
 			$team = $game->getTeams()->first();
 			if (!isset($team)) {
-				$this->respond(['error' => 'Error while getting a team from a game'], 500);
+				return $this->respond(['error' => 'Error while getting a team from a game'], 500);
 			}
 			/** @var Player $player */
 			foreach ($game->getPlayers() as $player) {
@@ -202,10 +203,10 @@ class GameHelpers extends ApiController
 
 		if (!$game->save()) {
 			$game->sync();
-			$this->respond(['error' => 'Error saving game'], 500);
+			return $this->respond(['error' => 'Error saving game'], 500);
 		}
 
-		$this->respond(['status' => 'OK']);
+		return $this->respond(['status' => 'OK']);
 	}
 
 	/**
@@ -215,23 +216,23 @@ class GameHelpers extends ApiController
 	 * @throws JsonException
 	 * @throws Throwable
 	 */
-	public function recalcScores(Request $request) : never {
+	public function recalcScores(Request $request): ResponseInterface {
 		$code = $request->params['code'] ?? '';
 		if (empty($code)) {
-			$this->respond(['error' => 'Invalid code'], 400);
+			return $this->respond(['error' => 'Invalid code'], 400);
 		}
 		$game = GameFactory::getByCode($code);
 		if (!isset($game)) {
-			$this->respond(['error' => 'Game not found'], 404);
+			return $this->respond(['error' => 'Game not found'], 404);
 		}
 
 		$game->recalculateScores();
 		if (!$game->save()) {
 			$game->sync();
-			$this->respond(['error' => 'Error saving game'], 500);
+			return $this->respond(['error' => 'Error saving game'], 500);
 		}
 
-		$this->respond(['status' => 'OK']);
+		return $this->respond(['status' => 'OK']);
 	}
 
 }

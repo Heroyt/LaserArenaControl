@@ -28,6 +28,7 @@ use Lsr\Exceptions\TemplateDoesNotExistException;
 use Lsr\Helpers\Files\UploadedFile;
 use Lsr\Interfaces\RequestInterface;
 use Lsr\Logging\Exceptions\DirectoryCreationException;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  *
@@ -53,8 +54,8 @@ class Settings extends Controller
 	 * @return void
 	 * @throws TemplateDoesNotExistException
 	 */
-	public function show(): void {
-		$this->view('pages/settings/index');
+	public function show(): ResponseInterface {
+		return $this->view('pages/settings/index');
 	}
 
 	/**
@@ -62,7 +63,7 @@ class Settings extends Controller
 	 * @throws ValidationException
 	 * @throws TemplateDoesNotExistException
 	 */
-	public function vests(): void {
+	public function vests(): ResponseInterface {
 		$vests = Vest::getAll();
 		$this->params['vests'] = [];
 		foreach (GameFactory::getSupportedSystems() as $system) {
@@ -71,15 +72,15 @@ class Settings extends Controller
 		foreach ($vests as $vest) {
 			$this->params['vests'][$vest->system][] = $vest;
 		}
-		$this->view('pages/settings/vests');
+		return $this->view('pages/settings/vests');
 	}
 
 	/**
 	 * @return void
 	 * @throws TemplateDoesNotExistException
 	 */
-	public function gate(): void {
-		$this->view('pages/settings/gate');
+	public function gate(): ResponseInterface {
+		return $this->view('pages/settings/gate');
 	}
 
 	/**
@@ -88,15 +89,17 @@ class Settings extends Controller
 	 * @return void
 	 * @throws JsonException
 	 */
-	public function saveGate(Request $request): void {
+	public function saveGate(Request $request): ResponseInterface {
 		try {
-			if (isset($request->post['timer_offset'])) {
-				Info::set('timer-offset', (int)$request->post['timer_offset']);
+			$offset = $request->getPost('timer_offset');
+			if (isset($offset)) {
+				Info::set('timer-offset', (int)$offset);
 			}
-			if (isset($request->post['timer_show'])) {
-				Info::set('timer_show', (int)$request->post['timer_show']);
+			$show = $request->getPost('timer_show');
+			if (isset($show)) {
+				Info::set('timer_show', (int)$show);
 			}
-			Info::set('timer_on_inactive_screen', !empty($request->post['timer_on_inactive_screen']));
+			Info::set('timer_on_inactive_screen', !empty($request->getPost('timer_on_inactive_screen')));
 			if (isset($_FILES['background'])) {
 				$file = UploadedFile::parseUploaded('background');
 				if (isset($file)) {
@@ -112,12 +115,12 @@ class Settings extends Controller
 			$request->passErrors[] = lang('Failed to save settings.', context: 'errors');
 		}
 		if ($request->isAjax()) {
-			$this->respond([
+			return $this->respond([
 				'success' => empty($request->passErrors),
 				'errors' => $request->passErrors,
 			]);
 		}
-		App::redirect('settings-gate', $request);
+		return App::redirect('settings-gate', $request);
 	}
 
 	/**
@@ -126,9 +129,9 @@ class Settings extends Controller
 	 * @return void
 	 * @throws JsonException
 	 */
-	public function saveVests(Request $request): void {
+	public function saveVests(Request $request): ResponseInterface {
 		try {
-			foreach ($request->post['vest'] ?? [] as $id => $info) {
+			foreach ($request->getPost('vest', []) as $id => $info) {
 				DB::update(Vest::TABLE, $info, ['%n = %i', Vest::getPrimaryKey(), $id]);
 				$vest = Vest::get($id);
 				$vest->clearCache();
@@ -137,12 +140,12 @@ class Settings extends Controller
 			$request->passErrors[] = lang('Failed to save settings.', context: 'errors');
 		}
 		if ($request->isAjax()) {
-			$this->respond([
+			return $this->respond([
 				'success' => empty($request->passErrors),
 				'errors' => $request->passErrors,
 			], empty($request->passErrors) ? 200 : 400);
 		}
-		App::redirect('settings', $request);
+		return App::redirect('settings', $request);
 	}
 
 	/**
@@ -151,16 +154,19 @@ class Settings extends Controller
 	 * @return void
 	 * @throws JsonException
 	 */
-	public function saveGeneral(Request $request): void {
+	public function saveGeneral(Request $request): ResponseInterface {
 		try {
-			if (isset($request->post['api_key'])) {
-				Info::set('liga_api_key', $request->post['api_key']);
+			$apiKey = $request->getPost('api_key');
+			if (isset($apiKey)) {
+				Info::set('liga_api_key', $apiKey);
 			}
-			if (isset($request->post['lmx_ip'])) {
-				Info::set('lmx_ip', $request->post['lmx_ip']);
+			$lmx = $request->getPost('lmx_ip');
+			if (isset($lmx)) {
+				Info::set('lmx_ip', $lmx);
 			}
-			if (isset($request->post['gates_ips'])) {
-				Info::set('gates_ips', array_map('trim', explode(',', $request->post['gates_ips'])));
+			$gates = $request->getPost('gates_ips');
+			if (isset($gates)) {
+				Info::set('gates_ips', array_map('trim', explode(',', $gates)));
 			}
 			if (isset($_FILES['logo'])) {
 				$file = UploadedFile::parseUploaded('logo');
@@ -177,25 +183,25 @@ class Settings extends Controller
 			$request->passErrors[] = lang('Failed to save settings.', context: 'errors');
 		}
 		if ($request->isAjax()) {
-			$this->respond([
+			return $this->respond([
 				'success' => empty($request->passErrors),
 				'errors' => $request->passErrors,
 			]);
 		}
-		App::redirect('settings', $request);
+		return App::redirect('settings', $request);
 	}
 
 	/**
 	 * @throws DriverException
 	 * @throws JsonException
 	 */
-	public function savePrint(Request $request): void {
+	public function savePrint(Request $request): ResponseInterface {
 		if ($this->validatePrint($request)) {
 			try {
 				DB::getConnection()->begin();
 
 				// Save default template
-				Info::set('default_print_template', $_POST['default-template'] ?? 'default');
+				Info::set('default_print_template', $request->getPost('default-template', 'default'));
 
 				// Delete all dates
 				DB::delete(PrintStyle::TABLE . '_dates', ['1=1']);
@@ -211,7 +217,7 @@ class Settings extends Controller
 				/**
 				 * @var array{name:string,primary:string,dark:string,light:string,original-background?:string,original-background-landscape?:string} $info
 				 */
-				foreach ($_POST['styles'] ?? [] as $key => $info) {
+				foreach ($request->getPost('styles', []) as $key => $info) {
 					$style = new PrintStyle();
 					$style->id = $key;
 					$style->name = $info['name'];
@@ -226,14 +232,14 @@ class Settings extends Controller
 					if (isset($uploadedFiles[$key]['background-landscape'])) {
 						$this->processPrintFileUpload($uploadedFiles[$key]['background-landscape'], $request, $printDir, $style, true);
 					}
-					$style->default = $style->id === (int)($_POST['default-style'] ?? 0);
+					$style->default = $style->id === (int)($request->getPost('default-style', 0));
 					$style->insert();
 				}
 
 				/**
 				 * @var array{style:int,dates:string} $info
 				 */
-				foreach ($_POST['dateRange'] ?? [] as $info) {
+				foreach ($request->getPost('dateRange', []) as $info) {
 					preg_match_all('/(\d{2}\.\d{2}\.\d{4})/', $info['dates'], $matches);
 					$dateFrom = new DateTime($matches[0][1] ?? '');
 					$dateTo = new DateTime($matches[1][1] ?? '');
@@ -254,12 +260,12 @@ class Settings extends Controller
 			}
 		}
 		if ($request->isAjax()) {
-			$this->respond([
+			return $this->respond([
 				'success' => empty($request->passErrors),
 				'errors' => $request->passErrors,
 			], empty($request->passErrors) ? 200 : 500);
 		}
-		App::redirect('settings-print', $request);
+		return App::redirect('settings-print', $request);
 	}
 
 	/**
@@ -278,7 +284,7 @@ class Settings extends Controller
 	 * @param string $printDir
 	 * @param PrintStyle $style
 	 */
-	private function processPrintFileUpload(UploadedFile $file, Request $request, string $printDir, PrintStyle $style, bool $landscape = false): void {
+	private function processPrintFileUpload(UploadedFile $file, Request $request, string $printDir, PrintStyle $style, bool $landscape = false): ResponseInterface {
 		if ($file->error !== UPLOAD_ERR_OK) {
 			$request->passErrors[] = $file->getErrorMessage();
 		}
@@ -316,24 +322,24 @@ class Settings extends Controller
 	 * @throws ValidationException
 	 * @throws DirectoryCreationException
 	 */
-	public function print(): void {
+	public function print(): ResponseInterface {
 		$this->params['styles'] = PrintStyle::getAll();
 		$this->params['templates'] = PrintTemplate::getAll();
 		$this->params['defaultTemplateId'] = Info::get('default_print_template', 'default');
 		$this->params['dates'] = PrintStyle::getAllStyleDates();
-		$this->view('pages/settings/print');
+		return $this->view('pages/settings/print');
 	}
 
 	#[Get('settings/cache', 'settings-cache')]
-	public function cache(): void {
-		$this->view('pages/settings/cache');
+	public function cache(): ResponseInterface {
+		return $this->view('pages/settings/cache');
 	}
 
-	public function group(): void {
+	public function group(): ResponseInterface {
 		$this->params['groupsActive'] = GameGroup::getActive();
 		$this->params['groupsInactive'] = GameGroup::query()->where('active = 0')->orderBy('id_group')->desc()->get();
 
-		$this->view('pages/settings/groups');
+		return $this->view('pages/settings/groups');
 	}
 
 }

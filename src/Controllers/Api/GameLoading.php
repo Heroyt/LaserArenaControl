@@ -8,6 +8,7 @@ use JsonException;
 use Lsr\Core\Controllers\ApiController;
 use Lsr\Core\Requests\Request;
 use Lsr\Core\Templating\Latte;
+use Psr\Http\Message\ResponseInterface;
 
 class GameLoading extends ApiController
 {
@@ -23,13 +24,13 @@ class GameLoading extends ApiController
 	 * @return never
 	 * @throws JsonException
 	 */
-	public function loadGame(string $system, Request $request): never {
+	public function loadGame(string $system, Request $request): ResponseInterface {
 		try {
-			$meta = $this->loader->loadGame($system, $request->post);
+			$meta = $this->loader->loadGame($system, $request->getParsedBody());
 		} catch (InvalidArgumentException $e) {
-			$this->respond(['error' => $e->getMessage(), 'trace' => $e->getTrace()], 400);
+			return $this->respond(['error' => $e->getMessage(), 'trace' => $e->getTrace()], 400);
 		}
-		$this->respond(['status' => 'ok', 'mode' => $meta['mode']]);
+		return $this->respond(['status' => 'ok', 'mode' => $meta['mode']]);
 	}
 
 }

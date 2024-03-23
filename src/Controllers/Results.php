@@ -15,6 +15,8 @@ use Lsr\Core\Requests\Request;
 use Lsr\Core\Templating\Latte;
 use Lsr\Exceptions\TemplateDoesNotExistException;
 use Lsr\Logging\Exceptions\DirectoryCreationException;
+use Nyholm\Psr7\Response;
+use Psr\Http\Message\ResponseInterface;
 use Throwable;
 use Tracy\Debugger;
 
@@ -31,16 +33,15 @@ class Results extends Controller
 	/**
 	 * @param Request $request
 	 *
-	 * @return void
+	 * @return ResponseInterface
 	 * @throws TemplateDoesNotExistException
-	 * @throws ValidationException
 	 * @throws Throwable
+	 * @throws ValidationException
 	 */
-	public function show(Request $request): void {
+	public function show(Request $request): ResponseInterface {
 		$rows = GameFactory::queryGames(true)->orderBy('start')->desc()->limit(10)->fetchAll(cache: false);
 		if (count($rows) === 0) {
-			$this->view('pages/results/noGames');
-			return;
+			return $this->view('pages/results/noGames');
 		}
 		$this->params['games'] = [];
 		if (isset($request->params['code'])) {
@@ -74,7 +75,7 @@ class Results extends Controller
 		$this->params['selectedTemplate'] = $_GET['template'] ?? Info::get('default_print_template', 'default');
 		$this->params['styles'] = PrintStyle::getAll();
 		$this->params['templates'] = PrintTemplate::getAll();
-		$this->view('pages/results/index');
+		return $this->view('pages/results/index');
 	}
 
 	/**
@@ -84,12 +85,9 @@ class Results extends Controller
 	 * @throws ValidationException
 	 * @throws TemplateDoesNotExistException
 	 */
-	public function printGame(Request $request): void {
-		$code = (string)($request->params['code'] ?? '');
-		$copies = (int)($request->params['copies'] ?? 1);
-		$template = (string)($request->params['template'] ?? 'default');
-		$style = (int)($request->params['style'] ?? PrintStyle::getActiveStyleId());
-		$cache = !isset($request->get['noCache']);
+	public function printGame(Request $request, string $code = '', int $copies = 1, string $template = 'default', ?int $style = null): ResponseInterface {
+		$style ??= PrintStyle::getActiveStyleId();
+		$cache = $request->getGet('noCache', false) === false;
 		//$colorless = ($request->params['type'] ?? 'color') === 'colorless';
 
 		$game = $code === 'last' ? GameFactory::getLastGame() : GameFactory::getByCode($code);
@@ -98,15 +96,18 @@ class Results extends Controller
 			$this->respond('Game not found', 404);
 		}
 
-		if (!isset($request->get['html'])) {
+		if ($request->getGet('html', false) === false) {
 			$pdfFile = $this->printService->getResultsPdf($game, $style, $template, $copies, $cache);
 			if ($pdfFile !== '' && file_exists($pdfFile)) {
-				header('Content-type: application/pdf;filename=results.pdf');
-				$this->respond(file_get_contents($pdfFile));
+				return new Response(
+					200, ['Content-Type' => 'application/pdf;filename=results.pdf'], fopen($pdfFile, 'rb')
+				);
 			}
 		}
-		Debugger::$showBar = false;
-		echo $this->printService->getResultsHtml($game, $style, $template, $copies, $cache);
+		Debugger::$showBar = $request->getGet('tracy', false) !== false;
+		return $this->respond(
+			$this->printService->getResultsHtml($game, $style, $template, $copies, $cache)
+		);
 	}
 
 }

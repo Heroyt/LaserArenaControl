@@ -12,6 +12,7 @@ use Lsr\Core\Exceptions\ModelNotFoundException;
 use Lsr\Core\Exceptions\ValidationException;
 use Lsr\Core\Requests\Request;
 use Lsr\Logging\Exceptions\DirectoryCreationException;
+use Psr\Http\Message\ResponseInterface;
 
 class GamesList extends Controller
 {
@@ -19,15 +20,15 @@ class GamesList extends Controller
 	protected string $title       = 'Games list';
 	protected string $description = '';
 
-	public function show() : void {
+	public function show(): ResponseInterface {
 		$this->params['date'] = new DateTime($_GET['date'] ?? 'now');
 		$this->params['games'] = GameFactory::getByDate($this->params['date'], true);
 		$this->params['gameCountsPerDay'] = GameFactory::getGamesCountPerDay('d.m.Y');
-		$this->view('pages/games-list/index');
+		return $this->view('pages/games-list/index');
 	}
 
-	public function game(Request $request) : void {
-		$this->view('pages/dashboard/index');
+	public function game(Request $request): ResponseInterface {
+		return $this->view('pages/dashboard/index');
 	}
 
 	/**

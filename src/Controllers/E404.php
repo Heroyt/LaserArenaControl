@@ -14,6 +14,7 @@ namespace App\Controllers;
 
 use Lsr\Core\Controllers\Controller;
 use Lsr\Core\Requests\Request;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * @class   E404
@@ -37,11 +38,11 @@ class E404 extends Controller
 	 */
 	protected string $description = 'Page not found';
 
-	public function show(Request $request) : void {
-		if (str_contains($request->header('Accept'), 'application/json')) {
-			$this->respond(['error' => 'Resource not found'], 404);
+	public function show(Request $request): ResponseInterface {
+		if (str_contains($request->getHeaderLine('Accept'), 'application/json')) {
+			return $this->respond(['error' => 'Resource not found'], 404);
 		}
-		http_response_code(404);
-		$this->view('errors/E404');
+		return $this->view('errors/E404')
+		            ->withStatus(404);
 	}
 }

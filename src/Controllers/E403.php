@@ -14,6 +14,7 @@ namespace App\Controllers;
 
 use Lsr\Core\Controllers\Controller;
 use Lsr\Core\Requests\Request;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * @class   E403
@@ -38,12 +39,12 @@ class E403 extends Controller
 	protected string $description = 'Access denied';
 
 
-	public function show(Request $request) : void {
+	public function show(Request $request): ResponseInterface {
 		if ($request->header('Accept') === 'application/json') {
-			$this->respond(['error' => 'Unauthorized'], 403);
+			return $this->respond(['error' => 'Unauthorized'], 403);
 		}
-		http_response_code(403);
-		$this->view('errors/E403');
+		return $this->view('errors/E403')
+		            ->withStatus(403);
 	}
 
 }

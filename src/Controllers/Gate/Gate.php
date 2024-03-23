@@ -5,6 +5,8 @@
 
 namespace App\Controllers\Gate;
 
+use App\Api\Response\ErrorDto;
+use App\Api\Response\ErrorType;
 use App\Core\Info;
 use App\GameModels\Factory\GameFactory;
 use App\GameModels\Factory\PlayerFactory;
@@ -24,6 +26,7 @@ use Lsr\Core\Exceptions\ValidationException;
 use Lsr\Core\Requests\Request;
 use Lsr\Core\Templating\Latte;
 use Lsr\Exceptions\TemplateDoesNotExistException;
+use Psr\Http\Message\ResponseInterface;
 use Throwable;
 
 /**
@@ -43,13 +46,13 @@ class Gate extends Controller
 	}
 
 	/**
-	 * @return void
+	 * @return ResponseInterface
 	 * @throws ModelNotFoundException
 	 * @throws TemplateDoesNotExistException
 	 * @throws Throwable
 	 * @throws ValidationException
 	 */
-	public function show(): void {
+	public function show(): ResponseInterface {
 		$this->params['style'] = PrintStyle::getActiveStyle();
 
 		// Allow for filtering games just from one system
@@ -63,12 +66,22 @@ class Gate extends Controller
 
 		$now = time();
 
-		$tmpGameResultsTime = (int)($this->config->getConfig(
-			'ENV'
-		)['TMP_GAME_RESULTS_TIME'] ?? Constants::TMP_GAME_RESULTS_TIME);
-		$gameResultsTime = (int)($this->config->getConfig('ENV')['GAME_RESULTS_TIME'] ?? Constants::GAME_RESULTS_TIME);
-		$gameStartedTime = (int)($this->config->getConfig('ENV')['GAME_STARTED_TIME'] ?? Constants::GAME_STARTED_TIME);
-		$gameLoadedTime = (int)($this->config->getConfig('ENV')['GAME_LOADED_TIME'] ?? Constants::GAME_LOADED_TIME);
+		$tmpGameResultsTime = (int)(
+			$this->config->getConfig('ENV')['TMP_GAME_RESULTS_TIME']
+			?? Constants::TMP_GAME_RESULTS_TIME
+		);
+		$gameResultsTime = (int)(
+			$this->config->getConfig('ENV')['GAME_RESULTS_TIME']
+			?? Constants::GAME_RESULTS_TIME
+		);
+		$gameStartedTime = (int)(
+			$this->config->getConfig('ENV')['GAME_STARTED_TIME']
+			?? Constants::GAME_STARTED_TIME
+		);
+		$gameLoadedTime = (int)(
+			$this->config->getConfig('ENV')['GAME_LOADED_TIME']
+			?? Constants::GAME_LOADED_TIME
+		);
 
 		// LAC allows for setting a game to display
 		/** @var Game|null $test */
@@ -77,10 +90,8 @@ class Gate extends Controller
 		$gateTime = Info::get('gate-time', $now);
 		if (isset($test) && ($now - $gateTime) <= $tmpGameResultsTime) {
 			$this->params['reloadTimer'] = $tmpGameResultsTime - ($now - $gateTime) + 2;
-			header('X-Reload-Time: ' . $this->params['reloadTimer']);
 			$this->game = $test;
-			$this->getResults();
-			return;
+			return $this->getResults()->withHeader('X-Reload-Time', $this->params['reloadTimer']);
 		}
 
 		// Get the results of the last game played if it had finished in the last 2 minutes
@@ -89,8 +100,7 @@ class Gate extends Controller
 			$this->params['reloadTimer'] = $gameResultsTime - ($now - $lastGame->end?->getTimestamp()) + 2;
 			header('X-Reload-Time: ' . $this->params['reloadTimer']);
 			$this->game = $lastGame;
-			$this->getResults();
-			return;
+			return $this->getResults();
 		}
 
 		// Try to find the last loaded or started games in selected systems
@@ -118,16 +128,13 @@ class Gate extends Controller
 				$this->game = $loaded;
 			}
 		}
+
+		$response = (isset($this->game) && !$this->game->isStarted()) ? $this->getLoaded() : $this->getIdle();
+
 		if (isset($this->params['reloadTimer'])) {
-			header('X-Reload-Time: ' . $this->params['reloadTimer']);
+			return $response->withHeader('X-Reload-Time', $this->params['reloadTimer']);
 		}
-
-		if (isset($this->game) && !$this->game->isStarted()) {
-			$this->getLoaded();
-			return;
-		}
-
-		$this->getIdle();
+		return $response;
 	}
 
 
@@ -139,9 +146,9 @@ class Gate extends Controller
 	 * @return void
 	 * @throws TemplateDoesNotExistException
 	 */
-	private function getLoaded(): void {
+	private function getLoaded(): ResponseInterface {
 		$this->params['game'] = $this->game;
-		$this->view('pages/gate/loaded');
+		return $this->view('pages/gate/loaded');
 	}
 
 	/**
@@ -151,7 +158,7 @@ class Gate extends Controller
 	 * @throws TemplateDoesNotExistException
 	 * @throws Throwable
 	 */
-	private function getIdle(): void {
+	private function getIdle(): ResponseInterface {
 		$this->params['game'] = $this->game;
 		$today = new DateTime();
 		$games = GameFactory::queryGames(true, $today)->fetchAssoc('system|id_game', cache: false);
@@ -226,7 +233,7 @@ class Gate extends Controller
 				);
 			}
 		}
-		$this->view('pages/gate/idle');
+		return $this->view('pages/gate/idle');
 	}
 
 	/**
@@ -235,8 +242,11 @@ class Gate extends Controller
 	 * @return void
 	 * @throws Throwable
 	 */
-	public function setGateGame(Request $request): void {
+	public function setGateGame(Request $request): ResponseInterface {
 		$game = $this->getGame($request);
+		if ($game instanceof ErrorDto) {
+			return $this->respond($game, $game->type === ErrorType::NOT_FOUND ? 404 : 400);
+		}
 		try {
 			$gateTime = time();
 			Info::set('gate-game', $game);
@@ -246,32 +256,31 @@ class Gate extends Controller
 				['type' => 'game-set', 'game' => $game->code, 'time' => $gateTime]
 			);
 		} catch (Exception $e) {
-			$this->respond(['error' => 'Failed to save the game info', 'exception' => $e->getMessage()], 500);
+			return $this->respond(
+				new ErrorDto('Failed to save the game info', type: ErrorType::DATABASE, exception: $e),
+				500
+			);
 		}
-		$this->respond(['success' => true]);
+		return $this->respond(['success' => true]);
 	}
 
 	/**
 	 * @param Request $request
 	 *
-	 * @return Game
+	 * @return Game|ErrorDto
 	 * @throws Throwable
-	 * @throws JsonException
 	 */
-	private function getGame(Request $request): Game {
-		$gameId = (int)($request->post['game'] ?? 0);
+	private function getGame(Request $request): Game|ErrorDto {
+		$gameId = (int)$request->getPost('game', 0);
 		if (empty($gameId)) {
-			$this->respond(['error' => 'Missing / Incorrect game'], 400);
+			return new ErrorDto('Missing / Incorrect game', type: ErrorType::VALIDATION);
 		}
-		$system = $request->params['system'] ?? '';
+		$system = $request->getParam('system');
 		if (empty($system)) {
-			$this->respond(['error' => 'Missing / Incorrect system'], 400);
+			return new ErrorDto('Missing / Incorrect system', type: ErrorType::VALIDATION);
 		}
 		$game = GameFactory::getById($gameId, ['system' => $system]);
-		if (!isset($game)) {
-			$this->respond(['error' => 'Cannot find game'], 404);
-		}
-		return $game;
+		return $game ?? new ErrorDto('Cannot find game', type: ErrorType::NOT_FOUND);
 	}
 
 	/**
@@ -280,8 +289,11 @@ class Gate extends Controller
 	 * @return void
 	 * @throws Throwable
 	 */
-	public function setGateLoaded(Request $request): void {
+	public function setGateLoaded(Request $request): ResponseInterface {
 		$game = $this->getGame($request);
+		if ($game instanceof ErrorDto) {
+			return $this->respond($game, $game->type === ErrorType::NOT_FOUND ? 404 : 400);
+		}
 		$system = $request->params['system'] ?? '';
 		try {
 			Info::set('gate-game', null);
@@ -293,9 +305,12 @@ class Gate extends Controller
 				['type' => 'game-set-loaded', 'game' => $game->code, 'time' => time()]
 			);
 		} catch (Exception $e) {
-			$this->respond(['error' => 'Failed to save the game info', 'exception' => $e->getMessage()], 500);
+			return $this->respond(
+				new ErrorDto('Failed to save the game info', type: ErrorType::DATABASE, exception: $e),
+				500
+			);
 		}
-		$this->respond(['success' => true]);
+		return $this->respond(['success' => true]);
 	}
 
 	/**
@@ -304,18 +319,21 @@ class Gate extends Controller
 	 * @return void
 	 * @throws JsonException
 	 */
-	public function setGateIdle(string $system = ''): void {
+	public function setGateIdle(string $system = ''): ResponseInterface {
 		if (empty($system)) {
-			$this->respond(['error' => 'Missing / Incorrect system'], 400);
+			return $this->respond(new ErrorDto('Missing / Incorrect system', type: ErrorType::VALIDATION), 400);
 		}
 		try {
 			Info::set('gate-game', null);
 			Info::set($system . '-game-loaded', null);
 			$this->eventService->trigger('gate-reload', ['type' => 'set-idle', 'time' => time()]);
 		} catch (Exception $e) {
-			$this->respond(['error' => 'Failed to save the game info', 'exception' => $e->getMessage()], 500);
+			return $this->respond(
+				new ErrorDto('Failed to save the game info', type: ErrorType::DATABASE, exception: $e),
+				500
+			);
 		}
-		$this->respond(['success' => true]);
+		return $this->respond(['success' => true]);
 	}
 
 }

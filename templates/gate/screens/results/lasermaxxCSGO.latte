@@ -1,0 +1,45 @@
+{layout '../../@layout.latte'}
+
+{varType App\GameModels\Game\Lasermaxx\Game $game}
+
+{define containerClasses}
+    results-csgo
+{/define}
+
+{define content}
+    <section class="teams">
+        {var App\GameModels\Game\Team|null $win = $game->getMode()?->getWin($game)}
+        <div class="team" n:foreach="$game->getTeamsSorted() as $team">
+            <div class="name bg-team-{$game::SYSTEM}-{$team->getTeamColor()}">
+                <div class="text-center">
+                    {if is_null($win)}
+                        {svgIcon 'shield', '2rem'}
+                    {elseif $win->id === $team->id}
+                        {svgIcon 'crown', '2rem'}
+                    {else}
+                        {svgIcon 'skull', '2rem'}
+                    {/if}
+                </div>
+                {$team->name}
+            </div>
+            <div class="players">
+                {include partPlayers, players: $team->getPlayersSorted()}
+            </div>
+        </div>
+    </section>
+{/define}
+
+{define partPlayers}
+    {varType App\GameModels\Game\Evo5\Player[] $players}
+    <div n:foreach="$players as $player"
+            class="player text-center text-grey-text {if $player->deaths >= $game->lives}dead{/if}">
+        {svgIcon ($player->deaths < $game->lives ? 'Vesta' . $player->getTeamColor() : 'skull'), '', '2rem'}
+        <div class="name text-team-{$game::SYSTEM}-{$player->getTeamColor()}">
+            {$player->name}
+        </div>
+        <div class="hits-deaths">
+            <div class="hits">{$player->hits} {svgIcon 'gun', '', '1.5rem'}</div>
+            <div class="deaths">{$player->deaths} {svgIcon 'skull', '', '1.5rem'}</div>
+        </div>
+    </div>
+{/define}

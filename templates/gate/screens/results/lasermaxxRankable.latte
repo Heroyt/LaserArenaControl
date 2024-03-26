@@ -1,0 +1,91 @@
+{layout '../../@layout.latte'}
+
+{varType App\GameModels\Game\Lasermaxx\Game $game}
+{varType string $qr}
+
+{var bool $includeTeams = $game->getMode()?->isTeam() && $game->getMode()?->settings?->partTeams}
+
+{define containerClasses}
+    results results-game-{$game->id} {if !$includeTeams}no-teams{/if}
+{/define}
+
+{define content}
+    <section class="info" data-game="{$game->code}">
+        {include partInfo}
+    </section>
+    <section class="players">
+        {include partPlayers}
+    </section>
+    <section class="teams" n:if="$includeTeams">
+        {include partTeams}
+    </section>
+{/define}
+
+{define partInfo}
+    {$qr|noescape}
+    <h3>{lang 'On-line detailní výsledky', context: 'results'}</h3>
+{/define}
+
+{define partPlayers}
+    {var int $playerCount = count($game->getPlayers())}
+    <div class="player text-grey-text" n:foreach="$game->getPlayersSorted() as $player"
+         style="--multiplier: {((-0.05 * ($playerCount - 11)) + 1)|noescape}; --delay: {$iterator->counter * 30}ms;"
+         data-score="{$player->score}"
+         data-position="{$iterator->counter}" data-team="{$player->getTeam()->id}">
+        {var array $rank = $player->getBestAt()}
+        <div class="position" data-value="{$iterator->counter}">
+            {$iterator->counter}.
+        </div>
+        {ifset $player->user}
+            <img src="https://laserliga.cz/user/{$player->user->getCode()}/avatar" alt="Avatar" class="player-avatar"/>
+        {/ifset}
+        <div class="rank-name">
+            <div class="name text-team-{$game::SYSTEM}-{$player->getTeamColor()}">
+                {$player->name}
+            </div>
+            <div class="rank">
+                {svgIcon $rank['icon'], '', 15}
+                {$rank['name']}
+                {var $count = count($player->getAllBestAt()) - 1}
+                {if $count > 0}
+                    +&nbsp;{$count}&nbsp;<i class="fa-solid fa-trophy"></i>
+                {/if}
+            </div>
+        </div>
+        {ifset $player->user}
+            <img src="https://laserliga.cz/user/{$player->user->getCode()}/title/svg" alt="title" class="title"/>
+        {/ifset}
+        <div class="score text-end {switch $iterator->counter}
+			{case 1} text-gold
+			{case 2} text-dark-silver
+			{case 3} text-bronze
+		   {/switch}
+			{if $player->score < 0}text-danger{/if}"
+             data-class="{switch $iterator->counter}
+			{case 1} text-gold
+			{case 2} text-dark-silver
+			{case 3} text-bronze
+		   {/switch}{if $player->score < 0}text-danger{/if}">
+            <span class="value">{$player->score|number:0,',','&nbsp;'|noescape}</span>
+            <i class="fas fa-star"></i>
+        </div>
+    </div>
+{/define}
+
+{define partTeams}
+    {var int $totalScore = array_sum(array_map(function(App\GameModels\Game\Team $team){ return $team->score > 0 ? $team->score : 0;},$game->getTeams()->getAll()))}
+    {var App\GameModels\Game\Team|null $win = $game->getMode()?->getWin($game)}
+    <div n:foreach="$game->getTeamsSorted() as $team" class="team bg-team-{$game::SYSTEM}-{$team->color}"
+                                                      style="height:calc({100*($team->score > 0 ? $team->score : 0) / ($totalScore > 0 ? $totalScore : 1)|noescape}% - .2rem);"
+                                                      data-team="{$team->id}">
+        <div class="name">
+            <div class="text-center crown">
+                {if is_null($win) || $win->id === $team->id}{svgIcon 'crown', '2rem'}{/if}
+            </div>
+            {$team->name}
+        </div>
+        <div class="score text-end" data-score="{$team->score}">
+            <span class="value">{$team->score|number:0,',','&nbsp;'|noescape}</span> <i class="fas fa-star"></i>
+        </div>
+    </div>
+{/define}

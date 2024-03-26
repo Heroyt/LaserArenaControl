@@ -41,6 +41,8 @@ docker-compose-staging.yml
 docs/
 !assets/icon/
 !assets/scss/results/
+!templates/gate/screens/results
+!src/Gate/Screens/Results
 upload/
 docker/mysql
 docker/private

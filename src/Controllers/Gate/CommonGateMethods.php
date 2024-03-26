@@ -48,7 +48,7 @@ trait CommonGateMethods
 		$team = new $teamClass;
 		$this->params['today'] = new Today($this->game, $player, $team);
 		if ($this->game->getMode() !== null && $this->game->getMode() instanceof CustomResultsMode) {
-			return $this->view($this->game->getMode()->getCustomGateTemplate($this));
+			return $this->view($this->game->getMode()->getCustomGateScreen($this));
 		}
 
 		return $this->view('pages/gate/results');

@@ -24,13 +24,13 @@ final readonly class LogArchiveJob implements Job
 		$processed = [];
 		$logger = new Logger(LOG_DIR, 'cron');
 		foreach ($it as $file) {
+			$path = pathinfo($file, PATHINFO_DIRNAME);
 			$fileName = pathinfo($file, PATHINFO_BASENAME);
-			preg_match('/(.*)-\d{4}-\d{2}-\d{2}\.log/', $fileName, $matches);
-			$name = $matches[0][0] ?? '';
+			preg_match('/^(.*)-\d{4}-\d{2}-\d{2}\.log$/', $fileName, $matches);
+			$name = $matches[1] ?? '';
 			if (empty($name) || isset($processed[$name])) {
 				continue;
 			}
-			$path = str_replace($fileName, '', $file);
 			try {
 				$this->archiver->archiveOld($path, $name, LOG_DIR . 'archive/');
 			} catch (ArchiveCreationException $e) {

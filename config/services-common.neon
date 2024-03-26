@@ -35,6 +35,9 @@ orisai.scheduler:
 		logArchive:
 			expression: 0 6 * * *
 			callback: [@cron.logArchive, 'run']
+		resultsImport:
+			expression: * * * * *
+			callback: [@cron.resultsImport, 'run']
 services:
 	- App\Services\VersionService
 	- App\Services\RegressionCalculator
@@ -73,6 +76,7 @@ services:
 	cron.vestSync: App\Cron\VestSyncJob
 	cron.logArchive: App\Cron\LogArchiveJob
 	cron.gamesPrecache: App\Cron\GamesPrecacheJob
+	cron.resultsImport: App\Cron\ResultsImportJob
 
 	result.parser: App\Tools\ResultParsing\ResultsParser
 	result.parser.evo5: App\Tools\ResultParsing\Evo5\ResultsParser

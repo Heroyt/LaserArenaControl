@@ -16,7 +16,6 @@ use App\Services\EventService;
 use DateTime;
 use Dibi\Exception;
 use JsonException;
-use Lsr\Core\Config;
 use Lsr\Core\Controllers\Controller;
 use Lsr\Core\Exceptions\ValidationException;
 use Lsr\Core\Requests\Request;
@@ -30,13 +29,10 @@ use Throwable;
 class GateController extends Controller
 {
 
-	use CommonGateMethods;
-
 	public function __construct(
-		Latte                   $latte,
+		Latte                 $latte,
 		private readonly EventService $eventService,
-		private readonly Config $config,
-		private readonly Gate   $gate) {
+		private readonly Gate $gate) {
 		parent::__construct($latte);
 	}
 

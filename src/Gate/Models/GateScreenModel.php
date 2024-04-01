@@ -63,4 +63,36 @@ class GateScreenModel extends Model
 		return $this;
 	}
 
+	public function setGate(GateType $gate) : GateScreenModel {
+		$this->gate = $gate;
+		return $this;
+	}
+
+	public function setOrder(int $order) : GateScreenModel {
+		$this->order = $order;
+		return $this;
+	}
+
+	public function setScreenSerialized(string $screenSerialized) : GateScreenModel {
+		$this->screenSerialized = $screenSerialized;
+		return $this;
+	}
+
+	public function setSettingsSerialized(?string $settingsSerialized) : GateScreenModel {
+		$this->settingsSerialized = $settingsSerialized;
+		return $this;
+	}
+
+	public function setTrigger(ScreenTriggerType $trigger) : GateScreenModel {
+		$this->trigger = $trigger;
+		return $this;
+	}
+
+	public function setTriggerValue(?string $triggerValue) : GateScreenModel {
+		$this->triggerValue = $triggerValue;
+		return $this;
+	}
+
+
+
 }

@@ -656,10 +656,11 @@ class Seeder implements InstallInterface
 				DB::delete(Tip::TABLE, ['1=1']);
 			}
 			foreach (self::TIPS as $id => $tip) {
-				DB::insertIgnore(Tip::TABLE, [
-					'id_tip' => $id,
-					'text'   => $tip,
-				]);
+				DB::insertIgnore(Tip::TABLE,
+				                 [
+					                 'id_tip' => $id,
+					                 'text'   => $tip,
+				                 ]);
 			}
 
 			// Vests
@@ -678,8 +679,9 @@ class Seeder implements InstallInterface
 			$count = DB::select(GateType::TABLE, 'COUNT(*)')->fetchSingle(cache: false);
 			if ($count === 0) {
 				$gate = new GateType();
-				$gate->name = 'Výchozí';
-				$gate->description = 'Výchozí výsledková tabule.';
+				$gate->setName('Výchozí')
+				     ->setSlug('default')
+				     ->setDescription('Výchozí výsledková tabule.');
 
 				$idleScreen = new GateScreenModel();
 				$idleScreen->screenSerialized = GeneralDayStatsScreen::getDiKey();

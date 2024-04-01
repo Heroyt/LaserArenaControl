@@ -122,4 +122,21 @@ class GateType extends Model
 		return $success;
 	}
 
+	public function setName(string $name) : GateType {
+		$this->name = $name;
+		return $this;
+	}
+
+	public function setSlug(string $slug) : GateType {
+		$this->slug = $slug;
+		return $this;
+	}
+
+	public function setDescription(?string $description) : GateType {
+		$this->description = $description;
+		return $this;
+	}
+
+
+
 }

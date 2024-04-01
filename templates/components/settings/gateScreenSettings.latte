@@ -1,0 +1,17 @@
+{parameters
+    int|string $gateKey,
+    int|string $screenKey,
+    App\Gate\Models\GateScreenModel $screen,
+    App\Gate\Models\GateType|null $gate = null,
+    string $formName = 'gate',
+    string $formName2 = 'screen',
+}
+
+{include
+    '../../'.$screen->getScreen()::getSettingsForm(),
+    key: 'gate-'.$gateKey.'-screen-'.$screenKey.'-settings',
+    name: $formName.'['.$gateKey.']['.$formName2.']['.$screenKey.'][settings]',
+    settings: $screen->getSettings(),
+    gate: $gate,
+    screen: $screen
+}

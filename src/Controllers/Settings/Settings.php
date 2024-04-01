@@ -76,54 +76,6 @@ class Settings extends Controller
 	}
 
 	/**
-	 * @return void
-	 * @throws TemplateDoesNotExistException
-	 */
-	public function gate(): ResponseInterface {
-		return $this->view('pages/settings/gate');
-	}
-
-	/**
-	 * @param Request $request
-	 *
-	 * @return void
-	 * @throws JsonException
-	 */
-	public function saveGate(Request $request): ResponseInterface {
-		try {
-			$offset = $request->getPost('timer_offset');
-			if (isset($offset)) {
-				Info::set('timer-offset', (int)$offset);
-			}
-			$show = $request->getPost('timer_show');
-			if (isset($show)) {
-				Info::set('timer_show', (int)$show);
-			}
-			Info::set('timer_on_inactive_screen', !empty($request->getPost('timer_on_inactive_screen')));
-			if (isset($_FILES['background'])) {
-				$file = UploadedFile::parseUploaded('background');
-				if (isset($file)) {
-					// Remove old uploaded files
-					foreach (glob(UPLOAD_DIR . 'gate.*') as $old) {
-						unlink($old);
-					}
-					// Save new file
-					$file->save(UPLOAD_DIR . 'gate.' . $file->getExtension());
-				}
-			}
-		} catch (Exception) {
-			$request->passErrors[] = lang('Failed to save settings.', context: 'errors');
-		}
-		if ($request->isAjax()) {
-			return $this->respond([
-				'success' => empty($request->passErrors),
-				'errors' => $request->passErrors,
-			]);
-		}
-		return App::redirect('settings-gate', $request);
-	}
-
-	/**
 	 * @param Request $request
 	 *
 	 * @return void

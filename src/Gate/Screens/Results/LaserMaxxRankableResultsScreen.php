@@ -28,7 +28,7 @@ class LaserMaxxRankableResultsScreen extends AbstractResultsScreen
 	 * @inheritDoc
 	 */
 	public static function getDiKey() : string {
-		return 'gate.screens.results.lasermaxxRankable';
+		return 'gate.screens.results.lasermaxx.rankable';
 	}
 
 	/**

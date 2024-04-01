@@ -1,58 +1,59 @@
 export type RequestMethod = 'POST' | 'GET' | 'PUT' | 'DELETE';
 export type CustomFetchOptions = {
-    body?: string | FormData | object | URLSearchParams,
-    params?: { [key: string]: any } | URLSearchParams | string,
-    headers?: Record<string, string>,
+	body?: string | FormData | object | URLSearchParams,
+	params?: { [key: string]: any } | URLSearchParams | string,
+	headers?: Record<string, string>,
 };
 export type FormSaveResponse = {
-    status?: 'ok' | 'error' | string,
-    success?: boolean,
-    message?: string,
-    errors?: string | string[],
+	status?: 'ok' | 'error' | string,
+	reload?: boolean,
+	success?: boolean,
+	message?: string,
+	errors?: string | string[],
 }
 
 export type ErrorResponseType =
-    'validation_error'
-    | 'database_error'
-    | 'internal_error'
-    | 'resource_not_found_error'
-    | 'resource_access_error';
+	'validation_error'
+	| 'database_error'
+	| 'internal_error'
+	| 'resource_not_found_error'
+	| 'resource_access_error';
 export type ExceptionResponse = {
-    message: string,
-    code: number,
-    trace: { file: string, line: number, function?: string, args?: string[] }[]
+	message: string,
+	code: number,
+	trace: { file: string, line: number, function?: string, args?: string[] }[]
 }
 
 export type ErrorResponse<Values = { [index: string]: any }> = {
-    title: string,
-    type: ErrorResponseType,
-    detail?: string,
-    exception?: null | ExceptionResponse,
-    values?: Values | null
+	title: string,
+	type: ErrorResponseType,
+	detail?: string,
+	exception?: null | ExceptionResponse,
+	values?: Values | null
 };
 
 export class ResponseError extends Error {
-    public response: Response;
+	public response: Response;
 
-    constructor(response: Response) {
-        super(`Request failed with an error: ${response.statusText}`);
-        this.response = response;
-    }
+	constructor(response: Response) {
+		super(`Request failed with an error: ${response.statusText}`);
+		this.response = response;
+	}
 
-    private _data: any;
+	private _data: any;
 
-    get data(): Promise<any> {
-        return this.getDataFromResponse();
-    }
+	get data(): Promise<any> {
+		return this.getDataFromResponse();
+	}
 
-    async getDataFromResponse(): Promise<any> {
-        if (this._data) {
-            return this._data;
-        }
+	async getDataFromResponse(): Promise<any> {
+		if (this._data) {
+			return this._data;
+		}
 
-        this._data = await processResponse(this.response.headers.get('Content-Type'), this.response);
-        return this._data;
-    }
+		this._data = await processResponse(this.response.headers.get('Content-Type'), this.response);
+		return this._data;
+	}
 
 }
 
@@ -64,12 +65,12 @@ export class ResponseError extends Error {
  * @throws ResponseError
  */
 export async function customFetch(path: string, method: RequestMethod, options: CustomFetchOptions = {}) {
-    const response = await prepareFetch(path, method, options);
-    if (!response.ok) {
-        throw new ResponseError(response);
-    }
-    const type = response.headers.get('Content-Type');
-    return processResponse(type, response);
+	const response = await prepareFetch(path, method, options);
+	if (!response.ok) {
+		throw new ResponseError(response);
+	}
+	const type = response.headers.get('Content-Type');
+	return processResponse(type, response);
 }
 
 
@@ -81,30 +82,30 @@ export async function customFetch(path: string, method: RequestMethod, options: 
  * @throws ResponseError
  */
 export async function fetchPost(path: string, body: string | FormData | object | URLSearchParams = '', headers: HeadersInit | null = null) {
-    const options: RequestInit = {
-        method: 'POST',
-        headers: {
-            'X-Requested-With': 'XMLHttpRequest',
-            ...headers
-        },
-    };
+	const options: RequestInit = {
+		method: 'POST',
+		headers: {
+			'X-Requested-With': 'XMLHttpRequest',
+			...headers,
+		},
+	};
 
-    if (body instanceof FormData) {
-        options.body = body;
-    } else if (typeof (body) === 'object') {
-        options.body = JSON.stringify(body);
-        // @ts-ignore
-        options.headers['Content-Type'] = 'application/json';
-    } else {
-        options.body = body;
-    }
+	if (body instanceof FormData) {
+		options.body = body;
+	} else if (typeof (body) === 'object') {
+		options.body = JSON.stringify(body);
+		// @ts-ignore
+		options.headers['Content-Type'] = 'application/json';
+	} else {
+		options.body = body;
+	}
 
-    const response = await fetch(path, options);
-    if (!response.ok) {
-        throw new ResponseError(response);
-    }
-    const type = response.headers.get('Content-Type');
-    return processResponse(type, response);
+	const response = await fetch(path, options);
+	if (!response.ok) {
+		throw new ResponseError(response);
+	}
+	const type = response.headers.get('Content-Type');
+	return processResponse(type, response);
 }
 
 /**
@@ -116,73 +117,73 @@ export async function fetchPost(path: string, body: string | FormData | object |
  * @throws ResponseError
  */
 export async function fetchGet(path: string, params: {
-    [key: string]: any
+	[key: string]: any
 } | URLSearchParams | string = {}, headers: HeadersInit | null = null) {
-    if (params) {
-        const searchParams = new URLSearchParams(params);
-        path += '?' + searchParams.toString();
-    }
-    const response = await fetch(
-        path,
-        {
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest',
-                ...headers
-            }
-        }
-    );
-    if (!response.ok) {
-        throw new ResponseError(response);
-    }
-    const type = response.headers.get('Content-Type');
-    return processResponse(type, response);
+	if (params) {
+		const searchParams = new URLSearchParams(params);
+		path += '?' + searchParams.toString();
+	}
+	const response = await fetch(
+		path,
+		{
+			headers: {
+				'X-Requested-With': 'XMLHttpRequest',
+				...headers,
+			},
+		},
+	);
+	if (!response.ok) {
+		throw new ResponseError(response);
+	}
+	const type = response.headers.get('Content-Type');
+	return processResponse(type, response);
 }
 
 export async function processResponse(type: string, response: Response) {
-    switch (type) {
-        case 'application/json':
-            return response.json();
-        default:
-            return response.text();
-    }
+	switch (type) {
+		case 'application/json':
+			return response.json();
+		default:
+			return response.text();
+	}
 }
 
 export async function prepareFetch(path: string, method: RequestMethod, options: CustomFetchOptions = {}): Promise<Response> {
-    const requestOptions: RequestInit = {
-        method: method,
-        headers: {
-            'X-Requested-With': 'XMLHttpRequest',
-            'Content-Type': 'application/x-www-form-urlencoded',
-        },
-    };
+	const requestOptions: RequestInit = {
+		method: method,
+		headers: {
+			'X-Requested-With': 'XMLHttpRequest',
+			'Content-Type': 'application/x-www-form-urlencoded',
+		},
+	};
 
-    if (options.params) {
-        const searchParams = new URLSearchParams(options.params);
-        path += '?' + searchParams.toString();
-    }
+	if (options.params) {
+		const searchParams = new URLSearchParams(options.params);
+		path += '?' + searchParams.toString();
+	}
 
-    if (options.body) {
-        if (options.body instanceof FormData) {
-            requestOptions.body = options.body;
-            // @ts-ignore
-	        if (requestOptions.headers['Content-Type']) {
-		        // @ts-ignore
-		        delete requestOptions.headers['Content-Type'];
-	        }
-        } else if (typeof (options.body) === 'object') {
-            requestOptions.body = JSON.stringify(options.body);
-            // @ts-ignore
-            requestOptions.headers['Content-Type'] = 'application/json';
-        } else {
-            requestOptions.body = options.body;
-        }
-    }
+	if (options.body) {
+		if (options.body instanceof FormData) {
+			requestOptions.body = options.body;
+			// @ts-ignore
+			if (requestOptions.headers['Content-Type']) {
+				// @ts-ignore
+				delete requestOptions.headers['Content-Type'];
+			}
+		} else if (typeof (options.body) === 'object') {
+			requestOptions.body = JSON.stringify(options.body);
+			// @ts-ignore
+			requestOptions.headers['Content-Type'] = 'application/json';
+		} else {
+			requestOptions.body = options.body;
+		}
+	}
 
-    if (options.headers) {
-        Object.entries(options.headers).forEach(([key, value]) => {
-            // @ts-ignore
-            requestOptions.headers[key] = value;
-        });
-    }
-    return fetch(path, requestOptions);
+	if (options.headers) {
+		Object.entries(options.headers).forEach(([key, value]) => {
+			// @ts-ignore
+			requestOptions.headers[key] = value;
+		});
+	}
+	return fetch(path, requestOptions);
 }

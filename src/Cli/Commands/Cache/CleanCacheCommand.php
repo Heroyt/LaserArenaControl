@@ -53,6 +53,12 @@ class CleanCacheCommand extends Command
 			'Clear latte cache.'
 		);
 		$this->addOption(
+			'model',
+			'm',
+			InputOption::VALUE_NONE,
+			'Clear model (ORM) cache.'
+		);
+		$this->addOption(
 			'info',
 			'i',
 			InputOption::VALUE_NONE,
@@ -71,6 +77,7 @@ class CleanCacheCommand extends Command
 		$system = $input->getOption('system');
 		$di = $input->getOption('di');
 		$latte = $input->getOption('latte');
+		$model = $input->getOption('model');
 		$info = $input->getOption('info');
 
 		if ($all || $system) {
@@ -106,15 +113,29 @@ class CleanCacheCommand extends Command
 
 		if ($all || $latte) {
 			/** @var string[] $files */
-			$files = glob(TMP_DIR . 'latte/*');
+			$files = glob(TMP_DIR.'latte/*');
 			foreach ($files as $file) {
 				unlink($file);
 			}
 			$output->writeln(
-				Colors::color(ForegroundColors::GREEN) . sprintf(
+				Colors::color(ForegroundColors::GREEN).sprintf(
 					'Successfully removed %d latte cache files.',
 					count($files)
-				) . Colors::reset()
+				).Colors::reset()
+			);
+		}
+
+		if ($all || $model) {
+			/** @var string[] $files */
+			$files = glob(TMP_DIR.'models/*');
+			foreach ($files as $file) {
+				unlink($file);
+			}
+			$output->writeln(
+				Colors::color(ForegroundColors::GREEN).sprintf(
+					'Successfully removed %d model (ORM) cache files.',
+					count($files)
+				).Colors::reset()
 			);
 		}
 

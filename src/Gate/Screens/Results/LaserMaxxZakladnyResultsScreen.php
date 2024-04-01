@@ -27,7 +27,7 @@ class LaserMaxxZakladnyResultsScreen extends AbstractResultsScreen
 	 * @inheritDoc
 	 */
 	public static function getDiKey() : string {
-		return 'gate.screens.results.lasermaxxZakladny';
+		return 'gate.screens.results.lasermaxx.zakladny';
 	}
 
 	public function isActive() : bool {

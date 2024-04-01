@@ -129,6 +129,6 @@ class GeneralDayStatsScreen extends GateScreen
 	 * @inheritDoc
 	 */
 	public static function getDiKey() : string {
-		return 'gate.screens.generalDayStats';
+		return 'gate.screens.idle.stats';
 	}
 }

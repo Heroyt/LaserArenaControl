@@ -461,6 +461,7 @@ tables:
 			`name` varchar(100) NOT NULL,
 			`slug` varchar(100) NOT NULL DEFAULT '',
 			`description` text DEFAULT NULL,
+			`locked` tinyint(1) NOT NULL DEFAULT 0,
 			PRIMARY KEY (`id_gate`),
             UNIQUE KEY `slug` (`slug`)
 		) ENGINE=InnoDB DEFAULT CHARSET utf8mb4;

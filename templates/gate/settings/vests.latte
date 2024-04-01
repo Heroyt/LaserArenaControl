@@ -1,0 +1,13 @@
+{parameters
+    string $key,
+    string $name,
+    App\Gate\Settings\VestsSettings $settings,
+    App\Gate\Models\GateType|null $gate = null,
+    App\Gate\Screens\GateScreen|null $screen = null
+}
+
+<label for="{$key}-time" class="form-label">
+    {lang 'Doba na obrazovce v sekundách', context: 'settings'}:
+</label>
+<input type="number" class="form-control" min="30" n:attr="value: $settings->time" id="{$key}-time"
+       name="{$name}[time]">

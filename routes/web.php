@@ -11,6 +11,7 @@ use App\Controllers\Lang;
 use App\Controllers\NewGame;
 use App\Controllers\Players;
 use App\Controllers\Results;
+use App\Controllers\Settings\Gate;
 use App\Controllers\Settings\Settings;
 use App\Core\App;
 use App\Services\FeatureConfig;
@@ -23,9 +24,12 @@ Route::get('/lang/{lang}', [Lang::class, 'setLang']);
 Route::get('/', [NewGame::class, 'show'])->name('dashboard');
 
 Route::group('/results')
-	->get('/', [Results::class, 'show'])->name('results')
-	->get('/{code}', [Results::class, 'show'])->name('results-game')
-	->get('/{code}/print', [Results::class, 'printGame'])->name('print')
+	->get('/', [Results::class, 'show'])
+	->name('results')
+	->get('/{code}', [Results::class, 'show'])
+	->name('results-game')
+	->get('/{code}/print', [Results::class, 'printGame'])
+	->name('print')
 	->get('/{code}/print/{lang}', [Results::class, 'printGame'])
 	->get('/{code}/print/{lang}/{copies}', [Results::class, 'printGame'])
 	->get('/{code}/print/{lang}/{copies}/{style}', [Results::class, 'printGame'])
@@ -33,17 +37,23 @@ Route::group('/results')
 	->get('/{code}/print/{lang}/{copies}/{style}/{template}/{type}', [Results::class, 'printGame']);
 
 Route::group('/list')
-	->get('/', [GamesList::class, 'show'])->name('games-list')
+	->get('/', [GamesList::class, 'show'])
+	->name('games-list')
 	->get('/{game}', [GamesList::class, 'game']);
 
 $settings = Route::group('settings')
-                 ->get('', [Settings::class, 'show'])->name('settings')
+	->get('', [Settings::class, 'show'])
+	->name('settings')
                  ->post('', [Settings::class, 'saveGeneral'])
-                 ->get('gate', [Settings::class, 'gate'])->name('settings-gate')
-                 ->post('gate', [Settings::class, 'saveGate'])
-                 ->get('vests', [Settings::class, 'vests'])->name('settings-vests')
+	->get('gate', [Gate::class, 'gate'])
+	->name('settings-gate')
+	->get('gate/settings/{screen}', [Gate::class, 'screenSettings'])
+	->post('gate', [Gate::class, 'saveGate'])
+	->get('vests', [Settings::class, 'vests'])
+	->name('settings-vests')
                  ->post('vests', [Settings::class, 'saveVests'])
-                 ->get('print', [Settings::class, 'print'])->name('settings-print')
+	->get('print', [Settings::class, 'print'])
+	->name('settings-print')
                  ->post('print', [Settings::class, 'savePrint']);
 
 if ($featureConfig->isFeatureEnabled('groups')) {
@@ -51,8 +61,11 @@ if ($featureConfig->isFeatureEnabled('groups')) {
 }
 
 Route::group('/gate')
-	->get('/', [GateController::class, 'show'])->name('gate')
-	->get('/{gate}', [GateController::class, 'show'])->name('gate-slug')
+	->get('/', [GateController::class, 'show'])
+	->name('gate')
+	->get('/{gate}', [GateController::class, 'show'])
+	->name('gate-slug')
+	->post('/event', [GateController::class, 'setEvent'])
 	->post('/set', [GateController::class, 'setGateGame'])      // Error
 	->post('/loaded', [GateController::class, 'setGateLoaded']) // Error
 	->post('/idle', [GateController::class, 'setGateIdle']) // Error

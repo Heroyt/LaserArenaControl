@@ -1,0 +1,69 @@
+{parameters
+    string|int $gateKey,
+    App\Gate\Models\GateScreenModel[] $screens,
+    App\Gate\Models\GateType|null $gate = null,
+    bool $locked = false,
+    string $formName = 'gate',
+}
+
+{import 'gateScreen.latte'}
+
+<div class="card m-2 gate-type" id="gate-{$gateKey}" data-id="{$gate?->id}"
+     {ifset $gate}data-delete-key="delete-gate[]"{/ifset}
+     data-slug="{$gate?->getSlug()}" style="max-width: 35rem;">
+    <div class="card-body">
+        <div class="text-end" n:if="!$locked">
+            <button type="button" class="btn btn-danger delete-gate"><i class="fa-solid fa-trash"></i></button>
+        </div>
+        <div class="card-title">
+            <label for="gate-{$gateKey}-name" class="form-label">{lang 'Název'}:</label>
+            <input n:attr="disabled: $locked, value: $gate?->name"
+                    type="text" class="form-control"
+                    id="gate-{$gateKey}-name"
+                    name="{$formName}[{$gateKey}][name]">
+        </div>
+        <label for="gate-{$gateKey}-slug" class="form-label">{lang 'URL název'}:</label>
+        <input n:attr="disabled: $locked, value: $gate?->slug"
+                type="text" class="form-control"
+                id="gate-{$gateKey}-slug"
+                name="{$formName}[{$gateKey}][slug]">
+        <div class="form-text">{lang 'Volitelná hodnota, automaticky se generuje. Jedná se o text, který se použije v URL pro přístup na tuto obrazovku.'}</div>
+        <button type="button" class="btn btn-primary w-100 text-center mt-2" data-toggle="collapse"
+                data-target="#gate-{$gateKey}-screens">
+            {lang 'Obrazovky'}
+        </button>
+        <div n:class="collapse-grid, !isset($gate) ? show" id="gate-{$gateKey}-screens">
+            <div class="collapse-inner">
+                <div class="list-group gate-screens">
+                    <div class="list-group-item gate-screen" n:foreach="$gate?->getScreens() ?? [] as $screen"
+                         data-id="{$screen->id}" data-delete-key="{$formName}[{$gateKey}][delete-screens][]">
+                        {include
+                            gateScreen,
+                            gateKey: $gateKey,
+                            screenKey: $screen->id,
+                            screens: $screens,
+                            locked: $locked,
+                            gate: $gate,
+                            screen: $screen,
+                            formName: $formName,
+                        }
+                    </div>
+                </div>
+                <p class="text-center mt-2" n:if="!$locked">
+                    <button class="btn btn-success add-screen" type="button"><i class="fa-solid fa-plus"></i></button>
+                </p>
+            </div>
+        </div>
+        <template class="new-screen" n:if="!$locked">
+            {include
+                gateScreen,
+                gateKey: $gateKey,
+                screenKey: '#key#',
+                screens: $screens,
+                gate: $gate,
+                formName: $formName,
+                formName2: 'new-screen',
+            }
+        </template>
+    </div>
+</div>

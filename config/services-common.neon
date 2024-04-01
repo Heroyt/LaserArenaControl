@@ -85,13 +85,13 @@ services:
 	# Gate
 	gate: App\Gate\Gate
 	gate.screens.vests: App\Gate\Screens\VestsScreen
-	gate.screens.generalDayStats: App\Gate\Screens\GeneralDayStatsScreen
+	gate.screens.idle.stats: App\Gate\Screens\GeneralDayStatsScreen
 	gate.screens.results: App\Gate\Screens\Results\ResultsScreen
-	gate.screens.results.lasermaxxRankable: App\Gate\Screens\Results\LaserMaxxRankableResultsScreen
-	gate.screens.results.lasermaxxCSGO: App\Gate\Screens\Results\LaserMaxxCSGOResultsScreen
-	gate.screens.results.lasermaxxZakladny: App\Gate\Screens\Results\LaserMaxxZakladnyResultsScreen
-	gate.screens.results.lasermaxx100Naboju: App\Gate\Screens\Results\LaserMaxx100NabojuResultsScreen
-	gate.screens.results.lasermaxxSurvival: App\Gate\Screens\Results\LaserMaxxSurvivalResultsScreen
+	gate.screens.results.lasermaxx.rankable: App\Gate\Screens\Results\LaserMaxxRankableResultsScreen
+	gate.screens.results.lasermaxx.csgo: App\Gate\Screens\Results\LaserMaxxCSGOResultsScreen
+	gate.screens.results.lasermaxx.zakladny: App\Gate\Screens\Results\LaserMaxxZakladnyResultsScreen
+	gate.screens.results.lasermaxx.100naboju: App\Gate\Screens\Results\LaserMaxx100NabojuResultsScreen
+	gate.screens.results.lasermaxx.survival: App\Gate\Screens\Results\LaserMaxxSurvivalResultsScreen
 
 	# Commands
 	command.cache.clean: App\Cli\Commands\Cache\CleanCacheCommand

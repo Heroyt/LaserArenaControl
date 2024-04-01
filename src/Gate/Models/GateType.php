@@ -28,6 +28,8 @@ class GateType extends Model
 	public string $slug = '';
 	#[OA\Property(example: 'This is the main gate that is shown on the screen right in front of the arena.')]
 	public ?string $description = null;
+	#[OA\Property]
+	public bool $locked = false;
 
 	/** @var GateScreenModel[] */
 	#[OneToMany(class: GateScreenModel::class, loadingType: LoadingType::LAZY)]
@@ -55,6 +57,11 @@ class GateType extends Model
 			}
 		}
 		return $this->slug;
+	}
+
+	public function setSlug(string $slug) : GateType {
+		$this->slug = $slug;
+		return $this;
 	}
 
 	public function addScreenModel(GateScreenModel ...$screens) : GateType {
@@ -127,16 +134,15 @@ class GateType extends Model
 		return $this;
 	}
 
-	public function setSlug(string $slug) : GateType {
-		$this->slug = $slug;
-		return $this;
-	}
-
 	public function setDescription(?string $description) : GateType {
 		$this->description = $description;
 		return $this;
 	}
 
+	public function setLocked(bool $locked) : GateType {
+		$this->locked = $locked;
+		return $this;
+	}
 
 
 }

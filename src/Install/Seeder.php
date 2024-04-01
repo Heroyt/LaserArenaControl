@@ -681,7 +681,8 @@ class Seeder implements InstallInterface
 				$gate = new GateType();
 				$gate->setName('Výchozí')
 				     ->setSlug('default')
-				     ->setDescription('Výchozí výsledková tabule.');
+					->setDescription('Výchozí výsledková tabule.')
+					->setLocked(true);
 
 				$idleScreen = new GateScreenModel();
 				$idleScreen->screenSerialized = GeneralDayStatsScreen::getDiKey();

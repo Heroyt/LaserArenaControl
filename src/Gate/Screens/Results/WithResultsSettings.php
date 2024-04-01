@@ -2,10 +2,13 @@
 
 namespace App\Gate\Screens\Results;
 
+use App\Gate\Screens\WithSettings;
+use App\Gate\Settings\GateSettings;
 use App\Gate\Settings\ResultsSettings;
+use InvalidArgumentException;
 
 /**
- *
+ * @implements WithSettings<ResultsSettings>
  */
 trait WithResultsSettings
 {
@@ -19,7 +22,10 @@ trait WithResultsSettings
 		return $this->settings;
 	}
 
-	public function setSettings(ResultsSettings $settings): static {
+	public function setSettings(GateSettings $settings) : static {
+		if (!($settings instanceof ResultsSettings)) {
+			throw new InvalidArgumentException('$settings must be an instance of '.ResultsSettings::class.', '.$settings::class.' provided.');
+		}
 		$this->settings = $settings;
 		return $this;
 	}

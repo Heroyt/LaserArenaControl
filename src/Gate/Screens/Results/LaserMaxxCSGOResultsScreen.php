@@ -24,7 +24,7 @@ class LaserMaxxCSGOResultsScreen extends AbstractResultsScreen
 	 * @inheritDoc
 	 */
 	public static function getDiKey() : string {
-		return 'gate.screens.results.lasermaxxCSGO';
+		return 'gate.screens.results.lasermaxx.csgo';
 	}
 
 	public function isActive() : bool {

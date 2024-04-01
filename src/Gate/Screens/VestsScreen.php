@@ -4,10 +4,15 @@ namespace App\Gate\Screens;
 
 use App\Api\Response\ErrorDto;
 use App\GameModels\Vest;
+use App\Gate\Settings\GateSettings;
 use App\Gate\Settings\VestsSettings;
+use InvalidArgumentException;
 use Psr\Http\Message\ResponseInterface;
 
-class VestsScreen extends GateScreen
+/**
+ * @implements WithSettings<VestsSettings>
+ */
+class VestsScreen extends GateScreen implements WithSettings
 {
 
 	private VestsSettings $settings;
@@ -15,18 +20,25 @@ class VestsScreen extends GateScreen
 	/**
 	 * @inheritDoc
 	 */
-	public static function getName(): string {
+	public static function getName() : string {
 		return lang('Vesty', context: 'gate-screens');
 	}
 
-	public static function getDescription(): string {
+	public static function getDescription() : string {
 		return lang('Obrazovka zobrazující přiřazené vesty před hrou.', context: 'gate-screens-description');
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function run(): ResponseInterface {
+	public static function getDiKey() : string {
+		return 'gate.screens.vests';
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function run() : ResponseInterface {
 		$game = $this->getGame();
 
 		if (!isset($game)) {
@@ -47,14 +59,17 @@ class VestsScreen extends GateScreen
 			->withHeader('X-Reload-Time', $reloadTimer);
 	}
 
-	public function getSettings(): VestsSettings {
+	public function getSettings() : VestsSettings {
 		if (!isset($this->settings)) {
 			$this->settings = new VestsSettings();
 		}
 		return $this->settings;
 	}
 
-	public function setSettings(VestsSettings $settings): VestsScreen {
+	public function setSettings(GateSettings $settings) : static {
+		if (!($settings instanceof VestsSettings)) {
+			throw new InvalidArgumentException('$settings must be an instance of '.VestsSettings::class.', '.$settings::class.' provided.');
+		}
 		$this->settings = $settings;
 		return $this;
 	}
@@ -62,7 +77,14 @@ class VestsScreen extends GateScreen
 	/**
 	 * @inheritDoc
 	 */
-	public static function getDiKey() : string {
-		return 'gate.screens.vests';
+	public static function getSettingsForm() : string {
+		return 'gate/settings/vests.latte';
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public static function buildSettingsFromForm(array $data) : GateSettings {
+		return new VestsSettings(isset($data['time']) ? (int) $data['time'] : null);
 	}
 }

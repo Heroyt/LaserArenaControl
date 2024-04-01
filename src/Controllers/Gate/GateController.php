@@ -11,6 +11,7 @@ use App\Core\Info;
 use App\GameModels\Factory\GameFactory;
 use App\GameModels\Game\Game;
 use App\Gate\Gate;
+use App\Gate\Logic\CustomEventDto;
 use App\Gate\Models\GateType;
 use App\Services\EventService;
 use DateTime;
@@ -56,6 +57,16 @@ class GateController extends Controller
 		}
 	}
 
+	public function setEvent(Request $request) : ResponseInterface {
+		$event = $request->getPost('event', '');
+		$time = (int) $request->getPost('time', 60);
+
+		$dto = new CustomEventDto($event, time() + $time);
+		Info::set('gate-event', $dto);
+		$this->eventService->trigger('gate-reload', ['type' => 'custom-event', 'event' => $event, 'time' => $dto->time]);
+		return $this->respond('');
+	}
+
 	/**
 	 * @param Request $request
 	 *
@@ -76,6 +87,7 @@ class GateController extends Controller
 			return $this->respond(new ErrorDto('Failed to save the game info', type: ErrorType::DATABASE, exception: $e),
 			                      500);
 		}
+
 		return $this->respond(['success' => true]);
 	}
 

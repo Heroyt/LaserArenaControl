@@ -55,6 +55,6 @@ class LaserMaxx100NabojuResultsScreen extends AbstractResultsScreen
 	 * @inheritDoc
 	 */
 	public static function getDiKey() : string {
-		return 'gate.screens.results.lasermaxx100Naboju';
+		return 'gate.screens.results.lasermaxx.100naboju';
 	}
 }

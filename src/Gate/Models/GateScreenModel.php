@@ -5,6 +5,7 @@ namespace App\Gate\Models;
 use App\Core\App;
 use App\Gate\Logic\ScreenTriggerType;
 use App\Gate\Screens\GateScreen;
+use App\Gate\Screens\WithSettings;
 use App\Gate\Settings\GateSettings;
 use Lsr\Core\Models\Attributes\ManyToOne;
 use Lsr\Core\Models\Attributes\PrimaryKey;
@@ -32,6 +33,17 @@ class GateScreenModel extends Model
 
 	private GateScreen $screen;
 	private ?GateSettings $settings = null;
+
+	public static function createFromScreen(
+		GateScreen $screen,
+		ScreenTriggerType $trigger = ScreenTriggerType::DEFAULT) : GateScreenModel {
+		$model = new self;
+		$model->setScreen($screen)->setTrigger($trigger);
+		if ($screen instanceof WithSettings) {
+			$model->setSettings($screen->getSettings());
+		}
+		return $model;
+	}
 
 	public function getScreen() : GateScreen {
 		if (!isset($this->screen)) {

@@ -1,43 +1,47 @@
 {layout '../../@layout.latte'}
 
+{varType App\Gate\Models\GateType[] $gates}
+{varType App\Gate\Screens\GateScreen[] $screens}
+
 {block content}
-	<form action="{link ['settings', 'gate']}" method="post" class="text-center autosave" enctype="multipart/form-data"
-		  id="gate-settings-form">
-		<div class="me-4 last-save-wrapper text-end position-fixed end-0">
-			{lang 'Last saved:'} <span class="last-save" data-target="#gate-settings-form">{lang 'never'}</span>
-		</div>
-		<h2>{lang 'Gate settings', context: 'settings'}:</h2>
-		<div class="my-3 text-center">
-			<h4>{lang 'Trigger events', context: 'settings'}:</h4>
-			<div class="btn-group">
-				<button type="button" class="btn btn-warning" data-toggle="event" data-event="gate-reload">
-					{lang 'Reload gate', context: 'events'}
-				</button>
+    <form action="{link ['settings', 'gate']}" method="post" class="text-center autosave" enctype="multipart/form-data"
+          id="gate-settings-form">
+        <div class="me-4 last-save-wrapper text-end position-fixed end-0">
+            {lang 'Last saved:'} <span class="last-save" data-target="#gate-settings-form">{lang 'never'}</span>
+        </div>
+        <h2>{lang 'Gate settings', context: 'settings'}:</h2>
+        <div class="my-3 text-center">
+            <h4>{lang 'Trigger events', context: 'settings'}:</h4>
+            <div class="btn-group">
+                <button type="button" class="btn btn-warning" data-toggle="event" data-event="gate-reload">
+                    {lang 'Reload gate', context: 'events'}
+                </button>
                 {if !\App\Core\App::isProduction()}
-					{var string[] $systems = App\GameModels\Factory\GameFactory::getSupportedSystems()}
-					<button type="button" class="btn btn-danger" data-toggle="gate-idle" n:foreach="$systems as $system"
-							data-system="{$system}">
-						{lang 'Nastavit výsledkovou tabuli na souhrn'}
-						{if count($systems) > 1}
-							&nbsp;{$system}
-						{/if}
-					</button>
-				{/if}
-			</div>
-		</div>
-		<h4>{lang 'Settings', context: 'settings'}:</h4>
+                    {var string[] $systems = App\GameModels\Factory\GameFactory::getSupportedSystems()}
+                    <button type="button" class="btn btn-danger" data-toggle="gate-idle"
+                            n:foreach="$systems as $system"
+                            data-system="{$system}">
+                        {lang 'Nastavit výsledkovou tabuli na souhrn'}
+                        {if count($systems) > 1}
+                            &nbsp;{$system}
+                        {/if}
+                    </button>
+                {/if}
+            </div>
+        </div>
+        <h4>{lang 'Settings', context: 'settings'}:</h4>
         <div class="form-group my-3">
             <label class="form-label" for="timer_offset">{lang 'Game timer offset in seconds', context: 'settings'}
                 :</label>
-			<input type="number" name="timer_offset" class="form-control" id="timer_offset"
-				   value="{\App\Core\Info::get('timer-offset', 0)}">
-		</div>
+            <input type="number" name="timer_offset" class="form-control" id="timer_offset"
+                   value="{\App\Core\Info::get('timer-offset', 0)}">
+        </div>
         <hr>
         <div class="form-group my-3">
             <label class="form-label" for="timer_show">{lang 'Show timer from minute', context: 'settings'}:</label>
-			<input type="number" name="timer_show" class="form-control" id="timer_show"
-				   value="{\App\Core\Info::get('timer_show', 30)}">
-		</div>
+            <input type="number" name="timer_show" class="form-control" id="timer_show"
+                   value="{\App\Core\Info::get('timer_show', 30)}">
+        </div>
         <div class="form-check form-switch d-flex justify-content-center">
             <input class="form-check-input" type="checkbox" role="switch" name="timer_on_inactive_screen"
                    id="timer_on_inactive_screen"
@@ -47,22 +51,54 @@
         </div>
         <hr>
         <div class="row my-3">
-			<div class="col-sm-6" style="max-height: 200px;" id="background-wrapper">
-				<img src="{\App\Services\GateStyleService::getGateBackgroundUrl()}" alt="Gate background"
-					 class="img-fluid" id="background-image">
-			</div>
-			<div class="col-sm-6">
-				<label class="form-label" for="background">
-					{lang 'Pozadí'}: (1920&times;1080px)
-				</label>
-				<input id="background" name="background" type="file"
-					   accept="image/jpeg,image/png" class="form-control">
-			</div>
-		</div>
-		<p class="my-4">
-			<button class="btn btn-success btn-lg" type="submit" data-action="autosave" data-prevent="true">
-				{lang 'Send', context: 'actions'}
-			</button>
-		</p>
-	</form>
+            <div class="col-sm-6" style="max-height: 200px;" id="background-wrapper">
+                <img src="{\App\Services\GateStyleService::getGateBackgroundUrl()}" alt="Gate background"
+                     class="img-fluid" id="background-image">
+            </div>
+            <div class="col-sm-6">
+                <label class="form-label" for="background">
+                    {lang 'Pozadí'}: (1920&times;1080px)
+                </label>
+                <input id="background" name="background" type="file"
+                       accept="image/jpeg,image/png" class="form-control">
+            </div>
+        </div>
+        <p class="my-4">
+            <button class="btn btn-success btn-lg" type="submit" data-action="autosave" data-prevent="true">
+                <i class="fa-solid fa-save"></i>
+                {lang 'Send', context: 'actions'}
+            </button>
+        </p>
+        <hr class="my-5">
+        <h4>{lang 'Typy obrazovek', context: 'settings'}</h4>
+        <div class="d-flex flex-wrap justify-content-evenly align-items-start g-2" id="gate-types">
+            {foreach $gates as $gate}
+                {include
+                    '../../components/settings/gateType.latte',
+                    gateKey: $gate->id,
+                    gate: $gate,
+                    screens: $screens,
+                    locked: $gate->locked,
+                }
+            {/foreach}
+        </div>
+        <p class="text-center">
+            <button class="btn btn-success" id="add-gate" type="button"><i class="fa-solid fa-plus"></i></button>
+        </p>
+        <template id="gate-type-template">
+            {include
+                '../../components/settings/gateType.latte',
+                gateKey: '#id#',
+                screens: $screens,
+                formName: 'new-gate',
+            }
+        </template>
+        <hr>
+        <p class="my-4">
+            <button class="btn btn-success btn-lg" type="submit">
+                <i class="fa-solid fa-save"></i>
+                {lang 'Send', context: 'actions'}
+            </button>
+        </p>
+    </form>
 {/block}

@@ -7,6 +7,8 @@ use App\Core\App;
 use App\Exceptions\GameModeNotFoundException;
 use App\GameModels\Game\GameModes\CustomResultsMode;
 use App\Gate\Screens\GateScreen;
+use App\Gate\Settings\GateSettings;
+use App\Gate\Settings\ResultsSettings;
 use Exception;
 use Psr\Http\Message\ResponseInterface;
 use RuntimeException;
@@ -29,10 +31,8 @@ class ResultsScreen extends GateScreen implements ResultsScreenInterface
 	}
 
 	public static function getDescription() : string {
-		return lang(
-			         'Obrazovka zobrazující výsledky z her. Automaticky vybírá zobrazení podle herního módu.',
-			context: 'gate-screens-description'
-		);
+		return lang('Obrazovka zobrazující výsledky z her. Automaticky vybírá zobrazení podle herního módu.',
+			context:  'gate-screens-description');
 	}
 
 	/**
@@ -77,21 +77,17 @@ class ResultsScreen extends GateScreen implements ResultsScreenInterface
 		}
 
 		// Find correct screen based on game
-		if (($mode = $game->getMode()) !== null && $mode instanceof CustomResultsMode && class_exists(
-				$screenClass = $mode->getCustomGateScreen()
-			)) {
-			$this->childScreen = App::getServiceByType($screenClass);
+		if (($mode = $game->getMode()) !== null && $mode instanceof CustomResultsMode && class_exists($screenClass = $mode->getCustomGateScreen())) {
+			$this->childScreen = App::getService($screenClass);
 		}
 
 		// Default to basic rankable
 		$this->childScreen ??= match ($game::SYSTEM) {
-			'evo5', 'evo6' => App::getService('gate.screens.results.lasermaxxRankable'),
+			'evo5', 'evo6' => App::getService('gate.screens.results.lasermaxx.rankable'),
 			default        => throw new Exception('Cannot find results screen for system '.$game::SYSTEM),
 		};
 
-		$this->childScreen->setGame($game)
-		                  ->setSettings($this->getSettings())
-		                  ->setParams($this->params);
+		$this->childScreen->setGame($game)->setSettings($this->getSettings())->setParams($this->params);
 
 		return $this->childScreen;
 	}
@@ -114,5 +110,20 @@ class ResultsScreen extends GateScreen implements ResultsScreenInterface
 		}
 
 		return $screen->run();
+	}
+
+
+	/**
+	 * @inheritDoc
+	 */
+	public static function getSettingsForm() : string {
+		return 'gate/settings/results.latte';
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public static function buildSettingsFromForm(array $data) : GateSettings {
+		return new ResultsSettings(isset($data['time']) ? (int) $data['time'] : null);
 	}
 }

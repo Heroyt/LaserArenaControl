@@ -63,6 +63,9 @@ export function initAutoSaveForm() {
                         lastSave.forEach(save => {
                             save.innerHTML = (new Date()).toLocaleTimeString();
                         });
+	                    if (result.reload) {
+		                    window.location.reload();
+	                    }
                     })
                     .catch(err => {
                         console.error(err);

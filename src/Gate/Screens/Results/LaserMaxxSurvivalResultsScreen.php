@@ -52,6 +52,6 @@ class LaserMaxxSurvivalResultsScreen extends AbstractResultsScreen
 	 * @inheritDoc
 	 */
 	public static function getDiKey() : string {
-		return 'gate.screens.results.lasermaxxSurvival';
+		return 'gate.screens.results.lasermaxx.survival';
 	}
 }

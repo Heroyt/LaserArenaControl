@@ -3,13 +3,12 @@
 namespace App\Gate\Screens\Results;
 
 use App\Api\Response\ErrorDto;
-use App\Gate\Screens\GateScreen;
+use App\Exceptions\GameModeNotFoundException;
+use App\GameModels\Game\Evo5\GameModes\CSGO;
 use Psr\Http\Message\ResponseInterface;
 
-class LaserMaxxCSGOResultsScreen extends GateScreen implements ResultsScreenInterface
+class LaserMaxxCSGOResultsScreen extends AbstractResultsScreen
 {
-	use WithResultsSettings;
-
 	/**
 	 * @inheritDoc
 	 */
@@ -24,6 +23,21 @@ class LaserMaxxCSGOResultsScreen extends GateScreen implements ResultsScreenInte
 	/**
 	 * @inheritDoc
 	 */
+	public static function getDiKey() : string {
+		return 'gate.screens.results.lasermaxxCSGO';
+	}
+
+	public function isActive() : bool {
+		try {
+			return parent::isActive() && $this->getGame()?->getMode() instanceof CSGO;
+		} catch (GameModeNotFoundException) {
+			return false;
+		}
+	}
+
+	/**
+	 * @inheritDoc
+	 */
 	public function run(): ResponseInterface {
 		$game = $this->getGame();
 
@@ -31,10 +45,7 @@ class LaserMaxxCSGOResultsScreen extends GateScreen implements ResultsScreenInte
 			return $this->respond(new ErrorDto('Cannot show screen without game.'), 412);
 		}
 
-		// Calculates how much longer should the screen remain active before reloading
-		$reloadTimer = $this->getSettings()->time - (time() - $game->end?->getTimestamp()) + 2;
-
 		return $this->view('gate/screens/results/lasermaxxCSGO', ['game' => $game,])
-		            ->withHeader('X-Reload-Time', (string)$reloadTimer);
+			->withHeader('X-Reload-Time', (string) $this->getReloadTimer());
 	}
 }

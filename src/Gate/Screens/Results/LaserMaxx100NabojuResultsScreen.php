@@ -3,14 +3,25 @@
 namespace App\Gate\Screens\Results;
 
 use App\Api\Response\ErrorDto;
-use App\Gate\Screens\GateScreen;
+use App\Exceptions\GameModeNotFoundException;
+use App\GameModels\Game\Evo5\GameModes\M100Naboju;
 use App\Gate\Screens\WithGameQR;
 use Psr\Http\Message\ResponseInterface;
 
-class LaserMaxx100NabojuResultsScreen extends GateScreen implements ResultsScreenInterface
+/**
+ *
+ */
+class LaserMaxx100NabojuResultsScreen extends AbstractResultsScreen
 {
-	use WithResultsSettings;
 	use WithGameQR;
+
+	public function isActive() : bool {
+		try {
+			return parent::isActive() && $this->getGame()?->getMode() instanceof M100Naboju;
+		} catch (GameModeNotFoundException) {
+			return false;
+		}
+	}
 
 	/**
 	 * @inheritDoc
@@ -33,13 +44,17 @@ class LaserMaxx100NabojuResultsScreen extends GateScreen implements ResultsScree
 			return $this->respond(new ErrorDto('Cannot show screen without game.'), 412);
 		}
 
-		// Calculates how much longer should the screen remain active before reloading
-		$reloadTimer = $this->getSettings()->time - (time() - $game->end?->getTimestamp()) + 2;
-
 		return $this->view(
 			'gate/screens/results/lasermaxx100naboju',
 			['game' => $game, 'qr' => $this->getQR($game), 'mode' => $game->getMode(),]
 		)
-		            ->withHeader('X-Reload-Time', (string)$reloadTimer);
+			->withHeader('X-Reload-Time', (string) $this->getReloadTimer());
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public static function getDiKey() : string {
+		return 'gate.screens.results.lasermaxx100Naboju';
 	}
 }

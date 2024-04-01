@@ -6,7 +6,7 @@
  */
 
 use App\Controllers\GamesList;
-use App\Controllers\Gate\Gate;
+use App\Controllers\Gate\GateController;
 use App\Controllers\Lang;
 use App\Controllers\NewGame;
 use App\Controllers\Players;
@@ -51,13 +51,14 @@ if ($featureConfig->isFeatureEnabled('groups')) {
 }
 
 Route::group('/gate')
-	->get('/', [Gate::class, 'show'])->name('gate')
-	->post('/set', [Gate::class, 'setGateGame'])      // Error
-	->post('/loaded', [Gate::class, 'setGateLoaded']) // Error
-	->post('/idle', [Gate::class, 'setGateIdle']) // Error
-	->post('/set/{system}', [Gate::class, 'setGateGame'])
-	->post('/loaded/{system}', [Gate::class, 'setGateLoaded'])
-	->post('/idle/{system}', [Gate::class, 'setGateIdle']);
+	->get('/', [GateController::class, 'show'])->name('gate')
+	->get('/{gate}', [GateController::class, 'show'])->name('gate-slug')
+	->post('/set', [GateController::class, 'setGateGame'])      // Error
+	->post('/loaded', [GateController::class, 'setGateLoaded']) // Error
+	->post('/idle', [GateController::class, 'setGateIdle']) // Error
+	->post('/set/{system}', [GateController::class, 'setGateGame'])
+	->post('/loaded/{system}', [GateController::class, 'setGateLoaded'])
+	->post('/idle/{system}', [GateController::class, 'setGateIdle']);
 
 Route::group('/players')
 	->get('/find', [Players::class, 'find'])

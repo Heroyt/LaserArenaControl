@@ -6,7 +6,10 @@ use App\Core\App;
 use Lsr\Core\Config;
 use Lsr\Core\Constants;
 
-readonly class VestsSettings
+/**
+ *
+ */
+readonly class VestsSettings extends GateSettings
 {
 
 	/** @var int Maximum time (in seconds) of how long the vests screen should remain active */

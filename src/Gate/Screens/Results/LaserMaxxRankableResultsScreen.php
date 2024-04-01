@@ -3,14 +3,15 @@
 namespace App\Gate\Screens\Results;
 
 use App\Api\Response\ErrorDto;
-use App\Gate\Screens\GateScreen;
 use App\Gate\Screens\WithGameQR;
 use Psr\Http\Message\ResponseInterface;
 
-class LaserMaxxRankableResultsScreen extends GateScreen implements ResultsScreenInterface
+/**
+ *
+ */
+class LaserMaxxRankableResultsScreen extends AbstractResultsScreen
 {
 	use WithGameQR;
-	use WithResultsSettings;
 
 	/**
 	 * @inheritDoc
@@ -26,6 +27,13 @@ class LaserMaxxRankableResultsScreen extends GateScreen implements ResultsScreen
 	/**
 	 * @inheritDoc
 	 */
+	public static function getDiKey() : string {
+		return 'gate.screens.results.lasermaxxRankable';
+	}
+
+	/**
+	 * @inheritDoc
+	 */
 	public function run(): ResponseInterface {
 		$game = $this->getGame();
 
@@ -33,13 +41,9 @@ class LaserMaxxRankableResultsScreen extends GateScreen implements ResultsScreen
 			return $this->respond(new ErrorDto('Cannot show screen without game.'), 412);
 		}
 
-		// Calculates how much longer should the screen remain active before reloading
-		$reloadTimer = $this->getSettings()->time - (time() - $game->end?->getTimestamp()) + 2;
-
 		return $this->view(
 			'gate/screens/results/lasermaxxRankable',
 			['game' => $game, 'qr' => $this->getQR($game),]
-		)
-		            ->withHeader('X-Reload-Time', (string)$reloadTimer);
+		)->withHeader('X-Reload-Time', (string) $this->getReloadTimer());
 	}
 }

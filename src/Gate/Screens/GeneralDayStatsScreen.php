@@ -10,7 +10,7 @@ use Dibi\Row;
 use Psr\Http\Message\ResponseInterface;
 
 /**
- *
+ * General screens that shows today stats and best players.
  */
 class GeneralDayStatsScreen extends GateScreen
 {
@@ -123,5 +123,12 @@ class GeneralDayStatsScreen extends GateScreen
 				'topShots'    => $topShots,
 			]
 		);
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public static function getDiKey() : string {
+		return 'gate.screens.generalDayStats';
 	}
 }

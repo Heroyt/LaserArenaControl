@@ -454,3 +454,28 @@ tables:
 			CONSTRAINT `playlist_music_ibfk_2` FOREIGN KEY (`id_playlist`) REFERENCES `playlists` (`id_playlist`) ON DELETE CASCADE ON UPDATE CASCADE
 		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 		'''
+	App\Gate\Models\GateType:
+		definition: '''
+		(
+			`id_gate` int(11) unsigned NOT NULL AUTO_INCREMENT,
+			`name` varchar(100) NOT NULL,
+			`slug` varchar(100) NOT NULL DEFAULT '',
+			`description` text DEFAULT NULL,
+			PRIMARY KEY (`id_gate`),
+            UNIQUE KEY `slug` (`slug`)
+		) ENGINE=InnoDB DEFAULT CHARSET utf8mb4;
+		'''
+	App\Gate\Models\GateScreenModel:
+		definition: '''
+		(
+			`id_screen` int(11) unsigned NOT NULL AUTO_INCREMENT,
+			`id_gate` int(11) unsigned NOT NULL,
+			`order` int(10) unsigned NOT NULL DEFAULT 0,
+			`trigger` enum('default','game_loaded','game_playing','game_ended','custom') NOT NULL DEFAULT 'default',
+			`trigger_value` varchar(255) DEFAULT NULL,
+			`screen_serialized` varchar(255) NOT NULL,
+			`settings_serialized` BLOB DEFAULT NULL,
+			PRIMARY KEY (`id_screen`),
+			CONSTRAINT `gate_screens_ibfk_1` FOREIGN KEY (`id_gate`) REFERENCES `gate_types` (`id_gate`) ON DELETE CASCADE ON UPDATE CASCADE
+		) ENGINE=InnoDB DEFAULT CHARSET utf8mb4;
+		'''

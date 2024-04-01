@@ -83,6 +83,7 @@ services:
 	result.parser.evo6: App\Tools\ResultParsing\Evo6\ResultsParser
 
 	# Gate
+	gate: App\Gate\Gate
 	gate.screens.vests: App\Gate\Screens\VestsScreen
 	gate.screens.generalDayStats: App\Gate\Screens\GeneralDayStatsScreen
 	gate.screens.results: App\Gate\Screens\Results\ResultsScreen

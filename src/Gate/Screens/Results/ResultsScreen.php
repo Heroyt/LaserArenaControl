@@ -4,10 +4,12 @@ namespace App\Gate\Screens\Results;
 
 use App\Api\Response\ErrorDto;
 use App\Core\App;
+use App\Exceptions\GameModeNotFoundException;
 use App\GameModels\Game\GameModes\CustomResultsMode;
 use App\Gate\Screens\GateScreen;
 use Exception;
 use Psr\Http\Message\ResponseInterface;
+use RuntimeException;
 use Throwable;
 
 /**
@@ -17,14 +19,16 @@ class ResultsScreen extends GateScreen implements ResultsScreenInterface
 {
 	use WithResultsSettings;
 
+	private ?ResultsScreenInterface $childScreen = null;
+
 	/**
 	 * @inheritDoc
 	 */
-	public static function getName(): string {
+	public static function getName() : string {
 		return lang('Výsledky ze hry', context: 'gate-screens');
 	}
 
-	public static function getDescription(): string {
+	public static function getDescription() : string {
 		return lang(
 			         'Obrazovka zobrazující výsledky z her. Automaticky vybírá zobrazení podle herního módu.',
 			context: 'gate-screens-description'
@@ -34,33 +38,80 @@ class ResultsScreen extends GateScreen implements ResultsScreenInterface
 	/**
 	 * @inheritDoc
 	 */
-	public function run(): ResponseInterface {
+	public static function getDiKey() : string {
+		return 'gate.screens.results';
+	}
+
+	public function isActive() : bool {
+		$game = $this->getGame();
+		if (!isset($game)) {
+			return false;
+		}
+
+		try {
+			return $this->getChildScreen()->isActive();
+		} catch (GameModeNotFoundException) {
+			return false;
+		}
+	}
+
+	/**
+	 * Get the correct child screen based on the current Game being displayed.
+	 *
+	 * Checks the game type and game mode for custom ones.
+	 *
+	 * @pre  Game must be set.
+	 * @post Child screen is initialized. (Game and settings are set)
+	 *
+	 * @return GateScreen&ResultsScreenInterface
+	 * @throws GameModeNotFoundException
+	 */
+	private function getChildScreen() : ResultsScreenInterface {
+		if (isset($this->childScreen)) {
+			return $this->childScreen;
+		}
 		$game = $this->getGame();
 
 		if (!isset($game)) {
-			return $this->respond(new ErrorDto('Cannot show screen without game.'), 412);
+			throw new RuntimeException('Game must be set.');
 		}
 
 		// Find correct screen based on game
 		if (($mode = $game->getMode()) !== null && $mode instanceof CustomResultsMode && class_exists(
 				$screenClass = $mode->getCustomGateScreen()
 			)) {
-			/** @var (ResultsScreenInterface&GateScreen)|null $screen */
-			$screen = App::getServiceByType($screenClass);
+			$this->childScreen = App::getServiceByType($screenClass);
+		}
+
+		// Default to basic rankable
+		$this->childScreen ??= match ($game::SYSTEM) {
+			'evo5', 'evo6' => App::getService('gate.screens.results.lasermaxxRankable'),
+			default        => throw new Exception('Cannot find results screen for system '.$game::SYSTEM),
+		};
+
+		$this->childScreen->setGame($game)
+		                  ->setSettings($this->getSettings())
+		                  ->setParams($this->params);
+
+		return $this->childScreen;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function run() : ResponseInterface {
+		$game = $this->getGame();
+
+		if (!isset($game)) {
+			return $this->respond(new ErrorDto('Cannot show screen without game.'), 412);
 		}
 
 		try {
-			// Default to basic rankable
 			/** @var ResultsScreenInterface&GateScreen $screen */
-			$screen ??= match ($game::SYSTEM) {
-				'evo5', 'evo6' => App::getService('gate.screens.results.lasermaxxRankable'),
-				default        => throw new Exception('Cannot find results screen for system ' . $game::SYSTEM),
-			};
+			$screen = $this->getChildScreen();
 		} catch (Throwable $e) {
 			return $this->respond(new ErrorDto('An error occured', exception: $e), 500);
 		}
-
-		$screen->setGame($game)->setSettings($this->getSettings());
 
 		return $screen->run();
 	}

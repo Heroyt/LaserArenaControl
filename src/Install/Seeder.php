@@ -11,6 +11,14 @@ use App\GameModels\Game\PrintStyle;
 use App\GameModels\Game\PrintTemplate;
 use App\GameModels\Tip;
 use App\GameModels\Vest;
+use App\Gate\Logic\ScreenTriggerType;
+use App\Gate\Models\GateScreenModel;
+use App\Gate\Models\GateType;
+use App\Gate\Screens\GeneralDayStatsScreen;
+use App\Gate\Screens\Results\ResultsScreen;
+use App\Gate\Screens\VestsScreen;
+use App\Gate\Settings\ResultsSettings;
+use App\Gate\Settings\VestsSettings;
 use Dibi\Exception;
 use Lsr\Core\DB;
 
@@ -665,6 +673,34 @@ class Seeder implements InstallInterface
 			// Info
 			DB::insertIgnore(Info::TABLE, ['key' => 'liga_api_url', 'value' => 's:25:"https://new.laserliga.cz/";']);
 			DB::insertIgnore(Info::TABLE, ['key' => 'default_print_template', 'value' => 's:9:"graphical";']);
+
+			// Default gate
+			$count = DB::select(GateType::TABLE, 'COUNT(*)')->fetchSingle(cache: false);
+			if ($count === 0) {
+				$gate = new GateType();
+				$gate->name = 'Výchozí';
+				$gate->description = 'Výchozí výsledková tabule.';
+
+				$idleScreen = new GateScreenModel();
+				$idleScreen->screenSerialized = GeneralDayStatsScreen::getDiKey();
+				$idleScreen->order = 99;
+
+				$vestsScreen = new GateScreenModel();
+				$vestsScreen->order = 10;
+				$vestsScreen->trigger = ScreenTriggerType::GAME_LOADED;
+				$vestsScreen->setSettings(new VestsSettings());
+				$vestsScreen->screenSerialized = VestsScreen::getDiKey();
+
+				$resultsScreen = new GateScreenModel();
+				$resultsScreen->order = 10;
+				$resultsScreen->trigger = ScreenTriggerType::GAME_ENDED;
+				$resultsScreen->setSettings(new ResultsSettings());
+				$resultsScreen->screenSerialized = ResultsScreen::getDiKey();
+
+				$gate->addScreenModel($idleScreen, $vestsScreen, $resultsScreen);
+
+				$gate->save();
+			}
 		} catch (Exception $e) {
 			echo $e->getMessage().PHP_EOL.$e->getSql().PHP_EOL;
 			return false;

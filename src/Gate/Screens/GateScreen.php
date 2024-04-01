@@ -20,6 +20,8 @@ abstract class GateScreen
 
 	protected ?Game $game = null;
 
+	protected array $params = [];
+
 	public function __construct(protected readonly Latte $latte,) {
 	}
 
@@ -37,6 +39,22 @@ abstract class GateScreen
 	 */
 	public static function getDescription(): string {
 		return '';
+	}
+
+	/**
+	 * Get the key that this screen is registered in the DI container
+	 *
+	 * @return string
+	 */
+	abstract public static function getDiKey() : string;
+
+	/**
+	 * Checks if this screen should be active under the current conditions.
+	 *
+	 * @return bool
+	 */
+	public function isActive() : bool {
+		return true;
 	}
 
 	/**
@@ -65,6 +83,11 @@ abstract class GateScreen
 		return $this;
 	}
 
+	public function setParams(array $params) : GateScreen {
+		$this->params = $params;
+		return $this;
+	}
+
 	/**
 	 * @param string              $template
 	 * @param array<string,mixed> $params
@@ -73,7 +96,8 @@ abstract class GateScreen
 	 * @throws TemplateDoesNotExistException
 	 */
 	protected function view(string $template, array $params): ResponseInterface {
-		return $this->respond($this->latte->viewToString($template, $params));
+		bdump($this->params);
+		return $this->respond($this->latte->viewToString($template, array_merge($this->params, $params)));
 	}
 
 

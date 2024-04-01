@@ -2,7 +2,7 @@
 {import '../symbols.latte'}
 {import '../loader.latte'}
 
-{varType App\GameModels\Game\PrintStyle $style}
+{default App\GameModels\Game\PrintStyle $style = App\GameModels\Game\PrintStyle::getActiveStyle()}
 {varType App\GameModels\Game\Game $game}
 {varType int|null $reloadTimer}
 
@@ -13,8 +13,6 @@
 {/define}
 {define content}
 {/define}
-
-{varType \Lsr\Core\Controller $page}
 
 {if \App\Core\App::getRequest()->isAjax()}
     {include content}
@@ -53,7 +51,7 @@
         <noscript>
             <link rel="stylesheet" href="{getUrl}dist/fontawesome.css?v={\App\Core\App::getCacheVersion()}">
         </noscript>
-        <title>{$page->getTitle()}</title>
+        <title>{lang 'Výsledková tabule'}</title>
         <link rel="stylesheet" href="{getUrl}dist/main.css?v={\App\Core\App::getCacheVersion()}">
         <link rel="stylesheet" href="{getUrl}dist/pages/gate.css?v={\App\Core\App::getCacheVersion()}">
         <link n:foreach="$addCss as $file" rel="stylesheet"

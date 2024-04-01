@@ -58,4 +58,11 @@ class VestsScreen extends GateScreen
 		$this->settings = $settings;
 		return $this;
 	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public static function getDiKey() : string {
+		return 'gate.screens.vests';
+	}
 }

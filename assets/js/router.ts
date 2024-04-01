@@ -1,4 +1,4 @@
-import {PageInfo} from "./interfaces/pageInfo";
+import {PageInfo} from './interfaces/pageInfo';
 import {getLink} from './includes/frameworkFunctions';
 
 const resultsReloadPages: { [index: string]: string[] } = {
@@ -75,6 +75,7 @@ export default function route(pageInfo: PageInfo): void {
 			});
 			break;
 		case 'gate':
+		case 'gate-slug':
 			import(
 				/* webpackChunkName: "gate" */
 				'./pages/gate'

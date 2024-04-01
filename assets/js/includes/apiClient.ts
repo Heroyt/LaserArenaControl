@@ -165,7 +165,10 @@ export async function prepareFetch(path: string, method: RequestMethod, options:
         if (options.body instanceof FormData) {
             requestOptions.body = options.body;
             // @ts-ignore
-            requestOptions.headers['Content-Type'] = 'multipart/form-data';
+	        if (requestOptions.headers['Content-Type']) {
+		        // @ts-ignore
+		        delete requestOptions.headers['Content-Type'];
+	        }
         } else if (typeof (options.body) === 'object') {
             requestOptions.body = JSON.stringify(options.body);
             // @ts-ignore

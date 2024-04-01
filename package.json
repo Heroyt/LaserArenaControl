@@ -16,10 +16,8 @@
   },
   "scripts": {
     "test": "phpunit",
-    "buildDev": "webpack --stats-children --config webpack.config.js --mode=development",
-    "build": "webpack --stats-children --config webpack.config.js --mode=production",
-    "watch": "webpack --watch --stats-children --config webpack.config.js --mode=production",
-    "watchDev": "webpack --watch --stats-children --config webpack.config.js --mode=development"
+    "build": "node esbuild.mjs",
+    "watch": "node esbuild.mjs watch"
   },
   "dependencies": {
     "@eastdesire/jscolor": "^2.5.2",

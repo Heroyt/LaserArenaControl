@@ -17,6 +17,10 @@ class VestsScreen extends GateScreen implements WithSettings
 
 	private VestsSettings $settings;
 
+	public function isActive() : bool {
+		return $this->getReloadTimer() > 0;
+	}
+
 	/**
 	 * @inheritDoc
 	 */
@@ -46,7 +50,6 @@ class VestsScreen extends GateScreen implements WithSettings
 		}
 
 		// Calculates how much longer should the screen remain active before reloading
-		$reloadTimer = $this->getSettings()->time - (time() - $game->start?->getTimestamp()) + 2;
 
 		return $this
 			->view(
@@ -58,7 +61,7 @@ class VestsScreen extends GateScreen implements WithSettings
 					'addCss' => ['gate/vests.css'],
 				]
 			)
-			->withHeader('X-Reload-Time', $reloadTimer);
+			->withHeader('X-Reload-Time', $this->getReloadTimer());
 	}
 
 	public function getSettings() : VestsSettings {
@@ -89,4 +92,9 @@ class VestsScreen extends GateScreen implements WithSettings
 	public static function buildSettingsFromForm(array $data) : GateSettings {
 		return new VestsSettings(isset($data['time']) ? (int) $data['time'] : null);
 	}
+
+	private function getReloadTimer() : int {
+		return $this->getSettings()->time - (time() - ($this->getGame()?->start?->getTimestamp() ?? 0)) + 2;
+	}
+
 }

@@ -13,10 +13,10 @@
         <button type="button" class="btn btn-danger delete"><i class="fa-solid fa-trash"></i></button>
     </div>
     <div class="form-group mb-2">
-        <label for="gate-{$gateKey}-screen-{$screenKey}-type" class="form-label">
+        <label for="gate-{((string)$gateKey)|replace:'][','-'}-screen-{$screenKey}-type" class="form-label">
             {lang 'Typ'}:
         </label>
-        <select id="gate-{$gateKey}-screen-{$screenKey}-type" class="form-select screen-type"
+        <select id="gate-{((string)$gateKey)|replace:'][','-'}-screen-{$screenKey}-type" class="form-select screen-type"
                 name="{$formName}[{$gateKey}][{$formName2}][{$screenKey}][type]"
                 n:attr="disabled: $locked">
             <option n:foreach="$screens as $key => $screenSelect"
@@ -26,25 +26,27 @@
                 {lang $screenSelect::getName(), context: 'gate-screens'}
             </option>
         </select>
-        <div class="select-description form-text" data-target="#gate-{$gateKey}-screen-{$screenKey}-type"></div>
+        <div class="select-description form-text"
+             data-target="#gate-{((string)$gateKey)|replace:'][','-'}-screen-{$screenKey}-type"></div>
     </div>
     <div class="form-group mb-2">
-        <label for="gate-{$gateKey}-screen-{$screenKey}-order" class="form-label">
+        <label for="gate-{((string)$gateKey)|replace:'][','-'}-screen-{$screenKey}-order" class="form-label">
             {lang 'Pořadí'}:
         </label>
         <input n:attr="disabled: $locked, value: $screen?->order ?? 0"
                 type="number"
                 min="0"
                 class="form-control"
-                id="gate-{$gateKey}-screen-{$screenKey}-order"
+                id="gate-{((string)$gateKey)|replace:'][','-'}-screen-{$screenKey}-order"
                 name="{$formName}[{$gateKey}][{$formName2}][{$screenKey}][order]">
         <div class="form-text">{lang 'Pořadí v jakém se obrazovky kontrolují (od nejmenšího čísla k větším).'}</div>
     </div>
     <div class="form-group mb-2">
-        <label for="gate-{$gateKey}-screen-{$screenKey}-trigger" class="form-label">
+        <label for="gate-{((string)$gateKey)|replace:'][','-'}-screen-{$screenKey}-trigger" class="form-label">
             {lang 'Podmínka'}:
         </label>
-        <select id="gate-{$gateKey}-screen-{$screenKey}-trigger" class="form-select screen-trigger"
+        <select id="gate-{((string)$gateKey)|replace:'][','-'}-screen-{$screenKey}-trigger"
+                class="form-select screen-trigger"
                 name="{$formName}[{$gateKey}][{$formName2}][{$screenKey}][trigger]"
                 n:attr="disabled: $locked">
             <option n:foreach="App\Gate\Logic\ScreenTriggerType::cases() as $type"
@@ -53,16 +55,17 @@
                 {$type->getReadable()}
             </option>
         </select>
-        <div class="select-description form-text" data-target="#gate-{$gateKey}-screen-{$screenKey}-trigger"></div>
+        <div class="select-description form-text"
+             data-target="#gate-{((string)$gateKey)|replace:'][','-'}-screen-{$screenKey}-trigger"></div>
     </div>
     <div class="form-group mb-2 trigger-value">
-        <label for="gate-{$gateKey}-screen-{$screenKey}-trigger-value" class="form-label">
+        <label for="gate-{((string)$gateKey)|replace:'][','-'}-screen-{$screenKey}-trigger-value" class="form-label">
             {lang 'Událost'}:
         </label>
         <input n:attr="disabled: $locked, value: $screen?->triggerValue"
                 type="text"
                 class="form-control"
-                id="gate-{$gateKey}-screen-{$screenKey}-trigger-value"
+                id="gate-{((string)$gateKey)|replace:'][','-'}-screen-{$screenKey}-trigger-value"
                 name="{$formName}[{$gateKey}][{$formName2}][{$screenKey}][trigger_value]">
         <div class="form-text">
             {lang 'Název manuální události, kterou se obrazovka vyvolá. Může to být cokoliv - je to vámi pojmenovaná událost, kterou můžete manuálně vyvolat zkratkou, nebo napsáním názvu události.'}
@@ -75,6 +78,7 @@
             {include
                 'gateScreenSettings.latte',
                 screen: $screen,
+                screens: $screens,
                 gateKey: $gateKey,
                 screenKey: $screenKey,
                 gate: $gate,

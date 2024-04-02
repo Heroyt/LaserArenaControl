@@ -2,6 +2,7 @@
     int|string $gateKey,
     int|string $screenKey,
     App\Gate\Models\GateScreenModel $screen,
+    App\Gate\Screens\GateScreen[] $screens,
     App\Gate\Models\GateType|null $gate = null,
     string $formName = 'gate',
     string $formName2 = 'screen',
@@ -13,5 +14,10 @@
     name: $formName.'['.$gateKey.']['.$formName2.']['.$screenKey.'][settings]',
     settings: $screen->getSettings(),
     gate: $gate,
-    screen: $screen
+    screen: $screen,
+    screens: $screens,
+    gateKey: $gateKey,
+    screenKey: $screenKey,
+    formName: $formName,
+    formName2: $formName2,
 }

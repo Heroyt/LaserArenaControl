@@ -1,0 +1,61 @@
+{parameters
+    string $gateKey,
+    string $screenKey,
+    string $key,
+    string $name,
+    App\Gate\Settings\TimerSettings $settings,
+    App\Gate\Models\GateType|null $gate = null,
+    App\Gate\Screens\GateScreen|null $screen = null,
+    App\Gate\Screens\GateScreen[] $screens = [],
+    string $formName = 'gate',
+    string $formName2 = 'screen',
+}
+
+{import '../../components/settings/gateType.latte'}
+
+<div class="form-group">
+    <label for="{$key}-timer" class="form-label">
+        {lang 'Interval v sekundách', context: 'settings'}:
+    </label>
+    <input type="number" class="form-control" min="30" n:attr="value: $settings->timer" id="{$key}-timer"
+           name="{$name}[timer]">
+</div>
+
+<button type="button" class="btn btn-primary w-100 text-center mt-2" data-toggle="collapse"
+        data-target="#{$key}-screens">
+    {lang 'Obrazovky'}
+</button>
+<div n:class="collapse-grid, !isset($gate) ? show" id="{$key}-screens">
+    <div class="collapse-inner">
+        <div class="list-group gate-screens">
+            <div class="list-group-item gate-screen" n:foreach="$settings->children as $key => $screen"
+                 data-delete-key="{$name}][delete-screens][]" data-id="{$key}">
+                {include
+                    gateScreen,
+                    gateKey: $gateKey.']['.$formName2.']['.$screenKey,
+                    screenKey: $key,
+                    screens: $screens,
+                    gate: $gate,
+                    screen: $screen,
+                    formName: $formName,
+                    formName2: 'settings]['.$formName2
+                }
+            </div>
+        </div>
+        <p class="text-center mt-2">
+            <button class="btn btn-success add-screen" type="button"><i class="fa-solid fa-plus"></i></button>
+        </p>
+    </div>
+</div>
+<template class="new-screen">
+    {include
+        gateScreen,
+        gateKey: $gateKey.']['.$formName2.']['.$screenKey,
+        screenKey: '#key#',
+        screens: $screens,
+        gate: $gate,
+        formName: $formName,
+        formName2: 'settings][new-screen',
+    }
+</template>
+

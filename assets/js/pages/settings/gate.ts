@@ -42,10 +42,11 @@ export default function initGateSettings() {
 		wrapper.querySelectorAll<HTMLDivElement>('.gate-screen').forEach(screen => initGateScreen(screen));
 
 		const screensWrapper = wrapper.querySelector<HTMLDivElement>('.gate-screens');
-		const addScreen = wrapper.querySelector<HTMLButtonElement>('.add-screen');
+		const addScreen = wrapper.querySelector<HTMLButtonElement>('.add-screen:not(.initialized)');
 		const screenTemplate = wrapper.querySelector<HTMLTemplateElement>('.new-screen');
 
 		if (screensWrapper && addScreen && screenTemplate) {
+			addScreen.classList.add('initialized');
 			addScreen.addEventListener('click', () => {
 				const screen = document.createElement('div');
 				screen.classList.add('list-group-item', 'gate-screen', 'gate-screen-new');
@@ -60,8 +61,9 @@ export default function initGateSettings() {
 			});
 		}
 
-		const deleteButton = wrapper.querySelector<HTMLButtonElement>('.delete-gate');
+		const deleteButton = wrapper.querySelector<HTMLButtonElement>('.delete-gate:not(.initialized)');
 		if (deleteButton) {
+			deleteButton.classList.add('initialized');
 			deleteButton.addEventListener('click', () => {
 				if (wrapper.dataset.deleteKey && wrapper.dataset.id) {
 					const input = document.createElement('input');
@@ -88,13 +90,14 @@ export default function initGateSettings() {
 		const settingsWrapper = wrapper.querySelector<HTMLDivElement>('.screen-settings');
 		const settingsCache = new Map<string, string>;
 
-		const deleteButton = wrapper.querySelector<HTMLButtonElement>('.delete');
+		const deleteButton = wrapper.querySelector<HTMLButtonElement>('.delete:not(.initialized)');
 
 		if (!created) {
 			settingsCache.set(type.value, settingsWrapper.innerHTML);
 		}
 
 		if (deleteButton) {
+			deleteButton.classList.add('initialized');
 			deleteButton.addEventListener('click', () => {
 				if (wrapper.dataset.deleteKey && wrapper.dataset.id) {
 					const input = document.createElement('input');
@@ -115,11 +118,23 @@ export default function initGateSettings() {
 				triggerValueWrapper.classList.add('d-none');
 			}
 		};
+
+		const initSettings = () => {
+			const test = settingsWrapper.querySelector('.gate-screens');
+			if (test) {
+				settingsWrapper.querySelectorAll<HTMLElement>('[data-toggle="collapse"]')
+					.forEach(elem => {
+						delete elem.dataset.collapseInitialized;
+					});
+				initGateType(settingsWrapper);
+			}
+		};
 		const updateSettings = () => {
 			const typeValue = type.value;
 			console.log(typeValue, Array.from(settingsCache.entries()));
 			if (settingsCache.has(typeValue)) {
 				settingsWrapper.innerHTML = settingsCache.get(typeValue);
+				initSettings();
 				return;
 			}
 
@@ -128,6 +143,7 @@ export default function initGateSettings() {
 				.then((result) => {
 					settingsCache.set(typeValue, result);
 					settingsWrapper.innerHTML = result;
+					initSettings();
 				})
 				.catch(() => {
 					settingsCache.set(typeValue, '');

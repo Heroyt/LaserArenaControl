@@ -103,7 +103,6 @@ abstract class GateScreen
 		                                                             $params)));
 	}
 
-
 	/**
 	 * @param string|array<string, mixed>|object $data
 	 * @param int                                $code

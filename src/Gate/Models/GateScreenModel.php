@@ -34,6 +34,20 @@ class GateScreenModel extends Model
 	private GateScreen $screen;
 	private ?GateSettings $settings = null;
 
+	public function __serialize() : array {
+		return [
+			'screen_serialized'   => $this->screenSerialized,
+			'settings_serialized' => $this->settingsSerialized,
+			'trigger'             => $this->trigger,
+		];
+	}
+
+	public function __unserialize(array $data) : void {
+		$this->screenSerialized = $data['screen_serialized'];
+		$this->settingsSerialized = $data['settings_serialized'];
+		$this->trigger = $data['trigger'];
+	}
+
 	public static function createFromScreen(
 		GateScreen $screen,
 		ScreenTriggerType $trigger = ScreenTriggerType::DEFAULT) : GateScreenModel {

@@ -126,6 +126,7 @@ class GateController extends Controller
 			Info::set('gate-game', null);
 			$game->fileTime = new DateTime(); // Set time to NOW
 			$game->start = null;
+			$game->end = null;
 			Info::set($system.'-game-loaded', $game);
 			$this->eventService->trigger('gate-reload',
 			                             ['type' => 'game-set-loaded', 'game' => $game->code, 'time' => time()]);

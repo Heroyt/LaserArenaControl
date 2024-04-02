@@ -43,7 +43,12 @@ class LaserMaxxRankableResultsScreen extends AbstractResultsScreen
 
 		return $this->view(
 			'gate/screens/results/lasermaxxRankable',
-			['game' => $game, 'qr' => $this->getQR($game),]
+			[
+				'game'   => $game,
+				'qr'     => $this->getQR($game),
+				'addJs'  => ['gate/results.js'],
+				'addCss' => ['gate/results.css'],
+			]
 		)->withHeader('X-Reload-Time', (string) $this->getReloadTimer());
 	}
 }

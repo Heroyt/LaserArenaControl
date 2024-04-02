@@ -1,0 +1,59 @@
+@import '../pages/gate/parts';
+
+#gate main .content.vests {
+	grid-template-areas: 'logo logo vest vest vest vest vest vest vest .'
+			                   '. . vest vest vest vest vest vest vest .'
+			                   '. . vest vest vest vest vest vest vest .'
+			                   '. . vest vest vest vest vest vest vest .';
+
+
+	.vest-grid {
+		@extend %gate-wrapper;
+		grid-area: vest;
+		height: calc(100vh - 4rem);
+	}
+
+	.vest {
+		align-self: stretch;
+		display: flex;
+		flex-direction: column;
+		font-weight: bold;
+		justify-self: stretch;
+		position: relative;
+		text-align: center;
+		text-transform: uppercase;
+
+		.number {
+			font-size: 2rem;
+			position: absolute;
+			top: 30%;
+			width: 100%;
+		}
+
+		svg {
+			display: block;
+			//flex: 1;
+			margin: 0 auto;
+			max-height: 10rem;
+			position: relative;
+		}
+
+		path {
+			fill: currentColor;
+			stroke: none;
+		}
+	}
+
+	&.in {
+		.vest {
+			animation: vest-slide-in 300ms ease forwards;
+			opacity: 0;
+		}
+	}
+
+	&.out {
+		.vest {
+			animation: vest-slide-out 300ms ease forwards;
+		}
+	}
+}

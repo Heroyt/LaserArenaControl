@@ -1,20 +1,31 @@
-import {animateResults} from "./gate/animateResults";
-import {prepareFetch, processResponse} from "../includes/apiClient";
-import {getGameHighlights} from "../api/endpoints/games";
+import {prepareFetch, processResponse} from '../includes/apiClient';
+import {getGameHighlights} from '../api/endpoints/games';
+import GateScreen from '../gate/gateScreen';
 
 declare global {
-    let tips: string[]
-    const tipsDefault: string[]
-    let reloadTimer: number
-    const timerOffset: number
+	let tips: string[];
+	const tipsDefault: string[];
+	let reloadTimer: number;
+	const timerOffset: number;
 }
 
-const gameResultsExp = /results-game-(\d+)/;
+const loadedAssets = new Set<string>;
+
+let lastScreen: GateScreen | null = null;
 
 /**
  * @type {boolean} If the tips component is displaying game highlights
  */
 let tipsHighlights: boolean = false;
+
+let container: HTMLElement = document.querySelector('main');
+
+function removePreviousContent(): void {
+	const elements = container.querySelectorAll('.content') as NodeListOf<HTMLDivElement>;
+	for (let i = 0; i < elements.length - 1; i++) {
+		elements[i].remove();
+	}
+}
 
 /**
  * Load gate content, replace the current and run animations if necessary
@@ -22,85 +33,110 @@ let tipsHighlights: boolean = false;
  * @param reloadTimeout Object that stores the reload timeout for gate. The timeout will be updated if necessary.
  */
 export function loadContent(path: string, reloadTimeout: { timeout: null | NodeJS.Timeout }) {
-    const container = document.querySelector('main');
-    if (!container) {
-        return;
-    }
-    const contentActive = container.querySelector('.content') as HTMLDivElement;
-    if (!contentActive) {
-        return;
-    }
+	if (!container) {
+		container = document.querySelector('main');
+	}
+	if (!container) {
+		return;
+	}
+	const contentActive = container.querySelector('.content') as HTMLDivElement;
+	if (!contentActive) {
+		return;
+	}
 
+	const contentNew = document.createElement('div');
+	// Load content
+	prepareFetch(path, 'GET')
+		.then(async (response) => {
 
-    const contentNew = document.createElement('div');
-    // Load content
-    prepareFetch(path, 'GET')
-        .then(async (response) => {
+			// Setup next auto-reload
+			clearTimeout(reloadTimeout.timeout);
+			if (response.headers.has('x-reload-time')) {
+				const time = parseInt(response.headers.get('x-reload-time'));
+				if (!isNaN(time)) {
+					reloadTimeout.timeout = setTimeout(() => {
+						loadContent(path, reloadTimeout);
+					}, time * 1000);
+				}
+			}
 
-            // Setup next auto-reload
-            clearTimeout(reloadTimeout.timeout);
-            if (response.headers.has('x-reload-time')) {
-                const time = parseInt(response.headers.get('x-reload-time'));
-                if (!isNaN(time)) {
-                    reloadTimeout.timeout = setTimeout(() => {
-                        loadContent(path, reloadTimeout);
-                    }, time * 1000);
-                }
-            }
+			// Copy content
+			contentNew.innerHTML = await processResponse(response.headers.get('Content-Type'), response);
 
-            // Copy content
-            contentNew.innerHTML = await processResponse(response.headers.get('Content-Type'), response);
+			// Find new container classes
+			const meta = contentNew.querySelector<HTMLMetaElement>('meta[name="container-classes"]');
+			if (meta) {
+				contentNew.className += meta.getAttribute('content');
+			}
 
-            // Find new container classes
-            const meta = contentNew.querySelector('meta[name="container-classes"]');
-            if (meta) {
-                contentNew.className += meta.getAttribute('content');
-            }
+			await initContent(contentNew, contentActive);
+		})
+		.catch(response => {
+			console.error(response);
+		});
+}
 
-            // Check if new content is game results
-            const isResults = contentNew.classList.contains('results');
-            if (isResults) {
-                // Check if this game is not already displayed
-                const matchNew = contentNew.className.match(gameResultsExp);
-                const matchActive = contentActive.className.match(gameResultsExp);
-                if (matchNew !== null && matchActive !== null && (matchNew[1] ?? '') === (matchActive[1] ?? '')) {
-                    console.log("Results are the same", matchNew, matchActive);
-                    return; // Do not animate results in if the game is the same
-                }
-            }
+export async function initContent(content: HTMLDivElement, previous: HTMLDivElement | null = null) {
+	if (!container) {
+		container = document.querySelector('main');
+	}
 
-            // Reset tips
-            tips = tipsDefault;
-            tipsHighlights = false;
+	// Reset tips
+	tips = tipsDefault;
+	tipsHighlights = false;
 
-            // Animate the new content in
-            contentNew.classList.add('content', 'in');
-            contentActive.classList.add('out');
-            container.appendChild(contentNew);
-            setTimeout(() => {
-                removePreviousContent();
-                contentNew.classList.remove('in');
-            }, 2000);
+	document.head.querySelectorAll<HTMLLinkElement>('link.add-style').forEach(link => {
+		loadedAssets.add(link.href);
+		// Remove class to prevent duplicate initialization
+		link.classList.remove('add-style');
+	});
 
-            // Load game highlights and animate results
-            if (isResults) {
-                // noinspection JSIgnoredPromiseFromCall
-                animateResults(contentNew);
-                await replaceTipsWithHighlights(contentNew);
-            }
+	const scriptMeta = content.querySelector<HTMLMetaElement>('meta[name="add-script"]');
+	let moduleClass: GateScreen = null;
+	if (scriptMeta) {
+		console.log(scriptMeta.content);
+		const module: { default: new () => GateScreen } = await import(scriptMeta.content);
 
-        })
-        .catch(response => {
-            console.error(response);
-        });
+		moduleClass = new module.default;
+		moduleClass.init(content, removePreviousContent);
+		if (lastScreen && moduleClass.isSame(lastScreen)) {
+			console.log('Skipping module - the screen is identical');
+			return;
+		}
+	} else {
+		console.error('No add-script found!');
+	}
 
-    function removePreviousContent() {
-        const elements = container.querySelectorAll('.content') as NodeListOf<HTMLDivElement>;
-        for (let i = 0; i < elements.length - 1; i++) {
-            elements[i].remove();
-        }
+	const styles = content.querySelectorAll<HTMLMetaElement>('meta[name="add-style"]');
+	styles.forEach(styleMeta => {
+		if (loadedAssets.has(styleMeta.content)) {
+			return;
+		}
 
-    }
+		// Add new styles
+		const link = document.createElement('link');
+		link.rel = 'stylesheet';
+		link.href = styleMeta.content;
+		loadedAssets.add(styleMeta.content);
+		document.head.appendChild(link);
+	});
+
+	container.appendChild(content);
+	if (moduleClass) {
+		if (lastScreen) {
+			lastScreen.animateOut();
+		}
+		setTimeout(() => moduleClass.animateIn(), 500);
+		const timer = container.querySelector<HTMLDivElement>('.timer');
+		if (timer) {
+			if (moduleClass.showTimer()) {
+				timer.style.display = 'initial';
+			} else {
+				timer.style.display = 'none';
+			}
+		}
+	}
+	lastScreen = moduleClass;
 }
 
 /**
@@ -108,76 +144,76 @@ export function loadContent(path: string, reloadTimeout: { timeout: null | NodeJ
  * @param wrapper Results parent element
  */
 export async function replaceTipsWithHighlights(wrapper: HTMLElement | Document = document) {
-    const gameInfo: HTMLElement = wrapper.querySelector('[data-game]');
-    console.log(gameInfo, tipsHighlights);
-    // Check if we can get the game code or if the highlights are not already displayed
-    if (!gameInfo || tipsHighlights) {
-        return;
-    }
+	const gameInfo: HTMLElement = wrapper.querySelector('[data-game]');
+	console.log(gameInfo, tipsHighlights);
+	// Check if we can get the game code or if the highlights are not already displayed
+	if (!gameInfo || tipsHighlights) {
+		return;
+	}
 
-    const code = gameInfo.dataset.game;
-    console.log(gameInfo, code);
+	const code = gameInfo.dataset.game;
+	console.log(gameInfo, code);
 
-    // Load highlights for game
-    const highlightsData = await getGameHighlights(code);
+	// Load highlights for game
+	const highlightsData = await getGameHighlights(code);
 
-    // Parse highlights.
-    // Highlights contain player names with their inflection, where the inflection is optional - '(name)<inflection>'
-    const highlights: string[] = [];
-    highlightsData.forEach(highlight => {
-        highlights.push(highlight.description.replace(/@([^@]+)@(?:<([^@]+)>)?/g, (_, group1: string, group2: string | undefined) => {
-            return `<strong class="player-name">${group2 ? group2 : group1}</strong>`;
-        }));
-    });
+	// Parse highlights.
+	// Highlights contain player names with their inflection, where the inflection is optional - '(name)<inflection>'
+	const highlights: string[] = [];
+	highlightsData.forEach(highlight => {
+		highlights.push(highlight.description.replace(/@([^@]+)@(?:<([^@]+)>)?/g, (_, group1: string, group2: string | undefined) => {
+			return `<strong class="player-name">${group2 ? group2 : group1}</strong>`;
+		}));
+	});
 
-    // Replace tips with highlights
-    tips = highlights;
-    tipsHighlights = true;
+	// Replace tips with highlights
+	tips = highlights;
+	tipsHighlights = true;
 }
 
 /**
  * Initialize rotating tips component
  */
 export function tipsRotations() {
-    let counter = 0;
-    const tipWrapper = document.querySelector('.tip') as HTMLDivElement;
-    if (!tips || !tipWrapper) {
-        return;
-    }
+	let counter = 0;
+	const tipWrapper = document.querySelector('.tip') as HTMLDivElement;
+	if (!tips || !tipWrapper) {
+		return;
+	}
 
-    // Rotate tips
-    setInterval(() => {
-        const tipActive = tipWrapper.querySelectorAll('.content') as NodeListOf<HTMLSpanElement>;
-        const tipNew = document.createElement('span');
-        tipNew.classList.add('content', 'next');
+	// Rotate tips
+	setInterval(() => {
+		const tipActive = tipWrapper.querySelectorAll('.content') as NodeListOf<HTMLSpanElement>;
+		const tipNew = document.createElement('span');
+		tipNew.classList.add('content', 'next');
 
-        // Check if we can get the next tip
-        if (!tips[counter]) {
-            if (tips.length === 0) {
-                tips = tipsDefault;
-            }
-            counter = counter % tips.length;
-        }
+		// Check if we can get the next tip
+		if (!tips[counter]) {
+			if (tips.length === 0) {
+				tips = tipsDefault;
+			}
+			counter = counter % tips.length;
+		}
 
-        // Add a new tip
-        tipNew.innerHTML = tips[counter];
-        tipWrapper.appendChild(tipNew);
+		// Add a new tip
+		tipNew.innerHTML = tips[counter];
+		tipWrapper.appendChild(tipNew);
 
-        // Animate old tips out
-        tipActive.forEach(el => {
-            el.classList.remove('active', 'next');
-            el.classList.add('prev');
-        });
+		// Animate old tips out
+		tipActive.forEach(el => {
+			el.classList.remove('active', 'next');
+			el.classList.add('prev');
+		});
 
-        counter = (counter + 1) % tips.length;
+		counter = (counter + 1) % tips.length;
 
-        // Animate the new tip in
-        setTimeout(() => {
-            tipNew.classList.remove('next');
-            tipNew.classList.add('active');
-            tipActive.forEach(el => {
-                el.remove();
-            });
-        }, 1000);
-    }, 10000);
+		// Animate the new tip in
+		setTimeout(() => {
+			tipNew.classList.remove('next');
+			tipNew.classList.add('active');
+			tipActive.forEach(el => {
+				el.remove();
+			});
+		}, 1000);
+	}, 10000);
 }

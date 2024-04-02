@@ -151,6 +151,22 @@ const entryPoints = [
                     in: './assets/scss/pages/' + file
                 }
             }),
+    ...fs.readdirSync('assets/js/gate/')
+            .filter(file => ['.ts'].includes(path.extname(file)) && !file.includes('gateScreen.ts'))
+            .map(file => {
+                return {
+                    out: 'gate/' + file.replace('.ts', ''),
+                    in: './assets/js/gate/' + file
+                }
+            }),
+    ...fs.readdirSync('assets/scss/gate/')
+            .filter(file => ['.scss'].includes(path.extname(file)))
+            .map(file => {
+                return {
+                    out: 'gate/' + file.replace('.scss', ''),
+                    in: './assets/scss/gate/' + file
+                }
+            }),
     ...fs.readdirSync('assets/scss/results/templates/').map(file => {
         return {
             out: 'results/' + file.replace('.scss', ''),
@@ -174,6 +190,7 @@ const buildOptions = {
     sourcemap: true,
     metafile: true,
     color: true,
+    treeShaking: true,
     external: [
         '/assets/fonts/*',
         '/assets/images/*'

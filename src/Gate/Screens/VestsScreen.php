@@ -54,6 +54,8 @@ class VestsScreen extends GateScreen implements WithSettings
 				[
 					'game' => $game,
 					'vests' => Vest::getForSystem($game::SYSTEM),
+					'addJs'  => ['gate/vests.js'],
+					'addCss' => ['gate/vests.css'],
 				]
 			)
 			->withHeader('X-Reload-Time', $reloadTimer);

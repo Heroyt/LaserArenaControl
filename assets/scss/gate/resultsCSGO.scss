@@ -1,0 +1,87 @@
+#gate main .content.results-csgo {
+	grid-template-areas: 'logo logo . . . . . . . .'
+		                     'teams teams teams teams teams teams teams teams teams teams'
+			                   'teams teams teams teams teams teams teams teams teams teams'
+  			                 'teams teams teams teams teams teams teams teams teams teams';
+
+	.teams {
+		align-items: flex-start;
+		display: flex;
+		grid-area: teams;
+		height: 100%;
+		justify-content: center;
+	}
+
+	.player {
+		background-color: rgba(255, 255, 255, .9);
+		border-radius: 10px;
+		margin: .2rem;
+		min-width: 9rem;
+		padding: 1rem;
+
+		&.dead {
+			background-color: rgba(250, 200, 200, .8);
+		}
+
+		.name {
+			font-size: 2rem;
+			font-weight: bold;
+			margin: .4rem 0;
+			text-transform: uppercase;
+		}
+
+		.hits-deaths {
+			align-items: center;
+			display: flex;
+			font-size: 1.8rem;
+			justify-content: center;
+
+			div {
+				margin: 0 1rem;
+			}
+		}
+	}
+
+	.team {
+		margin: 20px;
+
+		> .name {
+			border-radius: 10px;
+			font-size: 1.7rem;
+			font-weight: bold;
+			margin-bottom: 1rem;
+			padding: 1rem 0;
+			text-align: center;
+			text-transform: uppercase;
+		}
+
+		.players {
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: center;
+		}
+	}
+
+	.team svg {
+		position: relative;
+		top: -.2rem;
+	}
+
+	&.in {
+		.player, .team {
+			animation: vest-slide-in 300ms ease forwards;
+		}
+	}
+
+	&.out {
+		.player, .team {
+			animation: vest-slide-out 300ms ease forwards;
+		}
+	}
+
+	svg {
+		path {
+			fill: var(--text-color);
+		}
+	}
+}

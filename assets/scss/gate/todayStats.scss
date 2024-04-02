@@ -1,0 +1,60 @@
+#gate main .content.today {
+	font-size: 1.55rem;
+	grid-template-areas: 'logo logo . . title title . . . .'
+			                   '. score score score score best best best best .'
+			                   '. score score score score best best best best .'
+			                   '. . . . timer timer . . . .';
+
+	.table {
+		border-color: var(--print-dark);
+	}
+
+	td,
+	th {
+		vertical-align: middle;
+	}
+
+	.title {
+		align-self: end;
+		grid-area: title;
+	}
+
+	.score {
+		display: flex;
+		flex-direction: column;
+		grid-area: score;
+		justify-content: space-between;
+		justify-self: stretch;
+	}
+
+	.best {
+		grid-area: best;
+		justify-self: stretch;
+	}
+
+	.bbd {
+		border-bottom: 2px solid var(--print-dark);
+	}
+
+	.text-center svg {
+		margin: 0 auto;
+		position: relative;
+	}
+
+	svg {
+		display: block;
+
+		path {
+			fill: var(--text-color);
+		}
+	}
+
+	&.out {
+		animation: scale-out 500ms ease-in forwards;
+	}
+
+	&.in {
+		animation: scale-in 500ms ease-in 200ms forwards;
+		opacity: 0;
+	}
+}

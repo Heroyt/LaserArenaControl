@@ -74,15 +74,6 @@ export default function route(pageInfo: PageInfo): void {
 				module.default();
 			});
 			break;
-		case 'gate':
-		case 'gate-slug':
-			import(
-				/* webpackChunkName: "gate" */
-				'./pages/gate'
-				).then(module => {
-				module.default();
-			});
-			break;
 		case 'dashboard':
 			import(
 				/* webpackChunkName: "dashboard" */
@@ -116,5 +107,14 @@ export default function route(pageInfo: PageInfo): void {
                 module.default();
             });
             break;
+	}
+
+	if ((pageInfo.routeName ?? '').startsWith('gate')) {
+		import(
+			/* webpackChunkName: "gate" */
+			'./pages/gate'
+			).then(module => {
+			module.default();
+		});
 	}
 }

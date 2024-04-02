@@ -17,6 +17,10 @@
 {if \App\Core\App::getRequest()->isAjax()}
     {include content}
     <meta name="container-classes" content="{include containerClasses|noescape}"/>
+    <meta n:foreach="$addCss as $file" name="add-style"
+                                       content="{getUrl}dist/{$file}?v={\App\Core\App::getCacheVersion()}">
+    <meta n:foreach="$addJs as $file" name="add-script"
+                                      content="{getUrl}dist/{$file}?v={\App\Core\App::getCacheVersion()}">
     {if \App\Core\Info::get('gate_force_reload', false)}
         {do \App\Core\Info::set('gate_force_reload', false)}
         <script>
@@ -54,7 +58,7 @@
         <title>{lang 'Výsledková tabule'}</title>
         <link rel="stylesheet" href="{getUrl}dist/main.css?v={\App\Core\App::getCacheVersion()}">
         <link rel="stylesheet" href="{getUrl}dist/pages/gate.css?v={\App\Core\App::getCacheVersion()}">
-        <link n:foreach="$addCss as $file" rel="stylesheet"
+        <link n:foreach="$addCss as $file" rel="stylesheet" class="add-style"
                                            href="{getUrl}dist/{$file}?v={\App\Core\App::getCacheVersion()}">
         {\Tracy\Debugger::renderLoader()|noescape}
         {var string[][] $colors = App\GameModels\Factory\GameFactory::getAllTeamsColors()}
@@ -92,6 +96,8 @@
         </div>
         <div class="content {include containerClasses}">
             {include content}
+            <meta n:foreach="$addJs as $file" name="add-script"
+                                              content="{getUrl}dist/{$file}?v={\App\Core\App::getCacheVersion()}">
         </div>
 
         <div class="timer">
@@ -130,8 +136,6 @@
 
 
     <script src="{getUrl}dist/main.js?v={\App\Core\App::getCacheVersion()}" type="module"></script>
-    <script n:foreach="$addJs as $js" src="{getUrl}dist/{$js}?v={\App\Core\App::getCacheVersion()}" type="module"
-                                      defer></script>
     {include svgSymbols}
     </body>
     </html>

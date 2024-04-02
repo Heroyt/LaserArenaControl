@@ -18,11 +18,11 @@ class GeneralDayStatsScreen extends GateScreen
 	/**
 	 * @inheritDoc
 	 */
-	public static function getName(): string {
+	public static function getName() : string {
 		return lang('Základní denní statistiky', context: 'gate-screens');
 	}
 
-	public static function getDescription(): string {
+	public static function getDescription() : string {
 		return lang(
 			         'Obrazovka zobrazující dnešní nejlepší hráče a počet odehraných her.',
 			context: 'gate-screens-description'
@@ -32,7 +32,14 @@ class GeneralDayStatsScreen extends GateScreen
 	/**
 	 * @inheritDoc
 	 */
-	public function run(): ResponseInterface {
+	public static function getDiKey() : string {
+		return 'gate.screens.idle.stats';
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function run() : ResponseInterface {
 		$today = new DateTimeImmutable();
 		$query = GameFactory::queryGames(true, $today);
 		if (count($this->systems) > 0) {
@@ -64,8 +71,8 @@ class GeneralDayStatsScreen extends GateScreen
 				$count = 0;
 				foreach ($topScores as $score) {
 					$topScores[] = PlayerFactory::getById(
-						(int)$score->id_player,
-						['system' => (string)$score->system]
+						(int) $score->id_player,
+						['system' => (string) $score->system]
 					);
 					if ((++$count) > 3) {
 						break;
@@ -77,8 +84,8 @@ class GeneralDayStatsScreen extends GateScreen
 			$topHits = $q->orderBy('[hits]')->desc()->fetch(cache: false);
 			if (isset($topHits)) {
 				$topHits = PlayerFactory::getById(
-					(int)$topHits->id_player,
-					['system' => (string)$topHits->system]
+					(int) $topHits->id_player,
+					['system' => (string) $topHits->system]
 				);
 			}
 			$q = PlayerFactory::queryPlayers($gameIds);
@@ -86,8 +93,8 @@ class GeneralDayStatsScreen extends GateScreen
 			$topDeaths = $q->orderBy('[deaths]')->desc()->fetch(cache: false);
 			if (isset($topDeaths)) {
 				$topDeaths = PlayerFactory::getById(
-					(int)$topDeaths->id_player,
-					['system' => (string)$topDeaths->system]
+					(int) $topDeaths->id_player,
+					['system' => (string) $topDeaths->system]
 				);
 			}
 			$q = PlayerFactory::queryPlayers($gameIds);
@@ -95,8 +102,8 @@ class GeneralDayStatsScreen extends GateScreen
 			$topAccuracy = $q->orderBy('[accuracy]')->desc()->fetch(cache: false);
 			if (isset($topAccuracy)) {
 				$topAccuracy = PlayerFactory::getById(
-					(int)$topAccuracy->id_player,
-					['system' => (string)$topAccuracy->system]
+					(int) $topAccuracy->id_player,
+					['system' => (string) $topAccuracy->system]
 				);
 			}
 			$q = PlayerFactory::queryPlayers($gameIds);
@@ -104,8 +111,8 @@ class GeneralDayStatsScreen extends GateScreen
 			$topShots = $q->orderBy('[shots]')->desc()->fetch(cache: false);
 			if (isset($topShots)) {
 				$topShots = PlayerFactory::getById(
-					(int)$topShots->id_player,
-					['system' => (string)$topShots->system]
+					(int) $topShots->id_player,
+					['system' => (string) $topShots->system]
 				);
 			}
 		}
@@ -121,14 +128,8 @@ class GeneralDayStatsScreen extends GateScreen
 				'topDeaths'   => $topDeaths,
 				'topAccuracy' => $topAccuracy,
 				'topShots'    => $topShots,
+				'addCss' => ['gate/todayStats.css'],
 			]
 		);
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public static function getDiKey() : string {
-		return 'gate.screens.idle.stats';
 	}
 }

@@ -97,7 +97,10 @@ abstract class GateScreen
 	 */
 	protected function view(string $template, array $params): ResponseInterface {
 		bdump($this->params);
-		return $this->respond($this->latte->viewToString($template, array_merge($this->params, $params)));
+		return $this->respond($this->latte->viewToString($template,
+		                                                 array_merge($this->params,
+		                                                             ['addJs' => ['gate/defaultScreen.js']],
+		                                                             $params)));
 	}
 
 

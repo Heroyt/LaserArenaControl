@@ -12,11 +12,11 @@ class LaserMaxxCSGOResultsScreen extends AbstractResultsScreen
 	/**
 	 * @inheritDoc
 	 */
-	public static function getName(): string {
+	public static function getName() : string {
 		return lang('LaserMaxx výsledky z módu CSGO', context: 'gate-screens');
 	}
 
-	public static function getDescription(): string {
+	public static function getDescription() : string {
 		return lang('Obrazovka zobrazující výsledky LaserMaxx z módu CSGO.', context: 'gate-screens-description');
 	}
 
@@ -38,14 +38,20 @@ class LaserMaxxCSGOResultsScreen extends AbstractResultsScreen
 	/**
 	 * @inheritDoc
 	 */
-	public function run(): ResponseInterface {
+	public function run() : ResponseInterface {
 		$game = $this->getGame();
 
 		if (!isset($game)) {
 			return $this->respond(new ErrorDto('Cannot show screen without game.'), 412);
 		}
 
-		return $this->view('gate/screens/results/lasermaxxCSGO', ['game' => $game,])
-			->withHeader('X-Reload-Time', (string) $this->getReloadTimer());
+		return $this->view(
+			'gate/screens/results/lasermaxxCSGO',
+			[
+				'game'   => $game,
+				'addCss' => ['gate/resultsCSGO.css'],
+			]
+		)
+		            ->withHeader('X-Reload-Time', (string) $this->getReloadTimer());
 	}
 }

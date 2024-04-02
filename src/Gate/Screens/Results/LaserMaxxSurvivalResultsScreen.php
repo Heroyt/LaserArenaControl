@@ -15,12 +15,19 @@ class LaserMaxxSurvivalResultsScreen extends AbstractResultsScreen
 	/**
 	 * @inheritDoc
 	 */
-	public static function getName(): string {
+	public static function getName() : string {
 		return lang('LaserMaxx výsledky z módu Survival', context: 'gate-screens');
 	}
 
-	public static function getDescription(): string {
+	public static function getDescription() : string {
 		return lang('Obrazovka zobrazující výsledky LaserMaxx z módu Survival.', context: 'gate-screens-description');
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public static function getDiKey() : string {
+		return 'gate.screens.results.lasermaxx.survival';
 	}
 
 	public function isActive() : bool {
@@ -34,7 +41,7 @@ class LaserMaxxSurvivalResultsScreen extends AbstractResultsScreen
 	/**
 	 * @inheritDoc
 	 */
-	public function run(): ResponseInterface {
+	public function run() : ResponseInterface {
 		$game = $this->getGame();
 
 		if (!isset($game)) {
@@ -43,15 +50,13 @@ class LaserMaxxSurvivalResultsScreen extends AbstractResultsScreen
 
 		return $this->view(
 			'gate/screens/results/lasermaxxSurvival',
-			['game' => $game, 'qr' => $this->getQR($game), 'mode' => $game->getMode(),]
+			[
+				'game'   => $game,
+				'qr'     => $this->getQR($game),
+				'mode'   => $game->getMode(),
+				'addCss' => ['gate/results.css'],
+			]
 		)
-			->withHeader('X-Reload-Time', (string) $this->getReloadTimer());
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public static function getDiKey() : string {
-		return 'gate.screens.results.lasermaxx.survival';
+		            ->withHeader('X-Reload-Time', (string) $this->getReloadTimer());
 	}
 }

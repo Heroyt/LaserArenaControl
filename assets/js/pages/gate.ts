@@ -1,5 +1,5 @@
 import EventServerInstance from '../EventServer';
-import {loadContent, replaceTipsWithHighlights, tipsRotations} from '../components/gate';
+import {initContent, loadContent, replaceTipsWithHighlights, tipsRotations} from '../components/gate';
 
 import {gameTimer} from '../includes/gameTimer';
 
@@ -17,6 +17,10 @@ export default function initGate() {
 		loadContent(window.location.pathname, reloadTimeout);
 	});
 
+	const content = document.querySelector<HTMLDivElement>('main .content');
+	if (content) {
+		initContent(content);
+	}
 	tipsRotations();
 	gameTimer();
 	replaceTipsWithHighlights();

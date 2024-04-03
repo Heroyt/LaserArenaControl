@@ -21,8 +21,6 @@
 {/define}
 
 {define content}
-	{dump $style}
-    {dump $game->getMode()?}
 	{include resultsHeader}
     {if $game->getMode()?->settings?->partWin}
 		{include resultsWin}
@@ -259,7 +257,7 @@
             <th n:if="$game->getMode()?->settings->teamScore">{lang 'Skóre', context: 'results.team'}</th>
             <th n:if="$game->getMode()?->settings->teamAccuracy">{lang 'Úspěšnost', context: 'results.team'}</th>
             <th n:if="$game->getMode()?->settings->teamShots">{lang 'Výstřelů', context: 'results.team'}</th>
-            <th n:if="$game->getMode()?->settings->teamZakladny && $game->getMode()? instanceof App\GameModels\Game\Evo5\GameModes\Zakladny">
+            <th n:if="$game->getMode()?->settings->teamZakladny && $game->getMode() instanceof App\GameModels\Game\Evo5\GameModes\Zakladny">
 				{lang 'Ztráty základny', context: 'results.team'}
 			</th>
 		</tr>
@@ -278,7 +276,7 @@
                 %
             </td>
             <td n:if="$game->getMode()?->settings->teamShots">{$team->getShots()|number:0,',','&nbsp;'|noescape}</td>
-            <td n:if="$game->getMode()?->settings->teamZakladny && $game->getMode()? instanceof App\GameModels\Game\Evo5\GameModes\Zakladny">
+            <td n:if="$game->getMode()?->settings->teamZakladny && $game->getMode() instanceof App\GameModels\Game\Evo5\GameModes\Zakladny">
                 {$game->getMode()?->getBasesDestroyed($team)}
 			</td>
 		</tr>

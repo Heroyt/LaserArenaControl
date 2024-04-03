@@ -59,7 +59,6 @@
     "diego-ninja/composer-preload": "^1.0",
     "orisai/nette-console": "^1.4",
     "ext-redis": "*",
-    "zircote/swagger-php": "^4.8"
     "zircote/swagger-php": "^4.8",
     "ext-igbinary": "*"
   },

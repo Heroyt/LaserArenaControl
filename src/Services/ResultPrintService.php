@@ -63,7 +63,7 @@ readonly class ResultPrintService
 						$template,
 						'html'    => '1',
 						'view'    => '1',
-						'noCache' => '1',
+						'nocache' => '1',
 					],
 				)
 			)
@@ -83,8 +83,13 @@ readonly class ResultPrintService
 		return TMP_DIR;
 	}
 
-	public function getResultsFileName(Game $game, int $style, string $template, int $copies): string {
-		return $game->code . '-' . $template . '-' . $style . 'x' . $copies . '.' . App::getShortLanguageCode();
+	public function getResultsFileName(
+		Game   $game,
+		int    $style,
+		string $template,
+		int    $copies,
+		bool   $view = false) : string {
+		return $game->code.'-'.$template.'-'.$style.'x'.$copies.'.'.App::getShortLanguageCode().($view ? '.view' : '');
 	}
 
 	/**
@@ -102,6 +107,7 @@ readonly class ResultPrintService
 	 * @throws ValidationException
 	 */
 	public function getResultsHtml(Game $game, int $style, string $template, int $copies = 1, bool $cache = true): string {
+		bdump($cache);
 		$htmlFile = $this->getTmpDir() . $this->getResultsFileName($game, $style, $template, $copies) . '.html';
 		if ($cache && file_exists($htmlFile)) {
 			$html = file_get_contents($htmlFile);

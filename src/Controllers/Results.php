@@ -87,7 +87,7 @@ class Results extends Controller
 	 */
 	public function printGame(Request $request, string $code = '', int $copies = 1, string $template = 'default', ?int $style = null): ResponseInterface {
 		$style ??= PrintStyle::getActiveStyleId();
-		$cache = $request->getGet('noCache', false) === false;
+		$cache = !$request->getGet('nocache', false);
 		//$colorless = ($request->params['type'] ?? 'color') === 'colorless';
 
 		$game = $code === 'last' ? GameFactory::getLastGame() : GameFactory::getByCode($code);
@@ -96,7 +96,7 @@ class Results extends Controller
 			$this->respond('Game not found', 404);
 		}
 
-		if ($request->getGet('html', false) === false) {
+		if (!$request->getGet('html', false)) {
 			$pdfFile = $this->printService->getResultsPdf($game, $style, $template, $copies, $cache);
 			if ($pdfFile !== '' && file_exists($pdfFile)) {
 				return new Response(
@@ -104,7 +104,7 @@ class Results extends Controller
 				);
 			}
 		}
-		Debugger::$showBar = $request->getGet('tracy', false) !== false;
+		Debugger::$showBar = (bool) $request->getGet('tracy', false);
 		return $this->respond(
 			$this->printService->getResultsHtml($game, $style, $template, $copies, $cache)
 		);

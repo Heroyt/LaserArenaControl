@@ -2,9 +2,11 @@
 
 namespace App\Gate\Models;
 
+use App\Core\App;
 use App\Gate\Logic\ScreenTriggerType;
 use App\Gate\Screens\GateScreen;
 use App\Gate\Settings\GateSettings;
+use Lsr\Core\Caching\Cache;
 use Lsr\Core\Exceptions\ValidationException;
 use Lsr\Core\Models\Attributes\OneToMany;
 use Lsr\Core\Models\Attributes\PrimaryKey;
@@ -36,7 +38,19 @@ class GateType extends Model
 	public array $screens;
 
 	public static function getBySlug(string $slug) : ?GateType {
-		return static::query()->where('slug = %s', $slug)->first();
+		/** @var Cache $cache */
+		$cache = App::getService('cache');
+		return $cache->load(
+			'gateType.slug.'.$slug,
+			fn() => static::query()->where('slug = %s', $slug)->first(),
+			[
+				$cache::Tags   => array_merge(
+					['models', self::TABLE, self::TABLE.'/'.$slug],
+					self::CACHE_TAGS
+				),
+				$cache::Expire => '7 days',
+			]
+		);
 	}
 
 	public function getQueryData() : array {
@@ -82,13 +96,38 @@ class GateType extends Model
 	 */
 	public function getScreens() : array {
 		if (!isset($this->screens)) {
-			$this->screens = isset($this->id) ?
-				GateScreenModel::query()
-				               ->where('id_gate = %i', $this->id)
-				               ->orderBy('order')
-				               ->get() :
-				[];
+			if (!isset($this->id)) {
+				return [];
+			}
+			/** @var Cache $cache */
+			$cache = App::getService('cache');
+			$this->screens = $cache->load(
+				'gateType.'.$this->id.'.screens',
+				fn() => $this->loadScreens(),
+				[
+					$cache::Tags   => array_merge(
+						[
+							'models',
+							GateScreenModel::TABLE,
+							self::TABLE,
+							self::TABLE.'/'.$this->id,
+						],
+						GateScreenModel::CACHE_TAGS
+					),
+					$cache::Expire => '7 days',
+				]
+			);
 		}
+		return $this->screens;
+	}
+
+	private function loadScreens() : array {
+		$this->screens = isset($this->id) ?
+			GateScreenModel::query()
+			               ->where('id_gate = %i', $this->id)
+			               ->orderBy('order')
+			               ->get() :
+			[];
 		return $this->screens;
 	}
 

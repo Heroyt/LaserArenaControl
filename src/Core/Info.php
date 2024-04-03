@@ -8,6 +8,7 @@ namespace App\Core;
 use Dibi\Exception;
 use Lsr\Core\Caching\Cache;
 use Lsr\Core\DB;
+use Throwable;
 
 /**
  * Key-value read-write storage (in database)
@@ -31,16 +32,28 @@ class Info
 		if (isset(self::$info[$key])) {
 			return self::$info[$key];
 		}
+
+		/** @var Cache $cache */
+		$cache = App::getService('cache');
 		/** @var string|null $value */
-		$value = DB::select(self::TABLE, '[value]')
-							 ->where('[key] = %s', $key)
-							 ->cacheTags('info', 'info/'.$key)
-							 ->fetchSingle();
+		try {
+			$value = $cache->load(
+				'info.'.$key,
+				static fn() => DB::select(self::TABLE, '[value]')
+				                 ->where('[key] = %s', $key)
+				                 ->cacheTags('info', 'info/'.$key)
+				                 ->fetchSingle(),
+				[
+					$cache::Tags => ['info', 'info/'.$key],
+				]
+			);
+		} catch (Throwable $e) {
+			$value = null;
+		}
 		if (!isset($value)) {
 			return $default;
 		}
-		/** @noinspection UnserializeExploitsInspection */
-		$value = unserialize($value);
+		$value = igbinary_unserialize($value);
 		self::$info[$key] = $value; // Cache
 		return $value;
 	}
@@ -54,16 +67,18 @@ class Info
 	 */
 	public static function set(string $key, mixed $value) : void {
 		self::$info[$key] = $value; // Cache
+		$serialized = igbinary_serialize($value);
 		/** @phpstan-ignore-next-line */
 		DB::replace(self::TABLE, [
 			[
 				'key'   => $key,
-				'value' => serialize($value),
+				'value' => $serialized,
 			]
 		]);
 		/** @var Cache $cache */
 		$cache = App::getService('cache');
 		$cache->clean([Cache::Tags => ['info/'.$key]]);
+		$cache->save('info.'.$key, $serialized, [$cache::Tags => ['info', 'info/'.$key]]);
 	}
 
 }

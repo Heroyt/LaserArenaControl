@@ -127,12 +127,6 @@ class Gate
 			return $test;
 		}
 
-		$lastGame = GameFactory::getLastGame($system);
-		if (isset($lastGame) && $lastGame->end?->getTimestamp() > $maxTime) {
-			$maxGame = $lastGame;
-			$maxTime = $lastGame->end->getTimestamp();
-		}
-
 		foreach ($systems as $checkSystem) {
 			/** @var Game|null $startedSystem */
 			$startedSystem = Info::get($checkSystem.'-game-started');
@@ -147,6 +141,15 @@ class Gate
 				$maxGame = $loadedSystem;
 				$maxTime = $loadedSystem->fileTime?->getTimestamp();
 			}
+		}
+
+		$query = $system === 'all' ? GameFactory::queryGames(true) : GameFactory::queryGamesSystem($system, true);
+		$row = $query->where('end > %dt', $maxTime)
+		             ->orderBy('end')
+		             ->desc()
+		             ->fetch();
+		if (isset($row) && $row->end?->getTimestamp() > $maxTime) {
+			$maxGame = GameFactory::getById($row->id_game, ['system' => $row->system]);
 		}
 
 		return $maxGame;

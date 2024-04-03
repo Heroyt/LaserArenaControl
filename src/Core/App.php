@@ -8,16 +8,17 @@ use Lsr\Core\Menu\MenuBuilder;
 class App extends \Lsr\Core\App
 {
 
-	public static function getMenu(string $type = 'menu'): array {
-		return self::getServiceByType(Cache::class)
-		           ->load(
-			           'menu.' . $type . '.items.' . self::getShortLanguageCode(),
-			           fn() => self::getServiceByType(MenuBuilder::class)->getMenu($type),
-			           [
-				           Cache::Tags => ['core', 'core.menu'],
-				           Cache::Expire => '30 days',
-			           ]
-		           );
+	public static function getMenu(string $type = 'menu') : array {
+		/** @var Cache $cache */
+		$cache = self::getService('cache');
+		return $cache->load(
+			'menu.'.$type.'.items.'.self::getShortLanguageCode(),
+			fn() => self::getServiceByType(MenuBuilder::class)->getMenu($type),
+			[
+				$cache::Tags   => ['core', 'core.menu'],
+				$cache::Expire => '30 days',
+			]
+		);
 	}
 
 }

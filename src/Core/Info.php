@@ -35,8 +35,8 @@ class Info
 
 		/** @var Cache $cache */
 		$cache = App::getService('cache');
-		/** @var string|null $value */
 		try {
+			/** @var string|null $value */
 			$value = $cache->load(
 				'info.'.$key,
 				static fn() => DB::select(self::TABLE, '[value]')
@@ -53,9 +53,19 @@ class Info
 		if (!isset($value)) {
 			return $default;
 		}
-		$value = igbinary_unserialize($value);
-		self::$info[$key] = $value; // Cache
-		return $value;
+		$unserialized = igbinary_unserialize($value);
+		if (
+			($unserialized === false && $value !== igbinary_serialize(false)) ||
+			($unserialized === null && $value !== igbinary_serialize(null))
+		) {
+			// Fallback to normal PHP serialization
+			/** @noinspection UnserializeExploitsInspection */
+			$unserialized = unserialize($value);
+			// Re-serialize the value
+			self::set($key, $unserialized);
+		}
+		self::$info[$key] = $unserialized; // Cache
+		return $unserialized;
 	}
 
 	/**

@@ -5,10 +5,13 @@ tables:
 		definition: '''
     		(
     			`key` varchar(30) NOT NULL DEFAULT '',
-    			`value` text DEFAULT NULL,
+    			`value` BLOB DEFAULT NULL,
     			PRIMARY KEY (`key`)
     		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
     		'''
+		modifications:
+			0.1:
+				- 'CHANGE `value` `value` BLOB DEFAULT NULL;'
 	App\GameModels\Vest:
 		definition: '''
 			(

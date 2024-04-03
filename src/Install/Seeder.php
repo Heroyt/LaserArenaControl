@@ -672,8 +672,8 @@ class Seeder implements InstallInterface
 			}
 
 			// Info
-			DB::insertIgnore(Info::TABLE, ['key' => 'liga_api_url', 'value' => 's:25:"https://new.laserliga.cz/";']);
-			DB::insertIgnore(Info::TABLE, ['key' => 'default_print_template', 'value' => 's:9:"graphical";']);
+			Info::set('liga_api_url', 'https://laserliga.cz/');
+			Info::set('default_print_template', 'graphical');
 
 			// Default gate
 			$count = DB::select(GateType::TABLE, 'COUNT(*)')->fetchSingle(cache: false);

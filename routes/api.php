@@ -46,26 +46,21 @@ $debugGroup = $apiGroup->group('debug')
                        ->put('incrementCache', [Debug::class, 'incrementCache'])
                        ->get('glob', [Debug::class, 'glob']);
 
-$gameGroup = $apiGroup->group('game')->post('load/{system}', [GameLoading::class, 'loadGame'])->get(
-	'loaded',
-	[
-		GameHelpers::class,
-		'getLoadedGameInfo',
-	]
-)->get('gate', [GameHelpers::class, 'getGateGameInfo'])->post(
-	'{code}/recalcSkill',
-	[GameHelpers::class, 'recalcSkill']
-)->post('{code}/recalcScores', [GameHelpers::class, 'recalcScores'])->post(
-	'{code}/changeMode',
-	[GameHelpers::class, 'changeGameMode']
-);
+$gameGroup = $apiGroup->group('game')
+                      ->post('load/{system}', [GameLoading::class, 'loadGame'])
+                      ->get('loaded', [GameHelpers::class, 'getLoadedGameInfo',])
+                      ->get('gate', [GameHelpers::class, 'getGateGameInfo']);
 
 $gamesGroup = $apiGroup->group('games')
                        ->get('', [Games::class, 'listGames'])
                        ->post('sync', [Games::class, 'syncGames'])
                        ->post('sync/{limit}', [Games::class, 'syncGames'])
-                       ->get('{code}', [Games::class, 'getGame'])
-                       ->post('simulate', [Games::class, 'simulate']);
+	->post('simulate', [Games::class, 'simulate'])
+	->group('{code}')
+	->get('', [Games::class, 'getGame'])
+	->post('recalcSkill', [GameHelpers::class, 'recalcSkill'])
+	->post('recalcScores', [GameHelpers::class, 'recalcScores'])
+	->post('changeMode', [GameHelpers::class, 'changeGameMode']);
 
 
 $apiGroup->group('laserliga')->group('games')->group('{code}')->get('highlights', [LaserLiga::class, 'highlights']);

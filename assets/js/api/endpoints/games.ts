@@ -1,6 +1,6 @@
-import {GameData} from "../../interfaces/gameInterfaces";
-import {fetchGet, fetchPost, FormSaveResponse} from "../../includes/apiClient";
-import {Highlight} from "../../components/gate/types";
+import {GameData} from '../../interfaces/gameInterfaces';
+import {fetchGet, fetchPost, FormSaveResponse} from '../../includes/apiClient';
+import {Highlight} from '../../components/gate/types';
 
 export type LoadedGameResponse = {
     started: boolean,
@@ -20,37 +20,37 @@ export type LastGamesResponse = GameData[];
 export type LoadGameResponse = { status: string, mode?: string };
 
 export async function sendLoadGame(system: string, data: FormData): Promise<LoadGameResponse> {
-    return fetchPost(`/api/game/load/${system}`, data);
+	return fetchPost(`/api/game/load/${system}`, data, {'Accept': 'application/json'});
 }
 
 export async function getLoadedGame(): Promise<LoadedGameResponse> {
-    return fetchGet('/api/game/loaded');
+	return fetchGet('/api/game/loaded', null, {'Accept': 'application/json'});
 }
 
 export async function getLastGames(limit: number = 10, orderBy: string = 'start', desc: boolean = true, excludeFinished: boolean = true, expand: boolean = true): Promise<LastGamesResponse> {
-    return fetchGet('/api/games', {limit, orderBy, desc, excludeFinished, expand});
+	return fetchGet('/api/games', {limit, orderBy, desc, excludeFinished, expand}, {'Accept': 'application/json'});
 }
 
 export async function getGameHighlights(code: string): Promise<Highlight[]> {
-    return fetchGet(`/api/laserliga/games/${code}/highlights`);
+	return fetchGet(`/api/laserliga/games/${code}/highlights`, null, {'Accept': 'application/json'});
 }
 
 export async function reimportResults(code: string): Promise<FormSaveResponse> {
-    return fetchPost(`/api/results/import/${code}`);
+	return fetchPost(`/api/results/import/${code}`, null, {'Accept': 'application/json'});
 }
 
 export async function syncGame(code: string): Promise<FormSaveResponse> {
-    return fetchPost(`/api/games/${code}/sync`);
+	return fetchPost(`/api/games/${code}/sync`, null, {'Accept': 'application/json'});
 }
 
 export async function recalcGameSkill(code: string): Promise<FormSaveResponse> {
-    return fetchPost(`/api/games/${code}/recalcSkill`);
+	return fetchPost(`/api/games/${code}/recalcSkill`, null, {'Accept': 'application/json'});
 }
 
 export async function changeGameMode(code: string, mode: string): Promise<FormSaveResponse> {
-    return fetchPost(`/api/games/${code}/changeMode`, {mode});
+	return fetchPost(`/api/games/${code}/changeMode`, {mode}, {'Accept': 'application/json'});
 }
 
 export async function setGameGroup(code: string, groupId: number): Promise<FormSaveResponse> {
-    return fetchPost(`/api/games/${code}/group`, {groupId});
+	return fetchPost(`/api/games/${code}/group`, {groupId}, {'Accept': 'application/json'});
 }

@@ -45,13 +45,16 @@ class LaserMaxxCSGOResultsScreen extends AbstractResultsScreen
 			return $this->respond(new ErrorDto('Cannot show screen without game.'), 412);
 		}
 
+		if ($this->reloadTime < 0) {
+			$this->setReloadTime($this->getReloadTimer());
+		}
+
 		return $this->view(
 			'gate/screens/results/lasermaxxCSGO',
 			[
 				'game'   => $game,
 				'addCss' => ['gate/resultsCSGO.css'],
 			]
-		)
-		            ->withHeader('X-Reload-Time', (string) $this->getReloadTimer());
+		);
 	}
 }

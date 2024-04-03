@@ -5,6 +5,7 @@ namespace App\Gate\Screens;
 use App\GameModels\Factory\GameFactory;
 use App\GameModels\Factory\PlayerFactory;
 use App\GameModels\Factory\TeamFactory;
+use App\GameModels\Game\Player;
 use DateTimeImmutable;
 use Dibi\Row;
 use Psr\Http\Message\ResponseInterface;
@@ -58,10 +59,15 @@ class GeneralDayStatsScreen extends GateScreen
 		}
 
 		// Get today's best players
+		/** @var Player[] $topScores */
 		$topScores = [];
+		/** @var Player|null $topHits */
 		$topHits = null;
+		/** @var Player|null $topDeaths */
 		$topDeaths = null;
+		/** @var Player|null $topAccuracy */
 		$topAccuracy = null;
+		/** @var Player|null $topShots */
 		$topShots = null;
 
 		if (!empty($gameIds)) {
@@ -117,17 +123,38 @@ class GeneralDayStatsScreen extends GateScreen
 			}
 		}
 
+		$teamCount = empty($gameIds) ? 0 : TeamFactory::queryTeams($gameIds)->count();
+		$playerCount = empty($gameIds) ? 0 : PlayerFactory::queryPlayers($gameIds)->count();
+
+		// Calculate current screen hash (for caching)
+		$data = [
+			'gameCount'   => $gameCount,
+			'teamCount'   => $teamCount,
+			'playerCount' => $playerCount,
+			'scores'      => [],
+			'hits'        => [$topHits?->name, $topHits?->user?->getCode(), $topHits?->hits],
+			'deaths'      => [$topDeaths?->name, $topDeaths?->user?->getCode(), $topDeaths?->deaths],
+			'accuracy'    => [$topAccuracy?->name, $topAccuracy?->user?->getCode(), $topAccuracy?->accuracy],
+			'shots'       => [$topShots?->name, $topShots?->user?->getCode(), $topShots?->shots],
+		];
+		foreach ($topScores as $player) {
+			$data['scores'][] = [$player->name, $player->user?->getCode(), $player->score];
+		}
+
+
 		return $this->view(
 			'gate/screens/generalDayStats',
 			[
+				'screenHash'  => md5(json_encode($data, JSON_THROW_ON_ERROR)),
 				'gameCount'   => $gameCount,
-				'teamCount'   => empty($gameIds) ? 0 : TeamFactory::queryTeams($gameIds)->count(),
-				'playerCount' => empty($gameIds) ? 0 : PlayerFactory::queryPlayers($gameIds)->count(),
+				'teamCount'   => $teamCount,
+				'playerCount' => $playerCount,
 				'topScores'   => $topScores,
 				'topHits'     => $topHits,
 				'topDeaths'   => $topDeaths,
 				'topAccuracy' => $topAccuracy,
 				'topShots'    => $topShots,
+				'addJs'       => ['gate/today.js'],
 				'addCss' => ['gate/todayStats.css'],
 			]
 		);

@@ -49,19 +49,29 @@ class VestsScreen extends GateScreen implements WithSettings
 			return $this->respond(new ErrorDto('Cannot show screen without game.'), 412);
 		}
 
-		// Calculates how much longer should the screen remain active before reloading
+		if ($this->reloadTime < 0) {
+			$this->setReloadTime($this->getReloadTimer());
+		}
+
+		// Calculate current screen hash (for caching)
+		$data = [];
+		foreach ($game->getPlayers() as $player) {
+			$data[$player->vest] = [$player->getTeamColor(), $player->name, $player->user?->getCode()];
+		}
+		ksort($data);
+		$screenHash = md5(json_encode($data, JSON_THROW_ON_ERROR));
 
 		return $this
 			->view(
 				'gate/screens/vests',
 				[
 					'game' => $game,
+					'screenHash' => $screenHash,
 					'vests' => Vest::getForSystem($game::SYSTEM),
 					'addJs'  => ['gate/vests.js'],
 					'addCss' => ['gate/vests.css'],
 				]
-			)
-			->withHeader('X-Reload-Time', $this->getReloadTimer());
+			);
 	}
 
 	public function getSettings() : VestsSettings {

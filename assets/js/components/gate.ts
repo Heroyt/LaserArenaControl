@@ -10,6 +10,7 @@ declare global {
 }
 
 const loadedAssets = new Set<string>;
+const loadedScreens = new Map<string, { default: new() => GateScreen }>;
 
 let lastScreen: GateScreen | null = null;
 
@@ -51,8 +52,10 @@ export function loadContent(path: string, reloadTimeout: { timeout: null | NodeJ
 
 			// Setup next auto-reload
 			clearTimeout(reloadTimeout.timeout);
+			console.log(Array.from(response.headers.entries()));
 			if (response.headers.has('x-reload-time')) {
 				const time = parseInt(response.headers.get('x-reload-time'));
+				console.log('Reload timer', time);
 				if (!isNaN(time)) {
 					reloadTimeout.timeout = setTimeout(() => {
 						loadContent(path, reloadTimeout);
@@ -85,6 +88,7 @@ export async function initContent(content: HTMLDivElement, previous: HTMLDivElem
 	tips = tipsDefault;
 	tipsHighlights = false;
 
+	// Store information about loaded styles
 	document.head.querySelectorAll<HTMLLinkElement>('link.add-style').forEach(link => {
 		loadedAssets.add(link.href);
 		// Remove class to prevent duplicate initialization
@@ -95,10 +99,22 @@ export async function initContent(content: HTMLDivElement, previous: HTMLDivElem
 	let moduleClass: GateScreen = null;
 	if (scriptMeta) {
 		console.log(scriptMeta.content);
-		const module: { default: new () => GateScreen } = await import(scriptMeta.content);
 
+		// Cache loaded modules to prevent loading JS scripts all the time
+		let module: { default: new () => GateScreen };
+		if (loadedScreens.has(scriptMeta.content)) {
+			module = loadedScreens.get(scriptMeta.content);
+		} else {
+			module = await import(scriptMeta.content);
+			// Cache module for later use to prevent further import() call
+			loadedScreens.set(scriptMeta.content, module);
+		}
+
+		// Initialize module
 		moduleClass = new module.default;
 		moduleClass.init(content, removePreviousContent);
+
+		// Check for module changes
 		if (lastScreen && moduleClass.isSame(lastScreen)) {
 			console.log('Skipping module - the screen is identical');
 			return;
@@ -107,8 +123,10 @@ export async function initContent(content: HTMLDivElement, previous: HTMLDivElem
 		console.error('No add-script found!');
 	}
 
+	// Load extra styles
 	const styles = content.querySelectorAll<HTMLMetaElement>('meta[name="add-style"]');
 	styles.forEach(styleMeta => {
+		// Check if not already loaded
 		if (loadedAssets.has(styleMeta.content)) {
 			return;
 		}
@@ -117,16 +135,20 @@ export async function initContent(content: HTMLDivElement, previous: HTMLDivElem
 		const link = document.createElement('link');
 		link.rel = 'stylesheet';
 		link.href = styleMeta.content;
-		loadedAssets.add(styleMeta.content);
 		document.head.appendChild(link);
+
+		// Cache information about loaded styles
+		loadedAssets.add(styleMeta.content);
 	});
 
 	container.appendChild(content);
+
+	// Swap modules
 	if (moduleClass) {
 		if (lastScreen) {
 			lastScreen.animateOut();
 		}
-		setTimeout(() => moduleClass.animateIn(), 500);
+		moduleClass.animateIn();
 		const timer = container.querySelector<HTMLDivElement>('.timer');
 		if (timer) {
 			if (moduleClass.showTimer()) {
@@ -136,6 +158,7 @@ export async function initContent(content: HTMLDivElement, previous: HTMLDivElem
 			}
 		}
 	}
+
 	lastScreen = moduleClass;
 }
 

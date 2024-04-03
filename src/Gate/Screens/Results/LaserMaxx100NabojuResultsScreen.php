@@ -51,6 +51,10 @@ class LaserMaxx100NabojuResultsScreen extends AbstractResultsScreen
 			return $this->respond(new ErrorDto('Cannot show screen without game.'), 412);
 		}
 
+		if ($this->reloadTime < 0) {
+			$this->setReloadTime($this->getReloadTimer());
+		}
+
 		return $this->view(
 			'gate/screens/results/lasermaxx100naboju',
 			[
@@ -59,7 +63,6 @@ class LaserMaxx100NabojuResultsScreen extends AbstractResultsScreen
 				'mode'   => $game->getMode(),
 				'addCss' => ['gate/results.css'],
 			]
-		)
-		            ->withHeader('X-Reload-Time', (string) $this->getReloadTimer());
+		);
 	}
 }

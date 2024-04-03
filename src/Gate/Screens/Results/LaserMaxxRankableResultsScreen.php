@@ -41,6 +41,10 @@ class LaserMaxxRankableResultsScreen extends AbstractResultsScreen
 			return $this->respond(new ErrorDto('Cannot show screen without game.'), 412);
 		}
 
+		if ($this->reloadTime < 0) {
+			$this->setReloadTime($this->getReloadTimer());
+		}
+
 		return $this->view(
 			'gate/screens/results/lasermaxxRankable',
 			[
@@ -49,6 +53,6 @@ class LaserMaxxRankableResultsScreen extends AbstractResultsScreen
 				'addJs'  => ['gate/results.js'],
 				'addCss' => ['gate/results.css'],
 			]
-		)->withHeader('X-Reload-Time', (string) $this->getReloadTimer());
+		);
 	}
 }

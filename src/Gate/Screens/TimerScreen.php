@@ -87,26 +87,19 @@ class TimerScreen extends GateScreen implements WithSettings
 
 		$now = time();
 		$activeScreen = (int) floor($now / $this->getSettings()->timer) % count($screens);
-		$timeRemaining = $now % $this->getSettings()->timer;
+		// Remaining time for current screen to remain active + 2 seconds of buffer
+		$timeRemaining = ($now % $this->getSettings()->timer) + 2;
 
 		$screenModel = $screens[$activeScreen];
 		$screen = $screenModel->getScreen()
+			->setReloadTime($timeRemaining)
 		                      ->setGame($this->getGame())
 		                      ->setParams($this->params);
 		if ($screen instanceof WithSettings) {
 			$screen->setSettings($screenModel->getSettings());
 		}
 
-		return $this
-			->view(
-				'gate/screens/timer',
-				[
-					'activeScreen' => $screen,
-					'addJs'        => ['gate/timer.js'],
-					'addCss'       => ['gate/timer.css'],
-				]
-			)
-			->withHeader('X-Reload-Time', $timeRemaining);
+		return $screen->run();
 	}
 
 	/**

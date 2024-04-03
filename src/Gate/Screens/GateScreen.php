@@ -22,22 +22,23 @@ abstract class GateScreen
 
 	protected array $params = [];
 
-	public function __construct(protected readonly Latte $latte,) {
-	}
+	protected int $reloadTime = -1;
+
+	public function __construct(protected readonly Latte $latte,) {}
 
 	/**
 	 * Get screen name
 	 *
 	 * @return string
 	 */
-	abstract public static function getName(): string;
+	abstract public static function getName() : string;
 
 	/**
 	 * get screen description
 	 *
 	 * @return string
 	 */
-	public static function getDescription(): string {
+	public static function getDescription() : string {
 		return '';
 	}
 
@@ -62,29 +63,34 @@ abstract class GateScreen
 	 *
 	 * @return ResponseInterface Response containing the screen view
 	 */
-	abstract public function run(): ResponseInterface;
+	abstract public function run() : ResponseInterface;
 
 	/**
 	 * @param string[] $systems
 	 *
 	 * @return $this
 	 */
-	public function setSystems(array $systems): GateScreen {
+	public function setSystems(array $systems) : GateScreen {
 		$this->systems = $systems;
 		return $this;
 	}
 
-	public function getGame(): ?Game {
+	public function getGame() : ?Game {
 		return $this->game;
 	}
 
-	public function setGame(?Game $game): GateScreen {
+	public function setGame(?Game $game) : GateScreen {
 		$this->game = $game;
 		return $this;
 	}
 
 	public function setParams(array $params) : GateScreen {
 		$this->params = $params;
+		return $this;
+	}
+
+	public function setReloadTime(int $reloadTime) : GateScreen {
+		$this->reloadTime = $reloadTime;
 		return $this;
 	}
 
@@ -95,12 +101,26 @@ abstract class GateScreen
 	 * @return ResponseInterface
 	 * @throws TemplateDoesNotExistException
 	 */
-	protected function view(string $template, array $params): ResponseInterface {
+	protected function view(string $template, array $params) : ResponseInterface {
 		bdump($this->params);
-		return $this->respond($this->latte->viewToString($template,
-		                                                 array_merge($this->params,
-		                                                             ['addJs' => ['gate/defaultScreen.js']],
-		                                                             $params)));
+		$response = $this->respond(
+			$this->latte
+				->viewToString(
+					$template,
+					array_merge(
+						$this->params,
+						[
+							'addJs'       => ['gate/defaultScreen.js'],
+							'reloadTimer' => $this->reloadTime,
+						],
+						$params
+					)
+				)
+		);
+		if ($this->reloadTime > 0) {
+			return $response->withHeader('X-Reload-Time', (string) $this->reloadTime);
+		}
+		return $response;
 	}
 
 	/**
@@ -111,7 +131,7 @@ abstract class GateScreen
 	 * @return ResponseInterface
 	 * @throws JsonException
 	 */
-	protected function respond(string|array|object $data, int $code = 200, array $headers = []): ResponseInterface {
+	protected function respond(string | array | object $data, int $code = 200, array $headers = []) : ResponseInterface {
 		$response = new Response(new \Nyholm\Psr7\Response($code, $headers));
 
 		if (is_string($data)) {

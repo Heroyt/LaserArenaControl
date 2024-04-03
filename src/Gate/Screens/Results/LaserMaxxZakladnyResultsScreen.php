@@ -48,6 +48,10 @@ class LaserMaxxZakladnyResultsScreen extends AbstractResultsScreen
 			return $this->respond(new ErrorDto('Cannot show screen without game.'), 412);
 		}
 
+		if ($this->reloadTime < 0) {
+			$this->setReloadTime($this->getReloadTimer());
+		}
+
 		return $this->view(
 			'gate/screens/results/lasermaxxZakladny',
 			[
@@ -55,7 +59,6 @@ class LaserMaxxZakladnyResultsScreen extends AbstractResultsScreen
 				'mode'   => $game->getMode(),
 				'addCss' => ['gate/resultsZakladny.css'],
 			]
-		)
-			->withHeader('X-Reload-Time', (string) $this->getReloadTimer());
+		);
 	}
 }

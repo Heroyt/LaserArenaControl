@@ -4,7 +4,8 @@
 
 {default App\GameModels\Game\PrintStyle $style = App\GameModels\Game\PrintStyle::getActiveStyle()}
 {varType App\GameModels\Game\Game $game}
-{varType int|null $reloadTimer}
+
+{default int $reloadTimer = -1}
 
 {default string[] $addCss = []}
 {default string[] $addJs = []}

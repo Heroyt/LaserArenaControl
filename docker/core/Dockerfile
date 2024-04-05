@@ -1,4 +1,4 @@
-FROM node:19-slim AS node_base
+FROM node:21-slim AS node_base
 FROM php:8.2-fpm-bullseye as setup
 
 #COPY --from=node_base / /
@@ -30,12 +30,19 @@ COPY docker/core/spx.ini "$PHP_INI_DIR/conf.d/docker-php-ext-spx.ini"
 FROM setup as extensions
 
 # PHP extensions
-RUN apt-get install -y libzip-dev unzip libicu-dev cifs-utils ffmpeg
+RUN apt-get install -y libzip-dev unzip libicu-dev cifs-utils ffmpeg libpng-dev libwebp-dev
 RUN apt install -y curl libcurl4-openssl-dev
-RUN docker-php-ext-install mysqli curl gettext sockets pdo_mysql zip pcntl intl opcache
-RUN docker-php-ext-enable mysqli curl gettext sockets pdo_mysql zip pcntl intl opcache
+RUN docker-php-ext-install mysqli curl gettext sockets pdo_mysql zip pcntl intl opcache gd
+# Imagick
+RUN apt-get update && apt-get install -y libmagickwand-dev --no-install-recommends && rm -rf /var/lib/apt/lists/*
+RUN pecl install imagick
+# Igbinary
+RUN pecl install igbinary
+# Enable extensions
+RUN docker-php-ext-enable mysqli curl gettext sockets pdo_mysql zip pcntl intl opcache imagick igbinary
+RUN docker-php-ext-configure gd --with-jpeg --with-freetype --with-webp && docker-php-ext-install gd
 
-RUN apt-get -y install sudo
+#RUN apt-get -y install sudo
 
 # APCu cache
 RUN pecl install apcu
@@ -48,6 +55,7 @@ RUN docker-php-ext-enable redis
 FROM extensions as langs
 
 # Setup gettext languages
+RUN apt-get update && apt-get install -y locales locales-all
 RUN apt-get install -y locales \
 	&& sed -i -e 's/# cs_CZ.UTF-8 UTF-8/cs_CZ.UTF-8 UTF-8/' /etc/locale.gen \
 	&& sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen \
@@ -63,7 +71,7 @@ FROM langs as composer
 
 # Composer
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-RUN php -r "if (hash_file('sha384', 'composer-setup.php') === 'edb40769019ccf227279e3bdd1f5b2e9950eb000c3233ee85148944e555d97be3ea4f40c3c2fe73b22f875385f6a5155') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
+RUN php -r "if (hash_file('sha384', 'composer-setup.php') === 'dac665fdc30fdd8ec78b38b9800061b4150413ff2e3b6f88543c636f7cd84f6db9189d43a81e5503cda447da73c7e5b6') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
 RUN php composer-setup.php
 RUN rm composer-setup.php
 RUN mv composer.phar /usr/local/bin/composer

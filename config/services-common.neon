@@ -89,6 +89,7 @@ services:
 	gate.screens.vests: App\Gate\Screens\VestsScreen
 	gate.screens.timer: App\Gate\Screens\TimerScreen
 	gate.screens.image: App\Gate\Screens\ImageScreen
+	gate.screens.youtube: App\Gate\Screens\YoutubeScreen
 	gate.screens.idle.stats: App\Gate\Screens\GeneralDayStatsScreen
 	gate.screens.results: App\Gate\Screens\Results\ResultsScreen
 	gate.screens.results.lasermaxx.rankable: App\Gate\Screens\Results\LaserMaxxRankableResultsScreen

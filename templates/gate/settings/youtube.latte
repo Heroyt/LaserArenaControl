@@ -1,0 +1,37 @@
+{parameters
+    string $key,
+    string $name,
+    App\Gate\Settings\YoutubeSettings $settings,
+}
+
+<div class="form-group">
+    <label for="{$key}-type" class="form-label">
+        {lang 'Rozložení obrazovky'}:
+    </label>
+    <select name="{$name}[type]" id="{$key}-type" class="form-select">
+        <option n:foreach="App\Gate\Settings\ImageScreenType::cases() as $case"
+                n:attr="value: $case->value, selected: $case === $settings->screenType">
+            {$case->getReadableName()}
+        </option>
+    </select>
+</div>
+
+<div class="form-group">
+    <label for="{$key}-animation" class="form-label">
+        {lang 'Animace'}:
+    </label>
+    <select name="{$name}[animation]" id="{$key}-animation" class="form-select">
+        <option n:foreach="App\Gate\Settings\AnimationType::cases() as $case"
+                n:attr="value: $case->value, selected: $case === $settings->animationType">
+            {$case->getReadableName()}
+        </option>
+    </select>
+</div>
+
+<div class="form-group">
+    <label for="{$key}-url" class="form-label">
+        {lang 'URL'}:
+    </label>
+    <input type="url" name="{$name}[url]" id="{$key}-url" class="form-control" value="{$settings->url}">
+</div>
+

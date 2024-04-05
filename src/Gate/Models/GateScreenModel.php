@@ -7,6 +7,7 @@ use App\Gate\Logic\ScreenTriggerType;
 use App\Gate\Screens\GateScreen;
 use App\Gate\Screens\WithSettings;
 use App\Gate\Settings\GateSettings;
+use Lsr\Core\Caching\Cache;
 use Lsr\Core\Models\Attributes\ManyToOne;
 use Lsr\Core\Models\Attributes\PrimaryKey;
 use Lsr\Core\Models\Model;
@@ -128,6 +129,16 @@ class GateScreenModel extends Model
 	public function setTriggerValue(?string $triggerValue) : GateScreenModel {
 		$this->triggerValue = $triggerValue;
 		return $this;
+	}
+
+	public function clearCache() : void {
+		if (isset($this->gate)) {
+			/** @var Cache $cache */
+			$cache = App::getService('cache');
+			$cache->remove('gateType.'.$this->gate->id.'.screens');
+			$cache->clean([$cache::Tags => [$this->gate::TABLE.'/'.$this->gate->id.'/relations',]]);
+		}
+		parent::clearCache();
 	}
 
 

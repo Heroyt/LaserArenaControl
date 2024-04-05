@@ -46,16 +46,11 @@ class ImageScreen extends GateScreen implements WithSettings
 		$type = ImageScreenType::tryFrom($data['type'] ?? '') ?? ImageScreenType::CENTER;
 		$animation = AnimationType::tryFrom($data['animation'] ?? '') ?? AnimationType::FADE;
 
-		bdump($type);
-		bdump($animation);
-
 		$keys = explode('[', str_replace(']', '', $data['key']));
-		bdump($keys);
 		$uploadedImage = App::getRequest()->getUploadedFiles();
 		foreach ($keys as $key) {
 			$uploadedImage = $uploadedImage[$key] ?? [];
 		}
-		bdump($uploadedImage);
 		if (isset($uploadedImage['image']) && $uploadedImage['image'] instanceof UploadedFile && $uploadedImage['image']->getError() === UPLOAD_ERR_OK) {
 			$dir = UPLOAD_DIR.'gate/';
 			if (!file_exists($dir) && (!mkdir($dir) || !is_dir($dir))) {

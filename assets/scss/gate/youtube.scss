@@ -1,0 +1,90 @@
+@import '../pages/gate/parts';
+
+#gate main .content.youtube-screen {
+	grid-template-areas: 'logo logo video video video video video video . .'
+			                   '. . video video video video video video . .'
+			                   '. . video video video video video video . .'
+			                   '. . video video video video video video . .';
+
+	--animation-lenght: 500ms;
+
+	&.layout-fullscreen {
+		grid-template-areas: 'video video video video video video video video video video'
+			                   'video video video video video video video video video video'
+			                   'video video video video video video video video video video'
+			                   'video video video video video video video video video video';
+	}
+
+	.gate-video {
+		align-self: center;
+		aspect-ratio: 16/9;
+		grid-area: video;
+		max-height: 100%;
+		max-width: 100%;
+		width: 100%;
+		z-index: 5;
+	}
+
+	&.in {
+		.gate-video {
+			animation: fade-in var(--animation-lenght) ease forwards;
+			opacity: 0;
+		}
+
+		&.animation-scale .gate-video {
+			animation: scale-in var(--animation-lenght) ease forwards;
+			opacity: 0;
+		}
+
+		&.animation-slide_top .gate-video {
+			animation: slide-in-up var(--animation-lenght) ease forwards;
+			opacity: 1;
+			transform: translateY(-100vh);
+		}
+
+		&.animation-slide_bottom .gate-video {
+			animation: slide-in-down var(--animation-lenght) ease forwards;
+			opacity: 1;
+			transform: translateY(100vh);
+		}
+
+		&.animation-slide_right .gate-video {
+			animation: slide-in-right var(--animation-lenght) ease forwards;
+			opacity: 1;
+			transform: translateX(100vh);
+		}
+
+		&.animation-slide_left .gate-video {
+			animation: slide-in-left var(--animation-lenght) ease forwards;
+			opacity: 1;
+			transform: translateX(-100vh);
+		}
+	}
+
+	&.out {
+		.gate-video {
+			animation: fade-out var(--animation-lenght) ease forwards;
+		}
+
+		&.animation-scale .gate-video {
+			animation: scale-out var(--animation-lenght) ease forwards;
+		}
+
+		&.animation-slide_top .gate-video {
+			animation: slide-out-up var(--animation-lenght) ease forwards;
+		}
+
+		&.animation-slide_bottom .gate-video {
+			animation: slide-out-down var(--animation-lenght) ease forwards;
+		}
+
+		&.animation-slide_right .gate-video {
+			animation: slide-out-right var(--animation-lenght) ease forwards;
+		}
+
+		&.animation-slide_left .gate-video {
+			animation: slide-out-left var(--animation-lenght) ease forwards;
+		}
+	}
+
+}

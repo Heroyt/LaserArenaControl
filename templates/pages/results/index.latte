@@ -90,7 +90,7 @@
 	</div>
 	<div class="card bg-very-light shadow mt-4 p-4">
 		<iframe id="print-iframe"
-				src="{ifset $selected}{link ['results', $selected->code, 'print', $selectedLang, 1, $selectedStyle, $selectedTemplate, 'view' => 1, 'html' => 1, 'noCache' => 1]}{/ifset}"
+                src="{ifset $selected}{link ['results', $selected->code, 'print', $selectedLang, 1, $selectedStyle, $selectedTemplate, 'view' => 1, 'html' => 1, 'nocache' => 1]}{/ifset}"
 				class="w-100 min-vh-60"></iframe>
 	</div>
 	<script n:syntax="double">

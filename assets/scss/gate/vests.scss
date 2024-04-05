@@ -46,14 +46,14 @@
 
 	&.in {
 		.vest {
-			animation: vest-slide-in 300ms ease forwards;
+			animation: slide-fade-in 300ms ease forwards;
 			opacity: 0;
 		}
 	}
 
 	&.out {
 		.vest {
-			animation: vest-slide-out 300ms ease forwards;
+			animation: slide-fade-out 300ms ease forwards;
 		}
 	}
 }

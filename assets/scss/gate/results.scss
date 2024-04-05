@@ -99,7 +99,7 @@
 		}
 
 		&.animate-in {
-			animation: vest-slide-in 300ms ease forwards;
+			animation: slide-fade-in 300ms ease forwards;
 			opacity: 0;
 		}
 
@@ -153,7 +153,7 @@
 
 	&.out {
 		.player {
-			animation: vest-slide-out 300ms ease forwards var(--delay, 0ms);
+			animation: slide-fade-out 300ms ease forwards var(--delay, 0ms);
 		}
 
 		.team {

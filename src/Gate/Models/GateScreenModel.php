@@ -34,22 +34,8 @@ class GateScreenModel extends Model
 	private GateScreen $screen;
 	private ?GateSettings $settings = null;
 
-	public function __serialize() : array {
-		return [
-			'screen_serialized'   => $this->screenSerialized,
-			'settings_serialized' => $this->settingsSerialized,
-			'trigger'             => $this->trigger,
-		];
-	}
-
-	public function __unserialize(array $data) : void {
-		$this->screenSerialized = $data['screen_serialized'];
-		$this->settingsSerialized = $data['settings_serialized'];
-		$this->trigger = $data['trigger'];
-	}
-
 	public static function createFromScreen(
-		GateScreen $screen,
+		GateScreen        $screen,
 		ScreenTriggerType $trigger = ScreenTriggerType::DEFAULT) : GateScreenModel {
 		$model = new self;
 		$model->setScreen($screen)->setTrigger($trigger);
@@ -59,18 +45,8 @@ class GateScreenModel extends Model
 		return $model;
 	}
 
-	public function getScreen() : GateScreen {
-		if (!isset($this->screen)) {
-			// @phpstan-ignore-next-line
-			$this->screen = App::getService($this->screenSerialized);
-		}
-		// @phpstan-ignore-next-line
-		return $this->screen;
-	}
-
-	public function setScreen(GateScreen $screen) : GateScreenModel {
-		$this->screen = $screen;
-		$this->screenSerialized = $screen::getDiKey();
+	public function setTrigger(ScreenTriggerType $trigger) : GateScreenModel {
+		$this->trigger = $trigger;
 		return $this;
 	}
 
@@ -86,6 +62,46 @@ class GateScreenModel extends Model
 	public function setSettings(GateSettings $settings) : GateScreenModel {
 		$this->settings = $settings;
 		$this->settingsSerialized = igbinary_serialize($settings);
+		return $this;
+	}
+
+	public function __serialize() : array {
+		return [
+			'id'           => $this->id,
+			'gate'         => isset($this->gate) ? $this->gate->id : null,
+			'order'        => $this->order,
+			'screen_serialized'   => $this->screenSerialized,
+			'settings_serialized' => $this->settingsSerialized,
+			'trigger'             => $this->trigger,
+			'triggerValue' => $this->triggerValue,
+		];
+	}
+
+	public function __unserialize(array $data) : void {
+		if (isset($data['gate'])) {
+			$this->gate = GateType::get($data['gate']);
+		}
+		$this->id = $data['id'] ?? null;
+		$this->order = $data['order'] ?? 0;
+		$this->triggerValue = $data['triggerValue'] ?? null;
+		$this->screenSerialized = $data['screen_serialized'];
+		$this->settingsSerialized = $data['settings_serialized'];
+		$this->trigger = $data['trigger'];
+		$this->logger = $this->getLogger();
+	}
+
+	public function getScreen() : GateScreen {
+		if (!isset($this->screen)) {
+			// @phpstan-ignore-next-line
+			$this->screen = App::getService($this->screenSerialized);
+		}
+		// @phpstan-ignore-next-line
+		return $this->screen;
+	}
+
+	public function setScreen(GateScreen $screen) : GateScreenModel {
+		$this->screen = $screen;
+		$this->screenSerialized = $screen::getDiKey();
 		return $this;
 	}
 
@@ -109,16 +125,10 @@ class GateScreenModel extends Model
 		return $this;
 	}
 
-	public function setTrigger(ScreenTriggerType $trigger) : GateScreenModel {
-		$this->trigger = $trigger;
-		return $this;
-	}
-
 	public function setTriggerValue(?string $triggerValue) : GateScreenModel {
 		$this->triggerValue = $triggerValue;
 		return $this;
 	}
-
 
 
 }

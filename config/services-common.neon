@@ -39,8 +39,10 @@ orisai.scheduler:
 			expression: * * * * *
 			callback: [@cron.resultsImport, 'run']
 services:
-	- App\Services\VersionService
-	- App\Services\RegressionCalculator
+	version: App\Services\VersionService
+	regression: App\Services\RegressionCalculator
+
+	image: App\Services\ImageService([1000,600,250])
 
 	redis:
 		create: \Redis
@@ -86,6 +88,7 @@ services:
 	gate: App\Gate\Gate
 	gate.screens.vests: App\Gate\Screens\VestsScreen
 	gate.screens.timer: App\Gate\Screens\TimerScreen
+	gate.screens.image: App\Gate\Screens\ImageScreen
 	gate.screens.idle.stats: App\Gate\Screens\GeneralDayStatsScreen
 	gate.screens.results: App\Gate\Screens\Results\ResultsScreen
 	gate.screens.results.lasermaxx.rankable: App\Gate\Screens\Results\LaserMaxxRankableResultsScreen

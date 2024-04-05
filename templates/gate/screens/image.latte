@@ -1,0 +1,17 @@
+{layout '../@layout.latte'}
+
+{varType App\Gate\Settings\ImageSettings $settings}
+{varType App\Models\DataObjects\Image|null $image}
+
+{define containerClasses}
+    image-screen animation-{$settings->animationType->value} layout-{$settings->screenType->value}
+{/define}
+
+{define content}
+    <img n:ifset="$image"
+            data-key="{md5($image->getPath().$settings->animationType->value.$settings->screenType->value)}"
+            srcset="{getImageSrcSet($image)}"
+            src="{$image->getUrl()}"
+            loading="lazy"
+            class="gate-image">
+{/define}

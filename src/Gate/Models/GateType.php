@@ -109,8 +109,9 @@ class GateType extends Model
 						[
 							'models',
 							GateScreenModel::TABLE,
-							self::TABLE,
-							self::TABLE.'/'.$this->id,
+							$this::TABLE,
+							$this::TABLE.'/'.$this->id,
+							$this::TABLE.'/'.$this->id.'/relations',
 						],
 						GateScreenModel::CACHE_TAGS
 					),
@@ -161,9 +162,16 @@ class GateType extends Model
 
 		if (isset($this->screens)) {
 			foreach ($this->screens as $screen) {
+				if (!isset($screen->gate)) {
+					$screen->gate = $this;
+				}
 				$success = $success && $screen->save();
 			}
 		}
+
+		/** @var Cache $cache */
+		$cache = App::getService('cache');
+		$cache->remove('gateType.'.$this->id.'.screens');
 
 		return $success;
 	}

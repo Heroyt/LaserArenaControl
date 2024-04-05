@@ -69,13 +69,13 @@
 
 	&.in {
 		.player, .team {
-			animation: vest-slide-in 300ms ease forwards;
+			animation: slide-fade-in 300ms ease forwards;
 		}
 	}
 
 	&.out {
 		.player, .team {
-			animation: vest-slide-out 300ms ease forwards;
+			animation: slide-fade-out 300ms ease forwards;
 		}
 	}
 

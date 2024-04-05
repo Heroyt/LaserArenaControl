@@ -1,21 +1,10 @@
 import {initCollapse} from '../../includes/collapse';
 import {getGateScreenSettings} from '../../api/endpoints/settings/gate';
 import {initSelectDescription} from '../../includes/selectDescription';
+import {initImageUploadPreview} from '../../includes/imageUploadPreview';
 
 export default function initGateSettings() {
-	const backgroundImage = document.getElementById('background-image') as HTMLImageElement;
-	const backgroundInput = document.getElementById('background') as HTMLInputElement;
-	backgroundInput.addEventListener('change', () => {
-		const files = backgroundInput.files[0];
-		if (files) {
-			const fileReader = new FileReader();
-			fileReader.readAsDataURL(files);
-			fileReader.addEventListener('load', function () {
-				backgroundImage.src = this.result as string;
-			});
-		}
-	});
-
+	initImageUploadPreview();
 	initCollapse();
 
 	let newGateCounter = 0;
@@ -128,6 +117,7 @@ export default function initGateSettings() {
 					});
 				initGateType(settingsWrapper);
 			}
+			initImageUploadPreview(settingsWrapper);
 		};
 		const updateSettings = () => {
 			const typeValue = type.value;

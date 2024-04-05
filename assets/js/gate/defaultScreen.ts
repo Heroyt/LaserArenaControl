@@ -10,7 +10,9 @@ export default class DefaultScreen implements GateScreen {
 	}
 
 	isSame(active: GateScreen): boolean {
-		return false;
+		const key = this.content.querySelector<HTMLElement | null>('[data-key]')?.dataset?.key ?? '';
+		const keyActive = active.content.querySelector<HTMLElement | null>('[data-key]')?.dataset?.key ?? '';
+		return !(key !== '' && keyActive !== '') || key === keyActive;
 	}
 
 	animateIn(): void {

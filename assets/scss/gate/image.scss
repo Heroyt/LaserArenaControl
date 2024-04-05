@@ -1,0 +1,89 @@
+@import '../pages/gate/parts';
+
+#gate main .content.image-screen {
+	grid-template-areas: 'logo logo image image image image image image . .'
+			                   '. . image image image image image image . .'
+			                   '. . image image image image image image . .'
+			                   '. . image image image image image image . .';
+
+	--animation-lenght: 500ms;
+
+	&.layout-fullscreen {
+		grid-template-areas: 'image image image image image image image image image image'
+			                   'image image image image image image image image image image'
+			                   'image image image image image image image image image image'
+			                   'image image image image image image image image image image';
+	}
+
+	.gate-image {
+		align-self: center;
+		grid-area: image;
+		max-height: 100%;
+		max-width: 100%;
+		object-fit: contain;
+		z-index: 5;
+	}
+
+	&.in {
+		.gate-image {
+			animation: fade-in var(--animation-lenght) ease forwards;
+			opacity: 0;
+		}
+
+		&.animation-scale .gate-image {
+			animation: scale-in var(--animation-lenght) ease forwards;
+			opacity: 0;
+		}
+
+		&.animation-slide_top .gate-image {
+			animation: slide-in-up var(--animation-lenght) ease forwards;
+			opacity: 1;
+			transform: translateY(-100vh);
+		}
+
+		&.animation-slide_bottom .gate-image {
+			animation: slide-in-down var(--animation-lenght) ease forwards;
+			opacity: 1;
+			transform: translateY(100vh);
+		}
+
+		&.animation-slide_right .gate-image {
+			animation: slide-in-right var(--animation-lenght) ease forwards;
+			opacity: 1;
+			transform: translateX(100vh);
+		}
+
+		&.animation-slide_left .gate-image {
+			animation: slide-in-left var(--animation-lenght) ease forwards;
+			opacity: 1;
+			transform: translateX(-100vh);
+		}
+	}
+
+	&.out {
+		.gate-image {
+			animation: fade-out var(--animation-lenght) ease forwards;
+		}
+
+		&.animation-scale .gate-image {
+			animation: scale-out var(--animation-lenght) ease forwards;
+		}
+
+		&.animation-slide_top .gate-image {
+			animation: slide-out-up var(--animation-lenght) ease forwards;
+		}
+
+		&.animation-slide_bottom .gate-image {
+			animation: slide-out-down var(--animation-lenght) ease forwards;
+		}
+
+		&.animation-slide_right .gate-image {
+			animation: slide-out-right var(--animation-lenght) ease forwards;
+		}
+
+		&.animation-slide_left .gate-image {
+			animation: slide-out-left var(--animation-lenght) ease forwards;
+		}
+	}
+
+}

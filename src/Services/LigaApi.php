@@ -94,6 +94,7 @@ class LigaApi
 	 * @throws GuzzleException
 	 */
 	public function get(string $path, ?array $params = null, array $config = []): ResponseInterface {
+
 		$this->makeClient();
 		if (isset($params)) {
 			$config['query'] = $params;

@@ -46,7 +46,8 @@ class ImportService
 		private readonly PlayerProvider $playerProvider,
 		private readonly LockFactory    $lockFactory,
 		private readonly LigaApi        $ligaApi,
-		Config                          $config
+		Config                         $config,
+		private readonly FeatureConfig $featureConfig,
 	) {
 		$this->gameLoadedTime = (int)($config->getConfig('ENV')['GAME_LOADED_TIME'] ?? 300);
 		$this->gameStartedTime = (int)($config->getConfig('ENV')['GAME_STARTED_TIME'] ?? 1800);
@@ -66,7 +67,10 @@ class ImportService
 	 * @throws ModelNotFoundException
 	 * @throws Throwable
 	 */
-	public function import(string $resultsDir, bool $all = false, ?OutputInterface $output = null): ImportResponse|ErrorDto {
+	public function import(string           $resultsDir,
+	                       bool             $all = false,
+	                       int              $limit = 0,
+	                       ?OutputInterface $output = null) : ImportResponse | ErrorDto {
 		// Validate results directory
 		if (!file_exists($resultsDir) || !is_dir($resultsDir) || !is_readable($resultsDir)) {
 			return new ErrorDto(
@@ -110,6 +114,10 @@ class ImportService
 			$lastCheck = Info::get($resultsDir . 'check', 0);
 
 			foreach (GameFactory::getSupportedSystems() as $system) {
+				if ($limit > 0 && $total >= $limit) {
+					break;
+				}
+
 				// Find a parser for this system
 				try {
 					/** @var AbstractResultsParser $parser */
@@ -126,6 +134,10 @@ class ImportService
 
 				// Import all files
 				foreach ($resultFiles as $file) {
+					if ($limit > 0 && $total >= $limit) {
+						break;
+					}
+
 					// Skip duplicate and invalid files
 					if (
 						isset($processedFiles[$file]) ||
@@ -277,32 +289,33 @@ class ImportService
 			// Try to synchronize finished games to public
 			if (!empty($finishedGames)) {
 				$system = $finishedGames[0]::SYSTEM;
-				/** @var LigaApi $liga */
-				if ($this->ligaApi->syncGames($system, $finishedGames)) {
-					$logger->info('Synchronized games to public.');
-					// Set the sync flag
-					foreach ($finishedGames as $finishedGame) {
-						$finishedGame->sync = true;
-						try {
-							$finishedGame->save();
-						} catch (ValidationException $e) {
-							$output?->writeln(
-								Colors::color(ForegroundColors::RED) .
-								'Failed to synchronize games to public.' . $e->getMessage() .
-								Colors::reset()
-							);
-							$logger->warning('Failed to synchronize games to public');
-							$logger->exception($e);
+				if ($this->featureConfig->isFeatureEnabled('liga')) {
+					if ($this->ligaApi->syncGames($system, $finishedGames)) {
+						$logger->info('Synchronized games to public.');
+						// Set the sync flag
+						foreach ($finishedGames as $finishedGame) {
+							$finishedGame->sync = true;
+							try {
+								$finishedGame->save();
+							} catch (ValidationException $e) {
+								$output?->writeln(
+									Colors::color(ForegroundColors::RED).
+									'Failed to synchronize games to public.'.$e->getMessage().
+									Colors::reset()
+								);
+								$logger->warning('Failed to synchronize games to public');
+								$logger->exception($e);
+							}
 						}
 					}
-				}
-				else {
-					$logger->warning('Failed to synchronize games to public');
-					$output?->writeln(
-						Colors::color(ForegroundColors::RED) .
-						'Failed to synchronize games to public' .
-						Colors::reset()
-					);
+					else {
+						$logger->warning('Failed to synchronize games to public');
+						$output?->writeln(
+							Colors::color(ForegroundColors::RED).
+							'Failed to synchronize games to public'.
+							Colors::reset()
+						);
+					}
 				}
 
 				/** @var ResultsPrecacheService $precacheService */

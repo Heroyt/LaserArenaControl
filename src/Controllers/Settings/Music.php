@@ -4,6 +4,7 @@ namespace App\Controllers\Settings;
 
 use App\Core\App;
 use App\Models\MusicMode;
+use App\Services\FeatureConfig;
 use App\Services\LigaApi;
 use JsonException;
 use Lsr\Core\Controllers\Controller;
@@ -29,7 +30,7 @@ class Music extends Controller
 	 * @throws TemplateDoesNotExistException
 	 */
 	#[Get('settings/music', 'settings-music')]
-	public function show(): ResponseInterface {
+	public function show() : ResponseInterface {
 		$this->params['music'] = MusicMode::getAll();
 		return $this->view('pages/settings/music');
 	}
@@ -41,7 +42,7 @@ class Music extends Controller
 	 * @throws JsonException
 	 */
 	#[Post('settings/music/upload')]
-	public function upload(Request $request): ResponseInterface {
+	public function upload(Request $request) : ResponseInterface {
 		$allMusic = [];
 
 		if (!empty($_FILES['media']['name'])) {
@@ -52,19 +53,23 @@ class Music extends Controller
 				// Handle form errors
 				if ($_FILES['media']['error'][$key] !== UPLOAD_ERR_OK) {
 					$request->passErrors[] = match ($_FILES['media']['error'][$key]) {
-						UPLOAD_ERR_INI_SIZE => lang('Uploaded file is too large', context: 'errors').' - '.$name,
+						UPLOAD_ERR_INI_SIZE  => lang('Uploaded file is too large', context: 'errors').' - '.$name,
 						UPLOAD_ERR_FORM_SIZE => lang('Form size is to large', context: 'errors').' - '.$name,
-						UPLOAD_ERR_PARTIAL => lang('The uploaded file was only partially uploaded.', context: 'errors').' - '.$name,
+						UPLOAD_ERR_PARTIAL   => lang('The uploaded file was only partially uploaded.',
+								context:                 'errors').' - '.$name,
 						UPLOAD_ERR_CANT_WRITE => lang('Failed to write file to disk.', context: 'errors').' - '.$name,
-						default => lang('Error while uploading a file.', context: 'errors').' - '.$name,
+						default              => lang('Error while uploading a file.', context: 'errors').' - '.$name,
 					};
 					continue;
 				}
 
 				// Check for duplicates
 				if (file_exists(UPLOAD_DIR.$name)) {
-					$request->passNotices[] = ['type' => 'info', 'content' => lang('Uploaded file already exists', context: 'errors').' - '.$name];
-					$musicCheck = MusicMode::query()->where('file_name = %s', UPLOAD_DIR . $name)->first();
+					$request->passNotices[] = [
+						'type'    => 'info',
+						'content' => lang('Uploaded file already exists', context: 'errors').' - '.$name,
+					];
+					$musicCheck = MusicMode::query()->where('file_name = %s', UPLOAD_DIR.$name)->first();
 					if (isset($musicCheck)) {
 						$music = $musicCheck;
 					}
@@ -102,7 +107,8 @@ class Music extends Controller
 						'content' => lang('Saved successfully', context: 'form'),
 					];
 				} catch (ValidationException $e) {
-					$request->passErrors[] = lang('Failed to validate data before saving', context: 'errors').': '.$e->getMessage();
+					$request->passErrors[] = lang('Failed to validate data before saving',
+							context:                  'errors').': '.$e->getMessage();
 				}
 			}
 		}
@@ -110,11 +116,15 @@ class Music extends Controller
 			$request->passErrors[] = lang('No file uploaded', context: 'errors');
 		}
 
-		/** @var LigaApi $liga */
-		$liga = App::getService('liga');
-		try {
-			$liga->syncMusicModes();
-		} catch (ValidationException $e) {
+		/** @var FeatureConfig $featureConfig */
+		$featureConfig = App::getService('features');
+		if ($featureConfig->isFeatureEnabled('liga')) {
+			/** @var LigaApi $liga */
+			$liga = App::getService('liga');
+			try {
+				$liga->syncMusicModes();
+			} catch (ValidationException $e) {
+			}
 		}
 
 		return $this->customRespond($request, $allMusic);
@@ -127,7 +137,7 @@ class Music extends Controller
 	 * @throws JsonException
 	 */
 	#[Post('settings/music')]
-	public function save(Request $request): ResponseInterface {
+	public function save(Request $request) : ResponseInterface {
 
 		foreach ($_POST['music'] ?? [] as $id => $info) {
 			try {
@@ -152,11 +162,15 @@ class Music extends Controller
 			}
 		}
 
-		/** @var LigaApi $liga */
-		$liga = App::getService('liga');
-		try {
-			$liga->syncMusicModes();
-		} catch (ValidationException $e) {
+		/** @var FeatureConfig $featureConfig */
+		$featureConfig = App::getService('features');
+		if ($featureConfig->isFeatureEnabled('liga')) {
+			/** @var LigaApi $liga */
+			$liga = App::getService('liga');
+			try {
+				$liga->syncMusicModes();
+			} catch (ValidationException $e) {
+			}
 		}
 
 		return $this->customRespond($request);
@@ -171,7 +185,7 @@ class Music extends Controller
 	 * @return never
 	 * @throws JsonException
 	 */
-	private function customRespond(Request $request, array $music = []): ResponseInterface {
+	private function customRespond(Request $request, array $music = []) : ResponseInterface {
 		if ($request->isAjax()) {
 			if (!empty($request->passErrors)) {
 				return $this->respond(
@@ -193,7 +207,7 @@ class Music extends Controller
 	 * @throws JsonException
 	 */
 	#[Delete('settings/music/{id}')]
-	public function delete(Request $request): ResponseInterface {
+	public function delete(Request $request) : ResponseInterface {
 		$id = (int) ($request->params['id'] ?? 0);
 		if ($id <= 0) {
 			return $this->respond(['error' => lang('Invalid ID', context: 'errors')], 400);
@@ -206,7 +220,7 @@ class Music extends Controller
 			if (!$music->delete()) {
 				return $this->respond(['error' => lang('Failed to delete the music mode', context: 'errors')], 500);
 			}
-		} catch (ModelNotFoundException|ValidationException|DirectoryCreationException $e) {
+		} catch (ModelNotFoundException | ValidationException | DirectoryCreationException $e) {
 			return $this->respond(['error' => lang('Music mode not found', context: 'errors')], 404);
 		}
 

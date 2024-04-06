@@ -8,7 +8,6 @@ use App\GameModels\Game\Game;
 use App\Services\PlayerProvider;
 use App\Tools\Interfaces\ResultsParserInterface;
 use Lsr\Exceptions\FileException;
-use RuntimeException;
 
 /**
  * @template G of Game
@@ -53,16 +52,7 @@ class ResultsParser
 				/** @var class-string<ResultsParserInterface<G>> $class */
 				$class = $baseNamespace . ucfirst($system) . '\\ResultsParser';
 				if (class_exists($class) && $class::checkFile($this->fileName, $this->contents)) {
-					$this->parser = new $class();
-					if (!empty($this->fileName)) {
-						$this->parser->setFile($this->fileName);
-					}
-					else if (!empty($this->contents)) {
-						$this->parser->setContents($this->contents);
-					}
-					else {
-						throw new RuntimeException('File or content must be set for parsing.');
-					}
+					$this->parser = new $class($this->fileName, $this->contents);
 					return $this->parser;
 				}
 			}

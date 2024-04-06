@@ -49,11 +49,11 @@ interface ResultsParserInterface
 	 * Check if given result file should be parsed by this parser.
 	 *
 	 * @param string $fileName
-	 *
+	 * @param string $contents
+	 * @return bool True if this parser can parse this game file
 	 * @pre File exists
 	 * @pre File is readable
 	 *
-	 * @return bool True if this parser can parse this game file
 	 */
-	public static function checkFile(string $fileName): bool;
+	public static function checkFile(string $fileName, string $contents) : bool;
 }

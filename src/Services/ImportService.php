@@ -306,7 +306,7 @@ class ImportService
 				}
 
 				/** @var ResultsPrecacheService $precacheService */
-				$precacheService = App::getServiceByType(ResultsPrecacheService::class);
+				$precacheService = App::getService('resultPrecache');
 				$precacheService->prepareGamePrecache(...array_map(static fn(Game $game) => $game->code, $finishedGames)
 				);
 			}

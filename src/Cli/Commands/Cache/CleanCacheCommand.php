@@ -65,6 +65,12 @@ class CleanCacheCommand extends Command
 			'Clear info cache.'
 		);
 		$this->addOption(
+			'results',
+			'r',
+			InputOption::VALUE_NONE,
+			'Clear results cache.'
+		);
+		$this->addOption(
 			'tag',
 			't',
 			InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
@@ -79,6 +85,7 @@ class CleanCacheCommand extends Command
 		$latte = $input->getOption('latte');
 		$model = $input->getOption('model');
 		$info = $input->getOption('info');
+		$results = $input->getOption('results');
 
 		if ($all || $system) {
 			$tags = $input->getOption('tag');
@@ -149,6 +156,19 @@ class CleanCacheCommand extends Command
 			Info::set('gate-time', 0);
 			$output->writeln(
 				Colors::color(ForegroundColors::GREEN) . 'Cleared info values.' . Colors::reset()
+			);
+		}
+
+		if ($all || $results) {
+			$files = glob(TMP_DIR.'results/*');
+			foreach ($files as $file) {
+				unlink($file);
+			}
+			$output->writeln(
+				Colors::color(ForegroundColors::GREEN).sprintf(
+					'Successfully removed %d results cache files.',
+					count($files)
+				).Colors::reset()
 			);
 		}
 

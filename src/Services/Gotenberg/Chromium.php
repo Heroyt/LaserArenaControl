@@ -52,8 +52,7 @@ class Chromium
 
 	public function __construct(
 		public readonly GotenbergService $service
-	) {
-	}
+	) {}
 
 	/**
 	 * @param string               $url  URL to convert to PDF
@@ -72,7 +71,12 @@ class Chromium
 		$response = $this->service->post($this::PATHS['url'], $data, ['Gotenberg-Trace' => 'debug']);
 
 		if (!isset($response) || !$this->isResponseValid($response)) {
-			$this->service->getLogger()->warning('Invalid response '.json_encode(['isset' => isset($response), 'code' => $response->getStatusCode() === 200, 'type' => str_contains($response->getHeaderLine('Content-Type'), 'application/pdf')]));
+			$this->service->getLogger()->warning('Invalid response '.json_encode([
+				                                                                     'isset' => isset($response),
+				                                                                     'code'  => $response->getStatusCode() === 200,
+				                                                                     'type'  => str_contains($response->getHeaderLine('Content-Type'),
+				                                                                                             'application/pdf'),
+			                                                                     ]));
 			// Error - will be logged by the GotenbergService
 			return '';
 		}
@@ -87,18 +91,20 @@ class Chromium
 	 * @return bool
 	 */
 	protected function isResponseValid(ResponseInterface $response) : bool {
-		return $response->getStatusCode() === 200 && str_contains($response->getHeaderLine('Content-Type'), 'application/pdf');
+		return $response->getStatusCode() === 200 && str_contains($response->getHeaderLine('Content-Type'),
+		                                                          'application/pdf');
 	}
 
 	/**
 	 * @param string               $html URL to convert to PDF
 	 * @param array<string, mixed> $data Additional data
+	 * @param string[] $additionalFiles
 	 *
 	 * @return string Returns the PDF content or empty string on error
 	 * @see https://gotenberg.dev/docs/modules/chromium#html
 	 *
 	 */
-	public function getFromHTML(string $html, array $data = []) : string {
+	public function getFromHTML(string $html, array $data = [], array $additionalFiles = []) : string {
 		$data = array_merge($this::DEFAULT_DATA, $data);
 		$htmlFile = $this->getTmpDir().'index.html';
 		file_put_contents($htmlFile, $html);
@@ -106,10 +112,59 @@ class Chromium
 			'name'     => 'files',
 			'contents' => Utils::tryFopen($htmlFile, 'r'),
 		];
+		foreach ($additionalFiles as $file) {
+			$data[] = [
+				'name'     => 'files',
+				'contents' => Utils::tryFopen($file, 'r'),
+			];
+		}
 		$response = $this->service->post($this::PATHS['html'], $data);
 
 		if (!isset($response) || !$this->isResponseValid($response)) {
-			$this->service->getLogger()->warning('Invalid response '.json_encode(['isset' => isset($response), 'code' => $response->getStatusCode() === 200, 'type' => str_contains($response->getHeaderLine('Content-Type'), 'application/pdf')]));
+			$this->service->getLogger()->warning('Invalid response '.json_encode([
+				                                                                     'isset' => isset($response),
+				                                                                     'code'  => $response->getStatusCode() === 200,
+				                                                                     'type'  => str_contains($response->getHeaderLine('Content-Type'),
+				                                                                                             'application/pdf'),
+			                                                                     ]));
+			// Error - will be logged by the GotenbergService
+			return '';
+		}
+
+		$response->getBody()->rewind();
+		return $response->getBody()->getContents();
+	}
+
+	/**
+	 * @param string               $html URL to convert to PDF
+	 * @param array<string, mixed> $data Additional data
+	 * @param string[]             $additionalFiles
+	 *
+	 * @return string Returns the PDF content or empty string on error
+	 * @see https://gotenberg.dev/docs/modules/chromium#html
+	 *
+	 */
+	public function getFromHTMLFile(string $htmlFile, array $data = [], array $additionalFiles = []) : string {
+		$data = array_merge($this::DEFAULT_DATA, $data);
+		$data[] = [
+			'name'     => 'files',
+			'contents' => Utils::tryFopen($htmlFile, 'r'),
+		];
+		foreach ($additionalFiles as $file) {
+			$data[] = [
+				'name'     => 'files',
+				'contents' => Utils::tryFopen($file, 'r'),
+			];
+		}
+		$response = $this->service->post($this::PATHS['html'], $data);
+
+		if (!isset($response) || !$this->isResponseValid($response)) {
+			$this->service->getLogger()->warning('Invalid response '.json_encode([
+				                                                                     'isset' => isset($response),
+				                                                                     'code'  => $response->getStatusCode() === 200,
+				                                                                     'type'  => str_contains($response->getHeaderLine('Content-Type'),
+				                                                                                             'application/pdf'),
+			                                                                     ]));
 			// Error - will be logged by the GotenbergService
 			return '';
 		}
@@ -138,7 +193,8 @@ class Chromium
 		$data = array_merge($this::DEFAULT_DATA, $data);
 		$htmlFile = $this->getTmpDir().'index.html';
 		$mdFile = $this->getTmpDir().'file.md';
-		file_put_contents($htmlFile, '<!doctype html>
+		file_put_contents($htmlFile,
+		                  '<!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
@@ -151,16 +207,21 @@ class Chromium
 		file_put_contents($mdFile, $markdown);
 		$data[] = [
 			'name'     => 'files',
-			'contents' => '@'.$htmlFile
+			'contents' => '@'.$htmlFile,
 		];
 		$data[] = [
 			'name'     => 'files',
-			'contents' => '@'.$mdFile
+			'contents' => '@'.$mdFile,
 		];
 		$response = $this->service->post($this::PATHS['html'], $data);
 
 		if (!isset($response) || !$this->isResponseValid($response)) {
-			$this->service->getLogger()->warning('Invalid response '.json_encode(['isset' => isset($response), 'code' => $response->getStatusCode() === 200, 'type' => str_contains($response->getHeaderLine('Content-Type'), 'application/pdf')]));
+			$this->service->getLogger()->warning('Invalid response '.json_encode([
+				                                                                     'isset' => isset($response),
+				                                                                     'code'  => $response->getStatusCode() === 200,
+				                                                                     'type'  => str_contains($response->getHeaderLine('Content-Type'),
+				                                                                                             'application/pdf'),
+			                                                                     ]));
 			// Error - will be logged by the GotenbergService
 			return '';
 		}

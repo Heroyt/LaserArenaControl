@@ -16,6 +16,10 @@ parameters:
 		timeout: 15.0
 	redis:
 		host: redis
+	rpc:
+		connection: 'tcp://localhost:6001'
+	jobs:
+		queue: tasks
 orisai.console:
 	name: 'Laser arena Control'
 orisai.scheduler:
@@ -26,9 +30,9 @@ orisai.scheduler:
 		gamesSync:
 			expression: */5 * * * *
 			callback: [@cron.gamesSync, 'run']
-		gamesPrecache:
-			expression: * * * * *
-			callback: [@cron.gamesPrecache, 'run']
+		#gamesPrecache:
+		#	expression: * * * * *
+		#	callback: [@cron.gamesPrecache, 'run']
 		vestSync:
 			expression: */15 * * * *
 			callback: [@cron.vestSync, 'run']
@@ -44,6 +48,9 @@ services:
 
 	image: App\Services\ImageService([1000,600,250])
 
+	rpc:
+		type: Spiral\Goridge\RPC\RPC
+		create: Spiral\Goridge\RPC\RPC::create(%rpc.connection%)
 	redis:
 		create: \Redis
 		setup:
@@ -67,7 +74,7 @@ services:
 
 	gotenberg: App\Services\GotenbergService(%gotenberg.host%, %gotenberg.port%)
 	resultPrint: App\Services\ResultPrintService
-	resultPrecache: App\Services\ResultsPrecacheService
+	resultPrecache: App\Services\ResultsPrecacheService(mode: 'queue')
 
 	lasermaxx.regression: App\GameModels\Tools\Lasermaxx\RegressionStatCalculator
 	evo5.simulator: App\Services\Evo5\GameSimulator
@@ -79,6 +86,16 @@ services:
 	cron.logArchive: App\Cron\LogArchiveJob
 	cron.gamesPrecache: App\Cron\GamesPrecacheJob
 	cron.resultsImport: App\Cron\ResultsImportJob
+
+	# Jobs queue
+	jobs: Spiral\RoadRunner\Jobs\Jobs
+	queue:
+		type: Spiral\RoadRunner\Jobs\QueueInterface
+		create: @jobs::connect(%jobs.queue%)
+	taskProducer: App\Services\TaskProducer(@queue)
+
+	# Jobs tasks
+	task.gamesPrecache: App\Tasks\GamePrecacheTask
 
 	result.parser: App\Tools\ResultParsing\ResultsParser
 	result.parser.evo5: App\Tools\ResultParsing\Evo5\ResultsParser

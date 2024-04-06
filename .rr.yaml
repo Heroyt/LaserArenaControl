@@ -1,0 +1,41 @@
+version: "3"
+server:
+  command: "php psr-worker.php"
+
+rpc:
+  listen: tcp://0.0.0.0:6001
+
+http:
+  address: 0.0.0.0:8001
+  middleware: [ "gzip", "headers" ]
+  headers:
+    cors:
+      allowed_origin: "*"
+      allowed_headers: "*"
+      allowed_methods: "GET,POST,PUT,DELETE"
+      allow_credentials: true
+      exposed_headers: "Cache-Control,Content-Language,Content-Type,Expires,Last-Modified,Pragma"
+      max_age: 600
+      # Status code to use for successful OPTIONS requests. Default value is 200.
+      options_success_status: 200
+      # Debugging flag adds additional output to debug server side CORS issues, consider disabling in production.
+      debug: false
+  fcgi:
+    address: tcp://0.0.0.0:9000
+
+jobs:
+  # List of RoadRunner queues that can be processed by
+  # the consumer specified in the "server" section.
+  consume: [ "tasks" ]
+  pipelines:
+    tasks: # RoadRunner queue identifier
+      driver: memory    # - Queue driver name
+      config:
+        priority: 10
+        prefetch: 10
+
+# do not use development mode in production
+logs:
+  encoding: console
+  level: debug
+  mode: development

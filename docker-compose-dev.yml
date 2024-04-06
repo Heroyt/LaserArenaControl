@@ -75,6 +75,7 @@ services:
       - db
     ports:
       - "8001:80"
+      - "443:443"
     networks:
       - backend
       - frontend

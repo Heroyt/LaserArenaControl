@@ -61,6 +61,12 @@
     "ext-redis": "*",
     "zircote/swagger-php": "^4.8",
     "ext-igbinary": "*"
+    "ext-igbinary": "*",
+    "ext-gd": "*",
+    "spiral/roadrunner": "^2023.3",
+    "spiral/roadrunner-worker": "^3.5",
+    "spiral/roadrunner-http": "^3.5",
+    "spiral/roadrunner-jobs": "^4.3"
   },
   "require-dev": {
     "roave/security-advisories": "dev-latest",

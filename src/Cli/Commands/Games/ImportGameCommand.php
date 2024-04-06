@@ -36,11 +36,19 @@ class ImportGameCommand extends Command
 			InputOption::VALUE_NONE,
 			'Import all games in a directory - ignore modification time.'
 		);
+		$this->addOption(
+			'limit',
+			'l',
+			InputOption::VALUE_REQUIRED,
+			'Limit games to import.'
+		);
 		$this->addArgument('directory', InputArgument::REQUIRED, 'Results directory');
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output): int {
 		$dir = $input->getArgument('directory');
+		$limit = (int) $input->getOption('limit');
+
 		if (!file_exists($dir) || !is_dir($dir)) {
 			$output->writeln(
 				Colors::color(ForegroundColors::RED) . 'Error: argument must be a valid directory.' . Colors::reset()
@@ -48,7 +56,7 @@ class ImportGameCommand extends Command
 			return self::FAILURE;
 		}
 
-		$response = $this->importService->import($dir, $input->getOption('all'), $output);
+		$response = $this->importService->import($dir, $input->getOption('all'), $limit, $output);
 		if ($response instanceof ErrorDto) {
 			$output->writeln(
 				Colors::color(ForegroundColors::RED) .

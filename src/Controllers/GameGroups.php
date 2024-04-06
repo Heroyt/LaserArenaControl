@@ -21,8 +21,8 @@ class GameGroups extends Controller
 {
 
 	#[Get('/gameGroups')]
-	public function listGroups(): ResponseInterface {
-		$groups = isset($_GET['all']) ? GameGroup::getAll() : GameGroup::getActive();
+	public function listGroups(Request $request) : ResponseInterface {
+		$groups = $request->getGet('all') !== null ? GameGroup::getAll() : GameGroup::getActive();
 		$data = [];
 		foreach ($groups as $group) {
 			$groupData = $group->jsonSerialize();

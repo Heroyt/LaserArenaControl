@@ -71,8 +71,8 @@ class Results extends Controller
 			/** @phpstan-ignore-next-line */
 			$this->params['selected'] = $this->params['games'][0] ?? null;
 		}
-		$this->params['selectedStyle'] = (int)($_GET['style'] ?? PrintStyle::getActiveStyleId());
-		$this->params['selectedTemplate'] = $_GET['template'] ?? Info::get('default_print_template', 'default');
+		$this->params['selectedStyle'] = (int) $request->getGet('style', PrintStyle::getActiveStyleId());
+		$this->params['selectedTemplate'] = $request->getGet('template', Info::get('default_print_template', 'default'));
 		$this->params['styles'] = PrintStyle::getAll();
 		$this->params['templates'] = PrintTemplate::getAll();
 		return $this->view('pages/results/index');
@@ -100,7 +100,9 @@ class Results extends Controller
 			$pdfFile = $this->printService->getResultsPdf($game, $style, $template, $copies, $cache);
 			if ($pdfFile !== '' && file_exists($pdfFile)) {
 				return new Response(
-					200, ['Content-Type' => 'application/pdf;filename=results.pdf'], fopen($pdfFile, 'rb')
+					200,
+					['Content-Type' => 'application/pdf;filename=results.pdf'],
+					fopen($pdfFile, 'rb')
 				);
 			}
 		}

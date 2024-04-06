@@ -20,8 +20,8 @@ class GamesList extends Controller
 	protected string $title       = 'Games list';
 	protected string $description = '';
 
-	public function show(): ResponseInterface {
-		$this->params['date'] = new DateTime($_GET['date'] ?? 'now');
+	public function show(Request $request) : ResponseInterface {
+		$this->params['date'] = new DateTime($request->getGet('date', 'now'));
 		$this->params['games'] = GameFactory::getByDate($this->params['date'], true);
 		$this->params['gameCountsPerDay'] = GameFactory::getGamesCountPerDay('d.m.Y');
 		return $this->view('pages/games-list/index');

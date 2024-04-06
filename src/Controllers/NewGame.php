@@ -14,6 +14,7 @@ use App\Tools\GameLoading\GameLoader;
 use LAC\Modules\Core\ControllerDecoratorInterface;
 use Lsr\Core\Controllers\Controller;
 use Lsr\Core\Exceptions\ValidationException;
+use Lsr\Core\Requests\Request;
 use Lsr\Core\Templating\Latte;
 use Lsr\Exceptions\TemplateDoesNotExistException;
 use Lsr\Interfaces\RequestInterface;
@@ -58,13 +59,14 @@ class NewGame extends Controller
 	 * @throws TemplateDoesNotExistException
 	 * @throws Throwable
 	 */
-	public function show(): ResponseInterface {
+	public function show(Request $request) : ResponseInterface {
 		$this->hookedTemplates = new HookedTemplates();
 		$this->params['addedTemplates'] = $this->hookedTemplates;
 		$this->params['featureConfig'] = $this->featureConfig;
 		$this->params['addCss'] = ['pages/newGame.css'];
-		$this->params['loadGame'] = !empty($_GET['game']) ? GameFactory::getByCode($_GET['game']) : null;
-		$this->params['system'] = $_GET['system'] ?? first(GameFactory::getSupportedSystems());
+		$game = $request->getGet('game');
+		$this->params['loadGame'] = !empty($game) ? GameFactory::getByCode($game) : null;
+		$this->params['system'] = $request->getGet('system', first(GameFactory::getSupportedSystems()));
 		$this->params['vests'] = Vest::getForSystem($this->params['system']);
 		$this->params['colors'] = GameFactory::getAllTeamsColors()[$this->params['system']];
 		$this->params['teamNames'] = GameFactory::getAllTeamsNames()[$this->params['system']];

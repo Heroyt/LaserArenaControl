@@ -28,9 +28,9 @@ class GameHelpers extends ApiController
 	 * @return never
 	 * @throws JsonException
 	 */
-	public function getLoadedGameInfo(): ResponseInterface {
+	public function getLoadedGameInfo(Request $request) : ResponseInterface {
 		// Allow for filtering games just from one system
-		$system = $_GET['system'] ?? 'all';
+		$system = $request->getGet('system', 'all');
 		$systems = [$system];
 
 		// Fallback to all available systems

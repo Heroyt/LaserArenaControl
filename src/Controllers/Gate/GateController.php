@@ -42,7 +42,7 @@ class GateController extends Controller
 	 * @return ResponseInterface
 	 * @throws JsonException
 	 */
-	public function show(string $gate = 'default', Request $request) : ResponseInterface {
+	public function show(Request $request, string $gate = 'default') : ResponseInterface {
 		$system = $request->getGet('system', 'all');
 
 		$gateType = GateType::getBySlug(empty($gate) ? 'default' : $gate);

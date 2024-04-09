@@ -79,3 +79,19 @@
 		<i class="fa-solid fa-user-group"></i>
 	</button>
 {/define}
+
+{define gameActionPlanPrecache, App\GameModels\Game\Game|null $game = null}
+    <button class="btn btn-info plan-precache" data-toggle="tooltip"
+            title="{lang 'Předpřipravit výsledky pro tisk'}"
+            {ifset $game}data-code="{$game->code}"{/ifset}>
+        <i class="fa-solid fa-file-pdf"></i>
+    </button>
+{/define}
+
+{define gameActionPlanHighlights, App\GameModels\Game\Game|null $game = null}
+    <button class="btn btn-info plan-highlights" data-toggle="tooltip"
+            title="{lang 'Zkontrolovat zajímavosti'}"
+            {ifset $game}data-code="{$game->code}"{/ifset}>
+        <i class="fa-solid fa-circle-info"></i>
+    </button>
+{/define}

@@ -30,6 +30,8 @@
 				{include gameActionReImport}
                 {if !\App\Core\App::isProduction()}
 					{include gameActionRecalcSkill}
+                    {include gameActionPlanPrecache}
+                    {include gameActionPlanHighlights}
 				{/if}
 			</div>
 		</div>
@@ -121,6 +123,8 @@
             {if !\App\Core\App::isProduction()}
 				{include gameActionGateVests, $game}
 				{include gameActionRecalcSkill, $game}
+                {include gameActionPlanPrecache, $game}
+                {include gameActionPlanHighlights, $game}
 			{/if}
 			{include gameActionSwitchToSolo, $game}
 		</div>
@@ -135,6 +139,8 @@
         {if !\App\Core\App::isProduction()}
 			{include gameActionGateVests, $game}
 			{include gameActionRecalcSkill, $game}
+            {include gameActionPlanPrecache, $game}
+            {include gameActionPlanHighlights, $game}
 		{/if}
 		{include gameActionSwitchToSolo, $game}
 		{include gameActionResults, $game}

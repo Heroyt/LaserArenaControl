@@ -28,6 +28,7 @@ await fontawesomeSubset(
                 'download',
                 'edit',
                 'eye',
+                'file-pdf',
                 'filter',
                 'gear',
                 'gun',

@@ -96,6 +96,7 @@ services:
 
 	# Jobs tasks
 	task.gamesPrecache: App\Tasks\GamePrecacheTask
+	task.gamesHighlights: App\Tasks\GameHighlightsTask
 
 	result.parser: App\Tools\ResultParsing\ResultsParser
 	result.parser.evo5: App\Tools\ResultParsing\Evo5\ResultsParser

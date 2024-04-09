@@ -7,6 +7,7 @@ use App\GameModels\Factory\GameFactory;
 use App\GameModels\Game\Game;
 use App\GameModels\Game\PrintStyle;
 use App\Tasks\GamePrecacheTask;
+use App\Tasks\Payloads\GameHighlightsPayload;
 use App\Tasks\Payloads\GamePrecachePayload;
 use Redis;
 use Throwable;
@@ -37,6 +38,7 @@ readonly class ResultsPrecacheService
 		if ($this->mode === 'queue') {
 			foreach ($codes as $code) {
 				$this->taskProducer->plan(GamePrecacheTask::class, new GamePrecachePayload($code));
+				$this->taskProducer->plan(GameHighlightsPayload::class, new GameHighlightsPayload($code));
 			}
 			$this->taskProducer->dispatch();
 			return count($codes);

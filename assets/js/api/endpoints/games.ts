@@ -32,7 +32,7 @@ export async function getLastGames(limit: number = 10, orderBy: string = 'start'
 }
 
 export async function getGameHighlights(code: string): Promise<Highlight[]> {
-	return fetchGet(`/api/laserliga/games/${code}/highlights`, null, {'Accept': 'application/json'});
+	return fetchGet(`/api/games/${code}/highlights`, null, {'Accept': 'application/json'});
 }
 
 export async function reimportResults(code: string): Promise<FormSaveResponse> {

@@ -127,3 +127,15 @@ services:
 	command.regression.update: App\Cli\Commands\Regression\UpdateRegressionModelsCommand
 	command.translation.compile: App\Cli\Commands\Translation\CompileTranslationsCommand
 	command.translation.removeComments: App\Cli\Commands\Translation\RemoveCommentsCommand
+
+	gameHighlight: App\Services\GameHighlight\GameHighlightService(tagged(highlightChecker))
+
+search:
+	highlightCheckers:
+		in: '%constants.appDir%/src/Services/GameHighlight/Checkers'
+		implements:
+			- App\Services\GameHighlight\GameHighlightChecker
+			- App\Services\GameHighlight\PlayerHighlightChecker
+			- App\Services\GameHighlight\TeamHighlightChecker
+		tags:
+			- highlightChecker

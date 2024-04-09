@@ -14,107 +14,106 @@
 <!DOCTYPE html>
 <html lang="cs">
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport"
-		  content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-	<meta http-equiv="X-UA-Compatible" content="ie=edge">
-	<!-- Favicon -->
-	<link rel="apple-touch-icon" sizes="180x180" href="{getUrl}assets/favicon/apple-touch-icon.png">
-	<link rel="icon" type="image/png" sizes="192x192" href="{getUrl}assets/favicon/android-chrome-192x192.png">
-	<link rel="icon" type="image/png" sizes="32x32" href="{getUrl}assets/favicon/favicon-32x32.png">
-	<link rel="icon" type="image/png" sizes="16x16" href="{getUrl}assets/favicon/favicon-16x16.png">
-	<link rel="icon" href="{getUrl}assets/favicon/favicon.ico">
-	<link rel="manifest" href="{getUrl}assets/manifest.json">
-	<meta name="theme-color" content="#192029">
-	<meta name="apple-mobile-web-app-capable" content="yes">
-	<!-- Google Fonts Montserrat -->
-	<link rel="stylesheet"
-		  href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"/>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="{getUrl}assets/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="{getUrl}assets/favicon/android-chrome-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="{getUrl}assets/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="{getUrl}assets/favicon/favicon-16x16.png">
+    <link rel="icon" href="{getUrl}assets/favicon/favicon.ico">
+    <link rel="manifest" href="{getUrl}assets/manifest.json">
+    <meta name="theme-color" content="#192029">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <!-- Google Fonts Montserrat -->
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"/>
     <link rel="stylesheet" href="{getUrl}dist/main.css?v={\App\Core\App::getCacheVersion()}">
-	{block addHead}{/block}
-	{\Tracy\Debugger::renderLoader()|noescape}
-	{ifset $game}
-		<style>
-			:root {
-			{foreach $game->getTeamColors() as $key => $color} {var string $varName1 = '--team-'.$key} {var string $varName2 = '--team-'.$key.'-text'} {$varName1}: {$color|noescape};
-			{$varName2}:{\App\Tools\Color::getFontColor($color)|noescape};
-			{/foreach}
-			}
+    {block addHead}{/block}
+    {ifset $game}
+        <style>
+            :root {
+            {foreach $game->getTeamColors() as $key => $color} {var string $varName1 = '--team-'.$key} {var string $varName2 = '--team-'.$key.'-text'} {$varName1}: {$color|noescape};
+            {$varName2}:{\App\Tools\Color::getFontColor($color)|noescape};
+            {/foreach}
+            }
 
-			{foreach $game->getTeamColors() as $key => $color}
-			.bg-team-{$key} {
-				--bg-color: var(--team-{$key});
-				--text-color: var(--team-{$key}-text);
-				background-color: var(--team-{$key});
-				color: var(--team-{$key}-text);
-			}
+            {foreach $game->getTeamColors() as $key => $color}
+            .bg-team-{$key} {
+                --bg-color: var(--team-{$key});
+                --text-color: var(--team-{$key}-text);
+                background-color: var(--team-{$key});
+                color: var(--team-{$key}-text);
+            }
 
-			.text-team-{$key} {
-				color: var(--team-{$key});
+            .text-team-{$key} {
+                color: var(--team-{$key});
 
-			text {
-				fill: var(--team-{$key});
-				stroke: var(--team-{$key});
-			}
+                text {
+                    fill: var(--team-{$key});
+                    stroke: var(--team-{$key});
+                }
 
-			}
+            }
 
-			{/foreach}
-		</style>
-	{/ifset}
-	{ifset $style}
-		{$style->getCssClasses()|noescape}
-	{/ifset}
-	<style n:if="$template->orientation === App\GameModels\Game\Enums\PrintOrientation::landscape">
-		@page {
-			size: A4 landscape;
-			margin: 3mm 3.5mm;
-		}
+            {/foreach}
+        </style>
+    {/ifset}
+    {ifset $style}
+        {$style->getCssClasses()|noescape}
+    {/ifset}
+    <style n:if="$template->orientation === App\GameModels\Game\Enums\PrintOrientation::landscape">
+        @page {
+            size: A4 landscape;
+            margin: 3mm 3.5mm;
+        }
 
-		.container-print-wrapper {
-			aspect-ratio: 210 / 297;
-			height: 209mm;
-			width: 297mm;
-		}
+        .container-print-wrapper {
+            aspect-ratio: 210 / 297;
+            height: 209mm;
+            width: 297mm;
+        }
 
-		.container-print-wrapper .tip {
-			bottom: 2%;
-			background: transparent;
-			width: 50%;
-			left: 25%;
-		}
+        .container-print-wrapper .tip {
+            bottom: 2%;
+            background: transparent;
+            width: 50%;
+            left: 25%;
+        }
 
-		@media print {
-			.container-print-wrapper {
-				padding: 3mm 3.5mm;
-			}
+        @media print {
+            .container-print-wrapper {
+                padding: 3mm 3.5mm;
+            }
 
-			.container-print-wrapper .container-print {
-				margin-top: 0;
-			}
-		}
-	</style>
+            .container-print-wrapper .container-print {
+                margin-top: 0;
+            }
+        }
+    </style>
     <title>{lang 'Výsledky hry'}</title>
 </head>
 <body>
 {for $i = 0; $i < $copies; $i++}
-	<main class="container-print-wrapper">
-		<img src="{getUrl}{($template->orientation === App\GameModels\Game\Enums\PrintOrientation::landscape ? $style->bgLandscape : $style->bg)|noescape}"
-			 alt="background" class="bg-img">
-		<div class="container-print {include containerClasses}">
-			{include content}
-		</div>
-		<div class="tip">
-			{var App\GameModels\Tip|null $tip = \App\GameModels\Tip::random()}
-			<span class="content">{sprintf(lang('Tip #%d', context: 'tips'), $tip?->id)}: {lang $tip?->text, context: 'tips'}</span>
-		</div>
-	</main>
+    <main class="container-print-wrapper">
+        <img src="{getUrl}{($template->orientation === App\GameModels\Game\Enums\PrintOrientation::landscape ? $style->bgLandscape : $style->bg)|noescape}"
+             alt="background" class="bg-img">
+        <div class="container-print {include containerClasses}">
+            {include content}
+        </div>
+        <div class="tip">
+            {var App\GameModels\Tip|null $tip = \App\GameModels\Tip::random()}
+            <span class="content">{sprintf(lang('Tip #%d', context: 'tips'), $tip?->id)}: {lang $tip?->text, context: 'tips'}</span>
+        </div>
+    </main>
 {/for}
 {include svgSymbols}
-{if !isset($_GET['view'])}
-	<script>
-		window.print();
-	</script>
-{/if}
+<script>
+    if (!window.location.search.includes('view')) {
+        window.print();
+    }
+</script>
 </body>
 </html>

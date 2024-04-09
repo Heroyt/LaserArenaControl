@@ -26,6 +26,7 @@ use Lsr\Helpers\Tracy\TranslationTracyPanel;
 use Nette\Bridges\DITracy\ContainerPanel;
 use Nette\Bridges\HttpTracy\SessionPanel;
 use Tracy\Debugger;
+use Tracy\NativeSession;
 
 if (!defined('ROOT')) {
 	define("ROOT", dirname(__DIR__).'/');
@@ -50,23 +51,21 @@ if (!is_dir(UPLOAD_DIR) && !mkdir(UPLOAD_DIR) && (!file_exists(UPLOAD_DIR) || !i
 
 // Enable tracy
 Debugger::$editor = 'phpstorm://open?file=%file&line=%line';
-
 Debugger::$dumpTheme = 'dark';
+Debugger::setSessionStorage(new NativeSession());
 
 // Register custom tracy panels
 Debugger::getBar()
-				->addPanel(new TimerTracyPanel())
-				->addPanel(new CacheTracyPanel())
-				->addPanel(new DbTracyPanel())
-				->addPanel(new TranslationTracyPanel())
-				->addPanel(new RoutingTracyPanel());
+	->addPanel(new TimerTracyPanel())
+	->addPanel(new CacheTracyPanel())
+	->addPanel(new DbTracyPanel())
+	->addPanel(new TranslationTracyPanel())
+	->addPanel(new RoutingTracyPanel());
 
 Loader::init();
 
 define('CHECK_TRANSLATIONS', (bool) (App::getConfig()['General']['TRANSLATIONS'] ?? false));
-define('TRANSLATIONS_COMMENTS', (bool)(App::getConfig()['General']['TRANSLATIONS_COMMENTS'] ?? false));
-
-Debugger::enable(PRODUCTION ? Debugger::Production : Debugger::Development, LOG_DIR);
+define('TRANSLATIONS_COMMENTS', (bool) (App::getConfig()['General']['TRANSLATIONS_COMMENTS'] ?? false));
 
 // Translations update
 $translationChange = false;
@@ -78,12 +77,12 @@ if (!PRODUCTION) {
 	/** @var string[] $languages */
 	$languages = App::getSupportedLanguages();
 	foreach ($languages as $lang => $country) {
-		$concatLang = $lang . '_' . $country;
-		$path = LANGUAGE_DIR . '/' . $concatLang;
+		$concatLang = $lang.'_'.$country;
+		$path = LANGUAGE_DIR.'/'.$concatLang;
 		if (!is_dir($path)) {
 			continue;
 		}
-		$file = $path . '/LC_MESSAGES/' . LANGUAGE_FILE_NAME . '.po';
+		$file = $path.'/LC_MESSAGES/'.LANGUAGE_FILE_NAME.'.po';
 		$translations[$concatLang] = $poLoader->loadFile($file);
 	}
 	Timer::stop('core.init.translations');

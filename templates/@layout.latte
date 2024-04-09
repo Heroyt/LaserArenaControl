@@ -56,7 +56,7 @@
     <link n:foreach="$addCss as $file" rel="stylesheet"
                                        href="{getUrl}dist/{$file}?v={\App\Core\App::getCacheVersion()}">
     <title>{$page->getTitle()}</title>
-    {\Tracy\Debugger::renderLoader()|noescape}
+    {*\Tracy\Debugger::renderLoader()|noescape*}
     {include addHead}
 </head>
 <body {ifset $_COOKIE['mode']}class="{$_COOKIE['mode']}Mode"{/ifset}>

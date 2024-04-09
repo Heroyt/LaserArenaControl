@@ -40,8 +40,11 @@ services:
       REDIS_HOST: "redis"
   php:
     restart: always
-    image: "heroyt/laser-arena-control:dev-nginx-latest"
+    image: "heroyt/laser-arena-control:dev-roadrunner-latest"
     working_dir: /var/www/
+    command:
+      - /bin/sh
+      - ./startRR.sh
     links:
       - db
       - redis

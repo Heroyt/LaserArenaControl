@@ -1,0 +1,18 @@
+FROM heroyt/lac_core:roadrunner-latest AS project
+
+# Project files
+RUN mkdir -p "/var/www/.npm" && chown -R 33:33 "/var/www/.npm"
+RUN apt-get -y install sudo
+RUN cron
+
+# Move to project directory
+WORKDIR /var/www/html/
+
+ENV LAC_VERSION="dev"
+
+# Initialize crontab
+RUN crontab -l | { cat; echo "* * * * * /usr/local/bin/php /var/www/bin/scheduler.php >> /var/www/logs/cron.log 2>&1"; } | crontab -
+
+# Start command
+# Updates project, builds it and runs a start script which starts WS event server and Apache
+CMD sh ./startRR.sh

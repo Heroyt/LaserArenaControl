@@ -1,0 +1,79 @@
+FROM node:21-slim AS node_base
+FROM ghcr.io/roadrunner-server/roadrunner:latest AS roadrunner
+FROM php:8.2-cli-bullseye as setup
+
+#COPY --from=node_base / /
+COPY --from=roadrunner /usr/bin/rr /usr/local/bin/rr
+COPY --from=node_base /usr/local/lib/node_modules /usr/local/lib/node_modules
+COPY --from=node_base /usr/local/bin/node /usr/local/bin/node
+RUN ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm
+
+# Setup
+RUN apt-get update
+RUN apt-get -y install apt-utils wget git build-essential gettext cron zlib1g-dev
+
+#RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
+COPY docker/core/php.ini "$PHP_INI_DIR/php.ini"
+COPY docker/core/php-staging.ini "$PHP_INI_DIR/php-staging.ini"
+
+# SPX
+WORKDIR /home
+RUN git clone https://github.com/NoiseByNorthwest/php-spx.git
+WORKDIR /home/php-spx
+RUN git checkout release/latest
+RUN phpize
+RUN ./configure
+RUN make
+RUN make install
+RUN docker-php-ext-enable spx
+
+COPY docker/core/spx.ini "$PHP_INI_DIR/conf.d/docker-php-ext-spx.ini"
+
+FROM setup as extensions
+
+# PHP extensions
+RUN apt-get install -y libzip-dev unzip libicu-dev cifs-utils ffmpeg libpng-dev libwebp-dev
+RUN apt install -y curl libcurl4-openssl-dev
+RUN docker-php-ext-install mysqli curl gettext sockets pdo_mysql zip pcntl intl opcache gd
+# Imagick
+RUN apt-get update && apt-get install -y libmagickwand-dev --no-install-recommends && rm -rf /var/lib/apt/lists/*
+RUN pecl install imagick
+# Igbinary
+RUN pecl install igbinary
+# Enable extensions
+RUN docker-php-ext-enable mysqli curl gettext sockets pdo_mysql zip pcntl intl opcache imagick igbinary
+RUN docker-php-ext-configure gd --with-jpeg --with-freetype --with-webp && docker-php-ext-install gd
+
+#RUN apt-get -y install sudo
+
+# APCu cache
+RUN pecl install apcu
+RUN docker-php-ext-enable apcu
+
+# Redis
+RUN pecl install redis
+RUN docker-php-ext-enable redis
+
+FROM extensions as langs
+
+# Setup gettext languages
+RUN apt-get update && apt-get install -y locales locales-all
+RUN apt-get install -y locales \
+	&& sed -i -e 's/# cs_CZ.UTF-8 UTF-8/cs_CZ.UTF-8 UTF-8/' /etc/locale.gen \
+	&& sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen \
+	&& sed -i -e 's/# de_DE.UTF-8 UTF-8/de_DE.UTF-8 UTF-8/' /etc/locale.gen \
+	&& sed -i -e 's/# fr_FR.UTF-8 UTF-8/fr_FR.UTF-8 UTF-8/' /etc/locale.gen \
+	&& sed -i -e 's/# sk_SK.UTF-8 UTF-8/sk_SK.UTF-8 UTF-8/' /etc/locale.gen \
+	&& sed -i -e 's/# ru_RU.UTF-8 UTF-8/ru_RU.UTF-8 UTF-8/' /etc/locale.gen \
+    && dpkg-reconfigure --frontend=noninteractive locales
+RUN locale-gen cs_CZ.UTF-8
+RUN update-locale -y
+
+FROM langs as composer
+
+# Composer
+RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+RUN php -r "if (hash_file('sha384', 'composer-setup.php') === 'dac665fdc30fdd8ec78b38b9800061b4150413ff2e3b6f88543c636f7cd84f6db9189d43a81e5503cda447da73c7e5b6') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
+RUN php composer-setup.php
+RUN rm composer-setup.php
+RUN mv composer.phar /usr/local/bin/composer

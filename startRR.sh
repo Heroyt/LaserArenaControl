@@ -12,4 +12,7 @@ else
 fi
 
 # Run project
-php cron & rr serve -c .rr.yaml
+echo 'Starting...'
+echo $PWD
+rr -v
+cron & rr serve -d -p -c .rr.yaml

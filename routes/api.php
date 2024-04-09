@@ -14,6 +14,7 @@ use App\Controllers\Api\LaserLiga;
 use App\Controllers\Api\Logs;
 use App\Controllers\Api\Mount;
 use App\Controllers\Api\Results;
+use App\Controllers\Api\Tasks;
 use App\Controllers\Api\Updater;
 use Lsr\Core\Routing\Route;
 
@@ -58,10 +59,17 @@ $gamesGroup = $apiGroup->group('games')
 	->post('simulate', [Games::class, 'simulate'])
 	->group('{code}')
 	->get('', [Games::class, 'getGame'])
+	->post('group', [Games::class, 'setGroup'])
+	->post('sync', [Games::class, 'syncGame'])
 	->post('recalcSkill', [GameHelpers::class, 'recalcSkill'])
 	->post('recalcScores', [GameHelpers::class, 'recalcScores'])
-	->post('changeMode', [GameHelpers::class, 'changeGameMode']);
+	->post('changeMode', [GameHelpers::class, 'changeGameMode'])
+	->get('highlights', [Games::class, 'getHighlights']);
 
+
+$apiGroup->group('tasks')
+         ->post('precache', [Tasks::class, 'planGamePrecache'])
+         ->post('highlights', [Tasks::class, 'planGameHighlights']);
 
 $apiGroup->group('laserliga')->group('games')->group('{code}')->get('highlights', [LaserLiga::class, 'highlights']);
 

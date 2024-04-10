@@ -28,123 +28,132 @@
 	text-align: center;
 }
 
-#gate main .content.today-highlights {
-	font-size: 1.55rem;
-	grid-template-areas: 'logo logo highlights highlights highlights highlights highlights music music music'
+#gate main {
+	.timer.timer-today-highlights {
+		bottom: initial;
+		left: 2rem;
+		top: calc(26% - 3rem);
+		width: calc(20% - 1.2rem);
+	}
+
+	.content.today-highlights {
+		font-size: 1.55rem;
+		grid-template-areas: 'logo logo highlights highlights highlights highlights highlights music music music'
 			                   '. . highlights highlights highlights highlights highlights music music music'
 			                   '. . highlights highlights highlights highlights highlights players players players'
 			                   '. . highlights highlights highlights highlights highlights players players players';
 
 
-	.highlights-wrapper {
-		@extend %wrapper;
-		grid-area: highlights;
-	}
-
-	.music-modes-wrapper {
-		@extend %wrapper;
-		grid-area: music;
-
-		.music-modes {
-			mask-image: linear-gradient(180deg, #000 60%, transparent);
-			overflow-y: hidden;
+		.highlights-wrapper {
+			@extend %wrapper;
+			grid-area: highlights;
 		}
 
-		.music-mode {
-			@extend %data-block;
+		.music-modes-wrapper {
+			@extend %wrapper;
+			grid-area: music;
 
-			.name {
-				color: var(--primary);
-				font-weight: bold;
+			.music-modes {
+				mask-image: linear-gradient(180deg, #000 60%, transparent);
+				overflow-y: hidden;
 			}
 
-			.count {
-				text-align: right;
-			}
-		}
+			.music-mode {
+				@extend %data-block;
 
-		.no-music {
-			@extend %missing-data;
-		}
-	}
-
-	.top-players-wrapper {
-		@extend %wrapper;
-		grid-area: players;
-
-		.top-players {
-			mask-image: linear-gradient(180deg, #000 60%, transparent 90%);
-			overflow-y: hidden;
-		}
-
-		.player {
-			@extend %data-block;
-			grid-template-columns: 3rem 1fr auto;
-
-			.name {
-				color: var(--primary);
-				font-weight: bold;
-			}
-
-			.skill {
-				text-align: right;
-			}
-		}
-
-		.no-players {
-			@extend %missing-data;
-		}
-	}
-
-	.title {
-		align-self: end;
-		grid-area: title;
-	}
-
-	.highlights {
-		mask-image: linear-gradient(180deg, #000 70%, transparent 95%);
-		overflow-style: unset;
-		overflow-y: auto;
-		scrollbar-width: none;
-
-		&::-webkit-scrollbar {
-			display: none;
-		}
-
-		.no-highlights {
-			@extend %missing-data;
-		}
-
-		.highlight {
-			@extend %data-block;
-			grid-template-columns: 4rem 1fr 4rem;
-
-			svg {
-				max-height: 1.5em;
-				max-width: 4rem;
-			}
-
-			.description {
-				font-weight: 600;
-
-				.player-name {
+				.name {
 					color: var(--primary);
-					font-weight: 700;
+					font-weight: bold;
+				}
+
+				.count {
+					text-align: right;
 				}
 			}
 
-			.time {
-				text-align: right;
+			.no-music {
+				@extend %missing-data;
 			}
 		}
-	}
 
-	&.out {
-		animation: scale-out 500ms ease-in forwards;
-	}
+		.top-players-wrapper {
+			@extend %wrapper;
+			grid-area: players;
 
-	&.in {
-		animation: scale-in 500ms ease-in 200ms forwards;
-		opacity: 0;
+			.top-players {
+				mask-image: linear-gradient(180deg, #000 60%, transparent 90%);
+				overflow-y: hidden;
+			}
+
+			.player {
+				@extend %data-block;
+				grid-template-columns: 3rem 1fr auto;
+
+				.name {
+					color: var(--primary);
+					font-weight: bold;
+				}
+
+				.skill {
+					text-align: right;
+				}
+			}
+
+			.no-players {
+				@extend %missing-data;
+			}
+		}
+
+		.title {
+			align-self: end;
+			grid-area: title;
+		}
+
+		.highlights {
+			mask-image: linear-gradient(180deg, #000 70%, transparent 95%);
+			overflow-style: unset;
+			overflow-y: auto;
+			scrollbar-width: none;
+
+			&::-webkit-scrollbar {
+				display: none;
+			}
+
+			.no-highlights {
+				@extend %missing-data;
+			}
+
+			.highlight {
+				@extend %data-block;
+				grid-template-columns: 4rem 1fr 4rem;
+
+				svg {
+					max-height: 1.5em;
+					max-width: 4rem;
+				}
+
+				.description {
+					font-weight: 600;
+
+					.player-name {
+						color: var(--primary);
+						font-weight: 700;
+					}
+				}
+
+				.time {
+					text-align: right;
+				}
+			}
+		}
+
+		&.out {
+			animation: scale-out 500ms ease-in forwards;
+		}
+
+		&.in {
+			animation: scale-in 500ms ease-in 200ms forwards;
+			opacity: 0;
+		}
 	}
 }

@@ -17,6 +17,11 @@ export default class TodayHighlights extends DefaultScreen {
 	animateIn() {
 		super.animateIn();
 
+		const timer = this.content.parentElement.querySelector<HTMLDivElement>('.timer');
+		if (timer) {
+			timer.classList.add('timer-today-highlights');
+		}
+
 		const wrapper = this.content.querySelector<HTMLElement>('.highlights');
 		if (!wrapper) {
 			return;
@@ -43,10 +48,15 @@ export default class TodayHighlights extends DefaultScreen {
 		if (this.interval) {
 			clearInterval(this.interval);
 		}
+
+		const timer = this.content.parentElement.querySelector<HTMLDivElement>('.timer');
+		if (timer) {
+			timer.classList.remove('timer-today-highlights');
+		}
 	}
 
 	showTimer(): boolean {
-		return false;
+		return true;
 	}
 
 	private scrollStep(wrapper: HTMLElement, height: number, duration: number): void {

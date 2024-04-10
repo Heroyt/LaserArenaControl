@@ -2,6 +2,7 @@
 
 namespace App\Api\Response;
 
+use Dibi\Exception;
 use JsonSerializable;
 use OpenApi\Attributes as OA;
 use Throwable;
@@ -56,6 +57,9 @@ readonly class ErrorDto implements JsonSerializable
 				'code'    => $this->exception->getCode(),
 				'trace'   => $this->exception->getTrace(),
 			];
+        if ($this->exception instanceof Exception) {
+            $error['sql'] = $this->exception->getSql();
+        }
 		}
 
 		return $error;

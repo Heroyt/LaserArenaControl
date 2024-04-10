@@ -1,0 +1,74 @@
+{layout '../@layout.latte'}
+
+{varType string $screenHash}
+{varType App\Models\DataObjects\Highlights\HighlightDto[] $highlights}
+{varType int[] $musicCounts}
+{varType App\Models\MusicMode[] $musicModes}
+{varType App\GameModels\Game\Player[] $topPlayers}
+
+{define containerClasses}
+    today-highlights
+{/define}
+
+{define content}
+    <div class="highlights-wrapper">
+        <h1 class="title text-center text-white-forced" data-hash="{$screenHash}">
+            {lang 'Dnešní zajímavosti', context: 'gate'}
+        </h1>
+        <div class="highlights">
+            {foreach $highlights as $highlight}
+                <div class="highlight" data-rarity="{$highlight->rarity}">
+                    {svgIcon $highlight->getIcon(), 'auto', 'auto'}
+                    <div class="description">
+                        {$highlight->getFormattedDescription()|noescape}
+                    </div>
+                    <div class="time">
+                        {$highlight->datetime->format('H:i')}
+                    </div>
+                </div>
+            {else}
+                <div class="no-highlights">{lang 'Dnes zatím nejsou žádné zajímavosti.'}</div>
+            {/foreach}
+        </div>
+    </div>
+
+    <div class="music-modes-wrapper">
+        <h1 class="title text-center text-white-forced">
+            {lang 'Nejhranější hudba', context: 'gate'}
+        </h1>
+        <div class="music-modes">
+            {foreach $musicCounts as $id => $count}
+                {var App\Models\MusicMode $music = $musicModes[$id]}
+                <div class="music-mode">
+                    <div class="position">{$iterator->counter}.</div>
+                    <div class="name">{$music->name}</div>
+                    <div class="count">{$count}&times;</div>
+                </div>
+            {else}
+                <div class="no-music">
+                    {lang 'Nedostatečná data'}
+                </div>
+            {/foreach}
+        </div>
+    </div>
+
+    <div class="top-players-wrapper">
+        <h1 class="title text-center text-white-forced">
+            {lang 'Nejlepší hráči', context: 'gate'}
+        </h1>
+        <div class="top-players">
+            {foreach $topPlayers as $player}
+                <div class="player">
+                    <div class="position">{$iterator->counter}.</div>
+                    <div class="name">{$player->name}</div>
+                    <div class="skill">{$player->skill|number:0,',',' '} <i class="fa-solid fa-medal"></i></div>
+                </div>
+            {else}
+                <div class="no-players">
+                    {lang 'Nedostatečná data'}
+                </div>
+            {/foreach}
+        </div>
+    </div>
+
+{/define}

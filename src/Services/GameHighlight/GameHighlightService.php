@@ -8,9 +8,12 @@ use App\GameModels\Game\Team;
 use App\Models\DataObjects\Highlights\GameHighlight;
 use App\Models\DataObjects\Highlights\GameHighlightType;
 use App\Models\DataObjects\Highlights\HighlightCollection;
+use App\Models\DataObjects\Highlights\HighlightDto;
 use App\Services\FeatureConfig;
 use App\Services\LigaApi;
+use DateTimeInterface;
 use Dibi\Exception;
+use Dibi\Row;
 use GuzzleHttp\Exception\GuzzleException;
 use JsonException;
 use Lsr\Core\App;
@@ -22,7 +25,7 @@ class GameHighlightService
 {
 
 	public const  TABLE = 'game_highlights';
-	private const PLAYER_REGEXP = '/@([^@]+)@(?:<([^@]+)>)?/';
+    public const PLAYER_REGEXP = '/@([^@]+)@(?:<([^@]+)>)?/';
 
 	/** @var Player[][] */
 	private array $playerCache = [];
@@ -57,6 +60,60 @@ class GameHighlightService
 		}
 	}
 
+    /**
+     * @param  DateTimeInterface  $date
+     * @return HighlightDto[]
+     */
+    public function getHighlightsDataForDay(DateTimeInterface $date) : array {
+        $highlights = [];
+        /** @var Row{code:string,datetime:DateTimeInterface,rarity:int,type:string,description:string,players:string|null,object:string|null}[] $rows */
+        $rows = DB::select(self::TABLE, '*')
+                  ->where('DATE([datetime]) = %d AND [object] IS NOT NULL', $date)
+                  ->orderBy('rarity')
+                  ->desc()
+                  ->cacheTags(
+                    'highlights',
+                    'highlights/'.$date->format('Y-m-d'),
+                    'games/'.$date->format('Y-m-d')
+                  )
+                  ->fetchAll();
+        foreach ($rows as $row) {
+            $highlights[] = new HighlightDto(
+              $row->code,
+              $row->datetime,
+              $row->rarity,
+              GameHighlightType::from($row->type),
+              $row->description,
+              isset($row->players) ? json_decode($row->players, true) : null,
+              isset($row->object) ? igbinary_unserialize($row->object) : null,
+            );
+        }
+        return $highlights;
+    }
+
+    public function getHighlightsForDay(DateTimeInterface $date) : HighlightCollection {
+        /** @var string[] $rows */
+        $rows = DB::select(self::TABLE, '[object]')
+                  ->where('DATE([datetime]) = %d AND [object] IS NOT NULL', $date)
+                  ->orderBy('rarity')
+                  ->desc()
+                  ->cacheTags(
+                    'highlights',
+                    'highlights/'.$date->format('Y-m-d'),
+                    'games/'.$date->format('Y-m-d')
+                  )
+                  ->fetchPairs();
+
+        $highlights = new HighlightCollection();
+        foreach ($rows as $row) {
+            $object = igbinary_unserialize($row);
+            if ($object instanceof GameHighlight) {
+                $highlights->add($object);
+            }
+        }
+        return $highlights;
+    }
+
 	/**
 	 * Get all highlight for a game
 	 *
@@ -77,14 +134,7 @@ class GameHighlightService
 				'game.'.$game->code.'.highlights.'.App::getShortLanguageCode(),
 				$highlights,
 				[
-					$this->cache::Tags => [
-						'highlights',
-						'games',
-						'games/'.$game::SYSTEM,
-						'games/'.$game::SYSTEM.'/'.$game->id,
-						'games/'.$game->code,
-						'games/'.$game->code.'/highlights',
-					],
+          $this->cache::Tags => $this->getCacheTags($game),
 				]
 			);
 			return $highlights;
@@ -97,14 +147,7 @@ class GameHighlightService
 				return $this->loadHighlightsForGame($game);
 			},
 			[
-				$this->cache::Tags => [
-					'highlights',
-					'games',
-					'games/'.$game::SYSTEM,
-					'games/'.$game::SYSTEM.'/'.$game->id,
-					'games/'.$game->code,
-					'games/'.$game->code.'/highlights',
-				],
+        $this->cache::Tags => $this->getCacheTags($game),
 			]
 		);
 	}
@@ -217,7 +260,14 @@ class GameHighlightService
 			return false;
 		}
 
-		$this->cache->clean([$this->cache::Tags => ['games/'.$game->code.'/highlights']]);
+      $this->cache->clean(
+        [
+          $this->cache::Tags => [
+            'games/'.$game->code.'/highlights',
+            'highlights/'.$game->start->format('d-m-Y'),
+          ],
+        ]
+      );
 
 		return true;
 	}
@@ -276,23 +326,33 @@ class GameHighlightService
 		/** @var string[] $objects */
 		$objects = DB::select($this::TABLE, '[object]')
 		             ->where('[code] = %s && [object] IS NOT NULL', $game->code)
-		             ->cacheTags(
-			             'highlights',
-			             'games',
-			             'games/'.$game::SYSTEM,
-			             'games/'.$game::SYSTEM.'/'.$game->id,
-			             'games/'.$game->code,
-			             'games/'.$game->code.'/highlights',
-		             )
-		             ->fetchPairs();
+      ->cacheTags(...$this->getCacheTags($game))
+      ->fetchPairs();
 
-		foreach ($objects as $object) {
-			$highlight = @igbinary_unserialize($object);
-			if ($highlight instanceof GameHighlight) {
-				$highlights->add($highlight);
-			}
-		}
-		return $highlights;
+      foreach ($objects as $object) {
+          $highlight = @igbinary_unserialize($object);
+          if ($highlight instanceof GameHighlight) {
+              $highlights->add($highlight);
+          }
+      }
+      return $highlights;
+  }
+
+    /**
+     * @param  Game  $game
+     * @return string[]
+     */
+    private function getCacheTags(Game $game) : array {
+        return [
+          'highlights',
+          'highlights/'.$game->start?->format('Y-m-d'),
+          'games',
+          'games/'.$game::SYSTEM,
+          'games/'.$game::SYSTEM.'/'.$game->id,
+          'games/'.$game->code,
+          'games/'.$game->start?->format('Y-m-d'),
+          'games/'.$game->code.'/highlights',
+        ];
 	}
 
 	/**

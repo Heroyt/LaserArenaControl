@@ -2,11 +2,13 @@
 
 namespace App\Models\DataObjects\Highlights;
 
+use Exception;
 use OpenApi\Attributes as OA;
 
 /**
  * @method static GameHighlightType from(string $type)
  * @method static GameHighlightType|null tryFrom(string $type)
+ * @property string $value
  */
 #[OA\Schema(type: 'string')]
 enum GameHighlightType : string
@@ -28,5 +30,16 @@ enum GameHighlightType : string
 			default      => GameHighlight::class,
 		};
 	}
+
+    public function getIcon() : string {
+        return match ($this) {
+            self::TROPHY       => 'trophy',
+            self::OTHER        => 'star',
+            self::ALONE_STATS  => 'run',
+            self::HITS         => 'gun',
+            self::DEATHS       => 'skull',
+            self::USER_AVERAGE => throw new Exception('To be implemented'),
+        };
+    }
 
 }

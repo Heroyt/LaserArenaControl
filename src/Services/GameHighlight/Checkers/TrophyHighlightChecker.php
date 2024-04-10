@@ -27,11 +27,26 @@ class TrophyHighlightChecker implements PlayerHighlightChecker
 		foreach (PlayerTrophy::RARE_TROPHIES as $trophy) {
 			try {
 				if ($player->getTrophy()->check($trophy)) {
+            $rarity = GameHighlight::HIGH_RARITY;
+            switch ($trophy) {
+                case 'favouriteTarget':
+                    $rarity = GameHighlight::MEDIUM_RARITY;
+                    $rarity += (int) round($player->getHitsPlayer($player->getFavouriteTarget()) / 5);
+                    break;
+                case 'favouriteTargetOf':
+                    $rarity = GameHighlight::MEDIUM_RARITY;
+                    $rarity += (int) round($player->getFavouriteTargetOf()?->getHitsPlayer($player) / 5);
+                    break;
+                case 'team-50':
+                    $rarity = GameHighlight::MEDIUM_RARITY;
+                    $rarity += 50 * min(1.0, ($player->score / $player->getTeam()->score));
+                    break;
+            }
 					$highlights->add(
 						new TrophyHighlight(
 							$trophy,
 							$player,
-							GameHighlight::HIGH_RARITY - ($trophy === 'favouriteTargetOf' ? 10 : 0)
+              $rarity
 						)
 					);
 				}

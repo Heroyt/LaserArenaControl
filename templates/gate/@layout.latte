@@ -61,7 +61,6 @@
         <link rel="stylesheet" href="{getUrl}dist/pages/gate.css?v={\App\Core\App::getCacheVersion()}">
         <link n:foreach="$addCss as $file" rel="stylesheet" class="add-style"
                                            href="{getUrl}dist/{$file}?v={\App\Core\App::getCacheVersion()}">
-        {\Tracy\Debugger::renderLoader()|noescape}
         {var string[][] $colors = App\GameModels\Factory\GameFactory::getAllTeamsColors()}
         <style>
             :root {

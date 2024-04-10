@@ -109,6 +109,7 @@ services:
 	gate.screens.image: App\Gate\Screens\ImageScreen
 	gate.screens.youtube: App\Gate\Screens\YoutubeScreen
 	gate.screens.idle.stats: App\Gate\Screens\GeneralDayStatsScreen
+	gate.screens.idle.highlights: App\Gate\Screens\TodayHighlightsScreen
 	gate.screens.results: App\Gate\Screens\Results\ResultsScreen
 	gate.screens.results.lasermaxx.rankable: App\Gate\Screens\Results\LaserMaxxRankableResultsScreen
 	gate.screens.results.lasermaxx.csgo: App\Gate\Screens\Results\LaserMaxxCSGOResultsScreen

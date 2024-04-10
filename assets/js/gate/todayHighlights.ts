@@ -22,7 +22,7 @@ export default class TodayHighlights extends DefaultScreen {
 			return;
 		}
 
-		if (wrapper.getBoundingClientRect().height > wrapper.scrollHeight) {
+		if (wrapper.getBoundingClientRect().height >= wrapper.scrollHeight) {
 			return;
 		}
 

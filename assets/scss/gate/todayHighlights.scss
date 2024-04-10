@@ -18,6 +18,16 @@
 	scroll-snap-align: start;
 }
 
+%missing-data {
+	backdrop-filter: blur(10px);
+	background-color: rgba(255, 255, 255, .6);
+	border-radius: 10px;
+	font-weight: bold;
+	margin: 1rem;
+	padding: 3rem 6rem;
+	text-align: center;
+}
+
 #gate main .content.today-highlights {
 	font-size: 1.55rem;
 	grid-template-areas: 'logo logo highlights highlights highlights highlights highlights music music music'
@@ -54,12 +64,7 @@
 		}
 
 		.no-music {
-			backdrop-filter: blur(10px);
-			background-color: rgba(255, 255, 255, .6);
-			border-radius: 10px;
-			font-weight: bold;
-			margin: 1rem;
-			padding: 3rem 6rem;
+			@extend %missing-data;
 		}
 	}
 
@@ -87,12 +92,7 @@
 		}
 
 		.no-players {
-			backdrop-filter: blur(10px);
-			background-color: rgba(255, 255, 255, .6);
-			border-radius: 10px;
-			font-weight: bold;
-			margin: 1rem;
-			padding: 3rem 6rem;
+			@extend %missing-data;
 		}
 	}
 
@@ -112,12 +112,7 @@
 		}
 
 		.no-highlights {
-			backdrop-filter: blur(10px);
-			background-color: rgba(255, 255, 255, .6);
-			border-radius: 10px;
-			font-weight: bold;
-			margin: 1rem;
-			padding: 3rem 6rem;
+			@extend %missing-data;
 		}
 
 		.highlight {

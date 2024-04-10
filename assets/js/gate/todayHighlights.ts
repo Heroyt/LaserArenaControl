@@ -21,6 +21,11 @@ export default class TodayHighlights extends DefaultScreen {
 		if (!wrapper) {
 			return;
 		}
+
+		if (wrapper.getBoundingClientRect().height > wrapper.scrollHeight) {
+			return;
+		}
+
 		const highlights = wrapper.querySelectorAll<HTMLElement>('.highlight');
 		if (highlights.length === 0) {
 			return;
@@ -45,9 +50,11 @@ export default class TodayHighlights extends DefaultScreen {
 	}
 
 	private scrollStep(wrapper: HTMLElement, height: number, duration: number): void {
+		const first = wrapper.querySelector<HTMLElement>('.highlight');
+		const copy = first.cloneNode(true);
+		wrapper.appendChild(copy);
 		this.scroll(wrapper, height, duration, () => {
-			const first = wrapper.querySelector<HTMLElement>('.highlight');
-			wrapper.appendChild(first);
+			first.remove();
 			wrapper.scrollTo({top: 0, behavior: 'instant'});
 		});
 	}

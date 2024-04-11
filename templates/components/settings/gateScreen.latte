@@ -2,7 +2,7 @@
     gateScreen,
     int|string $gateKey,
     int|string $screenKey,
-    App\Gate\Screens\GateScreen[] $screens,
+    App\Gate\Screens\GateScreen[][] $screens,
     bool $locked = false,
     App\Gate\Models\GateType|null $gate = null,
     App\Gate\Models\GateScreenModel|null $screen = null,
@@ -19,12 +19,15 @@
         <select id="gate-{((string)$gateKey)|replace:'][','-'}-screen-{$screenKey}-type" class="form-select screen-type"
                 name="{$formName}[{$gateKey}][{$formName2}][{$screenKey}][type]"
                 n:attr="disabled: $locked">
-            <option n:foreach="$screens as $key => $screenSelect"
-                    value="{$screenSelect::getDiKey()}"
-                    data-description="{$screenSelect::getDescription()}"
-                    n:attr="selected: $key === $screen?->screenSerialized">
-                {lang $screenSelect::getName(), context: 'gate-screens'}
-            </option>
+            <optgroup n:foreach="$screens as $group => $groupScreens"
+                    label="{if $group === ''}{lang 'Ostatní'}{else}{$group}{/if}">
+                <option n:foreach="$groupScreens as $key => $screenSelect"
+                        value="{$screenSelect::getDiKey()}"
+                        data-description="{$screenSelect::getDescription()}"
+                        n:attr="selected: $key === $screen?->screenSerialized">
+                    {lang $screenSelect::getName(), context: 'gate-screens'}
+                </option>
+            </optgroup>
         </select>
         <div class="select-description form-text"
              data-target="#gate-{((string)$gateKey)|replace:'][','-'}-screen-{$screenKey}-type"></div>

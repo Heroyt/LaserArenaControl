@@ -32,6 +32,10 @@ class GeneralStatsScreen extends GateScreen
         );
     }
 
+    public static function getGroup() : string {
+        return lang('Denní statistiky', context: 'gate-screens-groups');
+    }
+
     /**
      * @inheritDoc
      */

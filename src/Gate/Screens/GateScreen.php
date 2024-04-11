@@ -42,6 +42,15 @@ abstract class GateScreen
 		return '';
 	}
 
+    /**
+     * Get screen group
+     *
+     * @return string
+     */
+    public static function getGroup() : string {
+        return '';
+    }
+
 	/**
 	 * Get the key that this screen is registered in the DI container
 	 *

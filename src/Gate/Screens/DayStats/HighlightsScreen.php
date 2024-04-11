@@ -47,6 +47,10 @@ class HighlightsScreen extends GateScreen
         return 'gate.screens.idle.highlights';
     }
 
+    public static function getGroup() : string {
+        return lang('Denní statistiky', context: 'gate-screens-groups');
+    }
+
     /**
      * @inheritDoc
      */

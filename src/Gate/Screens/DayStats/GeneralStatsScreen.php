@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Gate\Screens;
+namespace App\Gate\Screens\DayStats;
 
 use App\Core\App;
 use App\GameModels\Factory\GameFactory;
 use App\GameModels\Factory\PlayerFactory;
 use App\GameModels\Factory\TeamFactory;
 use App\GameModels\Game\Player;
+use App\Gate\Screens\GateScreen;
 use DateTimeImmutable;
 use Dibi\Row;
 use Psr\Http\Message\ResponseInterface;
@@ -14,7 +15,7 @@ use Psr\Http\Message\ResponseInterface;
 /**
  * General screens that shows today stats and best players.
  */
-class GeneralDayStatsScreen extends GateScreen
+class GeneralStatsScreen extends GateScreen
 {
 
     /**

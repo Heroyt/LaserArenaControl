@@ -14,7 +14,7 @@ use App\GameModels\Vest;
 use App\Gate\Logic\ScreenTriggerType;
 use App\Gate\Models\GateScreenModel;
 use App\Gate\Models\GateType;
-use App\Gate\Screens\GeneralDayStatsScreen;
+use App\Gate\Screens\DayStats\GeneralStatsScreen;
 use App\Gate\Screens\Results\ResultsScreen;
 use App\Gate\Screens\VestsScreen;
 use App\Gate\Settings\ResultsSettings;
@@ -685,7 +685,7 @@ class Seeder implements InstallInterface
 					->setLocked(true);
 
 				$idleScreen = new GateScreenModel();
-				$idleScreen->screenSerialized = GeneralDayStatsScreen::getDiKey();
+          $idleScreen->screenSerialized = GeneralStatsScreen::getDiKey();
 				$idleScreen->order = 99;
 
 				$vestsScreen = new GateScreenModel();

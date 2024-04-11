@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Gate\Screens;
+namespace App\Gate\Screens\DayStats;
 
 use App\Core\App;
 use App\GameModels\Factory\GameFactory;
 use App\GameModels\Factory\PlayerFactory;
+use App\Gate\Screens\GateScreen;
 use App\Models\MusicMode;
 use App\Services\GameHighlight\GameHighlightService;
 use DateTimeImmutable;
@@ -15,7 +16,7 @@ use Psr\Http\Message\ResponseInterface;
 /**
  * General screens that shows today stats and best players.
  */
-class TodayHighlightsScreen extends GateScreen
+class HighlightsScreen extends GateScreen
 {
 
     public function __construct(

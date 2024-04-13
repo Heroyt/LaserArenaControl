@@ -9,7 +9,7 @@
 
 {define content}
     <img n:ifset="$image"
-            data-key="{md5($image->getPath().$settings->animationType->value.$settings->screenType->value)}"
+            data-hash="{md5($image->getPath().$settings->animationType->value.$settings->screenType->value)}"
             srcset="{getImageSrcSet($image)}"
             src="{$image->getUrl()}"
             loading="lazy"

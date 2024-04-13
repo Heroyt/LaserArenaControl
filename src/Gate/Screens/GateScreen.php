@@ -3,6 +3,7 @@
 namespace App\Gate\Screens;
 
 use App\GameModels\Game\Game;
+use App\Gate\Logic\ScreenTriggerType;
 use JsonException;
 use Lsr\Core\Requests\Response;
 use Lsr\Core\Templating\Latte;
@@ -15,32 +16,34 @@ use Psr\Http\Message\ResponseInterface;
 abstract class GateScreen
 {
 
-	/** @var string[] */
-	protected array $systems = [];
+    /** @var string[] */
+    protected array $systems = [];
 
-	protected ?Game $game = null;
+    protected ?Game $game = null;
 
-	protected array $params = [];
+    protected array $params = [];
 
-	protected int $reloadTime = -1;
+    protected int $reloadTime = -1;
 
-	public function __construct(protected readonly Latte $latte,) {}
+    protected ?ScreenTriggerType $trigger = null;
 
-	/**
-	 * Get screen name
-	 *
-	 * @return string
-	 */
-	abstract public static function getName() : string;
+    public function __construct(protected readonly Latte $latte,) {}
 
-	/**
-	 * get screen description
-	 *
-	 * @return string
-	 */
-	public static function getDescription() : string {
-		return '';
-	}
+    /**
+     * Get screen name
+     *
+     * @return string
+     */
+    abstract public static function getName() : string;
+
+    /**
+     * get screen description
+     *
+     * @return string
+     */
+    public static function getDescription() : string {
+        return '';
+    }
 
     /**
      * Get screen group
@@ -51,103 +54,127 @@ abstract class GateScreen
         return '';
     }
 
-	/**
-	 * Get the key that this screen is registered in the DI container
-	 *
-	 * @return string
-	 */
-	abstract public static function getDiKey() : string;
+    /**
+     * Get the key that this screen is registered in the DI container
+     *
+     * @return string
+     */
+    abstract public static function getDiKey() : string;
 
-	/**
-	 * Checks if this screen should be active under the current conditions.
-	 *
-	 * @return bool
-	 */
-	public function isActive() : bool {
-		return true;
-	}
+    /**
+     * Checks if this screen should be active under the current conditions.
+     *
+     * @return bool
+     */
+    public function isActive() : bool {
+        if ($this instanceof ReloadTimerInterface) {
+            $timer = $this->getReloadTimer();
+            return !isset($timer) || $timer > 0;
+        }
+        return true;
+    }
 
-	/**
-	 * Show the screen
-	 *
-	 * @return ResponseInterface Response containing the screen view
-	 */
-	abstract public function run() : ResponseInterface;
+    /**
+     * Show the screen
+     *
+     * @return ResponseInterface Response containing the screen view
+     */
+    abstract public function run() : ResponseInterface;
 
-	/**
-	 * @param string[] $systems
-	 *
-	 * @return $this
-	 */
-	public function setSystems(array $systems) : GateScreen {
-		$this->systems = $systems;
-		return $this;
-	}
+    /**
+     * @param  string[]  $systems
+     *
+     * @return $this
+     */
+    public function setSystems(array $systems) : GateScreen {
+        $this->systems = $systems;
+        return $this;
+    }
 
-	public function getGame() : ?Game {
-		return $this->game;
-	}
+    public function getGame() : ?Game {
+        return $this->game;
+    }
 
-	public function setGame(?Game $game) : GateScreen {
-		$this->game = $game;
-		return $this;
-	}
+    public function setGame(?Game $game) : GateScreen {
+        $this->game = $game;
+        return $this;
+    }
 
-	public function setParams(array $params) : GateScreen {
-		$this->params = $params;
-		return $this;
-	}
+    public function setParams(array $params) : GateScreen {
+        $this->params = $params;
+        return $this;
+    }
 
-	public function setReloadTime(int $reloadTime) : GateScreen {
-		$this->reloadTime = $reloadTime;
-		return $this;
-	}
+    /**
+     * @param  string  $template
+     * @param  array<string,mixed>  $params
+     *
+     * @return ResponseInterface
+     * @throws TemplateDoesNotExistException
+     */
+    protected function view(string $template, array $params) : ResponseInterface {
+        if ($this instanceof ReloadTimerInterface && $this->reloadTime <= 0) {
+            $this->setReloadTime($this->getReloadTimer() ?? -1);
+        }
 
-	/**
-	 * @param string              $template
-	 * @param array<string,mixed> $params
-	 *
-	 * @return ResponseInterface
-	 * @throws TemplateDoesNotExistException
-	 */
-	protected function view(string $template, array $params) : ResponseInterface {
-		bdump($this->params);
-		$response = $this->respond(
-			$this->latte
-				->viewToString(
-					$template,
-					array_merge(
-						$this->params,
-						[
-							'addJs'       => ['gate/defaultScreen.js'],
-							'reloadTimer' => $this->reloadTime,
-						],
-						$params
-					)
-				)
-		);
-		if ($this->reloadTime > 0) {
-			return $response->withHeader('X-Reload-Time', (string) $this->reloadTime);
-		}
-		return $response;
-	}
+        $response = $this
+          ->respond(
+            $this->latte
+              ->viewToString(
+                $template,
+                array_merge(
+                  $this->params,
+                  [
+                    'addJs'       => ['gate/defaultScreen.js'],
+                    'reloadTimer' => $this->reloadTime,
+                  ],
+                  $params
+                )
+              )
+          )
+          ->withHeader('Content-Type', 'text/html')
+          ->withHeader('X-Trigger', $this->getTrigger()?->value ?? 'null');
 
-	/**
-	 * @param string|array<string, mixed>|object $data
-	 * @param int                                $code
-	 * @param string[]                           $headers
-	 *
-	 * @return ResponseInterface
-	 * @throws JsonException
-	 */
-	protected function respond(string | array | object $data, int $code = 200, array $headers = []) : ResponseInterface {
-		$response = new Response(new \Nyholm\Psr7\Response($code, $headers));
+        if ($this->reloadTime > 0) {
+            return $response->withHeader('X-Reload-Time', (string) $this->reloadTime);
+        }
+        return $response;
+    }
 
-		if (is_string($data)) {
-			return $response->withStringBody($data);
-		}
+    public function setReloadTime(int $reloadTime) : GateScreen {
+        $this->reloadTime = $reloadTime;
+        return $this;
+    }
 
-		return $response->withJsonBody($data);
-	}
+    /**
+     * @param  string|array<string, mixed>|object  $data
+     * @param  int  $code
+     * @param  string[]  $headers
+     *
+     * @return ResponseInterface
+     * @throws JsonException
+     */
+    protected function respond(
+      string | array | object $data,
+      int                     $code = 200,
+      array                   $headers = []
+    ) : ResponseInterface {
+        $response = new Response(new \Nyholm\Psr7\Response($code, $headers));
+
+        if (is_string($data)) {
+            return $response->withStringBody($data);
+        }
+
+        return $response->withJsonBody($data);
+    }
+
+    public function getTrigger() : ?ScreenTriggerType {
+        return $this->trigger;
+    }
+
+    public function setTrigger(ScreenTriggerType $trigger) : static {
+        $this->trigger = $trigger;
+        return $this;
+    }
 
 }

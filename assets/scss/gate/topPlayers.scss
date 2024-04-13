@@ -1,0 +1,111 @@
+#gate main .content.top-players {
+	font-size: 1.55rem;
+	grid-template-areas: 'logo logo . title title title title . . .'
+			                   '. players players players players players players players players .'
+			                   '. players players players players players players players players .'
+			                   '. . . . timer timer . . . .';
+
+	.title {
+		align-self: end;
+		grid-area: title;
+	}
+
+	.players {
+		grid-area: players;
+		mask-image: linear-gradient(90deg, transparent, #000 30%, #000 70%, transparent);
+		overflow: hidden;
+		position: relative;
+		width: 100%;
+	}
+
+	.top-player {
+		backdrop-filter: blur(10px);
+		background-color: rgba(255, 255, 255, .9);
+		border-radius: 2rem;
+		display: none;
+		grid-gap: 2rem;
+		grid-template-rows: 4rem 1fr 4rem;
+		justify-items: center;
+		left: 50%;
+		min-height: 28rem;
+		min-width: 50rem;
+		padding: 2rem 3rem;
+		position: absolute;
+		top: 50%;
+		transform: translate(-50%, -50%);
+		transform-origin: center;
+		transition: all 400ms ease-in-out;
+
+		&.active {
+			display: grid;
+		}
+
+		&.prev {
+			display: grid;
+			left: -10%;
+			rotate: -20deg;
+		}
+
+		&.next {
+			display: grid;
+			left: 110%;
+			rotate: 20deg;
+			top: 106%;
+		}
+
+		&.prev-prev {
+			display: grid;
+			left: -50%;
+			rotate: -60deg;
+			top: 200%;
+		}
+
+		&.next-next {
+			display: grid;
+			left: 150%;
+			rotate: 60deg;
+			top: 200%;
+		}
+
+		.label {
+			font-size: 3rem;
+			text-align: center;
+		}
+
+		.player {
+			align-items: center;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+
+			.player-avatar {
+				height: 100%;
+				max-height: 5rem;
+			}
+
+			.name {
+				color: var(--primary);
+				font-size: 5rem;
+				font-weight: bold;
+			}
+
+			.title {
+				max-height: 3rem;
+			}
+		}
+
+		.value {
+			font-size: 2.5rem;
+			text-align: center;
+		}
+	}
+
+	&.out {
+		animation: scale-out 500ms ease-in forwards;
+	}
+
+	&.in {
+		animation: scale-in 500ms ease-in 200ms forwards;
+		opacity: 0;
+	}
+}

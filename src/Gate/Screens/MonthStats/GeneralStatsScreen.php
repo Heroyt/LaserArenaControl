@@ -52,12 +52,12 @@ class GeneralStatsScreen extends GateScreen
         $today = new DateTimeImmutable($date);
         $monthStart = new DateTimeImmutable($today->format('Y-m-01'));
         $monthEnd = new DateTimeImmutable($today->format('Y-m-t'));
-        $query = GameFactory::queryGames(true)
-                            ->where(
-                              'DATE(start) BETWEEN %d AND %d',
-                              $monthStart,
-                              $monthEnd
-                            );
+
+        $query = GameFactory::queryGames(true)->where(
+          'DATE(start) BETWEEN %d AND %d',
+          $monthStart,
+          $monthEnd
+        );
         if (count($this->systems) > 0) {
             $query->where('system IN %in', $this->systems);
         }
@@ -87,17 +87,13 @@ class GeneralStatsScreen extends GateScreen
 
         if (!empty($gameIds)) {
             $q = PlayerFactory::queryPlayers($gameIds);
-            $topScores = $q->orderBy('[score]')->desc()->fetchAssoc('name', cache: false);
+            $topScores = $q->orderBy('[score]')->desc()->limit(3)->fetchAssoc('name', cache: false);
             if (!empty($topScores)) {
-                $count = 0;
                 foreach ($topScores as $score) {
                     $topScores[] = PlayerFactory::getById(
                       (int) $score->id_player,
                       ['system' => (string) $score->system]
                     );
-                    if ((++$count) > 3) {
-                        break;
-                    }
                 }
             }
             $q = PlayerFactory::queryPlayers($gameIds);

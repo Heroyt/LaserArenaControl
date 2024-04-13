@@ -10,9 +10,12 @@ export default class DefaultScreen implements GateScreen {
 	}
 
 	isSame(active: GateScreen): boolean {
-		const key = this.content.querySelector<HTMLElement | null>('[data-key]')?.dataset?.key ?? '';
-		const keyActive = active.content.querySelector<HTMLElement | null>('[data-key]')?.dataset?.key ?? '';
-		return !(key !== '' && keyActive !== '') || key === keyActive;
+		const hash = this.content.querySelector<HTMLElement | null>('[data-hash]')?.dataset?.hash ?? '';
+		const hashActive = active.content.querySelector<HTMLElement | null>('[data-hash]')?.dataset?.hash ?? '';
+		if (hash === '' || hashActive === '') {
+			return false;
+		}
+		return hash === hashActive;
 	}
 
 	animateIn(): void {

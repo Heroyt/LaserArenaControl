@@ -113,6 +113,7 @@ services:
 	gate.screens.idle.highlights: App\Gate\Screens\DayStats\HighlightsScreen
 
 	gate.screens.idle.month.stats: App\Gate\Screens\MonthStats\GeneralStatsScreen
+	gate.screens.idle.month.top_players: App\Gate\Screens\MonthStats\TopPlayersScreen
 
 	gate.screens.results: App\Gate\Screens\Results\ResultsScreen
 	gate.screens.results.lasermaxx.rankable: App\Gate\Screens\Results\LaserMaxxRankableResultsScreen

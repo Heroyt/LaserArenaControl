@@ -14,98 +14,102 @@ use Psr\Http\Message\ResponseInterface;
 /**
  * @implements WithSettings<ImageSettings>
  */
-class ImageScreen extends GateScreen implements WithSettings
+class ImageScreen extends GateScreen implements WithSettings, ReloadTimerInterface
 {
-	private ImageSettings $settings;
+    use WithReloadTimer;
 
-	/**
-	 * @inheritDoc
-	 */
-	public static function getName() : string {
-		return lang('Obrázek', context: 'gate.screens');
-	}
+    private ImageSettings $settings;
 
-	/**
-	 * @inheritDoc
-	 */
-	public static function getDiKey() : string {
-		return 'gate.screens.image';
-	}
+    /**
+     * @inheritDoc
+     */
+    public static function getName() : string {
+        return lang('Obrázek', context: 'gate.screens');
+    }
 
-	/**
-	 * @inheritDoc
-	 */
-	public static function getSettingsForm() : string {
-		return 'gate/settings/image.latte';
-	}
+    /**
+     * @inheritDoc
+     */
+    public static function getDiKey() : string {
+        return 'gate.screens.image';
+    }
 
-	/**
-	 * @inheritDoc
-	 */
-	public static function buildSettingsFromForm(array $data) : GateSettings {
-		$type = ImageScreenType::tryFrom($data['type'] ?? '') ?? ImageScreenType::CENTER;
-		$animation = AnimationType::tryFrom($data['animation'] ?? '') ?? AnimationType::FADE;
+    /**
+     * @inheritDoc
+     */
+    public static function getSettingsForm() : string {
+        return 'gate/settings/image.latte';
+    }
 
-		$keys = explode('[', str_replace(']', '', $data['key']));
-		$uploadedImage = App::getRequest()->getUploadedFiles();
-		foreach ($keys as $key) {
-			$uploadedImage = $uploadedImage[$key] ?? [];
-		}
-		if (isset($uploadedImage['image']) && $uploadedImage['image'] instanceof UploadedFile && $uploadedImage['image']->getError() === UPLOAD_ERR_OK) {
-			$dir = UPLOAD_DIR.'gate/';
-			if (!file_exists($dir) && (!mkdir($dir) || !is_dir($dir))) {
-				bdump('Error creating upload directory: '.$dir);
-				$dir = UPLOAD_DIR;
-			}
-			$name = $uploadedImage['image']->getClientFilename();
-			$extension = strtolower(pathinfo($name, PATHINFO_EXTENSION));
+    /**
+     * @inheritDoc
+     */
+    public static function buildSettingsFromForm(array $data) : GateSettings {
+        $type = ImageScreenType::tryFrom($data['type'] ?? '') ?? ImageScreenType::CENTER;
+        $animation = AnimationType::tryFrom($data['animation'] ?? '') ?? AnimationType::FADE;
+        $time = (int) ($data['time'] ?? 0);
 
-			// Validate image
-			if (in_array($extension, ['jpg', 'jpeg', 'png'])) {
-				$fileName = $dir.$name;
-				$uploadedImage['image']->moveTo($fileName);
-				return new ImageSettings(new Image($fileName), $type, $animation);
-			}
+        $keys = explode('[', str_replace(']', '', $data['key']));
+        $uploadedImage = App::getRequest()->getUploadedFiles();
+        foreach ($keys as $key) {
+            $uploadedImage = $uploadedImage[$key] ?? [];
+        }
+        if (isset($uploadedImage['image']) && $uploadedImage['image'] instanceof UploadedFile && $uploadedImage['image']->getError(
+          ) === UPLOAD_ERR_OK) {
+            $dir = UPLOAD_DIR.'gate/';
+            if (!file_exists($dir) && (!mkdir($dir) || !is_dir($dir))) {
+                bdump('Error creating upload directory: '.$dir);
+                $dir = UPLOAD_DIR;
+            }
+            $name = $uploadedImage['image']->getClientFilename();
+            $extension = strtolower(pathinfo($name, PATHINFO_EXTENSION));
 
-			bdump('Invalid file extension '.$extension);
-		}
+            // Validate image
+            if (in_array($extension, ['jpg', 'jpeg', 'png'])) {
+                $fileName = $dir.$name;
+                $uploadedImage['image']->moveTo($fileName);
+                return new ImageSettings(new Image($fileName), $type, $animation, $time > 0 ? $time : null,);
+            }
 
-		if (!empty($data['current']) && file_exists($data['current'])) {
-			return new ImageSettings(new Image($data['current']), $type, $animation);
-		}
+            bdump('Invalid file extension '.$extension);
+        }
 
-		return new ImageSettings(null, $type, $animation);
-	}
+        if (!empty($data['current']) && file_exists($data['current'])) {
+            return new ImageSettings(new Image($data['current']), $type, $animation, $time > 0 ? $time : null,);
+        }
 
-	/**
-	 * @inheritDoc
-	 */
-	public function run() : ResponseInterface {
-		return $this->view(
-			'gate/screens/image',
-			[
-				'settings' => $this->getSettings(),
-				'image'    => $this->getSettings()->image,
-				'addCss'   => ['gate/image.css'],
-			]
-		);
-	}
+        return new ImageSettings(null, $type, $animation, $time > 0 ? $time : null,);
+    }
 
-	/**
-	 * @inheritDoc
-	 */
-	public function getSettings() : ImageSettings {
-		if (!isset($this->settings)) {
-			$this->settings = new ImageSettings();
-		}
-		return $this->settings;
-	}
+    /**
+     * @inheritDoc
+     */
+    public function run() : ResponseInterface {
+        return $this->view(
+          'gate/screens/image',
+          [
+            'settings' => $this->getSettings(),
+            'image'    => $this->getSettings()->image,
+            'addCss'   => ['gate/image.css'],
+          ]
+        );
+    }
 
-	/**
-	 * @inheritDoc
-	 */
-	public function setSettings(GateSettings $settings) : static {
-		$this->settings = $settings;
-		return $this;
-	}
+    /**
+     * @inheritDoc
+     */
+    public function getSettings() : ImageSettings {
+        if (!isset($this->settings)) {
+            $this->settings = new ImageSettings();
+        }
+        return $this->settings;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setSettings(GateSettings $settings) : static {
+        $this->settings = $settings;
+        return $this;
+    }
 }

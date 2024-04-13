@@ -35,3 +35,11 @@
     <input type="url" name="{$name}[url]" id="{$key}-url" class="form-control" value="{$settings->url}">
 </div>
 
+<div class="form-group reload-timer">
+    <label for="{$key}-time" class="form-label">
+        {lang 'Doba na obrazovce v sekundách', context: 'settings'}:
+    </label>
+    <input type="number" class="form-control" min="0" n:attr="value: $settings->getTime()" id="{$key}-time"
+           name="{$name}[time]">
+    <div class="form-text">{lang 'Maximální doba, po kterou má obrazovka zůstat aktivní. 0 = neomezeně.'}</div>
+</div>

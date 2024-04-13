@@ -3,15 +3,18 @@
 namespace App\Gate\Screens\Results;
 
 use App\Gate\Screens\GateScreen;
+use App\Gate\Screens\ReloadTimerInterface;
+use App\Gate\Screens\WithReloadTimer;
 use App\Gate\Settings\GateSettings;
 use App\Gate\Settings\ResultsSettings;
 
 /**
  *
  */
-abstract class AbstractResultsScreen extends GateScreen implements ResultsScreenInterface
+abstract class AbstractResultsScreen extends GateScreen implements ResultsScreenInterface, ReloadTimerInterface
 {
     use WithResultsSettings;
+    use WithReloadTimer;
 
     public static function getGroup() : string {
         return lang('Výsledky', context: 'gate-screens-groups');
@@ -41,7 +44,7 @@ abstract class AbstractResultsScreen extends GateScreen implements ResultsScreen
      *
      * @return int Seconds before reload
      */
-    protected function getReloadTimer() : int {
+    public function getReloadTimer() : int {
         return $this->getSettings()->time - (time() - ($this->getGame()?->end?->getTimestamp() ?? 0)) + 2;
     }
 }

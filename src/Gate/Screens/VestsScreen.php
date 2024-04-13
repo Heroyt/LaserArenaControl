@@ -12,99 +12,94 @@ use Psr\Http\Message\ResponseInterface;
 /**
  * @implements WithSettings<VestsSettings>
  */
-class VestsScreen extends GateScreen implements WithSettings
+class VestsScreen extends GateScreen implements WithSettings, ReloadTimerInterface
 {
+    use WithReloadTimer;
 
-	private VestsSettings $settings;
+    private VestsSettings $settings;
 
-	public function isActive() : bool {
-		return $this->getReloadTimer() > 0;
-	}
+    /**
+     * @inheritDoc
+     */
+    public static function getName() : string {
+        return lang('Vesty', context: 'gate-screens');
+    }
 
-	/**
-	 * @inheritDoc
-	 */
-	public static function getName() : string {
-		return lang('Vesty', context: 'gate-screens');
-	}
+    public static function getDescription() : string {
+        return lang('Obrazovka zobrazující přiřazené vesty před hrou.', context: 'gate-screens-description');
+    }
 
-	public static function getDescription() : string {
-		return lang('Obrazovka zobrazující přiřazené vesty před hrou.', context: 'gate-screens-description');
-	}
+    /**
+     * @inheritDoc
+     */
+    public static function getDiKey() : string {
+        return 'gate.screens.vests';
+    }
 
-	/**
-	 * @inheritDoc
-	 */
-	public static function getDiKey() : string {
-		return 'gate.screens.vests';
-	}
+    /**
+     * @inheritDoc
+     */
+    public static function getSettingsForm() : string {
+        return 'gate/settings/vests.latte';
+    }
 
-	/**
-	 * @inheritDoc
-	 */
-	public function run() : ResponseInterface {
-		$game = $this->getGame();
+    /**
+     * @inheritDoc
+     */
+    public static function buildSettingsFromForm(array $data) : GateSettings {
+        return new VestsSettings(isset($data['time']) ? (int) $data['time'] : null);
+    }
 
-		if (!isset($game)) {
-			return $this->respond(new ErrorDto('Cannot show screen without game.'), 412);
-		}
+    public function getSettings() : VestsSettings {
+        if (!isset($this->settings)) {
+            $this->settings = new VestsSettings();
+        }
+        return $this->settings;
+    }
 
-		if ($this->reloadTime < 0) {
-			$this->setReloadTime($this->getReloadTimer());
-		}
+    public function setSettings(GateSettings $settings) : static {
+        if (!($settings instanceof VestsSettings)) {
+            throw new InvalidArgumentException(
+              '$settings must be an instance of '.VestsSettings::class.', '.$settings::class.' provided.'
+            );
+        }
+        $this->settings = $settings;
+        return $this;
+    }
 
-		// Calculate current screen hash (for caching)
-		$data = [];
-		foreach ($game->getPlayers() as $player) {
-			$data[$player->vest] = [$player->getTeamColor(), $player->name, $player->user?->getCode()];
-		}
-		ksort($data);
-		$screenHash = md5(json_encode($data, JSON_THROW_ON_ERROR));
+    /**
+     * @inheritDoc
+     */
+    public function run() : ResponseInterface {
+        $game = $this->getGame();
 
-		return $this
-			->view(
-				'gate/screens/vests',
-				[
-					'game' => $game,
-					'screenHash' => $screenHash,
-					'vests' => Vest::getForSystem($game::SYSTEM),
-					'addJs'  => ['gate/vests.js'],
-					'addCss' => ['gate/vests.css'],
-				]
-			);
-	}
+        if (!isset($game)) {
+            return $this->respond(new ErrorDto('Cannot show screen without game.'), 412);
+        }
 
-	public function getSettings() : VestsSettings {
-		if (!isset($this->settings)) {
-			$this->settings = new VestsSettings();
-		}
-		return $this->settings;
-	}
+        if ($this->reloadTime < 0) {
+            $this->setReloadTime($this->getReloadTimer());
+        }
 
-	public function setSettings(GateSettings $settings) : static {
-		if (!($settings instanceof VestsSettings)) {
-			throw new InvalidArgumentException('$settings must be an instance of '.VestsSettings::class.', '.$settings::class.' provided.');
-		}
-		$this->settings = $settings;
-		return $this;
-	}
+        // Calculate current screen hash (for caching)
+        $data = [];
+        foreach ($game->getPlayers() as $player) {
+            $data[$player->vest] = [$player->getTeamColor(), $player->name, $player->user?->getCode()];
+        }
+        ksort($data);
+        $screenHash = md5(json_encode($data, JSON_THROW_ON_ERROR));
 
-	/**
-	 * @inheritDoc
-	 */
-	public static function getSettingsForm() : string {
-		return 'gate/settings/vests.latte';
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public static function buildSettingsFromForm(array $data) : GateSettings {
-		return new VestsSettings(isset($data['time']) ? (int) $data['time'] : null);
-	}
-
-	private function getReloadTimer() : int {
-		return $this->getSettings()->time - (time() - ($this->getGame()?->start?->getTimestamp() ?? 0)) + 2;
-	}
+        return $this
+          ->view(
+            'gate/screens/vests',
+            [
+              'game'       => $game,
+              'screenHash' => $screenHash,
+              'vests'      => Vest::getForSystem($game::SYSTEM),
+              'addJs'      => ['gate/vests.js'],
+              'addCss'     => ['gate/vests.css'],
+            ]
+          );
+    }
 
 }

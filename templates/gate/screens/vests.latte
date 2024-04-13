@@ -13,7 +13,7 @@
     {cache 'gate.screen.vests.'.$screenHash, expire: '1 days', tags: ['templates', 'templates.gate', 'templates.gate.screens', 'templates.gate.screens.vests']}
         {var $gridDimensions = App\GameModels\Vest::getGridDimensions($game::SYSTEM)}
         <div class="vest-grid pb-5" style="--cols: {$gridDimensions->cols}; --rows: {$gridDimensions->rows};"
-             data-key="{$screenHash}">
+             data-hash="{$screenHash}">
             <div n:foreach="$vests as $vest"
                     {var App\GameModels\Game\Player|null $player = $game->getVestPlayer($vest->vestNum)}
                     class="vest shadow rounded-10 {ifset $player}bg-team-{$game::SYSTEM}-{$player->getTeamColor()} text-bg-team-{$game::SYSTEM}-{$player->getTeamColor()}{else}bg-white-forced text-grey-text{/ifset}"

@@ -32,7 +32,7 @@
         <div class="select-description form-text"
              data-target="#gate-{((string)$gateKey)|replace:'][','-'}-screen-{$screenKey}-type"></div>
     </div>
-    <div class="form-group mb-2">
+    <div class="form-group mb-2 order">
         <label for="gate-{((string)$gateKey)|replace:'][','-'}-screen-{$screenKey}-order" class="form-label">
             {lang 'Pořadí'}:
         </label>
@@ -44,7 +44,7 @@
                 name="{$formName}[{$gateKey}][{$formName2}][{$screenKey}][order]">
         <div class="form-text">{lang 'Pořadí v jakém se obrazovky kontrolují (od nejmenšího čísla k větším).'}</div>
     </div>
-    <div class="form-group mb-2">
+    <div class="form-group mb-2 trigger">
         <label for="gate-{((string)$gateKey)|replace:'][','-'}-screen-{$screenKey}-trigger" class="form-label">
             {lang 'Podmínka'}:
         </label>

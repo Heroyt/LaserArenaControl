@@ -1,0 +1,120 @@
+{layout '../@layout.latte'}
+
+{varType string $screenHash}
+{varType string $monthName}
+{varType string $year}
+{varType int $gameCount}
+
+{varType App\GameModels\Game\Player|null $topScore}
+{varType App\GameModels\Game\Player|null $topSkill}
+{varType App\GameModels\Game\Player|null $topHits}
+{varType App\GameModels\Game\Player|null $topDeaths}
+{varType App\GameModels\Game\Player|null $topAccuracy}
+{varType App\GameModels\Game\Player|null $topShots}
+{varType App\GameModels\Game\Player|null $topHitsOwn}
+
+{define containerClasses}
+    top-players
+{/define}
+
+{define content}
+    {cache 'gate.screen.top-players.'.$screenHash, expire: '1 days', tags: ['templates', 'templates.gate', 'templates.gate.screens', 'templates.gate.screens.top-players']}
+        <h1 class="title text-center text-white-forced" data-hash="{$screenHash}">
+            {sprintf(lang('Nejlepší hráči měsíce %s %s', context: 'gate'), $monthName, $year)}
+        </h1>
+
+        <div class="players">
+
+            <div n:ifset="$topScore" class="top-score top-player">
+                <div class="label">{lang 'Nejlepší skóre'}</div>
+                <div class="player">
+                    {include topPlayer, $topScore}
+                </div>
+                <div class="value">
+                    {$topScore->score|number:0,',',' '}
+                    <i class="fa-solid fa-star"></i>
+                </div>
+            </div>
+
+            <div n:ifset="$topSkill" class="top-skill top-player">
+                <div class="label">{lang 'Nejlepší herní úroveň'}</div>
+                <div class="player">
+                    {include topPlayer, $topSkill}
+                </div>
+                <div class="value">
+                    {$topSkill->skill|number:0,',',' '}
+                    <i class="fa-solid fa-medal"></i>
+                </div>
+            </div>
+
+            <div n:ifset="$topHits" class="top-hits top-player">
+                <div class="label">{lang 'Nejvíc zásahů'}</div>
+                <div class="player">
+                    {include topPlayer, $topHits}
+                </div>
+                <div class="value">
+                    {$topHits->hits|number:0,',',' '}
+                    {svgIcon 'kill', '', '1em'}
+                </div>
+            </div>
+
+            <div n:ifset="$topDeaths" class="top-deaths top-player">
+                <div class="label">{lang 'Nejvíc smrtí'}</div>
+                <div class="player">
+                    {include topPlayer, $topDeaths}
+                </div>
+                <div class="value">
+                    {$topDeaths->deaths|number:0,',',' '}
+                    {svgIcon 'skull', '', '1em'}
+                </div>
+            </div>
+
+            <div n:ifset="$topAccuracy" class="top-accuracy top-player">
+                <div class="label">{lang 'Nejlepší přesnost'}</div>
+                <div class="player">
+                    {include topPlayer, $topAccuracy}
+                </div>
+                <div class="value">
+                    {$topAccuracy->accuracy|number:0,',',' '}%
+                </div>
+            </div>
+
+            <div n:ifset="$topShots" class="top-shots top-player">
+                <div class="label">{lang 'Nejvíc výstřelů'}</div>
+                <div class="player">
+                    {include topPlayer, $topShots}
+                </div>
+                <div class="value">
+                    {$topShots->shots|number:0,',',' '}
+                    {svgIcon 'bullets', '', '1em'}
+                </div>
+            </div>
+
+            <div n:ifset="$topHitsOwn" class="top-hits-own top-player">
+                <div class="label">{lang 'Nejvíc zásahů vlastních'}</div>
+                <div class="player">
+                    {include topPlayer, $topHitsOwn}
+                </div>
+                <div class="value">
+                    {$topHitsOwn->hitsOwn|number:0,',',' '}
+                    {svgIcon 'dead', '', '1em'}
+                </div>
+            </div>
+
+        </div>
+    {/cache}
+{/define}
+
+{define topPlayer, App\GameModels\Game\Player $player}
+    {ifset $player->user}
+        <img src="https://laserliga.cz/user/{$player->user->getCode()}/avatar" alt="Avatar" class="player-avatar"
+             loading="lazy"/>
+    {/ifset}
+    <div class="name">
+        {$player->name}
+    </div>
+    {ifset $player->user}
+        <img src="https://laserliga.cz/user/{$player->user->getCode()}/title/svg" alt="title" class="title"
+             loading="lazy"/>
+    {/ifset}
+{/define}

@@ -42,6 +42,8 @@ class Gate extends Controller
             $this->params['screens'][$screen::getGroup()][$key] = $screen;
         }
 
+        $this->params['addCss'][] = 'pages/gateSettings.css';
+
         return $this->view('pages/settings/gate');
     }
 
@@ -222,7 +224,7 @@ class Gate extends Controller
 
     /**
      * @param  GateScreenModel  $screenModel
-     * @param  array{type?:string,trigger?:string,trigger_value?:string,settings?:array<string,mixed>}  $screenData
+     * @param  array{type?:string,order?:numeric,trigger?:string,trigger_value?:string,settings?:array<string,mixed>}  $screenData
      * @return void
      */
     private function processScreen(GateScreenModel $screenModel, array $screenData) : void {
@@ -232,6 +234,9 @@ class Gate extends Controller
         }
         if (isset($screenData['trigger'])) {
             $screenModel->setTrigger(ScreenTriggerType::from($screenData['trigger']));
+        }
+        if (isset($screenData['order'])) {
+            $screenModel->setOrder((int) $screenData['order']);
         }
         if (isset($screenData['trigger_value']) && $screenModel->trigger === ScreenTriggerType::CUSTOM) {
             $screenModel->setTriggerValue($screenData['trigger_value']);

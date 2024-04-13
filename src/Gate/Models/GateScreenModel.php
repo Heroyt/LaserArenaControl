@@ -95,6 +95,9 @@ class GateScreenModel extends Model
 		if (!isset($this->screen)) {
 			// @phpstan-ignore-next-line
 			$this->screen = App::getService($this->screenSerialized);
+        if (isset($this->trigger)) {
+            $this->screen->setTrigger($this->trigger);
+        }
 		}
 		// @phpstan-ignore-next-line
 		return $this->screen;

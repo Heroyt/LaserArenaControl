@@ -3,7 +3,6 @@
 {varType string $screenHash}
 {varType string $monthName}
 {varType string $year}
-{varType App\GameModels\Game\Game|null $game}
 {varType int $gameCount}
 {varType int $teamCount}
 {varType int $playerCount}
@@ -19,7 +18,7 @@
 {/define}
 
 {define content}
-    {cache 'gate.screen.today.'.$screenHash, expire: '1 days', tags: ['templates', 'templates.gate', 'templates.gate.screens', 'templates.gate.screens.today']}
+    {cache 'gate.screen.month.'.$screenHash, expire: '1 days', tags: ['templates', 'templates.gate', 'templates.gate.screens', 'templates.gate.screens.month']}
         <h1 class="title text-center text-white-forced"
             data-hash="{$screenHash}">{sprintf(lang('Výsledky pro měsíc %s %s', context: 'gate'), $monthName, $year)}</h1>
 

@@ -8,13 +8,13 @@ export default function initGate() {
 
 	if (reloadTimer && reloadTimer > 0) {
 		reloadTimeout.timeout = setTimeout(() => {
-			loadContent(window.location.pathname, reloadTimeout);
+			loadContent(window.location.pathname + window.location.search, reloadTimeout);
 		}, reloadTimer * 1000);
 	}
 
 	// WebSocket event listener
 	EventServerInstance.addEventListener(['game-imported', 'game-started', 'game-loaded', 'gate-reload'], () => {
-		loadContent(window.location.pathname, reloadTimeout);
+		loadContent(window.location.pathname + window.location.search, reloadTimeout);
 	});
 
 	const content = document.querySelector<HTMLDivElement>('main .content');

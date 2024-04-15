@@ -6,6 +6,9 @@ trait WithReloadTimer
 {
 
     public function getReloadTimer() : ?int {
+        if (!($this instanceof WithSettings)) {
+            return null;
+        }
         $settings = $this->getSettings();
         if (!isset($settings->time)) {
             return null;

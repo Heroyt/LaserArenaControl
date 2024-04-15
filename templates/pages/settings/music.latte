@@ -65,6 +65,16 @@
         </div>
 		<input type="checkbox" class="btn-check" name="music[{$id}][public]" id="music-{$id}-public" value="1"
 			   autocomplete="off" {if $public}checked{/if}>
+        <div class="form-floating">
+            <input type="file" name="music[{$id}][background]" accept="image/jpeg,image/png" class="form-control"
+                   id="music-{$id}-background">
+            <label for="music-{$id}-background" class="form-label">{lang 'Pozadí', context: 'actions'}:</label>
+        </div>
+        <div class="form-floating">
+            <input type="file" name="music[{$id}][icon]" accept="image/jpeg,image/png,.svg" class="form-control"
+                   id="music-{$id}-icon">
+            <label for="music-{$id}-icon" class="form-label">{lang 'Ikona', context: 'actions'}:</label>
+        </div>
 		<label for="music-{$id}-public" class="btn btn-outline-info d-flex align-items-center" data-toggle="tooltip"
 			   title="{lang 'Veřejný'}">
 			<i class="fa-solid fa-eye"></i>

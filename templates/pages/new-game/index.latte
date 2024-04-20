@@ -9,6 +9,7 @@
 {varType App\GameModels\Game\GameModes\AbstractMode[] $gameModes}
 {varType App\GameModels\Game\Game|null $loadGame}
 {varType App\Models\MusicMode[] $musicModes}
+{varType string[] $gateActions}
 {varType string $system}
 {default string $lang = App\Core\App::getShortLanguageCode()}
 
@@ -178,16 +179,31 @@
            title="{lang 'Tisknout poslední hru', context: 'actions'} 1&times;">
             <i class="fa-solid fa-print"></i> &times; 1
         </a>
-        <a href="{link ['results', 'last', 'print', \App\Core\App::getShortLanguageCode(), 2, \App\GameModels\Game\PrintStyle::getActiveStyleId(), \App\Core\Info::get('default_print_template', 'default')]}"
-           class="btn btn-info print-btn" target="_blank" data-toggle="tooltip"
-           title="{lang 'Tisknout poslední hru', context: 'actions'} 2&times;">
-            <i class="fa-solid fa-print"></i> &times; 2
-        </a>
-        <a href="{link ['results', 'last', 'print', \App\Core\App::getShortLanguageCode(), 3, \App\GameModels\Game\PrintStyle::getActiveStyleId(), \App\Core\Info::get('default_print_template', 'default')]}"
-           class="btn btn-info print-btn" target="_blank" data-toggle="tooltip"
-           title="{lang 'Tisknout poslední hru', context: 'actions'} 3&times;">
-            <i class="fa-solid fa-print"></i> &times; 3
-        </a>
+        <div class="btn-group flex-fill" role="group">
+            <button class="btn btn-info dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"
+                    data-toggle="tooltip" title="{lang 'Tisknout poslední hru', context: 'actions'}&times;">
+                <i class="fa-solid fa-print"></i> &times;
+            </button>
+            <ul class="dropdown-menu">
+                <li n:for="$i = 2; $i < 5; $i++">
+                    <a class="dropdown-item print-btn" target="_blank"
+                       href="{link ['results', 'last', 'print', \App\Core\App::getShortLanguageCode(), $i, \App\GameModels\Game\PrintStyle::getActiveStyleId(), \App\Core\Info::get('default_print_template', 'default')]}">
+                        &times; {$i}
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="btn-group flex-fill" role="group" n:if="!empty($gateActions)">
+            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                    aria-expanded="false" data-toggle="tooltip" title="{lang 'Akce výsledkové tabule'}">
+                <i class="fas fa-display"></i>
+            </button>
+            <ul class="dropdown-menu">
+                <li n:foreach="$gateActions as $gateAction"><a class="dropdown-item" href="#" data-toggle="gate-event"
+                                                               data-event="{$gateAction}"
+                                                               data-time="60">{$gateAction}</a></li>
+            </ul>
+        </div>
     </div>
 
     {foreach $addedTemplates->controlAfterPrint as $include}

@@ -8,6 +8,7 @@ use App\Exceptions\GameModeNotFoundException;
 use App\GameModels\Factory\GameFactory;
 use App\GameModels\Factory\GameModeFactory;
 use App\GameModels\Vest;
+use App\Gate\Models\GateScreenModel;
 use App\Models\MusicMode;
 use App\Services\FeatureConfig;
 use App\Tools\GameLoading\GameLoader;
@@ -65,6 +66,7 @@ class NewGame extends Controller
 		$this->params['featureConfig'] = $this->featureConfig;
 		$this->params['addCss'] = ['pages/newGame.css'];
 		$game = $request->getGet('game');
+
 		$this->params['loadGame'] = !empty($game) ? GameFactory::getByCode($game) : null;
 		$this->params['system'] = $request->getGet('system', first(GameFactory::getSupportedSystems()));
 		$this->params['vests'] = Vest::getForSystem($this->params['system']);
@@ -72,12 +74,20 @@ class NewGame extends Controller
 		$this->params['teamNames'] = GameFactory::getAllTeamsNames()[$this->params['system']];
 		$this->params['gameModes'] = GameModeFactory::getAll(['system' => $this->params['system']]);
 		$this->params['musicModes'] = MusicMode::getAll();
+
+      $gateActionScreens = GateScreenModel::query()->where('trigger_value IS NOT NULL')->get();
+      $this->params['gateActions'] = [];
+      foreach ($gateActionScreens as $gateActionScreen) {
+          $this->params['gateActions'][$gateActionScreen->triggerValue] = $gateActionScreen->triggerValue;
+      }
+
 		foreach ($this->decorators as $decorator) {
 			if ($decorator->decorates('show') && method_exists($decorator, 'decorateShow')) {
 				$decorator->decorateShow();
 			}
 		}
-		return $this->view('pages/new-game/index');
+
+      return $this->view('pages/new-game/index');
 	}
 
 }

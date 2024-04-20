@@ -12,6 +12,13 @@
 			                   '. . music music music music music music music .'
 			                   '. . music music music music music music music .';
 
+		&.full-screen {
+			grid-template-areas: 'music music music music music music music music music music'
+			                   'music music music music music music music music music music'
+			                   'music music music music music music music music music music'
+			                   'music music music music music music music music music music';
+		}
+
 		.music-modes-wrapper {
 			display: grid;
 			grid-area: music;
@@ -79,6 +86,15 @@
 					color: #fff;
 				}
 			}
+		}
+
+		&.out {
+			animation: scale-out 500ms ease-in forwards;
+		}
+
+		&.in {
+			animation: scale-in 500ms ease-in 200ms forwards;
+			opacity: 0;
 		}
 	}
 }

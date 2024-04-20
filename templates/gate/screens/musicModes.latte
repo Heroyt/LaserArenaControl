@@ -1,9 +1,10 @@
 {layout '../@layout.latte'}
 
 {varType App\Gate\Models\MusicGroupDto[] $musicModes}
+{varType App\Gate\Settings\MusicModeSettings $settings}
 
 {define containerClasses}
-    music-modes-screen
+    music-modes-screen {if $settings->layout === App\Gate\Settings\MusicModeScreenLayout::FULL_SCREEN}full-screen{/if}
 {/define}
 
 {define content}

@@ -1,0 +1,18 @@
+{parameters
+    string $key,
+    string $name,
+    App\Gate\Settings\MusicModeSettings $settings,
+}
+
+<div class="form-group">
+    <label for="{$key}-layout" class="form-label">
+        {lang 'Rozložení obrazovky'}:
+    </label>
+    <select name="{$name}[layout]" id="{$key}-layout" class="form-select">
+        <option n:foreach="App\Gate\Settings\MusicModeScreenLayout::cases() as $case"
+                n:attr="value: $case->value, selected: $case === $settings->layout">
+            {$case->getReadableName()}
+        </option>
+    </select>
+</div>
+

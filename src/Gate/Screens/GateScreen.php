@@ -3,6 +3,7 @@
 namespace App\Gate\Screens;
 
 use App\GameModels\Game\Game;
+use App\Gate\Logic\CustomEventDto;
 use App\Gate\Logic\ScreenTriggerType;
 use JsonException;
 use Lsr\Core\Requests\Response;
@@ -26,6 +27,8 @@ abstract class GateScreen
     protected int $reloadTime = -1;
 
     protected ?ScreenTriggerType $trigger = null;
+
+    protected ?CustomEventDto $triggerEvent = null;
 
     public function __construct(protected readonly Latte $latte,) {}
 
@@ -105,6 +108,11 @@ abstract class GateScreen
         return $this;
     }
 
+    public function setTriggerEvent(?CustomEventDto $triggerEvent) : GateScreen {
+        $this->triggerEvent = $triggerEvent;
+        return $this;
+    }
+
     /**
      * @param  string  $template
      * @param  array<string,mixed>  $params
@@ -134,9 +142,18 @@ abstract class GateScreen
           )
           ->withHeader('Content-Type', 'text/html')
           ->withHeader('X-Trigger', $this->getTrigger()?->value ?? 'null');
-
         if ($this->reloadTime > 0) {
             return $response->withHeader('X-Reload-Time', (string) $this->reloadTime);
+        }
+        if (isset($this->triggerEvent)) {
+            $now = time();
+            $response = $response
+              ->withHeader('X-Event', $this->triggerEvent->event)
+              ->withHeader('X-Now', (string) $now)
+              ->withHeader('X-Event-Time', (string) $this->triggerEvent->time);
+            if ($now < $this->triggerEvent->time) {
+                return $response->withHeader('X-Reload-Time', (string) ($this->triggerEvent->time - $now));
+            }
         }
         return $response;
     }

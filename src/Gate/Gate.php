@@ -67,7 +67,16 @@ class Gate
 
         foreach ($screens as $screenModel) {
             if ($screenModel->trigger === $activeGateType && (($activeGateType === ScreenTriggerType::CUSTOM && $screenModel->triggerValue === $customEvent?->event) || $activeGateType !== ScreenTriggerType::CUSTOM)) {
-                $screen = $screenModel->getScreen()->setGame($game)->setSystems($systems);
+                $screen = $screenModel->getScreen()
+                                      ->setGame($game)
+                                      ->setSystems($systems);
+
+                if ($activeGateType === ScreenTriggerType::CUSTOM) {
+                    $screen->setTriggerEvent($customEvent);
+                    if ($screen instanceof ReloadTimerInterface && isset($customEvent)) {
+                        $screen->setReloadTime(time() - $customEvent->time);
+                    }
+                }
 
                 $settings = $screenModel->getSettings();
                 if (isset($settings) && $screen instanceof WithSettings) {
@@ -75,9 +84,6 @@ class Gate
                 }
 
                 if ($screen->isActive()) {
-                    if ($activeGateType === ScreenTriggerType::CUSTOM && isset($customEvent->time) && $screen instanceof ReloadTimerInterface) {
-                        $screen->setReloadTime(time() - $customEvent->time);
-                    }
                     return $screen;
                 }
             }

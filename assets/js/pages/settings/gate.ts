@@ -19,8 +19,6 @@ export default function initGateSettings() {
 	form.addEventListener(
 		'autosaved',
 		(e: CustomEvent<GateSettingsSaveResponse>) => {
-			console.log(e.detail);
-
 			const processedNewScreens = new Set<string>();
 
 			// Rename gate inputs
@@ -46,10 +44,8 @@ export default function initGateSettings() {
 				if (!(originalGate in e.detail.newScreenIds)) {
 					return;
 				}
-				console.log(e.detail.newScreenIds[originalGate]);
 				Object.entries(e.detail.newScreenIds[originalGate]).forEach(([original, id]) => {
 					const screenWrapper = wrapper.querySelector<HTMLDivElement>(`.gate-screens > .gate-screen[data-key=${original}]`);
-					console.log(screenWrapper);
 					if (!screenWrapper) {
 						return;
 					}
@@ -57,7 +53,6 @@ export default function initGateSettings() {
 					screenWrapper.dataset.id = id;
 					screenWrapper.dataset.deleteKey = `gate[${gateId}][delete-screens][]`;
 					const inputs = screenWrapper.querySelectorAll<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>('[name]');
-					console.log(inputs);
 					inputs.forEach(input => {
 						input.name = input.name.replace(`[new-screen][${original}]`, `[screen][${id}]`);
 					});
@@ -86,7 +81,6 @@ export default function initGateSettings() {
 				}
 				Object.entries(screens).forEach(([original, id]) => {
 					const screenWrapper = wrapper.querySelector<HTMLDivElement>(`.gate-screens > .gate-screen[data-key=${original}]`);
-					console.log(screenWrapper);
 					if (!screenWrapper) {
 						return;
 					}
@@ -94,7 +88,6 @@ export default function initGateSettings() {
 					screenWrapper.dataset.id = id;
 					screenWrapper.dataset.deleteKey = `gate[${wrapper.dataset.id}][delete-screens][]`;
 					const inputs = screenWrapper.querySelectorAll<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>('[name]');
-					console.log(inputs);
 					inputs.forEach(input => {
 						input.name = input.name.replace(`[new-screen][${original}]`, `[screen][${id}]`);
 					});
@@ -128,13 +121,16 @@ export default function initGateSettings() {
 	}
 
 	function initGateType(wrapper: HTMLDivElement): void {
-		console.log('Init', wrapper);
+		console.log('Init gate type', wrapper);
 		initCollapse(wrapper);
-		wrapper.querySelectorAll<HTMLDivElement>('.gate-screen').forEach(screen => initGateScreen(screen));
 
-		const screensWrapper = wrapper.querySelector<HTMLDivElement>('.gate-screens');
-		const addScreen = wrapper.querySelector<HTMLButtonElement>('.add-screen:not(.initialized)');
-		const screenTemplate = wrapper.querySelector<HTMLTemplateElement>('.new-screen');
+		const screensWrapper = wrapper.querySelector<HTMLDivElement>('.gate-screens:not(:scope .gate-screens .gate-screens)');
+		const addScreen = wrapper.querySelector<HTMLButtonElement>('.add-screen:not(.initialized):not(:scope .gate-screens .add-screen)');
+		const screenTemplate = wrapper.querySelector<HTMLTemplateElement>('.new-screen:not(:scope .gate-screens .new-screen)');
+
+		if (screensWrapper) {
+			screensWrapper.querySelectorAll<HTMLDivElement>(':scope > .gate-screen').forEach(screen => initGateScreen(screen));
+		}
 
 		if (screensWrapper && addScreen && screenTemplate) {
 			addScreen.classList.add('initialized');
@@ -172,7 +168,7 @@ export default function initGateSettings() {
 	}
 
 	function initGateScreen(wrapper: HTMLDivElement, created: boolean = false): void {
-		console.log('Init', wrapper);
+		console.log('Init gate screen', wrapper);
 		initSelectDescription(wrapper);
 
 		const trigger = wrapper.querySelector<HTMLSelectElement>('.screen-trigger');
@@ -225,7 +221,6 @@ export default function initGateSettings() {
 		};
 		const updateSettings = () => {
 			const typeValue = type.value;
-			console.log(typeValue, Array.from(settingsCache.entries()));
 			if (settingsCache.has(typeValue)) {
 				settingsWrapper.innerHTML = settingsCache.get(typeValue);
 				initSettings();

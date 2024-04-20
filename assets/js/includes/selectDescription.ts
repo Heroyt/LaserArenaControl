@@ -7,7 +7,6 @@ export function initSelectDescription(dom: HTMLElement | Document = document): v
 		}
 
 		const target = document.querySelector(element.dataset.target) as HTMLSelectElement;
-		console.log(target, target.value);
 		if (!target) {
 			// Invalid target
 			console.log('Invalid target');
@@ -15,7 +14,6 @@ export function initSelectDescription(dom: HTMLElement | Document = document): v
 		}
 		const option = target.querySelector(`option[value="${target.value}"]`) as HTMLOptionElement;
 		if (option && option.dataset.description) {
-			console.log(option, target.dataset.description);
 			element.innerText = option.dataset.description;
 		} else {
 			element.innerText = '';
@@ -23,7 +21,6 @@ export function initSelectDescription(dom: HTMLElement | Document = document): v
 		target.addEventListener('change', () => {
 			const option = target.querySelector(`option[value="${target.value}"]`) as HTMLOptionElement;
 			if (option && option.dataset.description) {
-				console.log(option, target.dataset.description);
 				element.innerText = option.dataset.description;
 			} else {
 				element.innerText = '';

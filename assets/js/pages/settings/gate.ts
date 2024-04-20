@@ -3,9 +3,111 @@ import {getGateScreenSettings} from '../../api/endpoints/settings/gate';
 import {initSelectDescription} from '../../includes/selectDescription';
 import {initImageUploadPreview} from '../../includes/imageUploadPreview';
 
+type GateSettingsSaveResponse = {
+	success: boolean,
+	errors: string[],
+	newGateIds: { [index: string]: string },
+	newScreenIds: { [index: string]: { [index: string]: string } }
+};
+
 export default function initGateSettings() {
 	initImageUploadPreview();
 	initCollapse();
+
+	const form = document.getElementById('gate-settings-form') as HTMLFormElement;
+
+	form.addEventListener(
+		'autosaved',
+		(e: CustomEvent<GateSettingsSaveResponse>) => {
+			console.log(e.detail);
+
+			const processedNewScreens = new Set<string>();
+
+			// Rename gate inputs
+			Object.entries(e.detail.newGateIds).forEach(([originalGate, gateId]) => {
+				const wrapper = form.querySelector<HTMLDivElement>(`#gate-${originalGate}`);
+				if (!wrapper) {
+					return;
+				}
+				wrapper.id = wrapper.id.replace(originalGate, gateId);
+				wrapper.dataset.id = gateId;
+				wrapper.querySelectorAll<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>('[name]').forEach(input => {
+					input.name = input.name.replace(`new-gate[${originalGate}]`, `gate[${gateId}]`);
+				});
+				const screenTemplate = wrapper.querySelector<HTMLTemplateElement>('.new-screen');
+				if (screenTemplate) {
+					screenTemplate.innerHTML = screenTemplate.innerHTML
+						.replaceAll(`new-gate[${originalGate}]`, `gate[${gateId}]`)
+						.replaceAll(`data-gate-key="${originalGate}"`, `data-gate-key="${gateId}"`)
+						.replaceAll(`data-form-name="new-gate"`, `data-form-name="gate"`);
+				}
+
+				// Update screens
+				if (!(originalGate in e.detail.newScreenIds)) {
+					return;
+				}
+				console.log(e.detail.newScreenIds[originalGate]);
+				Object.entries(e.detail.newScreenIds[originalGate]).forEach(([original, id]) => {
+					const screenWrapper = wrapper.querySelector<HTMLDivElement>(`.gate-screens > .gate-screen[data-key=${original}]`);
+					console.log(screenWrapper);
+					if (!screenWrapper) {
+						return;
+					}
+					screenWrapper.classList.remove('gate-screen-new');
+					screenWrapper.dataset.id = id;
+					screenWrapper.dataset.deleteKey = `gate[${gateId}][delete-screens][]`;
+					const inputs = screenWrapper.querySelectorAll<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>('[name]');
+					console.log(inputs);
+					inputs.forEach(input => {
+						input.name = input.name.replace(`[new-screen][${original}]`, `[screen][${id}]`);
+					});
+					const settingsWrapper = screenWrapper.querySelector<HTMLDivElement>(`.screen-settings[data-screen-key=${original}]`);
+					if (settingsWrapper) {
+						settingsWrapper.dataset.gateKey = gateId;
+						settingsWrapper.dataset.screenKey = id;
+						settingsWrapper.dataset.formName = 'gate';
+						settingsWrapper.dataset.formName2 = 'screen';
+						settingsWrapper.setAttribute('data-gate-key', gateId);
+						settingsWrapper.setAttribute('data-screen-key', id);
+						settingsWrapper.setAttribute('data-form-name', 'gate');
+						settingsWrapper.setAttribute('data-form-name2', 'screen');
+					}
+				});
+				processedNewScreens.add(originalGate);
+			});
+
+			Object.entries(e.detail.newScreenIds).forEach(([originalGate, screens]) => {
+				if (processedNewScreens.has(originalGate)) {
+					return;
+				}
+				const wrapper = form.querySelector<HTMLDivElement>(`#gate-${originalGate}`);
+				if (!wrapper) {
+					return;
+				}
+				Object.entries(screens).forEach(([original, id]) => {
+					const screenWrapper = wrapper.querySelector<HTMLDivElement>(`.gate-screens > .gate-screen[data-key=${original}]`);
+					console.log(screenWrapper);
+					if (!screenWrapper) {
+						return;
+					}
+					screenWrapper.classList.remove('gate-screen-new');
+					screenWrapper.dataset.id = id;
+					screenWrapper.dataset.deleteKey = `gate[${wrapper.dataset.id}][delete-screens][]`;
+					const inputs = screenWrapper.querySelectorAll<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>('[name]');
+					console.log(inputs);
+					inputs.forEach(input => {
+						input.name = input.name.replace(`[new-screen][${original}]`, `[screen][${id}]`);
+					});
+					const settingsWrapper = screenWrapper.querySelector<HTMLDivElement>(`.screen-settings[data-screen-key=${original}]`);
+					if (settingsWrapper) {
+						settingsWrapper.dataset.screenKey = id;
+						settingsWrapper.dataset.formName2 = 'screen';
+						settingsWrapper.setAttribute('data-screen-key', id);
+						settingsWrapper.setAttribute('data-form-name2', 'screen');
+					}
+				});
+			});
+		});
 
 	let newGateCounter = 0;
 	let newScreenCounter = 0;
@@ -39,6 +141,8 @@ export default function initGateSettings() {
 			addScreen.addEventListener('click', () => {
 				const screen = document.createElement('div');
 				screen.classList.add('list-group-item', 'gate-screen', 'gate-screen-new');
+				screen.dataset.key = `new-${newScreenCounter}`;
+				screen.setAttribute('data-key', `new-${newScreenCounter}`);
 
 				screen.innerHTML = screenTemplate.innerHTML
 					.replaceAll('#key#', `new-${newScreenCounter}`);

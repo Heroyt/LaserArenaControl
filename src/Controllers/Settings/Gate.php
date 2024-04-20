@@ -18,7 +18,7 @@ use Lsr\Core\Exceptions\ModelNotFoundException;
 use Lsr\Core\Exceptions\ValidationException;
 use Lsr\Core\Requests\Request;
 use Lsr\Exceptions\TemplateDoesNotExistException;
-use Lsr\Helpers\Files\UploadedFile;
+use Nyholm\Psr7\UploadedFile;
 use Psr\Http\Message\ResponseInterface;
 
 class Gate extends Controller
@@ -61,9 +61,7 @@ class Gate extends Controller
         }
         return $this->respond(
           new ErrorDto(
-            'Invalid screen',
-            ErrorType::VALIDATION,
-            'This screen doesn\'t have any settings.'
+            'Invalid screen', ErrorType::VALIDATION, 'This screen doesn\'t have any settings.'
           ),
           400
         );
@@ -86,22 +84,28 @@ class Gate extends Controller
                 Info::set('timer_show', (int) $show);
             }
             Info::set('timer_on_inactive_screen', !empty($request->getPost('timer_on_inactive_screen')));
-            if (isset($_FILES['background'])) {
-                $file = UploadedFile::parseUploaded('background');
-                if (isset($file)) {
-                    // Remove old uploaded files
-                    foreach (glob(UPLOAD_DIR.'gate.*') as $old) {
-                        unlink($old);
-                    }
-                    // Save new file
-                    $file->save(UPLOAD_DIR.'gate.'.$file->getExtension());
+            $files = $request->getUploadedFiles();
+            if (
+              isset($files['background']) &&
+              $files['background'] instanceof UploadedFile &&
+              $files['background']->getError() === UPLOAD_ERR_OK
+            ) {
+                /** @var UploadedFile $file */
+                $file = $files['background'];
+                // Remove old uploaded files
+                foreach (glob(UPLOAD_DIR.'gate.*') as $old) {
+                    unlink($old);
                 }
+                // Save new file
+                $extension = strtolower(pathinfo($file->getClientFilename(), PATHINFO_EXTENSION));
+                $file->moveTo(UPLOAD_DIR.'gate.'.$extension);
             }
         } catch (Exception) {
             $request->passErrors[] = lang('Failed to save settings.', context: 'errors');
         }
-        bdump($request->getParsedBody());
-        bdump($request->getUploadedFiles());
+
+        $newGateIds = [];
+        $newScreenIds = [];
 
         // Update existing gates
         foreach ($request->getPost('gate', []) as $id => $gateData) {
@@ -112,13 +116,13 @@ class Gate extends Controller
                 bdump($e);
                 continue;
             }
-            $this->processGateType($gateType, $gateData, $request);
+            $this->processGateType($gateType, $gateData, $request, $id, $newGateIds, $newScreenIds);
         }
 
         // Create new gates
-        foreach ($request->getPost('new-gate', []) as $gateData) {
+        foreach ($request->getPost('new-gate', []) as $key => $gateData) {
             $gateType = new GateType();
-            $this->processGateType($gateType, $gateData, $request);
+            $this->processGateType($gateType, $gateData, $request, $key, $newGateIds, $newScreenIds);
         }
 
         // Remove deleted gates
@@ -141,7 +145,8 @@ class Gate extends Controller
               [
                 'success' => empty($request->passErrors),
                 'errors'  => $request->passErrors,
-                'reload'  => $request->params['reload'] ?? false,
+                'newGateIds' => $newGateIds,
+                'newScreenIds' => $newScreenIds,
               ]
             );
         }
@@ -152,10 +157,20 @@ class Gate extends Controller
      * @param  GateType  $gateType
      * @param  array{name?:string,slug?:string,screen?:array{type?:string,trigger?:string,trigger_value?:string,settings?:array<string,mixed>}[],new-screen?:array{type?:string,trigger?:string,trigger_value?:string,settings?:array<string,mixed>}[],delete-screens?:numeric-string[]}  $gateData
      * @param  Request  $request
+     * @param  string|int  $gateKey
+     * @param  array  $newGateIds
+     * @param  array  $newScreenIds
      * @return void
      * @throws ValidationException
      */
-    private function processGateType(GateType $gateType, array $gateData, Request $request) : void {
+    private function processGateType(
+      GateType     $gateType,
+      array        $gateData,
+      Request      $request,
+      string | int $gateKey,
+      array        &$newGateIds,
+      array        &$newScreenIds
+    ) : void {
         $new = !isset($gateType->id);
         $newScreens = false;
         bdump($new);
@@ -179,11 +194,13 @@ class Gate extends Controller
             $screenModel->save();
         }
 
-        foreach ($gateData['new-screen'] ?? [] as $screenData) {
+        $newScreenIds[$gateKey] ??= [];
+        $newScreens = [];
+        foreach ($gateData['new-screen'] ?? [] as $key => $screenData) {
             $screenModel = new GateScreenModel();
             $this->processScreen($screenModel, $screenData);
             $gateType->addScreenModel($screenModel);
-            $newScreens = true;
+            $newScreens[$key] = $screenModel;
         }
 
         if (isset($gateData['delete-screens'])) {
@@ -214,9 +231,12 @@ class Gate extends Controller
                   $gateType->name
                 );
             }
-            else {
-                if ($new || $newScreens) {
-                    $request->params['reload'] = true;
+            elseif ($new || $newScreens) {
+                $newGateIds[$gateKey] = $gateType->id;
+                foreach ($newScreens as $key => $screen) {
+                    if (isset($screen->id)) {
+                        $newScreenIds[$gateKey][$key] = $screen->id;
+                    }
                 }
             }
         }

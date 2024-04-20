@@ -80,16 +80,12 @@
                 {include sectionGameModeVariations}
             </section>
         {/cache}
-        {cache 'newGame-'.$lang.'-music', tags: ['templates.newGame', 'templates', 'templates.'.$lang, App\Models\MusicMode::TABLE]}
-            <section id="music">
-                {include sectionMusic}
-            </section>
-        {/cache}
-        {*{cache 'newGame-teams', tags: ['templates.newGame', 'templates', 'templates.'.$lang]}*}
+        <section id="music">
+            {include sectionMusic}
+        </section>
         <section id="teams-random" class="text-center solo-hide">
             {include sectionTeamsRandom}
         </section>
-        {*{/cache}*}
         <section id="teams" class="solo-hide">
             {include sectionTeams}
         </section>

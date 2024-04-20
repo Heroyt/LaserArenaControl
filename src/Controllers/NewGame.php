@@ -12,7 +12,6 @@ use App\Gate\Models\GateScreenModel;
 use App\Models\MusicMode;
 use App\Models\Playlist;
 use App\Services\FeatureConfig;
-use App\Tools\GameLoading\GameLoader;
 use LAC\Modules\Core\ControllerDecoratorInterface;
 use Lsr\Core\Controllers\Controller;
 use Lsr\Core\Exceptions\ValidationException;
@@ -35,7 +34,6 @@ class NewGame extends Controller
 	public function __construct(
 		Latte                          $latte,
 		private readonly FeatureConfig $featureConfig,
-		private readonly GameLoader    $loader,
 	) {
 		parent::__construct($latte);
 	}
@@ -49,7 +47,7 @@ class NewGame extends Controller
 		bdump($decorators);
 		foreach ($decorators as $name => $attributes) {
 			/** @var ControllerDecoratorInterface $decorator */
-			$this->decorators[] = $decorator = App::getService($name);
+        $this->decorators[$name] = $decorator = App::getService($name);
 			$decorator->setController($this)->init();
 		}
 	}

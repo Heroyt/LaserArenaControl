@@ -55,6 +55,18 @@ class Playlist extends Model
         return false;
     }
 
+    /**
+     * @return int[]
+     * @throws ValidationException
+     */
+    public function getMusicIds() : array {
+        $ids = [];
+        foreach ($this->getMusic() as $music) {
+            $ids[] = $music->id;
+        }
+        return $ids;
+    }
+
     public function save() : bool {
         return parent::save() && $this->saveMusic();
     }

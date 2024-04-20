@@ -30,7 +30,7 @@ class GameLoading extends ApiController
 		} catch (InvalidArgumentException $e) {
 			return $this->respond(['error' => $e->getMessage(), 'trace' => $e->getTrace()], 400);
 		}
-		return $this->respond(['status' => 'ok', 'mode' => $meta['mode']]);
+      return $this->respond(['status' => 'ok', 'mode' => $meta['mode'], 'music' => $meta['music']]);
 	}
 
 }

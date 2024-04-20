@@ -9,6 +9,7 @@
 {varType App\GameModels\Game\GameModes\AbstractMode[] $gameModes}
 {varType App\GameModels\Game\Game|null $loadGame}
 {varType App\Models\MusicMode[] $musicModes}
+{varType App\Models\Playlist[] $playlists}
 {varType string[] $gateActions}
 {varType string $system}
 {default string $lang = App\Core\App::getShortLanguageCode()}
@@ -297,6 +298,17 @@
         {lang 'Hudební mód', context: 'game'}:
     </label>
     <div class="input-group">
+        <input type="checkbox" id="playlists" name="use-playlist" value="1" class="btn-check">
+        <label for="playlists" class="btn btn-outline-info rounded-start" data-toggle="tooltip"
+               title="{lang 'Playlisty'}">
+            <i class="fa-solid fa-music"></i>
+        </label>
+        <select name="playlist" id="playlist-select" class="form-select d-none">
+            <option n:foreach="$playlists as $playlist" value="{$playlist->id}"
+                                                        data-music="{json_encode($playlist->getMusicIds())}">
+                {$playlist->name}
+            </option>
+        </select>
         <select name="music" id="music-select" class="form-select">
             {var string $lastGroup = ''}
             {foreach $musicModes as $musicMode}

@@ -10,6 +10,7 @@ use App\GameModels\Factory\GameModeFactory;
 use App\GameModels\Vest;
 use App\Gate\Models\GateScreenModel;
 use App\Models\MusicMode;
+use App\Models\Playlist;
 use App\Services\FeatureConfig;
 use App\Tools\GameLoading\GameLoader;
 use LAC\Modules\Core\ControllerDecoratorInterface;
@@ -74,6 +75,7 @@ class NewGame extends Controller
 		$this->params['teamNames'] = GameFactory::getAllTeamsNames()[$this->params['system']];
 		$this->params['gameModes'] = GameModeFactory::getAll(['system' => $this->params['system']]);
 		$this->params['musicModes'] = MusicMode::getAll();
+      $this->params['playlists'] = Playlist::getAll();
 
       $gateActionScreens = GateScreenModel::query()->where('trigger_value IS NOT NULL')->get();
       $this->params['gateActions'] = [];

@@ -34,7 +34,7 @@ export interface TeamData {
 export interface MusicMode {
 	id: number,
 	name?: string,
-    group?: string,
+	group?: string,
 	fileName?: string,
 	order?: number
 }
@@ -51,9 +51,10 @@ export interface GameData {
 	players: { [index: string]: PlayerData },
 	teams: { [index: string]: TeamData },
 	music: MusicMode | null,
-    group?: GameGroupDataBase,
+	playlist?: number,
+	group?: GameGroupDataBase,
 	table?: TableData,
-    system?: string,
+	system?: string,
 }
 
 interface ModeSettings {
@@ -97,7 +98,7 @@ interface GameGroupDataBase {
 	id: number,
 	name: string,
 	active?: boolean,
-    table?: TableData | null,
+	table?: TableData | null,
 }
 
 interface GameGroupData extends GameGroupDataBase {
@@ -151,7 +152,7 @@ interface VariationCollection {
 	[index: number]: {
 		variation: Variation,
 		values: VariationsValue[]
-	}
+	};
 }
 
 interface Music {

@@ -64,3 +64,39 @@ label.team-color {
 .team-color-input {
 	display: none;
 }
+
+.image-input-with-preview {
+	--size: 3rem;
+	background-color: var(--background);
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
+	border: 1px solid var(--bs-border-color);
+	cursor: pointer;
+	height: var(--size);
+	width: var(--size);
+
+	input {
+		display: none;
+	}
+
+	img {
+		height: 100%;
+		object-fit: cover;
+		object-position: center;
+		width: 100%;
+	}
+
+	svg {
+		height: 100%;
+		width: 100%;
+
+		path {
+			fill: currentColor;
+		}
+	}
+}
+
+.input-group .image-input-with-preview {
+	height: auto;
+}

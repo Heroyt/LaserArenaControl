@@ -5,56 +5,55 @@
 
 {block content}
 
-	<div id="notices">
-		{foreach $notices as $notice}
-			{alert $notice['content'], $notice['type']}
-		{/foreach}
-	</div>
+    <div id="notices">
+        {foreach $notices as $notice}
+            {alert $notice['content'], $notice['type']}
+        {/foreach}
+    </div>
 
-	<div class="me-4 last-save-wrapper text-end position-fixed end-0">
-		{lang 'Last saved:'} <span class="last-save" data-target="#music-settings-form">{lang 'never'}</span>
-	</div>
+    <div class="me-4 last-save-wrapper text-end position-fixed end-0">
+        {lang 'Last saved:'} <span class="last-save" data-target="#music-settings-form">{lang 'never'}</span>
+    </div>
 
-	<h2>{lang 'Hudební módy', context: 'game'}:</h2>
+    <h2>{lang 'Hudební módy', context: 'game'}:</h2>
 
 
-	<form action="{link ['settings', 'music', 'upload']}" enctype="multipart/form-data" id="upload-form"
-		  method="post"
-		  class="text-center">
-		<div class="form-group">
-			<label for="media" class="form-label">{lang 'Upload', context: 'actions'}:</label>
-			<input type="file" name="media[]" accept="audio/mpeg" required class="form-control" id="media" multiple>
-			<button type="submit" class="btn btn-success my-3" name="action" value="upload">
-				{lang 'Upload', context: 'actions'}
-			</button>
-		</div>
-	</form>
-	<form action="{link ['settings', 'music']}" enctype="multipart/form-data" method="post" class="text-center autosave"
-		  id="music-settings-form">
-		<div id="musicInputsWrapper">
-			{dump ROOT}
-			{foreach $music as $musicMode}
-                {include musicTemplate $iterator->counter, $musicMode->id, $musicMode->name, $musicMode->group, $musicMode->getMediaUrl(), $musicMode->public, $musicMode->getFormattedPreviewStart()}
-			{/foreach}
-		</div>
-		<p class="text-center">
-			<button type="submit" class="btn btn-success btn-large">
-				<i class="fa-solid fa-save"></i> {lang 'Uložit', context: 'actions'}
-			</button>
-		</p>
-	</form>
+    <form action="{link ['settings', 'music', 'upload']}" enctype="multipart/form-data" id="upload-form"
+          method="post"
+          class="text-center">
+        <div class="form-group">
+            <label for="media" class="form-label">{lang 'Upload', context: 'actions'}:</label>
+            <input type="file" name="media[]" accept="audio/mpeg" required class="form-control" id="media" multiple>
+            <button type="submit" class="btn btn-success my-3" name="action" value="upload">
+                {lang 'Upload', context: 'actions'}
+            </button>
+        </div>
+    </form>
+    <form action="{link ['settings', 'music']}" enctype="multipart/form-data" method="post" class="text-center autosave"
+          id="music-settings-form">
+        <div id="musicInputsWrapper">
+            {foreach $music as $musicMode}
+                {include musicTemplate $iterator->counter, $musicMode->id, $musicMode->name, $musicMode->group, $musicMode->getMediaUrl(), $musicMode->public, $musicMode->getFormattedPreviewStart(), $musicMode}
+            {/foreach}
+        </div>
+        <p class="text-center">
+            <button type="submit" class="btn btn-success btn-large">
+                <i class="fa-solid fa-save"></i> {lang 'Uložit', context: 'actions'}
+            </button>
+        </p>
+    </form>
 
-	<template id="musicInputTemplate">
+    <template id="musicInputTemplate">
         {include musicTemplate '#counter#', '#id#', '#name#', '', '#file#', true}
-	</template>
+    </template>
 {/block}
 
-{define musicTemplate int $counter, string|int $id, string $name, string|null $group, string $musicFile, bool $public, string $previewStart = '0:00'}
-	<div class="input-group music-input my-2" data-id="{$id}">
-		<div class="input-group-text counter cursor-grab">{$counter}</div>
-		<input type="hidden" name="music[{$id}][order]" value="{$counter}" class="order-input">
-		<input type="text" name="music[{$id}][name]" id="music-{$id}-name"
-			   class="form-control" value="{$name}">
+{define musicTemplate int $counter, string|int $id, string $name, string|null $group, string $musicFile, bool $public, string $previewStart = '0:00', App\Models\MusicMode|null $musicMode = null}
+    <div class="input-group music-input my-2" data-id="{$id}">
+        <div class="input-group-text counter cursor-grab">{$counter}</div>
+        <input type="hidden" name="music[{$id}][order]" value="{$counter}" class="order-input">
+        <input type="text" name="music[{$id}][name]" id="music-{$id}-name"
+               class="form-control" value="{$name}">
         <div class="form-floating" data-toggle="tooltip"
              title="{lang 'Hudební módy se slučují do skupin. Při zadávání hry se pak spustí jeden náhodně výbraný hudební mód z vybrané hudební skupiny.'}">
             <input type="text" name="music[{$id}][group]" id="music-{$id}-group"
@@ -63,37 +62,56 @@
                 {lang 'Skupina'}
             </label>
         </div>
-		<input type="checkbox" class="btn-check" name="music[{$id}][public]" id="music-{$id}-public" value="1"
-			   autocomplete="off" {if $public}checked{/if}>
-        <div class="form-floating">
-            <input type="file" name="music[{$id}][background]" accept="image/jpeg,image/png" class="form-control"
+        <input type="checkbox" class="btn-check" name="music[{$id}][public]" id="music-{$id}-public" value="1"
+               autocomplete="off" {if $public}checked{/if}>
+        <label for="music-{$id}-background" data-toggle="tooltip" title="{lang 'Pozadí', context: 'image'}"
+               class="image-input-with-preview">
+            {var App\Models\DataObjects\Image|null $backgroundImage = $musicMode?->getBackgroundImage()}
+            {if !isset($backgroundImage)}
+                <img src="{getUrl}assets/images/placeholder.png" alt="{lang 'Pozadí', 'image'}">
+            {elseif $backgroundImage->getType() === 'svg'}
+            {file_get_contents($backgroundImage->getPath())|noescape}
+            {else}
+            {var string[] $paths = $backgroundImage->getOptimized()}
+                <img src="{$paths['250-webp'] ?? $paths['250'] ?? $paths['webp'] ?? $paths['original']}"
+                     alt="{lang 'Pozadí', 'image'}">
+            {/if}
+            <input type="file" name="music[{$id}][background]" accept="image/jpeg,image/png"
                    id="music-{$id}-background">
-            <label for="music-{$id}-background" class="form-label">{lang 'Pozadí', context: 'actions'}:</label>
-        </div>
+        </label>
+        <label for="music-{$id}-icon" class="image-input-with-preview" data-toggle="tooltip"
+               title="{lang 'Ikona', context: 'image'}">
+            {var App\Models\DataObjects\Image|null $icon = $musicMode?->getIcon()}
+            {if !isset($icon)}
+                <img src="{getUrl}assets/images/placeholder.png" alt="{lang 'Pozadí', 'image'}">
+            {elseif $icon->getType() === 'svg'}
+            {file_get_contents($icon->getPath())|noescape}
+            {else}
+            {var string[] $paths = $icon->getOptimized()}
+                <img src="{$paths['250-webp'] ?? $paths['250'] ?? $paths['webp'] ?? $paths['original']}"
+                     alt="{lang 'Pozadí', 'image'}">
+            {/if}
+            <input type="file" name="music[{$id}][icon]" accept="image/jpeg,image/png,.svg" id="music-{$id}-icon">
+        </label>
+        <label for="music-{$id}-public" class="btn btn-outline-info d-flex align-items-center" data-toggle="tooltip"
+               title="{lang 'Veřejný'}">
+            <i class="fa-solid fa-eye"></i>
+        </label>
         <div class="form-floating">
-            <input type="file" name="music[{$id}][icon]" accept="image/jpeg,image/png,.svg" class="form-control"
-                   id="music-{$id}-icon">
-            <label for="music-{$id}-icon" class="form-label">{lang 'Ikona', context: 'actions'}:</label>
+            <input type="text" class="form-control" id="music-{$id}-previewStart" name="music[{$id}][previewStart]"
+                   placeholder="0:00" value="{$previewStart}">
+            <label for="music-{$id}-previewStart">{lang 'Začátek ukázky'}</label>
         </div>
-		<label for="music-{$id}-public" class="btn btn-outline-info d-flex align-items-center" data-toggle="tooltip"
-			   title="{lang 'Veřejný'}">
-			<i class="fa-solid fa-eye"></i>
-		</label>
-		<div class="form-floating">
-			<input type="text" class="form-control" id="music-{$id}-previewStart" name="music[{$id}][previewStart]"
-				   placeholder="0:00" value="{$previewStart}">
-			<label for="music-{$id}-previewStart">{lang 'Začátek ukázky'}</label>
-		</div>
-		<button type="button" class="btn btn-success play-music" data-file="{$musicFile}" data-toggle="tooltip"
-				title="{lang 'Přehrát', context: 'actions'}">
-			<i class="fa-solid fa-play"></i>
-		</button>
-		<div class="input-group-text time-music font-monospace">
-			0:00
-		</div>
-		<button type="button" class="btn btn-danger remove" data-toggle="tooltip"
-				title="{lang 'Smazat', context: 'actions'}">
-			<i class="fa-solid fa-trash"></i>
-		</button>
-	</div>
+        <button type="button" class="btn btn-success play-music" data-file="{$musicFile}" data-toggle="tooltip"
+                title="{lang 'Přehrát', context: 'actions'}">
+            <i class="fa-solid fa-play"></i>
+        </button>
+        <div class="input-group-text time-music font-monospace">
+            0:00
+        </div>
+        <button type="button" class="btn btn-danger remove" data-toggle="tooltip"
+                title="{lang 'Smazat', context: 'actions'}">
+            <i class="fa-solid fa-trash"></i>
+        </button>
+    </div>
 {/define}

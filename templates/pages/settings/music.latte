@@ -62,8 +62,6 @@
                 {lang 'Skupina'}
             </label>
         </div>
-        <input type="checkbox" class="btn-check" name="music[{$id}][public]" id="music-{$id}-public" value="1"
-               autocomplete="off" {if $public}checked{/if}>
         <label for="music-{$id}-background" data-toggle="tooltip" title="{lang 'Pozadí', context: 'image'}"
                class="image-input-with-preview">
             {var App\Models\DataObjects\Image|null $backgroundImage = $musicMode?->getBackgroundImage()}
@@ -93,6 +91,8 @@
             {/if}
             <input type="file" name="music[{$id}][icon]" accept="image/jpeg,image/png,.svg" id="music-{$id}-icon">
         </label>
+        <input type="checkbox" class="btn-check" name="music[{$id}][public]" id="music-{$id}-public" value="1"
+               autocomplete="off" {if $public}checked{/if}>
         <label for="music-{$id}-public" class="btn btn-outline-info d-flex align-items-center" data-toggle="tooltip"
                title="{lang 'Veřejný'}">
             <i class="fa-solid fa-eye"></i>

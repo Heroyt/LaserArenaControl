@@ -4,6 +4,7 @@ namespace App\Controllers\Settings;
 
 use App\Core\App;
 use App\Models\MusicMode;
+use App\Models\Playlist;
 use App\Services\FeatureConfig;
 use App\Services\LigaApi;
 use JsonException;
@@ -34,6 +35,7 @@ class Music extends Controller
     #[Get('settings/music', 'settings-music')]
     public function show() : ResponseInterface {
         $this->params['music'] = MusicMode::getAll();
+        $this->params['playlists'] = Playlist::getAll();
         return $this->view('pages/settings/music');
     }
 
@@ -137,7 +139,7 @@ class Music extends Controller
             }
         }
 
-        return $this->customRespond($request, $allMusic);
+        return $this->customRespond($request, ['music' => $allMusic]);
     }
 
     /**
@@ -259,6 +261,38 @@ class Music extends Controller
             }
         }
 
+        $playlistIds = [];
+        foreach ($request->getPost('playlist', []) as $id => $data) {
+            if (empty($data['name'])) {
+                continue;
+            }
+            $new = false;
+            if (str_starts_with($id, 'new')) {
+                $playlist = new Playlist;
+                $new = true;
+            }
+            else {
+                try {
+                    $playlist = Playlist::get((int) $id);
+                } catch (ModelNotFoundException | ValidationException $e) {
+                    $playlist = new Playlist;
+                    $new = true;
+                }
+            }
+
+            $playlist->name = $data['name'];
+            $music = [];
+            foreach ($data['music'] ?? [] as $musicId) {
+                $music[] = MusicMode::get((int) $musicId);
+            }
+            $playlist->setMusic($music);
+
+            $playlist->save();
+            if ($new) {
+                $playlistIds[$id] = $playlist->id;
+            }
+        }
+
         /** @var FeatureConfig $featureConfig */
         $featureConfig = App::getService('features');
         if ($featureConfig->isFeatureEnabled('liga')) {
@@ -270,28 +304,28 @@ class Music extends Controller
             }
         }
 
-        return $this->customRespond($request);
+        return $this->customRespond($request, ['playlistIds' => $playlistIds]);
     }
 
     /**
      * Send a response to the client - sends a JSON or a redirect based on the request type (AJAX / normal)
      *
      * @param  Request  $request
-     * @param  MusicMode[]  $music
+     * @param  array<string,mixed>  $music
      *
      * @return never
      * @throws JsonException
      */
-    private function customRespond(Request $request, array $music = []) : ResponseInterface {
+    private function customRespond(Request $request, array $data = []) : ResponseInterface {
         if ($request->isAjax()) {
             if (!empty($request->passErrors)) {
                 return $this->respond(
-                  ['errors' => $request->passErrors, 'notices' => $request->passNotices, 'music' => $music],
+                  array_merge(['errors' => $request->passErrors, 'notices' => $request->passNotices], $data),
                   500
                 );
             }
             return $this->respond(
-              ['status' => 'ok', 'errors' => [], 'notices' => $request->passNotices, 'music' => $music]
+              array_merge([['status' => 'ok', 'errors' => [], 'notices' => $request->passNotices]], $data)
             );
         }
         return App::redirect(['settings', 'music'], $request);

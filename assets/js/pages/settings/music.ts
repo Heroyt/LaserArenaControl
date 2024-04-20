@@ -15,7 +15,7 @@ export default function initMusicSettings() {
 	const uploadInput = document.getElementById('media') as HTMLInputElement;
 	const uploadForm = document.getElementById('upload-form') as HTMLFormElement;
 
-	//const musicForm = document.getElementById('music-settings-form') as HTMLFormElement;
+	const musicForm = document.getElementById('music-settings-form') as HTMLFormElement;
 	const musicWrapper = document.getElementById('musicInputsWrapper') as HTMLDivElement;
 
 	const notices = document.getElementById('notices') as HTMLDivElement;
@@ -41,6 +41,37 @@ export default function initMusicSettings() {
 		ghostClass: 'cursor-grabbing',
 		onSort: recountMusic,
 	});
+
+	const addPlaylistBtn = document.getElementById('add-playlist') as HTMLButtonElement;
+	const playlistWrapper = document.getElementById('playlist-wrapper') as HTMLDivElement;
+	const playlistTemplate = document.getElementById('playlistTemplate') as HTMLTemplateElement;
+	let playlistCounter = 0;
+	if (addPlaylistBtn && playlistWrapper && playlistTemplate) {
+		addPlaylistBtn.addEventListener('click', () => {
+			const tmp = document.createElement('div');
+			tmp.innerHTML = playlistTemplate.innerHTML.replaceAll('#id#', `new-${playlistCounter}`);
+			const playlist = tmp.firstElementChild as HTMLDivElement;
+			playlistCounter++;
+			playlistWrapper.appendChild(playlist);
+		});
+
+		musicForm.addEventListener('autosaved', (e: CustomEvent<{ playlistIds: Record<string, string> }>) => {
+			Object.entries(e.detail.playlistIds).forEach(([original, id]) => {
+				const playlist = musicForm.querySelector<HTMLDivElement>(`.playlist[data-id="${original}"]`);
+				if (!playlist) {
+					return;
+				}
+
+				playlist.dataset.id = id;
+				playlist.setAttribute('data-id', id);
+
+				const inputs = playlist.querySelectorAll<HTMLInputElement>('input');
+				inputs.forEach(input => {
+					input.name = input.name.replace(original, id);
+				});
+			});
+		});
+	}
 
 	function upload(index: number, files: FileList) {
 		if (index >= files.length) {

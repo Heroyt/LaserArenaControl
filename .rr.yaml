@@ -2,6 +2,8 @@ version: "3"
 server:
   command: "php psr-worker.php"
   relay: pipes
+metrics:
+  address: 0.0.0.0:2112
 rpc:
   listen: tcp://0.0.0.0:6001
 http:

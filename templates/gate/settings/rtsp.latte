@@ -1,0 +1,26 @@
+{parameters
+    string $key,
+    string $name,
+    App\Gate\Settings\RtspSettings $settings,
+}
+
+<div class="form-group">
+    <label for="{$key}-streams" class="form-label">
+        {lang 'URL RTSP streamů'}:
+    </label>
+    <textarea name="{$name}[streams]" rows="9" id="{$key}-streams"
+              class="form-control">{$settings->streams|join:"\n"|trim}</textarea>
+    <div class="form-text">
+        {lang 'Na každý řádek 1 URL ve formátu "rtsp://user:password@url".'}
+    </div>
+</div>
+
+<div class="form-group reload-timer">
+    <label for="{$key}-max-streams" class="form-label">
+        {lang 'Maximální počet zobrazených streamů v jednu chvíli', context: 'settings'}:
+    </label>
+    <input type="number" class="form-control" min="1" n:attr="value: $settings->maxStreams" id="{$key}-max-streams"
+           name="{$name}[max-streams]">
+    <div class="form-text">{lang 'Pokud je maximální počet menší, než počet streamů, budou se streamy postupně přepínat.'}</div>
+</div>
+

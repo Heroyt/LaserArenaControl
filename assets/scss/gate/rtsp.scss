@@ -1,0 +1,33 @@
+@import '../pages/gate/parts';
+
+#gate main .content.rtsp-screen {
+	grid-template-areas: 'logo logo streams streams streams streams streams streams streams .'
+			                   '. . streams streams streams streams streams streams streams .'
+			                   '. . streams streams streams streams streams streams streams .'
+			                   '. . streams streams streams streams streams streams streams .';
+
+
+	.streams {
+		display: grid;
+		grid-area: streams;
+		grid-gap: 2rem;
+		grid-template-columns: repeat(auto-fit, minmax(600px, 1fr));
+
+		.stream {
+
+		}
+	}
+
+	&.in {
+		.stream {
+			animation: slide-fade-in 300ms ease forwards;
+			opacity: 0;
+		}
+	}
+
+	&.out {
+		.stream {
+			animation: slide-fade-out 300ms ease forwards;
+		}
+	}
+}

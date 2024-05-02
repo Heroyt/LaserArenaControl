@@ -1,0 +1,21 @@
+{layout '../@layout.latte'}
+
+{varType App\Gate\Settings\RtspSettings $settings}
+{varType string $hash}
+
+{define containerClasses}
+    rtsp-screen
+{/define}
+
+{define content}
+    <div class="streams" data-hash="{$hash}" data-max-streams="{$settings->maxStreams}"
+         data-streams="{json_encode($settings->streams)}">
+        <video
+                n:for="$i = 0; $i < count($settings->streams) && $i < $settings->maxStreams; $i++"
+                data-index="{$i}"
+                class="stream"
+                id="stream-{$i}"
+                data-stream="{$settings->streams[$i]}"
+                src="{$settings->streams[$i]}"/>
+    </div>
+{/define}

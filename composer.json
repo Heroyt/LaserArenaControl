@@ -64,13 +64,17 @@
     "orisai/nette-console": "^1.4",
     "ext-redis": "*",
     "zircote/swagger-php": "^4.8",
-    "ext-igbinary": "*"
+    "laser-arena-control/tables_module": "@dev",
+    "laser-arena-control/tournament_module": "@dev",
     "ext-igbinary": "*",
     "ext-gd": "*",
     "spiral/roadrunner": "^2023.3",
     "spiral/roadrunner-worker": "^3.5",
     "spiral/roadrunner-http": "^3.5",
-    "spiral/roadrunner-jobs": "^4.3"
+    "spiral/roadrunner-jobs": "^4.3",
+    "roadrunner-php/centrifugo": "^2.1",
+    "symfony/process": "^6.4",
+    "spiral/roadrunner-tcp": "^4.1"
   },
   "require-dev": {
     "roave/security-advisories": "dev-latest",

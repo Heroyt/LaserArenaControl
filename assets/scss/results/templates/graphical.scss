@@ -62,6 +62,10 @@
 			right: 0;
 			top: 0;
 			width: var(--size);
+
+			path {
+				fill: #000 !important;
+			}
 		}
 	}
 

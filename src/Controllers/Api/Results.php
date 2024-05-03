@@ -164,7 +164,8 @@ class Results extends ApiController
 					500,
 				);
 			}
-			$parser = new $class($file, $this->playerProvider);
+        $parser = new $class($this->playerProvider);
+        $parser->setFile($file);
 			$gameObj = $parser->parse();
 
 			$now = time();

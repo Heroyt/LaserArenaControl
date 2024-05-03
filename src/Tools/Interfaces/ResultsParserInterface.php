@@ -55,5 +55,5 @@ interface ResultsParserInterface
 	 * @pre File is readable
 	 *
 	 */
-	public static function checkFile(string $fileName, string $contents) : bool;
+    public static function checkFile(string $fileName = '', string $contents = '') : bool;
 }

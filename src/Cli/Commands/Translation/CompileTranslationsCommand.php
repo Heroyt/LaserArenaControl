@@ -7,7 +7,6 @@ use App\Cli\Enums\ForegroundColors;
 use App\Core\App;
 use Gettext\Generator\MoGenerator;
 use Gettext\Loader\PoLoader;
-use Gettext\Translations;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -26,21 +25,20 @@ class CompileTranslationsCommand extends Command
 	protected function execute(InputInterface $input, OutputInterface $output): int {
 		$poLoader = new PoLoader();
 		$moGenerator = new MoGenerator();
-		/** @var Translations[] $translations */
-		$translations = [];
 		/** @var string[] $languages */
 		$languages = App::getSupportedLanguages();
 		foreach ($languages as $lang => $country) {
 			$concatLang = $lang . '_' . $country;
-			$path = LANGUAGE_DIR . '/' . $concatLang;
+        $path = LANGUAGE_DIR.$concatLang;
 			if (!is_dir($path)) {
 				continue;
 			}
 			$file = $path . '/LC_MESSAGES/' . LANGUAGE_FILE_NAME . '.po';
+        $output->writeln('Loading '.$file);
 			$translation = $poLoader->loadFile($file);
 			if ($moGenerator->generateFile(
 				$translation,
-				LANGUAGE_DIR . $lang . '/LC_MESSAGES/' . LANGUAGE_FILE_NAME . '.mo'
+        $path.'/LC_MESSAGES/'.LANGUAGE_FILE_NAME.'.mo'
 			)) {
 				$output->writeln('Compiled ' . $file);
 			}

@@ -142,6 +142,7 @@ class DbInstall implements InstallInterface
 						continue;
 					}
 				}
+          echo 'Creating table '.$tableName."\n";
 				$definition = $info['definition'];
 				DB::getConnection()->query("CREATE TABLE IF NOT EXISTS %n $definition", $tableName);
 			}

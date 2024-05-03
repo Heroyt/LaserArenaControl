@@ -4,7 +4,7 @@
 	branch = master
 [submodule "modules/Core"]
 	path = modules/Core
-	url = https://github.com/LaserLiga/lac_modules_core.git
+	url = https://github.com/LaserLiga/lac_modules_core
 	branch = master
 [submodule "modules/Tables"]
 	path = modules/Tables

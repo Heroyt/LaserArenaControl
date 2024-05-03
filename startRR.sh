@@ -3,13 +3,41 @@
 # Update project
 if [ "$LAC_VERSION" != "dev" ]; then
   git fetch --all --tags
-  git checkout "v${LAC_VERSION}" -b "stable"
-  git -C src/GameModels fetch --all --tags
-  git -C src/GameModels checkout "v${LAC_MODELS_VERSION}" -b "stable"
+  if [ "$LAC_VERSION" == "stable" ]; then
+    git pull --recurse-submodules
+  else
+    git checkout "v${LAC_VERSION}" -b "stable"
+    git -C src/GameModels fetch --all --tags
+    git -C src/GameModels checkout "v${LAC_MODELS_VERSION}" -b "stable"
+  fi
   php install.php
 else
   echo "Skipping git fetch for dev"
 fi
+
+if [ ! -f "composer.lock" ]; then
+  composer update
+else
+  composer install
+fi
+compoer dump-autoload
+
+if [ ! -f "package-lock.json" ]; then
+  npm update
+else
+  npm install
+fi
+
+# Build assets
+npm run build
+
+# Prepare some tasks
+./bin/console translations:compile
+./bin/console regression:update
+
+# Clear DI, model and info cache
+./bin/console cache:clean -dmi
+
 
 # Run project
 echo 'Starting...'

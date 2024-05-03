@@ -29,19 +29,13 @@ RUN mkdir -p lmx
 RUN mkdir -p lmx/results
 RUN mkdir -p lmx/games
 
-RUN composer update
+ENV COMPOSER_ALLOW_SUPERUSER=1
 
 # Copy shell scripts
-COPY start.sh start.sh
+COPY startRR.sh startRR.sh
 
 # Initialize crontab
 RUN crontab -l | { cat; echo "* * * * * /usr/local/bin/php /var/www/bin/scheduler.php >> /var/www/logs/cron.log 2>&1"; } | crontab -
-
-# Install
-ENV COMPOSER_ALLOW_SUPERUSER=1
-RUN composer dump-autoload
-RUN npm install
-RUN npm run build
 
 RUN chmod 0777 -R logs
 RUN chmod 0777 -R temp

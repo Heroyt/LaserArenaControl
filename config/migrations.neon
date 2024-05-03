@@ -237,10 +237,10 @@ tables:
 				- 'ADD `import_time` datetime DEFAULT NULL AFTER `file_time`'
 			0.4.0:
 				- 'ADD `id_music` int(11) unsigned DEFAULT NULL AFTER `id_mode`'
-				- 'ADD `evo5_games_ibfk_2` FOREIGN KEY IF NOT EXISTS (`id_music`) REFERENCES `music` (`id_music`) ON DELETE SET NULL ON UPDATE CASCADE'
+				- 'ADD FOREIGN KEY IF NOT EXISTS (`id_music`) REFERENCES `music` (`id_music`) ON DELETE SET NULL ON UPDATE CASCADE'
 			0.4.1:
 				- 'ADD `id_group` int(11) unsigned DEFAULT NULL AFTER `id_music`'
-				- 'ADD `evo5_games_ibfk_3` FOREIGN KEY IF NOT EXISTS (`id_group`) REFERENCES `game_groups` (`id_group`) ON DELETE SET NULL ON UPDATE CASCADE'
+				- 'ADD FOREIGN KEY IF NOT EXISTS (`id_group`) REFERENCES `game_groups` (`id_group`) ON DELETE SET NULL ON UPDATE CASCADE'
 			0.4.2:
 				- 'ADD UNIQUE INDEX (`code`);'
 			0.5.0:

@@ -2,6 +2,7 @@ includes:
 	- vendor/lsr/core/migrations.neon
 tables:
 	page_info:
+		order: 0
 		definition: '''
     		(
     			`key` varchar(30) NOT NULL DEFAULT '',
@@ -13,6 +14,7 @@ tables:
 			0.1:
 				- 'CHANGE `value` `value` BLOB DEFAULT NULL;'
 	App\GameModels\Vest:
+		order: 0
 		definition: '''
 			(
             	`id_vest` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -28,6 +30,7 @@ tables:
 			0.1:
 				- 'ADD `updated_at` datetime DEFAULT NULL ON UPDATE current_timestamp();'
 	App\Models\Auth\Player:
+		order: 0
 		definition: '''
 			(
 			  `id_user` int(11) unsigned NOT NULL,
@@ -39,6 +42,7 @@ tables:
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 			'''
 	App\Models\Auth\PlayerConnection:
+		order: 1
 		definition: '''
 			(
               `id_connection` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -51,6 +55,7 @@ tables:
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
             '''
 	App\Models\MusicMode:
+		order: 0
 		definition: '''
     		(
     			`id_music` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -79,6 +84,7 @@ tables:
 				- 'ADD `background_image` VARCHAR(255) DEFAULT NULL;'
 				- 'ADD `icon` VARCHAR(255) DEFAULT NULL;'
 	App\GameModels\Game\GameModes\AbstractMode:
+		order: 0
 		definition: '''
 		(
         	`id_mode` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -135,6 +141,7 @@ tables:
 				- 'ADD `active` tinyint(1) NOT NULL DEFAULT 1 AFTER `public`'
 				- 'ADD `alias` varchar(50) DEFAULT '''' AFTER `name`'
 	game_modes-names:
+		order: 1
 		definition: '''
 		(
         	`id_mode` int(11) unsigned NOT NULL,
@@ -145,6 +152,7 @@ tables:
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 		'''
 	App\Models\GameModeVariation:
+		order: 0
 		definition: '''
     	(
 			`id_variation` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -153,6 +161,7 @@ tables:
     	) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 		'''
 	game_modes_variations_values:
+		order: 1
 		definition: '''
 		(
 			`id_variation` int(11) unsigned NOT NULL,
@@ -169,6 +178,7 @@ tables:
 		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 		'''
 	App\Models\GameGroup:
+		order: 0
 		definition: '''
 		(
 			`id_group` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -178,6 +188,7 @@ tables:
 		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 		'''
 	App\GameModels\Game\Evo5\Game:
+		order: 1
 		definition: '''
 		(
 			`id_game` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -235,6 +246,7 @@ tables:
 			0.5.0:
 				- 'ADD `results_file` varchar(255) DEFAULT NULL AFTER `end`'
 	App\GameModels\Game\Evo6\Game:
+		order: 1
 		definition: '''
 		(
 			`id_game` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -278,6 +290,7 @@ tables:
 		'''
 		modifications:
 	App\GameModels\Game\Evo5\Team:
+		order: 2
 		definition: '''
 		(
 			`id_team` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -296,6 +309,7 @@ tables:
 			0.1.0:
 				- 'ADD `bonus` int(11) DEFAULT NULL AFTER `score`'
 	App\GameModels\Game\Evo6\Team:
+		order: 2
 		definition: '''
 		(
 			`id_team` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -312,6 +326,7 @@ tables:
 		'''
 		modifications:
 	App\GameModels\Game\Evo5\Player:
+		order: 3
 		definition: '''
 		(
 			`id_player` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -366,6 +381,7 @@ tables:
 			0.4.0:
 				- 'ADD `my_lasermaxx` varchar(100) NOT NULL DEFAULT '''''
 	App\GameModels\Game\Evo6\Player:
+		order: 3
 		definition: '''
 		(
 			`id_player` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -407,6 +423,7 @@ tables:
 		'''
 		modifications:
 	evo5_hits:
+		order: 4
 		definition: '''
 		(
 			`id_player` int(11) unsigned NOT NULL,
@@ -420,6 +437,7 @@ tables:
 		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 		'''
 	evo6_hits:
+		order: 4
 		definition: '''
 		(
 			`id_player` int(11) unsigned NOT NULL,
@@ -433,6 +451,7 @@ tables:
 		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 		'''
 	'prepared_games':
+		order: 0
 		definition: '''
 		(
 			`id_game` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -443,6 +462,7 @@ tables:
 		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 		'''
 	App\Models\Playlist:
+		order: 0
 		definition: '''
 		(
 			`id_playlist` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -451,6 +471,7 @@ tables:
 		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 		'''
 	playlist_music:
+		order: 1
 		definition: '''
 		(
 			`id_playlist` int(11) unsigned NOT NULL,
@@ -463,6 +484,7 @@ tables:
 		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 		'''
 	App\Gate\Models\GateType:
+		order: 0
 		definition: '''
 		(
 			`id_gate` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -475,6 +497,7 @@ tables:
 		) ENGINE=InnoDB DEFAULT CHARSET utf8mb4;
 		'''
 	App\Gate\Models\GateScreenModel:
+		order: 1
 		definition: '''
 		(
 			`id_screen` int(11) unsigned NOT NULL AUTO_INCREMENT,

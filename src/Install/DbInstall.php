@@ -117,8 +117,9 @@ class DbInstall implements InstallInterface
 			return false;
 		}
 
-		/** @var array{definition:string, modifications?:array<string,string[]>}[] $tables */
+      /** @var array{order?:int,definition:string, modifications?:array<string,string[]>}[] $tables */
 		$tables = array_merge($loader->migrations, self::TABLES);
+      uasort($tables, static fn($a, $b) => ($a['order'] ?? 99) - ($b['order'] ?? 99));
 
 		try {
 			if ($fresh) {

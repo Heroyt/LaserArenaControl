@@ -110,6 +110,7 @@ services:
 	gate.screens.youtube: App\Gate\Screens\YoutubeScreen
 	gate.screens.music: App\Gate\Screens\MusicModesScreen
 	gate.screens.rtsp: App\Gate\Screens\RtspScreen
+	gate.screens.vest_gun_after_game: App\Gate\Screens\VestGunAfterGameScreen
 
 	gate.screens.idle.stats: App\Gate\Screens\DayStats\GeneralStatsScreen
 	gate.screens.idle.highlights: App\Gate\Screens\DayStats\HighlightsScreen

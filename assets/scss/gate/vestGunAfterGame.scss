@@ -1,0 +1,344 @@
+#gate main .content.vest-gun-after-game-screen {
+	grid-template-areas: 'logo logo vest vest vest vest vest vest . .'
+			                   '. . vest vest vest vest vest vest . .'
+			                   '. . vest vest vest vest vest vest . .'
+			                   '. . vest vest vest vest vest vest . .';
+
+	.vest-gun-wrapper {
+		display: flex;
+		grid-area: vest;
+		justify-content: center;
+	}
+
+	h1 {
+		backdrop-filter: blur(10px);
+		background-color: rgba(0, 0, 0, 0.5);
+		border-radius: 1rem;
+		color: #fff;
+		font-size: 3.5rem;
+		font-weight: bold;
+		margin-bottom: 3rem;
+		padding: 2rem;
+		position: absolute;
+		text-align: center;
+		text-transform: uppercase;
+		top: 45%;
+	}
+
+	svg {
+		grid-area: vest;
+		height: min(90vh, 90rem);
+
+		.line {
+			transform-origin: center 65%;
+		}
+
+		#line-1 {
+			animation: scale-line-1 10s infinite linear;
+		}
+
+		#line-2 {
+			animation: scale-line-2 10s infinite linear;
+		}
+
+		#line-3 {
+			animation: scale-line-3 10s infinite linear;
+		}
+
+		#line-4 {
+			animation: scale-line-4 10s infinite linear;
+		}
+
+		#line-5 {
+			animation: scale-line-5 10s infinite linear;
+		}
+
+		#line-6 {
+			animation: scale-line-6 10s infinite linear;
+		}
+
+		#line-7 {
+			animation: scale-line-7 10s infinite linear;
+		}
+
+		#line-8 {
+			animation: scale-line-8 10s infinite linear;
+		}
+
+		#Gun {
+			animation: gun-click 10s infinite linear;
+		}
+	}
+
+	&.in {
+		h1 {
+			animation: slide-fade-in 500ms ease forwards;
+			animation-delay: 200ms;
+			opacity: 0;
+			transform: translateY(-50%);
+		}
+
+		svg {
+			animation: slide-fade-in 500ms ease forwards;
+		}
+	}
+
+	&.out {
+		h1 {
+			animation: slide-fade-out 500ms ease forwards;
+		}
+
+		svg {
+			animation: slide-fade-out 500ms ease forwards;
+			animation-delay: 100ms;
+		}
+	}
+}
+
+@keyframes scale-line-1 {
+	0%, 39% {
+		opacity: 0;
+		scale: 0;
+		translate: 0 3rem;
+	}
+	40% {
+		opacity: 1;
+		scale: .2;
+		translate: 0 -1rem;
+	}
+	42% {
+		opacity: 1;
+		scale: .8;
+		translate: 0 -13rem;
+	}
+	43% {
+		opacity: 0;
+		scale: 1;
+		translate: 0 -17rem;
+	}
+	100% {
+		opacity: 0;
+		scale: 0;
+		translate: 0 3rem;
+	}
+}
+
+@keyframes scale-line-2 {
+	0%, 39% {
+		opacity: 0;
+		scale: 0;
+		translate: -2rem 2rem;
+	}
+	40% {
+		opacity: 1;
+		scale: .2;
+		translate: .5rem -.5rem;
+	}
+	42% {
+		opacity: 1;
+		scale: .8;
+		translate: 11rem -11rem;
+	}
+	43% {
+		opacity: 0;
+		scale: 1;
+		translate: 14rem -14rem;
+	}
+	100% {
+		opacity: 0;
+		scale: 0;
+		translate: -2rem 2rem;
+	}
+}
+
+@keyframes scale-line-3 {
+	0%, 39% {
+		opacity: 0;
+		scale: 0;
+		translate: -3rem 0;
+	}
+	40% {
+		opacity: 1;
+		scale: .2;
+		translate: 1rem 0;
+	}
+	42% {
+		opacity: 1;
+		scale: .8;
+		translate: 13rem 0;
+	}
+	43% {
+		opacity: 0;
+		scale: 1;
+		translate: 17rem 0;
+	}
+	100% {
+		opacity: 0;
+		scale: 0;
+		translate: -3rem 0;
+	}
+}
+
+@keyframes scale-line-4 {
+	0%, 39% {
+		opacity: 0;
+		scale: 0;
+		translate: -2rem -2rem;
+	}
+	40% {
+		opacity: 1;
+		scale: .2;
+		translate: .5rem .5rem;
+	}
+	42% {
+		opacity: 1;
+		scale: .8;
+		translate: 11rem 11rem;
+	}
+	43% {
+		opacity: 0;
+		scale: 1;
+		translate: 14rem 14rem;
+	}
+	100% {
+		opacity: 0;
+		scale: 0;
+		translate: -2rem -2rem;
+	}
+}
+
+@keyframes scale-line-5 {
+	0%, 39% {
+		opacity: 0;
+		scale: 0;
+		translate: 0 -3rem;
+	}
+	40% {
+		opacity: 1;
+		scale: .2;
+		translate: 0 1rem;
+	}
+	42% {
+		opacity: 1;
+		scale: .8;
+		translate: 0 13rem;
+	}
+	43% {
+		opacity: 0;
+		scale: 1;
+		translate: 0 17rem;
+	}
+	100% {
+		opacity: 0;
+		scale: 0;
+		translate: 0 -3rem;
+	}
+}
+
+@keyframes scale-line-6 {
+	0%, 39% {
+		opacity: 0;
+		scale: 0;
+		translate: 2rem -2rem;
+	}
+	40% {
+		opacity: 1;
+		scale: .2;
+		translate: -.5rem .5rem;
+	}
+	42% {
+		opacity: 1;
+		scale: .8;
+		translate: -11rem 11rem;
+	}
+	43% {
+		opacity: 0;
+		scale: 1;
+		translate: -14rem 14rem;
+	}
+	100% {
+		opacity: 0;
+		scale: 0;
+		translate: 2rem -2rem;
+	}
+}
+
+@keyframes scale-line-7 {
+	0%, 39% {
+		opacity: 0;
+		scale: 0;
+		translate: 3rem 0;
+	}
+	40% {
+		opacity: 1;
+		scale: .2;
+		translate: -1rem 0;
+	}
+	42% {
+		opacity: 1;
+		scale: .8;
+		translate: -13rem 0;
+	}
+	43% {
+		opacity: 0;
+		scale: 1;
+		translate: -17rem 0;
+	}
+	100% {
+		opacity: 0;
+		scale: 0;
+		translate: 3rem 0;
+	}
+}
+
+@keyframes scale-line-8 {
+	0%, 39% {
+		opacity: 0;
+		scale: 0;
+		translate: 2rem 2rem;
+	}
+	40% {
+		opacity: 1;
+		scale: .2;
+		translate: -.5rem -.5rem;
+	}
+	42% {
+		opacity: 1;
+		scale: .8;
+		translate: -11rem -11rem;
+	}
+	43% {
+		opacity: 0;
+		scale: 1;
+		translate: -14rem -14rem;
+	}
+	100% {
+		opacity: 0;
+		scale: 0;
+		translate: 2rem 2rem;
+	}
+}
+
+@keyframes gun-click {
+	0%, 100% {
+		transform: translateY(5rem);
+	}
+	10% {
+		transform: translateY(1.5rem);
+	}
+	39% {
+		transform: translateY(1rem);
+	}
+	40% {
+		transform: translateY(0);
+	}
+	80% {
+		transform: translateY(0);
+	}
+	83% {
+		transform: translateY(1rem);
+	}
+	90% {
+		transform: translateY(5rem);
+	}
+}

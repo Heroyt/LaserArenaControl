@@ -53,3 +53,4 @@ docker/redis
 !docker/DockerfileNginx
 !docker/DockerfileNginxServer
 .env
+.pid

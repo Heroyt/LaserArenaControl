@@ -14,11 +14,7 @@ else
   echo "Skipping git fetch for dev"
 fi
 
-if [ ! -f "composer.lock" ]; then
-  composer update
-else
-  composer install
-fi
+composer update
 composer dump-autoload
 
 php install.php

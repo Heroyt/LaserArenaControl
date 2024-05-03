@@ -9,35 +9,8 @@
 
 {define content}
     <div class="music-modes-wrapper">
-        <div class="music-mode" n:foreach="$musicModes as $musicGroup">
-            {if $musicGroup->getBackgroundImage() !== null}
-                {var string[] $paths = $musicGroup->getBackgroundImage()->getOptimized()}
-                <img class="background"
-                     src="{$paths['250-webp'] ?? $paths['250'] ?? $paths['webp'] ?? $paths['original']}"
-                     alt="{lang 'Pozadí'}">
-            {/if}
-            <div n:if="$musicGroup->getIcon() !== null" class="icon">
-                {var App\Models\DataObjects\Image $icon = $musicGroup->getIcon()}
-                {if $icon->getType() === 'svg'}
-                    {file_get_contents($icon->getPath())|noescape}
-                {else}
-                    {var string[] $paths = $icon->getOptimized()}
-                    <img src="{$paths['250-webp'] ?? $paths['250'] ?? $paths['webp'] ?? $paths['original']}"
-                         alt="{lang 'Ikona'}">
-                {/if}
-            </div>
-            <div class="name">
-                {if count($musicGroup->music) === 1}
-                    {lang $musicGroup->music[0]->name, context: 'music'}
-                {else}
-                    {lang $musicGroup->name, context: 'music.group'}
-                {/if}
-            </div>
-            <div n:if="count($musicGroup->music) > 1" class="children">
-                <div n:foreach="$musicGroup->music as $musicMode" class="child">
-                    {lang $musicMode->name, context: 'music'}
-                </div>
-            </div>
-        </div>
+        {foreach $musicModes as $musicGroup}
+            {include '../../components/music/musicModeCard.latte', $musicGroup}
+        {/foreach}
     </div>
 {/define}

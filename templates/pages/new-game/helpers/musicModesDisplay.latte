@@ -1,0 +1,11 @@
+{parameters App\Gate\Models\MusicGroupDto[] $musicModes}
+
+<div class="modal fade" id="music-modes-display" tabindex="-1">
+    <div class="modal-dialog modal-xl">
+        <div class="music-groups-wrapper">
+            {foreach $musicModes as $musicGroup}
+                {include '../../../components/music/musicModeCard.latte', $musicGroup}
+            {/foreach}
+        </div>
+    </div>
+</div>

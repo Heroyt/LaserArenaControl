@@ -94,6 +94,10 @@ label.team-color {
 		path {
 			fill: currentColor;
 		}
+
+		[stroke] {
+			stroke: currentColor;
+		}
 	}
 }
 

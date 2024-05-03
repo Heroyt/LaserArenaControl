@@ -9,6 +9,7 @@
 {varType App\GameModels\Game\GameModes\AbstractMode[] $gameModes}
 {varType App\GameModels\Game\Game|null $loadGame}
 {varType App\Models\MusicMode[] $musicModes}
+{varType App\Gate\Models\MusicGroupDto[] $musicGroups}
 {varType App\Models\Playlist[] $playlists}
 {varType string[] $gateActions}
 {varType string $system}
@@ -95,6 +96,7 @@
     {/foreach}
     {include scoreDownloadModal}
     {include userSearchModal}
+    {include 'helpers/musicModesDisplay.latte', $musicGroups}
     {include help}
     {var int $order = 0}
     {if $featureConfig->isFeatureEnabled('preparedGames')}
@@ -329,6 +331,10 @@
                title="{lang 'Slučovat hudební skupiny'}">
             <i class="fa-solid fa-layer-group"></i>
         </label>
+        <button type="button" data-bs-toggle="modal" data-bs-target="#music-modes-display" class="btn btn-info"
+                data-toggle="tooltip" title="{lang 'Zobrazit přehled hudebních módů'}">
+            <i class="fa-solid fa-eye"></i>
+        </button>
         <button type="button" data-toggle="shuffle" title="{lang 'Náhodně', context: 'actions'}"
                 data-target="#music-select" class="btn btn-purple-500">
             <i class="fa-solid fa-shuffle"></i>

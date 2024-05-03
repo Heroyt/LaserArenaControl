@@ -3,14 +3,13 @@
 # Update project
 if [ "$LAC_VERSION" != "dev" ]; then
   git fetch --all --tags
-  if [ "$LAC_VERSION" == "stable" ]; then
+  if [[ "$LAC_VERSION" == "stable" ]]; then
     git pull --recurse-submodules
   else
     git checkout "v${LAC_VERSION}" -b "stable"
     git -C src/GameModels fetch --all --tags
     git -C src/GameModels checkout "v${LAC_MODELS_VERSION}" -b "stable"
   fi
-  php install.php
 else
   echo "Skipping git fetch for dev"
 fi
@@ -20,7 +19,9 @@ if [ ! -f "composer.lock" ]; then
 else
   composer install
 fi
-compoer dump-autoload
+composer dump-autoload
+
+php install.php
 
 if [ ! -f "package-lock.json" ]; then
   npm update

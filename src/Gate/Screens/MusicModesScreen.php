@@ -55,6 +55,9 @@ class MusicModesScreen extends GateScreen implements ReloadTimerInterface, WithS
     public function run() : ResponseInterface {
         $modes = [];
         foreach (MusicMode::getAll() as $music) {
+            if (!$music->public) {
+                continue;
+            }
             $group = $music->group ?? $music->name;
             $modes[$group] ??= new MusicGroupDto($group);
             $modes[$group]->music[] = $music;

@@ -77,6 +77,9 @@ class NewGame extends Controller
         $this->params['playlists'] = Playlist::getAll();
         $this->params['musicGroups'] = [];
         foreach ($this->params['musicModes'] as $music) {
+            if (!$music->public) {
+                continue;
+            }
             $group = $music->group ?? $music->name;
             $this->params['musicGroups'][$group] ??= new MusicGroupDto($group);
             $this->params['musicGroups'][$group]->music[] = $music;

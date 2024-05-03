@@ -4,15 +4,17 @@ on:
   push:
     paths:
       - .github/workflows/docker-image.yml
-      - docker/DockerfileNginx
+      - docker/Dockerfile
       - docker/DockerfileDev
+      - docker/DockerfileDevRR
       - docker/core/*
     branches: [ master ]
   pull_request:
     paths:
       - .github/workflows/docker-image.yml
-      - docker/DockerfileNginx
+      - docker/Dockerfile
       - docker/DockerfileDev
+      - docker/DockerfileDevRR
       - docker/core/*
     branches: [ master ]
 
@@ -29,7 +31,9 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - uses: actions/checkout@v2
-      - name: Build the Docker image - dev
-        run: docker build . --file docker/DockerfileDev --tag heroyt/laser-arena-control:dev-latest --tag heroyt/laser-arena-control:dev-nginx-latest && docker push heroyt/laser-arena-control -a
+      - name: Build the Docker image - dev Roadrunner
+        run: docker build . --file docker/DockerfileDevRR --tag heroyt/laser-arena-control:dev-latest --tag heroyt/laser-arena-control:dev-roadrunner-latest
       - name: Build the Docker image
-        run: docker build . --file docker/Dockerfile --tag heroyt/laser-arena-control:nginx-latest && docker push heroyt/laser-arena-control -a
+        run: docker build . --file docker/Dockerfile --tag heroyt/laser-arena-control:roadrunner-latest
+      - name: Push docker images
+        run: docker push heroyt/laser-arena-control -a

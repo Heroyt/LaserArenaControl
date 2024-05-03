@@ -22,6 +22,6 @@ jobs:
       - name: Use tag
         run: echo ${{steps.tag.outputs.tag}}
       - name: Build the Docker image
-        run: docker build . --file docker/Dockerfile --tag heroyt/laser-arena-control:latest --tag heroyt/laser-arena-control:${{steps.tag.outputs.tag}} --tag heroyt/laser-arena-control:nginx-latest --tag heroyt/laser-arena-control:${{steps.tag.outputs.tag}}-nginx
+        run: docker build . --file docker/Dockerfile --tag heroyt/laser-arena-control:latest --tag heroyt/laser-arena-control:${{steps.tag.outputs.tag}} --tag heroyt/laser-arena-control:roadrunner-latest --tag heroyt/laser-arena-control:${{steps.tag.outputs.tag}}-roadrunner
       - name: Push images
         run: docker push heroyt/laser-arena-control -a

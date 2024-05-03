@@ -1,8 +1,8 @@
-FROM heroyt/lac_core:nginx-latest AS project
+FROM heroyt/lac_core:roadrunner-latest AS project
 
 # Project files
 RUN mkdir -p "/var/www/.npm" && chown -R 33:33 "/var/www/.npm"
-RUN apt-get -y install sudo
+RUN apt-get -y install sudo nano
 RUN echo "www-data:pass" | chpasswd && adduser www-data sudo
 RUN cron
 #USER www-data
@@ -17,12 +17,8 @@ RUN git remote add origin https://github.com/Heroyt/LaserArenaControl.git
 RUN git fetch --all --tags
 RUN git checkout -t origin/master
 RUN git config pull.ff only --autostash
-RUN git submodule init
+RUN git submodule init && git submodule update --init --recursive --remote
 RUN git pull --recurse-submodules=yes
-RUN git submodule update --init --recursive --remote
-
-# Cron rights
-RUN echo "pass" | sudo -S chmod +x /var/www/cron.sh
 
 # Initialize all configs and create necessary directories
 RUN mv private/docker-config.ini private/config.ini
@@ -49,6 +45,8 @@ RUN npm run build
 RUN chmod 0777 -R logs
 RUN chmod 0777 -R temp
 
+SHELL ["/bin/bash"]
+
 # Start command
 # Updates project, builds it and runs a start script which starts WS event server and Apache
-CMD sh ./start.sh
+CMD ["sh", "./startRR.sh"]

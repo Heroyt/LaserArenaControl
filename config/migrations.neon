@@ -511,3 +511,18 @@ tables:
 			CONSTRAINT `gate_screens_ibfk_1` FOREIGN KEY (`id_gate`) REFERENCES `gate_types` (`id_gate`) ON DELETE CASCADE ON UPDATE CASCADE
 		) ENGINE=InnoDB DEFAULT CHARSET utf8mb4;
 		'''
+	'game_highlights':
+		order: 0
+		definition: '''
+		(
+          `code` varchar(50) NOT NULL,
+          `datetime` datetime NOT NULL,
+          `rarity` int(10) unsigned NOT NULL DEFAULT 0,
+          `type` varchar(100) NOT NULL DEFAULT 'other',
+          `description` varchar(500) NOT NULL,
+          `players` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`players`)),
+          `object` blob DEFAULT NULL,
+          `users` longtext GENERATED ALWAYS AS (json_extract(`players`,'$[*].user')) VIRTUAL,
+          PRIMARY KEY (`code`,`type`,`description`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+		'''

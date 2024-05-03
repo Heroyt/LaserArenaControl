@@ -1,6 +1,16 @@
 [submodule "src/GameModels"]
 	path = src/GameModels
 	url = https://github.com/Heroyt/LACModels
+	branch = master
 [submodule "modules/Core"]
 	path = modules/Core
 	url = https://github.com/LaserLiga/lac_modules_core.git
+	branch = master
+[submodule "modules/Tables"]
+	path = modules/Tables
+	url = https://github.com/LaserLiga/lac_module_tables
+	branch = master
+[submodule "modules/Tournament"]
+	path = modules/Tournament
+	url = https://github.com/LaserLiga/lac_modules_tournaments
+	branch = master

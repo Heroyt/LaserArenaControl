@@ -17,8 +17,8 @@ RUN git remote add origin https://github.com/Heroyt/LaserArenaControl.git
 RUN git fetch --all --tags
 RUN git checkout -t origin/master
 RUN git config pull.ff only --autostash
-RUN git submodule init && git submodule update --init --recursive --remote
 RUN git pull --recurse-submodules=yes
+RUN git submodule init && git submodule update --init --recursive --remote
 
 # Initialize all configs and create necessary directories
 RUN mv private/docker-config.ini private/config.ini

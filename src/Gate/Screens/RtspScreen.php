@@ -41,7 +41,7 @@ class RtspScreen extends GateScreen implements WithSettings
     public static function buildSettingsFromForm(array $data) : GateSettings {
         return new RtspSettings(
           array_filter(array_map('trim', explode("\n", $data['streams'] ?? ''))),
-          (int) ($data['max-screens'] ?? 9),
+          (int) ($data['max-streams'] ?? 9),
         );
     }
 

@@ -11,7 +11,7 @@
     <textarea name="{$name}[streams]" rows="9" id="{$key}-streams"
               class="form-control">{$settings->streams|join:"\n"|trim}</textarea>
     <div class="form-text">
-        {lang 'Na každý řádek 1 URL ve formátu "rtsp://user:password@url".'}
+        {sprintf(lang('Na každý řádek 1 URL ve formátu např. "%s".'), App\Core\App::getLink(['hls', 'stream.m3u8']))}
     </div>
 </div>
 

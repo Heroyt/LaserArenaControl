@@ -1,33 +1,42 @@
 @import '../pages/gate/parts';
 
-#gate main .content.rtsp-screen {
-	grid-template-areas: 'logo logo streams streams streams streams streams streams streams .'
-			                   '. . streams streams streams streams streams streams streams .'
-			                   '. . streams streams streams streams streams streams streams .'
-			                   '. . streams streams streams streams streams streams streams .';
-
-
-	.streams {
-		display: grid;
-		grid-area: streams;
-		grid-gap: 2rem;
-		grid-template-columns: repeat(auto-fit, minmax(600px, 1fr));
-
-		.stream {
-
-		}
+#gate main {
+	.timer.timer-rtsp {
+		bottom: initial;
+		left: 2rem;
+		top: calc(26% - 3rem);
+		width: calc(20% - 1.2rem);
 	}
 
-	&.in {
-		.stream {
-			animation: slide-fade-in 300ms ease forwards;
-			opacity: 0;
-		}
-	}
+	.content.rtsp-screen {
+		grid-template-areas: 'logo logo streams streams streams streams streams streams streams streams'
+			                   '. . streams streams streams streams streams streams streams streams'
+			                   '. . streams streams streams streams streams streams streams streams'
+			                   '. . streams streams streams streams streams streams streams streams';
 
-	&.out {
-		.stream {
-			animation: slide-fade-out 300ms ease forwards;
+
+		.streams {
+			align-content: center;
+			display: grid;
+			grid-area: streams;
+			grid-gap: 1rem;
+
+			.stream {
+				width: 100%;
+			}
+		}
+
+		&.in {
+			.stream {
+				animation: slide-fade-in 300ms ease forwards;
+				opacity: 0;
+			}
+		}
+
+		&.out {
+			.stream {
+				animation: slide-fade-out 300ms ease forwards;
+			}
 		}
 	}
 }

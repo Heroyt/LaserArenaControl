@@ -3,19 +3,22 @@
 {varType App\Gate\Settings\RtspSettings $settings}
 {varType string $hash}
 
+{var int $maxStreams = min($settings->maxStreams, count($settings->streams))}
+{var int $rows = ceil($maxStreams / 3)}
+{var int $columns = ceil($maxStreams / $rows)}
+
 {define containerClasses}
     rtsp-screen
 {/define}
 
 {define content}
-    <div class="streams" data-hash="{$hash}" data-max-streams="{$settings->maxStreams}"
-         data-streams="{json_encode($settings->streams)}">
-        <video
-                n:for="$i = 0; $i < count($settings->streams) && $i < $settings->maxStreams; $i++"
+    <div class="streams" data-hash="{$hash}" data-max-streams="{$maxStreams}"
+         data-streams="{json_encode($settings->streams)}" style="grid-template-columns: repeat({$columns}, 1fr);">
+        <video n:for="$i = 0; $i < $maxStreams; $i++"
                 data-index="{$i}"
                 class="stream"
-                id="stream-{$i}"
-                data-stream="{$settings->streams[$i]}"
-                src="{$settings->streams[$i]}"/>
+                autoplay>
+            <source src="{$settings->streams[$i]}" type="application/x-mpegURL">
+        </video>
     </div>
 {/define}

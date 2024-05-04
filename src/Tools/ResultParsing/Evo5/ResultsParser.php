@@ -152,6 +152,7 @@ class ResultsParser extends AbstractResultsParser
 						if ($date === false) {
 							$date = null;
 						}
+              var_dump($date);
 						$game->importTime = $date;
 					}
 					break;

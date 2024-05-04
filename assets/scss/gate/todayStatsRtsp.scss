@@ -1,0 +1,86 @@
+#gate main {
+	.timer.timer-rtsp {
+		bottom: initial;
+		left: 2rem;
+		top: calc(26% - 3rem);
+		width: calc(20% - 1.2rem);
+	}
+
+	.content.today-rtsp {
+		align-content: center;
+		font-size: 1.55rem;
+		grid-template-areas: 'logo title streams' '. score streams' '. best streams' '. . streams';
+		grid-template-columns: 17rem 1fr 40rem;
+		grid-template-rows: 5rem 1fr 1fr 3rem;
+
+		.streams {
+			align-content: center;
+			display: grid;
+			grid-area: streams;
+			grid-gap: 1rem;
+			grid-template-columns: 1fr;
+			height: 100%;
+			width: 100%;
+
+			.stream {
+				height: 100%;
+				object-fit: contain;
+				overflow: hidden;
+				width: 100%;
+			}
+		}
+
+		.table {
+			border-color: var(--print-dark);
+		}
+
+		td,
+		th {
+			vertical-align: middle;
+		}
+
+		.title {
+			align-self: end;
+			grid-area: title;
+		}
+
+		.score {
+			display: flex;
+			flex-direction: column;
+			grid-area: score;
+			justify-content: space-between;
+			justify-self: stretch;
+		}
+
+		.best {
+			grid-area: best;
+			justify-self: stretch;
+		}
+
+		.bbd {
+			border-bottom: 2px solid var(--print-dark);
+		}
+
+		.text-center svg {
+			margin: 0 auto;
+			position: relative;
+		}
+
+		svg {
+			display: block;
+
+			path {
+				fill: var(--text-color);
+			}
+		}
+
+		&.out {
+			animation: scale-out 500ms ease-in forwards;
+		}
+
+		&.in {
+			animation: scale-in 500ms ease-in 200ms forwards;
+			opacity: 0;
+		}
+	}
+}

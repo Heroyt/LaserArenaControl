@@ -1,7 +1,7 @@
 import DefaultScreen from './defaultScreen';
 import GateScreen from './gateScreen';
 
-export default class RtspScreen extends DefaultScreen {
+export default class TodayScreen extends DefaultScreen {
 
 	private interval: NodeJS.Timeout;
 	private streamsWrapper: HTMLDivElement;
@@ -9,12 +9,16 @@ export default class RtspScreen extends DefaultScreen {
 	private streamUrls: string[] = [];
 
 	isSame(active: GateScreen): boolean {
-		if (!(active instanceof RtspScreen)) {
+		if (!(active instanceof TodayScreen)) {
 			return false;
 		}
 		const key = this.content.querySelector<HTMLElement>('[data-hash]')?.dataset?.hash ?? '';
 		const keyActive = active.content.querySelector<HTMLElement>('[data-hash]')?.dataset?.hash ?? '';
 		return key === keyActive;
+	}
+
+	showTimer(): boolean {
+		return true;
 	}
 
 	animateIn() {

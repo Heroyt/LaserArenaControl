@@ -26,6 +26,7 @@
     "autocompleter": "^9.1.2",
     "bootstrap": "^5.3.3",
     "flatpickr": "^4.6.13",
+    "hls.js": "^1.5.8",
     "sortablejs": "^1.15.2",
     "taggle": "^1.15.0"
   },

@@ -185,7 +185,6 @@ class ResultsParser extends AbstractResultsParser
                             $date = null;
                         }
                         $game->end = $date;
-                        $game->importTime ??= $date;
                         $game->finished = $now->getTimestamp() > ($game->end?->getTimestamp() + $game->timing->after);
                     }
                     break;

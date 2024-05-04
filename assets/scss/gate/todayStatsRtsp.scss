@@ -30,15 +30,6 @@
 			}
 		}
 
-		.table {
-			border-color: var(--print-dark);
-		}
-
-		td,
-		th {
-			vertical-align: middle;
-		}
-
 		.title {
 			align-self: end;
 			grid-area: title;
@@ -58,7 +49,7 @@
 		}
 
 		.bbd {
-			border-bottom: 2px solid var(--print-dark);
+			border-bottom: 2px solid var(--blue-800);
 		}
 
 		.text-center svg {
@@ -70,7 +61,7 @@
 			display: block;
 
 			path {
-				fill: var(--text-color);
+				fill: currentColor;
 			}
 		}
 

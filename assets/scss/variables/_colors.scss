@@ -25,9 +25,10 @@ $custom-colors-light: (
                 "text": ('color': #212529, 'alias': 'text'),
         ),
         "blue": (
-                "200": ("color": #ade6fd, "alias": 'light-blue'),
-                "500": ("color": #339af0, "alias": 'primary'),
-                "600": #2578ce,
+                '200': ('color': #ade6fd, 'alias': 'light-blue'),
+                '500': ('color': #339af0, 'alias': 'primary'),
+                '600': #2578ce,
+		        '800': #304d99ff,
         ),
         "purple": (
                 "300": #b984fa,

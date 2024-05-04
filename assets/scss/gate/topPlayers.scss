@@ -24,7 +24,7 @@
 		border-radius: 2rem;
 		display: none;
 		grid-gap: 2rem;
-		grid-template-rows: 4rem 1fr 4rem;
+		grid-template-rows: 4rem 1fr 6rem;
 		justify-items: center;
 		left: 50%;
 		min-height: 28rem;
@@ -97,6 +97,11 @@
 		.value {
 			font-size: 2.5rem;
 			text-align: center;
+
+			time {
+				display: block;
+				font-size: 2rem;
+			}
 		}
 	}
 

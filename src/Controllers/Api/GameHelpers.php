@@ -10,11 +10,12 @@ use App\GameModels\Game\Enums\GameModeType;
 use App\GameModels\Game\Game;
 use App\GameModels\Game\Player;
 use JsonException;
-use Lsr\Core\Constants;
+use Lsr\Core\Config;
 use Lsr\Core\Controllers\ApiController;
 use Lsr\Core\Exceptions\ModelNotFoundException;
 use Lsr\Core\Exceptions\ValidationException;
 use Lsr\Core\Requests\Request;
+use Lsr\Core\Templating\Latte;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
 
@@ -24,215 +25,228 @@ use Throwable;
 class GameHelpers extends ApiController
 {
 
-	/**
-	 * @return never
-	 * @throws JsonException
-	 */
-	public function getLoadedGameInfo(Request $request) : ResponseInterface {
-		// Allow for filtering games just from one system
-		$system = $request->getGet('system', 'all');
-		$systems = [$system];
+    public function __construct(
+      Latte                   $latte,
+      private readonly Config $config,
+    ) {
+        parent::__construct($latte);
+    }
 
-		// Fallback to all available systems
-		if ($system === 'all') {
-			$systems = GameFactory::getSupportedSystems();
-		}
+    /**
+     * @return never
+     * @throws JsonException
+     */
+    public function getLoadedGameInfo(Request $request) : ResponseInterface {
+        // Allow for filtering games just from one system
+        $system = $request->getGet('system', 'all');
+        $systems = [$system];
 
-		$now = time();
+        // Fallback to all available systems
+        if ($system === 'all') {
+            $systems = GameFactory::getSupportedSystems();
+        }
 
-		/** @var Game|null $game */
-		$game = null;
+        $now = time();
 
-		// Try to find the last loaded or started games in selected systems
-		foreach ($systems as $system) {
-			/** @var Game|null $started */
-			$started = Info::get($system.'-game-started');
-			if (isset($started) && ($now - $started->start?->getTimestamp()) <= Constants::GAME_STARTED_TIME) {
-				if (isset($this->game) && $this->game->fileTime > $started->fileTime) {
-					continue;
-				}
-				$started->end = null;
-				$started->finished = false;
-				$game = $started;
-				continue;
-			}
+        /** @var Game|null $game */
+        $game = null;
+        $allGames = [];
 
-			/** @var Game|null $loaded */
-			$loaded = Info::get($system.'-game-loaded');
-			if (isset($loaded) && ($now - $loaded->fileTime?->getTimestamp()) <= Constants::GAME_LOADED_TIME) {
-				if (isset($this->game) && $this->game->fileTime > $loaded->fileTime) {
-					continue;
-				}
-				$game = $loaded;
-			}
-		}
+        $gameLoadedTime = (int) ($this->config->getConfig('ENV')['GAME_LOADED_TIME'] ?? 300);
+        $gameStartedTime = (int) ($this->config->getConfig('ENV')['GAME_STARTED_TIME'] ?? 1800);
 
-		if (!isset($game)) {
-			return $this->respond(['error' => 'No game found'], 404);
-		}
+        // Try to find the last loaded or started games in selected systems
+        foreach ($systems as $system) {
+            /** @var Game|null $started */
+            $started = Info::get($system.'-game-started');
+            $allGames['started'] = $started;
+            if (isset($started) && ($now - $started->start?->getTimestamp()) <= $gameStartedTime) {
+                if (isset($this->game) && $this->game->fileTime > $started->fileTime) {
+                    continue;
+                }
+                $started->end = null;
+                $started->finished = false;
+                $game = $started;
+                continue;
+            }
 
-		return $this->respond(
-			[
-				'currentServerTime' => time(),
-				'started'           => $game->started,
-				'finished'          => $game->finished,
-				'loadTime'          => $game->fileTime?->getTimestamp(),
-				'startTime'         => $game->start?->getTimestamp(),
-				'gameLength'        => !isset($game->timing) ? 0 : ($game->timing->gameLength * 60),
-				'playerCount' => $game->getPlayerCount(),
-				'teamCount'         => count($game->getTeams()),
-				'mode'        => $game->getMode(),
-				'game' => $game,
-			]
-		);
-	}
+            /** @var Game|null $loaded */
+            $loaded = Info::get($system.'-game-loaded');
+            $allGames['loaded'] = $loaded;
+            if (isset($loaded) && ($now - $loaded->fileTime?->getTimestamp()) <= $gameLoadedTime) {
+                if (isset($this->game) && $this->game->fileTime > $loaded->fileTime) {
+                    continue;
+                }
+                $game = $loaded;
+            }
+        }
 
-	/**
-	 * @return never
-	 * @throws JsonException
-	 * @throws ModelNotFoundException
-	 * @throws ValidationException
-	 */
-	public function getGateGameInfo(): ResponseInterface {
-		/** @var Game|null $game */
-		$game = Info::get('gate-game');
+        if (!isset($game)) {
+            return $this->respond(['error' => 'No game found', 'games' => $allGames], 404);
+        }
 
-		if (!isset($game)) {
-			return $this->respond(['error' => 'No game found'], 404);
-		}
+        return $this->respond(
+          [
+            'currentServerTime' => time(),
+            'started'           => $game->started,
+            'finished'          => $game->finished,
+            'loadTime'          => $game->fileTime?->getTimestamp(),
+            'startTime'         => $game->start?->getTimestamp(),
+            'gameLength'        => !isset($game->timing) ? 0 : ($game->timing->gameLength * 60),
+            'playerCount'       => $game->getPlayerCount(),
+            'teamCount'         => count($game->getTeams()),
+            'mode'              => $game->getMode(),
+            'game'              => $game,
+          ]
+        );
+    }
 
-		return $this->respond(
-			[
-				'currentServerTime' => time(),
-				'gateTime'          => Info::get('gate-time'),
-				'started'           => $game->started,
-				'finished'          => $game->finished,
-				'loadTime'          => $game->fileTime?->getTimestamp(),
-				'startTime'         => $game->start?->getTimestamp(),
-				'gameLength'        => !isset($game->timing) ? 0 : ($game->timing->gameLength * 60),
-				'playerCount'       => count($game->getPlayers()),
-				'teamCount'         => count($game->getTeams()),
-				'mode' => $game->getMode(),
-			]
-		);
-	}
+    /**
+     * @return never
+     * @throws JsonException
+     * @throws ModelNotFoundException
+     * @throws ValidationException
+     */
+    public function getGateGameInfo() : ResponseInterface {
+        /** @var Game|null $game */
+        $game = Info::get('gate-game');
 
-	/**
-	 * @param Request $request
-	 *
-	 * @return never
-	 * @throws JsonException
-	 * @throws Throwable
-	 */
-	public function recalcSkill(Request $request): ResponseInterface {
-		$code = $request->params['code'] ?? '';
-		if (empty($code)) {
-			return $this->respond(['error' => 'Invalid code'], 400);
-		}
-		$game = GameFactory::getByCode($code);
-		if (!isset($game)) {
-			return $this->respond(['error' => 'Game not found'], 404);
-		}
+        if (!isset($game)) {
+            return $this->respond(['error' => 'No game found'], 404);
+        }
 
-		try {
-			$game->calculateSkills();
-			$game->sync = false;
-			$game->save();
-			$game->sync();
-		} catch (ModelNotFoundException|ValidationException $e) {
-			return $this->respond(['error' => 'Error while saving the player data', 'exception' => $e], 500);
-		}
+        return $this->respond(
+          [
+            'currentServerTime' => time(),
+            'gateTime'          => Info::get('gate-time'),
+            'started'           => $game->started,
+            'finished'          => $game->finished,
+            'loadTime'          => $game->fileTime?->getTimestamp(),
+            'startTime'         => $game->start?->getTimestamp(),
+            'gameLength'        => !isset($game->timing) ? 0 : ($game->timing->gameLength * 60),
+            'playerCount'       => count($game->getPlayers()),
+            'teamCount'         => count($game->getTeams()),
+            'mode'              => $game->getMode(),
+          ]
+        );
+    }
 
-		return $this->respond(['status' => 'OK']);
-	}
+    /**
+     * @param  Request  $request
+     *
+     * @return never
+     * @throws JsonException
+     * @throws Throwable
+     */
+    public function recalcSkill(Request $request) : ResponseInterface {
+        $code = $request->params['code'] ?? '';
+        if (empty($code)) {
+            return $this->respond(['error' => 'Invalid code'], 400);
+        }
+        $game = GameFactory::getByCode($code);
+        if (!isset($game)) {
+            return $this->respond(['error' => 'Game not found'], 404);
+        }
 
-	/**
-	 * @param Request $request
-	 *
-	 * @return never
-	 * @throws JsonException
-	 * @throws Throwable
-	 * @throws GameModeNotFoundException
-	 */
-	public function changeGameMode(Request $request): ResponseInterface {
-		$code = $request->params['code'] ?? '';
-		if (empty($code)) {
-			return $this->respond(['error' => 'Invalid code'], 400);
-		}
+        try {
+            $game->calculateSkills();
+            $game->sync = false;
+            $game->save();
+            $game->sync();
+        } catch (ModelNotFoundException | ValidationException $e) {
+            return $this->respond(['error' => 'Error while saving the player data', 'exception' => $e], 500);
+        }
 
-		// Find game
-		$game = GameFactory::getByCode($code);
-		if (!isset($game)) {
-			return $this->respond(['error' => 'Game not found'], 404);
-		}
+        return $this->respond(['status' => 'OK']);
+    }
 
-		// Find game mode
-		$gameModeId = (int)$request->getPost('mode', 0);
-		if ($gameModeId < 1) {
-			return $this->respond(['error' => 'Invalid game mode ID'], 400);
-		}
-		$gameMode = GameModeFactory::getById($gameModeId, ['system' => $game::SYSTEM]);
-		if (!isset($gameMode)) {
-			return $this->respond(['error' => 'Game mode not found'], 404);
-		}
+    /**
+     * @param  Request  $request
+     *
+     * @return never
+     * @throws JsonException
+     * @throws Throwable
+     * @throws GameModeNotFoundException
+     */
+    public function changeGameMode(Request $request) : ResponseInterface {
+        $code = $request->params['code'] ?? '';
+        if (empty($code)) {
+            return $this->respond(['error' => 'Invalid code'], 400);
+        }
 
-		$previousType = $game->gameType;
+        // Find game
+        $game = GameFactory::getByCode($code);
+        if (!isset($game)) {
+            return $this->respond(['error' => 'Game not found'], 404);
+        }
 
-		// Set the new mode
-		$game->gameType = $gameMode->type;
-		$game->mode = $gameMode;
+        // Find game mode
+        $gameModeId = (int) $request->getPost('mode', 0);
+        if ($gameModeId < 1) {
+            return $this->respond(['error' => 'Invalid game mode ID'], 400);
+        }
+        $gameMode = GameModeFactory::getById($gameModeId, ['system' => $game::SYSTEM]);
+        if (!isset($gameMode)) {
+            return $this->respond(['error' => 'Game mode not found'], 404);
+        }
 
-		// Check mode type change
-		if ($previousType !== $game->getMode()) {
-			if ($previousType === GameModeType::SOLO) {
-				return $this->respond(['error' => 'Cannot change mode from solo to team'], 400);
-			}
+        $previousType = $game->gameType;
 
-			// Assign all players to one team
-			$team = $game->getTeams()->first();
-			if (!isset($team)) {
-				return $this->respond(['error' => 'Error while getting a team from a game'], 500);
-			}
-			/** @var Player $player */
-			foreach ($game->getPlayers() as $player) {
-				$player->setTeam($team);
-			}
-		}
+        // Set the new mode
+        $game->gameType = $gameMode->type;
+        $game->mode = $gameMode;
 
-		$game->recalculateScores();
+        // Check mode type change
+        if ($previousType !== $game->getMode()) {
+            if ($previousType === GameModeType::SOLO) {
+                return $this->respond(['error' => 'Cannot change mode from solo to team'], 400);
+            }
 
-		if (!$game->save()) {
-			$game->sync();
-			return $this->respond(['error' => 'Error saving game'], 500);
-		}
+            // Assign all players to one team
+            $team = $game->getTeams()->first();
+            if (!isset($team)) {
+                return $this->respond(['error' => 'Error while getting a team from a game'], 500);
+            }
+            /** @var Player $player */
+            foreach ($game->getPlayers() as $player) {
+                $player->setTeam($team);
+            }
+        }
 
-		return $this->respond(['status' => 'OK']);
-	}
+        $game->recalculateScores();
 
-	/**
-	 * @param Request $request
-	 *
-	 * @return never
-	 * @throws JsonException
-	 * @throws Throwable
-	 */
-	public function recalcScores(Request $request): ResponseInterface {
-		$code = $request->params['code'] ?? '';
-		if (empty($code)) {
-			return $this->respond(['error' => 'Invalid code'], 400);
-		}
-		$game = GameFactory::getByCode($code);
-		if (!isset($game)) {
-			return $this->respond(['error' => 'Game not found'], 404);
-		}
+        if (!$game->save()) {
+            $game->sync();
+            return $this->respond(['error' => 'Error saving game'], 500);
+        }
 
-		$game->recalculateScores();
-		if (!$game->save()) {
-			$game->sync();
-			return $this->respond(['error' => 'Error saving game'], 500);
-		}
+        return $this->respond(['status' => 'OK']);
+    }
 
-		return $this->respond(['status' => 'OK']);
-	}
+    /**
+     * @param  Request  $request
+     *
+     * @return never
+     * @throws JsonException
+     * @throws Throwable
+     */
+    public function recalcScores(Request $request) : ResponseInterface {
+        $code = $request->params['code'] ?? '';
+        if (empty($code)) {
+            return $this->respond(['error' => 'Invalid code'], 400);
+        }
+        $game = GameFactory::getByCode($code);
+        if (!isset($game)) {
+            return $this->respond(['error' => 'Game not found'], 404);
+        }
+
+        $game->recalculateScores();
+        if (!$game->save()) {
+            $game->sync();
+            return $this->respond(['error' => 'Error saving game'], 500);
+        }
+
+        return $this->respond(['status' => 'OK']);
+    }
 
 }

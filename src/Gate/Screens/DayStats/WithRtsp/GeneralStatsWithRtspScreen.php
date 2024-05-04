@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Gate\Screens\WithRtsp;
+namespace App\Gate\Screens\DayStats\WithRtsp;
 
 use App\Core\App;
 use App\GameModels\Factory\GameFactory;

@@ -10,7 +10,7 @@
 	backdrop-filter: blur(10px);
 	background-color: rgba(255, 255, 255, .9);
 	border-radius: 10px;
-	display: grid;
+	display: grid !important;;
 	grid-gap: 1rem;
 	grid-template-columns: 3rem 1fr 5rem;
 	margin: 1rem;

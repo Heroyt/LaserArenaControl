@@ -217,6 +217,7 @@ class ImportService
 						}
 						if ($null) {
 							$logger->warning('Game is empty');
+                $output?->writeln('Game is empty');
 							continue; // Empty game - no shots, no hits, etc..
 						}
 

@@ -163,9 +163,9 @@ class ImportService
 
                     try {
                         $parser->setFile($file);
-                        foreach ($parser->getFileLines() as $line) {
-                            $output?->writeln(json_encode($line));
-                        }
+                        //foreach ($parser->getFileLines() as $line) {
+                        //    $output?->writeln(json_encode($line));
+                        //}
                         $game = $parser->parse();
                         //$output?->writeln(json_encode($game, JSON_PRETTY_PRINT));
                         if (!isset($game->importTime)) {

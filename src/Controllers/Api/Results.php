@@ -11,6 +11,7 @@ use App\GameModels\Game\Player;
 use App\Services\ImportService;
 use App\Services\PlayerProvider;
 use App\Services\TaskProducer;
+use App\Tasks\GameImportTask;
 use App\Tasks\Payloads\GameImportPayload;
 use App\Tools\Interfaces\ResultsParserInterface;
 use Exception;
@@ -68,7 +69,7 @@ class Results extends ApiController
             );
         }
 
-        $this->taskProducer->push(GameImportPayload::class, new GameImportPayload($resultsDir));
+        $this->taskProducer->push(GameImportTask::class, new GameImportPayload($resultsDir));
         return $this->respond('');
     }
 

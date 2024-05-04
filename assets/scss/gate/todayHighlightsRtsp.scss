@@ -38,11 +38,27 @@
 
 	.content.today-highlights-rtsp {
 		font-size: 1.55rem;
-		grid-template-areas: 'logo logo highlights highlights highlights highlights highlights music music music'
-			                   '. . highlights highlights highlights highlights highlights music music music'
-			                   '. . highlights highlights highlights highlights highlights players players players'
-			                   '. . highlights highlights highlights highlights highlights players players players';
 
+		grid-template-areas: 'logo highlights streams' '. highlights streams' '. music streams' '. players streams' '. . streams';
+		grid-template-columns: 22rem 1fr 35rem;
+		grid-template-rows: 5rem 1fr 1fr 1fr 3rem;
+
+		.streams {
+			align-content: center;
+			display: grid;
+			grid-area: streams;
+			grid-gap: 1rem;
+			grid-template-columns: 1fr;
+			height: 100%;
+			width: 100%;
+
+			.stream {
+				height: 100%;
+				object-fit: contain;
+				overflow: hidden;
+				width: 100%;
+			}
+		}
 
 		.highlights-wrapper {
 			@extend %wrapper;

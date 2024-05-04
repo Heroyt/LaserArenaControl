@@ -164,10 +164,11 @@ class ImportService
                     try {
                         $parser->setFile($file);
                         $game = $parser->parse();
+                        $output?->writeln(json_encode($game, JSON_PRETTY_PRINT));
                         if (!isset($game->importTime)) {
                             $logger->debug('Game is not finished');
                             $output?->writeln('Game is not finished');
-                            $output?->writeln(json_encode($game, JSON_PRETTY_PRINT));
+                            //$output?->writeln(json_encode($game, JSON_PRETTY_PRINT));
 
                             // The game is not finished and does not contain any results
                             // It is either:

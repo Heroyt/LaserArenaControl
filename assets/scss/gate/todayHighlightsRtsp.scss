@@ -41,7 +41,7 @@
 
 		grid-template-areas: 'logo highlights streams' '. highlights streams' '. music streams' '. players streams' '. . streams';
 		grid-template-columns: 22rem 1fr 35rem;
-		grid-template-rows: 5rem 1fr 1fr 1fr 3rem;
+		grid-template-rows: 1fr 1fr 15rem 15rem 3rem;
 
 		.streams {
 			align-content: center;

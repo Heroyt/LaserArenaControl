@@ -113,7 +113,7 @@ const moduleFiles = fs.readdirSync('./modules/')
                                 moduleAssets.push(
                                         {
                                             in: `./modules/${module}/assets/js/${file}`,
-                                            out: `modules/${module}/${name}`,
+                                            out: `modules/${module.toLowerCase()}/${name}`,
                                         }
                                 );
                                 count++;

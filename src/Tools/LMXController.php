@@ -5,8 +5,10 @@
 
 namespace App\Tools;
 
+use App\Core\App;
 use App\Exceptions\ConnectionTimeoutException;
 use Exception;
+use Lsr\Core\Caching\Cache;
 
 /**
  * Controller for sending TCP requests to control the LaserMaxx console
@@ -87,7 +89,15 @@ class LMXController
 	 * @throws Exception
 	 */
 	public static function getStatus(string $ip) : string {
-		return self::sendCommand($ip, self::GET_STATUS_COMMAND);
+      /** @var Cache $cache */
+      $cache = App::getService('cache');
+      return $cache->load(
+        'lmx.status.'.$ip,
+        static fn() => self::sendCommand($ip, self::GET_STATUS_COMMAND),
+        [
+          $cache::Expire => 5,
+        ]
+      );
 	}
 
 	/**

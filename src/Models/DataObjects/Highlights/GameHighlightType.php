@@ -2,7 +2,6 @@
 
 namespace App\Models\DataObjects\Highlights;
 
-use Exception;
 use OpenApi\Attributes as OA;
 
 /**
@@ -38,7 +37,7 @@ enum GameHighlightType : string
             self::ALONE_STATS  => 'run',
             self::HITS         => 'gun',
             self::DEATHS       => 'skull',
-            self::USER_AVERAGE => throw new Exception('To be implemented'),
+            self::USER_AVERAGE => 'kill',
         };
     }
 

@@ -63,7 +63,7 @@ class GeneralStatsScreen extends GateScreen
           fn() => [
             $this->generalStats->getHash(date: $today, systems: $this->systems),
             [
-              'data'     => $this->generalStats->getData(date: $today, systems: $this->systems),
+              'data' => $this->generalStats->getData(date: $today, systems: $this->systems),
               'template' => $this->generalStats->getTemplate(),
             ],
           ],
@@ -84,10 +84,7 @@ class GeneralStatsScreen extends GateScreen
           [
             'screenHash' => $generalStatsHash,
             'widgets'    => [
-              'generalStats' => [
-                'data'     => $generalStatsData,
-                'template' => $this->generalStats->getTemplate(),
-              ],
+              'generalStats' => $generalStatsData,
             ],
             'addJs'      => ['gate/today.js'],
             'addCss'     => ['gate/todayStats.css'],

@@ -21,10 +21,11 @@ trait WithGameIds
       ?array             $systems = []
     ) : array {
         if (!isset($this->gameIds)) {
+            $this->gameIds = [];
             $dateFrom ??= new DateTimeImmutable();
             $dateTo ??= new DateTimeImmutable();
             $query = GameFactory::queryGames(true)
-                                ->where('[start] BETWEEN %d AND %d', $dateFrom, $dateTo);
+              ->where('DATE([start]) BETWEEN %d AND %d', $dateFrom, $dateTo);
             if (isset($systems) && count($systems) > 0) {
                 $query->where('[system] IN %in', $systems);
             }

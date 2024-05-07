@@ -6,6 +6,8 @@
 
 {varType App\Gate\Settings\RtspSettings $settings}
 {var int $maxStreams = min($settings->maxStreams, count($settings->streams))}
+{var int $columns = $maxStreams < 3 ? 1 : 2}
+{var int $rows = ceil($maxStreams / $columns)}
 
 {define containerClasses}
     today-rtsp
@@ -16,7 +18,8 @@
         <h1 class="title text-center text-white-forced">{lang 'Výsledky dne', context: 'gate'}</h1>
 
         <div class="streams" data-max-streams="{$maxStreams}"
-             data-streams="{json_encode($settings->streams)}" style="grid-template-rows: repeat({$maxStreams}, 1fr);">
+             data-streams="{json_encode($settings->streams)}"
+             style="grid-template-columns: repeat({$columns}, 1fr); grid-template-rows: repeat({$rows}, 1fr);">
             <video n:for="$i = 0; $i < $maxStreams; $i++"
                     data-index="{$i}"
                     class="stream"

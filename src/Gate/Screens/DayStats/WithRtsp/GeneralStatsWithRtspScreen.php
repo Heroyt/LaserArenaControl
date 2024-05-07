@@ -109,10 +109,7 @@ class GeneralStatsWithRtspScreen extends GateScreen implements WithSettings
             'settings'    => $this->getSettings(),
             'screenHash' => $generalStatsHash,
             'widgets'    => [
-              'generalStats' => [
-                'data'     => $generalStatsData,
-                'template' => $this->generalStats->getTemplate(),
-              ],
+              'generalStats' => $generalStatsData,
             ],
             'addJs'       => ['gate/todayRtsp.js'],
             'addCss'      => ['gate/todayStatsRtsp.css'],

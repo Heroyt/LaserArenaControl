@@ -1,0 +1,22 @@
+{parameters
+    App\GameModels\Game\Player[] $topPlayers
+}
+
+<div class="top-players-wrapper">
+    <h1 class="title text-center text-white-forced">
+        {lang 'Nejlepší hráči', context: 'gate'}
+    </h1>
+    <div class="top-players">
+        {foreach $topPlayers as $player}
+            <div class="player">
+                <div class="position">{$iterator->counter}.</div>
+                <div class="name">{$player->name}</div>
+                <div class="skill">{$player->skill|number:0,',',' '} <i class="fa-solid fa-medal"></i></div>
+            </div>
+        {else}
+            <div class="no-players">
+                {lang 'Nedostatečná data'}
+            </div>
+        {/foreach}
+    </div>
+</div>

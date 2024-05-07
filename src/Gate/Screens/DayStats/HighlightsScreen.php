@@ -3,13 +3,12 @@
 namespace App\Gate\Screens\DayStats;
 
 use App\Core\App;
-use App\GameModels\Factory\GameFactory;
-use App\GameModels\Factory\PlayerFactory;
 use App\Gate\Screens\GateScreen;
-use App\Models\MusicMode;
-use App\Services\GameHighlight\GameHighlightService;
+use App\Gate\Widgets\Highlights;
+use App\Gate\Widgets\MusicCount;
+use App\Gate\Widgets\TopPlayerSkills;
 use DateTimeImmutable;
-use Dibi\Row;
+use Lsr\Core\Caching\Cache;
 use Lsr\Core\Templating\Latte;
 use Psr\Http\Message\ResponseInterface;
 
@@ -21,7 +20,10 @@ class HighlightsScreen extends GateScreen
 
     public function __construct(
       Latte                                 $latte,
-      private readonly GameHighlightService $highlightService,
+      private readonly Highlights      $highlights,
+      private readonly MusicCount      $musicCount,
+      private readonly TopPlayerSkills $topPlayerSkills,
+      private readonly Cache           $cache,
     ) {
         parent::__construct($latte);
     }
@@ -58,64 +60,80 @@ class HighlightsScreen extends GateScreen
         $date = (string) App::getRequest()->getGet('date', 'now');
         $today = new DateTimeImmutable($date);
 
-        // Get highligths
-        $highlights = $this->highlightService->getHighlightsDataForDay($today);
-        $data = [];
-        foreach ($highlights as $highlight) {
-            $data[] = $highlight->code.$highlight->description;
-        }
+        [$highlightsHash, $highlightsData] = $this->cache->load(
+          'gate.today.highlights.'.$today->format('Y-m-d'),
+          fn() => [
+            $this->highlights->getHash(date: $today),
+            [
+              'data'     => $this->highlights->getData(date: $today),
+              'template' => $this->highlights->getTemplate(),
+            ],
+          ],
+          [
+            $this->cache::Tags   => [
+              'gate',
+              'gate.widgets',
+              'gate.widgets.highlights',
+              'games/'.$today->format('Y-m-d'),
+            ],
+            $this->cache::Expire => '1 days',
+          ]
+        );
 
-        // Get other stats
-        $query = GameFactory::queryGames(true, $today, ['id_music']);
-        if (count($this->systems) > 0) {
-            $query->where('system IN %in', $this->systems);
-        }
-        /** @var array<string,Row[]> $games */
-        $games = $query->fetchAssoc('system|id_game', cache: false);
-        /** @var array<string, int[]> $gameIds */
-        $gameIds = [];
-        $gameCount = 0;
-        $musicCounts = [];
+        [$musicHash, $musicData, $musicGameIds] = $this->cache->load(
+          'gate.today.musicCounts.'.$today->format('Y-m-d'),
+          fn() => [
+            $this->musicCount->getHash(date: $today, systems: $this->systems),
+            [
+              'data'     => $this->musicCount->getData(date: $today, systems: $this->systems),
+              'template' => $this->musicCount->getTemplate(),
+            ],
+            $this->musicCount->getData(date: $today, systems: $this->systems),
+          ],
+          [
+            $this->cache::Tags   => [
+              'gate',
+              'gate.widgets',
+              'gate.widgets.musicCounts',
+              'games/'.$today->format('Y-m-d'),
+            ],
+            $this->cache::Expire => '1 days',
+          ]
+        );
 
-        foreach ($games as $system => $g) {
-            /** @var array<int, Row> $g */
-            $gameIds[$system] = array_keys($g);
-            $gameCount += count($g);
-            foreach ($g as $game) {
-                if (isset($game->id_music)) {
-                    $musicCounts[$game->id_music] ??= 0;
-                    $musicCounts[$game->id_music]++;
-                }
-            }
-        }
+        [$topPlayersHash, $topPlayersData] = $this->cache->load(
+          'gate.today.topPlayers.'.$today->format('Y-m-d'),
+          function () use ($today, $musicGameIds) {
+              $this->topPlayerSkills->setGameIds($musicGameIds);
+              return [
+                $this->topPlayerSkills->getHash(date: $today, systems: $this->systems),
+                [
+                  'data'     => $this->topPlayerSkills->getData(date: $today, systems: $this->systems),
+                  'template' => $this->topPlayerSkills->getTemplate(),
+                ],
+              ];
+          },
+          [
+            $this->cache::Tags   => [
+              'gate',
+              'gate.widgets',
+              'gate.widgets.topPlayers',
+              'games/'.$today->format('Y-m-d'),
+            ],
+            $this->cache::Expire => '1 days',
+          ]
+        );
 
-        arsort($musicCounts);
-        $data[] = $musicCounts;
-        $musicModes = MusicMode::getAll();
-
-        $topPlayers = [];
-        if (!empty($gameIds)) {
-            $q = PlayerFactory::queryPlayers($gameIds);
-            $topScores = $q->orderBy('[skill]')->desc()->limit(10)->fetchAssoc('name', cache: false);
-            if (!empty($topScores)) {
-                $count = 0;
-                foreach ($topScores as $score) {
-                    $topPlayers[] = PlayerFactory::getById(
-                      (int) $score->id_player,
-                      ['system' => (string) $score->system]
-                    );
-                }
-            }
-        }
 
         return $this->view(
           'gate/screens/todayHighlights',
           [
-            'topPlayers'  => $topPlayers,
-            'screenHash'  => md5(json_encode($data, JSON_THROW_ON_ERROR)),
-            'musicModes'  => $musicModes,
-            'musicCounts' => $musicCounts,
-            'highlights'  => $highlights,
+            'screenHash' => md5($highlightsHash.$musicHash.$topPlayersHash),
+            'widgets'    => [
+              'highlights' => $highlightsData,
+              'music'      => $musicData,
+              'skills'     => $topPlayersData,
+            ],
             'addJs'       => ['gate/todayHighlights.js'],
             'addCss'      => ['gate/todayHighlights.css'],
           ]

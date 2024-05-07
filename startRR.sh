@@ -10,14 +10,15 @@ if [ "$LAC_VERSION" != "dev" ]; then
     git -C src/GameModels fetch --all --tags
     git -C src/GameModels checkout "v${LAC_MODELS_VERSION}" -b "stable"
   fi
+
+  composer update
+
+  php install.php
 else
   echo "Skipping git fetch for dev"
 fi
 
-composer update
 composer dump-autoload
-
-php install.php
 
 if [ ! -f "package-lock.json" ]; then
   npm update
@@ -28,12 +29,12 @@ fi
 # Build assets
 npm run build
 
+# Clear DI, model and info cache
+./bin/console cache:clean -dmi
+
 # Prepare some tasks
 ./bin/console translations:compile
 ./bin/console regression:update
-
-# Clear DI, model and info cache
-./bin/console cache:clean -dmi
 
 
 # Run project

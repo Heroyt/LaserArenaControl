@@ -10,8 +10,8 @@ http:
   address: 0.0.0.0:8001
   middleware: [ "gzip", "headers" ]
   pool:
-    num_workers: 3
-    max_jobs: 15
+    num_workers: 4
+    max_jobs: 50
   headers:
     cors:
       allowed_origin: "*"
@@ -31,7 +31,7 @@ jobs: # List of RoadRunner queues that can be processed by
   consume: [ "tasks" ]
   pool:
     num_workers: 2
-    max_jobs: 10
+    max_jobs: 50
   pipelines:
     tasks: # RoadRunner queue identifier
       driver: memory    # - Queue driver name

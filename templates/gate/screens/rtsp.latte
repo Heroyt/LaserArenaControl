@@ -17,6 +17,7 @@
         <video n:for="$i = 0; $i < $maxStreams; $i++"
                 data-index="{$i}"
                 class="stream"
+                muted
                 autoplay>
             <source src="{$settings->streams[$i]}" type="application/x-mpegURL">
         </video>

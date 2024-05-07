@@ -1,0 +1,24 @@
+{parameters
+    int[] $musicCounts,
+    App\Models\MusicMode[] $musicModes
+}
+
+<div class="music-modes-wrapper">
+    <h1 class="title text-center text-white-forced">
+        {lang 'Nejhranější hudba', context: 'gate'}
+    </h1>
+    <div class="music-modes">
+        {foreach $musicCounts as $id => $count}
+            {var App\Models\MusicMode $music = $musicModes[$id]}
+            <div class="music-mode">
+                <div class="position">{$iterator->counter}.</div>
+                <div class="name">{$music->name}</div>
+                <div class="count">{$count}&times;</div>
+            </div>
+        {else}
+            <div class="no-music">
+                {lang 'Nedostatečná data'}
+            </div>
+        {/foreach}
+    </div>
+</div>

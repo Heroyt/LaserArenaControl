@@ -1,0 +1,22 @@
+{parameters App\Models\DataObjects\Highlights\HighlightDto[] $highlights}
+
+<div class="highlights-wrapper">
+    <h1 class="title text-center text-white-forced">
+        {lang 'Dnešní zajímavosti', context: 'gate'}
+    </h1>
+    <div class="highlights">
+        {foreach $highlights as $highlight}
+            <div class="highlight" data-rarity="{$highlight->rarity}">
+                {svgIcon $highlight->getIcon(), 'auto', 'auto'}
+                <div class="description">
+                    {$highlight->getFormattedDescription()|noescape}
+                </div>
+                <div class="game-time">
+                    {$highlight->datetime->format('H:i')}
+                </div>
+            </div>
+        {else}
+            <div class="no-highlights">{lang 'Dnes zatím nejsou žádné zajímavosti.'}</div>
+        {/foreach}
+    </div>
+</div>

@@ -130,6 +130,10 @@ services:
 	gate.screens.results.lasermaxx.100naboju: App\Gate\Screens\Results\LaserMaxx100NabojuResultsScreen
 	gate.screens.results.lasermaxx.survival: App\Gate\Screens\Results\LaserMaxxSurvivalResultsScreen
 
+	gate.widgets.highlights: App\Gate\Widgets\Highlights
+	gate.widgets.music_count: App\Gate\Widgets\MusicCount
+	gate.widgets.top_skills: App\Gate\Widgets\TopPlayerSkills
+
 	# Commands
 	command.cache.clean: App\Cli\Commands\Cache\CleanCacheCommand
 	command.games.import: App\Cli\Commands\Games\ImportGameCommand

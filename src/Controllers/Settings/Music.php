@@ -6,7 +6,10 @@ use App\Core\App;
 use App\Models\MusicMode;
 use App\Models\Playlist;
 use App\Services\FeatureConfig;
-use App\Services\LigaApi;
+use App\Services\TaskProducer;
+use App\Tasks\MusicSyncTask;
+use App\Tasks\MusicTrimPreviewTask;
+use App\Tasks\Payloads\MusicTrimPreviewPayload;
 use JsonException;
 use Lsr\Core\Controllers\Controller;
 use Lsr\Core\Exceptions\ModelNotFoundException;
@@ -15,17 +18,27 @@ use Lsr\Core\Requests\Request;
 use Lsr\Core\Routing\Attributes\Delete;
 use Lsr\Core\Routing\Attributes\Get;
 use Lsr\Core\Routing\Attributes\Post;
+use Lsr\Core\Templating\Latte;
 use Lsr\Exceptions\TemplateDoesNotExistException;
 use Lsr\Logging\Exceptions\DirectoryCreationException;
 use Nyholm\Psr7\UploadedFile;
 use Psr\Http\Message\ResponseInterface;
 use RuntimeException;
+use Spiral\RoadRunner\Jobs\Options;
 
 /**
  *
  */
 class Music extends Controller
 {
+
+    public function __construct(
+      Latte                          $latte,
+      private readonly TaskProducer  $taskProducer,
+      private readonly FeatureConfig $config,
+    ) {
+        parent::__construct($latte);
+    }
 
     /**
      * @return void
@@ -128,16 +141,11 @@ class Music extends Controller
             $request->passErrors[] = lang('No file uploaded', context: 'errors');
         }
 
-        /** @var FeatureConfig $featureConfig */
-        $featureConfig = App::getService('features');
-        if ($featureConfig->isFeatureEnabled('liga')) {
-            /** @var LigaApi $liga */
-            $liga = App::getService('liga');
-            try {
-                $liga->syncMusicModes();
-            } catch (ValidationException $e) {
-            }
+        $this->taskProducer->plan(MusicTrimPreviewTask::class, new MusicTrimPreviewPayload($music->id));
+        if ($this->config->isFeatureEnabled('liga')) {
+            $this->taskProducer->plan(MusicSyncTask::class, null, new Options(priority: 99));
         }
+        $this->taskProducer->dispatch();
 
         return $this->customRespond($request, ['music' => $allMusic]);
     }
@@ -162,7 +170,7 @@ class Music extends Controller
                 $previewStart = $music->previewStart;
                 $music->setPreviewStartFromFormatted($info['previewStart'] ?? '0');
                 if ($previewStart !== $music->previewStart) {
-                    $music->trimMediaToPreview();
+                    $this->taskProducer->plan(MusicTrimPreviewTask::class, new MusicTrimPreviewPayload($music->id));
                 }
 
                 if (isset($files['music'][$id]['background'])) {
@@ -293,16 +301,11 @@ class Music extends Controller
             }
         }
 
-        /** @var FeatureConfig $featureConfig */
-        $featureConfig = App::getService('features');
-        if ($featureConfig->isFeatureEnabled('liga')) {
-            /** @var LigaApi $liga */
-            $liga = App::getService('liga');
-            try {
-                $liga->syncMusicModes();
-            } catch (ValidationException $e) {
-            }
+        if ($this->config->isFeatureEnabled('liga')) {
+            $this->taskProducer->plan(MusicSyncTask::class, null, new Options(priority: 99));
         }
+
+        $this->taskProducer->dispatch();
 
         return $this->customRespond($request, ['playlistIds' => $playlistIds]);
     }

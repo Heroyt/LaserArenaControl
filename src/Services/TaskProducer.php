@@ -11,45 +11,49 @@ use Spiral\RoadRunner\Jobs\Task\PreparedTaskInterface;
 class TaskProducer
 {
 
-	/** @var PreparedTaskInterface[] */
-	private array $planned = [];
+    /** @var PreparedTaskInterface[] */
+    private array $planned = [];
 
-	public function __construct(private readonly QueueInterface $queue) {}
+    public function __construct(private readonly QueueInterface $queue) {}
 
-	/**
-	 * @param class-string<TaskDispatcherInterface> $dispatcher
-	 * @param object                                $payload
-	 * @param OptionsInterface|null                 $options
-	 * @return void
-	 * @throws JobsException
-	 */
-	public function push(string $dispatcher, object $payload, ?OptionsInterface $options = null) : void {
-		$this->queue->push(
-			$dispatcher::getDiName(),
-			igbinary_serialize($payload),
-			$options,
-		);
-	}
+    /**
+     * @param  class-string<TaskDispatcherInterface>  $dispatcher
+     * @param  object  $payload
+     * @param  OptionsInterface|null  $options
+     * @return void
+     * @throws JobsException
+     */
+    public function push(string $dispatcher, ?object $payload, ?OptionsInterface $options = null) : void {
+        $this->queue->push(
+          $dispatcher::getDiName(),
+          igbinary_serialize($payload),
+          $options,
+        );
+    }
 
-	/**
-	 * @param class-string<TaskDispatcherInterface> $dispatcher
-	 * @param object                                $payload
-	 * @param OptionsInterface|null                 $options
-	 * @return PreparedTaskInterface
-	 */
-	public function plan(string $dispatcher, object $payload, ?OptionsInterface $options = null) : PreparedTaskInterface {
-		$task = $this->queue->create(
-			$dispatcher::getDiName(),
-			igbinary_serialize($payload),
-			$options,
-		);
-		$this->planned[] = $task;
-		return $task;
-	}
+    /**
+     * @param  class-string<TaskDispatcherInterface>  $dispatcher
+     * @param  object  $payload
+     * @param  OptionsInterface|null  $options
+     * @return PreparedTaskInterface
+     */
+    public function plan(
+      string            $dispatcher,
+      ?object           $payload,
+      ?OptionsInterface $options = null
+    ) : PreparedTaskInterface {
+        $task = $this->queue->create(
+          $dispatcher::getDiName(),
+          igbinary_serialize($payload),
+          $options,
+        );
+        $this->planned[] = $task;
+        return $task;
+    }
 
-	public function dispatch() : void {
-		$this->queue->dispatchMany(...$this->planned);
-		$this->planned = [];
-	}
+    public function dispatch() : void {
+        $this->queue->dispatchMany(...$this->planned);
+        $this->planned = [];
+    }
 
 }

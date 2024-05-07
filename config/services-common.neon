@@ -98,6 +98,8 @@ services:
 	task.gamesPrecache: App\Tasks\GamePrecacheTask
 	task.gamesHighlights: App\Tasks\GameHighlightsTask
 	task.gamesImport: App\Tasks\GameImportTask
+	task.musicTrimPreview: App\Tasks\MusicTrimPreviewTask
+	task.musicSync: App\Tasks\MusicSyncTask
 
 	result.parser: App\Tools\ResultParsing\ResultsParser
 	result.parser.evo5: App\Tools\ResultParsing\Evo5\ResultsParser

@@ -13,7 +13,7 @@ trait WithGameIds
     /**
      * @var array<string, int[]>
      */
-    protected array $gameIds;
+    protected ?array $gameIds = null;
 
     public function getGameIds(
       ?DateTimeInterface $dateFrom = null,

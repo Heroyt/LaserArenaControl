@@ -14,9 +14,16 @@ class MusicCount implements WidgetInterface, WithGameIdsInterface
 {
     use WithGameIds;
 
-    private string $hash;
+    private ?string $hash = null;
     /** @var array<int, int> */
-    private array $musicCounts;
+    private ?array $musicCounts = null;
+
+    public function refresh() : static {
+        $this->hash = null;
+        $this->musicCounts = null;
+        $this->gameIds = null;
+        return $this;
+    }
 
     public function getData(?Game $game = null, ?DateTimeInterface $date = null, ?array $systems = []) : array {
         return [

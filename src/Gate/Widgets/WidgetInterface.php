@@ -8,6 +8,8 @@ use DateTimeInterface;
 interface WidgetInterface
 {
 
+    public function refresh() : static;
+
     /**
      * @param  Game|null  $game
      * @param  DateTimeInterface|null  $date

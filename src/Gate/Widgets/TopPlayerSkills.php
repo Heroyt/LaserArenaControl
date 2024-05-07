@@ -13,12 +13,20 @@ class TopPlayerSkills implements WidgetInterface, WithGameIdsInterface
 {
     use WithGameIds;
 
-    private string $hash;
+    private ?string $hash = null;
 
     /**
      * @var Player[]
      */
-    private array $topPlayers;
+    private ?array $topPlayers = null;
+
+
+    public function refresh() : static {
+        $this->hash = null;
+        $this->topPlayers = null;
+        $this->gameIds = null;
+        return $this;
+    }
 
     /**
      * @inheritDoc

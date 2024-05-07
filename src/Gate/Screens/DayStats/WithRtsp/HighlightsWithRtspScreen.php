@@ -10,7 +10,6 @@ use App\Gate\Settings\RtspSettings;
 use App\Gate\Widgets\Highlights;
 use App\Gate\Widgets\MusicCount;
 use App\Gate\Widgets\TopPlayerSkills;
-use App\Services\GameHighlight\GameHighlightService;
 use DateTimeImmutable;
 use Lsr\Core\Caching\Cache;
 use Lsr\Core\Templating\Latte;
@@ -27,8 +26,7 @@ class HighlightsWithRtspScreen extends GateScreen implements WithSettings
     private RtspSettings $settings;
 
     public function __construct(
-      Latte                                 $latte,
-      private readonly GameHighlightService $highlightService,
+      Latte $latte,
       private readonly Highlights      $highlights,
       private readonly MusicCount      $musicCount,
       private readonly TopPlayerSkills $topPlayerSkills,
@@ -74,8 +72,7 @@ class HighlightsWithRtspScreen extends GateScreen implements WithSettings
      */
     public static function buildSettingsFromForm(array $data) : GateSettings {
         return new RtspSettings(
-          array_filter(array_map('trim', explode("\n", $data['streams'] ?? ''))),
-          (int) ($data['max-streams'] ?? 9),
+          array_filter(array_map('trim', explode("\n", $data['streams'] ?? ''))), (int) ($data['max-streams'] ?? 9),
         );
     }
 
@@ -85,6 +82,10 @@ class HighlightsWithRtspScreen extends GateScreen implements WithSettings
     public function run() : ResponseInterface {
         $date = (string) App::getRequest()->getGet('date', 'now');
         $today = new DateTimeImmutable($date);
+
+        $this->highlights->refresh();
+        $this->musicCount->refresh();
+        $this->topPlayerSkills->refresh();
 
         [$highlightsHash, $highlightsData] = $this->cache->load(
           'gate.today.highlights.'.$today->format('Y-m-d'),
@@ -153,15 +154,15 @@ class HighlightsWithRtspScreen extends GateScreen implements WithSettings
         return $this->view(
           'gate/screens/todayHighlightsRtsp',
           [
-            'settings'    => $this->getSettings(),
+            'settings' => $this->getSettings(),
             'screenHash' => md5($highlightsHash.$musicHash.$topPlayersHash),
             'widgets'    => [
               'highlights' => $highlightsData,
               'music'      => $musicData,
               'skills'     => $topPlayersData,
             ],
-            'addJs'       => ['gate/todayHighlightsRtsp.js'],
-            'addCss'      => ['gate/todayHighlightsRtsp.css'],
+            'addJs'    => ['gate/todayHighlightsRtsp.js'],
+            'addCss'   => ['gate/todayHighlightsRtsp.css'],
           ]
         );
     }

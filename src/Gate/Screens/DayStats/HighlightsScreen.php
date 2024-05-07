@@ -60,6 +60,10 @@ class HighlightsScreen extends GateScreen
         $date = (string) App::getRequest()->getGet('date', 'now');
         $today = new DateTimeImmutable($date);
 
+        $this->highlights->refresh();
+        $this->musicCount->refresh();
+        $this->topPlayerSkills->refresh();
+
         [$highlightsHash, $highlightsData] = $this->cache->load(
           'gate.today.highlights.'.$today->format('Y-m-d'),
           fn() => [

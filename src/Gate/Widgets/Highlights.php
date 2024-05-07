@@ -14,9 +14,9 @@ class Highlights implements WidgetInterface
     /**
      * @var HighlightDto[]
      */
-    private array $highlights;
+    private ?array $highlights = null;
 
-    private string $hash;
+    private ?string $hash = null;
 
     public function __construct(
       private readonly GameHighlightService $highlightService
@@ -56,5 +56,11 @@ class Highlights implements WidgetInterface
             $this->hash = md5($data);
         }
         return $this->hash;
+    }
+
+    public function refresh() : static {
+        $this->highlights = null;
+        $this->hash = null;
+        return $this;
     }
 }

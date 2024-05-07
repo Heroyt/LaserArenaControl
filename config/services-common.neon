@@ -133,6 +133,7 @@ services:
 	gate.widgets.highlights: App\Gate\Widgets\Highlights
 	gate.widgets.music_count: App\Gate\Widgets\MusicCount
 	gate.widgets.top_skills: App\Gate\Widgets\TopPlayerSkills
+	gate.widgets.general_stats: App\Gate\Widgets\GeneralStats
 
 	# Commands
 	command.cache.clean: App\Cli\Commands\Cache\CleanCacheCommand

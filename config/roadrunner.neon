@@ -1,0 +1,10 @@
+parameters:
+	rpc:
+		connection: 'tcp://localhost:6001'
+	jobs:
+		queue: tasks
+services:
+	rpc:
+		type: Spiral\Goridge\RPC\RPC
+		create: Spiral\Goridge\RPC\RPC::create(%rpc.connection%)
+	metrics: Spiral\RoadRunner\Metrics\Metrics(@rpc)

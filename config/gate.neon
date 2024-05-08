@@ -1,0 +1,30 @@
+services:
+	# Gate
+	gate: App\Gate\Gate
+	gate.screens.vests: App\Gate\Screens\VestsScreen
+	gate.screens.timer: App\Gate\Screens\TimerScreen
+	gate.screens.image: App\Gate\Screens\ImageScreen
+	gate.screens.youtube: App\Gate\Screens\YoutubeScreen
+	gate.screens.music: App\Gate\Screens\MusicModesScreen
+	gate.screens.rtsp: App\Gate\Screens\RtspScreen
+	gate.screens.vest_gun_after_game: App\Gate\Screens\VestGunAfterGameScreen
+
+	gate.screens.idle.stats: App\Gate\Screens\DayStats\GeneralStatsScreen
+	gate.screens.idle.stats_cameras: App\Gate\Screens\DayStats\WithRtsp\GeneralStatsWithRtspScreen
+	gate.screens.idle.highlights: App\Gate\Screens\DayStats\HighlightsScreen
+	gate.screens.idle.highlights_cameras: App\Gate\Screens\DayStats\WithRtsp\HighlightsWithRtspScreen
+
+	gate.screens.idle.month.stats: App\Gate\Screens\MonthStats\GeneralStatsScreen
+	gate.screens.idle.month.top_players: App\Gate\Screens\MonthStats\TopPlayersScreen
+
+	gate.screens.results: App\Gate\Screens\Results\ResultsScreen
+	gate.screens.results.lasermaxx.rankable: App\Gate\Screens\Results\LaserMaxxRankableResultsScreen
+	gate.screens.results.lasermaxx.csgo: App\Gate\Screens\Results\LaserMaxxCSGOResultsScreen
+	gate.screens.results.lasermaxx.zakladny: App\Gate\Screens\Results\LaserMaxxZakladnyResultsScreen
+	gate.screens.results.lasermaxx.100naboju: App\Gate\Screens\Results\LaserMaxx100NabojuResultsScreen
+	gate.screens.results.lasermaxx.survival: App\Gate\Screens\Results\LaserMaxxSurvivalResultsScreen
+
+	gate.widgets.highlights: App\Gate\Widgets\Highlights
+	gate.widgets.music_count: App\Gate\Widgets\MusicCount
+	gate.widgets.top_skills: App\Gate\Widgets\TopPlayerSkills
+	gate.widgets.general_stats: App\Gate\Widgets\GeneralStats

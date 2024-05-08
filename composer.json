@@ -74,7 +74,8 @@
     "spiral/roadrunner-jobs": "^4.3",
     "roadrunner-php/centrifugo": "^2.1",
     "symfony/process": "^6.4",
-    "spiral/roadrunner-tcp": "^4.1"
+    "spiral/roadrunner-tcp": "^4.1",
+    "spiral/roadrunner-metrics": "^3.2"
   },
   "require-dev": {
     "roave/security-advisories": "dev-latest",

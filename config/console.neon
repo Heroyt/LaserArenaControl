@@ -1,0 +1,17 @@
+extensions:
+	orisai.console: OriNette\Console\DI\ConsoleExtension
+orisai.console:
+	name: 'Laser arena Control'
+services:
+	# Commands
+	command.cache.clean: App\Cli\Commands\Cache\CleanCacheCommand
+	command.games.import: App\Cli\Commands\Games\ImportGameCommand
+	command.games.sync: App\Cli\Commands\Games\SyncGameCommand
+	command.games.skills: App\Cli\Commands\Games\RecalculateSkillsGameCommand
+	command.regression.hits: App\Cli\Commands\Regression\CalculateHitsRegressionCommand
+	command.regression.hitsOwn: App\Cli\Commands\Regression\CalculateHitsOwnRegressionCommand
+	command.regression.deaths: App\Cli\Commands\Regression\CalculateDeathsRegressionCommand
+	command.regression.deathsOwn: App\Cli\Commands\Regression\CalculateDeathsOwnRegressionCommand
+	command.regression.update: App\Cli\Commands\Regression\UpdateRegressionModelsCommand
+	command.translation.compile: App\Cli\Commands\Translation\CompileTranslationsCommand
+	command.translation.removeComments: App\Cli\Commands\Translation\RemoveCommentsCommand

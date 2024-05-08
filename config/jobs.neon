@@ -1,0 +1,43 @@
+extensions:
+	orisai.scheduler: OriNette\Scheduler\DI\SchedulerExtension
+orisai.scheduler:
+	console:
+		script: '%constants.appDir%bin/console'
+	errorHandler: tracy
+	jobs:
+		gamesSync:
+			expression: */5 * * * *
+			callback: [@cron.gamesSync, 'run']
+		#gamesPrecache:
+		#	expression: * * * * *
+		#	callback: [@cron.gamesPrecache, 'run']
+		vestSync:
+			expression: */15 * * * *
+			callback: [@cron.vestSync, 'run']
+		logArchive:
+			expression: 0 6 * * *
+			callback: [@cron.logArchive, 'run']
+		resultsImport:
+			expression: * * * * *
+			callback: [@cron.resultsImport, 'run']
+services:
+	# Jobs queue
+	jobs: Spiral\RoadRunner\Jobs\Jobs
+	queue:
+		type: Spiral\RoadRunner\Jobs\QueueInterface
+		create: @jobs::connect(%jobs.queue%)
+	taskProducer: App\Services\TaskProducer(@queue)
+
+	# Jobs tasks
+	task.gamesPrecache: App\Tasks\GamePrecacheTask
+	task.gamesHighlights: App\Tasks\GameHighlightsTask
+	task.gamesImport: App\Tasks\GameImportTask
+	task.musicTrimPreview: App\Tasks\MusicTrimPreviewTask
+	task.musicSync: App\Tasks\MusicSyncTask
+
+	# Cron jobs
+	cron.gamesSync: App\Cron\GamesSyncJob(%gamesSync.limit%, %gamesSync.timeout%)
+	cron.vestSync: App\Cron\VestSyncJob
+	cron.logArchive: App\Cron\LogArchiveJob
+	cron.gamesPrecache: App\Cron\GamesPrecacheJob
+	cron.resultsImport: App\Cron\ResultsImportJob

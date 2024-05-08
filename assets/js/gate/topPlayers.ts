@@ -31,7 +31,7 @@ export default class TopPlayersScreen extends DefaultScreen {
 		this.animationStep();
 		this.interval = setInterval(() => {
 			this.animationStep();
-		}, 10000);
+		}, 4000);
 	}
 
 	animateOut() {

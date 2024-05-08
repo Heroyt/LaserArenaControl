@@ -17,6 +17,7 @@ use Lsr\Exceptions\TemplateDoesNotExistException;
 use Lsr\Logging\Exceptions\DirectoryCreationException;
 use Nyholm\Psr7\Response;
 use Psr\Http\Message\ResponseInterface;
+use Spiral\RoadRunner\Metrics\Metrics;
 use Throwable;
 use Tracy\Debugger;
 
@@ -26,7 +27,11 @@ class Results extends Controller
 	protected string $title       = 'Results';
 	protected string $description = '';
 
-	public function __construct(Latte $latte, private readonly ResultPrintService $printService) {
+    public function __construct(
+      Latte                               $latte,
+      private readonly ResultPrintService $printService,
+      private readonly Metrics            $metrics,
+    ) {
 		parent::__construct($latte);
 	}
 
@@ -99,6 +104,8 @@ class Results extends Controller
 		if (!$request->getGet('html', false)) {
 			$pdfFile = $this->printService->getResultsPdf($game, $style, $template, $copies, $cache);
 			if ($pdfFile !== '' && file_exists($pdfFile)) {
+          $this->metrics->add('results_printed', $copies);
+          $this->metrics->add('games_printed', 1);
 				return new Response(
 					200,
 					['Content-Type' => 'application/pdf;filename=results.pdf'],

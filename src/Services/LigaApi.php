@@ -27,6 +27,7 @@ use LAC\Modules\Core\LigaApiExtensionInterface;
 use Lsr\Core\Exceptions\ValidationException;
 use Lsr\Logging\Logger;
 use Psr\Http\Message\ResponseInterface;
+use Spiral\RoadRunner\Metrics\Metrics;
 
 /**
  * Singleton service for handling public API calls
@@ -45,6 +46,7 @@ class LigaApi
 	public function __construct(
 		public string $url,
 		public string $apiKey,
+    private readonly Metrics $metrics,
 	) {
 		$this->logger = new Logger(LOG_DIR, 'ligaApi');
 		$this->makeClient();
@@ -72,13 +74,13 @@ class LigaApi
 	/**
 	 * @return LigaApi
 	 */
-	public static function getInstance(): LigaApi {
+    public static function getInstance(Metrics $metrics) : LigaApi {
 		if (!isset(self::$instance)) {
 			/** @var string $url */
 			$url = Info::get('liga_api_url', '');
 			/** @var string $key */
 			$key = Info::get('liga_api_key', '');
-			self::$instance = new self($url, $key);
+        self::$instance = new self($url, $key, $metrics);
 		}
 		return self::$instance;
 	}
@@ -192,6 +194,8 @@ class LigaApi
 			$this->logger->exception($e);
 			return false;
 		}
+
+      $this->metrics->add('games_synced', count($gamesData));
 
 		foreach ($this->getExtensions() as $extension) {
 			$extension->afterGameSync($system, $games);

@@ -16,7 +16,6 @@ use App\GameModels\Factory\GameFactory;
 use App\GameModels\Game\Game;
 use App\GameModels\Game\Player;
 use App\Tools\AbstractResultsParser;
-use App\Tools\ResultParsing\ResultsParser;
 use Dibi\Exception;
 use JsonException;
 use Lsr\Core\Config;
@@ -25,6 +24,7 @@ use Lsr\Core\Exceptions\ValidationException;
 use Lsr\Logging\Exceptions\DirectoryCreationException;
 use Lsr\Logging\Logger;
 use Nette\DI\MissingServiceException;
+use Spiral\RoadRunner\Metrics\Metrics;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Lock\LockFactory;
 use Throwable;
@@ -42,12 +42,11 @@ class ImportService
 
     public function __construct(
       private readonly EventService   $eventService,
-      private readonly ResultsParser  $parser,
-      private readonly PlayerProvider $playerProvider,
       private readonly LockFactory    $lockFactory,
       private readonly LigaApi        $ligaApi,
       Config                          $config,
       private readonly FeatureConfig  $featureConfig,
+      private readonly Metrics $metrics,
     ) {
         $this->gameLoadedTime = (int) ($config->getConfig('ENV')['GAME_LOADED_TIME'] ?? 300);
         $this->gameStartedTime = (int) ($config->getConfig('ENV')['GAME_STARTED_TIME'] ?? 1800);
@@ -88,6 +87,8 @@ class ImportService
         } catch (DirectoryCreationException $e) {
             return new ErrorDto('Failed to create a logging directory.', ErrorType::INTERNAL, exception: $e);
         }
+
+        $this->metrics->add('import_called', 1, [$resultsDir]);
 
         // Lock import to allow only 1 import process to run in this directory
         $lock = $this->lockFactory->createLock('results-import-'.md5($resultsDir), ttl: 60);
@@ -135,6 +136,7 @@ class ImportService
                 $resultFiles = glob($resultsDir.$parser::getFileGlob());
 
                 // Import all files
+                $importedSystem = 0;
                 foreach ($resultFiles as $file) {
                     if ($limit > 0 && $total >= $limit) {
                         break;
@@ -163,15 +165,10 @@ class ImportService
 
                     try {
                         $parser->setFile($file);
-                        //foreach ($parser->getFileLines() as $line) {
-                        //    $output?->writeln(json_encode($line));
-                        //}
                         $game = $parser->parse();
-                        //$output?->writeln(json_encode($game, JSON_PRETTY_PRINT));
                         if (!isset($game->importTime)) {
                             $logger->debug('Game is not finished');
                             $output?->writeln('Game is not finished');
-                            //$output?->writeln(json_encode($game, JSON_PRETTY_PRINT));
 
                             // The game is not finished and does not contain any results
                             // It is either:
@@ -253,6 +250,7 @@ class ImportService
                             $finishedGames[] = $gameModel;
                         }
                         $imported++;
+                        $importedSystem++;
                     } catch (Throwable $e) {
                         $logger->error($e->getMessage());
                         $logger->debug($e->getTraceAsString());
@@ -260,6 +258,7 @@ class ImportService
                         $errors[] = $e;
                     }
                 }
+                $this->metrics->add('games_imported', $importedSystem, [$system]);
             }
 
             // Update check timestamp
@@ -348,6 +347,7 @@ class ImportService
               $this->errors
             );
         }
+        return new ImportResponse(0, 0, 0, []);
     }
 
     /**

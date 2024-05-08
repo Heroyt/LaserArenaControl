@@ -4,11 +4,43 @@ server:
   relay: pipes
 metrics:
   address: 0.0.0.0:2112
+  collect:
+    games_imported:
+      type: counter
+      help: "Total count of games imported"
+      labels:
+        - system
+    import_called:
+      type: counter
+      help: "Times when game import was called"
+      labels:
+        - path
+    games_synced:
+      type: counter
+      help: "How many games where synchronized to the Laser Liga."
+    control_status:
+      type: counter
+      help: "How many times were the LMX status API called."
+    control_load:
+      type: counter
+      help: "How many times were the LMX load API called."
+    control_start:
+      type: counter
+      help: "How many times were the LMX start API called."
+    control_stop:
+      type: counter
+      help: "How many times were the LMX stop API called."
+    results_printed:
+      type: counter
+      help: "How many results were printed (each copy is counted)."
+    games_printed:
+      type: counter
+      help: "How many results were printed."
 rpc:
   listen: tcp://0.0.0.0:6001
 http:
   address: 0.0.0.0:8001
-  middleware: [ "gzip", "headers" ]
+  middleware: [ "gzip", "headers", "http_metrics" ]
   pool:
     num_workers: 4
     max_jobs: 50

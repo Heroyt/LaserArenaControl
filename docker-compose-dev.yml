@@ -102,8 +102,33 @@ services:
       - backend
     ports:
       - "3000:3000"
+  grafana:
+    restart: unless-stopped
+    image: grafana/grafana-oss
+    ports:
+      - "3001:3000"
+    links:
+      - prometheus
+    volumes:
+      - grafana-storage:/var/lib/grafana
+    networks:
+      - backend
+  prometheus:
+    restart: unless-stopped
+    image: prom/prometheus
+    ports:
+      - "9090:9090"
+    links:
+      - php
+    networks:
+      - backend
+    volumes:
+      - prometheus-storage:/prometheus
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
 volumes:
   mariadb-dev:
+  grafana-storage:
+  prometheus-storage:
 networks:
   backend:
   frontend:

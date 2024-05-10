@@ -64,6 +64,10 @@ export function loadContent(path: string, reloadTimeout: { timeout: null | NodeJ
 			}
 
 			// Copy content
+			if (response.headers.get('Content-Type') === 'application/json') {
+				console.log('Invalid content type');
+				return;
+			}
 			contentNew.innerHTML = await processResponse(response.headers.get('Content-Type'), response);
 
 			// Find new container classes

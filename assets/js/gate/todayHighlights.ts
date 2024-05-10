@@ -40,8 +40,4 @@ export default class TodayHighlights extends DefaultScreen {
 			timer.classList.remove('timer-today-highlights');
 		}
 	}
-
-	showTimer(): boolean {
-		return true;
-	}
 }

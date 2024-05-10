@@ -12,8 +12,4 @@ export default class TodayScreen extends DefaultScreen {
 		return key === keyActive;
 	}
 
-	showTimer(): boolean {
-		return false;
-	}
-
 }

@@ -21,10 +21,6 @@ export default class TodayScreen extends DefaultScreen {
 		return key === keyActive;
 	}
 
-	showTimer(): boolean {
-		return true;
-	}
-
 	animateIn() {
 		super.animateIn();
 		this.rtsp.animateIn();

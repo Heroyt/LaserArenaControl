@@ -42,10 +42,6 @@ export default class TopPlayersScreen extends DefaultScreen {
 		}
 	}
 
-	showTimer(): boolean {
-		return false;
-	}
-
 	private animationStep() {
 		const prevKey = this.activeKey < 1 ? this.players.length - 1 : this.activeKey - 1;
 		const prevPrevKey = this.activeKey < 2 ? this.players.length + this.activeKey - 2 : this.activeKey - 2;

@@ -46,8 +46,4 @@ export default class TodayHighlights extends DefaultScreen {
 		}
 	}
 
-	showTimer(): boolean {
-		return true;
-	}
-
 }

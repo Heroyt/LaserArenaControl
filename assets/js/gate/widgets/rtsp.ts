@@ -6,6 +6,7 @@ export default class RtspWidget implements GateWidget {
 	streamsWrapper: HTMLDivElement;
 	private readonly maxStreams: number;
 	private readonly streamUrls: string[];
+	private streams: Hls[] = [];
 	private interval: NodeJS.Timeout;
 
 	constructor(streamsWrapper: HTMLDivElement) {
@@ -35,7 +36,12 @@ export default class RtspWidget implements GateWidget {
 						video.querySelector('source').src = this.streamUrls[(offset + i) % this.streamUrls.length];
 						video.load();
 					} else if (Hls.isSupported()) {
-						const hls = new Hls();
+						this.streams[i] ??= new Hls({
+							enableWorker: true,
+							workerPath: '/dist/service-worker.js',
+						});
+						const hls = this.streams[i];
+						hls.detachMedia();
 						hls.loadSource(this.streamUrls[(offset + i) % this.streamUrls.length]);
 						hls.attachMedia(video);
 					}

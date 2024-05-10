@@ -8,6 +8,7 @@ import {compress} from 'esbuild-plugin-compress';
 import cssnanoPlugin from "cssnano";
 import path from "path";
 import {injectManifest} from "workbox-build";
+import {copy} from 'esbuild-plugin-copy';
 
 const watch = process.argv.includes('watch');
 
@@ -210,6 +211,16 @@ const buildOptions = {
                 return css
             }
         }),
+        copy({
+            // this is equal to process.cwd(), which means we use cwd path as base path to resolve `to` path
+            // if not specified, this plugin uses ESBuild.build outdir/outfile options as base path.
+            resolveFrom: 'cwd',
+            assets: {
+                from: ['./node_modules/hls.js/dist/hls.worker*'],
+                to: ['./dist',],
+            },
+            watch: true,
+        }),
     ]
 };
 
@@ -247,7 +258,17 @@ if (watch) {
         target: 'esnext',
         minify: true,
         outfile: 'temp/service-worker.js',
-    })
+        define: {
+            '__USE_SUBTITLES__': 'true',
+            '__USE_ALT_AUDIO__': 'true',
+            '__USE_EME_DRM__': 'true',
+            '__USE_CMCD__': 'true',
+            '__USE_CONTENT_STEERING__': 'true',
+            '__USE_VARIABLE_SUBSTITUTION__': 'true',
+            '__USE_M2TS_ADVANCED_CODECS__': 'true',
+            '__USE_MEDIA_CAPABILITIES__': 'true',
+        }
+    });
 
     injectManifest({
         swDest: 'dist/service-worker.js',

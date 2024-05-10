@@ -38,6 +38,7 @@
     "cssnano": "^6.1.0",
     "esbuild": "0.20.2",
     "esbuild-plugin-compress": "^1.0.1",
+    "esbuild-plugin-copy": "^2.1.1",
     "esbuild-sass-plugin": "^3.2.0",
     "fontawesome-subset": "^4.4.0",
     "postcss": "^8.4.36",
@@ -50,7 +51,8 @@
     "unlighthouse": "^0.11.5",
     "workbox-build": "^7.0.0",
     "workbox-precaching": "^7.0.0",
-    "workbox-sw": "^7.0.0"
+    "workbox-sw": "^7.0.0",
+    "url-toolkit": "2.2.5"
   },
   "author": "Tomáš Vojík <vojik@wboy.cz>",
   "license": "GPL-3.0"

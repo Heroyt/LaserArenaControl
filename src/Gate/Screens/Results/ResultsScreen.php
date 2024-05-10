@@ -19,111 +19,116 @@ use Throwable;
  */
 class ResultsScreen extends GateScreen implements ResultsScreenInterface
 {
-	use WithResultsSettings;
+    use WithResultsSettings;
 
-	private ?ResultsScreenInterface $childScreen = null;
+    private ?ResultsScreenInterface $childScreen = null;
 
-	/**
-	 * @inheritDoc
-	 */
-	public static function getName() : string {
-		return lang('Výsledky ze hry', context: 'gate-screens');
-	}
+    /**
+     * @inheritDoc
+     */
+    public static function getName() : string {
+        return lang('Výsledky ze hry', context: 'gate-screens');
+    }
 
-	public static function getDescription() : string {
-		return lang('Obrazovka zobrazující výsledky z her. Automaticky vybírá zobrazení podle herního módu.',
-			context:  'gate-screens-description');
-	}
+    public static function getDescription() : string {
+        return lang(
+                   'Obrazovka zobrazující výsledky z her. Automaticky vybírá zobrazení podle herního módu.',
+          context: 'gate-screens-description'
+        );
+    }
 
-	/**
-	 * @inheritDoc
-	 */
-	public static function getDiKey() : string {
-		return 'gate.screens.results';
-	}
+    /**
+     * @inheritDoc
+     */
+    public static function getSettingsForm() : string {
+        return 'gate/settings/results.latte';
+    }
 
-	public function isActive() : bool {
-		$game = $this->getGame();
-		if (!isset($game)) {
-			return false;
-		}
+    /**
+     * @inheritDoc
+     */
+    public static function buildSettingsFromForm(array $data) : GateSettings {
+        return new ResultsSettings(isset($data['time']) ? (int) $data['time'] : null);
+    }
 
-		try {
-			return $this->getChildScreen()->isActive();
-		} catch (GameModeNotFoundException) {
-			return false;
-		}
-	}
+    public function isActive() : bool {
+        $game = $this->getGame();
+        if (!isset($game)) {
+            return false;
+        }
 
-	/**
-	 * Get the correct child screen based on the current Game being displayed.
-	 *
-	 * Checks the game type and game mode for custom ones.
-	 *
-	 * @pre  Game must be set.
-	 * @post Child screen is initialized. (Game and settings are set)
-	 *
-	 * @return GateScreen&ResultsScreenInterface
-	 * @throws GameModeNotFoundException
-	 */
-	private function getChildScreen() : ResultsScreenInterface {
-		if (isset($this->childScreen)) {
-			return $this->childScreen;
-		}
-		$game = $this->getGame();
+        try {
+            return $this->getChildScreen()->isActive();
+        } catch (GameModeNotFoundException) {
+            return false;
+        }
+    }
 
-		if (!isset($game)) {
-			throw new RuntimeException('Game must be set.');
-		}
+    /**
+     * Get the correct child screen based on the current Game being displayed.
+     *
+     * Checks the game type and game mode for custom ones.
+     *
+     * @pre  Game must be set.
+     * @post Child screen is initialized. (Game and settings are set)
+     *
+     * @return GateScreen&ResultsScreenInterface
+     * @throws GameModeNotFoundException
+     */
+    private function getChildScreen() : ResultsScreenInterface {
+        if (isset($this->childScreen)) {
+            return $this->childScreen;
+        }
+        $game = $this->getGame();
 
-		// Find correct screen based on game
-		if (($mode = $game->getMode()) !== null && $mode instanceof CustomResultsMode && class_exists($screenClass = $mode->getCustomGateScreen())) {
-			$this->childScreen = App::getService($screenClass);
-		}
+        if (!isset($game)) {
+            throw new RuntimeException('Game must be set.');
+        }
 
-		// Default to basic rankable
-		$this->childScreen ??= match ($game::SYSTEM) {
-			'evo5', 'evo6' => App::getService('gate.screens.results.lasermaxx.rankable'),
-			default        => throw new Exception('Cannot find results screen for system '.$game::SYSTEM),
-		};
+        // Find correct screen based on game
+        /** @var class-string<ResultsScreenInterface&GateScreen> $screenClass */
+        if (
+          ($mode = $game->getMode()) !== null &&
+          $mode instanceof CustomResultsMode && class_exists($screenClass = $mode->getCustomGateScreen())
+        ) {
+            $this->childScreen = App::getService($screenClass::getDiKey());
+        }
 
-		$this->childScreen->setGame($game)->setSettings($this->getSettings())->setParams($this->params);
+        // Default to basic rankable
+        $this->childScreen ??= match ($game::SYSTEM) {
+            'evo5', 'evo6' => App::getService('gate.screens.results.lasermaxx.rankable'),
+            default        => throw new Exception('Cannot find results screen for system '.$game::SYSTEM),
+        };
 
-		return $this->childScreen;
-	}
+        $this->childScreen->setGame($game)->setSettings($this->getSettings())->setParams($this->params);
 
-	/**
-	 * @inheritDoc
-	 */
-	public function run() : ResponseInterface {
-		$game = $this->getGame();
+        return $this->childScreen;
+    }
 
-		if (!isset($game)) {
-			return $this->respond(new ErrorDto('Cannot show screen without game.'), 412);
-		}
+    /**
+     * @inheritDoc
+     */
+    public static function getDiKey() : string {
+        return 'gate.screens.results';
+    }
 
-		try {
-			/** @var ResultsScreenInterface&GateScreen $screen */
-			$screen = $this->getChildScreen();
-		} catch (Throwable $e) {
-			return $this->respond(new ErrorDto('An error occured', exception: $e), 500);
-		}
+    /**
+     * @inheritDoc
+     */
+    public function run() : ResponseInterface {
+        $game = $this->getGame();
 
-		return $screen->run();
-	}
+        if (!isset($game)) {
+            return $this->respond(new ErrorDto('Cannot show screen without game.'), 412);
+        }
 
+        try {
+            /** @var ResultsScreenInterface&GateScreen $screen */
+            $screen = $this->getChildScreen();
+        } catch (Throwable $e) {
+            return $this->respond(new ErrorDto('An error occured', exception: $e), 500);
+        }
 
-	/**
-	 * @inheritDoc
-	 */
-	public static function getSettingsForm() : string {
-		return 'gate/settings/results.latte';
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public static function buildSettingsFromForm(array $data) : GateSettings {
-		return new ResultsSettings(isset($data['time']) ? (int) $data['time'] : null);
-	}
+        return $screen->run();
+    }
 }

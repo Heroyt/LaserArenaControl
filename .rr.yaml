@@ -36,6 +36,19 @@ metrics:
     games_printed:
       type: counter
       help: "How many results were printed."
+    load_time:
+      type: gauge
+      help: "How much time does it take to load a game (create a 0000.game file and music)."
+      labels:
+        - system
+    load_music_time:
+      type: gauge
+      help: "How much time does it take to load a selected game music."
+      labels:
+        - system
+    control_time:
+      type: gauge
+      help: "How much does it take to call the control API."
 rpc:
   listen: tcp://0.0.0.0:6001
 http:

@@ -49,6 +49,8 @@ metrics:
     control_time:
       type: gauge
       help: "How much does it take to call the control API."
+      labels:
+        - action
 rpc:
   listen: tcp://0.0.0.0:6001
 http:

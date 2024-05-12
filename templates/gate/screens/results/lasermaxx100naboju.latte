@@ -110,7 +110,7 @@
 {/define}
 
 {define partTeams}
-    {var int $totalScore = array_sum(array_map(static function(App\GameModels\Game\Team $team){ return $team->score > 0 ? $team->score : 0;},$game->getTeams()->getAll()))}
+    {var int $totalScore = array_sum(array_map(function(App\GameModels\Game\Team $team){ return $team->score > 0 ? $team->score : 0;},$game->getTeams()->getAll()))}
     {var App\GameModels\Game\Team|null $win = $mode->getWin($game)}
     <div n:foreach="$game->getTeamsSorted() as $team" class="team bg-team-{$game::SYSTEM}-{$team->color}"
                                                       style="height:calc({100*($team->score > 0 ? $team->score : 0) / ($totalScore > 0 ? $totalScore : 1)|noescape}% - .2rem);">

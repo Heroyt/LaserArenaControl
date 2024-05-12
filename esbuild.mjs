@@ -158,7 +158,7 @@ const entryPoints = [
             .filter(file => ['.ts'].includes(path.extname(file)))
             .map(file => {
                 return {
-                    out: 'modes/' + file.replace('.ts', ''),
+                    out: 'game/modes/' + file.replace('.ts', ''),
                     in: './assets/js/game/modes/' + file
                 }
             }),

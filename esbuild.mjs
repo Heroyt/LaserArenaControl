@@ -154,6 +154,14 @@ const entryPoints = [
                     in: './assets/scss/pages/' + file
                 }
             }),
+    ...fs.readdirSync('assets/js/game/modes')
+            .filter(file => ['.ts'].includes(path.extname(file)))
+            .map(file => {
+                return {
+                    out: 'modes/' + file.replace('.ts', ''),
+                    in: './assets/js/game/modes/' + file
+                }
+            }),
     ...fs.readdirSync('assets/js/gate/')
             .filter(file => ['.ts'].includes(path.extname(file)) && !file.includes('gateScreen.ts'))
             .map(file => {

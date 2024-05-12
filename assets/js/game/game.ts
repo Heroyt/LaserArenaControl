@@ -229,7 +229,7 @@ export default class Game {
 			if (option.dataset.script) {
 				import(
 					/* webpackChunkName: "modes" */
-					`/dist/game/modes/${option.dataset.script}`
+					`/dist/game/modes/${option.dataset.script}.js`
 					)
 					.then((module) => {
 						this.loadedModeScript = new module.default;

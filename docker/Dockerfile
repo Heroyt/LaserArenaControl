@@ -1,14 +1,81 @@
-FROM heroyt/lac_core:roadrunner-latest AS project
+FROM golang:1.22.3 as golang
+FROM ghcr.io/roadrunner-server/velox:latest as roadrunner
+
+COPY --from=golang /usr/local/go/ /usr/local/go/
+
+ENV APP_VERSION="1.0.0"
+ARG BUILD_TIME="$(date +%FT%T%z)"
+ENV VERSION="v2024.1.2"
+ARG RT_TOKEN="undefined"
+
+COPY roadrunner/velox_rr_2024.toml .
+
+ENV CGO_ENABLED=0
+RUN vx build -c velox_rr_2024.toml -o /usr/bin/
+
+FROM php:8.2-cli-bullseye as php
+
+# Setup
+RUN apt-get update
+RUN apt-get -y install apt-utils wget git build-essential gettext cron zlib1g-dev
+
+#RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
+COPY docker/core/php.ini "$PHP_INI_DIR/php.ini"
+COPY docker/core/php-staging.ini "$PHP_INI_DIR/php-staging.ini"
+
+# PHP extensions
+RUN apt-get install -y libzip-dev unzip libicu-dev cifs-utils ffmpeg libpng-dev libwebp-dev
+RUN apt install -y curl libcurl4-openssl-dev
+RUN docker-php-ext-install mysqli curl gettext sockets pdo_mysql zip pcntl intl opcache gd
+# Imagick
+RUN apt-get update && apt-get install -y libmagickwand-dev --no-install-recommends && rm -rf /var/lib/apt/lists/*
+RUN pecl install imagick
+# Igbinary
+RUN pecl install igbinary
+# Enable extensions
+RUN docker-php-ext-enable mysqli curl gettext sockets pdo_mysql zip pcntl intl opcache imagick igbinary
+RUN docker-php-ext-configure gd --with-jpeg --with-freetype --with-webp && docker-php-ext-install gd
+
+#RUN apt-get -y install sudo
+
+# APCu cache
+RUN pecl install apcu
+RUN docker-php-ext-enable apcu
+
+# Redis
+RUN pecl install redis
+RUN docker-php-ext-enable redis
+
+# Setup gettext languages
+RUN apt-get update && apt-get install -y locales locales-all
+RUN apt-get install -y locales \
+	&& sed -i -e 's/# cs_CZ.UTF-8 UTF-8/cs_CZ.UTF-8 UTF-8/' /etc/locale.gen \
+	&& sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen \
+	&& sed -i -e 's/# de_DE.UTF-8 UTF-8/de_DE.UTF-8 UTF-8/' /etc/locale.gen \
+	&& sed -i -e 's/# fr_FR.UTF-8 UTF-8/fr_FR.UTF-8 UTF-8/' /etc/locale.gen \
+	&& sed -i -e 's/# sk_SK.UTF-8 UTF-8/sk_SK.UTF-8 UTF-8/' /etc/locale.gen \
+	&& sed -i -e 's/# ru_RU.UTF-8 UTF-8/ru_RU.UTF-8 UTF-8/' /etc/locale.gen \
+    && dpkg-reconfigure --frontend=noninteractive locales
+RUN locale-gen cs_CZ.UTF-8
+RUN update-locale -y
+
+FROM node:current-slim AS node_base
+FROM composer:latest AS composer
+FROM php AS project
+
+COPY --from=composer /usr/bin/composer /usr/local/bin/composer
+COPY --from=roadrunner /usr/bin/rr /usr/local/bin/rr
+COPY --from=node_base /usr/local/lib/node_modules /usr/local/lib/node_modules
+COPY --from=node_base /usr/local/bin/node /usr/local/bin/node
+RUN ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm
 
 # Project files
 RUN mkdir -p "/var/www/.npm" && chown -R 33:33 "/var/www/.npm"
-RUN apt-get -y install sudo nano
-RUN echo "www-data:pass" | chpasswd && adduser www-data sudo
+RUN apt-get -y install sudo
 RUN cron
-#USER www-data
 
 # Move to project directory
-WORKDIR /var/www/
+WORKDIR /var/www/html/
 
 # Initialize git and download project
 RUN git init
@@ -27,7 +94,7 @@ RUN mkdir -p logs
 RUN mkdir -p temp
 RUN mkdir -p lmx
 RUN mkdir -p lmx/results
-RUN mkdir -p lmx/games
+RUN mkdir -p lmx/gamess
 
 ENV COMPOSER_ALLOW_SUPERUSER=1
 

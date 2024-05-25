@@ -4,16 +4,16 @@
 {varType App\Models\GameGroup[] $groupsInactive}
 
 {block content}
-    <h2>{lang 'Skupiny', context: 'settings'}:</h2>
+    <h2>{_'Skupiny', context: 'settings'}:</h2>
     <div class="active-groups" id="active-groups">
         {foreach $groupsActive as $id => $group}
             {include groupCard, $id, $group}
         {/foreach}
     </div>
-    <h3>{lang 'Neaktivní skupiny', context: 'settings'}</h3>
+    <h3>{_'Neaktivní skupiny', context: 'settings'}</h3>
     <p>
         <button type="button" data-toggle="collapse" data-target="#inactive-groups-collapse" class="btn btn-info">
-            {lang 'Zobrazit', context: 'actions'}
+            {_'Zobrazit', context: 'actions'}
         </button>
     </p>
     <div class="collapse-grid" id="inactive-groups-collapse">
@@ -30,11 +30,11 @@
         <div class="card-body">
             <div class="input-group">
                 <input type="text" value="{$group->name}" class="form-control fs-5 group-name" maxlength="100">
-                <button type="button" data-toggle="tooltip" title="{lang 'Deaktivovat', context: 'actions'}"
+                <button type="button" data-toggle="tooltip" title="{_'Deaktivovat', context: 'actions'}"
                         class="btn btn-danger delete {if !$group->active}d-none{/if}">
                     <i class="fa-solid fa-trash"></i>
                 </button>
-                <button type="button" data-toggle="tooltip" title="{lang 'Aktivovat', context: 'actions'}"
+                <button type="button" data-toggle="tooltip" title="{_'Aktivovat', context: 'actions'}"
                         class="btn btn-success enable {if $group->active}d-none{/if}">
                     <i class="fa-solid fa-eye"></i>
                 </button>

@@ -2,7 +2,7 @@
 
 <div class="highlights-wrapper">
     <h1 class="title text-center text-white-forced">
-        {lang 'Dnešní zajímavosti', context: 'gate'}
+        {_'Dnešní zajímavosti', domain: 'gate'}
     </h1>
     <div class="highlights">
         {foreach $highlights as $highlight}
@@ -16,7 +16,7 @@
                 </div>
             </div>
         {else}
-            <div class="no-highlights">{lang 'Dnes zatím nejsou žádné zajímavosti.'}</div>
+            <div class="no-highlights">{_'Dnes zatím nejsou žádné zajímavosti.'}</div>
         {/foreach}
     </div>
 </div>

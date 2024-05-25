@@ -8,7 +8,7 @@ class GateStyleService
 {
 
 	public static function getGateBackgroundUrl() : string {
-		return App::getUrl().str_replace(ROOT, '', self::getGateBackgroundPath());
+      return App::getInstance()->getBaseUrl().str_replace(ROOT, '', self::getGateBackgroundPath());
 	}
 
 	public static function getGateBackgroundPath() : string {

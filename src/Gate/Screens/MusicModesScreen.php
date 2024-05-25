@@ -23,7 +23,7 @@ class MusicModesScreen extends GateScreen implements ReloadTimerInterface, WithS
      * @inheritDoc
      */
     public static function getName() : string {
-        return lang('Seznam hudebních módů', context: 'gate.screens');
+        return lang('Seznam hudebních módů', domain: 'gate', context: 'screens');
     }
 
     /**

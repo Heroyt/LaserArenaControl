@@ -36,9 +36,10 @@ npm run build
 ./bin/console translations:compile
 ./bin/console regression:update
 
-
 # Run project
 echo 'Starting...'
 echo $PWD
 rr -v
-cron & rr serve -d -p -c .rr.yaml
+cron &
+rr serve -d -c .rr.yaml
+echo $?

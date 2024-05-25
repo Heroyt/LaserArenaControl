@@ -34,31 +34,28 @@ use Throwable;
 class Modes extends Controller
 {
 
-	/**
-	 * @param Request $request
-	 *
-	 * @return void
-	 * @throws GameModeNotFoundException
-	 * @throws TemplateDoesNotExistException
-	 */
-	#[Get('settings/modes', 'settings-modes')]
-	#[Get('settings/modes/{system}')]
+    /**
+     * @param  Request  $request
+     *
+     * @return ResponseInterface
+     * @throws GameModeNotFoundException
+     * @throws JsonException
+     * @throws TemplateDoesNotExistException
+     */
 	public function modes(Request $request): ResponseInterface {
 		$this->params['system'] = $request->params['system'] ?? first(GameFactory::getSupportedSystems());
 		$this->params['modes'] = GameModeFactory::getAll(['system' => $this->params['system'], 'all' => true]);
 		return $this->view('pages/settings/modes');
 	}
 
-	/**
-	 * @param Request $request
-	 *
-	 * @return never
-	 * @throws JsonException
-	 * @throws ModelNotFoundException
-	 * @throws ValidationException
-	 * @throws DirectoryCreationException
-	 */
-	#[Get('settings/modes/{id}/variations')]
+    /**
+     * @param  Request  $request
+     *
+     * @return ResponseInterface
+     * @throws JsonException
+     * @throws ModelNotFoundException
+     * @throws ValidationException
+     */
 	public function modeVariations(Request $request): ResponseInterface {
 		$id = $this->getRequestId($request);
 
@@ -99,13 +96,12 @@ class Modes extends Controller
 		return $id;
 	}
 
-	/**
-	 * @param Request $request
-	 *
-	 * @return never
-	 * @throws JsonException
-	 */
-	#[Get('settings/modes/{id}/settings')]
+    /**
+     * @param  Request  $request
+     *
+     * @return ResponseInterface
+     * @throws JsonException
+     */
 	public function modeSettings(Request $request): ResponseInterface {
 		$id = $this->getRequestId($request);
 
@@ -121,13 +117,12 @@ class Modes extends Controller
 		return $this->respond($mode->settings);
 	}
 
-	/**
-	 * @param Request $request
-	 *
-	 * @return never
-	 * @throws JsonException
-	 */
-	#[Get('settings/modes/{id}/names')]
+    /**
+     * @param  Request  $request
+     *
+     * @return ResponseInterface
+     * @throws JsonException
+     */
 	public function modeNames(Request $request): ResponseInterface {
 		$id = $this->getRequestId($request);
 
@@ -144,7 +139,6 @@ class Modes extends Controller
 		return $this->respond($names);
 	}
 
-	#[Post('/settings/modes/{id}/names')]
 	public function saveModeNames(Request $request): ResponseInterface {
 		$id = $this->getRequestId($request);
 
@@ -169,24 +163,22 @@ class Modes extends Controller
 		return $this->respond(['status' => 'ok']);
 	}
 
-	/**
-	 * @return never
-	 * @throws JsonException
-	 * @throws ValidationException
-	 */
-	#[Get('/settings/modes/variations')]
+    /**
+     * @return ResponseInterface
+     * @throws JsonException
+     * @throws ValidationException
+     */
 	public function getAllVariations(): ResponseInterface {
 		return $this->respond(GameModeVariation::getAll());
 	}
 
-	/**
-	 * @param Request $request
-	 *
-	 * @return never
-	 * @throws JsonException
-	 * @throws ValidationException
-	 */
-	#[Post('/settings/modes/variations')]
+    /**
+     * @param  Request  $request
+     *
+     * @return ResponseInterface
+     * @throws JsonException
+     * @throws ValidationException
+     */
 	public function createVariation(Request $request): ResponseInterface {
 		$name = $request->getPost('name', '');
 		if (empty($name)) {
@@ -209,13 +201,12 @@ class Modes extends Controller
 		return $this->respond(['error' => lang('Nepodařilo se vytvořit variaci', context: 'errors')], 500);
 	}
 
-	/**
-	 * @param Request $request
-	 *
-	 * @return never
-	 * @throws JsonException
-	 */
-	#[Post('settings/modes')]
+    /**
+     * @param  Request  $request
+     *
+     * @return ResponseInterface
+     * @throws JsonException
+     */
 	public function save(Request $request): ResponseInterface {
 		$modes = [];
 		foreach ($request->getPost('mode', []) as $id => $values) {
@@ -267,13 +258,13 @@ class Modes extends Controller
 		return $this->saveResponse($request, ['modes' => $modes]);
 	}
 
-	/**
-	 * @param Request              $request
-	 * @param array<string, mixed> $additional
-	 *
-	 * @return never
-	 * @throws JsonException
-	 */
+    /**
+     * @param  Request  $request
+     * @param  array<string, mixed>  $additional
+     *
+     * @return ResponseInterface
+     * @throws JsonException
+     */
 	private function saveResponse(Request $request, array $additional = []): ResponseInterface {
 		if ($request->isAjax()) {
 			if (!empty($request->passErrors)) {
@@ -284,10 +275,9 @@ class Modes extends Controller
 			}
 			return $this->respond(array_merge($additional, ['status' => 'ok', 'notices' => $request->passNotices]));
 		}
-		return App::redirect(['settings', 'modes'], $request);
+      return $this->app->redirect(['settings', 'modes'], $request);
 	}
 
-	#[Post('settings/modes/{id}/variations')]
 	public function saveModeVariations(Request $request): ResponseInterface {
 		$id = (int) ($request->params['id'] ?? 0);
 		if ($id <= 0) {
@@ -341,13 +331,12 @@ class Modes extends Controller
 		return $this->saveResponse($request);
 	}
 
-	/**
-	 * @param Request $request
-	 *
-	 * @return never
-	 * @throws JsonException
-	 */
-	#[Delete('settings/modes/{id}')]
+    /**
+     * @param  Request  $request
+     *
+     * @return ResponseInterface
+     * @throws JsonException
+     */
 	public function deleteGameMode(Request $request): ResponseInterface {
 		$id = $this->getRequestId($request);
 
@@ -371,7 +360,6 @@ class Modes extends Controller
 		return $this->respond(['status' => 'ok']);
 	}
 
-	#[Post('settings/modes/new/{system}/{type}')]
 	public function createGameMode(Request $request): ResponseInterface {
 		$type = strtoupper($request->params['type'] ?? 'TEAM');
 		$system = $request->params['system'] ?? '';

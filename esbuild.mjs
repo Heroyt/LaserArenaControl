@@ -84,6 +84,8 @@ await fontawesomeSubset(
                 'circle-play',
                 'circle-stop',
                 'circle-exclamation',
+                'table-cells-large',
+                'magnifying-glass',
             ],
         },
         "assets/fonts",

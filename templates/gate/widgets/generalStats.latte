@@ -14,7 +14,7 @@
     <div class="d-flex flex-column shadow">
         <div class="bg-blue-800 text-white-forced text-center rounded-top-10 py-3 fw-bold">
             {svgIcon 'star', '', '2rem'}
-            {lang 'Nejlepší skóre dne', context: 'gate'}
+            {_'Nejlepší skóre dne', domain: 'gate'}
         </div>
         <div n:for="$i = 1; $i < 4; $i++"
                 class="text-center py-2 d-flex bg-white-forced text-grey-text flex-fill {if $i === 3}rounded-bottom-10{else}bbd{/if}">
@@ -37,7 +37,7 @@
         <div class="flex-fill rounded-start-10 bg-blue-800 text-white-forced d-flex align-items-center justify-content-center py-2 fw-bold">
             <div>
                 {svgIcon 'gun', '', '2.5rem'}
-                {lang 'Odehráno her', context: 'results'}
+                {_'Odehráno her', domain: 'results'}
             </div>
         </div>
         <div class="bg-white-forced text-grey-text rounded-end-10 d-flex align-items-center justify-content-center col-4">
@@ -52,7 +52,7 @@
              style="border-top-left-radius: 10px;">
             <div>
                 {svgIcon 'target', '', '2.5rem'}
-                {lang 'Sniper', context: 'results'}
+                {_'Sniper', domain: 'results'}
             </div>
         </div>
         <div class="flex-fill-same bg-white-forced text-grey-text py-1 d-flex align-items-center justify-content-center"
@@ -66,7 +66,7 @@
         <div class="bg-blue-800 text-white-forced py-1 fw-bold d-flex align-items-center justify-content-center flex-fill-same">
             <div>
                 {svgIcon 'bullets', '', '2.5rem'}
-                {lang 'Mega střelec', context: 'results'}
+                {_'Mega střelec', domain: 'results'}
             </div>
         </div>
         <div class="flex-fill-same bg-white-forced text-grey-text py-1 d-flex align-items-center justify-content-center">
@@ -79,7 +79,7 @@
         <div class="bg-blue-800 text-white-forced py-1 fw-bold d-flex align-items-center justify-content-center flex-fill-same">
             <div>
                 {svgIcon 'predator', '', '2.5rem'}
-                {lang 'Predátor', context: 'results'}
+                {_'Predátor', domain: 'results'}
             </div>
         </div>
         <div class="flex-fill-same bg-white-forced text-grey-text py-1 d-flex align-items-center justify-content-center">
@@ -93,7 +93,7 @@
              style="border-bottom-left-radius: 10px;">
             <div>
                 {svgIcon 'skull', '', '2.5rem'}
-                {lang 'Cíl', context: 'results'}
+                {_'Cíl', domain: 'results'}
             </div>
         </div>
         <div class="flex-fill-same bg-white-forced text-grey-text py-1 d-flex align-items-center justify-content-center"

@@ -14,10 +14,9 @@ class Players extends Controller
 {
 
 	public function __construct(
-		Latte                           $latte,
 		private readonly PlayerProvider $playerProvider
 	) {
-		parent::__construct($latte);
+      parent::__construct();
 	}
 
 	public function getPlayer(string $code): ResponseInterface {

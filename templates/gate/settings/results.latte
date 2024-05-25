@@ -8,9 +8,9 @@
 
 <div class="form-group reload-timer">
     <label for="{$key}-time" class="form-label">
-        {lang 'Doba na obrazovce v sekundách', context: 'settings'}:
+        {_'Doba na obrazovce v sekundách', context: 'settings'}:
     </label>
     <input type="number" class="form-control" min="0" n:attr="value: $settings->getTime()" id="{$key}-time"
            name="{$name}[time]">
-    <div class="form-text">{lang 'Maximální doba, po kterou má obrazovka zůstat aktivní. 0 = neomezeně.'}</div>
+    <div class="form-text">{_'Maximální doba, po kterou má obrazovka zůstat aktivní. 0 = neomezeně.'}</div>
 </div>

@@ -10,8 +10,8 @@ use Psr\Http\Message\ResponseInterface;
 class Cache extends Controller
 {
 
-	public function __construct(protected Latte $latte, protected CacheService $cache) {
-		parent::__construct($latte);
+    public function __construct(protected CacheService $cache) {
+        parent::__construct();
 	}
 
 	public function clearAll(): ResponseInterface {

@@ -64,8 +64,11 @@ Debugger::getBar()
 
 Loader::init();
 
-define('CHECK_TRANSLATIONS', (bool) (App::getConfig()['General']['TRANSLATIONS'] ?? false));
-define('TRANSLATIONS_COMMENTS', (bool) (App::getConfig()['General']['TRANSLATIONS_COMMENTS'] ?? false));
+define('CHECK_TRANSLATIONS', (bool) (App::getInstance()->config->getConfig()['General']['TRANSLATIONS'] ?? false));
+define(
+  'TRANSLATIONS_COMMENTS',
+  (bool) (App::getInstance()->config->getConfig()['General']['TRANSLATIONS_COMMENTS'] ?? false)
+);
 
 // Translations update
 $translationChange = false;
@@ -75,7 +78,7 @@ if (!PRODUCTION) {
 	/** @var Translations[] $translations */
 	$translations = [];
 	/** @var string[] $languages */
-	$languages = App::getSupportedLanguages();
+    $languages = App::getInstance()->getSupportedLanguages();
 	foreach ($languages as $lang => $country) {
 		$concatLang = $lang.'_'.$country;
 		$path = LANGUAGE_DIR.'/'.$concatLang;

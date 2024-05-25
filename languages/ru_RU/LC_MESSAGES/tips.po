@@ -1,0 +1,105 @@
+msgid ""
+msgstr ""
+"Content-Transfer-Encoding: 8bit\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: ru_RU\n"
+"Language-Team: Russian\n"
+"Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
+"MIME-Version: 1.0\n"
+"PO-Revision-Date: 2024-03-23 17:04\n"
+"POT-Creation-Date: 2021-12-01 12:05+0100\n"
+"Plural-Forms: nplurals=4; plural=((n%10==1 && n%100!=11) ? 0 : ((n%10 >= 2 && n%10 <=4 && (n%100 < 12 || n%100 > 14)) ? 1 : ((n%10 == 0 || (n%10 >= 5 && n%10 <=9)) || (n%100 >= 11 && n%100 <= 14)) ? 2 : 3));\n"
+"Project-Id-Version: laserarenacontrol\n"
+
+msgid "Jak se v aréně střílí, tak se v aréně umírá..."
+msgstr ""
+
+msgid "Trénink se vyplácí!"
+msgstr ""
+
+msgid "Tip #%d"
+msgstr ""
+
+msgid "Střílíme v Písku už od 31.12.2013!!!"
+msgstr ""
+
+msgid "Ve hře vždy sleduj svoje okolí!"
+msgstr ""
+
+msgid "Čidlo na zbrani, ač nenápadné, se dá velmi dobře trefit."
+msgstr ""
+
+msgid "Zkušení hráči hrajou týmově!"
+msgstr ""
+
+msgid "Pro vyřízení osobních sporů je aréna ideální."
+msgstr ""
+
+msgid "Dobití protihráče pažbou, vám žádné body nepřidá."
+msgstr ""
+
+msgid "Zabiják vlastního týmu, či největší vlasťnák... To je oč tu běží!"
+msgstr ""
+
+msgid "Vestu si oblečte vždy zbraní dobředu."
+msgstr ""
+
+msgid "Při týmové hře není výhodné střílet do hráčů se stejnou barvou."
+msgstr ""
+
+msgid "Jen Chuck Norris vás může zastřelit baterkou na svém mobilu."
+msgstr ""
+
+msgid "Nejlepší výherní taktika je strílet do protihráčů."
+msgstr ""
+
+msgid "Nemá cenu umírat na tom samém místě. Když to nejde, uteč jinam!"
+msgstr ""
+
+msgid "Všechny bonusy, kromě štítu, trvají 30s."
+msgstr ""
+
+msgid "Držení zbraně v obou rukách je přesnější."
+msgstr ""
+
+msgid "Měl bys radši hrát laser game a být úžasný!"
+msgstr ""
+
+msgid "Spoluhráč je nejlepší cíl. Neutíká."
+msgstr ""
+
+msgid "#laserarenapísek"
+msgstr ""
+
+msgid "Zabití: 100 bodů, Smrt: -50 bodů, Zabití vlastního hráče: -25 bodů"
+msgstr ""
+
+msgid "Go, go, go, go..."
+msgstr ""
+
+msgid "Ramenní čidla se trefují nejlépe, zádová nejhůř."
+msgstr ""
+
+msgid "Pohyblivý cíl je vždycky těžší trefit."
+msgstr ""
+
+msgid "Na displeji vesty po zásahu vidíte kdo vás zasáhl do jakého čidla. To pomáhá při orientaci."
+msgstr ""
+
+msgid "Při výstupu z arény vždy připni zbraň k vestě."
+msgstr ""
+
+msgid "LASER TAG - SUIT UP!"
+msgstr ""
+
+msgid "Když tě bolí nohy, kempi!"
+msgstr ""
+
+msgid "Nikdy nejsi příliš starý na laser game."
+msgstr ""
+
+msgid "Nezapomeň každý květen a listopad registrovat svůj tým na turnaj!"
+msgstr ""
+
+msgid "Oživení trvá 5 sekund."
+msgstr ""

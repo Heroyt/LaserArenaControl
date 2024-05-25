@@ -16,11 +16,15 @@ class LaserMaxxSurvivalResultsScreen extends AbstractResultsScreen
 	 * @inheritDoc
 	 */
 	public static function getName() : string {
-		return lang('LaserMaxx výsledky z módu Survival', context: 'gate-screens');
+      return lang('LaserMaxx výsledky z módu Survival', domain: 'gate', context: 'screens');
 	}
 
 	public static function getDescription() : string {
-		return lang('Obrazovka zobrazující výsledky LaserMaxx z módu Survival.', context: 'gate-screens-description');
+      return lang(
+                 'Obrazovka zobrazující výsledky LaserMaxx z módu Survival.',
+        domain : 'gate',
+        context: 'screens.description'
+      );
 	}
 
 	/**

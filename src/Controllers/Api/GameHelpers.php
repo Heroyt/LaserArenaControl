@@ -15,7 +15,6 @@ use Lsr\Core\Controllers\ApiController;
 use Lsr\Core\Exceptions\ModelNotFoundException;
 use Lsr\Core\Exceptions\ValidationException;
 use Lsr\Core\Requests\Request;
-use Lsr\Core\Templating\Latte;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
 
@@ -26,10 +25,9 @@ class GameHelpers extends ApiController
 {
 
     public function __construct(
-      Latte                   $latte,
       private readonly Config $config,
     ) {
-        parent::__construct($latte);
+        parent::__construct();
     }
 
     /**

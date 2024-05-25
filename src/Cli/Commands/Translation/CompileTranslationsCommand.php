@@ -7,6 +7,7 @@ use App\Cli\Enums\ForegroundColors;
 use App\Core\App;
 use Gettext\Generator\MoGenerator;
 use Gettext\Loader\PoLoader;
+use Lsr\Core\Translations;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -14,7 +15,14 @@ use Symfony\Component\Console\Output\OutputInterface;
 class CompileTranslationsCommand extends Command
 {
 
-	public static function getDefaultName(): ?string {
+    public function __construct(
+      private readonly Translations $translations,
+      ?string                       $name = null,
+    ) {
+        parent::__construct($name);
+    }
+
+    public static function getDefaultName() : ?string {
 		return 'translations:compile';
 	}
 
@@ -26,8 +34,7 @@ class CompileTranslationsCommand extends Command
 		$poLoader = new PoLoader();
 		$moGenerator = new MoGenerator();
 		/** @var string[] $languages */
-		$languages = App::getSupportedLanguages();
-		foreach ($languages as $lang => $country) {
+      foreach ($this->translations->supportedLanguages as $lang => $country) {
 			$concatLang = $lang . '_' . $country;
         $path = LANGUAGE_DIR.$concatLang;
 			if (!is_dir($path)) {
@@ -42,6 +49,22 @@ class CompileTranslationsCommand extends Command
 			)) {
 				$output->writeln('Compiled ' . $file);
 			}
+
+          foreach ($this->translations->textDomains as $domain) {
+              $file = $path.'/LC_MESSAGES/'.$domain.'.po';
+              if (!file_exists($file)) {
+                  $output->writeln('File "'.$file.'" does not exist.');
+                  continue;
+              }
+              $output->writeln('Loading '.$file);
+              $translation = $poLoader->loadFile($file);
+              if ($moGenerator->generateFile(
+                $translation,
+                $path.'/LC_MESSAGES/'.$domain.'.mo'
+              )) {
+                  $output->writeln('Compiled '.$file);
+              }
+          }
 		}
 
 		$output->writeln(

@@ -21,7 +21,6 @@ use JsonException;
 use Lsr\Core\Controllers\Controller;
 use Lsr\Core\Exceptions\ValidationException;
 use Lsr\Core\Requests\Request;
-use Lsr\Core\Templating\Latte;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
 
@@ -32,11 +31,10 @@ class GateController extends Controller
 {
 
     public function __construct(
-      Latte                         $latte,
       private readonly EventService $eventService,
       private readonly Gate         $gate
     ) {
-        parent::__construct($latte);
+        parent::__construct();
     }
 
     /**

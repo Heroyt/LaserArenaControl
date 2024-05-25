@@ -3,6 +3,9 @@
 use App\Api\Response\ErrorDto;
 use App\Api\Response\ErrorType;
 use App\Core\App;
+use App\Services\TaskProducer;
+use App\Tasks\GameImportTask;
+use App\Tasks\Payloads\GameImportPayload;
 use App\Tasks\TaskDispatcherInterface;
 use Lsr\Core\Requests\Exceptions\RouteNotFoundException;
 use Lsr\Core\Requests\RequestFactory;
@@ -15,8 +18,11 @@ use Spiral\RoadRunner\Environment;
 use Spiral\RoadRunner\Environment\Mode;
 use Spiral\RoadRunner\Http\PSR7Worker;
 use Spiral\RoadRunner\Jobs\Consumer;
+use Spiral\RoadRunner\Payload;
 use Spiral\RoadRunner\Worker;
 use Tracy\Debugger;
+use Tracy\Helpers;
+use Tracy\ILogger;
 
 const ROOT = __DIR__.'/';
 /** Visiting site normally */
@@ -29,7 +35,18 @@ ini_set('display_startup_errors', '1');
 
 require_once ROOT."include/load.php";
 
+$app = App::getInstance();
 $env = Environment::fromGlobals();
+
+Debugger::$logDirectory = LOG_DIR.'tracy';
+
+if (
+  !file_exists(Debugger::$logDirectory) &&
+  !mkdir(Debugger::$logDirectory, 0777, true) &&
+  !is_dir(Debugger::$logDirectory)
+) {
+    Debugger::$logDirectory = LOG_DIR;
+}
 
 switch ($env->getMode()) {
     case Mode::MODE_JOBS:
@@ -40,7 +57,7 @@ switch ($env->getMode()) {
                 $name = $task->getName();
 
                 /** @var TaskDispatcherInterface $dispatcher */
-                $dispatcher = App::getService($name);
+                $dispatcher = $app::getService($name);
                 $dispatcher->process($task);
 
                 if (!$task->isCompleted()) {
@@ -48,6 +65,34 @@ switch ($env->getMode()) {
                 }
             } catch (Throwable $e) {
                 $task->fail($e);
+            }
+        }
+        break;
+    case 'file_watch':
+        $worker = Worker::create();
+        $logger = new Logger(LOG_DIR, 'worker');
+        /** @var TaskProducer $taskProducer */
+        $taskProducer = App::getService('taskProducer');
+
+        while ($payload = $worker->waitPayload()) {
+            try {
+                $logger->debug('file_watch: '.$payload->body);
+
+                // Parse payload
+                /** @var array{directory?:string,eventTime?:string,file?:string,op?:string,path?:string} $data */
+                $data = json_decode($payload->body, true, 512, JSON_THROW_ON_ERROR);
+                $dir = (string) ($data['directory'] ?? '');
+                if (empty($resultsDir)) {
+                    $logger->error('Missing required argument "directory". Valid results directory is expected.');
+                    $worker->respond(new Payload('ERROR'));
+                }
+
+                // Plan import on watched dir
+                $taskProducer->push(GameImportTask::class, new GameImportPayload($dir));
+                $worker->respond(new Payload('OK'));
+            } catch (Throwable $e) {
+                $logger->exception($e);
+                $worker->respond(new Payload('ERROR'));
             }
         }
         break;
@@ -77,13 +122,13 @@ switch ($env->getMode()) {
 
             try {
                 $request = RequestFactory::fromPsrRequest($request);
-                App::setRequest($request);
+                $app->setRequest($request);
 
                 var_dump('Request: '.$request->getUri());
-                var_dump('App: '.App::getRequest()->getUri());
+                var_dump('App: '.$app->getRequest()->getUri());
 
                 /** @var SessionInterface $session */
-                $session = App::getService('session');
+                $session = $app->session;
                 if (!$session->isInitialized()) {
                     $session->init();
                 }
@@ -100,10 +145,10 @@ switch ($env->getMode()) {
                   $psr7->respond(new Response(200, [], $content));
                 }
                 else {*/
-                $response = App::run();
-                $psr7->respond($response);
+                $psr7->respond($app->run()->withAddedHeader('Content-Language', $app->translations->getLang()));
                 //}
                 $session->close();
+                $app->translations->updateTranslations();
             } catch (RouteNotFoundException $e) {
                 if (in_array('application/json', getAcceptTypes($request))) {
                     $psr7->respond(
@@ -122,6 +167,7 @@ switch ($env->getMode()) {
                     $psr7->respond(new Response(404, [], $e->getMessage()));
                 }
             } catch (Throwable $e) {
+                $logger->exception($e);
                 if (in_array('application/json', getAcceptTypes($request))) {
                     $psr7->respond(
                       new Response(
@@ -134,6 +180,8 @@ switch ($env->getMode()) {
                 }
                 else {
                     // TODO: Handle production mode
+                    Helpers::improveException($e);
+                    Debugger::log($e, ILogger::EXCEPTION);
                     ob_start();
                     Debugger::getBlueScreen()->render($e);
                     $blueScreen = ob_get_clean();
@@ -144,7 +192,6 @@ switch ($env->getMode()) {
                 // Additionally, we can inform the RoadRunner that the processing
                 // of the request failed.
                 $psr7->getWorker()->error((string) $e);
-                $logger->exception($e);
             }
         }
         break;

@@ -38,7 +38,7 @@ class GotenbergService
 		// Add logging to handler and set handler to cUrl
 		$stack = new HandlerStack();
 		$stack->setHandler(new CurlHandler(['handle_factory' => new CurlFactory(99)]));
-		$stack->push(Middleware::log($this->logger, new MessageFormatter(App::isProduction() ? MessageFormatter::CLF : MessageFormatter::DEBUG)));
+      $stack->push(Middleware::log($this->logger, new MessageFormatter(MessageFormatter::DEBUG)));
 
 		// Initialize client
 		$this->client = new Client(

@@ -6,7 +6,7 @@
 
 <div class="form-group">
     <label for="{$key}-type" class="form-label">
-        {lang 'Rozložení obrazovky'}:
+        {_'Rozložení obrazovky'}:
     </label>
     <select name="{$name}[type]" id="{$key}-type" class="form-select">
         <option n:foreach="App\Gate\Settings\ImageScreenType::cases() as $case"
@@ -18,7 +18,7 @@
 
 <div class="form-group">
     <label for="{$key}-animation" class="form-label">
-        {lang 'Animace'}:
+        {_'Animace'}:
     </label>
     <select name="{$name}[animation]" id="{$key}-animation" class="form-select">
         <option n:foreach="App\Gate\Settings\AnimationType::cases() as $case"
@@ -32,7 +32,7 @@
 <input type="hidden" name="{$name}[current]" value="{$settings->image?->getPath()}">
 <div class="mt-2">
     <label class="form-label" for="{$key}-image">
-        {lang 'Obrázek'}:
+        {_'Obrázek'}:
     </label>
     <input id="{$key}-image" name="{$name}[image]" type="file" accept="image/jpeg,image/png" class="form-control"
            data-preview="#{$key}-preview">
@@ -41,16 +41,16 @@
     {ifset $settings->image}
         {var string[] $paths = $settings->image?->getOptimized()}
         <img src="{$paths['600-webp'] ?? $paths['600'] ?? $paths['webp'] ?? $paths['original']}"
-             alt="{lang 'Obrázek'}" class="img-fluid" id="{$key}-preview"
+             alt="{_'Obrázek'}" class="img-fluid" id="{$key}-preview"
              style="max-height: 200px; object-fit: contain;">
     {/ifset}
 </div>
 <div class="form-group reload-timer">
     <label for="{$key}-time" class="form-label">
-        {lang 'Doba na obrazovce v sekundách', context: 'settings'}:
+        {_'Doba na obrazovce v sekundách', context: 'settings'}:
     </label>
     <input type="number" class="form-control" min="0" n:attr="value: $settings->getTime()" id="{$key}-time"
            name="{$name}[time]">
-    <div class="form-text">{lang 'Maximální doba, po kterou má obrazovka zůstat aktivní. 0 = neomezeně.'}</div>
+    <div class="form-text">{_'Maximální doba, po kterou má obrazovka zůstat aktivní. 0 = neomezeně.'}</div>
 </div>
 

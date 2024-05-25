@@ -5,7 +5,7 @@
 
 <div class="music-modes-wrapper">
     <h1 class="title text-center text-white-forced">
-        {lang 'Nejhranější hudba', context: 'gate'}
+        {_'Nejhranější hudba', domain: 'gate'}
     </h1>
     <div class="music-modes">
         {foreach $musicCounts as $id => $count}
@@ -17,7 +17,7 @@
             </div>
         {else}
             <div class="no-music">
-                {lang 'Nedostatečná data'}
+                {_'Nedostatečná data'}
             </div>
         {/foreach}
     </div>

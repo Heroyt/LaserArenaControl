@@ -8,9 +8,6 @@ use Exception;
 use JsonException;
 use Lsr\Core\Controllers\Controller;
 use Lsr\Core\Requests\Request;
-use Lsr\Core\Routing\Attributes\Get;
-use Lsr\Core\Routing\Attributes\Post;
-use Lsr\Core\Templating\Latte;
 use Psr\Http\Message\ResponseInterface;
 use Spiral\RoadRunner\Metrics\Metrics;
 
@@ -21,17 +18,15 @@ class GameControl extends Controller
 {
 
     public function __construct(
-      Latte                    $latte,
       private readonly Metrics $metrics,
     ) {
-        parent::__construct($latte);
+        parent::__construct();
     }
 
     /**
      * @return ResponseInterface
      * @throws JsonException
      */
-    #[Get('/control/status', 'getGameStatus')]
     public function status() : ResponseInterface {
         /** @var string|null $ip */
         $ip = Info::get('lmx_ip');
@@ -63,7 +58,6 @@ class GameControl extends Controller
      * @return ResponseInterface
      * @throws JsonException
      */
-    #[Post('/control/loadSafe', 'loadGameSafe')]
     public function loadSafe(Request $request) : ResponseInterface {
         /** @var string|null $ip */
         $ip = Info::get('lmx_ip');
@@ -105,7 +99,6 @@ class GameControl extends Controller
      * @return ResponseInterface
      * @throws JsonException
      */
-    #[Post('/control/load', 'loadGame')]
     public function load(Request $request) : ResponseInterface {
         /** @var string|null $ip */
         $ip = Info::get('lmx_ip');
@@ -133,7 +126,6 @@ class GameControl extends Controller
      * @return ResponseInterface
      * @throws JsonException
      */
-    #[Post('/control/startSafe', 'startGameSafe')]
     public function startSafe(Request $request) : ResponseInterface {
         /** @var string|null $ip */
         $ip = Info::get('lmx_ip');
@@ -187,7 +179,6 @@ class GameControl extends Controller
      * @return ResponseInterface
      * @throws JsonException
      */
-    #[Post('/control/start', 'startGame')]
     public function start() : ResponseInterface {
         /** @var string|null $ip */
         $ip = Info::get('lmx_ip');
@@ -208,7 +199,6 @@ class GameControl extends Controller
      *
      * @return ResponseInterface
      */
-    #[Post('/control/stop', 'stopGame')]
     public function stop() : ResponseInterface {
         /** @var string|null $ip */
         $ip = Info::get('lmx_ip');
@@ -229,7 +219,6 @@ class GameControl extends Controller
      *
      * @return ResponseInterface
      */
-    #[Post('/control/retry', 'retryDownload')]
     public function retryDownload() : ResponseInterface {
         /** @var string|null $ip */
         $ip = Info::get('lmx_ip');
@@ -249,7 +238,6 @@ class GameControl extends Controller
      *
      * @return ResponseInterface
      */
-    #[Post('/control/cancel', 'cancelDownload')]
     public function cancelDownload() : ResponseInterface {
         /** @var string|null $ip */
         $ip = Info::get('lmx_ip');

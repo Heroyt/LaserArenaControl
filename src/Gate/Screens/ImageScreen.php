@@ -24,7 +24,7 @@ class ImageScreen extends GateScreen implements WithSettings, ReloadTimerInterfa
      * @inheritDoc
      */
     public static function getName() : string {
-        return lang('Obrázek', context: 'gate.screens');
+        return lang('Obrázek', domain: 'gate', context: 'screens');
     }
 
     /**
@@ -50,7 +50,7 @@ class ImageScreen extends GateScreen implements WithSettings, ReloadTimerInterfa
         $time = (int) ($data['time'] ?? 0);
 
         $keys = explode('[', str_replace(']', '', $data['key']));
-        $uploadedImage = App::getRequest()->getUploadedFiles();
+        $uploadedImage = App::getInstance()->getRequest()->getUploadedFiles();
         foreach ($keys as $key) {
             $uploadedImage = $uploadedImage[$key] ?? [];
         }

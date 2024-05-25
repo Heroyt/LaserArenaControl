@@ -24,7 +24,7 @@ use Psr\Http\Message\ResponseInterface;
 class Gate extends Controller
 {
 
-    protected string $title = 'Settings - Gate';
+    protected string $title = 'Nastavení - Výsledková tabule';
 
 
     /**
@@ -150,7 +150,7 @@ class Gate extends Controller
               ]
             );
         }
-        return App::redirect('settings-gate', $request);
+        return $this->app->redirect('settings-gate', $request);
     }
 
     /**

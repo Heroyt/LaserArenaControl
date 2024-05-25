@@ -33,19 +33,18 @@ class Music extends Controller
 {
 
     public function __construct(
-      Latte                          $latte,
       private readonly TaskProducer  $taskProducer,
       private readonly FeatureConfig $config,
     ) {
-        parent::__construct($latte);
+        parent::__construct();
     }
 
     /**
-     * @return void
-     * @throws ValidationException
+     * @return ResponseInterface
+     * @throws JsonException
      * @throws TemplateDoesNotExistException
+     * @throws ValidationException
      */
-    #[Get('settings/music', 'settings-music')]
     public function show() : ResponseInterface {
         $this->params['music'] = MusicMode::getAll();
         $this->params['playlists'] = Playlist::getAll();
@@ -55,10 +54,9 @@ class Music extends Controller
     /**
      * @param  Request  $request
      *
-     * @return never
+     * @return ResponseInterface
      * @throws JsonException
      */
-    #[Post('settings/music/upload')]
     public function upload(Request $request) : ResponseInterface {
         $allMusic = [];
 
@@ -72,7 +70,7 @@ class Music extends Controller
                 // Handle form errors
                 if ($file->getError() !== UPLOAD_ERR_OK) {
                     $request->passErrors[] = match ($file->getError()) {
-                        UPLOAD_ERR_INI_SIZE   => lang('Uploaded file is too large', context: 'errors').' - '.$name,
+                        UPLOAD_ERR_INI_SIZE => lang('Nahraný soubor je příliš velký', context: 'errors').' - '.$name,
                         UPLOAD_ERR_FORM_SIZE  => lang('Form size is to large', context: 'errors').' - '.$name,
                         UPLOAD_ERR_PARTIAL    => lang(
                                      'The uploaded file was only partially uploaded.',
@@ -122,7 +120,7 @@ class Music extends Controller
                     $allMusic[] = [
                       'id'       => $music->id,
                       'name'     => $music->name,
-                      'media'    => App::getUrl().$name,
+                      'media' => App::getInstance()->getBaseUrl().$name,
                       'fileName' => $music->fileName,
                     ];
                     $request->passNotices[] = [
@@ -153,10 +151,11 @@ class Music extends Controller
     /**
      * @param  Request  $request
      *
-     * @return never
+     * @return ResponseInterface
      * @throws JsonException
+     * @throws ModelNotFoundException
+     * @throws ValidationException
      */
-    #[Post('settings/music')]
     public function save(Request $request) : ResponseInterface {
         /** @var UploadedFile[][][] $files */
         $files = $request->getUploadedFiles();
@@ -196,7 +195,10 @@ class Music extends Controller
                     }
                     else {
                         $request->passErrors[] = match ($file->getError()) {
-                            UPLOAD_ERR_INI_SIZE   => lang('Uploaded file is too large', context: 'errors').' - '.$name,
+                            UPLOAD_ERR_INI_SIZE => lang(
+                                         'Nahraný soubor je příliš velký',
+                                context: 'errors'
+                              ).' - '.$name,
                             UPLOAD_ERR_FORM_SIZE  => lang('Form size is to large', context: 'errors').' - '.$name,
                             UPLOAD_ERR_PARTIAL    => lang(
                                          'The uploaded file was only partially uploaded.',
@@ -237,7 +239,10 @@ class Music extends Controller
                     }
                     else {
                         $request->passErrors[] = match ($file->getError()) {
-                            UPLOAD_ERR_INI_SIZE   => lang('Uploaded file is too large', context: 'errors').' - '.$name,
+                            UPLOAD_ERR_INI_SIZE => lang(
+                                         'Nahraný soubor je příliš velký',
+                                context: 'errors'
+                              ).' - '.$name,
                             UPLOAD_ERR_FORM_SIZE  => lang('Form size is to large', context: 'errors').' - '.$name,
                             UPLOAD_ERR_PARTIAL    => lang(
                                          'The uploaded file was only partially uploaded.',
@@ -314,9 +319,9 @@ class Music extends Controller
      * Send a response to the client - sends a JSON or a redirect based on the request type (AJAX / normal)
      *
      * @param  Request  $request
-     * @param  array<string,mixed>  $music
+     * @param  array<string,mixed>  $data
      *
-     * @return never
+     * @return ResponseInterface
      * @throws JsonException
      */
     private function customRespond(Request $request, array $data = []) : ResponseInterface {
@@ -331,16 +336,15 @@ class Music extends Controller
               array_merge([['status' => 'ok', 'errors' => [], 'notices' => $request->passNotices]], $data)
             );
         }
-        return App::redirect(['settings', 'music'], $request);
+        return $this->app->redirect(['settings', 'music'], $request);
     }
 
     /**
      * @param  Request  $request
      *
-     * @return never
+     * @return ResponseInterface
      * @throws JsonException
      */
-    #[Delete('settings/music/{id}')]
     public function delete(Request $request) : ResponseInterface {
         $id = (int) ($request->params['id'] ?? 0);
         if ($id <= 0) {

@@ -16,21 +16,21 @@
             <button type="button" class="btn btn-danger delete-gate"><i class="fa-solid fa-trash"></i></button>
         </div>
         <div class="card-title">
-            <label for="gate-{$gateKey}-name" class="form-label">{lang 'Název'}:</label>
+            <label for="gate-{$gateKey}-name" class="form-label">{_'Název'}:</label>
             <input n:attr="disabled: $locked, value: $gate?->name"
                     type="text" class="form-control"
                     id="gate-{$gateKey}-name"
                     name="{$formName}[{$gateKey}][name]">
         </div>
-        <label for="gate-{$gateKey}-slug" class="form-label">{lang 'URL název'}:</label>
+        <label for="gate-{$gateKey}-slug" class="form-label">{_'URL název'}:</label>
         <input n:attr="disabled: $locked, value: $gate?->slug"
                 type="text" class="form-control"
                 id="gate-{$gateKey}-slug"
                 name="{$formName}[{$gateKey}][slug]">
-        <div class="form-text">{lang 'Volitelná hodnota, automaticky se generuje. Jedná se o text, který se použije v URL pro přístup na tuto obrazovku.'}</div>
+        <div class="form-text">{_'Volitelná hodnota, automaticky se generuje. Jedná se o text, který se použije v URL pro přístup na tuto obrazovku.'}</div>
         <button type="button" class="btn btn-primary w-100 text-center mt-2" data-toggle="collapse"
                 data-target="#gate-{$gateKey}-screens">
-            {lang 'Obrazovky'}
+            {_'Obrazovky'}
         </button>
         <div n:class="collapse-grid, !isset($gate) ? show" id="gate-{$gateKey}-screens">
             <div class="collapse-inner">

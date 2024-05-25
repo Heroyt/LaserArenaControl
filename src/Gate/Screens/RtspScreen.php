@@ -18,7 +18,7 @@ class RtspScreen extends GateScreen implements WithSettings
      * @inheritDoc
      */
     public static function getName() : string {
-        return lang('RTSP - kamery', context: 'gate.screens');
+        return lang('RTSP - kamery', domain: 'gate', context: 'screens');
     }
 
     /**

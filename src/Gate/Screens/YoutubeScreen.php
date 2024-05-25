@@ -21,7 +21,7 @@ class YoutubeScreen extends GateScreen implements WithSettings, ReloadTimerInter
      * @inheritDoc
      */
     public static function getName() : string {
-        return lang('Youtube video', context: 'gate.screens');
+        return lang('Youtube video', domain: 'gate', context: 'screens');
     }
 
     /**

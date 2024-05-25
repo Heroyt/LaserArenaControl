@@ -22,11 +22,11 @@ class VestsScreen extends GateScreen implements WithSettings, ReloadTimerInterfa
      * @inheritDoc
      */
     public static function getName() : string {
-        return lang('Vesty', context: 'gate-screens');
+        return lang('Vesty', domain: 'gate', context: 'screens');
     }
 
     public static function getDescription() : string {
-        return lang('Obrazovka zobrazující přiřazené vesty před hrou.', context: 'gate-screens-description');
+        return lang('Obrazovka zobrazující přiřazené vesty před hrou.', domain: 'gate', context: 'screens.description');
     }
 
     /**

@@ -1,4 +1,5 @@
-{varType array $_COOKIE}
+{varType Lsr\Core\Controllers\Controller $page}
+{var string $mode = $page->app->getRequest()->getCookieParams()['mode'] ?? 'light'}
 
 {define header}
 	<header class="navbar navbar-expand-lg navbar-light py-1 fixed-top bg-body-tertiary">
@@ -48,27 +49,31 @@
 				<div class="game-timer" style="display:none;">
 					<div class="time" data-start="" data-length="">00:00</div>
 				</div>
-				<button class="btn {if isset($_COOKIE['mode']) && $_COOKIE['mode'] === 'light'}btn-dark{else}btn-light{/if}"
+                <button class="btn {if isset($mode) && $mode === 'light'}btn-dark{else}btn-light{/if}"
                         type="button" id="modeSwitch"
-                        title="{if isset($_COOKIE['mode']) && $_COOKIE['mode'] === 'light'}{lang 'Přepnout na tmavý režim'}{else}{lang 'Přepnout na světlý režim'}{/if}"
-                        data-light-title="{lang 'Přepnout na světlý režim'}"
-                        data-dark-title="{lang 'Přepnout na tmavý režim'}">
+                        title="{if isset($mode) && $mode === 'light'}{translate}Přepnout na tmavý režim{/translate}{else}{translate}Přepnout na světlý režim{/translate}{/if}"
+                        data-light-title="{translate}Přepnout na světlý režim{/translate}"
+                        data-dark-title="{translate}Přepnout na tmavý režim{/translate}">
 					<i class="fa-solid fa-moon"></i>
 					<i class="fa-solid fa-sun"></i>
 				</button>
-                {var string $selectedLang = explode('_',$_GET['lang'] ?? App\Core\App::getLanguage()?->id ?? 'cs')[0]}
-                {var string $selectedCountry = App\Core\App::getSupportedLanguages()[$selectedLang]}
+                {var string $selectedLang = $page->app->translations->getLangId()}
+                {var string $selectedCountry = $page->app->translations->getCountry()}
 				<button class="btn btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown"
 						aria-expanded="false">
 					<img src="{getUrl}assets/flags/{\Lsr\Core\Constants::COUNTRIES[$selectedCountry]|escapeUrl}.png"
 						 style="height: 2rem; width: 2rem;"
+                         data-lang="{$selectedLang}"
+                         data-country="{$selectedCountry}"
 						 alt="{\Lsr\Core\Constants::COUNTRIES[$selectedCountry]}">
 				</button>
 				<ul class="dropdown-menu bg-white" style="min-width: 5rem;left:auto;margin-left: 2.8rem;top:3rem;">
-                    {foreach App\Core\App::getSupportedLanguages() as $lang => $country}
+                    {foreach $page->app->translations->supportedLanguages as $lang => $country}
 						{continueIf $selectedLang === $lang}
 						<li>
-							<a class="dropdown-item" href="{link ['lang', $lang, 'redirect' => $request->path]}">
+                            <a class="dropdown-item"
+                               href="{link ['lang', $lang, 'redirect' => $page->app->getRequest()->getPath()]}"
+                               data-set-lang="{$lang}">
 								<img class="mx-auto d-block"
 									 src="{getUrl}assets/flags/{\Lsr\Core\Constants::COUNTRIES[$country]|escapeUrl}.png"
 									 style="height: 2rem; width: 2rem;"
@@ -79,12 +84,12 @@
 				</ul>
 				<button class="navbar-toggler ms-2  border-black" type="button" data-bs-toggle="collapse"
 						data-bs-target="#navBarContent"
-						aria-controls="navBarContent" aria-expanded="false" aria-label="{lang 'Toggle navigation'}">
+                        aria-controls="navBarContent" aria-expanded="false" aria-label="{_'Toggle navigation'}">
 					<i class="fa-solid fa-bars"></i>
 				</button>
 			</div>
 			<script>
-				let currentColorScheme = {ifset $_COOKIE['mode']}{$_COOKIE['mode']}{else}window.matchMedia("(prefers-color-scheme: dark)").matches ? 'dark' : 'light'{/ifset}
+                let currentColorScheme = {ifset $mode}{$mode}{else}window.matchMedia("(prefers-color-scheme: dark)").matches ? 'dark' : 'light'{/ifset}
 				const modeSwitch = document.getElementById('modeSwitch');
                 const lightLabel = modeSwitch.dataset.lightTitle;
                 const darkLabel = modeSwitch.dataset.darkTitle;

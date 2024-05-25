@@ -1,5 +1,6 @@
 {layout '../@printLayout.latte'}
 
+{varType App\Core\App $app}
 {varType App\GameModels\Game\Game $game}
 {varType App\GameModels\Game\Today $today}
 {varType App\GameModels\Game\PrintStyle $style}
@@ -9,7 +10,7 @@
 {default bool $colorless = false}
 
 {define addHead}
-    <link rel="stylesheet" href="{getUrl}dist/results/graphical.css?v={\App\Core\App::getCacheVersion()}">
+    <link rel="stylesheet" href="{getUrl}dist/results/graphical.css?v={$app->getCacheVersion()}">
 {/define}
 
 {var array $fontSize = [
@@ -49,35 +50,35 @@
     {cache 'results-'.$lang.'-graphical-legend'.($minesOn ? '-withMines' : ''), tags: ['templates.results', 'templates.results.graphical', 'templates', 'templates.'.$lang]}
         <div class="results-legend">
             <div class="legend">
-                {svgIcon 'star', '', '1em'} - {lang 'Skóre', context: 'results'}
+                {svgIcon 'star', '', '1em'} - {_'Skóre', domain: 'results'}
             </div>
             <div class="legend">
-                {svgIcon 'bullets', '', '1em'} - {lang 'Výstřely', context: 'results'}
+                {svgIcon 'bullets', '', '1em'} - {_'Výstřely', domain: 'results'}
             </div>
             <div class="legend">
-                {svgIcon 'kill', '', '1em'} - {lang 'Zásahy', context: 'results'}
+                {svgIcon 'kill', '', '1em'} - {_'Zásahy', domain: 'results'}
             </div>
             <div class="legend">
-                {svgIcon 'skull', '', '1em'} - {lang 'Smrti', context: 'results'}
+                {svgIcon 'skull', '', '1em'} - {_'Smrti', domain: 'results'}
             </div>
             <div class="legend">
-                {svgIcon 'dead', '', '1em'} - {lang 'Zásahy od/do spoluhráčů', context: 'results'}
+                {svgIcon 'dead', '', '1em'} - {_'Zásahy od/do spoluhráčů', domain: 'results'}
             </div>
             {if $minesOn}
                 <div class="legend">
-                    {svgIcon 'base_2', '', '1em'} - {lang 'Bonusy', context: 'results'}
+                    {svgIcon 'base_2', '', '1em'} - {_'Bonusy', domain: 'results'}
                 </div>
                 <div class="legend">
-                    {svgIcon 'agent', '', '1em'} - {lang 'Agent', context: 'results.bonus'}
+                    {svgIcon 'agent', '', '1em'} - {_'Agent', domain: 'results', context: 'bonus'}
                 </div>
                 <div class="legend">
-                    {svgIcon 'invisibility', '', '1em'} - {lang 'Neviditelnost', context: 'results.bonus'}
+                    {svgIcon 'invisibility', '', '1em'} - {_'Neviditelnost', domain: 'results', context: 'bonus'}
                 </div>
                 <div class="legend">
-                    {svgIcon 'machine_gun', '', '1em'} - {lang 'Samopal', context: 'results.bonus'}
+                    {svgIcon 'machine_gun', '', '1em'} - {_'Samopal', domain: 'results', context: 'bonus'}
                 </div>
                 <div class="legend">
-                    {svgIcon 'shield', '', '1em'} - {lang 'Štít', context: 'results.bonus'}
+                    {svgIcon 'shield', '', '1em'} - {_'Štít', domain: 'results', context: 'bonus'}
                 </div>
             {/if}
         </div>
@@ -89,15 +90,15 @@
     <div class="results-win">
         {if is_null($win)}
             <div class="print-primary">
-                {lang 'Remíza', context: 'results'}
+                {_'Remíza', domain: 'results'}
             </div>
         {elseif $win instanceof App\GameModels\Game\Team}
             <div class="bg-team-{$win->color}">
-                {lang 'Vítězství', context: 'results'}: {$win->name}
+                {_'Vítězství', domain: 'results'}: {$win->name}
             </div>
         {elseif $win instanceof App\GameModels\Game\Player}
             <div class="{if $game->getMode()?->isSolo()}print-primary{else}bg-team-{$win->getTeam()->color}{/if}">
-                {lang 'Vítězství', context: 'results'}: {$win->name}
+                {_'Vítězství', domain: 'results'}: {$win->name}
             </div>
         {/if}
     </div>
@@ -106,21 +107,21 @@
 {define resultsHeader}
     <div class="results-header text-white text-start">
         <div class="my-1">
-            <strong>{lang 'Kód hry', context: 'results.info'}:</strong>
+            <strong>{_'Kód hry', domain: 'results', context: 'info'}:</strong>
             {$game->code} {ifset $game->fileNumber}({$game->fileNumber}){/ifset}
         </div>
         <div class="my-1">
-            <strong>{lang 'Datum', context: 'results.info'}:</strong>
+            <strong>{_'Datum', domain: 'results', context: 'info'}:</strong>
             {$game->start->format('d.m.Y H:i:s')}
         </div>
         <div>
-            <strong>{lang 'Herní mód', context: 'results.info'}:</strong>
-            {lang $game->getMode()??->getName(), context: 'gameModes'}
+            <strong>{_'Herní mód', domain: 'results', context: 'info'}:</strong>
+            {_$game->getMode()??->getName(), context: 'gameModes'}
         </div>
     </div>
     <div class="results-qr text-end">
         <div class="me-2">
-            <div class="fw-bold">{lang 'On-line detailní výsledky', context: 'results'}:</div>
+            <div class="fw-bold">{_'On-line detailní výsledky', domain: 'results'}:</div>
             <a href="{$publicUrl}" class="d-block mb-2 text-white">{$publicUrl}</a>
         </div>
         {$qr|noescape}
@@ -196,7 +197,7 @@
                 </g>
             </g>
         </svg>
-        <div class="number">{lang 'Výstřely', context: 'results.player'}
+        <div class="number">{_'Výstřely', domain: 'results', context: 'player'}
             : {svgIcon 'bullets', '', '1em'} {$player->shots|number:0,',','&nbsp;'|noescape}</div>
     </div>
 {/define}
@@ -233,7 +234,7 @@
 {/define}
 
 {define playerHits}
-    <h4 class="mt-2 mb-0">{lang 'Zásahy', context: 'results.player'}:</h4>
+    <h4 class="mt-2 mb-0">{_'Zásahy', domain: 'results', context: 'player'}:</h4>
     {var int $total = $player->hits + $player->deaths}
     <div n:if="$game->getMode()?->settings->playerPlayers" class="hits mt-1 mb-2">
         {var int $hits = $game->getMode()?->isTeam() ? $player->hitsOther : $player->hits}
@@ -305,23 +306,23 @@
     {var App\GameModels\Game\Player|null $favouriteOf = $player->getFavouriteTargetOf()}
     <div n:if="$game->getMode()?->settings->playerFavourites" class="player-favourites text-center">
         <div n:if="isset($favourite)" class="favourite-target">
-            <strong>{lang 'Nejoblíbenější cíl', context: 'results.player'}:</strong>
+            <strong>{_'Nejoblíbenější cíl', domain: 'results', context: 'player'}:</strong>
             <div class="text-team-{$game->getMode()?->isSolo() ? 2 : $favourite->getTeamColor()}">
                 {$favourite->name}
             </div>
             <div class="number">
                 {var int $hits = $player->getHitsPlayer($favourite)}
-                {sprintf(lang('%d zabití', context: 'results'), $hits)}
+                {_'%d zabití', plural: '%d zabití', num: $hits, domain: 'results', format: [$hits]}
             </div>
         </div>
         <div n:if="isset($favouriteOf)" class="favourite-target-of">
-            <strong>{lang 'Největší zabiják', context: 'results.player'}:</strong>
+            <strong>{_'Největší zabiják', domain: 'results', context: 'player'}:</strong>
             <div class="text-team-{$game->getMode()?->isSolo() ? 2 : $favouriteOf->getTeamColor()}">
                 {$favouriteOf->name}
             </div>
             <div class="number">
                 {var int $deaths = $favouriteOf->getHitsPlayer($player)}
-                {sprintf(lang('%d smrt', '%d smrtí', $deaths, context: 'results'), $deaths)}
+                {_'%d smrt', plural: '%d smrtí', num: $deaths, domain: 'results', format: [$deaths]}
             </div>
         </div>
     </div>
@@ -346,7 +347,7 @@
     <section class="results-hits">
         <h4 class="caption">
             {svgIcon 'kill', '', '1rem'}
-            {lang 'Zásahy hráčů', context: 'results.hits'}
+            {_'Zásahy hráčů', domain: 'results', context: 'hits'}
         </h4>
         <div n:foreach="$game->getPlayersSorted() as $player" {var int $len = strlen($player->name)}
                 class="player-hits w-100 bg-white rounded px-1 py-2 d-flex mt-1 align-items-center">
@@ -356,7 +357,7 @@
                     {$player->name}
                 </div>
                 <div class="fs-sm">
-                    {lang 'Zasáhl si hráče', context: 'results.hits'}:
+                    {_'Zasáhl si hráče', domain: 'results', context: 'hits'}:
                 </div>
             </div>
             <div n:foreach="$game->getPlayersSorted()->getAll() as $player2"

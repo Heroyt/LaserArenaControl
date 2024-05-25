@@ -17,11 +17,15 @@ class LaserMaxxRankableResultsScreen extends AbstractResultsScreen
 	 * @inheritDoc
 	 */
 	public static function getName(): string {
-		return lang('LaserMaxx klasické výsledky', context: 'gate-screens');
+      return lang('LaserMaxx klasické výsledky', domain: 'gate', context: 'screens');
 	}
 
 	public static function getDescription(): string {
-		return lang('Obrazovka zobrazující výsledky LaserMaxx z klasických her.', context: 'gate-screens-description');
+      return lang(
+                 'Obrazovka zobrazující výsledky LaserMaxx z klasických her.',
+        domain : 'gate',
+        context: 'screens.description'
+      );
 	}
 
 	/**

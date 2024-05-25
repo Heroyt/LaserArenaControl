@@ -12,10 +12,9 @@ class Events extends ApiController
 {
 
 	public function __construct(
-		Latte                         $latte,
 		private readonly EventService $eventService
 	) {
-		parent::__construct($latte);
+      parent::__construct();
 	}
 
 	public function triggerEvent(Request $request): ResponseInterface {

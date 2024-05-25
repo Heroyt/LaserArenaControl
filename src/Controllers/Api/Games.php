@@ -26,11 +26,10 @@ class Games extends ApiController
 {
 
 	public function __construct(
-		Latte                                 $latte,
 		private readonly GameSimulator        $gameSimulator,
 		private readonly GameHighlightService $highlightService,
 	) {
-		parent::__construct($latte);
+      parent::__construct();
 	}
 
 	public function cheat(Request $request) : ResponseInterface {

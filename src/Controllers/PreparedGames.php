@@ -20,20 +20,17 @@ class PreparedGames extends Controller
 	public const CACHE_TAGS = ['prepared_games'];
 
 	public function __construct(
-		Latte                  $latte,
 		private readonly Cache $cache
 	) {
-		parent::__construct($latte);
+      parent::__construct();
 	}
 
-	#[Delete('/prepared'), Post('/prepared/delete')]
 	public function deleteAll(): ResponseInterface {
 		DB::update($this::TABLE, ['active' => 0], ['active = 1']);
 		$this->cache->clean([Cache::Tags => $this::CACHE_TAGS]);
 		return $this->respond(['status' => 'ok']);
 	}
 
-	#[Post('/prepared')]
 	public function save(Request $request): ResponseInterface {
 		DB::insert($this::TABLE, ['data' => json_encode($request->getParsedBody(), JSON_THROW_ON_ERROR)]);
 
@@ -42,7 +39,6 @@ class PreparedGames extends Controller
 		return $this->respond(['status' => 'ok']);
 	}
 
-	#[Get('/prepared')]
 	public function get(Request $request): ResponseInterface {
 		$all = !empty($request->getGet('all'));
 
@@ -65,7 +61,6 @@ class PreparedGames extends Controller
 		return $this->respond($games);
 	}
 
-	#[Post('/prepared/{id}/delete'), Delete('/prepared/{id}')]
 	public function delete(int $id): ResponseInterface {
 		DB::update($this::TABLE, ['active' => 0], ['id_game = %i', $id]);
 

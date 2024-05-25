@@ -27,13 +27,14 @@ class ResultsScreen extends GateScreen implements ResultsScreenInterface
      * @inheritDoc
      */
     public static function getName() : string {
-        return lang('Výsledky ze hry', context: 'gate-screens');
+        return lang('Výsledky ze hry', domain: 'gate', context: 'screens');
     }
 
     public static function getDescription() : string {
         return lang(
                    'Obrazovka zobrazující výsledky z her. Automaticky vybírá zobrazení podle herního módu.',
-          context: 'gate-screens-description'
+          domain : 'gate',
+          context: 'screens.description'
         );
     }
 

@@ -31,7 +31,7 @@ class EventService
 			$url = $config->getConfig('ENV')['EVENT_URL'] ??
 				explode(':', ($_SERVER['HTTP_HOST'] ?? '{host}'))[0] . ':' . self::getEventPort();
 
-			$host = App::getUrl();
+        $host = App::getInstance()->getBaseUrl();
 			if (str_contains(strtolower($url), '{host}')) {
 				$url = str_replace(['{host}', '{HOST}'], $host, $url);
 			}

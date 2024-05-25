@@ -13,20 +13,20 @@
     </div>
 
     <div class="me-4 last-save-wrapper text-end position-fixed end-0">
-        {lang 'Last saved:'} <span class="last-save" data-target="#music-settings-form">{lang 'never'}</span>
+        {_'Naposledy uloženo:'} <span class="last-save" data-target="#music-settings-form">{_'never'}</span>
     </div>
 
-    <h2>{lang 'Hudební módy', context: 'game'}:</h2>
+    <h2>{_'Hudební módy', context: 'game'}:</h2>
 
 
     <form action="{link ['settings', 'music', 'upload']}" enctype="multipart/form-data" id="upload-form"
           method="post"
           class="text-center">
         <div class="form-group">
-            <label for="media" class="form-label">{lang 'Upload', context: 'actions'}:</label>
+            <label for="media" class="form-label">{_'Upload', context: 'actions'}:</label>
             <input type="file" name="media[]" accept="audio/mpeg" required class="form-control" id="media" multiple>
             <button type="submit" class="btn btn-success my-3" name="action" value="upload">
-                {lang 'Upload', context: 'actions'}
+                {_'Upload', context: 'actions'}
             </button>
         </div>
     </form>
@@ -39,7 +39,7 @@
                         data-bs-target="#music-modes-tab-content" type="button" role="tab"
                         aria-controls="music-settings-content"
                         aria-selected="true">
-                    {lang 'Hudební módy', context: 'game'}
+                    {_'Hudební módy', context: 'game'}
                 </button>
             </li>
             <li class="nav-item" role="presentation">
@@ -48,7 +48,7 @@
                         data-bs-target="#playlists-tab-content" type="button" role="tab"
                         aria-controls="music-settings-content"
                         aria-selected="true">
-                    {lang 'Playlisty', context: 'game'}
+                    {_'Playlisty', context: 'game'}
                 </button>
             </li>
         </ul>
@@ -79,7 +79,7 @@
         </div>
         <p class="text-center">
             <button type="submit" class="btn btn-success btn-large">
-                <i class="fa-solid fa-save"></i> {lang 'Uložit', context: 'actions'}
+                <i class="fa-solid fa-save"></i> {_'Uložit', context: 'actions'}
             </button>
         </p>
     </form>
@@ -96,7 +96,7 @@
 {define playlistTemplate string|int $id, App\Models\Playlist|null $playlist = null}
     <div data-id="{$id}" class="card m-3 playlist" style="max-width:500px;">
         <div class="card-body">
-            <label for="playlist-{$id}-name" class="form-label">{lang 'Název'}</label>
+            <label for="playlist-{$id}-name" class="form-label">{_'Název'}</label>
             <input type="text" class="form-control" value="{$playlist?->name}" name="playlist[{$id}][name]"
                    id="playlist-{$id}-name">
 
@@ -120,62 +120,62 @@
         <input type="text" name="music[{$id}][name]" id="music-{$id}-name"
                class="form-control" value="{$name}">
         <div class="form-floating" data-toggle="tooltip"
-             title="{lang 'Hudební módy se slučují do skupin. Při zadávání hry se pak spustí jeden náhodně výbraný hudební mód z vybrané hudební skupiny.'}">
+             title="{_'Hudební módy se slučují do skupin. Při zadávání hry se pak spustí jeden náhodně výbraný hudební mód z vybrané hudební skupiny.'}">
             <input type="text" name="music[{$id}][group]" id="music-{$id}-group"
-                   class="form-control music-group" value="{$group ?? ''}" placeholder="{lang 'Skupina'}">
+                   class="form-control music-group" value="{$group ?? ''}" placeholder="{_'Skupina'}">
             <label for="music-{$id}-group">
-                {lang 'Skupina'}
+                {_'Skupina'}
             </label>
         </div>
-        <label for="music-{$id}-background" data-toggle="tooltip" title="{lang 'Pozadí', context: 'image'}"
+        <label for="music-{$id}-background" data-toggle="tooltip" title="{_'Pozadí', context: 'image'}"
                class="image-input-with-preview">
             {var App\Models\DataObjects\Image|null $backgroundImage = $musicMode?->getBackgroundImage()}
             {if !isset($backgroundImage)}
-                <img src="{getUrl}assets/images/placeholder.png" alt="{lang 'Pozadí', 'image'}">
+                <img src="{getUrl}assets/images/placeholder.png" alt="{_'Pozadí', 'image'}">
             {elseif $backgroundImage->getType() === 'svg'}
             {file_get_contents($backgroundImage->getPath())|noescape}
             {else}
             {var string[] $paths = $backgroundImage->getOptimized()}
                 <img src="{$paths['250-webp'] ?? $paths['250'] ?? $paths['webp'] ?? $paths['original']}"
-                     alt="{lang 'Pozadí', 'image'}">
+                     alt="{_'Pozadí', 'image'}">
             {/if}
             <input type="file" name="music[{$id}][background]" accept="image/jpeg,image/png"
                    id="music-{$id}-background">
         </label>
         <label for="music-{$id}-icon" class="image-input-with-preview" data-toggle="tooltip"
-               title="{lang 'Ikona', context: 'image'}">
+               title="{_'Ikona', context: 'image'}">
             {var App\Models\DataObjects\Image|null $icon = $musicMode?->getIcon()}
             {if !isset($icon)}
-                <img src="{getUrl}assets/images/placeholder.png" alt="{lang 'Pozadí', 'image'}">
+                <img src="{getUrl}assets/images/placeholder.png" alt="{_'Pozadí', 'image'}">
             {elseif $icon->getType() === 'svg'}
             {file_get_contents($icon->getPath())|noescape}
             {else}
             {var string[] $paths = $icon->getOptimized()}
                 <img src="{$paths['250-webp'] ?? $paths['250'] ?? $paths['webp'] ?? $paths['original']}"
-                     alt="{lang 'Pozadí', 'image'}">
+                     alt="{_'Pozadí', 'image'}">
             {/if}
             <input type="file" name="music[{$id}][icon]" accept="image/jpeg,image/png,.svg" id="music-{$id}-icon">
         </label>
         <input type="checkbox" class="btn-check" name="music[{$id}][public]" id="music-{$id}-public" value="1"
                autocomplete="off" {if $public}checked{/if}>
         <label for="music-{$id}-public" class="btn btn-outline-info d-flex align-items-center" data-toggle="tooltip"
-               title="{lang 'Veřejný'}">
+               title="{_'Veřejný'}">
             <i class="fa-solid fa-eye"></i>
         </label>
         <div class="form-floating">
             <input type="text" class="form-control" id="music-{$id}-previewStart" name="music[{$id}][previewStart]"
                    placeholder="0:00" value="{$previewStart}">
-            <label for="music-{$id}-previewStart">{lang 'Začátek ukázky'}</label>
+            <label for="music-{$id}-previewStart">{_'Začátek ukázky'}</label>
         </div>
         <button type="button" class="btn btn-success play-music" data-file="{$musicFile}" data-toggle="tooltip"
-                title="{lang 'Přehrát', context: 'actions'}">
+                title="{_'Přehrát', context: 'actions'}">
             <i class="fa-solid fa-play"></i>
         </button>
         <div class="input-group-text time-music font-monospace">
             0:00
         </div>
         <button type="button" class="btn btn-danger remove" data-toggle="tooltip"
-                title="{lang 'Smazat', context: 'actions'}">
+                title="{_'Smazat', context: 'actions'}">
             <i class="fa-solid fa-trash"></i>
         </button>
     </div>

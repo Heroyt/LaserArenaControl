@@ -16,11 +16,15 @@ class LaserMaxxZakladnyResultsScreen extends AbstractResultsScreen
 	 * @inheritDoc
 	 */
 	public static function getName(): string {
-		return lang('LaserMaxx výsledky z módu Základny', context: 'gate-screens');
+      return lang('LaserMaxx výsledky z módu Základny', domain: 'gate', context: 'screens');
 	}
 
 	public static function getDescription(): string {
-		return lang('Obrazovka zobrazující výsledky LaserMaxx z módu Základny.', context: 'gate-screens-description');
+      return lang(
+                 'Obrazovka zobrazující výsledky LaserMaxx z módu Základny.',
+        domain : 'gate',
+        context: 'screens.description'
+      );
 	}
 
 	/**

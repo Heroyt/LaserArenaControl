@@ -1,5 +1,6 @@
 {layout '../../@layout.latte'}
 
+{varType Lsr\Core\Controllers\Controller $page}
 {varType App\Gate\Models\GateType[] $gates}
 {varType App\Gate\Screens\GateScreen[][] $screens}
 
@@ -7,21 +8,22 @@
     <form action="{link ['settings', 'gate']}" method="post" class="text-center autosave" enctype="multipart/form-data"
           id="gate-settings-form">
         <div class="me-4 last-save-wrapper text-end position-fixed end-0">
-            {lang 'Last saved:'} <span class="last-save" data-target="#gate-settings-form">{lang 'never'}</span>
+            {translate}Last saved{/translate}: <span class="last-save" data-target="#gate-settings-form" n:translate>never</span>
         </div>
-        <h2>{lang 'Gate settings', context: 'settings'}:</h2>
+        <h2>{translate context: 'settings'}Gate settings{/translate}:</h2>
         <div class="my-3 text-center">
-            <h4>{lang 'Trigger events', context: 'settings'}:</h4>
+            <h4>{_'Trigger events', context: 'settings'}:</h4>
             <div class="btn-group">
-                <button type="button" class="btn btn-warning" data-toggle="event" data-event="gate-reload">
-                    {lang 'Reload gate', context: 'events'}
+                <button type="button" class="btn btn-warning" data-toggle="event"
+                        data-event="gate-reload" n:translate="context:'events'">
+                    Reload gate
                 </button>
-                {if !\App\Core\App::isProduction()}
+                {if !$page->getApp()->isProduction()}
                     {var string[] $systems = App\GameModels\Factory\GameFactory::getSupportedSystems()}
                     <button type="button" class="btn btn-danger" data-toggle="gate-idle"
                             n:foreach="$systems as $system"
                             data-system="{$system}">
-                        {lang 'Nastavit výsledkovou tabuli na souhrn'}
+                        {_'Nastavit výsledkovou tabuli na souhrn'}
                         {if count($systems) > 1}
                             &nbsp;{$system}
                         {/if}
@@ -29,16 +31,15 @@
                 {/if}
             </div>
         </div>
-        <h4>{lang 'Settings', context: 'settings'}:</h4>
+        <h4>{_'Nastavení', context: 'settings'}:</h4>
         <div class="form-group my-3">
-            <label class="form-label" for="timer_offset">{lang 'Game timer offset in seconds', context: 'settings'}
-                :</label>
+            <label class="form-label" for="timer_offset">{_'Game timer offset in seconds', context: 'settings'}:</label>
             <input type="number" name="timer_offset" class="form-control" id="timer_offset"
                    value="{\App\Core\Info::get('timer-offset', 0)}">
         </div>
         <hr>
         <div class="form-group my-3">
-            <label class="form-label" for="timer_show">{lang 'Show timer from minute', context: 'settings'}:</label>
+            <label class="form-label" for="timer_show">{_'Show timer from minute', context: 'settings'}:</label>
             <input type="number" name="timer_show" class="form-control" id="timer_show"
                    value="{\App\Core\Info::get('timer_show', 30)}">
         </div>
@@ -47,7 +48,7 @@
                    id="timer_on_inactive_screen"
                    value="1" n:attr="checked: (bool) App\Core\Info::get('timer_on_inactive_screen', false)">
             <label class="form-check-label ms-2"
-                   for="timer_on_inactive_screen">{lang 'Platí i pro časovač na neaktivní obrazovce', context: 'settings'}</label>
+                   for="timer_on_inactive_screen">{_'Platí i pro časovač na neaktivní obrazovce', context: 'settings'}</label>
         </div>
         <hr>
         <div class="row my-3">
@@ -57,7 +58,7 @@
             </div>
             <div class="col-sm-6">
                 <label class="form-label" for="background">
-                    {lang 'Pozadí'}: (1920&times;1080px)
+                    {_'Pozadí'}: (1920&times;1080px)
                 </label>
                 <input id="background" name="background" type="file" data-preview="#background-image"
                        accept="image/jpeg,image/png" class="form-control">
@@ -66,11 +67,11 @@
         <p class="my-4">
             <button class="btn btn-success btn-lg" type="submit" data-action="autosave" data-prevent="true">
                 <i class="fa-solid fa-save"></i>
-                {lang 'Send', context: 'actions'}
+                {_'Odeslat', context: 'actions'}
             </button>
         </p>
         <hr class="my-5">
-        <h4>{lang 'Typy obrazovek', context: 'settings'}</h4>
+        <h4>{_'Typy obrazovek', context: 'settings'}</h4>
         <div class="d-flex flex-wrap justify-content-evenly align-items-start g-2" id="gate-types">
             {foreach $gates as $gate}
                 {include
@@ -98,7 +99,7 @@
         <p class="my-4">
             <button class="btn btn-success btn-lg" type="submit">
                 <i class="fa-solid fa-save"></i>
-                {lang 'Send', context: 'actions'}
+                {_'Odeslat', context: 'actions'}
             </button>
         </p>
     </form>

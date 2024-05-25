@@ -35,18 +35,19 @@ class GeneralStatsWithRtspScreen extends GateScreen implements WithSettings
      * @inheritDoc
      */
     public static function getName() : string {
-        return lang('Základní denní statistiky s kamerami', context: 'gate-screens');
+        return lang('Základní denní statistiky s kamerami', domain: 'gate', context: 'screens');
     }
 
     public static function getDescription() : string {
         return lang(
                    'Obrazovka zobrazující dnešní nejlepší hráče a počet odehraných her.',
-          context: 'gate-screens-description'
+          domain : 'gate',
+          context: 'screens.description'
         );
     }
 
     public static function getGroup() : string {
-        return lang('Denní statistiky', context: 'gate-screens-groups');
+        return lang('Denní statistiky', domain: 'gate', context: 'screens.groups');
     }
 
     /**
@@ -77,7 +78,7 @@ class GeneralStatsWithRtspScreen extends GateScreen implements WithSettings
      * @inheritDoc
      */
     public function run() : ResponseInterface {
-        $date = (string) App::getRequest()->getGet('date', 'now');
+        $date = (string) App::getInstance()->getRequest()->getGet('date', 'now');
         $today = new DateTimeImmutable($date);
 
         $this->generalStats->refresh();

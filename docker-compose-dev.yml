@@ -54,6 +54,7 @@ services:
       - ./:/var/www
       - ./fpm/:/etc/php/
       - ./docker/core/php.ini:/usr/local/etc/php/php.ini
+      - /Users/heroyt/Projects/lsr-packages/:/Users/heroyt/Projects/lsr-packages/
     ports:
       - "6001:6001"
       - "2112:2112"

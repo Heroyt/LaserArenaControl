@@ -34,15 +34,17 @@ if (PHP_SAPI === 'cli') {
 
 require_once ROOT."include/load.php";
 
+$app = App::getInstance();
+
 Timer::start('app');
 try {
-	$response = App::run();
+    $response = $app->run();
 } catch (RouteNotFoundException $e) {
 	bdump($e);
 	// Handle 404 Error
 	$controller = App::getContainer()->getByType(E404::class);
-	$controller->init(App::getRequest());
-	$response = $controller->show(App::getRequest());
+    $controller->init($app->getRequest());
+    $response = $controller->show($app->getRequest());
 }
 Timer::stop('app');
 

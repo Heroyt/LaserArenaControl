@@ -36,13 +36,12 @@ class Results extends ApiController
     private int $gameStartedTime;
 
     public function __construct(
-      Latte                           $latte,
       private readonly PlayerProvider $playerProvider,
       private readonly ImportService  $importService,
       Config                          $config,
       private readonly TaskProducer   $taskProducer
     ) {
-        parent::__construct($latte);
+        parent::__construct();
         $this->gameLoadedTime = (int) ($config->getConfig('ENV')['GAME_LOADED_TIME'] ?? 300);
         $this->gameStartedTime = (int) ($config->getConfig('ENV')['GAME_STARTED_TIME'] ?? 1800);
     }

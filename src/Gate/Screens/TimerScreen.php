@@ -21,11 +21,11 @@ class TimerScreen extends GateScreen implements WithSettings
 	 * @inheritDoc
 	 */
 	public static function getName() : string {
-		return lang('Časovač', context: 'gate-screens');
+      return lang('Časovač', domain: 'gate', context: 'screens');
 	}
 
 	public static function getDescription() : string {
-		return lang('Obrazovka, která automaticky cyklí podle časovače.', context: 'gate-screens-description');
+      return lang('Obrazovka, která automaticky cyklí podle časovače.', domain: 'gate', context: 'screens.description');
 	}
 
 	/**

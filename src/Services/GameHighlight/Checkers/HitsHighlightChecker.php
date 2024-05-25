@@ -62,7 +62,8 @@ class HitsHighlightChecker implements GameHighlightChecker, PlayerHighlightCheck
                         sprintf(
                           lang(
                                      'Hráči %s a %s se oba navzájem zasáhli %dx.',
-                            context: 'results.highlights'
+                            domain : 'results',
+                            context: 'highlights'
                           ),
                           '@'.$name1.'@',
                           '@'.$name2.'@',
@@ -92,7 +93,8 @@ class HitsHighlightChecker implements GameHighlightChecker, PlayerHighlightCheck
                                 Gender::FEMALE => '%s zasáhla nejvíce spoluhráčů (%d).',
                                 Gender::OTHER  => '%s zasáhlo nejvíce spoluhráčů (%d).',
                             },
-                            context: 'results.highlights'
+                            domain : 'results',
+                            context: 'highlights'
                           ),
                           '@'.$maxHitsOwnPlayers[0]->name.'@',
                           $maxHitsOwn,
@@ -138,7 +140,8 @@ class HitsHighlightChecker implements GameHighlightChecker, PlayerHighlightCheck
                                 Gender::FEMALE => '%s byla zasažena nejvíce spoluhráči (%d).',
                                 Gender::OTHER  => '%s bylo zasaženo nejvíce spoluhráči (%d).',
                             },
-                            context: 'results.highlights'
+                            domain : 'results',
+                            context: 'highlights'
                           ),
                           '@'.$maxDeathsOwnPlayers[0]->name.'@',
                           $maxDeathsOwn,
@@ -159,7 +162,8 @@ class HitsHighlightChecker implements GameHighlightChecker, PlayerHighlightCheck
                         sprintf(
                           lang(
                                      '%s byli zasaženi nejvíce spoluhráči (%d).',
-                            context: 'results.highlights'
+                            domain : 'results',
+                            context: 'highlights'
                           ),
                           $firstNames.' '.lang(
                                      'a',
@@ -195,7 +199,8 @@ class HitsHighlightChecker implements GameHighlightChecker, PlayerHighlightCheck
                         Gender::FEMALE => '%s zasáhla více spoluhráčů (%d), než protihráčů (%d)',
                         Gender::OTHER  => '%s zasáhlo více spoluhráčů (%d), než protihráčů (%d)',
                     },
-                    context: 'results.highlights'
+                    domain : 'results',
+                    context: 'highlights'
                   ),
                   '@'.$name1.'@',
                   $player->hitsOwn,
@@ -223,7 +228,8 @@ class HitsHighlightChecker implements GameHighlightChecker, PlayerHighlightCheck
                         Gender::FEMALE => '%s zasáhla '.$name2Verb.' %s vícekrát (%d), než kteréhokoliv protihráče',
                         Gender::OTHER  => '%s zasáhlo '.$name2Verb.' %s vícekrát (%d), než kteréhokoliv protihráče',
                     },
-                    context: 'results.highlights'
+                    domain : 'results',
+                    context: 'highlights'
                   ),
                   '@'.$name1.'@',
                   '@'.$name2.'@<'.NameInflectionService::accusative($name2).'>',

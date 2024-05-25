@@ -17,7 +17,7 @@ use Psr\Http\Message\ResponseInterface;
 class GamesList extends Controller
 {
 
-	protected string $title       = 'Games list';
+    protected string $title = 'Seznam her';
 	protected string $description = '';
 
 	public function show(Request $request) : ResponseInterface {
@@ -27,7 +27,7 @@ class GamesList extends Controller
 		return $this->view('pages/games-list/index');
 	}
 
-	public function game(Request $request): ResponseInterface {
+    public function game() : ResponseInterface {
 		return $this->view('pages/dashboard/index');
 	}
 

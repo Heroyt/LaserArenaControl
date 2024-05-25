@@ -11,25 +11,25 @@ use LAC\Modules\Core\MenuExtensionInterface;
 
 $menu = [
   [
-    'name'  => lang('New game'),
+    'name' => lang('Nová hra'),
     'route' => 'dashboard',
     'icon'  => 'fa-solid fa-plus',
     'order' => 0,
   ],
   [
-    'name'  => lang('Games'),
+    'name' => lang('Hry'),
     'route' => 'games-list',
     'icon'  => 'fas fa-list',
     'order' => 10,
   ],
   [
-    'name'  => lang('Print'),
+    'name' => lang('Tisk'),
     'route' => 'results',
     'icon'  => 'fas fa-print',
     'order' => 20,
   ],
   'gate' => [
-    'name'     => lang('Gate'),
+    'name' => lang('Výsledková tabule'),
     'route'    => 'gate',
     'icon'     => 'fas fa-display',
     'order'    => 30,
@@ -47,43 +47,43 @@ foreach (GateType::getAll() as $gateType) {
 $featureConfig = App::getServiceByType(FeatureConfig::class);
 
 $menu['settings'] = [
-  'name'     => lang('Settings'),
+  'name'     => lang('Nastavení'),
   'route'    => 'settings',
   'icon'     => 'fas fa-cog',
   'order'    => 99,
   'children' => [
     [
-      'name'  => lang('General'),
+      'name' => lang('Obecné'),
       'route' => 'settings',
       'order' => 0,
     ],
     [
-      'name'  => lang('Gate'),
+      'name' => lang('Výsledková tabule'),
       'route' => 'settings-gate',
       'order' => 10,
     ],
     [
-      'name'  => lang('Vests'),
+      'name' => lang('Vesty'),
       'route' => 'settings-vests',
       'order' => 20,
     ],
     [
-      'name'  => lang('Game modes'),
+      'name' => lang('Herní módy'),
       'route' => 'settings-modes',
       'order' => 30,
     ],
     [
-      'name'  => lang('Print'),
+      'name' => lang('Tisk'),
       'route' => 'settings-print',
       'order' => 40,
     ],
     [
-      'name'  => lang('Music'),
+      'name' => lang('Hudba'),
       'route' => 'settings-music',
       'order' => 50,
     ],
     [
-      'name'  => lang('Cache'),
+      'name' => lang('Mezipaměť'),
       'route' => 'settings-cache',
       'order' => 99,
     ],

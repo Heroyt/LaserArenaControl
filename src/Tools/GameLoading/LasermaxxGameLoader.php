@@ -157,7 +157,12 @@ abstract class LasermaxxGameLoader implements LoaderInterface
         return $loadData;
     }
 
-    protected function loadMusic(int $musicId, string $musicFile) : void {
+    /**
+     * @param  int  $musicId
+     * @param  string  $musicFile
+     * @return void
+     */
+    public function loadMusic(int $musicId, string $musicFile) : void {
         try {
             $music = MusicMode::get($musicId);
             if (!file_exists($music->fileName)) {

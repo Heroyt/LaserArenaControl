@@ -1,18 +1,18 @@
-import Game from "../../game/game";
-import EventServerInstance from "../../EventServer";
-import {startLoading, stopLoading} from "../../loaders";
-import {GameData} from "../../interfaces/gameInterfaces";
-import {Offcanvas} from "bootstrap";
-import {isFeatureEnabled} from "../../featureConfig";
-import Control, {GameStatus} from "./control";
-import {gatesStart, gatesStop} from "../../api/endpoints/gates";
-import {getLastGames, sendLoadGame} from "../../api/endpoints/games";
-import {initPrintButtons} from "../../components/resultsPrinting";
+import Game from '../../game/game';
+import EventServerInstance from '../../EventServer';
+import {startLoading, stopLoading} from '../../loaders';
+import {GameData} from '../../interfaces/gameInterfaces';
+import {Offcanvas} from 'bootstrap';
+import {isFeatureEnabled} from '../../featureConfig';
+import Control, {GameStatus} from './control';
+import {gatesStart, gatesStop} from '../../api/endpoints/gates';
+import {getLastGames, sendLoadGame} from '../../api/endpoints/games';
+import {initPrintButtons} from '../../components/resultsPrinting';
 import {lang} from '../../includes/frameworkFunctions';
 
 declare global {
 	const gameData: GameData;
-    const system: string;
+	const system: string;
 	const vestIcon: string;
 }
 
@@ -23,7 +23,7 @@ function initGatesControls() {
 	if (gatesStartBtn) {
 		gatesStartBtn.addEventListener('click', () => {
 			startLoading();
-            gatesStart()
+			gatesStart()
 				.then(() => {
 					stopLoading();
 				})
@@ -35,7 +35,7 @@ function initGatesControls() {
 	if (gatesStopBtn) {
 		gatesStopBtn.addEventListener('click', () => {
 			startLoading();
-            gatesStop()
+			gatesStop()
 				.then(() => {
 					stopLoading();
 				})
@@ -55,7 +55,7 @@ export default function initNewGamePage() {
 	(document.querySelectorAll('.trigger-help') as NodeListOf<HTMLButtonElement>).forEach(btn => {
 		btn.addEventListener('click', () => {
 			helpOffcanvas.show();
-		})
+		});
 	});
 
 	const loadBtn = form.querySelector('#loadGame') as HTMLButtonElement;
@@ -84,7 +84,7 @@ export default function initNewGamePage() {
 		console.log(e.submitter);
 
 		if (!data.get('action')) {
-			data.set('action', (e.submitter as HTMLButtonElement).value)
+			data.set('action', (e.submitter as HTMLButtonElement).value);
 		}
 
 		if (!validateForm(data)) {
@@ -151,9 +151,9 @@ export default function initNewGamePage() {
 		)
 		.then(module => {
 				const userSearch = new module.default();
-				userSearch.init()
+				userSearch.init();
 				userSearch.initGame(game);
-			}
+			},
 		);
 
 	if (isFeatureEnabled('groups')) {
@@ -163,8 +163,8 @@ export default function initNewGamePage() {
 			)
 			.then(module => {
 				const groups = new module.default(game, gameGroupsWrapper, gameGroupTemplate, gameGroupsSelect);
-                groups.updateGroups();
-				EventServerInstance.addEventListener('game-imported', groups.updateGroups);
+				groups.updateGroups();
+				EventServerInstance.addEventListener('game-imported', () => groups.updateGroups());
 
 				document.dispatchEvent(new CustomEvent('groups-module-loaded', {detail: groups}));
 			});
@@ -184,12 +184,12 @@ export default function initNewGamePage() {
 
 	EventServerInstance.addEventListener('game-imported', loadLastGames);
 
-    initPrintButtons();
+	initPrintButtons();
 
 	function loadLastGames() {
-        getLastGames()
-            .then(response => {
-                response.forEach(game => {
+		getLastGames()
+			.then(response => {
+				response.forEach(game => {
 						const test = lastGamesSelect.querySelector(`option[value="${game.code}"]`);
 						if (test) {
 							return; // Do not add duplicates
@@ -219,19 +219,19 @@ export default function initNewGamePage() {
 						Promise.all([
 							lang('%d player', '%d players', game.playerCount, 'game'),
 							lang('%d team', '%d teams', teamCount, 'game'),
-							lang(game.mode.name, null, 1, 'gameModes')
+							lang(game.mode.name, null, 1, 'gameModes'),
 						])
 							.then(values => {
-                                const playerString = values[0].replace('%d', game.playerCount.toString());
-                                const teamString = game.mode.type === 'TEAM' ? values[1].replace('%d', teamCount.toString()) + ', ' : '';
-                                option.innerText = `${game.fileNumber} - [${gameDate.getHours().toString().padStart(2, '0')}:${gameDate.getMinutes().toString().padStart(2, '0')}] ${values[2]}: ${playerString}, ${teamString} ${players}`;
-							})
-					}
+								const playerString = values[0].replace('%d', game.playerCount.toString());
+								const teamString = game.mode.type === 'TEAM' ? values[1].replace('%d', teamCount.toString()) + ', ' : '';
+								option.innerText = `${game.fileNumber} - [${gameDate.getHours().toString().padStart(2, '0')}:${gameDate.getMinutes().toString().padStart(2, '0')}] ${values[2]}: ${playerString}, ${teamString} ${players}`;
+							});
+					},
 				);
 			})
 			.catch(() => {
 
-			})
+			});
 	}
 
 	function validateForm(data: FormData): boolean {
@@ -261,30 +261,30 @@ export default function initNewGamePage() {
 			}
 		}
 
-        let ok = true;
-        game.getActiveTeams().forEach(team => {
-            if (team.name.length < team.$name.minLength) {
-                ok = false;
-                team.emptyNameTooltip.show();
-            } else if (team.name.length > team.$name.maxLength) {
-                ok = false;
-                team.nameTooLongTooltip.show();
-            }
-        });
+		let ok = true;
+		game.getActiveTeams().forEach(team => {
+			if (team.name.length < team.$name.minLength) {
+				ok = false;
+				team.emptyNameTooltip.show();
+			} else if (team.name.length > team.$name.maxLength) {
+				ok = false;
+				team.nameTooLongTooltip.show();
+			}
+		});
 
-        return ok;
+		return ok;
 	}
 
 	function loadGame(data: FormData, callback: null | (() => void) = null): void {
 		startLoading();
-        sendLoadGame(system, data)
-            .then(response => {
+		sendLoadGame(system, data)
+			.then(response => {
 				stopLoading();
-                if (!response.mode || response.mode === '') {
+				if (!response.mode || response.mode === '') {
 					console.error('Got invalid mode');
 					return;
 				}
-                const mode = response.mode;
+				const mode = response.mode;
 
 				if (control) {
 					control.loadGame(mode, callback);
@@ -297,14 +297,14 @@ export default function initNewGamePage() {
 
 	function loadStartGame(data: FormData, callback: null | (() => void) = null): void {
 		startLoading();
-        sendLoadGame(system, data)
-            .then(response => {
+		sendLoadGame(system, data)
+			.then(response => {
 				stopLoading();
-                if (!response.mode || response.mode === '') {
+				if (!response.mode || response.mode === '') {
 					console.error('Got invalid mode');
 					return;
 				}
-                const mode = response.mode;
+				const mode = response.mode;
 
 				if (control) {
 					control.loadStart(mode, callback);
@@ -316,13 +316,13 @@ export default function initNewGamePage() {
 	}
 
 	function handleKeyboardShortcuts(e: KeyboardEvent) {
-        console.log('keyup', e.key, e.code, e.altKey, e.ctrlKey);
+		console.log('keyup', e.key, e.code, e.altKey, e.ctrlKey);
 		if (e.target instanceof HTMLElement && (e.target.nodeName.toLowerCase() === 'input' || e.target.nodeName.toLowerCase() === 'textarea')) {
 			return;
 		}
-        switch (e.code) {
-            case 'Space': // Space
-            case 'Enter': // Enter
+		switch (e.code) {
+			case 'Space': // Space
+			case 'Enter': // Enter
 				if (!control || control.currentStatus === GameStatus.STANDBY) {
 					form.requestSubmit(loadBtn);
 				}
@@ -330,17 +330,17 @@ export default function initNewGamePage() {
 					form.requestSubmit(startBtn);
 				}
 				break;
-            case 'Backspace': // Backspace
-            case 'Delete': // Delete
+			case 'Backspace': // Backspace
+			case 'Delete': // Delete
 				if (e.ctrlKey) {
 					game.clearAll();
 				}
 				break;
-            case 'KeyV': // v
+			case 'KeyV': // v
 				(document.getElementById('hide-variations') as HTMLButtonElement)
 					.dispatchEvent(new Event('click', {bubbles: true}));
 				break;
-            case 'KeyH': // h
+			case 'KeyH': // h
 				helpOffcanvas.toggle();
 				break;
 		}

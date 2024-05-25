@@ -8,56 +8,57 @@
 {block content}
 	<form action="{link ['settings', 'print']}" enctype="multipart/form-data" method="post" class="text-center autosave"
 		  id="print-settings-form">
-		<div class="me-4 last-save-wrapper text-end position-fixed end-0">{lang 'Last saved:'} <span class="last-save"
-																									 data-target="#print-settings-form">{lang 'never'}</span>
+        <div class="me-4 last-save-wrapper text-end position-fixed end-0">{_'Naposledy uloženo:'} <span
+                    class="last-save"
+                    data-target="#print-settings-form">{_'never'}</span>
 		</div>
 
-		<h2>{lang 'Print defaults', context: 'results.style.settings'}:</h2>
+        <h2>{_'Print defaults', domain: 'results', context: 'style.settings'}:</h2>
 		<p>
 			<label class="form-label" for="default-style">
-				{lang 'Default print style', context: 'results.style.settings'}
+                {_'Default print style', domain: 'results', context: 'style.settings'}
 			</label>
 			<select name="default-style" class="form-select" id="default-style">
 				<option n:foreach="$styles as $style"
 						value="{$style->id}" {if $style->default}selected{/if}>
-					{lang $style->name, context: 'results.style'}
+                    {_$style->name, domain: 'results', context: 'style'}
 				</option>
 			</select>
 		</p>
 		<p>
 			<label class="form-label" for="default-template">
-				{lang 'Default template', context: 'results.style.settings'}
+                {_'Default template', domain: 'results', context: 'style.settings'}
 			</label>
 			<select name="default-template" class="form-select" id="default-template">
 				<option n:foreach="$templates as $template"
 						value="{$template->slug}" {if $template->slug === $defaultTemplateId}selected{/if}>
-					{lang $template->name, context: 'results.style'}
+                    {_$template->name, domain: 'results', context: 'style'}
 				</option>
 			</select>
 		</p>
 
-		<h2>{lang 'Print styles dates', context: 'results.style.settings'}:</h2>
+        <h2>{_'Print styles dates', domain: 'results', context: 'style.settings'}:</h2>
 		<div id="ranges" class="d-flex flex-wrap justify-content-center">
 			<div class="card bg-light m-2 print-style-date" n:foreach="$dates as $info">
 				<div class="card-header text-end">
 					<span class="btn btn-danger remove" data-toggle="tooltip"
-						  title="{lang 'Delete', context: 'actions'}">
+                          title="{_'Smazat', context: 'actions'}">
 						<i class="fas fa-trash"></i>
 					</span>
 				</div>
 				<div class="card-body">
 					<label class="form-label" for="style-date-select-{$iterator->counter0}">
-						{lang 'Style', context: 'results.style.settings'}
+                        {_'Styl', domain: 'results', context: 'style.settings'}
 					</label>
 					<select name="dateRange[{$iterator->counter0}][style]" class="form-select"
 							id="style-date-select-{$iterator->counter0}">
 						<option n:foreach="$styles as $style"
 								value="{$style->id}" {if $style->id === $info['style']->id}selected{/if}>
-							{lang $style->name, context: 'results.style'}
+                            {_$style->name, domain: 'results', context: 'style'}
 						</option>
 					</select>
 					<label class="form-label" for="date-range-{$iterator->counter0}">
-						{lang 'Dates', context: 'dates'}:
+                        {_'Dates', context: 'dates'}:
 					</label>
 					<div class="date">
 						<input type="text" name="dateRange[{$iterator->counter0}][dates]"
@@ -71,29 +72,29 @@
 		<p class="text-center">
 			<button type="button" class="btn btn-lg my-2 btn-primary" id="addRange" data-key="{count($dates)}">
 				<i class="fas fa-plus"></i>
-				{lang 'Add date', context: 'actions'}
+                {_'Přidat datum', context: 'actions'}
 			</button>
 		</p>
 		<template id="print-style-date">
 			<div class="card bg-light m-2 print-style-date">
 				<div class="card-header text-end">
 					<span class="btn btn-danger remove" data-toggle="tooltip"
-						  title="{lang 'Delete', context: 'actions'}">
+                          title="{_'Smazat', context: 'actions'}">
 						<i class="fas fa-trash"></i>
 					</span>
 				</div>
 				<div class="card-body">
 					<label class="form-label" for="style-date-select-#i#">
-						{lang 'Style', context: 'results.style.settings'}
+                        {_'Styl', domain: 'results', context: 'style.settings'}
 					</label>
 					<select name="dateRange[#i#][style]" class="form-select" id="style-date-select-#i#">
 						<option n:foreach="$styles as $style"
 								value="{$style->id}">
-							{lang $style->name, context: 'results.style'}
+                            {_$style->name, domain: 'results', context: 'style'}
 						</option>
 					</select>
 					<label class="form-label" for="date-range-#i#">
-						{lang 'Dates', context: 'dates'}:
+                        {_'Dates', context: 'dates'}:
 					</label>
 					<div class="date">
 						<input type="text" name="dateRange[#i#][dates]" class="form-control bg-white"
@@ -105,12 +106,12 @@
 			</div>
 		</template>
 
-		<h2>{lang 'Print styles', context: 'results.style.settings'}:</h2>
+        <h2>{_'Tiskové styly', domain: 'results', context: 'style.settings'}:</h2>
 		<div class="d-flex flex-wrap justify-content-center align-items-center" id="styles">
 			<div class="card bg-light m-3 print-style" n:foreach="$styles as $key => $style" style="max-width: 800px;">
 				<div class="card-header text-end">
 					<span class="btn btn-danger remove btn-sm" data-toggle="tooltip"
-						  title="{lang 'Delete', context: 'actions'}">
+                          title="{_'Smazat', context: 'actions'}">
 						<i class="fas fa-trash"></i>
 					</span>
 				</div>
@@ -123,14 +124,14 @@
 					<div class="col-md-6 p-3">
 						<div class="form-group mb-1">
 							<label class="form-label" for="name-{$key}">
-								{lang 'Name', context: 'results.style.settings'}:
+                                {_'Name', domain: 'results', context: 'style.settings'}:
 							</label>
 							<input id="name-{$key}" name="styles[{$key}][name]" type="text"
 								   value="{$style->name}" class="form-control">
 						</div>
 						<div class="form-group mb-1">
 							<label class="form-label" for="file-{$key}">
-								{lang 'Background', context: 'results.style.settings'}:
+                                {_'Background', domain: 'results', context: 'style.settings'}:
 							</label>
 							<input type="hidden" name="styles[{$key}][original-background]" value="{$style->bg}">
 							<input id="file-{$key}" name="styles[{$key}][background]" type="file"
@@ -138,7 +139,7 @@
 						</div>
 						<div class="form-group mb-1">
 							<label class="form-label" for="file-{$key}">
-								{lang 'Landscape background', context: 'results.style.settings'}:
+                                {_'Landscape background', domain: 'results', context: 'style.settings'}:
 							</label>
 							<input type="hidden" name="styles[{$key}][original-background-landscape]"
 								   value="{$style->bgLandscape}">
@@ -148,7 +149,7 @@
 						<div class="form-group mb-1">
 							<label class="form-label"
 								   for="primary-{$key}">
-								{lang 'Primary color', context: 'results.style.settings'}:
+                                {_'Primary color', domain: 'results', context: 'style.settings'}:
 							</label>
 							<input id="primary-{$key}" name="styles[{$key}][primary]" type="text" data-jscolor=""
 								   value="{$style->colorPrimary}"
@@ -156,14 +157,16 @@
 						</div>
 						<div class="form-group mb-1">
 							<label class="form-label"
-								   for="dark-{$key}">{lang 'Dark color', context: 'results.style.settings'}:</label>
+                                   for="dark-{$key}">{_'Dark color', domain: 'results', context: 'style.settings'}
+                                :</label>
 							<input id="dark-{$key}" name="styles[{$key}][dark]" type="text" data-jscolor=""
 								   value="{$style->colorDark}"
 								   class="form-control">
 						</div>
 						<div class="form-group mb-1">
 							<label class="form-label"
-								   for="light-{$key}">{lang 'Light color', context: 'results.style.settings'}:</label>
+                                   for="light-{$key}">{_'Light color', domain: 'results', context: 'style.settings'}
+                                :</label>
 							<input id="light-{$key}" name="styles[{$key}][light]" type="text" data-jscolor=""
 								   value="{$style->colorLight}"
 								   class="form-control">
@@ -178,10 +181,10 @@
 		<div class="btn-group btn-group-lg my-4">
 			<button class="btn btn-primary" type="button" id="addStyle" data-key="{count($styles)}">
 				<i class="fas fa-plus"></i>
-				{lang 'Add style', context: 'results.style.settings'}
+                {_'Add style', domain: 'results', context: 'style.settings'}
 			</button>
 			<button class="btn btn-success" type="submit" data-action="autosave">
-				{lang 'Send', context: 'actions'}
+                {_'Odeslat', context: 'actions'}
 			</button>
 		</div>
 	</form>
@@ -189,7 +192,7 @@
 		<div class="card bg-light m-3" style="max-width: 550px;">
 			<div class="card-header text-end">
 					<span class="btn btn-danger remove btn-sm" data-toggle="tooltip"
-						  title="{lang 'Delete', context: 'actions'}">
+                          title="{_'Smazat', context: 'actions'}">
 						<i class="fas fa-trash"></i>
 					</span>
 			</div>
@@ -202,35 +205,35 @@
 				<div class="col-md-6 p-3">
 					<div class="form-group mb-1">
 						<label class="form-label" for="name-#key#">
-							{lang 'Name', context: 'results.style.settings'}:
+                            {_'Name', domain: 'results', context: 'style.settings'}:
 						</label>
 						<input id="name-#key#" name="styles[#key#][name]" type="text"
 							   value="" class="form-control">
 					</div>
 					<div class="form-group mb-1">
 						<label class="form-label" for="file-#key#">
-							{lang 'Background', context: 'results.style.settings'}:
+                            {_'Background', domain: 'results', context: 'style.settings'}:
 						</label>
 						<input id="file-#key#" name="styles[#key#][background]" type="file"
 							   accept="image/jpeg,image/png" class="form-control portrait">
 					</div>
 					<div class="form-group mb-1">
 						<label class="form-label" for="file-{$key}">
-							{lang 'Landscape background', context: 'results.style.settings'}:
+                            {_'Landscape background', domain: 'results', context: 'style.settings'}:
 						</label>
 						<input id="file-#key#" name="styles[#key#][background-landscape]" type="file"
 							   accept="image/jpeg,image/png" class="form-control landscape">
 					</div>
 					<div class="form-group mb-1">
 						<label class="form-label" for="primary-#key#">
-							{lang 'Primary color', context: 'results.style.settings'}:
+                            {_'Primary color', domain: 'results', context: 'style.settings'}:
 						</label>
 						<input id="primary-#key#" name="styles[#key#][primary]" type="text" data-jscolor="" value=""
 							   class="form-control">
 					</div>
 					<div class="form-group mb-1">
 						<label class="form-label" for="dark-#key#">
-							{lang 'Dark color', context: 'results.style.settings'}:
+                            {_'Dark color', domain: 'results', context: 'style.settings'}:
 						</label>
 						<input id="dark-#key#" name="styles[#key#][dark]" type="text" data-jscolor=""
 							   value=""
@@ -238,7 +241,7 @@
 					</div>
 					<div class="form-group mb-1">
 						<label class="form-label" for="light-#key#">
-							{lang 'Light color', context: 'results.style.settings'}:
+                            {_'Light color', domain: 'results', context: 'style.settings'}:
 						</label>
 						<input id="light-#key#" name="styles[#key#][light]" type="text" data-jscolor=""
 							   value=""

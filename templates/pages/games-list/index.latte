@@ -1,6 +1,7 @@
 {layout '../../@layout.latte'}
 {import './actions.latte'}
 
+{varType Lsr\Core\Controllers\Controller $page}
 {varType App\GameModels\Game\Game[] $games}
 {varType \DateTime $date}
 {varType int[] $gameCountsPerDay}
@@ -10,9 +11,9 @@
 {/define}
 
 {block content}
-	<h2>{lang 'Games list'}:</h2>
+    <h2>{_'Seznam her'}:</h2>
 	<form action="{link ['list']}" class="mb-3" method="get">
-		<label for="date">{lang 'Date'}:</label>
+        <label for="date">{_'Datum'}:</label>
 		<div class="date-picker" data-events="{json_encode($gameCountsPerDay)}">
 			<input type="text" name="date" class="form-control bg-white" data-toggle="submit" id="date"
 				   value="{$date->format('d.m.Y')}"
@@ -20,15 +21,15 @@
 		</div>
 	</form>
 	{if empty($games)}
-		{alertWarning lang('No games had been played on this date.')}
+        {alertWarning lang('Tento den se nehrály žádné hry.')}
 	{else}
 		<div>
-			{lang 'Hromadné akce'}:
+            {_'Hromadné akce'}:
 			<div class="btn-group ms-2">
 				{include gameActionGroup}
 				{include gameActionLigaSync}
 				{include gameActionReImport}
-                {if !\App\Core\App::isProduction()}
+                {if !$page->getApp()->isProduction()}
 					{include gameActionRecalcSkill}
                     {include gameActionPlanPrecache}
                     {include gameActionPlanHighlights}
@@ -39,10 +40,10 @@
 			<thead>
 			<tr>
 				<th></th>
-				<th>{lang 'Time'}</th>
-				<th>{lang 'Game mode'}</th>
-				<th>{lang 'Players'}</th>
-				<th class="text-end">{lang 'Actions'}</th>
+                <th>{_'Čas'}</th>
+                <th>{_'Herní mód'}</th>
+                <th>{_'Hráči'}</th>
+                <th class="text-end">{_'Akce'}</th>
 			</tr>
 			</thead>
 			<tbody>
@@ -60,7 +61,7 @@
 				<td>
 				<span n:foreach="$game->getPlayersSorted() as $player"
 						data-toggle="tooltip"
-						title="{sprintf(lang('%s score'), number_format($player->score, 0, ',', '&nbsp;'))|noescape}"
+                        title="{_'%s skóre', format: [number_format($player->score, 0, ',', '&nbsp;')]|noescape}"
 						class="badge bg-{$player->getTeam() !== null ? $player->getTeam()->getTeamBgClass(true) : 'dark'}">
 					{$player->position}.&nbsp;{$player->name}
 				</span>
@@ -76,7 +77,7 @@
 			<div class="modal-dialog">
 				<div class="modal-content">
 					<div class="modal-header">
-						<h5 class="modal-title">{lang 'Skupiny'}</h5>
+                        <h5 class="modal-title">{_'Skupiny'}</h5>
 						<button type="button" class="btn btn-link" data-bs-dismiss="modal" aria-label="Close">
 							<i class="fa-solid fa-close"></i>
 						</button>
@@ -84,19 +85,19 @@
 					<div class="modal-body">
 						<div class="form-floating mx-2">
 							<select name="groupSelect" id="group-select" class="form-select">
-								<option value="">{lang 'Bez skupiny'}</option>
-								<option value="new">{lang 'Nová skupina'}</option>
+                                <option value="">{_'Bez skupiny'}</option>
+                                <option value="new">{_'Nová skupina'}</option>
 							</select>
-							<label for="group-select">{lang 'Skupina'}</label>
+                            <label for="group-select">{_'Skupina'}</label>
 						</div>
 						<div class="form-group m-3 d-none" id="group-name">
-							<label for="group-name-input">{lang 'Název skupiny'}</label>
+                            <label for="group-name-input">{_'Název skupiny'}</label>
 							<input type="text" id="group-name-input" class="form-control">
 						</div>
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-primary"
-								data-bs-dismiss="modal">{lang 'Save', context: 'actions'}</button>
+                                data-bs-dismiss="modal">{_'Uložit', context: 'actions'}</button>
 					</div>
 				</div>
 			</div>
@@ -120,7 +121,7 @@
 			{include gameActionReImport, $game}
 		</div>
 		<div class="btn-group">
-            {if !\App\Core\App::isProduction()}
+            {if !$page->getApp()->isProduction()}
 				{include gameActionGateVests, $game}
 				{include gameActionRecalcSkill, $game}
                 {include gameActionPlanPrecache, $game}
@@ -136,7 +137,7 @@
 		{include gameActionLigaSync, $game}
 		{include gameActionGate, $game}
 		{include gameActionReImport, $game}
-        {if !\App\Core\App::isProduction()}
+        {if !$page->getApp()->isProduction()}
 			{include gameActionGateVests, $game}
 			{include gameActionRecalcSkill, $game}
             {include gameActionPlanPrecache, $game}

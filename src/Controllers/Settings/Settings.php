@@ -36,13 +36,12 @@ use Psr\Http\Message\ResponseInterface;
 class Settings extends Controller
 {
 
-	protected string $title = 'Settings';
+    protected string $title = 'Nastavení';
 
 	public function __construct(
 		private readonly FeatureConfig $featureConfig,
-		Latte                          $latte
 	) {
-		parent::__construct($latte);
+      parent::__construct();
 	}
 
 	public function init(RequestInterface $request): void {
@@ -50,19 +49,21 @@ class Settings extends Controller
 		$this->params['featureConfig'] = $this->featureConfig;
 	}
 
-	/**
-	 * @return void
-	 * @throws TemplateDoesNotExistException
-	 */
+    /**
+     * @return ResponseInterface
+     * @throws JsonException
+     * @throws TemplateDoesNotExistException
+     */
 	public function show(): ResponseInterface {
 		return $this->view('pages/settings/index');
 	}
 
-	/**
-	 * @return void
-	 * @throws ValidationException
-	 * @throws TemplateDoesNotExistException
-	 */
+    /**
+     * @return ResponseInterface
+     * @throws JsonException
+     * @throws TemplateDoesNotExistException
+     * @throws ValidationException
+     */
 	public function vests(): ResponseInterface {
 		$vests = Vest::getAll();
 		$this->params['vests'] = [];
@@ -75,12 +76,14 @@ class Settings extends Controller
 		return $this->view('pages/settings/vests');
 	}
 
-	/**
-	 * @param Request $request
-	 *
-	 * @return void
-	 * @throws JsonException
-	 */
+    /**
+     * @param  Request  $request
+     *
+     * @return ResponseInterface
+     * @throws JsonException
+     * @throws ModelNotFoundException
+     * @throws ValidationException
+     */
 	public function saveVests(Request $request): ResponseInterface {
 		try {
 			foreach ($request->getPost('vest', []) as $id => $info) {
@@ -97,15 +100,15 @@ class Settings extends Controller
 				'errors' => $request->passErrors,
 			], empty($request->passErrors) ? 200 : 400);
 		}
-		return App::redirect('settings', $request);
+      return $this->app->redirect('settings', $request);
 	}
 
-	/**
-	 * @param Request $request
-	 *
-	 * @return void
-	 * @throws JsonException
-	 */
+    /**
+     * @param  Request  $request
+     *
+     * @return ResponseInterface
+     * @throws JsonException
+     */
 	public function saveGeneral(Request $request): ResponseInterface {
 		try {
 			$apiKey = $request->getPost('api_key');
@@ -140,7 +143,7 @@ class Settings extends Controller
 				'errors' => $request->passErrors,
 			]);
 		}
-		return App::redirect('settings', $request);
+      return $this->app->redirect('settings', $request);
 	}
 
 	/**
@@ -217,7 +220,7 @@ class Settings extends Controller
 				'errors' => $request->passErrors,
 			], empty($request->passErrors) ? 200 : 500);
 		}
-		return App::redirect('settings-print', $request);
+      return $this->app->redirect('settings-print', $request);
 	}
 
 	/**
@@ -230,12 +233,14 @@ class Settings extends Controller
 		return count($request->passErrors) === 0;
 	}
 
-	/**
-	 * @param UploadedFile $file
-	 * @param Request $request
-	 * @param string $printDir
-	 * @param PrintStyle $style
-	 */
+    /**
+     * @param  UploadedFile  $file
+     * @param  Request  $request
+     * @param  string  $printDir
+     * @param  PrintStyle  $style
+     * @param  bool  $landscape
+     * @return ResponseInterface
+     */
 	private function processPrintFileUpload(UploadedFile $file, Request $request, string $printDir, PrintStyle $style, bool $landscape = false): ResponseInterface {
 		if ($file->error !== UPLOAD_ERR_OK) {
 			$request->passErrors[] = $file->getErrorMessage();
@@ -267,13 +272,13 @@ class Settings extends Controller
 		}
 	}
 
-	/**
-	 * @return void
-	 * @throws ModelNotFoundException
-	 * @throws TemplateDoesNotExistException
-	 * @throws ValidationException
-	 * @throws DirectoryCreationException
-	 */
+    /**
+     * @return ResponseInterface
+     * @throws JsonException
+     * @throws ModelNotFoundException
+     * @throws TemplateDoesNotExistException
+     * @throws ValidationException
+     */
 	public function print(): ResponseInterface {
 		$this->params['styles'] = PrintStyle::getAll();
 		$this->params['templates'] = PrintTemplate::getAll();
@@ -282,7 +287,6 @@ class Settings extends Controller
 		return $this->view('pages/settings/print');
 	}
 
-	#[Get('settings/cache', 'settings-cache')]
 	public function cache(): ResponseInterface {
 		return $this->view('pages/settings/cache');
 	}

@@ -23,13 +23,14 @@ class GeneralStatsScreen extends GateScreen
      * @inheritDoc
      */
     public static function getName() : string {
-        return lang('Základní měsíční statistiky', context: 'gate-screens');
+        return lang('Základní měsíční statistiky', domain: 'gate', context: 'screens');
     }
 
     public static function getDescription() : string {
         return lang(
                    'Obrazovka zobrazující nejlepší hráče a počet odehraných her pro aktuální měsíc.',
-          context: 'gate-screens-description'
+          domain : 'gate',
+          context: 'screens.description'
         );
     }
 
@@ -41,14 +42,14 @@ class GeneralStatsScreen extends GateScreen
     }
 
     public static function getGroup() : string {
-        return lang('Měsíční statistiky', context: 'gate-screens-groups');
+        return lang('Měsíční statistiky', domain: 'gate', context: 'screens.groups');
     }
 
     /**
      * @inheritDoc
      */
     public function run() : ResponseInterface {
-        $date = (string) App::getRequest()->getGet('date', 'now');
+        $date = (string) App::getInstance()->getRequest()->getGet('date', 'now');
         $today = new DateTimeImmutable($date);
         $monthStart = new DateTimeImmutable($today->format('Y-m-01'));
         $monthEnd = new DateTimeImmutable($today->format('Y-m-t'));

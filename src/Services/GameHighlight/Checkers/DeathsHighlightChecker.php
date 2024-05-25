@@ -28,7 +28,8 @@ class DeathsHighlightChecker implements PlayerHighlightChecker
 					sprintf(
 						lang(
 							         '%s zasáhlo více spoluhráčů, než protihráčů',
-							context: 'results.highlights'
+              domain : 'results',
+              context: 'highlights'
 						),
 						'@'.$name.'@<'.NameInflectionService::genitive(
 							$name

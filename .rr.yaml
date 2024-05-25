@@ -85,7 +85,19 @@ jobs: # List of RoadRunner queues that can be processed by
       config:
         priority: 10
         prefetch: 10
+file_watch:
+  pool:
+    num_workers: 1
+    max_jobs: 10
+  dir: "./lmx/results"
+  regexp: ".*\\.game"
 logs:
   encoding: console
   level: debug
   mode: development
+#  file_logger_options:
+#    log_output: "logs/rr.log"
+#    max_size: 10
+#    max_age: 24
+#    max_backups: 10
+#    compress: true

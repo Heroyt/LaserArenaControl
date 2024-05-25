@@ -12,6 +12,10 @@ use Spiral\RoadRunner\Metrics\Metrics;
  */
 class Evo5GameLoader extends LasermaxxGameLoader
 {
+    use MusicLoading;
+
+    public const DI_NAME = 'evo5.gameLoader';
+    public const MUSIC_FILE = LMX_DIR.'music/evo5.mp3';
 
     public function __construct(
       private readonly Latte   $latte,
@@ -47,7 +51,7 @@ class Evo5GameLoader extends LasermaxxGameLoader
         // Set up a correct music file
         if (isset($loadData['meta']['music'])) {
             $start = microtime(true);
-            $this->loadMusic((int) $loadData['meta']['music'], LMX_DIR.'music/evo5.mp3');
+            $this->loadOrPlanMusic((int) $loadData['meta']['music']);
             $this->metrics->set('load_music_time', (microtime(true) - $start) * 1000, ['evo5']);
         }
 

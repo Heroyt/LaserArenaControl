@@ -11,7 +11,7 @@
 {define content}
     {cache 'gate.screen.today.'.$screenHash, expire: '1 days', tags: ['templates', 'templates.gate', 'templates.gate.screens', 'templates.gate.screens.today']}
         <h1 class="title text-center text-white-forced"
-            data-hash="{$screenHash}">{lang 'Výsledky dne', context: 'gate'}</h1>
+            data-hash="{$screenHash}">{_'Výsledky dne', domain: 'gate'}</h1>
 
         {foreach $widgets as $widget}
             {include '../widgets/'.$widget['template'], ...$widget['data']}

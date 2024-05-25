@@ -16,8 +16,8 @@ enum ImageScreenType : string
 
 	public function getReadableName() : string {
 		return match ($this) {
-			self::CENTER     => lang('V prostředku', context: 'gate.screen.type'),
-			self::FULLSCREEN => lang('Celá obrazovka', context: 'gate.screen.type'),
+        self::CENTER     => lang('V prostředku', domain: 'gate', context: 'screen.type'),
+        self::FULLSCREEN => lang('Celá obrazovka', domain: 'gate', context: 'screen.type'),
 		};
 	}
 

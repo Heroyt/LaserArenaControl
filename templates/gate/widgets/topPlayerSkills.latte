@@ -4,7 +4,7 @@
 
 <div class="top-players-wrapper">
     <h1 class="title text-center text-white-forced">
-        {lang 'Nejlepší hráči', context: 'gate'}
+        {_'Nejlepší hráči', domain: 'gate'}
     </h1>
     <div class="top-players">
         {foreach $topPlayers as $player}
@@ -15,7 +15,7 @@
             </div>
         {else}
             <div class="no-players">
-                {lang 'Nedostatečná data'}
+                {_'Nedostatečná data'}
             </div>
         {/foreach}
     </div>

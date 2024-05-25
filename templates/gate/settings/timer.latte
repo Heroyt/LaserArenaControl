@@ -15,7 +15,7 @@
 
 <div class="form-group">
     <label for="{$key}-timer" class="form-label">
-        {lang 'Interval v sekundách', context: 'settings'}:
+        {_'Interval v sekundách', context: 'settings'}:
     </label>
     <input type="number" class="form-control" min="30" n:attr="value: $settings->timer" id="{$key}-timer"
            name="{$name}[timer]">
@@ -23,7 +23,7 @@
 
 <button type="button" class="btn btn-primary w-100 text-center mt-2" data-toggle="collapse"
         data-target="#{$key}-screens">
-    {lang 'Obrazovky'}
+    {_'Obrazovky'}
 </button>
 <div n:class="collapse-grid, !isset($gate) ? show" id="{$key}-screens">
     <div class="collapse-inner">

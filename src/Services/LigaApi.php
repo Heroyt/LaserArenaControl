@@ -56,7 +56,7 @@ class LigaApi
 		// Add logging to handler and set handler to cUrl
 		$stack = new HandlerStack();
 		$stack->setHandler(new CurlHandler(['handle_factory' => new CurlFactory(99)]));
-		$stack->push(Middleware::log($this->logger, new MessageFormatter(App::isProduction() ? MessageFormatter::CLF : MessageFormatter::DEBUG)));
+      $stack->push(Middleware::log($this->logger, new MessageFormatter(MessageFormatter::DEBUG)));
 
 		// Initialize client
 		$this->client = new Client([
@@ -125,10 +125,8 @@ class LigaApi
 			$extension->beforeGameSync($system, $games);
 		}
 
-		$playerProvider = App::getContainer()->getByType(PlayerProvider::class);
-		if (!isset($playerProvider)) {
-			$playerProvider = new PlayerProvider($this);
-		}
+      /** @var PlayerProvider $playerProvider */
+      $playerProvider = App::getService('playersProvider');
 
 		// Validate each game
 		$gamesData = [];
@@ -190,7 +188,6 @@ class LigaApi
 				return false;
 			}
 		} catch (GuzzleException $e) {
-			/* @phpstan-ignore-next-line */
 			$this->logger->exception($e);
 			return false;
 		}
@@ -424,11 +421,12 @@ class LigaApi
 	public function getExtensions(): array {
 		if (!isset($this->extensions)) {
 			$this->extensions = [];
-			foreach (App::getContainer()->findByType(LigaApiExtensionInterface::class) as $name) {
+        foreach (App::getServiceByType(LigaApiExtensionInterface::class) as $name) {
 				// @phpstan-ignore-next-line
 				$this->extensions[] = App::getService($name);
 			}
 		}
+      // @phpstan-ignore-next-line
 		return $this->extensions;
 	}
 

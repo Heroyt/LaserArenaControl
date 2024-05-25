@@ -13,11 +13,15 @@ class LaserMaxxCSGOResultsScreen extends AbstractResultsScreen
 	 * @inheritDoc
 	 */
 	public static function getName() : string {
-		return lang('LaserMaxx výsledky z módu CSGO', context: 'gate-screens');
+      return lang('LaserMaxx výsledky z módu CSGO', domain: 'gate', context: 'screens');
 	}
 
 	public static function getDescription() : string {
-		return lang('Obrazovka zobrazující výsledky LaserMaxx z módu CSGO.', context: 'gate-screens-description');
+      return lang(
+                 'Obrazovka zobrazující výsledky LaserMaxx z módu CSGO.',
+        domain : 'gate',
+        context: 'screens.description'
+      );
 	}
 
 	/**

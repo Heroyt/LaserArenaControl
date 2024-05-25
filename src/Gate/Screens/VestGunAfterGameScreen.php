@@ -19,11 +19,11 @@ class VestGunAfterGameScreen extends GateScreen implements ReloadTimerInterface,
      * @inheritDoc
      */
     public static function getName() : string {
-        return lang('Připněte zbraň na vestu', context: 'gate.screens');
+        return lang('Připněte zbraň na vestu', domain: 'gate', context: 'screens');
     }
 
     public static function getDescription() : string {
-        return lang('Informační obrazovka s animací připnutí zbraně na vestu.', context: 'gate.screens');
+        return lang('Informační obrazovka s animací připnutí zbraně na vestu.', domain: 'gate', context: 'screens');
     }
 
     /**

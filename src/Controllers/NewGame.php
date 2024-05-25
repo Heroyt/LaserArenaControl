@@ -27,16 +27,15 @@ class NewGame extends Controller
 {
 
     public HookedTemplates $hookedTemplates;
-    protected string $title = 'New game';
+    protected string $title = 'Nová hra';
     protected string $description = '';
     /** @var ControllerDecoratorInterface[] */
     private array $decorators = [];
 
     public function __construct(
-      Latte                          $latte,
       private readonly FeatureConfig $featureConfig,
     ) {
-        parent::__construct($latte);
+        parent::__construct();
     }
 
     public function init(RequestInterface $request) : void {

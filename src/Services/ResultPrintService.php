@@ -27,166 +27,173 @@ use Lsr\Helpers\Tools\Strings;
 readonly class ResultPrintService
 {
 
-	public function __construct(
-		private GotenbergService $gotenberg,
-		private Latte $latte) {}
+    public function __construct(
+      private GotenbergService $gotenberg,
+      private Latte            $latte
+    ) {}
 
-	/**
-	 * Generate PDF results for a game
-	 *
-	 * @param Game   $game
-	 * @param int    $style
-	 * @param string $template
-	 * @param int    $copies
-	 * @param bool   $cache
-	 *
-	 * @return string File path of the generated PDF file or empty string on error
-	 */
-	public function getResultsPdf(
-		Game   $game,
-		int    $style,
-		string $template,
-		int    $copies = 1,
-		bool   $cache = true) : string {
-		$pdfFile = $this->getTmpDir().$this->getResultsFileName($game, $style, $template, $copies).'.pdf';
-		if ($cache && file_exists($pdfFile)) {
-			return $pdfFile;
-		}
+    /**
+     * Generate PDF results for a game
+     *
+     * @param  Game  $game
+     * @param  int  $style
+     * @param  string  $template
+     * @param  int  $copies
+     * @param  bool  $cache
+     *
+     * @return string File path of the generated PDF file or empty string on error
+     */
+    public function getResultsPdf(
+      Game   $game,
+      int    $style,
+      string $template,
+      int    $copies = 1,
+      bool   $cache = true
+    ) : string {
+        $pdfFile = $this->getTmpDir().$this->getResultsFileName($game, $style, $template, $copies).'.pdf';
+        if ($cache && file_exists($pdfFile)) {
+            return $pdfFile;
+        }
 
-		$styleObj = PrintStyle::get($style);
-		$templateObj = PrintTemplate::getBySlug($template);
+        $styleObj = PrintStyle::get($style);
+        $templateObj = PrintTemplate::getBySlug($template);
 
-		$bg = ROOT.($templateObj?->orientation === PrintOrientation::landscape ? $styleObj->bgLandscape : $styleObj->bg);
+        $bg = ROOT.($templateObj?->orientation === PrintOrientation::landscape ? $styleObj->bgLandscape :
+            $styleObj->bg);
 
-		$content = $this->gotenberg->chromium->getFromHTML(
-			                 str_replace(
-				                 [App::getUrl(), 'dist/results/', 'dist/', 'assets/images/print/'],
-				                 ['', '', '', ''],
-				                 $this->getResultsHtml(
-					                 $game,
-					                 $style,
-					                 $template,
-					                 $copies,
-					                 $cache
-				                 )
-			                 ),
-			additionalFiles: [
-				                 ROOT.'dist/main.css',
-				                 ROOT.'dist/results/'.$template.'.css',
-				                 $bg,
-			                 ]);
+        $content = $this->gotenberg->chromium->getFromHTML(
+                           str_replace(
+                             [App::getInstance()->getUrl(), 'dist/results/', 'dist/', 'assets/images/print/'],
+                             ['', '', '', ''],
+                             $this->getResultsHtml(
+                               $game,
+                               $style,
+                               $template,
+                               $copies,
+                               $cache
+                             )
+                           ),
+          additionalFiles: [
+                             ROOT.'dist/main.css',
+                             ROOT.'dist/results/'.$template.'.css',
+                             $bg,
+                           ]
+        );
 
-		if (!empty($content)) {
-			file_put_contents($pdfFile, $content);
-			return $pdfFile;
-		}
-		return '';
-	}
+        if (!empty($content)) {
+            file_put_contents($pdfFile, $content);
+            return $pdfFile;
+        }
+        return '';
+    }
 
-	public function getTmpDir() : string {
-		$dir = TMP_DIR.'results/';
-		if (is_dir($dir) || (mkdir($dir) && is_dir($dir))) {
-			return $dir;
-		}
-		return TMP_DIR;
-	}
+    public function getTmpDir() : string {
+        $dir = TMP_DIR.'results/';
+        if (is_dir($dir) || (mkdir($dir) && is_dir($dir))) {
+            return $dir;
+        }
+        return TMP_DIR;
+    }
 
-	public function getResultsFileName(
-		Game   $game,
-		int    $style,
-		string $template,
-		int    $copies,
-		bool   $view = false) : string {
-		return $game->code.'-'.$template.'-'.$style.'x'.$copies.'.'.App::getShortLanguageCode().($view ? '.view' : '');
-	}
+    public function getResultsFileName(
+      Game   $game,
+      int    $style,
+      string $template,
+      int    $copies,
+      bool   $view = false
+    ) : string {
+        return $game->code.'-'.$template.'-'.$style.'x'.$copies.'.'.App::getShortLanguageCode().($view ? '.view' : '');
+    }
 
-	/**
-	 * Generate html results for a game
-	 *
-	 * @param Game   $game
-	 * @param int    $style
-	 * @param string $template
-	 * @param int    $copies
-	 * @param bool   $cache
-	 *
-	 * @return string Generated HTML
-	 * @throws ModelNotFoundException
-	 * @throws TemplateDoesNotExistException
-	 * @throws ValidationException
-	 */
-	public function getResultsHtml(
-		Game   $game,
-		int    $style,
-		string $template,
-		int    $copies = 1,
-		bool   $cache = true) : string {
-		bdump($cache);
-		$htmlFile = $this->getHtmlFilePath($game, $style, $template, $copies);
-		if ($cache && file_exists($htmlFile)) {
-			$html = file_get_contents($htmlFile);
-			if ($html !== false) {
-				return $html;
-			}
-		}
+    /**
+     * Generate html results for a game
+     *
+     * @param  Game  $game
+     * @param  int  $style
+     * @param  string  $template
+     * @param  int  $copies
+     * @param  bool  $cache
+     *
+     * @return string Generated HTML
+     * @throws ModelNotFoundException
+     * @throws TemplateDoesNotExistException
+     * @throws ValidationException
+     */
+    public function getResultsHtml(
+      Game   $game,
+      int    $style,
+      string $template,
+      int    $copies = 1,
+      bool   $cache = true
+    ) : string {
+        bdump($cache);
+        $htmlFile = $this->getHtmlFilePath($game, $style, $template, $copies);
+        if ($cache && file_exists($htmlFile)) {
+            $html = file_get_contents($htmlFile);
+            if ($html !== false) {
+                return $html;
+            }
+        }
 
-		return $this->generateResultsHtml($game, $style, $template, $copies);
-	}
+        return $this->generateResultsHtml($game, $style, $template, $copies);
+    }
 
-	public function getHtmlFilePath(Game $game, int $style, string $template, int $copies = 1) : string {
-		return $this->getTmpDir().$this->getResultsFileName($game, $style, $template, $copies).'.html';
-	}
+    public function getHtmlFilePath(Game $game, int $style, string $template, int $copies = 1) : string {
+        return $this->getTmpDir().$this->getResultsFileName($game, $style, $template, $copies).'.html';
+    }
 
-	public function generateResultsHtml(Game $game, int $style, string $template, int $copies) : string {
-		$namespace = '\\App\\GameModels\\Game\\'.Strings::toPascalCase($game::SYSTEM).'\\';
-		$teamClass = $namespace.'Team';
-		$playerClass = $namespace.'Player';
-		/** @var Player $player */
-		$player = new $playerClass;
-		/** @var Team $team */
-		$team = new $teamClass;
+    public function generateResultsHtml(Game $game, int $style, string $template, int $copies) : string {
+        $namespace = '\\App\\GameModels\\Game\\'.Strings::toPascalCase($game::SYSTEM).'\\';
+        $teamClass = $namespace.'Team';
+        $playerClass = $namespace.'Player';
+        /** @var Player $player */
+        $player = new $playerClass;
+        /** @var Team $team */
+        $team = new $teamClass;
 
-		$params = [
-			'copies'    => $copies,
-			'game'      => $game,
-			'style'     => PrintStyle::exists($style) ? PrintStyle::get($style) : PrintStyle::getActiveStyle(),
-			'template'  => PrintTemplate::query()->where('slug = %s', $template)->first(),
-			'today'     => new Today($game, $player, $team),
-			'publicUrl' => $this->getPublicUrl($game),
-			'qr'        => $this->getQR($game),
-			'lang' => App::getShortLanguageCode(),
-		];
+        $params = [
+          'app'       => App::getInstance(),
+          'copies'    => $copies,
+          'game'      => $game,
+          'style'     => PrintStyle::exists($style) ? PrintStyle::get($style) : PrintStyle::getActiveStyle(),
+          'template'  => PrintTemplate::query()->where('slug = %s', $template)->first(),
+          'today'     => new Today($game, $player, $team),
+          'publicUrl' => $this->getPublicUrl($game),
+          'qr'        => $this->getQR($game),
+          'lang'      => App::getShortLanguageCode(),
+        ];
 
-		try {
-			$html = $this->latte->viewToString('results/templates/'.$template, $params);
-		} catch (TemplateDoesNotExistException) {
-			$html = $this->latte->viewToString('results/templates/default', $params);
-		}
+        try {
+            $html = $this->latte->viewToString('results/templates/'.$template, $params);
+        } catch (TemplateDoesNotExistException) {
+            $html = $this->latte->viewToString('results/templates/default', $params);
+        }
 
-		file_put_contents($this->getHtmlFilePath($game, $style, $template, $copies), $html);
-		return $html;
-	}
+        file_put_contents($this->getHtmlFilePath($game, $style, $template, $copies), $html);
+        return $html;
+    }
 
-	public function getPublicUrl(Game $game) : string {
-		/** @var string $url */
-		$url = Info::get('liga_api_url');
-		return trailingSlashIt($url).'g/'.$game->code;
-	}
+    public function getPublicUrl(Game $game) : string {
+        /** @var string $url */
+        $url = Info::get('liga_api_url');
+        return trailingSlashIt($url).'g/'.$game->code;
+    }
 
-	/**
-	 * Get SVG QR code for game
-	 *
-	 * @param Game $game
-	 *
-	 * @return string
-	 */
-	public function getQR(Game $game) : string {
-		$result = Builder::create()
-		                 ->data($this->getPublicUrl($game))
-		                 ->writer(new SvgWriter())
-		                 ->encoding(new Encoding('UTF-8'))
-		                 ->errorCorrectionLevel(ErrorCorrectionLevel::Low)
-		                 ->build();
-		return $result->getString();
-	}
+    /**
+     * Get SVG QR code for game
+     *
+     * @param  Game  $game
+     *
+     * @return string
+     */
+    public function getQR(Game $game) : string {
+        $result = Builder::create()
+                         ->data($this->getPublicUrl($game))
+                         ->writer(new SvgWriter())
+                         ->encoding(new Encoding('UTF-8'))
+                         ->errorCorrectionLevel(ErrorCorrectionLevel::Low)
+                         ->build();
+        return $result->getString();
+    }
 
 }

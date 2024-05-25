@@ -17,7 +17,7 @@ abstract class AbstractResultsScreen extends GateScreen implements ResultsScreen
     use WithReloadTimer;
 
     public static function getGroup() : string {
-        return lang('Výsledky', context: 'gate-screens-groups');
+        return lang('Výsledky', domain: 'gate', context: 'screens.groups');
     }
 
     /**

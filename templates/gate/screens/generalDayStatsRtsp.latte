@@ -15,7 +15,7 @@
 
 {define content}
     {cache 'gate.screen.today.rtsp.'.$screenHash, expire: '1 days', tags: ['templates', 'templates.gate', 'templates.gate.screens', 'templates.gate.screens.today']}
-        <h1 class="title text-center text-white-forced">{lang 'Výsledky dne', context: 'gate'}</h1>
+        <h1 class="title text-center text-white-forced">{_'Výsledky dne', domain: 'gate'}</h1>
 
         <div class="streams" data-max-streams="{$maxStreams}"
              data-streams="{json_encode($settings->streams)}"

@@ -50,7 +50,7 @@ class Loader
 		// Initialize app
 		Timer::start('core.init.app');
 		App::prettyUrl();
-		App::init();
+      App::setupDi();
 		Timer::stop('core.init.app');
 
 		// Setup database connection
@@ -89,7 +89,7 @@ class Loader
 		try {
 			DB::init();
 		} catch (Exception|DriverException $e) {
-			App::getLogger()->error('Cannot connect to the database! (' . $e->getCode() . ') ' . $e->getMessage());
+        App::getInstance()->getLogger()->error('Cannot connect to the database! ('.$e->getCode().') '.$e->getMessage());
 			throw new RuntimeException('Cannot connect to the database!'.PHP_EOL.$e->getMessage().PHP_EOL.$e->getTraceAsString().PHP_EOL.json_encode(App::getConfig()), $e->getCode(), $e);
 		}
 	}

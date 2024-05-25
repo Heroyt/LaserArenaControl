@@ -5,7 +5,7 @@
         {var string[] $paths = $musicGroup->getBackgroundImage()?->getOptimized()}
         <img class="background"
              src="{$paths['250-webp'] ?? $paths['250'] ?? $paths['webp'] ?? $paths['original']}"
-             alt="{lang 'Pozadí'}">
+             alt="{_'Pozadí'}">
     {/if}
     <div n:if="$musicGroup->getIcon() !== null" class="icon">
         {var App\Models\DataObjects\Image $icon = $musicGroup->getIcon()}
@@ -14,19 +14,19 @@
         {else}
             {var string[] $paths = $icon->getOptimized()}
             <img src="{$paths['original']}"
-                 alt="{lang 'Ikona'}">
+                 alt="{_'Ikona'}">
         {/if}
     </div>
     <div class="name">
         {if count($musicGroup->music) === 1}
-            {lang $musicGroup->music[0]->name, context: 'music'}
+            {_$musicGroup->music[0]->name, context: 'music'}
         {else}
-            {lang $musicGroup->name, context: 'music.group'}
+            {_$musicGroup->name, context: 'music.group'}
         {/if}
     </div>
     <div n:if="count($musicGroup->music) > 1" class="children">
         <div n:foreach="$musicGroup->music as $musicMode" class="child">
-            {lang $musicMode->name, context: 'music'}
+            {_$musicMode->name, context: 'music'}
         </div>
     </div>
 </div>

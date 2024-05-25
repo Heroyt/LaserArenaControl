@@ -47,13 +47,14 @@ class TopPlayersScreen extends GateScreen
      * @inheritDoc
      */
     public static function getName() : string {
-        return lang('Nejlepší hráči měsíce', context: 'gate-screens');
+        return lang('Nejlepší hráči měsíce', domain: 'gate', context: 'screens');
     }
 
     public static function getDescription() : string {
         return lang(
                    'Obrazovka zobrazující nejlepší hráče pro aktuální měsíc.',
-          context: 'gate-screens-description'
+          domain : 'gate',
+          context: 'screens.description'
         );
     }
 
@@ -65,7 +66,7 @@ class TopPlayersScreen extends GateScreen
     }
 
     public static function getGroup() : string {
-        return lang('Měsíční statistiky', context: 'gate-screens-groups');
+        return lang('Měsíční statistiky', domain: 'gate', context: 'screens.groups');
     }
 
     /**
@@ -73,7 +74,7 @@ class TopPlayersScreen extends GateScreen
      * @throws Throwable
      */
     public function run() : ResponseInterface {
-        $date = (string) App::getRequest()->getGet('date', 'now');
+        $date = (string) App::getInstance()->getRequest()->getGet('date', 'now');
         $this->today = new DateTimeImmutable($date);
         $this->gameIds = null;
         $this->gameIdsTeam = null;

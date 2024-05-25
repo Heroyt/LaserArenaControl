@@ -194,3 +194,9 @@ export function shuffle(array: any[]): any[] {
     return array;
 }
 
+export function setCookie(name: string, value: string, expireDays: number = 30) {
+	const d = new Date();
+	d.setTime(d.getTime() + (expireDays * 24 * 60 * 60 * 1000));
+	let expires = 'expires=' + d.toUTCString();
+	document.cookie = name + '=' + value + ';' + expires;
+}

@@ -51,11 +51,11 @@ enum ScreenTriggerType : string
 
     public function getReadable() : string {
         return match ($this) {
-            self::DEFAULT      => lang('Výchozí', context: 'gate-screen-trigger'),
-            self::GAME_LOADED  => lang('Hra načtena', context: 'gate-screen-trigger'),
-            self::GAME_PLAYING => lang('Hra hraje', context: 'gate-screen-trigger'),
-            self::GAME_ENDED   => lang('Hra skončila', context: 'gate-screen-trigger'),
-            self::CUSTOM       => lang('Vlastní událost', context: 'gate-screen-trigger'),
+            self::DEFAULT      => lang('Výchozí', domain: 'gate', context: 'screen.trigger'),
+            self::GAME_LOADED  => lang('Hra načtena', domain: 'gate', context: 'screen.trigger'),
+            self::GAME_PLAYING => lang('Hra hraje', domain: 'gate', context: 'screen.trigger'),
+            self::GAME_ENDED   => lang('Hra skončila', domain: 'gate', context: 'screen.trigger'),
+            self::CUSTOM       => lang('Vlastní událost', domain: 'gate', context: 'screen.trigger'),
         };
     }
 
@@ -63,23 +63,28 @@ enum ScreenTriggerType : string
         return match ($this) {
             self::DEFAULT      => lang(
                        'Obrazovka se zobrazuje jako výchozí, pokud žádná jiná před ní nesplňuje podmínku.',
-              context: 'gate-screen-trigger'
+              domain : 'gate',
+              context: 'screen.trigger'
             ),
             self::GAME_LOADED  => lang(
                        'Obrazovka se zobrazí, pokud je poslední hra načtená, ale nespuštěná.',
-              context: 'gate-screen-trigger'
+              domain : 'gate',
+              context: 'screen.trigger'
             ),
             self::GAME_PLAYING => lang(
                        'Obrazovka se zobrazí, pokud poslední hra právě probíhá.',
-              context: 'gate-screen-trigger'
+              domain : 'gate',
+              context: 'screen.trigger'
             ),
             self::GAME_ENDED   => lang(
                        'Obrazovka se zobrazí, pokud poseldní hra už skončila.',
-              context: 'gate-screen-trigger'
+              domain : 'gate',
+              context: 'screen.trigger'
             ),
             self::CUSTOM       => lang(
                        'Obrazovka se zobrazí, pokud se vyvolá nějaká manuální událost.',
-              context: 'gate-screen-trigger'
+              domain : 'gate',
+              context: 'screen.trigger'
             ),
         };
     }

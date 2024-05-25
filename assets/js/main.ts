@@ -1,4 +1,4 @@
-import {toAscii} from './includes/functions';
+import {setCookie, toAscii} from './includes/functions';
 import {Tooltip} from 'bootstrap';
 import route from './router';
 import {PageInfo} from './interfaces/pageInfo';
@@ -77,6 +77,14 @@ window.addEventListener('load', () => {
 				const e = new Event('change', {bubbles: true});
 				target.dispatchEvent(e);
 			});
+		});
+	});
+	document.querySelectorAll<HTMLElement>('[data-set-lang]').forEach(element => {
+		const lang = element.dataset.setLang;
+		element.addEventListener('click', e => {
+			e.preventDefault();
+			setCookie('lang', lang);
+			window.location.reload();
 		});
 	});
 

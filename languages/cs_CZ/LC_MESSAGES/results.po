@@ -1,0 +1,946 @@
+msgid ""
+msgstr ""
+"Content-Transfer-Encoding: 8bit\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: cs_CZ\n"
+"Language-Team: Czech\n"
+"Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
+"MIME-Version: 1.0\n"
+"PO-Revision-Date: 2024-03-23 17:04\n"
+"POT-Creation-Date: 2021-12-01 12:05+0100\n"
+"Plural-Forms: nplurals=4; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 3;\n"
+"Project-Id-Version: laserarenacontrol\n"
+
+msgctxt "info"
+msgid "Datum"
+msgstr "Datum"
+
+msgctxt "info"
+msgid "Herní mód"
+msgstr "Herní mód"
+
+msgctxt "info"
+msgid "Počet hráčů"
+msgstr "Počet hráčů"
+
+msgctxt "info"
+msgid "Počet týmů"
+msgstr "Počet týmů"
+
+msgctxt "scoring"
+msgid "Zásah protihráče"
+msgstr "Zásah protihráče"
+
+msgctxt "scoring"
+msgid "Zasažen protihráčem"
+msgstr "Zasažen protihráčem"
+
+msgctxt "scoring"
+msgid "Zásah spoluhráče"
+msgstr "Zásah spoluhráče"
+
+msgctxt "scoring"
+msgid "Zasažen spouhráčem"
+msgstr "Zasažen spoluhráčem"
+
+msgctxt "scoring"
+msgid "Zasažen minou"
+msgstr "Zasažen minou"
+
+msgctxt "scoring"
+msgid "Body za výstřel"
+msgstr "Body za výstřel"
+
+msgctxt "scoring"
+msgid "Samopal"
+msgstr "Samopal"
+
+msgctxt "scoring"
+msgid "Neviditelnost"
+msgstr "Neviditelnost"
+
+msgctxt "scoring"
+msgid "Agent"
+msgstr "Agent"
+
+msgctxt "scoring"
+msgid "Štít"
+msgstr "Štít"
+
+msgctxt "player"
+msgid "Jméno"
+msgstr "Jméno"
+
+msgctxt "player"
+msgid "Tým"
+msgstr "Tým"
+
+msgctxt "player"
+msgid "Skóre"
+msgstr "Skóre"
+
+msgctxt "player"
+msgid "Počet výstřelů"
+msgstr "Počet výstřelů"
+
+msgctxt "player"
+msgid "Počet střel do prázdna"
+msgstr "Počet střel do prázdna"
+
+msgctxt "player"
+msgid "Úspěšnost"
+msgstr "Úspěšnost"
+
+msgctxt "player"
+msgid "Hráči"
+msgstr "Hráči"
+
+msgctxt "player"
+msgid "Zásahy"
+msgstr "Zásahy"
+
+msgctxt "player"
+msgid "Smrti"
+msgstr "Smrti"
+
+msgctxt "player"
+msgid "Týmy"
+msgstr "Týmy"
+
+msgctxt "player"
+msgid "Soupeř"
+msgstr "Soupeř"
+
+msgctxt "player"
+msgid "Vlastní"
+msgstr "Vlastní"
+
+msgctxt "today"
+msgid "Umístění dne"
+msgstr "Umístění dne"
+
+msgctxt "today"
+msgid "Jméno"
+msgstr "Jméno"
+
+msgctxt "today"
+msgid "Denní pořadí podle"
+msgstr "Denní pořadí podle"
+
+msgctxt "today"
+msgid "Skóre"
+msgstr "Skóre"
+
+msgctxt "today"
+msgid "Přesnosti"
+msgstr "Přesnosti"
+
+msgctxt "today"
+msgid "Zásahů"
+msgstr "Zásahů"
+
+msgctxt "today"
+msgid "Smrtí"
+msgstr "Smrtí"
+
+msgctxt "today"
+msgid "Dnes odehráno"
+msgstr "Dnes odehráno"
+
+msgctxt "today"
+msgid "%d hra"
+msgid_plural "%d her"
+msgstr[0] "%d hra"
+msgstr[1] "%d hry"
+msgstr[2] "%d her"
+msgstr[3] "%d her"
+
+msgctxt "today"
+msgid "%d tým"
+msgid_plural "%d týmů"
+msgstr[0] "%d tým"
+msgstr[1] "%d týmy"
+msgstr[2] "%d týmů"
+msgstr[3] "%d týmů"
+
+msgctxt "today"
+msgid "%d hráč"
+msgid_plural "%d hráčů"
+msgstr[0] "%d hráč"
+msgstr[1] "%d hráči"
+msgstr[2] "%d hráčů"
+msgstr[3] "%d hráčů"
+
+msgctxt "hits"
+msgid "Zásahy hráčů"
+msgstr "Zásahy hráčů"
+
+msgctxt "hits"
+msgid "Zasáhl si hráče"
+msgstr "Zasáhl si hráče"
+
+msgctxt "team"
+msgid "Výsledky týmů"
+msgstr "Výsledky týmů"
+
+msgctxt "team"
+msgid "Tým"
+msgstr "Tým"
+
+msgctxt "team"
+msgid "Zásahů"
+msgstr "Zásahů"
+
+msgctxt "team"
+msgid "Skóre"
+msgstr "Skóre"
+
+msgctxt "team"
+msgid "Úspěšnost"
+msgstr "Úspěšnost"
+
+msgctxt "team"
+msgid "Výstřelů"
+msgstr "Výstřelů"
+
+msgctxt "bests"
+msgid "Ti nej..."
+msgstr "Ti nej..."
+
+msgctxt "bests"
+msgid "Největší terminátor"
+msgstr "Největší terminátor"
+
+msgctxt "bests"
+msgid "Objekt největšího zájmu"
+msgstr "Objekt největšího zájmu"
+
+msgctxt "bests"
+msgid "Absolutní vítěz"
+msgstr "Absolutní vítěz"
+
+msgctxt "bests"
+msgid "Hráč s nejlepší muškou"
+msgstr "Hráč s nejlepší muškou"
+
+msgctxt "bests"
+msgid "Nejúspornější střelec"
+msgstr "Nejúspornější střelec"
+
+msgctxt "bests"
+msgid "Největší mimoň"
+msgstr "Největší mimoň"
+
+msgctxt "bests"
+msgid "Zabiják vlastního týmu"
+msgstr "Zabiják vlastního týmu"
+
+msgctxt "bests"
+msgid "Největší vlastňák"
+msgstr "Největší vlastňák"
+
+msgctxt "bests"
+msgid "Drtič min"
+msgstr "Drtič min"
+
+msgctxt "style"
+msgid "Styl"
+msgstr "Styl"
+
+msgctxt "style"
+msgid "Základní"
+msgstr "Základní"
+
+msgctxt "style"
+msgid "Čerti"
+msgstr "Čerti"
+
+msgctxt "style"
+msgid "Zima"
+msgstr "Zima"
+
+msgctxt "style"
+msgid "Valentýn"
+msgstr "Valentýn"
+
+msgctxt "style"
+msgid "Vánoce"
+msgstr "Vánoce"
+
+msgctxt "style"
+msgid "Nový rok"
+msgstr "Nový rok"
+
+msgctxt "style"
+msgid "Template"
+msgstr "Šablona"
+
+msgctxt "style"
+msgid "Default"
+msgstr "Základní"
+
+msgctxt "player"
+msgid "K:D"
+msgstr "K:D"
+
+msgctxt "player"
+msgid "Nejoblíbenější cíl"
+msgstr "Nejoblíbenější cíl"
+
+msgctxt "player"
+msgid "Největší zabiják"
+msgstr "Největší zabiják"
+
+msgid "Vítězství"
+msgstr "Vítězství"
+
+msgid "Remíza"
+msgstr "Remíza"
+
+msgctxt "team"
+msgid "Ztráty základny"
+msgstr "Ztráty základny"
+
+msgctxt "player"
+msgid "Zbývá životů"
+msgstr "Zbývá životů"
+
+msgctxt "style.settings"
+msgid "Name"
+msgstr "Jméno"
+
+msgctxt "style.settings"
+msgid "Primary color"
+msgstr "Primární barva"
+
+msgctxt "style.settings"
+msgid "Dark color"
+msgstr "Tmavá barva"
+
+msgctxt "style.settings"
+msgid "Light color"
+msgstr "Světlá barva"
+
+msgctxt "style.settings"
+msgid "Background"
+msgstr "Pozadí"
+
+msgctxt "style.settings"
+msgid "Tiskové styly"
+msgstr "Tiskové styly"
+
+msgctxt "style.settings"
+msgid "Add style"
+msgstr "Přidat styl"
+
+msgctxt "style"
+msgid "Test"
+msgstr "Test"
+
+msgctxt "style.settings"
+msgid "Styl"
+msgstr "Styl"
+
+msgctxt "style"
+msgid "Graphical"
+msgstr "Grafický"
+
+msgctxt "bests"
+msgid "Nedotknutelný"
+msgstr "Nedotknutelný"
+
+msgctxt "bests"
+msgid "Sniper"
+msgstr "Sniper"
+
+msgctxt "bests"
+msgid "Hráč"
+msgstr "Hráč"
+
+msgid "Výsledky hráčů"
+msgstr "Výsledky hráčů"
+
+msgctxt "player"
+msgid "Výstřely"
+msgstr "Výstřely"
+
+msgctxt "bests"
+msgid "Vyrovnaný"
+msgstr "Vyrovnaný"
+
+msgctxt "bests"
+msgid "Poloviční sniper"
+msgstr "Poloviční sniper"
+
+msgctxt "bests"
+msgid "Zabiják"
+msgstr "Zabiják"
+
+msgctxt "bests"
+msgid "Nula"
+msgstr "Nula"
+
+msgctxt "bests"
+msgid "Potahal tým"
+msgstr "Potahal tým"
+
+msgctxt "bests"
+msgid "Občas se i trefí"
+msgstr "Občas se i trefí"
+
+msgctxt "bests"
+msgid "Zasedlý"
+msgstr "Zasedlý"
+
+msgctxt "bests"
+msgid "Pronásledovaný"
+msgstr "Pronásledovaný"
+
+msgid "%d zabití"
+msgstr "%d zabití"
+
+msgid "%d smrt"
+msgid_plural "%d smrtí"
+msgstr[0] "%d smrt"
+msgstr[1] "%d smrti"
+msgstr[2] "%d smrtí"
+msgstr[3] "%d smrtí"
+
+msgctxt "bests"
+msgid "Tahoun týmu"
+msgstr "Tahoun týmu"
+
+msgctxt "bests"
+msgid "Ďábel"
+msgstr "Ďábel"
+
+msgctxt "bests"
+msgid "Skóre nenalezeno"
+msgstr "Skóre nenalezeno"
+
+msgctxt "bests"
+msgid "Výstřely nenalezeny"
+msgstr "Výstřely nenalezeny"
+
+msgctxt "info"
+msgid "Kód hry"
+msgstr "Kód hry"
+
+msgid "Sniper"
+msgstr "Sniper"
+
+msgid "Mega střelec"
+msgstr "Mega střelec"
+
+msgid "Predátor"
+msgstr "Predátor"
+
+msgid "Cíl"
+msgstr "Cíl"
+
+msgid "%d shot"
+msgid_plural "%d shots"
+msgstr[0] "%d výstřel"
+msgstr[1] "%d výstřely"
+msgstr[2] "%d výstřelů"
+msgstr[3] "%d výstřelů"
+
+msgid "%d hit"
+msgid_plural "%d hits"
+msgstr[0] "%d zásah"
+msgstr[1] "%d zásahy"
+msgstr[2] "%d zásahů"
+msgstr[3] "%d zásahů"
+
+msgid "%d death"
+msgid_plural "%d deaths"
+msgstr[0] "%d smrt"
+msgstr[1] "%d smrti"
+msgstr[2] "%d smrtí"
+msgstr[3] "%d smrtí"
+
+msgctxt "style.settings"
+msgid "Print styles dates"
+msgstr "Data tiskových stylů"
+
+msgctxt "style.settings"
+msgid "Landscape background"
+msgstr "Pozadí na šířku"
+
+msgctxt "style.settings"
+msgid "Print defaults"
+msgstr "Nastavení tisku"
+
+msgctxt "style.settings"
+msgid "Default print style"
+msgstr "Základní tiskový styl"
+
+msgctxt "style.settings"
+msgid "Default template"
+msgstr "Základní šablona"
+
+msgctxt "info"
+msgid "Podrobnější výsledky zde"
+msgstr "Podrobnější výsledky zde"
+
+msgctxt "bests"
+msgid "Férový hráč"
+msgstr "Férový hráč"
+
+msgctxt "bests"
+msgid "Terč"
+msgstr "Terč"
+
+msgctxt "bests.description"
+msgid "Staň se hráčem s největším skóre hry."
+msgstr "Staň se hráčem s největším skóre hry."
+
+msgctxt "bests.description"
+msgid "Staň se hráčem s největším počtem zásahů hry."
+msgstr "Staň se hráčem s největším počtem zásahů hry."
+
+msgctxt "bests.description"
+msgid "Staň se hráčem s největším počtem smrtí hry."
+msgstr "Staň se hráčem s největším počtem smrtí hry."
+
+msgctxt "bests.description"
+msgid "Staň se nejpřesnějším hráčem hry."
+msgstr "Staň se nejpřesnějším hráčem hry."
+
+msgctxt "bests.description"
+msgid "Staň se hráčem s nejméně výstřely z celé hry."
+msgstr "Staň se hráčem s nejméně výstřely z celé hry."
+
+msgctxt "bests.description"
+msgid "Staň se hráčem, který se nejvícekrát netrefil."
+msgstr "Staň se hráčem, který se nejvícekrát netrefil."
+
+msgctxt "bests.description"
+msgid "Staň se hrářem, který nejvíckát zasáhnul spoluhráče."
+msgstr "Staň se hráčem, který nejvíckát zasáhnul spoluhráče."
+
+msgctxt "bests.description"
+msgid "Staň se hráčem, kterého nejvíckrát trefili spoluhráči."
+msgstr "Staň se hráčem, kterého nejvíckrát trefili spoluhráči."
+
+msgctxt "bests.description"
+msgid "Získej nejvíce bonusů za hru."
+msgstr "Získej nejvíce bonusů za hru."
+
+msgctxt "bests.description"
+msgid "Zemři méně než 10krát za hru."
+msgstr "Zemři méně než 10krát za hru."
+
+msgctxt "bests.description"
+msgid "Získej přesnost alespoň 95% za hru."
+msgstr "Získej přesnost alespoň 95% za hru."
+
+msgctxt "bests.description"
+msgid "Získej přesnost alespoň 50% za hru."
+msgstr "Získej přesnost alespoň 50% za hru."
+
+msgctxt "bests.description"
+msgid "Získej přesnost maximálně 5% za hru."
+msgstr "Získej přesnost maximálně 5% za hru."
+
+msgctxt "bests.description"
+msgid "Měj téměř stejně zásahů a smrtí."
+msgstr "Měj téměř stejně zásahů a smrtí."
+
+msgctxt "bests.description"
+msgid "Měj alespoň 2x tolik zásahů co smrtí."
+msgstr "Měj alespoň 2x tolik zásahů co smrtí."
+
+msgctxt "bests.description"
+msgid "Měl alespoň přibližně 2x tolik smrtí co zásahů."
+msgstr "Měj alespoň přibližně 2x tolik smrtí co zásahů."
+
+msgctxt "bests.description"
+msgid "Měj 0 skóre."
+msgstr "Měj 0 skóre."
+
+msgctxt "bests.description"
+msgid "Získej alespoň přibližně polovinu skóre celého tvého týmu."
+msgstr "Získej alespoň přibližně polovinu skóre celého tvého týmu."
+
+msgctxt "bests.description"
+msgid "Alespoň přibližně polovina všech tvých zásahů je jen jeden hráč."
+msgstr "Alespoň přibližně polovina všech tvých zásahů je jen jeden hráč."
+
+msgctxt "bests.description"
+msgid "Alespoň přibližně polovina všech tvých smrtí je jen jeden hráč."
+msgstr "Alespoň přibližně polovina všech tvých smrtí je jen jeden hráč."
+
+msgctxt "bests.description"
+msgid "Získej 666 skóre nebo výstřelů."
+msgstr "Získej 666 skóre nebo výstřelů."
+
+msgctxt "bests.description"
+msgid "Získej 404, 4040, nebo 40400 skóre."
+msgstr "Získej 404, 4040, nebo 40400 skóre."
+
+msgctxt "bests.description"
+msgid "Vystřel 404krát."
+msgstr "Vystřel 404krát."
+
+msgctxt "bests.description"
+msgid "Zasáhni všechny své nepřátele stejněkrát (přibližně)."
+msgstr "Zasáhni všechny své nepřátele stejněkrát (přibližně)."
+
+msgctxt "bests.description"
+msgid "Průměrný hráč. Bohužel na tebe nesedí žádná z trofejí."
+msgstr "Průměrný hráč. Bohužel na tebe nesedí žádná z trofejí."
+
+msgid "On-line detailní výsledky"
+msgstr "On-line detailní výsledky"
+
+msgid "Skóre"
+msgstr "Skóre"
+
+msgid "Výstřely"
+msgstr "Výstřely"
+
+msgid "Zásahy"
+msgstr "Zásahy"
+
+msgid "Smrti"
+msgstr "Smrti"
+
+msgid "Zásahy/Smrti od spoluhráčů"
+msgstr "Zásahy/Smrti od spoluhráčů"
+
+msgid "Bonusy"
+msgstr "Bonusy"
+
+msgctxt "bonus"
+msgid "Agent"
+msgstr "Agent"
+
+msgctxt "bonus"
+msgid "Neviditelnost"
+msgstr "Neviditelnost"
+
+msgctxt "bonus"
+msgid "Samopal"
+msgstr "Samopal"
+
+msgctxt "bonus"
+msgid "Štít"
+msgstr "Štít"
+
+msgctxt "bests.description"
+msgid "Staň se hráčem s největším skóre."
+msgstr "Staň se hráčem s největším skóre."
+
+msgctxt "bests.description"
+msgid "Staň se hráčem s největším počtem zásahů."
+msgstr "Staň se hráčem s největším počtem zásahů."
+
+msgctxt "bests.description"
+msgid "Staň se hráčem s největším počtem smrtí."
+msgstr "Staň se hráčem s největším počtem smrtí."
+
+msgctxt "bests.description"
+msgid "Staň se nejpřesnějším hráčem."
+msgstr "Staň se nejpřesnějším hráčem."
+
+msgid "Zásahy od/do spoluhráčů"
+msgstr "Zásahy od/do spoluhráčů"
+
+msgid "Odehráno her"
+msgstr "Odehráno her"
+
+msgctxt "today"
+msgid "Dnešní pořadí podle"
+msgstr "Dnešní pořadí podle"
+
+msgctxt "today"
+msgid "Výstřelů"
+msgstr "Výstřelů"
+
+msgctxt "info"
+msgid "Body za zásah"
+msgstr "Body za zásah"
+
+msgctxt "info"
+msgid "Body za smrt"
+msgstr "Body za smrt"
+
+msgctxt "info"
+msgid "Body za zásah vlastního"
+msgstr "Body za zásah vlastního"
+
+msgctxt "info"
+msgid "Body za smrt od vlastního hráče"
+msgstr "Body za smrt od vlastního hráče"
+
+msgctxt "bests"
+msgid "Získané trofeje"
+msgstr "Získané trofeje"
+
+msgctxt "bests"
+msgid "Zobrazit dostupné trofeje"
+msgstr "Zobrazit dostupné trofeje"
+
+msgid "Střely do prázdna"
+msgstr "Střely do prázdna"
+
+msgctxt "hits"
+msgid "Zásahy do hráčů"
+msgstr "Zásahy do hráčů"
+
+msgctxt "hits"
+msgid "Smrti od hráčů"
+msgstr "Smrti od hráčů"
+
+msgctxt "bests"
+msgid "Dostupné trofeje"
+msgstr "Dostupné trofeje"
+
+msgctxt "info"
+msgid "Body smrt od miny"
+msgstr "Body smrt od miny"
+
+msgctxt "info"
+msgid "Body za bonus"
+msgstr "Body za bonus"
+
+msgctxt "bonus"
+msgid "agent"
+msgstr "agent"
+
+msgctxt "bonus"
+msgid "neviditelnost"
+msgstr "neviditelnost"
+
+msgctxt "bonus"
+msgid "samopal"
+msgstr "samopal"
+
+msgctxt "bonus"
+msgid "štít"
+msgstr "štít"
+
+msgctxt "bests"
+msgid "Zobrazit všechny trofeje"
+msgstr "Zobrazit všechny trofeje"
+
+msgctxt "today"
+msgid "Klikněte níže na okénko pro zobrazení tabulky dnešního pořadí."
+msgstr "Klikněte níže na okénko pro zobrazení tabulky dnešního pořadí."
+
+msgctxt "today"
+msgid "Zobrazit dnešní pořadí"
+msgstr "Zobrazit dnešní pořadí"
+
+msgctxt "bests"
+msgid "Bohužel na tebe nesedí žádná z trofejí..."
+msgstr "Bohužel na tebe nesedí žádná z trofejí..."
+
+msgid "Bodování"
+msgstr "Bodování"
+
+msgctxt "info"
+msgid "Skupina"
+msgstr "Skupina"
+
+msgctxt "group"
+msgid "Předchozí hra"
+msgstr "Předchozí hra"
+
+msgctxt "group"
+msgid "Následující hra"
+msgstr "Následující hra"
+
+msgctxt "info"
+msgid "Hudební mód"
+msgstr "Hudební mód"
+
+msgctxt "group"
+msgid "Předchozí hra hráče %s"
+msgstr "Předchozí hra hráče %s"
+
+msgctxt "group"
+msgid "Následující hra hráče %s"
+msgstr "Následující hra hráče %s"
+
+msgctxt "hits"
+msgid "Zasáhlo si hráče"
+msgstr "Zasáhlo si hráče"
+
+msgid "Umístění"
+msgstr "Umístění"
+
+msgctxt "hits"
+msgid "Zasáhla si hráče"
+msgstr "Zasáhla si hráče"
+
+msgctxt "hits"
+msgid "Zásahy do týmů"
+msgstr "Zásahy do týmů"
+
+msgctxt "hits"
+msgid "Smrti od týmů"
+msgstr "Smrti od týmů"
+
+msgctxt "today"
+msgid "Klikněte níže na okénko pro zobrazení grafu vašeho umístění."
+msgstr "Klikněte níže na okénko pro zobrazení grafu vašeho umístění."
+
+msgctxt "today"
+msgid "Zobrazit umístění"
+msgstr "Zobrazit umístění"
+
+msgctxt "hits"
+msgid "Hry proti dalším týmům"
+msgstr "Hry proti dalším týmům"
+
+msgid "Agent"
+msgstr ""
+
+msgid "Neviditelnost"
+msgstr ""
+
+msgid "Samopal"
+msgstr ""
+
+msgid "Štít"
+msgstr ""
+
+msgid "Kód hry"
+msgstr ""
+
+msgid "Datum"
+msgstr ""
+
+msgid "Nejoblíbenější cíl"
+msgstr ""
+
+msgid "Největší zabiják"
+msgstr ""
+
+msgid "Zasáhl si hráče"
+msgstr ""
+
+msgid "Staň se hráčem s největším skóre."
+msgstr ""
+
+msgid "Největší terminátor"
+msgstr ""
+
+msgid "Staň se hráčem s největším počtem zásahů."
+msgstr ""
+
+msgid "Staň se hráčem s největším počtem smrtí."
+msgstr ""
+
+msgid "Staň se nejpřesnějším hráčem."
+msgstr ""
+
+msgid "Staň se hráčem s nejméně výstřely z celé hry."
+msgstr ""
+
+msgid "Staň se hráčem, který se nejvícekrát netrefil."
+msgstr ""
+
+msgid "Staň se hrářem, který nejvíckát zasáhnul spoluhráče."
+msgstr ""
+
+msgid "Staň se hráčem, kterého nejvíckrát trefili spoluhráči."
+msgstr ""
+
+msgid "Získej nejvíce bonusů za hru."
+msgstr ""
+
+msgid "Nedotknutelný"
+msgstr ""
+
+msgid "Zemři méně než 10krát za hru."
+msgstr ""
+
+msgid "Získej přesnost alespoň 95% za hru."
+msgstr ""
+
+msgid "Poloviční sniper"
+msgstr ""
+
+msgid "Získej přesnost alespoň 50% za hru."
+msgstr ""
+
+msgid "Občas se i trefí"
+msgstr ""
+
+msgid "Získej přesnost maximálně 5% za hru."
+msgstr ""
+
+msgid "Vyrovnaný"
+msgstr ""
+
+msgid "Měj téměř stejně zásahů a smrtí."
+msgstr ""
+
+msgid "Zabiják"
+msgstr ""
+
+msgid "Měj alespoň 2x tolik zásahů co smrtí."
+msgstr ""
+
+msgid "Terč"
+msgstr ""
+
+msgid "Měl alespoň přibližně 2x tolik smrtí co zásahů."
+msgstr ""
+
+msgid "Nula"
+msgstr ""
+
+msgid "Měj 0 skóre."
+msgstr ""
+
+msgid "Tahoun týmu"
+msgstr ""
+
+msgid "Získej alespoň přibližně polovinu skóre celého tvého týmu."
+msgstr ""
+
+msgid "Zasedlý"
+msgstr ""
+
+msgid "Alespoň přibližně polovina všech tvých zásahů je jen jeden hráč."
+msgstr ""
+
+msgid "Pronásledovaný"
+msgstr ""
+
+msgid "Alespoň přibližně polovina všech tvých smrtí je jen jeden hráč."
+msgstr ""
+
+msgid "Ďábel"
+msgstr ""
+
+msgid "Získej 666 skóre nebo výstřelů."
+msgstr ""
+
+msgid "Skóre nenalezeno"
+msgstr ""
+
+msgid "Získej 404, 4040, nebo 40400 skóre."
+msgstr ""
+
+msgid "Výstřely nenalezeny"
+msgstr ""
+
+msgid "Vystřel 404krát."
+msgstr ""
+
+msgid "Férový hráč"
+msgstr ""
+
+msgid "Zasáhni všechny své nepřátele stejněkrát (přibližně)."
+msgstr ""
+
+msgid "Hráč"
+msgstr ""
+
+msgid "Průměrný hráč. Bohužel na tebe nesedí žádná z trofejí."
+msgstr ""

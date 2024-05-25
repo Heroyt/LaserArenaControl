@@ -32,13 +32,14 @@ class HighlightsScreen extends GateScreen
      * @inheritDoc
      */
     public static function getName() : string {
-        return lang('Dnešní zajímavosti z her', context: 'gate-screens');
+        return lang('Dnešní zajímavosti z her', domain: 'gate', context: 'screens');
     }
 
     public static function getDescription() : string {
         return lang(
                    'Obrazovka zobrazující zajímavosti z dnešních odehraných her.',
-          context: 'gate-screens-description'
+          domain : 'gate',
+          context: 'screens.description'
         );
     }
 
@@ -50,14 +51,14 @@ class HighlightsScreen extends GateScreen
     }
 
     public static function getGroup() : string {
-        return lang('Denní statistiky', context: 'gate-screens-groups');
+        return lang('Denní statistiky', domain: 'gate', context: 'screens.groups');
     }
 
     /**
      * @inheritDoc
      */
     public function run() : ResponseInterface {
-        $date = (string) App::getRequest()->getGet('date', 'now');
+        $date = (string) App::getInstance()->getRequest()->getGet('date', 'now');
         $today = new DateTimeImmutable($date);
 
         $this->highlights->refresh();

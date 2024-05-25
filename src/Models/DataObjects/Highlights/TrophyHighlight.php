@@ -69,7 +69,8 @@ class TrophyHighlight extends GameHighlight
 						Gender::FEMALE => '%s si zasedla na %s',
 						Gender::OTHER  => '%s si zasedlo na %s',
 					},
-					context: 'results.highlights'
+          domain : 'results',
+          context: 'highlights'
 				),
 				'@'.$name.'@',
 				'@'.$name2.'@<'.NameInflectionService::accusative($name2).'>'
@@ -85,16 +86,17 @@ class TrophyHighlight extends GameHighlight
 						Gender::FEMALE => '%s byla pronásledovaná od %s',
 						Gender::OTHER  => '%s bylo pronásledováno od %s',
 					},
-					context: 'results.highlights'
+          domain : 'results',
+          context: 'highlights'
 				),
 				'@'.$name.'@',
 				'@'.$name2.'@<'.NameInflectionService::genitive($name2).'>'
 			);
 		}
 		return sprintf(
-			lang('%s získává trofej: %s', context: 'results.highlights'),
+      lang('%s získává trofej: %s', domain: 'results', context: 'highlights'),
 			'@'.$name.'@',
-			($fields[$this->value] ?? ['name' => lang('Hráč', context: 'results.bests')])['name']
+      ($fields[$this->value] ?? ['name' => lang('Hráč', domain: 'results', context: 'bests')])['name']
 		);
 	}
 }

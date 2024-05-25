@@ -6,21 +6,21 @@
 	<form action="{link ['settings']}" method="post" class="text-center autosave"
 		  id="general-settings-form" enctype="multipart/form-data">
 		<div class="me-4 last-save-wrapper text-end position-fixed end-0">
-			{lang 'Last saved:'} <span class="last-save" data-target="#general-settings-form">{lang 'never'}</span>
+            {_'Naposledy uloženo:'} <span class="last-save" data-target="#general-settings-form">{_'never'}</span>
 		</div>
-		<h2>{lang 'General settings', context: 'settings'}:</h2>
+        <h2>{_'General settings', context: 'settings'}:</h2>
         <div class="form-group my-3" n:if="$featureConfig->isFeatureEnabled('liga')">
-			<label for="api_key">{lang 'API klíč', context: 'settings'}:</label>
+            <label for="api_key">{_'API klíč', context: 'settings'}:</label>
 			<input type="text" name="api_key" class="form-control" id="api_key"
 				   value="{\App\Core\Info::get('liga_api_key', '')}">
 		</div>
 		<div class="form-group my-3" n:if="$featureConfig->isFeatureEnabled('control')">
-			<label for="lmx_ip">{lang 'IP adresa LaserMaxx konzole', context: 'settings'}:</label>
+            <label for="lmx_ip">{_'IP adresa LaserMaxx konzole', context: 'settings'}:</label>
 			<input type="text" name="lmx_ip" class="form-control" id="lmx_ip"
 				   value="{\App\Core\Info::get('lmx_ip', '')}">
 		</div>
 		<div class="form-group my-3" n:if="$featureConfig->isFeatureEnabled('gates')">
-			<label for="gates_ips">{lang 'IP adresy brán', context: 'settings'}:</label>
+            <label for="gates_ips">{_'IP adresy brán', context: 'settings'}:</label>
 			<input type="text" name="gates_ips" class="form-control" id="gates_ips"
 				   value="{implode(', ', (array) \App\Core\Info::get('gates_ips', []))}">
 		</div>
@@ -30,7 +30,7 @@
 			</div>
 			<div class="col-sm-6">
 				<label class="form-label" for="logo">
-					{lang 'Logo'}:
+                    {_'Logo'}:
 				</label>
 				<input id="logo" name="logo" type="file"
 					   accept="image/svg+xml,image/png" class="form-control">
@@ -38,7 +38,7 @@
 		</div>
 		<p class="my-4">
 			<button class="btn btn-success btn-lg" type="submit" data-action="autosave" data-prevent="true">
-				{lang 'Send', context: 'actions'}
+                {_'Odeslat', context: 'actions'}
 			</button>
 		</p>
 	</form>

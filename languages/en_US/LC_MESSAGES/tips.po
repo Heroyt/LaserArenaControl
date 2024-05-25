@@ -1,0 +1,107 @@
+msgid ""
+msgstr ""
+"Content-Transfer-Encoding: 8bit\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: en_US\n"
+"Language-Team: English\n"
+"Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
+"MIME-Version: 1.0\n"
+"PO-Revision-Date: 2024-03-23 17:04\n"
+"POT-Creation-Date: 2021-12-01 12:05+0100\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Project-Id-Version: laserarenacontrol\n"
+
+msgid "Držení zbraně v obou rukách je přesnější."
+msgid_plural "Držení zbraně v obou rukách je přesnější."
+msgstr[0] "Holding a gun with both hands is more accurate."
+msgstr[1] ""
+
+msgid "Jak se v aréně střílí, tak se v aréně umírá..."
+msgstr "A game a day keeps the improvements coming your way…"
+
+msgid "Trénink se vyplácí!"
+msgstr "Training pays off!"
+
+msgid "Tip #%d"
+msgstr "Hint #%d"
+
+msgid "Střílíme v Písku už od 31.12.2013!!!"
+msgstr "Shooting in Písek since 31.12.2013!!!"
+
+msgid "Ve hře vždy sleduj svoje okolí!"
+msgstr "Always be aware of your surroundings!"
+
+msgid "Čidlo na zbrani, ač nenápadné, se dá velmi dobře trefit."
+msgstr "The gun sensor is quite invisible but very easy to hit."
+
+msgid "Zkušení hráči hrajou týmově!"
+msgstr "Pro players cooperate with their teams!"
+
+msgid "Pro vyřízení osobních sporů je aréna ideální."
+msgstr "The arena is the best place to settle personal disputes."
+
+msgid "Dobití protihráče pažbou, vám žádné body nepřidá."
+msgstr "Melee hits do not add any score."
+
+msgid "Zabiják vlastního týmu, či největší vlasťnák... To je oč tu běží!"
+msgstr "Hit or be hit; there is no other way!"
+
+msgid "Vestu si oblečte vždy zbraní dobředu."
+msgstr "Always put your vest on with your gun in the front."
+
+msgid "Při týmové hře není výhodné střílet do hráčů se stejnou barvou."
+msgstr "It is not very beneficial to shoot the players with the same colour during a team deathmatch."
+
+msgid "Jen Chuck Norris vás může zastřelit baterkou na svém mobilu."
+msgstr "Only Chuck Norris can hit you with his mobile’s flashlight."
+
+msgid "Nejlepší výherní taktika je strílet do protihráčů."
+msgstr "The best winning tactic is to shoot your enemies."
+
+msgid "Nemá cenu umírat na tom samém místě. Když to nejde, uteč jinam!"
+msgstr "There is no use dying in the same place. If it’s hard, run somewhere else!"
+
+msgid "Všechny bonusy, kromě štítu, trvají 30s."
+msgstr "All powers, apart from the shield, last for the 30s."
+
+msgid "Měl bys radši hrát laser game a být úžasný!"
+msgstr "You should rather play laser game and be awesome!"
+
+msgid "Spoluhráč je nejlepší cíl. Neutíká."
+msgstr "A teammate is the best target. He doesn’t run away."
+
+msgid "#laserarenapísek"
+msgstr "#laserarenapísek"
+
+msgid "Zabití: 100 bodů, Smrt: -50 bodů, Zabití vlastního hráče: -25 bodů"
+msgstr "Hit: 100 points, Death: -50 points, Hit your teammate: -25 points"
+
+msgid "Go, go, go, go..."
+msgstr "Go, go, go, go..."
+
+msgid "Ramenní čidla se trefují nejlépe, zádová nejhůř."
+msgstr "Shoulders are the easiest to hit; back is the hardest."
+
+msgid "Pohyblivý cíl je vždycky těžší trefit."
+msgstr "A moving target is always harder to hit."
+
+msgid "Na displeji vesty po zásahu vidíte kdo vás zasáhl do jakého čidla. To pomáhá při orientaci."
+msgstr "You can see who hit you and which sensor on your vest’s display."
+
+msgid "Při výstupu z arény vždy připni zbraň k vestě."
+msgstr "When coming out from the arena, always plug your gun on the vest."
+
+msgid "LASER TAG - SUIT UP!"
+msgstr "LASER TAG - SUIT UP!"
+
+msgid "Když tě bolí nohy, kempi!"
+msgstr "If your legs hurt, try camping!"
+
+msgid "Nikdy nejsi příliš starý na laser game."
+msgstr "You’re never too old to play laser game."
+
+msgid "Nezapomeň každý květen a listopad registrovat svůj tým na turnaj!"
+msgstr "Don’t forget to sign-up for a tournament every May and November!"
+
+msgid "Oživení trvá 5 sekund."
+msgstr "Respawn is 5s."

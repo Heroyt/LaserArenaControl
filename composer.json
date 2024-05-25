@@ -5,6 +5,13 @@
   "version": "0.5.1",
   "repositories": [
     {
+      "type": "path",
+      "url": "/Users/heroyt/Projects/lsr-packages/*",
+      "options": {
+        "symlink": true
+      }
+    },
+    {
       "type": "composer",
       "url": "https://packages.laserliga.cz"
     },
@@ -49,12 +56,12 @@
     "tracy/tracy": "dev-rr as 2.10.6",
     "endroid/qr-code": "^5",
     "ext-pcntl": "*",
-    "lsr/interfaces": "^0.2",
-    "lsr/helpers": "^0.2",
-    "lsr/core": "^0.2",
-    "lsr/routing": "^0.2",
-    "lsr/logging": "^0.2",
-    "lsr/request": "^0.2",
+    "lsr/interfaces": "@dev",
+    "lsr/helpers": "@dev",
+    "lsr/core": "@dev",
+    "lsr/routing": "@dev",
+    "lsr/logging": "@dev",
+    "lsr/request": "@dev",
     "ext-zlib": "*",
     "heroyt/tournament-generator": "^0.5",
     "orisai/scheduler": "^2",

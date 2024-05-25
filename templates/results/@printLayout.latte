@@ -1,10 +1,10 @@
 {import '../symbols.latte'}
 
+{varType App\Core\App $app}
 {varType App\GameModels\Game\Game $game}
 {varType App\GameModels\Game\PrintStyle $style}
 {varType App\GameModels\Game\PrintTemplate $template}
 {varType int $copies}
-{varType array $_GET}
 
 {define containerClasses}
 {/define}
@@ -30,7 +30,7 @@
     <!-- Google Fonts Montserrat -->
     <link rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"/>
-    <link rel="stylesheet" href="{getUrl}dist/main.css?v={\App\Core\App::getCacheVersion()}">
+    <link rel="stylesheet" href="{getUrl}dist/main.css?v={$app->getCacheVersion()}">
     {block addHead}{/block}
     {ifset $game}
         <style>
@@ -93,7 +93,7 @@
             }
         }
     </style>
-    <title>{lang 'Výsledky hry'}</title>
+    <title>{translate}Výsledky hry{/translate}</title>
 </head>
 <body>
 {for $i = 0; $i < $copies; $i++}
@@ -105,7 +105,7 @@
         </div>
         <div class="tip">
             {var App\GameModels\Tip|null $tip = \App\GameModels\Tip::random()}
-            <span class="content">{sprintf(lang('Tip #%d', context: 'tips'), $tip?->id)}: {lang $tip?->text, context: 'tips'}</span>
+            <span class="content">{_'Tip #%d', domain: 'tips', format: [$tip?->id]}: {_$tip?->text, domain: 'tips'}</span>
         </div>
     </main>
 {/for}

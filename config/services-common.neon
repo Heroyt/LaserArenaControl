@@ -5,6 +5,8 @@ includes:
 	- console.neon
 extensions:
 	caching: Nette\Bridges\CacheDI\CacheExtension(%constants.tempDir%)
+	decorator: Nette\DI\Extensions\DecoratorExtension
+	inject: Nette\DI\Extensions\InjectExtension
 parameters:
 	gotenberg:
 		host: gotenberg
@@ -20,6 +22,24 @@ parameters:
 	redis:
 		host: redis
 services:
+	# Core
+	app: App\Core\App
+	translations:
+		create: Lsr\Core\Translations
+		arguments:
+			config: @config
+			defaultLang: 'cs_CZ'
+			supportedLanguages:
+				- 'cs_CZ'
+				- 'en_US'
+				- 'de_DE'
+				- 'fr_FR'
+				- 'sk_SK'
+			textDomains:
+				- 'results'
+				- 'gate'
+				- 'tips'
+
 	version: App\Services\VersionService
 	regression: App\Services\RegressionCalculator
 
@@ -70,3 +90,7 @@ search:
 			- App\Services\GameHighlight\TeamHighlightChecker
 		tags:
 			- highlightChecker
+
+decorator:
+	Lsr\Core\Controllers\Controller:
+		inject: true

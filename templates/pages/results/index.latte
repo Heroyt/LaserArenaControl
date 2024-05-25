@@ -1,17 +1,17 @@
 {layout '../../@layout.latte'}
 
+{varType Lsr\Core\Controllers\Controller $page}
 {varType App\GameModels\Game\Game[] $games}
-{varType App\GameModels\Game\Game $selected}
+{varType App\GameModels\Game\Game|null $selected}
 {varType App\GameModels\Game\PrintStyle[] $styles}
 {varType App\GameModels\Game\PrintTemplate[] $templates}
-{varType array $_GET}
 {varType int $selectedStyle}
 {varType string $selectedTemplate}
 
 {block content}
 	<div class="row">
 		<div class="col-md-3">
-			<label for="selectGame">{lang 'Game'}:</label>
+            <label for="selectGame">{translate}Game{/translate}:</label>
 			<select id="selectGame" class="form-select">
 				<option n:foreach="$games as $game" {if $selected?->code === $game->code}selected{/if}
 						value="{$game->code}">
@@ -19,29 +19,29 @@
                     {$game->start?->format('H:i')} - {$game->getMode()?->getName()} ({$game->getPlayers()|length})
 				</option>
 			</select>
-			<label for="selectStyle">{lang 'Style', context: 'results.style'}:</label>
+            <label for="selectStyle">{_'Styl', domain: 'results', context: 'style'}:</label>
 			<select id="selectStyle" class="form-select">
 				<option n:foreach="$styles as $style" {if $style->id === $selectedStyle}selected{/if}
 						value="{$style->id}">
-					{lang $style->name, context: 'results.style'}
+                    {_$style->name, domain: 'results', context: 'style'}
 				</option>
 			</select>
-			<label for="selectTemplate">{lang 'Template', context: 'results.style'}:</label>
+            <label for="selectTemplate">{_'Template', domain: 'results', context: 'style'}:</label>
 			<select id="selectTemplate" class="form-select">
 				<option n:foreach="$templates as $template" {if $template->slug === $selectedTemplate}selected{/if}
 						value="{$template->slug}">
-					{lang $template->name, context: 'results.style'}
+                    {_$template->name, domain: 'results', context: 'style'}
 				</option>
 			</select>
 		</div>
 		<div class="col-md-9" style="--size:35px;">
 			<div class="row my-2">
 				<div class="col-lg-3 lh-size">
-					<strong>{lang 'Language'}:</strong>
+                    <strong>{_'Jazyk'}:</strong>
 				</div>
 				<div class="col-lg-9">
-                    {var string $selectedLang = explode('_',$_GET['lang'] ?? App\Core\App::$language->id)[0]}
-                    {foreach App\Core\App::getSupportedLanguages() as $lang => $country}
+                    {var string $selectedLang = explode('_',$page->app->getRequest()->getQueryParams()['lang'] ?? $page->app->translations->getLang())[0]}
+                    {foreach $page->app->translations->supportedLanguages as $lang => $country}
 						<input type="radio" id="lang-{$lang}" name="lang" class="country-select-input" value="{$lang}"
 							   {if $selectedLang === $lang}checked{/if}>
 						<label class="country-select" for="lang-{$lang}">
@@ -53,7 +53,7 @@
 			</div>
 			<div class="row my-2" n:ifset="$selected">
 				<div class="col-lg-3 lh-size">
-					<strong>{lang 'In color', context: 'print'}:</strong>
+                    <strong>{_'Barevně', context: 'print'}:</strong>
 				</div>
 				<div class="col-lg-9">
 					<div class="btn-group">
@@ -63,7 +63,7 @@
 								{$i}&times;
 							</a>
 						{/for}
-						<button class="btn btn-danger" data-toggle="gate" title="{lang 'Zobrazit na Gate'}"
+                        <button class="btn btn-danger" data-toggle="gate" title="{_'Zobrazit na výsledkové tabuli'}"
 								data-id="{$selected->id}" data-system="{$selected::SYSTEM}">
 							<i class="fas fa-bullseye"></i>
 						</button>
@@ -72,7 +72,7 @@
 			</div>
 			<div class="row my-2" n:ifset="$selected">
 				<div class="col-lg-3 lh-size">
-					<strong>{lang 'Black & white', context: 'print'}:</strong>
+                    <strong>{_'Černobílé', context: 'print'}:</strong>
 				</div>
 				<div class="col-lg-9">
 					<div class="btn-group">

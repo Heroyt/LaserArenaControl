@@ -8,6 +8,10 @@ use Lsr\Exceptions\TemplateDoesNotExistException;
 
 class Evo6GameLoader extends LasermaxxGameLoader
 {
+    use MusicLoading;
+
+    public const DI_NAME = 'evo6.gameLoader';
+    public const MUSIC_FILE = LMX_DIR.'music/evo6.mp3';
 
 	public function __construct(private readonly Latte $latte) {
 	}
@@ -40,7 +44,7 @@ class Evo6GameLoader extends LasermaxxGameLoader
 
 		// Set up a correct music file
 		if (isset($loadData['meta']['music'])) {
-			$this->loadMusic((int)$loadData['meta']['music'], LMX_DIR . 'music/evo6.mp3');
+        $this->loadOrPlanMusic((int) $loadData['meta']['music']);
 		}
 
 		return $loadData['meta'];

@@ -15,8 +15,8 @@ enum MusicModeScreenLayout : string
 
     public function getReadableName() : string {
         return match ($this) {
-            self::EMPTY_SPACE => lang('Ve volném prostoru', context: 'gate.screen.type'),
-            self::FULL_SCREEN => lang('Celá obrazovka', context: 'gate.screen.type'),
+            self::EMPTY_SPACE => lang('Ve volném prostoru', domain: 'gate', context: 'screen.type'),
+            self::FULL_SCREEN => lang('Celá obrazovka', domain: 'gate', context: 'screen.type'),
         };
     }
 }

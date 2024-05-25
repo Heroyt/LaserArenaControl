@@ -7,7 +7,6 @@ use InvalidArgumentException;
 use JsonException;
 use Lsr\Core\Controllers\ApiController;
 use Lsr\Core\Requests\Request;
-use Lsr\Core\Templating\Latte;
 use Psr\Http\Message\ResponseInterface;
 use Spiral\RoadRunner\Metrics\Metrics;
 
@@ -15,11 +14,10 @@ class GameLoading extends ApiController
 {
 
     public function __construct(
-      Latte                       $latte,
       private readonly GameLoader $loader,
       private readonly Metrics    $metrics,
     ) {
-        parent::__construct($latte);
+        parent::__construct();
     }
 
     /**

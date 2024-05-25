@@ -44,7 +44,7 @@ class MusicMode extends Model
     }
 
     public function getMediaUrl() : string {
-        return str_replace(ROOT, App::getUrl(), $this->fileName);
+        return str_replace(ROOT, App::getInstance()->getBaseUrl(), $this->fileName);
     }
 
     public function setPreviewStartFromFormatted(string $formatted) : MusicMode {
@@ -60,7 +60,7 @@ class MusicMode extends Model
     }
 
     public function getPreviewUrl() : string {
-        return str_replace(ROOT, App::getUrl(), $this->getPreviewFileName());
+        return str_replace(ROOT, App::getInstance()->getBaseUrl(), $this->getPreviewFileName());
     }
 
     public function getPreviewFileName() : string {

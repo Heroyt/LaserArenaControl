@@ -22,14 +22,16 @@
     {/foreach}
 {/define}
 
-{varType \Lsr\Core\Controller $page}
+{varType Lsr\Core\Controllers\Controller $page}
+{var string $mode = $page->app->getRequest()->getCookieParams()['mode'] ?? 'light'}
 
 <!DOCTYPE html>
-<html lang="{\App\Core\App::getShortLanguageCode()}" data-bs-theme="{$_COOKIE['mode'] ?? 'light'}">
+<html lang="{$page->app->translations->getLang()}" data-bs-theme="{$mode}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=0.5">
+    <meta name="view-transition" content="same-origin"/>
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <!-- Favicon -->
     <link rel="apple-touch-icon" sizes="180x180" href="{getUrl}assets/favicon/apple-touch-icon.png">
@@ -48,18 +50,18 @@
               href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"/>
     </noscript>
     <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'"
-          href="{getUrl}dist/fontawesome.css?v={\App\Core\App::getCacheVersion()}">
+          href="{getUrl}dist/fontawesome.css?v={$page->app->getCacheVersion()}">
     <noscript>
-        <link rel="stylesheet" href="{getUrl}dist/fontawesome.css?v={\App\Core\App::getCacheVersion()}">
+        <link rel="stylesheet" href="{getUrl}dist/fontawesome.css?v={$page->app->getCacheVersion()}">
     </noscript>
-    <link rel="stylesheet" href="{getUrl}dist/main.css?v={\App\Core\App::getCacheVersion()}">
+    <link rel="stylesheet" href="{getUrl}dist/main.css?v={$page->app->getCacheVersion()}">
     <link n:foreach="$addCss as $file" rel="stylesheet"
-                                       href="{getUrl}dist/{$file}?v={\App\Core\App::getCacheVersion()}">
+                                       href="{getUrl}dist/{$file}?v={$page->app->getCacheVersion()}">
     <title>{$page->getTitle()}</title>
     {*\Tracy\Debugger::renderLoader()|noescape*}
     {include addHead}
 </head>
-<body {ifset $_COOKIE['mode']}class="{$_COOKIE['mode']}Mode"{/ifset}>
+<body class="{$mode}Mode">
 {include header}
 
 {include smallLoader}
@@ -119,16 +121,34 @@
 
 <script>
     let activeGame = null;
-    const activeLanguageCode = {\App\Core\App::getShortLanguageCode()};
+    const activeLanguageCode = {$page->app->translations->getLang()};
     const features = {\App\Core\App::getServiceByType(App\Services\FeatureConfig::class)->getFeatures()};
-    const page = {\App\Core\App::getPageInfo()};
+    const page = {$page->app->getPageInfo()};
     const prettyUrl = {\App\Core\App::isPrettyUrl()};
     const eventSourceURI ={\App\Services\EventService::getEventUrl()};
     const timerOffset = {\App\Core\Info::get('timer-offset', 0)};
 </script>
 
-<script src="{getUrl}dist/main.js?v={\App\Core\App::getCacheVersion()}" type="module"></script>
-<script n:foreach="$addJs as $js" src="{getUrl}dist/{$js}?v={\App\Core\App::getCacheVersion()}" type="module"
+<script type="speculationrules">
+    {
+      "prerender": [
+        {
+          "where": {
+            "and": [
+              { "href_matches": "/*" },
+              { "not": { "href_matches": "/lang/*" } },
+              { "not": { "selector_matches": ".no-prerender" } },
+              { "not": { "selector_matches": "[rel~=nofollow]" } }
+            ]
+          }
+        }
+      ]
+    }
+</script>
+
+
+<script src="{getUrl}dist/main.js?v={$page->app->getCacheVersion()}" type="module"></script>
+<script n:foreach="$addJs as $js" src="{getUrl}dist/{$js}?v={$page->app->getCacheVersion()}" type="module"
                                   defer></script>
 {include svgSymbols}
 </body>

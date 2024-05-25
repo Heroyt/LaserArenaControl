@@ -72,7 +72,7 @@ class Image
         $path = explode('/', str_replace(ROOT, '', $file));
         $index = count($path) - 1;
         $path[$index] = urlencode($path[$index]);
-        return App::getUrl().implode('/', $path);
+        return App::getInstance()->getBaseUrl().implode('/', $path);
     }
 
     /**

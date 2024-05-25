@@ -1,6 +1,6 @@
 {define help}
 	<button type="button" class="btn btn-info position-fixed rounded-circle trigger-help"
-			data-toggle="tooltip" title="{lang 'Nápověda'}"
+            data-toggle="tooltip" title="{_'Nápověda'}"
 			style="bottom: 2rem; left: 1rem; z-index: 10;">
 		<i class="fa-solid fa-circle-question"></i>
 	</button>
@@ -8,33 +8,33 @@
 	<div class="offcanvas offcanvas-start" tabindex="-1" id="help" aria-labelledby="helpLabel"
 		 style="--bs-offcanvas-width: 600px;">
 		<div class="offcanvas-header">
-			<h4 class="offcanvas-title" id="helpLabel">{lang 'Nápověda'}</h4>
+            <h4 class="offcanvas-title" id="helpLabel">{_'Nápověda'}</h4>
 			<button type="button" class="btn btn-link" data-bs-dismiss="offcanvas" aria-label="Close"><i
 						class="fa-solid fa-xmark"></i></button>
 		</div>
 		<div class="offcanvas-body">
-			<h5>{lang 'Klávesové zkratky', context: 'help'}</h5>
-			<h6>{lang 'Globální', context: 'help'}</h6>
+            <h5>{_'Klávesové zkratky', context: 'help'}</h5>
+            <h6>{_'Globální', context: 'help'}</h6>
 			<table class="table table-striped align-middle">
 				<tbody>
 				<tr>
 					<th class="text-center py-3">
-						<span class="bg-primary text-bg-primary p-2 rounded">{lang 'Enter', context: 'help.keys'}</span>
+                        <span class="bg-primary text-bg-primary p-2 rounded">{_'Enter', context: 'help.keys'}</span>
 						|
-						<span class="bg-primary text-bg-primary p-2 rounded">{lang 'Mezerník', context: 'help.keys'}</span>
+                        <span class="bg-primary text-bg-primary p-2 rounded">{_'Mezerník', context: 'help.keys'}</span>
 					</th>
 					<td>
-						{lang 'Odeslat formulář. Nahraje / Spustí hru.', context: 'help'}
+                        {_'Odeslat formulář. Nahraje / Spustí hru.', context: 'help'}
 					</td>
 				</tr>
 				<tr>
 					<th class="text-center py-3">
-						<span class="bg-primary text-bg-primary p-2 rounded">{lang 'CTRL', context: 'help.keys'}</span>
+                        <span class="bg-primary text-bg-primary p-2 rounded">{_'CTRL', context: 'help.keys'}</span>
 						+
-						<span class="bg-primary text-bg-primary p-2 rounded">{lang 'Backspace', context: 'help.keys'}</span>
+                        <span class="bg-primary text-bg-primary p-2 rounded">{_'Backspace', context: 'help.keys'}</span>
 					</th>
 					<td>
-						{lang 'Smaže celý formulář.', context: 'help'}
+                        {_'Smaže celý formulář.', context: 'help'}
 					</td>
 				</tr>
 				<tr>
@@ -42,7 +42,7 @@
 						<span class="bg-primary text-bg-primary p-2 rounded">V</span>
 					</th>
 					<td>
-						{lang 'Skryje / Zobrazí variace.', context: 'help'}
+                        {_'Skryje / Zobrazí variace.', context: 'help'}
 					</td>
 				</tr>
 				<tr>
@@ -50,43 +50,43 @@
 						<span class="bg-primary text-bg-primary p-2 rounded">H</span>
 					</th>
 					<td>
-						{lang 'Skryje / Zobrazí nápovědu.', context: 'help'}
+                        {_'Skryje / Zobrazí nápovědu.', context: 'help'}
 					</td>
 				</tr>
 				</tbody>
 			</table>
-			<h6>{lang 'Zadávání hráče', context: 'help'}</h6>
-			<p class="text-muted">{lang 'Aktivní pouze při zadávání jména hráče.', context: 'help'}</p>
+            <h6>{_'Zadávání hráče', context: 'help'}</h6>
+            <p class="text-muted">{_'Aktivní pouze při zadávání jména hráče.', context: 'help'}</p>
 			<table class="table table-striped align-middle">
 				<tbody>
 				<tr>
 					<th class="text-center py-3">
-						<span class="bg-primary text-bg-primary p-2 rounded">{lang 'CTRL', context: 'help.keys'}</span>
+                        <span class="bg-primary text-bg-primary p-2 rounded">{_'CTRL', context: 'help.keys'}</span>
 						+
 						<span class="bg-primary text-bg-primary p-2 rounded">1-9</span>
 					</th>
 					<td>
-						{lang 'Nastaví tým hráče.', context: 'help'}
+                        {_'Nastaví tým hráče.', context: 'help'}
 					</td>
 				</tr>
 				<tr>
 					<th class="text-center py-3">
-						<span class="bg-primary text-bg-primary p-2 rounded">{lang 'CTRL', context: 'help.keys'}</span>
+                        <span class="bg-primary text-bg-primary p-2 rounded">{_'CTRL', context: 'help.keys'}</span>
 						+
 						<span class="bg-primary text-bg-primary p-2 rounded">S</span>
 					</th>
 					<td>
-						{lang 'Přepne nastavení VIP hráče.', context: 'help'}
+                        {_'Přepne nastavení VIP hráče.', context: 'help'}
 					</td>
 				</tr>
 				<tr>
 					<th class="text-center py-3">
-						<span class="bg-primary text-bg-primary p-2 rounded">{lang 'CTRL', context: 'help.keys'}</span>
+                        <span class="bg-primary text-bg-primary p-2 rounded">{_'CTRL', context: 'help.keys'}</span>
 						+
-						<span class="bg-primary text-bg-primary p-2 rounded">{lang 'Backspace', context: 'help.keys'}</span>
+                        <span class="bg-primary text-bg-primary p-2 rounded">{_'Backspace', context: 'help.keys'}</span>
 					</th>
 					<td>
-						{lang 'Smaže hráče.', context: 'help'}
+                        {_'Smaže hráče.', context: 'help'}
 					</td>
 				</tr>
 				<tr>
@@ -94,7 +94,7 @@
 						<span class="bg-primary text-bg-primary p-2 rounded"><i class="fa-solid fa-arrow-up"></i></span>
 					</th>
 					<td>
-						{lang 'Zvýší herní úroveň hráče.', context: 'help'}
+                        {_'Zvýší herní úroveň hráče.', context: 'help'}
 					</td>
 				</tr>
 				<tr>
@@ -103,25 +103,25 @@
 									class="fa-solid fa-arrow-down"></i></span>
 					</th>
 					<td>
-						{lang 'Sníží herní úroveň hráče.', context: 'help'}
+                        {_'Sníží herní úroveň hráče.', context: 'help'}
 					</td>
 				</tr>
 				<tr>
 					<th class="text-center py-3">
-						<span class="bg-primary text-bg-primary p-2 rounded">{lang 'TAB', context: 'help.keys'}</span>
+                        <span class="bg-primary text-bg-primary p-2 rounded">{_'TAB', context: 'help.keys'}</span>
 					</th>
 					<td>
-						{lang 'Přepne na dalšího hráče.', context: 'help'}
+                        {_'Přepne na dalšího hráče.', context: 'help'}
 					</td>
 				</tr>
 				<tr>
 					<th class="text-center py-3">
-						<span class="bg-primary text-bg-primary p-2 rounded">{lang 'SHIFT', context: 'help.keys'}</span>
+                        <span class="bg-primary text-bg-primary p-2 rounded">{_'SHIFT', context: 'help.keys'}</span>
 						+
-						<span class="bg-primary text-bg-primary p-2 rounded">{lang 'TAB', context: 'help.keys'}</span>
+                        <span class="bg-primary text-bg-primary p-2 rounded">{_'TAB', context: 'help.keys'}</span>
 					</th>
 					<td>
-						{lang 'Přepne na předchozího hráče.', context: 'help'}
+                        {_'Přepne na předchozího hráče.', context: 'help'}
 					</td>
 				</tr>
 				</tbody>

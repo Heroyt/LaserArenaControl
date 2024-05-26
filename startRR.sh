@@ -41,5 +41,6 @@ echo 'Starting...'
 echo $PWD
 rr -v
 cron &
+bash
 rr serve -d -c .rr.yaml
 echo $?

@@ -5,13 +5,6 @@
   "version": "0.5.1",
   "repositories": [
     {
-      "type": "path",
-      "url": "/Users/heroyt/Projects/lsr-packages/*",
-      "options": {
-        "symlink": true
-      }
-    },
-    {
       "type": "composer",
       "url": "https://packages.laserliga.cz"
     },

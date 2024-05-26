@@ -116,7 +116,7 @@ class HighlightsWithRtspScreen extends GateScreen implements WithSettings
               'data'     => $this->musicCount->getData(date: $today, systems: $this->systems),
               'template' => $this->musicCount->getTemplate(),
             ],
-            $this->musicCount->getData(date: $today, systems: $this->systems),
+            $this->musicCount->getGameIds(dateFrom: $today, dateTo: $today, systems: $this->systems),
           ],
           [
             $this->cache::Tags   => [

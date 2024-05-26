@@ -18,6 +18,25 @@ abstract class LasermaxxGameLoader implements LoaderInterface
 {
 
     /**
+     * @param  int  $musicId
+     * @param  string  $musicFile
+     * @return void
+     */
+    public function loadMusic(int $musicId, string $musicFile) : void {
+        try {
+            $music = MusicMode::get($musicId);
+            if (!file_exists($music->fileName)) {
+                App::getLogger()->warning('Music file does not exist - '.$music->fileName);
+            }
+            elseif (!copy($music->fileName, $musicFile)) {
+                App::getLogger()->warning('Music copy failed - '.$music->fileName);
+            }
+        } catch (ModelNotFoundException | ValidationException | DirectoryCreationException) {
+            // Not critical, doesn't need to do anything
+        }
+    }
+
+    /**
      * @param  array{
      *     playlist?:numeric,
      *     use-playlist?:numeric,
@@ -155,24 +174,5 @@ abstract class LasermaxxGameLoader implements LoaderInterface
             $loadData['meta']['music'] = (int) $musicIds[array_rand($musicIds)];
         }
         return $loadData;
-    }
-
-    /**
-     * @param  int  $musicId
-     * @param  string  $musicFile
-     * @return void
-     */
-    public function loadMusic(int $musicId, string $musicFile) : void {
-        try {
-            $music = MusicMode::get($musicId);
-            if (!file_exists($music->fileName)) {
-                App::getLogger()->warning('Music file does not exist - '.$music->fileName);
-            }
-            elseif (!copy($music->fileName, $musicFile)) {
-                App::getLogger()->warning('Music copy failed - '.$music->fileName);
-            }
-        } catch (ModelNotFoundException | ValidationException | DirectoryCreationException) {
-            // Not critical, doesn't need to do anything
-        }
     }
 }

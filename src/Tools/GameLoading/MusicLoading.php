@@ -21,35 +21,6 @@ trait MusicLoading
     private Logger $logger;
     private bool $loadAsync;
 
-    public function getLogger() : Logger {
-        if (!isset($this->logger)) {
-            $this->logger = new Logger(LOG_DIR.'loading/', $this::DI_NAME);
-        }
-        return $this->logger;
-    }
-
-    protected function getTaskProducer() : TaskProducer {
-        if (!isset($this->taskProducer)) {
-            $this->taskProducer = App::getService('taskProducer');
-        }
-        return $this->taskProducer;
-    }
-
-    protected function getConfig() : Config {
-        if (!isset($this->config)) {
-            $this->config = App::getInstance()->config;
-        }
-        return $this->config;
-    }
-
-    protected function isLoadAsync() : bool {
-        if (!isset($this->loadAsync)) {
-            $this->loadAsync = (bool) ($this->getConfig()->getConfig('ENV')['MUSIC_LOAD_ASYNC'] ?? false);
-        }
-        return $this->loadAsync;
-    }
-
-
     protected function loadOrPlanMusic(int $musicId) : void {
         // Lazy load music file in the background
         // This is useful if the music mode should be copied to some network-attached directory which could take a few seconds.
@@ -69,6 +40,27 @@ trait MusicLoading
         $this->loadMusic($musicId, $this::MUSIC_FILE);
     }
 
+    protected function isLoadAsync() : bool {
+        if (!isset($this->loadAsync)) {
+            $this->loadAsync = (bool) ($this->getConfig()->getConfig('ENV')['MUSIC_LOAD_ASYNC'] ?? false);
+        }
+        return $this->loadAsync;
+    }
+
+    protected function getConfig() : Config {
+        if (!isset($this->config)) {
+            $this->config = App::getInstance()->config;
+        }
+        return $this->config;
+    }
+
+    public function getLogger() : Logger {
+        if (!isset($this->logger)) {
+            $this->logger = new Logger(LOG_DIR.'loading/', $this::DI_NAME);
+        }
+        return $this->logger;
+    }
+
     /**
      * @param  int  $musicId
      * @return void
@@ -79,5 +71,12 @@ trait MusicLoading
           MusicLoadTask::class,
           new MusicLoadPayload($musicId, $this::MUSIC_FILE, $this::DI_NAME)
         );
+    }
+
+    protected function getTaskProducer() : TaskProducer {
+        if (!isset($this->taskProducer)) {
+            $this->taskProducer = App::getService('taskProducer');
+        }
+        return $this->taskProducer;
     }
 }

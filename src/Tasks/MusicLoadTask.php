@@ -2,10 +2,12 @@
 
 namespace App\Tasks;
 
-use App\Services\LigaApi;
+use App\Core\App;
 use App\Tasks\Payloads\MusicLoadPayload;
-use Lsr\Core\Exceptions\ValidationException;
+use App\Tools\GameLoading\LoaderInterface;
+use App\Tools\GameLoading\MusicLoading;
 use Spiral\RoadRunner\Jobs\Task\ReceivedTaskInterface;
+use Throwable;
 
 class MusicLoadTask implements TaskDispatcherInterface
 {
@@ -19,12 +21,12 @@ class MusicLoadTask implements TaskDispatcherInterface
     public function process(ReceivedTaskInterface $task) : void {
         /** @var MusicLoadPayload $payload */
         $payload = igbinary_unserialize($task->getPayload());
+
         try {
-            if ($this->api->syncMusicModes()) {
-                $task->complete();
-                return;
-            }
-        } catch (ValidationException $e) {
+            /** @var MusicLoading&LoaderInterface $loader */
+            $loader = App::getService($payload->loader);
+            $loader->loadMusic($payload->musicId, $payload->musicFile);
+        } catch (Throwable $e) {
             $task->fail($e);
             return;
         }

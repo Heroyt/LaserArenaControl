@@ -34,6 +34,7 @@ services:
 	task.gamesImport: App\Tasks\GameImportTask
 	task.musicTrimPreview: App\Tasks\MusicTrimPreviewTask
 	task.musicSync: App\Tasks\MusicSyncTask
+	task.musicLoad: App\Tasks\MusicLoadTask
 
 	# Cron jobs
 	cron.gamesSync: App\Cron\GamesSyncJob(%gamesSync.limit%, %gamesSync.timeout%)

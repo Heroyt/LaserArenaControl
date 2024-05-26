@@ -63,7 +63,7 @@ readonly class ResultPrintService
 
         $content = $this->gotenberg->chromium->getFromHTML(
                            str_replace(
-                             [App::getInstance()->getUrl(), 'dist/results/', 'dist/', 'assets/images/print/'],
+                             [App::getInstance()->getBaseUrl(), 'dist/results/', 'dist/', 'assets/images/print/'],
                              ['', '', '', ''],
                              $this->getResultsHtml(
                                $game,

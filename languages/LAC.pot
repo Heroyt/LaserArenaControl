@@ -4435,14 +4435,12 @@ msgctxt "game"
 msgid "Playlisty"
 msgstr ""
 
-
 msgctxt "month"
 msgid "Duben"
 msgstr ""
 
 msgid "Duben"
 msgstr ""
-
 
 msgctxt "month"
 msgid "Březen"
@@ -4456,4 +4454,34 @@ msgid "Leden"
 msgstr ""
 
 msgid "Leden"
+msgstr ""
+
+msgid "Naposledy uloženo"
+msgstr ""
+
+msgctxt "events"
+msgid "Reload gate"
+msgstr ""
+
+msgid "Reload gate"
+msgstr ""
+
+msgctxt "settings"
+msgid "Typy obrazovek"
+msgstr ""
+
+msgid "Typy obrazovek"
+msgstr ""
+
+msgid "Přepnout na tmavý režim"
+msgstr ""
+
+msgid "Přepnout na světlý režim"
+msgstr ""
+
+msgctxt "pageTitles"
+msgid "Nastavení - Výsledková tabule"
+msgstr ""
+
+msgid "Nastavení - Výsledková tabule"
 msgstr ""

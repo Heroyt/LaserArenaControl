@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: Czech\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2024-05-28 12:12\n"
+"PO-Revision-Date: 2024-05-28 13:19\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=4; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 3;\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -48,35 +48,35 @@ msgstr "Výsledky"
 
 msgctxt "screens.description"
 msgid "Obrazovka zobrazující přiřazené vesty před hrou."
-msgstr ""
+msgstr "Obrazovka zobrazující přiřazené vesty před hrou."
 
 msgctxt "screens"
 msgid "Vesty"
-msgstr ""
+msgstr "Vesty"
 
 msgctxt "screens.description"
 msgid "Obrazovka, která automaticky cyklí podle časovače."
-msgstr ""
+msgstr "Obrazovka, která automaticky cyklí podle časovače."
 
 msgctxt "screens"
 msgid "Časovač"
-msgstr ""
+msgstr "Časovač"
 
 msgctxt "screens"
 msgid "Obrázek"
-msgstr ""
+msgstr "Obrázek"
 
 msgctxt "screens"
 msgid "Youtube video"
-msgstr ""
+msgstr "Youtube video"
 
 msgctxt "screens"
 msgid "Seznam hudebních módů"
-msgstr ""
+msgstr "Seznam hudebních módů"
 
 msgctxt "screens"
 msgid "RTSP - kamery"
-msgstr ""
+msgstr "RTSP - kamery"
 
 msgctxt "screens"
 msgid "Informační obrazovka s animací připnutí zbraně na vestu."
@@ -92,11 +92,11 @@ msgstr "Obrazovka zobrazující výsledky z her. Automaticky vybírá zobrazení
 
 msgctxt "screens"
 msgid "Výsledky ze hry"
-msgstr ""
+msgstr "Výsledky ze hry"
 
 msgctxt "screens"
 msgid "Výsledky turnaje"
-msgstr ""
+msgstr "Výsledky turnaje"
 
 msgctxt "screens.description"
 msgid "Obrazovka zobrazující dnešní nejlepší hráče a počet odehraných her."
@@ -140,63 +140,63 @@ msgstr ""
 
 msgctxt "screens.description"
 msgid "Obrazovka zobrazující výsledky LaserMaxx z klasických her."
-msgstr ""
+msgstr "Obrazovka zobrazující výsledky LaserMaxx z klasických her."
 
 msgctxt "screens"
 msgid "LaserMaxx klasické výsledky"
-msgstr ""
+msgstr "LaserMaxx klasické výsledky"
 
 msgctxt "screens.description"
 msgid "Obrazovka zobrazující výsledky LaserMaxx z módu CSGO."
-msgstr ""
+msgstr "Obrazovka zobrazující výsledky LaserMaxx z módu CSGO."
 
 msgctxt "screens"
 msgid "LaserMaxx výsledky z módu CSGO"
-msgstr ""
+msgstr "LaserMaxx výsledky z módu CSGO"
 
 msgctxt "screens.description"
 msgid "Obrazovka zobrazující výsledky LaserMaxx z módu Základny."
-msgstr ""
+msgstr "Obrazovka zobrazující výsledky LaserMaxx z módu Základny."
 
 msgctxt "screens"
 msgid "LaserMaxx výsledky z módu Základny"
-msgstr ""
+msgstr "LaserMaxx výsledky z módu Základny"
 
 msgctxt "screens.description"
 msgid "Obrazovka zobrazující výsledky LaserMaxx z módu 100 nábojů."
-msgstr ""
+msgstr "Obrazovka zobrazující výsledky LaserMaxx z módu 100 nábojů."
 
 msgctxt "screens"
 msgid "LaserMaxx výsledky z módu 100 nábojů"
-msgstr ""
+msgstr "LaserMaxx výsledky z módu 100 nábojů"
 
 msgctxt "screens.description"
 msgid "Obrazovka zobrazující výsledky LaserMaxx z módu Survival."
-msgstr ""
+msgstr "Obrazovka zobrazující výsledky LaserMaxx z módu Survival."
 
 msgctxt "screens"
 msgid "LaserMaxx výsledky z módu Survival"
-msgstr ""
+msgstr "LaserMaxx výsledky z módu Survival"
 
 msgctxt "screen.trigger"
 msgid "Obrazovka se zobrazuje jako výchozí, pokud žádná jiná před ní nesplňuje podmínku."
-msgstr ""
+msgstr "Obrazovka se zobrazuje jako výchozí, pokud žádná jiná před ní nesplňuje podmínku."
 
 msgctxt "screen.trigger"
 msgid "Výchozí"
-msgstr ""
+msgstr "Výchozí"
 
 msgctxt "screen.trigger"
 msgid "Obrazovka se zobrazí, pokud je poslední hra načtená, ale nespuštěná."
-msgstr ""
+msgstr "Obrazovka se zobrazí, pokud je poslední hra načtená, ale nespuštěná."
 
 msgctxt "screen.trigger"
 msgid "Hra načtena"
-msgstr ""
+msgstr "Hra načtena"
 
 msgctxt "screen.trigger"
 msgid "Obrazovka se zobrazí, pokud poslední hra právě probíhá."
-msgstr ""
+msgstr "Obrazovka se zobrazí, pokud poslední hra právě probíhá."
 
 msgctxt "screen.trigger"
 msgid "Hra hraje"
@@ -208,62 +208,62 @@ msgstr ""
 
 msgctxt "screen.trigger"
 msgid "Hra skončila"
-msgstr ""
+msgstr "Hra skončila"
 
 msgctxt "screen.trigger"
 msgid "Obrazovka se zobrazí, pokud se vyvolá nějaká manuální událost."
-msgstr ""
+msgstr "Obrazovka se zobrazí, pokud se vyvolá nějaká manuální událost."
 
 msgctxt "screen.trigger"
 msgid "Vlastní událost"
-msgstr ""
+msgstr "Vlastní událost"
 
 msgid "Nejlepší hráči měsíce %s %s"
-msgstr ""
+msgstr "Nejlepší hráči měsíce %s %s"
 
 msgctxt "settings"
 msgid "Název"
-msgstr ""
+msgstr "Název"
 
 msgctxt "settings"
 msgid "URL název"
-msgstr ""
+msgstr "URL název"
 
 msgctxt "settings"
 msgid "Volitelná hodnota, automaticky se generuje. Jedná se o text, který se použije v URL pro přístup na tuto obrazovku."
-msgstr ""
+msgstr "Volitelná hodnota, automaticky se generuje. Jedná se o text, který se použije v URL pro přístup na tuto obrazovku."
 
 msgctxt "settings"
 msgid "Obrazovky"
-msgstr ""
+msgstr "Obrazovky"
 
 msgctxt "settings"
 msgid "Typ"
-msgstr ""
+msgstr "Typ"
 
 msgctxt "settings"
 msgid "Pořadí"
-msgstr ""
+msgstr "Pořadí"
 
 msgctxt "settings"
 msgid "Pořadí v jakém se obrazovky kontrolují (od nejmenšího čísla k větším)."
-msgstr ""
+msgstr "Pořadí v jakém se obrazovky kontrolují (od nejmenšího čísla k větším)."
 
 msgctxt "settings"
 msgid "Podmínka"
-msgstr ""
+msgstr "Podmínka"
 
 msgctxt "settings"
 msgid "Událost"
-msgstr ""
+msgstr "Událost"
 
 msgctxt "settings"
 msgid "Název manuální události, kterou se obrazovka vyvolá. Může to být cokoliv - je to vámi pojmenovaná událost, kterou můžete manuálně vyvolat zkratkou, nebo napsáním názvu události."
-msgstr ""
+msgstr "Název manuální události, kterou se obrazovka vyvolá. Může to být cokoliv - je to vámi pojmenovaná událost, kterou můžete manuálně vyvolat zkratkou, nebo napsáním názvu události."
 
 msgctxt "settings"
 msgid "Doba na obrazovce v sekundách"
-msgstr ""
+msgstr "Doba na obrazovce v sekundách"
 
 msgctxt "settings"
 msgid "Maximální doba, po kterou má obrazovka zůstat aktivní. 0 = neomezeně."
@@ -305,36 +305,36 @@ msgid "Nedostatečná data"
 msgstr ""
 
 msgid "Nejlepší hráči"
-msgstr ""
+msgstr "Nejlepší hráči"
 
 msgid "Nejlepší skóre měsíce"
-msgstr ""
+msgstr "Nejlepší skóre měsíce"
 
 msgctxt "topPlayers"
 msgid "Nejlepší skóre"
-msgstr ""
+msgstr "Nejlepší skóre"
 
 msgctxt "topPlayers"
 msgid "Nejlepší herní úroveň"
-msgstr ""
+msgstr "Nejlepší herní úroveň"
 
 msgctxt "topPlayers"
 msgid "Nejvíc zásahů"
-msgstr ""
+msgstr "Nejvíc zásahů"
 
 msgctxt "topPlayers"
 msgid "Nejvíc smrtí"
-msgstr ""
+msgstr "Nejvíc smrtí"
 
 msgctxt "topPlayers"
 msgid "Nejlepší přesnost"
-msgstr ""
+msgstr "Nejlepší přesnost"
 
 msgctxt "topPlayers"
 msgid "Nejvíc výstřelů"
-msgstr ""
+msgstr "Nejvíc výstřelů"
 
 msgctxt "topPlayers"
 msgid "Nejvíc zásahů vlastních"
-msgstr ""
+msgstr "Nejvíc zásahů vlastních"
 

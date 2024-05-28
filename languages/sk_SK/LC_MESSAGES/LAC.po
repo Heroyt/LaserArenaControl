@@ -4196,12 +4196,6 @@ msgctxt "systems"
 msgid "evo6"
 msgstr ""
 
-
-
-
-
-
-
 msgid "Template"
 msgstr ""
 
@@ -4592,7 +4586,6 @@ msgstr ""
 msgid "Duben"
 msgstr ""
 
-
 msgctxt "month"
 msgid "Březen"
 msgstr ""
@@ -4605,4 +4598,17 @@ msgid "Leden"
 msgstr ""
 
 msgid "Leden"
+msgstr ""
+
+msgctxt "events"
+msgid "Reload gate"
+msgstr ""
+
+msgid "Reload gate"
+msgstr ""
+
+msgid "Přepnout na tmavý režim"
+msgstr ""
+
+msgid "Přepnout na světlý režim"
 msgstr ""

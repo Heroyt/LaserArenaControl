@@ -4160,8 +4160,6 @@ msgid_plural "Přepnout na světlý režim"
 msgstr[0] ""
 msgstr[1] ""
 
-
-
 msgid "Template"
 msgstr ""
 
@@ -4543,7 +4541,6 @@ msgstr ""
 msgid "Duben"
 msgstr ""
 
-
 msgctxt "month"
 msgid "Březen"
 msgstr ""
@@ -4556,4 +4553,11 @@ msgid "Leden"
 msgstr ""
 
 msgid "Leden"
+msgstr ""
+
+msgctxt "events"
+msgid "Reload gate"
+msgstr ""
+
+msgid "Reload gate"
 msgstr ""

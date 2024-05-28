@@ -4184,8 +4184,6 @@ msgid_plural "Přepnout na světlý režim"
 msgstr[0] ""
 msgstr[1] ""
 
-
-
 msgid "Template"
 msgstr ""
 
@@ -4429,8 +4427,6 @@ msgctxt "game"
 msgid "Playlisty"
 msgstr ""
 
-
-
 msgid "Naposledy uloženo:"
 msgstr ""
 
@@ -4459,7 +4455,6 @@ msgstr ""
 msgid "Duben"
 msgstr ""
 
-
 msgctxt "month"
 msgid "Březen"
 msgstr ""
@@ -4472,4 +4467,25 @@ msgid "Leden"
 msgstr ""
 
 msgid "Leden"
+msgstr ""
+
+msgctxt "events"
+msgid "Reload gate"
+msgstr ""
+
+msgid "Reload gate"
+msgstr ""
+
+msgctxt "settings"
+msgid "Typy obrazovek"
+msgstr ""
+
+msgid "Typy obrazovek"
+msgstr ""
+
+msgctxt "pageTitles"
+msgid "Nastavení - Výsledková tabule"
+msgstr ""
+
+msgid "Nastavení - Výsledková tabule"
 msgstr ""

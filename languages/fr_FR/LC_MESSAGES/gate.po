@@ -499,3 +499,55 @@ msgstr ""
 
 msgid "Nejlepší hráči"
 msgstr ""
+
+msgid "Nejlepší skóre měsíce"
+msgstr ""
+
+msgctxt "topPlayers"
+msgid "Nejlepší skóre"
+msgstr ""
+
+msgid "Nejlepší skóre"
+msgstr ""
+
+msgctxt "topPlayers"
+msgid "Nejlepší herní úroveň"
+msgstr ""
+
+msgid "Nejlepší herní úroveň"
+msgstr ""
+
+msgctxt "topPlayers"
+msgid "Nejvíc zásahů"
+msgstr ""
+
+msgid "Nejvíc zásahů"
+msgstr ""
+
+msgctxt "topPlayers"
+msgid "Nejvíc smrtí"
+msgstr ""
+
+msgid "Nejvíc smrtí"
+msgstr ""
+
+msgctxt "topPlayers"
+msgid "Nejlepší přesnost"
+msgstr ""
+
+msgid "Nejlepší přesnost"
+msgstr ""
+
+msgctxt "topPlayers"
+msgid "Nejvíc výstřelů"
+msgstr ""
+
+msgid "Nejvíc výstřelů"
+msgstr ""
+
+msgctxt "topPlayers"
+msgid "Nejvíc zásahů vlastních"
+msgstr ""
+
+msgid "Nejvíc zásahů vlastních"
+msgstr ""

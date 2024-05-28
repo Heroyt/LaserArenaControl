@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: English\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2024-05-28 09:21\n"
+"PO-Revision-Date: 2024-05-28 13:19\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -20,19 +20,19 @@ msgid "Jak se v aréně střílí, tak se v aréně umírá..."
 msgstr ""
 
 msgid "Trénink se vyplácí!"
-msgstr ""
+msgstr "Training pays off!"
 
 msgid "Tip #%d"
-msgstr ""
+msgstr "Tip #%d"
 
 msgid "Střílíme v Písku už od 31.12.2013!!!"
-msgstr ""
+msgstr "We have been shooting in Písek since 31.12.2013!!!"
 
 msgid "Ve hře vždy sleduj svoje okolí!"
-msgstr ""
+msgstr "Always watch your surroundings in the game!"
 
 msgid "Čidlo na zbrani, ač nenápadné, se dá velmi dobře trefit."
-msgstr ""
+msgstr "The gun sensor is quite easy to hit."
 
 msgid "Zkušení hráči hrajou týmově!"
 msgstr ""
@@ -77,16 +77,16 @@ msgid "#laserarenapísek"
 msgstr ""
 
 msgid "Zabití: 100 bodů, Smrt: -50 bodů, Zabití vlastního hráče: -25 bodů"
-msgstr ""
+msgstr "Killing: 100 points, Death: -50 points, Teammate hit: -25 points"
 
 msgid "Go, go, go, go..."
-msgstr ""
+msgstr "Go, go, go, go..."
 
 msgid "Ramenní čidla se trefují nejlépe, zádová nejhůř."
-msgstr ""
+msgstr "Shoulder sensors are the easiest to hit, and back the hardest."
 
 msgid "Pohyblivý cíl je vždycky těžší trefit."
-msgstr ""
+msgstr "It's always more difficult to hit a moving target."
 
 msgid "Na displeji vesty po zásahu vidíte kdo vás zasáhl do jakého čidla. To pomáhá při orientaci."
 msgstr ""
@@ -95,17 +95,17 @@ msgid "Při výstupu z arény vždy připni zbraň k vestě."
 msgstr ""
 
 msgid "LASER TAG - SUIT UP!"
-msgstr ""
+msgstr "LASER TAG - SUIT UP!"
 
 msgid "Když tě bolí nohy, kempi!"
-msgstr ""
+msgstr "You can camp if your legs hurt!"
 
 msgid "Nikdy nejsi příliš starý na laser game."
-msgstr ""
+msgstr "You are never too old to play laser game."
 
 msgid "Nezapomeň každý květen a listopad registrovat svůj tým na turnaj!"
 msgstr ""
 
 msgid "Oživení trvá 5 sekund."
-msgstr ""
+msgstr "Respawn is 5 seconds."
 

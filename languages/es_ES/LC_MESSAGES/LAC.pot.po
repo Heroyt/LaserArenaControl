@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: Spanish\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2024-05-28 11:05\n"
+"PO-Revision-Date: 2024-05-28 12:12\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -25,28 +25,10 @@ msgstr ""
 msgid "Toggle navigation"
 msgstr ""
 
-msgid "Nová hra"
-msgstr ""
-
 msgid "Hry"
 msgstr ""
 
 msgid "Tisk"
-msgstr ""
-
-msgid "Seznam her"
-msgstr ""
-
-msgid "Date"
-msgstr ""
-
-msgid "Čas"
-msgstr ""
-
-msgid "Herní mód"
-msgstr ""
-
-msgid "Hráči"
 msgstr ""
 
 msgid "Akce"
@@ -149,9 +131,6 @@ msgid "Game"
 msgstr ""
 
 msgid "Styl"
-msgstr ""
-
-msgid "Nastavení"
 msgstr ""
 
 msgid "Herní módy"
@@ -314,9 +293,6 @@ msgid "Hra neexistuje!"
 msgstr ""
 
 msgid "%d score"
-msgstr ""
-
-msgid "Základny"
 msgstr ""
 
 msgctxt "actions"
@@ -986,9 +962,6 @@ msgctxt "game.modes"
 msgid "Popis"
 msgstr ""
 
-msgid "Popis"
-msgstr ""
-
 msgctxt "gameModes"
 msgid "Klasická týmová hra."
 msgstr ""
@@ -1190,22 +1163,13 @@ msgctxt "help"
 msgid "Přepne na předchozího hráče."
 msgstr ""
 
-msgid "Veřejný"
-msgstr ""
-
 msgid "Začátek ukázky"
-msgstr ""
-
-msgid "Skupiny"
 msgstr ""
 
 msgid "Zobrazit hráče skupiny"
 msgstr ""
 
 msgid "Nahrát na vesty"
-msgstr ""
-
-msgid "Deaktivovat"
 msgstr ""
 
 msgid "Bez skupiny"
@@ -1226,9 +1190,6 @@ msgstr ""
 msgid "Název skupiny"
 msgstr ""
 
-msgid "Cache"
-msgstr ""
-
 msgctxt "settings"
 msgid "Cache"
 msgstr ""
@@ -1247,9 +1208,6 @@ msgstr ""
 
 msgctxt "actions"
 msgid "Smazat cache šablon"
-msgstr ""
-
-msgid "Tables"
 msgstr ""
 
 msgctxt "settings"
@@ -1341,9 +1299,6 @@ msgstr ""
 msgid "K:D"
 msgstr ""
 
-msgid "Výsledky"
-msgstr ""
-
 msgid "Nepodařilo se připojit k TCP serveru (%s:%d)."
 msgstr ""
 
@@ -1393,9 +1348,6 @@ msgid "Logo"
 msgstr ""
 
 msgid "Pozadí"
-msgstr ""
-
-msgid "Nahrát"
 msgstr ""
 
 msgid "Vyhledat hráče"
@@ -1451,9 +1403,6 @@ msgstr ""
 msgid "Čas ve hře na tým"
 msgstr ""
 
-msgid "Týmy"
-msgstr ""
-
 msgid "Zpět"
 msgstr ""
 
@@ -1467,9 +1416,6 @@ msgid "Počet her"
 msgstr ""
 
 msgid "Čas na začátku turnaje"
-msgstr ""
-
-msgid "Odeslat"
 msgstr ""
 
 msgid "Kvalifikace"
@@ -1526,9 +1472,6 @@ msgstr ""
 msgid "Hrát"
 msgstr ""
 
-msgid "Vítěz"
-msgstr ""
-
 msgid "Bonus/Penalizace"
 msgstr ""
 
@@ -1578,22 +1521,13 @@ msgstr ""
 msgid "Nejlepší hráči"
 msgstr ""
 
-msgid "Hráč"
-msgstr ""
-
 msgid "Nejpřesnější hráči"
 msgstr ""
 
 msgid "Největší mimoňi"
 msgstr ""
 
-msgid "Výstřely"
-msgstr ""
-
 msgid "Zabijáci vlastních"
-msgstr ""
-
-msgid "Turnaje"
 msgstr ""
 
 msgid "Seznam"
@@ -1611,12 +1545,6 @@ msgstr ""
 
 msgctxt "newGame.preparedGames.actions"
 msgid "Nahrát"
-msgstr ""
-
-msgid "Smazat vše"
-msgstr ""
-
-msgid "Nebyla nalezena žádná hra"
 msgstr ""
 
 msgctxt "tournament.presets"
@@ -1645,12 +1573,6 @@ msgid "Turnaj XYZ"
 msgstr ""
 
 msgid "Formát"
-msgstr ""
-
-msgid "Týmový"
-msgstr ""
-
-msgid "Sólo"
 msgstr ""
 
 msgid "Začátek turnaje"
@@ -1684,9 +1606,6 @@ msgid "Přidat tým"
 msgstr ""
 
 msgid "Uloženo"
-msgstr ""
-
-msgid "Uložit"
 msgstr ""
 
 msgid "Tým 1"
@@ -2320,13 +2239,7 @@ msgstr ""
 msgid "Historie úrovně"
 msgstr ""
 
-msgid "Poslední hry"
-msgstr ""
-
 msgid "Aréna"
-msgstr ""
-
-msgid "Herní úroveň"
 msgstr ""
 
 msgid "Všechny hry hráče"
@@ -2339,9 +2252,6 @@ msgid "Uživatel neexistuje"
 msgstr ""
 
 msgid "Kód"
-msgstr ""
-
-msgid "Přesnost"
 msgstr ""
 
 msgid "Počet výstřelů"
@@ -2408,9 +2318,6 @@ msgid "Profil hráče"
 msgstr ""
 
 msgid "Historie her hráče %s"
-msgstr ""
-
-msgid "Filtrovat"
 msgstr ""
 
 msgid "Zobrazeno %s z %d her"
@@ -2554,18 +2461,6 @@ msgstr ""
 msgid "Počet smrtí"
 msgstr ""
 
-msgid "Team deathmach"
-msgstr ""
-
-msgid "Barvičky"
-msgstr ""
-
-msgid "Deathmach"
-msgstr ""
-
-msgid "T.M.A - solo"
-msgstr ""
-
 msgid "Prihlásit"
 msgstr ""
 
@@ -2595,18 +2490,6 @@ msgid "Wednesday"
 msgstr ""
 
 msgid "Thursday"
-msgstr ""
-
-msgid "CSGO"
-msgstr ""
-
-msgid "Survival"
-msgstr ""
-
-msgid "100 nábojů"
-msgstr ""
-
-msgid "T.M.A"
 msgstr ""
 
 msgid "March"
@@ -2679,9 +2562,6 @@ msgstr ""
 msgid "Close navigation"
 msgstr ""
 
-msgid "Plánované akce"
-msgstr ""
-
 msgid "Výsledky laser game"
 msgstr ""
 
@@ -2707,16 +2587,10 @@ msgstr ""
 msgid "méně"
 msgstr ""
 
-msgid "Zobrazit"
-msgstr ""
-
 msgid "Výsledky ze hry - %s %s"
 msgstr ""
 
 msgid "Sdílet"
-msgstr ""
-
-msgid "Výsledky týmů"
 msgstr ""
 
 msgid "Výsledky hráčů"
@@ -2814,9 +2688,6 @@ msgid "Oživení hráče"
 msgstr ""
 
 msgid "5 sekund"
-msgstr ""
-
-msgid "Miny"
 msgstr ""
 
 msgid "Vypnuto"
@@ -3074,9 +2945,6 @@ msgstr ""
 msgid "Dnes odehráno hráčů"
 msgstr ""
 
-msgid "Hudební módy"
-msgstr ""
-
 msgid "Informace a kontakty"
 msgstr ""
 
@@ -3300,9 +3168,6 @@ msgctxt "musicModes"
 msgid "StarWars"
 msgstr ""
 
-msgid "Ligy laser game"
-msgstr ""
-
 msgctxt "pageTitles"
 msgid "Ligy laser game"
 msgstr ""
@@ -3312,9 +3177,6 @@ msgid "Organizované laser game ligy - skupiny turnajů, které na sebe navazuj�
 msgstr ""
 
 msgid "Organizované ligy laser game"
-msgstr ""
-
-msgid "Liga laser game je dlouhodobá soutěž skládající se z několika turnajů. Výsledky jsou vyhodnocovány z každého turnaje zvlášť, ale zároveň mezi turnaji. Na konci ligového období jsou vyhlášeny celkové výsledky."
 msgstr ""
 
 msgctxt "pageTitles"
@@ -3540,9 +3402,6 @@ msgid "Herní úroveň se zvyšuje a klesá s každou odehranou klasickou hrou. 
 msgstr ""
 
 msgid "Zobrazit statistiky domovské arény"
-msgstr ""
-
-msgid "Trofeje"
 msgstr ""
 
 msgid "Ocenění"
@@ -3852,9 +3711,6 @@ msgctxt "rarity"
 msgid "Vzácný"
 msgstr ""
 
-msgid "Drtič min"
-msgstr ""
-
 msgctxt "rarity"
 msgid "Legendární"
 msgstr ""
@@ -3882,9 +3738,6 @@ msgctxt "rarity"
 msgid "Běžný"
 msgstr ""
 
-msgid "Nejúspornější střelec"
-msgstr ""
-
 msgctxt "rarity"
 msgid "Neobvyklý"
 msgstr ""
@@ -3904,19 +3757,10 @@ msgstr ""
 msgid "Největší vlastňák"
 msgstr ""
 
-msgid "Hráč s nejlepší muškou"
-msgstr ""
-
-msgid "Zabiják vlastního týmu"
-msgstr ""
-
 msgid "Spray and Pray"
 msgstr ""
 
 msgid "Nedotknutelný"
-msgstr ""
-
-msgid "Absolutní vítěz"
 msgstr ""
 
 msgid "Největší terminátor"
@@ -4170,12 +4014,6 @@ msgctxt "pageTitles"
 msgid "Results"
 msgstr ""
 
-msgid "Results"
-msgstr ""
-
-msgid "Obecné"
-msgstr ""
-
 msgid "Vesty"
 msgstr ""
 
@@ -4192,13 +4030,7 @@ msgctxt "music"
 msgid "Cyber Laser Showdown"
 msgstr ""
 
-msgid "Cyber Laser Showdown"
-msgstr ""
-
 msgctxt "music"
-msgid "Lasermaxx"
-msgstr ""
-
 msgid "Lasermaxx"
 msgstr ""
 
@@ -4206,13 +4038,7 @@ msgctxt "music"
 msgid "Requiem for a dream"
 msgstr ""
 
-msgid "Requiem for a dream"
-msgstr ""
-
 msgctxt "music"
-msgid "Turnajový mix"
-msgstr ""
-
 msgid "Turnajový mix"
 msgstr ""
 
@@ -4220,13 +4046,7 @@ msgctxt "music"
 msgid "Narozeniny"
 msgstr ""
 
-msgid "Narozeniny"
-msgstr ""
-
 msgctxt "music"
-msgid "Undertale"
-msgstr ""
-
 msgid "Undertale"
 msgstr ""
 
@@ -4234,13 +4054,7 @@ msgctxt "music"
 msgid "Mortal kombat"
 msgstr ""
 
-msgid "Mortal kombat"
-msgstr ""
-
 msgctxt "music"
-msgid "Matrix"
-msgstr ""
-
 msgid "Matrix"
 msgstr ""
 
@@ -4248,13 +4062,7 @@ msgctxt "music"
 msgid "Marvel"
 msgstr ""
 
-msgid "Marvel"
-msgstr ""
-
 msgctxt "music"
-msgid "StarWars"
-msgstr ""
-
 msgid "StarWars"
 msgstr ""
 
@@ -4262,13 +4070,7 @@ msgctxt "music"
 msgid "Piráti z Karibiku"
 msgstr ""
 
-msgid "Piráti z Karibiku"
-msgstr ""
-
 msgctxt "music"
-msgid "Horror"
-msgstr ""
-
 msgid "Horror"
 msgstr ""
 
@@ -4276,27 +4078,15 @@ msgctxt "music.group"
 msgid "Halloween"
 msgstr ""
 
-msgid "Halloween"
-msgstr ""
-
 msgctxt "music"
 msgid "Halloween 1"
 msgstr ""
 
-msgid "Halloween 1"
-msgstr ""
-
 msgctxt "music"
-msgid "Halloween 2"
-msgstr ""
-
 msgid "Halloween 2"
 msgstr ""
 
 msgctxt "music.group"
-msgid "K-POP"
-msgstr ""
-
 msgid "K-POP"
 msgstr ""
 
@@ -4308,16 +4098,10 @@ msgctxt "music"
 msgid "K-POP 2"
 msgstr ""
 
-msgid "K-POP 2"
-msgstr ""
-
 msgctxt "music.group"
 msgid "Anime"
 msgstr ""
 
-msgid "Anime"
-msgstr ""
-
 msgctxt "music"
 msgid "Anime"
 msgstr ""
@@ -4326,13 +4110,7 @@ msgctxt "music"
 msgid "Anime 2"
 msgstr ""
 
-msgid "Anime 2"
-msgstr ""
-
 msgctxt "music"
-msgid "Dwarven metal"
-msgstr ""
-
 msgid "Dwarven metal"
 msgstr ""
 
@@ -4340,33 +4118,18 @@ msgctxt "music"
 msgid "Albatroz"
 msgstr ""
 
-msgid "Albatroz"
-msgstr ""
-
 msgctxt "music"
 msgid "Doom"
 msgstr ""
 
-msgid "Doom"
-msgstr ""
-
 msgctxt "music"
-msgid "S3RL"
-msgstr ""
-
 msgid "S3RL"
 msgstr ""
 
 msgid "Akce výsledkové tabule"
 msgstr ""
 
-msgid "Playlisty"
-msgstr ""
-
 msgid "Zobrazit přehled hudebních módů"
-msgstr ""
-
-msgid "Smazat"
 msgstr ""
 
 msgid "Ikona"
@@ -4378,9 +4141,6 @@ msgstr ""
 msgid "Zkontrolovat zajímavosti"
 msgstr ""
 
-msgid "evo6"
-msgstr ""
-
 msgctxt "game"
 msgid "Playlisty"
 msgstr ""
@@ -4389,20 +4149,11 @@ msgctxt "month"
 msgid "Duben"
 msgstr ""
 
-msgid "Duben"
-msgstr ""
-
 msgctxt "month"
 msgid "Březen"
 msgstr ""
 
-msgid "Březen"
-msgstr ""
-
 msgctxt "month"
-msgid "Leden"
-msgstr ""
-
 msgid "Leden"
 msgstr ""
 
@@ -4413,13 +4164,7 @@ msgctxt "events"
 msgid "Reload gate"
 msgstr ""
 
-msgid "Reload gate"
-msgstr ""
-
 msgctxt "settings"
-msgid "Typy obrazovek"
-msgstr ""
-
 msgid "Typy obrazovek"
 msgstr ""
 
@@ -4430,9 +4175,6 @@ msgid "Přepnout na světlý režim"
 msgstr ""
 
 msgctxt "pageTitles"
-msgid "Nastavení - Výsledková tabule"
-msgstr ""
-
 msgid "Nastavení - Výsledková tabule"
 msgstr ""
 

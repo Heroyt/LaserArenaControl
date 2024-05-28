@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: English\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2024-05-28 09:20\n"
+"PO-Revision-Date: 2024-05-28 10:57\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -363,5 +363,145 @@ msgid "Vlastní událost"
 msgstr ""
 
 msgid "Vlastní událost"
+msgstr ""
+
+msgid "Nejlepší hráči měsíce %s %s"
+msgstr ""
+
+msgctxt "settings"
+msgid "Název"
+msgstr ""
+
+msgid "Název"
+msgstr ""
+
+msgctxt "settings"
+msgid "URL název"
+msgstr ""
+
+msgid "URL název"
+msgstr ""
+
+msgctxt "settings"
+msgid "Volitelná hodnota, automaticky se generuje. Jedná se o text, který se použije v URL pro přístup na tuto obrazovku."
+msgstr ""
+
+msgid "Volitelná hodnota, automaticky se generuje. Jedná se o text, který se použije v URL pro přístup na tuto obrazovku."
+msgstr ""
+
+msgctxt "settings"
+msgid "Obrazovky"
+msgstr ""
+
+msgid "Obrazovky"
+msgstr ""
+
+msgctxt "settings"
+msgid "Typ"
+msgstr ""
+
+msgid "Typ"
+msgstr ""
+
+msgctxt "settings"
+msgid "Pořadí"
+msgstr ""
+
+msgid "Pořadí"
+msgstr ""
+
+msgctxt "settings"
+msgid "Pořadí v jakém se obrazovky kontrolují (od nejmenšího čísla k větším)."
+msgstr ""
+
+msgid "Pořadí v jakém se obrazovky kontrolují (od nejmenšího čísla k větším)."
+msgstr ""
+
+msgctxt "settings"
+msgid "Podmínka"
+msgstr ""
+
+msgid "Podmínka"
+msgstr ""
+
+msgctxt "settings"
+msgid "Událost"
+msgstr ""
+
+msgid "Událost"
+msgstr ""
+
+msgctxt "settings"
+msgid "Název manuální události, kterou se obrazovka vyvolá. Může to být cokoliv - je to vámi pojmenovaná událost, kterou můžete manuálně vyvolat zkratkou, nebo napsáním názvu události."
+msgstr ""
+
+msgid "Název manuální události, kterou se obrazovka vyvolá. Může to být cokoliv - je to vámi pojmenovaná událost, kterou můžete manuálně vyvolat zkratkou, nebo napsáním názvu události."
+msgstr ""
+
+msgctxt "settings"
+msgid "Doba na obrazovce v sekundách"
+msgstr ""
+
+msgid "Doba na obrazovce v sekundách"
+msgstr ""
+
+msgctxt "settings"
+msgid "Maximální doba, po kterou má obrazovka zůstat aktivní. 0 = neomezeně."
+msgstr ""
+
+msgid "Maximální doba, po kterou má obrazovka zůstat aktivní. 0 = neomezeně."
+msgstr ""
+
+msgctxt "settings"
+msgid "Interval v sekundách"
+msgstr ""
+
+msgid "Interval v sekundách"
+msgstr ""
+
+msgctxt "settings"
+msgid "URL RTSP streamů"
+msgstr ""
+
+msgid "URL RTSP streamů"
+msgstr ""
+
+msgctxt "settings"
+msgid "Maximální počet zobrazených streamů v jednu chvíli"
+msgstr ""
+
+msgid "Maximální počet zobrazených streamů v jednu chvíli"
+msgstr ""
+
+msgctxt "settings"
+msgid "Pokud je maximální počet menší, než počet streamů, budou se streamy postupně přepínat."
+msgstr ""
+
+msgid "Pokud je maximální počet menší, než počet streamů, budou se streamy postupně přepínat."
+msgstr ""
+
+msgctxt "settings"
+msgid "Na každý řádek 1 URL ve formátu např. \"%s\"."
+msgstr ""
+
+msgid "Na každý řádek 1 URL ve formátu např. \"%s\"."
+msgstr ""
+
+msgid "Výsledky pro měsíc %s %s"
+msgstr ""
+
+msgid "Dnešní zajímavosti"
+msgstr ""
+
+msgid "Dnes zatím nejsou žádné zajímavosti."
+msgstr ""
+
+msgid "Nejhranější hudba"
+msgstr ""
+
+msgid "Nedostatečná data"
+msgstr ""
+
+msgid "Nejlepší hráči"
 msgstr ""
 

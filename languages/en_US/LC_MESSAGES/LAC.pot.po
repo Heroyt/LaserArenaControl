@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: English\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2024-05-28 12:12\n"
+"PO-Revision-Date: 2024-05-28 13:19\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -20,7 +20,7 @@ msgstr ""
 
 msgctxt "pageTitles"
 msgid "Seznam her"
-msgstr ""
+msgstr "Game list"
 
 msgid "Toggle navigation"
 msgstr "Toggle navigation"
@@ -29,13 +29,13 @@ msgid "Hry"
 msgstr "Games"
 
 msgid "Tisk"
-msgstr ""
+msgstr "Print"
 
 msgid "Akce"
 msgstr "Events"
 
 msgid "%s skóre"
-msgstr ""
+msgstr "%s score"
 
 msgctxt "debugPanel"
 msgid "Rows"
@@ -83,7 +83,7 @@ msgstr "page not found"
 
 msgctxt "pageTitles"
 msgid "Výsledky"
-msgstr ""
+msgstr "Results"
 
 msgctxt "gameModes"
 msgid "Základny"
@@ -95,10 +95,10 @@ msgstr "Plural"
 
 msgctxt "pageTitles"
 msgid "Úvod"
-msgstr ""
+msgstr "Dashboard"
 
 msgid "Tento den se nehrály žádné hry."
-msgstr ""
+msgstr "No games had been played on this date."
 
 msgctxt "gameModes"
 msgid "CSGO"
@@ -113,25 +113,25 @@ msgid "Deathmach"
 msgstr "Deathmach"
 
 msgid "Jazyk"
-msgstr ""
+msgstr "Language"
 
 msgctxt "print"
 msgid "Barevně:"
-msgstr ""
+msgstr "In color:"
 
 msgctxt "print"
 msgid "Barevně"
-msgstr ""
+msgstr "In color"
 
 msgctxt "print"
 msgid "Černobílé"
-msgstr ""
+msgstr "Black & white"
 
 msgid "Game"
 msgstr "Game"
 
 msgid "Styl"
-msgstr ""
+msgstr "Style"
 
 msgid "Herní módy"
 msgstr "Game modes"
@@ -141,10 +141,10 @@ msgstr "General"
 
 msgctxt "pageTitles"
 msgid "Nastavení"
-msgstr ""
+msgstr "Settings"
 
 msgid "Tiskové styly"
-msgstr ""
+msgstr "Print styles"
 
 msgctxt "actions"
 msgid "Odeslat"
@@ -156,11 +156,11 @@ msgstr "Delete"
 
 msgctxt "dates"
 msgid "Datum od"
-msgstr ""
+msgstr "Date from"
 
 msgctxt "dates"
 msgid "do"
-msgstr ""
+msgstr "to"
 
 msgctxt "actions"
 msgid "Add"
@@ -175,24 +175,24 @@ msgid "Dates"
 msgstr "Dates"
 
 msgid "Nebyly odehrány žádné hry."
-msgstr ""
+msgstr "No games have been played yet."
 
 msgid "Zobrazit na výsledkové tabuli"
-msgstr ""
+msgstr "Show on score board"
 
 msgctxt "actions"
 msgid "Přidat datum"
-msgstr ""
+msgstr "Add date"
 
 msgid "Naposledy uloženo:"
-msgstr ""
+msgstr "Last saved:"
 
 msgid "nikdy"
-msgstr ""
+msgstr "never"
 
 msgctxt "errors"
 msgid "Nahraný soubor je příliš velký"
-msgstr ""
+msgstr "Uploaded file is too large"
 
 msgctxt "errors"
 msgid "Database error occurred."
@@ -253,7 +253,7 @@ msgid "100 nábojů"
 msgstr "100 ammo"
 
 msgid "Zobrazit vesty na výsledkové tabuli"
-msgstr ""
+msgstr "Show vests on score board"
 
 msgid "Výsledková tabule"
 msgstr "Result board"
@@ -268,7 +268,7 @@ msgstr "Trigger events"
 
 msgctxt "events"
 msgid "Znovu načíst výsledkovou tabuli"
-msgstr ""
+msgstr "Reload gate"
 
 msgctxt "settings"
 msgid "Game timer offset in seconds"
@@ -280,7 +280,7 @@ msgstr "Show timer from minute"
 
 msgctxt "settings"
 msgid "Nastavení"
-msgstr ""
+msgstr "Settings"
 
 msgctxt "gameModes"
 msgid "Barvičky"
@@ -411,7 +411,7 @@ msgstr "Re-import from file"
 
 msgctxt "pageTitles"
 msgid "Nová hra"
-msgstr ""
+msgstr "New game"
 
 msgctxt "game.actions"
 msgid "Nahrát hru"
@@ -4000,197 +4000,197 @@ msgstr "Game results"
 
 msgctxt "systems"
 msgid "evo6"
-msgstr ""
+msgstr "evo6"
 
 msgid "Template"
-msgstr ""
+msgstr "Template"
 
 msgid "Vánoce"
-msgstr ""
+msgstr "Christmas"
 
 msgid "Nový rok"
-msgstr ""
+msgstr "New Year"
 
 msgid "Zima"
-msgstr ""
+msgstr "Winter"
 
 msgid "Čerti"
-msgstr ""
+msgstr "Čerti"
 
 msgid "Valentýn"
-msgstr ""
+msgstr "Valentine's day"
 
 msgid "Default"
-msgstr ""
+msgstr "Default"
 
 msgid "Graphical"
-msgstr ""
+msgstr "Graphical"
 
 msgctxt "pageTitles"
 msgid "Results"
 msgstr "Results"
 
 msgid "Vesty"
-msgstr ""
+msgstr "Vests"
 
 msgid "Hudba"
-msgstr ""
+msgstr "Music"
 
 msgid "Mezipaměť"
-msgstr ""
+msgstr "Cache"
 
 msgid "Přezdívka hráče na vestě %s"
-msgstr ""
+msgstr "Player's nickname on vest %s"
 
 msgctxt "music"
 msgid "Cyber Laser Showdown"
-msgstr ""
+msgstr "Cyber Laser Showdown"
 
 msgctxt "music"
 msgid "Lasermaxx"
-msgstr ""
+msgstr "Lasermaxx"
 
 msgctxt "music"
 msgid "Requiem for a dream"
-msgstr ""
+msgstr "Requiem for a dream"
 
 msgctxt "music"
 msgid "Turnajový mix"
-msgstr ""
+msgstr "Tournament mix"
 
 msgctxt "music"
 msgid "Narozeniny"
-msgstr ""
+msgstr "Birthday"
 
 msgctxt "music"
 msgid "Undertale"
-msgstr ""
+msgstr "Undertale"
 
 msgctxt "music"
 msgid "Mortal kombat"
-msgstr ""
+msgstr "Mortal kombat"
 
 msgctxt "music"
 msgid "Matrix"
-msgstr ""
+msgstr "Matrix"
 
 msgctxt "music"
 msgid "Marvel"
-msgstr ""
+msgstr "Marvel"
 
 msgctxt "music"
 msgid "StarWars"
-msgstr ""
+msgstr "StarWars"
 
 msgctxt "music"
 msgid "Piráti z Karibiku"
-msgstr ""
+msgstr "Pirates of the Caribbean"
 
 msgctxt "music"
 msgid "Horror"
-msgstr ""
+msgstr "Horror"
 
 msgctxt "music.group"
 msgid "Halloween"
-msgstr ""
+msgstr "Halloween"
 
 msgctxt "music"
 msgid "Halloween 1"
-msgstr ""
+msgstr "Halloween 1"
 
 msgctxt "music"
 msgid "Halloween 2"
-msgstr ""
+msgstr "Halloween 2"
 
 msgctxt "music.group"
 msgid "K-POP"
-msgstr ""
+msgstr "K-POP"
 
 msgctxt "music"
 msgid "K-POP"
-msgstr ""
+msgstr "K-POP"
 
 msgctxt "music"
 msgid "K-POP 2"
-msgstr ""
+msgstr "K-POP 2"
 
 msgctxt "music.group"
 msgid "Anime"
-msgstr ""
+msgstr "Anime"
 
 msgctxt "music"
 msgid "Anime"
-msgstr ""
+msgstr "Anime"
 
 msgctxt "music"
 msgid "Anime 2"
-msgstr ""
+msgstr "Anime 2"
 
 msgctxt "music"
 msgid "Dwarven metal"
-msgstr ""
+msgstr "Dwarven metal"
 
 msgctxt "music"
 msgid "Albatroz"
-msgstr ""
+msgstr "Albatroz"
 
 msgctxt "music"
 msgid "Doom"
-msgstr ""
+msgstr "Doom"
 
 msgctxt "music"
 msgid "S3RL"
-msgstr ""
+msgstr "S3RL"
 
 msgid "Akce výsledkové tabule"
-msgstr ""
+msgstr "Scoreboard actions"
 
 msgid "Zobrazit přehled hudebních módů"
-msgstr ""
+msgstr "Show music mode overview"
 
 msgid "Ikona"
-msgstr ""
+msgstr "Icon"
 
 msgid "Předpřipravit výsledky pro tisk"
-msgstr ""
+msgstr "Prepare results for printing"
 
 msgid "Zkontrolovat zajímavosti"
-msgstr ""
+msgstr "Check interesting facts"
 
 msgctxt "game"
 msgid "Playlisty"
-msgstr ""
+msgstr "Playlists"
 
 msgctxt "month"
 msgid "Duben"
-msgstr ""
+msgstr "April"
 
 msgctxt "month"
 msgid "Březen"
-msgstr ""
+msgstr "March"
 
 msgctxt "month"
 msgid "Leden"
-msgstr ""
+msgstr "January"
 
 msgid "Naposledy uloženo"
-msgstr ""
+msgstr "Last saved"
 
 msgctxt "events"
 msgid "Reload gate"
-msgstr ""
+msgstr "Reload gate"
 
 msgctxt "settings"
 msgid "Typy obrazovek"
-msgstr ""
+msgstr "Screen types"
 
 msgid "Přepnout na tmavý režim"
-msgstr ""
+msgstr "Switch to Dark mode"
 
 msgid "Přepnout na světlý režim"
-msgstr ""
+msgstr "Switch to light mode"
 
 msgctxt "pageTitles"
 msgid "Nastavení - Výsledková tabule"
-msgstr ""
+msgstr "Settings - score board"
 

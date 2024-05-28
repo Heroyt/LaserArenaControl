@@ -208,7 +208,7 @@ msgstr ""
 msgid "Naposledy uloženo:"
 msgstr ""
 
-msgid "never"
+msgid "nikdy"
 msgstr ""
 
 msgctxt "errors"
@@ -288,7 +288,7 @@ msgid "Trigger events"
 msgstr ""
 
 msgctxt "events"
-msgid "Reload gate"
+msgid "Znovu načíst výsledkovou tabuli"
 msgstr ""
 
 msgctxt "settings"

@@ -6,7 +6,7 @@
 	<form action="{link ['settings']}" method="post" class="text-center autosave"
 		  id="general-settings-form" enctype="multipart/form-data">
 		<div class="me-4 last-save-wrapper text-end position-fixed end-0">
-            {_'Naposledy uloženo:'} <span class="last-save" data-target="#general-settings-form">{_'never'}</span>
+			{_'Naposledy uloženo:'} <span class="last-save" data-target="#general-settings-form">{_'nikdy'}</span>
 		</div>
         <h2>{_'General settings', context: 'settings'}:</h2>
         <div class="form-group my-3" n:if="$featureConfig->isFeatureEnabled('liga')">

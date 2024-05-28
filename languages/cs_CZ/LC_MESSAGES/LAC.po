@@ -208,7 +208,7 @@ msgstr "Přidat datum"
 msgid "Naposledy uloženo:"
 msgstr "Naposledy uloženo:"
 
-msgid "never"
+msgid "nikdy"
 msgstr "nikdy"
 
 msgctxt "errors"
@@ -288,7 +288,7 @@ msgid "Trigger events"
 msgstr "Vyvolat události"
 
 msgctxt "events"
-msgid "Reload gate"
+msgid "Znovu načíst výsledkovou tabuli"
 msgstr "Znovu načíst výsledkovou tabuli"
 
 msgctxt "settings"
@@ -4582,7 +4582,7 @@ msgstr ""
 msgid "Na každý řádek 1 URL ve formátu např. \"%s\"."
 msgstr ""
 
-msgid "Last saved"
+msgid "Naposledy uloženo"
 msgstr ""
 
 msgctxt "settings"
@@ -4599,25 +4599,6 @@ msgstr ""
 msgid "Nastavení - Výsledková tabule"
 msgstr ""
 
-msgid ""
-"<span class=\"last-save\" data-target=\"#gate-settings-form\">never</span>\n"
-""
-msgstr ""
-
-msgctxt "events"
-msgid ""
-"                <button type=\"button\" class=\"btn btn-warning\" data-toggle=\"event\" data-event=\"gate-reload\">\n"
-"                    Reload gate\n"
-"                </button>\n"
-""
-msgstr ""
-
-msgid ""
-"                <button type=\"button\" class=\"btn btn-warning\" data-toggle=\"event\" data-event=\"gate-reload\">\n"
-"                    Reload gate\n"
-"                </button>\n"
-""
-msgstr ""
 
 msgid "URL název"
 msgstr ""

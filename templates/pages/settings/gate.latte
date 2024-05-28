@@ -8,15 +8,18 @@
     <form action="{link ['settings', 'gate']}" method="post" class="text-center autosave" enctype="multipart/form-data"
           id="gate-settings-form">
         <div class="me-4 last-save-wrapper text-end position-fixed end-0">
-            {translate}Last saved{/translate}: <span class="last-save" data-target="#gate-settings-form" n:translate>never</span>
+            {translate}Naposledy uloženo{/translate}: <span class="last-save"
+                                                            data-target="#gate-settings-form">{translate}nikdy{/translate}</span>
         </div>
         <h2>{translate context: 'settings'}Gate settings{/translate}:</h2>
         <div class="my-3 text-center">
             <h4>{_'Trigger events', context: 'settings'}:</h4>
             <div class="btn-group">
                 <button type="button" class="btn btn-warning" data-toggle="event"
-                        data-event="gate-reload" n:translate="context:'events'">
+                        data-event="gate-reload">
+                    {translate context: 'events'}
                     Reload gate
+                    {/translate}
                 </button>
                 {if !$page->getApp()->isProduction()}
                     {var string[] $systems = App\GameModels\Factory\GameFactory::getSupportedSystems()}

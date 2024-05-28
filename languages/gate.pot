@@ -17,13 +17,7 @@ msgstr ""
 msgid "Výsledky dne"
 msgstr ""
 
-msgid "Výsledky turnaje"
-msgstr ""
-
 msgctxt "screen.type"
-msgid "V prostředku"
-msgstr ""
-
 msgid "V prostředku"
 msgstr ""
 
@@ -31,20 +25,11 @@ msgctxt "screen.type"
 msgid "Celá obrazovka"
 msgstr ""
 
-msgid "Celá obrazovka"
-msgstr ""
-
 msgctxt "screen.type"
 msgid "Ve volném prostoru"
 msgstr ""
 
-msgid "Ve volném prostoru"
-msgstr ""
-
 msgctxt "screens.groups"
-msgid "Denní statistiky"
-msgstr ""
-
 msgid "Denní statistiky"
 msgstr ""
 
@@ -52,20 +37,11 @@ msgctxt "screens.groups"
 msgid "Měsíční statistiky"
 msgstr ""
 
-msgid "Měsíční statistiky"
-msgstr ""
-
 msgctxt "screens.groups"
 msgid "Výsledky"
 msgstr ""
 
-msgid "Výsledky"
-msgstr ""
-
 msgctxt "screens.description"
-msgid "Obrazovka zobrazující přiřazené vesty před hrou."
-msgstr ""
-
 msgid "Obrazovka zobrazující přiřazené vesty před hrou."
 msgstr ""
 
@@ -73,13 +49,7 @@ msgctxt "screens"
 msgid "Vesty"
 msgstr ""
 
-msgid "Vesty"
-msgstr ""
-
 msgctxt "screens.description"
-msgid "Obrazovka, která automaticky cyklí podle časovače."
-msgstr ""
-
 msgid "Obrazovka, která automaticky cyklí podle časovače."
 msgstr ""
 
@@ -87,13 +57,7 @@ msgctxt "screens"
 msgid "Časovač"
 msgstr ""
 
-msgid "Časovač"
-msgstr ""
-
 msgctxt "screens"
-msgid "Obrázek"
-msgstr ""
-
 msgid "Obrázek"
 msgstr ""
 
@@ -101,13 +65,7 @@ msgctxt "screens"
 msgid "Youtube video"
 msgstr ""
 
-msgid "Youtube video"
-msgstr ""
-
 msgctxt "screens"
-msgid "Seznam hudebních módů"
-msgstr ""
-
 msgid "Seznam hudebních módů"
 msgstr ""
 
@@ -115,20 +73,11 @@ msgctxt "screens"
 msgid "RTSP - kamery"
 msgstr ""
 
-msgid "RTSP - kamery"
-msgstr ""
-
 msgctxt "screens"
 msgid "Informační obrazovka s animací připnutí zbraně na vestu."
 msgstr ""
 
-msgid "Informační obrazovka s animací připnutí zbraně na vestu."
-msgstr ""
-
 msgctxt "screens"
-msgid "Připněte zbraň na vestu"
-msgstr ""
-
 msgid "Připněte zbraň na vestu"
 msgstr ""
 
@@ -136,13 +85,7 @@ msgctxt "screens.description"
 msgid "Obrazovka zobrazující výsledky z her. Automaticky vybírá zobrazení podle herního módu."
 msgstr ""
 
-msgid "Obrazovka zobrazující výsledky z her. Automaticky vybírá zobrazení podle herního módu."
-msgstr ""
-
 msgctxt "screens"
-msgid "Výsledky ze hry"
-msgstr ""
-
 msgid "Výsledky ze hry"
 msgstr ""
 
@@ -154,13 +97,7 @@ msgctxt "screens.description"
 msgid "Obrazovka zobrazující dnešní nejlepší hráče a počet odehraných her."
 msgstr ""
 
-msgid "Obrazovka zobrazující dnešní nejlepší hráče a počet odehraných her."
-msgstr ""
-
 msgctxt "screens"
-msgid "Základní denní statistiky"
-msgstr ""
-
 msgid "Základní denní statistiky"
 msgstr ""
 
@@ -168,13 +105,7 @@ msgctxt "screens"
 msgid "Základní denní statistiky s kamerami"
 msgstr ""
 
-msgid "Základní denní statistiky s kamerami"
-msgstr ""
-
 msgctxt "screens.description"
-msgid "Obrazovka zobrazující zajímavosti z dnešních odehraných her."
-msgstr ""
-
 msgid "Obrazovka zobrazující zajímavosti z dnešních odehraných her."
 msgstr ""
 
@@ -182,13 +113,7 @@ msgctxt "screens"
 msgid "Dnešní zajímavosti z her"
 msgstr ""
 
-msgid "Dnešní zajímavosti z her"
-msgstr ""
-
 msgctxt "screens"
-msgid "Dnešní zajímavosti z her s kamerami"
-msgstr ""
-
 msgid "Dnešní zajímavosti z her s kamerami"
 msgstr ""
 
@@ -196,13 +121,7 @@ msgctxt "screens.description"
 msgid "Obrazovka zobrazující nejlepší hráče a počet odehraných her pro aktuální měsíc."
 msgstr ""
 
-msgid "Obrazovka zobrazující nejlepší hráče a počet odehraných her pro aktuální měsíc."
-msgstr ""
-
 msgctxt "screens"
-msgid "Základní měsíční statistiky"
-msgstr ""
-
 msgid "Základní měsíční statistiky"
 msgstr ""
 
@@ -210,13 +129,7 @@ msgctxt "screens.description"
 msgid "Obrazovka zobrazující nejlepší hráče pro aktuální měsíc."
 msgstr ""
 
-msgid "Obrazovka zobrazující nejlepší hráče pro aktuální měsíc."
-msgstr ""
-
 msgctxt "screens"
-msgid "Nejlepší hráči měsíce"
-msgstr ""
-
 msgid "Nejlepší hráči měsíce"
 msgstr ""
 
@@ -224,13 +137,7 @@ msgctxt "screens.description"
 msgid "Obrazovka zobrazující výsledky LaserMaxx z klasických her."
 msgstr ""
 
-msgid "Obrazovka zobrazující výsledky LaserMaxx z klasických her."
-msgstr ""
-
 msgctxt "screens"
-msgid "LaserMaxx klasické výsledky"
-msgstr ""
-
 msgid "LaserMaxx klasické výsledky"
 msgstr ""
 
@@ -238,13 +145,7 @@ msgctxt "screens.description"
 msgid "Obrazovka zobrazující výsledky LaserMaxx z módu CSGO."
 msgstr ""
 
-msgid "Obrazovka zobrazující výsledky LaserMaxx z módu CSGO."
-msgstr ""
-
 msgctxt "screens"
-msgid "LaserMaxx výsledky z módu CSGO"
-msgstr ""
-
 msgid "LaserMaxx výsledky z módu CSGO"
 msgstr ""
 
@@ -252,13 +153,7 @@ msgctxt "screens.description"
 msgid "Obrazovka zobrazující výsledky LaserMaxx z módu Základny."
 msgstr ""
 
-msgid "Obrazovka zobrazující výsledky LaserMaxx z módu Základny."
-msgstr ""
-
 msgctxt "screens"
-msgid "LaserMaxx výsledky z módu Základny"
-msgstr ""
-
 msgid "LaserMaxx výsledky z módu Základny"
 msgstr ""
 
@@ -266,13 +161,7 @@ msgctxt "screens.description"
 msgid "Obrazovka zobrazující výsledky LaserMaxx z módu 100 nábojů."
 msgstr ""
 
-msgid "Obrazovka zobrazující výsledky LaserMaxx z módu 100 nábojů."
-msgstr ""
-
 msgctxt "screens"
-msgid "LaserMaxx výsledky z módu 100 nábojů"
-msgstr ""
-
 msgid "LaserMaxx výsledky z módu 100 nábojů"
 msgstr ""
 
@@ -280,20 +169,11 @@ msgctxt "screens.description"
 msgid "Obrazovka zobrazující výsledky LaserMaxx z módu Survival."
 msgstr ""
 
-msgid "Obrazovka zobrazující výsledky LaserMaxx z módu Survival."
-msgstr ""
-
 msgctxt "screens"
 msgid "LaserMaxx výsledky z módu Survival"
 msgstr ""
 
-msgid "LaserMaxx výsledky z módu Survival"
-msgstr ""
-
 msgctxt "screen.trigger"
-msgid "Obrazovka se zobrazuje jako výchozí, pokud žádná jiná před ní nesplňuje podmínku."
-msgstr ""
-
 msgid "Obrazovka se zobrazuje jako výchozí, pokud žádná jiná před ní nesplňuje podmínku."
 msgstr ""
 
@@ -301,13 +181,7 @@ msgctxt "screen.trigger"
 msgid "Výchozí"
 msgstr ""
 
-msgid "Výchozí"
-msgstr ""
-
 msgctxt "screen.trigger"
-msgid "Obrazovka se zobrazí, pokud je poslední hra načtená, ale nespuštěná."
-msgstr ""
-
 msgid "Obrazovka se zobrazí, pokud je poslední hra načtená, ale nespuštěná."
 msgstr ""
 
@@ -315,13 +189,7 @@ msgctxt "screen.trigger"
 msgid "Hra načtena"
 msgstr ""
 
-msgid "Hra načtena"
-msgstr ""
-
 msgctxt "screen.trigger"
-msgid "Obrazovka se zobrazí, pokud poslední hra právě probíhá."
-msgstr ""
-
 msgid "Obrazovka se zobrazí, pokud poslední hra právě probíhá."
 msgstr ""
 
@@ -329,13 +197,7 @@ msgctxt "screen.trigger"
 msgid "Hra hraje"
 msgstr ""
 
-msgid "Hra hraje"
-msgstr ""
-
 msgctxt "screen.trigger"
-msgid "Obrazovka se zobrazí, pokud poseldní hra už skončila."
-msgstr ""
-
 msgid "Obrazovka se zobrazí, pokud poseldní hra už skončila."
 msgstr ""
 
@@ -343,20 +205,11 @@ msgctxt "screen.trigger"
 msgid "Hra skončila"
 msgstr ""
 
-msgid "Hra skončila"
-msgstr ""
-
 msgctxt "screen.trigger"
 msgid "Obrazovka se zobrazí, pokud se vyvolá nějaká manuální událost."
 msgstr ""
 
-msgid "Obrazovka se zobrazí, pokud se vyvolá nějaká manuální událost."
-msgstr ""
-
 msgctxt "screen.trigger"
-msgid "Vlastní událost"
-msgstr ""
-
 msgid "Vlastní událost"
 msgstr ""
 
@@ -367,13 +220,7 @@ msgctxt "settings"
 msgid "Název"
 msgstr ""
 
-msgid "Název"
-msgstr ""
-
 msgctxt "settings"
-msgid "URL název"
-msgstr ""
-
 msgid "URL název"
 msgstr ""
 
@@ -381,13 +228,7 @@ msgctxt "settings"
 msgid "Volitelná hodnota, automaticky se generuje. Jedná se o text, který se použije v URL pro přístup na tuto obrazovku."
 msgstr ""
 
-msgid "Volitelná hodnota, automaticky se generuje. Jedná se o text, který se použije v URL pro přístup na tuto obrazovku."
-msgstr ""
-
 msgctxt "settings"
-msgid "Obrazovky"
-msgstr ""
-
 msgid "Obrazovky"
 msgstr ""
 
@@ -395,13 +236,7 @@ msgctxt "settings"
 msgid "Typ"
 msgstr ""
 
-msgid "Typ"
-msgstr ""
-
 msgctxt "settings"
-msgid "Pořadí"
-msgstr ""
-
 msgid "Pořadí"
 msgstr ""
 
@@ -409,13 +244,7 @@ msgctxt "settings"
 msgid "Pořadí v jakém se obrazovky kontrolují (od nejmenšího čísla k větším)."
 msgstr ""
 
-msgid "Pořadí v jakém se obrazovky kontrolují (od nejmenšího čísla k větším)."
-msgstr ""
-
 msgctxt "settings"
-msgid "Podmínka"
-msgstr ""
-
 msgid "Podmínka"
 msgstr ""
 
@@ -423,13 +252,7 @@ msgctxt "settings"
 msgid "Událost"
 msgstr ""
 
-msgid "Událost"
-msgstr ""
-
 msgctxt "settings"
-msgid "Název manuální události, kterou se obrazovka vyvolá. Může to být cokoliv - je to vámi pojmenovaná událost, kterou můžete manuálně vyvolat zkratkou, nebo napsáním názvu události."
-msgstr ""
-
 msgid "Název manuální události, kterou se obrazovka vyvolá. Může to být cokoliv - je to vámi pojmenovaná událost, kterou můžete manuálně vyvolat zkratkou, nebo napsáním názvu události."
 msgstr ""
 
@@ -437,13 +260,7 @@ msgctxt "settings"
 msgid "Doba na obrazovce v sekundách"
 msgstr ""
 
-msgid "Doba na obrazovce v sekundách"
-msgstr ""
-
 msgctxt "settings"
-msgid "Maximální doba, po kterou má obrazovka zůstat aktivní. 0 = neomezeně."
-msgstr ""
-
 msgid "Maximální doba, po kterou má obrazovka zůstat aktivní. 0 = neomezeně."
 msgstr ""
 
@@ -451,13 +268,7 @@ msgctxt "settings"
 msgid "Interval v sekundách"
 msgstr ""
 
-msgid "Interval v sekundách"
-msgstr ""
-
 msgctxt "settings"
-msgid "URL RTSP streamů"
-msgstr ""
-
 msgid "URL RTSP streamů"
 msgstr ""
 
@@ -465,20 +276,11 @@ msgctxt "settings"
 msgid "Maximální počet zobrazených streamů v jednu chvíli"
 msgstr ""
 
-msgid "Maximální počet zobrazených streamů v jednu chvíli"
-msgstr ""
-
 msgctxt "settings"
 msgid "Pokud je maximální počet menší, než počet streamů, budou se streamy postupně přepínat."
 msgstr ""
 
-msgid "Pokud je maximální počet menší, než počet streamů, budou se streamy postupně přepínat."
-msgstr ""
-
 msgctxt "settings"
-msgid "Na každý řádek 1 URL ve formátu např. \"%s\"."
-msgstr ""
-
 msgid "Na každý řádek 1 URL ve formátu např. \"%s\"."
 msgstr ""
 
@@ -512,9 +314,6 @@ msgid "Nejlepší herní úroveň"
 msgstr ""
 
 msgctxt "topPlayers"
-msgid "Nejvíc zásahů"
-msgstr ""
-
 msgid "Nejvíc zásahů"
 msgstr ""
 

@@ -11,26 +11,6 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "Project-Id-Version: laserarenacontrol\n"
 
-msgid "Skóre"
-msgid_plural "Skóre"
-msgstr[0] "Score"
-msgstr[1] ""
-
-msgid "Výstřely"
-msgid_plural "Výstřely"
-msgstr[0] "Tirs"
-msgstr[1] ""
-
-msgid "Zásahy"
-msgid_plural "Zásahy"
-msgstr[0] "Coups"
-msgstr[1] ""
-
-msgid "Smrti"
-msgid_plural "Smrti"
-msgstr[0] "Morts"
-msgstr[1] ""
-
 msgid "Zásahy od/do spoluhráčů"
 msgid_plural "Zásahy od/do spoluhráčů"
 msgstr[0] ""
@@ -47,20 +27,10 @@ msgid_plural "bonusAgent"
 msgstr[0] "Agent"
 msgstr[1] ""
 
-msgid "Agent"
-msgid_plural "bonusAgent"
-msgstr[0] ""
-msgstr[1] ""
-
 msgctxt "bonus"
 msgid "Neviditelnost"
 msgid_plural "bonusNeviditelnost"
 msgstr[0] "Invisibilité"
-msgstr[1] ""
-
-msgid "Neviditelnost"
-msgid_plural "bonusNeviditelnost"
-msgstr[0] ""
 msgstr[1] ""
 
 msgctxt "bonus"
@@ -69,20 +39,10 @@ msgid_plural "bonusSamopal"
 msgstr[0] "Mitraillette"
 msgstr[1] ""
 
-msgid "Samopal"
-msgid_plural "bonusSamopal"
-msgstr[0] ""
-msgstr[1] ""
-
 msgctxt "bonus"
 msgid "Štít"
 msgid_plural "bonusŠtít"
 msgstr[0] "Bouclier"
-msgstr[1] ""
-
-msgid "Štít"
-msgid_plural "bonusŠtít"
-msgstr[0] ""
 msgstr[1] ""
 
 msgid "Remíza"
@@ -101,31 +61,16 @@ msgid_plural "infoKód hry"
 msgstr[0] "Code du jeu"
 msgstr[1] ""
 
-msgid "Kód hry"
-msgid_plural "infoKód hry"
-msgstr[0] ""
-msgstr[1] ""
-
 msgctxt "info"
 msgid "Datum"
 msgid_plural "infoDatum"
 msgstr[0] "Date"
 msgstr[1] ""
 
-msgid "Datum"
-msgid_plural "infoDatum"
-msgstr[0] ""
-msgstr[1] ""
-
 msgctxt "info"
 msgid "Herní mód"
 msgid_plural "infoHerní mód"
 msgstr[0] "Mode de jeu"
-msgstr[1] ""
-
-msgid "Herní mód"
-msgid_plural "infoHerní mód"
-msgstr[0] ""
 msgstr[1] ""
 
 msgid "On-line detailní výsledky"
@@ -151,20 +96,10 @@ msgid_plural "playerNejoblíbenější cíl"
 msgstr[0] "Cible favorite"
 msgstr[1] ""
 
-msgid "Nejoblíbenější cíl"
-msgid_plural "playerNejoblíbenější cíl"
-msgstr[0] ""
-msgstr[1] ""
-
 msgctxt "player"
 msgid "Největší zabiják"
 msgid_plural "playerNejvětší zabiják"
 msgstr[0] "Le plus grand tueur"
-msgstr[1] ""
-
-msgid "Největší zabiják"
-msgid_plural "playerNejvětší zabiják"
-msgstr[0] ""
 msgstr[1] ""
 
 msgctxt "hits"
@@ -173,20 +108,10 @@ msgid_plural "hitsZásahy hráčů"
 msgstr[0] "Coups de joueurs"
 msgstr[1] ""
 
-msgid "Zásahy hráčů"
-msgid_plural "hitsZásahy hráčů"
-msgstr[0] ""
-msgstr[1] ""
-
 msgctxt "hits"
 msgid "Zasáhl si hráče"
 msgid_plural "hitsZasáhl si hráče"
 msgstr[0] "Vous frappez un joueur"
-msgstr[1] ""
-
-msgid "Zasáhl si hráče"
-msgid_plural "hitsZasáhl si hráče"
-msgstr[0] ""
 msgstr[1] ""
 
 msgid "%d zabití"
@@ -205,20 +130,10 @@ msgid_plural "infoPočet hráčů"
 msgstr[0] "Nombre de joueurs"
 msgstr[1] ""
 
-msgid "Počet hráčů"
-msgid_plural "infoPočet hráčů"
-msgstr[0] ""
-msgstr[1] ""
-
 msgctxt "info"
 msgid "Počet týmů"
 msgid_plural "infoPočet týmů"
 msgstr[0] "Nombre d’ équipes"
-msgstr[1] ""
-
-msgid "Počet týmů"
-msgid_plural "infoPočet týmů"
-msgstr[0] ""
 msgstr[1] ""
 
 msgctxt "scoring"
@@ -227,20 +142,10 @@ msgid_plural "scoringZásah protihráče"
 msgstr[0] "Frappé un adversaire"
 msgstr[1] ""
 
-msgid "Zásah protihráče"
-msgid_plural "scoringZásah protihráče"
-msgstr[0] ""
-msgstr[1] ""
-
 msgctxt "scoring"
 msgid "Zasažen protihráčem"
 msgid_plural "scoringZasažen protihráčem"
 msgstr[0] "Touché par adversaire"
-msgstr[1] ""
-
-msgid "Zasažen protihráčem"
-msgid_plural "scoringZasažen protihráčem"
-msgstr[0] ""
 msgstr[1] ""
 
 msgctxt "scoring"
@@ -249,20 +154,10 @@ msgid_plural "scoringZásah spoluhráče"
 msgstr[0] "Frappé un allié"
 msgstr[1] ""
 
-msgid "Zásah spoluhráče"
-msgid_plural "scoringZásah spoluhráče"
-msgstr[0] ""
-msgstr[1] ""
-
 msgctxt "scoring"
 msgid "Zasažen spouhráčem"
 msgid_plural "scoringZasažen spouhráčem"
 msgstr[0] "Touché par allié"
-msgstr[1] ""
-
-msgid "Zasažen spouhráčem"
-msgid_plural "scoringZasažen spouhráčem"
-msgstr[0] ""
 msgstr[1] ""
 
 msgctxt "scoring"
@@ -271,20 +166,10 @@ msgid_plural "scoringZasažen minou"
 msgstr[0] "Tir de mine"
 msgstr[1] ""
 
-msgid "Zasažen minou"
-msgid_plural "scoringZasažen minou"
-msgstr[0] ""
-msgstr[1] ""
-
 msgctxt "scoring"
 msgid "Body za výstřel"
 msgid_plural "scoringBody za výstřel"
 msgstr[0] "Points par tir"
-msgstr[1] ""
-
-msgid "Body za výstřel"
-msgid_plural "scoringBody za výstřel"
-msgstr[0] ""
 msgstr[1] ""
 
 msgctxt "scoring"
@@ -317,20 +202,10 @@ msgid_plural "playerJméno"
 msgstr[0] "Prénom"
 msgstr[1] ""
 
-msgid "Jméno"
-msgid_plural "playerJméno"
-msgstr[0] ""
-msgstr[1] ""
-
 msgctxt "player"
 msgid "Tým"
 msgid_plural "playerTým"
 msgstr[0] "Équipe"
-msgstr[1] ""
-
-msgid "Tým"
-msgid_plural "playerTým"
-msgstr[0] ""
 msgstr[1] ""
 
 msgctxt "player"
@@ -345,20 +220,10 @@ msgid_plural "playerPočet výstřelů"
 msgstr[0] "Nombre des tirs"
 msgstr[1] ""
 
-msgid "Počet výstřelů"
-msgid_plural "playerPočet výstřelů"
-msgstr[0] ""
-msgstr[1] ""
-
 msgctxt "player"
 msgid "Počet střel do prázdna"
 msgid_plural "playerPočet střel do prázdna"
 msgstr[0] "Nombre de tirs ratés"
-msgstr[1] ""
-
-msgid "Počet střel do prázdna"
-msgid_plural "playerPočet střel do prázdna"
-msgstr[0] ""
 msgstr[1] ""
 
 msgctxt "player"
@@ -367,20 +232,10 @@ msgid_plural "playerÚspěšnost"
 msgstr[0] "Précision"
 msgstr[1] ""
 
-msgid "Úspěšnost"
-msgid_plural "playerÚspěšnost"
-msgstr[0] ""
-msgstr[1] ""
-
 msgctxt "player"
 msgid "K:D"
 msgid_plural "playerK:D"
 msgstr[0] "K:D"
-msgstr[1] ""
-
-msgid "K:D"
-msgid_plural "playerK:D"
-msgstr[0] ""
 msgstr[1] ""
 
 msgctxt "player"
@@ -389,20 +244,10 @@ msgid_plural "playerZbývá životů"
 msgstr[0] "Vies restantes"
 msgstr[1] ""
 
-msgid "Zbývá životů"
-msgid_plural "playerZbývá životů"
-msgstr[0] ""
-msgstr[1] ""
-
 msgctxt "player"
 msgid "Hráči"
 msgid_plural "playerHráči"
 msgstr[0] "Joueurs"
-msgstr[1] ""
-
-msgid "Hráči"
-msgid_plural "playerHráči"
-msgstr[0] ""
 msgstr[1] ""
 
 msgctxt "player"
@@ -417,20 +262,10 @@ msgid_plural "playerTýmy"
 msgstr[0] "Équipes"
 msgstr[1] ""
 
-msgid "Týmy"
-msgid_plural "playerTýmy"
-msgstr[0] ""
-msgstr[1] ""
-
 msgctxt "player"
 msgid "Soupeř"
 msgid_plural "playerSoupeř"
 msgstr[0] "Adversaire"
-msgstr[1] ""
-
-msgid "Soupeř"
-msgid_plural "playerSoupeř"
-msgstr[0] ""
 msgstr[1] ""
 
 msgctxt "player"
@@ -439,20 +274,10 @@ msgid_plural "playerVlastní"
 msgstr[0] "Allié"
 msgstr[1] ""
 
-msgid "Vlastní"
-msgid_plural "playerVlastní"
-msgstr[0] ""
-msgstr[1] ""
-
 msgctxt "team"
 msgid "Výsledky týmů"
 msgid_plural "teamVýsledky týmů"
 msgstr[0] "Les résultats des équipes"
-msgstr[1] ""
-
-msgid "Výsledky týmů"
-msgid_plural "teamVýsledky týmů"
-msgstr[0] ""
 msgstr[1] ""
 
 msgctxt "team"
@@ -465,11 +290,6 @@ msgctxt "team"
 msgid "Zásahů"
 msgid_plural "teamZásahů"
 msgstr[0] "Coups"
-msgstr[1] ""
-
-msgid "Zásahů"
-msgid_plural "teamZásahů"
-msgstr[0] ""
 msgstr[1] ""
 
 msgctxt "team"
@@ -490,31 +310,16 @@ msgid_plural "teamVýstřelů"
 msgstr[0] "Tirs"
 msgstr[1] ""
 
-msgid "Výstřelů"
-msgid_plural "teamVýstřelů"
-msgstr[0] ""
-msgstr[1] ""
-
 msgctxt "team"
 msgid "Ztráty základny"
 msgid_plural "teamZtráty základny"
 msgstr[0] "Bases perdues"
 msgstr[1] ""
 
-msgid "Ztráty základny"
-msgid_plural "teamZtráty základny"
-msgstr[0] ""
-msgstr[1] ""
-
 msgctxt "today"
 msgid "Umístění dne"
 msgid_plural "todayUmístění dne"
 msgstr[0] "Classement du jour"
-msgstr[1] ""
-
-msgid "Umístění dne"
-msgid_plural "todayUmístění dne"
-msgstr[0] ""
 msgstr[1] ""
 
 msgctxt "today"
@@ -529,11 +334,6 @@ msgid_plural "todayDenní pořadí podle"
 msgstr[0] "Un ordre de jour selon"
 msgstr[1] ""
 
-msgid "Denní pořadí podle"
-msgid_plural "todayDenní pořadí podle"
-msgstr[0] ""
-msgstr[1] ""
-
 msgctxt "today"
 msgid "Skóre"
 msgid_plural "todaySkóre"
@@ -544,11 +344,6 @@ msgctxt "today"
 msgid "Přesnosti"
 msgid_plural "todayPřesnosti"
 msgstr[0] "Précision"
-msgstr[1] ""
-
-msgid "Přesnosti"
-msgid_plural "todayPřesnosti"
-msgstr[0] ""
 msgstr[1] ""
 
 msgctxt "today"
@@ -563,31 +358,16 @@ msgid_plural "todaySmrtí"
 msgstr[0] "Morts"
 msgstr[1] ""
 
-msgid "Smrtí"
-msgid_plural "todaySmrtí"
-msgstr[0] ""
-msgstr[1] ""
-
 msgctxt "today"
 msgid "Dnes odehráno"
 msgid_plural "todayDnes odehráno"
 msgstr[0] "Joué aujourd’hui"
 msgstr[1] ""
 
-msgid "Dnes odehráno"
-msgid_plural "todayDnes odehráno"
-msgstr[0] ""
-msgstr[1] ""
-
 msgctxt "bests"
 msgid "Ti nej..."
 msgid_plural "bestsTi nej..."
 msgstr[0] "Les meilleurs..."
-msgstr[1] ""
-
-msgid "Ti nej..."
-msgid_plural "bestsTi nej..."
-msgstr[0] ""
 msgstr[1] ""
 
 msgctxt "today"
@@ -782,9 +562,6 @@ msgstr "Résultats non trouvés"
 msgctxt "bests"
 msgid "Výstřely nenalezeny"
 msgstr "Tirs non trouvés"
-
-msgid "Sniper"
-msgstr "Tireur d'élite"
 
 msgid "Mega střelec"
 msgstr "Grand tireur"
@@ -1102,127 +879,4 @@ msgstr ""
 
 msgctxt "hits"
 msgid "Hry proti dalším týmům"
-msgstr ""
-
-msgid "Staň se hráčem s největším skóre."
-msgstr ""
-
-msgid "Největší terminátor"
-msgstr ""
-
-msgid "Staň se hráčem s největším počtem zásahů."
-msgstr ""
-
-msgid "Staň se hráčem s největším počtem smrtí."
-msgstr ""
-
-msgid "Staň se nejpřesnějším hráčem."
-msgstr ""
-
-msgid "Staň se hráčem s nejméně výstřely z celé hry."
-msgstr ""
-
-msgid "Staň se hráčem, který se nejvícekrát netrefil."
-msgstr ""
-
-msgid "Staň se hrářem, který nejvíckát zasáhnul spoluhráče."
-msgstr ""
-
-msgid "Staň se hráčem, kterého nejvíckrát trefili spoluhráči."
-msgstr ""
-
-msgid "Získej nejvíce bonusů za hru."
-msgstr ""
-
-msgid "Nedotknutelný"
-msgstr ""
-
-msgid "Zemři méně než 10krát za hru."
-msgstr ""
-
-msgid "Získej přesnost alespoň 95% za hru."
-msgstr ""
-
-msgid "Poloviční sniper"
-msgstr ""
-
-msgid "Získej přesnost alespoň 50% za hru."
-msgstr ""
-
-msgid "Občas se i trefí"
-msgstr ""
-
-msgid "Získej přesnost maximálně 5% za hru."
-msgstr ""
-
-msgid "Vyrovnaný"
-msgstr ""
-
-msgid "Měj téměř stejně zásahů a smrtí."
-msgstr ""
-
-msgid "Zabiják"
-msgstr ""
-
-msgid "Měj alespoň 2x tolik zásahů co smrtí."
-msgstr ""
-
-msgid "Terč"
-msgstr ""
-
-msgid "Měl alespoň přibližně 2x tolik smrtí co zásahů."
-msgstr ""
-
-msgid "Nula"
-msgstr ""
-
-msgid "Měj 0 skóre."
-msgstr ""
-
-msgid "Tahoun týmu"
-msgstr ""
-
-msgid "Získej alespoň přibližně polovinu skóre celého tvého týmu."
-msgstr ""
-
-msgid "Zasedlý"
-msgstr ""
-
-msgid "Alespoň přibližně polovina všech tvých zásahů je jen jeden hráč."
-msgstr ""
-
-msgid "Pronásledovaný"
-msgstr ""
-
-msgid "Alespoň přibližně polovina všech tvých smrtí je jen jeden hráč."
-msgstr ""
-
-msgid "Ďábel"
-msgstr ""
-
-msgid "Získej 666 skóre nebo výstřelů."
-msgstr ""
-
-msgid "Skóre nenalezeno"
-msgstr ""
-
-msgid "Získej 404, 4040, nebo 40400 skóre."
-msgstr ""
-
-msgid "Výstřely nenalezeny"
-msgstr ""
-
-msgid "Vystřel 404krát."
-msgstr ""
-
-msgid "Férový hráč"
-msgstr ""
-
-msgid "Zasáhni všechny své nepřátele stejněkrát (přibližně)."
-msgstr ""
-
-msgid "Hráč"
-msgstr ""
-
-msgid "Průměrný hráč. Bohužel na tebe nesedí žádná z trofejí."
 msgstr ""

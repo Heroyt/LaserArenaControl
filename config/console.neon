@@ -15,3 +15,4 @@ services:
 	command.regression.update: App\Cli\Commands\Regression\UpdateRegressionModelsCommand
 	command.translation.compile: App\Cli\Commands\Translation\CompileTranslationsCommand
 	command.translation.removeComments: App\Cli\Commands\Translation\RemoveCommentsCommand
+	command.translation.removeDuplicates: App\Cli\Commands\Translation\RemoveTranslationsDuplicatesCommand

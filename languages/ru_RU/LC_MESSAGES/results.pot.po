@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: Russian\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2024-05-28 10:01\n"
+"PO-Revision-Date: 2024-05-28 12:13\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=4; plural=((n%10==1 && n%100!=11) ? 0 : ((n%10 >= 2 && n%10 <=4 && (n%100 < 12 || n%100 > 14)) ? 1 : ((n%10 == 0 || (n%10 >= 5 && n%10 <=9)) || (n%100 >= 11 && n%100 <= 14)) ? 2 : 3));\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -431,9 +431,6 @@ msgctxt "info"
 msgid "Kód hry"
 msgstr ""
 
-msgid "Sniper"
-msgstr ""
-
 msgid "Mega střelec"
 msgstr ""
 
@@ -590,18 +587,6 @@ msgid "Průměrný hráč. Bohužel na tebe nesedí žádná z trofejí."
 msgstr ""
 
 msgid "On-line detailní výsledky"
-msgstr ""
-
-msgid "Skóre"
-msgstr ""
-
-msgid "Výstřely"
-msgstr ""
-
-msgid "Zásahy"
-msgstr ""
-
-msgid "Smrti"
 msgstr ""
 
 msgid "Zásahy/Smrti od spoluhráčů"
@@ -791,155 +776,5 @@ msgstr ""
 
 msgctxt "hits"
 msgid "Hry proti dalším týmům"
-msgstr ""
-
-msgid "Agent"
-msgstr ""
-
-msgid "Neviditelnost"
-msgstr ""
-
-msgid "Samopal"
-msgstr ""
-
-msgid "Štít"
-msgstr ""
-
-msgid "Kód hry"
-msgstr ""
-
-msgid "Datum"
-msgstr ""
-
-msgid "Nejoblíbenější cíl"
-msgstr ""
-
-msgid "Největší zabiják"
-msgstr ""
-
-msgid "Zasáhl si hráče"
-msgstr ""
-
-msgid "Staň se hráčem s největším skóre."
-msgstr ""
-
-msgid "Největší terminátor"
-msgstr ""
-
-msgid "Staň se hráčem s největším počtem zásahů."
-msgstr ""
-
-msgid "Staň se hráčem s největším počtem smrtí."
-msgstr ""
-
-msgid "Staň se nejpřesnějším hráčem."
-msgstr ""
-
-msgid "Staň se hráčem s nejméně výstřely z celé hry."
-msgstr ""
-
-msgid "Staň se hráčem, který se nejvícekrát netrefil."
-msgstr ""
-
-msgid "Staň se hrářem, který nejvíckát zasáhnul spoluhráče."
-msgstr ""
-
-msgid "Staň se hráčem, kterého nejvíckrát trefili spoluhráči."
-msgstr ""
-
-msgid "Získej nejvíce bonusů za hru."
-msgstr ""
-
-msgid "Nedotknutelný"
-msgstr ""
-
-msgid "Zemři méně než 10krát za hru."
-msgstr ""
-
-msgid "Získej přesnost alespoň 95% za hru."
-msgstr ""
-
-msgid "Poloviční sniper"
-msgstr ""
-
-msgid "Získej přesnost alespoň 50% za hru."
-msgstr ""
-
-msgid "Občas se i trefí"
-msgstr ""
-
-msgid "Získej přesnost maximálně 5% za hru."
-msgstr ""
-
-msgid "Vyrovnaný"
-msgstr ""
-
-msgid "Měj téměř stejně zásahů a smrtí."
-msgstr ""
-
-msgid "Zabiják"
-msgstr ""
-
-msgid "Měj alespoň 2x tolik zásahů co smrtí."
-msgstr ""
-
-msgid "Terč"
-msgstr ""
-
-msgid "Měl alespoň přibližně 2x tolik smrtí co zásahů."
-msgstr ""
-
-msgid "Nula"
-msgstr ""
-
-msgid "Měj 0 skóre."
-msgstr ""
-
-msgid "Tahoun týmu"
-msgstr ""
-
-msgid "Získej alespoň přibližně polovinu skóre celého tvého týmu."
-msgstr ""
-
-msgid "Zasedlý"
-msgstr ""
-
-msgid "Alespoň přibližně polovina všech tvých zásahů je jen jeden hráč."
-msgstr ""
-
-msgid "Pronásledovaný"
-msgstr ""
-
-msgid "Alespoň přibližně polovina všech tvých smrtí je jen jeden hráč."
-msgstr ""
-
-msgid "Ďábel"
-msgstr ""
-
-msgid "Získej 666 skóre nebo výstřelů."
-msgstr ""
-
-msgid "Skóre nenalezeno"
-msgstr ""
-
-msgid "Získej 404, 4040, nebo 40400 skóre."
-msgstr ""
-
-msgid "Výstřely nenalezeny"
-msgstr ""
-
-msgid "Vystřel 404krát."
-msgstr ""
-
-msgid "Férový hráč"
-msgstr ""
-
-msgid "Zasáhni všechny své nepřátele stejněkrát (přibližně)."
-msgstr ""
-
-msgid "Hráč"
-msgstr ""
-
-msgid "Průměrný hráč. Bohužel na tebe nesedí žádná z trofejí."
 msgstr ""
 

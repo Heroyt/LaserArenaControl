@@ -4599,7 +4599,6 @@ msgstr ""
 msgid "Nastavení - Výsledková tabule"
 msgstr ""
 
-
 msgid "URL název"
 msgstr ""
 

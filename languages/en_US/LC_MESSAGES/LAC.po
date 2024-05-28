@@ -206,7 +206,7 @@ msgid "Přidat datum"
 msgstr "Add date"
 
 msgid "Naposledy uloženo"
-msgstr "Last saved"
+msgstr ""
 
 msgid "nikdy"
 msgstr "never"
@@ -4528,9 +4528,6 @@ msgstr ""
 msgid "Na každý řádek 1 URL ve formátu např. \"%s\"."
 msgstr ""
 
-msgid "Naposledy uloženo"
-msgstr ""
-
 msgctxt "settings"
 msgid "Typy obrazovek"
 msgstr ""
@@ -4564,4 +4561,7 @@ msgid "Událost"
 msgstr ""
 
 msgid "Název manuální události, kterou se obrazovka vyvolá. Může to být cokoliv - je to vámi pojmenovaná událost, kterou můžete manuálně vyvolat zkratkou, nebo napsáním názvu události."
+msgstr ""
+
+msgid "Naposledy uloženo:"
 msgstr ""

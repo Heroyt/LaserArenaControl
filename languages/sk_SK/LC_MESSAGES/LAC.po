@@ -4599,3 +4599,6 @@ msgstr ""
 
 msgid "Název manuální události, kterou se obrazovka vyvolá. Může to být cokoliv - je to vámi pojmenovaná událost, kterou můžete manuálně vyvolat zkratkou, nebo napsáním názvu události."
 msgstr ""
+
+msgid "nikdy"
+msgstr ""

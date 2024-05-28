@@ -13,10 +13,10 @@
                     data-target="#print-settings-form">{_'nikdy'}</span>
 		</div>
 
-        <h2>{_'Print defaults', domain: 'results', context: 'style.settings'}:</h2>
+        <h2>{_'Výchozí hodnoty tisku', domain: 'results', context: 'style.settings'}:</h2>
 		<p>
 			<label class="form-label" for="default-style">
-                {_'Default print style', domain: 'results', context: 'style.settings'}
+                {_'Výchozí tiskový styl', domain: 'results', context: 'style.settings'}
 			</label>
 			<select name="default-style" class="form-select" id="default-style">
 				<option n:foreach="$styles as $style"
@@ -27,7 +27,7 @@
 		</p>
 		<p>
 			<label class="form-label" for="default-template">
-                {_'Default template', domain: 'results', context: 'style.settings'}
+                {_'Výchozí šablona', domain: 'results', context: 'style.settings'}
 			</label>
 			<select name="default-template" class="form-select" id="default-template">
 				<option n:foreach="$templates as $template"
@@ -37,7 +37,7 @@
 			</select>
 		</p>
 
-        <h2>{_'Print styles dates', domain: 'results', context: 'style.settings'}:</h2>
+        <h2>{_'Data tiskových stylů', domain: 'results', context: 'style.settings'}:</h2>
 		<div id="ranges" class="d-flex flex-wrap justify-content-center">
 			<div class="card bg-light m-2 print-style-date" n:foreach="$dates as $info">
 				<div class="card-header text-end">
@@ -131,7 +131,7 @@
 						</div>
 						<div class="form-group mb-1">
 							<label class="form-label" for="file-{$key}">
-                                {_'Background', domain: 'results', context: 'style.settings'}:
+                                {_'Pozadí', domain: 'results', context: 'style.settings'}:
 							</label>
 							<input type="hidden" name="styles[{$key}][original-background]" value="{$style->bg}">
 							<input id="file-{$key}" name="styles[{$key}][background]" type="file"
@@ -139,7 +139,7 @@
 						</div>
 						<div class="form-group mb-1">
 							<label class="form-label" for="file-{$key}">
-                                {_'Landscape background', domain: 'results', context: 'style.settings'}:
+                                {_'Pozadí na šířku', domain: 'results', context: 'style.settings'}:
 							</label>
 							<input type="hidden" name="styles[{$key}][original-background-landscape]"
 								   value="{$style->bgLandscape}">
@@ -149,7 +149,7 @@
 						<div class="form-group mb-1">
 							<label class="form-label"
 								   for="primary-{$key}">
-                                {_'Primary color', domain: 'results', context: 'style.settings'}:
+                                {_'Primární barva', domain: 'results', context: 'style.settings'}:
 							</label>
 							<input id="primary-{$key}" name="styles[{$key}][primary]" type="text" data-jscolor=""
 								   value="{$style->colorPrimary}"
@@ -157,7 +157,7 @@
 						</div>
 						<div class="form-group mb-1">
 							<label class="form-label"
-                                   for="dark-{$key}">{_'Dark color', domain: 'results', context: 'style.settings'}
+                                   for="dark-{$key}">{_'Tmavá barva', domain: 'results', context: 'style.settings'}
                                 :</label>
 							<input id="dark-{$key}" name="styles[{$key}][dark]" type="text" data-jscolor=""
 								   value="{$style->colorDark}"
@@ -165,7 +165,7 @@
 						</div>
 						<div class="form-group mb-1">
 							<label class="form-label"
-                                   for="light-{$key}">{_'Light color', domain: 'results', context: 'style.settings'}
+                                   for="light-{$key}">{_'Světlá barva', domain: 'results', context: 'style.settings'}
                                 :</label>
 							<input id="light-{$key}" name="styles[{$key}][light]" type="text" data-jscolor=""
 								   value="{$style->colorLight}"
@@ -181,7 +181,7 @@
 		<div class="btn-group btn-group-lg my-4">
 			<button class="btn btn-primary" type="button" id="addStyle" data-key="{count($styles)}">
 				<i class="fas fa-plus"></i>
-                {_'Add style', domain: 'results', context: 'style.settings'}
+                {_'Přidat styl', domain: 'results', context: 'style.settings'}
 			</button>
 			<button class="btn btn-success" type="submit" data-action="autosave">
                 {_'Odeslat', context: 'actions'}
@@ -212,28 +212,28 @@
 					</div>
 					<div class="form-group mb-1">
 						<label class="form-label" for="file-#key#">
-                            {_'Background', domain: 'results', context: 'style.settings'}:
+                            {_'Pozadí', domain: 'results', context: 'style.settings'}:
 						</label>
 						<input id="file-#key#" name="styles[#key#][background]" type="file"
 							   accept="image/jpeg,image/png" class="form-control portrait">
 					</div>
 					<div class="form-group mb-1">
 						<label class="form-label" for="file-{$key}">
-                            {_'Landscape background', domain: 'results', context: 'style.settings'}:
+                            {_'Pozadí na šířku', domain: 'results', context: 'style.settings'}:
 						</label>
 						<input id="file-#key#" name="styles[#key#][background-landscape]" type="file"
 							   accept="image/jpeg,image/png" class="form-control landscape">
 					</div>
 					<div class="form-group mb-1">
 						<label class="form-label" for="primary-#key#">
-                            {_'Primary color', domain: 'results', context: 'style.settings'}:
+                            {_'Primární barva', domain: 'results', context: 'style.settings'}:
 						</label>
 						<input id="primary-#key#" name="styles[#key#][primary]" type="text" data-jscolor="" value=""
 							   class="form-control">
 					</div>
 					<div class="form-group mb-1">
 						<label class="form-label" for="dark-#key#">
-                            {_'Dark color', domain: 'results', context: 'style.settings'}:
+                            {_'Tmavá barva', domain: 'results', context: 'style.settings'}:
 						</label>
 						<input id="dark-#key#" name="styles[#key#][dark]" type="text" data-jscolor=""
 							   value=""
@@ -241,7 +241,7 @@
 					</div>
 					<div class="form-group mb-1">
 						<label class="form-label" for="light-#key#">
-                            {_'Light color', domain: 'results', context: 'style.settings'}:
+                            {_'Světlá barva', domain: 'results', context: 'style.settings'}:
 						</label>
 						<input id="light-#key#" name="styles[#key#][light]" type="text" data-jscolor=""
 							   value=""

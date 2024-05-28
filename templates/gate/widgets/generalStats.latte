@@ -71,7 +71,7 @@
         </div>
         <div class="flex-fill-same bg-white-forced text-grey-text py-1 d-flex align-items-center justify-content-center">
             {ifset $topShots}
-                {$topShots->name} ({sprintf(lang('%d shot', '%d shots', $topShots->shots, 'results'), $topShots->shots)})
+                {$topShots->name} ({sprintf(lang('%d výstřel', '%d výstřelů', $topShots->shots, 'results'), $topShots->shots)})
             {/ifset}
         </div>
     </div>
@@ -84,7 +84,7 @@
         </div>
         <div class="flex-fill-same bg-white-forced text-grey-text py-1 d-flex align-items-center justify-content-center">
             {ifset $topHits}
-                {$topHits->name} ({sprintf(lang('%d hit', '%d hits', $topHits->hits, 'results'), $topHits->hits)})
+                {$topHits->name} ({sprintf(lang('%d zásah', '%d zásahů', $topHits->hits, 'results'), $topHits->hits)})
             {/ifset}
         </div>
     </div>
@@ -99,7 +99,7 @@
         <div class="flex-fill-same bg-white-forced text-grey-text py-1 d-flex align-items-center justify-content-center"
              style="border-bottom-right-radius: 10px;">
             {ifset $topDeaths}
-                {$topDeaths->name} ({sprintf(lang('%d death', '%d deaths', $topDeaths->deaths, 'results'), $topDeaths->deaths)})
+                {$topDeaths->name} ({sprintf(lang('%d smrt', '%d smrtí', $topDeaths->deaths, 'results'), $topDeaths->deaths)})
             {/ifset}
         </div>
     </div>

@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: German\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2024-05-28 09:34\n"
+"PO-Revision-Date: 2024-05-28 10:58\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -4142,12 +4142,6 @@ msgctxt "systems"
 msgid "evo6"
 msgstr ""
 
-msgid "Přepnout na tmavý režim"
-msgstr ""
-
-msgid "Přepnout na světlý režim"
-msgstr ""
-
 msgid "Template"
 msgstr ""
 
@@ -4391,116 +4385,24 @@ msgctxt "game"
 msgid "Playlisty"
 msgstr ""
 
-msgctxt "image"
-msgid "Pozadí"
+msgctxt "month"
+msgid "Duben"
 msgstr ""
 
-msgctxt "image"
-msgid "Ikona"
+msgid "Duben"
 msgstr ""
 
-msgid "Rozložení obrazovky"
+msgctxt "month"
+msgid "Březen"
 msgstr ""
 
-msgid "Animace"
+msgid "Březen"
 msgstr ""
 
-msgid "Obrázek"
+msgctxt "month"
+msgid "Leden"
 msgstr ""
 
-msgctxt "settings"
-msgid "Doba na obrazovce v sekundách"
-msgstr ""
-
-msgid "Doba na obrazovce v sekundách"
-msgstr ""
-
-msgid "Maximální doba, po kterou má obrazovka zůstat aktivní. 0 = neomezeně."
-msgstr ""
-
-msgctxt "animation"
-msgid "Prolnutí"
-msgstr ""
-
-msgid "Prolnutí"
-msgstr ""
-
-msgctxt "animation"
-msgid "Zmenšení"
-msgstr ""
-
-msgid "Zmenšení"
-msgstr ""
-
-msgctxt "animation"
-msgid "Posun shora"
-msgstr ""
-
-msgid "Posun shora"
-msgstr ""
-
-msgctxt "animation"
-msgid "Posun z prava"
-msgstr ""
-
-msgid "Posun z prava"
-msgstr ""
-
-msgctxt "animation"
-msgid "Posun z leva"
-msgstr ""
-
-msgid "Posun z leva"
-msgstr ""
-
-msgctxt "animation"
-msgid "Posun ze spodu"
-msgstr ""
-
-msgid "Posun ze spodu"
-msgstr ""
-
-msgid "URL"
-msgstr ""
-
-msgid "Na každý řádek 1 URL ve formátu např. \"%s\"."
-msgstr ""
-
-msgid "Naposledy uloženo"
-msgstr ""
-
-msgctxt "settings"
-msgid "Typy obrazovek"
-msgstr ""
-
-msgid "Typy obrazovek"
-msgstr ""
-
-msgctxt "pageTitles"
-msgid "Nastavení - Výsledková tabule"
-msgstr ""
-
-msgid "Nastavení - Výsledková tabule"
-msgstr ""
-
-msgid "URL název"
-msgstr ""
-
-msgid "Volitelná hodnota, automaticky se generuje. Jedná se o text, který se použije v URL pro přístup na tuto obrazovku."
-msgstr ""
-
-msgid "Obrazovky"
-msgstr ""
-
-msgid "Pořadí v jakém se obrazovky kontrolují (od nejmenšího čísla k větším)."
-msgstr ""
-
-msgid "Podmínka"
-msgstr ""
-
-msgid "Událost"
-msgstr ""
-
-msgid "Název manuální události, kterou se obrazovka vyvolá. Může to být cokoliv - je to vámi pojmenovaná událost, kterou můžete manuálně vyvolat zkratkou, nebo napsáním názvu události."
+msgid "Leden"
 msgstr ""
 

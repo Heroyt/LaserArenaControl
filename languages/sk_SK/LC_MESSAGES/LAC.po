@@ -4602,3 +4602,49 @@ msgstr ""
 
 msgid "nikdy"
 msgstr ""
+
+msgctxt "results"
+msgid "%d výstřel"
+msgid_plural "%d výstřelů"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+msgctxt "results"
+msgid "%d zásah"
+msgid_plural "%d zásahů"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+msgctxt "results"
+msgid "%d smrt"
+msgid_plural "%d smrtí"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+msgctxt "month"
+msgid "Duben"
+msgstr ""
+
+msgid "Duben"
+msgstr ""
+
+
+msgctxt "month"
+msgid "Březen"
+msgstr ""
+
+msgid "Březen"
+msgstr ""
+
+msgctxt "month"
+msgid "Leden"
+msgstr ""
+
+msgid "Leden"
+msgstr ""

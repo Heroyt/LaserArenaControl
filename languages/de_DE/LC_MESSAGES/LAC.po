@@ -4541,3 +4541,43 @@ msgstr ""
 
 msgid "Název manuální události, kterou se obrazovka vyvolá. Může to být cokoliv - je to vámi pojmenovaná událost, kterou můžete manuálně vyvolat zkratkou, nebo napsáním názvu události."
 msgstr ""
+
+msgctxt "results"
+msgid "%d výstřel"
+msgid_plural "%d výstřelů"
+msgstr[0] ""
+msgstr[1] ""
+
+msgctxt "results"
+msgid "%d zásah"
+msgid_plural "%d zásahů"
+msgstr[0] ""
+msgstr[1] ""
+
+msgctxt "results"
+msgid "%d smrt"
+msgid_plural "%d smrtí"
+msgstr[0] ""
+msgstr[1] ""
+
+msgctxt "month"
+msgid "Duben"
+msgstr ""
+
+msgid "Duben"
+msgstr ""
+
+
+msgctxt "month"
+msgid "Březen"
+msgstr ""
+
+msgid "Březen"
+msgstr ""
+
+msgctxt "month"
+msgid "Leden"
+msgstr ""
+
+msgid "Leden"
+msgstr ""

@@ -17,9 +17,7 @@
             <div class="btn-group">
                 <button type="button" class="btn btn-warning" data-toggle="event"
                         data-event="gate-reload">
-                    {translate context: 'events'}
-                    Reload gate
-                    {/translate}
+                    {translate context: 'events'}Reload gate{/translate}
                 </button>
                 {if !$page->getApp()->isProduction()}
                     {var string[] $systems = App\GameModels\Factory\GameFactory::getSupportedSystems()}

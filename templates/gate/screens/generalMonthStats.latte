@@ -20,7 +20,7 @@
 {define content}
     {cache 'gate.screen.month.'.$screenHash, expire: '1 days', tags: ['templates', 'templates.gate', 'templates.gate.screens', 'templates.gate.screens.month']}
         <h1 class="title text-center text-white-forced"
-            data-hash="{$screenHash}">{sprintf(lang('Výsledky pro měsíc %s %s', domain: 'gate'), $monthName, $year)}</h1>
+            data-hash="{$screenHash}">{_'Výsledky pro měsíc %s %s', domain: 'gate', format:[$monthName, $year]}</h1>
 
         <div class="score d-flex flex-column justify-content-between align-items-stretch">
 
@@ -84,7 +84,7 @@
                 </div>
                 <div class="flex-fill-same bg-white-forced text-grey-text py-1 d-flex align-items-center justify-content-center">
                     {ifset $topShots}
-                        {$topShots->name} ({sprintf(lang('%d výstřel', '%d výstřelů', $topShots->shots, 'results'), $topShots->shots)})
+                        {$topShots->name} ({_'%d výstřel', plural: '%d výstřelů', num: $topShots->shots, domain: 'results', format: [$topShots->shots]})
                     {/ifset}
                 </div>
             </div>
@@ -97,7 +97,7 @@
                 </div>
                 <div class="flex-fill-same bg-white-forced text-grey-text py-1 d-flex align-items-center justify-content-center">
                     {ifset $topHits}
-                        {$topHits->name} ({sprintf(lang('%d zásah', '%d zásahů', $topHits->hits, 'results'), $topHits->hits)})
+                        {$topHits->name} ({_'%d zásah', plural: '%d zásahů', num: $topHits->hits, domain: 'results', format: [$topHits->hits]})
                     {/ifset}
                 </div>
             </div>
@@ -112,7 +112,7 @@
                 <div class="flex-fill-same bg-white-forced text-grey-text py-1 d-flex align-items-center justify-content-center"
                      style="border-bottom-right-radius: 10px;">
                     {ifset $topDeaths}
-                        {$topDeaths->name} ({sprintf(lang('%d smrt', '%d smrtí', $topDeaths->deaths, 'results'), $topDeaths->deaths)})
+                        {$topDeaths->name} ({_'%d smrt', plural: '%d smrtí', num: $topDeaths->deaths, domain: 'results', format: [$topDeaths->deaths]})
                     {/ifset}
                 </div>
             </div>

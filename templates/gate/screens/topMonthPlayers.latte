@@ -20,13 +20,13 @@
 {define content}
     {cache 'gate.screen.top-players.'.$screenHash, expire: '1 days', tags: ['templates', 'templates.gate', 'templates.gate.screens', 'templates.gate.screens.top-players']}
         <h1 class="title text-center text-white-forced" data-hash="{$screenHash}">
-            {sprintf(lang('Nejlepší hráči měsíce %s %s', domain: 'gate'), $monthName, $year)}
+            {_'Nejlepší hráči měsíce %s %s', domain: 'gate', format: [$monthName, $year]}
         </h1>
 
         <div class="players">
 
             <div n:ifset="$topScore" class="top-score top-player">
-                <div class="label">{_'Nejlepší skóre'}</div>
+                <div class="label">{_'Nejlepší skóre', domain: 'gate', context: 'topPlayers'}</div>
                 <div class="player">
                     {include topPlayer, $topScore}
                 </div>
@@ -40,7 +40,7 @@
             </div>
 
             <div n:ifset="$topSkill" class="top-skill top-player">
-                <div class="label">{_'Nejlepší herní úroveň'}</div>
+                <div class="label">{_'Nejlepší herní úroveň', domain: 'gate', context: 'topPlayers'}</div>
                 <div class="player">
                     {include topPlayer, $topSkill}
                 </div>
@@ -54,7 +54,7 @@
             </div>
 
             <div n:ifset="$topHits" class="top-hits top-player">
-                <div class="label">{_'Nejvíc zásahů'}</div>
+                <div class="label">{_'Nejvíc zásahů', domain: 'gate', context: 'topPlayers'}</div>
                 <div class="player">
                     {include topPlayer, $topHits}
                 </div>
@@ -68,7 +68,7 @@
             </div>
 
             <div n:ifset="$topDeaths" class="top-deaths top-player">
-                <div class="label">{_'Nejvíc smrtí'}</div>
+                <div class="label">{_'Nejvíc smrtí', domain: 'gate', context: 'topPlayers'}</div>
                 <div class="player">
                     {include topPlayer, $topDeaths}
                 </div>
@@ -82,7 +82,7 @@
             </div>
 
             <div n:ifset="$topAccuracy" class="top-accuracy top-player">
-                <div class="label">{_'Nejlepší přesnost'}</div>
+                <div class="label">{_'Nejlepší přesnost', domain: 'gate', context: 'topPlayers'}</div>
                 <div class="player">
                     {include topPlayer, $topAccuracy}
                 </div>
@@ -95,7 +95,7 @@
             </div>
 
             <div n:ifset="$topShots" class="top-shots top-player">
-                <div class="label">{_'Nejvíc výstřelů'}</div>
+                <div class="label">{_'Nejvíc výstřelů', domain: 'gate', context: 'topPlayers'}</div>
                 <div class="player">
                     {include topPlayer, $topShots}
                 </div>
@@ -109,7 +109,7 @@
             </div>
 
             <div n:ifset="$topHitsOwn" class="top-hits-own top-player">
-                <div class="label">{_'Nejvíc zásahů vlastních'}</div>
+                <div class="label">{_'Nejvíc zásahů vlastních', domain: 'gate', context: 'topPlayers'}</div>
                 <div class="player">
                     {include topPlayer, $topHitsOwn}
                 </div>

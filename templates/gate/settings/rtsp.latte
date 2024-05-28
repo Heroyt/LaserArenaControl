@@ -6,21 +6,21 @@
 
 <div class="form-group">
     <label for="{$key}-streams" class="form-label">
-        {_'URL RTSP streamů'}:
+        {_'URL RTSP streamů', domain: 'gate', context: 'settings'}:
     </label>
     <textarea name="{$name}[streams]" rows="9" id="{$key}-streams"
               class="form-control">{$settings->streams|join:"\n"|trim}</textarea>
     <div class="form-text">
-        {sprintf(lang('Na každý řádek 1 URL ve formátu např. "%s".'), App\Core\App::getLink(['hls', 'stream.m3u8']))}
+        {_'Na každý řádek 1 URL ve formátu např. "%s".', domain: 'gate', context: 'settings', format: [App\Core\App::getLink(['hls', 'stream.m3u8'])]}
     </div>
 </div>
 
 <div class="form-group reload-timer">
     <label for="{$key}-max-streams" class="form-label">
-        {_'Maximální počet zobrazených streamů v jednu chvíli', context: 'settings'}:
+        {_'Maximální počet zobrazených streamů v jednu chvíli', domain: 'gate', context: 'settings'}:
     </label>
     <input type="number" class="form-control" min="1" n:attr="value: $settings->maxStreams" id="{$key}-max-streams"
            name="{$name}[max-streams]">
-    <div class="form-text">{_'Pokud je maximální počet menší, než počet streamů, budou se streamy postupně přepínat.'}</div>
+    <div class="form-text">{_'Pokud je maximální počet menší, než počet streamů, budou se streamy postupně přepínat.', domain: 'gate', context: 'settings'}</div>
 </div>
 

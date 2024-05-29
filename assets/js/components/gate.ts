@@ -165,8 +165,10 @@ export async function initContent(content: HTMLDivElement, previous: HTMLDivElem
 			}
 		}
 
-		lastScreen.clear();
-		lastScreen = undefined;
+		if (lastScreen) {
+			lastScreen.clear();
+			lastScreen = undefined;
+		}
 	}
 
 	lastScreen = moduleClass;

@@ -3,7 +3,7 @@
 # Update project
 if [ "$LAC_VERSION" != "dev" ]; then
   git fetch --all --tags
-  if [[ "$LAC_VERSION" == "stable" ]]; then
+  if [ "$LAC_VERSION" == "stable" ]; then
     git pull --recurse-submodules
   else
     git checkout "v${LAC_VERSION}" -b "stable"

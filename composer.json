@@ -11,10 +11,6 @@
     {
       "type": "path",
       "url": "./modules/*"
-    },
-    {
-      "type": "vcs",
-      "url": "https://github.com/Heroyt/tracy"
     }
   ],
   "scripts": {
@@ -46,7 +42,7 @@
     "nette/utils": "^4",
     "php": "^8.2",
     "psr/log": "^3.0",
-    "tracy/tracy": "dev-rr as 2.10.6",
+    "tracy/tracy": "^2.10",
     "endroid/qr-code": "^5",
     "ext-pcntl": "*",
     "lsr/interfaces": "^0.2",

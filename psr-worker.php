@@ -133,20 +133,7 @@ switch ($env->getMode()) {
                     $session->init();
                 }
 
-                Debugger::$usePsr7 = true;
-                //Debugger::enable(PRODUCTION ? Debugger::Production : Debugger::Development, LOG_DIR);
-
-                /*$get = $request->getQueryParams();
-                if (isset($get['_tracy_bar'])) {
-                  $_GET = $get;
-                  ob_start();
-                  Debugger::dispatchPsr7($request);
-                  $content = ob_get_clean();
-                  $psr7->respond(new Response(200, [], $content));
-                }
-                else {*/
                 $psr7->respond($app->run()->withAddedHeader('Content-Language', $app->translations->getLang()));
-                //}
                 $session->close();
                 $app->translations->updateTranslations();
             } catch (RouteNotFoundException $e) {

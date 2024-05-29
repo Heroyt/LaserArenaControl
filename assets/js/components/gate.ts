@@ -24,6 +24,9 @@ let container: HTMLElement = document.querySelector('main');
 function removePreviousContent(): void {
 	const elements = container.querySelectorAll('.content') as NodeListOf<HTMLDivElement>;
 	for (let i = 0; i < elements.length - 1; i++) {
+		// Clear content
+		elements[i].textContent = '';
+		// Remove the parent element itself
 		elements[i].remove();
 	}
 }

@@ -10,7 +10,7 @@
 		align-content: center;
 		font-size: 1.55rem;
 		grid-row-gap: 1rem;
-		grid-template-areas: 'logo streams title' '. streams score' '. streams score' '. streams best';
+		grid-template-areas: 'logo . title' 'streams streams score' 'streams streams score' 'streams streams best';
 		grid-template-columns: 22rem 1fr 35rem;
 		grid-template-rows: 5rem 1fr 1fr 1fr 3rem;
 

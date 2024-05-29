@@ -1,5 +1,5 @@
 import GateWidget from './gateWidget';
-import Hls from 'hls.js';
+import Hls, {ErrorData, Events} from 'hls.js';
 
 export default class RtspWidget implements GateWidget {
 
@@ -27,35 +27,13 @@ export default class RtspWidget implements GateWidget {
 				hls.attachMedia(video);
 
 				// Error handling
-				hls.on(Hls.Events.ERROR, (event, data) => {
-					console.error(event, data);
-
-					if (data.fatal) {
-						switch (data.type) {
-							case Hls.ErrorTypes.MEDIA_ERROR:
-								console.log('fatal media error encountered, try to recover');
-								hls.recoverMediaError();
-								break;
-							case Hls.ErrorTypes.NETWORK_ERROR:
-								console.error('fatal network error encountered', data);
-								// All retries and media options have been exhausted.
-								// Immediately trying to restart loading could cause loop loading.
-								// Consider modifying loading policies to best fit your asset and network
-								// conditions (manifestLoadPolicy, playlistLoadPolicy, fragLoadPolicy).
-								break;
-							default:
-								// cannot recover
-								hls.destroy();
-								break;
-						}
-					}
-				});
+				hls.on(Hls.Events.ERROR, (event, data) => this.handleHlsError(hls, event, data));
 			}
-			video.addEventListener('canplaythrough', () => {
+			video.oncanplaythrough = () => {
 				video.play()
 					.then(r => console.log('Playing video', this.streamUrls[(offset + i) % this.streamUrls.length], r))
 					.catch(e => console.error(e));
-			});
+			};
 		}
 
 		// Cycle through available cameras
@@ -70,6 +48,30 @@ export default class RtspWidget implements GateWidget {
 					this.refreshStream(i, offset, video);
 				}
 			}, 30000);
+		}
+	}
+
+	handleHlsError(hls: Hls, event: Events.ERROR, data: ErrorData) {
+		console.error(event, data);
+
+		if (data.fatal) {
+			switch (data.type) {
+				case Hls.ErrorTypes.MEDIA_ERROR:
+					console.log('fatal media error encountered, try to recover');
+					hls.recoverMediaError();
+					break;
+				case Hls.ErrorTypes.NETWORK_ERROR:
+					console.error('fatal network error encountered', data);
+					// All retries and media options have been exhausted.
+					// Immediately trying to restart loading could cause loop loading.
+					// Consider modifying loading policies to best fit your asset and network
+					// conditions (manifestLoadPolicy, playlistLoadPolicy, fragLoadPolicy).
+					break;
+				default:
+					// cannot recover
+					hls.destroy();
+					break;
+			}
 		}
 	}
 
@@ -90,7 +92,9 @@ export default class RtspWidget implements GateWidget {
 		if (Hls.isSupported()) {
 			// Clear HLS resources
 			if (this.streams[i]) {
+				this.streams[i].removeAllListeners();
 				this.streams[i].detachMedia();
+				this.streams[i].stopLoad();
 				this.streams[i].destroy();
 			}
 
@@ -102,29 +106,7 @@ export default class RtspWidget implements GateWidget {
 			const hls = this.streams[i];
 
 			// Error handling
-			hls.on(Hls.Events.ERROR, (event, data) => {
-				console.error(event, data);
-
-				if (data.fatal) {
-					switch (data.type) {
-						case Hls.ErrorTypes.MEDIA_ERROR:
-							console.log('fatal media error encountered, try to recover');
-							hls.recoverMediaError();
-							break;
-						case Hls.ErrorTypes.NETWORK_ERROR:
-							console.error('fatal network error encountered', data);
-							// All retries and media options have been exhausted.
-							// Immediately trying to restart loading could cause loop loading.
-							// Consider modifying loading policies to best fit your asset and network
-							// conditions (manifestLoadPolicy, playlistLoadPolicy, fragLoadPolicy).
-							break;
-						default:
-							// cannot recover
-							hls.destroy();
-							break;
-					}
-				}
-			});
+			hls.on(Hls.Events.ERROR, (event, data) => this.handleHlsError(hls, event, data));
 
 			console.log('Loading media', media);
 			hls.loadSource(media);

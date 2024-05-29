@@ -1,9 +1,9 @@
 #gate main {
 	.timer.timer-rtsp {
 		bottom: initial;
-		left: 30%;
+		left: 0;
 		top: 1rem;
-		width: calc(20% - 1.2rem);
+		width: 100%;
 	}
 
 	.content.today-rtsp {

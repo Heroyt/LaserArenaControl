@@ -9,6 +9,8 @@ export default interface GateScreen {
 
 	animateOut(): void;
 
+	clear(): void;
+
 	showTimer(): boolean;
 
 }

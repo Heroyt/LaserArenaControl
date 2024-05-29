@@ -42,4 +42,8 @@ export default class ResultsScreen implements GateScreen {
 		return false;
 	}
 
+	clear() {
+		this.content = undefined;
+	}
+
 }

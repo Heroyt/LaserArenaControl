@@ -46,4 +46,10 @@ export default class TodayHighlights extends DefaultScreen {
 		}
 	}
 
+	clear() {
+		super.clear();
+		delete this.highlights;
+		delete this.rtsp;
+	}
+
 }

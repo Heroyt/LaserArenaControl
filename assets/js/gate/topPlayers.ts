@@ -78,4 +78,9 @@ export default class TopPlayersScreen extends DefaultScreen {
 		this.activeKey = nextKey;
 	}
 
+	clear() {
+		super.clear();
+		delete this.players;
+	}
+
 }

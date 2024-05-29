@@ -164,6 +164,9 @@ export async function initContent(content: HTMLDivElement, previous: HTMLDivElem
 				timer.style.display = 'none';
 			}
 		}
+
+		lastScreen.clear();
+		lastScreen = undefined;
 	}
 
 	lastScreen = moduleClass;

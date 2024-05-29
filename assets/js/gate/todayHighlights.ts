@@ -40,4 +40,9 @@ export default class TodayHighlights extends DefaultScreen {
 			timer.classList.remove('timer-today-highlights');
 		}
 	}
+
+	clear() {
+		super.clear();
+		delete this.highlights;
+	}
 }

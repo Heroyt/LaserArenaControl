@@ -41,4 +41,9 @@ export default class RtspScreen extends DefaultScreen {
 		}
 	}
 
+	clear() {
+		super.clear();
+		delete this.rtsp;
+	}
+
 }

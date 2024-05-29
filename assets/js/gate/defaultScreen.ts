@@ -35,4 +35,8 @@ export default class DefaultScreen implements GateScreen {
 		return true;
 	}
 
+	clear() {
+		this.content = undefined;
+	}
+
 }

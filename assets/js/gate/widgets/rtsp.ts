@@ -122,6 +122,9 @@ export default class RtspWidget implements GateWidget {
 		if (this.interval) {
 			clearInterval(this.interval);
 		}
+		for (const stream of this.streams) {
+			stream.destroy();
+		}
 	}
 
 }

@@ -40,7 +40,7 @@
 		font-size: 1.55rem;
 
 		grid-column-gap: 2rem;
-		grid-template-areas: 'logo streams highlights' '. streams highlights' 'music streams highlights' 'music streams players' '. . .';
+		grid-template-areas: 'logo . highlights' 'streams streams highlights' 'streams streams highlights' 'streams streams players' '. . .';
 		grid-template-columns: 23rem 1fr 35rem;
 		grid-template-rows: 1fr 1fr 15rem 15rem 3rem;
 
@@ -66,6 +66,7 @@
 
 		.music-modes-wrapper {
 			@extend %wrapper;
+			display: none;
 			grid-area: music;
 
 			.music-modes {

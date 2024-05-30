@@ -67,13 +67,13 @@
     <style n:if="$template->orientation === App\GameModels\Game\Enums\PrintOrientation::landscape">
         @page {
             size: A4 landscape;
-            margin: 3mm 3.5mm;
+            margin: 5mm 5mm;
         }
 
         .container-print-wrapper {
             aspect-ratio: 210 / 297;
-            height: 209mm;
-            width: 297mm;
+            height: 200mm;
+            width: 287mm;
         }
 
         .container-print-wrapper .tip {
@@ -85,7 +85,7 @@
 
         @media print {
             .container-print-wrapper {
-                padding: 3mm 3.5mm;
+                padding: 5mm 5mm;
             }
 
             .container-print-wrapper .container-print {

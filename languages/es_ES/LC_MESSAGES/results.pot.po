@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: Spanish\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2024-05-30 15:17\n"
+"PO-Revision-Date: 2024-05-30 21:50\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -102,7 +102,7 @@ msgstr "Jugadores"
 
 msgctxt "player"
 msgid "Zásahy"
-msgstr ""
+msgstr "Tiros"
 
 msgctxt "player"
 msgid "Smrti"
@@ -142,7 +142,7 @@ msgstr "Precisión"
 
 msgctxt "today"
 msgid "Zásahů"
-msgstr ""
+msgstr "Tiros"
 
 msgctxt "today"
 msgid "Smrtí"
@@ -188,7 +188,7 @@ msgstr "Equipo"
 
 msgctxt "team"
 msgid "Zásahů"
-msgstr ""
+msgstr "Tiros"
 
 msgctxt "team"
 msgid "Skóre"
@@ -480,7 +480,7 @@ msgstr "Llega a ser el jugador con la mejor puntuación del partido."
 
 msgctxt "bests.description"
 msgid "Staň se hráčem s největším počtem zásahů hry."
-msgstr ""
+msgstr "Llega a ser el jugador con la mayor número de tiros del partido."
 
 msgctxt "bests.description"
 msgid "Staň se hráčem s největším počtem smrtí hry."
@@ -605,7 +605,7 @@ msgstr "Llega a ser el jugador con la mejor puntuación."
 
 msgctxt "bests.description"
 msgid "Staň se hráčem s největším počtem zásahů."
-msgstr ""
+msgstr "Llega a ser el jugador con el mayor número de tiros."
 
 msgctxt "bests.description"
 msgid "Staň se hráčem s největším počtem smrtí."
@@ -631,7 +631,7 @@ msgstr "Disparos"
 
 msgctxt "info"
 msgid "Body za zásah"
-msgstr ""
+msgstr "Puntos por tiro"
 
 msgctxt "info"
 msgid "Body za smrt"
@@ -639,11 +639,11 @@ msgstr "Puntos por muerte"
 
 msgctxt "info"
 msgid "Body za zásah vlastního"
-msgstr ""
+msgstr "Puntos por tiro a compañero"
 
 msgctxt "info"
 msgid "Body za smrt od vlastního hráče"
-msgstr ""
+msgstr "Puntos por tiro de compañero"
 
 msgctxt "bests"
 msgid "Získané trofeje"

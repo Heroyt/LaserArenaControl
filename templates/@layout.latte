@@ -120,6 +120,7 @@
 </div>
 
 <script>
+    let timerInterval = null;
     let activeGame = null;
     const activeLanguageCode = {$page->app->translations->getLang()};
     const features = {\App\Core\App::getServiceByType(App\Services\FeatureConfig::class)->getFeatures()};

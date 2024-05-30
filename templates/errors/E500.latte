@@ -15,7 +15,11 @@
 
 {define content}
     <div class="col-md-12 text-center">
-        <h1>404</h1>
-        <h2>{_'stránka nenalezena', context: 'errors'}</h2>
+        <h1>500</h1>
+        <h2>{_'neočekávaná chyba', context: 'errors'}</h2>
+        {ifset $exception}
+            <p>{_'Kód chyby', context: 'errors'}: {$exception->getCode()}</p>
+            <p>{_'Popis chyby', context: 'errors'}: {$exception->getMessage()}</p>
+        {/ifset}
     </div>
 {/define}

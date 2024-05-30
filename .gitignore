@@ -54,3 +54,4 @@ docker/redis
 !docker/DockerfileNginxServer
 .env
 .pid
+ssl

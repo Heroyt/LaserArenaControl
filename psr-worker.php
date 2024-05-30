@@ -2,6 +2,8 @@
 
 use App\Api\Response\ErrorDto;
 use App\Api\Response\ErrorType;
+use App\Controllers\E404;
+use App\Controllers\E500;
 use App\Core\App;
 use App\Services\TaskProducer;
 use App\Tasks\GameImportTask;
@@ -9,7 +11,6 @@ use App\Tasks\Payloads\GameImportPayload;
 use App\Tasks\TaskDispatcherInterface;
 use Lsr\Core\Requests\Exceptions\RouteNotFoundException;
 use Lsr\Core\Requests\RequestFactory;
-use Lsr\Interfaces\SessionInterface;
 use Lsr\Logging\Logger;
 use Nyholm\Psr7\Factory\Psr17Factory;
 use Nyholm\Psr7\Response;
@@ -40,11 +41,9 @@ $env = Environment::fromGlobals();
 
 Debugger::$logDirectory = LOG_DIR.'tracy';
 
-if (
-  !file_exists(Debugger::$logDirectory) &&
-  !mkdir(Debugger::$logDirectory, 0777, true) &&
-  !is_dir(Debugger::$logDirectory)
-) {
+if (!file_exists(Debugger::$logDirectory) && !mkdir(Debugger::$logDirectory, 0777, true) && !is_dir(
+    Debugger::$logDirectory
+  )) {
     Debugger::$logDirectory = LOG_DIR;
 }
 
@@ -103,81 +102,119 @@ switch ($env->getMode()) {
         $factory = new Psr17Factory();
         $psr7 = new PSR7Worker($worker, $factory, $factory, $factory);
 
+        $e404 = $app::getServiceByType(E404::class);
+        $e500 = $app::getServiceByType(E500::class);
+
         while (true) {
             try {
-                $request = $psr7->waitRequest();
-                if ($request === null) {
-                    break;
-                }
-            } catch (Throwable $e) {
-                // Although the PSR-17 specification clearly states that there can be
-                // no exceptions when creating a request, however, some implementations
-                // may violate this rule. Therefore, it is recommended to process the
-                // incoming request for errors.
-                //
-                // Send "Bad Request" response.
-                $psr7->respond(new Response(400));
-                continue;
-            }
-
-            try {
-                $request = RequestFactory::fromPsrRequest($request);
-                $app->setRequest($request);
-
-                var_dump('Request: '.$request->getUri());
-                var_dump('App: '.$app->getRequest()->getUri());
-
-                /** @var SessionInterface $session */
-                $session = $app->session;
-                if (!$session->isInitialized()) {
-                    $session->init();
+                try {
+                    $request = $psr7->waitRequest();
+                    if ($request === null) {
+                        break;
+                    }
+                } catch (Throwable $e) {
+                    // Although the PSR-17 specification clearly states that there can be
+                    // no exceptions when creating a request, however, some implementations
+                    // may violate this rule. Therefore, it is recommended to process the
+                    // incoming request for errors.
+                    //
+                    // Send "Bad Request" response.
+                    $psr7->respond(new Response(400));
+                    continue;
                 }
 
-                $psr7->respond($app->run()->withAddedHeader('Content-Language', $app->translations->getLang()));
-                $session->close();
-                $app->translations->updateTranslations();
-            } catch (RouteNotFoundException $e) {
-                if (in_array('application/json', getAcceptTypes($request))) {
-                    $psr7->respond(
-                      new Response(
-                        404, ['Content-Type' => 'application/json'], json_encode(
-                             new ErrorDto(
-                               'Route not found', type: ErrorType::NOT_FOUND, detail: $e->getMessage(), exception: $e
-                             ),
-                             JSON_THROW_ON_ERROR
-                           )
-                      )
-                    );
-                }
-                else {
-                    // TODO: Handle production mode
-                    $psr7->respond(new Response(404, [], $e->getMessage()));
-                }
-            } catch (Throwable $e) {
-                $logger->exception($e);
-                if (in_array('application/json', getAcceptTypes($request))) {
-                    $psr7->respond(
-                      new Response(
-                        500, ['Content-Type' => 'application/json'], json_encode(
-                             new ErrorDto('Something Went wrong!', detail: $e->getMessage(), exception: $e),
-                             JSON_THROW_ON_ERROR
-                           )
-                      )
-                    );
-                }
-                else {
-                    // TODO: Handle production mode
+                try {
+                    $request = RequestFactory::fromPsrRequest($request);
+                    $app->setRequest($request);
+
+                    //var_dump('Request: '.$request->getUri());
+                    //var_dump('App: '.$app->getRequest()->getUri());
+
+                    $session = $app->session;
+                    if (!$session->isInitialized()) {
+                        $session->init();
+                    }
+
+                    $psr7->respond($app->run()->withAddedHeader('Content-Language', $app->translations->getLang()));
+                    $session->close();
+                    $app->translations->updateTranslations();
+                } catch (RouteNotFoundException $e) { // 404 error
+                    if (isset($e404)) {
+                        $psr7->respond($e404->show($request, $e));
+                    }
+                    elseif (in_array('application/json', getAcceptTypes($request))) {
+                        $psr7->respond(
+                          new Response(
+                            404, ['Content-Type' => 'application/json'], json_encode(
+                                 new ErrorDto(
+                                              'Route not found',
+                                   type     : ErrorType::NOT_FOUND,
+                                   detail   : $e->getMessage(),
+                                   exception: $e
+                                 ),
+                                 JSON_THROW_ON_ERROR
+                               )
+                          )
+                        );
+                    }
+                    else {
+                        $psr7->respond(new Response(404, [], $e->getMessage()));
+                    }
+                    $psr7->getWorker()->error((string) $e);
+                    continue;
+                } catch (Throwable $e) {
+                    $logger->exception($e);
                     Helpers::improveException($e);
                     Debugger::log($e, ILogger::EXCEPTION);
-                    ob_start();
-                    Debugger::getBlueScreen()->render($e);
-                    $blueScreen = ob_get_clean();
 
-                    $psr7->respond(new Response(500, [], $blueScreen));
+                    if (in_array('application/json', getAcceptTypes($request))) {
+                        $psr7->respond(
+                          new Response(
+                            500, ['Content-Type' => 'application/json'], json_encode(
+                                 new ErrorDto('Something Went wrong!', detail: $e->getMessage(), exception: $e),
+                                 JSON_THROW_ON_ERROR
+                               )
+                          )
+                        );
+                        $psr7->getWorker()->error((string) $e);
+                        continue;
+                    }
+
+                    if (!$app->isProduction()) {
+                        ob_start(); // double buffer prevents sending HTTP headers in some PHP
+                        ob_start();
+                        Debugger::getBlueScreen()->render($e);
+                        /** @var string $blueScreen */
+                        $blueScreen = ob_get_clean();
+                        ob_end_clean();
+
+                        $psr7->respond(
+                          new Response(
+                             500, [
+                            'Content-Type' => 'text/html',
+                          ], $blueScreen
+                          )
+                        );
+                        $psr7->getWorker()->error((string) $e);
+                        continue;
+                    }
+
+                    if (isset($e500)) {
+                        $psr7->respond($e500->show($request, $e));
+                    }
+                    else {
+                        $psr7->respond(new Response(500, [], $e->getMessage()));
+                    }
+
+                    $psr7->getWorker()->error((string) $e);
                 }
+            } catch (Throwable $e) { // Last line of defence if any error occurs
+                // Log exception
+                $logger->exception($e);
+                Helpers::improveException($e);
+                Debugger::log($e, ILogger::EXCEPTION);
 
-                // Additionally, we can inform the RoadRunner that the processing
-                // of the request failed.
+                // Inform worker that an unexpected error occured
                 $psr7->getWorker()->error((string) $e);
             }
         }

@@ -69,8 +69,6 @@ http:
       max_age: 600
       # Status code to use for successful OPTIONS requests. Default value is 200.
       options_success_status: 200
-      # Debugging flag adds additional output to debug server side CORS issues, consider disabling in production.
-      debug: true
   fcgi:
     address: tcp://0.0.0.0:9000
 jobs: # List of RoadRunner queues that can be processed by

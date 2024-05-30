@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: Spanish\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2024-05-28 12:12\n"
+"PO-Revision-Date: 2024-05-30 22:52\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -17,18 +17,18 @@ msgstr ""
 "X-Crowdin-File-ID: 68\n"
 
 msgid "Nejlepší skóre dne"
-msgstr ""
+msgstr "Mejor puntuación de hoy"
 
 msgid "Výsledky dne"
-msgstr ""
+msgstr "Resultados de hoy"
 
 msgctxt "screen.type"
 msgid "V prostředku"
-msgstr ""
+msgstr "En el centro"
 
 msgctxt "screen.type"
 msgid "Celá obrazovka"
-msgstr ""
+msgstr "Pantalla completa"
 
 msgctxt "screen.type"
 msgid "Ve volném prostoru"
@@ -44,31 +44,31 @@ msgstr ""
 
 msgctxt "screens.groups"
 msgid "Výsledky"
-msgstr ""
+msgstr "Resultados"
 
 msgctxt "screens.description"
 msgid "Obrazovka zobrazující přiřazené vesty před hrou."
-msgstr ""
+msgstr "Pantalla que muestra chalecos asignados antes del partido."
 
 msgctxt "screens"
 msgid "Vesty"
-msgstr ""
+msgstr "Chalecos"
 
 msgctxt "screens.description"
 msgid "Obrazovka, která automaticky cyklí podle časovače."
-msgstr ""
+msgstr "Pantalla que cicla automáticamente según un temporizador."
 
 msgctxt "screens"
 msgid "Časovač"
-msgstr ""
+msgstr "Temporizador"
 
 msgctxt "screens"
 msgid "Obrázek"
-msgstr ""
+msgstr "Imagen"
 
 msgctxt "screens"
 msgid "Youtube video"
-msgstr ""
+msgstr "Vídeo de YouTube"
 
 msgctxt "screens"
 msgid "Seznam hudebních módů"
@@ -76,15 +76,15 @@ msgstr ""
 
 msgctxt "screens"
 msgid "RTSP - kamery"
-msgstr ""
+msgstr "RTSP - cámaras"
 
 msgctxt "screens"
 msgid "Informační obrazovka s animací připnutí zbraně na vestu."
-msgstr ""
+msgstr "Pantalla informativa con animación de fijación de arma en chaleco."
 
 msgctxt "screens"
 msgid "Připněte zbraň na vestu"
-msgstr ""
+msgstr "Fijen el arma al chaleco"
 
 msgctxt "screens.description"
 msgid "Obrazovka zobrazující výsledky z her. Automaticky vybírá zobrazení podle herního módu."
@@ -92,15 +92,15 @@ msgstr ""
 
 msgctxt "screens"
 msgid "Výsledky ze hry"
-msgstr ""
+msgstr "Resultados del partido"
 
 msgctxt "screens"
 msgid "Výsledky turnaje"
-msgstr ""
+msgstr "Resultados del torneo"
 
 msgctxt "screens.description"
 msgid "Obrazovka zobrazující dnešní nejlepší hráče a počet odehraných her."
-msgstr ""
+msgstr "Pantalla que muestra los mejores jugadores de hoy y el número de partidos jugados."
 
 msgctxt "screens"
 msgid "Základní denní statistiky"

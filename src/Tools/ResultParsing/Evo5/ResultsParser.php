@@ -13,6 +13,7 @@ use App\GameModels\Game\Evo5\Game;
 use App\GameModels\Game\Evo5\Player;
 use App\GameModels\Game\Evo5\Scoring;
 use App\GameModels\Game\Evo5\Team;
+use App\GameModels\Game\GameModes\ModifyScoresMode;
 use App\GameModels\Game\Timing;
 use App\Tools\AbstractResultsParser;
 use App\Tools\ResultParsing\WithMetadata;
@@ -510,6 +511,10 @@ class ResultsParser extends AbstractResultsParser
                 $logger->warning('Game meta is not valid.', $meta);
             } catch (DirectoryCreationException) {
             }
+        }
+        $mode = $game->getMode();
+        if ($mode instanceof ModifyScoresMode) {
+            $mode->modifyResults($game);
         }
 
         $this->processExtensions($game, $meta);

@@ -289,7 +289,7 @@
 
 {define playerScore, App\GameModels\Game\Player $player, float $totalHeight, int $minScore}
     {var float $height = 100 * abs($player->score) / ($totalHeight > 0 ? $totalHeight : 1)}
-    {var float $bottom = $player->score < 0 ? 0 : 100 * abs($minScore) / ($totalHeight > 0 ? $totalHeight : 1)}
+    {var float $bottom = $player->score < 0 ? 0 : 100 * abs($minScore > 0 ? 0 : $minScore) / ($totalHeight > 0 ? $totalHeight : 1)}
     <div n:if="$game->getMode()?->settings?->playerScore" class="score-shadow mb-1 rounded">
         <div class="score">
             <div class="score-number" style="bottom: {$height+$bottom|noescape}%;">

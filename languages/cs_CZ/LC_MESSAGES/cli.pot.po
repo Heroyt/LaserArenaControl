@@ -1,0 +1,86 @@
+msgid ""
+msgstr ""
+"Content-Transfer-Encoding: 8bit\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: cs_CZ\n"
+"Language-Team: Czech\n"
+"Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
+"MIME-Version: 1.0\n"
+"PO-Revision-Date: 2024-05-28 09:20\n"
+"POT-Creation-Date: 2021-12-01 12:05+0100\n"
+"Plural-Forms: nplurals=4; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 3;\n"
+"Project-Id-Version: laserarenacontrol\n"
+"X-Crowdin-Project: laserarenacontrol\n"
+"X-Crowdin-Project-ID: 515800\n"
+"X-Crowdin-Language: cs\n"
+"X-Crowdin-File: /master/languages/cli.pot\n"
+"X-Crowdin-File-ID: 66\n"
+
+msgctxt "messages"
+msgid "Description"
+msgstr ""
+
+msgctxt "messages"
+msgid "Usage"
+msgstr ""
+
+msgctxt "messages"
+msgid "Arguments"
+msgstr ""
+
+msgctxt "help.arguments"
+msgid "A command to get information about."
+msgstr ""
+
+msgctxt "messages"
+msgid "Examples"
+msgstr ""
+
+msgctxt "help.arguments"
+msgid "A valid results directory"
+msgstr ""
+
+msgctxt "messages"
+msgid "Information"
+msgstr ""
+
+msgctxt "help.arguments"
+msgid "Optional filter for command groups."
+msgstr ""
+
+msgctxt "help.arguments"
+msgid "Optional filter for command groups"
+msgstr ""
+
+msgctxt "messages"
+msgid "Error"
+msgstr ""
+
+msgctxt "errors"
+msgid "Missing the required path argument (1)"
+msgstr ""
+
+msgctxt "help.arguments"
+msgid "If set, output will be written to the [out] file. Otherwise, output will be written to stdout."
+msgstr ""
+
+msgctxt "errors"
+msgid "Cannot find any translation files in \"%s\" for language \"%s\" - skipping"
+msgstr ""
+
+msgctxt "help.arguments"
+msgid "If set, only the records with specified tags will be removed"
+msgstr ""
+
+msgctxt "help.arguments"
+msgid "A language directory from the other project."
+msgstr ""
+
+msgctxt "help.arguments"
+msgid "A comma separated list of context names to skip while merging."
+msgstr ""
+
+msgctxt "errors"
+msgid "Insufficient data for game mode: %s (#%d)"
+msgstr ""
+

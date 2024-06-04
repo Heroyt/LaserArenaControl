@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: Spanish\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2024-06-04 12:51\n"
+"PO-Revision-Date: 2024-06-04 14:58\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -23,7 +23,7 @@ msgid "Trénink se vyplácí!"
 msgstr ""
 
 msgid "Tip #%d"
-msgstr ""
+msgstr "Consejo #%d"
 
 msgid "Střílíme v Písku už od 31.12.2013!!!"
 msgstr ""
@@ -74,13 +74,13 @@ msgid "Spoluhráč je nejlepší cíl. Neutíká."
 msgstr ""
 
 msgid "#laserarenapísek"
-msgstr ""
+msgstr "#laserarenapísek"
 
 msgid "Zabití: 100 bodů, Smrt: -50 bodů, Zabití vlastního hráče: -25 bodů"
 msgstr ""
 
 msgid "Go, go, go, go..."
-msgstr ""
+msgstr "Vamos, vamos, vamos, vamos..."
 
 msgid "Ramenní čidla se trefují nejlépe, zádová nejhůř."
 msgstr ""
@@ -95,7 +95,7 @@ msgid "Při výstupu z arény vždy připni zbraň k vestě."
 msgstr ""
 
 msgid "LASER TAG - SUIT UP!"
-msgstr ""
+msgstr "LASER TAG – ¡SUIT UP!"
 
 msgid "Když tě bolí nohy, kempi!"
 msgstr ""

@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: Czech\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2024-05-28 13:19\n"
+"PO-Revision-Date: 2024-06-04 13:33\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=4; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 3;\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -100,43 +100,43 @@ msgstr "Výsledky turnaje"
 
 msgctxt "screens.description"
 msgid "Obrazovka zobrazující dnešní nejlepší hráče a počet odehraných her."
-msgstr ""
+msgstr "Obrazovka zobrazující dnešní nejlepší hráče a počet odehraných her."
 
 msgctxt "screens"
 msgid "Základní denní statistiky"
-msgstr ""
+msgstr "Základní denní statistiky"
 
 msgctxt "screens"
 msgid "Základní denní statistiky s kamerami"
-msgstr ""
+msgstr "Základní denní statistiky s kamerami"
 
 msgctxt "screens.description"
 msgid "Obrazovka zobrazující zajímavosti z dnešních odehraných her."
-msgstr ""
+msgstr "Obrazovka zobrazující zajímavosti z dnešních odehraných her."
 
 msgctxt "screens"
 msgid "Dnešní zajímavosti z her"
-msgstr ""
+msgstr "Dnešní zajímavosti z her"
 
 msgctxt "screens"
 msgid "Dnešní zajímavosti z her s kamerami"
-msgstr ""
+msgstr "Dnešní zajímavosti z her s kamerami"
 
 msgctxt "screens.description"
 msgid "Obrazovka zobrazující nejlepší hráče a počet odehraných her pro aktuální měsíc."
-msgstr ""
+msgstr "Obrazovka zobrazující nejlepší hráče a počet odehraných her pro aktuální měsíc."
 
 msgctxt "screens"
 msgid "Základní měsíční statistiky"
-msgstr ""
+msgstr "Základní měsíční statistiky"
 
 msgctxt "screens.description"
 msgid "Obrazovka zobrazující nejlepší hráče pro aktuální měsíc."
-msgstr ""
+msgstr "Obrazovka zobrazující nejlepší hráče pro aktuální měsíc."
 
 msgctxt "screens"
 msgid "Nejlepší hráči měsíce"
-msgstr ""
+msgstr "Nejlepší hráči měsíce"
 
 msgctxt "screens.description"
 msgid "Obrazovka zobrazující výsledky LaserMaxx z klasických her."
@@ -200,11 +200,11 @@ msgstr "Obrazovka se zobrazí, pokud poslední hra právě probíhá."
 
 msgctxt "screen.trigger"
 msgid "Hra hraje"
-msgstr ""
+msgstr "Hra hraje"
 
 msgctxt "screen.trigger"
 msgid "Obrazovka se zobrazí, pokud poseldní hra už skončila."
-msgstr ""
+msgstr "Obrazovka se zobrazí, pokud poseldní hra už skončila."
 
 msgctxt "screen.trigger"
 msgid "Hra skončila"
@@ -267,42 +267,42 @@ msgstr "Doba na obrazovce v sekundách"
 
 msgctxt "settings"
 msgid "Maximální doba, po kterou má obrazovka zůstat aktivní. 0 = neomezeně."
-msgstr ""
+msgstr "Maximální doba, po kterou má obrazovka zůstat aktivní. 0 = neomezeně."
 
 msgctxt "settings"
 msgid "Interval v sekundách"
-msgstr ""
+msgstr "Interval v sekundách"
 
 msgctxt "settings"
 msgid "URL RTSP streamů"
-msgstr ""
+msgstr "URL RTSP streamů"
 
 msgctxt "settings"
 msgid "Maximální počet zobrazených streamů v jednu chvíli"
-msgstr ""
+msgstr "Maximální počet zobrazených streamů v jednu chvíli"
 
 msgctxt "settings"
 msgid "Pokud je maximální počet menší, než počet streamů, budou se streamy postupně přepínat."
-msgstr ""
+msgstr "Pokud je maximální počet menší, než počet streamů, budou se streamy postupně přepínat."
 
 msgctxt "settings"
 msgid "Na každý řádek 1 URL ve formátu např. \"%s\"."
-msgstr ""
+msgstr "Na každý řádek 1 URL ve formátu např. \"%s\"."
 
 msgid "Výsledky pro měsíc %s %s"
-msgstr ""
+msgstr "Výsledky pro měsíc %s %s"
 
 msgid "Dnešní zajímavosti"
-msgstr ""
+msgstr "Dnešní zajímavosti"
 
 msgid "Dnes zatím nejsou žádné zajímavosti."
-msgstr ""
+msgstr "Dnes zatím nejsou žádné zajímavosti."
 
 msgid "Nejhranější hudba"
-msgstr ""
+msgstr "Nejhranější hudba"
 
 msgid "Nedostatečná data"
-msgstr ""
+msgstr "Nedostatečná data"
 
 msgid "Nejlepší hráči"
 msgstr "Nejlepší hráči"

@@ -880,3 +880,10 @@ msgstr ""
 msgctxt "hits"
 msgid "Hry proti dalším týmům"
 msgstr ""
+
+msgctxt "player"
+msgid "Životy"
+msgstr ""
+
+msgid "Dobyté miny týmu"
+msgstr ""

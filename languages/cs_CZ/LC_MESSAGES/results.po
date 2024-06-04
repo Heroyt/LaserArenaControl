@@ -772,3 +772,10 @@ msgstr "Zobrazit umístění"
 msgctxt "hits"
 msgid "Hry proti dalším týmům"
 msgstr "Hry proti dalším týmům"
+
+msgctxt "player"
+msgid "Životy"
+msgstr ""
+
+msgid "Dobyté miny týmu"
+msgstr ""

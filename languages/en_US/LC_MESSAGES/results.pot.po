@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: English\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2024-06-04 12:51\n"
+"PO-Revision-Date: 2024-06-04 13:33\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -284,7 +284,7 @@ msgstr "K:D"
 
 msgctxt "player"
 msgid "Nejoblíbenější cíl"
-msgstr "Favourite target"
+msgstr "Favorite target"
 
 msgctxt "player"
 msgid "Největší zabiják"
@@ -768,8 +768,8 @@ msgstr "Games against other teams"
 
 msgctxt "player"
 msgid "Životy"
-msgstr ""
+msgstr "Lives"
 
 msgid "Dobyté miny týmu"
-msgstr ""
+msgstr "Destroyed bases of the team"
 

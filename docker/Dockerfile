@@ -55,9 +55,11 @@ RUN apt-get install -y locales \
 	&& sed -i -e 's/# fr_FR.UTF-8 UTF-8/fr_FR.UTF-8 UTF-8/' /etc/locale.gen \
 	&& sed -i -e 's/# sk_SK.UTF-8 UTF-8/sk_SK.UTF-8 UTF-8/' /etc/locale.gen \
 	&& sed -i -e 's/# ru_RU.UTF-8 UTF-8/ru_RU.UTF-8 UTF-8/' /etc/locale.gen \
+	&& sed -i -e 's/# es_ES.UTF-8 UTF-8/es_ES.UTF-8 UTF-8/' /etc/locale.gen \
     && dpkg-reconfigure --frontend=noninteractive locales
 RUN locale-gen cs_CZ.UTF-8
-RUN update-locale -y
+RUN update-locale
+RUN apt install -y nano
 
 FROM node:current-slim AS node_base
 FROM composer:latest AS composer
@@ -75,7 +77,7 @@ RUN apt-get -y install sudo
 RUN cron
 
 # Move to project directory
-WORKDIR /var/www/html/
+WORKDIR /var/www/
 
 # Initialize git and download project
 RUN git init

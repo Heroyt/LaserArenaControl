@@ -1,0 +1,46 @@
+.template-graphical.zakladny {
+	grid-template-areas: 'info qr' 'win win' 'teams teams' 'legend legend';
+	grid-template-rows: minmax(25mm, 33mm) auto 1fr 5mm 10mm;
+
+	.results-zakladny-teams {
+		display: grid;
+		grid-area: teams;
+		grid-gap: 1rem;
+		grid-template-columns: 1fr 1fr;
+
+		.team {
+			background-color: #fff;
+			border: 3px solid var(--team-color);
+			color: var(--team-color);
+			padding: .4rem;
+
+			.team-head {
+				align-items: center;
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+
+				.name {
+					font-size: 2em;
+				}
+
+				.mines {
+					font-size: 1.5em;
+
+					circle {
+						fill: currentColor;
+					}
+				}
+			}
+
+			.results-players {
+				color: #000;
+				margin-top: 2rem;
+
+				.results-player {
+					border: 1px solid var(--team-color);
+				}
+			}
+		}
+	}
+}

@@ -329,7 +329,7 @@
     </div>
 {/define}
 
-{define resultsTeams, App\GameModels\Game\Team $team}
+{define resultsTeams}
     {var int $totalScore = array_sum(array_map(function($team){ return $team->score > 0 ? $team->score : 0;},$game->getTeams()->getAll()))}
     {var App\GameModels\Game\Team|null $win = $game->getMode()?->getWin($game)}
     <div class="results-teams">

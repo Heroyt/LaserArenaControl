@@ -1,0 +1,118 @@
+{layout '../../@printLayout.latte'}
+
+{varType App\Core\App $app}
+{varType App\GameModels\Game\Lasermaxx\Game $game}
+{varType App\GameModels\Game\Today $today}
+{varType App\GameModels\Game\PrintStyle $style}
+{varType string $qr}
+{varType string $publicUrl}
+{varType string $lang}
+{default bool $colorless = false}
+
+{var App\GameModels\Game\Evo5\GameModes\Zakladny $mode = $game->getMode()}
+
+{import '../graphical_base.latte'}
+
+{var array $fontSize = [
+10 => 6,
+11 => 5,
+12 => 4,
+]}
+{var array $fontSizeHits = [
+8 => 6,
+9 => 6,
+10 => 5,
+11 => 4,
+12 => 4,
+]}
+
+{define addHead}
+    <link rel="stylesheet" href="{getUrl}dist/results/graphical.css?v={$app->getCacheVersion()}">
+    <link rel="stylesheet" href="{getUrl}dist/results/graphical_zakladny.css?v={$app->getCacheVersion()}">
+{/define}
+
+{define containerClasses}
+    template-graphical zakladny
+{/define}
+
+{define content}
+    {include resultsHeader}
+    {include resultsWin}
+    {include resultsTeams}
+    {include legend}
+{/define}
+
+{define resultsTeams}
+    {var App\GameModels\Game\Team|null $win = $mode->getWin($game)}
+    <div class="results-zakladny-teams">
+        <div n:foreach="$game->getTeams() as $team"
+                {varType App\GameModels\Game\Lasermaxx\Team $team}
+                class="team rounded" style="--team-color: var(--team-{$team->color});">
+            <div class="team-head">
+                {if is_null($win)}
+                    {svgIcon 'shield', '2rem'}
+                {elseif $win->id === $team->id}
+                    {svgIcon 'crown', '2rem'}
+                {else}
+                    {svgIcon 'skull', '2rem'}
+                {/if}
+                <div class="name">{$team->name}</div>
+                <div class="mines text-center mt-3">
+                    {svgIcon 'base', '', '2rem'}
+                    {$mode->getBasesDestroyed($team)}
+                </div>
+            </div>
+            {include resultsPlayers, players: $team->getPlayersSorted()}
+        </div>
+    </div>
+{/define}
+
+{define resultsPlayers, App\GameModels\Game\Lasermaxx\Player[] $players}
+    {var int $count = count($players)}
+    <section class="results-players" style="grid-template-columns: repeat({$count}, 1fr);">
+        {foreach $players as $player}
+            {varType App\GameModels\Game\Lasermaxx\Player $player}
+            <div n:class="results-player, rounded, p-2, bg-white, flex-fill">
+                <div class="player-head">
+                    {var int $len = strlen($player->name)}
+                    <div class="player-name text-center text-team-{$player->getTeamColor()}"
+                         {ifset $fontSize[$len]}style="--font-size: {$fontSize[$len]}pt;"{/ifset}>
+                        {$player->name}
+                    </div>
+                    <div class="player-rank">
+                        <div class="rank-name fs-sm">{$rank['name']}</div>
+                    </div>
+                </div>
+                {include playerAccuracy, $player}
+                {include playerShots, $player, $game->ammo}
+                {include playerHits, $player}
+            </div>
+        {/foreach}
+    </section>
+{/define}
+
+
+{define legend}
+    {cache 'results-'.$lang.'-graphical-zakladny-legend', tags: ['templates.results', 'templates.results.graphical', 'templates', 'templates.'.$lang]}
+        <div class="results-legend">
+            <div class="legend">
+                {svgIcon 'star', '', '1em'} - {_'Skóre', domain: 'results'}
+            </div>
+            <div class="legend">
+                {svgIcon 'bullets', '', '1em'} - {_'Výstřely', domain: 'results'}
+            </div>
+            <div class="legend">
+                {svgIcon 'kill', '', '1em'} - {_'Zásahy', domain: 'results'}
+            </div>
+            <div class="legend">
+                {svgIcon 'skull', '', '1em'} - {_'Smrti', domain: 'results'}
+            </div>
+            <div class="legend">
+                {svgIcon 'dead', '', '1em'} - {_'Zásahy od/do spoluhráčů', domain: 'results'}
+            </div>
+            <div class="legend">
+                {svgIcon 'base', '', '1em'} - {_'Dobyté miny týmu', domain: 'results'}
+            </div>
+        </div>
+    {/cache}
+{/define}

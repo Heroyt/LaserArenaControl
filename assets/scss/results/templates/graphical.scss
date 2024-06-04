@@ -47,6 +47,20 @@
 		width: var(--size);
 	}
 
+	.results-win {
+		grid-area: win;
+		justify-self: center;
+
+		> div {
+			border-radius: 5rem;
+			font-size: 1.5em;
+			font-weight: bold;
+			padding: 1rem 7rem;
+			text-align: center;
+			text-transform: uppercase;
+		}
+	}
+
 	.results-qr {
 		align-items: flex-start;
 		color: var(--white);
@@ -100,7 +114,7 @@
 		padding: .3rem;
 		text-align: center;
 		vertical-align: middle;
-		word-break: break-word;
+		word-break: normal;
 	}
 
 	table {
@@ -416,7 +430,7 @@
 		grid-area: hits;
 
 		.player-hit-name {
-			word-break: break-word;
+			word-break: normal;
 		}
 	}
 

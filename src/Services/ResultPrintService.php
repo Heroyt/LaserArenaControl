@@ -63,6 +63,28 @@ readonly class ResultPrintService
         $bg = ROOT.($templateObj?->orientation === PrintOrientation::landscape ? $styleObj->bgLandscape :
             $styleObj->bg);
 
+        $additionalFiles = [
+          ROOT.'dist/main.css',
+          ROOT.'dist/results/'.$template.'.css',
+          $bg,
+        ];
+
+        try {
+            $mode = $game->getMode();
+            if ($mode instanceof CustomResultsMode) {
+                $customTemplate = $mode->getCustomResultsTemplate();
+                if ($customTemplate !== '') {
+                    if (file_exists(ROOT.'dist/results/'.$customTemplate.'.css')) {
+                        $additionalFiles[] = ROOT.'dist/results/'.$customTemplate.'.css';
+                    }
+                    if (file_exists(ROOT.'dist/results/'.$template.'_'.$customTemplate.'.css')) {
+                        $additionalFiles[] = ROOT.'dist/results/'.$template.'_'.$customTemplate.'.css';
+                    }
+                }
+            }
+        } catch (GameModeNotFoundException) {
+        }
+
         $content = $this->gotenberg->chromium->getFromHTML(
                            str_replace(
                              [App::getInstance()->getBaseUrl(), 'dist/results/', 'dist/', 'assets/images/print/'],
@@ -75,11 +97,7 @@ readonly class ResultPrintService
                                $cache
                              )
                            ),
-          additionalFiles: [
-                             ROOT.'dist/main.css',
-                             ROOT.'dist/results/'.$template.'.css',
-                             $bg,
-                           ]
+          additionalFiles: $additionalFiles,
         );
 
         if (!empty($content)) {
@@ -173,10 +191,8 @@ readonly class ResultPrintService
                     if (file_exists(TEMPLATE_DIR.'results/templates/'.$template.'/'.$customTemplate.'.latte')) {
                         $template .= '/'.$customTemplate;
                     }
-                    else {
-                        if (file_exists(TEMPLATE_DIR.'results/templates/'.$customTemplate.'.latte')) {
-                            $template = $customTemplate;
-                        }
+                    elseif (file_exists(TEMPLATE_DIR.'results/templates/'.$customTemplate.'.latte')) {
+                        $template = $customTemplate;
                     }
                 }
             }

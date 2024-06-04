@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: Slovak\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2024-06-04 14:38\n"
+"PO-Revision-Date: 2024-06-04 16:00\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=4; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 3;\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -35,7 +35,7 @@ msgid "Akce"
 msgstr ""
 
 msgid "%s skóre"
-msgstr ""
+msgstr "%s skóre"
 
 msgctxt "debugPanel"
 msgid "Rows"
@@ -83,7 +83,7 @@ msgstr "stránka nenájdená"
 
 msgctxt "pageTitles"
 msgid "Výsledky"
-msgstr ""
+msgstr "Výsledky"
 
 msgctxt "gameModes"
 msgid "Základny"
@@ -95,7 +95,7 @@ msgstr "Množné číslo"
 
 msgctxt "pageTitles"
 msgid "Úvod"
-msgstr ""
+msgstr "Úvod"
 
 msgid "Tento den se nehrály žádné hry."
 msgstr "V tento deň sa nehrali žiadne hry."
@@ -113,7 +113,7 @@ msgid "Deathmach"
 msgstr "Deathmach"
 
 msgid "Jazyk"
-msgstr ""
+msgstr "Jazyk"
 
 msgctxt "print"
 msgid "Barevně:"
@@ -160,7 +160,7 @@ msgstr "Dátum od"
 
 msgctxt "dates"
 msgid "do"
-msgstr ""
+msgstr "do"
 
 msgctxt "actions"
 msgid "Add"
@@ -413,7 +413,7 @@ msgstr "Znovu importovať zo súboru"
 
 msgctxt "pageTitles"
 msgid "Nová hra"
-msgstr ""
+msgstr "Nová hra"
 
 msgctxt "game.actions"
 msgid "Nahrát hru"

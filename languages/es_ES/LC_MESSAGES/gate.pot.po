@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: Spanish\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2024-05-30 22:52\n"
+"PO-Revision-Date: 2024-06-04 10:38\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -36,11 +36,11 @@ msgstr ""
 
 msgctxt "screens.groups"
 msgid "Denní statistiky"
-msgstr ""
+msgstr "Estadísticas diarias"
 
 msgctxt "screens.groups"
 msgid "Měsíční statistiky"
-msgstr ""
+msgstr "Estadísticas mensuales"
 
 msgctxt "screens.groups"
 msgid "Výsledky"
@@ -104,71 +104,71 @@ msgstr "Pantalla que muestra los mejores jugadores de hoy y el número de partid
 
 msgctxt "screens"
 msgid "Základní denní statistiky"
-msgstr ""
+msgstr "Estadísticas diarias básicas"
 
 msgctxt "screens"
 msgid "Základní denní statistiky s kamerami"
-msgstr ""
+msgstr "Estadísticas diarias básicas con cámaras"
 
 msgctxt "screens.description"
 msgid "Obrazovka zobrazující zajímavosti z dnešních odehraných her."
-msgstr ""
+msgstr "Pantalla que muestra curiosidades de partidos jugados de hoy."
 
 msgctxt "screens"
 msgid "Dnešní zajímavosti z her"
-msgstr ""
+msgstr "Curiosidades de hoy"
 
 msgctxt "screens"
 msgid "Dnešní zajímavosti z her s kamerami"
-msgstr ""
+msgstr "Curiosidades de hoy con cámaras"
 
 msgctxt "screens.description"
 msgid "Obrazovka zobrazující nejlepší hráče a počet odehraných her pro aktuální měsíc."
-msgstr ""
+msgstr "Pantalla que muestra los mejores jugadores y el número de partidos jugados para el mes actual."
 
 msgctxt "screens"
 msgid "Základní měsíční statistiky"
-msgstr ""
+msgstr "Estadísticas mensuales básicas"
 
 msgctxt "screens.description"
 msgid "Obrazovka zobrazující nejlepší hráče pro aktuální měsíc."
-msgstr ""
+msgstr "Pantalla que muestra el mejor jugador para el mes actual."
 
 msgctxt "screens"
 msgid "Nejlepší hráči měsíce"
-msgstr ""
+msgstr "Los mejores jugadores del mes"
 
 msgctxt "screens.description"
 msgid "Obrazovka zobrazující výsledky LaserMaxx z klasických her."
-msgstr ""
+msgstr "Pantalla que muestra los resultados de LaserMaxx de los partidos clásicos."
 
 msgctxt "screens"
 msgid "LaserMaxx klasické výsledky"
-msgstr ""
+msgstr "Resultados clásicos de LaserMaxx"
 
 msgctxt "screens.description"
 msgid "Obrazovka zobrazující výsledky LaserMaxx z módu CSGO."
-msgstr ""
+msgstr "Pantalla que muestra los resultados de LaserMaxx del modo CSGO."
 
 msgctxt "screens"
 msgid "LaserMaxx výsledky z módu CSGO"
-msgstr ""
+msgstr "Resultados de LaserMaxx del modo CSGO"
 
 msgctxt "screens.description"
 msgid "Obrazovka zobrazující výsledky LaserMaxx z módu Základny."
-msgstr ""
+msgstr "Pantalla que muestra los resultados de LaserMaxx del modo Defensa de base."
 
 msgctxt "screens"
 msgid "LaserMaxx výsledky z módu Základny"
-msgstr ""
+msgstr "Resultados de LaserMaxx del modo Defensa de base"
 
 msgctxt "screens.description"
 msgid "Obrazovka zobrazující výsledky LaserMaxx z módu 100 nábojů."
-msgstr ""
+msgstr "Pantalla que muestra los resultados de LaserMaxx del modo 100 disparos."
 
 msgctxt "screens"
 msgid "LaserMaxx výsledky z módu 100 nábojů"
-msgstr ""
+msgstr "Resultados de LaserMaxx del modo 100 disparos"
 
 msgctxt "screens.description"
 msgid "Obrazovka zobrazující výsledky LaserMaxx z módu Survival."

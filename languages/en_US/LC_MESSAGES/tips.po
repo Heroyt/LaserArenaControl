@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: English\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2024-06-04 14:39\n"
+"PO-Revision-Date: 2024-06-04 16:00\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -23,13 +23,13 @@ msgid "Trénink se vyplácí!"
 msgstr "Training pays off!"
 
 msgid "Tip #%d"
-msgstr "Tip #%d"
+msgstr "Hint #%d"
 
 msgid "Střílíme v Písku už od 31.12.2013!!!"
-msgstr "We have been shooting in Písek since 31.12.2013!!!"
+msgstr "Shooting in Písek since 31.12.2013!!!"
 
 msgid "Ve hře vždy sleduj svoje okolí!"
-msgstr "Always watch your surroundings in the game!"
+msgstr "Always be aware of your surroundings!"
 
 msgid "Čidlo na zbrani, ač nenápadné, se dá velmi dobře trefit."
 msgstr "The gun sensor is quite easy to hit."
@@ -65,7 +65,7 @@ msgid "Všechny bonusy, kromě štítu, trvají 30s."
 msgstr "All powers, apart from the shield, last for the 30s."
 
 msgid "Držení zbraně v obou rukách je přesnější."
-msgstr ""
+msgstr "Holding a gun with both hands is more accurate."
 
 msgid "Měl bys radši hrát laser game a být úžasný!"
 msgstr "You should rather play laser game and be awesome!"
@@ -77,13 +77,13 @@ msgid "#laserarenapísek"
 msgstr "#laserarenapísek"
 
 msgid "Zabití: 100 bodů, Smrt: -50 bodů, Zabití vlastního hráče: -25 bodů"
-msgstr "Killing: 100 points, Death: -50 points, Teammate hit: -25 points"
+msgstr "Hit: 100 points, Death: -50 points, Teammate hit: -25 points"
 
 msgid "Go, go, go, go..."
 msgstr "Go, go, go, go..."
 
 msgid "Ramenní čidla se trefují nejlépe, zádová nejhůř."
-msgstr "Shoulder sensors are the easiest to hit, and back the hardest."
+msgstr "Shoulders are the easiest to hit; back is the hardest."
 
 msgid "Pohyblivý cíl je vždycky těžší trefit."
 msgstr "It's always more difficult to hit a moving target."
@@ -98,7 +98,7 @@ msgid "LASER TAG - SUIT UP!"
 msgstr "LASER TAG - SUIT UP!"
 
 msgid "Když tě bolí nohy, kempi!"
-msgstr "You can camp if your legs hurt!"
+msgstr "If your legs hurt, try camping!"
 
 msgid "Nikdy nejsi příliš starý na laser game."
 msgstr "You are never too old to play laser game."

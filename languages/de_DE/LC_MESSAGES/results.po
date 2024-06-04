@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: German\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2024-06-04 12:51\n"
+"PO-Revision-Date: 2024-06-04 16:00\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -26,31 +26,31 @@ msgstr ""
 
 msgctxt "info"
 msgid "Počet hráčů"
-msgstr ""
+msgstr "Spieler Anzahl"
 
 msgctxt "info"
 msgid "Počet týmů"
-msgstr ""
+msgstr "Teams Anzahl"
 
 msgctxt "scoring"
 msgid "Zásah protihráče"
-msgstr ""
+msgstr "Gegner getroffen"
 
 msgctxt "scoring"
 msgid "Zasažen protihráčem"
-msgstr ""
+msgstr "getroffen durch Gegner"
 
 msgctxt "scoring"
 msgid "Zásah spoluhráče"
-msgstr ""
+msgstr "Mitspieler getroffen"
 
 msgctxt "scoring"
 msgid "Zasažen spouhráčem"
-msgstr ""
+msgstr "getroffen durch Mitspieler"
 
 msgctxt "scoring"
 msgid "Zasažen minou"
-msgstr ""
+msgstr "getroffen durch Minen"
 
 msgctxt "scoring"
 msgid "Body za výstřel"
@@ -74,19 +74,19 @@ msgstr ""
 
 msgctxt "player"
 msgid "Jméno"
-msgstr ""
+msgstr "Name"
 
 msgctxt "player"
 msgid "Tým"
-msgstr ""
+msgstr "Team"
 
 msgctxt "player"
 msgid "Skóre"
-msgstr ""
+msgstr "Ergebnis"
 
 msgctxt "player"
 msgid "Počet výstřelů"
-msgstr ""
+msgstr "Anzahl der Schüsse"
 
 msgctxt "player"
 msgid "Počet střel do prázdna"
@@ -94,7 +94,7 @@ msgstr ""
 
 msgctxt "player"
 msgid "Úspěšnost"
-msgstr ""
+msgstr "Genauigkeit"
 
 msgctxt "player"
 msgid "Hráči"
@@ -102,7 +102,7 @@ msgstr ""
 
 msgctxt "player"
 msgid "Zásahy"
-msgstr ""
+msgstr "Treffer"
 
 msgctxt "player"
 msgid "Smrti"
@@ -110,11 +110,11 @@ msgstr ""
 
 msgctxt "player"
 msgid "Týmy"
-msgstr ""
+msgstr "Teams"
 
 msgctxt "player"
 msgid "Soupeř"
-msgstr ""
+msgstr "Gegner"
 
 msgctxt "player"
 msgid "Vlastní"
@@ -126,7 +126,7 @@ msgstr ""
 
 msgctxt "today"
 msgid "Jméno"
-msgstr ""
+msgstr "Name"
 
 msgctxt "today"
 msgid "Denní pořadí podle"
@@ -134,15 +134,15 @@ msgstr ""
 
 msgctxt "today"
 msgid "Skóre"
-msgstr ""
+msgstr "Ergebnis"
 
 msgctxt "today"
 msgid "Přesnosti"
-msgstr ""
+msgstr "Genauigkeit"
 
 msgctxt "today"
 msgid "Zásahů"
-msgstr ""
+msgstr "Treffer"
 
 msgctxt "today"
 msgid "Smrtí"
@@ -180,7 +180,7 @@ msgstr ""
 
 msgctxt "team"
 msgid "Výsledky týmů"
-msgstr ""
+msgstr "Team Ergebnisse"
 
 msgctxt "team"
 msgid "Tým"
@@ -188,23 +188,23 @@ msgstr ""
 
 msgctxt "team"
 msgid "Zásahů"
-msgstr ""
+msgstr "Treffer"
 
 msgctxt "team"
 msgid "Skóre"
-msgstr ""
+msgstr "Ergebnis"
 
 msgctxt "team"
 msgid "Úspěšnost"
-msgstr ""
+msgstr "Genauigkeit"
 
 msgctxt "team"
 msgid "Výstřelů"
-msgstr ""
+msgstr "Schüsse"
 
 msgctxt "bests"
 msgid "Ti nej..."
-msgstr ""
+msgstr "Top Spieler…"
 
 msgctxt "bests"
 msgid "Největší terminátor"
@@ -212,35 +212,35 @@ msgstr ""
 
 msgctxt "bests"
 msgid "Objekt největšího zájmu"
-msgstr ""
+msgstr "am meisten getroffen"
 
 msgctxt "bests"
 msgid "Absolutní vítěz"
-msgstr ""
+msgstr "Absoluter Gewinner"
 
 msgctxt "bests"
 msgid "Hráč s nejlepší muškou"
-msgstr ""
+msgstr "Spieler mit beste Genauigkeit"
 
 msgctxt "bests"
 msgid "Nejúspornější střelec"
-msgstr ""
+msgstr "der sparsamster Schütze"
 
 msgctxt "bests"
 msgid "Největší mimoň"
-msgstr ""
+msgstr "der grösste Minion"
 
 msgctxt "bests"
 msgid "Zabiják vlastního týmu"
-msgstr ""
+msgstr "Mitspieler killer"
 
 msgctxt "bests"
 msgid "Největší vlastňák"
-msgstr ""
+msgstr "am meisten getroffen durch Mitspieler"
 
 msgctxt "bests"
 msgid "Drtič min"
-msgstr ""
+msgstr "Minenbrecher"
 
 msgctxt "style"
 msgid "Styl"
@@ -334,7 +334,7 @@ msgstr ""
 
 msgctxt "style"
 msgid "Test"
-msgstr ""
+msgstr "Test"
 
 msgctxt "style.settings"
 msgid "Styl"
@@ -361,7 +361,7 @@ msgstr ""
 
 msgctxt "player"
 msgid "Výstřely"
-msgstr ""
+msgstr "Schüsse"
 
 msgctxt "bests"
 msgid "Vyrovnaný"
@@ -627,7 +627,7 @@ msgstr ""
 
 msgctxt "today"
 msgid "Výstřelů"
-msgstr ""
+msgstr "Schüsse"
 
 msgctxt "info"
 msgid "Body za zásah"

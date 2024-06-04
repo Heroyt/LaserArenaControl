@@ -35,6 +35,7 @@ services:
 				- 'de_DE'
 				- 'fr_FR'
 				- 'sk_SK'
+				- 'es_ES'
 			textDomains:
 				- 'results'
 				- 'gate'

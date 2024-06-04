@@ -4,8 +4,10 @@ namespace App\Services;
 
 use App\Core\App;
 use App\Core\Info;
+use App\Exceptions\GameModeNotFoundException;
 use App\GameModels\Game\Enums\PrintOrientation;
 use App\GameModels\Game\Game;
+use App\GameModels\Game\GameModes\CustomResultsMode;
 use App\GameModels\Game\Player;
 use App\GameModels\Game\PrintStyle;
 use App\GameModels\Game\PrintTemplate;
@@ -162,6 +164,24 @@ readonly class ResultPrintService
           'qr'        => $this->getQR($game),
           'lang'      => App::getShortLanguageCode(),
         ];
+
+        try {
+            $mode = $game->getMode();
+            if ($mode instanceof CustomResultsMode) {
+                $customTemplate = $mode->getCustomResultsTemplate();
+                if ($customTemplate !== '') {
+                    if (file_exists(TEMPLATE_DIR.'results/templates/'.$template.'/'.$customTemplate.'.latte')) {
+                        $template .= '/'.$customTemplate;
+                    }
+                    else {
+                        if (file_exists(TEMPLATE_DIR.'results/templates/'.$customTemplate.'.latte')) {
+                            $template = $customTemplate;
+                        }
+                    }
+                }
+            }
+        } catch (GameModeNotFoundException) {
+        }
 
         try {
             $html = $this->latte->viewToString('results/templates/'.$template, $params);

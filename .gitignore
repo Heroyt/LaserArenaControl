@@ -40,8 +40,9 @@ docker-compose.yml
 docker-compose-staging.yml
 docs/
 !assets/icon/
-!assets/scss/results/
+!assets/scss/results
 !templates/gate/screens/results
+!templates/results
 !src/Gate/Screens/Results
 upload/
 docker/mysql

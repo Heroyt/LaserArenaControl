@@ -1,0 +1,25 @@
+.template-graphical .results-players {
+	.results-player.dead {
+		background-color: #fbe3e3;
+	}
+
+	.hits {
+		height: auto;
+	}
+}
+
+.lives {
+	display: flex;
+	justify-content: space-evenly;
+	width: 100%;
+
+	.life {
+		flex: 1 1 0;
+		max-width: 10pt;
+		padding: 0 1px;
+	}
+}
+
+.lives-count {
+	text-align: center;
+}

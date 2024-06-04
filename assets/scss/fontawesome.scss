@@ -5,6 +5,7 @@ $fa-font-path: '/assets/fonts';
 @import '~@fortawesome/fontawesome-free/scss/variables';
 
 $icons: (
+		'heart': $fa-var-heart,
 		'music': $fa-var-music,
 		'angle-down': $fa-var-angle-down,
 		'angle-left': $fa-var-angle-left,

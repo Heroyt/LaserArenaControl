@@ -17,6 +17,7 @@ await fontawesomeSubset(
             brands: ['discord'],
             regular: ['calendar', 'circle-xmark', 'circle-check'],
             solid: [
+                'heart',
                 'music',
                 'angle-down',
                 'angle-left',

@@ -1,0 +1,146 @@
+{layout '../../@printLayout.latte'}
+
+{varType App\Core\App $app}
+{varType App\GameModels\Game\Lasermaxx\Game $game}
+{varType App\GameModels\Game\Today $today}
+{varType App\GameModels\Game\PrintStyle $style}
+{varType string $qr}
+{varType string $publicUrl}
+{varType string $lang}
+{default bool $colorless = false}
+
+{import '../graphical_base.latte'}
+
+{var array $fontSize = [
+10 => 6,
+11 => 5,
+12 => 4,
+]}
+{var array $fontSizeHits = [
+8 => 6,
+9 => 6,
+10 => 5,
+11 => 4,
+12 => 4,
+]}
+
+{define addHead}
+    <link rel="stylesheet" href="{getUrl}dist/results/graphical.css?v={$app->getCacheVersion()}">
+    <link rel="stylesheet" href="{getUrl}dist/results/graphical_survival.css?v={$app->getCacheVersion()}">
+{/define}
+
+{define resultsPlayers}
+    {var int $maxScore = $game->getMaxScore()}
+    {var int $minScore = $game->getMinScore()}
+    {var int $totalHeight = $maxScore - ($minScore < 0 ? $minScore : 0)}
+    {var int $count = count($game->getPlayers())}
+    <section class="results-players" style="grid-template-columns: repeat({$count}, 1fr)">
+        {foreach $game->getPlayersSorted() as $player}
+            {varType App\GameModels\Game\Lasermaxx\Player $player}
+            <div n:class="results-player, rounded, p-2, $player->getRemainingLives() > 0 && $player->ammoRest > 0 ? bg-white, flex-fill, $player->getRemainingLives() <= 0 || $player->ammoRest <= 0 ? dead">
+                <div class="player-head">
+                    {var array $rank = $player->getBestAt()}
+                    {svgIcon $rank['icon'], '', 15}
+                    {var int $len = strlen($player->name)}
+                    <div class="player-name text-center text-team-{$player->getTeamColor()}"
+                         {ifset $fontSize[$len]}style="--font-size: {$fontSize[$len]}pt;"{/ifset}>
+                        {$player->name}
+                    </div>
+                    <div class="player-rank">
+                        <div class="rank-name fs-sm">{$rank['name']}</div>
+                    </div>
+                </div>
+                {include playerScore, $player, $totalHeight, $minScore}
+                {include playerAccuracy, $player}
+                {include playerShots, $player, $game->ammo}
+                {include playerHits, $player}
+                {include playerFavourites, $player}
+                {if method_exists($game, 'isMinesOn') && $game->isMinesOn() && $game->getMode()?->settings?->playerMines}
+                    {include playerMines, $player}
+                {/if}
+            </div>
+        {/foreach}
+    </section>
+{/define}
+
+{define playerShots, App\GameModels\Game\Lasermaxx\Player $player, int $maxShots}
+    <div n:if="$game->getMode()?->settings?->playerShots" class="player-shots">
+        {var int $step = ceil($maxShots / 10)}
+        {var int $count = ceil(($game->ammo - $player->shots) / $step)}
+        <svg viewBox="0 0 1720 504" class="mb-1">
+            <g n:for="$i = 0; $i < $count; $i++" transform="translate({172*$i})">
+                <g transform="matrix(1,0,0,1,-167,0)">
+                    <path d="M335.738,436.459L335.738,184.656C335.738,180.014 331.986,176.263 327.345,176.263L176.263,176.263C171.621,176.263 167.87,180.015 167.87,184.656L167.87,436.459C167.87,441.101 171.622,444.852 176.263,444.852L176.263,453.245C171.621,453.245 167.87,456.997 167.87,461.638L167.87,495.212C167.87,499.854 171.622,503.605 176.263,503.605L327.345,503.605C331.987,503.605 335.738,499.853 335.738,495.212L335.738,461.64C335.738,456.998 331.986,453.247 327.345,453.247L327.345,444.854C331.986,444.853 335.738,441.101 335.738,436.459Z"
+                          style="fill-rule:nonzero;"/>
+                    <path d="M184.656,159.478L318.951,159.478C323.593,159.478 327.344,155.726 327.344,151.085L327.344,142.692C327.344,87.514 300.98,34.803 256.839,1.682C253.851,-0.559 249.755,-0.559 246.767,1.682C202.626,34.803 176.262,87.513 176.262,142.692L176.262,151.085C176.263,155.726 180.014,159.478 184.656,159.478Z"
+                          style="fill-rule:nonzero;"/>
+                </g>
+            </g>
+            <g class="empty" n:for="; $i < 10; $i++" transform="translate({172*$i})">
+                <g transform="matrix(1,0,0,1,-167,0)">
+                    <path d="M335.738,436.459L335.738,184.656C335.738,180.014 331.986,176.263 327.345,176.263L176.263,176.263C171.621,176.263 167.87,180.015 167.87,184.656L167.87,436.459C167.87,441.101 171.622,444.852 176.263,444.852L176.263,453.245C171.621,453.245 167.87,456.997 167.87,461.638L167.87,495.212C167.87,499.854 171.622,503.605 176.263,503.605L327.345,503.605C331.987,503.605 335.738,499.853 335.738,495.212L335.738,461.64C335.738,456.998 331.986,453.247 327.345,453.247L327.345,444.854C331.986,444.853 335.738,441.101 335.738,436.459Z"
+                          fill="transparent" stroke="#000"/>
+                    <path d="M184.656,159.478L318.951,159.478C323.593,159.478 327.344,155.726 327.344,151.085L327.344,142.692C327.344,87.514 300.98,34.803 256.839,1.682C253.851,-0.559 249.755,-0.559 246.767,1.682C202.626,34.803 176.262,87.513 176.262,142.692L176.262,151.085C176.263,155.726 180.014,159.478 184.656,159.478Z"
+                          fill="transparent" stroke="#000"/>
+                </g>
+            </g>
+        </svg>
+        <div class="number">
+            {_'Výstřely', domain: 'results', context: 'player'}:
+            {svgIcon 'bullets', '', '1em'} {$player->shots|number:0,',','&nbsp;'|noescape}
+            /{$game->ammo|number:0,',','&nbsp;'|noescape}
+        </div>
+    </div>
+{/define}
+
+{define playerHits, App\GameModels\Game\Lasermaxx\Player $player}
+    <h4 class="mt-2 mb-1">{_'Životy', domain: 'results', context: 'player'}:</h4>
+    {var int $step = ceil($game->lives / 10)}
+    {var int $count = ceil($player->getRemainingLives() / $step)}
+    <div class="lives">
+        <svg xmlns="http://www.w3.org/2000/svg" class="life alive"
+             viewBox="0 0 512 512" n:for="$i = 0; $i < $count; $i++">
+            <!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+            <path
+                    d="M47.6 300.4L228.3 469.1c7.5 7 17.4 10.9 27.7 10.9s20.2-3.9 27.7-10.9L464.4 300.4c30.4-28.3 47.6-68 47.6-109.5v-5.8c0-69.9-50.5-129.5-119.4-141C347 36.5 300.6 51.4 268 84L256 96 244 84c-32.6-32.6-79-47.5-124.6-39.9C50.5 55.6 0 115.2 0 185.1v5.8c0 41.5 17.2 81.2 47.6 109.5z"
+                    style="fill: var(--bs-danger, red);"
+            />
+        </svg>
+        <svg xmlns="http://www.w3.org/2000/svg" class="life dead"
+             viewBox="0 0 512 512" n:for="$i = 0; $i < 10-$count; $i++">
+            <!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+            <path
+                    d="M119.4 44.1c23.3-3.9 46.8-1.9 68.6 5.3l49.8 77.5-75.4 75.4c-1.5 1.5-2.4 3.6-2.3 5.8s1 4.2 2.6 5.7l112 104c2.9 2.7 7.4 2.9 10.5 .3s3.8-7 1.7-10.4l-60.4-98.1 90.7-75.6c2.6-2.1 3.5-5.7 2.4-8.8L296.8 61.8c28.5-16.7 62.4-23.2 95.7-17.6C461.5 55.6 512 115.2 512 185.1v5.8c0 41.5-17.2 81.2-47.6 109.5L283.7 469.1c-7.5 7-17.4 10.9-27.7 10.9s-20.2-3.9-27.7-10.9L47.6 300.4C17.2 272.1 0 232.4 0 190.9v-5.8c0-69.9 50.5-129.5 119.4-141z"
+                    style="fill: #000;"/>
+        </svg>
+    </div>
+    <div class="lives-count">
+        {$player->getRemainingLives()}/{$game->lives}
+    </div>
+    <h4 class="mt-2 mb-0">{_'Zásahy', domain: 'results', context: 'player'}:</h4>
+    <div n:if="$game->getMode()?->settings?->playerPlayers" class="hits mt-1 mb-2">
+        {var int $hits = $game->getMode()?->isTeam() ? $player->hitsOther : $player->hits}
+        <div class="kills-row">
+            <div class="kills" style="width:{100*$hits / ($player->hits > 0 ? $player->hits : 1)|noescape}%;">
+                <div class="main">
+                    <div class="icon">
+                        {svgIcon 'kill', '', '1rem'}
+                    </div>
+                    <div class="number">
+                        {$hits}
+                    </div>
+                </div>
+            </div>
+            <div n:if="$game->getMode()?->settings?->playerPlayersTeams && $game->getMode()?->isTeam()"
+                    class="kills-own"
+                    style="width: {100*($player->hitsOwn / ($player->hits > 0 ? $player->hits : 1))|noescape}%;">
+                <div class="main">
+                    <div class="icon">
+                        {svgIcon 'dead', '', '1rem'}
+                    </div>
+                    <div class="number">{$player->hitsOwn}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+{/define}

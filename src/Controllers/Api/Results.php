@@ -22,7 +22,6 @@ use Lsr\Core\Exceptions\ModelNotFoundException;
 use Lsr\Core\Exceptions\ValidationException;
 use Lsr\Core\Requests\Request;
 use Lsr\Core\Requests\Response;
-use Lsr\Core\Templating\Latte;
 use Lsr\Logging\Exceptions\ArchiveCreationException;
 use Lsr\Logging\Logger;
 use OpenApi\Attributes as OA;
@@ -129,7 +128,7 @@ class Results extends ApiController
                       new ErrorDto(
                                 'Found more than one suitable game file.',
                         type  : ErrorType::INTERNAL,
-                        values: ['path' => $resultsDir.$gameObj->fileNumber.'*.game']
+                        values: ['path' => $resultsDir.$gameObj->fileNumber.'*.game', 'files' => $files]
                       ),
                       500
                     );

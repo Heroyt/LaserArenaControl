@@ -1,3 +1,3 @@
 files:
   - source: /languages/*.pot
-    translation: /languages/%locale_with_underscore%/LC_MESSAGES/%original_file_name%.po
+    translation: /languages/%locale_with_underscore%/LC_MESSAGES/%file_name%.po

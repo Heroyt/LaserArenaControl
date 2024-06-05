@@ -201,6 +201,7 @@ switch ($env->getMode()) {
                     }
 
                     if (isset($e500)) {
+                        $e500->init($request);
                         $psr7->respond($e500->show($request, $e));
                     }
                     else {

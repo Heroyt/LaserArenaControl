@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: Spanish\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2024-06-05 12:40\n"
+"PO-Revision-Date: 2024-06-05 20:38\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -44,19 +44,19 @@ msgid "Dobití protihráče pažbou, vám žádné body nepřidá."
 msgstr "Apalear el oponente con la culata no te dará ningún punto."
 
 msgid "Zabiják vlastního týmu, či největší vlasťnák... To je oč tu běží!"
-msgstr ""
+msgstr "Matador de su propio equipo u odiado por sus compañeros... ¡De esto se trata!"
 
 msgid "Vestu si oblečte vždy zbraní dobředu."
-msgstr ""
+msgstr "Lleven siempre el chaleco con el arma por delante."
 
 msgid "Při týmové hře není výhodné střílet do hráčů se stejnou barvou."
-msgstr ""
+msgstr "En un partido de equipos no es ventajoso disparar a los jugadores del mismo color."
 
 msgid "Jen Chuck Norris vás může zastřelit baterkou na svém mobilu."
-msgstr ""
+msgstr "Solo Chuck Norris puede dispararse con la linterna de su móvil."
 
 msgid "Nejlepší výherní taktika je strílet do protihráčů."
-msgstr ""
+msgstr "La mejor táctica ganadora es disparar a los oponentes."
 
 msgid "Nemá cenu umírat na tom samém místě. Když to nejde, uteč jinam!"
 msgstr ""

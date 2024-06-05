@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: Spanish\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2024-06-05 20:38\n"
+"PO-Revision-Date: 2024-06-05 21:49\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -17,7 +17,7 @@ msgstr ""
 "X-Crowdin-Project-ID: 515800\n"
 
 msgid "Jak se v aréně střílí, tak se v aréně umírá..."
-msgstr ""
+msgstr "El que juega mucho y entrena mucho, acierta mucho y gana mucho..."
 
 msgid "Trénink se vyplácí!"
 msgstr "¡El entrenamiento vale la pena!"
@@ -59,53 +59,53 @@ msgid "Nejlepší výherní taktika je strílet do protihráčů."
 msgstr "La mejor táctica ganadora es disparar a los oponentes."
 
 msgid "Nemá cenu umírat na tom samém místě. Když to nejde, uteč jinam!"
-msgstr ""
+msgstr "No tiene sentido morir en el mismo lugar. Si puedes, ¡corre a otro lugar!"
 
 msgid "Všechny bonusy, kromě štítu, trvají 30s."
-msgstr ""
+msgstr "Todas las bonificaciones, excepto el escudo, duran 30 s."
 
 msgid "Držení zbraně v obou rukách je přesnější."
-msgstr ""
+msgstr "Asir el arma con las dos manos es más preciso."
 
 msgid "Měl bys radši hrát laser game a být úžasný!"
-msgstr ""
+msgstr "¡Deberías jugar al laser game y ser estupendo!"
 
 msgid "Spoluhráč je nejlepší cíl. Neutíká."
-msgstr ""
+msgstr "El compañero es la mejor diana. No huye."
 
 msgid "#laserarenapísek"
 msgstr "#laserarenapísek"
 
 msgid "Zabití: 100 bodů, Smrt: -50 bodů, Zabití vlastního hráče: -25 bodů"
-msgstr ""
+msgstr "Tiro: 100 puntos, Muerte: -50, Tiro al compañero: -25 puntos"
 
 msgid "Go, go, go, go..."
 msgstr "Vamos, vamos, vamos, vamos..."
 
 msgid "Ramenní čidla se trefují nejlépe, zádová nejhůř."
-msgstr ""
+msgstr "Los sensores de hombro se aciertan mejor, los de espalda peor."
 
 msgid "Pohyblivý cíl je vždycky těžší trefit."
-msgstr ""
+msgstr "Una diana móvil es siempre más difícil de acertar."
 
 msgid "Na displeji vesty po zásahu vidíte kdo vás zasáhl do jakého čidla. To pomáhá při orientaci."
-msgstr ""
+msgstr "En la pantalla que está en el chaleco después del tiro, puedes ver quién te acertó en qué sensor. Esto ayuda en la orientación."
 
 msgid "Při výstupu z arény vždy připni zbraň k vestě."
-msgstr ""
+msgstr "Cuando sales de la arena, siempre fija el arma al chaleco."
 
 msgid "LASER TAG - SUIT UP!"
 msgstr "LASER TAG – ¡SUIT UP!"
 
 msgid "Když tě bolí nohy, kempi!"
-msgstr ""
+msgstr "Si te duelen los pies, ¡prueba camping!"
 
 msgid "Nikdy nejsi příliš starý na laser game."
-msgstr ""
+msgstr "Nunca eres demasiado viejo para laser game."
 
 msgid "Nezapomeň každý květen a listopad registrovat svůj tým na turnaj!"
-msgstr ""
+msgstr "¡No olvides registrar tu equipo para el torneo cada mayo y noviembre!"
 
 msgid "Oživení trvá 5 sekund."
-msgstr ""
+msgstr "La reaparición dura 5 segundos."
 

@@ -40,6 +40,8 @@ services:
 				- 'results'
 				- 'gate'
 				- 'tips'
+				- 'cli'
+				- 'highlights'
 
 	version: App\Services\VersionService
 	regression: App\Services\RegressionCalculator

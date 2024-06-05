@@ -25,12 +25,6 @@ msgstr "Liste des jeux"
 msgid "Toggle navigation"
 msgstr "Changer la navigation"
 
-msgid "Hry"
-msgstr "Jeux"
-
-msgid "Tisk"
-msgstr "Imprimé"
-
 msgid "Akce"
 msgstr ""
 
@@ -133,9 +127,6 @@ msgstr "Jeu"
 msgid "Styl"
 msgstr "Style"
 
-msgid "Herní módy"
-msgstr ""
-
 msgid "General"
 msgstr "Général"
 
@@ -188,7 +179,7 @@ msgid "Naposledy uloženo:"
 msgstr "Dernière sauvegarde:"
 
 msgid "nikdy"
-msgstr "jamais"
+msgstr ""
 
 msgctxt "errors"
 msgid "Nahraný soubor je příliš velký"
@@ -254,9 +245,6 @@ msgstr "100 munitions"
 
 msgid "Zobrazit vesty na výsledkové tabuli"
 msgstr "Visualiser les gilets sur la tableau de bord"
-
-msgid "Výsledková tabule"
-msgstr ""
 
 msgctxt "settings"
 msgid "Gate settings"
@@ -1813,7 +1801,8 @@ msgid "Více než 50 let"
 msgstr ""
 
 msgctxt "questionnaire.question"
-msgid "<h4>O Vás</h4>\n"
+msgid ""
+"<h4>O Vás</h4>\n"
 "<p>Pro začátek prosím vyplňte základní údaje o Vás a vašem hraní laser game.</p>"
 msgstr ""
 
@@ -1982,7 +1971,8 @@ msgid "Ohodnoťte aktuální vzhled výsledků"
 msgstr ""
 
 msgctxt "questionnaire.question"
-msgid "<h4>Papírové výsledky - srozumitelnost</h4>\n"
+msgid ""
+"<h4>Papírové výsledky - srozumitelnost</h4>\n"
 "<p>V této části budete hodnotit jednotlivé části tisknutch výsledků a jejich srozumitelnost.</p>\n"
 "<p class=\"text-muted\">(1 = Nemám problém s pochopením, 5 = Vůbec tomu nerozumím / nevím, že tam něco takového je)</p> "
 msgstr ""
@@ -2024,7 +2014,8 @@ msgid "Bonusy (ve hře s minami - pokud jste nehrál/a s minami, vyberte možnos
 msgstr ""
 
 msgctxt "questionnaire.question"
-msgid "<h4>Papírové výsledky - vzhled</h4>\n"
+msgid ""
+"<h4>Papírové výsledky - vzhled</h4>\n"
 "<p>V této části budete hodnotit jednotlivé části tisknutch výsledků a jejich vzhled.</p>\n"
 "<p class=\"text-muted\">(1 = Moc se mi to líbí, 5 = Nelíbí se mi to)</p> "
 msgstr ""
@@ -2058,7 +2049,8 @@ msgid "On-line výsledky jsou málo detailní"
 msgstr ""
 
 msgctxt "questionnaire.question"
-msgid "<h4>On-line výsledky - srozumitelnost</h4>\n"
+msgid ""
+"<h4>On-line výsledky - srozumitelnost</h4>\n"
 "<p>V této části budete hodnotit jednotlivé části on-line výsledků a jejich srozumitelnost.</p>\n"
 "<p class=\"text-muted\">(1 = Nemám problém s pochopením, 5 = Vůbec tomu nerozumím / nevím, že tam něco takového je)</p> "
 msgstr ""
@@ -2072,7 +2064,8 @@ msgid "Dnešní pořadí podle"
 msgstr ""
 
 msgctxt "questionnaire.question"
-msgid "<h4>On-line výsledky - vzhled</h4>\n"
+msgid ""
+"<h4>On-line výsledky - vzhled</h4>\n"
 "<p>V této části budete hodnotit jednotlivé části on-line výsledků a jejich vzhled.</p>\n"
 "<p class=\"text-muted\">(1 = Moc se mi to líbí, 5 = Nelíbí se mi to)</p> "
 msgstr ""
@@ -2094,13 +2087,15 @@ msgid "Na výsledkové tabuli je detailů až moc"
 msgstr ""
 
 msgctxt "questionnaire.question"
-msgid "<h4>Výsledková tabule - srozumitelnost</h4>\n"
+msgid ""
+"<h4>Výsledková tabule - srozumitelnost</h4>\n"
 "<p>V této části budete hodnotit jednotlivé části výsledkové tabule a jejich srozumitelnost.</p>\n"
 "<p class=\"text-muted\">(1 = Nemám problém s pochopením, 5 = Vůbec tomu nerozumím / nevím, že tam něco takového je)</p> "
 msgstr ""
 
 msgctxt "questionnaire.question"
-msgid "<h4>Budoucnost</h4>\n"
+msgid ""
+"<h4>Budoucnost</h4>\n"
 "<p>V této části se budeme zabývat budoucím stavem. Zde budou Vaše odpovědi pomáhat určivat prioritu implementace nových funkcí do výsledků.</p>\n"
 "<p>Známkujte jednotlivé podotázky podle toho, jak moc se vám daná funkce libí a jak moc byste chtěli funkci využívat</p>\n"
 "<p class=\"text-muted\">(1 = nemůžu se dočkat, 5 = vůbec mě to neláká)</p>"
@@ -2131,7 +2126,8 @@ msgid "Organizace a registrace na turnaje pomocí mého přihlášení"
 msgstr ""
 
 msgctxt "questionnaire.question"
-msgid "<h4>Je něco co byste chtěl/a dodat? (nepovinné)</h4>\n"
+msgid ""
+"<h4>Je něco co byste chtěl/a dodat? (nepovinné)</h4>\n"
 "<p>V této části nám prosím napište jakoukoliv další kritiku, kterou chcete sdělit.</p>\n"
 "<p>Budu rád za jakékoliv další nápady na změny, připomínky, problémy, ale i pochvaly.</p>"
 msgstr ""
@@ -4025,15 +4021,6 @@ msgctxt "pageTitles"
 msgid "Results"
 msgstr "Résultats"
 
-msgid "Vesty"
-msgstr ""
-
-msgid "Hudba"
-msgstr ""
-
-msgid "Mezipaměť"
-msgstr ""
-
 msgid "Přezdívka hráče na vestě %s"
 msgstr ""
 
@@ -4239,9 +4226,6 @@ msgstr ""
 msgid "Název manuální události, kterou se obrazovka vyvolá. Může to být cokoliv - je to vámi pojmenovaná událost, kterou můžete manuálně vyvolat zkratkou, nebo napsáním názvu události."
 msgstr ""
 
-msgid "nikdy"
-msgstr ""
-
 msgctxt "results"
 msgid "%d výstřel"
 msgid_plural "%d výstřelů"
@@ -4274,4 +4258,60 @@ msgstr ""
 
 msgctxt "events"
 msgid "Reload gate"
+msgstr ""
+
+msgctxt "trvání"
+msgid "%d minutu"
+msgid_plural "%d minut"
+msgstr[0] ""
+msgstr[1] ""
+
+msgctxt "spojka"
+msgid "a"
+msgstr ""
+
+msgctxt "trvání"
+msgid "%d sekundu"
+msgid_plural "%d sekund"
+msgstr[0] ""
+msgstr[1] ""
+
+msgctxt "pageTitles"
+msgid "Hry"
+msgstr ""
+
+msgctxt "pageTitles"
+msgid "Tisk"
+msgstr ""
+
+msgctxt "pageTitles"
+msgid "Výsledková tabule"
+msgstr ""
+
+msgctxt "pageTitles.settings"
+msgid "Obecné"
+msgstr ""
+
+msgctxt "pageTitles.settings"
+msgid "Výsledková tabule"
+msgstr ""
+
+msgctxt "pageTitles.settings"
+msgid "Vesty"
+msgstr ""
+
+msgctxt "pageTitles.settings"
+msgid "Herní módy"
+msgstr ""
+
+msgctxt "pageTitles.settings"
+msgid "Tisk"
+msgstr ""
+
+msgctxt "pageTitles.settings"
+msgid "Hudba"
+msgstr ""
+
+msgctxt "pageTitles.settings"
+msgid "Mezipaměť"
 msgstr ""

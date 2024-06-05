@@ -11,25 +11,25 @@ use LAC\Modules\Core\MenuExtensionInterface;
 
 $menu = [
   [
-    'name' => lang('Nová hra'),
+    'name' => lang('Nová hra', context: 'pageTitles'),
     'route' => 'dashboard',
     'icon'  => 'fa-solid fa-plus',
     'order' => 0,
   ],
   [
-    'name' => lang('Hry'),
+    'name' => lang('Hry', context: 'pageTitles'),
     'route' => 'games-list',
     'icon'  => 'fas fa-list',
     'order' => 10,
   ],
   [
-    'name' => lang('Tisk'),
+    'name' => lang('Tisk', context: 'pageTitles'),
     'route' => 'results',
     'icon'  => 'fas fa-print',
     'order' => 20,
   ],
   'gate' => [
-    'name' => lang('Výsledková tabule'),
+    'name' => lang('Výsledková tabule', context: 'pageTitles'),
     'route'    => 'gate',
     'icon'     => 'fas fa-display',
     'order'    => 30,
@@ -47,43 +47,43 @@ foreach (GateType::getAll() as $gateType) {
 $featureConfig = App::getServiceByType(FeatureConfig::class);
 
 $menu['settings'] = [
-  'name'     => lang('Nastavení'),
+  'name'     => lang('Nastavení', context: 'pageTitles'),
   'route'    => 'settings',
   'icon'     => 'fas fa-cog',
   'order'    => 99,
   'children' => [
     [
-      'name' => lang('Obecné'),
+      'name' => lang('Obecné', context: 'pageTitles.settings'),
       'route' => 'settings',
       'order' => 0,
     ],
     [
-      'name' => lang('Výsledková tabule'),
+      'name' => lang('Výsledková tabule', context: 'pageTitles.settings'),
       'route' => 'settings-gate',
       'order' => 10,
     ],
     [
-      'name' => lang('Vesty'),
+      'name' => lang('Vesty', context: 'pageTitles.settings'),
       'route' => 'settings-vests',
       'order' => 20,
     ],
     [
-      'name' => lang('Herní módy'),
+      'name' => lang('Herní módy', context: 'pageTitles.settings'),
       'route' => 'settings-modes',
       'order' => 30,
     ],
     [
-      'name' => lang('Tisk'),
+      'name' => lang('Tisk', context: 'pageTitles.settings'),
       'route' => 'settings-print',
       'order' => 40,
     ],
     [
-      'name' => lang('Hudba'),
+      'name' => lang('Hudba', context: 'pageTitles.settings'),
       'route' => 'settings-music',
       'order' => 50,
     ],
     [
-      'name' => lang('Mezipaměť'),
+      'name' => lang('Mezipaměť', context: 'pageTitles.settings'),
       'route' => 'settings-cache',
       'order' => 99,
     ],
@@ -92,7 +92,7 @@ $menu['settings'] = [
 
 if ($featureConfig->isFeatureEnabled('groups')) {
     $menu['settings']['children'][] = [
-      'name'  => lang('Skupiny'),
+      'name' => lang('Skupiny', context: 'pageTitles.settings'),
       'route' => 'settings-groups',
       'order' => 60,
     ];

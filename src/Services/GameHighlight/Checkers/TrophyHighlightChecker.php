@@ -15,44 +15,44 @@ use Lsr\Logging\Exceptions\DirectoryCreationException;
 class TrophyHighlightChecker implements PlayerHighlightChecker
 {
 
-	public function checkPlayer(Player $player, HighlightCollection $highlights) : void {
-		foreach (PlayerTrophy::SPECIAL_TROPHIES as $trophy) {
-			try {
-				if ($player->getTrophy()->check($trophy)) {
-					$highlights->add(new TrophyHighlight($trophy, $player, GameHighlight::VERY_HIGH_RARITY));
-				}
-			} catch (ModelNotFoundException | ValidationException | DirectoryCreationException) {
-			}
-		}
-		foreach (PlayerTrophy::RARE_TROPHIES as $trophy) {
-			try {
-				if ($player->getTrophy()->check($trophy)) {
-            $rarity = GameHighlight::HIGH_RARITY;
-            switch ($trophy) {
-                case 'favouriteTarget':
-                    $rarity = GameHighlight::MEDIUM_RARITY;
-                    $rarity += (int) round($player->getHitsPlayer($player->getFavouriteTarget()) / 5);
-                    break;
-                case 'favouriteTargetOf':
-                    $rarity = GameHighlight::MEDIUM_RARITY;
-                    $rarity += (int) round($player->getFavouriteTargetOf()?->getHitsPlayer($player) / 5);
-                    break;
-                case 'team-50':
-                    $rarity = GameHighlight::MEDIUM_RARITY;
-                    $rarity += 50 * min(1.0, ($player->score / $player->getTeam()->score));
-                    break;
+    public function checkPlayer(Player $player, HighlightCollection $highlights) : void {
+        foreach (PlayerTrophy::SPECIAL_TROPHIES as $trophy) {
+            try {
+                if ($player->getTrophy()->check($trophy)) {
+                    $highlights->add(new TrophyHighlight($trophy, $player, GameHighlight::VERY_HIGH_RARITY));
+                }
+            } catch (ModelNotFoundException | ValidationException | DirectoryCreationException) {
             }
-					$highlights->add(
-						new TrophyHighlight(
-							$trophy,
-							$player,
-              $rarity
-						)
-					);
-				}
-			} catch (ModelNotFoundException | ValidationException | DirectoryCreationException) {
-			}
-		}
-	}
+        }
+        foreach (PlayerTrophy::RARE_TROPHIES as $trophy) {
+            try {
+                if ($player->getTrophy()->check($trophy)) {
+                    $rarity = GameHighlight::HIGH_RARITY;
+                    switch ($trophy) {
+                        case 'favouriteTarget':
+                            $rarity = GameHighlight::MEDIUM_RARITY;
+                            $rarity += (int) round($player->getHitsPlayer($player->getFavouriteTarget()) / 5);
+                            break;
+                        case 'favouriteTargetOf':
+                            $rarity = GameHighlight::MEDIUM_RARITY;
+                            $rarity += (int) round($player->getFavouriteTargetOf()?->getHitsPlayer($player) / 5);
+                            break;
+                        case 'team-50':
+                            $rarity = GameHighlight::MEDIUM_RARITY;
+                            $rarity += 50 * min(1.0, ($player->score / $player->getTeam()->score));
+                            break;
+                    }
+                    $highlights->add(
+                      new TrophyHighlight(
+                        $trophy,
+                        $player,
+                        $rarity
+                      )
+                    );
+                }
+            } catch (ModelNotFoundException | ValidationException | DirectoryCreationException) {
+            }
+        }
+    }
 
 }

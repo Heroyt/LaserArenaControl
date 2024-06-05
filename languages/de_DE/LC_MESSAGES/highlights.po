@@ -1,0 +1,109 @@
+msgid ""
+msgstr ""
+"Language: de_DE\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Domain: highlights\n"
+
+msgctxt "hits"
+msgid "Hráči %s a %s se oba navzájem zasáhli %dx."
+msgstr ""
+
+msgctxt "trophy"
+msgid "%s si zasedl na %s"
+msgstr ""
+
+msgctxt "trophy"
+msgid "%s byl pronásledovaný od %s"
+msgstr ""
+
+msgctxt "deaths"
+msgid "%s strávilo %s ve hře vypnuté."
+msgstr ""
+
+msgctxt "hits"
+msgid "%s zasáhlo nejvíce spoluhráčů (%d)."
+msgstr ""
+
+msgctxt "hits"
+msgid "%s byl zasažen nejvíce spoluhráči (%d)."
+msgstr ""
+
+msgctxt "trophy"
+msgid "%s bylo pronásledováno od %s"
+msgstr ""
+
+msgctxt "deaths"
+msgid "%s strávilo %s ve hře vypnuté. To je víc než polovina hry!"
+msgstr ""
+
+msgctxt "hits"
+msgid "%s zasáhli nejvíce spoluhráčů (%d)."
+msgstr ""
+
+msgctxt "hits"
+msgid "%s bylo zasaženo nejvíce spoluhráči (%d)."
+msgstr ""
+
+msgctxt "trophy"
+msgid "%s získává trofej: %s"
+msgstr ""
+
+msgctxt "trophy"
+msgid "%s si zasedlo na %s"
+msgstr ""
+
+msgctxt "deaths"
+msgid "%s zasáhlo více spoluhráčů, než protihráčů"
+msgstr ""
+
+msgctxt "hits"
+msgid "%s zasáhl nejvíce spoluhráčů (%d)."
+msgstr ""
+
+msgctxt "hits"
+msgid "%s byli zasaženi nejvíce spoluhráči (%d)."
+msgstr ""
+
+msgctxt "hits"
+msgid "%s byla zasažena nejvíce spoluhráči (%d)."
+msgstr ""
+
+msgctxt "hits"
+msgid "%s zasáhla nejvíce spoluhráčů (%d)."
+msgstr ""
+
+msgctxt "hits"
+msgid "%s zasáhl více spoluhráčů (%d), než protihráčů (%d)"
+msgstr ""
+
+msgctxt "hits"
+msgid "%s zasáhla více spoluhráčů (%d), než protihráčů (%d)"
+msgstr ""
+
+msgctxt "deaths"
+msgid "%s strávila %s ve hře vypnutá."
+msgstr ""
+
+msgctxt "trophy"
+msgid "%s si zasedla na %s"
+msgstr ""
+
+msgctxt "trophy"
+msgid "%s byla pronásledovaná od %s"
+msgstr ""
+
+msgctxt "deaths"
+msgid "%s strávil %s ve hře vypnutý. To je víc než polovina hry!"
+msgstr ""
+
+msgctxt "deaths"
+msgid "%s strávil %s ve hře vypnutý."
+msgstr ""
+
+msgctxt "evo5"
+msgid "%s získalo %.1fx tolik bonusů co ostatní."
+msgstr ""
+
+msgctxt "deaths"
+msgid "%s strávila %s ve hře vypnutá. To je víc než polovina hry!"
+msgstr ""

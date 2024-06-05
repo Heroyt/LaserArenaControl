@@ -1,0 +1,119 @@
+msgid ""
+msgstr ""
+"Language: es_ES\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Domain: highlights\n"
+"X-Crowdin-Project: laserarenacontrol\n"
+"X-Crowdin-Project-ID: 515800\n"
+"X-Crowdin-Language: es-ES\n"
+"X-Crowdin-File: /master/languages/highlights.pot\n"
+"X-Crowdin-File-ID: 74\n"
+"Project-Id-Version: laserarenacontrol\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language-Team: Spanish\n"
+"PO-Revision-Date: 2024-06-05 11:25\n"
+
+msgctxt "hits"
+msgid "Hráči %s a %s se oba navzájem zasáhli %dx."
+msgstr ""
+
+msgctxt "trophy"
+msgid "%s si zasedl na %s"
+msgstr ""
+
+msgctxt "hits"
+msgid "%s zasáhlo nejvíce spoluhráčů (%d)."
+msgstr ""
+
+msgctxt "hits"
+msgid "%s bylo zasaženo nejvíce spoluhráči (%d)."
+msgstr ""
+
+msgctxt "hits"
+msgid "%s zasáhlo více spoluhráčů (%d), než protihráčů (%d)"
+msgstr ""
+
+msgctxt "deaths"
+msgid "%s strávilo %s ve hře vypnuté."
+msgstr ""
+
+msgctxt "hits"
+msgid "%s byli zasaženi nejvíce spoluhráči (%d)."
+msgstr ""
+
+msgctxt "trophy"
+msgid "%s byla pronásledovaná od %s"
+msgstr ""
+
+msgctxt "trophy"
+msgid "%s si zasedla na %s"
+msgstr ""
+
+msgctxt "hits"
+msgid "%s zasáhl nejvíce spoluhráčů (%d)."
+msgstr ""
+
+msgctxt "trophy"
+msgid "%s získává trofej: %s"
+msgstr ""
+
+msgctxt "trophy"
+msgid "%s si zasedlo na %s"
+msgstr ""
+
+msgctxt "trophy"
+msgid "%s bylo pronásledováno od %s"
+msgstr ""
+
+msgctxt "deaths"
+msgid "%s strávila %s ve hře vypnutá. To je víc než polovina hry!"
+msgstr ""
+
+msgctxt "hits"
+msgid "%s zasáhli nejvíce spoluhráčů (%d)."
+msgstr ""
+
+msgctxt "deaths"
+msgid "%s strávil %s ve hře vypnutý."
+msgstr ""
+
+msgctxt "trophy"
+msgid "%s byl pronásledovaný od %s"
+msgstr ""
+
+msgctxt "hits"
+msgid "%s byla zasažena nejvíce spoluhráči (%d)."
+msgstr ""
+
+msgctxt "deaths"
+msgid "%s strávila %s ve hře vypnutá."
+msgstr ""
+
+msgctxt "hits"
+msgid "%s byl zasažen nejvíce spoluhráči (%d)."
+msgstr ""
+
+msgctxt "hits"
+msgid "%s zasáhlo svého spoluhráče %s vícekrát (%d), než kteréhokoliv protihráče"
+msgstr ""
+
+msgctxt "hits"
+msgid "%s zasáhla nejvíce spoluhráčů (%d)."
+msgstr ""
+
+msgctxt "hits"
+msgid "%s zasáhla více spoluhráčů (%d), než protihráčů (%d)"
+msgstr ""
+
+msgctxt "deaths"
+msgid "%s zasáhlo více spoluhráčů, než protihráčů"
+msgstr ""
+
+msgctxt "deaths"
+msgid "%s strávil %s ve hře vypnutý. To je víc než polovina hry!"
+msgstr ""
+
+msgctxt "evo5"
+msgid "%s získalo %.1fx tolik bonusů co ostatní."
+msgstr ""
+

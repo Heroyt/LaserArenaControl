@@ -221,6 +221,7 @@ tables:
 			`lives` int(10) unsigned DEFAULT NULL,
 			`ammo` int(10) unsigned DEFAULT NULL,
 			`sync` TINYINT(1)  NOT NULL  DEFAULT 0,
+    		`meta` BLOB DEFAULT NULL,
 			PRIMARY KEY (`id_game`),
 			UNIQUE KEY `code` (`code`),
 			KEY `id_mode` (`id_mode`),
@@ -245,6 +246,8 @@ tables:
 				- 'ADD UNIQUE INDEX (`code`);'
 			0.5.0:
 				- 'ADD `results_file` varchar(255) DEFAULT NULL AFTER `end`'
+			0.5.1:
+				- 'ADD `meta` BLOB DEFAULT NULL'
 	App\GameModels\Game\Evo6\Game:
 		order: 1
 		definition: '''
@@ -280,6 +283,7 @@ tables:
 			`lives` int(10) unsigned DEFAULT NULL,
 			`ammo` int(10) unsigned DEFAULT NULL,
 			`sync` TINYINT(1)  NOT NULL  DEFAULT 0,
+			`meta` BLOB DEFAULT NULL,
 			PRIMARY KEY (`id_game`),
 			UNIQUE KEY `code` (`code`),
 			KEY `id_mode` (`id_mode`),
@@ -289,6 +293,8 @@ tables:
 		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 		'''
 		modifications:
+			0.1:
+				- 'ADD `meta` BLOB DEFAULT NULL'
 	App\GameModels\Game\Evo5\Team:
 		order: 2
 		definition: '''

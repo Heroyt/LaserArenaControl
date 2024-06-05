@@ -11,7 +11,8 @@
     <section class="teams">
         {var App\GameModels\Game\Team|null $win = $mode->getWin($game)}
         <div class="team" n:foreach="$game->getTeamsSorted() as $team">
-            <div class="name text-center bg-team-{$game::SYSTEM}-{$team->getTeamColor()}">
+            {varType App\GameModels\Game\Lasermaxx\Team $team}
+            <div class="team-header text-center bg-team-{$game::SYSTEM}-{$team->getTeamColor()}">
                 <div>
                     {if is_null($win)}
                         {svgIcon 'shield', '2rem'}
@@ -21,7 +22,8 @@
                         {svgIcon 'skull', '2rem'}
                     {/if}
                 </div>
-                {$team->name}
+                <div class="name">{$team->name}</div>
+                <div class="base">{$mode->getBaseNameForTeam($team)}</div>
                 <div class="mines text-center mt-3">
                     {svgIcon 'base', '', '3rem'}
                     {$mode->getBasesDestroyed($team)}

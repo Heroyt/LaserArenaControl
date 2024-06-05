@@ -45,7 +45,7 @@
 	.team {
 		margin: 20px;
 
-		> .name {
+		> .team-header {
 			border-radius: 10px;
 			font-size: 1.7rem;
 			font-weight: bold;
@@ -53,6 +53,11 @@
 			padding: 1rem 0;
 			text-align: center;
 			text-transform: uppercase;
+		}
+
+		.base {
+			font-size: 1.5rem;
+			font-weight: 500;
 		}
 
 		.players {

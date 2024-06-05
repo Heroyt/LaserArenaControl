@@ -57,6 +57,7 @@
                     {svgIcon 'skull', '2rem'}
                 {/if}
                 <div class="name">{$team->name}</div>
+                <div class="base">{$mode->getBaseNameForTeam($team)}</div>
                 <div class="mines text-center mt-3">
                     {svgIcon 'base', '', '2rem'}
                     {$mode->getBasesDestroyed($team)}

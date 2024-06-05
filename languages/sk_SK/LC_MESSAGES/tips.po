@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: Slovak\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2024-06-04 13:33\n"
+"PO-Revision-Date: 2024-06-05 12:40\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=4; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 3;\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -15,13 +15,6 @@ msgstr ""
 "X-Crowdin-Language: sk\n"
 "X-Crowdin-Project: laserarenacontrol\n"
 "X-Crowdin-Project-ID: 515800\n"
-
-msgid "Držení zbraně v obou rukách je přesnější."
-msgid_plural "Držení zbraně v obou rukách je přesnější."
-msgstr[0] "Držanie zbrane v oboch rukách je presnejšie."
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
 
 msgid "Jak se v aréně střílí, tak se v aréně umírá..."
 msgstr "Ako sa v aréne strieľa, tak sa v aréne umiera..."
@@ -71,6 +64,9 @@ msgstr "Nemá cenu umierať na tom istom mieste. Keď to nejde, uteč inam!"
 msgid "Všechny bonusy, kromě štítu, trvají 30s."
 msgstr "Všetky bonusy, okrem štítu, trvajú 30s."
 
+msgid "Držení zbraně v obou rukách je přesnější."
+msgstr "Držanie zbrane v oboch rukách je presnejšie."
+
 msgid "Měl bys radši hrát laser game a být úžasný!"
 msgstr "Mal by si radšej hrať laser game a byť úžasný!"
 
@@ -112,3 +108,4 @@ msgstr "Nezabudni každý máj a november registrovať svoj tím na turnaj!"
 
 msgid "Oživení trvá 5 sekund."
 msgstr "Oživenie trvá 5 sekúnd."
+

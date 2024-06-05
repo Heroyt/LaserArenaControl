@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: Spanish\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2024-05-28 09:21\n"
+"PO-Revision-Date: 2024-06-05 12:40\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -20,28 +20,28 @@ msgid "Jak se v aréně střílí, tak se v aréně umírá..."
 msgstr ""
 
 msgid "Trénink se vyplácí!"
-msgstr ""
+msgstr "¡El entrenamiento vale la pena!"
 
 msgid "Tip #%d"
-msgstr ""
+msgstr "Consejo #%d"
 
 msgid "Střílíme v Písku už od 31.12.2013!!!"
-msgstr ""
+msgstr "¡¡¡Disparamos en Písek desde el 31.12.2013!!!"
 
 msgid "Ve hře vždy sleduj svoje okolí!"
-msgstr ""
+msgstr "¡Siempre vigila tus alrededores durante el partido!"
 
 msgid "Čidlo na zbrani, ač nenápadné, se dá velmi dobře trefit."
-msgstr ""
+msgstr "El sensor en el arma, aunque discreto, puede ser muy fácil de acertar."
 
 msgid "Zkušení hráči hrajou týmově!"
-msgstr ""
+msgstr "¡Los jugadores con experiencia juegan en equipo!"
 
 msgid "Pro vyřízení osobních sporů je aréna ideální."
-msgstr ""
+msgstr "Para resolver conflictos personales, la arena es ideal."
 
 msgid "Dobití protihráče pažbou, vám žádné body nepřidá."
-msgstr ""
+msgstr "Apalear el oponente con la culata no te dará ningún punto."
 
 msgid "Zabiják vlastního týmu, či největší vlasťnák... To je oč tu běží!"
 msgstr ""
@@ -74,13 +74,13 @@ msgid "Spoluhráč je nejlepší cíl. Neutíká."
 msgstr ""
 
 msgid "#laserarenapísek"
-msgstr ""
+msgstr "#laserarenapísek"
 
 msgid "Zabití: 100 bodů, Smrt: -50 bodů, Zabití vlastního hráče: -25 bodů"
 msgstr ""
 
 msgid "Go, go, go, go..."
-msgstr ""
+msgstr "Vamos, vamos, vamos, vamos..."
 
 msgid "Ramenní čidla se trefují nejlépe, zádová nejhůř."
 msgstr ""
@@ -95,7 +95,7 @@ msgid "Při výstupu z arény vždy připni zbraň k vestě."
 msgstr ""
 
 msgid "LASER TAG - SUIT UP!"
-msgstr ""
+msgstr "LASER TAG – ¡SUIT UP!"
 
 msgid "Když tě bolí nohy, kempi!"
 msgstr ""
@@ -108,3 +108,4 @@ msgstr ""
 
 msgid "Oživení trvá 5 sekund."
 msgstr ""
+

@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: Slovak\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2024-05-28 12:12\n"
+"PO-Revision-Date: 2024-06-05 12:40\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=4; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 3;\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -26,7 +26,7 @@ msgid "Toggle navigation"
 msgstr "Prepnúť navigáciu"
 
 msgid "Akce"
-msgstr ""
+msgstr "Akcia"
 
 msgid "%s skóre"
 msgstr "%s skóre"
@@ -178,7 +178,7 @@ msgstr "Pridať dátum"
 msgid "Naposledy uloženo:"
 msgstr "Naposledy uložené:"
 
-msgid "never"
+msgid "nikdy"
 msgstr "nikdy"
 
 msgctxt "errors"
@@ -593,10 +593,6 @@ msgstr "Nepodarilo sa odstrániť súbor hudby"
 
 msgctxt "actions"
 msgid "Uložit"
-msgstr "Uložiť"
-
-msgctxt "actions"
-msgid "Save"
 msgstr "Uložiť"
 
 msgctxt "actions"
@@ -1384,10 +1380,10 @@ msgid "Každý s každým na poloviny"
 msgstr ""
 
 msgid "Délka hry"
-msgstr ""
+msgstr "Dĺžka hry"
 
 msgid "v minutách"
-msgstr ""
+msgstr "v minútach"
 
 msgid "Přestávka mezi hrami"
 msgstr ""
@@ -1456,19 +1452,19 @@ msgid "%d. tým ze skupiny: %s"
 msgstr ""
 
 msgid "Hra"
-msgstr ""
+msgstr "Hra"
 
 msgid "Žádná"
-msgstr ""
+msgstr "Žiadna"
 
 msgid "Další hra"
-msgstr ""
+msgstr "Ďalšia hra"
 
 msgid "Předchozí hra"
-msgstr ""
+msgstr "Predchádzajúca hra"
 
 msgid "Hrát"
-msgstr ""
+msgstr "Hráť"
 
 msgid "Bonus/Penalizace"
 msgstr ""
@@ -1490,13 +1486,13 @@ msgid "Postoupeno skupin:"
 msgstr ""
 
 msgid "Všechny hry"
-msgstr ""
+msgstr "Všetky hry"
 
 msgid "Tým"
-msgstr ""
+msgstr "Tím"
 
 msgid "Výhry"
-msgstr ""
+msgstr "Výhry"
 
 msgid "Remízy"
 msgstr ""
@@ -1529,13 +1525,13 @@ msgid "Zabijáci vlastních"
 msgstr ""
 
 msgid "Seznam"
-msgstr ""
+msgstr "Zoznam"
 
 msgid "Připravené hry"
 msgstr ""
 
 msgid "Připravené"
-msgstr ""
+msgstr "Pripravené"
 
 msgctxt "game.actions"
 msgid "Připravit hru"
@@ -1543,7 +1539,7 @@ msgstr ""
 
 msgctxt "newGame.preparedGames.actions"
 msgid "Nahrát"
-msgstr ""
+msgstr "Nahrať"
 
 msgctxt "tournament.presets"
 msgid "Každý s každým na poloviny - 10 týmů"
@@ -1589,31 +1585,31 @@ msgid "Název týmu"
 msgstr ""
 
 msgid "Jméno"
-msgstr ""
+msgstr "Meno"
 
 msgid "Příjmení"
-msgstr ""
+msgstr "Priezvisko"
 
 msgid "Přezdívka"
-msgstr ""
+msgstr "Prezývka"
 
 msgid "Náhradník"
-msgstr ""
+msgstr "Náhradník"
 
 msgid "Přidat tým"
-msgstr ""
+msgstr "Pridať tím"
 
 msgid "Uloženo"
-msgstr ""
+msgstr "Uložené"
 
 msgid "Tým 1"
-msgstr ""
+msgstr "Tím 1"
 
 msgid "Tým 2"
-msgstr ""
+msgstr "Tím 2"
 
 msgid "Tým 3"
-msgstr ""
+msgstr "Tím 3"
 
 msgctxt "settings"
 msgid "Platí i pro časovač na neaktivní obrazovce"
@@ -1625,7 +1621,7 @@ msgstr ""
 
 msgctxt "tournament"
 msgid "Základní skupina"
-msgstr ""
+msgstr "Základná skupina"
 
 msgid "Semifinále"
 msgstr ""
@@ -1659,20 +1655,20 @@ msgid "Předpokládaný čas ve hře na tým"
 msgstr ""
 
 msgid "Celkem her"
-msgstr ""
+msgstr "Celkový počet hier"
 
 msgctxt "tournament.presets"
 msgid "3 základní hry na poloviny a baráž"
 msgstr ""
 
 msgid "Play-off"
-msgstr ""
+msgstr "Play-off"
 
 msgid "Nejlepší %d týmy z %d. týmů ze skupin: %s"
 msgstr ""
 
 msgid "Pořadí"
-msgstr ""
+msgstr "Poradie"
 
 msgid "Body za výhru"
 msgstr ""
@@ -1767,11 +1763,11 @@ msgstr ""
 
 msgctxt "questionnaire"
 msgid "A"
-msgstr ""
+msgstr "A"
 
 msgctxt "questionnaire"
 msgid "B"
-msgstr ""
+msgstr "B"
 
 msgctxt "questionnaire"
 msgid "C"
@@ -1810,8 +1806,7 @@ msgid "Více než 50 let"
 msgstr ""
 
 msgctxt "questionnaire.question"
-msgid ""
-"<h4>O Vás</h4>\n"
+msgid "<h4>O Vás</h4>\n"
 "<p>Pro začátek prosím vyplňte základní údaje o Vás a vašem hraní laser game.</p>"
 msgstr ""
 
@@ -1853,11 +1848,11 @@ msgstr ""
 
 msgctxt "questionnaire"
 msgid "Ano"
-msgstr ""
+msgstr "Áno"
 
 msgctxt "questionnaire"
 msgid "Ne"
-msgstr ""
+msgstr "Nie"
 
 msgctxt "questionnaire.question"
 msgid "Hrál/a jste někdy i v jiné aréně?"
@@ -1873,7 +1868,7 @@ msgstr ""
 
 msgctxt "questionnaire"
 msgid "Jen jednou"
-msgstr ""
+msgstr "Iba raz"
 
 msgctxt "questionnaire.question"
 msgid "<h4>Výsledky obecně</h4><p>V této části prosím vypňte jak moc Vás zajímají jednotlivé statistiky z výsledků.</p><p class=\"text-muted\">(1 = Potřebuju to vědět, 5 = Vůbec mě to nezajímá)</p>"
@@ -1980,8 +1975,7 @@ msgid "Ohodnoťte aktuální vzhled výsledků"
 msgstr ""
 
 msgctxt "questionnaire.question"
-msgid ""
-"<h4>Papírové výsledky - srozumitelnost</h4>\n"
+msgid "<h4>Papírové výsledky - srozumitelnost</h4>\n"
 "<p>V této části budete hodnotit jednotlivé části tisknutch výsledků a jejich srozumitelnost.</p>\n"
 "<p class=\"text-muted\">(1 = Nemám problém s pochopením, 5 = Vůbec tomu nerozumím / nevím, že tam něco takového je)</p> "
 msgstr ""
@@ -2023,8 +2017,7 @@ msgid "Bonusy (ve hře s minami - pokud jste nehrál/a s minami, vyberte možnos
 msgstr ""
 
 msgctxt "questionnaire.question"
-msgid ""
-"<h4>Papírové výsledky - vzhled</h4>\n"
+msgid "<h4>Papírové výsledky - vzhled</h4>\n"
 "<p>V této části budete hodnotit jednotlivé části tisknutch výsledků a jejich vzhled.</p>\n"
 "<p class=\"text-muted\">(1 = Moc se mi to líbí, 5 = Nelíbí se mi to)</p> "
 msgstr ""
@@ -2058,8 +2051,7 @@ msgid "On-line výsledky jsou málo detailní"
 msgstr ""
 
 msgctxt "questionnaire.question"
-msgid ""
-"<h4>On-line výsledky - srozumitelnost</h4>\n"
+msgid "<h4>On-line výsledky - srozumitelnost</h4>\n"
 "<p>V této části budete hodnotit jednotlivé části on-line výsledků a jejich srozumitelnost.</p>\n"
 "<p class=\"text-muted\">(1 = Nemám problém s pochopením, 5 = Vůbec tomu nerozumím / nevím, že tam něco takového je)</p> "
 msgstr ""
@@ -2073,8 +2065,7 @@ msgid "Dnešní pořadí podle"
 msgstr ""
 
 msgctxt "questionnaire.question"
-msgid ""
-"<h4>On-line výsledky - vzhled</h4>\n"
+msgid "<h4>On-line výsledky - vzhled</h4>\n"
 "<p>V této části budete hodnotit jednotlivé části on-line výsledků a jejich vzhled.</p>\n"
 "<p class=\"text-muted\">(1 = Moc se mi to líbí, 5 = Nelíbí se mi to)</p> "
 msgstr ""
@@ -2096,15 +2087,13 @@ msgid "Na výsledkové tabuli je detailů až moc"
 msgstr ""
 
 msgctxt "questionnaire.question"
-msgid ""
-"<h4>Výsledková tabule - srozumitelnost</h4>\n"
+msgid "<h4>Výsledková tabule - srozumitelnost</h4>\n"
 "<p>V této části budete hodnotit jednotlivé části výsledkové tabule a jejich srozumitelnost.</p>\n"
 "<p class=\"text-muted\">(1 = Nemám problém s pochopením, 5 = Vůbec tomu nerozumím / nevím, že tam něco takového je)</p> "
 msgstr ""
 
 msgctxt "questionnaire.question"
-msgid ""
-"<h4>Budoucnost</h4>\n"
+msgid "<h4>Budoucnost</h4>\n"
 "<p>V této části se budeme zabývat budoucím stavem. Zde budou Vaše odpovědi pomáhat určivat prioritu implementace nových funkcí do výsledků.</p>\n"
 "<p>Známkujte jednotlivé podotázky podle toho, jak moc se vám daná funkce libí a jak moc byste chtěli funkci využívat</p>\n"
 "<p class=\"text-muted\">(1 = nemůžu se dočkat, 5 = vůbec mě to neláká)</p>"
@@ -2135,8 +2124,7 @@ msgid "Organizace a registrace na turnaje pomocí mého přihlášení"
 msgstr ""
 
 msgctxt "questionnaire.question"
-msgid ""
-"<h4>Je něco co byste chtěl/a dodat? (nepovinné)</h4>\n"
+msgid "<h4>Je něco co byste chtěl/a dodat? (nepovinné)</h4>\n"
 "<p>V této části nám prosím napište jakoukoliv další kritiku, kterou chcete sdělit.</p>\n"
 "<p>Budu rád za jakékoliv další nápady na změny, připomínky, problémy, ale i pochvaly.</p>"
 msgstr ""
@@ -4047,10 +4035,10 @@ msgid "Valentýn"
 msgstr ""
 
 msgid "Default"
-msgstr ""
+msgstr "Predvolený"
 
 msgid "Graphical"
-msgstr ""
+msgstr "Grafické"
 
 msgctxt "pageTitles"
 msgid "Results"
@@ -4065,11 +4053,11 @@ msgstr ""
 
 msgctxt "music"
 msgid "Lasermaxx"
-msgstr ""
+msgstr "Lasermaxx"
 
 msgctxt "music"
 msgid "Requiem for a dream"
-msgstr ""
+msgstr "Requiem for a dream"
 
 msgctxt "music"
 msgid "Turnajový mix"
@@ -4077,27 +4065,27 @@ msgstr ""
 
 msgctxt "music"
 msgid "Narozeniny"
-msgstr ""
+msgstr "Narodeniny"
 
 msgctxt "music"
 msgid "Undertale"
-msgstr ""
+msgstr "Undertale"
 
 msgctxt "music"
 msgid "Mortal kombat"
-msgstr ""
+msgstr "Mortal kombat"
 
 msgctxt "music"
 msgid "Matrix"
-msgstr ""
+msgstr "Matrix"
 
 msgctxt "music"
 msgid "Marvel"
-msgstr ""
+msgstr "Marvel"
 
 msgctxt "music"
 msgid "StarWars"
-msgstr ""
+msgstr "StarWars"
 
 msgctxt "music"
 msgid "Piráti z Karibiku"
@@ -4105,59 +4093,59 @@ msgstr ""
 
 msgctxt "music"
 msgid "Horror"
-msgstr ""
+msgstr "Horror"
 
 msgctxt "music.group"
 msgid "Halloween"
-msgstr ""
+msgstr "Halloween"
 
 msgctxt "music"
 msgid "Halloween 1"
-msgstr ""
+msgstr "Halloween 1"
 
 msgctxt "music"
 msgid "Halloween 2"
-msgstr ""
+msgstr "Halloween 2"
 
 msgctxt "music.group"
 msgid "K-POP"
-msgstr ""
+msgstr "K-POP"
 
 msgctxt "music"
 msgid "K-POP"
-msgstr ""
+msgstr "K-POP"
 
 msgctxt "music"
 msgid "K-POP 2"
-msgstr ""
+msgstr "K-POP 2"
 
 msgctxt "music.group"
 msgid "Anime"
-msgstr ""
+msgstr "Anime"
 
 msgctxt "music"
 msgid "Anime"
-msgstr ""
+msgstr "Anime"
 
 msgctxt "music"
 msgid "Anime 2"
-msgstr ""
+msgstr "Anime 2"
 
 msgctxt "music"
 msgid "Dwarven metal"
-msgstr ""
+msgstr "Trpasličí metal"
 
 msgctxt "music"
 msgid "Albatroz"
-msgstr ""
+msgstr "Albatroz"
 
 msgctxt "music"
 msgid "Doom"
-msgstr ""
+msgstr "Doom"
 
 msgctxt "music"
 msgid "S3RL"
-msgstr ""
+msgstr "S3RL"
 
 msgid "Akce výsledkové tabule"
 msgstr ""
@@ -4166,7 +4154,7 @@ msgid "Zobrazit přehled hudebních módů"
 msgstr ""
 
 msgid "Ikona"
-msgstr ""
+msgstr "Ikona"
 
 msgid "Předpřipravit výsledky pro tisk"
 msgstr ""
@@ -4176,22 +4164,22 @@ msgstr ""
 
 msgctxt "game"
 msgid "Playlisty"
-msgstr ""
+msgstr "Playlisty"
 
 msgctxt "month"
 msgid "Duben"
-msgstr ""
+msgstr "Apríl"
 
 msgctxt "month"
 msgid "Březen"
-msgstr ""
+msgstr "Marec"
 
 msgctxt "month"
 msgid "Leden"
-msgstr ""
+msgstr "Január"
 
 msgid "Naposledy uloženo"
-msgstr ""
+msgstr "Naposledy uložené"
 
 msgctxt "events"
 msgid "Reload gate"
@@ -4202,74 +4190,72 @@ msgid "Typy obrazovek"
 msgstr ""
 
 msgid "Přepnout na tmavý režim"
-msgstr ""
+msgstr "Prepnúť na tmavý režim"
 
 msgid "Přepnout na světlý režim"
-msgstr ""
+msgstr "Prepnúť na svetlý režim"
 
 msgctxt "pageTitles"
 msgid "Nastavení - Výsledková tabule"
-msgstr ""
+msgstr "Nastavenie - Výsledková tabuľa"
 
 msgctxt "trvání"
 msgid "%d minutu"
 msgid_plural "%d minut"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "%d minútu"
+msgstr[1] "%d minúty"
+msgstr[2] "%d minút"
+msgstr[3] "%d minút"
 
 msgctxt "spojka"
 msgid "a"
-msgstr ""
+msgstr "a"
 
 msgctxt "trvání"
 msgid "%d sekundu"
 msgid_plural "%d sekund"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-
-msgid "nikdy"
-msgstr ""
+msgstr[0] "%d sekundu"
+msgstr[1] "%d sekundy"
+msgstr[2] "%d sekúnd"
+msgstr[3] "%d sekundu"
 
 msgctxt "pageTitles"
 msgid "Hry"
-msgstr ""
+msgstr "Hry"
 
 msgctxt "pageTitles"
 msgid "Tisk"
-msgstr ""
+msgstr "Tlač"
 
 msgctxt "pageTitles"
 msgid "Výsledková tabule"
-msgstr ""
+msgstr "Výsledková tabuľa"
 
 msgctxt "pageTitles.settings"
 msgid "Obecné"
-msgstr ""
+msgstr "Všeobecné"
 
 msgctxt "pageTitles.settings"
 msgid "Výsledková tabule"
-msgstr ""
+msgstr "Výsledková tabuľa"
 
 msgctxt "pageTitles.settings"
 msgid "Vesty"
-msgstr ""
+msgstr "Vesty"
 
 msgctxt "pageTitles.settings"
 msgid "Herní módy"
-msgstr ""
+msgstr "Herní módy"
 
 msgctxt "pageTitles.settings"
 msgid "Tisk"
-msgstr ""
+msgstr "Tlačenie"
 
 msgctxt "pageTitles.settings"
 msgid "Hudba"
-msgstr ""
+msgstr "Hudba"
 
 msgctxt "pageTitles.settings"
 msgid "Mezipaměť"
-msgstr ""
+msgstr "Cache"
+

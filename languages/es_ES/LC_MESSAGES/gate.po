@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: Spanish\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2024-06-04 13:33\n"
+"PO-Revision-Date: 2024-06-05 11:16\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -32,7 +32,7 @@ msgstr "Pantalla completa"
 
 msgctxt "screen.type"
 msgid "Ve volném prostoru"
-msgstr ""
+msgstr "Flotando"
 
 msgctxt "screens.groups"
 msgid "Denní statistiky"
@@ -72,7 +72,7 @@ msgstr "Vídeo de YouTube"
 
 msgctxt "screens"
 msgid "Seznam hudebních módů"
-msgstr ""
+msgstr "Lista de música"
 
 msgctxt "screens"
 msgid "RTSP - kamery"
@@ -88,7 +88,7 @@ msgstr "Fijen el arma al chaleco"
 
 msgctxt "screens.description"
 msgid "Obrazovka zobrazující výsledky z her. Automaticky vybírá zobrazení podle herního módu."
-msgstr ""
+msgstr "Pantalla que muestra los resultados de los partidos. Selecciona automáticamente la pantalla según el modo del partido."
 
 msgctxt "screens"
 msgid "Výsledky ze hry"
@@ -208,135 +208,136 @@ msgstr "La pantalla aparecerá si el último partido ha terminado."
 
 msgctxt "screen.trigger"
 msgid "Hra skončila"
-msgstr ""
+msgstr "Partido se acabó"
 
 msgctxt "screen.trigger"
 msgid "Obrazovka se zobrazí, pokud se vyvolá nějaká manuální událost."
-msgstr ""
+msgstr "La pantalla aparecerá si se activa un evento manual."
 
 msgctxt "screen.trigger"
 msgid "Vlastní událost"
-msgstr ""
+msgstr "Evento personalizado"
 
 msgid "Nejlepší hráči měsíce %s %s"
-msgstr ""
+msgstr "El mejor jugador del mes %s %s"
 
 msgctxt "settings"
 msgid "Název"
-msgstr ""
+msgstr "Título"
 
 msgctxt "settings"
 msgid "URL název"
-msgstr ""
+msgstr "Título de URL"
 
 msgctxt "settings"
 msgid "Volitelná hodnota, automaticky se generuje. Jedná se o text, který se použije v URL pro přístup na tuto obrazovku."
-msgstr ""
+msgstr "Valor opcional, se genera automáticamente. Es el texto que se utilizará en la URL para acceder a esta pantalla."
 
 msgctxt "settings"
 msgid "Obrazovky"
-msgstr ""
+msgstr "Pantallas"
 
 msgctxt "settings"
 msgid "Typ"
-msgstr ""
+msgstr "Tipo"
 
 msgctxt "settings"
 msgid "Pořadí"
-msgstr ""
+msgstr "Orden"
 
 msgctxt "settings"
 msgid "Pořadí v jakém se obrazovky kontrolují (od nejmenšího čísla k větším)."
-msgstr ""
+msgstr "El orden en que se comprueban las pantallas (de menor a mayor número)."
 
 msgctxt "settings"
 msgid "Podmínka"
-msgstr ""
+msgstr "Condición"
 
 msgctxt "settings"
 msgid "Událost"
-msgstr ""
+msgstr "Evento"
 
 msgctxt "settings"
 msgid "Název manuální události, kterou se obrazovka vyvolá. Může to být cokoliv - je to vámi pojmenovaná událost, kterou můžete manuálně vyvolat zkratkou, nebo napsáním názvu události."
-msgstr ""
+msgstr "El título del evento manual que activará la pantalla. Puede ser cualquier cosa – es un evento que usted nombra, que puede invocar manualmente por un atajo o escribiendo el nombre del evento."
 
 msgctxt "settings"
 msgid "Doba na obrazovce v sekundách"
-msgstr ""
+msgstr "Tiempo en pantalla en segundos"
 
 msgctxt "settings"
 msgid "Maximální doba, po kterou má obrazovka zůstat aktivní. 0 = neomezeně."
-msgstr ""
+msgstr "El tiempo máximo que la pantalla debe permanecer activa. 0 = sin límite."
 
 msgctxt "settings"
 msgid "Interval v sekundách"
-msgstr ""
+msgstr "Intervalo en segundos"
 
 msgctxt "settings"
 msgid "URL RTSP streamů"
-msgstr ""
+msgstr "URL de streams RTSP"
 
 msgctxt "settings"
 msgid "Maximální počet zobrazených streamů v jednu chvíli"
-msgstr ""
+msgstr "Número máximo de streams mostrados a la vez"
 
 msgctxt "settings"
 msgid "Pokud je maximální počet menší, než počet streamů, budou se streamy postupně přepínat."
-msgstr ""
+msgstr "Si el número máximo es inferior al número de streams, los streams se cambiarán sucesivamente."
 
 msgctxt "settings"
 msgid "Na každý řádek 1 URL ve formátu např. \"%s\"."
-msgstr ""
+msgstr "Para cada línea 1 URL en formato por ejemplo \"%s\"."
 
 msgid "Výsledky pro měsíc %s %s"
-msgstr ""
+msgstr "Resultados para el mes %s %s"
 
 msgid "Dnešní zajímavosti"
-msgstr ""
+msgstr "Curiosidades de hoy"
 
 msgid "Dnes zatím nejsou žádné zajímavosti."
-msgstr ""
+msgstr "Hoy todavía no hay curiosidades."
 
 msgid "Nejhranější hudba"
-msgstr ""
+msgstr "Música más reproducida"
 
 msgid "Nedostatečná data"
-msgstr ""
+msgstr "Datos insuficientes"
 
 msgid "Nejlepší hráči"
-msgstr ""
+msgstr "Mejores jugadores"
 
 msgid "Nejlepší skóre měsíce"
-msgstr ""
+msgstr "La mejor puntuación del mes"
 
 msgctxt "topPlayers"
 msgid "Nejlepší skóre"
-msgstr ""
+msgstr "La mejor puntuación"
 
 msgctxt "topPlayers"
 msgid "Nejlepší herní úroveň"
-msgstr ""
+msgstr "Mejor rango de partido"
 
 msgctxt "topPlayers"
 msgid "Nejvíc zásahů"
-msgstr ""
+msgstr "El mayor número de tiros"
 
 msgctxt "topPlayers"
 msgid "Nejvíc smrtí"
-msgstr ""
+msgstr "El mayor número de muertes"
 
 msgctxt "topPlayers"
 msgid "Nejlepší přesnost"
-msgstr ""
+msgstr "Mejor precisión"
 
 msgctxt "topPlayers"
 msgid "Nejvíc výstřelů"
-msgstr ""
+msgstr "El mayor número de disparos"
 
 msgctxt "topPlayers"
 msgid "Nejvíc zásahů vlastních"
-msgstr ""
+msgstr "El mayor número de tiros a sus compañeros"
 
 msgid "Připněte prosím zbraně na vesty!"
 msgstr ""
+

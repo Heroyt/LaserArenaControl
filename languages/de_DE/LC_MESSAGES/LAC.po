@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: German\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2024-06-04 14:38\n"
+"PO-Revision-Date: 2024-06-05 11:16\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -24,12 +24,6 @@ msgstr "Spiele-Liste"
 
 msgid "Toggle navigation"
 msgstr "Navigation umschalten"
-
-msgid "Hry"
-msgstr ""
-
-msgid "Tisk"
-msgstr "Drucken"
 
 msgid "Akce"
 msgstr ""
@@ -131,9 +125,6 @@ msgid "Game"
 msgstr ""
 
 msgid "Styl"
-msgstr ""
-
-msgid "Herní módy"
 msgstr ""
 
 msgid "General"
@@ -253,9 +244,6 @@ msgid "100 nábojů"
 msgstr ""
 
 msgid "Zobrazit vesty na výsledkové tabuli"
-msgstr ""
-
-msgid "Výsledková tabule"
 msgstr ""
 
 msgctxt "settings"
@@ -4014,15 +4002,6 @@ msgctxt "pageTitles"
 msgid "Results"
 msgstr ""
 
-msgid "Vesty"
-msgstr ""
-
-msgid "Hudba"
-msgstr ""
-
-msgid "Mezipaměť"
-msgstr ""
-
 msgid "Přezdívka hráče na vestě %s"
 msgstr ""
 
@@ -4176,5 +4155,61 @@ msgstr ""
 
 msgctxt "pageTitles"
 msgid "Nastavení - Výsledková tabule"
+msgstr ""
+
+msgctxt "trvání"
+msgid "%d minutu"
+msgid_plural "%d minut"
+msgstr[0] ""
+msgstr[1] ""
+
+msgctxt "spojka"
+msgid "a"
+msgstr ""
+
+msgctxt "trvání"
+msgid "%d sekundu"
+msgid_plural "%d sekund"
+msgstr[0] ""
+msgstr[1] ""
+
+msgctxt "pageTitles"
+msgid "Hry"
+msgstr ""
+
+msgctxt "pageTitles"
+msgid "Tisk"
+msgstr ""
+
+msgctxt "pageTitles"
+msgid "Výsledková tabule"
+msgstr ""
+
+msgctxt "pageTitles.settings"
+msgid "Obecné"
+msgstr ""
+
+msgctxt "pageTitles.settings"
+msgid "Výsledková tabule"
+msgstr ""
+
+msgctxt "pageTitles.settings"
+msgid "Vesty"
+msgstr ""
+
+msgctxt "pageTitles.settings"
+msgid "Herní módy"
+msgstr ""
+
+msgctxt "pageTitles.settings"
+msgid "Tisk"
+msgstr ""
+
+msgctxt "pageTitles.settings"
+msgid "Hudba"
+msgstr ""
+
+msgctxt "pageTitles.settings"
+msgid "Mezipaměť"
 msgstr ""
 

@@ -11,109 +11,109 @@ msgstr ""
 "Project-Id-Version: laserarenacontrol\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Language-Team: English\n"
-"PO-Revision-Date: 2024-06-05 11:25\n"
+"PO-Revision-Date: 2024-06-05 12:40\n"
 
 msgctxt "hits"
 msgid "Hráči %s a %s se oba navzájem zasáhli %dx."
-msgstr ""
+msgstr "Players %s and %s both hit each other %dx."
 
 msgctxt "trophy"
 msgid "%s si zasedl na %s"
-msgstr ""
+msgstr "%s stalked %s"
 
 msgctxt "hits"
 msgid "%s zasáhlo nejvíce spoluhráčů (%d)."
-msgstr ""
+msgstr "%s hit the most teammates (%d)."
 
 msgctxt "hits"
 msgid "%s bylo zasaženo nejvíce spoluhráči (%d)."
-msgstr ""
+msgstr "%s was hit the most by teammates (%d)."
 
 msgctxt "hits"
 msgid "%s zasáhlo více spoluhráčů (%d), než protihráčů (%d)"
-msgstr ""
+msgstr "%s hit more teammates (%d) than opponents (%d)"
 
 msgctxt "deaths"
 msgid "%s strávilo %s ve hře vypnuté."
-msgstr ""
+msgstr "%s spent %s in the game turned off."
 
 msgctxt "hits"
 msgid "%s byli zasaženi nejvíce spoluhráči (%d)."
-msgstr ""
+msgstr "%s were hit the most by teammates (%d)."
 
 msgctxt "trophy"
 msgid "%s byla pronásledovaná od %s"
-msgstr ""
+msgstr "%s was stalked by %s"
 
 msgctxt "trophy"
 msgid "%s si zasedla na %s"
-msgstr ""
+msgstr "%s stalked %s"
 
 msgctxt "hits"
 msgid "%s zasáhl nejvíce spoluhráčů (%d)."
-msgstr ""
+msgstr "%s hit the most teammates (%d)."
 
 msgctxt "trophy"
 msgid "%s získává trofej: %s"
-msgstr ""
+msgstr "%s acquired the trophy: %s"
 
 msgctxt "trophy"
 msgid "%s si zasedlo na %s"
-msgstr ""
+msgstr "%s stalked %s"
 
 msgctxt "trophy"
 msgid "%s bylo pronásledováno od %s"
-msgstr ""
+msgstr "%s was stalked by %s"
 
 msgctxt "deaths"
 msgid "%s strávila %s ve hře vypnutá. To je víc než polovina hry!"
-msgstr ""
+msgstr "%s spent %s in-game turned off. That's more than half of the game!"
 
 msgctxt "hits"
 msgid "%s zasáhli nejvíce spoluhráčů (%d)."
-msgstr ""
+msgstr "%s hit the most teammates (%d)."
 
 msgctxt "deaths"
 msgid "%s strávil %s ve hře vypnutý."
-msgstr ""
+msgstr "%s spent %s in the game turned off."
 
 msgctxt "trophy"
 msgid "%s byl pronásledovaný od %s"
-msgstr ""
+msgstr "%s was stalked by %s"
 
 msgctxt "hits"
 msgid "%s byla zasažena nejvíce spoluhráči (%d)."
-msgstr ""
+msgstr "%s was hit the most by teammates (%d)."
 
 msgctxt "deaths"
 msgid "%s strávila %s ve hře vypnutá."
-msgstr ""
+msgstr "%s spent %s in the game turned off."
 
 msgctxt "hits"
 msgid "%s byl zasažen nejvíce spoluhráči (%d)."
-msgstr ""
+msgstr "%s was hit the most by teammates (%d)."
 
 msgctxt "hits"
 msgid "%s zasáhlo svého spoluhráče %s vícekrát (%d), než kteréhokoliv protihráče"
-msgstr ""
+msgstr "%s hit their teammate %s more times (%d) than any opponent"
 
 msgctxt "hits"
 msgid "%s zasáhla nejvíce spoluhráčů (%d)."
-msgstr ""
+msgstr "%s hit the most teammates (%d)."
 
 msgctxt "hits"
 msgid "%s zasáhla více spoluhráčů (%d), než protihráčů (%d)"
-msgstr ""
+msgstr "%s hit more teammates (%d) than opponents (%d)"
 
 msgctxt "deaths"
 msgid "%s zasáhlo více spoluhráčů, než protihráčů"
-msgstr ""
+msgstr "%s hit more teammates than opponents"
 
 msgctxt "deaths"
 msgid "%s strávil %s ve hře vypnutý. To je víc než polovina hry!"
-msgstr ""
+msgstr "%s spent %s in-game turned off. That's more than half of the game!"
 
 msgctxt "evo5"
 msgid "%s získalo %.1fx tolik bonusů co ostatní."
-msgstr ""
+msgstr "%s gained %.1fx as many powers as the others."
 

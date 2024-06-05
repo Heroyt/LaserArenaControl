@@ -65,6 +65,7 @@ switch ($env->getMode()) {
             } catch (Throwable $e) {
                 $task->fail($e);
             }
+            $app->translations->updateTranslations();
         }
         break;
     case 'file_watch':

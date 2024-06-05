@@ -5,14 +5,14 @@
 	.results-zakladny-teams {
 		display: grid;
 		grid-area: teams;
-		grid-gap: 1rem;
+		grid-gap: 4pt;
 		grid-template-columns: 1fr 1fr;
 
 		.team {
 			background-color: #fff;
 			border: 3px solid var(--team-color);
 			color: var(--team-color);
-			padding: .4rem;
+			padding: 3pt;
 
 			.team-head {
 				align-items: center;
@@ -40,12 +40,19 @@
 
 			.results-players {
 				color: #000;
+				grid-gap: 2pt;
 				margin-top: 2rem;
 
 				.results-player {
 					border: 1px solid var(--team-color);
 				}
 			}
+		}
+	}
+
+	&.too-many-players {
+		.results-player {
+			padding: .5rem 3pt !important;
 		}
 	}
 }

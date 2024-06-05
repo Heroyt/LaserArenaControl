@@ -32,7 +32,7 @@
 {/define}
 
 {define containerClasses}
-    template-graphical zakladny
+    template-graphical zakladny {if $game->getPlayerCount() > 10}too-many-players{/if}
 {/define}
 
 {define content}

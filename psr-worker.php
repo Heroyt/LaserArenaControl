@@ -124,8 +124,9 @@ switch ($env->getMode()) {
                     continue;
                 }
 
+                $request = RequestFactory::fromPsrRequest($request);
+
                 try {
-                    $request = RequestFactory::fromPsrRequest($request);
                     $app->setRequest($request);
 
                     //var_dump('Request: '.$request->getUri());
@@ -196,7 +197,7 @@ switch ($env->getMode()) {
                           ], $blueScreen
                           )
                         );
-                        $psr7->getWorker()->error((string) $e);
+                        file_put_contents('php://stderr', (string) $e);
                         continue;
                     }
 
@@ -208,7 +209,7 @@ switch ($env->getMode()) {
                         $psr7->respond(new Response(500, [], $e->getMessage()));
                     }
 
-                    $psr7->getWorker()->error((string) $e);
+                    file_put_contents('php://stderr', (string) $e);
                 }
             } catch (Throwable $e) { // Last line of defence if any error occurs
                 // Log exception
@@ -217,7 +218,8 @@ switch ($env->getMode()) {
                 Debugger::log($e, ILogger::EXCEPTION);
 
                 // Inform worker that an unexpected error occured
-                $psr7->getWorker()->error((string) $e);
+                $psr7->respond(new Response(500, [], $e->getMessage()));
+                file_put_contents('php://stderr', (string) $e);
             }
         }
         break;

@@ -1,19 +1,4 @@
-FROM golang:1.22.3 as golang
-FROM ghcr.io/roadrunner-server/velox:latest as roadrunner
-
-COPY --from=golang /usr/local/go/ /usr/local/go/
-
-ENV APP_VERSION="1.0.0"
-ARG BUILD_TIME="$(date +%FT%T%z)"
-ENV VERSION="v2024.1.2"
-ARG RT_TOKEN="undefined"
-
-COPY roadrunner/velox_rr_2024.toml .
-
-ENV CGO_ENABLED=0
-RUN vx build -c velox_rr_2024.toml -o /usr/bin/
-
-FROM php:8.2-cli-bullseye as php
+FROM php:8.3-cli-bullseye as php
 
 # Setup
 RUN apt-get update
@@ -29,7 +14,17 @@ RUN apt install -y curl libcurl4-openssl-dev
 RUN docker-php-ext-install mysqli curl gettext sockets pdo_mysql zip pcntl intl opcache gd
 # Imagick
 RUN apt-get update && apt-get install -y libmagickwand-dev --no-install-recommends && rm -rf /var/lib/apt/lists/*
-RUN pecl install imagick
+#RUN pecl install imagick
+RUN git clone https://github.com/Imagick/imagick.git --depth 1 /tmp/imagick && \
+    cd /tmp/imagick && \
+    git fetch origin master && \
+    git switch master && \
+    cd /tmp/imagick && \
+    phpize && \
+    ./configure && \
+    make && \
+    make install
+
 # Igbinary
 RUN pecl install igbinary
 # Enable extensions
@@ -60,6 +55,21 @@ RUN apt-get install -y locales \
 RUN locale-gen cs_CZ.UTF-8
 RUN update-locale
 RUN apt install -y nano
+
+FROM golang:1.22.4 as golang
+FROM ghcr.io/roadrunner-server/velox:latest as roadrunner
+
+COPY --from=golang /usr/local/go/ /usr/local/go/
+
+ENV APP_VERSION="1.0.0"
+ARG BUILD_TIME="$(date +%FT%T%z)"
+ENV VERSION="v2024.1.2"
+ARG RT_TOKEN="undefined"
+
+COPY roadrunner/velox_rr_2024.toml .
+
+ENV CGO_ENABLED=0
+RUN vx build -c velox_rr_2024.toml -o /usr/bin/
 
 FROM node:current-slim AS node_base
 FROM composer:latest AS composer

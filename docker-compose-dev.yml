@@ -15,7 +15,7 @@ services:
       - backend
   redis:
     restart: unless-stopped
-    image: redis/redis-stack-server:latest
+    image: eqalpha/keydb:latest
     ports:
       - "6379:6379"
     networks:

@@ -55,10 +55,16 @@ rpc:
   listen: tcp://0.0.0.0:6001
 http:
   address: 0.0.0.0:8001
-  middleware: [ "gzip", "headers", "http_metrics" ]
+  middleware:
+    - headers
+    - http_metrics
+    - cache
   pool:
     num_workers: 4
     max_jobs: 20
+    supervisor:
+      ttl: 300s # Restart worker every 5 minutes
+      max_worker_memory: 256
   headers:
     cors:
       allowed_origin: "*"

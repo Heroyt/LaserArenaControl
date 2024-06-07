@@ -1,5 +1,5 @@
 extensions:
-	orisai.scheduler: OriNette\Scheduler\DI\SchedulerExtension
+	orisai.scheduler: App\DI\Extensions\SchedulerExtension
 orisai.scheduler:
 	console:
 		script: '%constants.appDir%bin/console'

@@ -11,6 +11,26 @@
     {
       "type": "path",
       "url": "./modules/*"
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/heroyt/orisai-exceptions"
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/heroyt/orisai-clock"
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/heroyt/orisai-utils"
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/heroyt/orisai-cron-expression-explainer"
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/heroyt/scheduler"
     }
   ],
   "scripts": {
@@ -21,8 +41,8 @@
     "docs": "doxygen",
     "build-production": "composer update --no-dev && composer dump-autoload --no-dev && npm install && npm run buildDev",
     "build": "composer update && composer dump-autoload && npm install && npm run build",
-    "docker-core": "docker build . --file docker/core/Dockerfile --tag heroyt/lac_core:$(date +%s) --tag heroyt/lac_core:latest --tag heroyt/lac_core:nginx-$(date +%s) --tag heroyt/lac_core:nginx-latest --tag heroyt/lac_core:nginx",
-    "docker-dev": "docker-compose --file docker-compose-dev.yml up -d"
+    "docker-arm": "docker buildx build --platform linux/arm64 . --file docker/Dockerfile --tag heroyt/laser-arena-control:roadrunner-latest --tag heroyt/laser-arena-control:roadrunner --tag heroyt/laser-arena-control:latest --push --build-arg \"RT_TOKEN=$RT_TOKEN\" --build-arg \"BUILD_TIME=$(date +%FT%T%z)\"",
+    "docker": "docker buildx build --platform linux/arm64,linux/amd64 . --file docker/Dockerfile --tag heroyt/laser-arena-control:roadrunner-latest --tag heroyt/laser-arena-control:roadrunner --tag heroyt/laser-arena-control:latest --push --build-arg \"RT_TOKEN=$RT_TOKEN\" --build-arg \"BUILD_TIME=$(date +%FT%T%z)\""
   },
   "require": {
     "dibi/dibi": "^5",
@@ -40,7 +60,7 @@
     "nette/http": "^3.1",
     "nette/security": "^3.1",
     "nette/utils": "^4",
-    "php": "^8.2",
+    "php": "^8.3",
     "psr/log": "^3.0",
     "tracy/tracy": "^2.10",
     "endroid/qr-code": "^5",
@@ -53,11 +73,13 @@
     "lsr/request": "^0.2",
     "ext-zlib": "*",
     "heroyt/tournament-generator": "^0.5",
-    "orisai/scheduler": "^2",
-    "orisai/nette-scheduler": "^1.1",
-    "symfony/lock": "^6",
+    "orisai/exceptions": "dev-v1.x-php83",
+    "orisai/cron-expression-explainer": "dev-v1.x-php83",
+    "orisai/clock": "dev-v1.x-php83",
+    "orisai/utils": "dev-v1.x-php83",
+    "orisai/scheduler": "dev-v2.x-php83",
+    "symfony/lock": "^7",
     "diego-ninja/composer-preload": "^1.0",
-    "orisai/nette-console": "^1.4",
     "ext-redis": "*",
     "zircote/swagger-php": "^4.8",
     "laser-arena-control/tables_module": "@dev",
@@ -69,9 +91,9 @@
     "spiral/roadrunner-http": "^3.5",
     "spiral/roadrunner-jobs": "^4.3",
     "roadrunner-php/centrifugo": "^2.1",
-    "symfony/process": "^6.4",
     "spiral/roadrunner-tcp": "^4.1",
-    "spiral/roadrunner-metrics": "^3.2"
+    "spiral/roadrunner-metrics": "^3.2",
+    "symfony/console": "^7"
   },
   "require-dev": {
     "roave/security-advisories": "dev-latest",

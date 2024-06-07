@@ -17,10 +17,21 @@ RUN apk add --no-cache --virtual .build-deps \
     mercurial \
     bash \
     alpine-sdk \
-    findutils
+    findutils \
+    libpcre3 \
+    libpcre3-dev \
+    zlib1g \
+    zlib1g-dev \
+    libssl-dev
 
 SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
 
+# Buld QuicTSL
+RUN git clone https://github.com/quictls/openssl.git /usr/src/quictls
+WORKDIR /usr/src/quictls
+RUN ./Configure && make && make install
+
+# Build nginx
 RUN wget "http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz" -O nginx.tar.gz
 
 RUN rm -rf /usr/src/nginx /usr/src/extra_module &&  \
@@ -31,7 +42,7 @@ WORKDIR /usr/src/nginx/nginx-${NGINX_VERSION}
 RUN git clone https://github.com/arut/nginx-rtmp-module.git
 
 RUN CONFARGS=$(nginx -V 2>&1 | sed -n -e 's/^.*arguments: //p') && \
-    sh -c "./configure --with-compat $CONFARGS --add-module=./nginx-rtmp-module --with-http_v3_module" &&  \
+    sh -c "./configure --with-compat $CONFARGS --add-module=./nginx-rtmp-module --with-http_v3_module --with-cc-opt=\"-I/usr/local/include/openssl\" --with-ld-opt=\"-L/usr/local/lib\"" &&  \
     make && \
     make install
 

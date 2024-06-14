@@ -3,17 +3,14 @@
 namespace App\Tools\GameLoading;
 
 use App\Core\Info;
-use Lsr\Core\Templating\Latte;
 use Lsr\Exceptions\TemplateDoesNotExistException;
 
 class Evo6GameLoader extends LasermaxxGameLoader
 {
     use MusicLoading;
 
-    public const DI_NAME = 'evo6.gameLoader';
-    public const MUSIC_FILE = LMX_DIR.'music/evo6.mp3';
-
-    public function __construct(private readonly Latte $latte) {}
+    public const string DI_NAME = 'evo6.gameLoader';
+    public const string MUSIC_FILE = LMX_DIR.'music/evo6.mp3';
 
     /**
      * Prepare a game for loading

@@ -11,11 +11,21 @@ use App\Models\MusicMode;
 use App\Models\Playlist;
 use Lsr\Core\Exceptions\ModelNotFoundException;
 use Lsr\Core\Exceptions\ValidationException;
+use Lsr\Core\Templating\Latte;
 use Lsr\Helpers\Tools\Strings;
 use Lsr\Logging\Exceptions\DirectoryCreationException;
+use Spiral\RoadRunner\Metrics\Metrics;
 
+/**
+ *
+ */
 abstract class LasermaxxGameLoader implements LoaderInterface
 {
+
+    public function __construct(
+      protected readonly Latte   $latte,
+      protected readonly Metrics $metrics,
+    ) {}
 
     /**
      * @param  int  $musicId
@@ -23,17 +33,19 @@ abstract class LasermaxxGameLoader implements LoaderInterface
      * @return void
      */
     public function loadMusic(int $musicId, string $musicFile) : void {
+        $start = microtime(true);
         try {
             $music = MusicMode::get($musicId);
             if (!file_exists($music->fileName)) {
-                App::getLogger()->warning('Music file does not exist - '.$music->fileName);
+                App::getInstance()->getLogger()->warning('Music file does not exist - '.$music->fileName);
             }
             elseif (!copy($music->fileName, $musicFile)) {
-                App::getLogger()->warning('Music copy failed - '.$music->fileName);
+                App::getInstance()->getLogger()->warning('Music copy failed - '.$music->fileName);
             }
         } catch (ModelNotFoundException | ValidationException | DirectoryCreationException) {
             // Not critical, doesn't need to do anything
         }
+        $this->metrics->set('load_music_time', (microtime(true) - $start) * 1000, ['evo5']);
     }
 
     /**

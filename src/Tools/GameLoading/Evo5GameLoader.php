@@ -3,9 +3,7 @@
 namespace App\Tools\GameLoading;
 
 use App\Core\Info;
-use Lsr\Core\Templating\Latte;
 use Lsr\Exceptions\TemplateDoesNotExistException;
-use Spiral\RoadRunner\Metrics\Metrics;
 
 /**
  *
@@ -14,13 +12,8 @@ class Evo5GameLoader extends LasermaxxGameLoader
 {
     use MusicLoading;
 
-    public const DI_NAME = 'evo5.gameLoader';
-    public const MUSIC_FILE = LMX_DIR.'music/evo5.mp3';
-
-    public function __construct(
-      private readonly Latte   $latte,
-      private readonly Metrics $metrics,
-    ) {}
+    public const string DI_NAME = 'evo5.gameLoader';
+    public const string MUSIC_FILE = LMX_DIR.'music/evo5.mp3';
 
     /**
      * Prepare a game for loading
@@ -50,9 +43,7 @@ class Evo5GameLoader extends LasermaxxGameLoader
 
         // Set up a correct music file
         if (isset($loadData['meta']['music'])) {
-            $start = microtime(true);
             $this->loadOrPlanMusic((int) $loadData['meta']['music']);
-            $this->metrics->set('load_music_time', (microtime(true) - $start) * 1000, ['evo5']);
         }
 
         return $loadData['meta'];

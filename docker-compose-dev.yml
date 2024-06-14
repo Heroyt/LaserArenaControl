@@ -39,7 +39,7 @@ services:
       REDIS_HOST: "redis"
   php:
     restart: unless-stopped
-    image: "heroyt/laser-arena-control:dev-roadrunner-latest"
+    image: "heroyt/laser-arena-control:latest"
     working_dir: /var/www/
     command:
       - /bin/sh
@@ -73,6 +73,20 @@ services:
       FEATURE_GATES: false
       FEATURE_TABLES: true
       FEATURE_GROUPS: true
+  nginx_exporter:
+    restart: unless-stopped
+    image: nginx/nginx-prometheus-exporter:latest
+    ports:
+      - 9113:9113
+    links:
+      - web
+    networks:
+      - backend
+    depends_on:
+      - web
+    command:
+      - -nginx.scrape-uri
+      - http://web:80/stub_status
   web:
     restart: unless-stopped
     build:
@@ -83,7 +97,8 @@ services:
       - db
     ports:
       - "8001:80"
-      - "443:443"
+      - "443:443/tcp"
+      - "443:443/udp"
       - "1935:1935"
     networks:
       - backend

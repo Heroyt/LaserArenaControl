@@ -1,6 +1,10 @@
 ARG VERSION=alpine
 FROM nginx:${VERSION} as nginx
 
+MAINTAINER Tomáš Vojík <vojik@wboy.cz>
+LABEL Name=Nginx
+LABEL Vendor=LaserLiga
+
 RUN apk add --no-cache --virtual .build-deps \
     gcc \
     libc-dev \
@@ -17,12 +21,7 @@ RUN apk add --no-cache --virtual .build-deps \
     mercurial \
     bash \
     alpine-sdk \
-    findutils \
-    libpcre3 \
-    libpcre3-dev \
-    zlib1g \
-    zlib1g-dev \
-    libssl-dev
+    findutils
 
 SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
 

@@ -58,7 +58,6 @@ http:
   middleware:
     - headers
     - http_metrics
-    - cache
   pool:
     num_workers: 4
     max_jobs: 20

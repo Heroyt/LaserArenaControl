@@ -142,6 +142,7 @@ switch ($env->getMode()) {
                     $app->translations->updateTranslations();
                 } catch (RouteNotFoundException $e) { // 404 error
                     if (isset($e404)) {
+                        $e404->init($request);
                         $psr7->respond($e404->show($request, $e));
                     }
                     elseif (in_array('application/json', getAcceptTypes($request))) {

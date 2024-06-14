@@ -75,6 +75,10 @@ FROM node:current-slim AS node_base
 FROM composer:latest AS composer
 FROM php AS project
 
+MAINTAINER Tomáš Vojík <vojik@wboy.cz>
+LABEL Name="Laser arena control"
+LABEL Vendor=LaserLiga
+
 COPY --from=composer /usr/bin/composer /usr/local/bin/composer
 COPY --from=roadrunner /usr/bin/rr /usr/local/bin/rr
 COPY --from=node_base /usr/local/lib/node_modules /usr/local/lib/node_modules

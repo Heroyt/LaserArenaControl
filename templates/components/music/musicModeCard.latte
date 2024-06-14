@@ -4,6 +4,7 @@
     {if $musicGroup->getBackgroundImage() !== null}
         {var string[] $paths = $musicGroup->getBackgroundImage()?->getOptimized()}
         <img class="background"
+             loading="lazy"
              src="{$paths['250-webp'] ?? $paths['250'] ?? $paths['webp'] ?? $paths['original']}"
              alt="{_'Pozadí'}">
     {/if}

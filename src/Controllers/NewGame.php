@@ -17,7 +17,6 @@ use LAC\Modules\Core\ControllerDecoratorInterface;
 use Lsr\Core\Controllers\Controller;
 use Lsr\Core\Exceptions\ValidationException;
 use Lsr\Core\Requests\Request;
-use Lsr\Core\Templating\Latte;
 use Lsr\Exceptions\TemplateDoesNotExistException;
 use Lsr\Interfaces\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -96,7 +95,8 @@ class NewGame extends Controller
             }
         }
 
-        return $this->view('pages/new-game/index');
+        return $this->view('pages/new-game/index')
+                    ->withAddedHeader('Expires', date('D, d M Y H:i:s T', strtotime('+ 1 minutes')));
     }
 
 }

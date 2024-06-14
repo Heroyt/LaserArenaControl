@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: German\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2024-06-05 11:16\n"
+"PO-Revision-Date: 2024-06-14 18:27\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -4211,5 +4211,54 @@ msgstr ""
 
 msgctxt "pageTitles.settings"
 msgid "Mezipaměť"
+msgstr ""
+
+msgctxt "pageTitles.settings"
+msgid "Skupiny"
+msgstr ""
+
+msgid "Tables"
+msgstr ""
+
+msgid "Turnaje"
+msgstr ""
+
+msgctxt "null"
+msgid "Obsazený"
+msgid_plural "null"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Playlisty"
+msgstr ""
+
+msgid "Smazat"
+msgstr ""
+
+msgid "Skupiny"
+msgstr ""
+
+msgid "Deaktivovat"
+msgstr ""
+
+msgid "Smazat vše"
+msgstr ""
+
+msgid "Nahrát"
+msgstr ""
+
+msgid "Seznam her"
+msgstr ""
+
+msgid "Čas"
+msgstr ""
+
+msgid "Herní mód"
+msgstr ""
+
+msgid "Hráči"
+msgstr ""
+
+msgid "Tisk"
 msgstr ""
 

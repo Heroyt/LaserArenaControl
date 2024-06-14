@@ -83,4 +83,3 @@ msgstr "Čárkou oddělený seznam kontextových jmen pro přeskočení při slo
 msgctxt "errors"
 msgid "Insufficient data for game mode: %s (#%d)"
 msgstr "Nedostatek dat pro herní mód: %s (#%d)"
-

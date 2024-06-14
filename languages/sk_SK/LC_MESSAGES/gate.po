@@ -340,4 +340,3 @@ msgstr "Najviac zásahov spoluháčov"
 
 msgid "Připněte prosím zbraně na vesty!"
 msgstr "Pripnite prosím zbrane na vesty!"
-

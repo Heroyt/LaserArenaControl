@@ -340,4 +340,3 @@ msgstr "El mayor número de tiros a sus compañeros"
 
 msgid "Připněte prosím zbraně na vesty!"
 msgstr ""
-

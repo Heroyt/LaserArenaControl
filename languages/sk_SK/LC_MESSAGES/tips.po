@@ -108,4 +108,3 @@ msgstr "Nezabudni každý máj a november registrovať svoj tím na turnaj!"
 
 msgid "Oživení trvá 5 sekund."
 msgstr "Oživenie trvá 5 sekúnd."
-

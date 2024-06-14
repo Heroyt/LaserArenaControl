@@ -785,3 +785,25 @@ msgstr "Životy"
 msgid "Dobyté miny týmu"
 msgstr "Dobyté miny týmu"
 
+msgid "Skóre"
+msgstr ""
+
+msgid "Výstřely"
+msgstr ""
+
+msgid "Zásahy"
+msgstr ""
+
+msgid "Smrti"
+msgstr ""
+
+msgid "Ztráty základny"
+msgstr ""
+
+msgctxt "mode.zakladny"
+msgid "Dolní základna"
+msgstr ""
+
+msgctxt "mode.zakladny"
+msgid "Horní základna"
+msgstr ""

@@ -108,4 +108,3 @@ msgstr "N'oubliez pas d'inscrire votre équipe au tournoi tous les mois de mai e
 
 msgid "Oživení trvá 5 sekund."
 msgstr "La désactivation dure 5 secondes."
-

@@ -108,4 +108,3 @@ msgstr "Don’t forget to sign-up for a tournament every May and November!"
 
 msgid "Oživení trvá 5 sekund."
 msgstr "Respawn is 5 seconds."
-

@@ -83,4 +83,3 @@ msgstr "A comma separated list of context names to skip while merging."
 msgctxt "errors"
 msgid "Insufficient data for game mode: %s (#%d)"
 msgstr "Insufficient data for game mode: %s (#%d)"
-

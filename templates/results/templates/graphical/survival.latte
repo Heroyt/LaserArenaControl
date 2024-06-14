@@ -37,7 +37,8 @@
     <section class="results-players" style="grid-template-columns: repeat({$count}, 1fr)">
         {foreach $game->getPlayersSorted() as $player}
             {varType App\GameModels\Game\Lasermaxx\Player $player}
-            <div n:class="results-player, rounded, p-2, $player->getRemainingLives() > 0 && $player->ammoRest > 0 ? bg-white, flex-fill, $player->getRemainingLives() <= 0 || $player->ammoRest <= 0 ? dead">
+            <div n:class="results-player, rounded, $player->getRemainingLives() > 0 && $player->ammoRest > 0 ? bg-white, flex-fill, $player->getRemainingLives() <= 0 || $player->ammoRest <= 0 ? dead"
+                    style="--team-color: var(--team-{$player->getTeamColor()});">
                 <div class="player-head">
                     {var array $rank = $player->getBestAt()}
                     {svgIcon $rank['icon'], '', 15}
@@ -86,7 +87,6 @@
             </g>
         </svg>
         <div class="number">
-            {_'Výstřely', domain: 'results', context: 'player'}:
             {svgIcon 'bullets', '', '1em'} {$player->shots|number:0,',','&nbsp;'|noescape}
             /{$game->ammo|number:0,',','&nbsp;'|noescape}
         </div>

@@ -7,7 +7,7 @@
 	grid-gap: .5rem;
 	grid-template-areas: 'info qr' 'teams teams' 'players players' 'legend legend';
 	grid-template-columns: 1fr 1fr;
-	grid-template-rows: minmax(25mm, 33mm) auto 1fr 5mm 10mm;
+	grid-template-rows: 27mm auto 1fr 5mm 12mm;
 	height: 100%;
 	justify-content: start;
 	--font-size: 7pt;
@@ -52,7 +52,12 @@
 		justify-self: center;
 
 		> div {
+			background-color: color-mix(in srgb, var(--team-color) 5%, white);
+			border: 2px solid var(--team-color);
 			border-radius: 5rem;
+			--team-color: var(--print-primary);
+			--text-color: var(--team-color);
+			color: var(--team-color);
 			font-size: 1.5em;
 			font-weight: bold;
 			padding: 1rem 7rem;
@@ -177,12 +182,18 @@
 
 		.team-score {
 			align-items: center;
+			background-color: color-mix(in srgb, var(--team-color) 5%, white);
+			border: 2px solid var(--team-color);
+			--text-color: var(--team-color);
+			color: var(--team-color);
 			display: flex;
 			flex-direction: column;
+			font-weight: 500;
 			justify-content: center;
 			line-height: 1.1;
 			min-width: 6rem;
-			padding: .1rem 1rem;
+			padding: 2pt 1rem;
+			--font-size: 9pt;
 		}
 	}
 
@@ -194,7 +205,12 @@
 		align-self: center;
 		display: grid;
 		grid-area: players;
-		grid-gap: .3rem;
+		grid-gap: 2pt;
+
+		.results-player {
+			border: 1px solid var(--team-color);
+			padding: .5rem .2rem .2rem;
+		}
 
 		.player-head {
 
@@ -262,6 +278,7 @@
 			}
 
 			.inner {
+				opacity: 70%;
 				position: absolute;
 				width: 100%;
 			}
@@ -279,6 +296,7 @@
 			display: flex;
 			flex-direction: column;
 			height: 6rem;
+			--bg-opacity: 80%;
 			position: relative;
 			text-align: center;
 			width: 100%;
@@ -292,19 +310,19 @@
 			}
 
 			.kills {
-				background-color: #55EA6A;
+				background-color: rgba(85, 234, 106, var(--bg-opacity));
 			}
 
 			.kills-own {
-				background-color: #50b35d;
+				background-color: rgba(80, 179, 93, var(--bg-opacity));
 			}
 
 			.deaths {
-				background-color: #EA5555;
+				background-color: rgba(234, 85, 85, var(--bg-opacity));
 			}
 
 			.deaths-own {
-				background-color: #b35050;
+				background-color: rgba(179, 80, 80, var(--bg-opacity));
 				color: #fff;
 			}
 
@@ -382,7 +400,7 @@
 			}
 
 			.fill-circle {
-				opacity: .4;
+				opacity: .2;
 				stroke: var(--color);
 				transform: rotate(-90deg);
 				transform-origin: center;
@@ -428,6 +446,11 @@
 
 	.results-hits {
 		grid-area: hits;
+
+		.player-hits {
+			--color: var(--print-primary);
+			border: 1px solid var(--color);
+		}
 
 		.player-hit-name {
 			word-break: normal;

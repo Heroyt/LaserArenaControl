@@ -91,15 +91,15 @@
     {var App\GameModels\Game\Player|App\GameModels\Game\Team|null $win = $game->getMode()?->getWin($game)}
     <div class="results-win">
         {if is_null($win)}
-            <div class="print-primary">
+            <div style="--team-color: var(--print-primary);">
                 {_'Remíza', domain: 'results'}
             </div>
         {elseif $win instanceof App\GameModels\Game\Team}
-            <div class="bg-team-{$win->color}">
+            <div style="--team-color: var(--team-{$win->color});">
                 {_'Vítězství', domain: 'results'}: {$win->name}
             </div>
         {elseif $win instanceof App\GameModels\Game\Player}
-            <div class="{if $game->getMode()?->isSolo()}print-primary{else}bg-team-{$win->getTeam()->color}{/if}">
+            <div style="--team-color: var({if $game->getMode()?->isSolo()}--print-primary{else}--team{$win->getTeam()->color}{/if});">
                 {_'Vítězství', domain: 'results'}: {$win->name}
             </div>
         {/if}
@@ -107,7 +107,7 @@
 {/define}
 
 {define resultsHeader}
-    <div class="results-header text-white text-start">
+    <div class="results-header text-black text-start">
         <div class="my-1">
             <strong>{_'Kód hry', domain: 'results', context: 'info'}:</strong>
             {$game->code} {ifset $game->fileNumber}({$game->fileNumber}){/ifset}
@@ -116,15 +116,19 @@
             <strong>{_'Datum', domain: 'results', context: 'info'}:</strong>
             {$game->start->format('d.m.Y H:i:s')}
         </div>
-        <div>
+        <div class="my-1">
             <strong>{_'Herní mód', domain: 'results', context: 'info'}:</strong>
             {_$game->getMode()??->getName(), context: 'gameModes'}
         </div>
+        <div n:if="$game->getMusic() !== null">
+            <strong>{_'Hudební mód', domain: 'results', context: 'info'}:</strong>
+            {$game->getMusic()->name}
+        </div>
     </div>
-    <div class="results-qr text-end">
+    <div class="results-qr text-end text-black">
         <div class="me-2">
             <div class="fw-bold">{_'On-line detailní výsledky', domain: 'results'}:</div>
-            <a href="{$publicUrl}" class="d-block mb-2 text-white">{$publicUrl}</a>
+            <a href="{$publicUrl}" class="d-block mb-2 text-black">{$publicUrl}</a>
         </div>
         {$qr|noescape}
     </div>
@@ -136,9 +140,10 @@
     {var int $maxShots = $game->getPlayers()->query()->sortBy('shots')->desc()->first()->shots}
     {var int $totalHeight = $maxScore - ($minScore < 0 ? $minScore : 0)}
     {var int $count = count($game->getPlayers())}
-    <section class="results-players" style="grid-template-columns: repeat({$count}, 1fr)">
+    <section class="results-players" style="grid-template-columns: repeat({$count}, 1fr);">
         {foreach $game->getPlayersSorted() as $player}
-            <div class="results-player rounded p-2 bg-white flex-fill">
+            <div class="results-player rounded bg-white flex-fill"
+                 style="--team-color: var(--team-{$player->getTeamColor()});">
                 <div class="player-head">
                     {var array $rank = $player->getBestAt()}
                     {svgIcon $rank['icon'], '', 15}
@@ -333,8 +338,8 @@
     {var int $totalScore = array_sum(array_map(function($team){ return $team->score > 0 ? $team->score : 0;},$game->getTeams()->getAll()))}
     {var App\GameModels\Game\Team|null $win = $game->getMode()?->getWin($game)}
     <div class="results-teams">
-        <div n:foreach="$game->getTeamsSorted() as $team" class="team-score rounded bg-team-{$team->color}"
-                                                          style="width:{100*($team->score > 0 ? $team->score : 0) / ($totalScore > 0 ? $totalScore : 1)|noescape}%;">
+        <div n:foreach="$game->getTeamsSorted() as $team" class="team-score rounded"
+                                                          style="--team-color: var(--team-{$team->color}); width:{100*($team->score > 0 ? $team->score : 0) / ($totalScore > 0 ? $totalScore : 1)|noescape}%;">
             {if is_null($win) || $win->id === $team->id}{svgIcon 'crown', '1rem'}{/if}
             <div class="name">{$team->name}</div>
             <div class="score"><i class="fas fa-star"></i> {$team->score|number:0,',','&nbsp;'|noescape}</div>

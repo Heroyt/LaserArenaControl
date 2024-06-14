@@ -61,7 +61,19 @@ services:
 	cache: Lsr\Core\Caching\Cache(@cache.storage, null, %constants.debug%)
 
 	events: App\Services\EventService
-	features: App\Services\FeatureConfig
+	features:
+		create: App\Services\FeatureConfig
+		arguments:
+			config: @config
+			default:
+				liga: true
+				tournaments: true
+				preparedgames: true
+				event_server: true
+				control: false
+				gates: false
+				groups: true
+				tables: true
 
 	liga: App\Services\LigaApi::getInstance(@metrics)
 	playersProvider: App\Services\PlayerProvider

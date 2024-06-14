@@ -10,32 +10,43 @@ use Lsr\Core\Config;
 class FeatureConfig
 {
 
-	/** @var array<string,bool> */
-	private array $features = [];
+    /** @var array<string,bool> */
+    private array $features = [];
 
-	public function __construct(
-		Config $config,
-	) {
-		// Initialize feature array from config
-		foreach ($config->getConfig('ENV') as $key => $value) {
-			if (str_starts_with($key, 'FEATURE_')) {
-				/** @var string $key */
-				$key = strtolower(str_replace('FEATURE_', '', $key));
-				$this->features[$key] = (is_int($value) && $value > 0) || (is_string($value) && strtolower($value) === 'true');
-			}
-		}
-	}
+    /**
+     * @param  Config  $config
+     * @param  array<string,bool>  $default
+     */
+    public function __construct(
+      Config $config,
+      array  $default = [],
+    ) {
+        foreach ($default as $key => $value) {
+            $this->features[strtolower($key)] = (bool) $value;
+        }
 
-	public function isFeatureEnabled(string $feature): bool {
-		$feature = strtolower($feature);
-		return isset($this->features[$feature]) && $this->features[$feature];
-	}
+        // Initialize feature array from config
+        foreach ($config->getConfig('ENV') as $key => $value) {
+            if (str_starts_with($key, 'FEATURE_')) {
+                /** @var string $key */
+                $key = strtolower(str_replace('FEATURE_', '', $key));
+                $this->features[$key] = (is_int($value) && $value > 0) || (is_string($value) && strtolower(
+                      $value
+                    ) === 'true');
+            }
+        }
+    }
 
-	/**
-	 * @return array<string,bool>
-	 */
-	public function getFeatures(): array {
-		return $this->features;
-	}
+    public function isFeatureEnabled(string $feature) : bool {
+        $feature = strtolower($feature);
+        return isset($this->features[$feature]) && $this->features[$feature];
+    }
+
+    /**
+     * @return array<string,bool>
+     */
+    public function getFeatures() : array {
+        return $this->features;
+    }
 
 }

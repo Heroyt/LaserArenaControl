@@ -313,7 +313,7 @@
     <div n:if="$game->getMode()?->settings?->playerFavourites" class="player-favourites text-center">
         <div n:if="isset($favourite)" class="favourite-target">
             <strong>{_'Nejoblíbenější cíl', domain: 'results', context: 'player'}:</strong>
-            <div class="text-team-{$game->getMode()?->isSolo() ? 2 : $favourite->getTeamColor()}">
+            <div class="player-name text-team-{$game->getMode()?->isSolo() ? 2 : $favourite->getTeamColor()}">
                 {$favourite->name}
             </div>
             <div class="number">
@@ -323,7 +323,7 @@
         </div>
         <div n:if="isset($favouriteOf)" class="favourite-target-of">
             <strong>{_'Největší zabiják', domain: 'results', context: 'player'}:</strong>
-            <div class="text-team-{$game->getMode()?->isSolo() ? 2 : $favouriteOf->getTeamColor()}">
+            <div class="player-name text-team-{$game->getMode()?->isSolo() ? 2 : $favouriteOf->getTeamColor()}">
                 {$favouriteOf->name}
             </div>
             <div class="number">

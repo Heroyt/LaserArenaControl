@@ -188,12 +188,14 @@
 			color: var(--team-color);
 			display: flex;
 			flex-direction: column;
-			font-weight: 500;
+			font-weight: 600;
 			justify-content: center;
 			line-height: 1.1;
 			min-width: 6rem;
 			padding: 2pt 1rem;
 			--font-size: 9pt;
+			text-align: center;
+			text-transform: uppercase;
 		}
 	}
 
@@ -208,7 +210,7 @@
 		grid-gap: 2pt;
 
 		.results-player {
-			border: 1px solid var(--team-color);
+			border: 2px solid var(--team-color);
 			padding: .5rem .2rem .2rem;
 		}
 
@@ -296,8 +298,12 @@
 			display: flex;
 			flex-direction: column;
 			height: 6rem;
-			--bg-opacity: 80%;
+			--bg-opacity: 10%;
+			--deaths-own-rgb: 179, 80, 80;
+			--kills-own-rgb: 80, 179, 93;
 			position: relative;
+			--deaths-rgb: 234, 85, 85;
+			--kills-rgb: 85, 234, 106;
 			text-align: center;
 			width: 100%;
 
@@ -310,31 +316,36 @@
 			}
 
 			.kills {
-				background-color: rgba(85, 234, 106, var(--bg-opacity));
+				background-color: rgba(var(--kills-rgb), var(--bg-opacity));
+				border-color: rgb(var(--kills-rgb));
 			}
 
 			.kills-own {
-				background-color: rgba(80, 179, 93, var(--bg-opacity));
+				background-color: rgba(var(--kills-own-rgb), var(--bg-opacity));
+				border-color: rgb(var(--kills-own-rgb));
 			}
 
 			.deaths {
-				background-color: rgba(234, 85, 85, var(--bg-opacity));
+				background-color: rgba(var(--deaths-rgb), var(--bg-opacity));
+				border-color: rgb(var(--deaths-rgb));
 			}
 
 			.deaths-own {
-				background-color: rgba(179, 80, 80, var(--bg-opacity));
-				color: #fff;
+				background-color: rgba(var(--deaths-own-rgb), var(--bg-opacity));
+				border-color: rgb(var(--deaths-own-rgb));
 			}
 
 			.kills,
 			.deaths,
 			.kills-own,
 			.deaths-own {
+				border-style: solid;
+				border-width: 2px;
 				display: flex;
 				flex-shrink: 1;
 				height: 100%;
 				min-width: 2rem;
-				padding: 0;
+				padding: 3pt 0;
 
 				.main {
 					align-items: center;
@@ -432,6 +443,11 @@
 
 			strong {
 				line-height: 1.5;
+			}
+
+			.player-name {
+				font-weight: bold;
+				text-transform: uppercase;
 			}
 		}
 	}

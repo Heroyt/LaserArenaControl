@@ -110,7 +110,7 @@ ARG BUILD_TIME="$(date +%FT%T%z)"
 ENV VERSION="v2024.1.4"
 ARG RT_TOKEN="undefined"
 
-COPY roadrunner/velox_rr_2024.toml .
+COPY docker/velox_rr_2024.toml .
 
 ENV CGO_ENABLED=0
 RUN vx build -c velox_rr_2024.toml -o /usr/bin/

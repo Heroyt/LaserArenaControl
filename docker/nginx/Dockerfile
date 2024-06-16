@@ -40,12 +40,12 @@ RUN rm -rf /usr/src/nginx /usr/src/extra_module &&  \
 WORKDIR /usr/src/nginx/nginx-${NGINX_VERSION}
 RUN git clone https://github.com/arut/nginx-rtmp-module.git
 
+RUN apk add --update pcre ffmpeg
+
 RUN CONFARGS=$(nginx -V 2>&1 | sed -n -e 's/^.*arguments: //p') && \
     sh -c "./configure --with-compat $CONFARGS --add-module=./nginx-rtmp-module --with-http_v3_module --with-cc-opt=\"-I/usr/local/include/openssl\" --with-ld-opt=\"-L/usr/local/lib\"" &&  \
     make && \
     make install
-
-RUN apk add --update pcre ffmpeg
 
 RUN mkdir /var/www
 RUN mkdir /var/www/hls

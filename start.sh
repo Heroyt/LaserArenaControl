@@ -6,6 +6,7 @@ then
   git fetch --all --tags
   if [ "$LAC_VERSION" == "stable" ]
   then
+    git checkout origin/stable
     git pull --recurse-submodules
   else
     git checkout "v${LAC_VERSION}" -b "stable"

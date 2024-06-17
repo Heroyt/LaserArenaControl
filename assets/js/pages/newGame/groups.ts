@@ -27,6 +27,7 @@ export default class NewGameGroup implements NewGameGroupInterface {
 	}
 
 	initGroup(group: HTMLDivElement): void {
+		console.log('Init group', group);
 		let loadType: GroupLoadType = GroupLoadType.PLAYERS;
 		const id = parseInt(group.dataset.id);
 		const loadBtn = group.querySelector('.loadPlayers') as HTMLButtonElement;
@@ -42,8 +43,8 @@ export default class NewGameGroup implements NewGameGroupInterface {
 
 		const showTeamsBtn = group.querySelector('.show-teams') as HTMLButtonElement;
 		const showPlayersBtn = group.querySelector('.show-players') as HTMLButtonElement;
-		const playersCollapseDom = group.querySelector('.group-players') as HTMLUListElement;
-		const teamsCollapseDom = group.querySelector('.group-teams') as HTMLUListElement;
+		const playersCollapseDom = group.querySelector('.players-collapse') as HTMLUListElement;
+		const teamsCollapseDom = group.querySelector('.teams-collapse') as HTMLUListElement;
 		collapseShow(playersCollapseDom);
 		collapseClose(teamsCollapseDom);
 
@@ -202,7 +203,6 @@ export default class NewGameGroup implements NewGameGroupInterface {
 		this.addGroup(response, vestCount);
 	}
 
-
 	initGroupTeamChecks(group: HTMLDivElement) {
 		(group.querySelectorAll('.group-team-check') as NodeListOf<HTMLInputElement>).forEach(input => {
 			const teamId = input.dataset.id;
@@ -215,7 +215,6 @@ export default class NewGameGroup implements NewGameGroupInterface {
 			});
 		});
 	}
-
 
 	addGroup(groupData: GameGroupData, vestCount: number | null = null) {
 		if (!vestCount) {
@@ -261,6 +260,7 @@ export default class NewGameGroup implements NewGameGroupInterface {
 			existingPlayers[elem.dataset.player] = elem;
 			playerCount++;
 		});
+		console.log(groupData.players, existingPlayers);
 		const playersWrapper = group.querySelector('.group-players') as HTMLUListElement;
 		if (groupData.players) {
 			Object.entries(groupData.players).forEach(([name, player]) => {

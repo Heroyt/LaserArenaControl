@@ -58,7 +58,7 @@
                             {_'Zobrazit hráče'}
                         </button>
                     </div>
-                    <div class="collapse-grid">
+                    <div class="collapse-grid teams-collapse">
                         <ul class="list-group mt-1 group-teams collapse-inner" id="group-{$id}-teams-collapse">
                             {foreach $teams as $teamId => $team}
                                 <li class="list-group-item bg-team-{$team->system}-{$team->getColor()}">
@@ -92,7 +92,7 @@
                             {/foreach}
                         </ul>
                     </div>
-                    <div class="collapse-grid">
+                    <div class="collapse-grid players-collapse">
                         <ul class="list-group mt-1 group-players collapse-inner" id="group-{$id}-players-collapse">
                             <li n:foreach="$players as $pName => $player" class="list-group-item group-player"
                                                                           data-player="{$pName}">

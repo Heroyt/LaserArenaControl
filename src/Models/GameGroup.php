@@ -82,17 +82,18 @@ class GameGroup extends Model
             ];
             try {
                 // @phpstan-ignore-next-line
-                $this->players = $cache->load(
+                [$this->players, $this->teams] = $cache->load(
                   'group/'.$this->id.'/players',
                   function () use ($games) : array {
-                      return $this->loadPlayers($games);
+                      return $this->loadPlayersAndTeams($games);
                   },
                   $dependencies,
                 );
             } catch (Throwable $e) {
                 $this->getLogger()->exception($e);
-                $this->players = $this->loadPlayers($games);
-                $cache->save('group/'.$this->id.'/players', $this->players, $dependencies);
+                $teamsAndPlayers = $this->loadPlayersAndTeams($games);
+                $cache->save('group/'.$this->id.'/players', $teamsAndPlayers, $dependencies);
+                [$this->players, $this->teams] = $teamsAndPlayers;
             }
         }
 
@@ -146,10 +147,11 @@ class GameGroup extends Model
 
     /**
      * @param  Game[]  $games
-     * @return Player[]
+     * @return array{0:Player[],1:Team[]}
      */
-    public function loadPlayers(array $games) : array {
+    public function loadPlayersAndTeams(array $games) : array {
         $players = [];
+        $teams = [];
         foreach ($games as $game) {
             /** @var \App\GameModels\Game\Team[] $team */
             foreach ($game->getTeams() as $team) {
@@ -177,12 +179,12 @@ class GameGroup extends Model
                 }
                 sort($tPlayerNames);
                 $id = md5(implode('', $tPlayerNames));
-                if (!isset($this->teams[$id])) {
-                    $this->teams[$id] = new Team($id, $team->name, $team::SYSTEM);
+                if (!isset($teams[$id])) {
+                    $teams[$id] = new Team($id, $team->name, $team::SYSTEM);
                 }
-                $this->teams[$id]->name = $team->name;
-                $this->teams[$id]->addColor($team->color);
-                $this->teams[$id]->addPlayer(...array_values($tPlayers));
+                $teams[$id]->name = $team->name;
+                $teams[$id]->addColor($team->color);
+                $teams[$id]->addPlayer(...array_values($tPlayers));
             }
         }
 
@@ -198,7 +200,7 @@ class GameGroup extends Model
           static fn(GroupPlayer $playerA, GroupPlayer $playerB) => $playerB->getSkill() - $playerA->getSkill()
         );
 
-        return $players;
+        return [$players, $teams];
     }
 
     public function clearCache() : void {

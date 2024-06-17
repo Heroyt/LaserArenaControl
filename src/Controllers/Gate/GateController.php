@@ -73,6 +73,10 @@ class GateController extends Controller
         return $this->respond('');
     }
 
+    private function clearEvent() : void {
+        Info::set('gate-event', null);
+    }
+
     /**
      * @param  Request  $request
      *
@@ -90,6 +94,7 @@ class GateController extends Controller
             $game->end = new DateTimeImmutable();
             Info::set('gate-game', $game);
             Info::set('gate-time', $gateTime);
+            $this->clearEvent();
             $this->eventService->trigger(
               'gate-reload',
               ['type' => 'game-set', 'game' => $game->code, 'time' => $gateTime]
@@ -152,6 +157,7 @@ class GateController extends Controller
             $game->start = null;
             $game->end = null;
             Info::set($system.'-game-loaded', $game);
+            $this->clearEvent();
             $this->eventService->trigger(
               'gate-reload',
               ['type' => 'game-set-loaded', 'game' => $game->code, 'time' => time()]
@@ -178,6 +184,7 @@ class GateController extends Controller
         try {
             Info::set('gate-game', null);
             Info::set($system.'-game-loaded', null);
+            $this->clearEvent();
             $this->eventService->trigger('gate-reload', ['type' => 'set-idle', 'time' => time()]);
         } catch (Exception $e) {
             return $this->respond(

@@ -30,9 +30,10 @@ abstract class LasermaxxGameLoader implements LoaderInterface
     /**
      * @param  int  $musicId
      * @param  string  $musicFile
+     * @param  non-empty-string  $system
      * @return void
      */
-    public function loadMusic(int $musicId, string $musicFile) : void {
+    public function loadMusic(int $musicId, string $musicFile, string $system = 'evo5') : void {
         $start = microtime(true);
         try {
             $music = MusicMode::get($musicId);
@@ -45,7 +46,7 @@ abstract class LasermaxxGameLoader implements LoaderInterface
         } catch (ModelNotFoundException | ValidationException | DirectoryCreationException) {
             // Not critical, doesn't need to do anything
         }
-        $this->metrics->set('load_music_time', (microtime(true) - $start) * 1000, ['evo5']);
+        $this->metrics->set('load_music_time', (microtime(true) - $start) * 1000, [$system]);
     }
 
     /**

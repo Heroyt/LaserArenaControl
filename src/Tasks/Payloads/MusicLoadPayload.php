@@ -9,6 +9,7 @@ readonly class MusicLoadPayload
       public int    $musicId,
       public string $musicFile,
       public string $loader,
+      public string $system = 'evo5',
     ) {}
 
 }

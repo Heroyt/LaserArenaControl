@@ -76,12 +76,14 @@ http:
       options_success_status: 200
   fcgi:
     address: tcp://0.0.0.0:9000
-jobs: # List of RoadRunner queues that can be processed by
-  # the consumer specified in the "server" section.
-  consume: [ "tasks" ]
+jobs:
+  num_pollers: 10
+  timeout: 120
+  pipeline_size: 1000
   pool:
     num_workers: 2
     max_jobs: 20
+  consume: [ "tasks" ]
   pipelines:
     tasks: # RoadRunner queue identifier
       driver: memory    # - Queue driver name

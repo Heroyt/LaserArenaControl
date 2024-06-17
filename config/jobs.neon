@@ -22,9 +22,9 @@ orisai.scheduler:
 			callback: [@cron.resultsImport, 'run']
 services:
 	# Jobs queue
-	jobs: Spiral\RoadRunner\Jobs\Jobs
+	jobs: Spiral\RoadRunner\Jobs\Jobs(@rpc)
 	queue:
-		type: Spiral\RoadRunner\Jobs\QueueInterface
+		type: Spiral\RoadRunner\Jobs\Queue
 		create: @jobs::connect(%jobs.queue%)
 	taskProducer: App\Services\TaskProducer(@queue)
 

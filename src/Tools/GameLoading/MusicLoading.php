@@ -21,13 +21,13 @@ trait MusicLoading
     private Logger $logger;
     private bool $loadAsync;
 
-    protected function loadOrPlanMusic(int $musicId) : void {
+    protected function loadOrPlanMusic(int $musicId, string $system = 'evo5') : void {
         // Lazy load music file in the background
         // This is useful if the music mode should be copied to some network-attached directory which could take a few seconds.
         if ($this->isLoadAsync()) {
             $this->getLogger()->debug('Loading music ('.$musicId.') - ASYNC');
             try {
-                $this->planMusicLoad($musicId);
+                $this->planMusicLoad($musicId, $system);
                 return;
             } catch (JobsException $e) {
                 $this->getLogger()->exception($e);
@@ -37,7 +37,7 @@ trait MusicLoading
         $this->getLogger()->debug('Loading music ('.$musicId.') - Direct');
 
         // Load music file right now
-        $this->loadMusic($musicId, $this::MUSIC_FILE);
+        $this->loadMusic($musicId, $this::MUSIC_FILE, $system);
     }
 
     protected function isLoadAsync() : bool {
@@ -66,10 +66,10 @@ trait MusicLoading
      * @return void
      * @throws JobsException
      */
-    protected function planMusicLoad(int $musicId) : void {
+    protected function planMusicLoad(int $musicId, string $system = 'evo5') : void {
         $this->getTaskProducer()->push(
           MusicLoadTask::class,
-          new MusicLoadPayload($musicId, $this::MUSIC_FILE, $this::DI_NAME)
+          new MusicLoadPayload($musicId, $this::MUSIC_FILE, $this::DI_NAME, $system)
         );
     }
 

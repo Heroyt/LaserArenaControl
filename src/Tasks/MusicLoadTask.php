@@ -25,7 +25,7 @@ class MusicLoadTask implements TaskDispatcherInterface
         try {
             /** @var MusicLoading&LoaderInterface $loader */
             $loader = App::getService($payload->loader);
-            $loader->loadMusic($payload->musicId, $payload->musicFile);
+            $loader->loadMusic($payload->musicId, $payload->musicFile, $payload->system);
         } catch (Throwable $e) {
             $task->fail($e);
             return;

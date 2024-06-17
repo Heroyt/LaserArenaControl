@@ -104,6 +104,7 @@ abstract class LasermaxxGameLoader implements LoaderInterface
         if (isset($mode)) {
             $loadData['meta']['mode'] = $mode->loadName;
             if (!empty($data['variation'])) {
+                uksort($data['variation'], static fn($a, $b) => ((int) $a) - ((int) $b));
                 $loadData['meta']['variations'] = [];
                 foreach ($data['variation'] as $id => $suffix) {
                     $loadData['meta']['variations'][$id] = $suffix;

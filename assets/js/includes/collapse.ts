@@ -57,7 +57,7 @@ export function collapseToggle(element: HTMLElement): void {
 	if (open) {
 		collapseClose(element);
 	} else {
-		collapseClose(element);
+		collapseShow(element);
 	}
 }
 

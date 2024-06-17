@@ -61,7 +61,7 @@ class GateController extends Controller
     }
 
     public function setEvent(Request $request) : ResponseInterface {
-        $event = $request->getPost('event', '');
+        $event = (string) $request->getPost('event', '');
         $time = (int) $request->getPost('time', 60);
 
         $dto = new CustomEventDto($event, time() + $time);
@@ -76,7 +76,8 @@ class GateController extends Controller
     /**
      * @param  Request  $request
      *
-     * @return void
+     * @return ResponseInterface
+     * @throws JsonException
      * @throws Throwable
      */
     public function setGateGame(Request $request) : ResponseInterface {
@@ -110,13 +111,23 @@ class GateController extends Controller
      * @throws Throwable
      */
     private function getGame(Request $request) : Game | ErrorDto {
-        $gameId = (int) $request->getPost('game', 0);
-        if (empty($gameId)) {
-            return new ErrorDto('Missing / Incorrect game', type: ErrorType::VALIDATION);
-        }
-        $system = $request->getParam('system');
+        /** @var 'last'|numeric $gamePost */
+        $gamePost = $request->getPost('game', '0');
+        $system = (string) $request->getParam('system', 'all');
         if (empty($system)) {
             return new ErrorDto('Missing / Incorrect system', type: ErrorType::VALIDATION);
+        }
+
+        if ($gamePost === 'last') {
+            $game = GameFactory::getLastGame($system);
+            if (isset($game)) {
+                return $game;
+            }
+        }
+
+        $gameId = (int) $gamePost;
+        if (empty($gameId)) {
+            return new ErrorDto('Missing / Incorrect game', type: ErrorType::VALIDATION);
         }
         $game = GameFactory::getById($gameId, ['system' => $system]);
         return $game ?? new ErrorDto('Cannot find game', type: ErrorType::NOT_FOUND);
@@ -125,7 +136,8 @@ class GateController extends Controller
     /**
      * @param  Request  $request
      *
-     * @return void
+     * @return ResponseInterface
+     * @throws JsonException
      * @throws Throwable
      */
     public function setGateLoaded(Request $request) : ResponseInterface {
@@ -156,7 +168,7 @@ class GateController extends Controller
     /**
      * @param  string  $system
      *
-     * @return void
+     * @return ResponseInterface
      * @throws JsonException
      */
     public function setGateIdle(string $system = '') : ResponseInterface {

@@ -4317,3 +4317,16 @@ msgstr ""
 
 msgid "Tisk"
 msgstr ""
+
+msgid "Zobrazit poslední hru na výsledkové tabuli"
+msgstr ""
+
+msgid "Výsledková tabule"
+msgstr ""
+
+msgctxt "month"
+msgid "Červen"
+msgstr ""
+
+msgid "Zobrazit poslední hru"
+msgstr ""

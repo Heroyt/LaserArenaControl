@@ -340,3 +340,15 @@ msgstr "Most teamkills"
 
 msgid "Připněte prosím zbraně na vesty!"
 msgstr "Attach your weapons to the vests!"
+
+msgctxt "screen.trigger"
+msgid "Obrazovka se zobrazí, pokud je hra manuálně zobrazena (zobrazit na výsledkové tabuli)."
+msgstr ""
+
+msgctxt "screen.trigger"
+msgid "Manuální zobrazení hry"
+msgstr ""
+
+msgctxt "settings"
+msgid "Rozložení obrazovky"
+msgstr ""

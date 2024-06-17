@@ -132,6 +132,22 @@ class GateType extends Model
         return $this->screens;
     }
 
+    public function removeScreenModel(GateScreenModel ...$screens) : GateType {
+        // Load screens if needed
+        $this->getScreens();
+
+        foreach ($screens as $key2 => $findScreen) {
+            foreach ($this->screens as $key => $screen) {
+                if ($screen->id === $findScreen->id) {
+                    unset($this->screens[$key], $screens[$key2]);
+                    $findScreen->delete();
+                    break;
+                }
+            }
+        }
+        return $this;
+    }
+
     public function addScreen(
       GateScreen        $screen,
       ?GateSettings     $settings = null,
@@ -152,6 +168,33 @@ class GateType extends Model
         $screenModel->gate = $this;
 
         return $this;
+    }
+
+    public function findScreen(
+      string            $screenType,
+      ScreenTriggerType $trigger = ScreenTriggerType::DEFAULT,
+    ) : ?GateScreenModel {
+        foreach ($this->getScreens() as $screen) {
+            if ($screen->screenSerialized === $screenType && $screen->trigger === $trigger) {
+                return $screen;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * @param  ScreenTriggerType  $trigger
+     * @return GateScreenModel[]
+     * @throws ValidationException
+     */
+    public function getScreensForTrigger(ScreenTriggerType $trigger) : array {
+        $screens = [];
+        foreach ($this->getScreens() as $screen) {
+            if ($screen->trigger === $trigger) {
+                $screens[] = $screen;
+            }
+        }
+        return $screens;
     }
 
     public function save() : bool {

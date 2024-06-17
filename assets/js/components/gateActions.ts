@@ -4,7 +4,7 @@ import {setGate, setGateEvent, setGateIdle, setGateLoaded} from '../api/endpoint
 
 export function gateActions() {
     (document.querySelectorAll('[data-toggle="gate"]') as NodeListOf<HTMLButtonElement>).forEach(btn => {
-        const id = parseInt(btn.dataset.id);
+	    const id = btn.dataset.id === 'last' ? 'last' : parseInt(btn.dataset.id);
         const system = btn.dataset.system;
         // Allow for tooltips
         if (btn.title) {
@@ -27,7 +27,7 @@ export function gateActions() {
         });
     });
     (document.querySelectorAll('[data-toggle="gate-loaded"]') as NodeListOf<HTMLButtonElement>).forEach(btn => {
-        const id = parseInt(btn.dataset.id);
+	    const id = btn.dataset.id === 'last' ? 'last' : parseInt(btn.dataset.id);
         const system = btn.dataset.system;
         // Allow for tooltips
         if (btn.title) {

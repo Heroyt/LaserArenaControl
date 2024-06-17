@@ -197,15 +197,25 @@
                 </li>
             </ul>
         </div>
-        <div class="btn-group flex-fill" role="group" n:if="!empty($gateActions)">
+        <div class="btn-group flex-fill" role="group">
             <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
                     aria-expanded="false" data-toggle="tooltip" title="{_'Akce výsledkové tabule'}">
                 <i class="fas fa-display"></i>
             </button>
             <ul class="dropdown-menu">
-                <li n:foreach="$gateActions as $gateAction"><a class="dropdown-item" href="#" data-toggle="gate-event"
-                                                               data-event="{$gateAction}"
-                                                               data-time="60">{$gateAction}</a></li>
+                <li>
+                    <a class="dropdown-item" href="#" data-toggle="gate" data-toggle="gate" data-id="last"
+                       data-system="all">
+                        <i class="fas fa-bullseye"></i>
+                        {_'Zobrazit poslední hru'}
+                    </a>
+                </li>
+                <li n:foreach="$gateActions as $gateAction">
+                    <a class="dropdown-item" href="#" data-toggle="gate-event" data-event="{$gateAction}"
+                       data-time="60">
+                        {$gateAction}
+                    </a>
+                </li>
             </ul>
         </div>
     </div>

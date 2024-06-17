@@ -19,7 +19,7 @@ enum ScreenTriggerType : string
     case GAME_LOADED  = 'game_loaded';
     case GAME_PLAYING = 'game_playing';
     case GAME_ENDED   = 'game_ended';
-
+    case RESULTS_MANUAL = 'results_manual';
     case CUSTOM = 'custom';
 
     /**
@@ -32,10 +32,10 @@ enum ScreenTriggerType : string
      */
     public function getReloadTimeFrom(Game $game) : int {
         return match ($this) {
-            self::GAME_LOADED  => $game->fileTime?->getTimestamp() ?? -1,
-            self::GAME_PLAYING => $game->start?->getTimestamp() ?? -1,
-            self::GAME_ENDED   => $game->end?->getTimestamp() ?? -1,
-            default            => -1,
+            self::GAME_LOADED                      => $game->fileTime?->getTimestamp() ?? -1,
+            self::GAME_PLAYING                     => $game->start?->getTimestamp() ?? -1,
+            self::GAME_ENDED, self::RESULTS_MANUAL => $game->end?->getTimestamp() ?? -1,
+            default                                => -1,
         };
     }
 
@@ -44,47 +44,53 @@ enum ScreenTriggerType : string
      */
     public function isReloadTimeSettable() : bool {
         return match ($this) {
-            self::GAME_LOADED, self::GAME_PLAYING, self::GAME_ENDED => true,
-            default                                                 => false,
+            self::GAME_LOADED, self::GAME_PLAYING, self::GAME_ENDED, self::RESULTS_MANUAL => true,
+            default                                                                       => false,
         };
     }
 
     public function getReadable() : string {
         return match ($this) {
-            self::DEFAULT      => lang('Výchozí', domain: 'gate', context: 'screen.trigger'),
-            self::GAME_LOADED  => lang('Hra načtena', domain: 'gate', context: 'screen.trigger'),
-            self::GAME_PLAYING => lang('Hra hraje', domain: 'gate', context: 'screen.trigger'),
-            self::GAME_ENDED   => lang('Hra skončila', domain: 'gate', context: 'screen.trigger'),
-            self::CUSTOM       => lang('Vlastní událost', domain: 'gate', context: 'screen.trigger'),
+            self::DEFAULT        => lang('Výchozí', context: 'screen.trigger', domain: 'gate'),
+            self::GAME_LOADED    => lang('Hra načtena', context: 'screen.trigger', domain: 'gate'),
+            self::GAME_PLAYING   => lang('Hra hraje', context: 'screen.trigger', domain: 'gate'),
+            self::GAME_ENDED     => lang('Hra skončila', context: 'screen.trigger', domain: 'gate'),
+            self::RESULTS_MANUAL => lang('Manuální zobrazení hry', context: 'screen.trigger', domain: 'gate'),
+            self::CUSTOM         => lang('Vlastní událost', context: 'screen.trigger', domain: 'gate'),
         };
     }
 
     public function getDescription() : string {
         return match ($this) {
-            self::DEFAULT      => lang(
+            self::DEFAULT        => lang(
                        'Obrazovka se zobrazuje jako výchozí, pokud žádná jiná před ní nesplňuje podmínku.',
-              domain : 'gate',
-              context: 'screen.trigger'
+              context: 'screen.trigger',
+              domain : 'gate'
             ),
-            self::GAME_LOADED  => lang(
+            self::GAME_LOADED    => lang(
                        'Obrazovka se zobrazí, pokud je poslední hra načtená, ale nespuštěná.',
-              domain : 'gate',
-              context: 'screen.trigger'
+              context: 'screen.trigger',
+              domain : 'gate'
             ),
-            self::GAME_PLAYING => lang(
+            self::GAME_PLAYING   => lang(
                        'Obrazovka se zobrazí, pokud poslední hra právě probíhá.',
-              domain : 'gate',
-              context: 'screen.trigger'
+              context: 'screen.trigger',
+              domain : 'gate'
             ),
-            self::GAME_ENDED   => lang(
+            self::GAME_ENDED     => lang(
                        'Obrazovka se zobrazí, pokud poseldní hra už skončila.',
-              domain : 'gate',
-              context: 'screen.trigger'
+              context: 'screen.trigger',
+              domain : 'gate'
             ),
-            self::CUSTOM       => lang(
+            self::RESULTS_MANUAL => lang(
+                       'Obrazovka se zobrazí, pokud je hra manuálně zobrazena (zobrazit na výsledkové tabuli).',
+              context: 'screen.trigger',
+              domain : 'gate'
+            ),
+            self::CUSTOM         => lang(
                        'Obrazovka se zobrazí, pokud se vyvolá nějaká manuální událost.',
-              domain : 'gate',
-              context: 'screen.trigger'
+              context: 'screen.trigger',
+              domain : 'gate'
             ),
         };
     }

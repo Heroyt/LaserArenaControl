@@ -795,3 +795,6 @@ msgstr ""
 msgctxt "mode.zakladny"
 msgid "Horní základna"
 msgstr ""
+
+msgid "Sniper"
+msgstr ""

@@ -24,6 +24,8 @@ use Throwable;
 class Gate
 {
 
+    public const string MANUAL_RESULTS_GAME_META = 'manual-gate';
+
     private ?int $tmpResultsTime = null;
 
     public function __construct(readonly private Config $config) {}
@@ -51,7 +53,9 @@ class Gate
             $activeGateType = ScreenTriggerType::CUSTOM;
         }
         elseif (isset($game)) {
+            $isManual = $game->getMeta()[$this::MANUAL_RESULTS_GAME_META] ?? false;
             $activeGateType = match (true) {
+                $isManual => ScreenTriggerType::RESULTS_MANUAL,
                 $game->isFinished() => ScreenTriggerType::GAME_ENDED,
                 $game->isStarted()  => ScreenTriggerType::GAME_PLAYING,
                 default             => ScreenTriggerType::GAME_LOADED,
@@ -66,7 +70,16 @@ class Gate
         $defaultScreen = null;
 
         foreach ($screens as $screenModel) {
-            if ($screenModel->trigger === $activeGateType && (($activeGateType === ScreenTriggerType::CUSTOM && $screenModel->triggerValue === $customEvent?->event) || $activeGateType !== ScreenTriggerType::CUSTOM)) {
+            if (
+              $screenModel->trigger === $activeGateType
+              && (
+                (
+                  $activeGateType === ScreenTriggerType::CUSTOM
+                  && $screenModel->triggerValue === $customEvent?->event
+                )
+                || $activeGateType !== ScreenTriggerType::CUSTOM
+              )
+            ) {
                 $screen = $screenModel->getScreen()
                                       ->setGame($game)
                                       ->setSystems($systems);
@@ -129,6 +142,7 @@ class Gate
         if (isset($test) && ($now - $gateTime) <= $this->getTmpResultsTime()) {
             // Set the correct (fake) end time
             $test->end = (new DateTimeImmutable())->setTimestamp($gateTime);
+            $test->setMetaValue($this::MANUAL_RESULTS_GAME_META, true);
             return $test;
         }
 

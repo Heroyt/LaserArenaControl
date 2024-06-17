@@ -61,6 +61,7 @@ services:
     networks:
       - backend
     environment:
+      LAC_VERSION: "dev"
       APP_NAME: "Laser arena control"
       DB_HOST: "db"
       DB_PORT: 3306

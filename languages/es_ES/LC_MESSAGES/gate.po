@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: Spanish\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2024-06-05 20:38\n"
+"PO-Revision-Date: 2024-06-17 15:21\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -340,4 +340,16 @@ msgstr "El mayor número de tiros a sus compañeros"
 
 msgid "Připněte prosím zbraně na vesty!"
 msgstr "¡Fijen el arma al chaleco, por favor!"
+
+msgctxt "screen.trigger"
+msgid "Obrazovka se zobrazí, pokud je hra manuálně zobrazena (zobrazit na výsledkové tabuli)."
+msgstr ""
+
+msgctxt "screen.trigger"
+msgid "Manuální zobrazení hry"
+msgstr ""
+
+msgctxt "settings"
+msgid "Rozložení obrazovky"
+msgstr ""
 

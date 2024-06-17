@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: Spanish\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2024-06-14 18:27\n"
+"PO-Revision-Date: 2024-06-17 15:21\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -794,5 +794,8 @@ msgstr ""
 
 msgctxt "mode.zakladny"
 msgid "Horní základna"
+msgstr ""
+
+msgid "Sniper"
 msgstr ""
 

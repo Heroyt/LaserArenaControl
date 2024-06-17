@@ -1,18 +1,15 @@
-#!/bin/bash
+#!/bin/sh
 
 # Update project
-if [ "$LAC_VERSION" != "dev" ]
-then
+if [ "$LAC_VERSION" = "stable" ]; then
   git fetch --all --tags
-  if [ "$LAC_VERSION" == "stable" ]
-  then
-    git checkout origin/stable
-    git pull --recurse-submodules
-  else
-    git checkout "v${LAC_VERSION}" -b "stable"
-    git -C src/GameModels fetch --all --tags
-    git -C src/GameModels checkout "v${LAC_MODELS_VERSION}" -b "stable"
-  fi
+  git checkout origin/stable
+  git pull --recurse-submodules
+elif [ "$LAC_VERSION" != "dev" ]; then
+  git fetch --all --tags
+  git checkout "v${LAC_VERSION}" -b "stable"
+  git -C src/GameModels fetch --all --tags
+  git -C src/GameModels checkout "v${LAC_MODELS_VERSION}" -b "stable"
 
   composer update
 

@@ -47,6 +47,14 @@ service = { ref = "v4.7.4", owner = "roadrunner-server", repository = "service" 
 
 # JOBS
 jobs = { ref = "v4.9.4", owner = "roadrunner-server", repository = "jobs" }
+amqp = { ref = "v4.11.4", owner = "roadrunner-server", repository = "amqp" }
+nats = { ref = "v4.8.4", owner = "roadrunner-server", repository = "nats" }
+kafka = { ref = "v4.6.4", owner = "roadrunner-server", repository = "kafka" }
+
+# KV
+kv = { ref = "v4.6.3", owner = "roadrunner-server", repository = "kv" }
+memory = { ref = "v4.8.4", owner = "roadrunner-server", repository = "memory" }
+redis = { ref = "v4.4.4", owner = "roadrunner-server", repository = "redis" }
 
 # FILESERVER (static files)
 fileserver = { ref = "v4.3.4", owner = "roadrunner-server", repository = "fileserver" }

@@ -6,6 +6,7 @@ on:
       - .github/workflows/docker-image.yml
       - docker/Dockerfile
       - docker/core/*
+      - docker/velox_rr_2024.toml
     branches: [ stable ]
     tags:
       - '*'
@@ -14,6 +15,7 @@ on:
       - .github/workflows/docker-image.yml
       - docker/Dockerfile
       - docker/core/*
+      - docker/velox_rr_2024.toml
     branches: [ stable ]
 
 env:

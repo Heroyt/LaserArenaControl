@@ -89,12 +89,12 @@
 				</button>
 			</div>
 			<script>
-                let currentColorScheme = {ifset $mode}{$mode}{else}window.matchMedia("(prefers-color-scheme: dark)").matches ? 'dark' : 'light'{/ifset}
+                const dataTheme = document.documentElement.dataset.bsTheme ?? null;
+                let currentColorScheme = dataTheme ? dataTheme : window.matchMedia("(prefers-color-scheme: dark)").matches ? 'dark' : 'light';
 				const modeSwitch = document.getElementById('modeSwitch');
                 const lightLabel = modeSwitch.dataset.lightTitle;
                 const darkLabel = modeSwitch.dataset.darkTitle;
 
-				console.log(currentColorScheme, modeSwitch.classList.entries());
 				document.documentElement.setAttribute('data-bs-theme', currentColorScheme);
 				if (currentColorScheme === 'dark') {
 					modeSwitch.classList.remove('btn-dark');

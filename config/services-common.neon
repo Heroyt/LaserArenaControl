@@ -96,6 +96,10 @@ services:
 
 	gameHighlight: App\Services\GameHighlight\GameHighlightService(tagged(highlightChecker))
 
+	theme:
+		type: App\Models\DataObjects\Theme
+		create: App\Models\DataObjects\Theme::get()
+
 search:
 	highlightCheckers:
 		in: '%constants.appDir%/src/Services/GameHighlight/Checkers'

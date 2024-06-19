@@ -22,7 +22,7 @@ use OpenApi\Attributes as OA;
 class GateType extends Model
 {
 
-    public const TABLE = 'gate_types';
+    public const string TABLE = 'gate_types';
 
     #[OA\Property(example: 'Main gate')]
     public string $name;

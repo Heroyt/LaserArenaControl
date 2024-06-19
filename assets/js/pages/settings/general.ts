@@ -1,3 +1,5 @@
+import initJsColor from '../../jscolor';
+
 export default function initGeneralSettings() {
 	const logoWrapper = document.getElementById('logo-wrapper') as HTMLDivElement;
 	const logoInput = document.getElementById('logo') as HTMLInputElement;
@@ -11,4 +13,6 @@ export default function initGeneralSettings() {
 			});
 		}
 	});
+
+	initJsColor();
 }

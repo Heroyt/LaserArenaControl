@@ -60,33 +60,13 @@
         <title>{_'Výsledková tabule'}</title>
         <link rel="stylesheet" href="{getUrl}dist/main.css?v={\App\Core\App::getInstance()->getCacheVersion()}">
         <link rel="stylesheet" href="{getUrl}dist/pages/gate.css?v={\App\Core\App::getInstance()->getCacheVersion()}">
+        <link rel="stylesheet" href="{getUrl}dist/theme.css?v={\App\Models\DataObjects\Theme::getCssVersion()}">
         <link n:foreach="$addCss as $file" rel="stylesheet" class="add-style"
                                            href="{getUrl}dist/{$file}?v={\App\Core\App::getInstance()->getCacheVersion()}">
-        {var string[][] $colors = App\GameModels\Factory\GameFactory::getAllTeamsColors()}
         <style>
             :root {
                 --gate-background: url('{\App\Services\GateStyleService::getGateBackgroundUrl()|noescape}');
-            {foreach $colors as $system => $systemColors} {foreach $systemColors as $key => $color} {var string $varName1 = '--team-'.$system.'-'.$key} {var string $varName2 = '--team-'.$system.'-'.$key.'-text'} {$varName1}: {$color|noescape};
-            {$varName2}:{\App\Tools\Color::getFontColor($color)|noescape};
-            {/foreach} {/foreach}
             }
-
-            {foreach $colors as $system => $systemColors}
-            {foreach $systemColors as $key => $color}
-            .bg-team-{$system}-{$key} {
-                --bg-color: var(--team-{$system}-{$key});
-                --bs-table-bg: var(--team-{$system}-{$key});
-                --text-color: var(--team-{$system}-{$key}-text);
-                background-color: var(--team-{$system}-{$key});
-                color: var(--team-{$system}-{$key}-text);
-            }
-
-            .text-team-{$system}-{$key} {
-                color: var(--team-{$system}-{$key});
-            }
-
-            {/foreach}
-            {/foreach}
         </style>
         {$style->getCssClasses()|noescape}
     </head>

@@ -1,6 +1,7 @@
 {layout '../../@layout.latte'}
 
 {varType App\Services\FeatureConfig $featureConfig}
+{varType App\Models\DataObjects\Theme $theme}
 
 {block content}
 	<form action="{link ['settings']}" method="post" class="text-center autosave"
@@ -36,6 +37,27 @@
 					   accept="image/svg+xml,image/png" class="form-control">
 			</div>
 		</div>
+        <hr class="my-5">
+        <h3>{_'Vzhled', context: 'settings'}</h3>
+        <p class="text-muted">{_'Nastavení primárně pro barvy výsledkové tabule.', context:'settings.theme'}</p>
+        <div class="form-group my-3">
+            <label for="primary_color">{_'Primární barva', context: 'settings.theme'}</label>
+            <input id="primary_color" name="primary_color" type="text" data-jscolor=""
+                   value="{$theme->primaryColor}"
+                   class="form-control">
+            <div class="form-text">
+                {_'Barva se používá pro zvýraznění některých prvků hlavně na výsledkové tabuli.',context:'settings.theme.primary_color'}
+            </div>
+        </div>
+        <div class="form-group my-3">
+            <label for="secondary_color">{_'Sekundární barva', context: 'settings.theme'}</label>
+            <input id="secondary_color" name="secondary_color" type="text" data-jscolor=""
+                   value="{$theme->secondaryColor}"
+                   class="form-control">
+            <div class="form-text">
+                {_'Barva se používá pro zvýraznění některých prvků (pozadí) hlavně na výsledkové tabuli.',context:'settings.theme.secondary_color'}
+            </div>
+        </div>
 		<p class="my-4">
 			<button class="btn btn-success btn-lg" type="submit" data-action="autosave" data-prevent="true">
                 {_'Odeslat', context: 'actions'}

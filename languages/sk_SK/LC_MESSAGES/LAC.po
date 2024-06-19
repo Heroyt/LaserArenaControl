@@ -4330,3 +4330,17 @@ msgstr ""
 
 msgid "Zobrazit poslední hru"
 msgstr ""
+
+msgid "Herní módy"
+msgstr ""
+
+msgid "Popis"
+msgstr ""
+
+msgctxt "settings"
+msgid "Vzhled"
+msgstr ""
+
+msgctxt "settings.theme"
+msgid "Hlavní barva"
+msgstr ""

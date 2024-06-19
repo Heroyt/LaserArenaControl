@@ -4,6 +4,7 @@
 use App\Controllers\Settings\Gate;
 use App\Controllers\Settings\Modes;
 use App\Controllers\Settings\Music;
+use App\Controllers\Settings\PrintSettings;
 use App\Controllers\Settings\Settings;
 use App\Core\App;
 use App\Services\FeatureConfig;
@@ -19,8 +20,8 @@ $settings->post('', [Settings::class, 'saveGeneral']);
 $settings->get('vests', [Settings::class, 'vests'])->name('settings-vests');
 $settings->post('vests', [Settings::class, 'saveVests']);
 
-$settings->get('print', [Settings::class, 'print'])->name('settings-print');
-$settings->post('print', [Settings::class, 'savePrint']);
+$settings->get('print', [PrintSettings::class, 'show'])->name('settings-print');
+$settings->post('print', [PrintSettings::class, 'save']);
 
 $settings->get('cache', [Settings::class, 'cache'])->name('settings-cache');
 

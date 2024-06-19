@@ -172,7 +172,6 @@ class Gate extends Controller
       array        &$newScreenIds
     ) : void {
         $new = !isset($gateType->id);
-        $newScreens = false;
         bdump($new);
         if (!empty($gateData['name'])) {
             $gateType->setName($gateData['name']);

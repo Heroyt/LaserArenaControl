@@ -78,7 +78,7 @@
 				@extend %data-block;
 
 				.name {
-					color: var(--primary);
+					color: var(--theme-primary-color);
 					font-weight: bold;
 				}
 
@@ -106,7 +106,7 @@
 				grid-template-columns: 3rem 1fr auto;
 
 				.name {
-					color: var(--primary);
+					color: var(--theme-primary-color);
 					font-weight: bold;
 				}
 
@@ -152,7 +152,7 @@
 					font-weight: 600;
 
 					.player-name {
-						color: var(--primary);
+						color: var(--theme-primary-color);
 						font-weight: 700;
 					}
 				}

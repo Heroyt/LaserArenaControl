@@ -36,6 +36,7 @@ npm run build
 # Prepare some tasks
 ./bin/console translations:compile
 ./bin/console regression:update
+./bin/console theme:generate
 
 # Run project
 echo 'Starting...'

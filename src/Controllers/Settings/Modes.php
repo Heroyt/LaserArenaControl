@@ -2,7 +2,6 @@
 
 namespace App\Controllers\Settings;
 
-use App\Core\App;
 use App\Exceptions\GameModeNotFoundException;
 use App\GameModels\Factory\GameFactory;
 use App\GameModels\Factory\GameModeFactory;
@@ -19,11 +18,7 @@ use Lsr\Core\DB;
 use Lsr\Core\Exceptions\ModelNotFoundException;
 use Lsr\Core\Exceptions\ValidationException;
 use Lsr\Core\Requests\Request;
-use Lsr\Core\Routing\Attributes\Delete;
-use Lsr\Core\Routing\Attributes\Get;
-use Lsr\Core\Routing\Attributes\Post;
 use Lsr\Exceptions\TemplateDoesNotExistException;
-use Lsr\Logging\Exceptions\DirectoryCreationException;
 use Psr\Http\Message\ResponseInterface;
 use RuntimeException;
 use Throwable;
@@ -135,7 +130,7 @@ class Modes extends Controller
 			return $this->respond(['error' => 'Game mode not found', 'exception' => $e->getMessage()], 404);
 		}
 
-		$names = DB::select('[game_modes-names]', 'sysName')->where('id_mode = %i', $id)->fetchPairs();
+      $names = DB::select('[game_modes-names]', 'sysName')->where('id_mode = %i', $id)->fetchPairs(cache: false);
 		return $this->respond($names);
 	}
 

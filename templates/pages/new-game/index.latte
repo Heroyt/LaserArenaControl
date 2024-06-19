@@ -32,36 +32,6 @@
 '6-stars' => svgIcon('6-stars'),
 ]}
 
-{define addHead}
-    {cache 'newGame-addHead', tags: ['templates.newGame', 'templates']}
-        {var string[][] $colors = App\GameModels\Factory\GameFactory::getAllTeamsColors()}
-        <style>
-            :root {
-            {foreach $colors as $colorSystem => $systemColors} {foreach $systemColors as $key => $color} {var string $varName1 = '--team-'.$colorSystem.'-'.$key} {var string $varName2 = '--team-'.$colorSystem.'-'.$key.'-text'} {$varName1}: {$color|noescape};
-            {$varName2}:{\App\Tools\Color::getFontColor($color)|noescape};
-            {/foreach} {/foreach}
-            }
-
-            {foreach $colors as $colorSystem => $systemColors}
-            {foreach $systemColors as $key => $color}
-            .bg-team-{$colorSystem}-{$key} {
-                --bg-color: var(--team-{$colorSystem}-{$key});
-                --bs-table-bg: var(--team-{$colorSystem}-{$key});
-                --text-color: var(--team-{$colorSystem}-{$key}-text);
-                background-color: var(--team-{$colorSystem}-{$key});
-                color: var(--team-{$colorSystem}-{$key}-text);
-            }
-
-            .text-team-{$colorSystem}-{$key} {
-                color: var(--team-{$colorSystem}-{$key});
-            }
-
-            {/foreach}
-            {/foreach}
-        </style>
-    {/cache}
-{/define}
-
 {block content}
     <form method="post" action="" id="new-game-content" class="w-100">
         {cache 'newGame-'.$lang.'-controls', tags: ['templates.newGame', 'templates', 'templates.'.$lang]}

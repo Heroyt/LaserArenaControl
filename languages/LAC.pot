@@ -4330,3 +4330,37 @@ msgstr ""
 
 msgid "Zobrazit poslední hru"
 msgstr ""
+
+msgid "Herní módy"
+msgstr ""
+
+msgid "Popis"
+msgstr ""
+
+msgctxt "settings"
+msgid "Vzhled"
+msgstr ""
+
+msgctxt "settings.theme"
+msgid "Hlavní barva"
+msgstr ""
+
+msgctxt "settings.theme"
+msgid "Nastavení primárně pro barvy výsledkové tabule."
+msgstr ""
+
+msgctxt "settings.theme"
+msgid "Primární barva"
+msgstr ""
+
+msgctxt "settings.theme.primary_color"
+msgid "Barva se používá pro zvýraznění některých prvků hlavně na výsledkové tabuli."
+msgstr ""
+
+msgctxt "settings.theme"
+msgid "Sekundární barva"
+msgstr ""
+
+msgctxt "settings.theme.secondary_color"
+msgid "Barva se používá pro zvýraznění některých prvků (pozadí) hlavně na výsledkové tabuli."
+msgstr ""

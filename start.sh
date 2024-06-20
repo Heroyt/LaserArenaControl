@@ -1,18 +1,19 @@
 #!/bin/sh
 
 # Update project
+git fetch --all --tags
 if [ "$LAC_VERSION" = "stable" ]; then
-  git fetch --all --tags
-  git checkout origin/stable
-  git pull --recurse-submodules
+  git switch stable
+  git pull --recurse-submodules origin stable
+
+  composer update
+  php install.php
 elif [ "$LAC_VERSION" != "dev" ]; then
-  git fetch --all --tags
   git checkout "v${LAC_VERSION}" -b "stable"
   git -C src/GameModels fetch --all --tags
   git -C src/GameModels checkout "v${LAC_MODELS_VERSION}" -b "stable"
 
   composer update
-
   php install.php
 else
   echo "Skipping git fetch for dev"

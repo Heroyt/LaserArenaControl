@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: Russian\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2024-06-19 12:33\n"
+"PO-Revision-Date: 2024-06-23 12:36\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=4; plural=((n%10==1 && n%100!=11) ? 0 : ((n%10 >= 2 && n%10 <=4 && (n%100 < 12 || n%100 > 14)) ? 1 : ((n%10 == 0 || (n%10 >= 5 && n%10 <=9)) || (n%100 >= 11 && n%100 <= 14)) ? 2 : 3));\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -4355,5 +4355,47 @@ msgstr ""
 
 msgctxt "settings.theme.secondary_color"
 msgid "Barva se používá pro zvýraznění některých prvků (pozadí) hlavně na výsledkové tabuli."
+msgstr ""
+
+msgid "Detail skupiny"
+msgstr ""
+
+msgid "Vytvořit"
+msgstr ""
+
+msgid "Vyplňte název"
+msgstr ""
+
+msgid "Skupina %s"
+msgstr ""
+
+msgid "Zobrazit detail skupiny"
+msgstr ""
+
+msgid "Hráč"
+msgstr ""
+
+msgid "Cenová kategorie"
+msgstr ""
+
+msgid "Zaplaceno"
+msgstr ""
+
+msgid "Odehráno"
+msgstr ""
+
+msgid "Celkem"
+msgstr ""
+
+msgid "Zrušit"
+msgstr ""
+
+msgid "Nezaplaceno"
+msgstr ""
+
+msgid "Zbývá zaplatit"
+msgstr ""
+
+msgid "Nastavit všem"
 msgstr ""
 

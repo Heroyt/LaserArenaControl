@@ -4,6 +4,19 @@ export interface PhpDateTime {
 	timezone: string
 }
 
+export interface PlayerPayInfo {
+	playerName: string,
+	gamesPlayed: number,
+	gamesPaid: number,
+	priceGroupId: number | null,
+}
+
+export interface PriceGroup {
+	id: number,
+	name: string,
+	price: number,
+}
+
 export interface PlayerData {
 	id?: number,
 	name: string,
@@ -94,6 +107,11 @@ interface ModeSettings {
 	[index: string]: boolean,
 }
 
+export interface PlayerGroupData extends PlayerData {
+	asciiName: string,
+	gameCodes: string[],
+}
+
 interface GameGroupDataBase {
 	id: number,
 	name: string,
@@ -102,16 +120,19 @@ interface GameGroupDataBase {
 }
 
 interface GameGroupData extends GameGroupDataBase {
-	players?: { [index: string]: PlayerData },
+	players?: { [index: string]: PlayerGroupData },
 	teams?: {
 		[index: string]: {
 			id: string,
 			name: string,
 			system: string,
 			color: number,
-			players: { [index: string]: PlayerData }
+			players: { [index: string]: PlayerGroupData }
 		}
 	},
+	meta?: {
+		payment: { [index: string]: PlayerPayInfo }
+	}
 }
 
 interface TableData {

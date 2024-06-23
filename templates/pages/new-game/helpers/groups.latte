@@ -5,6 +5,7 @@
     {var string $vestIcon = svgIcon('Vesta', 'auto', '1rem')}
     {var int $vestCount = count($vests)}
     <div class="offcanvas offcanvas-end border-blue-600 visible" tabindex="-1" id="groups"
+         style="--bs-offcanvas-width: 600px;"
          aria-labelledby="groupsLabel">
         <div class="offcanvas-tag bg-blue-600 text-bg-blue-600" data-bs-toggle="offcanvas" data-bs-target="#groups"
              style="--order:{$order};">
@@ -19,6 +20,19 @@
                         class="fa-solid fa-xmark"></i></button>
         </div>
         <div class="offcanvas-body" id="game-groups" data-vests="{$vestCount}">
+            <form action="{link ['gameGroups']}" method="post" id="new-group-form" class="mb-5">
+                <div class="input-group">
+                    <div class="form-floating">
+                        <input type="text" data-required-error="{_'Vyplňte název'}" required class="form-control"
+                               id="new-group-name" placeholder="{_'Nová skupina'}" name="name">
+                        <label for="new-group-name">{_'Nová skupina'}</label>
+                    </div>
+                    <button class="btn btn-success" type="submit">
+                        <i class="fa-solid fa-plus"></i>
+                        {_'Vytvořit'}
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
     <template id="new-game-group">
@@ -32,6 +46,11 @@
         <div class="card-body">
             <div class="input-group">
                 <input type="text" value="{$name}" class="form-control fs-5 group-name" maxlength="100">
+                <button type="button"
+                        data-toggle="tooltip" title="{_'Zobrazit detail skupiny'}"
+                        class="btn btn-primary show-group-detail">
+                    <i class="fa-solid fa-eye"></i>
+                </button>
                 <button type="button"
                         data-toggle="tooltip" title="{_'Zobrazit hráče skupiny'}"
                         class="btn btn-info show-group">
@@ -117,6 +136,59 @@
                             </li>
                         </ul>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{/define}
+
+{define gameGroupModal, App\Models\PriceGroup[] $priceGroups = []}
+    <div class="modal fade" tabindex="-1" id="group-detail-modal">
+        <div class="modal-dialog modal-dialog-scrollable modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">{_'Detail skupiny'} - <span class="group-detail-name"></span></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-striped table-hover align-middle" id="group-detail-player-table"
+                           data-price-groups="{json_encode(array_values($priceGroups))}">
+                        <thead>
+                        <tr>
+                            <th></th>
+                            <th>{_'Hráč'}</th>
+                            <th n:if="count($priceGroups) > 0">{_'Cenová kategorie'}</th>
+                            <th class="text-end">{_'Zaplaceno'}/{_'Odehráno'}</th>
+                        </tr>
+                        <tr class="align-middle">
+                            <th><input type="checkbox" id="select-all-players" class="form-check-input"></th>
+                            <th></th>
+                            <th n:if="count($priceGroups) > 0">
+                                <select id="price-group-all-players" class="form-select">
+                                    <option selected disabled value="">{_'Nastavit všem'}</option>
+                                    <option n:foreach="$priceGroups as $priceGroup"
+                                            value="{$priceGroup->id}">{$priceGroup->name}</option>
+                                </select>
+                            </th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <h6>{_'Celkem'}:</h6>
+                    <div class="payment-info me-auto" data-played-label="{_'Odehráno'}"
+                         data-unpaid-label="{_'Nezaplaceno'}" data-topay-label="{_'Zbývá zaplatit'}">
+                    </div>
+                    <button type="button" class="btn btn-success" id="paid" disabled>
+                        <i class="fa-solid fa-money-bill-1-wave"></i>
+                        {_'Zaplaceno'}
+                    </button>
+                    <button type="button" class="btn btn-danger" id="cancel-paid" disabled>
+                        <i class="fa-solid fa-xmark"></i>
+                        {_'Zrušit'}
+                    </button>
                 </div>
             </div>
         </div>

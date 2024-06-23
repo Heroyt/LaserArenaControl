@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\GameGroup;
+use App\Models\Group\PlayerPayInfoDto;
 use JsonException;
 use Lsr\Core\Controllers\Controller;
 use Lsr\Core\Exceptions\ValidationException;
@@ -86,6 +87,17 @@ class GameGroups extends Controller
                   $active
                 ) && ((int) $active) === 1) || $active === 'true';
         }
+
+        $meta = $request->getPost('meta');
+        if (isset($meta) && is_array($meta)) {
+            if (isset($meta['payment']) && is_array($meta['payment'])) {
+                foreach ($meta['payment'] as $key => $data) {
+                    $meta['payment'][$key] = new PlayerPayInfoDto(...$data);
+                }
+            }
+            $group->setMeta($meta);
+        }
+
         try {
             if (!$group->save()) {
                 return $this->respond(['error' => 'Save failed'], 500);

@@ -1,9 +1,19 @@
-import {GameData, GameGroupData, PlayerData} from '../../interfaces/gameInterfaces';
+import {
+	GameData,
+	GameGroupData,
+	PlayerData,
+	PlayerGroupData,
+	PlayerPayInfo,
+	PriceGroup,
+} from '../../interfaces/gameInterfaces';
 import Game from '../../game/game';
-import {getGameGroup, getGameGroups, updateGameGroup} from '../../api/endpoints/gameGroups';
+import {createGameGroup, getGameGroup, getGameGroups, updateGameGroup} from '../../api/endpoints/gameGroups';
 import {initTooltips} from '../../includes/tooltips';
 import {collapseClose, collapseShow, collapseToggle, initCollapse} from '../../includes/collapse';
 import {GroupLoadType, NewGameGroupInterface} from '../../interfaces/groups';
+import {startLoading, stopLoading} from '../../loaders';
+import {Modal} from 'bootstrap';
+import {GroupDetailPlayer} from './groupDetail';
 
 export default class NewGameGroup implements NewGameGroupInterface {
 
@@ -11,6 +21,18 @@ export default class NewGameGroup implements NewGameGroupInterface {
 	gameGroupsWrapper: HTMLDivElement;
 	gameGroupTemplate: HTMLTemplateElement;
 	gameGroupsSelect: HTMLSelectElement;
+	groupDetailModalDom: HTMLDivElement;
+	private readonly groupDetailModal: Modal;
+	private groupDetailPlayersTable: HTMLTableElement;
+	private groupDetailPaymentInfo: HTMLDivElement;
+	private groupDetailPaidBtn: HTMLButtonElement;
+	private groupDetailCancelBtn: HTMLButtonElement;
+	private priceGroups: Map<number, PriceGroup> = new Map();
+	private groupDetailSelectAll: HTMLInputElement;
+	private groups: Map<number, GameGroupData> = new Map();
+	private groupDetail: GameGroupData | null = null;
+	private groupPlayers: Map<string, GroupDetailPlayer> = new Map();
+	private selectedPlayers: Set<GroupDetailPlayer> = new Set();
 
 	constructor(game: Game, gameGroupsWrapper: HTMLDivElement, gameGroupTemplate: HTMLTemplateElement, gameGroupsSelect: HTMLSelectElement) {
 		this.game = game;
@@ -18,12 +40,120 @@ export default class NewGameGroup implements NewGameGroupInterface {
 		this.gameGroupTemplate = gameGroupTemplate;
 		this.gameGroupsSelect = gameGroupsSelect;
 
+		this.groupDetailModalDom = document.getElementById('group-detail-modal') as HTMLDivElement;
+		this.groupDetailModal = Modal.getOrCreateInstance(this.groupDetailModalDom);
+		this.groupDetailPlayersTable = this.groupDetailModalDom.querySelector('#group-detail-player-table');
+		this.groupDetailPaymentInfo = this.groupDetailModalDom.querySelector('.payment-info');
+		this.groupDetailPaidBtn = this.groupDetailModalDom.querySelector('#paid');
+		this.groupDetailCancelBtn = this.groupDetailModalDom.querySelector('#cancel-paid');
+
+		const priceGroups: PriceGroup[] = JSON.parse(this.groupDetailPlayersTable.dataset.priceGroups);
+		for (const priceGroup of priceGroups) {
+			this.priceGroups.set(priceGroup.id, priceGroup);
+		}
+
+		this.groupDetailSelectAll = this.groupDetailPlayersTable.querySelector('#select-all-players') as HTMLInputElement;
+		if (this.groupDetailSelectAll) {
+			this.groupDetailSelectAll.addEventListener('click', () => {
+				if (this.groupDetailSelectAll.checked) {
+					for (const [name, player] of this.groupPlayers) {
+						player.selectPlayer();
+						player.togglePlayer();
+					}
+				} else {
+					for (const [name, player] of this.groupPlayers) {
+						player.deselectPlayer();
+						player.togglePlayer();
+					}
+				}
+			});
+		}
+
+		const priceGroupAll = this.groupDetailPlayersTable.querySelector('#price-group-all-players') as HTMLSelectElement;
+		if (priceGroupAll) {
+			priceGroupAll.addEventListener('change', () => {
+				const id = parseInt(priceGroupAll.value);
+				if (this.priceGroups.has(id)) {
+					for (const [name, player] of this.groupPlayers) {
+						player.setPriceGroup(id);
+					}
+				}
+				priceGroupAll.value = '';
+			});
+		}
+
+		this.groupDetailPaidBtn.addEventListener('click', () => {
+			if (this.selectedPlayers.size === 0) {
+				this.groupDetailPaidBtn.disabled = true;
+				this.groupDetailCancelBtn.disabled = true;
+			}
+			if (this.groupDetailPaidBtn.disabled) {
+				return;
+			}
+
+			for (const player of this.selectedPlayers) {
+				player.payment.gamesPaid = player.payment.gamesPlayed;
+				player.updatePayInfo();
+				player.deselectPlayer();
+			}
+			this.selectedPlayers.clear();
+			this.updateGroupPayment();
+			this.updateCounts();
+		});
+		this.groupDetailCancelBtn.addEventListener('click', () => {
+			if (this.selectedPlayers.size === 0) {
+				this.groupDetailPaidBtn.disabled = true;
+				this.groupDetailCancelBtn.disabled = true;
+			}
+			if (this.groupDetailCancelBtn.disabled) {
+				return;
+			}
+
+			for (const player of this.selectedPlayers) {
+				player.payment.gamesPaid = 0;
+				player.updatePayInfo();
+				player.deselectPlayer();
+			}
+			this.selectedPlayers.clear();
+			this.updateGroupPayment();
+			this.updateCounts();
+		});
+		this.groupDetailModalDom.addEventListener('hide.bs.modal', () => {
+			this.updateGroupPayment();
+		});
+
 		(document.querySelectorAll('.game-group') as NodeListOf<HTMLDivElement>).forEach(group => {
 			this.initGroup(group);
 		});
 		document.getElementById('groups').addEventListener('show.bs.offcanvas', () => {
 			this.updateGroups();
 		});
+
+		const newGroupForm: HTMLFormElement = document.getElementById('new-group-form') as HTMLFormElement;
+		if (newGroupForm) {
+			const newGroupName = newGroupForm.querySelector('#new-group-name') as HTMLInputElement;
+			newGroupForm.addEventListener('submit', (e) => {
+				e.preventDefault();
+
+				// Validate name
+				const name = newGroupName.value.trim();
+				if (name.length < 1) {
+					newGroupName.setCustomValidity(newGroupName.dataset.requiredError);
+					return;
+				}
+
+				startLoading();
+				createGameGroup(name)
+					.then(() => {
+						stopLoading(true);
+						newGroupName.value = '';
+						this.updateGroups();
+					})
+					.catch(() => {
+						stopLoading(false);
+					});
+			});
+		}
 	}
 
 	initGroup(group: HTMLDivElement): void {
@@ -33,6 +163,17 @@ export default class NewGameGroup implements NewGameGroupInterface {
 		const loadBtn = group.querySelector('.loadPlayers') as HTMLButtonElement;
 		const deleteBtn = group.querySelector('.delete') as HTMLButtonElement;
 		const groupName = group.querySelector('.group-name') as HTMLInputElement;
+
+		const showGroupDetailBtn = group.querySelector('.show-group-detail') as HTMLButtonElement;
+		if (showGroupDetailBtn) {
+			if (!this.groups.has(id)) {
+				showGroupDetailBtn.remove();
+			} else {
+				showGroupDetailBtn.addEventListener('click', () => {
+					this.showGroupDetail(this.groups.get(id));
+				});
+			}
+		}
 
 		const showGroupBtn = group.querySelector('.show-group') as HTMLButtonElement;
 		const groupCollapse = group.querySelector(`#group-${id}-players`) as HTMLDivElement;
@@ -217,6 +358,8 @@ export default class NewGameGroup implements NewGameGroupInterface {
 	}
 
 	addGroup(groupData: GameGroupData, vestCount: number | null = null) {
+		this.groups.set(groupData.id, groupData);
+
 		if (!vestCount) {
 			vestCount = parseInt(this.gameGroupsWrapper.dataset.vests);
 		}
@@ -330,5 +473,168 @@ export default class NewGameGroup implements NewGameGroupInterface {
 			this.initGroupTeamChecks(group);
 		}
 
+	}
+
+	showGroupDetail(group: GameGroupData) {
+		console.log('Show group detail', group);
+
+		this.groupDetail = group;
+		this.groupPlayers.clear();
+		this.selectedPlayers.clear();
+		this.groupDetailSelectAll.checked = false;
+
+		for (const nameWrapper of this.groupDetailModalDom.querySelectorAll<HTMLElement>('.group-detail-name')) {
+			nameWrapper.innerText = group.name;
+		}
+
+		if (group.players) {
+			this.groupDetailPlayers(
+				group.players,
+				'meta' in group && group.meta.payment ? group.meta.payment : {},
+			);
+		}
+
+		this.updateCounts();
+		this.groupDetailModal.show();
+	}
+
+	private groupDetailPlayers(
+		players: { [index: string]: PlayerGroupData },
+		payment: { [index: string]: PlayerPayInfo },
+	): void {
+		// Sort players by name
+		const playersSorted = Object.values(players)
+			.sort((a, b) => a.name.localeCompare(b.name));
+
+		console.log('players', playersSorted);
+		console.log('payment', payment);
+
+		// Create table
+		const tableBody = this.groupDetailPlayersTable.querySelector('tbody');
+		// Clear table body
+		tableBody.innerHTML = '';
+		// Add players
+		for (const player of playersSorted) {
+			const playerObj = new GroupDetailPlayer(
+				player,
+				this.groupDetailPlayersTable,
+				this.priceGroups,
+				(player) => {
+					this.selectedPlayers.add(player);
+					this.updateCounts();
+				},
+				(player) => {
+					this.selectedPlayers.delete(player);
+					this.updateCounts();
+				},
+				(player) => {
+					this.updateCounts();
+				},
+			);
+			if ((player.asciiName in payment)) {
+				playerObj.setPayment(payment[player.asciiName]);
+			}
+			this.groupPlayers.set(player.asciiName, playerObj);
+		}
+	}
+
+	private updateCounts() {
+		console.log(this.selectedPlayers);
+		this.groupDetailPaidBtn.disabled = this.selectedPlayers.size === 0;
+		this.groupDetailCancelBtn.disabled = this.selectedPlayers.size === 0;
+
+		this.groupDetailSelectAll.checked = this.selectedPlayers.size === this.groupPlayers.size;
+
+		if (this.priceGroups.size > 0) {
+			const sums: { [index: number]: { sum: number, played: number } } = {};
+			for (const player of this.selectedPlayers) {
+				const id = player.payment.priceGroupId;
+				if (!(id in sums)) {
+					sums[id] = {
+						sum: 0,
+						played: 0,
+					};
+				}
+				sums[id].sum += player.payment.gamesPlayed - player.payment.gamesPaid;
+				sums[id].played += player.payment.gamesPlayed;
+			}
+
+			let html = `<ul class="m-0">`;
+			let sumMoney = 0;
+			for (const [id, priceGroup] of this.priceGroups) {
+				if (!(id in sums)) {
+					continue;
+				}
+				const {sum, played} = sums[id];
+				sumMoney += sum * priceGroup.price;
+				html += `<li><strong>${priceGroup.name}:</strong><ul class="m-0">`;
+				if (played !== sum) {
+					html += `<li><strong>${this.groupDetailPaymentInfo.dataset.playedLabel}:</strong> ${played} (${(priceGroup.price * played).toLocaleString(undefined, {
+						style: 'currency',
+						currency: 'CZK',
+					})})</li>`;
+				}
+				html += `<li><strong>${this.groupDetailPaymentInfo.dataset.unpaidLabel}:</strong> ${sum} (${(priceGroup.price * sum).toLocaleString(undefined, {
+						style: 'currency',
+						currency: 'CZK',
+					})})</li>` +
+					`</ul></li>`;
+			}
+			html += `<li class="mt-3">${this.groupDetailPaymentInfo.dataset.topayLabel}:</strong> ${sumMoney.toLocaleString(undefined, {
+				style: 'currency',
+				currency: 'CZK',
+			})}</li>`;
+			html += `</ul>`;
+			this.groupDetailPaymentInfo.innerHTML = html;
+		} else {
+			let sum = 0;
+			let sumPlayed = 0;
+			for (const player of this.selectedPlayers) {
+				sum += player.payment.gamesPlayed - player.payment.gamesPaid;
+				sumPlayed += player.payment.gamesPlayed;
+			}
+
+			let html = `<ul class="m-0">`;
+			if (sumPlayed !== sum) {
+				html += `<li><strong>${this.groupDetailPaymentInfo.dataset.playedLabel}:</strong> ${sumPlayed}</li>`;
+			}
+			html += `<li><strong>${this.groupDetailPaymentInfo.dataset.unpaidLabel}:</strong> ${sum}</li></ul>`;
+			this.groupDetailPaymentInfo.innerHTML = html;
+		}
+	}
+
+	private updateGroupPayment() {
+		if (!this.groupDetail) {
+			return;
+		}
+
+		const group = this.groupDetail;
+
+		// Update data
+		if (!('meta' in group) || group.meta instanceof Array) {
+			group.meta = {
+				payment: {},
+			};
+		}
+		if (!('payment' in group.meta)) {
+			group.meta.payment = {};
+		}
+
+		for (const [name, player] of this.groupPlayers) {
+			group.meta.payment[name] = player.payment;
+		}
+
+		console.log(group);
+
+		startLoading(true);
+		updateGameGroup(group.id, group)
+			.then(() => {
+				stopLoading(true, true);
+				this.groups.set(group.id, group);
+			})
+			.catch(e => {
+				console.error(e);
+				stopLoading(false, true);
+			});
 	}
 }

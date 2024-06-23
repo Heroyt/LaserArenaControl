@@ -7,6 +7,7 @@ use App\GameModels\Factory\GameFactory;
 use App\GameModels\Game\Game;
 use App\GameModels\Game\Player;
 use App\Models\Group\Player as GroupPlayer;
+use App\Models\Group\PlayerPayInfoDto;
 use App\Models\Group\Team;
 use Lsr\Core\Caching\Cache;
 use Lsr\Core\Exceptions\ValidationException;
@@ -17,18 +18,21 @@ use Nette\Caching\Cache as CacheParent;
 use Throwable;
 
 /**
+ * @phpstan-type GroupMeta array{payment: array<string, PlayerPayInfoDto>}
  *
+ * @use WithMetaData<GroupMeta>
  */
 #[PrimaryKey('id_group')]
 class GameGroup extends Model
 {
+    /** @phpstan-use WithMetaData<GroupMeta> */
+    use WithMetaData;
 
     public const string TABLE = 'game_groups';
 
     public string $name = '';
     public bool $active = true;
 
-    // TODO: Fix this so that OneToMany connection uses a factory when available
     /** @var Game[] */
     private array $games = [];
 
@@ -43,6 +47,12 @@ class GameGroup extends Model
      */
     public static function getActive() : array {
         return static::query()->where('[active] = 1')->get();
+    }
+
+    public function jsonSerialize() : array {
+        $data = parent::jsonSerialize();
+        $data['meta'] = $this->getMeta();
+        return $data;
     }
 
     /**

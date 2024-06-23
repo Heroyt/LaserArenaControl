@@ -184,9 +184,13 @@ tables:
 			`id_group` int(11) unsigned NOT NULL AUTO_INCREMENT,
 			`name` varchar(100) NOT NULL DEFAULT '',
 			`active` tinyint(1) NOT NULL DEFAULT 1,
+			`meta` BLOB DEFAULT NULL,
 			PRIMARY KEY (`id_group`)
 		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 		'''
+		modifications:
+			0.1:
+				- 'ADD `meta` BLOB DEFAULT NULL'
 	App\GameModels\Game\Evo5\Game:
 		order: 1
 		definition: '''
@@ -534,4 +538,14 @@ tables:
           `users` longtext GENERATED ALWAYS AS (json_extract(`players`,'$[*].user')) VIRTUAL,
           PRIMARY KEY (`code`,`type`,`description`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+		'''
+	App\Models\PriceGroup:
+		order: 0
+		definition: '''
+		(
+			`id_price` int(11) unsigned NOT NULL AUTO_INCREMENT,
+			`name` varchar(100) NOT NULL DEFAULT '',
+			`price` int(11) NOT NULL DEFAULT 0,
+			PRIMARY KEY (`id_price`)
+		) ENGINE InnoDB DEFAULT CHARSET=utf8mb4;
 		'''

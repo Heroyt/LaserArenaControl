@@ -12,6 +12,7 @@ use App\Gate\Models\GateScreenModel;
 use App\Gate\Models\MusicGroupDto;
 use App\Models\MusicMode;
 use App\Models\Playlist;
+use App\Models\PriceGroup;
 use App\Services\FeatureConfig;
 use LAC\Modules\Core\ControllerDecoratorInterface;
 use Lsr\Core\Controllers\Controller;
@@ -73,6 +74,7 @@ class NewGame extends Controller
         $this->params['gameModes'] = GameModeFactory::getAll(['system' => $this->params['system']]);
         $this->params['musicModes'] = MusicMode::getAll();
         $this->params['playlists'] = Playlist::getAll();
+        $this->params['priceGroups'] = PriceGroup::getAll();
         $this->params['musicGroups'] = [];
         foreach ($this->params['musicModes'] as $music) {
             if (!$music->public) {

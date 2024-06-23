@@ -54,7 +54,13 @@ class GateController extends Controller
         }
 
         try {
-            return $this->gate->getCurrentScreen($gateType, $system)->setParams($this->params)->run();
+            $screen = $this->gate
+              ->getCurrentScreen($gateType, $system)
+              ->setParams($this->params);
+            return $screen->run()
+                          ->withHeader('Cache-Control', 'no-store')
+                          ->withAddedHeader('X-Screen', $screen::getDiKey())
+                          ->withAddedHeader('X-Trigger', $screen->getTrigger()?->value ?? 'none');
         } catch (ValidationException | Throwable $e) {
             return $this->respond(new ErrorDto('An error has occured', exception: $e), 500);
         }
@@ -71,10 +77,6 @@ class GateController extends Controller
           ['type' => 'custom-event', 'event' => $event, 'time' => $dto->time]
         );
         return $this->respond('');
-    }
-
-    private function clearEvent() : void {
-        Info::set('gate-event', null);
     }
 
     /**
@@ -136,6 +138,10 @@ class GateController extends Controller
         }
         $game = GameFactory::getById($gameId, ['system' => $system]);
         return $game ?? new ErrorDto('Cannot find game', type: ErrorType::NOT_FOUND);
+    }
+
+    private function clearEvent() : void {
+        Info::set('gate-event', null);
     }
 
     /**

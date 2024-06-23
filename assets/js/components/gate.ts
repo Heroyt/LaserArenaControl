@@ -56,6 +56,18 @@ export function loadContent(path: string, reloadTimeout: { timeout: null | NodeJ
 			// Setup next auto-reload
 			clearTimeout(reloadTimeout.timeout);
 			console.log(Array.from(response.headers.entries()));
+
+			// Check header
+			if (!response.headers.has('x-screen')) {
+				console.log('Missing required screen header - skipping');
+				// Try to load again after a short delay
+				reloadTimeout.timeout = setTimeout(() => {
+					loadContent(path, reloadTimeout);
+				}, 5000);
+				return;
+			}
+			console.log('response screen', response.headers.get('x-screen'));
+
 			if (response.headers.has('x-reload-time')) {
 				const time = parseInt(response.headers.get('x-reload-time'));
 				console.log('Reload timer', time);

@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: English\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2024-06-19 12:33\n"
+"PO-Revision-Date: 2024-06-23 12:36\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -4323,5 +4323,47 @@ msgstr ""
 
 msgctxt "settings.theme.secondary_color"
 msgid "Barva se používá pro zvýraznění některých prvků (pozadí) hlavně na výsledkové tabuli."
+msgstr ""
+
+msgid "Detail skupiny"
+msgstr ""
+
+msgid "Vytvořit"
+msgstr ""
+
+msgid "Vyplňte název"
+msgstr ""
+
+msgid "Skupina %s"
+msgstr ""
+
+msgid "Zobrazit detail skupiny"
+msgstr ""
+
+msgid "Hráč"
+msgstr ""
+
+msgid "Cenová kategorie"
+msgstr ""
+
+msgid "Zaplaceno"
+msgstr ""
+
+msgid "Odehráno"
+msgstr ""
+
+msgid "Celkem"
+msgstr ""
+
+msgid "Zrušit"
+msgstr ""
+
+msgid "Nezaplaceno"
+msgstr ""
+
+msgid "Zbývá zaplatit"
+msgstr ""
+
+msgid "Nastavit všem"
 msgstr ""
 

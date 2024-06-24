@@ -9,6 +9,7 @@ use App\GameModels\Game\Player;
 use App\Models\Group\Player as GroupPlayer;
 use App\Models\Group\PlayerPayInfoDto;
 use App\Models\Group\Team;
+use DateTimeImmutable;
 use DateTimeInterface;
 use Lsr\Core\Caching\Cache;
 use Lsr\Core\Exceptions\ValidationException;
@@ -42,6 +43,11 @@ class GameGroup extends Model
     private array $players = [];
     /** @var array<string, Team> */
     private array $teams = [];
+
+    public function save() : bool {
+        $this->createdAt ??= new DateTimeImmutable();
+        return parent::save();
+    }
 
     /**
      * @return static[]

@@ -75,7 +75,7 @@
 {define partTeams}
     {var int $totalScore = array_sum(array_map(function(App\GameModels\Game\Team $team){ return $team->score > 0 ? $team->score : 0;},$game->getTeams()->getAll()))}
     {var App\GameModels\Game\Team|null $win = $game->getMode()?->getWin($game)}
-    <div n:foreach="$game->getTeamsSorted() as $team" class="team bg-team-{$game::SYSTEM}-{$team->color}"
+    <div n:foreach="$game->getTeamsSorted() as $team" class="team text-bg-team-{$game::SYSTEM}-{$team->color}"
                                                       style="height:calc({100*($team->score > 0 ? $team->score : 0) / ($totalScore > 0 ? $totalScore : 1)|noescape}% - .2rem);"
                                                       data-team="{$team->id}">
         <div class="name">

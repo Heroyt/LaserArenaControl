@@ -476,7 +476,7 @@ export default class NewGameGroup implements NewGameGroupInterface {
 			teamsWrapper.innerHTML = '';
 			Object.entries(groupData.teams).forEach(([id, team]) => {
 				const teamLi = document.createElement('li');
-				teamLi.classList.add('list-group-item', `bg-team-${team.system}-${team.color}`);
+				teamLi.classList.add('list-group-item', `text-bg-team-${team.system}-${team.color}`);
 				teamLi.innerHTML = `<label class="cursor-pointer">` + `<input type="checkbox" class="form-check-input group-team-check mx-2 mt-0" data-id="${id}" data-team="${team.color}">` + team.name + `</label>`;
 				teamsWrapper.appendChild(teamLi);
 				let counter = 1;

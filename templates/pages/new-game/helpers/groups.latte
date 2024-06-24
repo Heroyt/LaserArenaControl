@@ -80,7 +80,7 @@
                     <div class="collapse-grid teams-collapse">
                         <ul class="list-group mt-1 group-teams collapse-inner" id="group-{$id}-teams-collapse">
                             {foreach $teams as $teamId => $team}
-                                <li class="list-group-item bg-team-{$team->system}-{$team->getColor()}">
+                                <li class="list-group-item text-bg-team-{$team->system}-{$team->getColor()}">
                                     <label class="cursor-pointer">
                                         <input type="checkbox" class="form-check-input group-team-check mx-2 mt-0"
                                                data-id="{$teamId}" data-team="{$team->getColor()}">

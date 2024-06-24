@@ -16,7 +16,7 @@
              data-hash="{$screenHash}">
             <div n:foreach="$vests as $vest"
                     {var App\GameModels\Game\Player|null $player = $game->getVestPlayer($vest->vestNum)}
-                    class="vest shadow rounded-10 {ifset $player}bg-team-{$game::SYSTEM}-{$player->getTeamColor()} text-bg-team-{$game::SYSTEM}-{$player->getTeamColor()}{else}bg-white-forced text-grey-text{/ifset}"
+                    class="vest shadow rounded-10 {ifset $player}text-bg-team-{$game::SYSTEM}-{$player->getTeamColor()} text-bg-team-{$game::SYSTEM}-{$player->getTeamColor()}{else}bg-white-forced text-grey-text{/ifset}"
                     style="grid-column: {$vest->gridCol};grid-row: {$vest->gridRow}; animation-delay: {300 + ($iterator->counter * 50)}ms;">
                 {svgIcon 'Vesta', '', 'calc(60vh / ' . $gridDimensions->rows . ')'}
                 {ifset $player}

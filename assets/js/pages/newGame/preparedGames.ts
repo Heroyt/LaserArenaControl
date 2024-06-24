@@ -1,13 +1,13 @@
-import {Offcanvas} from "bootstrap";
-import {startLoading, stopLoading} from "../../loaders";
-import {GameData, PhpDateTime} from "../../interfaces/gameInterfaces";
-import Game from "../../game/game";
+import {Offcanvas} from 'bootstrap';
+import {startLoading, stopLoading} from '../../loaders';
+import {GameData, PhpDateTime} from '../../interfaces/gameInterfaces';
+import Game from '../../game/game';
 import {
-    deleteAllPreparedGames,
-    deletePreparedGame,
-    getPreparedGames,
-    sendPreparedGame
-} from "../../api/endpoints/preparedGames";
+	deleteAllPreparedGames,
+	deletePreparedGame,
+	getPreparedGames,
+	sendPreparedGame,
+} from '../../api/endpoints/preparedGames';
 import {initTooltips} from '../../includes/tooltips';
 
 interface PreparedGameData {
@@ -108,7 +108,7 @@ export default class NewGamesPrepared {
 			const tmp = document.createElement('div');
 			let playersHTML = '';
 			Object.values(preparedGameData.data.players).forEach(player => {
-				playersHTML += `<span class="badge m-1 bg-team-${system}-${player.teamNum}">${player.name}</span>`;
+				playersHTML += `<span class="badge m-1 text-bg-team-${system}-${player.teamNum}">${player.name}</span>`;
 			});
 			tmp.innerHTML = `<div class="prepared-game card mb-4" data-id="${preparedGameData.id_game}">` +
 				`<div class="card-body">` +

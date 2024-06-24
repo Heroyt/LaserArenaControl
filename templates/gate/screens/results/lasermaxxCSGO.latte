@@ -10,7 +10,7 @@
     <section class="teams">
         {var App\GameModels\Game\Team|null $win = $game->getMode()?->getWin($game)}
         <div class="team" n:foreach="$game->getTeamsSorted() as $team">
-            <div class="name bg-team-{$game::SYSTEM}-{$team->getTeamColor()}">
+            <div class="name text-bg-team-{$game::SYSTEM}-{$team->getTeamColor()}">
                 <div class="text-center">
                     {if is_null($win)}
                         {svgIcon 'shield', '2rem'}

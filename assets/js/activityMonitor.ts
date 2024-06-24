@@ -71,7 +71,7 @@ export default class ActivityMonitor {
             return;
         }
         Object.values(activeGame.players).forEach(player => {
-            this.players.innerHTML += `<div class="badge bg-team-${activeGame.system}-${player.teamNum}">${player.name}</div>`;
+            this.players.innerHTML += `<div class="badge text-bg-team-${activeGame.system}-${player.teamNum}">${player.name}</div>`;
         });
     }
 

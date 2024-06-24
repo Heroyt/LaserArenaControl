@@ -12,7 +12,7 @@
         {var App\GameModels\Game\Team|null $win = $mode->getWin($game)}
         <div class="team" n:foreach="$game->getTeamsSorted() as $team">
             {varType App\GameModels\Game\Lasermaxx\Team $team}
-            <div class="team-header text-center bg-team-{$game::SYSTEM}-{$team->getTeamColor()}">
+            <div class="team-header text-center text-bg-team-{$game::SYSTEM}-{$team->getTeamColor()}">
                 <div>
                     {if is_null($win)}
                         {svgIcon 'shield', '2rem'}

@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: Spanish\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2024-06-23 12:36\n"
+"PO-Revision-Date: 2024-06-24 11:50\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -4349,5 +4349,8 @@ msgid "Zbývá zaplatit"
 msgstr ""
 
 msgid "Nastavit všem"
+msgstr ""
+
+msgid "Tisknout"
 msgstr ""
 

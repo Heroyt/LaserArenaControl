@@ -9,6 +9,7 @@ use App\GameModels\Game\Player;
 use App\Models\Group\Player as GroupPlayer;
 use App\Models\Group\PlayerPayInfoDto;
 use App\Models\Group\Team;
+use DateTimeInterface;
 use Lsr\Core\Caching\Cache;
 use Lsr\Core\Exceptions\ValidationException;
 use Lsr\Core\Models\Attributes\PrimaryKey;
@@ -32,6 +33,7 @@ class GameGroup extends Model
 
     public string $name = '';
     public bool $active = true;
+    public ?DateTimeInterface $createdAt = null;
 
     /** @var Game[] */
     private array $games = [];
@@ -47,6 +49,41 @@ class GameGroup extends Model
      */
     public static function getActive() : array {
         return static::query()->where('[active] = 1')->get();
+    }
+
+    /**
+     * @return static[]
+     * @throws ValidationException
+     */
+    public static function getActiveByDate(bool $descending = true) : array {
+        $query = static::query()
+                       ->where('[active] = 1')
+                       ->orderBy('[created_at]');
+        if ($descending) {
+            $query->desc();
+        }
+        $query->orderBy('[id_group]');
+        if ($descending) {
+            $query->desc();
+        }
+        return $query->get();
+    }
+
+    /**
+     * @return static[]
+     * @throws ValidationException
+     */
+    public static function getAllByDate(bool $descending = true) : array {
+        $query = static::query()
+                       ->orderBy('[created_at]');
+        if ($descending) {
+            $query->desc();
+        }
+        $query->orderBy('[id_group]');
+        if ($descending) {
+            $query->desc();
+        }
+        return $query->get();
     }
 
     public function jsonSerialize() : array {
@@ -108,19 +145,6 @@ class GameGroup extends Model
         }
 
         return $this->players;
-    }
-
-    /**
-     * @return GroupPlayer[]
-     * @throws Throwable
-     */
-    public function getPlayersSortedByName() : array {
-        $players = $this->getPlayers();
-        uasort(
-          $players,
-          static fn(GroupPlayer $a, GroupPlayer $b) => strcmp(strtolower($a->name), strtolower($b->name))
-        );
-        return $players;
     }
 
     /**
@@ -224,6 +248,19 @@ class GameGroup extends Model
         );
 
         return [$players, $teams];
+    }
+
+    /**
+     * @return GroupPlayer[]
+     * @throws Throwable
+     */
+    public function getPlayersSortedByName() : array {
+        $players = $this->getPlayers();
+        uasort(
+          $players,
+          static fn(GroupPlayer $a, GroupPlayer $b) => strcmp(strtolower($a->name), strtolower($b->name))
+        );
+        return $players;
     }
 
     public function clearCache() : void {

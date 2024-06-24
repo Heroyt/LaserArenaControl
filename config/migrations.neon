@@ -185,12 +185,15 @@ tables:
 			`name` varchar(100) NOT NULL DEFAULT '',
 			`active` tinyint(1) NOT NULL DEFAULT 1,
 			`meta` BLOB DEFAULT NULL,
+			`created_at` datetime NOT NULL DEFAULT current_timestamp(),
 			PRIMARY KEY (`id_group`)
 		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 		'''
 		modifications:
 			0.1:
 				- 'ADD `meta` BLOB DEFAULT NULL'
+			0.2:
+				- 'ADD `created_at` datetime NOT NULL DEFAULT current_timestamp()'
 	App\GameModels\Game\Evo5\Game:
 		order: 1
 		definition: '''

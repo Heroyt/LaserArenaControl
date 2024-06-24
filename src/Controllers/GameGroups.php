@@ -27,7 +27,7 @@ class GameGroups extends Controller
      * @throws Throwable
      */
     public function listGroups(Request $request) : ResponseInterface {
-        $groups = $request->getGet('all') !== null ? GameGroup::getAll() : GameGroup::getActive();
+        $groups = $request->getGet('all') !== null ? GameGroup::getAllByDate() : GameGroup::getActiveByDate();
         $data = [];
         foreach ($groups as $group) {
             $groupData = $group->jsonSerialize();

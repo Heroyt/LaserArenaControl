@@ -207,7 +207,7 @@ class Settings extends Controller
     }
 
     public function group() : ResponseInterface {
-        $this->params['groupsActive'] = GameGroup::getActive();
+        $this->params['groupsActive'] = GameGroup::getActiveByDate();
         $this->params['groupsInactive'] = GameGroup::query()->where('active = 0')->orderBy('id_group')->desc()->get();
 
         return $this->view('pages/settings/groups');

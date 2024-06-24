@@ -121,6 +121,27 @@ export default class NewGameGroup implements NewGameGroupInterface {
 		this.groupDetailModalDom.addEventListener('hide.bs.modal', () => {
 			this.updateGroupPayment();
 		});
+		const printBtn = this.groupDetailModalDom.querySelector<HTMLButtonElement>('#print-group-players');
+		if (printBtn) {
+			const printIframe = document.createElement('iframe');
+			printIframe.style.display = 'none';
+			printIframe.onload = () => {
+				stopLoading();
+				if (printIframe.src) {
+					printIframe.contentWindow.print();
+				}
+			};
+			document.body.appendChild(printIframe);
+			printBtn.addEventListener('click', () => {
+				if (!this.groupDetail || !this.groupDetail.id) {
+					console.log('No group selected');
+					return;
+				}
+				startLoading();
+				printIframe.src = `/gameGroups/${this.groupDetail.id}/print`;
+				console.log(printIframe.src);
+			});
+		}
 
 		(document.querySelectorAll('.game-group') as NodeListOf<HTMLDivElement>).forEach(group => {
 			this.initGroup(group);

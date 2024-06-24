@@ -80,6 +80,7 @@ $groupsId = $groups->group('{id}');
 $groupsId->get('', [GameGroups::class, 'getGroup']);
 $groupsId->update('', [GameGroups::class, 'update']);
 $groupsId->post('', [GameGroups::class, 'update']);
+$groupsId->get('print', [GameGroups::class, 'printPlayerList']);
 
 $control = Route::group('control');
 $control->get('status', [GameControl::class, 'status'])->name('getGameStatus');

@@ -1,0 +1,35 @@
+{layout '../../@layoutPrint.latte'}
+
+{varType App\Models\GameGroup $group}
+{varType App\Models\PriceGroup[] $priceGroups}
+
+{define content}
+    <table class="table table-striped align-middle caption-top" id="group-detail-player-table">
+        <caption>{$group->name}</caption>
+        <thead>
+        <tr>
+            <th>{_'Hráč'}</th>
+            <th n:if="count($priceGroups) > 0">{_'Cenová kategorie'}</th>
+            <th class="text-end">{_'Zaplaceno'}/{_'Odehráno'}</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr n:foreach="$group->getPlayersSortedByName() as $player">
+            {var App\Models\Group\PlayerPayInfoDto|null $playerPayment = ($group->getMeta()['payment'] ?? [])[$player->asciiName] ?? null}
+            <td>
+                {$player->name}
+            </td>
+            <td n:if="count($priceGroups) > 0">
+                {if isset($playerPayment?->priceGroupId)}
+                    {$priceGroups[$playerPayment?->priceGroupId]->name}
+                {else}
+                    {first($priceGroups)->name}
+                {/if}
+            </td>
+            <td class="text-end">
+                {$playerPayment?->gamesPaid ?? 0}/{count($player->gameCodes)}
+            </td>
+        </tr>
+        </tbody>
+    </table>
+{/define}

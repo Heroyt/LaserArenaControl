@@ -111,6 +111,19 @@ class GameGroup extends Model
     }
 
     /**
+     * @return GroupPlayer[]
+     * @throws Throwable
+     */
+    public function getPlayersSortedByName() : array {
+        $players = $this->getPlayers();
+        uasort(
+          $players,
+          static fn(GroupPlayer $a, GroupPlayer $b) => strcmp(strtolower($a->name), strtolower($b->name))
+        );
+        return $players;
+    }
+
+    /**
      * @return Game[]
      * @throws Throwable
      */

@@ -4,10 +4,12 @@ namespace App\Controllers;
 
 use App\Models\GameGroup;
 use App\Models\Group\PlayerPayInfoDto;
+use App\Models\PriceGroup;
 use JsonException;
 use Lsr\Core\Controllers\Controller;
 use Lsr\Core\Exceptions\ValidationException;
 use Lsr\Core\Requests\Request;
+use Lsr\Exceptions\TemplateDoesNotExistException;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
 
@@ -106,6 +108,19 @@ class GameGroups extends Controller
             return $this->respond(['error' => 'Validation failed', 'exception' => $e->getMessage()], 400);
         }
         return $this->respond(['status' => 'ok', 'id' => $group->id]);
+    }
+
+    /**
+     * @param  GameGroup  $group
+     * @return ResponseInterface
+     * @throws JsonException
+     * @throws ValidationException
+     * @throws TemplateDoesNotExistException
+     */
+    public function printPlayerList(GameGroup $group) : ResponseInterface {
+        $this->params['group'] = $group;
+        $this->params['priceGroups'] = PriceGroup::getAll();
+        return $this->view('components/groups/groupPrint');
     }
 
 }

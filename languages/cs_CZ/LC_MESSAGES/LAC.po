@@ -4430,3 +4430,6 @@ msgstr ""
 
 msgid "Nastavit všem"
 msgstr ""
+
+msgid "Tisknout"
+msgstr ""

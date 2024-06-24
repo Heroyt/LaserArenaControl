@@ -15,6 +15,7 @@ export interface PriceGroup {
 	id: number,
 	name: string,
 	price: number,
+	deleted?: boolean,
 }
 
 export interface PlayerData {

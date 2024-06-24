@@ -142,7 +142,7 @@
     </div>
 {/define}
 
-{define gameGroupModal, App\Models\PriceGroup[] $priceGroups = []}
+{define gameGroupModal, App\Models\PriceGroup[] $priceGroups = [], App\Models\PriceGroup[] $priceGroupsAll = []}
     <div class="modal fade" tabindex="-1" id="group-detail-modal">
         <div class="modal-dialog modal-dialog-scrollable modal-xl">
             <div class="modal-content">
@@ -158,7 +158,8 @@
                         </button>
                     </p>
                     <table class="table table-striped table-hover align-middle" id="group-detail-player-table"
-                           data-price-groups="{json_encode(array_values($priceGroups))}">
+                           data-price-groups="{json_encode(array_values($priceGroups))}"
+                           data-price-groups-all="{json_encode(array_values($priceGroupsAll))}">
                         <thead>
                         <tr>
                             <th></th>

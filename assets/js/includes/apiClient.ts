@@ -82,8 +82,34 @@ export async function customFetch(path: string, method: RequestMethod, options: 
  * @throws ResponseError
  */
 export async function fetchPost(path: string, body: string | FormData | object | URLSearchParams = '', headers: HeadersInit | null = null) {
+	return fetchPostBase('POST', path, body, headers);
+}
+
+/**
+ * Call a fetch PUT method with some pre-processing
+ * @param path
+ * @param body
+ * @param headers
+ * @throws ResponseError
+ */
+export async function fetchPut(path: string, body: string | FormData | object | URLSearchParams = '', headers: HeadersInit | null = null) {
+	return fetchPostBase('PUT', path, body, headers);
+}
+
+/**
+ * Call a fetch DELETE method with some pre-processing
+ * @param path
+ * @param body
+ * @param headers
+ * @throws ResponseError
+ */
+export async function fetchDelete(path: string, body: string | FormData | object | URLSearchParams = '', headers: HeadersInit | null = null) {
+	return fetchPostBase('DELETE', path, body, headers);
+}
+
+async function fetchPostBase(method: RequestMethod, path: string, body: string | FormData | object | URLSearchParams = '', headers: HeadersInit | null = null) {
 	const options: RequestInit = {
-		method: 'POST',
+		method: method,
 		headers: {
 			'X-Requested-With': 'XMLHttpRequest',
 			...headers,

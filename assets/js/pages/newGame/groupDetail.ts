@@ -8,6 +8,7 @@ export class GroupDetailPlayer {
 	payment: PlayerPayInfo;
 
 	private readonly priceGroups: Map<number, PriceGroup> = new Map();
+	private readonly priceGroupsAll: Map<number, PriceGroup> = new Map();
 	private countsColumn: HTMLTableCellElement;
 	private checkbox: HTMLInputElement;
 	private select: HTMLSelectElement;
@@ -19,6 +20,7 @@ export class GroupDetailPlayer {
 		player: PlayerGroupData,
 		table: HTMLTableElement,
 		priceGroups: Map<number, PriceGroup>,
+		priceGroupsAll: Map<number, PriceGroup>,
 		onPlayerSelected: (player: GroupDetailPlayer) => void,
 		onPlayerDeselected: (player: GroupDetailPlayer) => void,
 		onPlayerChanged: (player: GroupDetailPlayer) => void,
@@ -26,6 +28,7 @@ export class GroupDetailPlayer {
 		this.table = table;
 		this.player = player;
 		this.priceGroups = priceGroups;
+		this.priceGroupsAll = priceGroupsAll;
 		this.onPlayerSelected = onPlayerSelected;
 		this.onPlayerDeselected = onPlayerDeselected;
 		this.onPlayerChanged = onPlayerChanged;
@@ -52,13 +55,22 @@ export class GroupDetailPlayer {
 		}
 
 		if (this.payment.priceGroupId && this.select) {
-			this.select.value = this.payment.priceGroupId.toString();
+			this.setPriceGroup(this.payment.priceGroupId);
 		}
 		this.updatePayInfo();
 	}
 
 	setPriceGroup(id: number) {
 		this.select.value = id.toString();
+		// Option does not exist
+		if (this.select.value !== id.toString() && this.priceGroupsAll.has(id)) {
+			const option = document.createElement('option');
+			option.value = id.toString();
+			option.disabled = true;
+			option.innerText = this.priceGroupsAll.get(id).name;
+			this.select.appendChild(option);
+			this.select.value = id.toString();
+		}
 		this.payment.priceGroupId = id;
 		this.onPlayerChanged(this);
 	}

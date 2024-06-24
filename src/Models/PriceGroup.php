@@ -21,6 +21,12 @@ class PriceGroup extends Model
      */
     public int $price;
 
+    public bool $deleted = false;
+
+    public static function getAll() : array {
+        return static::query()->where('[deleted] = 0')->get();
+    }
+
     public function jsonSerialize() : array {
         $data = parent::jsonSerialize();
         $data['price'] = $this->getPrice();

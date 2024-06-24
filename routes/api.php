@@ -15,6 +15,7 @@ use App\Controllers\Api\Helpers;
 use App\Controllers\Api\LaserLiga;
 use App\Controllers\Api\Logs;
 use App\Controllers\Api\Mount;
+use App\Controllers\Api\PriceGroups;
 use App\Controllers\Api\Results;
 use App\Controllers\Api\Tasks;
 use App\Controllers\Api\Updater;
@@ -104,6 +105,15 @@ $apiGroup->group('cache')->group('clear')->post('', [Cache::class, 'clearAll'])-
 $helpersGroup = $apiGroup->group('helpers');
 $helpersGroup->get('translate', [Helpers::class, 'translate']);
 
-$apiGroup->group('gates')
-         ->post('start', [Gates::class, 'start'])
-         ->post('stop', [Gates::class, 'stop']);
+$apiGroup->group('gates')->post('start', [Gates::class, 'start'])->post('stop', [Gates::class, 'stop']);
+
+$priceGroup = $apiGroup->group('pricegroups');
+$priceGroup->get('/', [PriceGroups::class, 'list'])->name('api-price-groups');
+$priceGroup->post('/', [PriceGroups::class, 'create'])->name('api-price-groups-create');
+
+$priceGroupId = $priceGroup->group('{id}');
+$priceGroupId->get('/', [PriceGroups::class, 'show'])->name('api-price-group');
+$priceGroupId->post('/', [PriceGroups::class, 'update']);
+$priceGroupId->put('/', [PriceGroups::class, 'update']);
+$priceGroupId->delete('/', [PriceGroups::class, 'delete']);
+$priceGroupId->post('/delete', [PriceGroups::class, 'delete']);

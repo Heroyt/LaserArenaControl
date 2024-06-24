@@ -549,6 +549,10 @@ tables:
 			`id_price` int(11) unsigned NOT NULL AUTO_INCREMENT,
 			`name` varchar(100) NOT NULL DEFAULT '',
 			`price` int(11) NOT NULL DEFAULT 0,
+			`deleted` tinyint(1) NOT NULL DEFAULT 0,
 			PRIMARY KEY (`id_price`)
 		) ENGINE InnoDB DEFAULT CHARSET=utf8mb4;
 		'''
+		modifications:
+			0.1:
+				- 'ADD `deleted` tinyint(1) NOT NULL DEFAULT 0'

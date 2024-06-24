@@ -15,6 +15,7 @@
 {varType string $system}
 {default string $lang = App\Core\App::getShortLanguageCode()}
 {default App\Models\PriceGroup[] $priceGroups = []}
+{default App\Models\PriceGroup[] $priceGroupsAll = $priceGroups}
 
 {import 'helpers/help.latte'}
 {import 'helpers/groups.latte'}
@@ -67,7 +68,7 @@
     {/foreach}
     {include scoreDownloadModal}
     {include userSearchModal}
-    {include gameGroupModal, $priceGroups}
+    {include gameGroupModal, $priceGroups, $priceGroupsAll}
     {include 'helpers/musicModesDisplay.latte', $musicGroups}
     {include help}
     {var int $order = 0}

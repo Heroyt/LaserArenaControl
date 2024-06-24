@@ -2,6 +2,7 @@
 
 {varType App\Services\FeatureConfig $featureConfig}
 {varType App\Models\DataObjects\Theme $theme}
+{varType App\Models\PriceGroup[] $priceGroups}
 
 {block content}
 	<form action="{link ['settings']}" method="post" class="text-center autosave"
@@ -37,6 +38,11 @@
 					   accept="image/svg+xml,image/png" class="form-control">
 			</div>
 		</div>
+        <p class="my-4">
+            <button class="btn btn-success btn-lg" type="submit" data-action="autosave" data-prevent="true">
+                {_'Odeslat', context: 'actions'}
+            </button>
+        </p>
         <hr class="my-5">
         <h3>{_'Vzhled', context: 'settings'}</h3>
         <p class="text-muted">{_'Nastavení primárně pro barvy výsledkové tabule.', context:'settings.theme'}</p>
@@ -63,5 +69,55 @@
                 {_'Odeslat', context: 'actions'}
 			</button>
 		</p>
+        <hr class="my-5">
+        <h3>{_'Cenové úrovně'}</h3>
+        <div id="price-groups">
+            {foreach $priceGroups as $priceGroup}
+                {include priceGroup, $priceGroup->id, $priceGroup->name, $priceGroup->getPrice()}
+            {/foreach}
+        </div>
+        <div class="input-group my-3" id="new-price-group">
+            <div class="form-floating">
+                <input type="text" data-required-error="{_'Vyplňte název'}" class="form-control"
+                       id="price-group-new-name" placeholder="{_'Základní, student,...', context: 'pricegroups.name'}">
+                <label for="price-group-new-name">{_'Název'}</label>
+            </div>
+            <div class="form-floating">
+                <input type="number" step="0.01" data-required-error="{_'Vyplňte cenu'}" class="form-control"
+                       id="price-group-new-price" placeholder="{_'Cena'}">
+                <label for="price-group-new-price">{_'Cena'}</label>
+            </div>
+            <button id="create-price-group" type="button" class="btn btn-success create" data-toggle="tooltip"
+                    title="{_'Vytvořit'}">
+                <i class="fa-solid fa-plus"></i>
+            </button>
+        </div>
+        <template id="new-price-group-template">{include priceGroup}</template>
+        <p class="my-4">
+            <button class="btn btn-success btn-lg" type="submit" data-action="autosave" data-prevent="true">
+                {_'Odeslat', context: 'actions'}
+            </button>
+        </p>
 	</form>
 {/block}
+
+{define priceGroup, string|int $id = '#', string $name = '', int|float $price = 100}
+    <div class="input-group price-group my-3" data-id="{$id}">
+        <div class="form-floating">
+            <input type="text" data-required-error="{_'Vyplňte název'}" required class="form-control name-input"
+                   value="{$name}"
+                   id="price-group-{$id}-name" placeholder="{_'Základní, student,...', context: 'pricegroups.name'}"
+                   name="pricegroups[{$id}][name]">
+            <label for="price-group-{$id}-name">{_'Název'}</label>
+        </div>
+        <div class="form-floating">
+            <input type="number" step="0.01" data-required-error="{_'Vyplňte cenu'}" required
+                   class="form-control price-input" value="{$price}"
+                   id="price-group-{$id}-price" placeholder="{_'Cena'}" name="pricegroups[{$id}][price]">
+            <label for="price-group-{$id}-price">{_'Cena'}</label>
+        </div>
+        <button type="button" class="btn btn-danger delete" data-toggle="tooltip" title="{_'Smazat'}">
+            <i class="fa-solid fa-trash"></i>
+        </button>
+    </div>
+{/define}

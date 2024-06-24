@@ -23,12 +23,13 @@ export default class NewGameGroup implements NewGameGroupInterface {
 	gameGroupsSelect: HTMLSelectElement;
 	groupDetailModalDom: HTMLDivElement;
 	private readonly groupDetailModal: Modal;
-	private groupDetailPlayersTable: HTMLTableElement;
+	private readonly groupDetailPlayersTable: HTMLTableElement;
 	private groupDetailPaymentInfo: HTMLDivElement;
 	private groupDetailPaidBtn: HTMLButtonElement;
 	private groupDetailCancelBtn: HTMLButtonElement;
 	private priceGroups: Map<number, PriceGroup> = new Map();
-	private groupDetailSelectAll: HTMLInputElement;
+	private priceGroupsAll: Map<number, PriceGroup> = new Map();
+	private readonly groupDetailSelectAll: HTMLInputElement;
 	private groups: Map<number, GameGroupData> = new Map();
 	private groupDetail: GameGroupData | null = null;
 	private groupPlayers: Map<string, GroupDetailPlayer> = new Map();
@@ -50,6 +51,10 @@ export default class NewGameGroup implements NewGameGroupInterface {
 		const priceGroups: PriceGroup[] = JSON.parse(this.groupDetailPlayersTable.dataset.priceGroups);
 		for (const priceGroup of priceGroups) {
 			this.priceGroups.set(priceGroup.id, priceGroup);
+		}
+		const priceGroupsAll: PriceGroup[] = JSON.parse(this.groupDetailPlayersTable.dataset.priceGroupsAll);
+		for (const priceGroup of priceGroupsAll) {
+			this.priceGroupsAll.set(priceGroup.id, priceGroup);
 		}
 
 		this.groupDetailSelectAll = this.groupDetailPlayersTable.querySelector('#select-all-players') as HTMLInputElement;
@@ -540,6 +545,7 @@ export default class NewGameGroup implements NewGameGroupInterface {
 				player,
 				this.groupDetailPlayersTable,
 				this.priceGroups,
+				this.priceGroupsAll,
 				(player) => {
 					this.selectedPlayers.add(player);
 					this.updateCounts();
@@ -582,7 +588,7 @@ export default class NewGameGroup implements NewGameGroupInterface {
 
 			let html = `<ul class="m-0">`;
 			let sumMoney = 0;
-			for (const [id, priceGroup] of this.priceGroups) {
+			for (const [id, priceGroup] of this.priceGroupsAll) {
 				if (!(id in sums)) {
 					continue;
 				}
@@ -638,6 +644,7 @@ export default class NewGameGroup implements NewGameGroupInterface {
 			};
 		}
 		if (!('payment' in group.meta)) {
+			// @ts-ignore
 			group.meta.payment = {};
 		}
 

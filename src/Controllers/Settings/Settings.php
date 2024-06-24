@@ -10,6 +10,7 @@ use App\GameModels\Factory\GameFactory;
 use App\GameModels\Vest;
 use App\Models\DataObjects\Theme;
 use App\Models\GameGroup;
+use App\Models\PriceGroup;
 use App\Services\FeatureConfig;
 use Dibi\Exception;
 use JsonException;
@@ -50,6 +51,7 @@ class Settings extends Controller
      */
     public function show() : ResponseInterface {
         $this->params['theme'] = Theme::get();
+        $this->params['priceGroups'] = PriceGroup::getAll();
         return $this->view('pages/settings/index');
     }
 
@@ -123,6 +125,8 @@ class Settings extends Controller
             }
 
             $this->handleLogoUpload($request);
+
+            $this->handlePriceGroups($request);
 
             // Update theme
             $theme = Theme::get();
@@ -212,5 +216,28 @@ class Settings extends Controller
 
         return $this->view('pages/settings/groups');
     }
+
+    private function handlePriceGroups(Request $request) : void {
+        /** @var array<numeric, array{name?:string,price?:numeric}> $priceGroups */
+        $priceGroups = $request->getPost('pricegroups', []);
+        if (!is_array($priceGroups) || empty($priceGroups)) {
+            return;
+        }
+
+        foreach ($priceGroups as $id => $priceGroupData) {
+            try {
+                $priceGroup = PriceGroup::get((int) $id);
+            } catch (ModelNotFoundException | ValidationException $e) {
+                $request->passErrors[] = $e->getMessage();
+                continue;
+            }
+
+            $priceGroup->name = $priceGroupData['name'] ?? $priceGroup->name;
+            $priceGroup->setPrice((float) ($priceGroupData['price'] ?? $priceGroup->getPrice()));
+
+            $priceGroup->save();
+        }
+    }
+
 
 }

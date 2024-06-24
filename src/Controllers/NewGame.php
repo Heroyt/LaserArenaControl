@@ -75,6 +75,7 @@ class NewGame extends Controller
         $this->params['musicModes'] = MusicMode::getAll();
         $this->params['playlists'] = Playlist::getAll();
         $this->params['priceGroups'] = PriceGroup::getAll();
+        $this->params['priceGroupsAll'] = PriceGroup::query()->get(); // Get event the deleted price groups
         $this->params['musicGroups'] = [];
         foreach ($this->params['musicModes'] as $music) {
             if (!$music->public) {

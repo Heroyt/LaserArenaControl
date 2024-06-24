@@ -4385,3 +4385,13 @@ msgstr ""
 
 msgid "Tisknout"
 msgstr ""
+
+msgid "Cenové úrovně"
+msgstr ""
+
+msgctxt "pricegroups.name"
+msgid "Základní, student,..."
+msgstr ""
+
+msgid "Vyplňte cenu"
+msgstr ""

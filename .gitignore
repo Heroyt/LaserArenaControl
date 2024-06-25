@@ -57,3 +57,4 @@ docker/redis
 .pid
 ssl
 lac
+!src/Cli/Commands/Logs/

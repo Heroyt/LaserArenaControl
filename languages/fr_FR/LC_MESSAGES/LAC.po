@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: French\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2024-06-24 15:22\n"
+"PO-Revision-Date: 2024-06-26 10:50\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -4362,5 +4362,9 @@ msgid "Základní, student,..."
 msgstr ""
 
 msgid "Vyplňte cenu"
+msgstr ""
+
+msgctxt "print"
+msgid "Vypnout mezipaměť"
 msgstr ""
 

@@ -85,26 +85,29 @@ readonly class ResultPrintService
         } catch (GameModeNotFoundException) {
         }
 
-        $content = $this->gotenberg->chromium->getFromHTML(
-                           str_replace(
-                             [
-                               App::getInstance()->getBaseUrl(),
-                               'dist/results/',
-                               'dist/',
-                               'assets/images/print/',
-                               'upload/',
-                             ],
-                             ['', '', '', '', ''],
-                             $this->getResultsHtml(
-                               $game,
-                               $style,
-                               $template,
-                               $copies,
-                               $cache
-                             )
-                           ),
-          additionalFiles: $additionalFiles,
-        );
+        $content = $this
+          ->gotenberg
+          ->chromium
+          ->getFromHTML(
+                             str_replace(
+                               [
+                                 App::getInstance()->getBaseUrl(),
+                                 'dist/results/',
+                                 'dist/',
+                                 'assets/images/print/',
+                                 'upload/',
+                               ],
+                               ['', '', '', '', ''],
+                               $this->getResultsHtml(
+                                 $game,
+                                 $style,
+                                 $template,
+                                 $copies,
+                                 $cache
+                               )
+                             ),
+            additionalFiles: $additionalFiles,
+          );
 
         if (!empty($content)) {
             file_put_contents($pdfFile, $content);

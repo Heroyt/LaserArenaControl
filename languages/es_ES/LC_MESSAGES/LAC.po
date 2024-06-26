@@ -4371,3 +4371,7 @@ msgstr ""
 
 msgid "Vyplňte cenu"
 msgstr ""
+
+msgctxt "print"
+msgid "Vypnout mezipaměť"
+msgstr ""

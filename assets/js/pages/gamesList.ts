@@ -1,23 +1,47 @@
 import {startLoading, stopLoading} from '../loaders';
-import {Modal} from 'bootstrap';
+import {Modal, Tooltip} from 'bootstrap';
 import {changeGameMode, recalcGameSkill, reimportResults, setGameGroup, syncGame} from '../api/endpoints/games';
 import {ErrorResponse, FormSaveResponse} from '../includes/apiClient';
 import {createGameGroup, getGameGroups} from '../api/endpoints/gameGroups';
 import {planGameHighlightsTask, planGamePrecacheTask} from '../api/endpoints/tasks';
 
 export default function initGamesList() {
-	function getCheckedGameCodes(gameCode: string): string[] {
-		const codes: string[] = [];
+	const checkAll = document.getElementById('game-select-check-all') as HTMLInputElement;
+	const checks = document.querySelectorAll<HTMLInputElement>('.game-select-check');
+	const checked = new Set<HTMLInputElement>;
+
+	function* getCheckedGameCodes(gameCode: string): Generator<string> {
 		if (!gameCode || gameCode === '') {
-			const checks = document.querySelectorAll('.game-select-check:checked') as NodeListOf<HTMLInputElement>;
-			checks.forEach(check => {
-				codes.push(check.value);
-			});
+			for (const input of checked) {
+				yield input.value;
+			}
 		} else {
-			codes.push(gameCode);
+			yield gameCode;
 		}
-		return codes;
 	}
+
+	for (const check of checks) {
+		check.addEventListener('change', () => {
+			if (check.checked) {
+				checked.add(check);
+			} else {
+				checked.delete(check);
+			}
+
+			checkAll.checked = checked.size === checks.length;
+		});
+	}
+
+	checkAll.addEventListener('change', () => {
+		for (const check of checks) {
+			check.checked = checkAll.checked;
+			if (check.checked) {
+				checked.add(check);
+			} else {
+				checked.delete(check);
+			}
+		}
+	});
 
 	import(/* webpackChunkName: "datePickers" */ '../datePickers').then(module => {
 		// Init date pickers
@@ -179,18 +203,17 @@ export default function initGamesList() {
 						groups[group] = btn.dataset.groupname;
 					}
 				} else {
-					const checks = document.querySelectorAll('.game-select-check:checked') as NodeListOf<HTMLInputElement>;
-					checks.forEach(check => {
+					for (const check of checked) {
 						groupCodes.push(check.value);
 						if (check.dataset.group) {
 							groups[check.dataset.group] = check.dataset.groupname;
 						}
-					});
+					}
 				}
 				getGameGroups()
 					.then(response => {
 						response.forEach(groupData => {
-							let option = groupModalSelect.querySelector(`option[value="${groupData.id}"]`) as HTMLOptionElement;
+							let option = groupModalSelect.querySelector<HTMLOptionElement>(`option[value="${groupData.id}"]`);
 							if (!option) {
 								option = document.createElement('option');
 								option.value = groupData.id.toString();
@@ -241,35 +264,44 @@ export default function initGamesList() {
 			}
 
 			const promises: Promise<FormSaveResponse>[] = [];
-			groupCodes.forEach(code => {
+			for (const code of groupCodes) {
 				promises.push(setGameGroup(code, groupId));
-			});
+			}
 
 			Promise.all(promises)
 				.then(() => {
 					// Update data for all games
-					groupCodes.forEach(code => {
-						const btns = document.querySelectorAll(`.select-group[data-code="${code}"]`) as NodeListOf<HTMLButtonElement>;
+					for (const code of groupCodes) {
+						const btns = document.querySelectorAll<HTMLButtonElement>(`.select-group[data-code="${code}"]`);
 						const groupVal = groupId === 0 ? '' : groupId.toString();
-						btns.forEach(btn => {
+						for (const btn of btns) {
+							const tooltip = Tooltip.getOrCreateInstance(btn);
 							if (groupId === 0) {
 								btn.classList.add('btn-primary');
 								btn.classList.remove('btn-success');
+								btn.title = btn.dataset.label;
+								btn.ariaLabel = btn.dataset.label;
+								btn.dataset.bsOriginalTitle = btn.dataset.label;
+								tooltip.setContent({'.tooltip-inner': btn.dataset.label});
 							} else {
 								btn.classList.remove('btn-primary');
 								btn.classList.add('btn-success');
+								btn.title = groupName;
+								btn.ariaLabel = groupName;
+								btn.dataset.bsOriginalTitle = groupName;
+								tooltip.setContent({'.tooltip-inner': groupName});
 							}
 							btn.dataset.group = groupVal;
 							btn.setAttribute('data-group', groupVal);
 							btn.dataset.groupname = groupName;
 							btn.setAttribute('data-groupname', groupName);
-						});
-						const check = document.querySelector(`.game-select-check[value="${code}"]`) as HTMLInputElement;
+						}
+						const check = document.querySelector<HTMLInputElement>(`.game-select-check[value="${code}"]`);
 						check.dataset.group = groupVal;
 						check.setAttribute('data-group', groupVal);
 						check.dataset.groupname = groupName;
 						check.setAttribute('data-groupname', groupName);
-					});
+					}
 					stopLoading(true);
 				})
 				.catch(e => {

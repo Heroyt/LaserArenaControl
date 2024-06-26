@@ -33,9 +33,15 @@ metrics:
     results_printed:
       type: counter
       help: "How many results were printed (each copy is counted)."
+      labels:
+        - language
+        - template
     games_printed:
       type: counter
       help: "How many results were printed."
+      labels:
+        - language
+        - template
     load_time:
       type: gauge
       help: "How much time does it take to load a game (create a 0000.game file and music)."
@@ -55,6 +61,7 @@ rpc:
   listen: tcp://0.0.0.0:6001
 http:
   address: 0.0.0.0:8001
+  access_logs: true
   middleware:
     - headers
     - http_metrics

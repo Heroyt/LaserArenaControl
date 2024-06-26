@@ -114,8 +114,8 @@ class Results extends Controller
         if (!$request->getGet('html', false)) {
             $pdfFile = $this->printService->getResultsPdf($game, $style, $template, $copies, $cache);
             if ($pdfFile !== '' && file_exists($pdfFile)) {
-                $this->metrics->add('results_printed', $copies);
-                $this->metrics->add('games_printed', 1);
+                $this->metrics->add('results_printed', $copies, [$this->getApp()::getShortLanguageCode(), $template]);
+                $this->metrics->add('games_printed', 1, [$this->getApp()::getShortLanguageCode(), $template]);
                 return new Response(
                   200, ['Content-Type' => 'application/pdf;filename=results.pdf'], fopen($pdfFile, 'rb')
                 );

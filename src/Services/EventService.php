@@ -20,7 +20,9 @@ class EventService
 
 	private static string $eventUrl;
 
-	public function __construct(private readonly Redis $redis) {
+    public function __construct(
+      private readonly Redis $redis,
+    ) {
 	}
 
 	public static function getEventUrl(): string {

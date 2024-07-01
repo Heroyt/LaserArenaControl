@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: English\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2024-06-26 10:50\n"
+"PO-Revision-Date: 2024-07-01 12:56\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -4231,156 +4231,156 @@ msgstr "Cache"
 
 msgctxt "pageTitles.settings"
 msgid "Skupiny"
-msgstr ""
+msgstr "Groups"
 
 msgid "Tables"
-msgstr ""
+msgstr "Tables"
 
 msgid "Turnaje"
-msgstr ""
+msgstr "Tournaments"
 
 msgctxt "null"
 msgid "Obsazený"
 msgid_plural "null"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Occupied"
+msgstr[1] "Occupied"
 
 msgid "Playlisty"
-msgstr ""
+msgstr "Playlists"
 
 msgid "Smazat"
-msgstr ""
+msgstr "Delete"
 
 msgid "Skupiny"
-msgstr ""
+msgstr "Groups"
 
 msgid "Deaktivovat"
-msgstr ""
+msgstr "Disable"
 
 msgid "Smazat vše"
-msgstr ""
+msgstr "Delete all"
 
 msgid "Nahrát"
-msgstr ""
+msgstr "Upload"
 
 msgid "Seznam her"
-msgstr ""
+msgstr "Game list"
 
 msgid "Čas"
-msgstr ""
+msgstr "Time"
 
 msgid "Herní mód"
-msgstr ""
+msgstr "Game mode"
 
 msgid "Hráči"
-msgstr ""
+msgstr "Players"
 
 msgid "Tisk"
-msgstr ""
+msgstr "Print"
 
 msgid "Zobrazit poslední hru na výsledkové tabuli"
-msgstr ""
+msgstr "Show last game on the score board"
 
 msgid "Výsledková tabule"
-msgstr ""
+msgstr "Score board"
 
 msgctxt "month"
 msgid "Červen"
-msgstr ""
+msgstr "June"
 
 msgid "Zobrazit poslední hru"
-msgstr ""
+msgstr "Show last game"
 
 msgid "Herní módy"
-msgstr ""
+msgstr "Game modes"
 
 msgid "Popis"
-msgstr ""
+msgstr "Description"
 
 msgctxt "settings"
 msgid "Vzhled"
-msgstr ""
+msgstr "Theme"
 
 msgctxt "settings.theme"
 msgid "Hlavní barva"
-msgstr ""
+msgstr "Main Color"
 
 msgctxt "settings.theme"
 msgid "Nastavení primárně pro barvy výsledkové tabule."
-msgstr ""
+msgstr "This setting applies primarily to the colors of the score board."
 
 msgctxt "settings.theme"
 msgid "Primární barva"
-msgstr ""
+msgstr "Primary color"
 
 msgctxt "settings.theme.primary_color"
 msgid "Barva se používá pro zvýraznění některých prvků hlavně na výsledkové tabuli."
-msgstr ""
+msgstr "Color is used to highlight certain elements mainly on the scoreboard."
 
 msgctxt "settings.theme"
 msgid "Sekundární barva"
-msgstr ""
+msgstr "Secondary color"
 
 msgctxt "settings.theme.secondary_color"
 msgid "Barva se používá pro zvýraznění některých prvků (pozadí) hlavně na výsledkové tabuli."
-msgstr ""
+msgstr "Color is used to highlight certain elements (background) mainly on the scoreboard."
 
 msgid "Detail skupiny"
-msgstr ""
+msgstr "Group detail"
 
 msgid "Vytvořit"
-msgstr ""
+msgstr "Create"
 
 msgid "Vyplňte název"
-msgstr ""
+msgstr "Fill in the name"
 
 msgid "Skupina %s"
-msgstr ""
+msgstr "Group %s"
 
 msgid "Zobrazit detail skupiny"
-msgstr ""
+msgstr "Show group detail"
 
 msgid "Hráč"
-msgstr ""
+msgstr "Player"
 
 msgid "Cenová kategorie"
-msgstr ""
+msgstr "Price category"
 
 msgid "Zaplaceno"
-msgstr ""
+msgstr "Paid"
 
 msgid "Odehráno"
-msgstr ""
+msgstr "Played"
 
 msgid "Celkem"
-msgstr ""
+msgstr "Total"
 
 msgid "Zrušit"
-msgstr ""
+msgstr "Cancel"
 
 msgid "Nezaplaceno"
-msgstr ""
+msgstr "Unpaid"
 
 msgid "Zbývá zaplatit"
-msgstr ""
+msgstr "To pay"
 
 msgid "Nastavit všem"
-msgstr ""
+msgstr "Set all"
 
 msgid "Tisknout"
-msgstr ""
+msgstr "Print"
 
 msgid "Cenové úrovně"
-msgstr ""
+msgstr "Price categories"
 
 msgctxt "pricegroups.name"
 msgid "Základní, student,..."
-msgstr ""
+msgstr "Base, student,..."
 
 msgid "Vyplňte cenu"
-msgstr ""
+msgstr "Fill in the price"
 
 msgctxt "print"
 msgid "Vypnout mezipaměť"
-msgstr ""
+msgstr "Turn off cache"
 

@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: Czech\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2024-06-26 10:50\n"
+"PO-Revision-Date: 2024-07-01 12:56\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=4; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 3;\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -4277,158 +4277,158 @@ msgstr "Mezipaměť"
 
 msgctxt "pageTitles.settings"
 msgid "Skupiny"
-msgstr ""
+msgstr "Skupiny"
 
 msgid "Tables"
-msgstr ""
+msgstr "Stoly"
 
 msgid "Turnaje"
-msgstr ""
+msgstr "Turnaje"
 
 msgctxt "null"
 msgid "Obsazený"
 msgid_plural "null"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "Obsazený"
+msgstr[1] "Obsazené"
+msgstr[2] "Obsazené"
+msgstr[3] "Obsazené"
 
 msgid "Playlisty"
-msgstr ""
+msgstr "Playlisty"
 
 msgid "Smazat"
-msgstr ""
+msgstr "Smazat"
 
 msgid "Skupiny"
-msgstr ""
+msgstr "Skupiny"
 
 msgid "Deaktivovat"
-msgstr ""
+msgstr "Deaktivovat"
 
 msgid "Smazat vše"
-msgstr ""
+msgstr "Smazat vše"
 
 msgid "Nahrát"
-msgstr ""
+msgstr "Nahrát"
 
 msgid "Seznam her"
-msgstr ""
+msgstr "Seznam her"
 
 msgid "Čas"
-msgstr ""
+msgstr "Čas"
 
 msgid "Herní mód"
-msgstr ""
+msgstr "Herní mód"
 
 msgid "Hráči"
-msgstr ""
+msgstr "Hráči"
 
 msgid "Tisk"
-msgstr ""
+msgstr "Tisk"
 
 msgid "Zobrazit poslední hru na výsledkové tabuli"
-msgstr ""
+msgstr "Zobrazit poslední hru na výsledkové tabuli"
 
 msgid "Výsledková tabule"
-msgstr ""
+msgstr "Výsledková tabule"
 
 msgctxt "month"
 msgid "Červen"
-msgstr ""
+msgstr "Červen"
 
 msgid "Zobrazit poslední hru"
-msgstr ""
+msgstr "Zobrazit poslední hru"
 
 msgid "Herní módy"
-msgstr ""
+msgstr "Herní módy"
 
 msgid "Popis"
-msgstr ""
+msgstr "Popis"
 
 msgctxt "settings"
 msgid "Vzhled"
-msgstr ""
+msgstr "Vzhled"
 
 msgctxt "settings.theme"
 msgid "Hlavní barva"
-msgstr ""
+msgstr "Hlavní barva"
 
 msgctxt "settings.theme"
 msgid "Nastavení primárně pro barvy výsledkové tabule."
-msgstr ""
+msgstr "Nastavení primárně pro barvy výsledkové tabule."
 
 msgctxt "settings.theme"
 msgid "Primární barva"
-msgstr ""
+msgstr "Primární barva"
 
 msgctxt "settings.theme.primary_color"
 msgid "Barva se používá pro zvýraznění některých prvků hlavně na výsledkové tabuli."
-msgstr ""
+msgstr "Barva se používá pro zvýraznění některých prvků hlavně na výsledkové tabuli."
 
 msgctxt "settings.theme"
 msgid "Sekundární barva"
-msgstr ""
+msgstr "Sekundární barva"
 
 msgctxt "settings.theme.secondary_color"
 msgid "Barva se používá pro zvýraznění některých prvků (pozadí) hlavně na výsledkové tabuli."
-msgstr ""
+msgstr "Barva se používá pro zvýraznění některých prvků (pozadí) hlavně na výsledkové tabuli."
 
 msgid "Detail skupiny"
-msgstr ""
+msgstr "Detail skupiny"
 
 msgid "Vytvořit"
-msgstr ""
+msgstr "Vytvořit"
 
 msgid "Vyplňte název"
-msgstr ""
+msgstr "Vyplňte název"
 
 msgid "Skupina %s"
-msgstr ""
+msgstr "Skupina %s"
 
 msgid "Zobrazit detail skupiny"
-msgstr ""
+msgstr "Zobrazit detail skupiny"
 
 msgid "Hráč"
-msgstr ""
+msgstr "Hráč"
 
 msgid "Cenová kategorie"
-msgstr ""
+msgstr "Cenová kategorie"
 
 msgid "Zaplaceno"
-msgstr ""
+msgstr "Zaplaceno"
 
 msgid "Odehráno"
-msgstr ""
+msgstr "Odehráno"
 
 msgid "Celkem"
-msgstr ""
+msgstr "Celkem"
 
 msgid "Zrušit"
-msgstr ""
+msgstr "Zrušit"
 
 msgid "Nezaplaceno"
-msgstr ""
+msgstr "Nezaplaceno"
 
 msgid "Zbývá zaplatit"
-msgstr ""
+msgstr "Zbývá zaplatit"
 
 msgid "Nastavit všem"
-msgstr ""
+msgstr "Nastavit všem"
 
 msgid "Tisknout"
-msgstr ""
+msgstr "Tisknout"
 
 msgid "Cenové úrovně"
-msgstr ""
+msgstr "Cenové úrovně"
 
 msgctxt "pricegroups.name"
 msgid "Základní, student,..."
-msgstr ""
+msgstr "Základní, student,..."
 
 msgid "Vyplňte cenu"
-msgstr ""
+msgstr "Vyplňte cenu"
 
 msgctxt "print"
 msgid "Vypnout mezipaměť"
-msgstr ""
+msgstr "Vypnout mezipaměť"
 

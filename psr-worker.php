@@ -5,6 +5,7 @@ use App\Api\Response\ErrorType;
 use App\Controllers\E404;
 use App\Controllers\E500;
 use App\Core\App;
+use App\Core\Info;
 use App\Services\TaskProducer;
 use App\Tasks\GameImportTask;
 use App\Tasks\Payloads\GameImportPayload;
@@ -125,19 +126,18 @@ switch ($env->getMode()) {
                 }
 
                 $request = RequestFactory::fromPsrRequest($request);
+                $app->setRequest($request);
 
                 try {
-                    $app->setRequest($request);
-
-                    //var_dump('Request: '.$request->getUri());
-                    //var_dump('App: '.$app->getRequest()->getUri());
-
                     $session = $app->session;
                     if (!$session->isInitialized()) {
                         $session->init();
                     }
 
-                    $psr7->respond($app->run()->withAddedHeader('Content-Language', $app->translations->getLang()));
+                    $psr7->respond(
+                      $app->run()
+                          ->withAddedHeader('Content-Language', $app->translations->getLang())
+                    );
                     $session->close();
                     $app->translations->updateTranslations();
                 } catch (RouteNotFoundException $e) { // 404 error
@@ -222,6 +222,10 @@ switch ($env->getMode()) {
                 $psr7->respond(new Response(500, [], $e->getMessage()));
                 file_put_contents('php://stderr', (string) $e);
             }
+
+            // Clear cycle
+            Info::clearStaticCache();
+            unset($request);
         }
         break;
 }

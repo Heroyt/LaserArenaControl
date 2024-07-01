@@ -18,7 +18,7 @@ use Throwable;
 class Info
 {
 
-	public const TABLE = 'page_info';
+    public const string TABLE = 'page_info';
 	/** @var array<string, mixed> */
 	private static array $info = [];
 
@@ -90,5 +90,9 @@ class Info
 		$cache->clean([Cache::Tags => ['info/'.$key]]);
 		$cache->save('info.'.$key, $serialized, [$cache::Tags => ['info', 'info/'.$key]]);
 	}
+
+    public static function clearStaticCache() : void {
+        self::$info = [];
+    }
 
 }

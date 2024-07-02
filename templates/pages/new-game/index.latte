@@ -100,7 +100,7 @@
             load: `{_'Nahrát', context: 'newGame.preparedGames.actions'}`,
             delete: `{_'Smazat', context: 'actions'}`,
         }
-        const gameData = {$loadGame};
+        const gameData = {jsonSerialize($loadGame)|noescape};
         const system = {$system};
         const vestIcon = {svgIcon('Vesta', 'auto', '1rem')|replace:"\n", ''};
     </script>

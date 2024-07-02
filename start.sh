@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Update project
 git fetch --all --tags
@@ -19,17 +19,34 @@ else
   echo "Skipping git fetch for dev"
 fi
 
+composer preload
 composer dump-autoload
 
-if [ ! -f "package-lock.json" ]
+# Use PNPM or NPM
+if ! command -v pnpm &> /dev/null
 then
-  npm update
-else
-  npm install
-fi
+  # Update / Install js libraries
+  if [ ! -f "package-lock.json" ]
+  then
+    npm update
+  else
+    npm install
+  fi
 
-# Build assets
-npm run build
+  # Build assets
+  npm run build
+else
+  # Update / Install js libraries
+  if [ ! -f "pnpm-lock.yaml" ]
+  then
+    pnpm update
+  else
+    pnpm install
+  fi
+
+  # Build assets
+  pnpm run build
+fi
 
 # Clear DI, model and info cache
 ./bin/console cache:clean -dmi
@@ -41,8 +58,7 @@ npm run build
 
 # Run project
 echo 'Starting...'
-echo $PWD
+echo "$PWD"
 rr -v
 cron &
 rr serve -c .rr.yaml
-echo $?

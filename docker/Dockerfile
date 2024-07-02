@@ -131,6 +131,9 @@ COPY --from=node_base /usr/local/lib/node_modules /usr/local/lib/node_modules
 COPY --from=node_base /usr/local/bin/node /usr/local/bin/node
 RUN ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm
 
+# Install PNPM
+RUN wget -qO- https://get.pnpm.io/install.sh | ENV="$HOME/.bashrc" SHELL="$(which bash)" bash -
+
 # Project files
 RUN mkdir -p "/var/www/.npm" && chown -R 33:33 "/var/www/.npm"
 
@@ -143,6 +146,7 @@ RUN git init \
     && git remote add origin https://github.com/Heroyt/LaserArenaControl.git \
     && git fetch --all --tags \
     && git checkout -t origin/stable \
+    && git switch stable \
     && git config pull.ff only --autostash \
     && git pull \
     && git submodule init && git submodule update --init --recursive --remote \
@@ -171,5 +175,5 @@ SHELL ["/bin/bash"]
 
 # Start command
 # Updates project, builds it and runs a start script which starts WS event server and Apache
-ENTRYPOINT ["sh", "./start.sh"]
-CMD ["sh", "./start.sh"]
+ENTRYPOINT ["/bin/bash", "./start.sh"]
+CMD ["/bin/bash", "./start.sh"]

@@ -356,6 +356,12 @@ class Player implements JsonSerializable
 	 */
 	public function jsonSerialize() : array {
 		$data = get_object_vars($this);
+      $data['player'] = [
+        'id'    => $this->player->id,
+        'name'  => $this->player->name,
+        'skill' => $this->player->skill,
+        'vest'  => $this->player->vest,
+      ];
 		$data['skill'] = $this->getSkill();
 		$data['avgSkill'] = $this->getSkill();
 		$data['vest'] = $this->getFavouriteVest();

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE latte PUBLIC "-//LATTE//Latte plugin XML V0.0.1//EN" ".idea/intellij-latte-pro/xmlSources/Latte.dtd">
+<latte version="1" vendor="heroyt/laser_arena_control">
+    <tags>
+    </tags>
+    <functions>
+        <function name="json" returnType="string" documentation="Json encode a value">
+            <functionArguments>
+                <functionArgument name="data" type="mixed" description="value to encode"/>
+            </functionArguments>
+        </function>
+        <function name="xml" returnType="string" documentation="XML encode a value">
+            <functionArguments>
+                <functionArgument name="data" type="mixed" description="value to encode"/>
+            </functionArguments>
+        </function>
+        <function name="csv" returnType="string" documentation="csv encode a value">
+            <functionArguments>
+                <functionArgument name="data" type="mixed" description="value to encode"/>
+            </functionArguments>
+        </function>
+    </functions>
+    <filters>
+        <filter name="json" description="Json encode a value"/>
+        <filter name="xml" description="XML encode a value"/>
+        <filter name="csv" description="csv encode a value"/>
+    </filters>
+</latte>

@@ -3,6 +3,7 @@ includes:
 	- gate.neon
 	- roadrunner.neon
 	- console.neon
+	- symfony.neon
 extensions:
 	caching: Nette\Bridges\CacheDI\CacheExtension(%constants.tempDir%)
 	decorator: Nette\DI\Extensions\DecoratorExtension
@@ -53,12 +54,18 @@ services:
 		setup:
 			- connect(%redis.host%)
 
-	symfony.lock.store: Symfony\Component\Lock\Store\RedisStore(@redis)
-	symfony.lock.factory: Symfony\Component\Lock\LockFactory(@symfony.lock.store)
-
 	caching.journal: Lsr\Core\Caching\RedisJournal(@redis)
 	cache.storage: Lsr\Core\Caching\RedisStorage(@redis, '', @caching.journal)
 	cache: Lsr\Core\Caching\Cache(@cache.storage, null, %constants.debug%)
+
+	templating.latte.lac:
+		create: App\Latte\LacExtension
+		tags:
+			- templating
+
+	templating.latte.engine:
+		setup:
+			- addExtension(@templating.latte.lac)
 
 	events: App\Services\EventService
 	features:

@@ -25,7 +25,7 @@
 	{else}
 		<div>
             {_'Hromadné akce'}:
-			<div class="btn-group ms-2">
+            <div class="btn-group ms-2" id="bulk-actions">
 				{include gameActionGroup}
 				{include gameActionLigaSync}
 				{include gameActionReImport}
@@ -92,7 +92,13 @@
                                 <option value="">{_'Bez skupiny'}</option>
                                 <option value="new">{_'Nová skupina'}</option>
 							</select>
-                            <label for="group-select">{_'Skupina'}</label>
+                            <label for="group-select">
+                                {_'Skupina'}
+                                <div class="spinner-border" role="status"
+                                     style="--bs-spinner-width: 1rem; --bs-spinner-height: 1rem;">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </label>
 						</div>
 						<div class="form-group m-3 d-none" id="group-name">
                             <label for="group-name-input">{_'Název skupiny'}</label>

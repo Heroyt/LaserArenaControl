@@ -1,21 +1,15 @@
 import {Offcanvas} from 'bootstrap';
 import {startLoading, stopLoading} from '../../loaders';
-import {GameData, PhpDateTime} from '../../interfaces/gameInterfaces';
+import {GameData} from '../../interfaces/gameInterfaces';
 import Game from '../../game/game';
 import {
 	deleteAllPreparedGames,
 	deletePreparedGame,
 	getPreparedGames,
+	PreparedGameData,
 	sendPreparedGame,
 } from '../../api/endpoints/preparedGames';
 import {initTooltips} from '../../includes/tooltips';
-
-interface PreparedGameData {
-	id_game: number,
-	datetime: PhpDateTime,
-	data: GameData,
-	active: 0 | 1 | boolean,
-}
 
 export default class NewGamesPrepared {
 
@@ -32,7 +26,7 @@ export default class NewGamesPrepared {
 
 		document.getElementById('deleteAllPreparedGames').addEventListener('click', () => {
 			startLoading();
-            deleteAllPreparedGames()
+			deleteAllPreparedGames()
 				.then(() => {
 					stopLoading(true);
 					this.updatePreparedGames();
@@ -47,7 +41,7 @@ export default class NewGamesPrepared {
 			const data = this.game.export();
 
 			startLoading();
-            sendPreparedGame(data)
+			sendPreparedGame(data)
 				.then(() => {
 					stopLoading(true);
 					this.updatePreparedGames();
@@ -77,7 +71,7 @@ export default class NewGamesPrepared {
 
 		deleteBtn.addEventListener('click', () => {
 			startLoading();
-            deletePreparedGame(id)
+			deletePreparedGame(id)
 				.then(() => {
 					stopLoading(true);
 					preparedGameWrapper.remove();
@@ -85,15 +79,15 @@ export default class NewGamesPrepared {
 				.catch(e => {
 					stopLoading(false);
 					console.error(e);
-				})
+				});
 		});
 	}
 
 	updatePreparedGames() {
-        getPreparedGames()
-            .then(response => {
+		getPreparedGames()
+			.then(response => {
 				this.gamesPreparedWrapper.innerHTML = '';
-                response.forEach(groupData => {
+				response.forEach(groupData => {
 					this.addPreparedGame(groupData);
 				});
 			});

@@ -192,10 +192,11 @@ export default function initNewGamePage() {
 				response.forEach(game => {
 						const test = lastGamesSelect.querySelector(`option[value="${game.code}"]`);
 						if (test) {
+							console.log('Skip', test);
 							return; // Do not add duplicates
 						}
 
-						const gameDate = new Date(game.start.date.replace(' ', 'T'));
+					const gameDate = new Date(game.start);
 
 						const option = document.createElement('option');
 						option.value = game.code;

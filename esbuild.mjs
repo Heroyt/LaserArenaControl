@@ -12,6 +12,8 @@ import {copy} from 'esbuild-plugin-copy';
 
 const watch = process.argv.includes('watch');
 
+console.time('Build');
+console.time('Fontawesome');
 await fontawesomeSubset({
     brands: ['discord'],
     regular: ['calendar', 'circle-xmark', 'circle-check'],
@@ -19,7 +21,9 @@ await fontawesomeSubset({
 }, "assets/fonts", {
     package: 'free', targetFormats: ['woff2', "woff", 'sfnt'],
 });
+console.timeEnd('Fontawesome');
 
+console.time('Prepare');
 /**
  * @type {{in:string,out:string}[][]}
  */
@@ -65,8 +69,7 @@ const moduleFiles = fs.readdirSync('./modules/')
         .flat();
 
 const entryPoints = [{out: 'main', in: 'assets/js/main.ts'}, {
-    out: 'main',
-    in: 'assets/scss/main.scss'
+    out: 'main', in: 'assets/scss/main.scss'
 }, //{out: 'bootstrap', in: 'assets/scss/bootstrap.scss'},
     {out: 'fontawesome', in: 'assets/scss/fontawesome.scss'}, ...fs.readdirSync('assets/scss/pages/')
             .filter(file => ['.css', '.scss'].includes(path.extname(file)))
@@ -98,7 +101,7 @@ const entryPoints = [{out: 'main', in: 'assets/js/main.ts'}, {
         }
     }), ...moduleFiles,];
 
-console.log(entryPoints);
+console.log('Entrypoints:', entryPoints);
 
 const buildOptions = {
     entryPoints,
@@ -114,21 +117,24 @@ const buildOptions = {
     color: true,
     treeShaking: true,
     external: ['/assets/fonts/*', '/assets/images/*'],
-    plugins: [sassPlugin({
-        embedded: true, cssImports: true, async transform(source, _) {
-            const {css} = await postcss([autoprefixer, cssnanoPlugin({preset: 'default'})])
-                    .process(source, {
-                        from: 'assets/scss', to: 'dist/scss'
-                    })
-            return css
-        }
-    }), copy({
-        // this is equal to process.cwd(), which means we use cwd path as base path to resolve `to` path
-        // if not specified, this plugin uses ESBuild.build outdir/outfile options as base path.
-        resolveFrom: 'cwd', assets: {
-            from: ['./node_modules/hls.js/dist/hls.worker*'], to: ['./dist',],
-        }, watch: true,
-    }),]
+    plugins: [
+        sassPlugin({
+            embedded: true, cssImports: true, async transform(source, _) {
+                const {css} = await postcss([autoprefixer, cssnanoPlugin({preset: 'default'})])
+                        .process(source, {
+                            from: 'assets/scss', to: 'dist/scss'
+                        })
+                return css
+            }
+        }),
+        copy({
+            // this is equal to process.cwd(), which means we use cwd path as base path to resolve `to` path
+            // if not specified, this plugin uses ESBuild.build outdir/outfile options as base path.
+            resolveFrom: 'cwd', assets: {
+                from: ['./node_modules/hls.js/dist/hls.worker*'], to: ['./dist',],
+            }, watch: true,
+        }),
+    ]
 };
 
 const compressOptions = {
@@ -137,17 +143,39 @@ const compressOptions = {
     }),]
 }
 
+// Clear previous chunks
+const chunkDir = path.join(buildOptions.outdir, 'chunks');
+let count = 0;
+for (const file of fs.readdirSync(chunkDir)) {
+    fs.unlinkSync(path.join(chunkDir, file));
+    count++;
+}
+console.log(`Removed ${count} old chunk files`);
+
 const ctx = await esbuild.context(buildOptions);
+console.timeEnd('Prepare');
 
 if (watch) {
     await ctx.watch();
-    console.log('watching...')
+    console.log('watching...');
 } else {
+    console.log('building...');
+    console.time('build');
     const result = await ctx.rebuild();
+    console.timeEnd('build');
+
+    console.log('compressing...');
+    console.time('compression');
     const compressResult = await esbuild.build(compressOptions);
+    console.timeEnd('compression');
+
     fs.writeFileSync('dist/meta.json', JSON.stringify(result.metafile));
+    fs.writeFileSync('dist/meta-compress.json', JSON.stringify(compressResult.metafile));
+
     await ctx.dispose();
 
+    console.log('building service worker...');
+    console.time('Service worker');
     await esbuild.build({
         entryPoints: ['assets/js/sw/service-worker.ts'],
         bundle: true,
@@ -182,4 +210,7 @@ if (watch) {
 
                 console.log(`Injected a manifest which will precache ${count} files, totaling ${size} bytes.`);
             });
+    console.timeEnd('Service worker');
 }
+
+console.timeEnd('Build');

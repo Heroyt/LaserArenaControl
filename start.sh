@@ -1,5 +1,7 @@
 #!/bin/bash
 
+echo "Entry: $SHELL $0"
+
 # Update project
 git fetch --all --tags
 if [ "$LAC_VERSION" = "stable" ]; then
@@ -23,8 +25,10 @@ composer preload
 composer dump-autoload
 
 # Use PNPM or NPM
+source ~/.bashrc
 if ! command -v pnpm &> /dev/null
 then
+  echo "Running with NPM"
   # Update / Install js libraries
   if [ ! -f "package-lock.json" ]
   then
@@ -36,6 +40,7 @@ then
   # Build assets
   npm run build
 else
+  echo "Running with PNPM"
   # Update / Install js libraries
   if [ ! -f "pnpm-lock.yaml" ]
   then

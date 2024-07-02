@@ -42,8 +42,8 @@ services:
     image: "heroyt/laser-arena-control:latest"
     working_dir: /var/www/
     command:
-      - /bin/sh
-      - ./startRR.sh
+      - /bin/bash
+      - ./start.sh
     links:
       - db
       - redis

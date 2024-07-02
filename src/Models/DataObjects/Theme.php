@@ -67,10 +67,14 @@ final class Theme
                     background-color: var(--team-{$system}-{$key});
                 }
                 .text-bg-team-{$system}-{$key} {
+                    --bg-color: var(--team-{$system}-{$key});
+                    --bs-table-bg: var(--team-{$system}-{$key});
+                    --text-color: var(--team-{$system}-{$key}-text);
                     background-color: var(--team-{$system}-{$key});
                     color: var(--team-{$system}-{$key}-text);
                 }
                 .text-team-{$system}-{$key} {
+                    --text-color: var(--team-{$system}-{$key});
                     color: var(--team-{$system}-{$key});
                 }
 
@@ -96,10 +100,14 @@ final class Theme
             background-color: var(--theme-primary-color);
         }
         .text-bg-theme-primary {
+            --bg-color: var(--theme-primary-color);
+            --bs-table-bg: var(--theme-primary-color);
+            --text-color: var(--theme-primary-color-text);
             background-color: var(--theme-primary-color);
             color: var(--theme-primary-color-text);
         }
         .text-theme-primary {
+            --text-color: var(--theme-primary-color);
             color: var(--theme-primary-color);
         }
         .bg-theme-secondary {
@@ -109,10 +117,14 @@ final class Theme
             background-color: var(--theme-secondary-color);
         }
         .text-bg-theme-secondary {
+            --bg-color: var(--theme-secondary-color);
+            --bs-table-bg: var(--theme-secondary-color);
+            --text-color: var(--theme-secondary-color-text);
             background-color: var(--theme-secondary-color);
             color: var(--theme-secondary-color-text);
         }
         .text-theme-secondary {
+            --text-color: var(--theme-secondary-color);
             color: var(--theme-secondary-color);
         }
         $gameColorsClasses

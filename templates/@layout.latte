@@ -5,7 +5,6 @@
 
 {varType string[] $errors}
 {varType array $notices}
-{varType array < string,string > $_COOKIE}
 
 {default string[] $addCss = []}
 {default string[] $addJs = []}
@@ -26,7 +25,7 @@
 {var string $mode = $page->app->getRequest()->getCookieParams()['mode'] ?? 'light'}
 
 <!DOCTYPE html>
-<html lang="{$page->app->translations->getLang()}" data-bs-theme="{$mode}">
+<html lang="{$page->app->translations->getLangId()}" data-bs-theme="{$mode}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"

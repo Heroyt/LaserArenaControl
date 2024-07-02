@@ -29,11 +29,18 @@ class GameGroups extends Controller
     public function listGroups(Request $request) : ResponseInterface {
         $groups = $request->getGet('all') !== null ? GameGroup::getAllByDate() : GameGroup::getActiveByDate();
         $data = [];
-        foreach ($groups as $group) {
-            $groupData = $group->jsonSerialize();
-            $groupData['players'] = $group->getPlayers();
-            $groupData['teams'] = $group->getTeams();
-            $data[] = $groupData;
+        if ($request->getGet('basic') !== null) {
+            foreach ($groups as $group) {
+                $data[] = $group->jsonSerialize();
+            }
+        }
+        else {
+            foreach ($groups as $group) {
+                $groupData = $group->jsonSerialize();
+                $groupData['players'] = $group->getPlayers();
+                $groupData['teams'] = $group->getTeams();
+                $data[] = $groupData;
+            }
         }
         return $this->respond($data);
     }

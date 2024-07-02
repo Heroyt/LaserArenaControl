@@ -158,7 +158,7 @@ RUN mkdir -p logs
 RUN mkdir -p temp
 RUN mkdir -p lmx
 RUN mkdir -p lmx/results
-RUN mkdir -p lmx/gamess
+RUN mkdir -p lmx/games
 
 ENV COMPOSER_ALLOW_SUPERUSER=1
 

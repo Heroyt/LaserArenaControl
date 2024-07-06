@@ -1,5 +1,7 @@
 <?php
 
+/** @noinspection PhpDynamicFieldDeclarationInspection */
+
 namespace App\Controllers;
 
 use App\Core\App;
@@ -14,6 +16,7 @@ use App\Models\MusicMode;
 use App\Models\Playlist;
 use App\Models\PriceGroup;
 use App\Services\FeatureConfig;
+use App\Templates\NewGame\NewGameParams;
 use LAC\Modules\Core\ControllerDecoratorInterface;
 use Lsr\Core\Controllers\Controller;
 use Lsr\Core\Exceptions\ValidationException;
@@ -23,12 +26,13 @@ use Lsr\Interfaces\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
 
+/**
+ * @property NewGameParams $params
+ */
 class NewGame extends Controller
 {
-
     public HookedTemplates $hookedTemplates;
     protected string $title = 'Nová hra';
-    protected string $description = '';
     /** @var ControllerDecoratorInterface[] */
     private array $decorators = [];
 
@@ -36,6 +40,7 @@ class NewGame extends Controller
       private readonly FeatureConfig $featureConfig,
     ) {
         parent::__construct();
+        $this->params = new NewGameParams();
     }
 
     public function init(RequestInterface $request) : void {
@@ -47,49 +52,54 @@ class NewGame extends Controller
         bdump($decorators);
         foreach ($decorators as $name => $attributes) {
             /** @var ControllerDecoratorInterface $decorator */
+            /** @phpstan-ignore-next-line */
             $this->decorators[$name] = $decorator = App::getService($name);
             $decorator->setController($this)->init();
         }
     }
 
     /**
-     * @return void
+     * @param  Request  $request
+     * @return ResponseInterface
      * @throws GameModeNotFoundException
-     * @throws ValidationException
      * @throws TemplateDoesNotExistException
      * @throws Throwable
+     * @throws ValidationException
      */
     public function show(Request $request) : ResponseInterface {
         $this->hookedTemplates = new HookedTemplates();
-        $this->params['addedTemplates'] = $this->hookedTemplates;
-        $this->params['featureConfig'] = $this->featureConfig;
-        $this->params['addCss'] = ['pages/newGame.css'];
+        $this->params->addedTemplates = $this->hookedTemplates;
+        $this->params->featureConfig = $this->featureConfig;
+        $this->params->addCss = ['pages/newGame.css'];
+
+        /** @var string|null $game */
         $game = $request->getGet('game');
 
-        $this->params['loadGame'] = !empty($game) ? GameFactory::getByCode($game) : null;
-        $this->params['system'] = $request->getGet('system', first(GameFactory::getSupportedSystems()));
-        $this->params['vests'] = Vest::getForSystem($this->params['system']);
-        $this->params['colors'] = GameFactory::getAllTeamsColors()[$this->params['system']];
-        $this->params['teamNames'] = GameFactory::getAllTeamsNames()[$this->params['system']];
-        $this->params['gameModes'] = GameModeFactory::getAll(['system' => $this->params['system']]);
-        $this->params['musicModes'] = MusicMode::getAll();
-        $this->params['playlists'] = Playlist::getAll();
-        $this->params['priceGroups'] = PriceGroup::getAll();
-        $this->params['priceGroupsAll'] = PriceGroup::query()->get(); // Get event the deleted price groups
-        $this->params['musicGroups'] = [];
-        foreach ($this->params['musicModes'] as $music) {
+        $this->params->loadGame = !empty($game) ? GameFactory::getByCode($game) : null;
+        /** @phpstan-ignore-next-line */
+        $this->params->system = $request->getGet('system', first(GameFactory::getSupportedSystems()));
+        $this->params->vests = Vest::getForSystem($this->params->system);
+        $this->params->colors = GameFactory::getAllTeamsColors()[$this->params->system];
+        $this->params->teamNames = GameFactory::getAllTeamsNames()[$this->params->system];
+        $this->params->gameModes = GameModeFactory::getAll(['system' => $this->params->system]);
+        $this->params->musicModes = MusicMode::getAll();
+        $this->params->playlists = Playlist::getAll();
+        $this->params->priceGroups = PriceGroup::getAll();
+        $this->params->priceGroupsAll = PriceGroup::query()->get(); // Get event the deleted price groups
+        $this->params->musicGroups = [];
+        foreach ($this->params->musicModes as $music) {
             if (!$music->public) {
                 continue;
             }
             $group = $music->group ?? $music->name;
-            $this->params['musicGroups'][$group] ??= new MusicGroupDto($group);
-            $this->params['musicGroups'][$group]->music[] = $music;
+            $this->params->musicGroups[$group] ??= new MusicGroupDto($group);
+            $this->params->musicGroups[$group]->music[] = $music;
         }
 
         $gateActionScreens = GateScreenModel::query()->where('trigger_value IS NOT NULL')->get();
-        $this->params['gateActions'] = [];
+        $this->params->gateActions = [];
         foreach ($gateActionScreens as $gateActionScreen) {
-            $this->params['gateActions'][$gateActionScreen->triggerValue] = $gateActionScreen->triggerValue;
+            $this->params->gateActions[$gateActionScreen->triggerValue] = $gateActionScreen->triggerValue;
         }
 
         foreach ($this->decorators as $decorator) {
@@ -101,5 +111,4 @@ class NewGame extends Controller
         return $this->view('pages/new-game/index')
                     ->withAddedHeader('Expires', date('D, d M Y H:i:s T', strtotime('+ 1 minutes')));
     }
-
 }

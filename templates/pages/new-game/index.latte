@@ -1,18 +1,7 @@
 {layout '../../@layout.latte'}
 
-{varType App\DataObjects\NewGame\HookedTemplates $addedTemplates}
-{varType App\Services\FeatureConfig $featureConfig}
-{varType App\GameModels\Vest[] $vests}
-{varType string $colorSystem}
-{varType string[] $colors}
-{varType string[] $teamNames}
-{varType App\GameModels\Game\GameModes\AbstractMode[] $gameModes}
-{varType App\GameModels\Game\Game|null $loadGame}
-{varType App\Models\MusicMode[] $musicModes}
-{varType App\Gate\Models\MusicGroupDto[] $musicGroups}
-{varType App\Models\Playlist[] $playlists}
-{varType string[] $gateActions}
-{varType string $system}
+{templateType App\Templates\NewGame\NewGameParams}
+
 {default string $lang = App\Core\App::getShortLanguageCode()}
 {default App\Models\PriceGroup[] $priceGroups = []}
 {default App\Models\PriceGroup[] $priceGroupsAll = $priceGroups}

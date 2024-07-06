@@ -152,17 +152,6 @@ ij_twig_spaces_inside_comments_delimiters = true
 ij_twig_spaces_inside_delimiters = true
 ij_twig_spaces_inside_variable_delimiters = true
 
-[*.vue]
-indent_size = 2
-tab_width = 2
-ij_continuation_indent_size = 4
-ij_vue_indent_children_of_top_level = template
-ij_vue_interpolation_new_line_after_start_delimiter = true
-ij_vue_interpolation_new_line_before_end_delimiter = true
-ij_vue_interpolation_wrap = off
-ij_vue_keep_indents_on_empty_lines = false
-ij_vue_spaces_within_interpolation_expressions = true
-
 [.editorconfig]
 ij_editorconfig_align_group_field_declarations = false
 ij_editorconfig_space_after_colon = false
@@ -378,7 +367,7 @@ ij_shell_redirect_followed_by_space = false
 ij_shell_switch_cases_indented = false
 ij_shell_use_unix_line_separator = true
 
-[{*.bplist,*.dist,*.har,*.jsb2,*.jsb3,*.json,*.jsonc,*.postman_collection,*.postman_collection.json,*.postman_environment,*.postman_environment.json,.babelrc,.eslintrc,.prettierrc,.stylelintrc,StoreLocator.mdj,bowerrc,composer.lock,jest.config}]
+[{*.bplist,*.dist,*.har,*.jsb2,*.jsb3,*.json,*.jsonc,*.postman_collection,*.postman_collection.json,*.postman_environment,*.postman_environment.json,.babelrc,.eslintrc,.prettierrc,.stylelintrc,.ws-context,StoreLocator.mdj,bowerrc,composer.lock,jest.config}]
 indent_size = 2
 ij_json_array_wrapping = split_into_lines
 ij_json_keep_blank_lines_in_code = 0
@@ -629,7 +618,7 @@ ij_php_concat_spaces = false
 ij_php_copyright_weight = 28
 ij_php_deprecated_weight = 28
 ij_php_do_while_brace_force = always
-ij_php_else_if_style = combine
+ij_php_else_if_style = separate
 ij_php_else_on_new_line = true
 ij_php_example_weight = 28
 ij_php_extends_keyword_wrap = off
@@ -947,6 +936,9 @@ ij_powershell_special_else_if_treatment = true
 ij_powershell_while_on_new_line = false
 ij_powershell_wrap_first_method_in_call_chain = false
 ij_powershell_wrap_long_lines = false
+
+[{*.toml,Cargo.lock,Cargo.toml.orig,Gopkg.lock,Pipfile,poetry.lock}]
+ij_toml_keep_indents_on_empty_lines = false
 
 [{*.yaml,*.yml}]
 indent_size = 2

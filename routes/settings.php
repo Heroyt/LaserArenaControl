@@ -1,6 +1,5 @@
 <?php
 
-
 use App\Controllers\Settings\Gate;
 use App\Controllers\Settings\Modes;
 use App\Controllers\Settings\Music;

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file   web.php
  * @brief  web route definitions
@@ -39,23 +40,23 @@ Route::group('/results')
   ->get('/{code}/print/{lang}/{copies}/{style}/{template}/{type}', [Results::class, 'printGame']);
 
 Route::group('/list')->get('/', [GamesList::class, 'show'])->name('games-list')->get(
-  '/{game}',
-  [GamesList::class, 'game']
+    '/{game}',
+    [GamesList::class, 'game']
 );
 
 Route::group('/gate')->get('/', [GateController::class, 'show'])->name('gate')->get(
-  '/{gate}',
-  [GateController::class, 'show']
+    '/{gate}',
+    [GateController::class, 'show']
 )->name('gate-slug')->post('/event', [GateController::class, 'setEvent'])->post(
-  '/set',
-  [GateController::class, 'setGateGame']
+    '/set',
+    [GateController::class, 'setGateGame']
 )      // Error
      ->post('/loaded', [GateController::class, 'setGateLoaded']) // Error
      ->post('/idle', [GateController::class, 'setGateIdle']) // Error
      ->post('/set/{system}', [GateController::class, 'setGateGame'])->post(
-  '/loaded/{system}',
-  [GateController::class, 'setGateLoaded']
-)->post('/idle/{system}', [GateController::class, 'setGateIdle']);
+         '/loaded/{system}',
+         [GateController::class, 'setGateLoaded']
+     )->post('/idle/{system}', [GateController::class, 'setGateIdle']);
 
 Route::group('/players')
   ->get('/find', [Players::class, 'find'])

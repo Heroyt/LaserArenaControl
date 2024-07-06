@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file  api.php
  * @brief API route definitions
@@ -29,11 +30,11 @@ $apiGroup = Route::group('api')
                  ->post('events', [Events::class, 'triggerEvent']);
 
 $resultGroup = $apiGroup->group('results')->post('import', [Results::class, 'import'])->post(
-  'import/{game}',
-  [
+    'import/{game}',
+    [
     Results::class,
     'importGame',
-  ]
+    ]
 )->get('last', [Results::class, 'getLastGameFile'])->get('download', [Results::class, 'downloadLastGameFiles']);
 
 $gitGroup = $apiGroup->group('git')
@@ -53,11 +54,11 @@ $debugGroup = $apiGroup->group('debug')
                        ->get('glob', [Debug::class, 'glob']);
 
 $gameGroup = $apiGroup->group('game')->post('load/{system}', [GameLoading::class, 'loadGame'])->get(
-  'loaded',
-  [
+    'loaded',
+    [
     GameHelpers::class,
     'getLoadedGameInfo',
-  ]
+    ]
 )->get('gate', [GameHelpers::class, 'getGateGameInfo']);
 
 $gamesGroup = $apiGroup->group('games')
@@ -76,30 +77,30 @@ $gamesGroup = $apiGroup->group('games')
 
 
 $apiGroup->group('tasks')->post('precache', [Tasks::class, 'planGamePrecache'])->post(
-  'highlights',
-  [
+    'highlights',
+    [
     Tasks::class,
     'planGameHighlights',
-  ]
+    ]
 );
 
 $apiGroup->group('laserliga')->group('games')->group('{code}')->get('highlights', [LaserLiga::class, 'highlights']);
 
 $apiGroup->group('cache')->group('clear')->post('', [Cache::class, 'clearAll'])->name('cache-clear')->post(
-  'system',
-  [
+    'system',
+    [
     Cache::class,
     'clearSystem',
-  ]
+    ]
 )->name('cache-clear-system')->post('di', [Cache::class, 'clearDi'])->name('cache-clear-di')->post(
-  'models',
-  [
+    'models',
+    [
     Cache::class,
     'clearModels',
-  ]
+    ]
 )->name('cache-clear-models')->post('config', [Cache::class, 'clearConfig'])->name('cache-clear-config')->post(
-  'results',
-  [Cache::class, 'clearResults']
+    'results',
+    [Cache::class, 'clearResults']
 )->name('cache-clear-results')->post('latte', [Cache::class, 'clearLatte'])->name('cache-clear-latte');
 
 $helpersGroup = $apiGroup->group('helpers');

@@ -16,7 +16,22 @@ use Lsr\Logging\Exceptions\DirectoryCreationException;
 use Spiral\RoadRunner\Metrics\Metrics;
 
 /**
- *
+ * @phpstan-type GameData array{
+ *      playlist?:numeric,
+ *      use-playlist?:numeric,
+ *      music?: numeric,
+ *      groupSelect?:numeric|'new',
+ *      tableSelect?:numeric,
+ *      game-mode?:numeric,
+ *      variation?:array<numeric,string>,
+ *      player?:array{name:string,team?:string,vip?:numeric-string,code:string}[],
+ *      team?:array{name:string}[]
+ *   }
+ * @phpstan-type LoadData array{
+ *    meta:array<string,string|numeric>,
+ *    players:array{vest:int,name:string,vip:bool,team:int,code?:string}[],
+ *    teams:array{key:int,name:string,playerCount:int}[]
+ * }
  */
 abstract class LasermaxxGameLoader implements LoaderInterface
 {
@@ -48,31 +63,12 @@ abstract class LasermaxxGameLoader implements LoaderInterface
     }
 
     /**
-     * @param  array{
-     *     playlist?:numeric,
-     *     use-playlist?:numeric,
-     *     music?: numeric,
-     *     groupSelect?:numeric|'new',
-     *     tableSelect?:numeric,
-     *     game-mode?:numeric,
-     *     variation?:array<numeric,string>,
-     *     player?:array{name:string,team?:string,vip?:numeric-string,code:string}[],
-     *     team?:array{name:string}[]
-     *  }  $data
+     * @param  GameData  $data
      *
-     * @return array{
-     *    meta:array<string,string|numeric>,
-     *    players:array{vest:int,name:string,vip:bool,team:int,code?:string}[],
-     *    teams:array{key:int,name:string,playerCount:int}
-     *    }
+     * @return LoadData
      */
     protected function loadLasermaxxGame(array $data): array {
-        /** @var array{
-         *   meta:array<string,string|numeric>,
-         *   players:array{vest:int,name:string,vip:bool,team:int,code?:string}[],
-         *   teams:array{key:int,name:string,playerCount:int}
-         *   } $loadData
-         */
+        /** @var LoadData $loadData */
         $loadData = [
           'meta'    => [
             'music'    => empty($data['music']) ? null : $data['music'],
@@ -127,7 +123,7 @@ abstract class LasermaxxGameLoader implements LoaderInterface
                 $player['team'] = '2';
             }
 
-            $asciiName = substr(Strings::toAscii($player['name']), 0, 12);
+            $asciiName = substr($this->escapeName($player['name']), 0, 12);
             if ($player['name'] !== $asciiName) {
                 $loadData['meta']['p' . $vest . 'n'] = $player['name'];
             }
@@ -148,7 +144,7 @@ abstract class LasermaxxGameLoader implements LoaderInterface
         }
 
         foreach ($data['team'] ?? [] as $key => $team) {
-            $asciiName = Strings::toAscii($team['name']);
+            $asciiName = $this->escapeName($team['name']);
             if ($team['name'] !== $asciiName) {
                 $loadData['meta']['t' . $key . 'n'] = $team['name'];
             }
@@ -178,7 +174,7 @@ abstract class LasermaxxGameLoader implements LoaderInterface
                 if (!empty($musicIds)) {
                     $loadData['meta']['music'] = (int) $musicIds[array_rand($musicIds)];
                 }
-            } catch (ModelNotFoundException | ValidationException $e) {
+            } catch (ModelNotFoundException | ValidationException) {
             }
         }
         if (isset($loadData['meta']['music']) && str_starts_with($loadData['meta']['music'], 'g-')) {
@@ -186,5 +182,32 @@ abstract class LasermaxxGameLoader implements LoaderInterface
             $loadData['meta']['music'] = (int) $musicIds[array_rand($musicIds)];
         }
         return $loadData;
+    }
+
+    /**
+     * Replaces all unwanted characters in the player/team name
+     *
+     * @param  string  $name
+     * @return string
+     */
+    public function escapeName(string $name): string {
+        // Remove UTF-8 characters
+        $name = Strings::toAscii($name);
+        // Remove key characters
+        return str_replace(
+            [
+                '#',
+                ',',
+                '}',
+                '{',
+            ],
+            [
+              '+',
+              '.',
+              ']',
+              '[',
+            ],
+            $name
+        );
     }
 }

@@ -16,9 +16,8 @@ use Spiral\RoadRunner\Metrics\Metrics;
  */
 class GameControl extends Controller
 {
-
     public function __construct(
-      private readonly Metrics $metrics,
+        private readonly Metrics $metrics,
     ) {
         parent::__construct();
     }
@@ -27,7 +26,7 @@ class GameControl extends Controller
      * @return ResponseInterface
      * @throws JsonException
      */
-    public function status() : ResponseInterface {
+    public function status(): ResponseInterface {
         /** @var string|null $ip */
         $ip = Info::get('lmx_ip');
         if (empty($ip)) {
@@ -40,12 +39,12 @@ class GameControl extends Controller
         } catch (Exception $e) {
             $this->metrics->set('control_time', (microtime(true) - $start) * 1000, ['status']);
             return $this->respond(
-              [
+                [
                 'status'    => 'error',
                 'error'     => 'Error while getting the game status',
                 'exception' => $e->getMessage(),
-              ],
-              500
+                ],
+                500
             );
         }
         $this->metrics->set('control_time', (microtime(true) - $start) * 1000, ['status']);
@@ -58,7 +57,7 @@ class GameControl extends Controller
      * @return ResponseInterface
      * @throws JsonException
      */
-    public function loadSafe(Request $request) : ResponseInterface {
+    public function loadSafe(Request $request): ResponseInterface {
         /** @var string|null $ip */
         $ip = Info::get('lmx_ip');
         if (empty($ip)) {
@@ -74,12 +73,12 @@ class GameControl extends Controller
             $response = LMXController::getStatus($ip);
         } catch (Exception $e) {
             return $this->respond(
-              [
+                [
                 'status'    => 'error',
                 'error'     => 'Error while getting the game status',
                 'exception' => $e->getMessage(),
-              ],
-              500
+                ],
+                500
             );
         }
         if ($response === 'PLAYING' || $response === 'DOWNLOAD') {
@@ -99,7 +98,7 @@ class GameControl extends Controller
      * @return ResponseInterface
      * @throws JsonException
      */
-    public function load(Request $request) : ResponseInterface {
+    public function load(Request $request): ResponseInterface {
         /** @var string|null $ip */
         $ip = Info::get('lmx_ip');
         if (empty($ip)) {
@@ -126,7 +125,7 @@ class GameControl extends Controller
      * @return ResponseInterface
      * @throws JsonException
      */
-    public function startSafe(Request $request) : ResponseInterface {
+    public function startSafe(Request $request): ResponseInterface {
         /** @var string|null $ip */
         $ip = Info::get('lmx_ip');
         if (empty($ip)) {
@@ -138,12 +137,12 @@ class GameControl extends Controller
             $response = LMXController::getStatus($ip);
         } catch (Exception $e) {
             return $this->respond(
-              [
+                [
                 'status'    => 'error',
                 'error'     => 'Error while getting the game status',
                 'exception' => $e->getMessage(),
-              ],
-              500
+                ],
+                500
             );
         }
         if ($response === 'PLAYING' || $response === 'DOWNLOAD') {
@@ -153,18 +152,17 @@ class GameControl extends Controller
             $modeName = $request->getPost('mode', '');
             if (empty($modeName)) {
                 return $this->respond(
-                  [
+                    [
                     'status' => 'error',
                     'error'  => 'Missing required parameter - mode',
                     'post'   => $request->getParsedBody(),
-                  ],
-                  400
+                    ],
+                    400
                 );
             }
             $response = LMXController::loadStart($ip, $modeName);
             $this->metrics->set('control_time', (microtime(true) - $start) * 1000, ['loadStart']);
-        }
-        else {
+        } else {
             $response = LMXController::start($ip);
             $this->metrics->set('control_time', (microtime(true) - $start) * 1000, ['start']);
         }
@@ -179,7 +177,7 @@ class GameControl extends Controller
      * @return ResponseInterface
      * @throws JsonException
      */
-    public function start() : ResponseInterface {
+    public function start(): ResponseInterface {
         /** @var string|null $ip */
         $ip = Info::get('lmx_ip');
         if (empty($ip)) {
@@ -199,7 +197,7 @@ class GameControl extends Controller
      *
      * @return ResponseInterface
      */
-    public function stop() : ResponseInterface {
+    public function stop(): ResponseInterface {
         /** @var string|null $ip */
         $ip = Info::get('lmx_ip');
         if (empty($ip)) {
@@ -219,7 +217,7 @@ class GameControl extends Controller
      *
      * @return ResponseInterface
      */
-    public function retryDownload() : ResponseInterface {
+    public function retryDownload(): ResponseInterface {
         /** @var string|null $ip */
         $ip = Info::get('lmx_ip');
         if (empty($ip)) {
@@ -238,7 +236,7 @@ class GameControl extends Controller
      *
      * @return ResponseInterface
      */
-    public function cancelDownload() : ResponseInterface {
+    public function cancelDownload(): ResponseInterface {
         /** @var string|null $ip */
         $ip = Info::get('lmx_ip');
         if (empty($ip)) {
@@ -252,5 +250,4 @@ class GameControl extends Controller
         }
         return $this->respond(['status' => 'ok']);
     }
-
 }

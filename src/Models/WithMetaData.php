@@ -7,7 +7,6 @@ namespace App\Models;
  */
 trait WithMetaData
 {
-
     public ?string $meta = null;
     /** @var T|array<string,mixed>|null */
     protected ?array $metaData = null;
@@ -17,7 +16,7 @@ trait WithMetaData
      * @param  mixed  $value
      * @return $this
      */
-    public function setMetaValue(string $key, mixed $value) : static {
+    public function setMetaValue(string $key, mixed $value): static {
         $meta = $this->getMeta();
         $meta[$key] = $value;
         $this->setMeta($meta);
@@ -27,7 +26,7 @@ trait WithMetaData
     /**
      * @return T|array<string,mixed>
      */
-    public function getMeta() : array {
+    public function getMeta(): array {
         if (!isset($this->metaData)) {
             $this->metaData = isset($this->meta) ? igbinary_unserialize($this->meta) : [];
         }
@@ -38,7 +37,7 @@ trait WithMetaData
      * @param  T|array<string,mixed>  $meta
      * @return $this
      */
-    public function setMeta(array $meta) : static {
+    public function setMeta(array $meta): static {
         $this->metaData = $meta;
         $this->meta = igbinary_serialize($meta);
         return $this;

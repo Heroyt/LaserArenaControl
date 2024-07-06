@@ -8,16 +8,16 @@ use Spiral\RoadRunner\Jobs\Task\ReceivedTaskInterface;
 
 class MusicSyncTask implements TaskDispatcherInterface
 {
-
     public function __construct(
-      private readonly LigaApi $api,
-    ) {}
+        private readonly LigaApi $api,
+    ) {
+    }
 
-    public static function getDiName() : string {
+    public static function getDiName(): string {
         return 'task.musicSync';
     }
 
-    public function process(ReceivedTaskInterface $task) : void {
+    public function process(ReceivedTaskInterface $task): void {
         try {
             if ($this->api->syncMusicModes()) {
                 $task->complete();

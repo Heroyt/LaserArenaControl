@@ -9,48 +9,49 @@ use OpenApi\Attributes as OA;
 #[OA\Schema(properties: [new OA\Property(property: 'description', type: 'string')])]
 class GameHighlight implements JsonSerializable
 {
+    public const VERY_HIGH_RARITY = 100;
+    public const HIGH_RARITY = 90;
+    public const MEDIUM_RARITY = 50;
+    public const LOW_RARITY = 10;
 
-	public const VERY_HIGH_RARITY = 100;
-	public const HIGH_RARITY = 90;
-	public const MEDIUM_RARITY = 50;
-	public const LOW_RARITY = 10;
+    /**
+     * @param GameHighlightType $type
+     * @param string            $value
+     * @param int               $rarityScore Score that indicates the importance of this highlight (for sorting) - higher
+     *                                       value = more important/interesting highlight
+     */
+    public function __construct(
+        #[OA\Property]
+        public readonly GameHighlightType $type,
+        #[OA\Property]
+        public string                     $value,
+        #[OA\Property]
+        public int                        $rarityScore = self::LOW_RARITY,
+    ) {
+    }
 
-	/**
-	 * @param GameHighlightType $type
-	 * @param string            $value
-	 * @param int               $rarityScore Score that indicates the importance of this highlight (for sorting) - higher
-	 *                                       value = more important/interesting highlight
-	 */
-	public function __construct(
-		#[OA\Property]
-		public readonly GameHighlightType $type,
-		#[OA\Property]
-		public string                     $value,
-		#[OA\Property]
-		public int                        $rarityScore = self::LOW_RARITY,) {}
+    /**
+     * @param array{type:string,score:int,value:string,description:string} $data
+     * @return static
+     */
+    public static function fromJson(array $data, Game $game): static {
+        return new static(
+            GameHighlightType::from($data['type']),
+            $data['value'],
+            $data['score'],
+        );
+    }
 
-	/**
-	 * @param array{type:string,score:int,value:string,description:string} $data
-	 * @return static
-	 */
-	public static function fromJson(array $data, Game $game) : static {
-		return new static(
-			GameHighlightType::from($data['type']),
-			$data['value'],
-			$data['score'],
-		);
-	}
+    public function jsonSerialize(): array {
+        return [
+            'type'        => $this->type,
+            'score'       => $this->rarityScore,
+            'value'       => $this->value,
+            'description' => $this->getDescription(),
+        ];
+    }
 
-	public function jsonSerialize() : array {
-		return [
-			'type'        => $this->type,
-			'score'       => $this->rarityScore,
-			'value'       => $this->value,
-			'description' => $this->getDescription(),
-		];
-	}
-
-	public function getDescription() : string {
-		return $this->value;
-	}
+    public function getDescription(): string {
+        return $this->value;
+    }
 }

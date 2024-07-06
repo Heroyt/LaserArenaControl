@@ -13,12 +13,12 @@ use Symfony\Component\Serializer\SerializerInterface;
  */
 class LacExtension extends Extension
 {
-
     public function __construct(
-      private readonly SerializerInterface $serializer,
-    ) {}
+        private readonly SerializerInterface $serializer,
+    ) {
+    }
 
-    public function getFilters() : array {
+    public function getFilters(): array {
         return [
           'escapeJs' => [$this, 'escapeJs'],
           'json'     => [$this, 'filterJson'],
@@ -27,7 +27,7 @@ class LacExtension extends Extension
         ];
     }
 
-    public function getFunctions() : array {
+    public function getFunctions(): array {
         return [
           'json' => [$this, 'jsonSerialize'],
           'xml'  => [$this, 'xmlSerialize'],
@@ -35,32 +35,32 @@ class LacExtension extends Extension
         ];
     }
 
-    public function filterJson(FilterInfo $info, mixed $data) : string {
+    public function filterJson(FilterInfo $info, mixed $data): string {
         $info->contentType = ContentType::JavaScript;
         return str_replace([']]>', '<!', '</'], [']]\u003E', '\u003C!', '<\/'], $this->jsonSerialize($data));
     }
 
-    public function jsonSerialize(mixed $s) : string {
+    public function jsonSerialize(mixed $s): string {
         return $this->serializer->serialize($s, 'json');
     }
 
-    public function filterXml(FilterInfo $info, mixed $data) : string {
+    public function filterXml(FilterInfo $info, mixed $data): string {
         $info->contentType = ContentType::Xml;
         return $this->xmlSerialize($data);
     }
 
-    public function xmlSerialize(mixed $s) : string {
+    public function xmlSerialize(mixed $s): string {
         return $this->serializer->serialize($s, 'xml');
     }
 
-    public function csvSerialize(mixed $s) : string {
+    public function csvSerialize(mixed $s): string {
         return $this->serializer->serialize($s, 'csv');
     }
 
     /**
      * Escapes variables for use inside <script>.
      */
-    public function escapeJs(mixed $s) : string {
+    public function escapeJs(mixed $s): string {
         if ($s instanceof HtmlStringable) {
             $s = $s->__toString();
         }
@@ -69,5 +69,4 @@ class LacExtension extends Extension
 
         return str_replace([']]>', '<!', '</'], [']]\u003E', '\u003C!', '<\/'], $json);
     }
-
 }

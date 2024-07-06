@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @author Tomáš Vojík <xvojik00@stud.fit.vutbr.cz>, <vojik@wboy.cz>
  */
@@ -18,67 +19,65 @@ use Lsr\Core\Models\Model;
  */
 interface CollectionInterface extends ArrayAccess, JsonSerializable, Countable, Iterator
 {
+    /**
+     * Create a new collection from array of data
+     *
+     * @param T[] $array
+     *
+     * @return CollectionInterface<T>
+     */
+    public static function fromArray(array $array): CollectionInterface;
 
-	/**
-	 * Create a new collection from array of data
-	 *
-	 * @param T[] $array
-	 *
-	 * @return CollectionInterface<T>
-	 */
-	public static function fromArray(array $array) : CollectionInterface;
+    /**
+     * Get all collection's data as an array
+     *
+     * @return T[]
+     */
+    public function getAll(): array;
 
-	/**
-	 * Get all collection's data as an array
-	 *
-	 * @return T[]
-	 */
-	public function getAll() : array;
+    /**
+     * @return CollectionQueryInterface<T>
+     */
+    public function query(): CollectionQueryInterface;
 
-	/**
-	 * @return CollectionQueryInterface<T>
-	 */
-	public function query() : CollectionQueryInterface;
+    /**
+     * Add new data to collection
+     *
+     * @param T ...$values
+     *
+     * @return CollectionInterface<T>
+     */
+    public function add(Model ...$values): CollectionInterface;
 
-	/**
-	 * Add new data to collection
-	 *
-	 * @param T ...$values
-	 *
-	 * @return CollectionInterface<T>
-	 */
-	public function add(Model ...$values) : CollectionInterface;
+    /**
+     * Checks whether the given model already exists in collection
+     *
+     * @param T $model
+     *
+     * @return bool
+     */
+    public function contains(Model $model): bool;
 
-	/**
-	 * Checks whether the given model already exists in collection
-	 *
-	 * @param T $model
-	 *
-	 * @return bool
-	 */
-	public function contains(Model $model) : bool;
+    /**
+     * Get collection's model type
+     *
+     * @return string
+     */
+    public function getType(): string;
 
-	/**
-	 * Get collection's model type
-	 *
-	 * @return string
-	 */
-	public function getType() : string;
+    /**
+     * Sort collection's data using a callback function
+     *
+     * @param callable $callback
+     *
+     * @return CollectionInterface<T>
+     */
+    public function sort(callable $callback): CollectionInterface;
 
-	/**
-	 * Sort collection's data using a callback function
-	 *
-	 * @param callable $callback
-	 *
-	 * @return CollectionInterface<T>
-	 */
-	public function sort(callable $callback) : CollectionInterface;
-
-	/**
-	 * Get first object in collection
-	 *
-	 * @return T|null
-	 */
-	public function first() : ?Model;
-
+    /**
+     * Get first object in collection
+     *
+     * @return T|null
+     */
+    public function first(): ?Model;
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @author Tomáš Vojík <xvojik00@stud.fit.vutbr.cz>, <vojik@wboy.cz>
  */
@@ -35,7 +36,6 @@ use Lsr\Core\DB;
  */
 class Seeder implements InstallInterface
 {
-
     public const GAME_MODES = [
       [
         'id_mode'              => 1,
@@ -627,7 +627,7 @@ class Seeder implements InstallInterface
     /**
      * @inheritDoc
      */
-    public static function install(bool $fresh = false) : bool {
+    public static function install(bool $fresh = false): bool {
         try {
             // Game modes
             if ($fresh) {
@@ -637,10 +637,10 @@ class Seeder implements InstallInterface
                 DB::insertIgnore(AbstractMode::TABLE, $insert);
             }
             if ($fresh) {
-                DB::delete(AbstractMode::TABLE.'-names', ['1=1']);
+                DB::delete(AbstractMode::TABLE . '-names', ['1=1']);
             }
             foreach (self::GAME_MODE_NAMES as $insert) {
-                DB::insertIgnore(AbstractMode::TABLE.'-names', $insert);
+                DB::insertIgnore(AbstractMode::TABLE . '-names', $insert);
             }
 
             // Print styles
@@ -665,11 +665,11 @@ class Seeder implements InstallInterface
             }
             foreach (self::TIPS as $id => $tip) {
                 DB::insertIgnore(
-                  Tip::TABLE,
-                  [
+                    Tip::TABLE,
+                    [
                     'id_tip' => $id,
                     'text'   => $tip,
-                  ]
+                    ]
                 );
             }
 
@@ -714,10 +714,10 @@ class Seeder implements InstallInterface
 
 
             $idleScreen->setSettings(
-              new TimerSettings(
-                [$child1, $child2, $child3],
-                60
-              )
+                new TimerSettings(
+                    [$child1, $child2, $child3],
+                    60
+                )
             );
 
             $vestsScreens = $defaultGate->getScreensForTrigger(ScreenTriggerType::GAME_LOADED);
@@ -773,10 +773,10 @@ class Seeder implements InstallInterface
 
 
             if (!$defaultGate->save()) {
-                echo 'Failed to save default gate.'.PHP_EOL;
+                echo 'Failed to save default gate.' . PHP_EOL;
             }
         } catch (Exception $e) {
-            echo $e->getMessage().PHP_EOL.$e->getSql().PHP_EOL;
+            echo $e->getMessage() . PHP_EOL . $e->getSql() . PHP_EOL;
             return false;
         }
         return true;

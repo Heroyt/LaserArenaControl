@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\DI\Extensions;
@@ -27,6 +28,7 @@ use Orisai\Scheduler\ManagedScheduler;
 use Orisai\Scheduler\Manager\JobManager;
 use Orisai\Scheduler\Scheduler;
 use stdClass;
+
 use function assert;
 use function class_exists;
 use function function_exists;
@@ -42,130 +44,130 @@ use function timezone_identifiers_list;
  */
 final class SchedulerExtension extends CompilerExtension
 {
-
-    public function getConfigSchema() : Schema {
+    public function getConfigSchema(): Schema {
         return Expect::structure(
-          [
+            [
             'errorHandler' => Expect::anyOf(
             /* @infection-ignore-all */
-              Expect::array()->min(2)->max(2),
-              'tracy',
-              null,
+                Expect::array()->min(2)->max(2),
+                'tracy',
+                null,
             )->default(null),
             'executor'     => Expect::anyOf('auto', 'basic', 'process')->default('auto'),
             'console'      => Expect::structure(
-              [
+                [
                 'script'        => Expect::string()->default('bin/console'),
                 'runCommand'    => Expect::string()->default('scheduler:run'),
                 'runJobCommand' => Expect::string()->default('scheduler:run-job'),
-              ]
+                ]
             ),
             'events'       => Expect::structure(
-              [
+                [
                 'beforeRun' => Expect::listOf(
-                  Expect::anyOf(
-                    Expect::string(),
-                    /* @infection-ignore-all */
-                    Expect::array()->min(2)->max(2),
-                    Expect::type(Statement::class),
-                  ),
+                    Expect::anyOf(
+                        Expect::string(),
+                        /* @infection-ignore-all */
+                        Expect::array()->min(2)->max(2),
+                        Expect::type(Statement::class),
+                    ),
                 ),
                 'afterRun'  => Expect::listOf(
-                  Expect::anyOf(
-                    Expect::string(),
-                    /* @infection-ignore-all */
-                    Expect::array()->min(2)->max(2),
-                    Expect::type(Statement::class),
-                  ),
+                    Expect::anyOf(
+                        Expect::string(),
+                        /* @infection-ignore-all */
+                        Expect::array()->min(2)->max(2),
+                        Expect::type(Statement::class),
+                    ),
                 ),
                 'lockedJob' => Expect::listOf(
-                  Expect::anyOf(
-                    Expect::string(),
-                    /* @infection-ignore-all */
-                    Expect::array()->min(2)->max(2),
-                    Expect::type(Statement::class),
-                  ),
+                    Expect::anyOf(
+                        Expect::string(),
+                        /* @infection-ignore-all */
+                        Expect::array()->min(2)->max(2),
+                        Expect::type(Statement::class),
+                    ),
                 ),
                 'beforeJob' => Expect::listOf(
-                  Expect::anyOf(
-                    Expect::string(),
-                    /* @infection-ignore-all */
-                    Expect::array()->min(2)->max(2),
-                    Expect::type(Statement::class),
-                  ),
+                    Expect::anyOf(
+                        Expect::string(),
+                        /* @infection-ignore-all */
+                        Expect::array()->min(2)->max(2),
+                        Expect::type(Statement::class),
+                    ),
                 ),
                 'afterJob'  => Expect::listOf(
-                  Expect::anyOf(
-                    Expect::string(),
-                    /* @infection-ignore-all */
-                    Expect::array()->min(2)->max(2),
-                    Expect::type(Statement::class),
-                  ),
+                    Expect::anyOf(
+                        Expect::string(),
+                        /* @infection-ignore-all */
+                        Expect::array()->min(2)->max(2),
+                        Expect::type(Statement::class),
+                    ),
                 ),
-              ]
+                ]
             ),
             'jobs'         => Expect::arrayOf(
-              Expect::structure(
-                [
-                  'enabled'            => Expect::bool(true),
-                  'expression'         => Expect::string()
+                Expect::structure(
+                    [
+                    'enabled'            => Expect::bool(true),
+                    'expression'         => Expect::string()
                                                 ->assert(
-                                                  static function (string $value) : bool {
-                                                      if (str_starts_with($value, '@@')) { // '@yearly' - string
-                                                          $value = substr($value, 1);
-                                                          assert($value !== false);
-                                                      }
-                                                      elseif (str_starts_with(
-                                                        $value,
-                                                        '@'
-                                                      )) { // @yearly - service reference
-                                                          return false;
-                                                      }
+                                                    static function (string $value): bool {
+                                                        if (str_starts_with($value, '@@')) { // '@yearly' - string
+                                                            $value = substr($value, 1);
+                                                            assert($value !== false);
+                                                        } elseif (
+                                                            str_starts_with(
+                                                                $value,
+                                                                '@'
+                                                            )
+                                                        ) { // @yearly - service reference
+                                                            return false;
+                                                        }
 
-                                                      return CronExpression::isValidExpression($value);
-                                                  },
-                                                  'Valid cron expression',
+                                                        return CronExpression::isValidExpression($value);
+                                                    },
+                                                    'Valid cron expression',
                                                 ),
-                  'callback'           => Expect::anyOf(
-                    Expect::string(),
-                    /* @infection-ignore-all */
-                    Expect::array()->min(2)->max(2),
-                    Expect::type(Statement::class),
-                  )->default(null),
-                  'job'                => DefinitionsLoader::schema()->default(null),
-                  'repeatAfterSeconds' => Expect::int(0)
+                    'callback'           => Expect::anyOf(
+                        Expect::string(),
+                        /* @infection-ignore-all */
+                        Expect::array()->min(2)->max(2),
+                        Expect::type(Statement::class),
+                    )->default(null),
+                    'job'                => DefinitionsLoader::schema()->default(null),
+                    'repeatAfterSeconds' => Expect::int(0)
                                                 ->min(0)
                                                 ->max(30),
-                  'timeZone'           => Expect::anyOf(
-                    Expect::string(),
-                    Expect::null(),
-                  )->assert(
-                    static function (?string $timeZone) : bool {
-                        if ($timeZone === null) {
-                            return true;
+                    'timeZone'           => Expect::anyOf(
+                        Expect::string(),
+                        Expect::null(),
+                    )->assert(
+                        static function (?string $timeZone): bool {
+                            if ($timeZone === null) {
+                                return true;
+                            }
+
+                            return in_array($timeZone, timezone_identifiers_list(), true);
+                        },
+                        'Valid timezone'
+                    ),
+                    ]
+                )->assert(
+                    static function (stdClass $values): bool {
+                        if ($values->callback !== null && $values->job !== null) {
+                            return false;
                         }
 
-                        return in_array($timeZone, timezone_identifiers_list(), true);
+                        return $values->callback !== null || $values->job !== null;
                     },
-                    'Valid timezone'
-                  ),
-                ]
-              )->assert(
-                static function (stdClass $values) : bool {
-                    if ($values->callback !== null && $values->job !== null) {
-                        return false;
-                    }
-
-                    return $values->callback !== null || $values->job !== null;
-                },
-                "Use either 'callback' or 'job'"
-              ),
+                    "Use either 'callback' or 'job'"
+                ),
             ),
-          ]
+            ]
         );
     }
 
-    public function loadConfiguration() : void {
+    public function loadConfiguration(): void {
         $builder = $this->getContainerBuilder();
         $config = $this->config;
 
@@ -175,16 +177,16 @@ final class SchedulerExtension extends CompilerExtension
         $this->registerExplainer($builder);
     }
 
-    private function registerScheduler(ContainerBuilder $builder, stdClass $config) : ServiceDefinition {
+    private function registerScheduler(ContainerBuilder $builder, stdClass $config): ServiceDefinition {
         /** @infection-ignore-all */
         $schedulerDefinition = $builder->addDefinition($this->prefix('scheduler'))
                                        ->setFactory(
-                                         ManagedScheduler::class,
-                                         [
+                                           ManagedScheduler::class,
+                                           [
                                            'jobManager'   => $this->registerJobManager($builder, $config),
                                            'errorHandler' => $this->registerErrorHandler($config),
                                            'executor'     => $this->registerExecutor($builder, $config),
-                                         ]
+                                           ]
                                        );
 
         $events = $config->events;
@@ -192,40 +194,40 @@ final class SchedulerExtension extends CompilerExtension
         // Compat - orisai/scheduler v1
         if (method_exists(Scheduler::class, 'getJobSchedules')) {
             $this->addEventsToScheduler(
-              $schedulerDefinition,
-              'addBeforeRunCallback',
-              $events->beforeRun,
+                $schedulerDefinition,
+                'addBeforeRunCallback',
+                $events->beforeRun,
             );
 
             $this->addEventsToScheduler(
-              $schedulerDefinition,
-              'addAfterRunCallback',
-              $events->afterRun,
+                $schedulerDefinition,
+                'addAfterRunCallback',
+                $events->afterRun,
             );
 
             $this->addEventsToScheduler(
-              $schedulerDefinition,
-              'addLockedJobCallback',
-              $events->lockedJob,
+                $schedulerDefinition,
+                'addLockedJobCallback',
+                $events->lockedJob,
             );
         }
 
         $this->addEventsToScheduler(
-          $schedulerDefinition,
-          'addBeforeJobCallback',
-          $events->beforeJob,
+            $schedulerDefinition,
+            'addBeforeJobCallback',
+            $events->beforeJob,
         );
 
         $this->addEventsToScheduler(
-          $schedulerDefinition,
-          'addAfterJobCallback',
-          $events->afterJob,
+            $schedulerDefinition,
+            'addAfterJobCallback',
+            $events->afterJob,
         );
 
         return $schedulerDefinition;
     }
 
-    private function registerJobManager(ContainerBuilder $builder, stdClass $config) : ServiceDefinition {
+    private function registerJobManager(ContainerBuilder $builder, stdClass $config): ServiceDefinition {
         $loader = new DefinitionsLoader($this->compiler);
 
         // Compat - orisai/scheduler v1
@@ -242,7 +244,7 @@ final class SchedulerExtension extends CompilerExtension
                 if ($job->repeatAfterSeconds !== 0) {
                     throw InvalidArgument::create()
                                          ->withMessage(
-                                           "Option `$this->name > jobs > $id > repeatAfterSeconds` requires orisai/scheduler >= 2.0.0",
+                                             "Option `$this->name > jobs > $id > repeatAfterSeconds` requires orisai/scheduler >= 2.0.0",
                                          );
                 }
 
@@ -250,7 +252,7 @@ final class SchedulerExtension extends CompilerExtension
                 if ($job->timeZone !== null) {
                     throw InvalidArgument::create()
                                          ->withMessage(
-                                           "Option `$this->name > jobs > $id > timeZone` requires orisai/scheduler >= 2.0.0",
+                                             "Option `$this->name > jobs > $id > timeZone` requires orisai/scheduler >= 2.0.0",
                                          );
                 }
 
@@ -261,11 +263,11 @@ final class SchedulerExtension extends CompilerExtension
 
             return $builder->addDefinition($this->prefix('jobManager'))
                            ->setFactory(
-                             LazyJobManagerV1::class,
-                             [
+                               LazyJobManagerV1::class,
+                               [
                                'jobs'        => $jobs,
                                'expressions' => $expressions,
-                             ]
+                               ]
                            )
                            ->setAutowired(false);
         }
@@ -287,10 +289,10 @@ final class SchedulerExtension extends CompilerExtension
 
         return $builder->addDefinition($this->prefix('jobManager'))
                        ->setFactory(
-                         LazyJobManager::class,
-                         [
+                           LazyJobManager::class,
+                           [
                            'jobSchedules' => $jobSchedules,
-                         ]
+                           ]
                        )
                        ->setAutowired(false);
     }
@@ -298,74 +300,76 @@ final class SchedulerExtension extends CompilerExtension
     /**
      * @param  int|string  $id
      */
-    private function registerJob($id, stdClass $job, ContainerBuilder $builder, DefinitionsLoader $loader) : string {
+    private function registerJob($id, stdClass $job, ContainerBuilder $builder, DefinitionsLoader $loader): string {
         $jobDefinitionName = $this->prefix("job.$id");
         if ($job->callback !== null) {
             $builder->addDefinition($jobDefinitionName)
                     ->setFactory(
-                      new Statement(
-                        CallbackJob::class,
-                        [
-                          new Statement(
+                        new Statement(
+                            CallbackJob::class,
                             [
-                              Closure::class,
-                              'fromCallable',
-                            ], [
-                              $job->callback,
-                            ]
-                          ),
-                        ],
-                      )
+                            new Statement(
+                                [
+                                Closure::class,
+                                'fromCallable',
+                                ],
+                                [
+                                $job->callback,
+                                ]
+                            ),
+                            ],
+                        )
                     )
                     ->setAutowired(false);
-        }
-        else {
+        } else {
             $loader->loadDefinitionFromConfig($job->job, $jobDefinitionName);
         }
 
         return $jobDefinitionName;
     }
 
-    private function registerErrorHandler(stdClass $config) : ?Statement {
+    private function registerErrorHandler(stdClass $config): ?Statement {
         if ($config->errorHandler === 'tracy') {
             return new Statement(
-              [
+                [
                 Closure::class,
                 'fromCallable',
-              ], [
+                ],
+                [
                 [SchedulerTracyLogger::class, 'log'],
-              ]
+                ]
             );
         }
 
         if (is_array($config->errorHandler)) {
             return new Statement(
-              [
+                [
                 Closure::class,
                 'fromCallable',
-              ], [
+                ],
+                [
                 $config->errorHandler,
-              ]
+                ]
             );
         }
 
         return null;
     }
 
-    private function registerExecutor(ContainerBuilder $builder, stdClass $config) : ?ServiceDefinition {
+    private function registerExecutor(ContainerBuilder $builder, stdClass $config): ?ServiceDefinition {
         if (
-          ($config->executor === 'auto' && function_exists('proc_open'))
-          || $config->executor === 'process'
+            ($config->executor === 'auto' && function_exists('proc_open'))
+            || $config->executor === 'process'
         ) {
             /** @infection-ignore-all */
             return $builder->addDefinition($this->prefix('executor'))
                            ->setFactory(ProcessJobExecutor::class)
                            ->addSetup(
-                             'setExecutable',
-                             [
+                               'setExecutable',
+                               [
                                $config->console->script,
                                $config->console->runJobCommand,
-                             ]
+                               ]
                            )
                            ->setAutowired(false);
         }
@@ -377,59 +381,60 @@ final class SchedulerExtension extends CompilerExtension
      * @param  array<mixed>  $events
      */
     private function addEventsToScheduler(
-      ServiceDefinition $schedulerDefinition,
-      string            $method,
-      array             $events
-    ) : void {
+        ServiceDefinition $schedulerDefinition,
+        string            $method,
+        array             $events
+    ): void {
         foreach ($events as $event) {
             $schedulerDefinition->addSetup(
-              $method,
-              [
+                $method,
+                [
                 new Statement(
-                  [
+                    [
                     Closure::class,
                     'fromCallable',
-                  ], [
+                    ],
+                    [
                     $event,
-                  ]
+                    ]
                 ),
-              ],
+                ],
             );
         }
     }
 
     private function registerCommands(
-      ContainerBuilder  $builder,
-      stdClass          $config,
-      ServiceDefinition $schedulerDefinition
-    ) : void {
+        ContainerBuilder  $builder,
+        stdClass          $config,
+        ServiceDefinition $schedulerDefinition
+    ): void {
         /** @infection-ignore-all */
         $builder->addDefinition($this->prefix('command.list'))
                 ->setFactory(
-                  ListCommand::class,
-                  [
+                    ListCommand::class,
+                    [
                     $schedulerDefinition,
-                  ]
+                    ]
                 )
                 ->setAutowired(false);
 
         /** @infection-ignore-all */
         $builder->addDefinition($this->prefix('command.run'))
                 ->setFactory(
-                  RunCommand::class,
-                  [
+                    RunCommand::class,
+                    [
                     $schedulerDefinition,
-                  ]
+                    ]
                 )
                 ->setAutowired(false);
 
         /** @infection-ignore-all */
         $builder->addDefinition($this->prefix('command.runJob'))
                 ->setFactory(
-                  RunJobCommand::class,
-                  [
+                    RunJobCommand::class,
+                    [
                     $schedulerDefinition,
-                  ]
+                    ]
                 )
                 ->setAutowired(false);
 
@@ -437,11 +442,11 @@ final class SchedulerExtension extends CompilerExtension
         $builder->addDefinition($this->prefix('command.worker'))
                 ->setFactory(WorkerCommand::class)
                 ->addSetup(
-                  'setExecutable',
-                  [
+                    'setExecutable',
+                    [
                     $config->console->script,
                     $config->console->runCommand,
-                  ]
+                    ]
                 )
                 ->setAutowired(false);
 
@@ -450,19 +455,18 @@ final class SchedulerExtension extends CompilerExtension
         if (class_exists(ExplainCommand::class)) {
             $builder->addDefinition($this->prefix('command.explain'))
                     ->setFactory(
-                      ExplainCommand::class,
-                      [
+                        ExplainCommand::class,
+                        [
                         $schedulerDefinition,
-                      ]
+                        ]
                     )
                     ->setAutowired(false);
         }
     }
 
-    private function registerExplainer(ContainerBuilder $builder) : void {
+    private function registerExplainer(ContainerBuilder $builder): void {
         $builder->addDefinition($this->prefix('explainer'))
                 ->setFactory(DefaultCronExpressionExplainer::class)
                 ->setType(CronExpressionExplainer::class);
     }
-
 }

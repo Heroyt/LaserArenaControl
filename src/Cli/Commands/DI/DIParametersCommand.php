@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Cli\Commands\DI;
@@ -8,6 +9,7 @@ use Nette\DI\Container;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+
 use function array_keys;
 use function count;
 use function get_class;
@@ -22,7 +24,6 @@ use function sprintf;
 
 final class DIParametersCommand extends Command
 {
-
     private Container $container;
 
     private bool $exportHint;
@@ -40,15 +41,15 @@ final class DIParametersCommand extends Command
         $this->parameters = $parameters;
     }
 
-    public static function getDefaultName() : string {
+    public static function getDefaultName(): string {
         return 'di:parameters';
     }
 
-    public static function getDefaultDescription() : string {
+    public static function getDefaultDescription(): string {
         return 'Show DI container parameters';
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output) : int {
+    protected function execute(InputInterface $input, OutputInterface $output): int {
         $parameters = $this->parameters ?? $this->container->getParameters();
 
         if ($parameters === []) {
@@ -56,8 +57,8 @@ final class DIParametersCommand extends Command
 
             if ($this->exportHint) {
                 $output->writeln(
-                  'Export of parameters into DIC is disabled.'.
-                  " You may enable it for only this command by setting console extension option 'di > parameters > backup' to 'true'",
+                    'Export of parameters into DIC is disabled.' .
+                    " You may enable it for only this command by setting console extension option 'di > parameters > backup' to 'true'",
                 );
 
                 return self::FAILURE;
@@ -67,8 +68,8 @@ final class DIParametersCommand extends Command
         }
 
         $this->printSortedParameters(
-          $output,
-          ParametersSorter::sortByType($parameters),
+            $output,
+            ParametersSorter::sortByType($parameters),
         );
 
         return self::SUCCESS;
@@ -77,50 +78,47 @@ final class DIParametersCommand extends Command
     /**
      * @param  array<mixed>  $parameters
      */
-    private function printSortedParameters(OutputInterface $output, array $parameters, string $spaces = '  ') : void {
+    private function printSortedParameters(OutputInterface $output, array $parameters, string $spaces = '  '): void {
         $lastKey = array_keys($parameters)[count($parameters) - 1];
 
         foreach ($parameters as $key => $item) {
             if (is_array($item)) {
                 if ($item === []) {
                     $output->writeln(
-                      sprintf(
-                        '%s<fg=cyan>%s</>: <fg=white>[]</>',
-                        $spaces,
-                        $key,
-                      )
+                        sprintf(
+                            '%s<fg=cyan>%s</>: <fg=white>[]</>',
+                            $spaces,
+                            $key,
+                        )
                     );
 
                     if ($key !== $lastKey) {
                         $output->writeln('');
                     }
-                }
-                else {
+                } else {
                     $output->writeln(
-                      sprintf(
-                        '%s<fg=cyan>%s</>:',
-                        $spaces,
-                        $key,
-                      )
+                        sprintf(
+                            '%s<fg=cyan>%s</>:',
+                            $spaces,
+                            $key,
+                        )
                     );
 
-                    $this->printSortedParameters($output, $item, $spaces.'  ');
+                    $this->printSortedParameters($output, $item, $spaces . '  ');
                 }
-            }
-            else {
+            } else {
                 $output->writeln(
-                  sprintf(
-                    '%s<fg=cyan>%s</>: %s',
-                    $spaces,
-                    $key,
-                    $this->valueToString($item),
-                  )
+                    sprintf(
+                        '%s<fg=cyan>%s</>: %s',
+                        $spaces,
+                        $key,
+                        $this->valueToString($item),
+                    )
                 );
 
                 if ($key === $lastKey) {
                     $output->writeln('');
-                }
-                elseif (is_array(next($parameters))) {
+                } elseif (is_array(next($parameters))) {
                     $output->writeln('');
                     prev($parameters);
                 }
@@ -131,27 +129,22 @@ final class DIParametersCommand extends Command
     /**
      * @param  mixed  $value
      */
-    private function valueToString($value) : string {
+    private function valueToString($value): string {
         if (is_bool($value)) {
             $value = $value ? 'true' : 'false';
             $fg = 'yellow';
-        }
-        elseif (is_int($value) || is_float($value)) {
+        } elseif (is_int($value) || is_float($value)) {
             $fg = 'green';
-        }
-        elseif (is_string($value)) {
+        } elseif (is_string($value)) {
             $fg = 'white';
-        }
-        elseif ($value === null) {
+        } elseif ($value === null) {
             $value = 'null';
             $fg = 'yellow';
-        }
-        else {
+        } else {
             $value = get_class($value);
             $fg = 'red';
         }
 
         return "<fg={$fg}>{$value}</>";
     }
-
 }

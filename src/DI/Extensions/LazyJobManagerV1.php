@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\DI\Extensions;
@@ -12,6 +13,7 @@ use Orisai\Scheduler\Job\Job;
 use Orisai\Scheduler\Job\JobSchedule;
 use Orisai\Scheduler\Manager\JobManager;
 use Orisai\Utils\Reflection\Classes;
+
 use function get_class;
 
 /**
@@ -22,7 +24,6 @@ use function get_class;
  */
 final class LazyJobManagerV1 implements JobManager
 {
-
     private Container $container;
 
     /** @var array<int|string, string> */
@@ -41,7 +42,7 @@ final class LazyJobManagerV1 implements JobManager
         $this->expressions = $expressions;
     }
 
-    public function getPair($id) : ?array {
+    public function getPair($id): ?array {
         $job = $this->jobs[$id] ?? null;
 
         if ($job === null) {
@@ -63,7 +64,7 @@ final class LazyJobManagerV1 implements JobManager
      * @param  class-string  $expectedType
      * @return never
      */
-    private function throwInvalidServiceType(string $serviceName, string $expectedType, object $service) : void {
+    private function throwInvalidServiceType(string $serviceName, string $expectedType, object $service): void {
         $serviceClass = get_class($service);
         $selfClass = self::class;
         $className = Classes::getShortName($selfClass);
@@ -72,14 +73,14 @@ final class LazyJobManagerV1 implements JobManager
                           ->withContext("Service '$serviceName' returns instance of $serviceClass.")
                           ->withProblem("$selfClass supports only instances of $expectedType.")
                           ->withSolution(
-                            "Remove service from $className or make the service return supported object type."
+                              "Remove service from $className or make the service return supported object type."
                           );
 
         throw InvalidArgument::create()
                              ->withMessage($message);
     }
 
-    public function getPairs() : array {
+    public function getPairs(): array {
         $pairs = [];
         foreach ($this->jobs as $id => $job) {
             $jobInst = $this->container->getService($job);
@@ -96,7 +97,7 @@ final class LazyJobManagerV1 implements JobManager
         return $pairs;
     }
 
-    public function getExpressions() : array {
+    public function getExpressions(): array {
         $expressions = [];
         foreach ($this->expressions as $id => $expression) {
             $expressions[$id] = new CronExpression($expression);
@@ -108,7 +109,7 @@ final class LazyJobManagerV1 implements JobManager
     /**
      * @codeCoverageIgnore
      */
-    public function getJobSchedule($id) : ?JobSchedule {
+    public function getJobSchedule($id): ?JobSchedule {
         throw ShouldNotHappen::create()
                              ->withMessage('This method is here just to make tooling happy');
     }
@@ -116,9 +117,8 @@ final class LazyJobManagerV1 implements JobManager
     /**
      * @codeCoverageIgnore
      */
-    public function getJobSchedules() : array {
+    public function getJobSchedules(): array {
         throw ShouldNotHappen::create()
                              ->withMessage('This method is here just to make tooling happy');
     }
-
 }

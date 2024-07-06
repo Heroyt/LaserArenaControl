@@ -8,15 +8,14 @@ use Psr\Http\Message\ResponseInterface;
 
 class LaserLiga extends Controller
 {
-
     public function __construct(
-      private readonly LigaApi $api
+        private readonly LigaApi $api
     ) {
         parent::__construct();
     }
 
-    public function highlights(string $code) : ResponseInterface {
-        $response = $this->api->get('/api/games/'.$code.'/highlights');
+    public function highlights(string $code): ResponseInterface {
+        $response = $this->api->get('/api/games/' . $code . '/highlights');
         $response->getBody()->rewind();
         $contents = $response->getBody()->getContents();
 
@@ -29,5 +28,4 @@ class LaserLiga extends Controller
 
         return $this->respond($highlights);
     }
-
 }

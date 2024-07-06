@@ -4,8 +4,7 @@ namespace App\Services;
 
 class SerializerHelper
 {
-
-    public static function handleCircularReference(object $object, string $format, array $context) : mixed {
+    public static function handleCircularReference(object $object, string $format, array $context): mixed {
         if (property_exists($object, 'code')) {
             return $object->code;
         }
@@ -17,5 +16,4 @@ class SerializerHelper
         }
         return null;
     }
-
 }

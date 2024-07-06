@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file      E500.php
  * @brief     Pages\E500 class
@@ -41,13 +42,16 @@ class E500 extends Controller
      */
     protected string $description = 'Page not found';
 
-    public function show(Request $request, ?Throwable $e = null) : ResponseInterface {
+    public function show(Request $request, ?Throwable $e = null): ResponseInterface {
         if (str_contains($request->getHeaderLine('Accept'), 'application/json')) {
             return $this->respond(
-              new ErrorDto(
-                'Internal error', type: ErrorType::INTERNAL, detail: $e?->getMessage(), exception: $e,
-              ),
-              500
+                new ErrorDto(
+                    'Internal error',
+                    type: ErrorType::INTERNAL,
+                    detail: $e?->getMessage(),
+                    exception: $e,
+                ),
+                500
             );
         }
         $this->params['exception'] = $e;

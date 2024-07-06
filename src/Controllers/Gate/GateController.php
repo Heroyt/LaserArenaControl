@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @author Tomáš Vojík <xvojik00@stud.fit.vutbr.cz>, <vojik@wboy.cz>
  */
@@ -29,10 +30,9 @@ use Throwable;
  */
 class GateController extends Controller
 {
-
     public function __construct(
-      private readonly EventService $eventService,
-      private readonly Gate         $gate
+        private readonly EventService $eventService,
+        private readonly Gate         $gate
     ) {
         parent::__construct();
     }
@@ -42,14 +42,14 @@ class GateController extends Controller
      * @return ResponseInterface
      * @throws JsonException
      */
-    public function show(Request $request, string $gate = 'default') : ResponseInterface {
+    public function show(Request $request, string $gate = 'default'): ResponseInterface {
         $system = $request->getGet('system', 'all');
 
         $gateType = GateType::getBySlug(empty($gate) ? 'default' : $gate);
         if (!isset($gateType)) {
             return $this->respond(
-              new ErrorDto('Gate type not found.', ErrorType::NOT_FOUND, values: ['slug' => $gate]),
-              404
+                new ErrorDto('Gate type not found.', ErrorType::NOT_FOUND, values: ['slug' => $gate]),
+                404
             );
         }
 
@@ -66,15 +66,15 @@ class GateController extends Controller
         }
     }
 
-    public function setEvent(Request $request) : ResponseInterface {
+    public function setEvent(Request $request): ResponseInterface {
         $event = (string) $request->getPost('event', '');
         $time = (int) $request->getPost('time', 60);
 
         $dto = new CustomEventDto($event, time() + $time);
         Info::set('gate-event', $dto);
         $this->eventService->trigger(
-          'gate-reload',
-          ['type' => 'custom-event', 'event' => $event, 'time' => $dto->time]
+            'gate-reload',
+            ['type' => 'custom-event', 'event' => $event, 'time' => $dto->time]
         );
         return $this->respond('');
     }
@@ -86,7 +86,7 @@ class GateController extends Controller
      * @throws JsonException
      * @throws Throwable
      */
-    public function setGateGame(Request $request) : ResponseInterface {
+    public function setGateGame(Request $request): ResponseInterface {
         $game = $this->getGame($request);
         if ($game instanceof ErrorDto) {
             return $this->respond($game, $game->type === ErrorType::NOT_FOUND ? 404 : 400);
@@ -98,13 +98,13 @@ class GateController extends Controller
             Info::set('gate-time', $gateTime);
             $this->clearEvent();
             $this->eventService->trigger(
-              'gate-reload',
-              ['type' => 'game-set', 'game' => $game->code, 'time' => $gateTime]
+                'gate-reload',
+                ['type' => 'game-set', 'game' => $game->code, 'time' => $gateTime]
             );
         } catch (Exception $e) {
             return $this->respond(
-              new ErrorDto('Failed to save the game info', type: ErrorType::DATABASE, exception: $e),
-              500
+                new ErrorDto('Failed to save the game info', type: ErrorType::DATABASE, exception: $e),
+                500
             );
         }
 
@@ -117,7 +117,7 @@ class GateController extends Controller
      * @return Game|ErrorDto
      * @throws Throwable
      */
-    private function getGame(Request $request) : Game | ErrorDto {
+    private function getGame(Request $request): Game | ErrorDto {
         /** @var 'last'|numeric $gamePost */
         $gamePost = $request->getPost('game', '0');
         $system = (string) $request->getParam('system', 'all');
@@ -140,7 +140,7 @@ class GateController extends Controller
         return $game ?? new ErrorDto('Cannot find game', type: ErrorType::NOT_FOUND);
     }
 
-    private function clearEvent() : void {
+    private function clearEvent(): void {
         Info::set('gate-event', null);
     }
 
@@ -151,7 +151,7 @@ class GateController extends Controller
      * @throws JsonException
      * @throws Throwable
      */
-    public function setGateLoaded(Request $request) : ResponseInterface {
+    public function setGateLoaded(Request $request): ResponseInterface {
         $game = $this->getGame($request);
         if ($game instanceof ErrorDto) {
             return $this->respond($game, $game->type === ErrorType::NOT_FOUND ? 404 : 400);
@@ -162,16 +162,16 @@ class GateController extends Controller
             $game->fileTime = new DateTime(); // Set time to NOW
             $game->start = null;
             $game->end = null;
-            Info::set($system.'-game-loaded', $game);
+            Info::set($system . '-game-loaded', $game);
             $this->clearEvent();
             $this->eventService->trigger(
-              'gate-reload',
-              ['type' => 'game-set-loaded', 'game' => $game->code, 'time' => time()]
+                'gate-reload',
+                ['type' => 'game-set-loaded', 'game' => $game->code, 'time' => time()]
             );
         } catch (Exception $e) {
             return $this->respond(
-              new ErrorDto('Failed to save the game info', type: ErrorType::DATABASE, exception: $e),
-              500
+                new ErrorDto('Failed to save the game info', type: ErrorType::DATABASE, exception: $e),
+                500
             );
         }
         return $this->respond(['success' => true]);
@@ -183,22 +183,21 @@ class GateController extends Controller
      * @return ResponseInterface
      * @throws JsonException
      */
-    public function setGateIdle(string $system = '') : ResponseInterface {
+    public function setGateIdle(string $system = ''): ResponseInterface {
         if (empty($system)) {
             return $this->respond(new ErrorDto('Missing / Incorrect system', type: ErrorType::VALIDATION), 400);
         }
         try {
             Info::set('gate-game', null);
-            Info::set($system.'-game-loaded', null);
+            Info::set($system . '-game-loaded', null);
             $this->clearEvent();
             $this->eventService->trigger('gate-reload', ['type' => 'set-idle', 'time' => time()]);
         } catch (Exception $e) {
             return $this->respond(
-              new ErrorDto('Failed to save the game info', type: ErrorType::DATABASE, exception: $e),
-              500
+                new ErrorDto('Failed to save the game info', type: ErrorType::DATABASE, exception: $e),
+                500
             );
         }
         return $this->respond(['success' => true]);
     }
-
 }

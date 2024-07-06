@@ -10,32 +10,30 @@ use Lsr\Core\Models\Model;
 #[PrimaryKey('id_variation')]
 class GameModeVariation extends Model
 {
+    public const TABLE        = 'game_modes_variations';
+    public const TABLE_VALUES = 'game_modes_variations_values';
 
-	public const TABLE        = 'game_modes_variations';
-	public const TABLE_VALUES = 'game_modes_variations_values';
+    public string $name;
 
-	public string $name;
+    /** @var GameModeVariationValue[][] */
+    private array $valuesModes = [];
 
-	/** @var GameModeVariationValue[][] */
-	private array $valuesModes = [];
-
-	/**
-	 * @param AbstractMode $mode
-	 *
-	 * @return GameModeVariationValue[]
-	 */
-	public function getValuesForMode(AbstractMode $mode) : array {
-		if (empty($this->valuesModes[$mode->id])) {
-			$this->valuesModes[$mode->id] = [];
-			$rows = DB::select(self::TABLE_VALUES, '[value], [suffix], [order]')
-								->where('id_variation = %i AND id_mode = %i', $this->id, $mode->id)
-								->orderBy('[order]')
-								->fetchAll();
-			foreach ($rows as $row) {
-				$this->valuesModes[$mode->id][] = new GameModeVariationValue($this, $mode, $row->value, $row->suffix, $row->order);
-			}
-		}
-		return $this->valuesModes[$mode->id];
-	}
-
+    /**
+     * @param AbstractMode $mode
+     *
+     * @return GameModeVariationValue[]
+     */
+    public function getValuesForMode(AbstractMode $mode): array {
+        if (empty($this->valuesModes[$mode->id])) {
+            $this->valuesModes[$mode->id] = [];
+            $rows = DB::select(self::TABLE_VALUES, '[value], [suffix], [order]')
+                                ->where('id_variation = %i AND id_mode = %i', $this->id, $mode->id)
+                                ->orderBy('[order]')
+                                ->fetchAll();
+            foreach ($rows as $row) {
+                $this->valuesModes[$mode->id][] = new GameModeVariationValue($this, $mode, $row->value, $row->suffix, $row->order);
+            }
+        }
+        return $this->valuesModes[$mode->id];
+    }
 }

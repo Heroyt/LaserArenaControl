@@ -9,10 +9,8 @@ namespace App\Models\Auth\Enums;
  */
 enum ConnectionType: string
 {
+    case RFID = 'rfid';
+    case LASER_FORCE = 'laserforce';
 
-	case RFID = 'rfid';
-	case LASER_FORCE = 'laserforce';
-
-	case OTHER = 'other';
-
+    case OTHER = 'other';
 }

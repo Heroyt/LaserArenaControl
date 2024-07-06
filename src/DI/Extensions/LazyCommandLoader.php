@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\DI\Extensions;
@@ -10,8 +11,7 @@ use Symfony\Component\Console\Exception\CommandNotFoundException;
 
 final class LazyCommandLoader extends ServiceManager implements CommandLoaderInterface
 {
-
-    public function get(string $name) : Command {
+    public function get(string $name): Command {
         $service = $this->getService($name);
 
         if ($service === null) {
@@ -25,15 +25,14 @@ final class LazyCommandLoader extends ServiceManager implements CommandLoaderInt
         return $service;
     }
 
-    public function has(string $name) : bool {
+    public function has(string $name): bool {
         return $this->hasService($name);
     }
 
     /**
      * @return array<string>
      */
-    public function getNames() : array {
+    public function getNames(): array {
         return $this->getKeys();
     }
-
 }

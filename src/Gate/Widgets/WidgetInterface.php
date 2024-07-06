@@ -7,8 +7,7 @@ use DateTimeInterface;
 
 interface WidgetInterface
 {
-
-    public function refresh() : static;
+    public function refresh(): static;
 
     /**
      * @param  Game|null  $game
@@ -16,7 +15,7 @@ interface WidgetInterface
      * @param  string[]|null  $systems
      * @return array
      */
-    public function getData(?Game $game = null, ?DateTimeInterface $date = null, ?array $systems = []) : array;
+    public function getData(?Game $game = null, ?DateTimeInterface $date = null, ?array $systems = []): array;
 
     /**
      * @param  Game|null  $game
@@ -24,9 +23,9 @@ interface WidgetInterface
      * @param  string[]|null  $systems
      * @return string
      */
-    public function getHash(?Game $game = null, ?DateTimeInterface $date = null, ?array $systems = []) : string;
+    public function getHash(?Game $game = null, ?DateTimeInterface $date = null, ?array $systems = []): string;
 
-    public function getTemplate() : string;
+    public function getTemplate(): string;
 
-    public function getSettingsTemplate() : string;
+    public function getSettingsTemplate(): string;
 }

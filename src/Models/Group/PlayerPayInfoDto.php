@@ -9,18 +9,18 @@ use JsonSerializable;
  */
 class PlayerPayInfoDto implements JsonSerializable
 {
-
     public function __construct(
-      public string $playerName,
-      public int    $gamesPlayed,
-      public int    $gamesPaid = 0,
-      public ?int   $priceGroupId = null,
-    ) {}
+        public string $playerName,
+        public int    $gamesPlayed,
+        public int    $gamesPaid = 0,
+        public ?int   $priceGroupId = null,
+    ) {
+    }
 
     /**
      * @inheritDoc
      */
-    public function jsonSerialize() : array {
+    public function jsonSerialize(): array {
         return get_object_vars($this);
     }
 }

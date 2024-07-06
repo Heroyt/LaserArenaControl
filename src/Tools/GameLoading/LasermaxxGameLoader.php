@@ -2,7 +2,6 @@
 
 namespace App\Tools\GameLoading;
 
-
 use App\Core\App;
 use App\Exceptions\GameModeNotFoundException;
 use App\GameModels\Factory\GameModeFactory;
@@ -21,11 +20,11 @@ use Spiral\RoadRunner\Metrics\Metrics;
  */
 abstract class LasermaxxGameLoader implements LoaderInterface
 {
-
     public function __construct(
-      protected readonly Latte   $latte,
-      protected readonly Metrics $metrics,
-    ) {}
+        protected readonly Latte   $latte,
+        protected readonly Metrics $metrics,
+    ) {
+    }
 
     /**
      * @param  int  $musicId
@@ -33,15 +32,14 @@ abstract class LasermaxxGameLoader implements LoaderInterface
      * @param  non-empty-string  $system
      * @return void
      */
-    public function loadMusic(int $musicId, string $musicFile, string $system = 'evo5') : void {
+    public function loadMusic(int $musicId, string $musicFile, string $system = 'evo5'): void {
         $start = microtime(true);
         try {
             $music = MusicMode::get($musicId);
             if (!file_exists($music->fileName)) {
-                App::getInstance()->getLogger()->warning('Music file does not exist - '.$music->fileName);
-            }
-            elseif (!copy($music->fileName, $musicFile)) {
-                App::getInstance()->getLogger()->warning('Music copy failed - '.$music->fileName);
+                App::getInstance()->getLogger()->warning('Music file does not exist - ' . $music->fileName);
+            } elseif (!copy($music->fileName, $musicFile)) {
+                App::getInstance()->getLogger()->warning('Music copy failed - ' . $music->fileName);
             }
         } catch (ModelNotFoundException | ValidationException | DirectoryCreationException) {
             // Not critical, doesn't need to do anything
@@ -68,7 +66,7 @@ abstract class LasermaxxGameLoader implements LoaderInterface
      *    teams:array{key:int,name:string,playerCount:int}
      *    }
      */
-    protected function loadLasermaxxGame(array $data) : array {
+    protected function loadLasermaxxGame(array $data): array {
         /** @var array{
          *   meta:array<string,string|numeric>,
          *   players:array{vest:int,name:string,vip:bool,team:int,code?:string}[],
@@ -131,12 +129,12 @@ abstract class LasermaxxGameLoader implements LoaderInterface
 
             $asciiName = substr(Strings::toAscii($player['name']), 0, 12);
             if ($player['name'] !== $asciiName) {
-                $loadData['meta']['p'.$vest.'n'] = $player['name'];
+                $loadData['meta']['p' . $vest . 'n'] = $player['name'];
             }
             if (!empty($player['code'])) {
-                $loadData['meta']['p'.$vest.'u'] = $player['code'];
+                $loadData['meta']['p' . $vest . 'u'] = $player['code'];
             }
-            $hashData[(int) $vest] = $vest.'-'.$asciiName;
+            $hashData[(int) $vest] = $vest . '-' . $asciiName;
             $loadData['players'][(int) $vest] = [
               'vest' => (string) $vest,
               'name' => $asciiName,
@@ -152,7 +150,7 @@ abstract class LasermaxxGameLoader implements LoaderInterface
         foreach ($data['team'] ?? [] as $key => $team) {
             $asciiName = Strings::toAscii($team['name']);
             if ($team['name'] !== $asciiName) {
-                $loadData['meta']['t'.$key.'n'] = $team['name'];
+                $loadData['meta']['t' . $key . 'n'] = $team['name'];
             }
             $loadData['teams'][] = [
               'key'         => $key,
@@ -169,7 +167,7 @@ abstract class LasermaxxGameLoader implements LoaderInterface
         ksort($hashData);
         ksort($loadData['players']);
         $loadData['players'] = array_values($loadData['players']);
-        $loadData['meta']['hash'] = md5($loadData['meta']['mode'].';'.implode(';', $hashData));
+        $loadData['meta']['hash'] = md5($loadData['meta']['mode'] . ';' . implode(';', $hashData));
 
 
         // Choose random music ID if a group is selected

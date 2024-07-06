@@ -37,13 +37,13 @@ class NewGame extends Controller
     private array $decorators = [];
 
     public function __construct(
-      private readonly FeatureConfig $featureConfig,
+        private readonly FeatureConfig $featureConfig,
     ) {
         parent::__construct();
         $this->params = new NewGameParams();
     }
 
-    public function init(RequestInterface $request) : void {
+    public function init(RequestInterface $request): void {
         $this->params['addCss'] = [];
         $this->params['addJs'] = [];
         parent::init($request);
@@ -66,7 +66,7 @@ class NewGame extends Controller
      * @throws Throwable
      * @throws ValidationException
      */
-    public function show(Request $request) : ResponseInterface {
+    public function show(Request $request): ResponseInterface {
         $this->hookedTemplates = new HookedTemplates();
         $this->params->addedTemplates = $this->hookedTemplates;
         $this->params->featureConfig = $this->featureConfig;

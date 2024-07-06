@@ -6,15 +6,15 @@ use Symfony\Component\Process\Process;
 
 class RtspDecoder
 {
-
     private Process $process;
 
     public function __construct(
-      public readonly string $uri,
-      public readonly string $name,
-    ) {}
+        public readonly string $uri,
+        public readonly string $name,
+    ) {
+    }
 
-    public function start() : void {
+    public function start(): void {
         $command = [
           'ffmpeg',
           '-fflags',
@@ -44,15 +44,15 @@ class RtspDecoder
           '-hls_segment_type',
           'mpegts',
           '-hls_segment_filename',
-          '/var/tmp/hls/'.$this->name.'%d.ts',
-          '/var/tmp/hls/'.$this->name.'.m3u8',
+          '/var/tmp/hls/' . $this->name . '%d.ts',
+          '/var/tmp/hls/' . $this->name . '.m3u8',
         ];
 
         $this->process = new Process($command);
         $this->process->start();
     }
 
-    public function stop() : void {
+    public function stop(): void {
         if (isset($this->process)) {
             $this->process->stop();
         }

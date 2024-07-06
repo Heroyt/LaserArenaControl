@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file    load.php
  * @brief   Main bootstrap
@@ -29,24 +30,24 @@ use Tracy\Debugger;
 use Tracy\NativeSession;
 
 if (!defined('ROOT')) {
-	define("ROOT", dirname(__DIR__).'/');
+    define("ROOT", dirname(__DIR__) . '/');
 }
 
 date_default_timezone_set('Europe/Prague');
 
 // Autoload libraries
-require_once ROOT.'vendor/autoload.php';
+require_once ROOT . 'vendor/autoload.php';
 
 // Load all globals and constants
-require_once ROOT.'include/config.php';
+require_once ROOT . 'include/config.php';
 
 Timer::start('core.init');
 
 if (!is_dir(LOG_DIR) && !mkdir(LOG_DIR) && (!file_exists(LOG_DIR) || !is_dir(LOG_DIR))) {
-	throw new RuntimeException(sprintf('Directory "%s" was not created', LOG_DIR));
+    throw new RuntimeException(sprintf('Directory "%s" was not created', LOG_DIR));
 }
 if (!is_dir(UPLOAD_DIR) && !mkdir(UPLOAD_DIR) && (!file_exists(UPLOAD_DIR) || !is_dir(UPLOAD_DIR))) {
-	throw new RuntimeException(sprintf('Directory "%s" was not created', UPLOAD_DIR));
+    throw new RuntimeException(sprintf('Directory "%s" was not created', UPLOAD_DIR));
 }
 
 // Enable tracy
@@ -56,52 +57,52 @@ Debugger::setSessionStorage(new NativeSession());
 
 // Register custom tracy panels
 Debugger::getBar()
-	->addPanel(new TimerTracyPanel())
-	->addPanel(new CacheTracyPanel())
-	->addPanel(new DbTracyPanel())
-	->addPanel(new TranslationTracyPanel())
-	->addPanel(new RoutingTracyPanel());
+    ->addPanel(new TimerTracyPanel())
+    ->addPanel(new CacheTracyPanel())
+    ->addPanel(new DbTracyPanel())
+    ->addPanel(new TranslationTracyPanel())
+    ->addPanel(new RoutingTracyPanel());
 
 Loader::init();
 
 define('CHECK_TRANSLATIONS', (bool) (App::getInstance()->config->getConfig()['General']['TRANSLATIONS'] ?? false));
 define(
-  'TRANSLATIONS_COMMENTS',
-  (bool) (App::getInstance()->config->getConfig()['General']['TRANSLATIONS_COMMENTS'] ?? false)
+    'TRANSLATIONS_COMMENTS',
+    (bool) (App::getInstance()->config->getConfig()['General']['TRANSLATIONS_COMMENTS'] ?? false)
 );
 
 // Translations update
 $translationChange = false;
 if (!PRODUCTION) {
-	Timer::start('core.init.translations');
-	$poLoader = new PoLoader();
-	/** @var Translations[] $translations */
-	$translations = [];
-	/** @var string[] $languages */
+    Timer::start('core.init.translations');
+    $poLoader = new PoLoader();
+    /** @var Translations[] $translations */
+    $translations = [];
+    /** @var string[] $languages */
     $languages = App::getInstance()->getSupportedLanguages();
-	foreach ($languages as $lang => $country) {
-		$concatLang = $lang.'_'.$country;
-		$path = LANGUAGE_DIR.'/'.$concatLang;
-		if (!is_dir($path)) {
-			continue;
-		}
-		$file = $path.'/LC_MESSAGES/'.LANGUAGE_FILE_NAME.'.po';
-		$translations[$concatLang] = $poLoader->loadFile($file);
-	}
-	Timer::stop('core.init.translations');
+    foreach ($languages as $lang => $country) {
+        $concatLang = $lang . '_' . $country;
+        $path = LANGUAGE_DIR . '/' . $concatLang;
+        if (!is_dir($path)) {
+            continue;
+        }
+        $file = $path . '/LC_MESSAGES/' . LANGUAGE_FILE_NAME . '.po';
+        $translations[$concatLang] = $poLoader->loadFile($file);
+    }
+    Timer::stop('core.init.translations');
 }
 
 if (defined('INDEX') && PHP_SAPI !== 'cli') {
-	// Register library tracy panels
-	if (!isset($_ENV['noDb'])) {
-		(new Panel())->register(DB::getConnection());
-	}
-	if (!PRODUCTION) {
-		Debugger::getBar()
-		        ->addPanel(new ContainerPanel(App::getContainer()))
-		        ->addPanel(new LattePanel(App::getService('templating.latte.engine'))) // @phpstan-ignore-line
-		        ->addPanel(new SessionPanel());
-	}
+    // Register library tracy panels
+    if (!isset($_ENV['noDb'])) {
+        (new Panel())->register(DB::getConnection());
+    }
+    if (!PRODUCTION) {
+        Debugger::getBar()
+                ->addPanel(new ContainerPanel(App::getContainer()))
+                ->addPanel(new LattePanel(App::getService('templating.latte.engine'))) // @phpstan-ignore-line
+                ->addPanel(new SessionPanel());
+    }
 }
 
 BlueScreenPanel::initialize();

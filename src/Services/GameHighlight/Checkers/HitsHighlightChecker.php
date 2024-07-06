@@ -15,11 +15,10 @@ use App\Services\NameInflectionService;
 
 class HitsHighlightChecker implements GameHighlightChecker, PlayerHighlightChecker
 {
-
     /**
      * @inheritDoc
      */
-    public function checkGame(Game $game, HighlightCollection $highlights) : void {
+    public function checkGame(Game $game, HighlightCollection $highlights): void {
         $pairs = [];
         $maxHitsOwn = 0;
         /** @var Player[] $maxHitsOwnPlayers */
@@ -49,7 +48,7 @@ class HitsHighlightChecker implements GameHighlightChecker, PlayerHighlightCheck
                     // Check for duplicate pairs (1-2 and 2-1 should be the same)
                     $minId = min($player->vest, $hits->playerTarget->vest);
                     $maxId = max($player->vest, $hits->playerTarget->vest);
-                    $key = $minId.'-'.$maxId;
+                    $key = $minId . '-' . $maxId;
                     // Skip duplicates
                     if (isset($pairs[$key])) {
                         continue;
@@ -57,20 +56,20 @@ class HitsHighlightChecker implements GameHighlightChecker, PlayerHighlightCheck
                     $pairs[$key] = true;
                     $name2 = $hits->playerTarget->name;
                     $highlights->add(
-                      new GameHighlight(
-                        GameHighlightType::HITS,
-                        sprintf(
-                          lang(
-                                     'Hráči %s a %s se oba navzájem zasáhli %dx.',
-                            context: 'hits',
-                            domain : 'highlights'
-                          ),
-                          '@'.$name1.'@',
-                          '@'.$name2.'@',
-                          $hits->count
-                        ),
-                        GameHighlight::MEDIUM_RARITY + ($hits->count * 2) // The more hits, the less rare -> higher score
-                      )
+                        new GameHighlight(
+                            GameHighlightType::HITS,
+                            sprintf(
+                                lang(
+                                    'Hráči %s a %s se oba navzájem zasáhli %dx.',
+                                    context: 'hits',
+                                    domain : 'highlights'
+                                ),
+                                '@' . $name1 . '@',
+                                '@' . $name2 . '@',
+                                $hits->count
+                            ),
+                            GameHighlight::MEDIUM_RARITY + ($hits->count * 2) // The more hits, the less rare -> higher score
+                        )
                     );
                 }
             }
@@ -84,46 +83,48 @@ class HitsHighlightChecker implements GameHighlightChecker, PlayerHighlightCheck
                 case 1:
                     $gender = GenderService::rankWord($maxHitsOwnPlayers[0]->name);
                     $highlights->add(
-                      new GameHighlight(
-                        GameHighlightType::HITS,
-                        sprintf(
-                          lang(
-                            match ($gender) {
-                                Gender::MALE   => '%s zasáhl nejvíce spoluhráčů (%d).',
-                                Gender::FEMALE => '%s zasáhla nejvíce spoluhráčů (%d).',
-                                Gender::OTHER  => '%s zasáhlo nejvíce spoluhráčů (%d).',
-                            },
-                            context: 'hits',
-                            domain : 'highlights'
-                          ),
-                          '@'.$maxHitsOwnPlayers[0]->name.'@',
-                          $maxHitsOwn,
-                        ),
-                        30 + ($maxHitsOwn * 3)
-                      )
+                        new GameHighlight(
+                            GameHighlightType::HITS,
+                            sprintf(
+                                lang(
+                                    match ($gender) {
+                                        Gender::MALE   => '%s zasáhl nejvíce spoluhráčů (%d).',
+                                        Gender::FEMALE => '%s zasáhla nejvíce spoluhráčů (%d).',
+                                        Gender::OTHER  => '%s zasáhlo nejvíce spoluhráčů (%d).',
+                                    },
+                                    context: 'hits',
+                                    domain : 'highlights'
+                                ),
+                                '@' . $maxHitsOwnPlayers[0]->name . '@',
+                                $maxHitsOwn,
+                            ),
+                            30 + ($maxHitsOwn * 3)
+                        )
                     );
                     break;
                 default:
                     $playerNames = array_map(
-                      static fn(Player $player) => '@'.$player->name.'@',
-                      $maxHitsOwnPlayers
+                        static fn(Player $player) => '@' . $player->name . '@',
+                        $maxHitsOwnPlayers
                     );
                     $firstNames = implode(', ', array_slice($playerNames, 0, -1));
                     $highlights->add(
-                      new GameHighlight(
-                         GameHighlightType::HITS, sprintf(
-                        lang(
-                                   '%s zasáhli nejvíce spoluhráčů (%d).',
-                          context: 'hits',
-                          domain : 'highlights'
-                        ),
-                        $firstNames.' '.lang(
-                                   'a',
-                          context: 'spojka'
-                        ).' '.last($playerNames),
-                        $maxHitsOwn,
-                      ), 30 + ($maxHitsOwn * 3)
-                      )
+                        new GameHighlight(
+                            GameHighlightType::HITS,
+                            sprintf(
+                                lang(
+                                    '%s zasáhli nejvíce spoluhráčů (%d).',
+                                    context: 'hits',
+                                    domain : 'highlights'
+                                ),
+                                $firstNames . ' ' . lang(
+                                    'a',
+                                    context: 'spojka'
+                                ) . ' ' . last($playerNames),
+                                $maxHitsOwn,
+                            ),
+                            30 + ($maxHitsOwn * 3)
+                        )
                     );
                     break;
             }
@@ -135,57 +136,57 @@ class HitsHighlightChecker implements GameHighlightChecker, PlayerHighlightCheck
                 case 1:
                     $gender = GenderService::rankWord($maxDeathsOwnPlayers[0]->name);
                     $highlights->add(
-                      new GameHighlight(
-                        GameHighlightType::HITS,
-                        sprintf(
-                          lang(
-                            match ($gender) {
-                                Gender::MALE   => '%s byl zasažen nejvíce spoluhráči (%d).',
-                                Gender::FEMALE => '%s byla zasažena nejvíce spoluhráči (%d).',
-                                Gender::OTHER  => '%s bylo zasaženo nejvíce spoluhráči (%d).',
-                            },
-                            context: 'hits',
-                            domain : 'highlights'
-                          ),
-                          '@'.$maxDeathsOwnPlayers[0]->name.'@',
-                          $maxDeathsOwn,
-                        ),
-                        30 + ($maxDeathsOwn * 3)
-                      )
+                        new GameHighlight(
+                            GameHighlightType::HITS,
+                            sprintf(
+                                lang(
+                                    match ($gender) {
+                                        Gender::MALE   => '%s byl zasažen nejvíce spoluhráči (%d).',
+                                        Gender::FEMALE => '%s byla zasažena nejvíce spoluhráči (%d).',
+                                        Gender::OTHER  => '%s bylo zasaženo nejvíce spoluhráči (%d).',
+                                    },
+                                    context: 'hits',
+                                    domain : 'highlights'
+                                ),
+                                '@' . $maxDeathsOwnPlayers[0]->name . '@',
+                                $maxDeathsOwn,
+                            ),
+                            30 + ($maxDeathsOwn * 3)
+                        )
                     );
                     break;
                 default:
                     $playerNames = array_map(
-                      static fn(Player $player) => '@'.$player->name.'@',
-                      $maxDeathsOwnPlayers
+                        static fn(Player $player) => '@' . $player->name . '@',
+                        $maxDeathsOwnPlayers
                     );
                     $firstNames = implode(', ', array_slice($playerNames, 0, -1));
                     $highlights->add(
-                      new GameHighlight(
-                        GameHighlightType::HITS,
-                        sprintf(
-                          lang(
-                                     '%s byli zasaženi nejvíce spoluhráči (%d).',
-                            context: 'hits',
-                            domain : 'highlights'
-                          ),
-                          $firstNames.' '.lang(
-                                     'a',
-                            context: 'spojka'
-                          ).' '.last(
-                            $playerNames
-                          ),
-                          $maxDeathsOwn,
-                        ),
-                        30 + ($maxDeathsOwn * 3)
-                      )
+                        new GameHighlight(
+                            GameHighlightType::HITS,
+                            sprintf(
+                                lang(
+                                    '%s byli zasaženi nejvíce spoluhráči (%d).',
+                                    context: 'hits',
+                                    domain : 'highlights'
+                                ),
+                                $firstNames . ' ' . lang(
+                                    'a',
+                                    context: 'spojka'
+                                ) . ' ' . last(
+                                    $playerNames
+                                ),
+                                $maxDeathsOwn,
+                            ),
+                            30 + ($maxDeathsOwn * 3)
+                        )
                     );
                     break;
             }
         }
     }
 
-    public function checkPlayer(Player $player, HighlightCollection $highlights) : void {
+    public function checkPlayer(Player $player, HighlightCollection $highlights): void {
         if ($player->getGame()->getMode()?->isSolo()) {
             return;
         }
@@ -194,24 +195,24 @@ class HitsHighlightChecker implements GameHighlightChecker, PlayerHighlightCheck
 
         if ($player->hitsOwn > $player->hitsOther) {
             $highlights->add(
-              new GameHighlight(
-                GameHighlightType::HITS,
-                sprintf(
-                  lang(
-                    match ($gender1) {
-                        Gender::MALE   => '%s zasáhl více spoluhráčů (%d), než protihráčů (%d)',
-                        Gender::FEMALE => '%s zasáhla více spoluhráčů (%d), než protihráčů (%d)',
-                        Gender::OTHER  => '%s zasáhlo více spoluhráčů (%d), než protihráčů (%d)',
-                    },
-                    context: 'hits',
-                    domain : 'highlights'
-                  ),
-                  '@'.$name1.'@',
-                  $player->hitsOwn,
-                  $player->hitsOther,
-                ),
-                GameHighlight::VERY_HIGH_RARITY + 20
-              )
+                new GameHighlight(
+                    GameHighlightType::HITS,
+                    sprintf(
+                        lang(
+                            match ($gender1) {
+                                Gender::MALE   => '%s zasáhl více spoluhráčů (%d), než protihráčů (%d)',
+                                Gender::FEMALE => '%s zasáhla více spoluhráčů (%d), než protihráčů (%d)',
+                                Gender::OTHER  => '%s zasáhlo více spoluhráčů (%d), než protihráčů (%d)',
+                            },
+                            context: 'hits',
+                            domain : 'highlights'
+                        ),
+                        '@' . $name1 . '@',
+                        $player->hitsOwn,
+                        $player->hitsOther,
+                    ),
+                    GameHighlight::VERY_HIGH_RARITY + 20
+                )
             );
         }
 
@@ -223,24 +224,24 @@ class HitsHighlightChecker implements GameHighlightChecker, PlayerHighlightCheck
                 Gender::FEMALE              => 'svou spoluhráčku',
             };
             $highlights->add(
-              new GameHighlight(
-                GameHighlightType::HITS,
-                sprintf(
-                  lang(
-                    match ($gender1) {
-                        Gender::MALE   => '%s zasáhl '.$name2Verb.' %s vícekrát (%d), než kteréhokoliv protihráče',
-                        Gender::FEMALE => '%s zasáhla '.$name2Verb.' %s vícekrát (%d), než kteréhokoliv protihráče',
-                        Gender::OTHER  => '%s zasáhlo '.$name2Verb.' %s vícekrát (%d), než kteréhokoliv protihráče',
-                    },
-                    context: 'hits',
-                    domain : 'highlights'
-                  ),
-                  '@'.$name1.'@',
-                  '@'.$name2.'@<'.NameInflectionService::accusative($name2).'>',
-                  $player->getHitsPlayer($player->getFavouriteTarget()),
-                ),
-                GameHighlight::VERY_HIGH_RARITY + 20
-              )
+                new GameHighlight(
+                    GameHighlightType::HITS,
+                    sprintf(
+                        lang(
+                            match ($gender1) {
+                                Gender::MALE   => '%s zasáhl ' . $name2Verb . ' %s vícekrát (%d), než kteréhokoliv protihráče',
+                                Gender::FEMALE => '%s zasáhla ' . $name2Verb . ' %s vícekrát (%d), než kteréhokoliv protihráče',
+                                Gender::OTHER  => '%s zasáhlo ' . $name2Verb . ' %s vícekrát (%d), než kteréhokoliv protihráče',
+                            },
+                            context: 'hits',
+                            domain : 'highlights'
+                        ),
+                        '@' . $name1 . '@',
+                        '@' . $name2 . '@<' . NameInflectionService::accusative($name2) . '>',
+                        $player->getHitsPlayer($player->getFavouriteTarget()),
+                    ),
+                    GameHighlight::VERY_HIGH_RARITY + 20
+                )
             );
         }
     }

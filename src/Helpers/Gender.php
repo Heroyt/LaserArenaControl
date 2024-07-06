@@ -10,9 +10,7 @@ use OpenApi\Attributes as OA;
 #[OA\Schema(type: 'string')]
 enum Gender : string
 {
-
-	case MALE = 'm';
-	case FEMALE = 'f';
-	case OTHER = 'o';
-
+    case MALE = 'm';
+    case FEMALE = 'f';
+    case OTHER = 'o';
 }

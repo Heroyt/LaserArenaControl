@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @author Tomáš Vojík <xvojik00@stud.fit.vutbr.cz>, <vojik@wboy.cz>
  */
@@ -20,7 +21,6 @@ use Lsr\Exceptions\FileException;
  */
 abstract class AbstractResultsParser implements ResultsParserInterface
 {
-
     protected array $matches = [];
     protected string $fileName = '';
     protected string $fileContents = '';
@@ -31,13 +31,14 @@ abstract class AbstractResultsParser implements ResultsParserInterface
      * @throws FileException
      */
     public function __construct(
-      protected readonly PlayerProvider $playerProvider,
-    ) {}
+        protected readonly PlayerProvider $playerProvider,
+    ) {
+    }
 
     /**
      * @return iterable<string>
      */
-    public function getFileLines() : iterable {
+    public function getFileLines(): iterable {
         $separator = "\r\n";
         /** @var string|false $line */
         $line = strtok($this->getFileContents(), $separator);
@@ -50,7 +51,7 @@ abstract class AbstractResultsParser implements ResultsParserInterface
     /**
      * @return string
      */
-    public function getFileContents() : string {
+    public function getFileContents(): string {
         return $this->fileContents;
     }
 
@@ -59,7 +60,7 @@ abstract class AbstractResultsParser implements ResultsParserInterface
      *
      * @return string[][]
      */
-    public function matchAll(string $pattern) : array {
+    public function matchAll(string $pattern): array {
         if (isset($this->matches[$pattern])) {
             return $this->matches[$pattern];
         }
@@ -74,16 +75,16 @@ abstract class AbstractResultsParser implements ResultsParserInterface
      * @return $this
      * @throws FileException
      */
-    public function setFile(string $fileName) : static {
+    public function setFile(string $fileName): static {
         if (!file_exists($fileName) || !is_readable($fileName)) {
-            throw new FileException('File "'.$fileName.'" does not exist or is not readable');
+            throw new FileException('File "' . $fileName . '" does not exist or is not readable');
         }
 
         $this->fileName = $fileName;
 
         $contents = file_get_contents($this->fileName);
         if ($contents === false) {
-            throw new FileException('File "'.$this->fileName.'" read failed');
+            throw new FileException('File "' . $this->fileName . '" read failed');
         }
         $this->fileContents = mb_convert_encoding($contents, 'UTF-8');
         $this->matches = [];
@@ -95,7 +96,7 @@ abstract class AbstractResultsParser implements ResultsParserInterface
      *
      * @return $this
      */
-    public function setContents(string $fileContents) : static {
+    public function setContents(string $fileContents): static {
         $this->fileContents = $fileContents;
         $this->matches = [];
         return $this;
@@ -107,7 +108,7 @@ abstract class AbstractResultsParser implements ResultsParserInterface
      *
      * @return void
      */
-    protected function processExtensions(Game $game, array $meta) : void {
+    protected function processExtensions(Game $game, array $meta): void {
         $extensions = App::getContainer()->findByType(ResultParserExtensionInterface::class);
         foreach ($extensions as $extensionName) {
             /** @var ResultParserExtensionInterface $extensions */
@@ -115,5 +116,4 @@ abstract class AbstractResultsParser implements ResultsParserInterface
             $extensions->parse($game, $meta, $this);
         }
     }
-
 }

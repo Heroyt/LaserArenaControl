@@ -12,25 +12,24 @@ use OpenApi\Attributes as OA;
 #[OA\Schema(type: 'string')]
 enum GameHighlightType : string
 {
+    case TROPHY = 'trophy';
+    case OTHER = 'other';
+    case ALONE_STATS = 'alone';
+    case HITS = 'hits';
+    case DEATHS = 'deaths';
+    case USER_AVERAGE = 'user_average';
 
-	case TROPHY = 'trophy';
-	case OTHER = 'other';
-	case ALONE_STATS = 'alone';
-	case HITS = 'hits';
-	case DEATHS = 'deaths';
-	case USER_AVERAGE = 'user_average';
+    /**
+     * @return class-string<GameHighlight>
+     */
+    public function getHighlightClass(): string {
+        return match ($this) {
+            self::TROPHY => TrophyHighlight::class,
+            default      => GameHighlight::class,
+        };
+    }
 
-	/**
-	 * @return class-string<GameHighlight>
-	 */
-	public function getHighlightClass() : string {
-		return match ($this) {
-			self::TROPHY => TrophyHighlight::class,
-			default      => GameHighlight::class,
-		};
-	}
-
-    public function getIcon() : string {
+    public function getIcon(): string {
         return match ($this) {
             self::TROPHY       => 'trophy',
             self::OTHER        => 'star',
@@ -40,5 +39,4 @@ enum GameHighlightType : string
             self::USER_AVERAGE => 'kill',
         };
     }
-
 }

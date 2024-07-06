@@ -14,17 +14,17 @@ use Spiral\RoadRunner\Jobs\Task\ReceivedTaskInterface;
 
 class MusicTrimPreviewTask implements TaskDispatcherInterface
 {
-
     public function __construct(
-      private readonly FeatureConfig $config,
-      private readonly TaskProducer  $taskProducer,
-    ) {}
+        private readonly FeatureConfig $config,
+        private readonly TaskProducer  $taskProducer,
+    ) {
+    }
 
-    public static function getDiName() : string {
+    public static function getDiName(): string {
         return 'task.musicTrimPreview';
     }
 
-    public function process(ReceivedTaskInterface $task) : void {
+    public function process(ReceivedTaskInterface $task): void {
         /** @var MusicTrimPreviewPayload $payload */
         $payload = igbinary_unserialize($task->getPayload());
 

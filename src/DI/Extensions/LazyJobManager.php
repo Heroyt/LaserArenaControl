@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\DI\Extensions;
@@ -13,6 +14,7 @@ use Orisai\Scheduler\Job\Job;
 use Orisai\Scheduler\Job\JobSchedule;
 use Orisai\Scheduler\Manager\JobManager;
 use Orisai\Utils\Reflection\Classes;
+
 use function get_class;
 
 /**
@@ -20,7 +22,6 @@ use function get_class;
  */
 final class LazyJobManager implements JobManager
 {
-
     private Container $container;
 
     /**
@@ -49,7 +50,7 @@ final class LazyJobManager implements JobManager
         $this->container = $container;
     }
 
-    public function getJobSchedules() : array {
+    public function getJobSchedules(): array {
         // Triggers schedules initialization
         foreach ($this->jobSchedules as $id => $jobSchedule) {
             $this->getJobSchedule($id);
@@ -58,7 +59,7 @@ final class LazyJobManager implements JobManager
         return $this->resolvedJobSchedules;
     }
 
-    public function getJobSchedule($id) : ?JobSchedule {
+    public function getJobSchedule($id): ?JobSchedule {
         $schedule = $this->resolvedJobSchedules[$id] ?? null;
         if ($schedule !== null) {
             return $schedule;
@@ -72,17 +73,17 @@ final class LazyJobManager implements JobManager
         $jobName = $rawSchedule['job'];
         $timeZone = $rawSchedule['timeZone'];
         $schedule = JobSchedule::createLazy(
-          function () use ($jobName) : Job {
-              $job = $this->container->getService($jobName);
-              if (!$job instanceof Job) {
-                  self::throwInvalidServiceType($jobName, Job::class, $job);
-              }
+            function () use ($jobName): Job {
+                $job = $this->container->getService($jobName);
+                if (!$job instanceof Job) {
+                    self::throwInvalidServiceType($jobName, Job::class, $job);
+                }
 
-              return $job;
-          },
-          new CronExpression($rawSchedule['expression']),
-          $rawSchedule['repeatAfterSeconds'],
-          $timeZone !== null ? new DateTimeZone($timeZone) : null,
+                return $job;
+            },
+            new CronExpression($rawSchedule['expression']),
+            $rawSchedule['repeatAfterSeconds'],
+            $timeZone !== null ? new DateTimeZone($timeZone) : null,
         );
 
         unset($this->jobSchedules[$id]);
@@ -94,7 +95,7 @@ final class LazyJobManager implements JobManager
      * @param  class-string  $expectedType
      * @return never
      */
-    private static function throwInvalidServiceType(string $serviceName, string $expectedType, object $service) : void {
+    private static function throwInvalidServiceType(string $serviceName, string $expectedType, object $service): void {
         $serviceClass = get_class($service);
         $selfClass = self::class;
         $className = Classes::getShortName($selfClass);
@@ -103,7 +104,7 @@ final class LazyJobManager implements JobManager
                           ->withContext("Service '$serviceName' returns instance of $serviceClass.")
                           ->withProblem("$selfClass supports only instances of $expectedType.")
                           ->withSolution(
-                            "Remove service from $className or make the service return supported object type."
+                              "Remove service from $className or make the service return supported object type."
                           );
 
         throw InvalidArgument::create()
@@ -113,7 +114,7 @@ final class LazyJobManager implements JobManager
     /**
      * @codeCoverageIgnore
      */
-    public function getPair($id) : ?array {
+    public function getPair($id): ?array {
         throw ShouldNotHappen::create()
                              ->withMessage('This method is here just to make tooling happy');
     }
@@ -121,7 +122,7 @@ final class LazyJobManager implements JobManager
     /**
      * @codeCoverageIgnore
      */
-    public function getPairs() : array {
+    public function getPairs(): array {
         throw ShouldNotHappen::create()
                              ->withMessage('This method is here just to make tooling happy');
     }
@@ -129,9 +130,8 @@ final class LazyJobManager implements JobManager
     /**
      * @codeCoverageIgnore
      */
-    public function getExpressions() : array {
+    public function getExpressions(): array {
         throw ShouldNotHappen::create()
                              ->withMessage('This method is here just to make tooling happy');
     }
-
 }

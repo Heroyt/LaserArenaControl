@@ -21,38 +21,38 @@ class HighlightDto
      * @param  GameHighlight|null  $object
      */
     public function __construct(
-      readonly public string            $code,
-      readonly public DateTimeInterface $datetime,
-      readonly public int               $rarity,
-      readonly public GameHighlightType $type,
-      readonly public string            $description,
-      readonly public ?array            $players = null,
-      readonly public ?GameHighlight    $object = null,
-    ) {}
+        readonly public string            $code,
+        readonly public DateTimeInterface $datetime,
+        readonly public int               $rarity,
+        readonly public GameHighlightType $type,
+        readonly public string            $description,
+        readonly public ?array            $players = null,
+        readonly public ?GameHighlight    $object = null,
+    ) {
+    }
 
-    public function getGame() : ?Game {
+    public function getGame(): ?Game {
         $this->game ??= GameFactory::getByCode($this->code);
         return $this->game;
     }
 
-    public function getFormattedDescription() : string {
+    public function getFormattedDescription(): string {
         return preg_replace_callback(
-          GameHighlightService::PLAYER_REGEXP,
-          static function (array $matches) {
-              $playerName = $matches[1];
-              $label = $matches[2] ?? $playerName;
+            GameHighlightService::PLAYER_REGEXP,
+            static function (array $matches) {
+                $playerName = $matches[1];
+                $label = $matches[2] ?? $playerName;
 
-              return '<strong class="player-name" data-player="'.$playerName.'">'.$label.'</strong>';
-          },
-          $this->description
+                return '<strong class="player-name" data-player="' . $playerName . '">' . $label . '</strong>';
+            },
+            $this->description
         );
     }
 
-    public function getIcon() : string {
+    public function getIcon(): string {
         if (isset($this->object) && $this->object instanceof TrophyHighlight) {
             return $this->object->player->getTrophy()::getFields()[$this->object->value]['icon'];
         }
         return $this->type->getIcon();
     }
-
 }

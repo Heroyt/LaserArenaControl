@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Cli;
@@ -16,7 +17,6 @@ use function ksort;
  */
 final class ParametersSorter
 {
-
     private const
       TYPE_ARRAY = 'array',
       TYPE_BOOL = 'bool',
@@ -29,7 +29,7 @@ final class ParametersSorter
      * @param  array<mixed>  $parameters
      * @return array<mixed>
      */
-    public static function sortByType(array $parameters) : array {
+    public static function sortByType(array $parameters): array {
         ksort($parameters);
         $byType = [
           self::TYPE_ARRAY  => [],
@@ -44,20 +44,15 @@ final class ParametersSorter
             if (is_array($item)) {
                 $item = self::sortByType($item);
                 $type = self::TYPE_ARRAY;
-            }
-            elseif (is_bool($item)) {
+            } elseif (is_bool($item)) {
                 $type = self::TYPE_BOOL;
-            }
-            elseif (is_int($item) || is_float($item)) {
+            } elseif (is_int($item) || is_float($item)) {
                 $type = self::TYPE_NUMBER;
-            }
-            elseif (is_string($item)) {
+            } elseif (is_string($item)) {
                 $type = self::TYPE_STRING;
-            }
-            elseif ($item === null) {
+            } elseif ($item === null) {
                 $type = self::TYPE_NULL;
-            }
-            else {
+            } else {
                 $type = self::TYPE_OTHER;
             }
 
@@ -65,13 +60,12 @@ final class ParametersSorter
         }
 
         return array_merge(
-          $byType[self::TYPE_BOOL],
-          $byType[self::TYPE_STRING],
-          $byType[self::TYPE_NUMBER],
-          $byType[self::TYPE_NULL],
-          $byType[self::TYPE_OTHER],
-          $byType[self::TYPE_ARRAY],
+            $byType[self::TYPE_BOOL],
+            $byType[self::TYPE_STRING],
+            $byType[self::TYPE_NUMBER],
+            $byType[self::TYPE_NULL],
+            $byType[self::TYPE_OTHER],
+            $byType[self::TYPE_ARRAY],
         );
     }
-
 }

@@ -14,7 +14,6 @@ use Lsr\Core\Models\Model;
 #[PrimaryKey('id_playlist')]
 class Playlist extends Model
 {
-
     public const TABLE = 'playlists';
 
     public string $name;
@@ -30,23 +29,23 @@ class Playlist extends Model
      * @return MusicMode[]
      * @throws ValidationException
      */
-    public function getMusic() : array {
+    public function getMusic(): array {
         if (empty($this->music) && !$this->loadedMusic) {
             $this->music = MusicMode::query()
                                     ->where(
-                                      'id_music IN %sql',
-                                      DB::select('playlist_music', 'id_music')
+                                        'id_music IN %sql',
+                                        DB::select('playlist_music', 'id_music')
                                         ->where('id_playlist = %i', $this->id)
                                         ->fluent
                                     )
-                                    ->cacheTags($this::TABLE.'/'.$this->id.'/relations')
+                                    ->cacheTags($this::TABLE . '/' . $this->id . '/relations')
                                     ->get();
             $this->loadedMusic = true;
         }
         return $this->music;
     }
 
-    public function hasMusicMode(MusicMode $musicMode) : bool {
+    public function hasMusicMode(MusicMode $musicMode): bool {
         foreach ($this->getMusic() as $music) {
             if ($musicMode->id === $music->id) {
                 return true;
@@ -59,7 +58,7 @@ class Playlist extends Model
      * @return int[]
      * @throws ValidationException
      */
-    public function getMusicIds() : array {
+    public function getMusicIds(): array {
         $ids = [];
         foreach ($this->getMusic() as $music) {
             $ids[] = $music->id;
@@ -67,11 +66,11 @@ class Playlist extends Model
         return $ids;
     }
 
-    public function save() : bool {
+    public function save(): bool {
         return parent::save() && $this->saveMusic();
     }
 
-    public function saveMusic() : bool {
+    public function saveMusic(): bool {
         if (!$this->musicChanged) {
             return true;
         }
@@ -96,7 +95,7 @@ class Playlist extends Model
      * @param  MusicMode[]  $music
      * @return $this
      */
-    public function setMusic(array $music) : static {
+    public function setMusic(array $music): static {
         $this->music = $music;
         $this->musicChanged = true;
         return $this;

@@ -11,7 +11,6 @@ use Lsr\Core\Models\Model;
 #[PrimaryKey('id_price')]
 class PriceGroup extends Model
 {
-
     public const string TABLE = 'price_groups';
 
     public string $name;
@@ -23,22 +22,21 @@ class PriceGroup extends Model
 
     public bool $deleted = false;
 
-    public static function getAll() : array {
+    public static function getAll(): array {
         return static::query()->where('[deleted] = 0')->get();
     }
 
-    public function jsonSerialize() : array {
+    public function jsonSerialize(): array {
         $data = parent::jsonSerialize();
         $data['price'] = $this->getPrice();
         return $data;
     }
 
-    public function getPrice() : float {
+    public function getPrice(): float {
         return $this->price / 100;
     }
 
-    public function setPrice(float | int $price) : void {
+    public function setPrice(float | int $price): void {
         $this->price = (int) ($price * 100);
     }
-
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file      E403.php
  * @brief     Pages\E403 class
@@ -29,22 +30,21 @@ use Psr\Http\Message\ResponseInterface;
  */
 class E403 extends Controller
 {
-	/**
-	 * @var string $title Page name
-	 */
-	protected string $title = '403';
-	/**
-	 * @var string $description Page description
-	 */
-	protected string $description = 'Access denied';
+    /**
+     * @var string $title Page name
+     */
+    protected string $title = '403';
+    /**
+     * @var string $description Page description
+     */
+    protected string $description = 'Access denied';
 
 
-	public function show(Request $request): ResponseInterface {
-		if ($request->header('Accept') === 'application/json') {
-			return $this->respond(['error' => 'Unauthorized'], 403);
-		}
-		return $this->view('errors/E403')
-		            ->withStatus(403);
-	}
-
+    public function show(Request $request): ResponseInterface {
+        if ($request->header('Accept') === 'application/json') {
+            return $this->respond(['error' => 'Unauthorized'], 403);
+        }
+        return $this->view('errors/E403')
+                    ->withStatus(403);
+    }
 }

@@ -14,8 +14,7 @@ use Lsr\Logging\Exceptions\DirectoryCreationException;
 
 class TrophyHighlightChecker implements PlayerHighlightChecker
 {
-
-    public function checkPlayer(Player $player, HighlightCollection $highlights) : void {
+    public function checkPlayer(Player $player, HighlightCollection $highlights): void {
         foreach (PlayerTrophy::SPECIAL_TROPHIES as $trophy) {
             try {
                 if ($player->getTrophy()->check($trophy)) {
@@ -43,16 +42,15 @@ class TrophyHighlightChecker implements PlayerHighlightChecker
                             break;
                     }
                     $highlights->add(
-                      new TrophyHighlight(
-                        $trophy,
-                        $player,
-                        $rarity
-                      )
+                        new TrophyHighlight(
+                            $trophy,
+                            $player,
+                            $rarity
+                        )
                     );
                 }
             } catch (ModelNotFoundException | ValidationException | DirectoryCreationException) {
             }
         }
     }
-
 }

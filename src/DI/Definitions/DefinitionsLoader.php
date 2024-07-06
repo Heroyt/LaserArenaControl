@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\DI\Definitions;
@@ -10,6 +11,7 @@ use Nette\DI\Definitions\Statement;
 use Nette\Schema\Elements\AnyOf;
 use Nette\Schema\Expect;
 use Orisai\Exceptions\Logic\InvalidArgument;
+
 use function array_key_exists;
 use function class_exists;
 use function is_array;
@@ -21,18 +23,17 @@ use function substr;
 
 final class DefinitionsLoader
 {
-
     private Compiler $compiler;
 
     public function __construct(Compiler $compiler) {
         $this->compiler = $compiler;
     }
 
-    public static function schema() : AnyOf {
+    public static function schema(): AnyOf {
         return Expect::anyOf(
-          Expect::string(),
-          Expect::array(),
-          Expect::type(Statement::class),
+            Expect::string(),
+            Expect::array(),
+            Expect::type(Statement::class),
         );
     }
 
@@ -113,5 +114,4 @@ final class DefinitionsLoader
 
         return $value;
     }
-
 }

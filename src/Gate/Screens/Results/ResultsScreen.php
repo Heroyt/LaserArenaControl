@@ -26,33 +26,33 @@ class ResultsScreen extends GateScreen implements ResultsScreenInterface
     /**
      * @inheritDoc
      */
-    public static function getName() : string {
+    public static function getName(): string {
         return lang('Výsledky ze hry', domain: 'gate', context: 'screens');
     }
 
-    public static function getDescription() : string {
+    public static function getDescription(): string {
         return lang(
-                   'Obrazovka zobrazující výsledky z her. Automaticky vybírá zobrazení podle herního módu.',
-          domain : 'gate',
-          context: 'screens.description'
+            'Obrazovka zobrazující výsledky z her. Automaticky vybírá zobrazení podle herního módu.',
+            domain : 'gate',
+            context: 'screens.description'
         );
     }
 
     /**
      * @inheritDoc
      */
-    public static function getSettingsForm() : string {
+    public static function getSettingsForm(): string {
         return 'gate/settings/results.latte';
     }
 
     /**
      * @inheritDoc
      */
-    public static function buildSettingsFromForm(array $data) : GateSettings {
+    public static function buildSettingsFromForm(array $data): GateSettings {
         return new ResultsSettings(isset($data['time']) ? (int) $data['time'] : null);
     }
 
-    public function isActive() : bool {
+    public function isActive(): bool {
         $game = $this->getGame();
         if (!isset($game)) {
             return false;
@@ -76,7 +76,7 @@ class ResultsScreen extends GateScreen implements ResultsScreenInterface
      * @return GateScreen&ResultsScreenInterface
      * @throws GameModeNotFoundException
      */
-    private function getChildScreen() : ResultsScreenInterface {
+    private function getChildScreen(): ResultsScreenInterface {
         if (isset($this->childScreen)) {
             return $this->childScreen;
         }
@@ -89,8 +89,8 @@ class ResultsScreen extends GateScreen implements ResultsScreenInterface
         // Find correct screen based on game
         /** @var class-string<ResultsScreenInterface&GateScreen> $screenClass */
         if (
-          ($mode = $game->getMode()) !== null &&
-          $mode instanceof CustomResultsMode && class_exists($screenClass = $mode->getCustomGateScreen())
+            ($mode = $game->getMode()) !== null &&
+            $mode instanceof CustomResultsMode && class_exists($screenClass = $mode->getCustomGateScreen())
         ) {
             $this->childScreen = App::getService($screenClass::getDiKey());
         }
@@ -98,7 +98,7 @@ class ResultsScreen extends GateScreen implements ResultsScreenInterface
         // Default to basic rankable
         $this->childScreen ??= match ($game::SYSTEM) {
             'evo5', 'evo6' => App::getService('gate.screens.results.lasermaxx.rankable'),
-            default        => throw new Exception('Cannot find results screen for system '.$game::SYSTEM),
+            default        => throw new Exception('Cannot find results screen for system ' . $game::SYSTEM),
         };
 
         $this->childScreen->setGame($game)->setSettings($this->getSettings())->setParams($this->params);
@@ -109,14 +109,14 @@ class ResultsScreen extends GateScreen implements ResultsScreenInterface
     /**
      * @inheritDoc
      */
-    public static function getDiKey() : string {
+    public static function getDiKey(): string {
         return 'gate.screens.results';
     }
 
     /**
      * @inheritDoc
      */
-    public function run() : ResponseInterface {
+    public function run(): ResponseInterface {
         $game = $this->getGame();
 
         if (!isset($game)) {

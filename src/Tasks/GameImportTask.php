@@ -13,12 +13,12 @@ use Spiral\RoadRunner\Jobs\Task\ReceivedTaskInterface;
  */
 class GameImportTask implements TaskDispatcherInterface
 {
-
     public function __construct(
-      private ImportService $importService
-    ) {}
+        private ImportService $importService
+    ) {
+    }
 
-    public static function getDiName() : string {
+    public static function getDiName(): string {
         return 'task.gamesImport';
     }
 
@@ -27,14 +27,14 @@ class GameImportTask implements TaskDispatcherInterface
      * @return void
      * @throws JobsException
      */
-    public function process(ReceivedTaskInterface $task) : void {
+    public function process(ReceivedTaskInterface $task): void {
         /** @var GameImportPayload $payload */
         $payload = igbinary_unserialize($task->getPayload());
 
         $response = $this->importService->import($payload->dir);
 
         if ($response instanceof ErrorDto) {
-            $task->fail('Game import failed '.$response->title);
+            $task->fail('Game import failed ' . $response->title);
             return;
         }
 

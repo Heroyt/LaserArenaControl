@@ -18,14 +18,14 @@ class MusicCount implements WidgetInterface, WithGameIdsInterface
     /** @var array<int, int> */
     private ?array $musicCounts = null;
 
-    public function refresh() : static {
+    public function refresh(): static {
         $this->hash = null;
         $this->musicCounts = null;
         $this->gameIds = null;
         return $this;
     }
 
-    public function getData(?Game $game = null, ?DateTimeInterface $date = null, ?array $systems = []) : array {
+    public function getData(?Game $game = null, ?DateTimeInterface $date = null, ?array $systems = []): array {
         return [
           'musicCounts' => $this->getMusicCounts($date, $systems),
           'musicModes'  => MusicMode::getAll(),
@@ -37,7 +37,7 @@ class MusicCount implements WidgetInterface, WithGameIdsInterface
      * @param  string[]|null  $systems
      * @return int[]
      */
-    private function getMusicCounts(?DateTimeInterface $date = null, ?array $systems = []) : array {
+    private function getMusicCounts(?DateTimeInterface $date = null, ?array $systems = []): array {
         if (isset($this->musicCounts)) {
             return $this->musicCounts;
         }
@@ -49,8 +49,7 @@ class MusicCount implements WidgetInterface, WithGameIdsInterface
                 $where[] = ['system = %s AND id_game IN %in', $system, $gameIds];
             }
             $query->where('%or', $where);
-        }
-        else {
+        } else {
             $query = GameFactory::queryGames(true, $date ?? new DateTimeImmutable(), ['id_music']);
             if (isset($systems) && count($systems) > 0) {
                 $query->where('system IN %in', $systems);
@@ -83,18 +82,18 @@ class MusicCount implements WidgetInterface, WithGameIdsInterface
      * @return string
      * @throws JsonException
      */
-    public function getHash(?Game $game = null, ?DateTimeInterface $date = null, ?array $systems = []) : string {
+    public function getHash(?Game $game = null, ?DateTimeInterface $date = null, ?array $systems = []): string {
         if (!isset($this->hash)) {
             $this->hash = md5(json_encode($this->getMusicCounts($date, $systems), JSON_THROW_ON_ERROR));
         }
         return $this->hash;
     }
 
-    public function getTemplate() : string {
+    public function getTemplate(): string {
         return 'musicCounts.latte';
     }
 
-    public function getSettingsTemplate() : string {
+    public function getSettingsTemplate(): string {
         return '';
     }
 }

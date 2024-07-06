@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @author Tomáš Vojík <xvojik00@stud.fit.vutbr.cz>, <vojik@wboy.cz>
  */
@@ -30,16 +31,15 @@ use RuntimeException;
  */
 class Settings extends Controller
 {
-
     protected string $title = 'Nastavení';
 
     public function __construct(
-      private readonly FeatureConfig $featureConfig,
+        private readonly FeatureConfig $featureConfig,
     ) {
         parent::__construct();
     }
 
-    public function init(RequestInterface $request) : void {
+    public function init(RequestInterface $request): void {
         parent::init($request);
         $this->params['featureConfig'] = $this->featureConfig;
     }
@@ -49,7 +49,7 @@ class Settings extends Controller
      * @throws JsonException
      * @throws TemplateDoesNotExistException
      */
-    public function show() : ResponseInterface {
+    public function show(): ResponseInterface {
         $this->params['theme'] = Theme::get();
         $this->params['priceGroups'] = PriceGroup::getAll();
         return $this->view('pages/settings/index');
@@ -61,7 +61,7 @@ class Settings extends Controller
      * @throws TemplateDoesNotExistException
      * @throws ValidationException
      */
-    public function vests() : ResponseInterface {
+    public function vests(): ResponseInterface {
         $vests = Vest::getAll();
         $this->params['vests'] = [];
         foreach (GameFactory::getSupportedSystems() as $system) {
@@ -81,7 +81,7 @@ class Settings extends Controller
      * @throws ModelNotFoundException
      * @throws ValidationException
      */
-    public function saveVests(Request $request) : ResponseInterface {
+    public function saveVests(Request $request): ResponseInterface {
         try {
             foreach ($request->getPost('vest', []) as $id => $info) {
                 DB::update(Vest::TABLE, $info, ['%n = %i', Vest::getPrimaryKey(), $id]);
@@ -93,11 +93,11 @@ class Settings extends Controller
         }
         if ($request->isAjax()) {
             return $this->respond(
-              [
+                [
                 'success' => empty($request->passErrors),
                 'errors'  => $request->passErrors,
-              ],
-              empty($request->passErrors) ? 200 : 400
+                ],
+                empty($request->passErrors) ? 200 : 400
             );
         }
         return $this->app->redirect('settings', $request);
@@ -109,7 +109,7 @@ class Settings extends Controller
      * @return ResponseInterface
      * @throws JsonException
      */
-    public function saveGeneral(Request $request) : ResponseInterface {
+    public function saveGeneral(Request $request): ResponseInterface {
         try {
             $apiKey = $request->getPost('api_key');
             if (isset($apiKey)) {
@@ -143,23 +143,23 @@ class Settings extends Controller
             $theme->save();
 
             // Generate theme css
-            file_put_contents(ROOT.'dist/theme.css', $theme->getCss());
+            file_put_contents(ROOT . 'dist/theme.css', $theme->getCss());
 
         } catch (Exception) {
             $request->passErrors[] = lang('Failed to save settings.', context: 'errors');
         }
         if ($request->isAjax()) {
             return $this->respond(
-              [
+                [
                 'success' => empty($request->passErrors),
                 'errors'  => $request->passErrors,
-              ]
+                ]
             );
         }
         return $this->app->redirect('settings', $request);
     }
 
-    private function handleLogoUpload(Request $request) : void {
+    private function handleLogoUpload(Request $request): void {
         $files = $request->getUploadedFiles();
         if (!isset($files['logo'])) {
             return;
@@ -170,20 +170,20 @@ class Settings extends Controller
         // Handle form errors
         if ($file->getError() !== UPLOAD_ERR_OK) {
             $request->passErrors[] = match ($file->getError()) {
-                UPLOAD_ERR_INI_SIZE   => lang('Nahraný soubor je příliš velký', context: 'errors').' - '.$name,
-                UPLOAD_ERR_FORM_SIZE  => lang('Form size is to large', context: 'errors').' - '.$name,
+                UPLOAD_ERR_INI_SIZE   => lang('Nahraný soubor je příliš velký', context: 'errors') . ' - ' . $name,
+                UPLOAD_ERR_FORM_SIZE  => lang('Form size is to large', context: 'errors') . ' - ' . $name,
                 UPLOAD_ERR_PARTIAL    => lang(
-                             'The uploaded file was only partially uploaded.',
+                    'The uploaded file was only partially uploaded.',
                     context: 'errors'
-                  ).' - '.$name,
-                UPLOAD_ERR_CANT_WRITE => lang('Failed to write file to disk.', context: 'errors').' - '.$name,
-                default               => lang('Error while uploading a file.', context: 'errors').' - '.$name,
+                ) . ' - ' . $name,
+                UPLOAD_ERR_CANT_WRITE => lang('Failed to write file to disk.', context: 'errors') . ' - ' . $name,
+                default               => lang('Error while uploading a file.', context: 'errors') . ' - ' . $name,
             };
             return;
         }
 
         // Remove old uploaded files
-        foreach (glob(UPLOAD_DIR.'logo.*') as $old) {
+        foreach (glob(UPLOAD_DIR . 'logo.*') as $old) {
             unlink($old);
         }
 
@@ -192,32 +192,32 @@ class Settings extends Controller
         $fileType = strtolower(pathinfo($name, PATHINFO_EXTENSION));
         if (!in_array($fileType, $validTypes)) {
             $request->passErrors[] = lang(
-                       'Nahraný soubor musí být v jednom z formátů: %s.',
-              context: 'errors',
-              format : [implode(', ', $validTypes)]
+                'Nahraný soubor musí být v jednom z formátů: %s.',
+                context: 'errors',
+                format : [implode(', ', $validTypes)]
             );
             return;
         }
 
         try {
-            $file->moveTo(UPLOAD_DIR.'logo.'.$fileType);
+            $file->moveTo(UPLOAD_DIR . 'logo.' . $fileType);
         } catch (RuntimeException $e) {
-            $request->passErrors[] = lang('File upload failed.', context: 'errors').$e->getMessage();
+            $request->passErrors[] = lang('File upload failed.', context: 'errors') . $e->getMessage();
         }
     }
 
-    public function cache() : ResponseInterface {
+    public function cache(): ResponseInterface {
         return $this->view('pages/settings/cache');
     }
 
-    public function group() : ResponseInterface {
+    public function group(): ResponseInterface {
         $this->params['groupsActive'] = GameGroup::getActiveByDate();
         $this->params['groupsInactive'] = GameGroup::query()->where('active = 0')->orderBy('id_group')->desc()->get();
 
         return $this->view('pages/settings/groups');
     }
 
-    private function handlePriceGroups(Request $request) : void {
+    private function handlePriceGroups(Request $request): void {
         /** @var array<numeric, array{name?:string,price?:numeric}> $priceGroups */
         $priceGroups = $request->getPost('pricegroups', []);
         if (!is_array($priceGroups) || empty($priceGroups)) {
@@ -238,6 +238,4 @@ class Settings extends Controller
             $priceGroup->save();
         }
     }
-
-
 }

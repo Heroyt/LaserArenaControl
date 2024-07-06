@@ -10,5 +10,4 @@ use App\Gate\Settings\ResultsSettings;
  */
 interface ResultsScreenInterface extends WithSettings
 {
-
 }

@@ -4,7 +4,6 @@ namespace App\Tools\GameLoading;
 
 interface LoaderInterface
 {
-
     /**
      * Prepare a game for loading
      *
@@ -12,8 +11,7 @@ interface LoaderInterface
      *
      * @return array<string,string|numeric> Metadata
      */
-    public function loadGame(array $data) : array;
+    public function loadGame(array $data): array;
 
-    public function loadMusic(int $musicId, string $musicFile) : void;
-
+    public function loadMusic(int $musicId, string $musicFile): void;
 }

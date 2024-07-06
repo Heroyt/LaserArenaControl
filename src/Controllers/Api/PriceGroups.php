@@ -13,16 +13,15 @@ use Psr\Http\Message\ResponseInterface;
 
 class PriceGroups extends ApiController
 {
-
-    public function list() : ResponseInterface {
+    public function list(): ResponseInterface {
         return $this->respond(array_values(PriceGroup::getAll()));
     }
 
-    public function show(PriceGroup $priceGroup) : ResponseInterface {
+    public function show(PriceGroup $priceGroup): ResponseInterface {
         return $this->respond($priceGroup);
     }
 
-    public function create(Request $request) : ResponseInterface {
+    public function create(Request $request): ResponseInterface {
         /** @var string|null $name */
         $name = $request->getPost('name');
         if (empty($name)) {
@@ -54,7 +53,7 @@ class PriceGroups extends ApiController
         return $this->respond($priceGroup, 201);
     }
 
-    public function update(PriceGroup $priceGroup, Request $request) : ResponseInterface {
+    public function update(PriceGroup $priceGroup, Request $request): ResponseInterface {
         /** @var string|null $name */
         $name = $request->getPost('name', $priceGroup->name);
         if (empty($name)) {
@@ -85,7 +84,7 @@ class PriceGroups extends ApiController
         return $this->respond($priceGroup, 200);
     }
 
-    public function delete(PriceGroup $priceGroup) : ResponseInterface {
+    public function delete(PriceGroup $priceGroup): ResponseInterface {
         // Soft-delete the entity
         $priceGroup->deleted = true;
         try {
@@ -97,5 +96,4 @@ class PriceGroups extends ApiController
         }
         return $this->respond('ok');
     }
-
 }

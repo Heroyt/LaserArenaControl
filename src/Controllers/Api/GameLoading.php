@@ -12,10 +12,9 @@ use Spiral\RoadRunner\Metrics\Metrics;
 
 class GameLoading extends ApiController
 {
-
     public function __construct(
-      private readonly GameLoader $loader,
-      private readonly Metrics    $metrics,
+        private readonly GameLoader $loader,
+        private readonly Metrics    $metrics,
     ) {
         parent::__construct();
     }
@@ -27,7 +26,7 @@ class GameLoading extends ApiController
      * @return ResponseInterface
      * @throws JsonException
      */
-    public function loadGame(string $system, Request $request) : ResponseInterface {
+    public function loadGame(string $system, Request $request): ResponseInterface {
         $start = microtime(true);
         try {
             // @phpstan-ignore-next-line
@@ -39,5 +38,4 @@ class GameLoading extends ApiController
         $this->metrics->set('load_time', (microtime(true) - $start) * 1000, [$system]);
         return $this->respond(['status' => 'ok', 'mode' => $meta['mode'], 'music' => $meta['music']]);
     }
-
 }

@@ -23,9 +23,8 @@ use Throwable;
  */
 class GameHelpers extends ApiController
 {
-
     public function __construct(
-      private readonly Config $config,
+        private readonly Config $config,
     ) {
         parent::__construct();
     }
@@ -34,7 +33,7 @@ class GameHelpers extends ApiController
      * @return never
      * @throws JsonException
      */
-    public function getLoadedGameInfo(Request $request) : ResponseInterface {
+    public function getLoadedGameInfo(Request $request): ResponseInterface {
         // Allow for filtering games just from one system
         $system = $request->getGet('system', 'all');
         $systems = [$system];
@@ -56,7 +55,7 @@ class GameHelpers extends ApiController
         // Try to find the last loaded or started games in selected systems
         foreach ($systems as $system) {
             /** @var Game|null $started */
-            $started = Info::get($system.'-game-started');
+            $started = Info::get($system . '-game-started');
             $allGames['started'] = $started;
             if (isset($started) && ($now - $started->start?->getTimestamp()) <= $gameStartedTime) {
                 if (isset($this->game) && $this->game->fileTime > $started->fileTime) {
@@ -69,7 +68,7 @@ class GameHelpers extends ApiController
             }
 
             /** @var Game|null $loaded */
-            $loaded = Info::get($system.'-game-loaded');
+            $loaded = Info::get($system . '-game-loaded');
             $allGames['loaded'] = $loaded;
             if (isset($loaded) && ($now - $loaded->fileTime?->getTimestamp()) <= $gameLoadedTime) {
                 if (isset($this->game) && $this->game->fileTime > $loaded->fileTime) {
@@ -84,7 +83,7 @@ class GameHelpers extends ApiController
         }
 
         return $this->respond(
-          [
+            [
             'currentServerTime' => time(),
             'started'           => $game->started,
             'finished'          => $game->finished,
@@ -95,7 +94,7 @@ class GameHelpers extends ApiController
             'teamCount'         => count($game->getTeams()),
             'mode'              => $game->getMode(),
             'game'              => $game,
-          ]
+            ]
         );
     }
 
@@ -105,7 +104,7 @@ class GameHelpers extends ApiController
      * @throws ModelNotFoundException
      * @throws ValidationException
      */
-    public function getGateGameInfo() : ResponseInterface {
+    public function getGateGameInfo(): ResponseInterface {
         /** @var Game|null $game */
         $game = Info::get('gate-game');
 
@@ -114,7 +113,7 @@ class GameHelpers extends ApiController
         }
 
         return $this->respond(
-          [
+            [
             'currentServerTime' => time(),
             'gateTime'          => Info::get('gate-time'),
             'started'           => $game->started,
@@ -125,7 +124,7 @@ class GameHelpers extends ApiController
             'playerCount'       => count($game->getPlayers()),
             'teamCount'         => count($game->getTeams()),
             'mode'              => $game->getMode(),
-          ]
+            ]
         );
     }
 
@@ -136,7 +135,7 @@ class GameHelpers extends ApiController
      * @throws JsonException
      * @throws Throwable
      */
-    public function recalcSkill(Request $request) : ResponseInterface {
+    public function recalcSkill(Request $request): ResponseInterface {
         $code = $request->params['code'] ?? '';
         if (empty($code)) {
             return $this->respond(['error' => 'Invalid code'], 400);
@@ -166,7 +165,7 @@ class GameHelpers extends ApiController
      * @throws Throwable
      * @throws GameModeNotFoundException
      */
-    public function changeGameMode(Request $request) : ResponseInterface {
+    public function changeGameMode(Request $request): ResponseInterface {
         $code = $request->params['code'] ?? '';
         if (empty($code)) {
             return $this->respond(['error' => 'Invalid code'], 400);
@@ -228,7 +227,7 @@ class GameHelpers extends ApiController
      * @throws JsonException
      * @throws Throwable
      */
-    public function recalcScores(Request $request) : ResponseInterface {
+    public function recalcScores(Request $request): ResponseInterface {
         $code = $request->params['code'] ?? '';
         if (empty($code)) {
             return $this->respond(['error' => 'Invalid code'], 400);
@@ -246,5 +245,4 @@ class GameHelpers extends ApiController
 
         return $this->respond(['status' => 'OK']);
     }
-
 }

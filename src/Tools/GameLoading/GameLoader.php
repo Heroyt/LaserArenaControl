@@ -11,7 +11,6 @@ use Throwable;
  */
 class GameLoader
 {
-
     /** @var array<string, LoaderInterface> */
     private array $loaders = [];
 
@@ -21,10 +20,10 @@ class GameLoader
      *
      * @return array<string, string|numeric> Metadata
      */
-    public function loadGame(string $system, array $data) : array {
+    public function loadGame(string $system, array $data): array {
         $loader = $this->findGameLoader($system);
         if (!isset($loader)) {
-            throw new InvalidArgumentException('Cannot find loader for system - '.$system);
+            throw new InvalidArgumentException('Cannot find loader for system - ' . $system);
         }
 
         return $loader->loadGame($data);
@@ -37,15 +36,14 @@ class GameLoader
      *
      * @return LoaderInterface|null
      */
-    private function findGameLoader(string $system) : ?LoaderInterface {
+    private function findGameLoader(string $system): ?LoaderInterface {
         try {
             // @phpstan-ignore-next-line
-            $this->loaders[$system] ??= App::getService($system.'.gameLoader');
+            $this->loaders[$system] ??= App::getService($system . '.gameLoader');
             // @phpstan-ignore-next-line
             return $this->loaders[$system];
         } catch (Throwable) {
             return null;
         }
     }
-
 }

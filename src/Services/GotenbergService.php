@@ -19,21 +19,20 @@ use Psr\Http\Message\ResponseInterface;
  */
 class GotenbergService
 {
-
     public readonly Chromium $chromium;
     private Logger $logger;
     private Client $client;
 
     public function __construct(
-      public readonly string $host,
-      public readonly int    $port,
+        public readonly string $host,
+        public readonly int    $port,
     ) {
         $this->chromium = new Chromium($this);
         $this->logger = new Logger(LOG_DIR, 'gotenberg');
         $this->makeClient();
     }
 
-    private function makeClient() : void {
+    private function makeClient(): void {
         // Add logging to handler and set handler to cUrl
         $stack = new HandlerStack();
         $stack->setHandler(new CurlHandler(['handle_factory' => new CurlFactory(99)]));
@@ -41,13 +40,13 @@ class GotenbergService
 
         // Initialize client
         $this->client = new Client(
-          [
+            [
             'handler'         => $stack,
-            'base_uri'        => trailingUnSlashIt($this->host).':'.$this->port,
+            'base_uri'        => trailingUnSlashIt($this->host) . ':' . $this->port,
             'timeout'         => 30.0, // 10 seconds
             'allow_redirects' => true,
             'headers'         => [],
-          ]
+            ]
         );
     }
 
@@ -58,21 +57,21 @@ class GotenbergService
      *
      * @return ResponseInterface|null
      */
-    public function get(string $path, array $query = [], array $headers = []) : ?ResponseInterface {
+    public function get(string $path, array $query = [], array $headers = []): ?ResponseInterface {
         if (!isset($this->client)) {
             $this->makeClient();
         }
         try {
             $response = $this->client->post(
-              $path.'?'.http_build_query($query),
-              [
+                $path . '?' . http_build_query($query),
+                [
                 'headers' => $headers,
-              ]
+                ]
             );
             if ($response->getStatusCode() !== 200) {
                 try {
                     $this->logger->error(
-                      'Request failed: '.json_encode($response->getBody()->getContents(), JSON_THROW_ON_ERROR)
+                        'Request failed: ' . json_encode($response->getBody()->getContents(), JSON_THROW_ON_ERROR)
                     );
                 } catch (JsonException $e) {
                     $this->logger->exception($e);
@@ -94,7 +93,7 @@ class GotenbergService
      *
      * @return ResponseInterface|null
      */
-    public function post(string $path, array $formData = [], array $headers = []) : ?ResponseInterface {
+    public function post(string $path, array $formData = [], array $headers = []): ?ResponseInterface {
         if (!isset($this->client)) {
             $this->makeClient();
         }
@@ -103,16 +102,16 @@ class GotenbergService
         }
         try {
             $response = $this->client->post(
-              $path,
-              [
+                $path,
+                [
                 'multipart' => $formData,
                 'headers'   => $headers,
-              ]
+                ]
             );
             if ($response->getStatusCode() !== 200) {
                 try {
                     $this->logger->error(
-                      'Request failed: '.json_encode($response->getBody()->getContents(), JSON_THROW_ON_ERROR)
+                        'Request failed: ' . json_encode($response->getBody()->getContents(), JSON_THROW_ON_ERROR)
                     );
                 } catch (JsonException $e) {
                     $this->logger->exception($e);
@@ -125,7 +124,7 @@ class GotenbergService
         }
 
         $this->logger->debug(
-          'Status code: '.$response->getStatusCode().', Content-Type: '.$response->getHeaderLine('Content-Type')
+            'Status code: ' . $response->getStatusCode() . ', Content-Type: ' . $response->getHeaderLine('Content-Type')
         );
 
         return $response;
@@ -134,8 +133,7 @@ class GotenbergService
     /**
      * @return Logger
      */
-    public function getLogger() : Logger {
+    public function getLogger(): Logger {
         return $this->logger;
     }
-
 }

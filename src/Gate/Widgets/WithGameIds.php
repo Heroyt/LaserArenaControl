@@ -9,17 +9,16 @@ use Dibi\Row;
 
 trait WithGameIds
 {
-
     /**
      * @var array<string, int[]>
      */
     protected ?array $gameIds = null;
 
     public function getGameIds(
-      ?DateTimeInterface $dateFrom = null,
-      ?DateTimeInterface $dateTo = null,
-      ?array             $systems = []
-    ) : array {
+        ?DateTimeInterface $dateFrom = null,
+        ?DateTimeInterface $dateTo = null,
+        ?array             $systems = []
+    ): array {
         if (!isset($this->gameIds)) {
             $this->gameIds = [];
             $dateFrom ??= new DateTimeImmutable();
@@ -39,7 +38,7 @@ trait WithGameIds
         return $this->gameIds;
     }
 
-    public function setGameIds(array $gameIds) : static {
+    public function setGameIds(array $gameIds): static {
         $this->gameIds = $gameIds;
         return $this;
     }

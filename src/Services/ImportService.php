@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @author Tomáš Vojík <xvojik00@stud.fit.vutbr.cz>, <vojik@wboy.cz>
  */
@@ -34,19 +35,18 @@ use Throwable;
  */
 class ImportService
 {
-
     /** @var array{error?:string,exception?:string,sql?:string}[]|string[] */
     private array $errors = [];
     private int $gameLoadedTime;
     private int $gameStartedTime;
 
     public function __construct(
-      private readonly EventService   $eventService,
-      private readonly LockFactory    $lockFactory,
-      private readonly LigaApi        $ligaApi,
-      Config                          $config,
-      private readonly FeatureConfig  $featureConfig,
-      private readonly Metrics $metrics,
+        private readonly EventService   $eventService,
+        private readonly LockFactory    $lockFactory,
+        private readonly LigaApi        $ligaApi,
+        Config                          $config,
+        private readonly FeatureConfig  $featureConfig,
+        private readonly Metrics $metrics,
     ) {
         $this->gameLoadedTime = (int) ($config->getConfig('ENV')['GAME_LOADED_TIME'] ?? 300);
         $this->gameStartedTime = (int) ($config->getConfig('ENV')['GAME_STARTED_TIME'] ?? 1800);
@@ -67,23 +67,23 @@ class ImportService
      * @throws Throwable
      */
     public function import(
-      string           $resultsDir,
-      bool             $all = false,
-      int              $limit = 0,
-      ?OutputInterface $output = null
-    ) : ImportResponse | ErrorDto {
+        string           $resultsDir,
+        bool             $all = false,
+        int              $limit = 0,
+        ?OutputInterface $output = null
+    ): ImportResponse | ErrorDto {
         // Validate results directory
         if (!file_exists($resultsDir) || !is_dir($resultsDir) || !is_readable($resultsDir)) {
             return new ErrorDto(
-                      'Results directory does not exist.',
-                      ErrorType::VALIDATION,
-              values: ['dir' => $resultsDir]
+                'Results directory does not exist.',
+                ErrorType::VALIDATION,
+                values: ['dir' => $resultsDir]
             );
         }
 
         // Create logger
         try {
-            $logger = new Logger(LOG_DIR.'results/', 'import');
+            $logger = new Logger(LOG_DIR . 'results/', 'import');
         } catch (DirectoryCreationException $e) {
             return new ErrorDto('Failed to create a logging directory.', ErrorType::INTERNAL, exception: $e);
         }
@@ -91,7 +91,7 @@ class ImportService
         $this->metrics->add('import_called', 1, [$resultsDir]);
 
         // Lock import to allow only 1 import process to run in this directory
-        $lock = $this->lockFactory->createLock('results-import-'.md5($resultsDir), ttl: 60);
+        $lock = $this->lockFactory->createLock('results-import-' . md5($resultsDir), ttl: 60);
 
         if ($lock->acquire(true)) {
             $now = time();
@@ -114,7 +114,7 @@ class ImportService
             $resultsDir = trailingSlashIt($resultsDir);
 
             /** @var int $lastCheck Timestamp when this directory was last checked */
-            $lastCheck = Info::get($resultsDir.'check', 0);
+            $lastCheck = Info::get($resultsDir . 'check', 0);
 
             foreach (GameFactory::getSupportedSystems() as $system) {
                 if ($limit > 0 && $total >= $limit) {
@@ -124,16 +124,16 @@ class ImportService
                 // Find a parser for this system
                 try {
                     /** @var AbstractResultsParser $parser */
-                    $parser = App::getService('result.parser.'.$system);
+                    $parser = App::getService('result.parser.' . $system);
                 } catch (MissingServiceException $e) {
-                    $output?->writeln('Cannot find parser for system result.parser.'.$system);
+                    $output?->writeln('Cannot find parser for system result.parser.' . $system);
                     $logger->exception($e);
                     continue;
                 }
 
                 // Find all files
                 /** @var string[] $resultFiles */
-                $resultFiles = glob($resultsDir.$parser::getFileGlob());
+                $resultFiles = glob($resultsDir . $parser::getFileGlob());
 
                 // Import all files
                 $importedSystem = 0;
@@ -144,9 +144,9 @@ class ImportService
 
                     // Skip duplicate and invalid files
                     if (
-                      isset($processedFiles[$file]) ||
-                      str_ends_with($file, '0000.game') ||
-                      !$parser::checkFile($file)
+                        isset($processedFiles[$file]) ||
+                        str_ends_with($file, '0000.game') ||
+                        !$parser::checkFile($file)
                     ) {
                         // Invalid or duplicate file
                         continue;
@@ -160,8 +160,8 @@ class ImportService
                     }
 
                     $total++;
-                    $logger->info('Importing file: '.$file);
-                    $output?->writeln('Importing file: '.$file);
+                    $logger->info('Importing file: ' . $file);
+                    $output?->writeln('Importing file: ' . $file);
 
                     try {
                         $parser->setFile($file);
@@ -182,9 +182,9 @@ class ImportService
 
                             // The game is started
                             if (
-                              $game->started &&
-                              isset($game->fileTime) &&
-                              ($now - $game->fileTime->getTimestamp()) <= $this->gameStartedTime
+                                $game->started &&
+                                isset($game->fileTime) &&
+                                ($now - $game->fileTime->getTimestamp()) <= $this->gameStartedTime
                             ) {
                                 $lastUnfinishedGame = $game;
                                 $lastEvent = 'game-started';
@@ -194,9 +194,9 @@ class ImportService
                             }
                             // The game is loaded
                             if (
-                              !$game->started &&
-                              isset($game->fileTime) &&
-                              ($now - $game->fileTime->getTimestamp()) <= $this->gameLoadedTime
+                                !$game->started &&
+                                isset($game->fileTime) &&
+                                ($now - $game->fileTime->getTimestamp()) <= $this->gameLoadedTime
                             ) {
                                 // Check if the last unfinished game is not created later
                                 if (isset($lastUnfinishedGame) && $game->fileTime < $lastUnfinishedGame->fileTime) {
@@ -226,21 +226,21 @@ class ImportService
                         }
 
                         if (!$game->save()) {
-                            $logger->error('Failed saving game into DB. '.$file);
+                            $logger->error('Failed saving game into DB. ' . $file);
                             $output?->writeln(
-                              Colors::color(ForegroundColors::RED).
-                              'Failed saving game into DB'.
-                              Colors::reset()
+                                Colors::color(ForegroundColors::RED) .
+                                'Failed saving game into DB' .
+                                Colors::reset()
                             );
                             continue;
                         }
 
                         // Refresh the started-game info to stop the game timer
                         /** @var Game|null $startedGame */
-                        $startedGame = Info::get($system.'-game-started');
+                        $startedGame = Info::get($system . '-game-started');
                         if (isset($startedGame) && $game->resultsFile === $startedGame->resultsFile) {
                             try {
-                                Info::set($system.'-game-started', null);
+                                Info::set($system . '-game-started', null);
                             } catch (Exception) {
                             }
                         }
@@ -254,7 +254,7 @@ class ImportService
                     } catch (Throwable $e) {
                         $logger->error($e->getMessage());
                         $logger->debug($e->getTraceAsString());
-                        $output?->writeln(Colors::color(ForegroundColors::RED).$e->getMessage().Colors::reset());
+                        $output?->writeln(Colors::color(ForegroundColors::RED) . $e->getMessage() . Colors::reset());
                         $errors[] = $e;
                     }
                 }
@@ -264,7 +264,7 @@ class ImportService
             // Update check timestamp
             if ($imported > 0) {
                 try {
-                    Info::set($resultsDir.'check', $now);
+                    Info::set($resultsDir . 'check', $now);
                 } catch (Exception $e) {
                     $lock->release();
                     return $this->errorHandle($e);
@@ -274,13 +274,13 @@ class ImportService
             // Set last unfinished game event
             if (isset($lastUnfinishedGame)) {
                 $logger->debug(
-                  'Setting last unfinished game: "'.$lastUnfinishedGame::SYSTEM.'-'.$lastEvent.'" - '.$lastUnfinishedGame->resultsFile
+                    'Setting last unfinished game: "' . $lastUnfinishedGame::SYSTEM . '-' . $lastEvent . '" - ' . $lastUnfinishedGame->resultsFile
                 );
                 $output?->writeln(
-                  'Setting last unfinished game: "'.$lastUnfinishedGame::SYSTEM.'-'.$lastEvent.'" - '.$lastUnfinishedGame->resultsFile
+                    'Setting last unfinished game: "' . $lastUnfinishedGame::SYSTEM . '-' . $lastEvent . '" - ' . $lastUnfinishedGame->resultsFile
                 );
                 try {
-                    Info::set($lastUnfinishedGame::SYSTEM.'-'.$lastEvent, $lastUnfinishedGame);
+                    Info::set($lastUnfinishedGame::SYSTEM . '-' . $lastEvent, $lastUnfinishedGame);
                     $this->eventService->trigger($lastEvent, ['game' => $lastUnfinishedGame->resultsFile]);
                 } catch (Exception $e) {
                     $lock->release();
@@ -306,21 +306,20 @@ class ImportService
                                 $finishedGame->save();
                             } catch (ValidationException $e) {
                                 $output?->writeln(
-                                  Colors::color(ForegroundColors::RED).
-                                  'Failed to synchronize games to public.'.$e->getMessage().
-                                  Colors::reset()
+                                    Colors::color(ForegroundColors::RED) .
+                                    'Failed to synchronize games to public.' . $e->getMessage() .
+                                    Colors::reset()
                                 );
                                 $logger->warning('Failed to synchronize games to public');
                                 $logger->exception($e);
                             }
                         }
-                    }
-                    else {
+                    } else {
                         $logger->warning('Failed to synchronize games to public');
                         $output?->writeln(
-                          Colors::color(ForegroundColors::RED).
-                          'Failed to synchronize games to public'.
-                          Colors::reset()
+                            Colors::color(ForegroundColors::RED) .
+                            'Failed to synchronize games to public' .
+                            Colors::reset()
                         );
                     }
                 }
@@ -328,10 +327,9 @@ class ImportService
                 /** @var ResultsPrecacheService $precacheService */
                 $precacheService = App::getService('resultPrecache');
                 $precacheService->prepareGamePrecache(
-                  ...array_map(static fn(Game $game) => $game->code, $finishedGames)
+                    ...array_map(static fn(Game $game) => $game->code, $finishedGames)
                 );
-            }
-            else {
+            } else {
                 $logger->info('No games to synchronize to public');
             }
 
@@ -341,10 +339,10 @@ class ImportService
             }
 
             return new ImportResponse(
-              $imported,
-              $total,
-              round(microtime(true) - $start, 2),
-              $this->errors
+                $imported,
+                $total,
+                round(microtime(true) - $start, 2),
+                $this->errors
             );
         }
         return new ImportResponse(0, 0, 0, []);
@@ -359,7 +357,7 @@ class ImportService
      * @return void
      * @throws JsonException
      */
-    private function errorHandle(string | Throwable | array $data, int $statusCode = 0) : ErrorDto {
+    private function errorHandle(string | Throwable | array $data, int $statusCode = 0): ErrorDto {
         if (!is_array($data)) {
             $data = [$data];
         }
@@ -369,8 +367,7 @@ class ImportService
             $info = [];
             if (is_string($error)) {
                 $info['error'] = $error;
-            }
-            else {
+            } else {
                 if ($error instanceof \Exception) {
                     $info = [
                       'error'     => 'An exception has occurred.',
@@ -389,9 +386,9 @@ class ImportService
         }
 
         return new ErrorDto(
-                  'An error has occured',
-                  ErrorType::INTERNAL,
-          values: ['code' => $statusCode, 'errors' => $errors],
+            'An error has occured',
+            ErrorType::INTERNAL,
+            values: ['code' => $statusCode, 'errors' => $errors],
         );
     }
 }

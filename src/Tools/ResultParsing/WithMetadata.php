@@ -17,7 +17,6 @@ use Lsr\Core\Exceptions\ValidationException;
  */
 trait WithMetadata
 {
-
     /** @var int 5 minutes in seconds */
     protected const MAX_LOAD_START_TIME_DIFFERENCE = 300;
 
@@ -26,7 +25,7 @@ trait WithMetadata
      *
      * @return array<string,string|numeric>
      */
-    protected function decodeMetadata(string $encoded) : array {
+    protected function decodeMetadata(string $encoded): array {
         $encoded = trim($encoded);
         if ($encoded === '') {
             return [];
@@ -58,7 +57,7 @@ trait WithMetadata
      *
      * @return bool
      */
-    protected function validateMetadata(array $meta, Game $game) : bool {
+    protected function validateMetadata(array $meta, Game $game): bool {
         if (empty($meta)) {
             return false;
         }
@@ -66,11 +65,11 @@ trait WithMetadata
         if (!empty($meta['hash'])) {
             $players = [];
             foreach ($game->getPlayers() as $player) {
-                $players[(int) $player->vest] = $player->vest.'-'.$player->name;
+                $players[(int) $player->vest] = $player->vest . '-' . $player->name;
             }
             ksort($players);
             // Calculate and compare hash
-            $hash = md5($game->modeName.';'.implode(';', $players));
+            $hash = md5($game->modeName . ';' . implode(';', $players));
             if ($hash === $meta['hash']) {
                 $game->setMeta($meta);
                 return true;
@@ -108,7 +107,7 @@ trait WithMetadata
      *
      * @return void
      */
-    protected function setMusicModeFromMeta(Game $game, array $meta) : void {
+    protected function setMusicModeFromMeta(Game $game, array $meta): void {
         if (empty($meta['music']) || ((int) $meta['music']) < 1) {
             return;
         }
@@ -131,7 +130,7 @@ trait WithMetadata
      *
      * @return void
      */
-    protected function setGroupFromMeta(Game $game, array $meta) : void {
+    protected function setGroupFromMeta(Game $game, array $meta): void {
         if (empty($meta['group'])) {
             return;
         }
@@ -151,8 +150,8 @@ trait WithMetadata
         if (!isset($group)) {
             $group = new GameGroup();
             $group->name = sprintf(
-              lang('Skupina %s'),
-              isset($game->start) ? $game->start->format('d.m.Y H:i') : ''
+                lang('Skupina %s'),
+                isset($game->start) ? $game->start->format('d.m.Y H:i') : ''
             );
         }
 
@@ -171,18 +170,18 @@ trait WithMetadata
      *
      * @return void
      */
-    protected function setPlayersMeta(Game $game, array $meta) : void {
+    protected function setPlayersMeta(Game $game, array $meta): void {
         /** @var Player $player */
         foreach ($game->getPlayers() as $player) {
             // Names from game are strictly ASCII
             // If a name contained any non ASCII character, it is coded in the metadata
-            if (!empty($meta['p'.$player->vest.'n'])) {
-                $player->name = $meta['p'.$player->vest.'n'];
+            if (!empty($meta['p' . $player->vest . 'n'])) {
+                $player->name = $meta['p' . $player->vest . 'n'];
             }
 
             // Check for player's user code
-            if (!empty($meta['p'.$player->vest.'u'])) {
-                $code = $meta['p'.$player->vest.'u'];
+            if (!empty($meta['p' . $player->vest . 'u'])) {
+                $code = $meta['p' . $player->vest . 'u'];
                 $user = User::getByCode($code);
 
                 // Check the public API for user by code
@@ -215,15 +214,14 @@ trait WithMetadata
      *
      * @return void
      */
-    protected function setTeamsMeta(Game $game, array $meta) : void {
+    protected function setTeamsMeta(Game $game, array $meta): void {
         /** @var Team $team */
         foreach ($game->getTeams() as $team) {
             // Names from game are strictly ASCII
             // If a name contained any non ASCII character, it is coded in the metadata
-            if (!empty($meta['t'.$team->color.'n'])) {
-                $team->name = (string) $meta['t'.$team->color.'n'];
+            if (!empty($meta['t' . $team->color . 'n'])) {
+                $team->name = (string) $meta['t' . $team->color . 'n'];
             }
         }
     }
-
 }

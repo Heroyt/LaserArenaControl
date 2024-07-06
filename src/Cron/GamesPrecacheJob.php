@@ -10,25 +10,24 @@ use Throwable;
 
 final readonly class GamesPrecacheJob implements Job
 {
+    public function __construct(private ResultsPrecacheService $precacheService) {
+    }
 
-	public function __construct(private ResultsPrecacheService $precacheService) {
-	}
+    /**
+     * @param JobLock $lock
+     *
+     * @return void
+     * @throws Throwable
+     */
+    public function run(JobLock $lock): void {
+        // Lock should expire after all timeouts + 1 minute
+        $lock->refresh(120.0);
+        if ($this->precacheService->precacheNextGame()) {
+            (new Logger(LOG_DIR, 'cron'))->debug('Precached game results');
+        }
+    }
 
-	/**
-	 * @param JobLock $lock
-	 *
-	 * @return void
-	 * @throws Throwable
-	 */
-	public function run(JobLock $lock): void {
-		// Lock should expire after all timeouts + 1 minute
-		$lock->refresh(120.0);
-		if ($this->precacheService->precacheNextGame()) {
-			(new Logger(LOG_DIR, 'cron'))->debug('Precached game results');
-		}
-	}
-
-	public function getName(): string {
-		return 'Games Precache';
-	}
+    public function getName(): string {
+        return 'Games Precache';
+    }
 }

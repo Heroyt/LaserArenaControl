@@ -9,7 +9,6 @@ use Lsr\Core\Config;
  */
 class FeatureConfig
 {
-
     /** @var array<string,bool> */
     private array $features = [];
 
@@ -18,8 +17,8 @@ class FeatureConfig
      * @param  array<string,bool>  $default
      */
     public function __construct(
-      Config $config,
-      array  $default = [],
+        Config $config,
+        array  $default = [],
     ) {
         foreach ($default as $key => $value) {
             $this->features[strtolower($key)] = (bool) $value;
@@ -31,13 +30,13 @@ class FeatureConfig
                 /** @var string $key */
                 $key = strtolower(str_replace('FEATURE_', '', $key));
                 $this->features[$key] = (is_int($value) && $value > 0) || (is_string($value) && strtolower(
-                      $value
-                    ) === 'true');
+                    $value
+                ) === 'true');
             }
         }
     }
 
-    public function isFeatureEnabled(string $feature) : bool {
+    public function isFeatureEnabled(string $feature): bool {
         $feature = strtolower($feature);
         return isset($this->features[$feature]) && $this->features[$feature];
     }
@@ -45,8 +44,7 @@ class FeatureConfig
     /**
      * @return array<string,bool>
      */
-    public function getFeatures() : array {
+    public function getFeatures(): array {
         return $this->features;
     }
-
 }

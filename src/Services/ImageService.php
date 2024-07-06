@@ -6,6 +6,7 @@ use GdImage;
 use InvalidArgumentException;
 use Lsr\Exceptions\FileException;
 use RuntimeException;
+
 use function imagecreatefromgif;
 use function imagecreatefromjpeg;
 use function imagecreatefrompng;
@@ -13,12 +14,11 @@ use function imagecreatefromwebp;
 
 class ImageService
 {
-
     /**
      * @param  int[]  $sizes
      */
     public function __construct(
-      public readonly array $sizes = [
+        public readonly array $sizes = [
         1000,
         800,
         500,
@@ -26,8 +26,9 @@ class ImageService
         300,
         200,
         150,
-      ]
-    ) {}
+        ]
+    ) {
+    }
 
     /**
      * @param  string  $file
@@ -35,18 +36,18 @@ class ImageService
      * @return void
      * @throws FileException
      */
-    public function optimize(string $file) : void {
+    public function optimize(string $file): void {
         if (!file_exists($file)) {
-            throw new FileException('File doesn\'t exist - '.$file);
+            throw new FileException('File doesn\'t exist - ' . $file);
         }
 
         $type = strtolower(pathinfo($file, PATHINFO_EXTENSION));
         $name = pathinfo($file, PATHINFO_FILENAME);
-        $path = pathinfo($file, PATHINFO_DIRNAME).'/';
+        $path = pathinfo($file, PATHINFO_DIRNAME) . '/';
 
-        $optimizedDir = $path.'optimized';
+        $optimizedDir = $path . 'optimized';
         if (!is_dir($optimizedDir) && !mkdir($optimizedDir) && !is_dir($optimizedDir)) {
-            throw new FileException('Cannot create an optimized image directory - '.$file);
+            throw new FileException('Cannot create an optimized image directory - ' . $file);
         }
 
         $image = match ($type) {
@@ -54,7 +55,7 @@ class ImageService
             'png'         => imagecreatefrompng($file),
             'gif'         => imagecreatefromgif($file),
             'webp'        => imagecreatefromwebp($file),
-            default       => throw new RuntimeException('Invalid image type: '.$type),
+            default       => throw new RuntimeException('Invalid image type: ' . $type),
         };
 
         if (!$image) {
@@ -68,12 +69,12 @@ class ImageService
             imagefilledrectangle($image, 0, 0, 150, 30, $bgc);
 
             /* Output an error message */
-            imagestring($image, 1, 5, 5, 'Error loading '.$file, $tc);
+            imagestring($image, 1, 5, 5, 'Error loading ' . $file, $tc);
             //throw new RuntimeException('Failed to read image - '.$file);
         }
 
         if ($type !== 'webp') {
-            imagewebp($image, $optimizedDir.'/'.$name.'.webp');
+            imagewebp($image, $optimizedDir . '/' . $name . '.webp');
         }
 
         $originalWidth = imagesx($image);
@@ -89,14 +90,14 @@ class ImageService
                 continue;
             }
 
-            $resizedFileName = $optimizedDir.'/'.$name.'x'.$size.'.'.$type;
+            $resizedFileName = $optimizedDir . '/' . $name . 'x' . $size . '.' . $type;
             match ($type) {
                 'jpg', 'jpeg' => imagejpeg($resized, $resizedFileName),
                 'png'         => imagepng($resized, $resizedFileName),
                 'gif'         => imagegif($resized, $resizedFileName),
             };
 
-            imagewebp($resized, $optimizedDir.'/'.$name.'x'.$size.'.webp');
+            imagewebp($resized, $optimizedDir . '/' . $name . 'x' . $size . '.webp');
         }
 
     }
@@ -104,7 +105,7 @@ class ImageService
     /**
      * @return int[]
      */
-    public function getSizes() : array {
+    public function getSizes(): array {
         return $this->sizes;
     }
 
@@ -155,8 +156,7 @@ class ImageService
         if ($ratio1 > $ratio2) {
             $resizedWidth = $originalWidth * $height / $originalHeight;
             $srcX = ($resizedWidth - $width) / 2;
-        }
-        else {
+        } else {
             $resizedHeight = $originalHeight * $width / $originalWidth;
             $srcY = ($resizedHeight - $height) / 2;
         }
@@ -165,5 +165,4 @@ class ImageService
         imagecopyresized($out, $image, 0, 0, $srcX, $srcY, $width, $height, $originalWidth, $originalHeight);
         return $out;
     }
-
 }

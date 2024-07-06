@@ -14,58 +14,56 @@ use Psr\Http\Message\ResponseInterface;
 
 class PreparedGames extends Controller
 {
+    public const TABLE = 'prepared_games';
 
-	public const TABLE = 'prepared_games';
+    public const CACHE_TAGS = ['prepared_games'];
 
-	public const CACHE_TAGS = ['prepared_games'];
+    public function __construct(
+        private readonly Cache $cache
+    ) {
+        parent::__construct();
+    }
 
-	public function __construct(
-		private readonly Cache $cache
-	) {
-      parent::__construct();
-	}
+    public function deleteAll(): ResponseInterface {
+        DB::update($this::TABLE, ['active' => 0], ['active = 1']);
+        $this->cache->clean([Cache::Tags => $this::CACHE_TAGS]);
+        return $this->respond(['status' => 'ok']);
+    }
 
-	public function deleteAll(): ResponseInterface {
-		DB::update($this::TABLE, ['active' => 0], ['active = 1']);
-		$this->cache->clean([Cache::Tags => $this::CACHE_TAGS]);
-		return $this->respond(['status' => 'ok']);
-	}
+    public function save(Request $request): ResponseInterface {
+        DB::insert($this::TABLE, ['data' => json_encode($request->getParsedBody(), JSON_THROW_ON_ERROR)]);
 
-	public function save(Request $request): ResponseInterface {
-		DB::insert($this::TABLE, ['data' => json_encode($request->getParsedBody(), JSON_THROW_ON_ERROR)]);
+        $this->cache->clean([Cache::Tags => $this::CACHE_TAGS]);
 
-		$this->cache->clean([Cache::Tags => $this::CACHE_TAGS]);
+        return $this->respond(['status' => 'ok']);
+    }
 
-		return $this->respond(['status' => 'ok']);
-	}
+    public function get(Request $request): ResponseInterface {
+        $all = !empty($request->getGet('all'));
 
-	public function get(Request $request): ResponseInterface {
-		$all = !empty($request->getGet('all'));
+        $query = DB::select($this::TABLE, '*')->cacheTags(...$this::CACHE_TAGS);
+        if (!$all) {
+            $query->where('`active` = 1');
+        }
+        $query->orderBy('datetime')->desc();
 
-		$query = DB::select($this::TABLE, '*')->cacheTags(...$this::CACHE_TAGS);
-		if (!$all) {
-			$query->where('`active` = 1');
-		}
-		$query->orderBy('datetime')->desc();
+        $games = [];
+        $rows = $query->fetchAll();
+        foreach ($rows as $row) {
+            $games[] = [
+                'id_game' => $row->id_game,
+                'datetime' => $row->datetime,
+                'data' => json_decode($row->data, false, 512, JSON_THROW_ON_ERROR),
+                'active' => (bool)$row->active,
+            ];
+        }
+        return $this->respond($games);
+    }
 
-		$games = [];
-		$rows = $query->fetchAll();
-		foreach ($rows as $row) {
-			$games[] = [
-				'id_game' => $row->id_game,
-				'datetime' => $row->datetime,
-				'data' => json_decode($row->data, false, 512, JSON_THROW_ON_ERROR),
-				'active' => (bool)$row->active,
-			];
-		}
-		return $this->respond($games);
-	}
+    public function delete(int $id): ResponseInterface {
+        DB::update($this::TABLE, ['active' => 0], ['id_game = %i', $id]);
 
-	public function delete(int $id): ResponseInterface {
-		DB::update($this::TABLE, ['active' => 0], ['id_game = %i', $id]);
-
-		$this->cache->clean([Cache::Tags => $this::CACHE_TAGS]);
-		return $this->respond(['status' => 'ok']);
-	}
-
+        $this->cache->clean([Cache::Tags => $this::CACHE_TAGS]);
+        return $this->respond(['status' => 'ok']);
+    }
 }

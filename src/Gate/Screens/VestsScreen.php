@@ -21,46 +21,46 @@ class VestsScreen extends GateScreen implements WithSettings, ReloadTimerInterfa
     /**
      * @inheritDoc
      */
-    public static function getName() : string {
+    public static function getName(): string {
         return lang('Vesty', domain: 'gate', context: 'screens');
     }
 
-    public static function getDescription() : string {
+    public static function getDescription(): string {
         return lang('Obrazovka zobrazující přiřazené vesty před hrou.', domain: 'gate', context: 'screens.description');
     }
 
     /**
      * @inheritDoc
      */
-    public static function getDiKey() : string {
+    public static function getDiKey(): string {
         return 'gate.screens.vests';
     }
 
     /**
      * @inheritDoc
      */
-    public static function getSettingsForm() : string {
+    public static function getSettingsForm(): string {
         return 'gate/settings/vests.latte';
     }
 
     /**
      * @inheritDoc
      */
-    public static function buildSettingsFromForm(array $data) : GateSettings {
+    public static function buildSettingsFromForm(array $data): GateSettings {
         return new VestsSettings(isset($data['time']) ? (int) $data['time'] : null);
     }
 
-    public function getSettings() : VestsSettings {
+    public function getSettings(): VestsSettings {
         if (!isset($this->settings)) {
             $this->settings = new VestsSettings();
         }
         return $this->settings;
     }
 
-    public function setSettings(GateSettings $settings) : static {
+    public function setSettings(GateSettings $settings): static {
         if (!($settings instanceof VestsSettings)) {
             throw new InvalidArgumentException(
-              '$settings must be an instance of '.VestsSettings::class.', '.$settings::class.' provided.'
+                '$settings must be an instance of ' . VestsSettings::class . ', ' . $settings::class . ' provided.'
             );
         }
         $this->settings = $settings;
@@ -70,7 +70,7 @@ class VestsScreen extends GateScreen implements WithSettings, ReloadTimerInterfa
     /**
      * @inheritDoc
      */
-    public function run() : ResponseInterface {
+    public function run(): ResponseInterface {
         $game = $this->getGame();
 
         if (!isset($game)) {
@@ -91,15 +91,14 @@ class VestsScreen extends GateScreen implements WithSettings, ReloadTimerInterfa
 
         return $this
           ->view(
-            'gate/screens/vests',
-            [
+              'gate/screens/vests',
+              [
               'game'       => $game,
               'screenHash' => $screenHash,
               'vests'      => Vest::getForSystem($game::SYSTEM),
               'addJs'      => ['gate/vests.js'],
               'addCss'     => ['gate/vests.css'],
-            ]
+              ]
           );
     }
-
 }

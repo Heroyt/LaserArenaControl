@@ -9,11 +9,10 @@ namespace App\Gate\Settings;
  */
 enum MusicModeScreenLayout : string
 {
-
     case EMPTY_SPACE = 'empty_space';
     case FULL_SCREEN = 'full_screen';
 
-    public function getReadableName() : string {
+    public function getReadableName(): string {
         return match ($this) {
             self::EMPTY_SPACE => lang('Ve volném prostoru', domain: 'gate', context: 'screen.type'),
             self::FULL_SCREEN => lang('Celá obrazovka', domain: 'gate', context: 'screen.type'),

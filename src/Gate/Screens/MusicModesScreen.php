@@ -14,7 +14,6 @@ use Psr\Http\Message\ResponseInterface;
  */
 class MusicModesScreen extends GateScreen implements ReloadTimerInterface, WithSettings
 {
-
     use WithReloadTimer;
 
     private MusicModeSettings $settings;
@@ -22,37 +21,37 @@ class MusicModesScreen extends GateScreen implements ReloadTimerInterface, WithS
     /**
      * @inheritDoc
      */
-    public static function getName() : string {
+    public static function getName(): string {
         return lang('Seznam hudebních módů', domain: 'gate', context: 'screens');
     }
 
     /**
      * @inheritDoc
      */
-    public static function getDiKey() : string {
+    public static function getDiKey(): string {
         return 'gate.screens.music';
     }
 
     /**
      * @inheritDoc
      */
-    public static function getSettingsForm() : string {
+    public static function getSettingsForm(): string {
         return 'gate/settings/music.latte';
     }
 
     /**
      * @inheritDoc
      */
-    public static function buildSettingsFromForm(array $data) : MusicModeSettings {
+    public static function buildSettingsFromForm(array $data): MusicModeSettings {
         return new MusicModeSettings(
-          MusicModeScreenLayout::tryFrom($data['layout'] ?? '') ?? MusicModeScreenLayout::EMPTY_SPACE,
+            MusicModeScreenLayout::tryFrom($data['layout'] ?? '') ?? MusicModeScreenLayout::EMPTY_SPACE,
         );
     }
 
     /**
      * @inheritDoc
      */
-    public function run() : ResponseInterface {
+    public function run(): ResponseInterface {
         $modes = [];
         foreach (MusicMode::getAll() as $music) {
             if (!$music->public) {
@@ -63,20 +62,20 @@ class MusicModesScreen extends GateScreen implements ReloadTimerInterface, WithS
             $modes[$group]->music[] = $music;
         }
         return $this->view(
-          'gate/screens/musicModes',
-          [
+            'gate/screens/musicModes',
+            [
             'musicModes' => $modes,
             'settings' => $this->getSettings(),
             'addCss'     => ['gate/musicModes.css'],
             'addJs'      => ['gate/musicModes.js'],
-          ]
+            ]
         );
     }
 
     /**
      * @inheritDoc
      */
-    public function getSettings() : MusicModeSettings {
+    public function getSettings(): MusicModeSettings {
         if (!isset($this->settings)) {
             $this->settings = new MusicModeSettings();
         }
@@ -86,7 +85,7 @@ class MusicModesScreen extends GateScreen implements ReloadTimerInterface, WithS
     /**
      * @inheritDoc
      */
-    public function setSettings(GateSettings $settings) : static {
+    public function setSettings(GateSettings $settings): static {
         $this->settings = $settings;
         return $this;
     }

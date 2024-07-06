@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file      functions.php
  * @brief     Main functions
@@ -29,77 +30,77 @@ use Symfony\Component\Serializer\Serializer;
  *
  * @return string
  */
-function trailingUnSlashIt(string $string) : string {
-	if (substr($string, -1) === DIRECTORY_SEPARATOR) {
-		$string = substr($string, 0, -1);
-	}
-	return $string;
+function trailingUnSlashIt(string $string): string {
+    if (substr($string, -1) === DIRECTORY_SEPARATOR) {
+        $string = substr($string, 0, -1);
+    }
+    return $string;
 }
 
-function getImageSrcSet(Image | string $image, bool $includeAllSizes = true) : string {
-	if (is_string($image)) {
-		$image = new Image($image);
-	}
+function getImageSrcSet(Image | string $image, bool $includeAllSizes = true): string {
+    if (is_string($image)) {
+        $image = new Image($image);
+    }
 
-	$versions = $image->getOptimized();
+    $versions = $image->getOptimized();
 
-	$srcSet = [];
+    $srcSet = [];
 
-	if ($includeAllSizes) {
-		/** @var ImageService $imageService */
-		$imageService = App::getService('image');
-		foreach (array_reverse($imageService->getSizes()) as $size) {
-			$index = $size.'-webp';
-			if (isset($versions[$index])) {
-				$srcSet[] = $versions[$index].' '.$size.'w';
-				continue;
-			}
-			$index = (string) $size;
-			if (isset($versions[$index])) {
-				$srcSet[] = $versions[$index].' '.$size.'w';
-			}
-		}
-	}
+    if ($includeAllSizes) {
+        /** @var ImageService $imageService */
+        $imageService = App::getService('image');
+        foreach (array_reverse($imageService->getSizes()) as $size) {
+            $index = $size . '-webp';
+            if (isset($versions[$index])) {
+                $srcSet[] = $versions[$index] . ' ' . $size . 'w';
+                continue;
+            }
+            $index = (string) $size;
+            if (isset($versions[$index])) {
+                $srcSet[] = $versions[$index] . ' ' . $size . 'w';
+            }
+        }
+    }
 
-	if (isset($versions['webp'])) {
-		$srcSet[] = $versions['webp'];
-	}
-	else {
-		$srcSet[] = $versions['original'];
-	}
+    if (isset($versions['webp'])) {
+        $srcSet[] = $versions['webp'];
+    } else {
+        $srcSet[] = $versions['original'];
+    }
 
-	return implode(',', $srcSet);
+    return implode(',', $srcSet);
 }
 
-function jsonSerialize($data) : string {
+function jsonSerialize($data): string {
     $normalizerContext = [
       AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function (object $object, string $format, array $context) {
-          if (property_exists($object, 'code')) {
-              return $object->code;
-          }
-          if (property_exists($object, 'id')) {
-              return $object->id;
-          }
-          if (property_exists($object, 'name')) {
-              return $object->name;
-          }
+        if (property_exists($object, 'code')) {
+            return $object->code;
+        }
+        if (property_exists($object, 'id')) {
+            return $object->id;
+        }
+        if (property_exists($object, 'name')) {
+            return $object->name;
+        }
           return null;
       },
     ];
     $serializer = new Serializer(
-      [
+        [
         new DateTimeNormalizer(),
         new BackedEnumNormalizer(),
         new JsonSerializableNormalizer(defaultContext: $normalizerContext),
         new ObjectNormalizer(defaultContext: $normalizerContext),
-      ], [
+        ],
+        [
         new JsonEncoder(
-          defaultContext: [
+            defaultContext: [
                             JsonDecode::ASSOCIATIVE => true,
                             JsonEncode::OPTIONS     => JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRESERVE_ZERO_FRACTION | JSON_THROW_ON_ERROR,
                           ]
         ),
-      ],
+        ],
     );
     return $serializer->serialize($data, 'json');
 }

@@ -7,10 +7,9 @@
     <file>src</file>
     <file>tests</file>
     <file>include</file>
-
-    <exclude-pattern>*/src/Standards/*/Tests/*\.(inc|css|js)$</exclude-pattern>
-    <exclude-pattern>*/tests/Core/*/*\.(inc|css|js)$</exclude-pattern>
-    <exclude-pattern>*/tests/Core/*/Fixtures/*\.php$</exclude-pattern>
+    <file>modules</file>
+    <file>config</file>
+    <file>routes</file>
 
     <arg name="basepath" value="."/>
     <arg name="colors"/>

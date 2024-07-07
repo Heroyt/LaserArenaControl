@@ -1,11 +1,4 @@
-{varType App\Core\App $app}
-{varType App\GameModels\Game\Game $game}
-{varType App\GameModels\Game\Today $today}
-{varType App\GameModels\Game\PrintStyle $style}
-{varType string $qr}
-{varType string $publicUrl}
-{varType string $lang}
-{default bool $colorless = false}
+{templateType App\Templates\Results\ResultsParams}
 
 {define addHead}
     <link rel="stylesheet" href="{getUrl}dist/results/graphical.css?v={$app->getCacheVersion()}">

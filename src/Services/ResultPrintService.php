@@ -13,6 +13,7 @@ use App\GameModels\Game\PrintStyle;
 use App\GameModels\Game\PrintTemplate;
 use App\GameModels\Game\Team;
 use App\GameModels\Game\Today;
+use App\Templates\Results\ResultsParams;
 use Endroid\QrCode\Builder\Builder;
 use Endroid\QrCode\Encoding\Encoding;
 use Endroid\QrCode\ErrorCorrectionLevel;
@@ -37,13 +38,14 @@ readonly class ResultPrintService
     /**
      * Generate PDF results for a game
      *
-     * @param  Game  $game
+     * @param  Game<Team, Player>  $game
      * @param  int  $style
      * @param  string  $template
      * @param  int  $copies
      * @param  bool  $cache
      *
      * @return string File path of the generated PDF file or empty string on error
+     * @throws TemplateDoesNotExistException
      */
     public function getResultsPdf(
         Game   $game,
@@ -57,7 +59,11 @@ readonly class ResultPrintService
             return $pdfFile;
         }
 
-        $styleObj = PrintStyle::get($style);
+        try {
+            $styleObj = PrintStyle::exists($style) ? PrintStyle::get($style) : PrintStyle::getActiveStyle();
+        } catch (ModelNotFoundException | ValidationException) {
+            $styleObj = new PrintStyle();
+        }
         $templateObj = PrintTemplate::getBySlug($template);
 
         $bg = ROOT . ($templateObj?->orientation === PrintOrientation::landscape ? $styleObj->bgLandscape :
@@ -124,6 +130,14 @@ readonly class ResultPrintService
         return TMP_DIR;
     }
 
+    /**
+     * @param  Game<Team, Player>  $game
+     * @param  int  $style
+     * @param  string  $template
+     * @param  int  $copies
+     * @param  bool  $view
+     * @return string
+     */
     public function getResultsFileName(
         Game   $game,
         int    $style,
@@ -131,22 +145,25 @@ readonly class ResultPrintService
         int    $copies,
         bool   $view = false
     ): string {
-        return $game->code . '-' . $template . '-' . $style . 'x' . $copies . '.' . App::getShortLanguageCode() . ($view ? '.view' : '');
+        return $game->code . '-' .
+          $template . '-' .
+          $style . 'x' .
+          $copies . '.' .
+          App::getShortLanguageCode() .
+          ($view ? '.view' : '');
     }
 
     /**
      * Generate html results for a game
      *
-     * @param  Game  $game
+     * @param  Game<Team, Player>  $game
      * @param  int  $style
      * @param  string  $template
      * @param  int  $copies
      * @param  bool  $cache
      *
      * @return string Generated HTML
-     * @throws ModelNotFoundException
      * @throws TemplateDoesNotExistException
-     * @throws ValidationException
      */
     public function getResultsHtml(
         Game   $game,
@@ -167,37 +184,59 @@ readonly class ResultPrintService
         return $this->generateResultsHtml($game, $style, $template, $copies);
     }
 
+    /**
+     * @param  Game<Team, Player>  $game
+     * @param  int  $style
+     * @param  string  $template
+     * @param  int  $copies
+     * @return string
+     */
     public function getHtmlFilePath(Game $game, int $style, string $template, int $copies = 1): string {
         return $this->getTmpDir() . $this->getResultsFileName($game, $style, $template, $copies) . '.html';
     }
 
+    /**
+     * @param  Game<Team, Player>  $game
+     * @param  int  $style
+     * @param  string  $template
+     * @param  int  $copies
+     * @return string
+     * @throws TemplateDoesNotExistException
+     */
     public function generateResultsHtml(Game $game, int $style, string $template, int $copies): string {
         $namespace = '\\App\\GameModels\\Game\\' . Strings::toPascalCase($game::SYSTEM) . '\\';
         $teamClass = $namespace . 'Team';
         $playerClass = $namespace . 'Player';
-        /** @var Player $player */
+        /** @var Player<Game, Team> $player */
         $player = new $playerClass();
-        /** @var Team $team */
+        /** @var Team<Player, Game> $team */
         $team = new $teamClass();
 
-        $params = [
-          'app'       => App::getInstance(),
-          'copies'    => $copies,
-          'game'      => $game,
-          'style'     => PrintStyle::exists($style) ? PrintStyle::get($style) : PrintStyle::getActiveStyle(),
-          'template'  => PrintTemplate::query()->where('slug = %s', $template)->first(),
-          'today'     => new Today($game, $player, $team),
-          'publicUrl' => $this->getPublicUrl($game),
-          'qr'        => $this->getQR($game),
-          'lang'      => App::getShortLanguageCode(),
-        ];
+        try {
+            $printStyle = PrintStyle::exists($style) ? PrintStyle::get($style) : PrintStyle::getActiveStyle();
+        } catch (ModelNotFoundException | ValidationException) {
+            $printStyle = new PrintStyle();
+        }
+
+        $params = new ResultsParams(
+            $game,
+            $printStyle,
+            PrintTemplate::getBySlug($template),
+            new Today($game, $player, $team),
+            $this->getPublicUrl($game),
+            $this->getQR($game),
+            App::getShortLanguageCode(),
+            $copies,
+        );
+        $params->app = App::getInstance();
 
         try {
             $mode = $game->getMode();
             if ($mode instanceof CustomResultsMode) {
                 $customTemplate = $mode->getCustomResultsTemplate();
                 if ($customTemplate !== '') {
-                    if (file_exists(TEMPLATE_DIR . 'results/templates/' . $template . '/' . $customTemplate . '.latte')) {
+                    $customFile = TEMPLATE_DIR . 'results/templates/' . $template . '/' . $customTemplate . '.latte';
+                    if (file_exists($customFile)) {
                         $template .= '/' . $customTemplate;
                     } elseif (file_exists(TEMPLATE_DIR . 'results/templates/' . $customTemplate . '.latte')) {
                         $template = $customTemplate;
@@ -217,6 +256,10 @@ readonly class ResultPrintService
         return $html;
     }
 
+    /**
+     * @param  Game<Team, Player>  $game
+     * @return string
+     */
     public function getPublicUrl(Game $game): string {
         /** @var string $url */
         $url = Info::get('liga_api_url');
@@ -226,7 +269,7 @@ readonly class ResultPrintService
     /**
      * Get SVG QR code for game
      *
-     * @param  Game  $game
+     * @param  Game<Team, Player>  $game
      *
      * @return string
      */

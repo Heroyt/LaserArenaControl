@@ -78,7 +78,6 @@ class GotenbergService
                 }
             }
         } catch (GuzzleException $e) {
-            /** @phpstan-ignore-next-line */
             $this->logger->exception($e);
             return null;
         }
@@ -118,7 +117,6 @@ class GotenbergService
                 }
             }
         } catch (GuzzleException $e) {
-            /** @phpstan-ignore-next-line */
             $this->logger->exception($e);
             return null;
         }

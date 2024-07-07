@@ -3,6 +3,8 @@
 namespace App\Services\Evo5;
 
 use App\Core\Info;
+use App\Exceptions\GameModeNotFoundException;
+use App\Exceptions\InsuficientRegressionDataException;
 use App\GameModels\Factory\GameModeFactory;
 use App\GameModels\Game\Enums\GameModeType;
 use App\GameModels\Tools\Lasermaxx\RegressionStatCalculator;
@@ -10,14 +12,18 @@ use App\Services\RegressionCalculator;
 use DateTimeImmutable;
 use JsonException;
 use Lsr\Core\Templating\Latte;
+use Lsr\Exceptions\TemplateDoesNotExistException;
 use RuntimeException;
 
+/**
+ *
+ */
 class GameSimulator
 {
-    public const HIT_STD_DEVIATION = 30;
-    public const DEATH_STD_DEVIATION = 30;
-    public const HIT_OWN_STD_DEVIATION = 5;
-    public const DEATH_OWN_STD_DEVIATION = 5;
+    public const int HIT_STD_DEVIATION = 30;
+    public const int DEATH_STD_DEVIATION = 30;
+    public const int HIT_OWN_STD_DEVIATION = 5;
+    public const int DEATH_OWN_STD_DEVIATION = 5;
 
     public function __construct(
         private readonly Latte                    $latte,
@@ -25,6 +31,11 @@ class GameSimulator
     ) {
     }
 
+    /**
+     * @throws GameModeNotFoundException
+     * @throws InsuficientRegressionDataException
+     * @throws TemplateDoesNotExistException
+     */
     public function simulate(): void {
         $loadDir = LMX_DIR . Info::get('evo5_load_file', 'games/');
         $loadFile = $loadDir . '0000.game';
@@ -46,6 +57,9 @@ class GameSimulator
 
         // Parse 0000.game
         $contents = file_get_contents($loadFile);
+        if ($contents === false) {
+            throw new RuntimeException('Failed to read load file');
+        }
         // Parse file into lines and arguments
         preg_match_all('/([A-Z]+){([^{}]*)}#/', $contents, $matches);
         [, $titles, $argsAll] = $matches;
@@ -143,33 +157,66 @@ class GameSimulator
                 $teamsCounts[$team['key']]['enemy'] += (int)$team2['playerCount'];
             }
             $teamMedians[$team['key']] = [
-                'hits' => RegressionCalculator::calculateRegressionPrediction([$teamsCounts[$team['key']]['team'], $teamsCounts[$team['key']]['enemy'], $gameLength], $hitsModel),
-                'deaths' => RegressionCalculator::calculateRegressionPrediction([$teamsCounts[$team['key']]['team'], $teamsCounts[$team['key']]['enemy'], $gameLength], $deathsModel),
-                'hitsOwn' => RegressionCalculator::calculateRegressionPrediction([$teamsCounts[$team['key']]['team'], $teamsCounts[$team['key']]['enemy'], $gameLength], $hitsOwnModel),
-                'deathsOwn' => RegressionCalculator::calculateRegressionPrediction([$teamsCounts[$team['key']]['team'], $teamsCounts[$team['key']]['enemy'], $gameLength], $deathsOwnModel),
+                'hits' => RegressionCalculator::calculateRegressionPrediction(
+                    [$teamsCounts[$team['key']]['team'], $teamsCounts[$team['key']]['enemy'], $gameLength],
+                    $hitsModel
+                ),
+                'deaths' => RegressionCalculator::calculateRegressionPrediction(
+                    [$teamsCounts[$team['key']]['team'], $teamsCounts[$team['key']]['enemy'], $gameLength],
+                    $deathsModel
+                ),
+                'hitsOwn' => RegressionCalculator::calculateRegressionPrediction(
+                    [$teamsCounts[$team['key']]['team'], $teamsCounts[$team['key']]['enemy'], $gameLength],
+                    $hitsOwnModel
+                ),
+                'deathsOwn' => RegressionCalculator::calculateRegressionPrediction(
+                    [$teamsCounts[$team['key']]['team'], $teamsCounts[$team['key']]['enemy'], $gameLength],
+                    $deathsOwnModel
+                ),
             ];
         }
 
 
         $playerScores = [];
         foreach ($players as $key => $player) {
-            $players[$key]['enemyHits'] = $this->randomValue($teamMedians[$player['team']]['hits'], $this::HIT_STD_DEVIATION);
-            $players[$key]['teammateHits'] = $this->randomValue($teamMedians[$player['team']]['hitsOwn'], $this::HIT_OWN_STD_DEVIATION);
-            $players[$key]['enemyDeaths'] = $this->randomValue($teamMedians[$player['team']]['deaths'], $this::DEATH_STD_DEVIATION);
-            $players[$key]['teammateDeaths'] = $this->randomValue($teamMedians[$player['team']]['deathsOwn'], $this::DEATH_OWN_STD_DEVIATION);
+            $players[$key]['enemyHits'] = $this->randomValue(
+                $teamMedians[$player['team']]['hits'],
+                $this::HIT_STD_DEVIATION
+            );
+            $players[$key]['teammateHits'] = $this->randomValue(
+                $teamMedians[$player['team']]['hitsOwn'],
+                $this::HIT_OWN_STD_DEVIATION
+            );
+            $players[$key]['enemyDeaths'] = $this->randomValue(
+                $teamMedians[$player['team']]['deaths'],
+                $this::DEATH_STD_DEVIATION
+            );
+            $players[$key]['teammateDeaths'] = $this->randomValue(
+                $teamMedians[$player['team']]['deathsOwn'],
+                $this::DEATH_OWN_STD_DEVIATION
+            );
             $players[$key]['hits'] = $players[$key]['enemyHits'] + $players[$key]['teammateHits'];
             $players[$key]['deaths'] = $players[$key]['enemyDeaths'] + $players[$key]['teammateDeaths'];
             $players[$key]['accuracy'] = rand(10, 80);
             $players[$key]['shots'] = round($players[$key]['hits'] * (1 + (100 / $players[$key]['accuracy'])));
             $players[$key]['lives'] = $lives - $players[$key]['deaths'];
             $players[$key]['ammoRemaining'] = $ammo - $players[$key]['shots'];
-            $players[$key]['score'] = (100 * $players[$key]['enemyHits']) - (50 * $players[$key]['deaths']) - (25 * $players[$key]['teammateHits']);
+            $players[$key]['score'] =
+              (100 * $players[$key]['enemyHits'])
+              - (50 * $players[$key]['deaths'])
+              - (25 * $players[$key]['teammateHits']);
             $playerScores[$key] = $players[$key]['score'];
 
             $teams[$player['team']]['score'] += $players[$key]['score'];
 
-            $hitsOwn = $this->randomSumDistribution($players[$key]['teammateHits'], $teamsCounts[$player['team']]['team'] - 1);
-            $hitsEnemy = $this->randomSumDistribution($players[$key]['enemyHits'], $teamsCounts[$player['team']]['enemy']);
+            $hitsOwn = $this->randomSumDistribution(
+                $players[$key]['teammateHits'],
+                $teamsCounts[$player['team']]['team'] - 1
+            );
+            $hitsEnemy = $this->randomSumDistribution(
+                $players[$key]['enemyHits'],
+                $teamsCounts[$player['team']]['enemy']
+            );
 
             foreach ($players as $key2 => $player2) {
                 if ($key === $key2) {

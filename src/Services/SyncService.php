@@ -19,12 +19,11 @@ class SyncService
     /**
      * Synchronize not synchronized games to public
      *
-     * @param int        $limit   Maximum number of games to sync
-     * @param float|null $timeout Timeout for each request in seconds
+     * @param  int  $limit  Maximum number of games to sync
+     * @param  float|null  $timeout  Timeout for each request in seconds
      *
-     * @return void
+     * @return int
      * @throws Throwable
-     * @noinspection PhpIllegalArrayKeyTypeInspection
      */
     public static function syncGames(int $limit = 5, ?float $timeout = null): int {
         $logger = new Logger(LOG_DIR, 'sync');

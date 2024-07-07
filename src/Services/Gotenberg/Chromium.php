@@ -8,13 +8,13 @@ use Psr\Http\Message\ResponseInterface;
 
 class Chromium
 {
-    public const PATHS = [
+    public const array PATHS = [
       'url'      => '/forms/chromium/convert/url',
       'html'     => '/forms/chromium/convert/html',
       'markdown' => '/forms/chromium/convert/markdown',
     ];
 
-    public const DEFAULT_DATA = [
+    public const array DEFAULT_DATA = [
       [
         'name'     => 'preferCssPageSize',
         'contents' => 'true',
@@ -158,7 +158,7 @@ class Chromium
     }
 
     /**
-     * @param  string  $html  URL to convert to PDF
+     * @param  string  $htmlFile  File to convert to PDF
      * @param  array<string, mixed>  $data  Additional data
      * @param  string[]  $additionalFiles
      *

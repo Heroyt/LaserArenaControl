@@ -18,7 +18,7 @@ use Lsr\Core\Exceptions\ValidationException;
 trait WithMetadata
 {
     /** @var int 5 minutes in seconds */
-    protected const MAX_LOAD_START_TIME_DIFFERENCE = 300;
+    protected const int MAX_LOAD_START_TIME_DIFFERENCE = 300;
 
     /**
      * Decode game metadata
@@ -31,11 +31,20 @@ trait WithMetadata
             return [];
         }
         /** @var string|false $decodedJson */
-        $decodedJson = base64_decode($encoded);
+        $decodedJson = @base64_decode($encoded);
+        if ($decodedJson === false) {
+            return [];
+        }
         /** @var string|false $decodedJson */
-        $decodedJson = gzinflate((string) $decodedJson);
+        $decodedJson = @gzinflate((string) $decodedJson);
+        if ($decodedJson === false) {
+            return [];
+        }
         /** @var string|false $decodedJson */
-        $decodedJson = gzinflate((string) $decodedJson);
+        $decodedJson = @gzinflate((string) $decodedJson);
+        if ($decodedJson === false) {
+            return [];
+        }
         if ($decodedJson !== false) {
             try {
                 /** @var array<string,string> $meta Meta data from game */

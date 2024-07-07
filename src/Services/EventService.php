@@ -16,7 +16,7 @@ use Redis;
  */
 class EventService
 {
-    public const TABLE = 'events';
+    public const string TABLE = 'events';
 
     private static string $eventUrl;
 
@@ -30,6 +30,7 @@ class EventService
             /** @var Config $config */
             $config = App::getServiceByType(Config::class);
 
+            /** @var string $url */
             $url = $config->getConfig('ENV')['EVENT_URL'] ??
                 explode(':', ($_SERVER['HTTP_HOST'] ?? '{host}'))[0] . ':' . self::getEventPort();
 
@@ -37,7 +38,7 @@ class EventService
             if (str_contains(strtolower($url), '{host}')) {
                 $url = str_replace(['{host}', '{HOST}'], $host, $url);
             } else {
-                $url = (App::isSecure() ? 'https://' : 'http://') . $url;
+                $url = App::getInstance()->getBaseUrlObject()->getScheme() . '://' . $url;
             }
 
             // Remove double slashes

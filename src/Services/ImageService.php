@@ -1,5 +1,7 @@
 <?php
 
+/** @noinspection PhpStrictComparisonWithOperandsOfDifferentTypesInspection */
+
 namespace App\Services;
 
 use GdImage;
@@ -12,13 +14,16 @@ use function imagecreatefromjpeg;
 use function imagecreatefrompng;
 use function imagecreatefromwebp;
 
-class ImageService
+/**
+ *
+ */
+readonly class ImageService
 {
     /**
      * @param  int[]  $sizes
      */
     public function __construct(
-        public readonly array $sizes = [
+        public array $sizes = [
         1000,
         800,
         500,
@@ -58,13 +63,20 @@ class ImageService
             default       => throw new RuntimeException('Invalid image type: ' . $type),
         };
 
-        if (!$image) {
-            bdump($image);
-            bdump($type);
+        if ($image === false) {
             /* Create a black image */
             $image = imagecreatetruecolor(150, 30);
+
+            if ($image === false) {
+                throw new RuntimeException('Cannot create a GD image');
+            }
+
             $bgc = imagecolorallocate($image, 255, 255, 255);
             $tc = imagecolorallocate($image, 0, 0, 0);
+
+            if ($bgc === false || $tc === false) {
+                throw new RuntimeException('Error while allocating GD image color');
+            }
 
             imagefilledrectangle($image, 0, 0, 150, 30, $bgc);
 
@@ -95,6 +107,7 @@ class ImageService
                 'jpg', 'jpeg' => imagejpeg($resized, $resizedFileName),
                 'png'         => imagepng($resized, $resizedFileName),
                 'gif'         => imagegif($resized, $resizedFileName),
+                default => null,
             };
 
             imagewebp($resized, $optimizedDir . '/' . $name . 'x' . $size . '.webp');
@@ -110,13 +123,13 @@ class ImageService
     }
 
     /**
-     * @param  resource  $image
+     * @param  GdImage  $image
      * @param  int|null  $width
      * @param  int|null  $height
      *
      * @return GdImage|false
      */
-    public function resize($image, ?int $width = null, ?int $height = null) {
+    public function resize(GdImage $image, ?int $width = null, ?int $height = null): GdImage | false {
         if ($width === null && $height === null) {
             throw new InvalidArgumentException('At least 1 argument $width or $height must be set.');
         }

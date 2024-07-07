@@ -43,7 +43,7 @@ class VersionService
                 }
             }
             // Sort all versions in ascending order
-            usort($this->availableVersions, 'version_compare');
+            usort($this->availableVersions, static fn(string $v1, string $v2) => version_compare($v1, $v2));
         }
         return $this->availableVersions;
     }

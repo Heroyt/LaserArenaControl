@@ -137,7 +137,6 @@ class ResultsParser extends AbstractResultsParser
                     }
                     [$gameNumber, , $dateStart, $dateEnd, $playerCount] = $args;
                     $game->fileNumber = (int) $gameNumber;
-                    $game->playerCount = (int) $playerCount;
                     if ($dateStart !== $this::EMPTY_DATE) {
                         $date = DateTime::createFromFormat('YmdHis', $dateStart);
                         if ($date === false) {

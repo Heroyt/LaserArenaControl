@@ -1,5 +1,7 @@
 <?php
 
+/** @noinspection PhpToStringImplementationInspection */
+
 /**
  * @author Tomáš Vojík <xvojik00@stud.fit.vutbr.cz>, <vojik@wboy.cz>
  */
@@ -25,6 +27,7 @@ use Lsr\Core\Exceptions\ValidationException;
 use Lsr\Logging\Exceptions\DirectoryCreationException;
 use Lsr\Logging\Logger;
 use Nette\DI\MissingServiceException;
+use Spiral\RoadRunner\Jobs\Exception\JobsException;
 use Spiral\RoadRunner\Metrics\Metrics;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Lock\LockFactory;
@@ -35,6 +38,8 @@ use Throwable;
  */
 class ImportService
 {
+    public const int ERROR_STATUS_INFO_SET = 1;
+
     /** @var array{error?:string,exception?:string,sql?:string}[]|string[] */
     private array $errors = [];
     private int $gameLoadedTime;
@@ -57,14 +62,15 @@ class ImportService
      *
      * Handles result import the same for both, but outputs differently.
      *
-     * @param  string  $resultsDir  Results directory passed from a Controller
+     * @param  non-empty-string  $resultsDir  Results directory passed from a Controller
      * @param  bool  $all  If true - ignore file modification time and import all files
+     * @param  int  $limit
      * @param  OutputInterface|null  $output
      *
      * @return ImportResponse|ErrorDto
-     * @throws JsonException
      * @throws ModelNotFoundException
      * @throws Throwable
+     * @throws JobsException
      */
     public function import(
         string           $resultsDir,
@@ -132,8 +138,10 @@ class ImportService
                 }
 
                 // Find all files
-                /** @var string[] $resultFiles */
                 $resultFiles = glob($resultsDir . $parser::getFileGlob());
+                if ($resultFiles === false) {
+                    $resultFiles = [];
+                }
 
                 // Import all files
                 $importedSystem = 0;
@@ -175,7 +183,8 @@ class ImportService
                             // - an old, un-played game
                             // - freshly loaded game
                             // - started and not finished game
-                            // An old game should be ignored, the other 2 cases should be logged and an event should be sent.
+                            // An old game should be ignored, the other 2 cases should be logged and an event
+                            // should be sent.
                             // But only the latest game should be considered
 
                             // TODO: Detect manually stopped game and delete game-started
@@ -267,24 +276,26 @@ class ImportService
                     Info::set($resultsDir . 'check', $now);
                 } catch (Exception $e) {
                     $lock->release();
-                    return $this->errorHandle($e);
+                    return $this->errorHandle($e, statusCode: $this::ERROR_STATUS_INFO_SET);
                 }
             }
 
             // Set last unfinished game event
             if (isset($lastUnfinishedGame)) {
                 $logger->debug(
-                    'Setting last unfinished game: "' . $lastUnfinishedGame::SYSTEM . '-' . $lastEvent . '" - ' . $lastUnfinishedGame->resultsFile
+                    'Setting last unfinished game: "' . $lastUnfinishedGame::SYSTEM . '-' .
+                    $lastEvent . '" - ' . $lastUnfinishedGame->resultsFile
                 );
                 $output?->writeln(
-                    'Setting last unfinished game: "' . $lastUnfinishedGame::SYSTEM . '-' . $lastEvent . '" - ' . $lastUnfinishedGame->resultsFile
+                    'Setting last unfinished game: "' . $lastUnfinishedGame::SYSTEM . '-' .
+                    $lastEvent . '" - ' . $lastUnfinishedGame->resultsFile
                 );
                 try {
                     Info::set($lastUnfinishedGame::SYSTEM . '-' . $lastEvent, $lastUnfinishedGame);
                     $this->eventService->trigger($lastEvent, ['game' => $lastUnfinishedGame->resultsFile]);
                 } catch (Exception $e) {
                     $lock->release();
-                    return $this->errorHandle($e);
+                    return $this->errorHandle($e, statusCode: self::ERROR_STATUS_INFO_SET);
                 }
             }
 
@@ -354,8 +365,7 @@ class ImportService
      * @param  string|Throwable|string[]|Throwable[]  $data
      * @param  int  $statusCode
      *
-     * @return void
-     * @throws JsonException
+     * @return ErrorDto
      */
     private function errorHandle(string | Throwable | array $data, int $statusCode = 0): ErrorDto {
         if (!is_array($data)) {
@@ -367,20 +377,17 @@ class ImportService
             $info = [];
             if (is_string($error)) {
                 $info['error'] = $error;
-            } else {
-                if ($error instanceof \Exception) {
-                    $info = [
-                      'error'     => 'An exception has occurred.',
-                      'exception' => $error->getMessage(),
-                    ];
-                    if ($error instanceof Exception) {
-                        $info['sql'] = $error->getSql();
-                    }
+            } else if ($error instanceof \Exception) {
+                $info = [
+                  'error'     => 'An exception has occurred.',
+                  'exception' => $error->getMessage(),
+                ];
+                if ($error instanceof Exception) {
+                    $info['sql'] = $error->getSql();
                 }
             }
             $errors[] = $info;
             if ($statusCode === 0) {
-                // @phpstan-ignore-next-line
                 $this->errors[] = $info;
             }
         }

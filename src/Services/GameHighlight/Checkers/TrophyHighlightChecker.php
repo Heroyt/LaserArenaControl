@@ -2,6 +2,7 @@
 
 namespace App\Services\GameHighlight\Checkers;
 
+use App\Exceptions\GameModeNotFoundException;
 use App\GameModels\Game\Player;
 use App\GameModels\Game\PlayerTrophy;
 use App\Models\DataObjects\Highlights\GameHighlight;
@@ -11,9 +12,20 @@ use App\Services\GameHighlight\PlayerHighlightChecker;
 use Lsr\Core\Exceptions\ModelNotFoundException;
 use Lsr\Core\Exceptions\ValidationException;
 use Lsr\Logging\Exceptions\DirectoryCreationException;
+use Throwable;
 
+/**
+ *
+ */
 class TrophyHighlightChecker implements PlayerHighlightChecker
 {
+    /**
+     * @param  Player  $player
+     * @param  HighlightCollection  $highlights
+     * @return void
+     * @throws GameModeNotFoundException
+     * @throws Throwable
+     */
     public function checkPlayer(Player $player, HighlightCollection $highlights): void {
         foreach (PlayerTrophy::SPECIAL_TROPHIES as $trophy) {
             try {
@@ -30,11 +42,11 @@ class TrophyHighlightChecker implements PlayerHighlightChecker
                     switch ($trophy) {
                         case 'favouriteTarget':
                             $rarity = GameHighlight::MEDIUM_RARITY;
-                            $rarity += (int) round($player->getHitsPlayer($player->getFavouriteTarget()) / 5);
+                            $rarity += round($player->getHitsPlayer($player->getFavouriteTarget()) / 5);
                             break;
                         case 'favouriteTargetOf':
                             $rarity = GameHighlight::MEDIUM_RARITY;
-                            $rarity += (int) round($player->getFavouriteTargetOf()?->getHitsPlayer($player) / 5);
+                            $rarity += round($player->getFavouriteTargetOf()?->getHitsPlayer($player) / 5);
                             break;
                         case 'team-50':
                             $rarity = GameHighlight::MEDIUM_RARITY;
@@ -45,7 +57,7 @@ class TrophyHighlightChecker implements PlayerHighlightChecker
                         new TrophyHighlight(
                             $trophy,
                             $player,
-                            $rarity
+                            (int) $rarity
                         )
                     );
                 }

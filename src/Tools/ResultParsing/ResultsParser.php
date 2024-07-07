@@ -17,13 +17,10 @@ class ResultsParser
     protected string $fileName = '';
     protected string $contents = '';
     /** @var ResultsParserInterface<G> */
-    private ResultsParserInterface $parser;
+    private ?ResultsParserInterface $parser;
 
     /**
-     * @param string         $fileName
      * @param PlayerProvider $playerProvider
-     *
-     * @throws FileException
      */
     public function __construct(
         protected readonly PlayerProvider $playerProvider,
@@ -51,7 +48,12 @@ class ResultsParser
                 /** @var class-string<ResultsParserInterface<G>> $class */
                 $class = $baseNamespace . ucfirst($system) . '\\ResultsParser';
                 if (class_exists($class) && $class::checkFile($this->fileName, $this->contents)) {
-                    $this->parser = new $class($this->fileName, $this->contents);
+                    $this->parser = new $class($this->playerProvider);
+                    if (!empty($this->fileName)) {
+                        $this->parser->setFile($this->fileName);
+                    } else {
+                        $this->parser->setContents($this->contents);
+                    }
                     return $this->parser;
                 }
             }
@@ -65,11 +67,15 @@ class ResultsParser
             throw new FileException('File "' . $fileName . '" does not exist or is not readable');
         }
         $this->fileName = $fileName;
+        $this->contents = '';
+        $this->parser = null;
         return $this;
     }
 
     public function setContents(string $contents): ResultsParser {
+        $this->fileName = '';
         $this->contents = $contents;
+        $this->parser = null;
         return $this;
     }
 }

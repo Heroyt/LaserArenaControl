@@ -2,15 +2,20 @@
 
 namespace App\Services;
 
+use App\Core\App;
 use App\Core\Info;
 use App\GameModels\Factory\GameFactory;
 use App\GameModels\Game\Game;
+use App\GameModels\Game\Player;
 use App\GameModels\Game\PrintStyle;
+use App\GameModels\Game\Team;
 use App\Tasks\GameHighlightsTask;
 use App\Tasks\GamePrecacheTask;
 use App\Tasks\Payloads\GameHighlightsPayload;
 use App\Tasks\Payloads\GamePrecachePayload;
+use Lsr\Exceptions\TemplateDoesNotExistException;
 use Redis;
+use Spiral\RoadRunner\Jobs\Exception\JobsException;
 use Throwable;
 
 /**
@@ -18,7 +23,7 @@ use Throwable;
  */
 readonly class ResultsPrecacheService
 {
-    public const KEY = 'result-precache-queue';
+    public const string KEY = 'result-precache-queue';
 
     public function __construct(
         private Redis              $redis,
@@ -34,6 +39,7 @@ readonly class ResultsPrecacheService
      * @param  string  ...$codes
      *
      * @return int|false
+     * @throws JobsException
      */
     public function prepareGamePrecache(string ...$codes): int | false {
         if ($this->mode === 'queue') {
@@ -83,18 +89,22 @@ readonly class ResultsPrecacheService
     /**
      * Precache game results PDF
      *
-     * @param  Game  $game
+     * @param  Game<Team, Player>  $game
      * @param  int|null  $style
      * @param  string|null  $template
      * @return bool False if pre-caching failed
      */
-    private function precacheGame(Game $game, ?int $style = null, ?string $template = null) {
-        $file = $this->printService->getResultsPdf(
-            $game,
-            $style ?? PrintStyle::getActiveStyleId(),
-            $template ?? ((string) Info::get('default_print_template', 'default')),
-        );
-        var_dump($file);
+    private function precacheGame(Game $game, ?int $style = null, ?string $template = null): bool {
+        try {
+            $file = $this->printService->getResultsPdf(
+                $game,
+                $style ?? PrintStyle::getActiveStyleId(),
+                $template ?? ((string) Info::get('default_print_template', 'default')),
+            );
+        } catch (TemplateDoesNotExistException $e) {
+            App::getInstance()->getLogger()->exception($e);
+            return false;
+        }
         return $file !== '' && file_exists($file);
     }
 }

@@ -34,10 +34,10 @@ class ResultsParser extends AbstractResultsParser
 {
     use WithMetadata;
 
-    public const REGEXP = '/([A-Z]+){([^{}]*)}#/';
+    public const string REGEXP = '/([A-Z]+){([^{}]*)}#/';
 
     /** @var string Default LMX date string passed when no distinct date should be used (= null) */
-    public const EMPTY_DATE = '20000101000000';
+    public const string EMPTY_DATE = '20000101000000';
 
     /**
      * @inheritDoc
@@ -140,7 +140,6 @@ class ResultsParser extends AbstractResultsParser
                     }
                     [$gameNumber, , $dateStart, $dateEnd, $playerCount] = $args;
                     $game->fileNumber = (int) $gameNumber;
-                    $game->playerCount = (int) $playerCount;
                     if ($dateStart !== $this::EMPTY_DATE) {
                         $date = DateTime::createFromFormat('YmdHis', $dateStart);
                         if ($date === false) {

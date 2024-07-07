@@ -2,6 +2,7 @@
 
 namespace App\Services\GameHighlight;
 
+use App\Core\App;
 use App\GameModels\Game\Game;
 use App\GameModels\Game\Player;
 use App\GameModels\Game\Team;
@@ -12,19 +13,18 @@ use App\Models\DataObjects\Highlights\HighlightDto;
 use App\Services\FeatureConfig;
 use App\Services\LigaApi;
 use DateTimeInterface;
+use Dibi\DriverException;
 use Dibi\Exception;
-use Dibi\Row;
 use GuzzleHttp\Exception\GuzzleException;
 use JsonException;
-use Lsr\Core\App;
 use Lsr\Core\Caching\Cache;
 use Lsr\Core\DB;
 use Throwable;
 
 class GameHighlightService
 {
-    public const  TABLE = 'game_highlights';
-    public const PLAYER_REGEXP = '/@([^@]+)@(?:<([^@]+)>)?/';
+    public const  string TABLE = 'game_highlights';
+    public const string PLAYER_REGEXP = '/@([^@]+)@(?:<([^@]+)>)?/';
 
     /** @var Player[][] */
     private array $playerCache = [];
@@ -65,7 +65,6 @@ class GameHighlightService
      */
     public function getHighlightsDataForDay(DateTimeInterface $date): array {
         $highlights = [];
-        /** @var Row{code:string,datetime:DateTimeInterface,rarity:int,type:string,description:string,players:string|null,object:string|null}[] $rows */
         $rows = DB::select(self::TABLE, '*')
                   ->where('DATE([datetime]) = %d AND [object] IS NOT NULL', $date)
                   ->orderBy('rarity')
@@ -126,28 +125,24 @@ class GameHighlightService
      * @throws Throwable Cache error
      */
     public function getHighlightsForGame(Game $game, bool $cache = true): HighlightCollection {
+        $dependencies = [
+          'tags' => $this->getCacheTags($game),
+        ];
         if (!$cache) {
             $highlights = $this->loadHighlightsForGame($game);
             // Cache result
             $this->cache->save(
                 'game.' . $game->code . '.highlights.' . App::getShortLanguageCode(),
                 $highlights,
-                [
-                $this->cache::Tags => $this->getCacheTags($game),
-                ]
+                $dependencies,
             );
             return $highlights;
         }
 
-        // @phpstan-ignore-next-line
         return $this->cache->load(
             'game.' . $game->code . '.highlights.' . App::getShortLanguageCode(),
-            function (array &$dependencies) use ($game) {
-                return $this->loadHighlightsForGame($game);
-            },
-            [
-            $this->cache::Tags => $this->getCacheTags($game),
-            ]
+            fn ()=> $this->loadHighlightsForGame($game),
+            $dependencies,
         );
     }
 
@@ -155,9 +150,10 @@ class GameHighlightService
      * @template T of Team
      * @template P of Player
      *
-     * @param Game<T,P> $game
-     *
+     * @param  Game<T,P>  $game
+     * @param  bool  $generate
      * @return HighlightCollection
+     * @throws GuzzleException
      */
     private function loadHighlightsForGame(Game $game, bool $generate = false): HighlightCollection {
         $ligaActive = $this->config->isFeatureEnabled('LIGA') && $game->sync;
@@ -171,8 +167,8 @@ class GameHighlightService
             return $highlights;
         }
 
-        $highlights ??= $this->loadHighlightsForGameFromDb($game);
-        if ($highlights->count() === 0 && $ligaActive) {
+        $highlights = $this->loadHighlightsForGameFromDb($game);
+        if ($ligaActive && $highlights->count() === 0) {
             $highlights = $this->getHighlightsFromLiga($game);
             $this->saveHighlightCollection($highlights, $game);
         }
@@ -208,7 +204,9 @@ class GameHighlightService
         $highlights = json_decode($contents, true, 512, JSON_THROW_ON_ERROR);
 
         foreach ($highlights as $highlight) {
-            $collection->add(GameHighlightType::from($highlight['type'])->getHighlightClass()::fromJson($highlight, $game));
+            $collection->add(
+                (GameHighlightType::from($highlight['type'])->getHighlightClass()::fromJson($highlight, $game))
+            );
         }
         return $collection;
     }
@@ -235,6 +233,12 @@ class GameHighlightService
         return $highlights;
     }
 
+    /**
+     * @param  HighlightCollection  $collection
+     * @param  Game  $game
+     * @return bool
+     * @throws DriverException
+     */
     private function saveHighlightCollection(HighlightCollection $collection, Game $game): bool {
         try {
             DB::getConnection()->begin();
@@ -242,21 +246,21 @@ class GameHighlightService
                 DB::replace(
                     $this::TABLE,
                     [
-                        'code'        => $game->code,
-                        'datetime'    => $game->start,
-                        'rarity'      => $highlight->rarityScore,
-                        'type'        => $highlight->type->value,
-                        'description' => $highlight->getDescription(),
-                        'players'     => json_encode(
-                            $this->getHighlightPlayers($highlight, $game),
-                            JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
-                        ),
-                        'object'      => igbinary_serialize($highlight),
+                      'code'        => $game->code,
+                      'datetime'    => $game->start,
+                      'rarity'      => $highlight->rarityScore,
+                      'type'        => $highlight->type->value,
+                      'description' => $highlight->getDescription(),
+                      'players'     => json_encode(
+                          $this->getHighlightPlayers($highlight, $game),
+                          JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
+                      ),
+                      'object'      => igbinary_serialize($highlight),
                     ]
                 );
             }
             DB::getConnection()->commit();
-        } catch (Exception $e) {
+        } catch (Exception) {
             DB::getConnection()->rollback();
             return false;
         }
@@ -294,14 +298,10 @@ class GameHighlightService
     }
 
     /**
-     * @template T of Team
-     * @template P of Player
-     * @template G of Game<T,P>
-     *
      * @param string $name
-     * @param G      $game
+     * @param Game   $game
      *
-     * @return Player<G, T>|null
+     * @return Player|null
      */
     private function getPlayerByName(string $name, Game $game): ?Player {
         if (isset($this->playerCache[$game->code][$name])) {

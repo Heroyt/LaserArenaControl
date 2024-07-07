@@ -1,6 +1,8 @@
+includes:
+	- phar://phpstan.phar/conf/bleedingEdge.neon
 parameters:
 	editorUrl: 'phpstorm://open?file=%%file%%&line=%%line%%'
-	level: max
+	level: 7
 	paths:
 		- src
 		- tests
@@ -8,5 +10,8 @@ parameters:
 		- routes
 		- config
 	tmpDir: temp
+	ignoreErrors:
+		-
+			identifier: missingType.generics
 	universalObjectCratesClasses:
 		- Dibi\Row

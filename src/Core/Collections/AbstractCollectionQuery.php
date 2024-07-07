@@ -143,7 +143,7 @@ abstract class AbstractCollectionQuery implements CollectionQueryInterface
 
     /**
      * @param string $param
-     * @param T      ...$values
+     * @param mixed  ...$values
      *
      * @return CollectionQueryInterface<T>
      */

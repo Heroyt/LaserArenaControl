@@ -82,7 +82,8 @@ services:
 				groups: true
 				tables: true
 
-	liga: App\Services\LigaApi::getInstance(@metrics)
+	guzzle: App\Services\GuzzleFactory
+	liga: App\Services\LigaApi::getInstance(@metrics, @symfony.serializer, @guzzle)
 	playersProvider: App\Services\PlayerProvider
 
 	gamesImport: App\Services\ImportService

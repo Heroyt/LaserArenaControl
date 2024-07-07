@@ -6,21 +6,16 @@
 
 namespace App\Services;
 
+use App\Api\DataObjects\LigaPlayer\LigaPlayerData;
+use App\Api\DataObjects\Vests\LigaVest;
 use App\Core\App;
 use App\Core\Info;
-use App\GameModels\Game\Enums\VestStatus;
 use App\GameModels\Game\Game;
 use App\GameModels\Vest;
 use App\Models\MusicMode;
-use DateTimeImmutable;
-use DateTimeZone;
+use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
-use GuzzleHttp\Handler\CurlFactory;
-use GuzzleHttp\Handler\CurlHandler;
-use GuzzleHttp\HandlerStack;
-use GuzzleHttp\MessageFormatter;
-use GuzzleHttp\Middleware;
 use GuzzleHttp\Psr7\Utils;
 use InvalidArgumentException;
 use JsonException;
@@ -28,7 +23,10 @@ use LAC\Modules\Core\LigaApiExtensionInterface;
 use Lsr\Core\Exceptions\ValidationException;
 use Lsr\Logging\Logger;
 use Psr\Http\Message\ResponseInterface;
+use RuntimeException;
+use SensitiveParameter;
 use Spiral\RoadRunner\Metrics\Metrics;
+use Symfony\Component\Serializer\Serializer;
 
 /**
  * Singleton service for handling public API calls
@@ -45,42 +43,36 @@ class LigaApi
 
     public function __construct(
         public string $url,
+        #[SensitiveParameter]
         public string $apiKey,
         private readonly Metrics $metrics,
+        private readonly Serializer $serializer,
+        private readonly GuzzleFactory $guzzleFactory,
     ) {
         $this->logger = new Logger(LOG_DIR, 'ligaApi');
         $this->makeClient();
     }
 
     private function makeClient(): void {
-        // Add logging to handler and set handler to cUrl
-        $stack = new HandlerStack();
-        $stack->setHandler(new CurlHandler(['handle_factory' => new CurlFactory(99)]));
-        $stack->push(Middleware::log($this->logger, new MessageFormatter(MessageFormatter::DEBUG)));
-
-        // Initialize client
-        $this->client = new Client([
-            'handler' => $stack,
-            'base_uri' => trailingSlashIt($this->url) . 'api/',
-            'timeout' => 60.0, // 1 minute
-            'allow_redirects' => true,
-            'headers' => [
-                'Accept' => 'application/json',
-                'Authorization' => 'Bearer ' . $this->apiKey,
-            ],
-        ]);
+        $this->client = $this->guzzleFactory->makeClient($this->url, $this->apiKey);
     }
 
     /**
+     * @param  Metrics  $metrics
+     * @param  Serializer  $serializer
      * @return LigaApi
      */
-    public static function getInstance(Metrics $metrics): LigaApi {
+    public static function getInstance(
+        Metrics       $metrics,
+        Serializer    $serializer,
+        GuzzleFactory $guzzleFactory
+    ): LigaApi {
         if (!isset(self::$instance)) {
             /** @var string $url */
             $url = Info::get('liga_api_url', '');
             /** @var string $key */
             $key = Info::get('liga_api_key', '');
-            self::$instance = new self($url, $key, $metrics);
+            self::$instance = new self($url, $key, $metrics, $serializer, $guzzleFactory);
         }
         return self::$instance;
     }
@@ -96,7 +88,6 @@ class LigaApi
      * @throws GuzzleException
      */
     public function get(string $path, ?array $params = null, array $config = []): ResponseInterface {
-
         $this->makeClient();
         if (isset($params)) {
             $config['query'] = $params;
@@ -116,7 +107,12 @@ class LigaApi
      * @throws JsonException
      * @post All finished games will be sent to public
      */
-    public function syncGames(string $system, array $games, ?float $timeout = null, bool $recreateClient = false): bool {
+    public function syncGames(
+        string $system,
+        array  $games,
+        ?float $timeout = null,
+        bool   $recreateClient = false
+    ): bool {
         if ($recreateClient) {
             $this->makeClient();
         }
@@ -132,7 +128,9 @@ class LigaApi
         $gamesData = [];
         foreach ($games as $key => $game) {
             if ($game::SYSTEM !== $system) {
-                throw new InvalidArgumentException('Game #' . $key . ' (code: ' . $game->code . ') is not an ' . $system . ' game.');
+                throw new InvalidArgumentException(
+                    'Game #' . $key . ' (code: ' . $game->code . ') is not an ' . $system . ' game.'
+                );
             }
             // Remove unfinished games
             if ($game->isFinished()) {
@@ -142,8 +140,13 @@ class LigaApi
                     $response = $this->client->get('games/' . $game->code . '/users');
                     if ($response->getStatusCode() === 200) {
                         $response->getBody()->rewind();
-                        /** @var array<int,array{id:int,nickname:string,code:string,arena:int,email:string,stats:array{rank:int,gamesPlayed:int,arenasPlayed:int},connections:array{type:string,identifier:string}[]}> $users */
-                        $users = json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
+
+                        /** @var LigaPlayerData[] $users */
+                        $users = $this->serializer->deserialize(
+                            $response->getBody()->getContents(),
+                            LigaPlayerData::class . '[]',
+                            'json'
+                        );
                         if (!empty($users)) {
                             // Assign user objects for each user got
                             foreach ($users as $vest => $userData) {
@@ -151,7 +154,7 @@ class LigaApi
                                 if (isset($player)) {
                                     $player->user = $playerProvider->getPlayerObjectFromData($userData);
                                     // Sync new user
-                                    if (isset($player->user) && !isset($player->user->id)) {
+                                    if (!isset($player->user->id)) {
                                         $player->user->save();
                                     }
                                     $player->save();
@@ -184,7 +187,10 @@ class LigaApi
             $response = $this->client->post('games', $config);
             $status = $response->getStatusCode();
             if ($status > 299) {
-                $this->logger->error('Request failed: ' . json_encode($response->getBody()->getContents(), JSON_THROW_ON_ERROR));
+                $this->logger->error(
+                    'Request failed: ' .
+                    json_encode($response->getBody()->getContents(), JSON_THROW_ON_ERROR)
+                );
                 return false;
             }
         } catch (GuzzleException $e) {
@@ -205,7 +211,7 @@ class LigaApi
      * Send a POST request to the liga API with all necessary settings, headers, etc.
      *
      * @param string $path
-     * @param array|object|null $data
+     * @param array<string,mixed>|object|null $data
      * @param array<string,mixed> $config
      *
      * @return ResponseInterface
@@ -221,6 +227,10 @@ class LigaApi
         return $this->client->post($path, $config);
     }
 
+    /**
+     * @param  MusicMode  $mode
+     * @return bool
+     */
     public function syncMusicMode(MusicMode $mode): bool {
         try {
             if (!$mode->public) {
@@ -342,9 +352,16 @@ class LigaApi
                 $delimiter = '-------------' . $boundary;
 
                 $fileName = basename($previewFile);
-                $post_data = $this->build_data_files($boundary, [], [['name' => 'media', 'fileName' => $fileName, 'contents' => $media, 'type' => 'audio/mpeg']]);
+                $post_data = $this->buildDataFiles(
+                    $boundary,
+                    [],
+                    [['name' => 'media', 'fileName' => $fileName, 'contents' => $media, 'type' => 'audio/mpeg']]
+                );
 
                 $ch = curl_init(trailingSlashIt($this->url) . 'api/music/' . $mode->id . '/upload');
+                if ($ch === false) {
+                    throw new RuntimeException('CURL init failed');
+                }
                 curl_setopt_array($ch, [
                     CURLOPT_POST => 1,
                     CURLOPT_TIMEOUT => 60,
@@ -373,7 +390,13 @@ class LigaApi
         return true;
     }
 
-    private function build_data_files(string $boundary, array $fields, array $files): string {
+    /**
+     * @param  string  $boundary
+     * @param  array<string,mixed>  $fields
+     * @param  array{name:string,fileName:string,contents:string,type:string}[]  $files
+     * @return string
+     */
+    private function buildDataFiles(string $boundary, array $fields, array $files): string {
         $data = '';
         $eol = "\r\n";
 
@@ -420,25 +443,27 @@ class LigaApi
      */
     public function getExtensions(): array {
         if (!isset($this->extensions)) {
-            $this->extensions = [];
-            foreach (App::getServiceByType(LigaApiExtensionInterface::class) as $name) {
-                // @phpstan-ignore-next-line
-                $this->extensions[] = App::getService($name);
+            $extensions = App::getServiceByType(LigaApiExtensionInterface::class);
+            if ($extensions === null) {
+                $extensions = [];
+            } else if (!is_array($extensions)) {
+                $extensions = [$extensions];
             }
+            $this->extensions = $extensions;
         }
-      // @phpstan-ignore-next-line
         return $this->extensions;
     }
 
     /**
      * Synchronize all vests to laser liga
      *
-     * @param bool $recreateClient
+     * @param  bool  $recreateClient
      *
      * @return bool
      * @throws GuzzleException
      * @throws JsonException
      * @throws ValidationException
+     * @throws Exception
      */
     public function syncVests(bool $recreateClient = false): bool {
         if ($recreateClient) {
@@ -454,17 +479,23 @@ class LigaApi
 
         // Get updates from laser liga
         $response = $this->get('/api/vests');
-        /** @var array{vestNum:string,system:string,status:string,info:string|null,updatedAt:array{date:string,timezone_type:int,timezone:string}}[] $data */
-        $data = json_decode($response->getBody(), true, 512, JSON_THROW_ON_ERROR);
+
+        $contents = $response->getBody()->getContents();
+        /** @var LigaVest[] $data */
+        $data = $this->serializer->deserialize(
+            $contents,
+            LigaVest::class . '[]',
+            'json'
+        );
+
         foreach ($data as $vestData) {
-            if (!isset($vests[$vestData['system']][$vestData['vestNum']])) {
+            if (!isset($vests[$vestData->system][$vestData->vestNum])) {
                 continue;
             }
-            $vest = $vests[$vestData['system']][$vestData['vestNum']];
-            $updated = new DateTimeImmutable($vestData['date'], new DateTimeZone($vestData['date']['timezone']));
-            if ($vest->updatedAt < $updated) {
-                $vest->status = VestStatus::tryFrom($vestData['status']) ?? $vest->status;
-                $vest->info = $vestData['info'] ?? null;
+            $vest = $vests[$vestData->system][$vestData->vestNum];
+            if ($vest->updatedAt < $vestData->updatedAt) {
+                $vest->status = $vestData->status;
+                $vest->info = $vestData->info;
                 $vest->save();
             }
         }

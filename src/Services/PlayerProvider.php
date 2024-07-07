@@ -2,23 +2,37 @@
 
 namespace App\Services;
 
-use App\Models\Auth\Enums\ConnectionType;
+use App\Api\DataObjects\LigaPlayer\LigaPlayerData;
+use App\Core\App;
 use App\Models\Auth\Player;
 use App\Models\Auth\PlayerConnection;
 use GuzzleHttp\Exception\GuzzleException;
 use JsonException;
 use Lsr\Core\Exceptions\ValidationException;
+use Symfony\Component\Serializer\Serializer;
 
-class PlayerProvider
+/**
+ * @phpstan-type PlayerData array{
+ *     id:int,
+ *     nickname:string,
+ *     code:string,
+ *     arena:int,
+ *     email:string,
+ *     stats:array{rank:int,gamesPlayed:int,arenasPlayed:int},
+ *     connections:array{type:string,identifier:string}[]
+ * }
+ */
+readonly class PlayerProvider
 {
     public function __construct(
-        private readonly LigaApi $api
+        private LigaApi    $api,
+        private Serializer $serializer,
     ) {
     }
 
     /**
-     * @param string $search
-     * @param bool   $includeMail If true, the search checks an user's email too
+     * @param  string  $search
+     * @param  bool  $includeMail  If true, the search checks an user's email too
      *
      * @return Player[]
      * @throws ValidationException
@@ -30,8 +44,8 @@ class PlayerProvider
             $query->where('[code] LIKE %like~', $matches[1]);
         } else {
             $where = [
-                ['[code] LIKE %~like~', $search],
-                ['[nickname] LIKE %~like~', $search],
+              ['[code] LIKE %~like~', $search],
+              ['[nickname] LIKE %~like~', $search],
             ];
             if ($includeMail) {
                 $where[] = ['[email] LIKE %~like~', $search];
@@ -48,7 +62,7 @@ class PlayerProvider
     /**
      * Find players using the public API.
      *
-     * @param string $search
+     * @param  string  $search
      *
      * @return Player[]
      */
@@ -64,8 +78,8 @@ class PlayerProvider
         $response->getBody()->rewind();
         $body = $response->getBody()->getContents();
         try {
-            /** @var object{id:int,nickname:string,code:string,arena:int,email:string,stats:object{rank:int,gamesPlayed:int,arenasPlayed:int},connections:object{type:string,identifier:string}[]}[] $data */
-            $data = json_decode($body, false, 512, JSON_THROW_ON_ERROR);
+            /** @var LigaPlayerData[] $data */
+            $data = $this->serializer->deserialize($body, LigaPlayerData::class . '[]', 'json');
         } catch (JsonException) {
             return [];
         }
@@ -85,42 +99,41 @@ class PlayerProvider
      *
      * @warning Does not check the validity of input array. It will throw a warning if the input is not valid.
      *
-     * @param array{id:int,nickname:string,code:string,arena:int,email:string,stats:array{rank:int,gamesPlayed:int,arenasPlayed:int},connections:array{type:string,identifier:string}[]} $data
+     * @param  LigaPlayerData  $data
      *
      * @return Player
      */
-    public function getPlayerObjectFromData(array|object $data): Player {
-        if (is_array($data)) {
-            $data = (object) $data;
-        }
-        if (is_array($data->stats)) {
-            $data->stats = (object) $data->stats;
-        }
-
+    public function getPlayerObjectFromData(LigaPlayerData $data): Player {
         // Try to find existing player first
         $player = Player::getByCode($data->code);
         if (!isset($player)) {
             $player = new Player();
         }
 
-        $changed = isset($player->id) && ($player->nickname !== $data->nickname || $player->email !== $data->email || $player->rank !== $data->stats->rank);
+        $changed = isset($player->id)
+          && (
+            $player->nickname !== $data->nickname
+            || $player->email !== $data->email
+            || $player->rank !== $data->stats->rank
+          );
         $player->nickname = $data->nickname;
         $player->code = $data->code;
         $player->email = $data->email;
         $player->rank = $data->stats->rank;
         foreach ($data->connections ?? [] as $connectionData) {
-            if (is_array($connectionData)) {
-                $connectionData = (object) $connectionData;
-            }
             $connection = new PlayerConnection();
-            $connection->type = ConnectionType::tryFrom($connectionData->type) ?? ConnectionType::OTHER;
+            $connection->type = $connectionData->type;
             $connection->identifier = $connectionData->identifier;
             $player->addConnection($connection);
         }
 
         if ($changed || !isset($player->id)) {
             // Update player data from public
-            $player->save();
+            try {
+                $player->save();
+            } catch (ValidationException $e) {
+                App::getInstance()->getLogger()->exception($e);
+            }
         }
         return $player;
     }
@@ -128,7 +141,7 @@ class PlayerProvider
     /**
      * Find only one player from public API by code
      *
-     * @param string $code
+     * @param  string  $code
      *
      * @return Player|null
      */
@@ -145,8 +158,7 @@ class PlayerProvider
         $body = $response->getBody()->getContents();
 
         try {
-            /** @var object{id:int,nickname:string,code:string,arena:int,email:string,stats:object{rank:int,gamesPlayed:int,arenasPlayed:int},connections:object{type:string,identifier:string}[]}[] $data */
-            $data = json_decode($body, false, 512, JSON_THROW_ON_ERROR);
+            $data = $this->serializer->deserialize($body, LigaPlayerData::class, 'json');
         } catch (JsonException) {
             return null;
         }

@@ -1,0 +1,98 @@
+SITE{2518,0602016,EVO-6 MAXX}#
+GAME{3,2024 01 10 - 18 48 - 9 players,20240110185118,20240110190720,9}#
+TIMING{30,15,30,20240110185148,20240110190648,20240110190718}#
+STYLE{1) Solo Action,,0,15,0,0,1}#
+STYLEX{6,9999,999}#
+STYLELEDS{0,15,15,15,15,15,1,5,3,0,6}#
+STYLEFLAGS{0,1,1,1,1,1,0,1,0,0,1,1,0,0,1,1,1,1,0,0,1,1,0,0,0,0,0,5135,0,0}#
+STYLESOUNDS{255}#
+SCORING{-50,100,0,-25,-50,0,0,0,0,0,14200,0,0,0,0,0,75,-25}#
+ENVIRONMENT{,,,C:\LaserMaxx\shared\music\LaserMixx Standard\LaserMixx Standard Armed.mp3,C:\LaserMaxx\shared\music\LaserMixx Standard\LaserMixx Standard Intro 30sec.mp3,C:\LaserMaxx\shared\music\LaserMixx Standard\LaserMixx Standard Play 15min.mp3,C:\LaserMaxx\shared\music\LaserMixx Standard\LaserMixx Standard Gameover.mp3}#
+REALITY{0}#
+VIPSTYLE{0,1,20,0,1,1,0,0,0,0,0,0,6,0,0,2,0}#
+VAMPIRESTYLE{0,1,0,1,999,0,0}#
+SWITCHSTYLE{0,0}#
+ASSISTEDSTYLE{1,1,1,0,1,1,3,0,0,0}#
+HITSTREAKSTYLE{0,2,15}#
+SHOWDOWNSTYLE{0,0,1,1,0}#
+ACTIVITYSTYLE{0,250,0}#
+KNOCKOUTSTYLE{0,100}#
+HITGAINSTYLE{0,0,0}#
+CROSSFIRESTYLE{0}#
+PARALLELSTYLE{0}#
+SENSORTAGSTYLE{0}#
+ROCKPAPERSCISSORSSTYLE{0}#
+RESPAWNSTYLE{0,5,0}#
+MINESTYLE{0,0,0,0,Unnamed Unit}#
+MINESTYLE{1,0,0,0,Unnamed Unit}#
+MINESTYLE{2,0,0,0,Unnamed Unit}#
+MINESTYLE{3,0,0,0,Unnamed Unit}#
+MINESTYLE{4,0,0,0,Unnamed Unit#
+MINESTYLE{5,0,1,6,Unnamed Unit}#
+MINESTYLE{6,0,1,6,Unnamed Unit}#
+MINESTYLE{7,0,1,6,Power Pod}#
+
+GROUP{2024 01 10 - 18 48 - 9 players,...,2}#
+
+PACK{1,Mroz,2,0,0,0,0,0}#
+PACK{2,JiriQ,2,0,0,0,0,0}# 
+PACK{3,Kuba,2,0,0,0,0,0}#
+PACK{4,Heroyt,2,0,0,0,0,0}#
+PACK{6,Palo,2,0,0,0,0,0}#
+PACK{7,Lukas,2,0,0,0,0,0}#
+PACK{8,Honza,2,0,0,0,0,0}#
+PACK{9,Ladek,2,0,0,0,0,0}#
+PACK{10,Sofcilka,2,0,0,0,0,0}#
+
+TEAM{2,,9}#
+
+TEAMS{0,,0｝#
+TEAMS{1,,0}#
+TEAMS{2,,0}#
+TEAMS{3,,0}#
+TEAMS{4,,0}#
+TEAMS{5,,0}#
+
+PACKX{1,3425,409,61,53,3,https://my.lasermaxx.com/q57pq47,24,85}#
+PACKX{2,5875,308,80,47,2,https://my.lasermaxx.com/ewx5ek6,16,56}#
+PACKX{3,1225,353,38,53,8,https://my.lasermaxx.com/zsav7p8,20,71}#
+PACKX{4,6000,137,92,64,1,https://my.lasermaxx.com/8s8eavv,26,92}#
+PACKX{6,1350,326,49,71,7,https://my.lasermaxx.com/ec5cjjg,19,67}#
+PACKX{7,2250,333,44,43,5,https://my.lasermaxx.com/8wm4xj9,18,64}#
+PACKX{8,800,208,32,48,9,https://my.lasermaxx.com/9qfmbs5,16,56}#
+PACKX{9,1900,278,51,64,6,https://my.lasermaxx.com/e64g75e,25,88}#
+PACKX{10,2925,229,61,65,4,https://my.lasermaxx.com/a9tztbt,19,67}#
+
+РАСКY{1,0,0,75,-100,9590,15,2,0,0,0,0,0,61,0,53,944,0,3450,0,0,0,0,930,0,0,1,0,0}#
+PACKY{2,0,0,225,0,9691,26,0,0,0,0,0,0,80,0,47,952,0,5650,0,0,0,0,930,0,0,3,0,0}#
+PACKY{3,0,0,75,0,9646,11,0,0,0,0,0,0,38,0,53,946,0,1150,0,0,0,0,930,0,0,1,0,0}#
+PACKY{4,0,0,0,0,9862,67,0,0,0,0,0,0,92,0,64,935,0,6000,0,0,0,0,930,0,0,0,0,0}#
+PACKY{6,0,0,0,0,9673,15,0,0,0,0,0,0,49,0,71,928,0,1350,0,0,0,0,930,0,0,0,0,0}#
+PACKY{7,0,0,0,0,9666,13,0,0,0,0,0,0,44,0,43,956,0,2250,0,0,0,0,930,0,0,0,0,0}#
+PACKY{8,0,0,0,0,9791,15,0,0,0,0,0,0,32,0,48,951,0,800,0,0,0,0,930,0,0,0,0,0}#
+PACKY{9,0,0,0,0,9721,18,0,0,0,0,0,0,51,0,64,935,0,1900,0,0,0,0,930,0,0,0,0,0}#
+PACKY{10,0,0,75,0,9770,27,0,0,0,0,0,0,61,0,65,934,0,2850,0,0,0,0,930,0,0,1,0,0}#
+
+PACKZ{1,0,53}#
+PACKZ{2,0,47}#
+PACKZ{3,0,53}#
+PACKZ{4,0,64}#
+PACKZ{6,0,71}#
+PACKZ{7,0,43}#
+PACKZ{8,0,48}#
+PACKZ{9,0,64}#
+PACKZ{10,0,65}#
+
+TEAMX{2,25750,0,0}#
+
+HITS{1,0,5,10,9,10,6,7,6,8}#
+HITS{2,11,0,8,14,11,4,8,15,9}#
+HITS{3,5,3,0,7,6,4,4,5,4}#
+HITS{4,12,9,7,0,12,7,9,13,23}#
+HITS{6,4,7,5,5,0,6,5,9,8}#
+HITS{7,4,7,1,9,8,0,4,5,6}#
+HITS{8,5,2,5,5,5,3,0,6,1}# 
+HITS{9,4,6,6,7,11,8,3,0,6}# 
+HITS{10,8,8,11,8,8,5,8,5,0}#
+
+GAMECLONES{0}#

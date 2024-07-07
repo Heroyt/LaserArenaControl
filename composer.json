@@ -1,6 +1,6 @@
 {
   "name": "heroyt/laser-arena-control",
-  "description": "Systém pro lepší zpracování a sjednocení výsledků LaserGame z různých arén a různých výrobců.",
+  "description": "Syst\u00e9m pro lep\u0161\u00ed zpracov\u00e1n\u00ed a sjednocen\u00ed v\u00fdsledk\u016f LaserGame z r\u016fzn\u00fdch ar\u00e9n a r\u016fzn\u00fdch v\u00fdrobc\u016f.",
   "type": "project",
   "version": "0.5.1",
   "repositories": [
@@ -35,9 +35,7 @@
   ],
   "scripts": {
     "serve": "php -S localhost:8000 index.php",
-    "test": "./vendor/bin/phpunit",
-    "testUnit": "./vendor/bin/phpunit --testsuite=unit",
-    "testIntegration": "./vendor/bin/phpunit --testsuite=integration",
+    "test": "env XDEBUG_MODE=coverage php vendor/bin/codecept run --coverage --coverage-xml --coverage-html",
     "docs": "doxygen",
     "build-production": "composer update --no-dev && composer dump-autoload --no-dev && npm install && npm run buildDev",
     "build": "composer update && composer dump-autoload && npm install && npm run build",
@@ -105,7 +103,10 @@
     "phpstan/phpstan-dibi": "^1.0",
     "phpstan/phpstan-nette": "^1.2",
     "phpstan/phpstan-phpunit": "^1.4",
-    "squizlabs/php_codesniffer": "^3.0"
+    "squizlabs/php_codesniffer": "^3.0",
+    "codeception/codeception": "^5.1",
+    "codeception/module-phpbrowser": "*",
+    "codeception/module-asserts": "*"
   },
   "license": "GPL-3.0-or-later",
   "autoload": {
@@ -116,9 +117,14 @@
       "include/functions.php"
     ]
   },
+  "autoload-dev": {
+    "psr-4": {
+      "Tests\\": "tests/"
+    }
+  },
   "authors": [
     {
-      "name": "Tomáš Vojík",
+      "name": "Tom\u00e1\u0161 Voj\u00edk",
       "email": "vojik@wboy.cz"
     }
   ],

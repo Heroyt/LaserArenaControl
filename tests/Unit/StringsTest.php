@@ -1,11 +1,11 @@
 <?php
 
-namespace TestCases\unit\Tools;
+namespace Tests\Unit;
 
+use Codeception\Test\Unit;
 use Lsr\Helpers\Tools\Strings;
-use PHPUnit\Framework\TestCase;
 
-class StringsTest extends TestCase
+class StringsTest extends Unit
 {
     /**
      * @return string[][]

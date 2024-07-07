@@ -27,11 +27,6 @@ use Spiral\RoadRunner\Metrics\Metrics;
  *      player?:array{name:string,team?:string,vip?:numeric-string,code:string}[],
  *      team?:array{name:string}[]
  *   }
- * @phpstan-type LoadData array{
- *    meta:array<string,string|numeric>,
- *    players:array{vest:int,name:string,vip:bool,team:int,code?:string}[],
- *    teams:array{key:int,name:string,playerCount:int}[]
- * }
  */
 abstract class LasermaxxGameLoader implements LoaderInterface
 {
@@ -65,29 +60,26 @@ abstract class LasermaxxGameLoader implements LoaderInterface
     /**
      * @param  GameData  $data
      *
-     * @return LoadData
+     * @return LasermaxxLoadData
      */
-    protected function loadLasermaxxGame(array $data): array {
-        /** @var LoadData $loadData */
-        $loadData = [
-          'meta'    => [
-            'music'    => empty($data['music']) ? null : $data['music'],
-            'mode'     => '',
-            'loadTime' => time(),
-          ],
-          'players' => [],
-          'teams'   => [],
-        ];
+    protected function loadLasermaxxGame(array $data): LasermaxxLoadData {
+        $loadData = new LasermaxxLoadData(
+            meta: [
+                  'music'    => empty($data['music']) ? null : $data['music'],
+                  'mode'     => '',
+                  'loadTime' => time(),
+                ],
+        );
 
         /** @var array<int,string> $hashData */
         $hashData = [];
 
         if (!empty($data['groupSelect'])) {
-            $loadData['meta']['group'] = $data['groupSelect'];
+            $loadData->meta['group'] = $data['groupSelect'];
         }
 
         if (!empty($data['tableSelect'])) {
-            $loadData['meta']['table'] = $data['tableSelect'];
+            $loadData->meta['table'] = $data['tableSelect'];
         }
 
         try {
@@ -96,13 +88,13 @@ abstract class LasermaxxGameLoader implements LoaderInterface
         }
 
         if (isset($mode)) {
-            $loadData['meta']['mode'] = $mode->loadName;
+            $loadData->meta['mode'] = $mode->loadName;
             if (!empty($data['variation'])) {
                 uksort($data['variation'], static fn($a, $b) => ((int) $a) - ((int) $b));
-                $loadData['meta']['variations'] = [];
+                $loadData->meta['variations'] = [];
                 foreach ($data['variation'] as $id => $suffix) {
-                    $loadData['meta']['variations'][$id] = $suffix;
-                    $loadData['meta']['mode'] .= $suffix;
+                    $loadData->meta['variations'][$id] = $suffix;
+                    $loadData->meta['mode'] .= $suffix;
                 }
             }
         }
@@ -125,18 +117,18 @@ abstract class LasermaxxGameLoader implements LoaderInterface
 
             $asciiName = substr($this->escapeName($player['name']), 0, 12);
             if ($player['name'] !== $asciiName) {
-                $loadData['meta']['p' . $vest . 'n'] = $player['name'];
+                $loadData->meta['p' . $vest . 'n'] = $player['name'];
             }
             if (!empty($player['code'])) {
-                $loadData['meta']['p' . $vest . 'u'] = $player['code'];
+                $loadData->meta['p' . $vest . 'u'] = $player['code'];
             }
             $hashData[(int) $vest] = $vest . '-' . $asciiName;
-            $loadData['players'][(int) $vest] = [
-              'vest' => (string) $vest,
-              'name' => $asciiName,
-              'team' => (string) $player['team'],
-              'vip'  => ((int) ($player['vip'] ?? 0)) === 1,
-            ];
+            $loadData->players[(int) $vest] = new LasermaxxLoadPlayerData(
+                (string) $vest,
+                $asciiName,
+                (string) $player['team'],
+                ((int) ($player['vip'] ?? 0)) === 1,
+            );
             if (!isset($teams[(string) $player['team']])) {
                 $teams[(string) $player['team']] = 0;
             }
@@ -146,24 +138,24 @@ abstract class LasermaxxGameLoader implements LoaderInterface
         foreach ($data['team'] ?? [] as $key => $team) {
             $asciiName = $this->escapeName($team['name']);
             if ($team['name'] !== $asciiName) {
-                $loadData['meta']['t' . $key . 'n'] = $team['name'];
+                $loadData->meta['t' . $key . 'n'] = $team['name'];
             }
-            $loadData['teams'][] = [
-              'key'         => $key,
-              'name'        => $asciiName,
-              'playerCount' => (int) ($teams[(string) $key] ?? 0),
-            ];
+            $loadData->teams[] = new LasermaxxLoadTeamData(
+                $key,
+                $asciiName,
+                (int) ($teams[(string) $key] ?? 0),
+            );
         }
 
         if (isset($mode) && $mode instanceof CustomLoadMode) {
-            $loadData = $mode->modifyGameDataBeforeLoad($loadData);
+            $loadData = $mode->modifyGameDataBeforeLoad($loadData, $data);
         }
 
-        $loadData['teams'] = array_filter($loadData['teams'], static fn($team) => $team['playerCount'] > 0);
+        $loadData->filterTeams();
         ksort($hashData);
-        ksort($loadData['players']);
-        $loadData['players'] = array_values($loadData['players']);
-        $loadData['meta']['hash'] = md5($loadData['meta']['mode'] . ';' . implode(';', $hashData));
+        $loadData->sortPlayers();
+        $loadData->players = array_values($loadData->players);
+        $loadData->meta['hash'] = md5($loadData->meta['mode'] . ';' . implode(';', $hashData));
 
 
         // Choose random music ID if a group is selected
@@ -172,14 +164,14 @@ abstract class LasermaxxGameLoader implements LoaderInterface
                 $playlist = Playlist::get((int) $data['playlist']);
                 $musicIds = $playlist->getMusicIds();
                 if (!empty($musicIds)) {
-                    $loadData['meta']['music'] = (int) $musicIds[array_rand($musicIds)];
+                    $loadData->meta['music'] = (int) $musicIds[array_rand($musicIds)];
                 }
             } catch (ModelNotFoundException | ValidationException) {
             }
         }
-        if (isset($loadData['meta']['music']) && str_starts_with($loadData['meta']['music'], 'g-')) {
-            $musicIds = array_slice(explode('-', $loadData['meta']['music']), 1);
-            $loadData['meta']['music'] = (int) $musicIds[array_rand($musicIds)];
+        if (isset($loadData->meta['music']) && str_starts_with($loadData->meta['music'], 'g-')) {
+            $musicIds = array_slice(explode('-', $loadData->meta['music']), 1);
+            $loadData->meta['music'] = (int) $musicIds[array_rand($musicIds)];
         }
         return $loadData;
     }

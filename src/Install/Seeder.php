@@ -40,7 +40,7 @@ class Seeder implements InstallInterface
       [
         'id_mode'              => 1,
         'system'               => 'evo5',
-        'name'                 => 'Team deathmach',
+        'name'                 => 'Team Deathmatch',
         'description'          => 'Classic team game.',
         'load_name'            => '1-TEAM-DEATHMACH',
         'type'                 => 'TEAM',
@@ -80,7 +80,7 @@ class Seeder implements InstallInterface
       [
         'id_mode'              => 2,
         'system'               => 'evo5',
-        'name'                 => 'Deathmach',
+        'name'                 => 'Deathmatch',
         'description'          => 'Classic free for all game.',
         'load_name'            => '2-SOLO-DEATHMACH',
         'type'                 => 'SOLO',

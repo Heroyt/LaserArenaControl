@@ -35,6 +35,7 @@ logs/
 *.sass-cache/
 lmx/
 results/
+!src/**/results
 entr/
 docker-compose.yml
 docker-compose-staging.yml

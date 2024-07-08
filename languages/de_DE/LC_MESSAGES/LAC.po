@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: German\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2024-06-26 10:50\n"
+"PO-Revision-Date: 2024-07-08 14:33\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -99,11 +99,11 @@ msgid "CSGO"
 msgstr "CSGO"
 
 msgctxt "gameModes"
-msgid "Team deathmach"
+msgid "Team deathmatch"
 msgstr ""
 
 msgctxt "gameModes"
-msgid "Deathmach"
+msgid "Deathmatch"
 msgstr ""
 
 msgid "Jazyk"
@@ -997,7 +997,7 @@ msgctxt "gameModes"
 msgid "Test - solo"
 msgstr ""
 
-msgid "Variace herních módů označují malé změny v nastavení hry, jako například délku hry. Při načtení hry do konzole se vybírá mód, jehož jméno se získá přidáním potřebných přípon za nastavený základní název v konzoli. Pokud je tedy mód \"TeamDeathmach\" a má vybranou variaci délky 15 minut, která má příponu \"-10\", výsledný vybraný mód z konzole bude mít název \"TeamDeathmach-15\"."
+msgid "Variace herních módů označují malé změny v nastavení hry, jako například délku hry. Při načtení hry do konzole se vybírá mód, jehož jméno se získá přidáním potřebných přípon za nastavený základní název v konzoli. Pokud je tedy mód \"TeamDeathmatch\" a má vybranou variaci délky 15 minut, která má příponu \"-10\", výsledný vybraný mód z konzole bude mít název \"TeamDeathmatch-15\"."
 msgstr ""
 
 msgid "Hodnoty variace můžete řadit. Jako výchozí se vždy použije první hodnota (nahoře v seznamu)."
@@ -1021,7 +1021,7 @@ msgstr ""
 msgid "Názvy nejsou kontrolované striktně. Nezáleží na velkých/malých písmenech. Zadaný název může být jen podřetězec celého názvu v konzoli."
 msgstr ""
 
-msgid "Např. při módu \"1-TEAM-DEATHMACH\" stačí, aby byl zde zadaný text \"1-TEAM\" nebo \"team-deathmach\"."
+msgid "Např. při módu \"1-TEAM-DEATHMATCH\" stačí, aby byl zde zadaný text \"1-TEAM\" nebo \"team-deathmatch\"."
 msgstr ""
 
 msgctxt "game.modes"
@@ -1348,9 +1348,6 @@ msgid "Jméno, e-mail, kód hráče"
 msgstr ""
 
 msgid "Nastavit výsledkovou tabuli na souhrn"
-msgstr ""
-
-msgid "Obsazený"
 msgstr ""
 
 msgid "Plánované turnaje"
@@ -4217,55 +4214,13 @@ msgctxt "pageTitles.settings"
 msgid "Skupiny"
 msgstr ""
 
-msgid "Tables"
-msgstr ""
-
-msgid "Turnaje"
-msgstr ""
-
 msgctxt "null"
 msgid "Obsazený"
 msgid_plural "null"
 msgstr[0] ""
 msgstr[1] ""
 
-msgid "Playlisty"
-msgstr ""
-
-msgid "Smazat"
-msgstr ""
-
-msgid "Skupiny"
-msgstr ""
-
-msgid "Deaktivovat"
-msgstr ""
-
-msgid "Smazat vše"
-msgstr ""
-
-msgid "Nahrát"
-msgstr ""
-
-msgid "Seznam her"
-msgstr ""
-
-msgid "Čas"
-msgstr ""
-
-msgid "Herní mód"
-msgstr ""
-
-msgid "Hráči"
-msgstr ""
-
-msgid "Tisk"
-msgstr ""
-
 msgid "Zobrazit poslední hru na výsledkové tabuli"
-msgstr ""
-
-msgid "Výsledková tabule"
 msgstr ""
 
 msgctxt "month"
@@ -4273,12 +4228,6 @@ msgid "Červen"
 msgstr ""
 
 msgid "Zobrazit poslední hru"
-msgstr ""
-
-msgid "Herní módy"
-msgstr ""
-
-msgid "Popis"
 msgstr ""
 
 msgctxt "settings"
@@ -4312,9 +4261,6 @@ msgstr ""
 msgid "Detail skupiny"
 msgstr ""
 
-msgid "Vytvořit"
-msgstr ""
-
 msgid "Vyplňte název"
 msgstr ""
 
@@ -4322,9 +4268,6 @@ msgid "Skupina %s"
 msgstr ""
 
 msgid "Zobrazit detail skupiny"
-msgstr ""
-
-msgid "Hráč"
 msgstr ""
 
 msgid "Cenová kategorie"
@@ -4337,9 +4280,6 @@ msgid "Odehráno"
 msgstr ""
 
 msgid "Celkem"
-msgstr ""
-
-msgid "Zrušit"
 msgstr ""
 
 msgid "Nezaplaceno"

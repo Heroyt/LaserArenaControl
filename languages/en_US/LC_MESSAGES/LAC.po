@@ -4362,3 +4362,39 @@ msgstr ""
 msgctxt "month"
 msgid "Prosinec"
 msgstr ""
+
+msgid "Playlisty"
+msgstr ""
+
+msgid "Smazat"
+msgstr ""
+
+msgid "Skupiny"
+msgstr ""
+
+msgid "Vytvořit"
+msgstr ""
+
+msgid "Deaktivovat"
+msgstr ""
+
+msgid "Hráč"
+msgstr ""
+
+msgid "Zrušit"
+msgstr ""
+
+msgid "Smazat vše"
+msgstr ""
+
+msgid "Obsazený"
+msgstr ""
+
+msgid "Nahrát"
+msgstr ""
+
+msgid "Tables"
+msgstr ""
+
+msgid "Turnaje"
+msgstr ""

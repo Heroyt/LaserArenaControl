@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: English\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2024-07-01 12:56\n"
+"PO-Revision-Date: 2024-07-08 14:33\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -99,12 +99,12 @@ msgid "CSGO"
 msgstr "CSGO"
 
 msgctxt "gameModes"
-msgid "Team deathmach"
-msgstr "Team deathmach"
+msgid "Team deathmatch"
+msgstr ""
 
 msgctxt "gameModes"
-msgid "Deathmach"
-msgstr "Deathmach"
+msgid "Deathmatch"
+msgstr ""
 
 msgid "Jazyk"
 msgstr "Language"
@@ -997,8 +997,8 @@ msgctxt "gameModes"
 msgid "Test - solo"
 msgstr "Test - solo"
 
-msgid "Variace herních módů označují malé změny v nastavení hry, jako například délku hry. Při načtení hry do konzole se vybírá mód, jehož jméno se získá přidáním potřebných přípon za nastavený základní název v konzoli. Pokud je tedy mód \"TeamDeathmach\" a má vybranou variaci délky 15 minut, která má příponu \"-10\", výsledný vybraný mód z konzole bude mít název \"TeamDeathmach-15\"."
-msgstr "Game mode variations indicate small game setting changes like the game's length. After loading the game to the console, the game's mode name is created using the game mode's base name and appending all variation suffixes. If, for example, you chose the \"TeamDeathmach\" game mode and pick a 15-minute variation with a \"-15\" suffix, the resulting game mode's name will be \"TeamDeathmach-15\"."
+msgid "Variace herních módů označují malé změny v nastavení hry, jako například délku hry. Při načtení hry do konzole se vybírá mód, jehož jméno se získá přidáním potřebných přípon za nastavený základní název v konzoli. Pokud je tedy mód \"TeamDeathmatch\" a má vybranou variaci délky 15 minut, která má příponu \"-10\", výsledný vybraný mód z konzole bude mít název \"TeamDeathmatch-15\"."
+msgstr ""
 
 msgid "Hodnoty variace můžete řadit. Jako výchozí se vždy použije první hodnota (nahoře v seznamu)."
 msgstr "You can sort the variation values. The first (top) value will be used as a default."
@@ -1021,8 +1021,8 @@ msgstr "Names set here will be used for pairing loaded games from the console to
 msgid "Názvy nejsou kontrolované striktně. Nezáleží na velkých/malých písmenech. Zadaný název může být jen podřetězec celého názvu v konzoli."
 msgstr "Names aren't checked strictly. For example, uppercase and lowercase letters can be interchanged. A given string can be only a substring of the full game mode's name."
 
-msgid "Např. při módu \"1-TEAM-DEATHMACH\" stačí, aby byl zde zadaný text \"1-TEAM\" nebo \"team-deathmach\"."
-msgstr "For example, you can input only the string \"1-TEAM\" or \"team-deathmatch\" to match the game mode \"1-TEAM-DEATHMATCH\"."
+msgid "Např. při módu \"1-TEAM-DEATHMATCH\" stačí, aby byl zde zadaný text \"1-TEAM\" nebo \"team-deathmatch\"."
+msgstr ""
 
 msgctxt "game.modes"
 msgid "Povolené barvy"
@@ -1349,9 +1349,6 @@ msgstr "Player's name, e-mail or code"
 
 msgid "Nastavit výsledkovou tabuli na souhrn"
 msgstr "Set gate to today's summary"
-
-msgid "Obsazený"
-msgstr "Occupied"
 
 msgid "Plánované turnaje"
 msgstr "Planned tournaments"
@@ -4233,56 +4230,14 @@ msgctxt "pageTitles.settings"
 msgid "Skupiny"
 msgstr "Groups"
 
-msgid "Tables"
-msgstr "Tables"
-
-msgid "Turnaje"
-msgstr "Tournaments"
-
 msgctxt "null"
 msgid "Obsazený"
 msgid_plural "null"
 msgstr[0] "Occupied"
 msgstr[1] "Occupied"
 
-msgid "Playlisty"
-msgstr "Playlists"
-
-msgid "Smazat"
-msgstr "Delete"
-
-msgid "Skupiny"
-msgstr "Groups"
-
-msgid "Deaktivovat"
-msgstr "Disable"
-
-msgid "Smazat vše"
-msgstr "Delete all"
-
-msgid "Nahrát"
-msgstr "Upload"
-
-msgid "Seznam her"
-msgstr "Game list"
-
-msgid "Čas"
-msgstr "Time"
-
-msgid "Herní mód"
-msgstr "Game mode"
-
-msgid "Hráči"
-msgstr "Players"
-
-msgid "Tisk"
-msgstr "Print"
-
 msgid "Zobrazit poslední hru na výsledkové tabuli"
 msgstr "Show last game on the score board"
-
-msgid "Výsledková tabule"
-msgstr "Score board"
 
 msgctxt "month"
 msgid "Červen"
@@ -4290,12 +4245,6 @@ msgstr "June"
 
 msgid "Zobrazit poslední hru"
 msgstr "Show last game"
-
-msgid "Herní módy"
-msgstr "Game modes"
-
-msgid "Popis"
-msgstr "Description"
 
 msgctxt "settings"
 msgid "Vzhled"
@@ -4328,9 +4277,6 @@ msgstr "Color is used to highlight certain elements (background) mainly on the s
 msgid "Detail skupiny"
 msgstr "Group detail"
 
-msgid "Vytvořit"
-msgstr "Create"
-
 msgid "Vyplňte název"
 msgstr "Fill in the name"
 
@@ -4339,9 +4285,6 @@ msgstr "Group %s"
 
 msgid "Zobrazit detail skupiny"
 msgstr "Show group detail"
-
-msgid "Hráč"
-msgstr "Player"
 
 msgid "Cenová kategorie"
 msgstr "Price category"
@@ -4354,9 +4297,6 @@ msgstr "Played"
 
 msgid "Celkem"
 msgstr "Total"
-
-msgid "Zrušit"
-msgstr "Cancel"
 
 msgid "Nezaplaceno"
 msgstr "Unpaid"

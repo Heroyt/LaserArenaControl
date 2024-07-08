@@ -15,7 +15,9 @@ use Exception;
 use Lsr\Core\Caching\Cache;
 use Lsr\Core\Constants;
 use Lsr\Core\DB;
+use Lsr\Core\Requests\Request;
 use Lsr\Core\Templating\Latte;
+use Lsr\Interfaces\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
 
@@ -73,7 +75,14 @@ class TopPlayersScreen extends GateScreen
      * @throws Throwable
      */
     public function run(): ResponseInterface {
-        $date = (string) App::getInstance()->getRequest()->getGet('date', 'now');
+        /** @var RequestInterface $request */
+        $request = App::getInstance()->getRequest();
+        if ($request instanceof Request) {
+            /** @var string $date */
+            $date = $request->getGet('date', 'now');
+        } else {
+            $date = (string) ($request->getQueryParams()['date'] ?? 'now');
+        }
         $this->today = new DateTimeImmutable($date);
         $this->gameIds = null;
         $this->gameIdsTeam = null;
@@ -87,7 +96,7 @@ class TopPlayersScreen extends GateScreen
          */
         // @phpstan-ignore-next-line
         [$data, $gameCount, $hash] = $this->cache->load(
-            'gate.month.topPlayers',
+            'gate.month.' . $this->today->format('Ym') . '.topPlayers',
             function () {
                 // Get today's best players
                 /** @var Player|null $topScore */
@@ -124,6 +133,7 @@ class TopPlayersScreen extends GateScreen
                 'deaths'    => [$topDeaths?->name, $topDeaths?->user?->getCode(), $topDeaths?->deaths],
                 'accuracy'  => [$topAccuracy?->name, $topAccuracy?->user?->getCode(), $topAccuracy?->accuracy],
                 'shots'     => [$topShots?->name, $topShots?->user?->getCode(), $topShots?->shots],
+                /** @phpstan-ignore-next-line  */
                 'hitsOwn'   => [$topHitsOwn?->name, $topHitsOwn?->user?->getCode(), $topHitsOwn?->hitsOwn],
                 ];
 
@@ -138,7 +148,7 @@ class TopPlayersScreen extends GateScreen
                   'topHitsOwn'  => $topHitsOwn,
                 ],
                 $this->getGameCount(),
-                md5(json_encode($data, JSON_THROW_ON_ERROR)),
+                md5($this->today->format('Ym') . json_encode($data, JSON_THROW_ON_ERROR)),
                 ];
             },
             [

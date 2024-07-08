@@ -22,14 +22,14 @@ class GeneralStatsScreen extends GateScreen
      * @inheritDoc
      */
     public static function getName(): string {
-        return lang('Základní měsíční statistiky', domain: 'gate', context: 'screens');
+        return lang('Základní měsíční statistiky', context: 'screens', domain: 'gate');
     }
 
     public static function getDescription(): string {
         return lang(
             'Obrazovka zobrazující nejlepší hráče a počet odehraných her pro aktuální měsíc.',
-            domain : 'gate',
-            context: 'screens.description'
+            context: 'screens.description',
+            domain : 'gate'
         );
     }
 
@@ -41,7 +41,7 @@ class GeneralStatsScreen extends GateScreen
     }
 
     public static function getGroup(): string {
-        return lang('Měsíční statistiky', domain: 'gate', context: 'screens.groups');
+        return lang('Měsíční statistiky', context: 'screens.groups', domain: 'gate');
     }
 
     /**
@@ -157,7 +157,7 @@ class GeneralStatsScreen extends GateScreen
             [
             'monthName'   => lang(Constants::MONTH_NAMES[(int) $today->format('m')], context: 'month'),
             'year'        => $today->format('Y'),
-            'screenHash'  => md5(json_encode($data, JSON_THROW_ON_ERROR)),
+            'screenHash'  => md5($today->format('Ym') . json_encode($data, JSON_THROW_ON_ERROR)),
             'gameCount'   => $gameCount,
             'teamCount'   => $teamCount,
             'playerCount' => $playerCount,

@@ -7,6 +7,7 @@ use App\Cli\Enums\ForegroundColors;
 use App\Core\Info;
 use App\GameModels\Factory\GameFactory;
 use Lsr\Core\Caching\Cache;
+use Lsr\Core\Config;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -70,6 +71,12 @@ class CleanCacheCommand extends Command
             'Clear results cache.'
         );
         $this->addOption(
+            'config',
+            'c',
+            InputOption::VALUE_NONE,
+            'Clear config cache.'
+        );
+        $this->addOption(
             'tag',
             't',
             InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
@@ -84,6 +91,7 @@ class CleanCacheCommand extends Command
         $latte = $input->getOption('latte');
         $model = $input->getOption('model');
         $info = $input->getOption('info');
+        $config = $input->getOption('config');
         $results = $input->getOption('results');
 
         if ($all || $system) {
@@ -99,7 +107,6 @@ class CleanCacheCommand extends Command
         }
 
         if ($all || $di) {
-            /** @var string[] $files */
             $files = array_merge(
                 glob(TMP_DIR . 'di/*'),
                 glob(TMP_DIR . '*.php'),
@@ -117,8 +124,10 @@ class CleanCacheCommand extends Command
         }
 
         if ($all || $latte) {
-            /** @var string[] $files */
             $files = glob(TMP_DIR . 'latte/*');
+            if ($files === false) {
+                $files = [];
+            }
             foreach ($files as $file) {
                 unlink($file);
             }
@@ -131,8 +140,10 @@ class CleanCacheCommand extends Command
         }
 
         if ($all || $model) {
-            /** @var string[] $files */
             $files = glob(TMP_DIR . 'models/*');
+            if ($files === false) {
+                $files = [];
+            }
             foreach ($files as $file) {
                 unlink($file);
             }
@@ -157,8 +168,18 @@ class CleanCacheCommand extends Command
             );
         }
 
+        if ($all || $config) {
+            Config::getInstance()->clearCache();
+            $output->writeln(
+                Colors::color(ForegroundColors::GREEN) . 'Cleared config cache.' . Colors::reset()
+            );
+        }
+
         if ($all || $results) {
             $files = glob(TMP_DIR . 'results/*');
+            if ($files === false) {
+                $files = [];
+            }
             foreach ($files as $file) {
                 unlink($file);
             }

@@ -54,7 +54,7 @@ else
 fi
 
 # Clear DI, model and info cache
-./bin/console cache:clean -dmi
+./bin/console cache:clean -dmic
 
 # Prepare some tasks
 ./bin/console translations:compile

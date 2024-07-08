@@ -6,11 +6,11 @@
 		GROUP{,{{$metaString}}}#
 
 		{{foreach $players as $player}}
-		PACK{{{$player['vest']}},{{$player['name']}},{{$player['team']}},0,{{$player['vip'] ? 1 : 0}},0,0}#
+		PACK{{{$player->vest}},{{$player->name}},{{$player->team}},0,{{$player->vip ? 1 : 0}},0,0}#
 		{{/foreach}}
 
 		{{foreach $teams as $team}}
-		TEAM{{{$team['key']}},{{$team['name']}},{{$team['playerCount']}}}#
+		TEAM{{{$team->key}},{{$team->name}},{{$team->playerCount}}}#
 		{{/foreach}}
 	{{/syntax}}
 {/block}

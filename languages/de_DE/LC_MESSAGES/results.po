@@ -795,3 +795,6 @@ msgstr ""
 
 msgid "Ztráty základny"
 msgstr ""
+
+msgid "Sniper"
+msgstr ""

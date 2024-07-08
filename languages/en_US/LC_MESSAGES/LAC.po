@@ -4339,3 +4339,26 @@ msgstr ""
 msgctxt "print"
 msgid "Vypnout mezipaměť"
 msgstr ""
+
+msgctxt "month"
+msgid "Červenec"
+msgstr ""
+
+msgid "Výsledková tabule"
+msgstr ""
+
+msgctxt "month"
+msgid "Únor"
+msgstr ""
+
+msgctxt "month"
+msgid "Květen"
+msgstr ""
+
+msgctxt "month"
+msgid "Září"
+msgstr ""
+
+msgctxt "month"
+msgid "Prosinec"
+msgstr ""

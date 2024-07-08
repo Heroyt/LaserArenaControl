@@ -60,6 +60,7 @@ class LigaApi
     /**
      * @param  Metrics  $metrics
      * @param  Serializer  $serializer
+     * @param  GuzzleFactory  $guzzleFactory
      * @return LigaApi
      */
     public static function getInstance(
@@ -104,7 +105,6 @@ class LigaApi
      * @param bool $recreateClient
      *
      * @return bool
-     * @throws JsonException
      * @post All finished games will be sent to public
      */
     public function syncGames(
@@ -162,7 +162,7 @@ class LigaApi
                             }
                         }
                     }
-                } catch (GuzzleException | ValidationException | JsonException) {
+                } catch (GuzzleException | ValidationException) {
                 }
 
                 foreach ($this->getExtensions() as $extension) {
@@ -176,7 +176,7 @@ class LigaApi
         // Build a request
         try {
             $config = [
-                'body' => \GuzzleHttp\Utils::jsonEncode(['system' => $system, 'games' => $gamesData]),
+                'body' => $this->serializer->serialize(['system' => $system, 'games' => $gamesData], 'json'),
             ];
             $config['headers']['Content-Type'] = 'application/json';
             $config['headers']['Content-Length'] = strlen($config['body']);
@@ -189,7 +189,7 @@ class LigaApi
             if ($status > 299) {
                 $this->logger->error(
                     'Request failed: ' .
-                    json_encode($response->getBody()->getContents(), JSON_THROW_ON_ERROR)
+                    $this->serializer->serialize($response->getBody()->getContents(), 'json')
                 );
                 return false;
             }
@@ -220,7 +220,7 @@ class LigaApi
     public function post(string $path, array|object|null $data = null, array $config = []): ResponseInterface {
         $this->makeClient();
         if (isset($data)) {
-            $config['body'] = \GuzzleHttp\Utils::jsonEncode($data);
+            $config['body'] = $this->serializer->serialize($data, 'json');
             $config['headers']['Content-Type'] = 'application/json';
             $config['headers']['Content-Length'] = strlen($config['body']);
         }
@@ -245,7 +245,8 @@ class LigaApi
             }
 
             $config = [
-                'body' => \GuzzleHttp\Utils::jsonEncode([
+                'body' => $this->serializer->serialize(
+                    [
                     'music' => [
                         [
                             'id' => $mode->id,
@@ -254,7 +255,9 @@ class LigaApi
                             'previewStart' => $mode->previewStart,
                         ],
                     ],
-                ]),
+                    ],
+                    'json'
+                ),
             ];
             $config['headers']['Content-Type'] = 'application/json';
             $config['headers']['Content-Length'] = strlen($config['body']);
@@ -319,9 +322,9 @@ class LigaApi
 
         try {
             $config = [
-                'body' => \GuzzleHttp\Utils::jsonEncode([
+                'body' => $this->serializer->serialize([
                     'music' => $data,
-                ]),
+                ], 'json'),
             ];
             $config['headers']['Content-Type'] = 'application/json';
             $config['headers']['Content-Length'] = strlen($config['body']);
@@ -377,7 +380,10 @@ class LigaApi
                 $body = curl_exec($ch);
                 $info = curl_getinfo($ch);
                 if ($info['http_code'] !== 200) {
-                    $this->logger->error('Music upload failed: ' . $body . ' ' . json_encode($info));
+                    $this->logger->error(
+                        'Music upload failed: ' . $body . ' ' .
+                        $this->serializer->serialize($info, 'json')
+                    );
                     return false;
                 }
             }

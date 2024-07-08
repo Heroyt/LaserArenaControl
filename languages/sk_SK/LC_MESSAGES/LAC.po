@@ -99,12 +99,12 @@ msgid "CSGO"
 msgstr "CSGO"
 
 msgctxt "gameModes"
-msgid "Team deathmach"
-msgstr "Team deathmach"
+msgid "Team deathmatch"
+msgstr ""
 
 msgctxt "gameModes"
-msgid "Deathmach"
-msgstr "Deathmach"
+msgid "Deathmatch"
+msgstr "Deathmatch"
 
 msgid "Jazyk"
 msgstr "Jazyk"
@@ -1003,8 +1003,8 @@ msgctxt "gameModes"
 msgid "Test - solo"
 msgstr "Test - sólo"
 
-msgid "Variace herních módů označují malé změny v nastavení hry, jako například délku hry. Při načtení hry do konzole se vybírá mód, jehož jméno se získá přidáním potřebných přípon za nastavený základní název v konzoli. Pokud je tedy mód \"TeamDeathmach\" a má vybranou variaci délky 15 minut, která má příponu \"-10\", výsledný vybraný mód z konzole bude mít název \"TeamDeathmach-15\"."
-msgstr "Varianty herného režimu sa týkajú malých zmien v nastaveniach hry, napríklad dĺžky hry. Po načítaní hry do konzoly sa vyberie režim, ktorého názov sa získa pridaním potrebných prípon za základný názov nastavený v konzole. Ak je teda režim \"TeamDeathmach\" a má zvolenú 15-minútovú variáciu s príponou \"-10\", výsledný zvolený režim z konzoly sa bude volať \"TeamDeathmach-15\"."
+msgid "Variace herních módů označují malé změny v nastavení hry, jako například délku hry. Při načtení hry do konzole se vybírá mód, jehož jméno se získá přidáním potřebných přípon za nastavený základní název v konzoli. Pokud je tedy mód \"TeamDeathmatch\" a má vybranou variaci délky 15 minut, která má příponu \"-10\", výsledný vybraný mód z konzole bude mít název \"TeamDeathmatch-15\"."
+msgstr "Varianty herného režimu sa týkajú malých zmien v nastaveniach hry, napríklad dĺžky hry. Po načítaní hry do konzoly sa vyberie režim, ktorého názov sa získa pridaním potrebných prípon za základný názov nastavený v konzole. Ak je teda režim \"TeamDeathmatch\" a má zvolenú 15-minútovú variáciu s príponou \"-10\", výsledný zvolený režim z konzoly sa bude volať \"TeamDeathmatch-15\"."
 
 msgid "Hodnoty variace můžete řadit. Jako výchozí se vždy použije první hodnota (nahoře v seznamu)."
 msgstr "Hodnoty variácie môžete zoradiť. Ako východisková sa vždy použije prvá hodnota (hore v zozname)."
@@ -1027,8 +1027,8 @@ msgstr "Názvy nastavené tu sa budú používať na párovanie načítaných hi
 msgid "Názvy nejsou kontrolované striktně. Nezáleží na velkých/malých písmenech. Zadaný název může být jen podřetězec celého názvu v konzoli."
 msgstr "Názvy nie sú kontrolované striktne. Nezáleží na veľkých/malých písmenách. Zadaný názov môže byť len podreťazec celého názvu v konzole."
 
-msgid "Např. při módu \"1-TEAM-DEATHMACH\" stačí, aby byl zde zadaný text \"1-TEAM\" nebo \"team-deathmach\"."
-msgstr "Napr. pri móde „1-TEAM-DEATHMATCH“ stačí, aby bol tu zadaný text „1-TEAM“ alebo „team-deathmach“."
+msgid "Např. při módu \"1-TEAM-DEATHMATCH\" stačí, aby byl zde zadaný text \"1-TEAM\" nebo \"team-deathmatch\"."
+msgstr "Napr. pri móde „1-TEAM-DEATHMATCH“ stačí, aby bol tu zadaný text „1-TEAM“ alebo „team-deathmatch“."
 
 msgctxt "game.modes"
 msgid "Povolené barvy"
@@ -1355,9 +1355,6 @@ msgstr "Meno, e-mail, kód hráča"
 
 msgid "Nastavit výsledkovou tabuli na souhrn"
 msgstr "Nastaviť výsledkovú tabuľu na súhrn"
-
-msgid "Obsazený"
-msgstr "Obsadený"
 
 msgid "Plánované turnaje"
 msgstr ""
@@ -4271,12 +4268,6 @@ msgctxt "pageTitles.settings"
 msgid "Skupiny"
 msgstr ""
 
-msgid "Tables"
-msgstr ""
-
-msgid "Turnaje"
-msgstr ""
-
 msgctxt "null"
 msgid "Obsazený"
 msgid_plural "null"
@@ -4285,43 +4276,7 @@ msgstr[1] ""
 msgstr[2] ""
 msgstr[3] ""
 
-msgid "Playlisty"
-msgstr ""
-
-msgid "Smazat"
-msgstr ""
-
-msgid "Skupiny"
-msgstr ""
-
-msgid "Deaktivovat"
-msgstr ""
-
-msgid "Smazat vše"
-msgstr ""
-
-msgid "Nahrát"
-msgstr ""
-
-msgid "Seznam her"
-msgstr ""
-
-msgid "Čas"
-msgstr ""
-
-msgid "Herní mód"
-msgstr ""
-
-msgid "Hráči"
-msgstr ""
-
-msgid "Tisk"
-msgstr ""
-
 msgid "Zobrazit poslední hru na výsledkové tabuli"
-msgstr ""
-
-msgid "Výsledková tabule"
 msgstr ""
 
 msgctxt "month"
@@ -4329,12 +4284,6 @@ msgid "Červen"
 msgstr ""
 
 msgid "Zobrazit poslední hru"
-msgstr ""
-
-msgid "Herní módy"
-msgstr ""
-
-msgid "Popis"
 msgstr ""
 
 msgctxt "settings"
@@ -4368,9 +4317,6 @@ msgstr ""
 msgid "Detail skupiny"
 msgstr ""
 
-msgid "Vytvořit"
-msgstr ""
-
 msgid "Vyplňte název"
 msgstr ""
 
@@ -4378,9 +4324,6 @@ msgid "Skupina %s"
 msgstr ""
 
 msgid "Zobrazit detail skupiny"
-msgstr ""
-
-msgid "Hráč"
 msgstr ""
 
 msgid "Cenová kategorie"
@@ -4393,9 +4336,6 @@ msgid "Odehráno"
 msgstr ""
 
 msgid "Celkem"
-msgstr ""
-
-msgid "Zrušit"
 msgstr ""
 
 msgid "Nezaplaceno"

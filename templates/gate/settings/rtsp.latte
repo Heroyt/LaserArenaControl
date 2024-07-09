@@ -9,7 +9,7 @@
         {_'URL RTSP streamů', domain: 'gate', context: 'settings'}:
     </label>
     <textarea name="{$name}[streams]" rows="9" id="{$key}-streams"
-              class="form-control">{$settings->streams|join:"\n"|trim}</textarea>
+              class="form-control">{$settings->streams ?? []|join:"\n"|trim}</textarea>
     <div class="form-text">
         {_'Na každý řádek 1 URL ve formátu např. "%s".', domain: 'gate', context: 'settings', format: [App\Core\App::getLink(['hls', 'stream.m3u8'])]}
     </div>

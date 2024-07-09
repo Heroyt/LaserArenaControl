@@ -145,12 +145,14 @@ const compressOptions = {
 
 // Clear previous chunks
 const chunkDir = path.join(buildOptions.outdir, 'chunks');
-let count = 0;
-for (const file of fs.readdirSync(chunkDir)) {
-    fs.unlinkSync(path.join(chunkDir, file));
-    count++;
+if (fs.existsSync(chunkDir)) {
+    let count = 0;
+    for (const file of fs.readdirSync(chunkDir)) {
+        fs.unlinkSync(path.join(chunkDir, file));
+        count++;
+    }
+    console.log(`Removed ${count} old chunk files`);
 }
-console.log(`Removed ${count} old chunk files`);
 
 const ctx = await esbuild.context(buildOptions);
 console.timeEnd('Prepare');

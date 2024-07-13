@@ -470,10 +470,14 @@ tables:
 			`id_game` int(11) unsigned NOT NULL AUTO_INCREMENT,
 			`datetime` datetime NOT NULL DEFAULT current_timestamp(),
 			`data` text NOT NULL,
+			`type` enum('prepared','user-local','user-public') NOT NULL DEFAULT 'prepared',
 			`active` tinyint(1) NOT NULL DEFAULT 1,
 			PRIMARY KEY (`id_game`)
 		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 		'''
+		modifications:
+			0.1:
+				- 'ADD `type` enum(''prepared'',''user-local'',''user-public'') NOT NULL DEFAULT ''prepared'''
 	App\Models\Playlist:
 		order: 0
 		definition: '''

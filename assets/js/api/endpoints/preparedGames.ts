@@ -1,10 +1,12 @@
 import {customFetch, fetchGet, fetchPost, FormSaveResponse} from '../../includes/apiClient';
 import {GameData} from '../../interfaces/gameInterfaces';
 
+export type PreparedGameType = 'prepared' | 'user-local' | 'user-public';
 export type PreparedGameData = {
 	id_game: number,
 	datetime: string,
 	data: GameData,
+	type: PreparedGameType,
 	active: 0 | 1 | boolean,
 }
 

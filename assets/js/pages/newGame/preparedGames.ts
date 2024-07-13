@@ -11,6 +11,12 @@ import {
 } from '../../api/endpoints/preparedGames';
 import {initTooltips} from '../../includes/tooltips';
 
+const borderColors = {
+	'prepared': 'gray',
+	'user-local': 'primary',
+	'user-public': 'info',
+}
+
 export default class NewGamesPrepared {
 
 	game: Game;
@@ -104,7 +110,7 @@ export default class NewGamesPrepared {
 			Object.values(preparedGameData.data.players).forEach(player => {
 				playersHTML += `<span class="badge m-1 text-bg-team-${system}-${player.teamNum}">${player.name}</span>`;
 			});
-			tmp.innerHTML = `<div class="prepared-game card mb-4" data-id="${preparedGameData.id_game}">` +
+			tmp.innerHTML = `<div class="prepared-game card mb-4 border-4 border-${borderColors[preparedGameData.type]}" data-id="${preparedGameData.id_game}">` +
 				`<div class="card-body">` +
 				`<div class="input-group w-100">` +
 				`<span class="game-mode flex-grow-1 input-group-text">${preparedGameData.data.mode.name}</span>` +

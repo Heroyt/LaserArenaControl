@@ -68,6 +68,7 @@ Route::group('/players')
 $prepared = Route::group('prepared');
 $prepared->get('', [PreparedGames::class, 'get']);
 $prepared->post('', [PreparedGames::class, 'save']);
+$prepared->post('{type}', [PreparedGames::class, 'save']);
 $prepared->delete('', [PreparedGames::class, 'deleteAll'])->post('delete', [PreparedGames::class, 'deleteAll']);
 
 $preparedId = $prepared->group('{id}');

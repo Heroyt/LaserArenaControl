@@ -2,38 +2,42 @@
 
 namespace App\Controllers;
 
+use App\Models\DataObjects\NewGame\GameLoadData;
+use App\Models\DataObjects\PreparedGames\PreparedGameType;
 use Lsr\Core\Caching\Cache;
 use Lsr\Core\Controllers\Controller;
 use Lsr\Core\DB;
 use Lsr\Core\Requests\Request;
-use Lsr\Core\Routing\Attributes\Delete;
-use Lsr\Core\Routing\Attributes\Get;
-use Lsr\Core\Routing\Attributes\Post;
-use Lsr\Core\Templating\Latte;
 use Psr\Http\Message\ResponseInterface;
+use Symfony\Component\Serializer\Serializer;
 
 class PreparedGames extends Controller
 {
-    public const TABLE = 'prepared_games';
+    public const string TABLE = 'prepared_games';
 
-    public const CACHE_TAGS = ['prepared_games'];
+    public const array CACHE_TAGS = ['prepared_games'];
 
     public function __construct(
-        private readonly Cache $cache
+        private readonly Cache $cache,
+        private readonly Serializer $serializer,
     ) {
         parent::__construct();
     }
 
     public function deleteAll(): ResponseInterface {
         DB::update($this::TABLE, ['active' => 0], ['active = 1']);
-        $this->cache->clean([Cache::Tags => $this::CACHE_TAGS]);
+        $this->cache->clean([$this->cache::Tags => $this::CACHE_TAGS]);
         return $this->respond(['status' => 'ok']);
     }
 
-    public function save(Request $request): ResponseInterface {
-        DB::insert($this::TABLE, ['data' => json_encode($request->getParsedBody(), JSON_THROW_ON_ERROR)]);
+    public function save(Request $request, string $type = PreparedGameType::PREPARED->value): ResponseInterface {
+        $preparedType = PreparedGameType::tryFrom($type) ?? PreparedGameType::PREPARED;
+        DB::insert($this::TABLE, [
+          'data' => $this->serializer->serialize($request->getParsedBody(), 'json'),
+          'type' => $preparedType->value,
+        ]);
 
-        $this->cache->clean([Cache::Tags => $this::CACHE_TAGS]);
+        $this->cache->clean([$this->cache::Tags => $this::CACHE_TAGS]);
 
         return $this->respond(['status' => 'ok']);
     }
@@ -53,7 +57,8 @@ class PreparedGames extends Controller
             $games[] = [
                 'id_game' => $row->id_game,
                 'datetime' => $row->datetime,
-                'data' => json_decode($row->data, false, 512, JSON_THROW_ON_ERROR),
+                'data' => $this->serializer->deserialize($row->data, GameLoadData::class, 'json'),
+                'type' => PreparedGameType::tryFrom($row->type) ?? PreparedGameType::PREPARED,
                 'active' => (bool)$row->active,
             ];
         }
@@ -63,7 +68,7 @@ class PreparedGames extends Controller
     public function delete(int $id): ResponseInterface {
         DB::update($this::TABLE, ['active' => 0], ['id_game = %i', $id]);
 
-        $this->cache->clean([Cache::Tags => $this::CACHE_TAGS]);
+        $this->cache->clean([$this->cache::Tags => $this::CACHE_TAGS]);
         return $this->respond(['status' => 'ok']);
     }
 }

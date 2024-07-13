@@ -61,7 +61,7 @@ export interface GameData {
 	fileTime?: string,
 	start?: string,
 	end?: string,
-	mode: { id: number, name?: string, description?: string, type?: 'TEAM' | 'SOLO' },
+	mode: { id: number, name?: string, description?: string, type?: 'TEAM' | 'SOLO', variations?: {[key: string] : string} },
 	players: { [index: string]: PlayerData },
 	teams: { [index: string]: TeamData },
 	music: MusicMode | null,

@@ -197,7 +197,7 @@ export default class Game {
 			this.clearAll();
 		});
 
-		this.$gameMode.addEventListener('change', () => {
+		this.$gameMode.addEventListener('change', (e : CustomEvent) => {
 			if (this.loadedModeScript !== null) {
 				this.loadedModeScript.cancel();
 				this.loadedModeScript = null;
@@ -225,6 +225,12 @@ export default class Game {
 			} = JSON.parse((this.$gameMode.querySelector(`option[value="${this.$gameMode.value}"]`) as HTMLOptionElement).dataset.variations);
 			console.log(variations);
 			this.updateModeVariations(variations);
+			if (e.detail) {
+				const variationValues = e.detail as {[key: number] : string};
+				for(const [id, value] of Object.entries(variationValues)) {
+					this.setVariationValue(id, value);
+				}
+			}
 
 			if (option.dataset.script) {
 				import(
@@ -710,7 +716,11 @@ export default class Game {
 			}
 		}
 
-		const e = new Event('change');
+		const e = new CustomEvent(
+			'change',
+			{detail: data.mode.variations},
+		);
+		this.variationMemory[data.mode.id.toString()] = data.mode.variations;
 		this.$gameMode.value = data.mode.id.toString();
 		this.$gameMode.dispatchEvent(e);
 		if (data.music) {
@@ -796,6 +806,7 @@ export default class Game {
 				id: parseInt(this.$gameMode.value),
 				name: (this.$gameMode.querySelector(`option[value="${this.$gameMode.value}"]`) as HTMLOptionElement).innerText.trim(),
 				type: this.getModeType(),
+				variations: this.variationMemory[this.$gameMode.value],
 			},
 			music: {
 				id: musicId,
@@ -913,5 +924,24 @@ export default class Game {
 				this.$musicMode.value = ids[Math.floor(Math.random() * ids.length)];
 			}
 		});
+	}
+
+	private setVariationValue(id: string, value: string) {
+		// Set select value
+		const select = this.$modeVariations.querySelector<HTMLSelectElement>(`select[name="variation[${id}]"]`);
+		if (select) {
+			select.value = value;
+			select.dispatchEvent(new Event('change'));
+			return;
+		}
+
+		// Set radio value
+		const inputs = this.$modeVariations.querySelectorAll<HTMLInputElement>(`input[name="variation[${id}]"]`);
+		for (const input of inputs) {
+			input.checked = input.value === value;
+			if (input.checked) {
+				input.dispatchEvent(new Event('change'));
+			}
+		}
 	}
 }

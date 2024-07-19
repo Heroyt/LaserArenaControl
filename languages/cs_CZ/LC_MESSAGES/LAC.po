@@ -4446,3 +4446,27 @@ msgstr ""
 
 msgid "Turnaje"
 msgstr ""
+
+msgid "Seznam her"
+msgstr ""
+
+msgid "Čas"
+msgstr ""
+
+msgid "Herní mód"
+msgstr ""
+
+msgid "Hráči"
+msgstr ""
+
+msgid "Tisk"
+msgstr ""
+
+msgid "Vítěz"
+msgstr ""
+
+msgid "Odeslat"
+msgstr ""
+
+msgid "Nebyla nalezena žádná hra"
+msgstr ""

@@ -44,7 +44,10 @@
     <div class="card game-group mb-4" data-id="{$id}">
         <div class="card-body">
             <div class="input-group">
-                <input type="text" value="{$name}" class="form-control fs-5 group-name" maxlength="100">
+                <div class="form-floating">
+                    <input type="text" value="{$name}" class="form-control fs-5 group-name" maxlength="100" id="group-{$id}-name">
+                    <label for="group-{$id}-name">{_'Název'}</label>
+                </div>
                 <button type="button"
                         data-toggle="tooltip" title="{_'Zobrazit detail skupiny'}"
                         class="btn btn-primary show-group-detail">

@@ -97,20 +97,20 @@
 
 {define sectionControls}
     <div id="control-btns" class="btn-group pb-2 pb-sm-0">
-        <button type="submit" name="action" value="load" class="btn btn-warning" id="loadGame">
+        <button type="submit" name="action" value="load" class="btn btn-warning" id="loadGame" aria-label="{_'Nahrát hru', context: 'game.actions'}">
             <i class="fa-solid mx-1 fa-circle-chevron-up"></i>
             <span>{_'Nahrát hru', context: 'game.actions'}</span>
         </button>
-        <button type="submit" name="action" value="start" class="btn btn-success" id="startGame">
+        <button type="submit" name="action" value="start" class="btn btn-success" id="startGame" aria-label="{_'Spustit hru', context: 'game.actions'}">
             <i class="fa-solid mx-1 fa-circle-play"></i>
             <span>{_'Spustit hru', context: 'game.actions'}</span>
         </button>
-        <button type="button" name="action" value="stop" class="btn btn-danger" id="stopGame">
+        <button type="button" name="action" value="stop" class="btn btn-danger" id="stopGame" aria-label="{_'Ukončit hru', context: 'game.actions'}">
             <i class="fa-solid mx-1 fa-circle-stop"></i>
             <span>{_'Ukončit hru', context: 'game.actions'}</span>
         </button>
         <button n:if="$featureConfig->isFeatureEnabled('preparedGames')" type="button" class="btn btn-primary"
-                                                                         id="prepareGame">
+                                                                         id="prepareGame" aria-label="{_'Připravit hru', context: 'game.actions'}">
             <i class="fa-solid mx-1 fa-save"></i>
             <span>{_'Připravit hru', context: 'game.actions'}</span>
         </button>
@@ -229,6 +229,7 @@
         {_'Herní mód', context: 'game'}:
     </label>
     <div class="input-group">
+        {var string $firstDescription = ''}
         <select name="game-mode" id="game-mode-select" class="form-select">
             <option n:foreach="$gameModes as $mode" value="{$mode->id}" data-type="{$mode->type->value}"
                                                     data-teams="{$mode->teams}"
@@ -236,6 +237,7 @@
                                                     data-description="{_$mode->description, context: 'gameModes'}"
                                                     data-active="{json_encode($mode->active)}"
                     {if $mode instanceof App\GameModels\Game\GameModes\CustomLoadMode}data-script="{$mode->getNewGameScriptToRun()}"{/if}>
+                {if $iterator->first}{do $firstDescription = $mode->description}{/if}
                 {_$mode->getName(), context: 'gameModes'}
             </option>
         </select>
@@ -244,7 +246,11 @@
             <i class="fa-solid fa-shuffle"></i>
         </button>
     </div>
-    <div id="game-mode-description" class="select-description text-muted" data-target="#game-mode-select"></div>
+    <div id="game-mode-description" class="select-description text-muted" data-target="#game-mode-select">
+        {if $firstDescription !== ''}
+            {_$firstDescription, context: 'gameModes'}
+        {/if}
+    </div>
 {/define}
 
 {define sectionGameModeVariations}
@@ -374,11 +380,9 @@
                 {$vest->vestNum}
             </div>
             {if $vest->status === App\GameModels\Game\Enums\VestStatus::PLAYABLE}
-                <div class="fa-solid fa-circle-exclamation text-warning" data-toggle="tooltip"
-                     title="{$vest->info}"></div>
+                <div class="fa-solid fa-circle-exclamation text-warning" data-toggle="tooltip" role="tooltip" title="{$vest->info}"></div>
             {elseif $vest->status === App\GameModels\Game\Enums\VestStatus::BROKEN}
-                <div class="fa-solid fa-circle-exclamation text-danger" data-toggle="tooltip"
-                     title="{$vest->info}"></div>
+                <div class="fa-solid fa-circle-exclamation text-danger" data-toggle="tooltip" role="tooltip" title="{$vest->info}"></div>
             {/if}
         </div>
         <div class="input-group-text handle cursor-grab bg-secondary text-bg-secondary px-2">
@@ -417,7 +421,7 @@
                 VIP
             </label>
         </div>
-        <div data-toggle="tooltip" title="{_'Herní schopnost hráče', context: 'game.player'}">
+        <div data-toggle="tooltip" role="tooltip" title="{_'Herní schopnost hráče', context: 'game.player'}">
             <input type="radio" name="player[{$vest->vestNum}][skill]" value="1" class="player-skill-input"
                    id="player-skill-{$vest->vestNum}-1" checked/>
             <label class="player-skill bg-grey" for="player-skill-{$vest->vestNum}-2">

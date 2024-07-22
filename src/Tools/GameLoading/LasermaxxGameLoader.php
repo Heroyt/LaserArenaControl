@@ -25,7 +25,9 @@ use Spiral\RoadRunner\Metrics\Metrics;
  *      game-mode?:numeric,
  *      variation?:array<numeric,string>,
  *      player?:array{name:string,team?:string,vip?:numeric-string,code:string}[],
- *      team?:array{name:string}[]
+ *      team?:array{name:string}[],
+ *      mode?:string,
+ *      meta?:array<string,mixed>
  *   }
  */
 abstract class LasermaxxGameLoader implements LoaderInterface
@@ -66,8 +68,9 @@ abstract class LasermaxxGameLoader implements LoaderInterface
         $loadData = new LasermaxxLoadData(
             meta: [
                   'music'    => empty($data['music']) ? null : $data['music'],
-                  'mode'     => '',
+                  'mode'     => $data['mode'] ?? '',
                   'loadTime' => time(),
+                  ...($data['meta'] ?? [])
                 ],
         );
 

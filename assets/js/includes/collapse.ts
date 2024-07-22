@@ -21,15 +21,15 @@ export function initCollapse(dom: HTMLElement | Document = document, force: bool
 
 		let open = targets[0].classList.contains('show');
 		trigger.addEventListener('click', e => {
-			console.log(e);
 			open = !open;
+			console.log(e, 'open', open);
 			for (const target of targets) {
+				target.dispatchEvent(new CustomEvent(open ? 'collapse.open' : 'collapse.close'));
 				if (open) {
 					target.classList.add('show');
 					continue;
 				}
 				target.classList.remove('show');
-				target.dispatchEvent(new CustomEvent(open ? 'collapse.open' : 'collapse.close'));
 			}
 			if (open) {
 				trigger.classList.add('collapse-show');

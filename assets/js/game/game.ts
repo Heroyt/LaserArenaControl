@@ -313,13 +313,13 @@ export default class Game {
 			});
 		});
 
-		this.$modeVariations.parentElement.addEventListener('show.bs.collapse', () => {
-			console.log('show');
+		this.$modeVariations.parentElement.addEventListener('collapse.open', e => {
+			console.log('show', e);
 			this.$variationsHideBtn.querySelector('.fa-eye-slash').classList.add('d-none');
 			this.$variationsHideBtn.querySelector('.fa-eye').classList.remove('d-none');
 		});
-		this.$modeVariations.parentElement.addEventListener('hide.bs.collapse', () => {
-			console.log('hide');
+		this.$modeVariations.parentElement.addEventListener('collapse.close', e => {
+			console.log('hide', e);
 			this.$variationsHideBtn.querySelector('.fa-eye-slash').classList.remove('d-none');
 			this.$variationsHideBtn.querySelector('.fa-eye').classList.add('d-none');
 		});

@@ -250,11 +250,11 @@
 {define sectionGameModeVariations}
     <button class="btn btn-info w-100" type="button" id="hide-variations" data-toggle="collapse"
             data-target="#game-mode-variations-collapse">
-        <i class="fa-solid fa-eye"></i>
-        <i class="fa-solid fa-eye-slash d-none"></i>
+        <i class="fa-solid fa-eye d-none"></i>
+        <i class="fa-solid fa-eye-slash"></i>
         {_'Variace', context: 'gameModes'}
     </button>
-    <div class="collapse-grid show" id="game-mode-variations-collapse">
+    <div class="collapse-grid" id="game-mode-variations-collapse">
         <div id="game-mode-variations-wrapper" class="collapse-inner bg-background-1 p-3 rounded-bottom"></div>
     </div>
     {if $featureConfig->isFeatureEnabled('gates') && !empty(App\Core\Info::get('gates_ips'))}

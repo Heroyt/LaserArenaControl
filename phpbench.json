@@ -1,0 +1,11 @@
+{
+  "$schema":"vendor/phpbench/phpbench/phpbench.schema.json",
+  "runner.bootstrap": "cli-bootstrap.php",
+  "runner.path": "tests/Benchmark",
+  "report.generators": {
+    "all": {
+      "generator": "composite",
+      "reports": [ "default", "aggregate" ]
+    }
+  }
+}

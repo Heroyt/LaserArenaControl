@@ -22,6 +22,9 @@ parameters:
 		timeout: 15.0
 	redis:
 		host: redis
+	fairTeams:
+		maxIterations: 500
+		maxIterationsWithoutImprovement: 10
 services:
 	# Core
 	app: App\Core\App
@@ -108,6 +111,8 @@ services:
 	theme:
 		type: App\Models\DataObjects\Theme
 		create: App\Models\DataObjects\Theme::get()
+
+	fairteams: App\Services\FairTeams(%fairTeams%)
 
 search:
 	highlightCheckers:

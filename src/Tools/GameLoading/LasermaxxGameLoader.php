@@ -89,15 +89,16 @@ abstract class LasermaxxGameLoader implements LoaderInterface
             $mode = GameModeFactory::getById((int) ($data['game-mode'] ?? 0));
         } catch (GameModeNotFoundException) {
         }
-
-        if (isset($mode)) {
-            $loadData->meta['mode'] = $mode->loadName;
-            if (!empty($data['variation'])) {
-                uksort($data['variation'], static fn($a, $b) => ((int) $a) - ((int) $b));
-                $loadData->meta['variations'] = [];
-                foreach ($data['variation'] as $id => $suffix) {
-                    $loadData->meta['variations'][$id] = $suffix;
-                    $loadData->meta['mode'] .= $suffix;
+        if (empty($loadData->meta['mode'])) {
+            if (isset($mode)) {
+                $loadData->meta['mode'] = $mode->loadName;
+                if (!empty($data['variation'])) {
+                    uksort($data['variation'], static fn($a, $b) => ((int) $a) - ((int) $b));
+                    $loadData->meta['variations'] = [];
+                    foreach ($data['variation'] as $id => $suffix) {
+                        $loadData->meta['variations'][$id] = $suffix;
+                        $loadData->meta['mode'] .= $suffix;
+                    }
                 }
             }
         }

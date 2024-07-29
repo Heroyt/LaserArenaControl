@@ -100,14 +100,14 @@ RUN sed -i -e 's/# cs_CZ.UTF-8 UTF-8/cs_CZ.UTF-8 UTF-8/' /etc/locale.gen \
     && locale-gen cs_CZ.UTF-8 \
     && update-locale
 
-FROM golang:1.22.4 as golang
+FROM golang:1.22.5 as golang
 FROM ghcr.io/roadrunner-server/velox:latest as roadrunner
 
 COPY --from=golang /usr/local/go/ /usr/local/go/
 
 ENV APP_VERSION="1.0.0"
 ARG BUILD_TIME="$(date +%FT%T%z)"
-ENV VERSION="v2024.1.4"
+ENV VERSION="v2024.2.0"
 ARG RT_TOKEN="undefined"
 
 COPY docker/velox_rr_2024.toml .

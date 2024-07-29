@@ -60,7 +60,7 @@ fileserver = { ref = "v5.0.1", owner = "roadrunner-server", repository = "filese
 grpc = { ref = "v5.0.2", owner = "roadrunner-server", repository = "grpc" }
 
 # HEALTHCHECKS + READINESS CHECKS
-status = { ref = "v5.0.2", owner = "roadrunner-server", repository = "status" }}
+status = { ref = "v5.0.2", owner = "roadrunner-server", repository = "status" }
 
 # TCP for the RAW TCP PAYLOADS
 tcp = { ref = "v5.0.2", owner = "roadrunner-server", repository = "tcp" }

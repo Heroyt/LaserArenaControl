@@ -23,8 +23,8 @@ parameters:
 	redis:
 		host: redis
 	fairTeams:
-		maxIterations: 500
-		maxIterationsWithoutImprovement: 10
+		maxIterations: 1000
+		maxIterationsWithoutImprovement: 100
 services:
 	# Core
 	app: App\Core\App

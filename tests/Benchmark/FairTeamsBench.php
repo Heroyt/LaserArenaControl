@@ -73,6 +73,7 @@ class FairTeamsBench
         yield 'default-default' => ['service' => []];
         yield '100-default' => ['service' => [100]];
         yield '500-10' => ['service' => [500, 10]];
+        yield '1000-100' => ['service' => [500, 10]];
         yield 'no-annealing' => ['service' => [0, 0]];
     }
 

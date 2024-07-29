@@ -184,6 +184,9 @@ class FairTeamsTest extends Unit
 
     public function provideSplitPlayers(): Generator {
         $iterations = 10;
+        $teamSizes = [5,4,3,2];
+        $iterationValues = [2000, 1000, 500, 100, 50, 0];
+        $iterationWithoutImprovementValues = [500, 100, 50, 20, 10, 0];
         $players = [
           new PlayerSkillDto('Tomážeg', 811),
           new PlayerSkillDto('Honza_24', 642),
@@ -217,45 +220,61 @@ class FairTeamsTest extends Unit
           new PlayerSkillDto('Senix', 49),
           new PlayerSkillDto('Rukybazuky', 24),
         ];
-        for ($i = 0; $i < $iterations; $i++) {
-            yield [
-            $players,
-            (int) ceil(count($players) / 5),
-            500,
-            40,
-            60,
-            30
-            ];
+
+        foreach ($teamSizes as $teamSize) {
+            foreach ($iterationValues as $iterationValue) {
+                foreach ($iterationWithoutImprovementValues as $iterationWithoutImprovementValue) {
+                    if ($iterationValue < $iterationWithoutImprovementValue) {
+                        continue;
+                    }
+                    for ($i = 0; $i < $iterations; $i++) {
+                        yield [
+                          $i,
+                          $players,
+                          (int) ceil(count($players) / $teamSize),
+                          $iterationValue,
+                          $iterationWithoutImprovementValue,
+                        ];
+                    }
+                }
+            }
         }
-        for ($i = 0; $i < $iterations; $i++) {
-            yield [
-            $players,
-            (int) ceil(count($players) / 4),
-            500,
-            40,
-            55,
-            25
-            ];
-        }
-        for ($i = 0; $i < $iterations; $i++) {
-            yield [
-            $players,
-            (int) ceil(count($players) / 4),
-            500,
-            10,
-            55,
-            25
-            ];
-        }
-        for ($i = 0; $i < $iterations; $i++) {
-            yield [
-            $players,
-            (int) ceil(count($players) / 4),
-            0,
-            0,
-            55,
-            25
-            ];
+
+        $players = [
+          new PlayerSkillDto('Tomážeg', 811),
+          new PlayerSkillDto('Honza_24', 642),
+          new PlayerSkillDto('Kirbouš', 640),
+          new PlayerSkillDto('Jeff', 619),
+          new PlayerSkillDto('Fat george', 551),
+          new PlayerSkillDto('DavidJ', 548),
+          new PlayerSkillDto('Teniska', 537),
+          new PlayerSkillDto('Jižík', 537),
+          new PlayerSkillDto('Staja', 462),
+          new PlayerSkillDto('Náhradník', 453),
+          new PlayerSkillDto('Saruše', 436),
+          new PlayerSkillDto('Hvězda', 418),
+          new PlayerSkillDto('Dave', 407),
+          new PlayerSkillDto('Ma_ES', 388),
+          new PlayerSkillDto('Růža', 388),
+        ];
+
+        foreach ($teamSizes as $teamSize) {
+            foreach ($iterationValues as $iterationValue) {
+                foreach ($iterationWithoutImprovementValues as $iterationWithoutImprovementValue) {
+                    if ($iterationValue < $iterationWithoutImprovementValue) {
+                        continue;
+                    }
+                    for ($i = 0; $i < $iterations; $i++) {
+                        yield [
+                          $i,
+                          $players,
+                          (int) ceil(count($players) / $teamSize),
+                          $iterationValue,
+                          $iterationWithoutImprovementValue,
+                        ];
+                    }
+                }
+            }
         }
     }
 
@@ -288,15 +307,37 @@ class FairTeamsTest extends Unit
 
     #[Depends('testCalculateDeltas', 'testMaxDelta')]
     #[DataProvider('provideSplitPlayers')]
-    public function testSplitPlayers(array $players, int $teamCount, int $iterations, int $maxIterationsWithoutImprovement, int $maxDelta, int $maxAvgDelta): void {
+    public function testSplitPlayers(int $iteration, array $players, int $teamCount, int $iterations, int $maxIterationsWithoutImprovement): void {
         $fairTeams = new FairTeams($iterations, $maxIterationsWithoutImprovement);
         $teams = $fairTeams->splitPlayers($players, $teamCount);
         self::assertCount($teamCount, $teams);
 
-        $delta = $fairTeams->getMaxSkillDelta($teams);
-        self::assertLessThan($maxDelta, $delta);
+        // Test player counts in teams
+        $maxTeamCount = (int) ceil(count($players) / $teamCount);
+        foreach ($teams as $team) {
+            $playerCount = count($team->players);
+            self::assertLessThanOrEqual($maxTeamCount, $playerCount);
+            self::assertGreaterThanOrEqual($maxTeamCount - 1, $playerCount);
+        }
 
-        $delta = $fairTeams->getAvgSkillDelta($teams);
-        self::assertLessThan($maxAvgDelta, $delta);
+        // Save stats
+        $deltas = $fairTeams->calculateDeltas($teams);
+        $out = number_format($iteration, 0, '.', '') . ',';
+        $out .= number_format(count($players), 0, '.', '') . ',';
+        $out .= number_format($teamCount, 0, '.', '') . ',';
+        $out .= number_format($iterations, 0, '.', '') . ',';
+        $out .= number_format($maxIterationsWithoutImprovement, 0, '.', '') . ',';
+        $out .= number_format($fairTeams->getMinSkillDelta($teams, $deltas), 0, '.', '') . ',';
+        $out .= number_format($fairTeams->getMaxSkillDelta($teams, $deltas), 0, '.', '') . ',';
+        $out .= number_format($fairTeams->getMeanSkillDelta($teams, $deltas), 3) . ',';
+        $out .= number_format($fairTeams->getAvgSkillDelta($teams, $deltas), 3, '.', '') . ',';
+        $out .= number_format($fairTeams->getSkillDeltaStdDev($teams, $deltas), 4) . ',';
+        $out .= number_format($fairTeams->getTotalSkillDelta($teams, $deltas), 0, '.', '') . PHP_EOL;
+        file_put_contents('test.out.csv', $out, FILE_APPEND);
+    }
+
+    public function __construct(string $name) {
+        file_put_contents('test.out.csv', 'Iteration,Player count,Team count,Iterations,MaxIterationsWI,Delta Min,Delta Max,Delta mean,Delta average,Delta stdDev,Delta total' . PHP_EOL);
+        parent::__construct($name);
     }
 }

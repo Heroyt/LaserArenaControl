@@ -124,10 +124,40 @@ class FairTeams
 
     /**
      * @param  FairTeamDto[]  $teams
+     * @param  array<string,int>|null  $deltas
      * @return int
      */
-    public function getMaxSkillDelta(array $teams): int {
-        $deltas = $this->calculateDeltas($teams);
+    public function getMinSkillDelta(array $teams, ?array $deltas = null): int {
+        $deltas ??= $this->calculateDeltas($teams);
+        if (count($deltas) === 0) {
+            return 0;
+        }
+        return min($deltas);
+    }
+
+    /**
+     * @param  FairTeamDto[]  $teams
+     * @param  array<string,int>|null  $deltas
+     * @return float
+     */
+    public function getMeanSkillDelta(array $teams, ?array $deltas = null): float {
+        $deltas ??= $this->calculateDeltas($teams);
+        sort($deltas);
+        $count = count($deltas);
+        $mid = $count / 2;
+        if ($count % 2 === 0) {
+            return ($deltas[(int) floor($mid)] + $deltas[(int) ceil($mid)]) / 2;
+        }
+        return $deltas[(int) $mid];
+    }
+
+    /**
+     * @param  FairTeamDto[]  $teams
+     * @param  array<string,int>|null  $deltas
+     * @return int
+     */
+    public function getMaxSkillDelta(array $teams, ?array $deltas = null): int {
+        $deltas ??= $this->calculateDeltas($teams);
         if (count($deltas) === 0) {
             return 0;
         }
@@ -154,10 +184,11 @@ class FairTeams
 
     /**
      * @param  FairTeamDto[]  $teams
+     * @param  array<string,int>|null  $deltas
      * @return float
      */
-    public function getAvgSkillDelta(array $teams): float {
-        $deltas = $this->calculateDeltas($teams);
+    public function getAvgSkillDelta(array $teams, ?array $deltas = null): float {
+        $deltas ??= $this->calculateDeltas($teams);
         $count = count($deltas);
         if ($count === 0) {
             return 0;
@@ -167,9 +198,30 @@ class FairTeams
 
     /**
      * @param  FairTeamDto[]  $teams
+     * @param  array<string,int>|null  $deltas
      * @return int
      */
-    public function getTotalSkillDelta(array $teams): int {
-        return array_sum($this->calculateDeltas($teams));
+    public function getTotalSkillDelta(array $teams, ?array $deltas = null): int {
+        $deltas ??= $this->calculateDeltas($teams);
+        return array_sum($deltas);
+    }
+
+    /**
+     * @param  FairTeamDto[]  $teams
+     * @param  array<string,int>|null  $deltas
+     * @return float
+     */
+    public function getSkillDeltaStdDev(array $teams, ?array $deltas = null): float {
+        $deltas ??= $this->calculateDeltas($teams);
+
+        $mean = $this->getMeanSkillDelta($teams, $deltas);
+
+        $sum = 0;
+        foreach ($deltas as $delta) {
+            $meanDiff = $delta - $mean;
+            $sum += $meanDiff * $meanDiff;
+        }
+
+        return sqrt($sum / count($deltas));
     }
 }

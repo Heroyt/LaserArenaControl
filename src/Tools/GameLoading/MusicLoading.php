@@ -9,6 +9,7 @@ use App\Tasks\Payloads\MusicLoadPayload;
 use Lsr\Core\Config;
 use Lsr\Logging\Logger;
 use Spiral\RoadRunner\Jobs\Exception\JobsException;
+use Spiral\RoadRunner\Jobs\Options;
 
 /**
  *
@@ -68,7 +69,8 @@ trait MusicLoading
     protected function planMusicLoad(int $musicId, string $system = 'evo5'): void {
         $this->getTaskProducer()->push(
             MusicLoadTask::class,
-            new MusicLoadPayload($musicId, $this::MUSIC_FILE, $this::DI_NAME, $system)
+            new MusicLoadPayload($musicId, $this::MUSIC_FILE, $this::DI_NAME, $system),
+            new Options(priority: 1) // Priority job should be done as soon as possible
         );
     }
 

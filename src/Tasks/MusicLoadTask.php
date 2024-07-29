@@ -5,10 +5,12 @@ namespace App\Tasks;
 use App\Core\App;
 use App\Tasks\Payloads\MusicLoadPayload;
 use App\Tools\GameLoading\LoaderInterface;
-use App\Tools\GameLoading\MusicLoading;
 use Spiral\RoadRunner\Jobs\Task\ReceivedTaskInterface;
 use Throwable;
 
+/**
+ *
+ */
 class MusicLoadTask implements TaskDispatcherInterface
 {
     public function __construct() {
@@ -23,13 +25,13 @@ class MusicLoadTask implements TaskDispatcherInterface
         $payload = igbinary_unserialize($task->getPayload());
 
         try {
-            /** @var MusicLoading&LoaderInterface $loader */
             $loader = App::getService($payload->loader);
-            $loader->loadMusic($payload->musicId, $payload->musicFile, $payload->system);
+            assert($loader instanceof LoaderInterface, 'Loader must be instance of LoaderInterface');
+            $loader->loadMusic($payload->musicId, $payload->musicFile, $payload->system, $payload->timeSinceStart);
         } catch (Throwable $e) {
-            $task->fail($e);
+            $task->nack($e);
             return;
         }
-        $task->fail('Error');
+        $task->nack('Error');
     }
 }

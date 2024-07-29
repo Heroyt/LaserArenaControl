@@ -23,7 +23,8 @@ trait MusicLoading
 
     protected function loadOrPlanMusic(int $musicId, string $system = 'evo5'): void {
         // Lazy load music file in the background
-        // This is useful if the music mode should be copied to some network-attached directory which could take a few seconds.
+        // This is useful if the music mode should be copied to some network-attached directory
+        // which could take a few seconds.
         if ($this->isLoadAsync()) {
             $this->getLogger()->debug('Loading music (' . $musicId . ') - ASYNC');
             try {
@@ -63,13 +64,14 @@ trait MusicLoading
 
     /**
      * @param  int  $musicId
+     * @param  string  $system
      * @return void
      * @throws JobsException
      */
     protected function planMusicLoad(int $musicId, string $system = 'evo5'): void {
         $this->getTaskProducer()->push(
             MusicLoadTask::class,
-            new MusicLoadPayload($musicId, $this::MUSIC_FILE, $this::DI_NAME, $system),
+            new MusicLoadPayload($musicId, $this::MUSIC_FILE, $this::DI_NAME, $system, microtime(true)),
             new Options(priority: 1) // Priority job should be done as soon as possible
         );
     }

@@ -13,5 +13,5 @@ interface LoaderInterface
      */
     public function loadGame(array $data): array;
 
-    public function loadMusic(int $musicId, string $musicFile): void;
+    public function loadMusic(int $musicId, string $musicFile, string $system, ?float $timeSinceStart = null): void;
 }

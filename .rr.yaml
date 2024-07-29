@@ -52,6 +52,11 @@ metrics:
       help: "How much time does it take to load a selected game music."
       labels:
         - system
+    music_time_since_load:
+      type: gauge
+      help: "How much time does it take to load a selected game music since game load."
+      labels:
+        - system
     control_time:
       type: gauge
       help: "How much does it take to call the control API."

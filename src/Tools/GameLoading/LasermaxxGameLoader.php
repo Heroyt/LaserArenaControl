@@ -44,7 +44,12 @@ abstract class LasermaxxGameLoader implements LoaderInterface
      * @param  non-empty-string  $system
      * @return void
      */
-    public function loadMusic(int $musicId, string $musicFile, string $system = 'evo5'): void {
+    public function loadMusic(
+        int    $musicId,
+        string $musicFile,
+        string $system = 'evo5',
+        ?float $timeSinceStart = null
+    ): void {
         $start = microtime(true);
         try {
             $music = MusicMode::get($musicId);
@@ -56,7 +61,11 @@ abstract class LasermaxxGameLoader implements LoaderInterface
         } catch (ModelNotFoundException | ValidationException | DirectoryCreationException) {
             // Not critical, doesn't need to do anything
         }
-        $this->metrics->set('load_music_time', (microtime(true) - $start) * 1000, [$system]);
+        $end = microtime(true);
+        $this->metrics->set('load_music_time', ($end - $start) * 1000, [$system]);
+        if (isset($timeSinceStart)) {
+            $this->metrics->set('music_time_since_load', ($end - $timeSinceStart) * 1000, [$system]);
+        }
     }
 
     /**
@@ -89,16 +98,14 @@ abstract class LasermaxxGameLoader implements LoaderInterface
             $mode = GameModeFactory::getById((int) ($data['game-mode'] ?? 0));
         } catch (GameModeNotFoundException) {
         }
-        if (empty($loadData->meta['mode'])) {
-            if (isset($mode)) {
-                $loadData->meta['mode'] = $mode->loadName;
-                if (!empty($data['variation'])) {
-                    uksort($data['variation'], static fn($a, $b) => ((int) $a) - ((int) $b));
-                    $loadData->meta['variations'] = [];
-                    foreach ($data['variation'] as $id => $suffix) {
-                        $loadData->meta['variations'][$id] = $suffix;
-                        $loadData->meta['mode'] .= $suffix;
-                    }
+        if (empty($loadData->meta['mode']) && isset($mode)) {
+            $loadData->meta['mode'] = $mode->loadName;
+            if (!empty($data['variation'])) {
+                uksort($data['variation'], static fn($a, $b) => ((int) $a) - ((int) $b));
+                $loadData->meta['variations'] = [];
+                foreach ($data['variation'] as $id => $suffix) {
+                    $loadData->meta['variations'][$id] = $suffix;
+                    $loadData->meta['mode'] .= $suffix;
                 }
             }
         }
@@ -159,6 +166,7 @@ abstract class LasermaxxGameLoader implements LoaderInterface
         ksort($hashData);
         $loadData->sortPlayers();
         $loadData->players = array_values($loadData->players);
+        assert(is_string($loadData->meta['mode']), 'Mode name must be set and be a string');
         $loadData->meta['hash'] = md5($loadData->meta['mode'] . ';' . implode(';', $hashData));
 
 
@@ -173,7 +181,11 @@ abstract class LasermaxxGameLoader implements LoaderInterface
             } catch (ModelNotFoundException | ValidationException) {
             }
         }
-        if (isset($loadData->meta['music']) && str_starts_with($loadData->meta['music'], 'g-')) {
+        if (
+            isset($loadData->meta['music']) &&
+            is_string($loadData->meta['music']) &&
+            str_starts_with($loadData->meta['music'], 'g-')
+        ) {
             $musicIds = array_slice(explode('-', $loadData->meta['music']), 1);
             $loadData->meta['music'] = (int) $musicIds[array_rand($musicIds)];
         }

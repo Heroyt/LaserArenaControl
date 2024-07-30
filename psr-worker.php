@@ -129,6 +129,10 @@ switch ($env->getMode()) {
 
                 $request = RequestFactory::fromPsrRequest($request);
                 $app->setRequest($request);
+                assert($request === $app->getRequest(), 'Request set does not match');
+
+                echo $request->getUri();
+                echo PHP_EOL;
 
                 try {
                     $session = $app->session;

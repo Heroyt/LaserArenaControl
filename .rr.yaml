@@ -71,10 +71,9 @@ http:
     - headers
     - http_metrics
   pool:
-    num_workers: 4
-    max_jobs: 20
+    num_workers: 5
+    max_queue_size: 10
     supervisor:
-      ttl: 300s # Restart worker every 5 minutes
       max_worker_memory: 256
   headers:
     cors:
@@ -94,7 +93,9 @@ jobs:
   pipeline_size: 1000
   pool:
     num_workers: 2
-    max_jobs: 20
+    max_jobs: 100
+    supervisor:
+      max_worker_memory: 256
   consume: [ "tasks" ]
   pipelines:
     tasks: # RoadRunner queue identifier
@@ -105,13 +106,14 @@ jobs:
 file_watch:
   pool:
     num_workers: 1
-    max_jobs: 10
+    supervisor:
+      max_worker_memory: 256
   dir: "./lmx/results"
   regexp: ".*\\.game"
 logs:
   encoding: console
   level: debug
-  mode: development
+  mode: production
 #  file_logger_options:
 #    log_output: "logs/rr.log"
 #    max_size: 10

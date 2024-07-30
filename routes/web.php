@@ -15,6 +15,8 @@ use App\Controllers\NewGame;
 use App\Controllers\Players;
 use App\Controllers\PreparedGames;
 use App\Controllers\Results;
+use App\Controllers\Roadrunner;
+use App\Controllers\System;
 use App\Core\App;
 use App\Services\FeatureConfig;
 use Lsr\Core\Routing\Route;
@@ -25,6 +27,7 @@ $featureConfig = App::getService('features');
 Route::get('/lang/{lang}', [Lang::class, 'setLang']);
 
 Route::get('/', [NewGame::class, 'show'])->name('dashboard');
+Route::get('/public', [NewGame::class, 'public'])->name('public');
 
 Route::group('/results')
   ->get('/', [Results::class, 'show'])
@@ -96,3 +99,11 @@ $control->post('startSafe', [GameControl::class, 'startSafe'])->name('startGameS
 $control->post('stop', [GameControl::class, 'stop'])->name('stopGame');
 $control->post('retry', [GameControl::class, 'retryDownload'])->name('retryDownload');
 $control->post('cancel', [GameControl::class, 'cancelDownload'])->name('cancelDownload');
+
+$roadrunner = Route::group('roadrunner');
+$roadrunner->get('reset', [Roadrunner::class, 'reset'])->name('resetRoadrunnerGet');
+$roadrunner->post('reset', [Roadrunner::class, 'reset'])->name('resetRoadrunner');
+
+$system = Route::group('system');
+$system->get('restart', [System::class, 'restart'])->name('resetDockerGet');
+$system->post('restart', [System::class, 'restart'])->name('resetDocker');

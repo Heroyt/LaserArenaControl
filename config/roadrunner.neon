@@ -7,4 +7,7 @@ services:
 	rpc:
 		type: Spiral\Goridge\RPC\RPC
 		create: Spiral\Goridge\RPC\RPC::create(%rpc.connection%)
+	asyncRpc:
+		type: Spiral\Goridge\RPC\MultiRPC
+		create: Spiral\Goridge\RPC\MultiRPC::create(%rpc.connection%)
 	metrics: Spiral\RoadRunner\Metrics\Metrics(@rpc)

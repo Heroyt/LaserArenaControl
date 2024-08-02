@@ -72,9 +72,10 @@ http:
     - http_metrics
   pool:
     num_workers: 5
+    max_jobs: 5
     max_queue_size: 10
     supervisor:
-      max_worker_memory: 256
+      max_worker_memory: 512
   headers:
     cors:
       allowed_origin: "*"
@@ -93,9 +94,9 @@ jobs:
   pipeline_size: 1000
   pool:
     num_workers: 2
-    max_jobs: 100
+    max_jobs: 5
     supervisor:
-      max_worker_memory: 256
+      max_worker_memory: 512
   consume: [ "tasks" ]
   pipelines:
     tasks: # RoadRunner queue identifier

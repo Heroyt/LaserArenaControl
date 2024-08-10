@@ -41,7 +41,7 @@
     "build": "composer update && composer dump-autoload && npm install && npm run build",
     "docker-arm": "docker buildx build --platform linux/arm64 . --file docker/Dockerfile --tag heroyt/laser-arena-control:roadrunner-latest --tag heroyt/laser-arena-control:roadrunner --tag heroyt/laser-arena-control:latest --push --build-arg \"RT_TOKEN=$RT_TOKEN\" --build-arg \"BUILD_TIME=$(date +%FT%T%z)\"",
     "docker": "docker buildx build --platform linux/arm64,linux/amd64 . --file docker/Dockerfile --tag heroyt/laser-arena-control:roadrunner-latest --tag heroyt/laser-arena-control:roadrunner --tag heroyt/laser-arena-control:latest --push --build-arg \"RT_TOKEN=$RT_TOKEN\" --build-arg \"BUILD_TIME=$(date +%FT%T%z)\"",
-    "swagger": "./vendor/bin/openapi src vendor/lsr/request/src modules -o swagger.yaml",
+    "swagger": "./vendor/bin/openapi src vendor/lsr/request/src modules -o docs/swagger.yaml",
     "phpstan": "./vendor/bin/phpstan",
     "phpcbf": "./vendor/bin/phpcbf"
   },

@@ -13,6 +13,7 @@
 use App\Core\App;
 use App\Models\DataObjects\Image;
 use App\Services\ImageService;
+use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Component\Serializer\Encoder\JsonDecode;
 use Symfony\Component\Serializer\Encoder\JsonEncode;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
@@ -71,7 +72,7 @@ function getImageSrcSet(Image | string $image, bool $includeAllSizes = true): st
     return implode(',', $srcSet);
 }
 
-function jsonSerialize($data): string {
+function jsonSerialize(mixed $data): string {
     $normalizerContext = [
       AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function (object $object, string $format, array $context) {
         if (property_exists($object, 'code')) {
@@ -97,10 +98,30 @@ function jsonSerialize($data): string {
         new JsonEncoder(
             defaultContext: [
                             JsonDecode::ASSOCIATIVE => true,
-                            JsonEncode::OPTIONS     => JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRESERVE_ZERO_FRACTION | JSON_THROW_ON_ERROR,
+                            JsonEncode::OPTIONS     => JSON_UNESCAPED_UNICODE
+                              | JSON_UNESCAPED_SLASHES
+                              | JSON_PRESERVE_ZERO_FRACTION
+                              | JSON_THROW_ON_ERROR,
                           ]
         ),
         ],
     );
     return $serializer->serialize($data, 'json');
+}
+
+
+/**
+ * @param  ServerRequestInterface  $request
+ * @return list<non-empty-lowercase-string>
+ */
+function getAcceptTypes(ServerRequestInterface $request): array {
+    $types = [];
+    foreach ($request->getHeader('Accept') as $value) {
+        $str = strtolower(trim(explode(';', $value, 2)[0]));
+        if ($str === '') {
+            continue;
+        }
+        $types[] = $str;
+    }
+    return $types;
 }

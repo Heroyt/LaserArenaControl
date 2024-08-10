@@ -238,15 +238,3 @@ switch ($env->getMode()) {
         }
         break;
 }
-
-/**
- * @param  ServerRequestInterface  $request
- * @return string[]
- */
-function getAcceptTypes(ServerRequestInterface $request): array {
-    $types = [];
-    foreach ($request->getHeader('Accept') as $value) {
-        $types[] = strtolower(trim(explode(';', $value, 2)[0]));
-    }
-    return $types;
-}

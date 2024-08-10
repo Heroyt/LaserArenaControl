@@ -2,8 +2,8 @@
 
 namespace App\Gate\Screens\Results;
 
-use App\Api\Response\ErrorDto;
 use App\Gate\Screens\WithGameQR;
+use Lsr\Core\Requests\Dto\ErrorResponse;
 use Psr\Http\Message\ResponseInterface;
 
 /**
@@ -17,14 +17,14 @@ class LaserMaxxRankableResultsScreen extends AbstractResultsScreen
      * @inheritDoc
      */
     public static function getName(): string {
-        return lang('LaserMaxx klasické výsledky', domain: 'gate', context: 'screens');
+        return lang('LaserMaxx klasické výsledky', context: 'screens', domain: 'gate');
     }
 
     public static function getDescription(): string {
         return lang(
             'Obrazovka zobrazující výsledky LaserMaxx z klasických her.',
-            domain : 'gate',
-            context: 'screens.description'
+            context: 'screens.description',
+            domain : 'gate'
         );
     }
 
@@ -42,7 +42,7 @@ class LaserMaxxRankableResultsScreen extends AbstractResultsScreen
         $game = $this->getGame();
 
         if (!isset($game)) {
-            return $this->respond(new ErrorDto('Cannot show screen without game.'), 412);
+            return $this->respond(new ErrorResponse('Cannot show screen without game.'), 412);
         }
 
         if ($this->reloadTime < 0) {

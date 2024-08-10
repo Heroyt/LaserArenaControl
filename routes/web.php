@@ -47,19 +47,16 @@ Route::group('/list')->get('/', [GamesList::class, 'show'])->name('games-list')-
     [GamesList::class, 'game']
 );
 
-Route::group('/gate')->get('/', [GateController::class, 'show'])->name('gate')->get(
-    '/{gate}',
-    [GateController::class, 'show']
-)->name('gate-slug')->post('/event', [GateController::class, 'setEvent'])->post(
-    '/set',
-    [GateController::class, 'setGateGame']
-)      // Error
-     ->post('/loaded', [GateController::class, 'setGateLoaded']) // Error
-     ->post('/idle', [GateController::class, 'setGateIdle']) // Error
-     ->post('/set/{system}', [GateController::class, 'setGateGame'])->post(
-         '/loaded/{system}',
-         [GateController::class, 'setGateLoaded']
-     )->post('/idle/{system}', [GateController::class, 'setGateIdle']);
+$gateGroup = Route::group('/gate');
+$gateGroup->get('/', [GateController::class, 'show'])->name('gate');
+$gateGroup->get('/{gate}', [GateController::class, 'show'])->name('gate-slug');
+$gateGroup->post('/event', [GateController::class, 'setEvent']);
+$gateGroup->post('/set', [GateController::class, 'setGateGame']);      // Error
+$gateGroup->post('/loaded', [GateController::class, 'setGateLoaded']); // Error
+$gateGroup->post('/idle', [GateController::class, 'setGateIdle']); // Error
+$gateGroup->post('/set/{system}', [GateController::class, 'setGateGame']);
+$gateGroup->post('/loaded/{system}', [GateController::class, 'setGateLoaded']);
+$gateGroup->post('/idle/{system}', [GateController::class, 'setGateIdle']);
 
 Route::group('/players')
   ->get('/find', [Players::class, 'find'])

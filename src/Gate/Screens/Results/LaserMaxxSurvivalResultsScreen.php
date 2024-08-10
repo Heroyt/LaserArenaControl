@@ -2,10 +2,10 @@
 
 namespace App\Gate\Screens\Results;
 
-use App\Api\Response\ErrorDto;
 use App\Exceptions\GameModeNotFoundException;
 use App\GameModels\Game\Evo5\GameModes\Survival;
 use App\Gate\Screens\WithGameQR;
+use Lsr\Core\Requests\Dto\ErrorResponse;
 use Psr\Http\Message\ResponseInterface;
 
 class LaserMaxxSurvivalResultsScreen extends AbstractResultsScreen
@@ -16,14 +16,14 @@ class LaserMaxxSurvivalResultsScreen extends AbstractResultsScreen
      * @inheritDoc
      */
     public static function getName(): string {
-        return lang('LaserMaxx výsledky z módu Survival', domain: 'gate', context: 'screens');
+        return lang('LaserMaxx výsledky z módu Survival', context: 'screens', domain: 'gate');
     }
 
     public static function getDescription(): string {
         return lang(
             'Obrazovka zobrazující výsledky LaserMaxx z módu Survival.',
-            domain : 'gate',
-            context: 'screens.description'
+            context: 'screens.description',
+            domain : 'gate'
         );
     }
 
@@ -49,7 +49,7 @@ class LaserMaxxSurvivalResultsScreen extends AbstractResultsScreen
         $game = $this->getGame();
 
         if (!isset($game)) {
-            return $this->respond(new ErrorDto('Cannot show screen without game.'), 412);
+            return $this->respond(new ErrorResponse('Cannot show screen without game.'), 412);
         }
 
         if ($this->reloadTime < 0) {

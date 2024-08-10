@@ -29,20 +29,19 @@ $apiGroup = Route::group('api')
                  ->post('install', [Updater::class, 'install'])
                  ->post('events', [Events::class, 'triggerEvent']);
 
-$resultGroup = $apiGroup->group('results')->post('import', [Results::class, 'import'])->post(
-    'import/{game}',
-    [
-    Results::class,
-    'importGame',
-    ]
-)->get('last', [Results::class, 'getLastGameFile'])->get('download', [Results::class, 'downloadLastGameFiles']);
+$resultGroup = $apiGroup->group('results');
+$resultGroup->post('import', [Results::class, 'import']);
+$resultGroup->post('import/{game}', [Results::class, 'importGame']);
+$resultGroup->get('last', [Results::class, 'getLastGameFile']);
 
 $gitGroup = $apiGroup->group('git')
                      ->post('pull', [Updater::class, 'pull'])
                      ->post('fetch', [Updater::class, 'fetch'])
                      ->post('status', [Updater::class, 'status']);
 
-$logGroup = $apiGroup->group('logs')->get('', [Logs::class, 'show'])->get('download', [Logs::class, 'download']);
+$logGroup = $apiGroup->group('logs');
+$logGroup->get('', [Logs::class, 'show']);
+$logGroup->get('download', [Logs::class, 'download']);
 
 $debugGroup = $apiGroup->group('debug')
                        ->get('pwd', [Debug::class, 'pwd'])
@@ -53,13 +52,10 @@ $debugGroup = $apiGroup->group('debug')
                        ->put('incrementCache', [Debug::class, 'incrementCache'])
                        ->get('glob', [Debug::class, 'glob']);
 
-$gameGroup = $apiGroup->group('game')->post('load/{system}', [GameLoading::class, 'loadGame'])->get(
-    'loaded',
-    [
-    GameHelpers::class,
-    'getLoadedGameInfo',
-    ]
-)->get('gate', [GameHelpers::class, 'getGateGameInfo']);
+$gameGroup = $apiGroup->group('game');
+$logGroup->post('load/{system}', [GameLoading::class, 'loadGame']);
+$logGroup->get('loaded', [GameHelpers::class, 'getLoadedGameInfo']);
+$logGroup->get('gate', [GameHelpers::class, 'getGateGameInfo']);
 
 $gamesGroup = $apiGroup->group('games')
                        ->get('', [Games::class, 'listGames'])
@@ -76,32 +72,22 @@ $gamesGroup = $apiGroup->group('games')
   ->get('highlights', [Games::class, 'getHighlights']);
 
 
-$apiGroup->group('tasks')->post('precache', [Tasks::class, 'planGamePrecache'])->post(
-    'highlights',
-    [
-    Tasks::class,
-    'planGameHighlights',
-    ]
-);
+$tasksGroup = $apiGroup->group('tasks');
+$tasksGroup->post('precache', [Tasks::class, 'planGamePrecache']);
+$tasksGroup->post('highlights', [Tasks::class, 'planGameHighlights']);
 
-$apiGroup->group('laserliga')->group('games')->group('{code}')->get('highlights', [LaserLiga::class, 'highlights']);
+$laserLigaGroup = $apiGroup->group('laserliga');
+$laserLigaGroup->get('games/{code}/highlights', [LaserLiga::class, 'highlights']);
 
-$apiGroup->group('cache')->group('clear')->post('', [Cache::class, 'clearAll'])->name('cache-clear')->post(
-    'system',
-    [
-    Cache::class,
-    'clearSystem',
-    ]
-)->name('cache-clear-system')->post('di', [Cache::class, 'clearDi'])->name('cache-clear-di')->post(
-    'models',
-    [
-    Cache::class,
-    'clearModels',
-    ]
-)->name('cache-clear-models')->post('config', [Cache::class, 'clearConfig'])->name('cache-clear-config')->post(
-    'results',
-    [Cache::class, 'clearResults']
-)->name('cache-clear-results')->post('latte', [Cache::class, 'clearLatte'])->name('cache-clear-latte');
+$cacheGroup = $apiGroup->group('cache');
+$cacheClearGroup = $cacheGroup->group('clear');
+$cacheClearGroup->post('', [Cache::class, 'clearAll'])->name('cache-clear');
+$cacheClearGroup->post('system', [Cache::class,'clearSystem'])->name('cache-clear-system');
+$cacheClearGroup->post('di', [Cache::class, 'clearDi'])->name('cache-clear-di');
+$cacheClearGroup->post('models', [Cache::class, 'clearModels'])->name('cache-clear-models');
+$cacheClearGroup->post('config', [Cache::class, 'clearConfig'])->name('cache-clear-config');
+$cacheClearGroup->post('results', [Cache::class, 'clearResults'])->name('cache-clear-results');
+$cacheClearGroup->post('latte', [Cache::class, 'clearLatte'])->name('cache-clear-latte');
 
 $helpersGroup = $apiGroup->group('helpers');
 $helpersGroup->get('translate', [Helpers::class, 'translate']);

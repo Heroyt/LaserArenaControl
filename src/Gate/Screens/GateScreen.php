@@ -5,7 +5,6 @@ namespace App\Gate\Screens;
 use App\GameModels\Game\Game;
 use App\Gate\Logic\CustomEventDto;
 use App\Gate\Logic\ScreenTriggerType;
-use JsonException;
 use Lsr\Core\Requests\Response;
 use Lsr\Core\Templating\Latte;
 use Lsr\Exceptions\TemplateDoesNotExistException;
@@ -21,6 +20,7 @@ abstract class GateScreen
 
     protected ?Game $game = null;
 
+    /** @var array<string,mixed> */
     protected array $params = [];
 
     protected int $reloadTime = -1;
@@ -29,7 +29,7 @@ abstract class GateScreen
 
     protected ?CustomEventDto $triggerEvent = null;
 
-    public function __construct(protected readonly Latte $latte,) {
+    public function __construct(protected readonly Latte $latte) {
     }
 
     /**
@@ -103,6 +103,10 @@ abstract class GateScreen
         return $this;
     }
 
+    /**
+     * @param  array<string,mixed>  $params
+     * @return $this
+     */
     public function setParams(array $params): GateScreen {
         $this->params = $params;
         return $this;
@@ -169,7 +173,6 @@ abstract class GateScreen
      * @param  string[]  $headers
      *
      * @return ResponseInterface
-     * @throws JsonException
      */
     protected function respond(
         string | array | object $data,

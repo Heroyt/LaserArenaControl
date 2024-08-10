@@ -2,10 +2,10 @@
 
 namespace App\Gate\Screens\Results;
 
-use App\Api\Response\ErrorDto;
 use App\Exceptions\GameModeNotFoundException;
 use App\GameModels\Game\Evo5\GameModes\M100Naboju;
 use App\Gate\Screens\WithGameQR;
+use Lsr\Core\Requests\Dto\ErrorResponse;
 use Psr\Http\Message\ResponseInterface;
 
 /**
@@ -25,8 +25,8 @@ class LaserMaxx100NabojuResultsScreen extends AbstractResultsScreen
     public static function getDescription(): string {
         return lang(
             'Obrazovka zobrazující výsledky LaserMaxx z módu 100 nábojů.',
-            domain : 'gate',
-            context: 'screens.description'
+            context: 'screens.description',
+            domain : 'gate'
         );
     }
 
@@ -52,7 +52,7 @@ class LaserMaxx100NabojuResultsScreen extends AbstractResultsScreen
         $game = $this->getGame();
 
         if (!isset($game)) {
-            return $this->respond(new ErrorDto('Cannot show screen without game.'), 412);
+            return $this->respond(new ErrorResponse('Cannot show screen without game.'), 412);
         }
 
         if ($this->reloadTime < 0) {

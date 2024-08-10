@@ -6,8 +6,6 @@
 
 namespace App\Controllers\Gate;
 
-use App\Api\Response\ErrorDto;
-use App\Api\Response\ErrorType;
 use App\Core\Info;
 use App\GameModels\Factory\GameFactory;
 use App\GameModels\Game\Game;
@@ -18,10 +16,13 @@ use App\Services\EventService;
 use DateTime;
 use DateTimeImmutable;
 use Dibi\Exception;
-use JsonException;
 use Lsr\Core\Controllers\Controller;
 use Lsr\Core\Exceptions\ValidationException;
+use Lsr\Core\Requests\Dto\ErrorResponse;
+use Lsr\Core\Requests\Dto\SuccessResponse;
+use Lsr\Core\Requests\Enums\ErrorType;
 use Lsr\Core\Requests\Request;
+use OpenApi\Attributes as OA;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
 
@@ -40,7 +41,6 @@ class GateController extends Controller
     /**
      * @param  string  $gate
      * @return ResponseInterface
-     * @throws JsonException
      */
     public function show(Request $request, string $gate = 'default'): ResponseInterface {
         $system = $request->getGet('system', 'all');
@@ -48,7 +48,7 @@ class GateController extends Controller
         $gateType = GateType::getBySlug(empty($gate) ? 'default' : $gate);
         if (!isset($gateType)) {
             return $this->respond(
-                new ErrorDto('Gate type not found.', ErrorType::NOT_FOUND, values: ['slug' => $gate]),
+                new ErrorResponse('Gate type not found.', ErrorType::NOT_FOUND, values: ['slug' => $gate]),
                 404
             );
         }
@@ -62,10 +62,49 @@ class GateController extends Controller
                           ->withAddedHeader('X-Screen', $screen::getDiKey())
                           ->withAddedHeader('X-Trigger', $screen->getTrigger()?->value ?? 'none');
         } catch (ValidationException | Throwable $e) {
-            return $this->respond(new ErrorDto('An error has occured', exception: $e), 500);
+            return $this->respond(new ErrorResponse('An error has occured', exception: $e), 500);
         }
     }
 
+    #[OA\Post(
+        path: '/gate/event',
+        operationId: 'setGateEvent',
+        description: 'Set a gate event.',
+        requestBody: new OA\RequestBody(
+            required: true,
+            content : new OA\JsonContent(
+                required  : ["event"],
+                properties: [
+                                  new OA\Property(
+                                      property: "event",
+                                      description: 'Event name',
+                                      type: "string",
+                                      example: 'reload'
+                                  ),
+                                  new OA\Property(
+                                      property   : "time",
+                                      description: 'How long should the event be valid in seconds.',
+                                      type       : "int",
+                                      example    : '60'
+                                  ),
+                                ],
+                type      : 'object',
+            ),
+        ),
+        tags: ['Gate'],
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'Event set',
+        content: new OA\JsonContent(ref: '#/components/schemas/SuccessResponse')
+    )]
+    #[OA\Response(
+        response: 500,
+        description: 'Internal error',
+        content: new OA\JsonContent(
+            ref: '#/components/schemas/ErrorResponse',
+        )
+    )]
     public function setEvent(Request $request): ResponseInterface {
         $event = (string) $request->getPost('event', '');
         $time = (int) $request->getPost('time', 60);
@@ -76,19 +115,71 @@ class GateController extends Controller
             'gate-reload',
             ['type' => 'custom-event', 'event' => $event, 'time' => $dto->time]
         );
-        return $this->respond('');
+        return $this->respond(new SuccessResponse());
     }
 
-    /**
-     * @param  Request  $request
-     *
-     * @return ResponseInterface
-     * @throws JsonException
-     * @throws Throwable
-     */
+    #[OA\Post(
+        path: '/gate/set/{system}',
+        operationId: 'setGateGame',
+        description: 'Set a gate active game.',
+        requestBody: new OA\RequestBody(
+            required: true,
+            content : new OA\JsonContent(
+                required  : ["game"],
+                properties: [
+                                  new OA\Property(
+                                      property: "game",
+                                      description: 'Game ID',
+                                      oneOf : [
+                                      new OA\Schema(description: 'Last game', type: 'string', enum: ['last']),
+                                      new OA\Schema(description: 'Game ID', type: 'int', example: 1)
+                                              ],
+                                  ),
+                                ],
+                type      : 'object',
+            ),
+        ),
+        tags: ['Gate'],
+    )]
+    #[OA\Parameter(
+        name   : "system",
+        description: 'Game system.',
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+            type       : "string",
+            enum: ['evo5', 'evo6']
+        ),
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'Game set',
+        content: new OA\JsonContent(ref: '#/components/schemas/SuccessResponse'),
+    )]
+    #[OA\Response(
+        response: 400,
+        description: 'Request error',
+        content: new OA\JsonContent(
+            ref: '#/components/schemas/ErrorResponse',
+        )
+    )]
+    #[OA\Response(
+        response: 404,
+        description: 'Game not found',
+        content: new OA\JsonContent(
+            ref: '#/components/schemas/ErrorResponse',
+        )
+    )]
+    #[OA\Response(
+        response: 500,
+        description: 'Internal error',
+        content: new OA\JsonContent(
+            ref: '#/components/schemas/ErrorResponse',
+        )
+    )]
     public function setGateGame(Request $request): ResponseInterface {
         $game = $this->getGame($request);
-        if ($game instanceof ErrorDto) {
+        if ($game instanceof ErrorResponse) {
             return $this->respond($game, $game->type === ErrorType::NOT_FOUND ? 404 : 400);
         }
         try {
@@ -103,26 +194,26 @@ class GateController extends Controller
             );
         } catch (Exception $e) {
             return $this->respond(
-                new ErrorDto('Failed to save the game info', type: ErrorType::DATABASE, exception: $e),
+                new ErrorResponse('Failed to save the game info', type: ErrorType::DATABASE, exception: $e),
                 500
             );
         }
 
-        return $this->respond(['success' => true]);
+        return $this->respond(new SuccessResponse());
     }
 
     /**
      * @param  Request  $request
      *
-     * @return Game|ErrorDto
+     * @return Game|ErrorResponse
      * @throws Throwable
      */
-    private function getGame(Request $request): Game | ErrorDto {
+    private function getGame(Request $request): Game | ErrorResponse {
         /** @var 'last'|numeric $gamePost */
         $gamePost = $request->getPost('game', '0');
         $system = (string) $request->getParam('system', 'all');
         if (empty($system)) {
-            return new ErrorDto('Missing / Incorrect system', type: ErrorType::VALIDATION);
+            return new ErrorResponse('Missing / Incorrect system', type: ErrorType::VALIDATION);
         }
 
         if ($gamePost === 'last') {
@@ -134,29 +225,80 @@ class GateController extends Controller
 
         $gameId = (int) $gamePost;
         if (empty($gameId)) {
-            return new ErrorDto('Missing / Incorrect game', type: ErrorType::VALIDATION);
+            return new ErrorResponse('Missing / Incorrect game', type: ErrorType::VALIDATION);
         }
         $game = GameFactory::getById($gameId, ['system' => $system]);
-        return $game ?? new ErrorDto('Cannot find game', type: ErrorType::NOT_FOUND);
+        return $game ?? new ErrorResponse('Cannot find game', type: ErrorType::NOT_FOUND);
     }
 
     private function clearEvent(): void {
         Info::set('gate-event', null);
     }
 
-    /**
-     * @param  Request  $request
-     *
-     * @return ResponseInterface
-     * @throws JsonException
-     * @throws Throwable
-     */
-    public function setGateLoaded(Request $request): ResponseInterface {
+    #[OA\Post(
+        path: '/gate/loaded/{system}',
+        operationId: 'setGateGameLoaded',
+        description: 'Set a gate loaded game.',
+        requestBody: new OA\RequestBody(
+            required: true,
+            content : new OA\JsonContent(
+                required  : ["game"],
+                properties: [
+                                  new OA\Property(
+                                      property: "game",
+                                      description: 'Game ID',
+                                      oneOf : [
+                                                new OA\Schema(description: 'Last game', type: 'string', enum: ['last']),
+                                                new OA\Schema(description: 'Game ID', type: 'int', example: 1)
+                                              ],
+                                  ),
+                                ],
+                type      : 'object',
+            ),
+        ),
+        tags: ['Gate'],
+    )]
+    #[OA\Parameter(
+        name   : "system",
+        description: 'Game system.',
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+            type       : "string",
+            enum: ['evo5', 'evo6']
+        ),
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'Game set',
+        content: new OA\JsonContent(ref: '#/components/schemas/SuccessResponse'),
+    )]
+    #[OA\Response(
+        response: 400,
+        description: 'Request error',
+        content: new OA\JsonContent(
+            ref: '#/components/schemas/ErrorResponse',
+        )
+    )]
+    #[OA\Response(
+        response: 404,
+        description: 'Game not found',
+        content: new OA\JsonContent(
+            ref: '#/components/schemas/ErrorResponse',
+        )
+    )]
+    #[OA\Response(
+        response: 500,
+        description: 'Internal error',
+        content: new OA\JsonContent(
+            ref: '#/components/schemas/ErrorResponse',
+        )
+    )]
+    public function setGateLoaded(string $system, Request $request): ResponseInterface {
         $game = $this->getGame($request);
-        if ($game instanceof ErrorDto) {
+        if ($game instanceof ErrorResponse) {
             return $this->respond($game, $game->type === ErrorType::NOT_FOUND ? 404 : 400);
         }
-        $system = $request->params['system'] ?? '';
         try {
             Info::set('gate-game', null);
             $game->fileTime = new DateTime(); // Set time to NOW
@@ -170,22 +312,51 @@ class GateController extends Controller
             );
         } catch (Exception $e) {
             return $this->respond(
-                new ErrorDto('Failed to save the game info', type: ErrorType::DATABASE, exception: $e),
+                new ErrorResponse('Failed to save the game info', type: ErrorType::DATABASE, exception: $e),
                 500
             );
         }
-        return $this->respond(['success' => true]);
+        return $this->respond(new SuccessResponse());
     }
 
-    /**
-     * @param  string  $system
-     *
-     * @return ResponseInterface
-     * @throws JsonException
-     */
+    #[OA\Post(
+        path: '/gate/idle/{system}',
+        operationId: 'setGateIdle',
+        description: 'Set a gate to the idle state.',
+        tags: ['Gate'],
+    )]
+    #[OA\Parameter(
+        name   : "system",
+        description: 'Game system.',
+        in: 'path',
+        required: true,
+        schema: new OA\Schema(
+            type       : "string",
+            enum: ['evo5', 'evo6']
+        ),
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'Gate state set',
+        content: new OA\JsonContent(ref: '#/components/schemas/SuccessResponse'),
+    )]
+    #[OA\Response(
+        response: 400,
+        description: 'Request error',
+        content: new OA\JsonContent(
+            ref: '#/components/schemas/ErrorResponse',
+        )
+    )]
+    #[OA\Response(
+        response: 500,
+        description: 'Internal error',
+        content: new OA\JsonContent(
+            ref: '#/components/schemas/ErrorResponse',
+        )
+    )]
     public function setGateIdle(string $system = ''): ResponseInterface {
         if (empty($system)) {
-            return $this->respond(new ErrorDto('Missing / Incorrect system', type: ErrorType::VALIDATION), 400);
+            return $this->respond(new ErrorResponse('Missing / Incorrect system', type: ErrorType::VALIDATION), 400);
         }
         try {
             Info::set('gate-game', null);
@@ -194,10 +365,10 @@ class GateController extends Controller
             $this->eventService->trigger('gate-reload', ['type' => 'set-idle', 'time' => time()]);
         } catch (Exception $e) {
             return $this->respond(
-                new ErrorDto('Failed to save the game info', type: ErrorType::DATABASE, exception: $e),
+                new ErrorResponse('Failed to save the game info', type: ErrorType::DATABASE, exception: $e),
                 500
             );
         }
-        return $this->respond(['success' => true]);
+        return $this->respond(new SuccessResponse());
     }
 }

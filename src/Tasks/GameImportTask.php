@@ -2,16 +2,18 @@
 
 namespace App\Tasks;
 
-use App\Api\Response\ErrorDto;
 use App\Services\ImportService;
 use App\Tasks\Payloads\GameImportPayload;
+use Lsr\Core\Exceptions\ModelNotFoundException;
+use Lsr\Core\Requests\Dto\ErrorResponse;
 use Spiral\RoadRunner\Jobs\Exception\JobsException;
 use Spiral\RoadRunner\Jobs\Task\ReceivedTaskInterface;
+use Throwable;
 
 /**
  *
  */
-class GameImportTask implements TaskDispatcherInterface
+readonly class GameImportTask implements TaskDispatcherInterface
 {
     public function __construct(
         private ImportService $importService
@@ -26,15 +28,18 @@ class GameImportTask implements TaskDispatcherInterface
      * @param  ReceivedTaskInterface  $task
      * @return void
      * @throws JobsException
+     * @throws ModelNotFoundException
+     * @throws Throwable
      */
     public function process(ReceivedTaskInterface $task): void {
         /** @var GameImportPayload $payload */
         $payload = igbinary_unserialize($task->getPayload());
+        assert($payload->dir !== '', 'Import directory cannot be empty');
 
         $response = $this->importService->import($payload->dir);
 
-        if ($response instanceof ErrorDto) {
-            $task->fail('Game import failed ' . $response->title);
+        if ($response instanceof ErrorResponse) {
+            $task->nack('Game import failed ' . $response->title);
             return;
         }
 

@@ -8,8 +8,6 @@
 
 namespace App\Services;
 
-use App\Api\Response\ErrorDto;
-use App\Api\Response\ErrorType;
 use App\Api\Response\ImportResponse;
 use App\Cli\Colors;
 use App\Cli\Enums\ForegroundColors;
@@ -20,10 +18,11 @@ use App\GameModels\Game\Game;
 use App\GameModels\Game\Player;
 use App\Tools\AbstractResultsParser;
 use Dibi\Exception;
-use JsonException;
 use Lsr\Core\Config;
 use Lsr\Core\Exceptions\ModelNotFoundException;
 use Lsr\Core\Exceptions\ValidationException;
+use Lsr\Core\Requests\Dto\ErrorResponse;
+use Lsr\Core\Requests\Enums\ErrorType;
 use Lsr\Logging\Exceptions\DirectoryCreationException;
 use Lsr\Logging\Logger;
 use Nette\DI\MissingServiceException;
@@ -67,7 +66,7 @@ class ImportService
      * @param  int  $limit
      * @param  OutputInterface|null  $output
      *
-     * @return ImportResponse|ErrorDto
+     * @return ImportResponse|ErrorResponse
      * @throws ModelNotFoundException
      * @throws Throwable
      * @throws JobsException
@@ -77,10 +76,10 @@ class ImportService
         bool             $all = false,
         int              $limit = 0,
         ?OutputInterface $output = null
-    ): ImportResponse | ErrorDto {
+    ): ImportResponse | ErrorResponse {
         // Validate results directory
         if (!file_exists($resultsDir) || !is_dir($resultsDir) || !is_readable($resultsDir)) {
-            return new ErrorDto(
+            return new ErrorResponse(
                 'Results directory does not exist.',
                 ErrorType::VALIDATION,
                 values: ['dir' => $resultsDir]
@@ -91,7 +90,7 @@ class ImportService
         try {
             $logger = new Logger(LOG_DIR . 'results/', 'import');
         } catch (DirectoryCreationException $e) {
-            return new ErrorDto('Failed to create a logging directory.', ErrorType::INTERNAL, exception: $e);
+            return new ErrorResponse('Failed to create a logging directory.', ErrorType::INTERNAL, exception: $e);
         }
 
         $this->metrics->add('import_called', 1, [$resultsDir]);
@@ -138,6 +137,7 @@ class ImportService
                 }
 
                 // Find all files
+                /** @var list<string>|false $resultFiles */
                 $resultFiles = glob($resultsDir . $parser::getFileGlob());
                 if ($resultFiles === false) {
                     $resultFiles = [];
@@ -365,9 +365,9 @@ class ImportService
      * @param  string|Throwable|string[]|Throwable[]  $data
      * @param  int  $statusCode
      *
-     * @return ErrorDto
+     * @return ErrorResponse
      */
-    private function errorHandle(string | Throwable | array $data, int $statusCode = 0): ErrorDto {
+    private function errorHandle(string | Throwable | array $data, int $statusCode = 0): ErrorResponse {
         if (!is_array($data)) {
             $data = [$data];
         }
@@ -392,7 +392,7 @@ class ImportService
             }
         }
 
-        return new ErrorDto(
+        return new ErrorResponse(
             'An error has occured',
             ErrorType::INTERNAL,
             values: ['code' => $statusCode, 'errors' => $errors],

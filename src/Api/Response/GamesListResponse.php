@@ -5,6 +5,7 @@ namespace App\Api\Response;
 use OpenApi\Attributes as OA;
 
 #[OA\Schema(
+    schema: 'GamesList',
     type : 'array',
     items: new OA\Items(
         oneOf: [

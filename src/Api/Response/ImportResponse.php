@@ -24,13 +24,40 @@ readonly class ImportResponse implements JsonSerializable
         public int   $total,
         #[OA\Property]
         public float $time,
-        #[OA\Property]
+        #[OA\Property(
+            items: new OA\Items(
+                oneOf: [
+                new OA\Schema(
+                    properties: [
+                    'error' => new OA\Property(
+                        property: 'error',
+                        type: 'string',
+                        nullable: true,
+                    ),
+                    'exception' => new OA\Property(
+                        property: 'exception',
+                        type: 'string',
+                        nullable: true,
+                    ),
+                    'sql' => new OA\Property(
+                        property: 'sql',
+                        type: 'string',
+                        nullable: true,
+                    ),
+                      ],
+                    type      : 'object'
+                ),
+                new OA\Schema(type: 'string'),
+                ]
+            )
+        )]
         public array $errors,
     ) {
     }
 
     /**
      * @inheritDoc
+     * @return array<string,mixed>
      */
     public function jsonSerialize(): array {
         return get_object_vars($this);

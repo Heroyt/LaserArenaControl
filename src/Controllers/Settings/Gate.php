@@ -2,8 +2,6 @@
 
 namespace App\Controllers\Settings;
 
-use App\Api\Response\ErrorDto;
-use App\Api\Response\ErrorType;
 use App\Core\App;
 use App\Core\Info;
 use App\Gate\Logic\ScreenTriggerType;
@@ -12,10 +10,11 @@ use App\Gate\Models\GateType;
 use App\Gate\Screens\GateScreen;
 use App\Gate\Screens\WithSettings;
 use Dibi\Exception;
-use JsonException;
 use Lsr\Core\Controllers\Controller;
 use Lsr\Core\Exceptions\ModelNotFoundException;
 use Lsr\Core\Exceptions\ValidationException;
+use Lsr\Core\Requests\Dto\ErrorResponse;
+use Lsr\Core\Requests\Enums\ErrorType;
 use Lsr\Core\Requests\Request;
 use Lsr\Exceptions\TemplateDoesNotExistException;
 use Nyholm\Psr7\UploadedFile;
@@ -59,7 +58,7 @@ class Gate extends Controller
             return $this->view('components/settings/gateScreenSettings');
         }
         return $this->respond(
-            new ErrorDto(
+            new ErrorResponse(
                 'Invalid screen',
                 ErrorType::VALIDATION,
                 'This screen doesn\'t have any settings.'
@@ -72,7 +71,6 @@ class Gate extends Controller
      * @param  Request  $request
      *
      * @return ResponseInterface
-     * @throws JsonException
      */
     public function saveGate(Request $request): ResponseInterface {
         try {

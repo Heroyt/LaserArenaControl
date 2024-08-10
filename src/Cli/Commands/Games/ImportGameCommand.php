@@ -2,10 +2,10 @@
 
 namespace App\Cli\Commands\Games;
 
-use App\Api\Response\ErrorDto;
 use App\Cli\Colors;
 use App\Cli\Enums\ForegroundColors;
 use App\Services\ImportService;
+use Lsr\Core\Requests\Dto\ErrorResponse;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -56,7 +56,7 @@ class ImportGameCommand extends Command
         }
 
         $response = $this->importService->import($dir, $input->getOption('all'), $limit, $output);
-        if ($response instanceof ErrorDto) {
+        if ($response instanceof ErrorResponse) {
             $output->writeln(
                 Colors::color(ForegroundColors::RED) .
                 $response->title .

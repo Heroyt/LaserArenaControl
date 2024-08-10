@@ -2,7 +2,6 @@
 
 namespace App\Gate\Screens\Results;
 
-use App\Api\Response\ErrorDto;
 use App\Core\App;
 use App\Exceptions\GameModeNotFoundException;
 use App\GameModels\Game\GameModes\CustomResultsMode;
@@ -10,6 +9,7 @@ use App\Gate\Screens\GateScreen;
 use App\Gate\Settings\GateSettings;
 use App\Gate\Settings\ResultsSettings;
 use Exception;
+use Lsr\Core\Requests\Dto\ErrorResponse;
 use Psr\Http\Message\ResponseInterface;
 use RuntimeException;
 use Throwable;
@@ -27,14 +27,14 @@ class ResultsScreen extends GateScreen implements ResultsScreenInterface
      * @inheritDoc
      */
     public static function getName(): string {
-        return lang('Výsledky ze hry', domain: 'gate', context: 'screens');
+        return lang('Výsledky ze hry', context: 'screens', domain: 'gate');
     }
 
     public static function getDescription(): string {
         return lang(
             'Obrazovka zobrazující výsledky z her. Automaticky vybírá zobrazení podle herního módu.',
-            domain : 'gate',
-            context: 'screens.description'
+            context: 'screens.description',
+            domain : 'gate'
         );
     }
 
@@ -73,7 +73,7 @@ class ResultsScreen extends GateScreen implements ResultsScreenInterface
      * @pre  Game must be set.
      * @post Child screen is initialized. (Game and settings are set)
      *
-     * @return GateScreen&ResultsScreenInterface
+     * @return ResultsScreenInterface
      * @throws GameModeNotFoundException
      */
     private function getChildScreen(): ResultsScreenInterface {
@@ -87,21 +87,29 @@ class ResultsScreen extends GateScreen implements ResultsScreenInterface
         }
 
         // Find correct screen based on game
-        /** @var class-string<ResultsScreenInterface&GateScreen> $screenClass */
-        if (
-            ($mode = $game->getMode()) !== null &&
-            $mode instanceof CustomResultsMode && class_exists($screenClass = $mode->getCustomGateScreen())
-        ) {
-            $this->childScreen = App::getService($screenClass::getDiKey());
+        $mode = $game->getMode();
+        if ($mode instanceof CustomResultsMode) {
+            /** @var class-string<ResultsScreenInterface&GateScreen> $screenClass */
+            $screenClass = $mode->getCustomGateScreen();
+            if (class_exists($screenClass)) {
+                // @phpstan-ignore-next-line
+                $this->childScreen = App::getService($screenClass::getDiKey());
+            }
         }
 
         // Default to basic rankable
-        $this->childScreen ??= match ($game::SYSTEM) {
+        /** @var 'evo5'|'evo6'|'laserforce'|string $system */
+        $system = $game::SYSTEM;
+        // @phpstan-ignore-next-line
+        $this->childScreen ??= match ($system) {
             'evo5', 'evo6' => App::getService('gate.screens.results.lasermaxx.rankable'),
-            default        => throw new Exception('Cannot find results screen for system ' . $game::SYSTEM),
+            default        => throw new Exception('Cannot find results screen for system ' . $system),
         };
 
-        $this->childScreen->setGame($game)->setSettings($this->getSettings())->setParams($this->params);
+        assert($this->childScreen instanceof ResultsScreenInterface, '');
+        $this->childScreen->setGame($game)
+                          ->setSettings($this->getSettings())
+                          ->setParams($this->params);
 
         return $this->childScreen;
     }
@@ -120,14 +128,14 @@ class ResultsScreen extends GateScreen implements ResultsScreenInterface
         $game = $this->getGame();
 
         if (!isset($game)) {
-            return $this->respond(new ErrorDto('Cannot show screen without game.'), 412);
+            return $this->respond(new ErrorResponse('Cannot show screen without game.'), 412);
         }
 
         try {
             /** @var ResultsScreenInterface&GateScreen $screen */
             $screen = $this->getChildScreen();
         } catch (Throwable $e) {
-            return $this->respond(new ErrorDto('An error occured', exception: $e), 500);
+            return $this->respond(new ErrorResponse('An error occured', exception: $e), 500);
         }
 
         return $screen->run();

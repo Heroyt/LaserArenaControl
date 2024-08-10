@@ -2,8 +2,8 @@
 
 namespace App\Cron;
 
-use App\Api\Response\ErrorDto;
 use App\Services\ImportService;
+use Lsr\Core\Requests\Dto\ErrorResponse;
 use Lsr\Logging\Logger;
 use Orisai\Scheduler\Job\Job;
 use Orisai\Scheduler\Job\JobLock;
@@ -35,7 +35,7 @@ final readonly class ResultsImportJob implements Job
             throw new RuntimeException('Error while running import', 0, $e);
         }
 
-        if ($response instanceof ErrorDto) {
+        if ($response instanceof ErrorResponse) {
             $this->logger->error(
                 $response->title . (!empty($response->detail) ? ' ' . $response->detail : ''),
                 $response->values ?? []

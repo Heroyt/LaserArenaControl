@@ -4,22 +4,26 @@ namespace App\Models;
 
 use Lsr\Core\Models\Attributes\PrimaryKey;
 use Lsr\Core\Models\Model;
+use OpenApi\Attributes as OA;
 
 /**
  *
  */
-#[PrimaryKey('id_price')]
+#[PrimaryKey('id_price'), OA\Schema]
 class PriceGroup extends Model
 {
     public const string TABLE = 'price_groups';
 
+    #[OA\Property]
     public string $name;
 
     /**
      * @var int Price is stored as an int with 2 decimal places of precision (*100)
      */
+    #[OA\Property(type:'float')]
     public int $price;
 
+    #[OA\Property]
     public bool $deleted = false;
 
     public static function getAll(): array {

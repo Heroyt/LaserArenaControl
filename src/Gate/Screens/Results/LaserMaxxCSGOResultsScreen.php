@@ -2,9 +2,9 @@
 
 namespace App\Gate\Screens\Results;
 
-use App\Api\Response\ErrorDto;
 use App\Exceptions\GameModeNotFoundException;
 use App\GameModels\Game\Evo5\GameModes\CSGO;
+use Lsr\Core\Requests\Dto\ErrorResponse;
 use Psr\Http\Message\ResponseInterface;
 
 class LaserMaxxCSGOResultsScreen extends AbstractResultsScreen
@@ -13,14 +13,14 @@ class LaserMaxxCSGOResultsScreen extends AbstractResultsScreen
      * @inheritDoc
      */
     public static function getName(): string {
-        return lang('LaserMaxx výsledky z módu CSGO', domain: 'gate', context: 'screens');
+        return lang('LaserMaxx výsledky z módu CSGO', context: 'screens', domain: 'gate');
     }
 
     public static function getDescription(): string {
         return lang(
             'Obrazovka zobrazující výsledky LaserMaxx z módu CSGO.',
-            domain : 'gate',
-            context: 'screens.description'
+            context: 'screens.description',
+            domain : 'gate'
         );
     }
 
@@ -46,7 +46,7 @@ class LaserMaxxCSGOResultsScreen extends AbstractResultsScreen
         $game = $this->getGame();
 
         if (!isset($game)) {
-            return $this->respond(new ErrorDto('Cannot show screen without game.'), 412);
+            return $this->respond(new ErrorResponse('Cannot show screen without game.'), 412);
         }
 
         if ($this->reloadTime < 0) {

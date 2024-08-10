@@ -4,19 +4,42 @@ namespace App\Controllers;
 
 use Lsr\Core\Controllers\Controller;
 use Lsr\Core\Requests\Request;
+use OpenApi\Attributes as OA;
 use Psr\Http\Message\ResponseInterface;
 use Spiral\Goridge\RPC\AsyncRPCInterface;
+use Spiral\RoadRunner\Metrics\MetricsInterface;
 
+/**
+ *
+ */
 class Roadrunner extends Controller
 {
     public function __construct(
-        private readonly AsyncRPCInterface $rpc
+        private readonly AsyncRPCInterface $rpc,
+        private readonly MetricsInterface $metrics,
     ) {
         parent::__construct();
     }
 
+    #[OA\Get(
+        path: '/roadrunner/reset',
+        operationId: 'roadrunnerReset',
+        description: 'Reset roadrunner worker(s).',
+        tags: ['Roadrunner', 'System'],
+    )]
+    #[OA\Parameter(name: 'service', in: 'query', required: false, example: 'http')]
+    #[OA\Response(
+        response: 200,
+        description: 'Ok response',
+        content: new OA\JsonContent(
+            type: 'string',
+            example: 'Resetting workers...',
+        )
+    )]
     public function reset(Request $request): ResponseInterface {
+        /** @var non-empty-string $service */
         $service = $request->getPost('service', 'all');
+        $this->metrics->add('reset_called', 1, [$service]);
         if ($service === 'all') {
             $this->resetAll();
         } else {

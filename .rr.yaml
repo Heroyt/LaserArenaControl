@@ -62,6 +62,14 @@ metrics:
       help: "How much does it take to call the control API."
       labels:
         - action
+    reset_called:
+      type: counter
+      help: "How many times was roadrunner reset called"
+      labels:
+        - worker
+    restart_called:
+      type: counter
+      help: "How many times was server restart called"
 rpc:
   listen: tcp://0.0.0.0:6001
 http:

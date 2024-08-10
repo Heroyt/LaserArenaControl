@@ -10,7 +10,7 @@ class LigaPlayerData
     public int $id;
     public string $nickname;
     public string $code;
-    public int $arena;
+    public ?int $arena;
     public string $email;
     public LigaPlayerStats $stats;
     /** @var LigaPlayerConnection[] */

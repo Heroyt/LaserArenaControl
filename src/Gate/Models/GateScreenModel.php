@@ -88,7 +88,6 @@ class GateScreenModel extends Model
         $this->screenSerialized = $data['screen_serialized'];
         $this->settingsSerialized = $data['settings_serialized'];
         $this->trigger = $data['trigger'];
-        $this->logger = $this->getLogger();
     }
 
     public function getScreen(): GateScreen {

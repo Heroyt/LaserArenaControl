@@ -47,7 +47,7 @@ class Info
                     $cache::Tags => ['info', 'info/' . $key],
                 ]
             );
-        } catch (Throwable $e) {
+        } catch (Throwable) {
             $value = null;
         }
         if (!isset($value)) {
@@ -87,7 +87,7 @@ class Info
         ]);
         /** @var Cache $cache */
         $cache = App::getService('cache');
-        $cache->clean([Cache::Tags => ['info/' . $key]]);
+        $cache->clean([$cache::Tags => ['info/' . $key]]);
         $cache->save('info.' . $key, $serialized, [$cache::Tags => ['info', 'info/' . $key]]);
     }
 

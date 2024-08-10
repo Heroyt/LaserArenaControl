@@ -1,7 +1,5 @@
 <?php
 
-use App\Api\Response\ErrorDto;
-use App\Api\Response\ErrorType;
 use App\Controllers\E404;
 use App\Controllers\E500;
 use App\Core\App;
@@ -10,12 +8,14 @@ use App\Services\TaskProducer;
 use App\Tasks\GameImportTask;
 use App\Tasks\Payloads\GameImportPayload;
 use App\Tasks\TaskDispatcherInterface;
+use Lsr\Core\Models\ModelRepository;
+use Lsr\Core\Requests\Dto\ErrorResponse;
+use Lsr\Core\Requests\Enums\ErrorType;
 use Lsr\Core\Requests\Exceptions\RouteNotFoundException;
 use Lsr\Core\Requests\RequestFactory;
 use Lsr\Logging\Logger;
 use Nyholm\Psr7\Factory\Psr17Factory;
 use Nyholm\Psr7\Response;
-use Psr\Http\Message\ServerRequestInterface;
 use Spiral\RoadRunner\Environment;
 use Spiral\RoadRunner\Environment\Mode;
 use Spiral\RoadRunner\Http\PSR7Worker;
@@ -29,7 +29,6 @@ use Tracy\ILogger;
 const ROOT = __DIR__ . '/';
 /** Visiting site normally */
 const INDEX = true;
-const ROADRUNNER = true;
 
 error_reporting(E_ALL);
 ini_set('display_errors', 'stderr');
@@ -55,6 +54,10 @@ switch ($env->getMode()) {
         $consumer = new Consumer();
         /** @var Spiral\RoadRunner\Jobs\Task\ReceivedTaskInterface $task */
         while ($task = $consumer->waitTask()) {
+            // Clear static cache
+            Info::clearStaticCache();
+            ModelRepository::clearInstances();
+
             try {
                 $name = $task->getName();
 
@@ -63,14 +66,15 @@ switch ($env->getMode()) {
                 $dispatcher->process($task);
 
                 if (!$task->isCompleted()) {
-                    $task->complete();
+                    $task->ack();
                 }
             } catch (Throwable $e) {
-                $task->fail($e);
+                $task->nack($e);
             }
             $app->translations->updateTranslations();
         }
         break;
+    /** @noinspection PhpExpectedValuesShouldBeUsedInspection */
     case 'file_watch':
         $worker = Worker::create();
         $logger = new Logger(LOG_DIR, 'worker');
@@ -107,9 +111,18 @@ switch ($env->getMode()) {
         $psr7 = new PSR7Worker($worker, $factory, $factory, $factory);
 
         $e404 = $app::getServiceByType(E404::class);
+        assert($e404 instanceof E404, 'Invalid controller instance from DI');
         $e500 = $app::getServiceByType(E500::class);
+        assert($e500 instanceof E500, 'Invalid controller instance from DI');
 
         while (true) {
+            // Clear static cache
+            Info::clearStaticCache();
+            ModelRepository::clearInstances();
+            if (isset($request)) {
+                unset($request);
+            }
+
             try {
                 try {
                     $request = $psr7->waitRequest();
@@ -156,7 +169,7 @@ switch ($env->getMode()) {
                                 404,
                                 ['Content-Type' => 'application/json'],
                                 json_encode(
-                                    new ErrorDto(
+                                    new ErrorResponse(
                                         'Route not found',
                                         type     : ErrorType::NOT_FOUND,
                                         detail   : $e->getMessage(),
@@ -169,7 +182,6 @@ switch ($env->getMode()) {
                     } else {
                         $psr7->respond(new Response(404, [], $e->getMessage()));
                     }
-                    $psr7->getWorker()->error((string) $e);
                     continue;
                 } catch (Throwable $e) {
                     $logger->exception($e);
@@ -182,12 +194,11 @@ switch ($env->getMode()) {
                                 500,
                                 ['Content-Type' => 'application/json'],
                                 json_encode(
-                                    new ErrorDto('Something Went wrong!', detail: $e->getMessage(), exception: $e),
+                                    new ErrorResponse('Something Went wrong!', detail: $e->getMessage(), exception: $e),
                                     JSON_THROW_ON_ERROR
                                 )
                             )
                         );
-                        $psr7->getWorker()->error((string) $e);
                         continue;
                     }
 
@@ -212,12 +223,8 @@ switch ($env->getMode()) {
                         continue;
                     }
 
-                    if (isset($e500)) {
-                        $e500->init($request);
-                        $psr7->respond($e500->show($request, $e));
-                    } else {
-                        $psr7->respond(new Response(500, [], $e->getMessage()));
-                    }
+                    $e500->init($request);
+                    $psr7->respond($e500->show($request, $e));
 
                     file_put_contents('php://stderr', (string) $e);
                 }
@@ -231,10 +238,6 @@ switch ($env->getMode()) {
                 $psr7->respond(new Response(500, [], $e->getMessage()));
                 file_put_contents('php://stderr', (string) $e);
             }
-
-            // Clear cycle
-            Info::clearStaticCache();
-            unset($request);
         }
         break;
 }

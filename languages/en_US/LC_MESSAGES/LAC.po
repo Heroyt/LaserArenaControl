@@ -4422,3 +4422,7 @@ msgstr ""
 
 msgid "Nebyla nalezena žádná hra"
 msgstr ""
+
+msgctxt "month"
+msgid "Srpen"
+msgstr ""

@@ -120,3 +120,12 @@ msgstr ""
 
 msgid "Týmů ve hře: %d"
 msgstr ""
+
+msgid "Výhry"
+msgstr ""
+
+msgid "Remízy"
+msgstr ""
+
+msgid "Prohry"
+msgstr ""

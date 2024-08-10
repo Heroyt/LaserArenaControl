@@ -53,9 +53,9 @@ $debugGroup = $apiGroup->group('debug')
                        ->get('glob', [Debug::class, 'glob']);
 
 $gameGroup = $apiGroup->group('game');
-$logGroup->post('load/{system}', [GameLoading::class, 'loadGame']);
-$logGroup->get('loaded', [GameHelpers::class, 'getLoadedGameInfo']);
-$logGroup->get('gate', [GameHelpers::class, 'getGateGameInfo']);
+$gameGroup->post('load/{system}', [GameLoading::class, 'loadGame']);
+$gameGroup->get('loaded', [GameHelpers::class, 'getLoadedGameInfo']);
+$gameGroup->get('gate', [GameHelpers::class, 'getGateGameInfo']);
 
 $gamesGroup = $apiGroup->group('games')
                        ->get('', [Games::class, 'listGames'])

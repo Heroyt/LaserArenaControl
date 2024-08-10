@@ -11,6 +11,7 @@ enum ConnectionType: string
 {
     case RFID = 'rfid';
     case LASER_FORCE = 'laserforce';
+    case MY_LASERMAXX = 'mylasermaxx';
 
     case OTHER = 'other';
 }

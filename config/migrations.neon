@@ -47,13 +47,16 @@ tables:
 			(
               `id_connection` int(11) unsigned NOT NULL AUTO_INCREMENT,
               `id_user` int(11) unsigned NOT NULL,
-              `type` enum('rfid','laserforce') NOT NULL,
+              `type` enum('rfid','laserforce','mylasermaxx','other') NOT NULL,
               `identifier` tinytext NOT NULL,
               PRIMARY KEY (`id_connection`),
               KEY `id_user` (`id_user`),
               CONSTRAINT `user_connected_accounts_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `players` (`id_user`) ON DELETE CASCADE ON UPDATE CASCADE
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
             '''
+		modifications:
+			0.1:
+				- "CHANGE `type` `type` ENUM('rfid','laserforce','mylasermaxx','other')  CHARACTER SET utf8mb4  COLLATE utf8mb4_general_ci  NOT NULL;"
 	App\Models\MusicMode:
 		order: 0
 		definition: '''

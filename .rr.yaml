@@ -19,7 +19,7 @@ metrics:
       type: counter
       help: "How many times was import pushed into task queue."
       labels:
-        - source
+        - producer
     games_synced:
       type: counter
       help: "How many games where synchronized to the Laser Liga."

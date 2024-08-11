@@ -20,6 +20,8 @@ use Spiral\RoadRunner\Environment;
 use Spiral\RoadRunner\Environment\Mode;
 use Spiral\RoadRunner\Http\PSR7Worker;
 use Spiral\RoadRunner\Jobs\Consumer;
+use Spiral\RoadRunner\Jobs\Options;
+use Spiral\RoadRunner\Metrics\Metrics;
 use Spiral\RoadRunner\Payload;
 use Spiral\RoadRunner\Worker;
 use Tracy\Debugger;
@@ -80,6 +82,8 @@ switch ($env->getMode()) {
         $logger = new Logger(LOG_DIR, 'worker');
         /** @var TaskProducer $taskProducer */
         $taskProducer = App::getService('taskProducer');
+        /** @var Metrics $metrics */
+        $metrics = App::getService('metrics');
 
         while ($payload = $worker->waitPayload()) {
             try {
@@ -95,7 +99,12 @@ switch ($env->getMode()) {
                 }
 
                 // Plan import on watched dir
-                $taskProducer->push(GameImportTask::class, new GameImportPayload($dir));
+                $metrics->add('import_planned', 1, ['file_watch']);
+                $taskProducer->push(
+                    GameImportTask::class,
+                    new GameImportPayload($dir),
+                    new Options(priority: GameImportTask::PRIORITY),
+                );
                 $worker->respond(new Payload('OK'));
             } catch (Throwable $e) {
                 $logger->exception($e);

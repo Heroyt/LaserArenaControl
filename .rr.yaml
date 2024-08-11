@@ -15,6 +15,11 @@ metrics:
       help: "Times when game import was called"
       labels:
         - path
+    import_planned:
+      type: counter
+      help: "How many times was import pushed into task queue."
+      labels:
+        - source
     games_synced:
       type: counter
       help: "How many games where synchronized to the Laser Liga."
@@ -70,6 +75,21 @@ metrics:
     restart_called:
       type: counter
       help: "How many times was server restart called"
+    cron_job_started:
+      type: counter
+      help: "Amount of started cron jobs"
+      labels:
+        - job
+    cron_job_ok:
+      type: counter
+      help: "Amount of finished cron jobs"
+      labels:
+        - job
+    cron_job_error:
+      type: counter
+      help: "Amount of finished cron jobs"
+      labels:
+        - job
 rpc:
   listen: tcp://0.0.0.0:6001
 http:
@@ -79,6 +99,7 @@ http:
     - headers
     - http_metrics
   pool:
+#    debug: true
     num_workers: 5
     max_jobs: 5
     max_queue_size: 10

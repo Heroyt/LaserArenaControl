@@ -24,6 +24,8 @@ use Lsr\Logging\Logger;
 use OpenApi\Attributes as OA;
 use Psr\Http\Message\ResponseInterface;
 use Spiral\RoadRunner\Jobs\Exception\JobsException;
+use Spiral\RoadRunner\Jobs\Options;
+use Spiral\RoadRunner\Metrics\Metrics;
 use Throwable;
 
 /**
@@ -38,7 +40,8 @@ class Results extends ApiController
         private readonly PlayerProvider $playerProvider,
         private readonly ImportService  $importService,
         Config                          $config,
-        private readonly TaskProducer   $taskProducer
+        private readonly TaskProducer   $taskProducer,
+        private readonly Metrics $metrics,
     ) {
         parent::__construct();
         $this->gameLoadedTime = (int) ($config->getConfig('ENV')['GAME_LOADED_TIME'] ?? 300);
@@ -115,7 +118,12 @@ class Results extends ApiController
                 }
                 $this->respond($response);
             } else {
-                $this->taskProducer->push(GameImportTask::class, new GameImportPayload($resultsDir));
+                $this->metrics->add('import_planned', 1, ['api']);
+                $this->taskProducer->push(
+                    GameImportTask::class,
+                    new GameImportPayload($resultsDir),
+                    new Options(priority: GameImportTask::PRIORITY),
+                );
             }
         } catch (JobsException $e) {
             $this->respond(new ErrorResponse('Job push failed', exception: $e), 500);

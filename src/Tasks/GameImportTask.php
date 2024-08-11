@@ -15,6 +15,8 @@ use Throwable;
  */
 readonly class GameImportTask implements TaskDispatcherInterface
 {
+    public const int PRIORITY = 20;
+
     public function __construct(
         private ImportService $importService
     ) {

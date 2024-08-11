@@ -37,7 +37,7 @@ services:
 	task.musicLoad: App\Tasks\MusicLoadTask
 
 	# Cron jobs
-	cron.gamesSync: App\Cron\GamesSyncJob(%gamesSync.limit%, %gamesSync.timeout%)
+	cron.gamesSync: App\Cron\GamesSyncJob(limit: %gamesSync.limit%, timeout: %gamesSync.timeout%)
 	cron.vestSync: App\Cron\VestSyncJob
 	cron.logArchive: App\Cron\LogArchiveJob
 	cron.gamesPrecache: App\Cron\GamesPrecacheJob

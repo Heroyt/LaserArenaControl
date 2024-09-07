@@ -720,9 +720,19 @@ export default class Game {
 			'change',
 			{detail: data.mode.variations},
 		);
-		this.variationMemory[data.mode.id.toString()] = data.mode.variations;
-		this.$gameMode.value = data.mode.id.toString();
-		this.$gameMode.dispatchEvent(e);
+		console.log(data.mode);
+		if (!data.mode.id && data.mode.name) {
+			// Find id from name
+			const option = this.$gameMode.querySelector<HTMLOptionElement>(`[data-name="${data.mode.name}"]`);
+			if (option) {
+				data.mode.id = parseInt(option.value);
+			}
+		}
+		if (data.mode.id) {
+			this.variationMemory[data.mode.id.toString()] = data.mode.variations;
+			this.$gameMode.value = data.mode.id.toString();
+			this.$gameMode.dispatchEvent(e);
+		}
 		if (data.music) {
 			this.$musicMode.value = data.music.id.toString();
 

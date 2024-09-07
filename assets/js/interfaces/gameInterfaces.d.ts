@@ -53,6 +53,14 @@ export interface MusicMode {
 	order?: number
 }
 
+export interface ModeData {
+	id: number | null,
+	name?: string,
+	description?: string,
+	type?: 'TEAM' | 'SOLO',
+	variations?: { [key: string]: string }
+}
+
 export interface GameData {
 	id?: number,
 	code?: string,
@@ -61,7 +69,7 @@ export interface GameData {
 	fileTime?: string,
 	start?: string,
 	end?: string,
-	mode: { id: number, name?: string, description?: string, type?: 'TEAM' | 'SOLO', variations?: {[key: string] : string} },
+	mode: ModeData,
 	players: { [index: string]: PlayerData },
 	teams: { [index: string]: TeamData },
 	music: MusicMode | null,

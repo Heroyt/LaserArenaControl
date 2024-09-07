@@ -40,7 +40,7 @@ $modes->post('new/{system}/{type}', [Modes::class, 'createGameMode']);
 $modeId = $modes->group('{id}');
 $modes->delete('', [Modes::class, 'deleteGameMode']);
 $modeId->get('variations', [Modes::class, 'modeVariations']);
-$modeId->post('variations', [Modes::class, 'saveModeVariation']);
+$modeId->post('variations', [Modes::class, 'saveModeVariations']);
 $modeId->get('settings', [Modes::class, 'modeSettings']);
 $modeId->get('names', [Modes::class, 'modeNames']);
 $modeId->post('names', [Modes::class, 'saveModeNames']);

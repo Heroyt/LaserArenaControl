@@ -129,3 +129,6 @@ msgstr ""
 
 msgid "Prohry"
 msgstr ""
+
+msgid "Odehrané turnaje"
+msgstr ""

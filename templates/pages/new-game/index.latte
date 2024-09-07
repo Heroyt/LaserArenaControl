@@ -34,7 +34,7 @@
         <section id="vests">
             {include sectionVests}
         </section>
-        {cache 'newGame-'.$lang.'-game-mode', tags: ['templates.newGame', 'templates', 'templates.'.$lang, App\GameModels\Game\GameModes\AbstractMode::TABLE]}
+        {cache 'newGame-'.$lang.'-game-mode', tags: ['templates.newGame', 'templates', 'templates.mode', 'templates.'.$lang, App\GameModels\Game\GameModes\AbstractMode::TABLE]}
             <section id="game-mode">
                 {include sectionGameMode}
             </section>
@@ -232,6 +232,7 @@
         {var string $firstDescription = ''}
         <select name="game-mode" id="game-mode-select" class="form-select">
             <option n:foreach="$gameModes as $mode" value="{$mode->id}" data-type="{$mode->type->value}"
+                                                    data-name="{$mode->getName()}"
                                                     data-teams="{$mode->teams}"
                                                     data-variations='{json_encode($mode->getVariations())}'
                                                     data-description="{_$mode->description, context: 'gameModes'}"

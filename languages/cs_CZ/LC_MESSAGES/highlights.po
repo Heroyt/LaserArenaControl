@@ -116,3 +116,7 @@ msgstr "%s strávil %s ve hře vypnutý. To je víc než polovina hry!"
 msgctxt "evo5"
 msgid "%s získalo %.1fx tolik bonusů co ostatní."
 msgstr "%s získalo %.1fx tolik bonusů co ostatní."
+
+msgctxt "evo5"
+msgid "%s získal %.1fx tolik bonusů co ostatní."
+msgstr ""

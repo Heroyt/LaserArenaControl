@@ -29,7 +29,7 @@ export function validateForm(data: FormData, game : Game): boolean {
 
 	let ok = true;
 	const activeTeams = game.getActiveTeams();
-	if (activeTeams.length < 2) {
+	if (game.getModeType() === 'TEAM' && activeTeams.length < 2) {
 		game.atLeastTwoTeamsTooltip.show();
 		return false;
 	}

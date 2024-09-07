@@ -63,13 +63,15 @@ input[type="radio"]:checked + label.player-vip {
 }
 
 .vest-row {
+	container-name: vest-row;
+	container-type: inline-size;
 
 	&.highlight {
 		outline: 2px solid var(--danger);
 	}
 }
 
-@include media-breakpoint-down(xl) {
+@container vest-row (width < 600px) {
 	@for $i from 0 to 5 {
 		.vest-row[data-team='#{$i}'] .team-select-wrapper {
 			.team-select {

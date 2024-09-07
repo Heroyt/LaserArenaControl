@@ -58,7 +58,7 @@ export default function initNewGamePage() {
 		'./userSearch'
 		)
 		.then(module => {
-				const userSearch = new module.default();
+				const userSearch = new module.default(true);
 				userSearch.init();
 				userSearch.initGame(game);
 			},

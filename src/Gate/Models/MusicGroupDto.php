@@ -40,4 +40,12 @@ class MusicGroupDto
         }
         return $this->backgroundImage;
     }
+
+    public function getValue(): string {
+        if (count($this->music) > 1) {
+            return 'g-' . implode('-', array_map(static fn($music) => $music->id, $this->music));
+        }
+
+        return (string) $this->music[0]->id;
+    }
 }

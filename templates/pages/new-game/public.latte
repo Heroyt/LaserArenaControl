@@ -1,0 +1,350 @@
+{layout '../../@layoutPublic.latte'}
+
+{templateType App\Templates\NewGame\NewGameParams}
+
+{default string $lang = App\Core\App::getShortLanguageCode()}
+{default App\Models\PriceGroup[] $priceGroups = []}
+{default App\Models\PriceGroup[] $priceGroupsAll = $priceGroups}
+
+{import 'helpers/help.latte'}
+{import '../../components/control/scoreDownload.latte'}
+{foreach $addedTemplates->import as $import}
+    {import $import}
+{/foreach}
+
+{var string[] $icons = [
+'1-stars' => svgIcon('1-stars'),
+'2-stars' => svgIcon('2-stars'),
+'3-stars' => svgIcon('3-stars'),
+'4-stars' => svgIcon('4-stars'),
+'5-stars' => svgIcon('5-stars'),
+'6-stars' => svgIcon('6-stars'),
+]}
+
+{block content}
+    <form method="post" action="" id="new-game-content" class="w-100">
+        <section id="vests-control">
+            {include sectionVestsControl}
+        </section>
+        <section id="vests">
+            {include sectionVests}
+        </section>
+        {cache 'newGame-'.$lang.'-game-mode', tags: ['templates.newGame', 'templates', 'templates.'.$lang, App\GameModels\Game\GameModes\AbstractMode::TABLE]}
+            <section id="game-mode">
+                {include sectionGameMode}
+            </section>
+            <section id="game-mode-variations">
+                {include sectionGameModeVariations}
+            </section>
+        {/cache}
+        <section id="music">
+            {include sectionMusic}
+        </section>
+        <section id="teams-random" class="text-center solo-hide">
+            {include sectionTeamsRandom}
+        </section>
+        <section id="teams" class="solo-hide">
+            {include sectionTeams}
+        </section>
+        <section id="submit">
+            <button type="submit" class="btn btn-lg btn-success">
+                {_'Odeslat'}
+            </button>
+        </section>
+    </form>
+    {foreach $addedTemplates->afterForm as $include}
+        {block $include}{/block}
+    {/foreach}
+    {include userSearchModal}
+    {include 'helpers/musicModesDisplay.latte', $musicGroups}
+    {include help}
+    {var int $order = 0}
+    {foreach $addedTemplates->offcanvas as $include}
+        {block $include}{/block}
+        {do $order++}
+    {/foreach}
+
+    <script>
+        const messages = {
+            missingShuffleTeam: `{_'Musíte vybrat alespoň 2 týmy.', context: 'errors'}`,
+            missingPlayerTeam: `{_'Musíte vybrat tým hráče.', context: 'errors'}`,
+            emptyTeamName: `{_'Vyplňte název týmu', context: 'errors'}`,
+            teamNameTooLong: `{_'Název týmu je moc dlouhý', context: 'errors'}`,
+            noPlayersActive: `{_'Musíte zadat alespoň 2 hráče.', context: 'errors'}`,
+            vestOk: `{_'V pořádku', context: 'settings.vests.status'}`,
+            vestPlayable: `{_'Hratelná', context: 'settings.vests.status'}`,
+            vestBroken: `{_'Nefunkční', context: 'settings.vests.status'}`,
+            vestFailure: `{_'Porucha', context: 'settings.vests'}`,
+            load: `{_'Nahrát', context: 'newGame.preparedGames.actions'}`,
+            delete: `{_'Smazat', context: 'actions'}`,
+        }
+        const gameData = {$loadGame|json|noescape};
+        const system = {$system};
+        const vestIcon = {svgIcon('Vesta', 'auto', '1rem')|replace:"\n", ''};
+    </script>
+{/block}
+
+{define sectionVestsControl}
+    {foreach $addedTemplates->vestsControl as $include}
+        {block $include}{/block}
+    {/foreach}
+    <input type="radio" name="maxSkill" value="3" checked class="player-skill-input maxSkill"
+           id="player-skill-3"/>
+    <label class="player-skill bg-danger rounded px-2" style="min-height: 2.5rem; max-height: 3.6rem; width: auto;"
+           for="player-skill-6">
+        {_'Maximální herní úroveň', context:'game.player'}: {svgIcon '3-stars', 'auto', '100%'}
+    </label>
+    <input type="radio" name="maxSkill" value="6" class="player-skill-input maxSkill"
+           id="player-skill-6"/>
+    <label class="player-skill bg-purple-500 rounded px-2" style="min-height: 2.5rem; max-height: 3.6rem; width: auto;"
+           for="player-skill-3">
+        {_'Maximální herní úroveň', context:'game.player'}: {svgIcon '6-stars', 'auto', '100%'}
+    </label>
+    <button type="button" class="btn btn-danger" id="clear-all" data-toggle="tooltip"
+            title="{_'Smazat vše', context: 'actions'}">
+        <i class="fa-solid fa-trash"></i>
+    </button>
+{/define}
+
+{define sectionVests}
+    <div id="vestsWrapper">
+        <h4 class="text-center">
+            {_'Hráči', context: 'game'}
+        </h4>
+        {foreach $vests as $vest}
+            {include vestRow, $vest}
+        {/foreach}
+    </div>
+{/define}
+
+{define sectionGameMode}
+    <label for="game-mode-select">
+        {_'Herní mód', context: 'game'}:
+    </label>
+    <div class="input-group">
+        <select name="game-mode" id="game-mode-select" class="form-select">
+            <option n:foreach="$gameModes as $mode" value="{$mode->id}" data-type="{$mode->type->value}"
+                                                    data-teams="{$mode->teams}"
+                                                    data-variations='{json_encode($mode->getVariationsPublic())}'
+                                                    data-description="{_$mode->description, context: 'gameModes'}"
+                                                    data-active="{json_encode($mode->active)}"
+                    {if $mode instanceof App\GameModels\Game\GameModes\CustomLoadMode}data-script="{$mode->getNewGameScriptToRun()}"{/if}>
+                {_$mode->getName(), context: 'gameModes'}
+            </option>
+        </select>
+        <button type="button" data-toggle="shuffle" title="{_'Náhodně', context: 'actions'}"
+                data-target="#game-mode-select" class="btn btn-purple-500">
+            <i class="fa-solid fa-shuffle"></i>
+        </button>
+    </div>
+    <div id="game-mode-description" class="select-description text-muted" data-target="#game-mode-select"></div>
+{/define}
+
+{define sectionGameModeVariations}
+    <button class="btn btn-info w-100" type="button" id="hide-variations" data-toggle="collapse"
+            data-target="#game-mode-variations-collapse">
+        <i class="fa-solid fa-eye"></i>
+        <i class="fa-solid fa-eye-slash d-none"></i>
+        {_'Variace', context: 'gameModes'}
+    </button>
+    <div class="collapse-grid show" id="game-mode-variations-collapse">
+        <div id="game-mode-variations-wrapper" class="collapse-inner bg-background-1 p-3 rounded-bottom"></div>
+    </div>
+    {if $featureConfig->isFeatureEnabled('gates') && !empty(App\Core\Info::get('gates_ips'))}
+        <div class="mt-3" id="gatesControl">
+            <h3>{_'Brány'}</h3>
+            <div class="btn-group">
+                <button type="button" class="btn btn-success" id="startGates">{_'Zapnout brány'}</button>
+                <button type="button" class="btn btn-danger" id="stopGates">{_'Vypnout brány'}</button>
+            </div>
+        </div>
+    {/if}
+{/define}
+
+{define sectionMusic}
+    <label for="music-select">
+        {_'Hudební mód', context: 'game'}:
+    </label>
+    <div class="input-group">
+        <select name="music" id="music-select" class="form-select">
+            {var string $lastGroup = ''}
+            {foreach $musicModes as $musicMode}
+                {if !empty($musicMode->group) && $musicMode->group !== $lastGroup}
+                    {if $lastGroup !== ''}
+                        </optgroup>
+                    {/if}
+                {do $lastGroup = $musicMode->group}
+                    <optgroup label="{$musicMode->group}">
+                        {elseif empty($musicMode->group) && !empty($lastGroup)}
+                    </optgroup>
+                    {do $lastGroup = ''}
+                {/if}
+                <option data-group="{$musicMode->group}" value="{$musicMode->id}">{$musicMode->name}</option>
+            {/foreach}
+            {if !empty($lastGroup)}
+                </optgroup>
+            {/if}
+        </select>
+        <input type="checkbox" id="music-mode-grouped" value="1" class="btn-check">
+        <label for="music-mode-grouped" class="btn btn-outline-primary" data-toggle="tooltip"
+               title="{_'Slučovat hudební skupiny'}">
+            <i class="fa-solid fa-layer-group"></i>
+        </label>
+        <button type="button" data-bs-toggle="modal" data-bs-target="#music-modes-display" class="btn btn-info"
+                data-toggle="tooltip" title="{_'Zobrazit přehled hudebních módů'}">
+            <i class="fa-solid fa-eye"></i>
+        </button>
+        <button type="button" data-toggle="shuffle" title="{_'Náhodně', context: 'actions'}"
+                data-target="#music-select" class="btn btn-purple-500">
+            <i class="fa-solid fa-shuffle"></i>
+        </button>
+    </div>
+{/define}
+
+{define sectionTeamsRandom}
+    {cache $system . 'newGameTeamsRandom-'.$lang, tags => ['templates', 'templates.'.$lang, 'newGame']}
+        <h4>
+            {_'Náhodné rozdělení týmů', context: 'game'}:
+        </h4>
+        <div id="team-random-select" class="d-flex align-items-stretch justify-content-center w-100 mb-3 mt-2"
+             style="height: 2rem; --width: 3rem;">
+            {foreach $colors as $key => $color}
+                <input class="team-color-input show" type="checkbox" value="{$key}"
+                       id="team-color-{$key}">
+                <label class="team-color {if $iterator->first}rounded-start{elseif $iterator->last}rounded-end{/if}"
+                       style="background-color: {$color|noescape};"
+                       for="team-color-{$key}">&nbsp;</label>
+            {/foreach}
+        </div>
+        <div class="btn-group">
+            <button type="button" class="btn btn-purple-500" id="random-teams">
+                <i class="fa-solid fa-shuffle"></i>
+                {_'Náhodně', context: 'actions'}
+            </button>
+            <button type="button" class="btn btn-success" id="random-fair-teams">
+                <i class="fa-solid fa-star"></i>
+                {_'Náhodně fér', context: 'actions'}
+            </button>
+        </div>
+    {/cache}
+{/define}
+
+{define sectionTeams}
+    {cache $system . 'newGameTeams-'.$lang, tags => ['templates', 'templates.'.$lang, 'newGame']}
+        <h4 class="text-center">
+            {_'Týmy', context: 'game'}
+        </h4>
+        <div n:foreach="$colors as $key => $color" class="team-row input-group my-1 d-none" id="team-{$key}"
+                                                   data-key="{$key}">
+            <label for="team-{$key}-name" class="input-group-text player-count justify-content-center"
+                   style="background-color: {$color|noescape}; color: {\App\Tools\Color::getFontColor($color)|noescape}; width: 2.5rem;">
+                0
+            </label>
+            <input type="text" name="team[{$key}][name]" minlength="1" maxlength="99" class="form-control team-name"
+                   id="team-{$key}-name"
+                   value="{$teamNames[$key]}" data-default="{$teamNames[$key]}">
+        </div>
+    {/cache}
+{/define}
+
+{define vestRow}
+    {varType App\GameModels\Vest $vest}
+    <div class="input-group my-2 shadow-in-place vest-row rounded" data-vest="{$vest->vestNum}">
+        <label class="input-group-text px-2 bg-light text-black vest-num cursor-pointer"
+             data-status="" data-info="" for="player-name-{$vest->vestNum}">
+            {$vest->vestNum}
+        </label>
+        <div class="input-group-text handle cursor-grab bg-secondary text-bg-secondary px-2">
+            <i class="fa-solid fa-grip-lines"></i>
+        </div>
+        <input id="player-name-{$vest->vestNum}" tabindex="{$vest->vestNum}" type="text"
+               class="form-control player-name" autocomplete="off"
+               aria-label="{_'Přezdívka hráče na vestě %s', format:[$vest->vestNum]}"
+               name="player[{$vest->vestNum}][name]" maxlength="12">
+        <button type="button" class="btn btn-info btn-sm search-user" data-toggle="tooltip"
+                title="{_'Vyhledat hráče'}">
+            <i class="fa-solid fa-search"></i>
+        </button>
+        <input type="hidden" name="player[{$vest->vestNum}][code]" value="" class="user-code"
+               id="user-{$vest->vestNum}-code">
+        <div class="team-select-wrapper solo-hide">
+            <div class="team-select">
+                {foreach $colors as $key => $color}
+                    <input class="team-color-input" type="radio" name="player[{$vest->vestNum}][team]" value="{$key}"
+                           id="team-color-{$vest->vestNum}-{$key}" data-text="{\App\Tools\Color::getFontColor($color)}"
+                           data-color="{$color|noescape}">
+                    <label class="team-color" style="background-color: {$color|noescape};"
+                           for="team-color-{$vest->vestNum}-{$key}">&nbsp;</label>
+                {/foreach}
+            </div>
+        </div>
+        <div>
+            <input type="radio" name="player[{$vest->vestNum}][vip]" value="0" class="player-vip-input"
+                   id="player-vip-{$vest->vestNum}-0" checked/>
+            <label class="player-vip bg-secondary" for="player-vip-{$vest->vestNum}-1">
+                VIP
+            </label>
+            <input type="radio" name="player[{$vest->vestNum}][vip]" value="1" class="player-vip-input"
+                   id="player-vip-{$vest->vestNum}-1"/>
+            <label class="player-vip bg-gold" for="player-vip-{$vest->vestNum}-0">
+                VIP
+            </label>
+        </div>
+        <div data-toggle="tooltip" title="{_'Herní schopnost hráče', context: 'game.player'}">
+            <input type="radio" name="player[{$vest->vestNum}][skill]" value="1" class="player-skill-input"
+                   id="player-skill-{$vest->vestNum}-1" checked/>
+            <label class="player-skill bg-grey" for="player-skill-{$vest->vestNum}-2">
+                {$icons['1-stars']|noescape}
+            </label>
+            <input type="radio" name="player[{$vest->vestNum}][skill]" value="2" class="player-skill-input"
+                   id="player-skill-{$vest->vestNum}-2"/>
+            <label class="player-skill bg-primary" for="player-skill-{$vest->vestNum}-3">
+                {$icons['2-stars']|noescape}
+            </label>
+            <input type="radio" name="player[{$vest->vestNum}][skill]" value="3" class="player-skill-input"
+                   id="player-skill-{$vest->vestNum}-3"/>
+            <label class="player-skill bg-danger maxSkillSwitch" for="player-skill-{$vest->vestNum}-1">
+                {$icons['3-stars']|noescape}
+            </label>
+            <input type="radio" name="player[{$vest->vestNum}][skill]" value="4" class="player-skill-input"
+                   id="player-skill-{$vest->vestNum}-4"/>
+            <label class="player-skill bg-green" for="player-skill-{$vest->vestNum}-5">
+                {$icons['4-stars']|noescape}
+            </label>
+            <input type="radio" name="player[{$vest->vestNum}][skill]" value="5" class="player-skill-input"
+                   id="player-skill-{$vest->vestNum}-5"/>
+            <label class="player-skill bg-gold-700" for="player-skill-{$vest->vestNum}-6">
+                {$icons['5-stars']|noescape}
+            </label>
+            <input type="radio" name="player[{$vest->vestNum}][skill]" value="6" class="player-skill-input"
+                   id="player-skill-{$vest->vestNum}-6"/>
+            <label class="player-skill bg-purple-500" for="player-skill-{$vest->vestNum}-1">
+                {$icons['6-stars']|noescape}
+            </label>
+        </div>
+        <button type="button" class="btn btn-danger clear" title="{_'Smazat'}">
+            <i class="fa-solid fa-trash"></i>
+        </button>
+    </div>
+{/define}
+
+{define userSearchModal}
+    <div class="modal" id="userSearchModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">{_'Vyhledat hráče'}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="user-search" class="form-label">{_'Hledat'}...</label>
+                        <input type="search" id="user-search" class="form-control"
+                               placeholder="{_'Jméno, e-mail, kód hráče'}">
+                    </div>
+                    <div class="list-group" id="search-results"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+{/define}

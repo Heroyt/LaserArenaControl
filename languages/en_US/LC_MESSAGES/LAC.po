@@ -4438,3 +4438,11 @@ msgstr ""
 
 msgid "Popis"
 msgstr ""
+
+msgctxt "game.modes"
+msgid "Zda se herní mód zobrazuje na výběr hráčům."
+msgstr ""
+
+msgctxt "game"
+msgid "Hráči"
+msgstr ""

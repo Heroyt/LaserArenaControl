@@ -1,18 +1,18 @@
 import {Modal, Tooltip} from 'bootstrap';
-import {startLoading, stopLoading} from "../../loaders";
-import Sortable from "sortablejs";
+import {startLoading, stopLoading} from '../../loaders';
+import Sortable from 'sortablejs';
 import {GameMode, Variation, VariationsValue} from '../../interfaces/gameInterfaces';
 import {
-    createGameMode,
-    createGameModeVariation,
-    deleteGameMode,
-    GameModeType,
-    getAllGameModeVariations,
-    getGameModeNames,
-    getGameModeSettings,
-    getGameModeVariations
-} from "../../api/endpoints/settings/modes";
-import {fetchPost, ResponseError} from "../../includes/apiClient";
+	createGameMode,
+	createGameModeVariation,
+	deleteGameMode,
+	GameModeType,
+	getAllGameModeVariations,
+	getGameModeNames,
+	getGameModeSettings,
+	getGameModeVariations,
+} from '../../api/endpoints/settings/modes';
+import {fetchPost, ResponseError} from '../../includes/apiClient';
 
 export default function initModesSettings() {
     const modesWrapper = document.getElementById('modes') as HTMLDivElement;
@@ -200,7 +200,11 @@ export default function initModesSettings() {
 
                         const createVariationWrapper = document.createElement('div');
                         createVariationWrapper.classList.add('input-group', 'mt-2', 'mb-2');
-                        createVariationWrapper.innerHTML = `<div class="form-floating">` + `<input class="form-control" id="newVariationName" placeholder="name" />` + `<label for="newVariationName">${messages.newVariation}</label>` + `</div>` + `<button type="button" class="btn btn-success" id="addNewVariation">${messages.create}</button>`;
+                        createVariationWrapper.innerHTML = `<div class="form-floating">` +
+	                        `<input class="form-control" id="newVariationName" placeholder="name" />` +
+	                        `<label for="newVariationName">${messages.newVariation}</label>` +
+	                        `</div>` +
+	                        `<button type="button" class="btn btn-success" id="addNewVariation">${messages.create}</button>`;
 
                         const newVariationName = createVariationWrapper.querySelector('#newVariationName') as HTMLInputElement;
                         const addNewVariationButton = createVariationWrapper.querySelector('#addNewVariation') as HTMLButtonElement;
@@ -264,7 +268,15 @@ export default function initModesSettings() {
 
                             const variationDiv = document.createElement('div');
                             variationDiv.classList.add('card', 'my-2', 'w-100');
-                            variationDiv.innerHTML = `<div class="card-body"><div class="form-floating mb-2">` + `<input type="text" class="form-control" name="variation[${variation.id}][name]" id="variation-name-${variation.id}" value="${variation.name}"/>` + `<label for="variation-name-${variation.id}">${messages.variationName}</label>` + `</div><div class="values"></div>` + `<div class="text-center"><button type="button" class="btn btn-primary add-value w-100"><i class="fa-solid fa-plus"></i></button></div>` + `</div>`;
+                            variationDiv.innerHTML = `<div class="card-body"><div class="input-group mb-2"><div class="form-floating">` +
+	                            `<input type="text" class="form-control" name="variation[${variation.id}][name]" id="variation-name-${variation.id}" value="${variation.name}"/>` +
+	                            `<label for="variation-name-${variation.id}">${messages.variationName}</label>` +
+	                            `</div>`+
+	                            `<input type="checkbox" class="btn-check" id="variation-${variation.id}-public" autocomplete="off" name="variation[${variation.id}][public]" value="1" ${variation.public ? 'checked' : ''}>`+
+							                `<label data-toggle="tooltip" title="${messages.publicTitle}" class="btn btn-outline-info" for="variation-${variation.id}-public"><i class="fa-solid fa-eye"></i></label>`+
+	                            `</div><div class="values"></div>` +
+	                            `<div class="text-center"><button type="button" class="btn btn-primary add-value w-100"><i class="fa-solid fa-plus"></i></button></div>` +
+	                            `</div>`;
                             const variationName = variationDiv.querySelector('.form-control') as HTMLInputElement;
                             const tooltip = new Tooltip(variationName, {
                                 title: messages.errorEmptyVariationName,

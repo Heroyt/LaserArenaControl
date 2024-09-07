@@ -1,0 +1,10 @@
+@import 'vests';
+@import 'gameMode';
+@import 'teams';
+
+.btn {
+	align-items: center;
+	display: inline-flex;
+	justify-content: center;
+	width: var(--width, auto);
+}

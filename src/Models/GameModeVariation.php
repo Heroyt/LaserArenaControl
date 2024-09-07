@@ -15,6 +15,8 @@ class GameModeVariation extends Model
 
     public string $name;
 
+    public bool $public = true;
+
     /** @var GameModeVariationValue[][] */
     private array $valuesModes = [];
 

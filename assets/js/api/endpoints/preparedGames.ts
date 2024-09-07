@@ -22,6 +22,10 @@ export async function sendPreparedGame(data: GameData): Promise<FormSaveResponse
 	return fetchPost('/prepared', data);
 }
 
+export async function sendPreparedGamePublic(data: GameData): Promise<FormSaveResponse> {
+	return fetchPost('/prepared/user-local', data);
+}
+
 export async function getPreparedGames(): Promise<PreparedGameData[]> {
 	return fetchGet('/prepared');
 }

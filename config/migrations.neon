@@ -160,9 +160,13 @@ tables:
     	(
 			`id_variation` int(11) unsigned NOT NULL AUTO_INCREMENT,
 			`name` varchar(30) NOT NULL,
+			`public` tinyint(1) NOT NULL DEFAULT 1,
           	PRIMARY KEY (`id_variation`)
     	) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 		'''
+		modifications:
+			0.1:
+				- 'ADD `public` tinyint(1) NOT NULL DEFAULT 1'
 	game_modes_variations_values:
 		order: 1
 		definition: '''

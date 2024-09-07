@@ -1,0 +1,113 @@
+#vests-control {
+	align-items: center;
+	display: flex;
+	gap: .5rem;
+	grid-column: vests;
+	grid-row: vestcontrol;
+	justify-content: space-between;
+
+	#clear-all {
+		height: 3.6rem;
+	}
+}
+
+#vests {
+	grid-column: vests;
+	grid-row: game;
+	//overflow-y: auto;
+
+	.vest-row:nth-child(1) {
+		margin-top: 0 !important;
+	}
+}
+
+.vest-num {
+	display: flex;
+	justify-content: space-between;
+	width: 3.5em;
+
+	.fa-solid {
+		text-shadow: 0 0 1rem rgba(0, 0, 0, .6);
+	}
+}
+
+.team-select-wrapper {
+	display: flex;
+	overflow: hidden;
+
+	.team-select {
+		display: flex;
+	}
+}
+
+.player-skill-input,
+.player-vip-input {
+	display: none;
+}
+
+label.player-skill,
+label.player-vip {
+	align-items: center;
+	cursor: pointer;
+	display: none;
+	font-size: .8rem;
+	height: 100%;
+	justify-content: center;
+	position: relative;
+	width: 2.5rem;
+}
+
+input[type="radio"]:checked + label.player-skill,
+input[type="radio"]:checked + label.player-vip {
+	display: flex;
+}
+
+.vest-row {
+
+	&.highlight {
+		outline: 2px solid var(--danger);
+	}
+}
+
+@include media-breakpoint-down(xl) {
+	@for $i from 0 to 5 {
+		.vest-row[data-team='#{$i}'] .team-select-wrapper {
+			.team-select {
+				translate: calc(-#{$i} * var(--width, 2rem)) 0;
+			}
+		}
+	}
+
+	.team-select-wrapper {
+		max-width: var(--width, 2rem);
+		transition: max-width 100ms ease;
+
+
+		&:hover {
+			max-width: calc(6 * var(--width, 2rem));
+
+			.team-select {
+				translate: 0 0 !important;
+			}
+		}
+	}
+}
+
+@include media-breakpoint-down(sm) {
+	.team-select-wrapper {
+		--width: 2.5rem;
+
+		&:hover {
+			background-color: var(--background);
+			position: absolute;
+			right: 0;
+			z-index: 5;
+		}
+	}
+
+	.input-group.vest-row {
+		flex-wrap: nowrap;
+		max-width: calc(100vw - var(--bs-gutter-x));
+		overflow: hidden;
+	}
+}

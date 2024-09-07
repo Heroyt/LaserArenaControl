@@ -1,6 +1,6 @@
 {parameters App\Gate\Models\MusicGroupDto $musicGroup}
 
-<div class="music-mode">
+<div class="music-mode" data-value="{$musicGroup->getValue()}">
     {if $musicGroup->getBackgroundImage() !== null}
         {var string[] $paths = $musicGroup->getBackgroundImage()?->getOptimized()}
         <img class="background"
@@ -26,8 +26,8 @@
         {/if}
     </div>
     <div n:if="count($musicGroup->music) > 1" class="children">
-        <div n:foreach="$musicGroup->music as $musicMode" class="child">
+        <button type="button" n:foreach="$musicGroup->music as $musicMode" class="child" data-id="{$musicMode->id}">
             {_$musicMode->name, context: 'music'}
-        </div>
+        </button>
     </div>
 </div>

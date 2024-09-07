@@ -82,6 +82,14 @@ export default function route(pageInfo: PageInfo): void {
 				module.default();
 			});
 			break;
+		case 'public':
+			import(
+				/* webpackChunkName: "public" */
+				'./pages/newGame/public'
+				).then(module => {
+				module.default();
+			});
+			break;
 		case 'settings-music':
 			import(
 				/* webpackChunkName: "musicSettings" */

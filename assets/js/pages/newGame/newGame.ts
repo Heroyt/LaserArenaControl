@@ -9,6 +9,7 @@ import {gatesStart, gatesStop} from '../../api/endpoints/gates';
 import {getLastGames, sendLoadGame} from '../../api/endpoints/games';
 import {initPrintButtons} from '../../components/resultsPrinting';
 import {lang} from '../../includes/frameworkFunctions';
+import {validateForm} from './validate';
 
 declare global {
 	const gameData: GameData;
@@ -75,39 +76,6 @@ export default function initNewGamePage() {
 		initGatesControls();
 	}
 
-	// Send form via ajax
-	form.addEventListener('submit', e => {
-		e.preventDefault();
-
-		const data = new FormData(form);
-
-		console.log(e.submitter);
-
-		if (!data.get('action')) {
-			data.set('action', (e.submitter as HTMLButtonElement).value);
-		}
-
-		if (!validateForm(data)) {
-			return;
-		}
-
-		switch (data.get('action')) {
-			case 'load':
-				loadGame(data);
-				break;
-			case 'start':
-				if (control) {
-					control.startGame(data, loadStartGame);
-				}
-				break;
-			case 'stop':
-				if (control) {
-					control.stopGame();
-				}
-				break;
-		}
-	});
-
 	// Autosave to local storage
 	form.addEventListener('update', () => {
 		const data = game.export();
@@ -140,6 +108,39 @@ export default function initNewGamePage() {
 		lastGamesSelect.value = '';
 		if (gameGroupsSelect) {
 			gameGroupsSelect.value = '';
+		}
+	});
+
+	// Send form via ajax
+	form.addEventListener('submit', e => {
+		e.preventDefault();
+
+		const data = new FormData(form);
+
+		console.log(e.submitter);
+
+		if (!data.get('action')) {
+			data.set('action', (e.submitter as HTMLButtonElement).value);
+		}
+
+		if (!validateForm(data, game)) {
+			return;
+		}
+
+		switch (data.get('action')) {
+			case 'load':
+				loadGame(data);
+				break;
+			case 'start':
+				if (control) {
+					control.startGame(data, loadStartGame);
+				}
+				break;
+			case 'stop':
+				if (control) {
+					control.stopGame();
+				}
+				break;
 		}
 	});
 
@@ -233,47 +234,6 @@ export default function initNewGamePage() {
 			.catch(() => {
 
 			});
-	}
-
-	function validateForm(data: FormData): boolean {
-		console.log(data.get('action'));
-		if (data.get('action') !== 'load') {
-			return true;
-		}
-
-		const activePlayers = game.getActivePlayers();
-		console.log(activePlayers);
-		if (activePlayers.length < 2) {
-			game.noPlayersTooltip.show();
-			return false;
-		}
-
-		if (game.getModeType() === 'TEAM') {
-			let ok = true;
-			const disabledPlayers = activePlayers.filter(player => player.team === null);
-			if ((activePlayers.length - disabledPlayers.length) < 2) {
-				ok = false;
-				disabledPlayers.forEach(player => {
-					player.selectTeamTooltip.show();
-				});
-			}
-			if (!ok) {
-				return false;
-			}
-		}
-
-		let ok = true;
-		game.getActiveTeams().forEach(team => {
-			if (team.name.length < team.$name.minLength) {
-				ok = false;
-				team.emptyNameTooltip.show();
-			} else if (team.name.length > team.$name.maxLength) {
-				ok = false;
-				team.nameTooLongTooltip.show();
-			}
-		});
-
-		return ok;
 	}
 
 	function loadGame(data: FormData, callback: null | (() => void) = null): void {

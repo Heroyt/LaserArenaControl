@@ -168,6 +168,7 @@ interface GameMode {
 interface Variation {
 	id: number,
 	name: string,
+	public: boolean,
 }
 
 interface VariationsValue {

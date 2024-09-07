@@ -1,7 +1,7 @@
 import Player from './player';
 import Team from './team';
 import {shuffle} from '../includes/functions';
-import {Tooltip} from 'bootstrap';
+import {Modal, Tooltip} from 'bootstrap';
 import {GameData, Variation, VariationsValue} from '../interfaces/gameInterfaces';
 import CustomLoadMode from './customLoadMode';
 // @ts-ignore
@@ -30,15 +30,15 @@ export default class Game {
 	players: Map<String, Player>;
 	teams: Map<String, Team>;
 
-	$group: HTMLSelectElement;
-	$table: HTMLSelectElement;
+	$group: HTMLSelectElement|null;
+	$table: HTMLSelectElement|null;
 
 	$gameMode: HTMLSelectElement;
 	$musicMode: HTMLSelectElement;
 	$groupMusicModes: HTMLInputElement;
 	$groupMusicModesLabel: HTMLLabelElement;
-	$playlist: HTMLSelectElement;
-	$usePlaylist: HTMLInputElement;
+	$playlist: HTMLSelectElement|null;
+	$usePlaylist: HTMLInputElement|null;
 	$teams: NodeListOf<HTMLInputElement>;
 	$maxSkill: NodeListOf<HTMLInputElement>;
 	$modeVariations: HTMLDivElement;
@@ -94,15 +94,17 @@ export default class Game {
 
 		this.$clearAll = document.getElementById('clear-all') as HTMLButtonElement;
 
-		this.$usePlaylist.checked = window.localStorage.getItem('use-playlist') === '1';
-		if (this.$usePlaylist.checked) {
-			this.$playlist.classList.remove('d-none');
-			this.$musicMode.classList.add('d-none');
-			this.$groupMusicModesLabel.classList.add('d-none');
-		} else {
-			this.$playlist.classList.add('d-none');
-			this.$musicMode.classList.remove('d-none');
-			this.$groupMusicModesLabel.classList.remove('d-none');
+		if (this.$usePlaylist && this.$playlist) {
+			this.$usePlaylist.checked = window.localStorage.getItem('use-playlist') === '1';
+			if (this.$usePlaylist.checked) {
+				this.$playlist.classList.remove('d-none');
+				this.$musicMode.classList.add('d-none');
+				this.$groupMusicModesLabel.classList.add('d-none');
+			} else {
+				this.$playlist.classList.add('d-none');
+				this.$musicMode.classList.remove('d-none');
+				this.$groupMusicModesLabel.classList.remove('d-none');
+			}
 		}
 		this.$groupMusicModes.checked = window.localStorage.getItem('group-music-mode') === '1';
 		if (this.$groupMusicModes.checked) {
@@ -269,25 +271,27 @@ export default class Game {
 			}
 		});
 
-		this.$playlist.addEventListener('change', () => {
-			this.$playlist.dispatchEvent(
-				new Event('update', {
-					bubbles: true,
-				}),
-			);
-		});
-		this.$usePlaylist.addEventListener('change', () => {
-			window.localStorage.setItem('use-playlist', this.$usePlaylist.checked ? '1' : '0');
-			if (this.$usePlaylist.checked) {
-				this.$playlist.classList.remove('d-none');
-				this.$musicMode.classList.add('d-none');
-				this.$groupMusicModesLabel.classList.add('d-none');
-			} else {
-				this.$playlist.classList.add('d-none');
-				this.$musicMode.classList.remove('d-none');
-				this.$groupMusicModesLabel.classList.remove('d-none');
-			}
-		});
+		if (this.$playlist && this.$usePlaylist) {
+			this.$playlist.addEventListener('change', () => {
+				this.$playlist.dispatchEvent(
+					new Event('update', {
+						bubbles: true,
+					}),
+				);
+			});
+			this.$usePlaylist.addEventListener('change', () => {
+				window.localStorage.setItem('use-playlist', this.$usePlaylist.checked ? '1' : '0');
+				if (this.$usePlaylist.checked) {
+					this.$playlist.classList.remove('d-none');
+					this.$musicMode.classList.add('d-none');
+					this.$groupMusicModesLabel.classList.add('d-none');
+				} else {
+					this.$playlist.classList.add('d-none');
+					this.$musicMode.classList.remove('d-none');
+					this.$groupMusicModesLabel.classList.remove('d-none');
+				}
+			});
+		}
 
 		this.$shuffleTeams.addEventListener('click', () => {
 			this.shuffleTeams();
@@ -297,9 +301,11 @@ export default class Game {
 			this.shuffleFairTeams();
 		});
 
-		this.$group.addEventListener('change', () => {
-			this.$group.dispatchEvent(new Event('update', {bubbles: true}));
-		});
+		if (this.$group) {
+			this.$group.addEventListener('change', () => {
+				this.$group.dispatchEvent(new Event('update', {bubbles: true}));
+			});
+		}
 
 		this.$teams.forEach($team => {
 			$team.addEventListener('change', () => {
@@ -323,6 +329,31 @@ export default class Game {
 			this.$variationsHideBtn.querySelector('.fa-eye-slash').classList.remove('d-none');
 			this.$variationsHideBtn.querySelector('.fa-eye').classList.add('d-none');
 		});
+
+		const musicModeModalElement = document.getElementById('music-modes-display') as HTMLDivElement;
+		if (musicModeModalElement) {
+			const musicModeModal = Modal.getOrCreateInstance(musicModeModalElement);
+			const musicModeCards = musicModeModalElement.querySelectorAll<HTMLDivElement>('.music-mode');
+
+			for (const musicModeCard of musicModeCards) {
+				musicModeCard.addEventListener('click', (e) => {
+					if (e.target instanceof HTMLButtonElement && e.target.dataset.id) {
+						this.unGroupMusicModes();
+						this.$musicMode.value = e.target.dataset.id;
+					}
+					else {
+						this.groupMusicModes();
+						this.$musicMode.value = musicModeCard.dataset.value;
+					}
+					this.$musicMode.dispatchEvent(
+						new Event('update', {
+							bubbles: true,
+						}),
+					);
+					musicModeModal.hide();
+				});
+			}
+		}
 	}
 
 	updateModeVariations(variations: { [index: number]: VariationsValue[] }) {
@@ -429,11 +460,15 @@ export default class Game {
 		this.$gameMode.dispatchEvent(new Event('update', {bubbles: true}));
 		this.$gameMode.dispatchEvent(new Event('change', {bubbles: true}));
 
-		this.$group.value = '';
-		this.$group.dispatchEvent(new Event('change', {bubbles: true}));
+		if (this.$group) {
+			this.$group.value = '';
+			this.$group.dispatchEvent(new Event('change', {bubbles: true}));
+		}
 
-		this.$table.value = '';
-		this.$table.dispatchEvent(new Event('change', {bubbles: true}));
+		if (this.$table) {
+			this.$table.value = '';
+			this.$table.dispatchEvent(new Event('change', {bubbles: true}));
+		}
 
 		const e = new Event('clear-all');
 		document.dispatchEvent(e);
@@ -745,37 +780,43 @@ export default class Game {
 
 			this.$musicMode.dispatchEvent(e);
 		}
-		if (data.playlist) {
+		if (data.playlist && this.$playlist) {
 			this.$playlist.value = data.playlist.toString();
 			this.$playlist.dispatchEvent(e);
 		}
-		if (data.group) {
-			this.$group.value = data.group.id.toString();
-			//console.log('group value', data.group.id.toString(), this.$group.value);
-
-			// If the group is currently not active, it can still be loaded back.
-			// In that case an option should be appended because the group still exists, it's just not visible.
-			if (this.$group.value !== data.group.id.toString()) {
-				const option = document.createElement('option');
-				option.value = data.group.id.toString();
-				option.innerText = data.group.name;
-				this.$group.appendChild(option);
+		if (this.$group) {
+			if (data.group) {
 				this.$group.value = data.group.id.toString();
-				//console.log('created option', option, this.$group.value);
+				//console.log('group value', data.group.id.toString(), this.$group.value);
+
+				// If the group is currently not active, it can still be loaded back.
+				// In that case an option should be appended because the group still exists, it's just not visible.
+				if (this.$group.value !== data.group.id.toString()) {
+					const option = document.createElement('option');
+					option.value = data.group.id.toString();
+					option.innerText = data.group.name;
+					this.$group.appendChild(option);
+					this.$group.value = data.group.id.toString();
+					//console.log('created option', option, this.$group.value);
+				}
+				document.dispatchEvent(new CustomEvent('game-group-import', {detail: data.group}));
+			} else {
+				this.$group.value = '';
 			}
-			document.dispatchEvent(new CustomEvent('game-group-import', {detail: data.group}));
-		} else {
-			this.$group.value = '';
 		}
-		if (data.table) {
-			this.$table.value = data.table.id.toString();
-		} else {
-			this.$table.value = '';
+		if (this.$table) {
+			if (data.table) {
+				this.$table.value = data.table.id.toString();
+			} else {
+				this.$table.value = '';
+			}
+			if (!data.group) {
+				this.$table.dispatchEvent(e);
+			}
 		}
-		if (!data.group) {
-			this.$table.dispatchEvent(e);
+		if (this.$group) {
+			this.$group.dispatchEvent(e);
 		}
-		this.$group.dispatchEvent(e);
 	}
 
 	reassignPlayerSkills(): void {
@@ -799,7 +840,7 @@ export default class Game {
 
 		const musicValue = this.$musicMode.value;
 		let musicId: number;
-		if (this.$usePlaylist.checked && this.$playlist.value) {
+		if (this.$usePlaylist && this.$playlist && this.$usePlaylist.checked && this.$playlist.value) {
 			const ids = JSON.parse(this.$playlist.querySelector(`[value="${this.$playlist.value}"]`).getAttribute('data-music'));
 			musicId = parseInt(ids[Math.floor(Math.random() * ids.length)]);
 		} else if (musicValue.startsWith('g-')) {
@@ -825,11 +866,11 @@ export default class Game {
 			teams: {},
 		};
 
-		if (this.$playlist.value) {
+		if (this.$playlist && this.$playlist.value) {
 			data.playlist = parseInt(this.$playlist.value);
 		}
 
-		if (this.$group.value !== '' && this.$group.value !== 'new') {
+		if (this.$group && this.$group.value !== '' && this.$group.value !== 'new') {
 			data.group = {
 				id: parseInt(this.$group.value),
 				name: (this.$group.querySelector(`option[value="${this.$group.value}"]`) as HTMLOptionElement).innerText,
@@ -837,7 +878,7 @@ export default class Game {
 			};
 		}
 
-		if (this.$table.value !== '') {
+		if (this.$table && this.$table.value !== '') {
 			data.table = {
 				id: parseInt(this.$table.value),
 				name: (this.$table.querySelector(`option[value="${this.$table.value}"]`) as HTMLOptionElement).innerText,

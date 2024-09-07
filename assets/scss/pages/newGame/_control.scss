@@ -1,0 +1,23 @@
+#control-btns {
+	grid-area: control;
+}
+
+#control-games {
+	grid-area: games;
+}
+
+#control-print {
+	grid-area: print;
+}
+
+@include media-breakpoint-down(sm) {
+	#control-btns, #control-print {
+		.btn {
+			min-height: 3.5rem;
+
+			span {
+				display: none;
+			}
+		}
+	}
+}

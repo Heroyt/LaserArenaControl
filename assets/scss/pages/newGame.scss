@@ -4,213 +4,31 @@
 @import '../variables/customVariables';
 @import '~bootstrap/scss/maps';
 @import '../mixins';
+@import 'newGame/music';
 
 #new-game-content {
-  display: grid;
-  grid-gap: 1rem;
-  grid-template-columns: [main-start vests-start control-start] 1fr 1fr 1fr 1fr 1fr 1fr [vests-end settings-start mode-start control-end games-start] 1fr 1fr [teams-start] 1fr [mode-end games-end print-start music-start] 1fr [teams-end] 1fr 1fr [music-end main-end print-end settings-end];
-  grid-template-rows: [main-start control-start games-start print-start] auto [control-end games-end print-end vestcontrol-start mode-start music-start] auto [vestcontrol-end mode-end music-end game-start variations-start] auto [variations-end random-start] auto [random-end teams-start] auto [teams-end main-end game-end];
-
-  #control-btns {
-    grid-area: control;
-  }
-
-  #control-games {
-    grid-area: games;
-  }
-
-  #control-print {
-    grid-area: print;
-  }
-
-  .btn {
-    align-items: center;
-    display: inline-flex;
-    justify-content: center;
-  }
-
-  #vests-control {
-    align-items: center;
-    display: flex;
-    gap: .5rem;
-    grid-column: vests;
-    grid-row: vestcontrol;
-    justify-content: space-between;
-
-    #clear-all {
-      height: 3.6rem;
-    }
-  }
-
-  #vests {
-    grid-column: vests;
-    grid-row: game;
-    //overflow-y: auto;
-
-    .vest-row:nth-child(1) {
-      margin-top: 0 !important;
-    }
-  }
-
-  #game-mode {
-    grid-column: mode;
-    grid-row: mode;
-  }
-
-  #game-mode-variations {
-    grid-column: settings;
-    grid-row: variations;
-
-    #game-mode-variations-wrapper {
-      align-items: center;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-    }
-
-    .btn-group {
-      flex-wrap: wrap;
-    }
-  }
-
-  #music {
-    grid-area: music;
-  }
-
-  #teams-random {
-    grid-column: settings;
-    grid-row: random;
-  }
-
-  #teams {
-    grid-column: teams;
-    grid-row: teams;
-  }
-
-  .vest-num {
-    display: flex;
-    justify-content: space-between;
-    width: 3.5em;
-
-    .fa-solid {
-      text-shadow: 0 0 1rem rgba(0, 0, 0, .6);
-    }
-  }
-
-  .team-select-wrapper {
-    display: flex;
-    overflow: hidden;
-
-    .team-select {
-      display: flex;
-    }
-  }
-
-  @include media-breakpoint-down(xl) {
-    @for $i from 0 to 5 {
-      .vest-row[data-team="#{$i}"] .team-select-wrapper {
-        .team-select {
-          translate: calc(-#{$i} * var(--width, 2rem)) 0;
-        }
-      }
-    }
-
-    .team-select-wrapper {
-      max-width: var(--width, 2rem);
-      transition: max-width 100ms ease;
-
-
-      &:hover {
-        max-width: calc(6 * var(--width, 2rem));
-
-        .team-select {
-          translate: 0 0 !important;
-        }
-      }
-    }
-  }
-  @include media-breakpoint-down(lg) {
-    grid-template-columns: [main-start vests-start control-start teams-start] 1fr 1fr 1fr 1fr [teams-end control-end vests-end settings-start mode-start music-start print-start games-start] 1fr 1fr [games-end print-end mode-end music-end main-end settings-end];
-    grid-template-rows: [main-start control-start print-start] auto [control-end print-end games-start vestcontrol-start] auto [vestcontrol-end games-end music-start game-start] auto [music-end mode-start] auto [mode-end variations-start] auto [variations-end] 1fr [game-end random-start teams-start] auto [random-end teams-end main-end ];
-  }
-
-  @include media-breakpoint-down(md) {
-    grid-template-columns: [main-start vests-start control-start teams-start settings-start mode-start games-start] 1fr [games-end mode-end music-start print-start] 1fr [ print-end music-end main-end settings-end teams-end control-end vests-end];
-    grid-template-rows: [main-start control-start] auto [control-end print-start games-start ] auto [print-end games-end music-start mode-start] auto [music-end mode-end variations-start] auto [variations-end vestcontrol-start] auto [vestcontrol-end random-start] auto [random-end game-start] auto [game-end teams-start] auto [ teams-end main-end ];
-  }
-
-  @include media-breakpoint-down(sm) {
-    grid-template-columns: [main-start vests-start control-start teams-start settings-start mode-start games-start music-start print-start] 1fr [games-end mode-end print-end music-end main-end settings-end teams-end control-end vests-end];
-    grid-template-rows: [main-start control-start] auto [control-end print-start] auto [print-end games-start] auto [games-end mode-start] auto [mode-end music-start] auto [music-end variations-start] auto [variations-end vestcontrol-start] auto [vestcontrol-end random-start] auto [random-end game-start] auto [game-end teams-start] auto [ teams-end main-end ];
-
-    #control-btns, #control-print {
-      .btn {
-        min-height: 3.5rem;
-
-        span {
-          display: none;
-        }
-      }
-    }
-
-    .team-select-wrapper {
-      --width: 2.5rem;
-
-      &:hover {
-        background-color: var(--background);
-        position: absolute;
-        right: 0;
-        z-index: 5;
-      }
-    }
-
-    .input-group.vest-row {
-      flex-wrap: nowrap;
-      max-width: calc(100vw - var(--bs-gutter-x));
-      overflow: hidden;
-    }
-
-  }
-}
-
-label.player-skill,
-label.player-vip {
-  align-items: center;
-  cursor: pointer;
-  display: none;
-  font-size: .8rem;
-  height: 100%;
-  justify-content: center;
-  position: relative;
-  width: 2.5rem;
-
-  input[type="radio"]:checked + & {
-    display: flex;
-  }
-}
-
-.player-skill-input,
-.player-vip-input {
-  display: none;
-}
-
-.vest-row {
-
-  &.highlight {
-    outline: 2px solid var(--danger);
-  }
-}
-
-.music-groups-wrapper {
 	display: grid;
-	grid-area: music;
-	grid-auto-rows: min-content;
 	grid-gap: 1rem;
-	grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
-	height: 100%;
-	overflow-y: auto;
-	scrollbar-width: none;
-	width: 100%;
+	grid-template-columns: [main-start vests-start control-start] 1fr 1fr 1fr 1fr 1fr 1fr [vests-end settings-start mode-start control-end games-start] 1fr 1fr [teams-start] 1fr [mode-end games-end print-start music-start] 1fr [teams-end] 1fr 1fr [music-end main-end print-end settings-end];
+	grid-template-rows: [main-start control-start games-start print-start] auto [control-end games-end print-end vestcontrol-start mode-start music-start] auto [vestcontrol-end mode-end music-end game-start variations-start] auto [variations-end random-start] auto [random-end teams-start] auto [teams-end main-end game-end];
 
-	@import '../components/musicModeCard';
+	@include media-breakpoint-down(lg) {
+		grid-template-columns: [main-start vests-start control-start teams-start] 1fr 1fr 1fr 1fr [teams-end control-end vests-end settings-start mode-start music-start print-start games-start] 1fr 1fr [games-end print-end mode-end music-end main-end settings-end];
+		grid-template-rows: [main-start control-start print-start] auto [control-end print-end games-start vestcontrol-start] auto [vestcontrol-end games-end music-start game-start] auto [music-end mode-start] auto [mode-end variations-start] auto [variations-end] 1fr [game-end random-start teams-start] auto [random-end teams-end main-end ];
+	}
+
+	@include media-breakpoint-down(md) {
+		grid-template-columns: [main-start vests-start control-start teams-start settings-start mode-start games-start] 1fr [games-end mode-end music-start print-start] 1fr [ print-end music-end main-end settings-end teams-end control-end vests-end];
+		grid-template-rows: [main-start control-start] auto [control-end print-start games-start ] auto [print-end games-end music-start mode-start] auto [music-end mode-end variations-start] auto [variations-end vestcontrol-start] auto [vestcontrol-end random-start] auto [random-end game-start] auto [game-end teams-start] auto [ teams-end main-end ];
+	}
+
+	@include media-breakpoint-down(sm) {
+		grid-template-columns: [main-start vests-start control-start teams-start settings-start mode-start games-start music-start print-start] 1fr [games-end mode-end print-end music-end main-end settings-end teams-end control-end vests-end];
+		grid-template-rows: [main-start control-start] auto [control-end print-start] auto [print-end games-start] auto [games-end mode-start] auto [mode-end music-start] auto [music-end variations-start] auto [variations-end vestcontrol-start] auto [vestcontrol-end random-start] auto [random-end game-start] auto [game-end teams-start] auto [ teams-end main-end ];
+
+	}
+
+
+	@import 'newGame/common';
+	@import 'newGame/control';
 }

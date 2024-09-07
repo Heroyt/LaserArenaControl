@@ -261,6 +261,7 @@ class Modes extends Controller
                 }
             }
             $mode->active = !empty($values['active']);
+            $mode->public = !empty($values['public']);
             if (!empty($values['teams'])) {
                 $mode->teams = json_encode($values['teams'], JSON_THROW_ON_ERROR);
             }
@@ -325,6 +326,7 @@ class Modes extends Controller
             foreach ($variations as $variationId => $info) {
                 $variation = GameModeVariation::get($variationId);
                 $variation->name = $info['name'];
+                $variation->public = !empty($info['public']);
                 if (!$variation->save()) {
                     throw new RuntimeException('Cannot save variation');
                 }

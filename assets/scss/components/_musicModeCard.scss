@@ -2,8 +2,10 @@
 	backdrop-filter: blur(10px);
 	background-color: rgba(255, 255, 255, 0.4);
 	border-radius: 1rem;
+	cursor: pointer;
 	overflow: hidden;
 	padding: 1rem;
+	pointer-events: all;
 	position: relative;
 
 	* {
@@ -51,6 +53,12 @@
 	}
 
 	.children {
-		color: #fff;
+		.child {
+			appearance: none;
+			background: none;
+			border: 0;
+			color: #fff;
+			display: block;
+		}
 	}
 }

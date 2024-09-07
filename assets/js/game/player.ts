@@ -1,7 +1,7 @@
-import {Popover, Tooltip} from "bootstrap";
-import {startLoading, stopLoading} from "../loaders";
-import Game from "./game";
-import {updateVests, VestData} from "../api/endpoints/settings/vests";
+import {Popover, Tooltip} from 'bootstrap';
+import {startLoading, stopLoading} from '../loaders';
+import Game from './game';
+import {updateVests, VestData} from '../api/endpoints/settings/vests';
 import {initTooltips} from '../includes/tooltips';
 
 declare module "bootstrap" {
@@ -39,6 +39,7 @@ export default class Player {
 
 	popover: Popover;
 	selectTeamTooltip: Tooltip;
+	atLeastTwoTeamsTooltip: Tooltip;
 
 	/**
 	 * @param vest {String}
@@ -80,6 +81,14 @@ export default class Player {
 				customClass: 'tooltip-danger',
 			}
 		)
+		this.atLeastTwoTeamsTooltip = new Tooltip(
+			this.row.querySelector('.team-select'),
+			{
+				title: messages.atLeastTwoTeams,
+				trigger: 'manual',
+				customClass: 'tooltip-danger',
+			}
+		);
 
 		const input = tmp.querySelector(`input[value="${this.$vest.dataset.status.toLowerCase()}"]`) as HTMLInputElement;
 		if (input) {
@@ -114,6 +123,8 @@ export default class Player {
 			const label = document.querySelector(`label[for="${$team.id}"]`);
 			$team.addEventListener('change', () => {
 				this.selectTeamTooltip.hide();
+				this.atLeastTwoTeamsTooltip.hide();
+				this.game.atLeastTwoTeamsTooltip.hide();
 				this.update();
 			});
 			if (label) {
@@ -395,6 +406,8 @@ export default class Player {
 			$team.checked = $team.value === team;
 		});
 		this.selectTeamTooltip.hide();
+		this.atLeastTwoTeamsTooltip.hide();
+		this.game.atLeastTwoTeamsTooltip.hide();
 	}
 
 	setTeam(team: string): void {

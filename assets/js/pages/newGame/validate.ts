@@ -28,7 +28,12 @@ export function validateForm(data: FormData, game : Game): boolean {
 	}
 
 	let ok = true;
-	game.getActiveTeams().forEach(team => {
+	const activeTeams = game.getActiveTeams();
+	if (activeTeams.length < 2) {
+		game.atLeastTwoTeamsTooltip.show();
+		return false;
+	}
+	activeTeams.forEach(team => {
 		if (team.name.length < team.$name.minLength) {
 			ok = false;
 			team.emptyNameTooltip.show();

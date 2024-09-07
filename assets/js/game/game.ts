@@ -53,6 +53,7 @@ export default class Game {
 
 	teamShuffleTooltip: Tooltip;
 	noPlayersTooltip: Tooltip;
+	atLeastTwoTeamsTooltip: Tooltip;
 
 	maxSkill: 3 | 6 = 3;
 
@@ -128,6 +129,14 @@ export default class Game {
 				trigger: 'manual',
 				customClass: 'tooltip-danger',
 			},
+		);
+		this.atLeastTwoTeamsTooltip = new Tooltip(
+			document.querySelector('.vest-row'),
+			{
+				title: messages.atLeastTwoTeams,
+				trigger: 'manual',
+				customClass: 'tooltip-danger',
+			}
 		);
 
 		(document.querySelectorAll('.vest-row') as NodeListOf<HTMLDivElement>).forEach(row => {

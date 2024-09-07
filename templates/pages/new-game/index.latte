@@ -77,17 +77,18 @@
 
     <script>
         const messages = {
-            missingShuffleTeam: `{_'Musíte vybrat alespoň 2 týmy.', context: 'errors'}`,
-            missingPlayerTeam: `{_'Musíte vybrat tým hráče.', context: 'errors'}`,
-            emptyTeamName: `{_'Vyplňte název týmu', context: 'errors'}`,
-            teamNameTooLong: `{_'Název týmu je moc dlouhý', context: 'errors'}`,
-            noPlayersActive: `{_'Musíte zadat alespoň 2 hráče.', context: 'errors'}`,
-            vestOk: `{_'V pořádku', context: 'settings.vests.status'}`,
-            vestPlayable: `{_'Hratelná', context: 'settings.vests.status'}`,
-            vestBroken: `{_'Nefunkční', context: 'settings.vests.status'}`,
-            vestFailure: `{_'Porucha', context: 'settings.vests'}`,
-            load: `{_'Nahrát', context: 'newGame.preparedGames.actions'}`,
-            delete: `{_'Smazat', context: 'actions'}`,
+            missingShuffleTeam: {_'Musíte vybrat alespoň 2 týmy.', context: 'errors'},
+            atLeastTwoTeams: {_'Musíte vybrat alespoň 2 týmy.', context: 'errors'},
+            missingPlayerTeam: {_'Musíte vybrat tým hráče.', context: 'errors'},
+            emptyTeamName: {_'Vyplňte název týmu', context: 'errors'},
+            teamNameTooLong: {_'Název týmu je moc dlouhý', context: 'errors'},
+            noPlayersActive: {_'Musíte zadat alespoň 2 hráče.', context: 'errors'},
+            vestOk: {_'V pořádku', context: 'settings.vests.status'},
+            vestPlayable: {_'Hratelná', context: 'settings.vests.status'},
+            vestBroken: {_'Nefunkční', context: 'settings.vests.status'},
+            vestFailure: {_'Porucha', context: 'settings.vests'},
+            load: {_'Nahrát', context: 'newGame.preparedGames.actions'},
+            delete: {_'Smazat', context: 'actions'},
         }
         const gameData = {$loadGame|json|noescape};
         const system = {$system};

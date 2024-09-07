@@ -36,6 +36,7 @@ export default function initNewGamePage() {
 		e.preventDefault();
 
 		const data = new FormData(form);
+		data.set('action', 'load');
 
 		if (!validateForm(data, game)) {
 			return;

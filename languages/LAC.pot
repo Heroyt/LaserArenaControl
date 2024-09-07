@@ -4470,3 +4470,14 @@ msgstr ""
 msgctxt "game"
 msgid "Hráči"
 msgstr ""
+
+msgctxt "image"
+msgid "Pozadí"
+msgstr ""
+
+msgctxt "image"
+msgid "Ikona"
+msgstr ""
+
+msgid "Veřejný"
+msgstr ""

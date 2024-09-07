@@ -251,7 +251,7 @@
 {define vestRow}
     {varType App\GameModels\Vest $vest}
     <div class="input-group my-2 shadow-in-place vest-row rounded" data-vest="{$vest->vestNum}">
-        <label class="input-group-text px-2 bg-light text-black vest-num cursor-pointer"
+        <label class="input-group-text px-2 bg-light text-black vest-num cursor-pointer" data-hide-status="1"
              data-status="" data-info="" for="player-name-{$vest->vestNum}">
             {$vest->vestNum}
         </label>
@@ -279,18 +279,18 @@
                 {/foreach}
             </div>
         </div>
-        <div>
-            <input type="radio" name="player[{$vest->vestNum}][vip]" value="0" class="player-vip-input"
-                   id="player-vip-{$vest->vestNum}-0" checked/>
-            <label class="player-vip bg-secondary" for="player-vip-{$vest->vestNum}-1">
-                VIP
-            </label>
-            <input type="radio" name="player[{$vest->vestNum}][vip]" value="1" class="player-vip-input"
-                   id="player-vip-{$vest->vestNum}-1"/>
-            <label class="player-vip bg-gold" for="player-vip-{$vest->vestNum}-0">
-                VIP
-            </label>
-        </div>
+{*        <div>*}
+{*            <input type="radio" name="player[{$vest->vestNum}][vip]" value="0" class="player-vip-input"*}
+{*                   id="player-vip-{$vest->vestNum}-0" checked/>*}
+{*            <label class="player-vip bg-secondary" for="player-vip-{$vest->vestNum}-1">*}
+{*                VIP*}
+{*            </label>*}
+{*            <input type="radio" name="player[{$vest->vestNum}][vip]" value="1" class="player-vip-input"*}
+{*                   id="player-vip-{$vest->vestNum}-1"/>*}
+{*            <label class="player-vip bg-gold" for="player-vip-{$vest->vestNum}-0">*}
+{*                VIP*}
+{*            </label>*}
+{*        </div>*}
         <div data-toggle="tooltip" title="{_'Herní schopnost hráče', context: 'game.player'}">
             <input type="radio" name="player[{$vest->vestNum}][skill]" value="1" class="player-skill-input"
                    id="player-skill-{$vest->vestNum}-1" checked/>

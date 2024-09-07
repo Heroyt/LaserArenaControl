@@ -4,12 +4,6 @@ import Game from './game';
 import {updateVests, VestData} from '../api/endpoints/settings/vests';
 import {initTooltips} from '../includes/tooltips';
 
-declare module "bootstrap" {
-	class Popover {
-		_getTipElement(): HTMLElement;
-	}
-}
-
 export default class Player {
 
 	vest: number | string;
@@ -37,7 +31,7 @@ export default class Player {
 	$vip: NodeListOf<HTMLInputElement>;
 	$clear: HTMLButtonElement;
 
-	popover: Popover;
+	popover: Popover|null = null;
 	selectTeamTooltip: Tooltip;
 	atLeastTwoTeamsTooltip: Tooltip;
 
@@ -64,15 +58,17 @@ export default class Player {
 
 		const tmp = document.createElement('div');
 		tmp.innerHTML = `<div class="btn-group my-3 shadow"><input type="radio" class="btn-check" name="vest[status]" id="vest-status-ok" autocomplete="off" value="ok"><label class="btn btn-outline-success" for="vest-status-ok">${messages.vestOk}</label><input type="radio" class="btn-check" name="vest[status]" id="vest-status-playable" autocomplete="off" value="playable"><label class="btn btn-outline-warning" for="vest-status-playable">${messages.vestPlayable}</label><input type="radio" class="btn-check" name="vest[status]" id="vest-status-broken" autocomplete="off" value="broken" ><label class="btn btn-outline-danger" for="vest-status-broken">${messages.vestBroken}</label></div><textarea class="form-control" name="vest[info]" id="vest-info" cols="20" rows="4">${this.$vest.dataset.info}</textarea>`;
-		this.popover = new Popover(
-			this.$vest,
-			{
-				trigger: 'click',
-				title: 'Stav vesty',
-				content: tmp,
-				html: true,
-			}
-		);
+		if (!this.$vest.dataset.hideStatus){
+			this.popover = new Popover(
+				this.$vest,
+				{
+					trigger: 'click',
+					title: 'Stav vesty',
+					content: tmp,
+					html: true,
+				}
+			);
+		}
 		this.selectTeamTooltip = new Tooltip(
 			this.row.querySelector('.team-select'),
 			{
@@ -171,7 +167,7 @@ export default class Player {
 			});
 
 			this.game.players.forEach(player => {
-				if (player === this) {
+				if (player === this || player.popover === null) {
 					return;
 				}
 				player.popover.hide();
@@ -292,14 +288,18 @@ export default class Player {
 		this.$teams.forEach($team => {
 			$team.checked = false;
 		});
-		this.$skills.forEach($skill => {
-			$skill.checked = false;
-		});
-		this.$skills[0].checked = true;
-		this.$vip.forEach($vip => {
-			$vip.checked = false;
-		});
-		this.$vip[0].checked = true;
+		if (this.$skills.length > 0) {
+			this.$skills.forEach($skill => {
+				$skill.checked = false;
+			});
+			this.$skills[0].checked = true;
+		}
+		if (this.$vip.length > 0) {
+			this.$vip.forEach($vip => {
+				$vip.checked = false;
+			});
+			this.$vip[0].checked = true;
+		}
 		this.realSkill = 1;
 		this.row.style.removeProperty('--shadow-color');
 		this.$vest.style.removeProperty('color');
@@ -365,28 +365,32 @@ export default class Player {
 			}
 		}
 
-		found = false;
-		this.$skills.forEach($skill => {
-			if ($skill.checked) {
-				this.skill = parseInt($skill.value);
-				found = true;
+		if (this.$skills.length > 0) {
+			found = false;
+			this.$skills.forEach($skill => {
+				if ($skill.checked) {
+					this.skill = parseInt($skill.value);
+					found = true;
+				}
+			});
+			if (!found) {
+				this.skill = 1;
+				this.$skills[0].checked = true;
 			}
-		});
-		if (!found) {
-			this.skill = 1;
-			this.$skills[0].checked = true;
 		}
 
-		found = false;
-		this.$vip.forEach($vip => {
-			if ($vip.checked) {
-				this.vip = parseInt($vip.value) > 0;
-				found = true;
+		if (this.$vip.length > 0) {
+			found = false;
+			this.$vip.forEach($vip => {
+				if ($vip.checked) {
+					this.vip = parseInt($vip.value) > 0;
+					found = true;
+				}
+			});
+			if (!found) {
+				this.vip = false;
+				this.$vip[0].checked = true;
 			}
-		});
-		if (!found) {
-			this.vip = false;
-			this.$vip[0].checked = true;
 		}
 
 		this.row.dispatchEvent(

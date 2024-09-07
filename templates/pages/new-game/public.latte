@@ -6,7 +6,6 @@
 {default App\Models\PriceGroup[] $priceGroups = []}
 {default App\Models\PriceGroup[] $priceGroupsAll = $priceGroups}
 
-{import 'helpers/help.latte'}
 {import '../../components/control/scoreDownload.latte'}
 {foreach $addedTemplates->import as $import}
     {import $import}
@@ -57,7 +56,6 @@
     {/foreach}
     {include userSearchModal}
     {include 'helpers/musicModesDisplay.latte', $musicGroups}
-    {include help}
     {var int $order = 0}
     {foreach $addedTemplates->offcanvas as $include}
         {block $include}{/block}

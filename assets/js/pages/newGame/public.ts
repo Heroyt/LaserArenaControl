@@ -1,5 +1,4 @@
 import Game from '../../game/game';
-import {Offcanvas} from 'bootstrap';
 import {validateForm} from './validate';
 import {startLoading, stopLoading} from '../../loaders';
 import {sendPreparedGamePublic} from '../../api/endpoints/preparedGames';
@@ -8,13 +7,13 @@ export default function initNewGamePage() {
 	const form = document.getElementById('new-game-content') as HTMLFormElement;
 
 	// Toggle offcanvas
-	const helpOffcanvasElement = document.getElementById('help') as HTMLDivElement;
-	const helpOffcanvas = new Offcanvas(helpOffcanvasElement, {backdrop: true});
-	(document.querySelectorAll('.trigger-help') as NodeListOf<HTMLButtonElement>).forEach(btn => {
-		btn.addEventListener('click', () => {
-			helpOffcanvas.show();
-		});
-	});
+	// const helpOffcanvasElement = document.getElementById('help') as HTMLDivElement;
+	// const helpOffcanvas = new Offcanvas(helpOffcanvasElement, {backdrop: true});
+	// (document.querySelectorAll('.trigger-help') as NodeListOf<HTMLButtonElement>).forEach(btn => {
+	// 	btn.addEventListener('click', () => {
+	// 		helpOffcanvas.show();
+	// 	});
+	// });
 
 	// Autosave to local storage
 	form.addEventListener('update', () => {

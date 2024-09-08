@@ -487,6 +487,7 @@ class LigaApi
         // Get updates from laser liga
         $response = $this->get('/api/vests');
         if ($response->getStatusCode() === 200) {
+            $response->getBody()->rewind();
             $contents = $response->getBody()->getContents();
             try {
                 /** @var LigaVest[] $data */
@@ -513,12 +514,14 @@ class LigaApi
                 $this->logger->exception($e);
             }
         } else {
+            $response->getBody()->rewind();
             $this->logger->error('Failed to call GET /api/vests', context: ['response' => $response->getBody()->getContents()]);
         }
 
         // Send all updates to laser liga
-        $response = $this->post('/api/vests', $vestsAll);
+        $response = $this->post('/api/vests', ['vest' => $vestsAll]);
         if ($response->getStatusCode() >= 300) {
+            $response->getBody()->rewind();
             $this->logger->error('Failed to call POST /api/vests', context: ['response' => $response->getBody()->getContents(), 'request' => $vestsAll]);
         }
         return $response->getStatusCode() < 300;

@@ -26,6 +26,7 @@ use Psr\Http\Message\ResponseInterface;
 use RuntimeException;
 use SensitiveParameter;
 use Spiral\RoadRunner\Metrics\Metrics;
+use Symfony\Component\Serializer\Exception\UnexpectedValueException;
 use Symfony\Component\Serializer\Serializer;
 
 /**
@@ -487,23 +488,29 @@ class LigaApi
         $response = $this->get('/api/vests');
         if ($response->getStatusCode() === 200) {
             $contents = $response->getBody()->getContents();
-            /** @var LigaVest[] $data */
-            $data = $this->serializer->deserialize(
-                $contents,
-                LigaVest::class . '[]',
-                'json'
-            );
+            try {
+                /** @var LigaVest[] $data */
+                $data = $this->serializer->deserialize(
+                    $contents,
+                    LigaVest::class . '[]',
+                    'json'
+                );
 
-            foreach ($data as $vestData) {
-                if (!isset($vests[$vestData->system][$vestData->vestNum])) {
-                    continue;
+                foreach ($data as $vestData) {
+                    if (!isset($vests[$vestData->system][$vestData->vestNum])) {
+                        continue;
+                    }
+                    $vest = $vests[$vestData->system][$vestData->vestNum];
+                    if ($vest->updatedAt < $vestData->updatedAt) {
+                        $vest->status = $vestData->status;
+                        $vest->info = $vestData->info;
+                        $vest->save();
+                    }
                 }
-                $vest = $vests[$vestData->system][$vestData->vestNum];
-                if ($vest->updatedAt < $vestData->updatedAt) {
-                    $vest->status = $vestData->status;
-                    $vest->info = $vestData->info;
-                    $vest->save();
-                }
+            } catch (UnexpectedValueException $e) {
+                $response->getBody()->rewind();
+                $this->logger->error('Failed to parse GET /api/vests response', context: ['response' => $response->getBody()->getContents()]);
+                $this->logger->exception($e);
             }
         } else {
             $this->logger->error('Failed to call GET /api/vests', context: ['response' => $response->getBody()->getContents()]);

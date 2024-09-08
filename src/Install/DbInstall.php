@@ -7,10 +7,6 @@
 namespace App\Install;
 
 use App\Core\Info;
-use App\GameModels\Game\PrintStyle;
-use App\GameModels\Game\PrintTemplate;
-use App\GameModels\Tip;
-use App\Services\EventService;
 use Dibi\Exception;
 use Lsr\Core\DB;
 use Lsr\Core\Exceptions\CyclicDependencyException;
@@ -27,71 +23,7 @@ use ReflectionException;
 class DbInstall implements InstallInterface
 {
     /** @var array{definition:string, modifications:array<string,string[]>}[] */
-    public const TABLES = [
-        PrintStyle::TABLE => [
-            'definition' => "(
-				`id_style` int(10) unsigned NOT NULL AUTO_INCREMENT,
-				`name` varchar(50) COLLATE utf8_czech_ci DEFAULT NULL,
-				`color_dark` varchar(7) COLLATE utf8_czech_ci NOT NULL DEFAULT '#304D99',
-				`color_light` varchar(7) COLLATE utf8_czech_ci NOT NULL DEFAULT '#a7d0f0',
-				`color_primary` varchar(7) COLLATE utf8_czech_ci NOT NULL DEFAULT '#1b4799',
-				`bg` varchar(100) COLLATE utf8_czech_ci NOT NULL DEFAULT 'assets/images/print/bg.jpg',
-				`bg_landscape` varchar(100) COLLATE utf8_czech_ci NOT NULL DEFAULT 'assets/images/print/bg_landscape.jpg',
-				`default` tinyint(1) NOT NULL DEFAULT 0,
-				PRIMARY KEY (`id_style`)
-			) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;",
-            'modifications' => [
-                '0.1' => [
-                    "ADD `bg_landscape` VARCHAR(100)  NOT NULL  DEFAULT 'assets/images/print/bg_landscape.jpg' AFTER `bg`;",
-                ],
-            ],
-        ],
-        PrintStyle::TABLE . '_dates' => [
-            'definition' => "(
-				`id_style` int(10) unsigned NOT NULL,
-				`date_from` date NOT NULL,
-				`date_to` date NOT NULL,
-				KEY `style` (`id_style`),
-				CONSTRAINT `style` FOREIGN KEY (`id_style`) REFERENCES `print_styles` (`id_style`) ON DELETE CASCADE ON UPDATE CASCADE
-			) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;",
-            'modifications' => [],
-        ],
-        PrintTemplate::TABLE => [
-            'definition' => "(
-				`id_template` int(11) unsigned NOT NULL AUTO_INCREMENT,
-				`slug` varchar(50) NOT NULL DEFAULT '',
-				`name` varchar(50) DEFAULT NULL,
-				`description` text DEFAULT NULL,
-				`orientation` enum('landscape','portrait') NOT NULL DEFAULT 'portrait',
-				PRIMARY KEY (`id_template`),
-				UNIQUE KEY `slug` (`slug`)
-			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;",
-            'modifications' => [],
-        ],
-        Tip::TABLE => [
-            'definition' => "(
-				`id_tip` int(11) unsigned NOT NULL AUTO_INCREMENT,
-				`text` text DEFAULT NULL,
-				PRIMARY KEY (`id_tip`)
-			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;",
-            'modifications' => [],
-        ],
-        EventService::TABLE => [
-            'definition' => "(
-				`id_event` int(11) unsigned NOT NULL AUTO_INCREMENT,
-				`datetime` datetime NOT NULL DEFAULT current_timestamp(),
-				`message` text NOT NULL,
-				`sent` tinyint(1) NOT NULL DEFAULT 0,
-				`sent_dev` tinyint(1) NOT NULL DEFAULT 0,
-				PRIMARY KEY (`id_event`)
-			) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=utf8mb4;",
-            'modifications' => [
-                '0.1' => [
-                    'ADD `sent_dev` tinyint(1) NOT NULL DEFAULT 0 AFTER `sent`',
-                ],
-            ],
-        ],
-    ];
+    public const array TABLES = [];
 
     /** @var array<class-string, string> */
     protected static array $classTables = [];
@@ -117,9 +49,10 @@ class DbInstall implements InstallInterface
             return false;
         }
 
-      /** @var array{order?:int,definition:string, modifications?:array<string,string[]>}[] $tables */
-        $tables = array_merge($loader->migrations, self::TABLES);
-        uasort($tables, static fn($a, $b) => ($a['order'] ?? 99) - ($b['order'] ?? 99));
+        $tables = $loader::transformToDto(array_merge($loader->migrations, self::TABLES));
+        uasort($tables, static fn($a, $b) => ($a->order ?? 99) - ($b->order ?? 99));
+
+        $connection = DB::getConnection();
 
         try {
             if ($fresh) {
@@ -131,7 +64,7 @@ class DbInstall implements InstallInterface
                             continue;
                         }
                     }
-                    DB::getConnection()->query("DROP TABLE IF EXISTS %n;", $tableName);
+                    $connection->query("DROP TABLE IF EXISTS %n;", $tableName);
                 }
             }
 
@@ -144,10 +77,11 @@ class DbInstall implements InstallInterface
                     }
                 }
                 echo 'Creating table ' . $tableName . "\n";
-                $definition = $info['definition'];
-                DB::getConnection()->query("CREATE TABLE IF NOT EXISTS %n $definition", $tableName);
+                $definition = $info->definition;
+                $connection->query("CREATE TABLE IF NOT EXISTS %n $definition", $tableName);
             }
 
+            // Update tables
             if (!$fresh) {
                 /** @var array<string,string> $tableVersions */
                 $tableVersions = (array)Info::get('db_version', []);
@@ -162,7 +96,7 @@ class DbInstall implements InstallInterface
                     }
                     $currTableVersion = $tableVersions[$tableName] ?? '0.0';
                     $maxVersion = $currTableVersion;
-                    foreach ($info['modifications'] ?? [] as $version => $queries) {
+                    foreach ($info->modifications as $version => $queries) {
                         // Check versions
                         if ($version !== 'always') {
                             if (version_compare($currTableVersion, $version) > 0) {
@@ -178,7 +112,7 @@ class DbInstall implements InstallInterface
                         foreach ($queries as $query) {
                             echo 'Altering table: ' . $tableName . ' - ' . $query . PHP_EOL;
                             try {
-                                DB::getConnection()->query("ALTER TABLE %n $query;", $tableName);
+                                $connection->query("ALTER TABLE %n $query;", $tableName);
                             } catch (Exception $e) {
                                 if ($e->getCode() === 1060 || $e->getCode() === 1061) {
                                     // Duplicate column <-> already created
@@ -198,43 +132,182 @@ class DbInstall implements InstallInterface
                 }
             }
 
+            // Check indexes and foreign keys
+            foreach ($tables as $tableName => $info) {
+                if (class_exists($tableName)) {
+                    $tableName = static::getTableNameFromClass($tableName);
+                    if ($tableName === null) {
+                        continue;
+                    }
+                }
+
+                $indexNames = ['PRIMARY'];
+
+                // Check indexes
+                foreach ($info->indexes as $index) {
+                    if ($index->pk || count($index->columns) < 1) {
+                        continue;
+                    }
+
+                    $indexNames[] = $index->name;
+
+                    // Check current indexes
+                    $indexes = $connection->query("SHOW INDEX FROM %n WHERE key_name = %s;", $tableName, $index->name)
+                                          ->fetchAll();
+                    if (!empty($indexes)) {
+                        // Index already exists
+                        continue;
+                    }
+                    $columns = [];
+                    for ($i = 0, $iMax = count($index->columns); $i < $iMax; $i++) {
+                        $columns[] = '%n';
+                    }
+                    echo 'Creating ' . ($index->unique ? 'UNIQUE ' : '') . 'index on: ' . $tableName . ' - ' . $index->name . ' (' . implode(', ', $index->columns) . ')' . PHP_EOL;
+                    $connection->query(
+                        'CREATE ' . ($index->unique ? 'UNIQUE ' : '') . 'INDEX %n ON %n (' . implode(',', $columns) . ');',
+                        $index->name,
+                        $tableName,
+                        ...$index->columns,
+                    );
+                }
+
+                // Check foreign keys
+                foreach ($info->foreignKeys as $foreignKey) {
+                    $refTable = $foreignKey->refTable;
+                    if (class_exists($refTable)) {
+                        $refTable = static::getTableNameFromClass($refTable);
+                        if ($refTable === null) {
+                            continue;
+                        }
+                    }
+
+                    $indexNames[] = $foreignKey->column;
+
+                    echo 'Checking foreign keys for relation ' . $tableName . '.' . $foreignKey->column . '->' . $refTable . '.' . $foreignKey->refColumn . PHP_EOL;
+
+                    // Check current foreign keys
+                    $fks = $connection
+                      ->select('CONSTRAINT_NAME')
+                      ->from('INFORMATION_SCHEMA.KEY_COLUMN_USAGE')
+                      ->where('REFERENCED_TABLE_SCHEMA = (SELECT DATABASE())')
+                      ->where('TABLE_NAME = %s', $tableName)
+                      ->where('COLUMN_NAME = %s', $foreignKey->column)
+                      ->where('REFERENCED_TABLE_NAME = %s AND REFERENCED_COLUMN_NAME = %s', $refTable, $foreignKey->refColumn)
+                      ->fetchPairs();
+                    $count = count($fks);
+                    if ($count === 1) {
+                        // FK already exists
+                        continue;
+                    }
+                    if ($count > 1) {
+                        echo 'Multiple foreign keys found for relation ' . $tableName . '.' . $foreignKey->column . '->' . $refTable . '.' . $foreignKey->refColumn . ' - ' . implode(', ', $fks) . PHP_EOL;
+                        // FK already exists, but is duplicated
+                        array_shift($fks); // Remove first element
+                        // Drop any duplicate foreign key
+                        foreach ($fks as $fkName) {
+                            try {
+                                echo 'DROPPING foreign key on: ' . $tableName . ' - ' . $fkName . PHP_EOL;
+                                $connection->query('ALTER TABLE %n DROP FOREIGN KEY %n;', $tableName, $fkName);
+                            } catch (Exception $e) {
+                                echo $e->getMessage() . PHP_EOL;
+                            }
+                        }
+                        continue;
+                    }
+
+                    // Create new foreign key
+                    echo 'Creating foreign key on: ' . $tableName . ' - ' . $foreignKey->column . '->' . $refTable . '.' . $foreignKey->refColumn . PHP_EOL;
+                    $connection->query(
+                        'ALTER TABLE %n ADD FOREIGN KEY (%n) REFERENCES %n (%n) ON DELETE %SQL ON UPDATE %SQL;',
+                        $tableName,
+                        $foreignKey->column,
+                        $refTable,
+                        $foreignKey->refColumn,
+                        $foreignKey->onDelete,
+                        $foreignKey->onUpdate,
+                    );
+                }
+
+                // DROP all undefined indexes
+                echo 'DROPPING indexes on ' . $tableName . ' other then: ' . implode(', ', $indexNames) . PHP_EOL;
+                $indexes = $connection->query("SHOW INDEX FROM %n WHERE key_name NOT IN %in;", $tableName, $indexNames)
+                                      ->fetchAll();
+                foreach ($indexes as $row) {
+                    try {
+                        echo 'DROPPING index on: ' . $tableName . ' - ' . $row->Key_name . PHP_EOL;
+                        $connection->query('DROP INDEX %n ON %n;', $row->Key_name, $tableName);
+                    } catch (Exception $e) {
+                        echo $e->getMessage() . PHP_EOL;
+                    }
+                }
+            }
+
             // Game mode view
-            DB::getConnection()->query("DROP VIEW IF EXISTS `vModesNames`");
-            DB::getConnection()->query(
-                "CREATE VIEW IF NOT EXISTS `vModesNames`
-AS SELECT
-   `a`.`id_mode` AS `id_mode`,
-   `a`.`system` AS `system`,
-   `a`.`name` AS `name`,
-   `a`.`description` AS `description`,
-   `a`.`type` AS `type`,
-   `b`.`sysName` AS `sysName`
-FROM (`game_modes` `a` left join `game_modes-names` `b` on(`a`.`id_mode` = `b`.`id_mode`));"
+            $connection->query("DROP VIEW IF EXISTS `vModesNames`");
+            $connection->query("DROP VIEW IF EXISTS `vmodesnames`");
+            $connection->query(<<<SQL
+                CREATE VIEW IF NOT EXISTS `vModesNames`
+                AS SELECT
+                   `a`.`id_mode` AS `id_mode`,
+                   `a`.`system` AS `system`,
+                   `a`.`name` AS `name`,
+                   `a`.`description` AS `description`,
+                   `a`.`type` AS `type`,
+                   `b`.`sysName` AS `sysName`
+                FROM (`game_modes` `a` left join `game_modes-names` `b` on(`a`.`id_mode` = `b`.`id_mode`));
+                SQL
             );
 
             // RegressionData view
-            DB::getConnection()->query("DROP VIEW IF EXISTS `vEvo5RegressionData`");
-            DB::getConnection()->query(
-                "CREATE VIEW IF NOT EXISTS `vEvo5RegressionData`
-AS SELECT
-   `p`.`id_game` AS `id_game`,
-   `p`.`hits` AS `hits`,
-   `p`.`deaths` AS `deaths`,
-   `p`.`hits_other` AS `hits_other`,
-   `p`.`deaths_other` AS `deaths_other`,
-   `p`.`hits_own` AS `hits_own`,
-   `p`.`deaths_own` AS `deaths_own`,
-   `p`.`id_team` AS `id_team`,
-   `g`.`game_type` AS `game_type`,
-   TIMESTAMPDIFF(MINUTE,`g`.`start`, `g`.`end`) AS `game_length`,
-   (SELECT COUNT(0) - 1 FROM `evo5_players` `p2` WHERE `p2`.`id_team` = `p`.`id_team`) AS `teammates`,
-   (SELECT COUNT(0) from `evo5_players` `p2` WHERE `p2`.`id_team` <> `p`.`id_team` AND `p2`.`id_game` = `p`.`id_game`) AS `enemies`,
-   `m`.`id_mode` AS `id_mode`,
-   `m`.`rankable` AS `rankable` 
-FROM `evo5_players` `p` 
-JOIN `evo5_games` `g` ON (`p`.`id_game` = `g`.`id_game`)
-JOIN `game_modes` `m` ON (`g`.`id_mode` = `m`.`id_mode` OR `g`.`id_mode` is null AND `m`.`id_mode` = IF(`g`.`game_type` = 'TEAM',1,2))
-WHERE `g`.`start` is not null AND `g`.`end` is not null;"
+            $connection->query("DROP VIEW IF EXISTS `vEvo5RegressionData`");
+            $connection->query("DROP VIEW IF EXISTS `vevo5regressiondata`");
+            $connection->query(<<<SQL
+                CREATE VIEW IF NOT EXISTS `vEvo5RegressionData`
+                AS SELECT
+                   `p`.`id_game` AS `id_game`,
+                   `p`.`hits` AS `hits`,
+                   `p`.`deaths` AS `deaths`,
+                   `p`.`hits_other` AS `hits_other`,
+                   `p`.`deaths_other` AS `deaths_other`,
+                   `p`.`hits_own` AS `hits_own`,
+                   `p`.`deaths_own` AS `deaths_own`,
+                   `p`.`id_team` AS `id_team`,
+                   `g`.`game_type` AS `game_type`,
+                   TIMESTAMPDIFF(MINUTE,`g`.`start`, `g`.`end`) AS `game_length`,
+                   (SELECT COUNT(0) - 1 FROM `evo5_players` `p2` WHERE `p2`.`id_team` = `p`.`id_team`) AS `teammates`,
+                   (SELECT COUNT(0) from `evo5_players` `p2` WHERE `p2`.`id_team` <> `p`.`id_team` AND `p2`.`id_game` = `p`.`id_game`) AS `enemies`,
+                   `m`.`id_mode` AS `id_mode`,
+                   `m`.`rankable` AS `rankable`
+                FROM `evo5_players` `p`
+                JOIN `evo5_games` `g` ON (`p`.`id_game` = `g`.`id_game`)
+                JOIN `game_modes` `m` ON (`g`.`id_mode` = `m`.`id_mode` OR `g`.`id_mode` is null AND `m`.`id_mode` = IF(`g`.`game_type` = 'TEAM',1,2))
+                WHERE `g`.`start` is not null AND `g`.`end` is not null;
+                SQL
+            );
+            $connection->query("DROP VIEW IF EXISTS `vEvo6RegressionData`");
+            $connection->query("DROP VIEW IF EXISTS `vevo6regressiondata`");
+            $connection->query(<<<SQL
+                CREATE VIEW IF NOT EXISTS `vEvo6RegressionData`
+                AS SELECT
+                   `p`.`id_game` AS `id_game`,
+                   `p`.`hits` AS `hits`,
+                   `p`.`deaths` AS `deaths`,
+                   `p`.`hits_other` AS `hits_other`,
+                   `p`.`deaths_other` AS `deaths_other`,
+                   `p`.`hits_own` AS `hits_own`,
+                   `p`.`deaths_own` AS `deaths_own`,
+                   `p`.`id_team` AS `id_team`,
+                   `g`.`game_type` AS `game_type`,
+                   TIMESTAMPDIFF(MINUTE,`g`.`start`, `g`.`end`) AS `game_length`,
+                   (SELECT COUNT(0) - 1 FROM `evo6_players` `p2` WHERE `p2`.`id_team` = `p`.`id_team`) AS `teammates`,
+                   (SELECT COUNT(0) from `evo6_players` `p2` WHERE `p2`.`id_team` <> `p`.`id_team` AND `p2`.`id_game` = `p`.`id_game`) AS `enemies`,
+                   `m`.`id_mode` AS `id_mode`,
+                   `m`.`rankable` AS `rankable`
+                FROM `evo6_players` `p`
+                JOIN `evo6_games` `g` ON (`p`.`id_game` = `g`.`id_game`)
+                JOIN `game_modes` `m` ON (`g`.`id_mode` = `m`.`id_mode` OR `g`.`id_mode` is null AND `m`.`id_mode` = IF(`g`.`game_type` = 'TEAM',1,2))
+                WHERE `g`.`start` is not null AND `g`.`end` is not null;
+                SQL
             );
         } catch (Exception $e) {
             echo "\e[0;31m" . $e->getMessage() . "\e[m\n" . $e->getSql() . "\n";

@@ -46,6 +46,11 @@ tables:
               UNIQUE KEY `code` (`code`)
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 			'''
+		indexes:
+			-
+				name: 'code'
+				columns: ['code']
+				unique: true
 	App\Models\Auth\PlayerConnection:
 		order: 1
 		definition: '''
@@ -62,6 +67,15 @@ tables:
 		modifications:
 			0.1:
 				- "CHANGE `type` `type` ENUM('rfid','laserforce','mylasermaxx','other')  CHARACTER SET utf8mb4  COLLATE utf8mb4_general_ci  NOT NULL;"
+		indexes:
+			-
+				name: 'id_user'
+				columns: ['id_user']
+		foreignKeys:
+			-
+				column: id_user
+				refTable: App\Models\Auth\Player
+				refColumn: id_user
 	App\Models\MusicMode:
 		order: 0
 		definition: '''
@@ -87,10 +101,13 @@ tables:
 				- 'CHANGE `name` `name` VARCHAR(80)  CHARACTER SET utf8mb4  COLLATE utf8mb4_general_ci  NOT NULL;'
 			0.3:
 				- 'ADD `group` VARCHAR(80)  CHARACTER SET utf8mb4  COLLATE utf8mb4_general_ci DEFAULT NULL AFTER `name`;'
-				- 'ADD INDEX `group` (`group`);'
 			0.4:
 				- 'ADD `background_image` VARCHAR(255) DEFAULT NULL;'
 				- 'ADD `icon` VARCHAR(255) DEFAULT NULL;'
+		indexes:
+			-
+				name: group
+				columns: ['group']
 	App\GameModels\Game\GameModes\AbstractMode:
 		order: 0
 		definition: '''
@@ -159,6 +176,11 @@ tables:
         	CONSTRAINT `game_modes-names_ibfk_1` FOREIGN KEY (`id_mode`) REFERENCES `game_modes` (`id_mode`) ON DELETE CASCADE ON UPDATE CASCADE
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 		'''
+		foreignKeys:
+			-
+				column: 'id_mode'
+				refTable: App\GameModels\Game\GameModes\AbstractMode
+				refColumn: 'id_mode'
 	App\Models\GameModeVariation:
 		order: 0
 		definition: '''
@@ -189,6 +211,19 @@ tables:
 			CONSTRAINT `game_modes_variations_values_ibfk_2` FOREIGN KEY (`id_mode`) REFERENCES `game_modes` (`id_mode`) ON DELETE CASCADE ON UPDATE CASCADE
 		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 		'''
+		foreignKeys:
+			-
+				column: id_variation
+				refTable: App\Models\GameModeVariation
+				refColumn: id_variation
+			-
+				column: id_mode
+				refTable: App\GameModels\Game\GameModes\AbstractMode
+				refColumn: id_mode
+		indexes:
+			-
+				name: 'value'
+				columns: ['value']
 	App\Models\GameGroup:
 		order: 0
 		definition: '''
@@ -257,16 +292,42 @@ tables:
 				- 'ADD `import_time` datetime DEFAULT NULL AFTER `file_time`'
 			0.4.0:
 				- 'ADD `id_music` int(11) unsigned DEFAULT NULL AFTER `id_mode`'
-				- 'ADD FOREIGN KEY IF NOT EXISTS (`id_music`) REFERENCES `music` (`id_music`) ON DELETE SET NULL ON UPDATE CASCADE'
 			0.4.1:
 				- 'ADD `id_group` int(11) unsigned DEFAULT NULL AFTER `id_music`'
-				- 'ADD FOREIGN KEY IF NOT EXISTS (`id_group`) REFERENCES `game_groups` (`id_group`) ON DELETE SET NULL ON UPDATE CASCADE'
-			0.4.2:
-				- 'ADD UNIQUE INDEX (`code`);'
 			0.5.0:
 				- 'ADD `results_file` varchar(255) DEFAULT NULL AFTER `end`'
 			0.5.1:
 				- 'ADD `meta` BLOB DEFAULT NULL'
+		foreignKeys:
+			-
+				column: id_music
+				refTable: App\Models\MusicMode
+				refColumn: id_music
+				onDelete: 'SET NULL'
+			-
+				column: id_mode
+				refTable: App\GameModels\Game\GameModes\AbstractMode
+				refColumn: id_mode
+				onDelete: 'SET NULL'
+			-
+				column: id_group
+				refTable: App\Models\GameGroup
+				refColumn: id_group
+				onDelete: 'SET NULL'
+		indexes:
+			-
+				name: start
+				columns: ['start']
+			-
+				name: end
+				columns: ['end']
+			-
+				name: sync
+				columns: ['sync']
+			-
+				name: code
+				columns: ['code']
+				unique: true
 	App\GameModels\Game\Evo6\Game:
 		order: 1
 		definition: '''
@@ -314,6 +375,36 @@ tables:
 		modifications:
 			0.1:
 				- 'ADD `meta` BLOB DEFAULT NULL'
+		foreignKeys:
+			-
+				column: id_music
+				refTable: App\Models\MusicMode
+				refColumn: id_music
+				onDelete: 'SET NULL'
+			-
+				column: id_mode
+				refTable: App\GameModels\Game\GameModes\AbstractMode
+				refColumn: id_mode
+				onDelete: 'SET NULL'
+			-
+				column: id_group
+				refTable: App\Models\GameGroup
+				refColumn: id_group
+				onDelete: 'SET NULL'
+		indexes:
+			-
+				name: start
+				columns: ['start']
+			-
+				name: end
+				columns: ['end']
+			-
+				name: sync
+				columns: ['sync']
+			-
+				name: code
+				columns: ['code']
+				unique: true
 	App\GameModels\Game\Evo5\Team:
 		order: 2
 		definition: '''
@@ -333,6 +424,11 @@ tables:
 		modifications:
 			0.1.0:
 				- 'ADD `bonus` int(11) DEFAULT NULL AFTER `score`'
+		foreignKeys:
+			-
+				column: id_game
+				refTable: App\GameModels\Game\Evo5\Game
+				refColumn: id_game
 	App\GameModels\Game\Evo6\Team:
 		order: 2
 		definition: '''
@@ -349,7 +445,11 @@ tables:
 			CONSTRAINT `evo6_teams_ibfk_1` FOREIGN KEY (`id_game`) REFERENCES `evo6_games` (`id_game`) ON DELETE CASCADE ON UPDATE CASCADE
 		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 		'''
-		modifications:
+		foreignKeys:
+			-
+				column: id_game
+				refTable: App\GameModels\Game\Evo6\Game
+				refColumn: id_game
 	App\GameModels\Game\Evo5\Player:
 		order: 3
 		definition: '''
@@ -397,7 +497,6 @@ tables:
 			0.1.0:
 				- 'ADD `id_user` INT(11)  UNSIGNED  NULL  DEFAULT NULL  AFTER `id_team`'
 				- 'ADD `skill` INT(11)  NOT NULL DEFAULT 0  AFTER `score`'
-				- 'ADD FOREIGN KEY IF NOT EXISTS (`id_user`) REFERENCES `players` (`id_user`) ON DELETE SET NULL ON UPDATE CASCADE'
 			0.2.0:
 				- 'ADD `vip` tinyint(1) unsigned NOT NULL DEFAULT 0 AFTER `bonus_shield`'
 			0.3.0:
@@ -405,6 +504,19 @@ tables:
 				- 'ADD `relative_deaths` decimal(11,4) DEFAULT NULL'
 			0.4.0:
 				- 'ADD `my_lasermaxx` varchar(100) NOT NULL DEFAULT '''''
+		foreignKeys:
+			-
+				column: id_game
+				refTable: App\GameModels\Game\Evo5\Game
+				refColumn: id_game
+			-
+				column: id_team
+				refTable: App\GameModels\Game\Evo5\Team
+				refColumn: id_team
+			-
+				column: id_user
+				refTable: App\Models\Auth\Player
+				refColumn: id_user
 	App\GameModels\Game\Evo6\Player:
 		order: 3
 		definition: '''
@@ -446,7 +558,19 @@ tables:
 			CONSTRAINT `evo6_players_ibfk_3` FOREIGN KEY (`id_user`) REFERENCES `players` (`id_user`) ON DELETE SET NULL ON UPDATE CASCADE
 		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 		'''
-		modifications:
+		foreignKeys:
+			-
+				column: id_game
+				refTable: App\GameModels\Game\Evo6\Game
+				refColumn: id_game
+			-
+				column: id_team
+				refTable: App\GameModels\Game\Evo6\Team
+				refColumn: id_team
+			-
+				column: id_user
+				refTable: App\Models\Auth\Player
+				refColumn: id_user
 	evo5_hits:
 		order: 4
 		definition: '''
@@ -461,6 +585,15 @@ tables:
 			CONSTRAINT `evo5_hits_ibfk_2` FOREIGN KEY (`id_target`) REFERENCES `evo5_players` (`id_player`) ON DELETE CASCADE ON UPDATE CASCADE
 		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 		'''
+		foreignKeys:
+			-
+				column: id_player
+				refTable: App\GameModels\Game\Evo5\Player
+				refColumn: id_player
+			-
+				column: id_target
+				refTable: App\GameModels\Game\Evo5\Player
+				refColumn: id_player
 	evo6_hits:
 		order: 4
 		definition: '''
@@ -475,6 +608,15 @@ tables:
 			CONSTRAINT `evo6_hits_ibfk_2` FOREIGN KEY (`id_target`) REFERENCES `evo6_players` (`id_player`) ON DELETE CASCADE ON UPDATE CASCADE
 		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 		'''
+		foreignKeys:
+			-
+				column: id_player
+				refTable: App\GameModels\Game\Evo6\Player
+				refColumn: id_player
+			-
+				column: id_target
+				refTable: App\GameModels\Game\Evo6\Player
+				refColumn: id_player
 	'prepared_games':
 		order: 0
 		definition: '''
@@ -512,6 +654,15 @@ tables:
 			CONSTRAINT `playlist_music_ibfk_2` FOREIGN KEY (`id_playlist`) REFERENCES `playlists` (`id_playlist`) ON DELETE CASCADE ON UPDATE CASCADE
 		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 		'''
+		foreignKeys:
+			-
+				column: id_music
+				refTable: App\Models\MusicMode
+				refColumn: id_music
+			-
+				column: id_playlist
+				refTable: App\Models\Playlist
+				refColumn: id_playlist
 	App\Gate\Models\GateType:
 		order: 0
 		definition: '''
@@ -525,6 +676,11 @@ tables:
             UNIQUE KEY `slug` (`slug`)
 		) ENGINE=InnoDB DEFAULT CHARSET utf8mb4;
 		'''
+		indexes:
+			-
+				name: 'slug'
+				columns: ['slug']
+				unique: true
 	App\Gate\Models\GateScreenModel:
 		order: 1
 		definition: '''
@@ -543,6 +699,11 @@ tables:
 		modifications:
 			0.1.0:
 				- 'CHANGE `trigger` `trigger` ENUM(''default'',''game_loaded'',''game_playing'',''game_ended'',''custom'',''results_manual'') NOT NULL  DEFAULT ''default'';'
+		foreignKeys:
+			-
+				column: id_gate
+				refTable: App\Gate\Models\GateType
+				refColumn: id_gate
 	'game_highlights':
 		order: 0
 		definition: '''
@@ -572,3 +733,68 @@ tables:
 		modifications:
 			0.1:
 				- 'ADD `deleted` tinyint(1) NOT NULL DEFAULT 0'
+		indexes:
+			-
+				name: deleted
+				columns: ['deleted']
+	App\GameModels\Game\PrintStyle:
+		order: 0
+		definition: '''
+		(
+			`id_style` int(10) unsigned NOT NULL AUTO_INCREMENT,
+			`name` varchar(50) COLLATE utf8_czech_ci DEFAULT NULL,
+			`color_dark` varchar(7) COLLATE utf8_czech_ci NOT NULL DEFAULT '#304D99',
+			`color_light` varchar(7) COLLATE utf8_czech_ci NOT NULL DEFAULT '#a7d0f0',
+			`color_primary` varchar(7) COLLATE utf8_czech_ci NOT NULL DEFAULT '#1b4799',
+			`bg` varchar(100) COLLATE utf8_czech_ci NOT NULL DEFAULT 'assets/images/print/bg.jpg',
+			`bg_landscape` varchar(100) COLLATE utf8_czech_ci NOT NULL DEFAULT 'assets/images/print/bg_landscape.jpg',
+			`default` tinyint(1) NOT NULL DEFAULT 0,
+			PRIMARY KEY (`id_style`)
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
+		'''
+		modifications:
+			0.1:
+				- 'ADD `bg_landscape` VARCHAR(100)  NOT NULL  DEFAULT ''assets/images/print/bg_landscape.jpg'' AFTER `bg`;'
+	App\GameModels\Game\PrintTemplate:
+		order: 0
+		definition: '''
+		(
+			`id_template` int(11) unsigned NOT NULL AUTO_INCREMENT,
+			`slug` varchar(50) NOT NULL DEFAULT '',
+			`name` varchar(50) DEFAULT NULL,
+			`description` text DEFAULT NULL,
+			`orientation` enum('landscape','portrait') NOT NULL DEFAULT 'portrait',
+			PRIMARY KEY (`id_template`),
+			UNIQUE KEY `slug` (`slug`)
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+		'''
+		indexes:
+			-
+				name: 'slug'
+				columns: ['slug']
+				unique: true
+	'print_styles_dates':
+		order: 1
+		definition: '''
+		(
+			`id_style` int(10) unsigned NOT NULL,
+			`date_from` date NOT NULL,
+			`date_to` date NOT NULL,
+			KEY `style` (`id_style`),
+			CONSTRAINT `style` FOREIGN KEY (`id_style`) REFERENCES `print_styles` (`id_style`) ON DELETE CASCADE ON UPDATE CASCADE
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
+		'''
+		foreignKeys:
+			-
+				column: 'id_style'
+				refTable: App\GameModels\Game\PrintStyle
+				refColumn: 'id_style'
+	App\GameModels\Tip:
+		order: 0
+		definition: '''
+		(
+			`id_tip` int(11) unsigned NOT NULL AUTO_INCREMENT,
+			`text` text DEFAULT NULL,
+			PRIMARY KEY (`id_tip`)
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+		'''

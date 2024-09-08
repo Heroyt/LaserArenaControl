@@ -16,8 +16,6 @@ use Redis;
  */
 class EventService
 {
-    public const string TABLE = 'events';
-
     private static string $eventUrl;
 
     public function __construct(

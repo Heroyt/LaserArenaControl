@@ -485,29 +485,35 @@ class LigaApi
 
         // Get updates from laser liga
         $response = $this->get('/api/vests');
+        if ($response->getStatusCode() === 200) {
+            $contents = $response->getBody()->getContents();
+            /** @var LigaVest[] $data */
+            $data = $this->serializer->deserialize(
+                $contents,
+                LigaVest::class . '[]',
+                'json'
+            );
 
-        $contents = $response->getBody()->getContents();
-        /** @var LigaVest[] $data */
-        $data = $this->serializer->deserialize(
-            $contents,
-            LigaVest::class . '[]',
-            'json'
-        );
-
-        foreach ($data as $vestData) {
-            if (!isset($vests[$vestData->system][$vestData->vestNum])) {
-                continue;
+            foreach ($data as $vestData) {
+                if (!isset($vests[$vestData->system][$vestData->vestNum])) {
+                    continue;
+                }
+                $vest = $vests[$vestData->system][$vestData->vestNum];
+                if ($vest->updatedAt < $vestData->updatedAt) {
+                    $vest->status = $vestData->status;
+                    $vest->info = $vestData->info;
+                    $vest->save();
+                }
             }
-            $vest = $vests[$vestData->system][$vestData->vestNum];
-            if ($vest->updatedAt < $vestData->updatedAt) {
-                $vest->status = $vestData->status;
-                $vest->info = $vestData->info;
-                $vest->save();
-            }
+        } else {
+            $this->logger->error('Failed to call GET /api/vests', context: ['response' => $response->getBody()->getContents()]);
         }
 
         // Send all updates to laser liga
         $response = $this->post('/api/vests', $vestsAll);
+        if ($response->getStatusCode() >= 300) {
+            $this->logger->error('Failed to call POST /api/vests', context: ['response' => $response->getBody()->getContents(), 'request' => $vestsAll]);
+        }
         return $response->getStatusCode() < 300;
     }
 }

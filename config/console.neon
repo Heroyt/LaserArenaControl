@@ -24,3 +24,5 @@ services:
 
 	command.logs.archive: App\Cli\Commands\Logs\ArchiveLogsCommand
 	command.logs.clear: App\Cli\Commands\Logs\ClearLogsCommand
+
+	command.vests.sync: App\Cli\Commands\Vests\SyncVestsCommand

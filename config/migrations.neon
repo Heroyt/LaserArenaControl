@@ -22,6 +22,8 @@ tables:
             	`system` varchar(50) NOT NULL DEFAULT '',
             	`grid_col` int(10) unsigned DEFAULT NULL,
             	`grid_row` int(10) unsigned DEFAULT NULL,
+            	`status` enum('ok','playable','broken') NOT NULL DEFAULT 'ok',
+                `info` text DEFAULT NULL,
             	`updated_at` datetime DEFAULT NULL ON UPDATE current_timestamp(),
             	PRIMARY KEY (`id_vest`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -29,6 +31,9 @@ tables:
 		modifications:
 			0.1:
 				- 'ADD `updated_at` datetime DEFAULT NULL ON UPDATE current_timestamp();'
+			0.2:
+				- "ADD `status` enum('ok','playable','broken') NOT NULL DEFAULT 'ok';"
+				- "ADD `info` text DEFAULT NULL;"
 	App\Models\Auth\Player:
 		order: 0
 		definition: '''

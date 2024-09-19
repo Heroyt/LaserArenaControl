@@ -1,0 +1,140 @@
+msgid ""
+msgstr ""
+"Content-Transfer-Encoding: 8bit\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: cs_CZ\n"
+"Language-Team: Czech\n"
+"Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
+"MIME-Version: 1.0\n"
+"PO-Revision-Date: 2024-09-19 12:28\n"
+"POT-Creation-Date: 2021-12-01 12:05+0100\n"
+"Plural-Forms: nplurals=4; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 3;\n"
+"X-Crowdin-Project: laserarenacontrol\n"
+"X-Crowdin-Project-ID: 515800\n"
+"X-Crowdin-Language: cs\n"
+"X-Crowdin-File: /master/languages/tournament.pot\n"
+"X-Crowdin-File-ID: 76\n"
+"Project-Id-Version: laserarenacontrol\n"
+
+msgctxt "vests"
+msgid "Přerozdělit"
+msgstr ""
+
+msgctxt "vests"
+msgid "Všechny"
+msgstr ""
+
+msgid "Turnaj"
+msgstr ""
+
+msgid "Začátek"
+msgstr ""
+
+msgid "Domácí"
+msgstr ""
+
+msgid "Hosté"
+msgstr ""
+
+msgid "Skupina"
+msgstr ""
+
+msgid "Týmy"
+msgstr ""
+
+msgid "Rozlosování"
+msgstr ""
+
+msgid "Hrát"
+msgstr ""
+
+msgid "Výsledky"
+msgstr ""
+
+msgid "Výsledková tabule"
+msgstr ""
+
+msgid "Pořadí"
+msgstr ""
+
+msgid "Tým"
+msgstr ""
+
+msgid "Skóre"
+msgstr ""
+
+msgid "Body"
+msgstr ""
+
+msgid "Nový turnaj"
+msgstr ""
+
+msgid "Název turnaje"
+msgstr ""
+
+msgid "Turnaj XYZ"
+msgstr ""
+
+msgid "Formát"
+msgstr ""
+
+msgid "Týmový"
+msgstr ""
+
+msgid "Sólo"
+msgstr ""
+
+msgid "Začátek turnaje"
+msgstr ""
+
+msgid "Velikost týmu"
+msgstr ""
+
+msgid "Týmů ve hře"
+msgstr ""
+
+msgid "Body za výhru"
+msgstr ""
+
+msgid "Body za remízu"
+msgstr ""
+
+msgid "Body za prohru"
+msgstr ""
+
+msgid "Poslední místo. Ve hře 3 týmů je to 3. místo, ve hře čtyř týmů je to 4. místo."
+msgstr ""
+
+msgid "Body za druhé místo"
+msgstr ""
+
+msgid "Jen pro hru 3 a 4 týmů ve hře."
+msgstr ""
+
+msgid "Body za třetí místo"
+msgstr ""
+
+msgid "Jen pro hru 4 týmů ve hře."
+msgstr ""
+
+msgid "Synchronizovat"
+msgstr ""
+
+msgid "Plánované turnaje"
+msgstr ""
+
+msgid "Týmů ve hře: %d"
+msgstr ""
+
+msgid "Výhry"
+msgstr ""
+
+msgid "Remízy"
+msgstr ""
+
+msgid "Prohry"
+msgstr ""
+
+msgid "Odehrané turnaje"
+msgstr ""
+

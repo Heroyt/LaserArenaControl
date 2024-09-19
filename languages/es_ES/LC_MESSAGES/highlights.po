@@ -3,7 +3,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Language: es_ES\n"
 "Language-Team: Spanish\n"
-"PO-Revision-Date: 2024-07-01 12:56\n"
+"PO-Revision-Date: 2024-09-19 12:28\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Project-Id-Version: laserarenacontrol\n"
 "X-Crowdin-File: /master/languages/highlights.pot\n"
@@ -116,4 +116,8 @@ msgstr "%s pasó %s en el partido apagado. ¡Eso es más que la mitad del partid
 msgctxt "evo5"
 msgid "%s získalo %.1fx tolik bonusů co ostatní."
 msgstr "%s ganó %.1f veces más habilidades que los demás."
+
+msgctxt "evo5"
+msgid "%s získal %.1fx tolik bonusů co ostatní."
+msgstr ""
 

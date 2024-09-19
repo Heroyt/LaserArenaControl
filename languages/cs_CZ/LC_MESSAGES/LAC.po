@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: Czech\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2024-07-08 15:43\n"
+"PO-Revision-Date: 2024-09-19 12:28\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=4; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 3;\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -4429,5 +4429,64 @@ msgid "Tables"
 msgstr ""
 
 msgid "Turnaje"
+msgstr ""
+
+msgid "Seznam her"
+msgstr ""
+
+msgid "Čas"
+msgstr ""
+
+msgid "Herní mód"
+msgstr ""
+
+msgid "Hráči"
+msgstr ""
+
+msgid "Tisk"
+msgstr ""
+
+msgid "Vítěz"
+msgstr ""
+
+msgid "Odeslat"
+msgstr ""
+
+msgid "Nebyla nalezena žádná hra"
+msgstr ""
+
+msgctxt "month"
+msgid "Srpen"
+msgstr ""
+
+msgid "Herní módy"
+msgstr ""
+
+msgid "Např. při módu \"1-TEAM-DEATHMACH\" stačí, aby byl zde zadaný text \"1-TEAM\" nebo \"team-deathmach\"."
+msgstr ""
+
+msgid "Variace herních módů označují malé změny v nastavení hry, jako například délku hry. Při načtení hry do konzole se vybírá mód, jehož jméno se získá přidáním potřebných přípon za nastavený základní název v konzoli. Pokud je tedy mód \"TeamDeathmach\" a má vybranou variaci délky 15 minut, která má příponu \"-10\", výsledný vybraný mód z konzole bude mít název \"TeamDeathmach-15\"."
+msgstr ""
+
+msgid "Popis"
+msgstr ""
+
+msgctxt "game.modes"
+msgid "Zda se herní mód zobrazuje na výběr hráčům."
+msgstr ""
+
+msgctxt "game"
+msgid "Hráči"
+msgstr ""
+
+msgctxt "image"
+msgid "Pozadí"
+msgstr ""
+
+msgctxt "image"
+msgid "Ikona"
+msgstr ""
+
+msgid "Veřejný"
 msgstr ""
 

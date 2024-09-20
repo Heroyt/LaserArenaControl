@@ -1,5 +1,5 @@
-import {Toast} from "bootstrap";
-import EventServerInstance from "../EventServer";
+import EventServerInstance from '../EventServer';
+import {triggerNotification} from '../includes/notifications';
 
 let activityTimer: NodeJS.Timeout | number;
 let isActive: boolean = true;
@@ -17,30 +17,25 @@ export default function initResultsReload(url: string | null = null): void {
 	}
 
 	// Activity timer detects any user activity to prevent site-reload when not wanted
-	document.addEventListener("mousemove", resetActivityTimer, false);
-	document.addEventListener("mousedown", resetActivityTimer, false);
-	document.addEventListener("keypress", resetActivityTimer, false);
-	document.addEventListener("touchmove", resetActivityTimer, false);
+	document.addEventListener('mousemove', resetActivityTimer, false);
+	document.addEventListener('mousedown', resetActivityTimer, false);
+	document.addEventListener('keypress', resetActivityTimer, false);
+	document.addEventListener('touchmove', resetActivityTimer, false);
 	startActivityTimer();
 
 	// WebSocket event listener
-	EventServerInstance.addEventListener("game-imported", triggerNewGame);
+	EventServerInstance.addEventListener('game-imported', triggerNewGame);
 }
 
 function triggerNewGame() {
-	const toasts = document.getElementById('toasts');
-	newGame = true;
-	const toast = document.createElement('div');
-	toast.classList.add('toast');
-	toast.role = 'alert';
-	toast.ariaLive = "assertive";
-	toast.ariaAtomic = "true";
-	toast.innerHTML = `<div class="toast-header"><strong class="me-auto">Upozornění</strong></div><div class="toast-body text-start"><p>Byla detekována nová hra</p><p><a href="${reloadUrl}" class="btn btn-primary">Načíst</a></p></div>`;
-	toasts.appendChild(toast);
-	const toastObj = new Toast(toast, {
-		autohide: false
-	});
-	toastObj.show();
+	triggerNotification(
+		{
+			title: 'Upozornění',
+			type: 'info',
+			content: `<p>Byla detekována nová hra</p><p><a href="${reloadUrl}" class="btn btn-primary">Načíst</a></p>`,
+		},
+		false,
+	);
 	if (!isActive) {
 		setTimeout(() => {
 			if (reloadUrl === window.location.href) {

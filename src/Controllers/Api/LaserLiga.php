@@ -2,7 +2,7 @@
 
 namespace App\Controllers\Api;
 
-use App\Services\LigaApi;
+use App\Services\LaserLiga\LigaApi;
 use Lsr\Core\Controllers\Controller;
 use Psr\Http\Message\ResponseInterface;
 

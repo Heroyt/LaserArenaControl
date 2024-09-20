@@ -6,7 +6,7 @@ namespace App\Cli\Commands\Vests;
 
 use App\Cli\Colors;
 use App\Cli\Enums\ForegroundColors;
-use App\Services\LigaApi;
+use App\Services\LaserLiga\LigaApi;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;

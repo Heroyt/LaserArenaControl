@@ -4,7 +4,7 @@
  * @author Tomáš Vojík <xvojik00@stud.fit.vutbr.cz>, <vojik@wboy.cz>
  */
 
-namespace App\Services;
+namespace App\Services\LaserLiga;
 
 use App\Api\DataObjects\LigaPlayer\LigaPlayerData;
 use App\Api\DataObjects\Vests\LigaVest;
@@ -13,6 +13,7 @@ use App\Core\Info;
 use App\GameModels\Game\Game;
 use App\GameModels\Vest;
 use App\Models\MusicMode;
+use App\Services\GuzzleFactory;
 use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;

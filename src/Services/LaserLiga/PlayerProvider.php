@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\LaserLiga;
 
 use App\Api\DataObjects\LigaPlayer\LigaPlayerData;
 use App\Core\App;

@@ -2,7 +2,7 @@
 
 namespace App\Tasks;
 
-use App\Services\LigaApi;
+use App\Services\LaserLiga\LigaApi;
 use Lsr\Core\Exceptions\ValidationException;
 use Spiral\RoadRunner\Jobs\Task\ReceivedTaskInterface;
 

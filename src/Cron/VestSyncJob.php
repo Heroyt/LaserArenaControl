@@ -2,7 +2,7 @@
 
 namespace App\Cron;
 
-use App\Services\LigaApi;
+use App\Services\LaserLiga\LigaApi;
 use Lsr\Logging\Logger;
 use Orisai\Scheduler\Job\Job;
 use Orisai\Scheduler\Job\JobLock;

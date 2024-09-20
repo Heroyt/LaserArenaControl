@@ -5,7 +5,7 @@ namespace Tests\Unit;
 use App\Core\App;
 use App\GameModels\Game\Enums\VestStatus;
 use App\GameModels\Vest;
-use App\Services\LigaApi;
+use App\Services\LaserLiga\LigaApi;
 use Codeception\Stub;
 use Codeception\Test\Unit;
 use Lsr\Core\DB;

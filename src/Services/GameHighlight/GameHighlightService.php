@@ -11,7 +11,7 @@ use App\Models\DataObjects\Highlights\GameHighlightType;
 use App\Models\DataObjects\Highlights\HighlightCollection;
 use App\Models\DataObjects\Highlights\HighlightDto;
 use App\Services\FeatureConfig;
-use App\Services\LigaApi;
+use App\Services\LaserLiga\LigaApi;
 use DateTimeInterface;
 use Dibi\DriverException;
 use Dibi\Exception;

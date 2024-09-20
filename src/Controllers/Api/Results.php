@@ -8,7 +8,7 @@ use App\GameModels\Factory\GameFactory;
 use App\GameModels\Game\Lasermaxx\Game;
 use App\GameModels\Game\Player;
 use App\Services\ImportService;
-use App\Services\PlayerProvider;
+use App\Services\LaserLiga\PlayerProvider;
 use App\Services\TaskProducer;
 use App\Tasks\GameImportTask;
 use App\Tasks\Payloads\GameImportPayload;

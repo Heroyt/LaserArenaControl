@@ -8,7 +8,7 @@ namespace App\Tools;
 
 use App\Core\App;
 use App\GameModels\Game\Game;
-use App\Services\PlayerProvider;
+use App\Services\LaserLiga\PlayerProvider;
 use App\Tools\Interfaces\ResultsParserInterface;
 use LAC\Modules\Core\ResultParserExtensionInterface;
 use Lsr\Exceptions\FileException;

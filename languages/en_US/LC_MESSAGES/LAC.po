@@ -4474,5 +4474,15 @@ msgctxt "pageTitles"
 msgid "Registrovaní hráči"
 msgstr ""
 
+msgctxt "pageTitles"
+msgid "Nastavení - Tisk"
+msgstr ""
+
 msgid "Registrovaní hráči"
+msgstr ""
+
+msgid "Synchronizace byla naplánována"
+msgstr ""
+
+msgid "Synchronizace proběhne na pozadí během pár minut."
 msgstr ""

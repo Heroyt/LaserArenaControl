@@ -1,5 +1,6 @@
-import {loadPlayersTable} from '../api/endpoints/players';
+import {loadPlayersTable, syncPlayers} from '../api/endpoints/players';
 import {startLoading, stopLoading} from '../loaders';
+import {triggerNotification} from '../includes/notifications';
 
 interface TableParams {
 	search: string;
@@ -9,6 +10,29 @@ interface TableParams {
 }
 
 export default function initPlayers() {
+	const syncPlayersBtn = document.getElementById('sync-players') as HTMLButtonElement;
+	if (syncPlayersBtn) {
+		syncPlayersBtn.addEventListener('click', () => {
+			startLoading(true);
+			syncPlayersBtn.disabled = true;
+			syncPlayers()
+				.then((response) => {
+					triggerNotification({
+						type: 'success',
+						title: response.message,
+						content: response.detail,
+					});
+					stopLoading(true, true);
+				})
+				.catch(() => {
+					stopLoading(false, true);
+				})
+				.finally(() => {
+					syncPlayersBtn.disabled = false;
+				})
+		});
+	}
+
 	let playersTable = document.getElementById('players-table') as HTMLTableElement;
 
 	if (!playersTable) {

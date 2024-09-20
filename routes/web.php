@@ -61,7 +61,7 @@ $gateGroup->post('/idle/{system}', [GateController::class, 'setGateIdle']);
 $playersGroup = Route::group('/players');
 $playersGroup->get('', [Players::class, 'show'])->name('liga-players');
 $playersGroup->group('sync')
-  ->post('sync', [Players::class, 'sync'])
+  ->post('', [Players::class, 'sync'])
   ->get('{code}', [Players::class, 'syncPlayer'])
   ->post('{code}', [Players::class, 'syncPlayer']);
 $playersGroup->group('find')

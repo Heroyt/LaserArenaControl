@@ -5,7 +5,7 @@ namespace App\Controllers;
 use App\Models\Auth\Player;
 use App\Services\LaserLiga\PlayerProvider;
 use App\Services\TaskProducer;
-use App\Tasks\GameImportTask;
+use App\Tasks\PlayersSyncTask;
 use InvalidArgumentException;
 use Lsr\Core\Controllers\Controller;
 use Lsr\Core\Requests\Dto\ErrorResponse;
@@ -13,7 +13,6 @@ use Lsr\Core\Requests\Dto\SuccessResponse;
 use Lsr\Core\Requests\Request;
 use Psr\Http\Message\ResponseInterface;
 use Spiral\RoadRunner\Jobs\Exception\JobsException;
-use Spiral\RoadRunner\Jobs\Options;
 
 class Players extends Controller
 {
@@ -71,11 +70,16 @@ class Players extends Controller
 
     public function sync(): ResponseInterface {
         try {
-            $this->taskProducer->push(GameImportTask::class, null, new Options(priority: GameImportTask::PRIORITY));
+            $this->taskProducer->push(PlayersSyncTask::class, null);
         } catch (JobsException $e) {
             return $this->respond(new ErrorResponse($e->getMessage(), exception: $e), 500);
         }
-        return $this->respond(new SuccessResponse());
+        return $this->respond(
+            new SuccessResponse(
+                message: lang('Synchronizace byla naplánována'),
+                detail: lang('Synchronizace proběhne na pozadí během pár minut.')
+            )
+        );
     }
 
     public function show(Request $request): ResponseInterface {

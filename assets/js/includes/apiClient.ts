@@ -32,6 +32,12 @@ export type ErrorResponse<Values = { [index: string]: any }> = {
 	values?: Values | null
 };
 
+export type SuccessResponse<Values = { [index: string]: any }> = {
+	message: string,
+	detail?: string|null,
+	values?: Values | null,
+}
+
 export class ResponseError extends Error {
 	public response: Response;
 

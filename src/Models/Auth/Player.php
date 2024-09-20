@@ -6,6 +6,7 @@ use App\Models\Auth\Validators\PlayerCode;
 use InvalidArgumentException;
 use Lsr\Core\DB;
 use Lsr\Core\Exceptions\ValidationException;
+use Lsr\Core\Models\Attributes\NoDB;
 use Lsr\Core\Models\Attributes\OneToMany;
 use Lsr\Core\Models\Attributes\PrimaryKey;
 use Lsr\Core\Models\Attributes\Validation\Email;
@@ -28,6 +29,12 @@ class Player extends Model
     public array $connections = [];
 
     public int $rank = 100;
+
+    /**
+     * @var string[]
+     */
+    #[NoDB]
+    public array $codeHistory = [];
 
     public static function getByCode(string $code): ?static {
         $code = strtoupper(trim($code));

@@ -87,10 +87,9 @@ services:
 				tables: true
 
 	guzzle: App\Services\GuzzleFactory
-	liga: App\Services\LigaApi::getInstance(@metrics, @symfony.serializer, @guzzle)
-	playersProvider: App\Services\PlayerProvider
 	liga: App\Services\LaserLiga\LigaApi::getInstance(@metrics, @symfony.serializer, @guzzle)
 	playersProvider: App\Services\LaserLiga\PlayerProvider
+	playersSynchronization: App\Services\LaserLiga\PlayerSynchronizationService
 
 	gamesImport: App\Services\ImportService
 	gamesLoad: App\Tools\GameLoading\GameLoader

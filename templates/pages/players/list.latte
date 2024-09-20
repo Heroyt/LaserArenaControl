@@ -1,0 +1,24 @@
+{layout '../../@layout.latte'}
+
+{varType App\Models\Auth\Player[] $players}
+{varType string $sort}
+{varType bool $desc}
+{varType string $search}
+{varType int $tablePage}
+
+{block content}
+    <h2 class="mt-5 mb-3">{_'Registrovaní hráči'}</h2>
+    <div class="input-group mb-3 ms-auto">
+        <label for="player-search" class="input-group-text">
+            <i class="fa-solid fa-magnifying-glass"></i><span class="visually-hidden">{_'Hledat'}</span>
+        </label>
+        <input type="search" id="player-search" placeholder="{_'Hledat'}..." class="form-control">
+    </div>
+    {include 'table.latte'}
+    <p class="text-center">
+        <button type="button" id="load-more" class="btn btn-primary">
+            <i class="fa-solid fa-plus"></i>
+            {_'Načíst další'}
+        </button>
+    </p>
+{/block}

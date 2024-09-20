@@ -1,0 +1,66 @@
+{varType App\Models\Auth\Player[] $players}
+{varType string $sort}
+{varType bool $desc}
+{varType string $search}
+{varType int $tablePage}
+
+<table class="table table-striped table-hover" id="players-table" {if $ajax}data-ajax{/if}>
+    <thead>
+    <tr>
+        <th n:class="sortable, $sort === 'nickname' && $desc ? 'sort-desc', $sort === 'nickname' && !$desc ? 'sort-asc'" data-sortable="true" data-name="nickname">
+            <div class="h-100 w-100 d-flex align-items-center justify-content-between">
+                {_'Hráč'}
+                <span class="sort ms-2">
+                    <i class="fa-solid fa-sort"></i>
+                    <i class="fa-solid fa-sort-up"></i>
+                    <i class="fa-solid fa-sort-down"></i>
+                </span>
+            </div>
+        </th>
+        <th n:class="sortable, $sort === 'code' && $desc ? 'sort-desc', $sort === 'code' && !$desc ? 'sort-asc'" data-sortable="true" data-name="code">
+            <div class="h-100 w-100 d-flex align-items-center justify-content-between">
+                {_'Kód hráče'}
+                <span class="sort ms-2">
+                    <i class="fa-solid fa-sort"></i>
+                    <i class="fa-solid fa-sort-up"></i>
+                    <i class="fa-solid fa-sort-down"></i>
+                </span>
+            </div>
+        </th>
+        <th n:class="sortable, $sort === 'email' && $desc ? 'sort-desc', $sort === 'email' && !$desc ? 'sort-asc'" data-sortable="true" data-name="email">
+            <div class="h-100 w-100 d-flex align-items-center justify-content-between">
+                {_'Email'}
+                <span class="sort ms-2">
+                    <i class="fa-solid fa-sort"></i>
+                    <i class="fa-solid fa-sort-up"></i>
+                    <i class="fa-solid fa-sort-down"></i>
+                </span>
+            </div>
+        </th>
+        <th n:class="text-end, sortable, $sort === 'rank' && $desc ? 'sort-desc', $sort === 'rank' && !$desc ? 'sort-asc'" data-sortable="true" data-name="rank">
+            <div class="h-100 w-100 d-flex align-items-center justify-content-between">
+                {_'Herní úroveň'}
+                <span class="sort ms-2">
+                    <i class="fa-solid fa-sort"></i>
+                    <i class="fa-solid fa-sort-up"></i>
+                    <i class="fa-solid fa-sort-down"></i>
+                </span>
+            </div>
+        </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr n:foreach="$players as $player">
+        <th>{$player->nickname}</th>
+        <td>
+            <a target="_blank" href="https://laserliga.cz/user/{$player->getCode()}" title="{_'Profil'}" data-toggle="tooltip">
+                {$player->getCode()}
+            </a>
+        </td>
+        <td>
+            <a href="mailto:{$player->email}">{$player->email}</a>
+        </td>
+        <td class="text-end">{$player->rank} <i class="fa-solid fa-star"></i></td>
+    </tr>
+    </tbody>
+</table>

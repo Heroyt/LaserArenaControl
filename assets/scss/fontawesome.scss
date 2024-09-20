@@ -5,6 +5,9 @@ $fa-font-path: '/assets/fonts';
 @import '~@fortawesome/fontawesome-free/scss/variables';
 
 $icons: (
+		'sort': $fa-var-sort,
+		'sort-up': $fa-var-sort-up,
+		'sort-down': $fa-var-sort-down,
 		'arrow-up': $fa-var-arrow-up,
 		'arrow-down': $fa-var-arrow-down,
 		'money-bill-1-wave': $fa-var-money-bill-1-wave,
@@ -50,6 +53,7 @@ $icons: (
 		'tag': $fa-var-tag,
 		'trophy': $fa-var-trophy,
 		'user': $fa-var-user,
+		'users': $fa-var-users,
 		'user-clock': $fa-var-user-clock,
 		'user-plus': $fa-var-user-plus,
 		'xmark': $fa-var-xmark,

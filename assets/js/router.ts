@@ -82,6 +82,14 @@ export default function route(pageInfo: PageInfo): void {
 				module.default();
 			});
 			break;
+		case 'liga-players':
+			import(
+				/* webpackChunkName: "players" */
+				'./pages/players'
+				).then(module => {
+				module.default();
+			});
+			break;
 		case 'public':
 			import(
 				/* webpackChunkName: "public" */

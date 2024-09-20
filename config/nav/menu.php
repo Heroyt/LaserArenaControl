@@ -36,6 +36,13 @@ $menu = [
     'order'    => 30,
     'children' => [],
   ],
+  'players' => [
+    'name' => lang('Registrovaní hráči', context: 'pageTitles'),
+    'route'    => 'liga-players',
+    'icon'     => 'fas fa-users',
+    'order'    => 40,
+    'children' => [],
+  ],
 ];
 
 foreach (GateType::getAll() as $gateType) {

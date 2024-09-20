@@ -58,12 +58,17 @@ $gateGroup->post('/set/{system}', [GateController::class, 'setGateGame']);
 $gateGroup->post('/loaded/{system}', [GateController::class, 'setGateLoaded']);
 $gateGroup->post('/idle/{system}', [GateController::class, 'setGateIdle']);
 
-Route::group('/players')
-  ->get('/find', [Players::class, 'find'])
-  ->get('/find/{code}', [Players::class, 'getPlayer'])
-  ->get('/sync/{code}', [Players::class, 'syncPlayer'])
-  ->group('/public')
-  ->get('/find', [Players::class, 'findPublic']);
+$playersGroup = Route::group('/players');
+$playersGroup->get('', [Players::class, 'show'])->name('liga-players');
+$playersGroup->group('sync')
+  ->post('sync', [Players::class, 'sync'])
+  ->get('{code}', [Players::class, 'syncPlayer'])
+  ->post('{code}', [Players::class, 'syncPlayer']);
+$playersGroup->group('find')
+  ->get('', [Players::class, 'find'])
+  ->get('{code}', [Players::class, 'getPlayer']);
+$playersGroup->group('public')
+  ->get('find', [Players::class, 'findPublic']);
 
 $prepared = Route::group('prepared');
 $prepared->get('', [PreparedGames::class, 'get']);

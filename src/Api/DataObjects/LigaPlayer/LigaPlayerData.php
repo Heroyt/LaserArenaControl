@@ -15,6 +15,10 @@ class LigaPlayerData
     public LigaPlayerStats $stats;
     /** @var LigaPlayerConnection[] */
     public array $connections = [];
+    /**
+     * @var string[]|null
+     */
+    public ?array $codeHistory = null;
 
     public function addConnection(LigaPlayerConnection $connection): void {
         $this->connections[] = $connection;

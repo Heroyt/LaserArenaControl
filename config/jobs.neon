@@ -17,6 +17,9 @@ orisai.scheduler:
 		logArchive:
 			expression: 0 6 * * *
 			callback: [@cron.logArchive, 'run']
+		playersSync:
+			expression: 30 6 * * *
+			callback: [@cron.ligaPlayerSync, 'run']
 		resultsImport:
 			expression: * * * * *
 			callback: [@cron.resultsImport, 'run']
@@ -35,6 +38,7 @@ services:
 	task.musicTrimPreview: App\Tasks\MusicTrimPreviewTask
 	task.musicSync: App\Tasks\MusicSyncTask
 	task.musicLoad: App\Tasks\MusicLoadTask
+	task.ligaPlayersSync: App\Tasks\PlayersSyncTask
 
 	# Cron jobs
 	cron.gamesSync: App\Cron\GamesSyncJob(limit: %gamesSync.limit%, timeout: %gamesSync.timeout%)
@@ -42,3 +46,4 @@ services:
 	cron.logArchive: App\Cron\LogArchiveJob
 	cron.gamesPrecache: App\Cron\GamesPrecacheJob
 	cron.resultsImport: App\Cron\ResultsImportJob
+	cron.ligaPlayerSync: App\Cron\PlayersSyncJob

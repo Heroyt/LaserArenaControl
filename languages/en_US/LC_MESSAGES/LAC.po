@@ -4457,3 +4457,22 @@ msgstr ""
 
 msgid "Veřejný"
 msgstr ""
+
+msgid "Kód hráče"
+msgstr ""
+
+msgid "Email"
+msgstr ""
+
+msgid "Herní úroveň"
+msgstr ""
+
+msgid "Načíst další"
+msgstr ""
+
+msgctxt "pageTitles"
+msgid "Registrovaní hráči"
+msgstr ""
+
+msgid "Registrovaní hráči"
+msgstr ""

@@ -76,15 +76,19 @@ class GameHighlightService
                   )
                   ->fetchAll();
         foreach ($rows as $row) {
-            $highlights[] = new HighlightDto(
-                $row->code,
-                $row->datetime,
-                $row->rarity,
-                GameHighlightType::from($row->type),
-                $row->description,
-                isset($row->players) ? json_decode($row->players, true) : null,
-                isset($row->object) ? igbinary_unserialize($row->object) : null,
-            );
+            try {
+                $highlights[] = new HighlightDto(
+                    $row->code,
+                    $row->datetime,
+                    $row->rarity,
+                    GameHighlightType::from($row->type),
+                    $row->description,
+                    isset($row->players) ? json_decode($row->players, true) : null,
+                    isset($row->object) ? igbinary_unserialize($row->object) : null,
+                );
+            } catch (\Throwable) {
+
+            }
         }
         return $highlights;
     }

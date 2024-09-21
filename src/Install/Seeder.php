@@ -439,7 +439,7 @@ class Seeder implements InstallInterface
       ],
     ];
 
-    public const GAME_MODE_NAMES = [
+    public const array GAME_MODE_NAMES = [
       [
         'id_mode' => 1,
         'sysName' => '1-TEAM',
@@ -482,7 +482,7 @@ class Seeder implements InstallInterface
       ],
     ];
 
-    public const PRINT_STYLES = [
+    public const array PRINT_STYLES = [
       [
         'id_style'      => 1,
         'name'          => 'Default',
@@ -495,11 +495,11 @@ class Seeder implements InstallInterface
       ],
     ];
 
-    public const PRINT_TEMPLATES = [
+    public const array PRINT_TEMPLATES = [
       [
         'id_template' => 1,
         'slug'        => 'default',
-        'name'        => 'Default',
+        'name'        => 'Tabulkové',
         'description' => 'Basic result template',
         'orientation' => 'portrait',
       ],
@@ -512,7 +512,7 @@ class Seeder implements InstallInterface
       ],
     ];
 
-    public const TIPS = [
+    public const array TIPS = [
       1  => 'Ve hře vždy sleduj svoje okolí!',
       2  => 'Při týmové hře není výhodné střílet do hráčů se stejnou barvou.',
       3  => 'Při výstupu z arény vždy připni zbraň k vestě.',

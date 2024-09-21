@@ -35,7 +35,7 @@
 			</select>
 		</div>
 		<div class="col-md-9" style="--size:35px;">
-			<div class="row my-2">
+			<div class="row my-2 mt-4">
 				<div class="col-lg-3 lh-size">
                     <strong>{_'Jazyk'}:</strong>
 				</div>
@@ -51,9 +51,9 @@
 					{/foreach}
 				</div>
 			</div>
-			<div class="row my-2" n:ifset="$selected">
+			<div class="row my-3" n:ifset="$selected">
 				<div class="col-lg-3 lh-size">
-                    <strong>{_'Barevně', context: 'print'}:</strong>
+                    <strong>{_'Kopie', context: 'print'}:</strong>
 				</div>
 				<div class="col-lg-9">
 					<div class="btn-group">
@@ -70,7 +70,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="row my-2" n:ifset="$selected">
+			{*<div class="row my-2" n:ifset="$selected">
 				<div class="col-lg-3 lh-size">
                     <strong>{_'Černobílé', context: 'print'}:</strong>
 				</div>
@@ -85,7 +85,7 @@
 						{/for}
 					</div>
 				</div>
-			</div>
+			</div>*}
             <div class="row my-2" n:ifset="$selected">
                 <div class="col-lg-3 lh-size">
                     <label class="fw-bold" for="nocache">{_'Vypnout mezipaměť', context: 'print'}:</label>

@@ -4486,3 +4486,15 @@ msgstr ""
 
 msgid "Synchronizace proběhne na pozadí během pár minut."
 msgstr ""
+
+msgctxt ".player"
+msgid "Zásahy"
+msgstr ""
+
+msgctxt ".player"
+msgid "Smrti"
+msgstr ""
+
+msgctxt "print"
+msgid "Kopie"
+msgstr ""

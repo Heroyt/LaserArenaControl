@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: Spanish\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2024-09-20 14:25\n"
+"PO-Revision-Date: 2024-09-21 20:28\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -4453,5 +4453,17 @@ msgid "Synchronizace byla naplánována"
 msgstr ""
 
 msgid "Synchronizace proběhne na pozadí během pár minut."
+msgstr ""
+
+msgctxt ".player"
+msgid "Zásahy"
+msgstr ""
+
+msgctxt ".player"
+msgid "Smrti"
+msgstr ""
+
+msgctxt "print"
+msgid "Kopie"
 msgstr ""
 

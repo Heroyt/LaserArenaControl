@@ -101,7 +101,7 @@
         </div>
         <div class="tip">
             {var App\GameModels\Tip|null $tip = \App\GameModels\Tip::random()}
-            <span class="content">{_'Tip #%d', domain: 'tips', format: [$tip?->id]}: {_$tip?->text, domain: 'tips'}</span>
+            <span class="content">{_'Tip #%d', domain: 'tips', format: [$tip?->id]}: {$tip?->translate()}</span>
         </div>
     </main>
 {/for}

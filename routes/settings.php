@@ -5,6 +5,7 @@ use App\Controllers\Settings\Modes;
 use App\Controllers\Settings\Music;
 use App\Controllers\Settings\PrintSettings;
 use App\Controllers\Settings\Settings;
+use App\Controllers\Settings\TipsSettings;
 use App\Core\App;
 use App\Services\FeatureConfig;
 use Lsr\Core\Routing\Route;
@@ -56,3 +57,9 @@ $musicId->delete('', [Music::class, 'delete']);
 if ($featureConfig->isFeatureEnabled('groups')) {
     $settings->get('groups', [Settings::class, 'group'])->name('settings-groups');
 }
+
+$tips = $settings->group('tips');
+$tips->get('', [TipsSettings::class, 'show'])->name('settings-tips');
+$tips->post('', [TipsSettings::class, 'save']);
+$tips->post('{id}/delete', [TipsSettings::class, 'remove']);
+$tips->delete('{id}', [TipsSettings::class, 'remove']);

@@ -795,6 +795,10 @@ tables:
 		(
 			`id_tip` int(11) unsigned NOT NULL AUTO_INCREMENT,
 			`text` text DEFAULT NULL,
+			`translations` BLOB DEFAULT NULL,
 			PRIMARY KEY (`id_tip`)
 		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 		'''
+		modifications:
+			0.1:
+				- 'ADD `translations` BLOB DEFAULT NULL'

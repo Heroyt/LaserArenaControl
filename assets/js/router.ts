@@ -114,15 +114,23 @@ export default function route(pageInfo: PageInfo): void {
 				module.default();
 			});
 			break;
-        case 'results':
-        case 'results-game':
-            import(
-                /* webpackChunkName: "results" */
-                './pages/results'
-                ).then(module => {
-                module.default();
-            });
-            break;
+		case 'settings-tips':
+			import(
+				/* webpackChunkName: "tipsSettings" */
+				'./pages/settings/tips'
+				).then(module => {
+				module.default();
+			});
+			break;
+      case 'results':
+      case 'results-game':
+          import(
+              /* webpackChunkName: "results" */
+              './pages/results'
+              ).then(module => {
+              module.default();
+          });
+          break;
 	}
 
 	if ((pageInfo.routeName ?? '').startsWith('gate')) {

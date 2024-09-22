@@ -1,0 +1,75 @@
+{layout '../../@layout.latte'}
+
+{varType App\GameModels\Tip[] $tips}
+{varType string[] $languages}
+
+{block content}
+	<form action="{link ['settings', 'tips']}" method="post" class="text-center autosave"
+		  id="tips-settings-form">
+		<div class="me-4 last-save-wrapper text-end position-fixed end-0">
+			{_'Naposledy uloženo:'} <span class="last-save" data-target="#tips-settings-form">{_'nikdy'}</span>
+		</div>
+        <h2>{_'Tipy', context: 'settings'}:</h2>
+        <div class="table-responsive">
+        <table class="table table-striped table hover" id="tips-table">
+            <thead>
+            <tr>
+                <th n:foreach="$languages as $lang => $country">
+                    <img class="mx-auto d-block"
+                         src="{getUrl}assets/flags/{\Lsr\Core\Constants::COUNTRIES[$country]|escapeUrl}.png"
+                         style="height: 2rem; width: 2rem;"
+                         alt="{\Lsr\Core\Constants::COUNTRIES[$country]}">
+                </th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr n:foreach="$tips as $tip" data-id="{$tip->id}" class="old">
+                <td n:foreach="$languages as $lang => $country">
+                    {if $lang === 'cs'}
+                        <textarea style="min-width: 15ch;" class="form-control" name="tip[{$tip->id}][text]">{$tip->text}</textarea>
+                    {else}
+                        <textarea style="min-width: 15ch;" class="form-control" name="tip[{$tip->id}][translations][{$lang}_{$country}]">{$tip->getTranslations()[$lang.'_'.$country] ?? ''}</textarea>
+                    {/if}
+                </td>
+                <td class="align-middle">
+                    <button class="btn btn-danger remove" type="button" data-id="{$tip->id}">
+                        <i class="fa-solid fa-trash"></i><span class="visually-hidden">{_'Smazat', context: 'actions'}</span>
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        </div>
+
+        <template id="tip-row">
+            <tr data-id="#" class="new">
+                <td n:foreach="$languages as $lang => $country">
+                    {if $lang === 'cs'}
+                        <textarea style="min-width: 15ch;" class="form-control" name="new_tip[#][text]"></textarea>
+                    {else}
+                        <textarea style="min-width: 15ch;" class="form-control" name="new_tip[#][translations][{$lang}_{$country}]"></textarea>
+                    {/if}
+                </td>
+                <td class="align-middle">
+                    <button class="btn btn-danger remove" type="button" data-id="#">
+                        <i class="fa-solid fa-trash"></i><span class="visually-hidden">{_'Smazat', context: 'actions'}</span>
+                    </button>
+                </td>
+            </tr>
+        </template>
+
+        <p class="my-2">
+            <button class="btn btn-success btn-lg" type="button" id="add">
+                <i class="fa-solid fa-plus"></i>
+                {_'Přidat', context: 'actions'}
+            </button>
+        </p>
+
+        <p class="my-4">
+            <button class="btn btn-success btn-lg" type="submit" data-action="autosave" data-prevent="true">
+                {_'Odeslat', context: 'actions'}
+            </button>
+        </p>
+	</form>
+{/block}

@@ -93,7 +93,7 @@
 
     <div class="tip">
         {var App\GameModels\Tip|null $tip = \App\GameModels\Tip::random()}
-        <span class="content active">{_'Tip #%d', domain: 'tips', format: [$tip?->id]}: {_$tip?->text, domain: 'tips'}</span>
+        <span class="content active">{_'Tip #%d', domain: 'tips', format: [$tip?->id]}: {$tip?->translate()}</span>
     </div>
     {include loader}
     {if \App\Core\Info::get('gate_force_reload', false)}

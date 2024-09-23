@@ -1,6 +1,9 @@
 {layout '../../@layout.latte'}
 
 {varType App\GameModels\Vest[][] $vests}
+{varType App\GameModels\Vest[][][] $vestsGrid}
+{varType int[] $columnCounts}
+{varType int[] $rowCounts}
 
 {block content}
 	<form action="{link ['settings', 'vests']}" method="post" class="text-center autosave"
@@ -9,29 +12,65 @@
 			{_'Naposledy uloženo:'} <span class="last-save" data-target="#vests-settings-form">{_'nikdy'}</span>
 		</div>
         <h2>{_'Vest settings', context: 'settings'}:</h2>
-		{if count($vests) > 1}
-			<ul class="nav nav-tabs" id="systems" role="tablist">
-				<li class="nav-item" role="presentation" n:foreach="$vests as $colorSystem => $v">
-					<button class="nav-link {if $iterator->first}active{/if}" id="system-tab-{$colorSystem}"
-							data-bs-toggle="tab"
-							data-bs-target="#vests-{$colorSystem}" type="button" role="tab"
-							aria-controls="vests-{$colorSystem}"
-							aria-selected="true">
-                        {_$colorSystem, context: 'systems'}
-					</button>
-				</li>
-			</ul>
-			<div class="tab-content" id="systems-content">
-				<div n:foreach="$vests as $colorSystem => $systemVests"
-						class="tab-pane fade {if $iterator->first}show active{/if}" id="vests-{$colorSystem}"
-						role="tabpanel"
-						aria-labelledby="system-tab-{$colorSystem}">
-					{include vestSettings}
-				</div>
-			</div>
-		{elseif count($vests) === 1}
-			{include vestSettings, systemVests: reset($vests)}
-		{/if}
+        <ul class="nav nav-tabs" id="systems" role="tablist">
+            <li class="nav-item" role="presentation" n:foreach="$vests as $colorSystem => $v">
+                <button class="nav-link {if $iterator->first}active{/if}" id="system-tab-{$colorSystem}"
+                        data-bs-toggle="tab"
+                        data-bs-target="#vests-{$colorSystem}" type="button" role="tab"
+                        aria-controls="vests-{$colorSystem}"
+                        aria-selected="{if $iterator->first}true{/if}">
+                    {_$colorSystem, context: 'systems'}
+                </button>
+            </li>
+            <li class="nav-item" role="presentation" n:foreach="$vests as $colorSystem => $v">
+                <button class="nav-link" id="system-tab-{$colorSystem}-layout"
+                        data-bs-toggle="tab"
+                        data-bs-target="#vests-{$colorSystem}-layout" type="button" role="tab"
+                        aria-controls="vests-{$colorSystem}-layout"
+                        aria-selected="false">
+                    {_'Rozložení'} - {_$colorSystem, context: 'systems'}
+                </button>
+            </li>
+        </ul>
+        <div class="tab-content" id="systems-content">
+            <div n:foreach="$vests as $colorSystem => $systemVests"
+                    class="tab-pane fade {if $iterator->first}show active{/if}" id="vests-{$colorSystem}"
+                    role="tabpanel"
+                    aria-labelledby="system-tab-{$colorSystem}">
+                {include vestSettings}
+            </div>
+            <div n:foreach="$vestsGrid as $colorSystem => $systemVests"
+                    class="tab-pane vests-layout fade" id="vests-{$colorSystem}-layout"
+                    role="tabpanel"
+                    aria-labelledby="system-tab-{$colorSystem}-layout">
+                <div class="form-group">
+                    <label for="columns-{$colorSystem}" class="form-label">{_'Počet sloupců'}:</label>
+                    <input type="number" class="form-control columns-input" name="columns[{$colorSystem}]" id="columns-{$colorSystem}" value="{$columnCounts[$colorSystem]}">
+                </div>
+                <div class="form-group">
+                    <label for="rows-{$colorSystem}" class="form-label">{_'Počet řádků'}:</label>
+                    <input type="number" class="form-control rows-input" name="rows[{$colorSystem}]" id="rows-{$colorSystem}" value="{$rowCounts[$colorSystem]}">
+                </div>
+                <div class="vest-grid draggable-grid mt-3" style="--columns: {$columnCounts[$colorSystem]}; --rows: {$rowCounts[$colorSystem]};">
+                    {for $row = 1; $row <= $rowCounts[$colorSystem]; $row++}
+                        {for $col = 1; $col <= $columnCounts[$colorSystem]; $col++}
+                            {if isset($systemVests[$row][$col])}
+                                <div class="vest draggable-item" data-id="{$systemVests[$row][$col]->id}" data-row="{$row}" data-col="{$col}">
+                                    {svgIcon 'Vesta', '', '3rem'}
+                                    <div class="num">
+                                        {$systemVests[$row][$col]->vestNum}
+                                    </div>
+                                    <input type="hidden" class="col-input" name="vest[{$systemVests[$row][$col]->id}][col]" value="{$col}">
+                                    <input type="hidden" class="row-input" name="vest[{$systemVests[$row][$col]->id}][row]" value="{$row}">
+                                </div>
+                            {else}
+                                <div class="draggable-empty" data-row="{$row}" data-col="{$col}"></div>
+                            {/if}
+                        {/for}
+                    {/for}
+                </div>
+            </div>
+        </div>
 	</form>
 {/block}
 

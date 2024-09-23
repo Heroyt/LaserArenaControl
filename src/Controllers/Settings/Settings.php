@@ -8,6 +8,7 @@ namespace App\Controllers\Settings;
 
 use App\Core\Info;
 use App\GameModels\Factory\GameFactory;
+use App\GameModels\Game\Enums\VestStatus;
 use App\GameModels\Vest;
 use App\Models\DataObjects\Theme;
 use App\Models\GameGroup;
@@ -16,7 +17,6 @@ use App\Services\FeatureConfig;
 use Dibi\Exception;
 use JsonException;
 use Lsr\Core\Controllers\Controller;
-use Lsr\Core\DB;
 use Lsr\Core\Exceptions\ModelNotFoundException;
 use Lsr\Core\Exceptions\ValidationException;
 use Lsr\Core\Requests\Request;
@@ -64,11 +64,35 @@ class Settings extends Controller
     public function vests(): ResponseInterface {
         $vests = Vest::getAll();
         $this->params['vests'] = [];
+        $this->params['vestsGrid'] = [];
+
         foreach (GameFactory::getSupportedSystems() as $system) {
             $this->params['vests'][$system] = [];
+            $this->params['vestsGrid'][$system] = [];
         }
+
+        $this->params['columnCounts'] = [];
+        $this->params['rowCounts'] = [];
+
         foreach ($vests as $vest) {
+            $this->params['columnCounts'][$vest->system] ??= (int) Info::get($system.'_column_count', 15);
+            $this->params['rowCounts'][$vest->system] ??= (int) Info::get($system.'_row_count', 15);
+
             $this->params['vests'][$vest->system][] = $vest;
+            $row = max($vest->gridRow, 1);
+            $col = max($vest->gridCol, 1);
+
+            $this->params['vestsGrid'][$vest->system][$row] ??= [];
+
+            // If duplicate, find first available column
+            while (isset($this->params['vestsGrid'][$vest->system][$row][$col])) {
+                $col++;
+            }
+
+            $this->params['columnCounts'][$vest->system] = max($this->params['columnCounts'][$vest->system], $col);
+            $this->params['rowCounts'][$vest->system] = max($this->params['rowCounts'][$vest->system], $row);
+
+            $this->params['vestsGrid'][$vest->system][$row][$col] = $vest;
         }
         return $this->view('pages/settings/vests');
     }
@@ -83,13 +107,25 @@ class Settings extends Controller
      */
     public function saveVests(Request $request): ResponseInterface {
         try {
+            foreach ($request->getPost('columns', []) as $system => $count) {
+                Info::set($system.'_column_count', (int) $count);
+            }
+            foreach ($request->getPost('rows', []) as $system => $count) {
+                Info::set($system.'_row_count', (int) $count);
+            }
             foreach ($request->getPost('vest', []) as $id => $info) {
-                DB::update(Vest::TABLE, $info, ['%n = %i', Vest::getPrimaryKey(), $id]);
                 $vest = Vest::get($id);
+                $vest->vestNum = $info['vest_num'] ?? $vest->vestNum;
+                $vest->status = VestStatus::from($info['status'] ?? $vest->status->value);
+                $vest->info = $info['info'] ?? $vest->info;
+                $vest->gridCol = (int) ($info['col'] ?? $vest->gridCol);
+                $vest->gridRow = (int) ($info['row'] ?? $vest->gridRow);
+                $vest->save();
                 $vest->clearCache();
             }
-        } catch (Exception) {
+        } catch (Exception $e) {
             $request->passErrors[] = lang('Failed to save settings.', context: 'errors');
+            $request->passErrors[] = $e->getMessage();
         }
         if ($request->isAjax()) {
             return $this->respond(

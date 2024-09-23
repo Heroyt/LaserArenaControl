@@ -1,0 +1,35 @@
+%draggable-item {
+	border: 2px solid var(--background-subtle);
+	border-radius: 1rem;
+	height: 100%;
+	width: 100%;
+
+	&.sortable-chosen {
+		background-color: var(--background-subtle);
+		border-color: var(--primary);
+		cursor: grabbing;
+	}
+
+	&.highlight {
+		border-color: var(--danger);
+	}
+}
+
+.draggable-grid {
+	--columns: 15;
+	--rows: 15;
+	display: grid;
+	grid-gap: .5rem;
+	grid-template-columns: repeat(var(--columns), 1fr);
+	grid-template-rows: repeat(var(--rows), 1fr);
+
+	.draggable-item {
+		@extend %draggable-item;
+		cursor: grab;
+	}
+
+	.draggable-empty {
+		@extend %draggable-item;
+
+	}
+}

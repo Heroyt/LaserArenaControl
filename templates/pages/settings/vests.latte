@@ -40,7 +40,7 @@
                 {include vestSettings}
             </div>
             <div n:foreach="$vestsGrid as $colorSystem => $systemVests"
-                    class="tab-pane vests-layout fade" id="vests-{$colorSystem}-layout"
+                    class="tab-pane vests-layout fade py-3" id="vests-{$colorSystem}-layout"
                     role="tabpanel"
                     aria-labelledby="system-tab-{$colorSystem}-layout">
                 <div class="form-group">
@@ -51,6 +51,7 @@
                     <label for="rows-{$colorSystem}" class="form-label">{_'Počet řádků'}:</label>
                     <input type="number" class="form-control rows-input" name="rows[{$colorSystem}]" id="rows-{$colorSystem}" value="{$rowCounts[$colorSystem]}">
                 </div>
+                <p class="my-3">{_'Přetažením vest v mřížce upravujete zobrazení vest na výsledkové tabuli. Mělo by odpovídat fyzickému rozmístění vest na stojanech.'}</p>
                 <div class="vest-grid draggable-grid mt-3" style="--columns: {$columnCounts[$colorSystem]}; --rows: {$rowCounts[$colorSystem]};">
                     {for $row = 1; $row <= $rowCounts[$colorSystem]; $row++}
                         {for $col = 1; $col <= $columnCounts[$colorSystem]; $col++}

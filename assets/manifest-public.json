@@ -3,8 +3,8 @@
 	"id": "LaserArenaControl",
 	"short_name": "LAC",
 	"description": "Nástroje pro ovládání laser game arén.",
-	"start_url": "/",
-	"scope": "/",
+	"start_url": "/public",
+	"scope": "/public",
 	"prefer_related_applications": false,
 	"icons": [
 		{

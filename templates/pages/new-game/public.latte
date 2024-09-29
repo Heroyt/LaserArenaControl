@@ -28,7 +28,7 @@
         <section id="vests">
             {include sectionVests}
         </section>
-        {cache 'newGame-'.$lang.'-game-mode', tags: ['templates.newGame', 'templates', 'templates.'.$lang, App\GameModels\Game\GameModes\AbstractMode::TABLE]}
+        {cache 'newGame-'.$lang.'-game-mode-public', tags: ['templates.newGame', 'templates', 'templates.'.$lang, App\GameModels\Game\GameModes\AbstractMode::TABLE]}
             <section id="game-mode">
                 {include sectionGameMode}
             </section>
@@ -149,15 +149,6 @@
     <div class="collapse-grid show" id="game-mode-variations-collapse">
         <div id="game-mode-variations-wrapper" class="collapse-inner bg-background-1 p-3 rounded-bottom"></div>
     </div>
-    {if $featureConfig->isFeatureEnabled('gates') && !empty(App\Core\Info::get('gates_ips'))}
-        <div class="mt-3" id="gatesControl">
-            <h3>{_'Brány'}</h3>
-            <div class="btn-group">
-                <button type="button" class="btn btn-success" id="startGates">{_'Zapnout brány'}</button>
-                <button type="button" class="btn btn-danger" id="stopGates">{_'Vypnout brány'}</button>
-            </div>
-        </div>
-    {/if}
 {/define}
 
 {define sectionMusic}

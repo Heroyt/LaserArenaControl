@@ -8,6 +8,10 @@
 		background-color: var(--background-subtle);
 		border-color: var(--primary);
 		cursor: grabbing;
+
+		.handle {
+			cursor: grabbing;
+		}
 	}
 
 	&.highlight {
@@ -25,7 +29,11 @@
 
 	.draggable-item {
 		@extend %draggable-item;
-		cursor: grab;
+
+		&:not(.with-handle),
+		.handle {
+			cursor: grab;
+		}
 	}
 
 	.draggable-empty {

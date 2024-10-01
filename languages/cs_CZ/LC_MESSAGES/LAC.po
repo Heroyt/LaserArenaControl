@@ -4305,38 +4305,38 @@ msgstr ""
 
 msgctxt "month"
 msgid "Červen"
-msgstr ""
+msgstr "Červen"
 
 msgid "Zobrazit poslední hru"
-msgstr ""
+msgstr "Zobrazit poslední hru"
 
 msgctxt "settings"
 msgid "Vzhled"
-msgstr ""
+msgstr "Vzhled"
 
 msgctxt "settings.theme"
 msgid "Hlavní barva"
-msgstr ""
+msgstr "Hlavní barva"
 
 msgctxt "settings.theme"
 msgid "Nastavení primárně pro barvy výsledkové tabule."
-msgstr ""
+msgstr "Nastavení primárně pro barvy výsledkové tabule."
 
 msgctxt "settings.theme"
 msgid "Primární barva"
-msgstr ""
+msgstr "Primární barva"
 
 msgctxt "settings.theme.primary_color"
 msgid "Barva se používá pro zvýraznění některých prvků hlavně na výsledkové tabuli."
-msgstr ""
+msgstr "Barva se používá pro zvýraznění některých prvků hlavně na výsledkové tabuli."
 
 msgctxt "settings.theme"
 msgid "Sekundární barva"
-msgstr ""
+msgstr "Sekundární barva"
 
 msgctxt "settings.theme.secondary_color"
 msgid "Barva se používá pro zvýraznění některých prvků (pozadí) hlavně na výsledkové tabuli."
-msgstr ""
+msgstr "Barva se používá pro zvýraznění některých prvků (pozadí) hlavně na výsledkové tabuli."
 
 msgid "Detail skupiny"
 msgstr ""
@@ -4442,7 +4442,7 @@ msgid "Nahrát"
 msgstr ""
 
 msgid "Tables"
-msgstr ""
+msgstr "Stoly"
 
 msgid "Turnaje"
 msgstr ""
@@ -4545,4 +4545,23 @@ msgstr ""
 
 msgctxt "print"
 msgid "Kopie"
+msgstr ""
+
+msgid "Počet sloupců"
+msgstr ""
+
+msgid "Počet řádků"
+msgstr ""
+
+msgid "Přetažením stolu v mřížce upravujete rozložení stolů při zadávání hry. Mělo by odpovídat fyzickému rozmístění stolů."
+msgstr ""
+
+msgid "Velikost stolu roztahuje stůl na více řádků (směrem dolů) nebo sloupců (směrem nahoru). Níže se velikosti nemění. Mění se jen na stránce zadávání her."
+msgstr ""
+
+msgid "Velikost"
+msgstr ""
+
+msgctxt "pageTitles.settings"
+msgid "Tipy"
 msgstr ""

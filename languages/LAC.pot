@@ -4522,3 +4522,22 @@ msgstr ""
 msgctxt "print"
 msgid "Kopie"
 msgstr ""
+
+msgid "Počet sloupců"
+msgstr ""
+
+msgid "Počet řádků"
+msgstr ""
+
+msgid "Přetažením stolu v mřížce upravujete rozložení stolů při zadávání hry. Mělo by odpovídat fyzickému rozmístění stolů."
+msgstr ""
+
+msgid "Velikost stolu roztahuje stůl na více řádků (směrem dolů) nebo sloupců (směrem nahoru). Níže se velikosti nemění. Mění se jen na stránce zadávání her."
+msgstr ""
+
+msgid "Velikost"
+msgstr ""
+
+msgctxt "pageTitles.settings"
+msgid "Tipy"
+msgstr ""

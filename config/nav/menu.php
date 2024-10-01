@@ -91,6 +91,11 @@ $menu['settings'] = [
       'order' => 50,
     ],
     [
+      'name' => lang('Tipy', context: 'pageTitles.settings'),
+      'route' => 'settings-tips',
+      'order' => 60,
+    ],
+    [
       'name' => lang('Mezipaměť', context: 'pageTitles.settings'),
       'route' => 'settings-cache',
       'order' => 99,

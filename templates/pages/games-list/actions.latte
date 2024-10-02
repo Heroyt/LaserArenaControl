@@ -3,7 +3,7 @@
 {define gameActionNewGame, App\GameModels\Game\Game $game}
 	<a href="{link ['system' => $game::SYSTEM, 'game' => $game->code]}"
        class="btn btn-success" data-toggle="tooltip" title="{_'Použít pro novou hru'}">
-		<i class="fa-solid fa-plus"></i>
+		{faSolid 'plus'}
 	</a>
 {/define}
 
@@ -11,7 +11,7 @@
 	<a href="{trailingSlashIt(\App\Core\Info::get('liga_api_url')) . 'g/' . $game->code}"
 	   target="_blank"
        class="btn btn-primary" data-toggle="tooltip" title="{_'Výsledky on-line'}">
-		<i class="fa-solid fa-cloud"></i>
+		{faSolid 'cloud'}
 	</a>
 {/define}
 
@@ -19,14 +19,14 @@
 	<button class="btn btn-info liga-sync" data-toggle="tooltip"
             title="{_'Synchronizovat on-line'}"
 			{ifset $game}data-code="{$game->code}"{/ifset}>
-		<i class="fa-solid fa-cloud-arrow-up"></i>
+		{faSolid 'cloud-arrow-up'}
 	</button>
 {/define}
 
 {define gameActionGate, App\GameModels\Game\Game $game}
     <button class="btn btn-danger" data-toggle="gate" title="{_'Zobrazit na výsledkové tabuli'}"
 			data-id="{$game->id}" data-system="{$game::SYSTEM}">
-		<i class="fas fa-bullseye"></i>
+		{faSolid 'bullseye'}
 	</button>
 {/define}
 
@@ -34,7 +34,7 @@
 	<button class="btn btn-warning re-import" data-toggle="tooltip"
             title="{_'Znovu importovat ze souboru'}"
 			{ifset $game}data-code="{$game->code}"{/ifset}>
-		<i class="fa-solid fa-arrows-rotate"></i>
+		{faSolid 'arrows-rotate'}
 	</button>
 {/define}
 
@@ -50,7 +50,7 @@
 	<button class="btn btn-warning recalc-skill" data-toggle="tooltip"
             title="{_'Znovu spočítat herní úroveň'}"
 			{ifset $game}data-code="{$game->code}"{/ifset}>
-		<i class="fa-solid fa-star"></i>
+		{faSolid 'star'}
 	</button>
 {/define}
 
@@ -62,13 +62,13 @@
             title="{_'Přepnout na sólo mód'}"
 			data-code="{$game->code}"
             data-mode="{\App\GameModels\Factory\GameModeFactory::getIdByObject($game->getMode()?->getSoloAlternative())}">
-		<i class="fa-solid fa-wrench"></i>
+		{faSolid 'wrench'}
 	</button>
 {/define}
 
 {define gameActionResults, App\GameModels\Game\Game $game}
 	<a href="{link ['results', $game->code]}" class="btn btn-info" data-toggle="tooltip"
-       title="{_'Tisk'}"><i class="fas fa-print"></i></a>
+       title="{_'Tisk'}">{faSolid 'print'}</a>
 {/define}
 
 {define gameActionGroup, App\GameModels\Game\Game|null $game = null}
@@ -78,7 +78,7 @@
             {ifset $game}data-code="{$game?->code}" data-group="{$game?->getGroup()?->id}"
             data-label="{_'Vybrat skupinu'}"
             data-groupname="{$game?->getGroup()?->name}"{/ifset}>
-		<i class="fa-solid fa-user-group"></i>
+		{faSolid 'user-group'}
 	</button>
 {/define}
 
@@ -86,7 +86,7 @@
     <button class="btn btn-info plan-precache" data-toggle="tooltip"
             title="{_'Předpřipravit výsledky pro tisk'}"
             {ifset $game}data-code="{$game->code}"{/ifset}>
-        <i class="fa-solid fa-file-pdf"></i>
+        {faSolid 'file-pdf'}
     </button>
 {/define}
 
@@ -94,6 +94,6 @@
     <button class="btn btn-info plan-highlights" data-toggle="tooltip"
             title="{_'Zkontrolovat zajímavosti'}"
             {ifset $game}data-code="{$game->code}"{/ifset}>
-        <i class="fa-solid fa-circle-info"></i>
+        {faSolid 'circle-info'}
     </button>
 {/define}

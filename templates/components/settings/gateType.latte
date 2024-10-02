@@ -13,7 +13,7 @@
      data-slug="{$gate?->getSlug()}" style="max-width: 35rem;">
     <div class="card-body">
         <div class="text-end" n:if="!$locked">
-            <button type="button" class="btn btn-danger delete-gate"><i class="fa-solid fa-trash"></i></button>
+            <button type="button" class="btn btn-danger delete-gate">{faSolid 'trash'}</button>
         </div>
         <div class="card-title">
             <label for="gate-{$gateKey}-name" class="form-label">{_'Název', domain: 'gate', context: 'settings'}
@@ -52,7 +52,7 @@
                     </div>
                 </div>
                 <p class="text-center mt-2" n:if="!$locked">
-                    <button class="btn btn-success add-screen" type="button"><i class="fa-solid fa-plus"></i></button>
+                    <button class="btn btn-success add-screen" type="button">{faSolid 'plus'}</button>
                 </p>
             </div>
         </div>

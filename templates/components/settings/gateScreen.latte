@@ -10,7 +10,7 @@
     string $formName2 = 'screen',
 }
     <div class="text-end" n:if="!$locked">
-        <button type="button" class="btn btn-danger delete"><i class="fa-solid fa-trash"></i></button>
+        <button type="button" class="btn btn-danger delete">{faSolid 'trash'}</button>
     </div>
     <div class="form-group mb-2">
         <label for="gate-{((string)$gateKey)|replace:'][','-'}-screen-{$screenKey}-type" class="form-label">

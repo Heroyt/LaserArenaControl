@@ -101,7 +101,7 @@
     </label>
     <button type="button" class="btn btn-danger" id="clear-all" data-toggle="tooltip"
             title="{_'Smazat vše', context: 'actions'}">
-        <i class="fa-solid fa-trash"></i>
+        {faSolid 'trash'}
     </button>
 {/define}
 
@@ -133,7 +133,7 @@
         </select>
         <button type="button" data-toggle="shuffle" title="{_'Náhodně', context: 'actions'}"
                 data-target="#game-mode-select" class="btn btn-purple-500">
-            <i class="fa-solid fa-shuffle"></i>
+            {faSolid 'shuffle'}
         </button>
     </div>
     <div id="game-mode-description" class="select-description text-muted" data-target="#game-mode-select"></div>
@@ -142,8 +142,8 @@
 {define sectionGameModeVariations}
     <button class="btn btn-info w-100" type="button" id="hide-variations" data-toggle="collapse"
             data-target="#game-mode-variations-collapse">
-        <i class="fa-solid fa-eye"></i>
-        <i class="fa-solid fa-eye-slash d-none"></i>
+        {faSolid 'eye'}
+        {faSolid 'eye-slash', 'd-none'}
         {_'Variace', context: 'gameModes'}
     </button>
     <div class="collapse-grid show" id="game-mode-variations-collapse">
@@ -178,15 +178,15 @@
         <input type="checkbox" id="music-mode-grouped" value="1" class="btn-check">
         <label for="music-mode-grouped" class="btn btn-outline-primary" data-toggle="tooltip"
                title="{_'Slučovat hudební skupiny'}">
-            <i class="fa-solid fa-layer-group"></i>
+            {faSolid 'layer-group'}
         </label>
         <button type="button" data-bs-toggle="modal" data-bs-target="#music-modes-display" class="btn btn-info"
                 data-toggle="tooltip" title="{_'Zobrazit přehled hudebních módů'}">
-            <i class="fa-solid fa-eye"></i>
+            {faSolid 'eye'}
         </button>
         <button type="button" data-toggle="shuffle" title="{_'Náhodně', context: 'actions'}"
                 data-target="#music-select" class="btn btn-purple-500">
-            <i class="fa-solid fa-shuffle"></i>
+            {faSolid 'shuffle'}
         </button>
     </div>
 {/define}
@@ -208,11 +208,11 @@
         </div>
         <div class="btn-group">
             <button type="button" class="btn btn-purple-500" id="random-teams">
-                <i class="fa-solid fa-shuffle"></i>
+                {faSolid 'shuffle'}
                 {_'Náhodně', context: 'actions'}
             </button>
             <button type="button" class="btn btn-success" id="random-fair-teams">
-                <i class="fa-solid fa-star"></i>
+                {faSolid 'star'}
                 {_'Náhodně fér', context: 'actions'}
             </button>
         </div>
@@ -245,7 +245,7 @@
             {$vest->vestNum}
         </label>
         <div class="input-group-text handle cursor-grab bg-secondary text-bg-secondary px-2">
-            <i class="fa-solid fa-grip-lines"></i>
+            {faSolid 'grip-lines'}
         </div>
         <input id="player-name-{$vest->vestNum}" tabindex="{$vest->vestNum}" type="text"
                class="form-control player-name" autocomplete="off"
@@ -253,7 +253,7 @@
                name="player[{$vest->vestNum}][name]" maxlength="12">
         <button type="button" class="btn btn-info btn-sm search-user" data-toggle="tooltip"
                 title="{_'Vyhledat hráče'}">
-            <i class="fa-solid fa-search"></i>
+            {faSolid 'search'}
         </button>
         <input type="hidden" name="player[{$vest->vestNum}][code]" value="" class="user-code"
                id="user-{$vest->vestNum}-code">
@@ -313,7 +313,7 @@
             </label>
         </div>
         <button type="button" class="btn btn-danger clear" title="{_'Smazat'}">
-            <i class="fa-solid fa-trash"></i>
+            {faSolid 'trash'}
         </button>
     </div>
 {/define}

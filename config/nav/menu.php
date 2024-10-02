@@ -8,38 +8,42 @@
 use App\Core\App;
 use App\Gate\Models\GateType;
 use App\Services\FeatureConfig;
+use App\Services\FontAwesomeManager;
 use LAC\Modules\Core\MenuExtensionInterface;
+
+$fontawesome = App::getService('fontawesome');
+assert($fontawesome instanceof FontAwesomeManager, 'Invalid service type from DI');
 
 $menu = [
   [
     'name' => lang('Nová hra', context: 'pageTitles'),
     'route' => 'dashboard',
-    'icon'  => 'fa-solid fa-plus',
+    'icon'  => $fontawesome->solid('plus'),
     'order' => 0,
   ],
   [
     'name' => lang('Hry', context: 'pageTitles'),
     'route' => 'games-list',
-    'icon'  => 'fas fa-list',
+    'icon'  => $fontawesome->solid('list'),
     'order' => 10,
   ],
   [
     'name' => lang('Tisk', context: 'pageTitles'),
     'route' => 'results',
-    'icon'  => 'fas fa-print',
+    'icon'  => $fontawesome->solid('print'),
     'order' => 20,
   ],
   'gate' => [
     'name' => lang('Výsledková tabule', context: 'pageTitles'),
     'route'    => 'gate',
-    'icon'     => 'fas fa-display',
+    'icon'     => $fontawesome->solid('display'),
     'order'    => 30,
     'children' => [],
   ],
   'players' => [
     'name' => lang('Registrovaní hráči', context: 'pageTitles'),
     'route'    => 'liga-players',
-    'icon'     => 'fas fa-users',
+    'icon'     => $fontawesome->solid('users'),
     'order'    => 40,
     'children' => [],
   ],
@@ -57,7 +61,7 @@ $featureConfig = App::getServiceByType(FeatureConfig::class);
 $menu['settings'] = [
   'name'     => lang('Nastavení', context: 'pageTitles'),
   'route'    => 'settings',
-  'icon'     => 'fas fa-cog',
+  'icon'     => $fontawesome->solid('cog'),
   'order'    => 99,
   'children' => [
     [

@@ -109,6 +109,8 @@ services:
 
 	gameHighlight: App\Services\GameHighlight\GameHighlightService(tagged(highlightChecker))
 
+	fontawesome: App\Services\FontAwesomeManager
+
 	theme:
 		type: App\Models\DataObjects\Theme
 		create: App\Models\DataObjects\Theme::get()

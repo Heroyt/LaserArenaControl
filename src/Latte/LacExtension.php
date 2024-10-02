@@ -2,7 +2,10 @@
 
 namespace App\Latte;
 
+use App\Latte\Nodes\IconNode;
+use App\Services\FontAwesomeManager;
 use Latte\ContentType;
+use Latte\Engine;
 use Latte\Extension;
 use Latte\Runtime\FilterInfo;
 use Latte\Runtime\HtmlStringable;
@@ -15,7 +18,22 @@ class LacExtension extends Extension
 {
     public function __construct(
         private readonly SerializerInterface $serializer,
+        private readonly FontAwesomeManager $fontAwesomeManager,
     ) {
+    }
+
+    public function beforeCompile(Engine $engine): void {
+        $this->fontAwesomeManager->resetIcons();
+        parent::beforeCompile($engine);
+    }
+
+    public function getTags(): array {
+        return [
+          'fa' => [IconNode::class, 'create'],
+          'faSolid' => [IconNode::class, 'createSolid'],
+          'faRegular' => [IconNode::class, 'createRegular'],
+          'faBrand' => [IconNode::class, 'createBrand'],
+        ];
     }
 
     public function getFilters(): array {
@@ -32,6 +50,10 @@ class LacExtension extends Extension
           'json' => [$this, 'jsonSerialize'],
           'xml'  => [$this, 'xmlSerialize'],
           'csv'  => [$this, 'csvSerialize'],
+          'faSolid' => [$this->fontAwesomeManager, 'solid'],
+          'faRegular' => [$this->fontAwesomeManager, 'regular'],
+          'faBrands' => [$this->fontAwesomeManager, 'brands'],
+          'fa' => [$this->fontAwesomeManager, 'icon'],
         ];
     }
 

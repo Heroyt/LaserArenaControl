@@ -89,7 +89,7 @@
             </div>
             <button id="create-price-group" type="button" class="btn btn-success create" data-toggle="tooltip"
                     title="{_'Vytvořit'}">
-                <i class="fa-solid fa-plus"></i>
+                {faSolid 'plus'}
             </button>
         </div>
         <template id="new-price-group-template">{include priceGroup}</template>
@@ -117,7 +117,7 @@
             <label for="price-group-{$id}-price">{_'Cena'}</label>
         </div>
         <button type="button" class="btn btn-danger delete" data-toggle="tooltip" title="{_'Smazat'}">
-            <i class="fa-solid fa-trash"></i>
+            {faSolid 'trash'}
         </button>
     </div>
 {/define}

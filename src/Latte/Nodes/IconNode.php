@@ -111,15 +111,15 @@ class IconNode extends StatementNode
     public function print(PrintContext $context): string {
         $icon = $context->format(
             <<<'XX'
-					$ʟ_style = %node;
-					$ʟ_icon = %node;
-					$ʟ_tmp = %node;
-					if (is_string($ʟ_tmp)) {
-					  $ʟ_tmp = [$ʟ_tmp];
-					}
-					$ʟ_tmp = array_filter($ʟ_tmp);
-					echo '<i class="fa-'.($ʟ_style instanceof \App\Models\DataObjects\FontAwesome\IconType ? $ʟ_style->value : $ʟ_style).' fa-'.$ʟ_icon.($ʟ_tmp ? ' '.LR\Filters::escapeHtmlAttr(implode(" ", array_unique($ʟ_tmp))) : '').'"></i>' %line;
-                      XX,
+            $ʟ_style = %node;
+            $ʟ_icon = %node;
+            $ʟ_tmp = %node;
+            if (is_string($ʟ_tmp)) {
+              $ʟ_tmp = [$ʟ_tmp];
+            }
+            $ʟ_tmp = array_filter($ʟ_tmp);
+            echo '<i class="fa-'.($ʟ_style instanceof \App\Models\DataObjects\FontAwesome\IconType ? $ʟ_style->value : $ʟ_style).' fa-'.$ʟ_icon.($ʟ_tmp ? ' '.LR\Filters::escapeHtmlAttr(implode(" ", array_unique($ʟ_tmp))) : '').'"></i>' %line;
+            XX,
             $this->style,
             $this->icon,
             $this->classes,

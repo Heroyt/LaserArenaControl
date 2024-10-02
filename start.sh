@@ -42,6 +42,7 @@ then
 else
   echo "Running with PNPM"
   # Update / Install js libraries
+  export CI="true"
   if [ ! -f "pnpm-lock.yaml" ]
   then
     pnpm update
@@ -84,7 +85,7 @@ while true; do
     rr stop
 
     # exit the container - exit code is optional
-    exit 3010
+    exit 0
   fi
   sleep 5
 done

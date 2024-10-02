@@ -2,6 +2,19 @@
 
 echo "Entry: $SHELL $0"
 
+if [ -n "$SSH_KEY" ] && [ -f "$SSH_KEY" ]; then
+  eval "$(ssh-agent -s)" >/dev/null 2>&1
+  if ssh-add "$SSH_KEY"; then
+    git remote set-url origin git@github.com:Heroyt/LaserArenaControl.git
+  else
+    echo "Failed to add SSH key. Falling back to HTTPS."
+    git remote set-url origin https://github.com/Heroyt/LaserArenaControl.git
+  fi
+else
+  git remote set-url origin https://github.com/Heroyt/LaserArenaControl.git
+fi
+
+
 # Update project
 git fetch --all --tags
 if [ "$LAC_VERSION" = "stable" ]; then

@@ -22,6 +22,9 @@ class FontAwesomeManager
     }
 
     public function resetIcons(): void {
+        if ($this->changed) {
+            return;
+        }
         $this->collection = null;
     }
 
@@ -32,17 +35,19 @@ class FontAwesomeManager
         }
         $this->changed = false;
 
+        $collection = $this->getCollection();
+
         // Save JSON
-        $serialized = $this->serializer->serialize($this->collection, 'json');
+        $serialized = $this->serializer->serialize($collection, 'json');
         file_put_contents($this->file, $serialized);
 
         // Save CSS
         $content = "@import '~@fortawesome/fontawesome-free/scss/variables';\n\$icons: (\n";
         $icons = array_unique(
             array_merge(
-                $this->collection->solid,
-                $this->collection->regular,
-                $this->collection->brands
+                $collection->solid,
+                $collection->regular,
+                $collection->brands
             )
         );
         sort($icons);

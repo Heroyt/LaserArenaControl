@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controllers;
+namespace App\Controllers\System;
 
 use Lsr\Core\Controllers\Controller;
 use Lsr\Core\Requests\Request;
@@ -45,7 +45,7 @@ class Roadrunner extends Controller
         } else {
             $this->rpc->callIgnoreResponse('resetter.Reset', $service);
         }
-        return $this->respond('Resetting workers...');
+        return $this->respond('Restarting...');
     }
 
     private function resetAll(): void {

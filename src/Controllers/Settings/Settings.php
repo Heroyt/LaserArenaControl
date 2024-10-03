@@ -242,10 +242,6 @@ class Settings extends Controller
         }
     }
 
-    public function cache(): ResponseInterface {
-        return $this->view('pages/settings/cache');
-    }
-
     public function group(): ResponseInterface {
         $this->params['groupsActive'] = GameGroup::getActiveByDate();
         $this->params['groupsInactive'] = GameGroup::query()->where('active = 0')->orderBy('id_group')->desc()->get();

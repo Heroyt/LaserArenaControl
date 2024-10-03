@@ -56,13 +56,14 @@ foreach (GateType::getAll() as $gateType) {
     ];
 }
 
-$featureConfig = App::getServiceByType(FeatureConfig::class);
+$featureConfig = App::getService('features');
+assert($featureConfig instanceof FeatureConfig, 'Invalid service type from DI');
 
 $menu['settings'] = [
   'name'     => lang('Nastavení', context: 'pageTitles'),
   'route'    => 'settings',
   'icon'     => $fontawesome->solid('cog'),
-  'order'    => 99,
+  'order'    => 98,
   'children' => [
     [
       'name' => lang('Obecné', context: 'pageTitles.settings'),
@@ -99,11 +100,6 @@ $menu['settings'] = [
       'route' => 'settings-tips',
       'order' => 60,
     ],
-    [
-      'name' => lang('Mezipaměť', context: 'pageTitles.settings'),
-      'route' => 'settings-cache',
-      'order' => 99,
-    ],
   ],
 ];
 
@@ -112,6 +108,38 @@ if ($featureConfig->isFeatureEnabled('groups')) {
       'name' => lang('Skupiny', context: 'pageTitles.settings'),
       'route' => 'settings-groups',
       'order' => 60,
+    ];
+}
+
+$menu['system'] = [
+  'name' => lang('Systém', context: 'pageTitles'),
+  'route' => 'system',
+  'icon' => $fontawesome->solid('server'),
+  'order' => 99,
+  'children' => [
+    [
+      'name' => lang('Mezipaměť', context: 'pageTitles.settings'),
+      'route' => 'settings-cache',
+      'order' => 10,
+    ],
+    [
+      'name' => lang('Soft-reset', context: 'pageTitles.system'),
+      'route' => 'resetRoadrunnerGet',
+      'order' => 20,
+    ],
+    [
+      'name' => lang('Hard-reset', context: 'pageTitles.system'),
+      'route' => 'resetDockerGet',
+      'order' => 30,
+    ],
+  ],
+];
+
+if ($featureConfig->isFeatureEnabled('rtsp')) {
+    $menu['system']['children'][] = [
+      'name' => lang('Kamery reset', context: 'pageTitles.system'),
+      'route' => 'resetFFMPEGDockerGet',
+      'order' => 40,
     ];
 }
 

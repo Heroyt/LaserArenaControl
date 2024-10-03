@@ -23,8 +23,6 @@ $settings->post('vests', [Settings::class, 'saveVests']);
 $settings->get('print', [PrintSettings::class, 'show'])->name('settings-print');
 $settings->post('print', [PrintSettings::class, 'save']);
 
-$settings->get('cache', [Settings::class, 'cache'])->name('settings-cache');
-
 $gate = $settings->group('gate');
 $gate->get('', [Gate::class, 'gate'])->name('settings-gate');
 $gate->post('', [Gate::class, 'saveGate']);

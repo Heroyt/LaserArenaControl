@@ -15,8 +15,9 @@ use App\Controllers\NewGame;
 use App\Controllers\Players;
 use App\Controllers\PreparedGames;
 use App\Controllers\Results;
-use App\Controllers\Roadrunner;
-use App\Controllers\System;
+use App\Controllers\System\Cache;
+use App\Controllers\System\Roadrunner;
+use App\Controllers\System\System;
 use App\Core\App;
 use App\Services\FeatureConfig;
 use Lsr\Core\Routing\Route;
@@ -107,5 +108,8 @@ $roadrunner->get('reset', [Roadrunner::class, 'reset'])->name('resetRoadrunnerGe
 $roadrunner->post('reset', [Roadrunner::class, 'reset'])->name('resetRoadrunner');
 
 $system = Route::group('system');
+$system->get('cache', [Cache::class, 'show'])->name('settings-cache');
 $system->get('restart', [System::class, 'restart'])->name('resetDockerGet');
 $system->post('restart', [System::class, 'restart'])->name('resetDocker');
+$system->get('ffmpeg/restart', [System::class, 'restartFfmpeg'])->name('resetFFMPEGDockerGet');
+$system->post('ffmpeg/restart', [System::class, 'restartFfmpeg'])->name('resetFFMPEGDocker');

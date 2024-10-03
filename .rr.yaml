@@ -75,6 +75,8 @@ metrics:
     restart_called:
       type: counter
       help: "How many times was server restart called"
+      labels:
+        - container
     cron_job_started:
       type: counter
       help: "Amount of started cron jobs"

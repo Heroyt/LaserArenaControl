@@ -4517,3 +4517,35 @@ msgstr ""
 msgctxt "pageTitles.settings"
 msgid "Tipy"
 msgstr ""
+
+msgctxt "pageTitles"
+msgid "Systém"
+msgstr ""
+
+msgctxt "pageTitles.system"
+msgid "Soft-reset"
+msgstr ""
+
+msgctxt "pageTitles.system"
+msgid "Hard-reset"
+msgstr ""
+
+msgctxt "pageTitles.system"
+msgid "Kamery reset"
+msgstr ""
+
+msgctxt "pageTitles"
+msgid "Mezipaměť"
+msgstr ""
+
+msgctxt "null"
+msgid "Systém se restartuje"
+msgid_plural "null"
+msgstr[0] ""
+msgstr[1] ""
+
+msgctxt "null"
+msgid "Restart může chvíli trvat."
+msgid_plural "null"
+msgstr[0] ""
+msgstr[1] ""

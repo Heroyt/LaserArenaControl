@@ -107,7 +107,7 @@ COPY --from=golang /usr/local/go/ /usr/local/go/
 
 ENV APP_VERSION="1.0.0"
 ARG BUILD_TIME="$(date +%FT%T%z)"
-ENV VERSION="v2024.2.0"
+ENV VERSION="v2024.2.1"
 ARG RT_TOKEN="undefined"
 
 COPY docker/velox_rr_2024.toml .

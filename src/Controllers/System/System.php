@@ -60,11 +60,11 @@ class System extends Controller
         // The restarting happens automatically due to the docker-compose "restart: unless-stopped" setting.
         $configDir = TMP_DIR . 'streams';
         if (!file_exists($configDir) || !is_dir($configDir)) {
-            return $this->respond('error');
+            return $this->respond('error - streams directory does not exist');
         }
         $configDir .= '/config';
-        if (!file_exists($configDir) || !is_dir($configDir) || !mkdir($configDir) || !is_dir($configDir)) {
-            return $this->respond('error');
+        if (!file_exists($configDir) && !is_dir($configDir) && !mkdir($configDir) && !is_dir($configDir)) {
+            return $this->respond('error - Cannot create streams/config directory');
         }
         touch($configDir . '/restart.txt');
         return $this->respond('Restarting...');

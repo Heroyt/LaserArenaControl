@@ -37,11 +37,11 @@
 			<div class="btn-group btn-group-lg">
 				<button type="button" class="btn btn-primary addMode" data-system="{$system}" data-type="TEAM"
 						id="addModeTeam">
-                    <i class="fa-solid fa-plus"></i> {_'Přidat týmový mód', context: 'actions'}
+                    {faSolid 'plus'} {_'Přidat týmový mód', context: 'actions'}
 				</button>
 				<button type="button" class="btn btn-info addMode" data-system="{$system}" data-type="SOLO"
 						id="addModeSolo">
-                    <i class="fa-solid fa-plus"></i> {_'Přidat sólo mód', context: 'actions'}
+                    {faSolid 'plus'} {_'Přidat sólo mód', context: 'actions'}
 				</button>
 			</div>
 		</div>
@@ -60,7 +60,7 @@
                     <h5 class="modal-title">{_'Variace módu', context: 'game.modes'} - <span
 								class="mode-name"></span></h5>
 					<button type="button" class="btn btn-link text-text" data-bs-dismiss="modal" aria-label="Close">
-						<i class="fa-solid fa-xmark"></i>
+						{faSolid 'xmark'}
 					</button>
 				</div>
 				<div class="modal-body">
@@ -80,7 +80,7 @@
                         {_'Názvy z konzole', context: 'game.modes'} - <span class="mode-name"></span>
 					</h5>
 					<button type="button" class="btn btn-link text-text" data-bs-dismiss="modal" aria-label="Close">
-						<i class="fa-solid fa-xmark"></i>
+						{faSolid 'xmark'}
 					</button>
 				</div>
 				<div class="modal-body">
@@ -90,7 +90,7 @@
 					<div id="modeNames"></div>
 					<div class="text-center" id="add-name-wrapper">
 						<button type="button" class="btn btn-primary w-100 add">
-							<i class="fa-solid fa-plus"></i>
+							{faSolid 'plus'}
 						</button>
 					</div>
 				</div>
@@ -108,7 +108,7 @@
                     <h5 class="modal-title">{_'Nastavení zobrazených statistik na výsledcích', context: 'game.modes'}
 						- <span class="mode-name"></span></h5>
 					<button type="button" class="btn btn-link text-text" data-bs-dismiss="modal" aria-label="Close">
-						<i class="fa-solid fa-xmark"></i>
+						{faSolid 'xmark'}
 					</button>
 				</div>
 				<div class="modal-body">
@@ -209,7 +209,7 @@
 			{if !isset($mode) || $mode instanceof App\GameModels\Game\GameModes\CustomTeamMode || $mode instanceof App\GameModels\Game\GameModes\CustomSoloMode}
 				<div class="text-end mb-2">
 					<button type="button" class="btn btn-danger delete">
-						<i class="fa-solid fa-trash"></i>
+						{faSolid 'trash'}
 					</button>
 				</div>
 				<div class="form-floating mb-2">
@@ -263,31 +263,31 @@
 				<button type="button" class="btn btn-primary edit-variations" data-toggle="tooltip"
 						data-id="{$id}"
                         title="{_'Upravit variace', context: 'game.modes'}">
-					<i class="fa-solid fa-list"></i>
+					{faSolid 'list'}
 				</button>
 				<button type="button" class="btn btn-success edit-results" data-toggle="tooltip"
 						data-id="{$id}"
                         title="{_'Upravit zobrazení výsledků', context: 'game.modes'}">
-                    <i class="fa-solid fa-table-cells-large"></i>
+                    {faSolid 'table-cells-large'}
 				</button>
 				<button type="button" class="btn btn-info edit-mode-names" data-toggle="tooltip"
 						data-id="{$id}"
                         title="{_'Upravit názvy z konzole', context: 'game.modes'}">
-					<i class="fa-solid fa-magnifying-glass"></i>
+					{faSolid 'magnifying-glass'}
 				</button>
                 <input type="checkbox" class="btn-check" id="mode-{$id}-active" autocomplete="off"
                        name="mode[{$id}][active]" value="1" n:attr="checked: !isset($mode) || $mode?->active">
                 <label data-toggle="tooltip"
                        title="{_'Zda je herní mód aktivní (zobrazí se ve výběru módu)', context: 'game.modes'}"
                        class="btn btn-outline-success" for="mode-{$id}-active">
-                    <i class="fa-solid fa-eye"></i>
+                    {faSolid 'eye'}
                 </label>
                 <input type="checkbox" class="btn-check" id="mode-{$id}-public" autocomplete="off"
                        name="mode[{$id}][public]" value="1" n:attr="checked: !isset($mode) || $mode?->public">
                 <label data-toggle="tooltip"
                        title="{_'Zda se herní mód zobrazuje na výběr hráčům.', context: 'game.modes'}"
                        class="btn btn-outline-info" for="mode-{$id}-public">
-                    <i class="fa-solid fa-eye"></i>
+                    {faSolid 'eye'}
                 </label>
 			</div>
 		</div>
@@ -301,7 +301,7 @@
 		<label class="form-check-label" for="mode-#id#-{$name}">
             {_$label, context: 'game.modes.settings'}
 		</label>
-		<i class="fa-solid fa-circle-info cursor-help" data-toggle="tooltip"
+		<i class="{faSolid('circle-info')} cursor-help" data-toggle="tooltip"
            title='{_$info, context: 'game.modes.settings'}'></i>
 	</div>
 {/define}

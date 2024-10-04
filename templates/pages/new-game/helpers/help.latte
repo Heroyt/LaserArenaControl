@@ -2,15 +2,14 @@
 	<button type="button" class="btn btn-info position-fixed rounded-circle trigger-help"
             data-toggle="tooltip" title="{_'Nápověda'}"
 			style="bottom: 2rem; left: 1rem; z-index: 10;">
-		<i class="fa-solid fa-circle-question"></i>
+        {faSolid 'circle-question'}
 	</button>
 
 	<div class="offcanvas offcanvas-start" tabindex="-1" id="help" aria-labelledby="helpLabel"
 		 style="--bs-offcanvas-width: 600px;">
 		<div class="offcanvas-header">
             <h4 class="offcanvas-title" id="helpLabel">{_'Nápověda'}</h4>
-			<button type="button" class="btn btn-link" data-bs-dismiss="offcanvas" aria-label="Close"><i
-						class="fa-solid fa-xmark"></i></button>
+			<button type="button" class="btn btn-link" data-bs-dismiss="offcanvas" aria-label="Close">{faSolid 'xmark'}</button>
 		</div>
 		<div class="offcanvas-body">
             <h5>{_'Klávesové zkratky', context: 'help'}</h5>
@@ -91,7 +90,7 @@
 				</tr>
 				<tr>
 					<th class="text-center py-3">
-						<span class="bg-primary text-bg-primary p-2 rounded"><i class="fa-solid fa-arrow-up"></i></span>
+						<span class="bg-primary text-bg-primary p-2 rounded">{faSolid 'arrow-up'}</span>
 					</th>
 					<td>
                         {_'Zvýší herní úroveň hráče.', context: 'help'}
@@ -99,8 +98,7 @@
 				</tr>
 				<tr>
 					<th class="text-center py-3">
-						<span class="bg-primary text-bg-primary p-2 rounded"><i
-									class="fa-solid fa-arrow-down"></i></span>
+						<span class="bg-primary text-bg-primary p-2 rounded">{faSolid 'arrow-down'}</span>
 					</th>
 					<td>
                         {_'Sníží herní úroveň hráče.', context: 'help'}

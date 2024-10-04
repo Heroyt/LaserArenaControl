@@ -56,7 +56,7 @@
                 {$rank['name']}
                 {var $count = count($player->getAllBestAt()) - 1}
                 {if $count > 0}
-                    +&nbsp;{$count}&nbsp;<i class="fa-solid fa-trophy"></i>
+                    +&nbsp;{$count}&nbsp;{faSolid 'trophy'}
                 {/if}
             </div>
         </div>
@@ -65,9 +65,9 @@
 			{$lives}
 			</span>
             {if $lives > 0}
-                <i class="fas fa-heart"></i>
+                {faSolid 'heart'}
             {else}
-                <i class="fa-solid fa-heart-crack"></i>
+                {faSolid 'heart-crack'}
             {/if}
         </div>
         <div class="ammo text-end" n:if="property_exists($player,'ammoRest')">
@@ -88,7 +88,8 @@
 			{case 3} text-bronze
 		   {/switch}{if $player->score < 0}text-danger{/if}">
             <span class="value">{$player->score|number:0,',','&nbsp;'|noescape}</span>
-            <i class="fas fa-star"></i></div>
+            {faSolid 'star'}
+        </div>
     </div>
 {/define}
 
@@ -103,7 +104,9 @@
             </div>
             {$team->name}
         </div>
-        <div class="score text-end"><span class="value">{$team->score|number:0,',','&nbsp;'|noescape}</span> <i
-                    class="fas fa-star"></i></div>
+        <div class="score text-end">
+            <span class="value">{$team->score|number:0,',','&nbsp;'|noescape}</span>
+            {faSolid 'star'}
+        </div>
     </div>
 {/define}

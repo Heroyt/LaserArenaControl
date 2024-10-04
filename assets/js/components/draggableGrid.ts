@@ -16,6 +16,7 @@ export default class DraggableGrid {
 			swap: true,
 			swapClass: 'highlight',
 			filter: ".draggable-empty",
+			handle: this.element.querySelector('.with-handle') ? '.handle' : undefined,
 		});
 	}
 

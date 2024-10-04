@@ -6,7 +6,7 @@ if [ -n "$SSH_KEY" ] && [ -f "$SSH_KEY" ]; then
   eval "$(ssh-agent -s)" >/dev/null 2>&1
   if ssh-add "$SSH_KEY"; then
     git remote set-url origin git@github.com:Heroyt/LaserArenaControl.git
-    echo -e "Host github.com\n    User git\n    Hostname github.com\n    PreferredAuthentication publickey\n    IdentityFile $SSH_KEY" > /etc/ssh/ssh_config.d/github
+    echo -e "Host github.com\n    User git\n    Hostname github.com\n    IdentityFile $SSH_KEY\n" > /etc/ssh/ssh_config.d/github.conf
   else
     echo "Failed to add SSH key. Falling back to HTTPS."
     git remote set-url origin https://github.com/Heroyt/LaserArenaControl.git

@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: Spanish\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2024-07-08 15:43\n"
+"PO-Revision-Date: 2024-10-08 12:30\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -782,20 +782,20 @@ msgid "Horní základna"
 msgstr ""
 
 msgid "Skóre"
-msgstr ""
+msgstr "Puntuación"
 
 msgid "Výstřely"
-msgstr ""
+msgstr "Disparos"
 
 msgid "Zásahy"
-msgstr ""
+msgstr "Tiros"
 
 msgid "Smrti"
-msgstr ""
+msgstr "Muertes"
 
 msgid "Ztráty základny"
-msgstr ""
+msgstr "Pérdida de base"
 
 msgid "Sniper"
-msgstr ""
+msgstr "Sniper"
 

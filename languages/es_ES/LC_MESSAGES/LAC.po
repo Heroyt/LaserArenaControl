@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: Spanish\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2024-10-10 08:32\n"
+"PO-Revision-Date: 2024-10-10 10:08\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -100,14 +100,14 @@ msgstr "CSGO"
 
 msgctxt "gameModes"
 msgid "Team deathmatch"
-msgstr "Team Deathmatch"
+msgstr "Team deathmatch"
 
 msgctxt "gameModes"
 msgid "Deathmatch"
-msgstr ""
+msgstr "Deathmatch"
 
 msgid "Jazyk"
-msgstr ""
+msgstr "Idioma"
 
 msgctxt "print"
 msgid "Barevně:"
@@ -122,10 +122,10 @@ msgid "Černobílé"
 msgstr ""
 
 msgid "Game"
-msgstr ""
+msgstr "Juego"
 
 msgid "Styl"
-msgstr ""
+msgstr "Estilo"
 
 msgid "General"
 msgstr ""
@@ -139,7 +139,7 @@ msgstr ""
 
 msgctxt "actions"
 msgid "Odeslat"
-msgstr ""
+msgstr "Enviar"
 
 msgctxt "actions"
 msgid "Smazat"
@@ -151,19 +151,19 @@ msgstr ""
 
 msgctxt "dates"
 msgid "do"
-msgstr ""
+msgstr "hasta"
 
 msgctxt "actions"
 msgid "Add"
-msgstr ""
+msgstr "Añadir"
 
 msgctxt "dates"
 msgid "Date"
-msgstr ""
+msgstr "Dato"
 
 msgctxt "dates"
 msgid "Dates"
-msgstr ""
+msgstr "Datos"
 
 msgid "Nebyly odehrány žádné hry."
 msgstr ""
@@ -173,13 +173,13 @@ msgstr ""
 
 msgctxt "actions"
 msgid "Přidat datum"
-msgstr ""
+msgstr "Añadir fecha"
 
 msgid "Naposledy uloženo:"
 msgstr ""
 
 msgid "nikdy"
-msgstr ""
+msgstr "nunca"
 
 msgctxt "errors"
 msgid "Nahraný soubor je příliš velký"
@@ -191,7 +191,7 @@ msgstr ""
 
 msgctxt "gameModes"
 msgid "Survival"
-msgstr ""
+msgstr "Survival"
 
 msgctxt "settings"
 msgid "API klíč"
@@ -202,7 +202,7 @@ msgid "General settings"
 msgstr ""
 
 msgid "Vests"
-msgstr ""
+msgstr "Chalecos"
 
 msgctxt "settings"
 msgid "Vest settings"
@@ -210,7 +210,7 @@ msgstr ""
 
 msgctxt "systems"
 msgid "evo5"
-msgstr ""
+msgstr "evo5"
 
 msgctxt "settings.vests"
 msgid "Porucha"

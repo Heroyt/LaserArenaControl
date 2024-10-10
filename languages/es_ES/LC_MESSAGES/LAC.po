@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: Spanish\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2024-09-21 20:28\n"
+"PO-Revision-Date: 2024-10-10 08:32\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -20,16 +20,16 @@ msgstr ""
 
 msgctxt "pageTitles"
 msgid "Seznam her"
-msgstr ""
+msgstr "Lista de juegos"
 
 msgid "Toggle navigation"
 msgstr ""
 
 msgid "Akce"
-msgstr ""
+msgstr "Acción"
 
 msgid "%s skóre"
-msgstr ""
+msgstr "%s puntuación"
 
 msgctxt "debugPanel"
 msgid "Rows"
@@ -41,11 +41,11 @@ msgstr ""
 
 msgctxt "debugPanel"
 msgid "Translations"
-msgstr ""
+msgstr "Traducciones"
 
 msgctxt "debugPanel"
 msgid "Language"
-msgstr ""
+msgstr "Idioma"
 
 msgctxt "debugPanel"
 msgid "HTTP header"
@@ -65,42 +65,42 @@ msgstr ""
 
 msgctxt "debugPanel"
 msgid "Context"
-msgstr ""
+msgstr "Contexto"
 
 msgctxt "pageTitles"
 msgid "404"
-msgstr ""
+msgstr "404"
 
 msgctxt "errors"
 msgid "stránka nenalezena"
-msgstr ""
+msgstr "página no encontrada"
 
 msgctxt "pageTitles"
 msgid "Výsledky"
-msgstr ""
+msgstr "Resultados"
 
 msgctxt "gameModes"
 msgid "Základny"
-msgstr ""
+msgstr "Bases"
 
 msgctxt "debugPanel"
 msgid "Plural"
-msgstr ""
+msgstr "Plural"
 
 msgctxt "pageTitles"
 msgid "Úvod"
-msgstr ""
+msgstr "Introducción"
 
 msgid "Tento den se nehrály žádné hry."
 msgstr ""
 
 msgctxt "gameModes"
 msgid "CSGO"
-msgstr ""
+msgstr "CSGO"
 
 msgctxt "gameModes"
 msgid "Team deathmatch"
-msgstr ""
+msgstr "Team Deathmatch"
 
 msgctxt "gameModes"
 msgid "Deathmatch"

@@ -11,26 +11,6 @@
     {
       "type": "path",
       "url": "./modules/*"
-    },
-    {
-      "type": "vcs",
-      "url": "https://github.com/heroyt/orisai-exceptions"
-    },
-    {
-      "type": "vcs",
-      "url": "https://github.com/heroyt/orisai-clock"
-    },
-    {
-      "type": "vcs",
-      "url": "https://github.com/heroyt/orisai-utils"
-    },
-    {
-      "type": "vcs",
-      "url": "https://github.com/heroyt/orisai-cron-expression-explainer"
-    },
-    {
-      "type": "vcs",
-      "url": "https://github.com/heroyt/scheduler"
     }
   ],
   "scripts": {
@@ -74,11 +54,7 @@
     "lsr/request": "^0.2",
     "ext-zlib": "*",
     "heroyt/tournament-generator": "^0.5",
-    "orisai/exceptions": "dev-v1.x-php83",
-    "orisai/cron-expression-explainer": "dev-v1.x-php83",
-    "orisai/clock": "dev-v1.x-php83",
-    "orisai/utils": "dev-v1.x-php83",
-    "orisai/scheduler": "dev-v2.x-php83",
+    "orisai/scheduler": "^2.1",
     "symfony/lock": "^7",
     "diego-ninja/composer-preload": "^1.0",
     "ext-redis": "*",

@@ -28,3 +28,4 @@ services:
 	command.vests.sync: App\Cli\Commands\Vests\SyncVestsCommand
 
 	command.laserliga.syncPlayers: App\Cli\Commands\LaserLiga\SyncPlayersCommand
+	command.laserliga.syncMusic: App\Cli\Commands\LaserLiga\SyncMusicCommand

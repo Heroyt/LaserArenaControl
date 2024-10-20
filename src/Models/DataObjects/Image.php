@@ -104,20 +104,6 @@ class Image
         }
     }
 
-    public function getWebp(): ?string {
-        if ($this->getType() === 'svg') {
-            return null;
-        }
-        if ($this->getType() === 'webp') {
-            return $this->pathToUrl($this->image);
-        }
-        $webp = $this->path . 'optimized/' . $this->name . '.webp';
-        if (!file_exists($webp)) {
-            return null;
-        }
-        return $this->pathToUrl($webp);
-    }
-
     public function getType(): string {
         if (!isset($this->type)) {
             // Default to using provided extension
@@ -139,6 +125,20 @@ class Image
         return $this->type;
     }
 
+    public function getWebp(): ?string {
+        if ($this->getType() === 'svg') {
+            return null;
+        }
+        if ($this->getType() === 'webp') {
+            return $this->pathToUrl($this->image);
+        }
+        $webp = $this->path . 'optimized/' . $this->name . '.webp';
+        if (!file_exists($webp)) {
+            return null;
+        }
+        return $this->pathToUrl($webp);
+    }
+
     /**
      * @return void
      * @throws FileException
@@ -152,6 +152,22 @@ class Image
         /** @var ImageService $imageService */
         $imageService = App::getService('image');
         $imageService->optimize($this->image);
+    }
+
+    public function getMimeType(): string {
+        if (function_exists('exif_imagetype') && function_exists('image_type_to_mime_type')) {
+            /** @var int|false $type */
+            $type = exif_imagetype($this->image);
+            if ($type !== false) {
+                return image_type_to_mime_type($type);
+            }
+        }
+        return match ($this->getType()) {
+            'png' => 'image/png',
+            'webp' => 'image/webp',
+            'svg' => 'image/svg+xml',
+            default => 'image/jpeg',
+        };
     }
 
     public function getPath(): string {

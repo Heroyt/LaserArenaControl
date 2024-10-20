@@ -11,9 +11,9 @@
             <div class="h-100 w-100 d-flex align-items-center justify-content-between">
                 {_'Hráč'}
                 <span class="sort ms-2">
-                    <i class="fa-solid fa-sort"></i>
-                    <i class="fa-solid fa-sort-up"></i>
-                    <i class="fa-solid fa-sort-down"></i>
+                    {faSolid 'sort'}
+                    {faSolid 'sort-up'}
+                    {faSolid 'sort-down'}
                 </span>
             </div>
         </th>
@@ -21,9 +21,9 @@
             <div class="h-100 w-100 d-flex align-items-center justify-content-between">
                 {_'Kód hráče'}
                 <span class="sort ms-2">
-                    <i class="fa-solid fa-sort"></i>
-                    <i class="fa-solid fa-sort-up"></i>
-                    <i class="fa-solid fa-sort-down"></i>
+                    {faSolid 'sort'}
+                    {faSolid 'sort-up'}
+                    {faSolid 'sort-down'}
                 </span>
             </div>
         </th>
@@ -31,9 +31,9 @@
             <div class="h-100 w-100 d-flex align-items-center justify-content-between">
                 {_'Email'}
                 <span class="sort ms-2">
-                    <i class="fa-solid fa-sort"></i>
-                    <i class="fa-solid fa-sort-up"></i>
-                    <i class="fa-solid fa-sort-down"></i>
+                    {faSolid 'sort'}
+                    {faSolid 'sort-up'}
+                    {faSolid 'sort-down'}
                 </span>
             </div>
         </th>
@@ -41,9 +41,9 @@
             <div class="h-100 w-100 d-flex align-items-center justify-content-between">
                 {_'Herní úroveň'}
                 <span class="sort ms-2">
-                    <i class="fa-solid fa-sort"></i>
-                    <i class="fa-solid fa-sort-up"></i>
-                    <i class="fa-solid fa-sort-down"></i>
+                    {faSolid 'sort'}
+                    {faSolid 'sort-up'}
+                    {faSolid 'sort-down'}
                 </span>
             </div>
         </th>
@@ -60,7 +60,7 @@
         <td>
             <a href="mailto:{$player->email}">{$player->email}</a>
         </td>
-        <td class="text-end">{$player->rank} <i class="fa-solid fa-star"></i></td>
+        <td class="text-end">{$player->rank} {faSolid 'star'}</td>
     </tr>
     </tbody>
 </table>

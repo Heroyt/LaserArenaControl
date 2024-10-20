@@ -99,20 +99,20 @@
 {define sectionControls}
     <div id="control-btns" class="btn-group pb-2 pb-sm-0">
         <button type="submit" name="action" value="load" class="btn btn-warning" id="loadGame" aria-label="{_'Nahrát hru', context: 'game.actions'}">
-            <i class="fa-solid mx-1 fa-circle-chevron-up"></i>
+            {faSolid 'circle-chevron-up', 'mx-1'}
             <span>{_'Nahrát hru', context: 'game.actions'}</span>
         </button>
         <button type="submit" name="action" value="start" class="btn btn-success" id="startGame" aria-label="{_'Spustit hru', context: 'game.actions'}">
-            <i class="fa-solid mx-1 fa-circle-play"></i>
+            {faSolid 'circle-play', 'mx-1'}
             <span>{_'Spustit hru', context: 'game.actions'}</span>
         </button>
         <button type="button" name="action" value="stop" class="btn btn-danger" id="stopGame" aria-label="{_'Ukončit hru', context: 'game.actions'}">
-            <i class="fa-solid mx-1 fa-circle-stop"></i>
+            {faSolid 'circle-stop', 'mx-1'}
             <span>{_'Ukončit hru', context: 'game.actions'}</span>
         </button>
         <button n:if="$featureConfig->isFeatureEnabled('preparedGames')" type="button" class="btn btn-primary"
                                                                          id="prepareGame" aria-label="{_'Připravit hru', context: 'game.actions'}">
-            <i class="fa-solid mx-1 fa-save"></i>
+            {faSolid 'save', 'mx-1'}
             <span>{_'Připravit hru', context: 'game.actions'}</span>
         </button>
         {foreach $addedTemplates->controlButtons as $include}
@@ -139,17 +139,17 @@
         <a href="{link ['results', 'last', 'print', \App\Core\App::getShortLanguageCode(), 1, \App\GameModels\Game\PrintStyle::getActiveStyleId(), \App\Core\Info::get('default_print_template', 'default')]}"
            class="btn btn-info print-btn" target="_blank" data-toggle="tooltip"
            title="{_'Tisknout poslední hru', context: 'actions'} 1&times;">
-            <i class="fa-solid fa-print"></i> &times; 1
+            {faSolid 'print'} &times; 1
         </a>
         <a href="{link ['results', 'last', 'print', \App\Core\App::getShortLanguageCode(), 2, \App\GameModels\Game\PrintStyle::getActiveStyleId(), \App\Core\Info::get('default_print_template', 'default')]}"
            class="btn btn-info print-btn" target="_blank" data-toggle="tooltip"
            title="{_'Tisknout poslední hru', context: 'actions'} 2&times;">
-            <i class="fa-solid fa-print"></i> &times; 2
+            {faSolid 'print'} &times; 2
         </a>
         <div class="btn-group flex-fill" role="group">
             <button class="btn btn-info dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"
                     data-toggle="tooltip" title="{_'Tisknout poslední hru', context: 'actions'}&times;">
-                <i class="fa-solid fa-print"></i> &times;
+                {faSolid 'print'} &times;
             </button>
             <ul class="dropdown-menu">
                 <li n:for="$i = 3; $i < 6; $i++">
@@ -163,13 +163,13 @@
         <div class="btn-group flex-fill" role="group">
             <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
                     aria-expanded="false" data-toggle="tooltip" title="{_'Akce výsledkové tabule'}">
-                <i class="fas fa-display"></i>
+                {faSolid 'display'}
             </button>
             <ul class="dropdown-menu">
                 <li>
                     <a class="dropdown-item" href="#" data-toggle="gate" data-toggle="gate" data-id="last"
                        data-system="all">
-                        <i class="fas fa-bullseye"></i>
+                        {faSolid 'bullseye'}
                         {_'Zobrazit poslední hru'}
                     </a>
                 </li>
@@ -213,7 +213,7 @@
     </label>
     <button type="button" class="btn btn-danger" id="clear-all" data-toggle="tooltip"
             title="{_'Smazat vše', context: 'actions'}">
-        <i class="fa-solid fa-trash"></i>
+        {faSolid 'trash'}
     </button>
 {/define}
 
@@ -245,7 +245,7 @@
         </select>
         <button type="button" data-toggle="shuffle" title="{_'Náhodně', context: 'actions'}"
                 data-target="#game-mode-select" class="btn btn-purple-500">
-            <i class="fa-solid fa-shuffle"></i>
+            {faSolid 'shuffle'}
         </button>
     </div>
     <div id="game-mode-description" class="select-description text-muted" data-target="#game-mode-select">
@@ -258,8 +258,8 @@
 {define sectionGameModeVariations}
     <button class="btn btn-info w-100" type="button" id="hide-variations" data-toggle="collapse"
             data-target="#game-mode-variations-collapse">
-        <i class="fa-solid fa-eye d-none"></i>
-        <i class="fa-solid fa-eye-slash"></i>
+        {faSolid 'eye', 'd-none'}
+        {faSolid 'eye-slash'}
         {_'Variace', context: 'gameModes'}
     </button>
     <div class="collapse-grid" id="game-mode-variations-collapse">
@@ -284,7 +284,7 @@
         <input type="checkbox" id="playlists" name="use-playlist" value="1" class="btn-check">
         <label for="playlists" class="btn btn-outline-info rounded-start" data-toggle="tooltip"
                title="{_'Playlisty'}">
-            <i class="fa-solid fa-music"></i>
+            {faSolid 'music'}
         </label>
         <select name="playlist" id="playlist-select" class="form-select d-none">
             <option n:foreach="$playlists as $playlist" value="{$playlist->id}"
@@ -314,15 +314,15 @@
         <input type="checkbox" id="music-mode-grouped" value="1" class="btn-check">
         <label for="music-mode-grouped" class="btn btn-outline-primary" data-toggle="tooltip"
                title="{_'Slučovat hudební skupiny'}">
-            <i class="fa-solid fa-layer-group"></i>
+            {faSolid 'layer-group'}
         </label>
         <button type="button" data-bs-toggle="modal" data-bs-target="#music-modes-display" class="btn btn-info"
                 data-toggle="tooltip" title="{_'Zobrazit přehled hudebních módů'}">
-            <i class="fa-solid fa-eye"></i>
+            {faSolid 'eye'}
         </button>
         <button type="button" data-toggle="shuffle" title="{_'Náhodně', context: 'actions'}"
                 data-target="#music-select" class="btn btn-purple-500">
-            <i class="fa-solid fa-shuffle"></i>
+            {faSolid 'shuffle'}
         </button>
     </div>
 {/define}
@@ -344,11 +344,11 @@
         </div>
         <div class="btn-group">
             <button type="button" class="btn btn-purple-500" id="random-teams">
-                <i class="fa-solid fa-shuffle"></i>
+                {faSolid 'shuffle'}
                 {_'Náhodně', context: 'actions'}
             </button>
             <button type="button" class="btn btn-success" id="random-fair-teams">
-                <i class="fa-solid fa-star"></i>
+                {faSolid 'star'}
                 {_'Náhodně fér', context: 'actions'}
             </button>
         </div>
@@ -382,13 +382,13 @@
                 {$vest->vestNum}
             </div>
             {if $vest->status === App\GameModels\Game\Enums\VestStatus::PLAYABLE}
-                <div class="fa-solid fa-circle-exclamation text-warning" data-toggle="tooltip" role="tooltip" title="{$vest->info}"></div>
+                <div class="{faSolid('circle-exclamation')} text-warning" data-toggle="tooltip" role="tooltip" title="{$vest->info}"></div>
             {elseif $vest->status === App\GameModels\Game\Enums\VestStatus::BROKEN}
-                <div class="fa-solid fa-circle-exclamation text-danger" data-toggle="tooltip" role="tooltip" title="{$vest->info}"></div>
+                <div class="{faSolid('circle-exclamation')} text-danger" data-toggle="tooltip" role="tooltip" title="{$vest->info}"></div>
             {/if}
         </div>
         <div class="input-group-text handle cursor-grab bg-secondary text-bg-secondary px-2">
-            <i class="fa-solid fa-grip-lines"></i>
+            {faSolid 'grip-lines'}
         </div>
         <input id="player-name-{$vest->vestNum}" tabindex="{$vest->vestNum}" type="text"
                class="form-control player-name" autocomplete="off"
@@ -396,7 +396,7 @@
                name="player[{$vest->vestNum}][name]" maxlength="12">
         <button type="button" class="btn btn-info btn-sm search-user" data-toggle="tooltip"
                 title="{_'Vyhledat hráče'}">
-            <i class="fa-solid fa-search"></i>
+            {faSolid 'search'}
         </button>
         <input type="hidden" name="player[{$vest->vestNum}][code]" value="" class="user-code"
                id="user-{$vest->vestNum}-code">
@@ -456,7 +456,7 @@
             </label>
         </div>
         <button type="button" class="btn btn-danger clear" title="{_'Smazat'}">
-            <i class="fa-solid fa-trash"></i>
+            {faSolid 'trash'}
         </button>
     </div>
 {/define}

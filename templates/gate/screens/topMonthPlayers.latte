@@ -32,7 +32,7 @@
                 </div>
                 <div class="value">
                     {$topScore->score|number:0,',',' '}
-                    <i class="fa-solid fa-star"></i>
+                    {faSolid 'star'}
                     <time datetime="{$topScore?->getGame()?->start?->format('c')}">
                         {$topScore?->getGame()?->start?->format('j. n. Y H:i')}
                     </time>
@@ -46,7 +46,7 @@
                 </div>
                 <div class="value">
                     {$topSkill->skill|number:0,',',' '}
-                    <i class="fa-solid fa-medal"></i>
+                    {faSolid 'medal'}
                     <time datetime="{$topSkill?->getGame()?->start?->format('c')}">
                         {$topSkill?->getGame()?->start?->format('j. n. Y H:i')}
                     </time>

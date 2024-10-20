@@ -14,13 +14,13 @@ const watch = process.argv.includes('watch');
 
 console.time('Build');
 console.time('Fontawesome');
-await fontawesomeSubset({
-    brands: ['discord'],
-    regular: ['calendar', 'circle-xmark', 'circle-check'],
-    solid: ['wrench', 'sort','sort-up','sort-down','arrow-up', 'arrow-down', 'money-bill-1-wave', 'person', 'heart', 'music', 'angle-down', 'angle-left', 'angle-right', 'angle-up', 'ban', 'cancel', 'check', 'circle-info', 'circle-question', 'download', 'edit', 'eye', 'eye-slash', 'file-pdf', 'filter', 'gear', 'gun', 'info', 'list', 'location-dot', 'magnifying-glass-plus', 'medal', 'pen-to-square', 'play', 'plus', 'question', 'ranking-star', 'right-from-bracket', 'right-to-bracket', 'share', 'star', 'stop', 'tag', 'trophy', 'user', 'users', 'user-clock', 'user-plus', 'xmark', 'moon', 'sun', 'print', 'display', 'cog', 'bars', 'save', 'trash', 'search', 'shuffle', 'chair', 'soap', 'upload', 'cloud', 'close', 'rotate', 'box-archive', 'bullseye', 'arrows-rotate', 'cloud-arrow-up', 'user-group', 'layer-group', 'people-group', 'clipboard-list', 'grip-lines', 'circle-chevron-up', 'circle-play', 'circle-stop', 'circle-exclamation', 'table-cells-large', 'magnifying-glass','caret-left','caret-right'],
-}, "assets/fonts", {
-    package: 'free', targetFormats: ['woff2', "woff", 'sfnt'],
-});
+const subset = JSON.parse(fs.readFileSync('./assets/icons/fontawesome.json', 'utf8'));
+await fontawesomeSubset(
+        subset,
+        "assets/fonts", {
+            package: 'free', targetFormats: ['woff2', "woff", 'sfnt'],
+        }
+);
 console.timeEnd('Fontawesome');
 
 console.time('Prepare');
@@ -145,74 +145,84 @@ const compressOptions = {
 
 // Clear previous chunks
 const chunkDir = path.join(buildOptions.outdir, 'chunks');
+const oldChunks = [];
 if (fs.existsSync(chunkDir)) {
-    let count = 0;
     for (const file of fs.readdirSync(chunkDir)) {
-        fs.unlinkSync(path.join(chunkDir, file));
+        oldChunks.push(path.join(chunkDir, file));
+    }
+}
+
+try {
+    const ctx = await esbuild.context(buildOptions);
+
+    let count = 0;
+    for (const oldChunk of oldChunks) {
+        fs.unlinkSync(oldChunk);
         count++;
     }
     console.log(`Removed ${count} old chunk files`);
-}
 
-const ctx = await esbuild.context(buildOptions);
-console.timeEnd('Prepare');
+    console.timeEnd('Prepare');
 
-if (watch) {
-    await ctx.watch();
-    console.log('watching...');
-} else {
-    console.log('building...');
-    console.time('build');
-    const result = await ctx.rebuild();
-    console.timeEnd('build');
+    if (watch) {
+        await ctx.watch();
+        console.log('watching...');
+    } else {
+        console.log('building...');
+        console.time('build');
+        const result = await ctx.rebuild();
+        console.timeEnd('build');
 
-    console.log('compressing...');
-    console.time('compression');
-    const compressResult = await esbuild.build(compressOptions);
-    console.timeEnd('compression');
+        console.log('compressing...');
+        console.time('compression');
+        const compressResult = await esbuild.build(compressOptions);
+        console.timeEnd('compression');
 
-    fs.writeFileSync('dist/meta.json', JSON.stringify(result.metafile));
-    fs.writeFileSync('dist/meta-compress.json', JSON.stringify(compressResult.metafile));
+        fs.writeFileSync('dist/meta.json', JSON.stringify(result.metafile));
+        fs.writeFileSync('dist/meta-compress.json', JSON.stringify(compressResult.metafile));
 
-    await ctx.dispose();
+        await ctx.dispose();
 
-    console.log('building service worker...');
-    console.time('Service worker');
-    await esbuild.build({
-        entryPoints: ['assets/js/sw/service-worker.ts'],
-        bundle: true,
-        sourcemap: true,
-        color: true,
-        format: 'esm',
-        target: 'esnext',
-        minify: true,
-        outfile: 'temp/service-worker.js',
-        define: {
-            '__USE_SUBTITLES__': 'true',
-            '__USE_ALT_AUDIO__': 'true',
-            '__USE_EME_DRM__': 'true',
-            '__USE_CMCD__': 'true',
-            '__USE_CONTENT_STEERING__': 'true',
-            '__USE_VARIABLE_SUBSTITUTION__': 'true',
-            '__USE_M2TS_ADVANCED_CODECS__': 'true',
-            '__USE_MEDIA_CAPABILITIES__': 'true',
-        }
-    });
+        console.log('building service worker...');
+        console.time('Service worker');
+        await esbuild.build({
+            entryPoints: ['assets/js/sw/service-worker.ts'],
+            bundle: true,
+            sourcemap: true,
+            color: true,
+            format: 'esm',
+            target: 'esnext',
+            minify: true,
+            outfile: 'temp/service-worker.js',
+            define: {
+                '__USE_SUBTITLES__': 'true',
+                '__USE_ALT_AUDIO__': 'true',
+                '__USE_EME_DRM__': 'true',
+                '__USE_CMCD__': 'true',
+                '__USE_CONTENT_STEERING__': 'true',
+                '__USE_VARIABLE_SUBSTITUTION__': 'true',
+                '__USE_M2TS_ADVANCED_CODECS__': 'true',
+                '__USE_MEDIA_CAPABILITIES__': 'true',
+            }
+        });
 
-    injectManifest({
-        swDest: 'dist/service-worker.js',
-        swSrc: 'temp/service-worker.js',
-        globDirectory: './dist',
-        globPatterns: ['pages/*', 'chunks/*', '*', '../assets/fonts/*', '../assets/images/*',]
-    })
-            .then(({count, size, warnings}) => {
-                if (warnings.length > 0) {
-                    console.warn('Warnings encountered while injecting the manifest:', warnings.join('\n'));
-                }
+        injectManifest({
+            swDest: 'dist/service-worker.js',
+            swSrc: 'temp/service-worker.js',
+            globDirectory: './dist',
+            globPatterns: ['pages/*', 'chunks/*', '*', '../assets/fonts/*', '../assets/images/*',]
+        })
+                .then(({count, size, warnings}) => {
+                    if (warnings.length > 0) {
+                        console.warn('Warnings encountered while injecting the manifest:', warnings.join('\n'));
+                    }
 
-                console.log(`Injected a manifest which will precache ${count} files, totaling ${size} bytes.`);
-            });
-    console.timeEnd('Service worker');
+                    console.log(`Injected a manifest which will precache ${count} files, totaling ${size} bytes.`);
+                });
+        console.timeEnd('Service worker');
+    }
+} catch (e) {
+    console.error(e);
 }
 
 console.timeEnd('Build');

@@ -14,8 +14,8 @@
                         title="{if isset($mode) && $mode === 'light'}{translate}Přepnout na tmavý režim{/translate}{else}{translate}Přepnout na světlý režim{/translate}{/if}"
                         data-light-title="{translate}Přepnout na světlý režim{/translate}"
                         data-dark-title="{translate}Přepnout na tmavý režim{/translate}">
-					<i class="fa-solid fa-moon"></i>
-					<i class="fa-solid fa-sun"></i>
+                    {faSolid 'moon'}
+                    {faSolid 'sun'}
 				</button>
                 {var string $selectedLang = $page->app->translations->getLangId()}
                 {var string $selectedCountry = $page->app->translations->getCountry()}
@@ -45,7 +45,7 @@
 				<button class="navbar-toggler ms-2  border-black" type="button" data-bs-toggle="collapse"
 						data-bs-target="#navBarContent"
                         aria-controls="navBarContent" aria-expanded="false" aria-label="{_'Toggle navigation'}">
-					<i class="fa-solid fa-bars"></i>
+                    {faSolid 'bars'}
 				</button>
 			</div>
 			<script>

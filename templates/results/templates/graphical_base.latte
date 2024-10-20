@@ -291,7 +291,7 @@
     <div n:if="$game->getMode()?->settings?->playerScore" class="score-shadow mb-1 rounded">
         <div class="score">
             <div class="score-number" style="bottom: {$height+$bottom|noescape}%;">
-                <i class="fas fa-star"></i> {$player->score|number:0,',','&nbsp;'|noescape}
+                {faSolid 'star'} {$player->score|number:0,',','&nbsp;'|noescape}
             </div>
             <div class="inner bg-team-{$player->getTeamColor()}"
                  style="height: {$height|noescape}%;bottom:{$bottom|noescape}%;"></div>
@@ -335,7 +335,7 @@
                                                           style="--team-color: var(--team-{$team->color}); width:{100*($team->score > 0 ? $team->score : 0) / ($totalScore > 0 ? $totalScore : 1)|noescape}%;">
             {if is_null($win) || $win->id === $team->id}{svgIcon 'crown', '1rem'}{/if}
             <div class="name">{$team->name}</div>
-            <div class="score"><i class="fas fa-star"></i> {$team->score|number:0,',','&nbsp;'|noescape}</div>
+            <div class="score">{faSolid 'star'} {$team->score|number:0,',','&nbsp;'|noescape}</div>
         </div>
     </div>
 {/define}

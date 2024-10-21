@@ -9,6 +9,7 @@ import {deleteMusic, MusicUploadResponse} from '../../api/endpoints/settings/mus
 import {initTooltips} from '../../includes/tooltips';
 import {lang} from '../../includes/frameworkFunctions';
 import {initImageUploadPreview} from '../../includes/imageUploadPreview';
+import {initMusicPlay} from '../../components/musicPlay';
 
 
 export default function initMusicSettings() {
@@ -208,60 +209,6 @@ export default function initMusicSettings() {
 					});
 			});
 		}
-		const playBtn = elem.querySelector('.play-music') as HTMLButtonElement;
-		if (playBtn) {
-			const media = playBtn.dataset.file;
-			let audio: HTMLAudioElement;
-			const tooltip = Tooltip.getInstance(playBtn);
-			playBtn.addEventListener('click', () => {
-				playBtn.innerHTML = `<div class="spinner-grow spinner-grow-sm" role="status"><span class="visually-hidden">Loading...</span></div>`;
-				if (!audio) {
-					audio = new Audio(media);
-				}
-
-				if (!audio.paused) {
-					playBtn.classList.add('btn-success');
-					playBtn.classList.remove('btn-danger');
-					playBtn.innerHTML = `<i class="fa-solid fa-play"></i>`;
-					lang('Přehrát', null, 1, 'actions')
-						.then(response => {
-							tooltip.setContent({
-								'.tooltip-inner': response,
-							});
-						});
-					// Stop
-					audio.pause();
-					return;
-				}
-
-				if (audio.readyState === HTMLMediaElement.HAVE_ENOUGH_DATA) {
-					triggerPlay();
-				} else {
-					audio.addEventListener('canplaythrough', triggerPlay);
-				}
-			});
-
-			function triggerPlay() {
-				const timeWrap = elem.querySelector('.time-music') as HTMLDivElement;
-				if (audio.paused) {
-					audio.addEventListener('timeupdate', () => {
-						timeWrap.innerText = `${Math.floor(audio.currentTime / 60)}:${Math.floor(audio.currentTime % 60).toString().padStart(2, '0')}`;
-					});
-					playBtn.classList.remove('btn-success');
-					playBtn.classList.add('btn-danger');
-					playBtn.innerHTML = `<i class="fa-solid fa-stop"></i>`;
-					lang('Zastavit', null, 1, 'actions')
-						.then(response => {
-							tooltip.setContent({
-								'.tooltip-inner': response,
-							});
-						});
-					// Reset playback
-					audio.load();
-					// Play
-					audio.play();
-				}
-			}
-		}
+		initMusicPlay(elem);
 	}
 }

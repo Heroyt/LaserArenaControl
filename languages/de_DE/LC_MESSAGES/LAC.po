@@ -4525,3 +4525,15 @@ msgid "Restart může chvíli trvat."
 msgid_plural "null"
 msgstr[0] ""
 msgstr[1] ""
+
+msgctxt "music"
+msgid "Test"
+msgstr ""
+
+msgctxt "music"
+msgid "AI"
+msgstr ""
+
+msgctxt "pageTitles"
+msgid "Hudební módy"
+msgstr ""

@@ -55,7 +55,7 @@
         {block $include}{/block}
     {/foreach}
     {include userSearchModal}
-    {include 'helpers/musicModesDisplay.latte', $musicGroups}
+    {include '../new-game/helpers/musicModesDisplay.latte', $musicGroups}
     {var int $order = 0}
     {foreach $addedTemplates->offcanvas as $include}
         {block $include}{/block}

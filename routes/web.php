@@ -28,7 +28,6 @@ $featureConfig = App::getService('features');
 Route::get('/lang/{lang}', [Lang::class, 'setLang']);
 
 Route::get('/', [NewGame::class, 'show'])->name('dashboard');
-Route::get('/public', [NewGame::class, 'public'])->name('public');
 
 Route::group('/results')
   ->get('/', [Results::class, 'show'])

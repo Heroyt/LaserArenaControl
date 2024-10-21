@@ -4601,3 +4601,15 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 msgstr[3] ""
+
+msgctxt "music"
+msgid "Test"
+msgstr ""
+
+msgctxt "music"
+msgid "AI"
+msgstr ""
+
+msgctxt "pageTitles"
+msgid "Hudební módy"
+msgstr ""

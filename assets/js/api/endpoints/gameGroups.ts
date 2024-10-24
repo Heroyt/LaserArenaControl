@@ -8,6 +8,11 @@ export type GameGroupUpdateData = {
 
 export type GameGroupsResponse = GameGroupData[]
 
+export async function findGroups(search: string): Promise<GameGroupsResponse> {
+	const searchParams = new URLSearchParams({search});
+	return fetchGet('/gameGroups/find', searchParams);
+}
+
 export async function updateGameGroup(id: number, data: GameGroupUpdateData): Promise<FormSaveResponse> {
 	return fetchPost(`/gameGroups/${id}`, data);
 }

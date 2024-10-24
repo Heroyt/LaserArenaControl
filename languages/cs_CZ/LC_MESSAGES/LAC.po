@@ -4613,3 +4613,34 @@ msgstr ""
 msgctxt "pageTitles"
 msgid "Hudební módy"
 msgstr ""
+
+msgid "Pojmenujte svou skupinu. Výsledky v LaserLize (pod QR kódem) se vám sloučí dohromady."
+msgstr ""
+
+msgctxt "groupName"
+msgid "Oslava - Karel"
+msgstr ""
+
+msgctxt "groupName"
+msgid "Šmoulové"
+msgstr ""
+
+msgctxt "groupName"
+msgid "Kamarádi"
+msgstr ""
+
+msgctxt "groupName"
+msgid "Rozlučka!"
+msgstr ""
+
+msgctxt "groupName"
+msgid "Šílení Střelci"
+msgstr ""
+
+msgctxt "groupName"
+msgid "Laserové Lamy"
+msgstr ""
+
+msgctxt "groupName"
+msgid "Vesmírní Piráti"
+msgstr ""

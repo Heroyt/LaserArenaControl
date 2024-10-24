@@ -20,8 +20,18 @@
 '6-stars' => svgIcon('6-stars'),
 ]}
 
+{var string[] $groupNames = ['Šmoulové', 'Oslava - Karel', 'Kamarádi', 'Rozlučka!', 'Laserové Lamy', 'Šílení Střelci', 'Vesmírní Piráti', 'Rychle a laserově']}
+
 {block content}
     <form method="post" action="" id="new-game-content" class="w-100">
+		{if $featureConfig->isFeatureEnabled('groups')}
+			<section id="group-select-section">
+				<input type="hidden" name="groupSelect" value="new-custom" id="group-select">
+				<label class="form-label" for="new-group-name">{_'Název skupiny'}:</label>
+				<input type="text" id="new-group-name" class="form-control" name="groupName" value="" placeholder="{_$groupNames[array_rand($groupNames)], context: 'groupName'}">
+				<div class="form-text">{_'Pojmenujte svou skupinu. Výsledky v LaserLize (pod QR kódem) se vám sloučí dohromady.'}</div>
+			</section>
+		{/if}
         <section id="vests-control">
             {include sectionVestsControl}
         </section>

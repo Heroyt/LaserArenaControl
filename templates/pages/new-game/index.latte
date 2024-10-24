@@ -193,6 +193,7 @@
         {block $include}{/block}
     {/foreach}
     <div n:if="$featureConfig->isFeatureEnabled('groups')" class="form-floating">
+		<input type="hidden" name="groupName" id="new-group-name" value="">
         <select name="groupSelect" id="group-select" class="form-select">
             <option value="">{_'Bez skupiny'}</option>
             <option value="new">{_'Nová skupina'}</option>

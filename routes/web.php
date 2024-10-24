@@ -81,6 +81,7 @@ $preparedId->delete('', [PreparedGames::class, 'delete'])->post('/delete', [Prep
 
 $groups = Route::group('gameGroups');
 $groups->get('', [GameGroups::class, 'listGroups']);
+$groups->get('find', [GameGroups::class, 'findGroups']);
 $groups->post('', [GameGroups::class, 'create']);
 
 $groupsId = $groups->group('{id}');

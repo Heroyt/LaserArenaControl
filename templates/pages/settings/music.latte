@@ -72,14 +72,14 @@
                 </div>
                 <p class="text-center">
                     <button type="button" class="btn btn-success" id="add-playlist">
-                        <i class="fa-solid fa-plus"></i>
+                        {faSolid 'plus'}
                     </button>
                 </p>
             </div>
         </div>
         <p class="text-center">
             <button type="submit" class="btn btn-success btn-large">
-                <i class="fa-solid fa-save"></i> {_'Uložit', context: 'actions'}
+                {faSolid 'save'} {_'Uložit', context: 'actions'}
             </button>
         </p>
     </form>
@@ -160,7 +160,7 @@
                autocomplete="off" {if $public}checked{/if}>
         <label for="music-{$id}-public" class="btn btn-outline-info d-flex align-items-center" data-toggle="tooltip"
                title="{_'Veřejný'}">
-            <i class="fa-solid fa-eye"></i>
+            {faSolid 'eye'}
         </label>
         <div class="form-floating">
             <input type="text" class="form-control" id="music-{$id}-previewStart" name="music[{$id}][previewStart]"
@@ -169,14 +169,14 @@
         </div>
         <button type="button" class="btn btn-success play-music" data-file="{$musicFile}" data-toggle="tooltip"
                 title="{_'Přehrát', context: 'actions'}">
-            <i class="fa-solid fa-play"></i>
+            {faSolid 'play'}
         </button>
         <div class="input-group-text time-music font-monospace">
             0:00
         </div>
         <button type="button" class="btn btn-danger remove" data-toggle="tooltip"
                 title="{_'Smazat', context: 'actions'}">
-            <i class="fa-solid fa-trash"></i>
+            {faSolid 'trash'}
         </button>
     </div>
 {/define}

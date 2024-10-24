@@ -15,7 +15,6 @@ services:
 
 	symfony.denormalizer.array: Symfony\Component\Serializer\Normalizer\ArrayDenormalizer
 
-	symfony.normalizer.datetime: App\Helpers\Serializer\Normalizer\DateTimeNormalizer
 	symfony.normalizer.enum: Symfony\Component\Serializer\Normalizer\BackedEnumNormalizer
 	symfony.normalizer.json: Symfony\Component\Serializer\Normalizer\JsonSerializableNormalizer(defaultContext: %symfony.normalizer.context%)
 	symfony.normalizer.object: Symfony\Component\Serializer\Normalizer\ObjectNormalizer(propertyTypeExtractor: @symfony.info.reflectionextractor,defaultContext: %symfony.normalizer.context%)
@@ -25,6 +24,7 @@ services:
 	symfony.encoder.csv: Symfony\Component\Serializer\Encoder\CsvEncoder
 
 	symfony.serializer: Symfony\Component\Serializer\Serializer(
-		[@symfony.denormalizer.array, @symfony.normalizer.datetime, @symfony.normalizer.enum, @symfony.normalizer.json, @symfony.normalizer.object],
+		[@symfony.normalizer.dibiRow, @symfony.denormalizer.array, @symfony.normalizer.datetime, @symfony.normalizer.enum, @symfony.normalizer.json, @symfony.normalizer.object],
 		[@symfony.encoder.json, @symfony.encoder.xml, @symfony.encoder.csv]
 	)
+	mapper: Lsr\Core\Mapper(@symfony.serializer)

@@ -32,6 +32,8 @@ use Spiral\RoadRunner\Metrics\Metrics;
  */
 abstract class LasermaxxGameLoader implements LoaderInterface
 {
+    use GroupLoading;
+
     public function __construct(
         protected readonly Latte   $latte,
         protected readonly Metrics $metrics,
@@ -86,9 +88,7 @@ abstract class LasermaxxGameLoader implements LoaderInterface
         /** @var array<int,string> $hashData */
         $hashData = [];
 
-        if (!empty($data['groupSelect'])) {
-            $loadData->meta['group'] = $data['groupSelect'];
-        }
+        $this->prepareGroup($loadData, $data);
 
         if (!empty($data['tableSelect'])) {
             $loadData->meta['table'] = $data['tableSelect'];

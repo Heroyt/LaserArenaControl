@@ -12,6 +12,7 @@ class GameLoadData
     public ?int $playlist = null;
     public ?ModeLoadData $mode = null;
     public ?MusicLoadData $music = null;
+    public ?GroupLoadData $group = null;
 
     public function addPlayer(PlayerLoadData $player): void {
         $this->players[$player->vest] = $player;

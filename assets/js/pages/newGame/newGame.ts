@@ -6,7 +6,7 @@ import {Offcanvas} from 'bootstrap';
 import {isFeatureEnabled} from '../../featureConfig';
 import Control, {GameStatus} from './control';
 import {gatesStart, gatesStop} from '../../api/endpoints/gates';
-import {getLastGames, sendLoadGame} from '../../api/endpoints/games';
+import {getLastGames, LoadGameResponse, sendLoadGame} from '../../api/endpoints/games';
 import {initPrintButtons} from '../../components/resultsPrinting';
 import {lang} from '../../includes/frameworkFunctions';
 import {validateForm} from './validate';
@@ -240,14 +240,9 @@ export default function initNewGamePage() {
 		startLoading();
 		sendLoadGame(system, data)
 			.then(response => {
-				stopLoading();
-				if (!response.mode || response.mode === '') {
-					console.error('Got invalid mode');
-					return;
-				}
-				const mode = response.mode;
+				const mode = handleLoad(response)
 
-				if (control) {
+				if (control && mode) {
 					control.loadGame(mode, callback);
 				}
 			})
@@ -260,20 +255,38 @@ export default function initNewGamePage() {
 		startLoading();
 		sendLoadGame(system, data)
 			.then(response => {
-				stopLoading();
-				if (!response.mode || response.mode === '') {
-					console.error('Got invalid mode');
-					return;
-				}
-				const mode = response.mode;
+				const mode = handleLoad(response)
 
-				if (control) {
+				if (control && mode) {
 					control.loadStart(mode, callback);
 				}
 			})
 			.catch(() => {
 				stopLoading(false);
 			});
+	}
+
+	function handleLoad(response : LoadGameResponse) : string {
+		stopLoading();
+		if (!response.values.mode || response.values.mode === '') {
+			console.error('Got invalid mode');
+			return '';
+		}
+		const mode = response.values.mode;
+
+		if (typeof response.values.group === 'number' && game.$group.value === 'new-custom') {
+			if (game.$group instanceof HTMLSelectElement) {
+				let option = game.$group.querySelector<HTMLOptionElement>('option[value="' + game.$group.value + '"]');
+				if (!option) {
+					option = document.createElement('option');
+					option.innerText = response.values.groupName ?? 'Skupina';
+				}
+				option.value = response.values.group.toString();
+			}
+			game.$group.value = response.values.group.toString();
+		}
+
+		return mode;
 	}
 
 	function handleKeyboardShortcuts(e: KeyboardEvent) {

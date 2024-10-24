@@ -6,6 +6,7 @@ use App\Tools\GameLoading\GameLoader;
 use InvalidArgumentException;
 use JsonException;
 use Lsr\Core\Controllers\ApiController;
+use Lsr\Core\Requests\Dto\SuccessResponse;
 use Lsr\Core\Requests\Request;
 use Psr\Http\Message\ResponseInterface;
 use Spiral\RoadRunner\Metrics\Metrics;
@@ -36,6 +37,15 @@ class GameLoading extends ApiController
             return $this->respond(['error' => $e->getMessage(), 'trace' => $e->getTrace()], 400);
         }
         $this->metrics->set('load_time', (microtime(true) - $start) * 1000, [$system]);
-        return $this->respond(['status' => 'ok', 'mode' => $meta['mode'], 'music' => $meta['music']]);
+        return $this->respond(
+            new SuccessResponse(
+                values: [
+                  'mode' => $meta['mode'],
+                  'music' => $meta['music'],
+                  'group' => $meta['group'] ?? null,
+                  'groupName' => $meta['groupName'] ?? null
+                ],
+            )
+        );
     }
 }

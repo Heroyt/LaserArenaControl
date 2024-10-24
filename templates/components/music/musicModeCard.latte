@@ -1,4 +1,8 @@
-{parameters App\Gate\Models\MusicGroupDto $musicGroup}
+{parameters
+	App\Gate\Models\MusicGroupDto $musicGroup,
+	bool $showPlay = false,
+	bool $playPreview = false,
+}
 
 <div class="music-mode" data-value="{$musicGroup->getValue()}">
     {if $musicGroup->getBackgroundImage() !== null}
@@ -14,20 +18,73 @@
             {file_get_contents($icon->getPath())|noescape}
         {else}
             {var string[] $paths = $icon->getOptimized()}
-            <img src="{$paths['original']}"
-                 alt="{_'Ikona'}">
+            <img src="{$paths['original']}" alt="{_'Ikona'}">
         {/if}
     </div>
-    <div class="name">
-        {if count($musicGroup->music) === 1}
-            {_$musicGroup->music[0]->name, context: 'music'}
-        {else}
-            {_$musicGroup->name, context: 'music.group'}
-        {/if}
-    </div>
+	{if $showPlay && count($musicGroup->music) === 1}
+		<div class="music-mode-name-play">
+			<div class="name">
+				{_$musicGroup->name, context: 'music'}
+			</div>
+			<div class="d-flex align-items-center music">
+				<div class="time-music font-monospace">
+					0:00
+				</div>
+				{var string $url = $playPreview ? $musicGroup->music[0]->getPreviewUrl() : $musicGroup->music[0]->getMediaUrl()}
+				<button type="button" class="btn btn-success play-music ms-2" data-content-piece="Play"
+						data-content-target="{$url}"
+						data-file="{$url}"
+						data-toggle="tooltip"
+						data-play="{_'Přehrát', context: 'actions'}"
+						data-stop="{_'Zastavit', context: 'actions'}"
+						title="{_'Přehrát', context: 'actions'}"
+						aria-label="{_'Přehrát', context: 'actions'}">
+					<div class="spinner-grow spinner-grow-sm" role="status"><span
+								class="visually-hidden">Loading...</span></div>
+					{faSolid 'play'}
+						{faSolid 'stop'}
+				</button>
+			</div>
+		</div>
+	{else}
+		<div class="name">
+			{if count($musicGroup->music) === 1}
+				{_$musicGroup->music[0]->name, context: 'music'}
+			{else}
+				{_$musicGroup->name, context: 'music.group'}
+			{/if}
+		</div>
+	{/if}
     <div n:if="count($musicGroup->music) > 1" class="children">
-        <button type="button" n:foreach="$musicGroup->music as $musicMode" class="child" data-id="{$musicMode->id}">
-            {_$musicMode->name, context: 'music'}
-        </button>
+		{if $showPlay}
+			<div n:foreach="$musicGroup->music as $musicMode" class="child" data-id="{$musicMode->id}">
+				<div class="name">
+					{_$musicMode->name, context: 'music'}
+				</div>
+				<div class="d-flex align-items-center music">
+					<div class="time-music font-monospace">
+						0:00
+					</div>
+					{var string $url = $playPreview ? $musicMode->getPreviewUrl() : $musicMode->getMediaUrl()}
+					<button type="button" class="btn btn-success play-music ms-2" data-content-piece="Play"
+							data-content-target="{$url}"
+							data-file="{$url}"
+							data-toggle="tooltip"
+							data-play="{_'Přehrát', context: 'actions'}"
+							data-stop="{_'Zastavit', context: 'actions'}"
+							title="{_'Přehrát', context: 'actions'}"
+							aria-label="{_'Přehrát', context: 'actions'}">
+						<div class="spinner-grow spinner-grow-sm" role="status"><span
+									class="visually-hidden">Loading...</span></div>
+						{faSolid 'play'}
+						{faSolid 'stop'}
+					</button>
+				</div>
+			</div>
+		{else}
+			<button type="button" n:foreach="$musicGroup->music as $musicMode" class="child" data-id="{$musicMode->id}">
+				{_$musicMode->name, context: 'music'}
+			</button>
+		{/if}
     </div>
 </div>

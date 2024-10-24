@@ -27,6 +27,10 @@
     grid-template-rows: [main-start control-start] auto [control-end print-start] auto [print-end games-start] auto [games-end mode-start] auto [mode-end music-start] auto [music-end variations-start] auto [variations-end random-start] auto [random-end vestcontrol-start] auto [vestcontrol-end game-start] auto [game-end teams-start] auto [ teams-end submit-start ] auto [ submit-end main-end ];
   }
 
+	#group-select-section {
+		grid-column: main;
+	}
+
 	#vests {
 		.btn,
 		.team-select-wrapper {

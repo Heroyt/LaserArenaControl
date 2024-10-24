@@ -17,7 +17,7 @@ export type LoadedGameResponse = {
 
 export type LastGamesResponse = GameData[];
 
-export type LoadGameResponse = { status: string, mode?: string };
+export type LoadGameResponse = { message: string, detail: string|null, values: {mode: string, music: number|null, group: number|'new'|null, groupName: string|null} };
 
 export async function sendLoadGame(system: string, data: FormData): Promise<LoadGameResponse> {
 	return fetchPost(`/api/game/load/${system}`, data, {'Accept': 'application/json'});

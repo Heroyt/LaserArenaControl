@@ -122,15 +122,23 @@ export default function route(pageInfo: PageInfo): void {
 				module.default();
 			});
 			break;
-      case 'results':
-      case 'results-game':
-          import(
-              /* webpackChunkName: "results" */
-              './pages/results'
-              ).then(module => {
-              module.default();
-          });
-          break;
+		case 'results':
+		case 'results-game':
+			import(
+				/* webpackChunkName: "results" */
+				'./pages/results'
+				).then(module => {
+				module.default();
+			});
+			break;
+		case 'public-music':
+			import(
+				/* webpackChunkName: "public-music" */
+				'./pages/public/music'
+				).then(module => {
+				module.default();
+			});
+			break;
 	}
 
 	if ((pageInfo.routeName ?? '').startsWith('gate')) {

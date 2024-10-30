@@ -4568,3 +4568,16 @@ msgstr ""
 msgctxt "groupName"
 msgid "Vesmírní Piráti"
 msgstr ""
+
+msgid "Úvodní hudba"
+msgstr ""
+
+msgid "Hudba pro nahrané vesty"
+msgstr ""
+
+msgid "Závěrečná hudba"
+msgstr ""
+
+msgctxt "errors"
+msgid "Nepodařilo se uložit hudební mód."
+msgstr ""

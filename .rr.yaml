@@ -57,6 +57,7 @@ metrics:
       help: "How much time does it take to load a selected game music."
       labels:
         - system
+        - type
     music_time_since_load:
       type: gauge
       help: "How much time does it take to load a selected game music since game load."

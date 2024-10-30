@@ -84,6 +84,9 @@ tables:
     			`name` varchar(80) NOT NULL,
     			`group` VARCHAR(80)  CHARACTER SET utf8mb4  COLLATE utf8mb4_general_ci DEFAULT NULL,
     			`file_name` varchar(100) NOT NULL DEFAULT '',
+    			`intro_file` varchar(255) DEFAULT NULL,
+                `ending_file` varchar(255) DEFAULT NULL,
+                `armed_file` varchar(255) DEFAULT NULL,
   				`background_image` varchar(255) DEFAULT NULL,
   				`icon` varchar(255) DEFAULT NULL,
     			`order` int(10) unsigned NOT NULL DEFAULT 0,
@@ -104,6 +107,10 @@ tables:
 			0.4:
 				- 'ADD `background_image` VARCHAR(255) DEFAULT NULL;'
 				- 'ADD `icon` VARCHAR(255) DEFAULT NULL;'
+			0.5:
+				- 'ADD `intro_file` varchar(255) DEFAULT NULL AFTER `file_name`;'
+				- 'ADD `ending_file` varchar(255) DEFAULT NULL AFTER `intro_file`;'
+				- 'ADD `armed_file` varchar(255) DEFAULT NULL AFTER `ending_file`;'
 		indexes:
 			-
 				name: group

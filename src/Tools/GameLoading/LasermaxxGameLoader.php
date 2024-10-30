@@ -52,7 +52,8 @@ abstract class LasermaxxGameLoader implements LoaderInterface
         string $system = 'evo5',
         ?float $timeSinceStart = null
     ): void {
-        $start = microtime(true);
+        $startPlay = microtime(true);
+        $endPlay = null;
         try {
             $music = MusicMode::get($musicId);
             if (!file_exists($music->fileName)) {
@@ -60,14 +61,74 @@ abstract class LasermaxxGameLoader implements LoaderInterface
             } elseif (!copy($music->fileName, $musicFile)) {
                 App::getInstance()->getLogger()->warning('Music copy failed - ' . $music->fileName);
             }
+            $endPlay = microtime(true);
+
+            if ($music->introFile !== null) {
+                $startIntro = microtime(true);
+                $introFile = str_replace('.mp3', '.intro.mp3', $musicFile);
+                if (!file_exists($music->introFile)) {
+                    App::getInstance()->getLogger()->warning('Music file does not exist - ' . $music->introFile);
+                } elseif (!copy($music->introFile, $introFile)) {
+                    App::getInstance()->getLogger()->warning('Music copy failed - ' . $music->introFile);
+                }
+                $endIntro = microtime(true);
+            }
+
+            if ($music->endingFile !== null) {
+                $startEnding = microtime(true);
+                $endingFile = str_replace('.mp3', '.gameover.mp3', $musicFile);
+                if (!file_exists($music->endingFile)) {
+                    App::getInstance()->getLogger()->warning('Music file does not exist - ' . $music->endingFile);
+                } elseif (!copy($music->endingFile, $endingFile)) {
+                    App::getInstance()->getLogger()->warning('Music copy failed - ' . $music->endingFile);
+                }
+                $endEnding = microtime(true);
+            }
         } catch (ModelNotFoundException | ValidationException | DirectoryCreationException) {
             // Not critical, doesn't need to do anything
         }
         $end = microtime(true);
-        $this->metrics->set('load_music_time', ($end - $start) * 1000, [$system]);
+        $endPlay ??= $end;
+        $this->metrics->set('load_music_time', ($endPlay - $startPlay) * 1000, [$system, 'play']);
+        if (isset($startIntro, $endIntro)) {
+            $this->metrics->set('load_music_time', ($endIntro - $startIntro) * 1000, [$system, 'intro']);
+        }
+        if (isset($startEnding, $endEnding)) {
+            $this->metrics->set('load_music_time', ($endEnding - $startEnding) * 1000, [$system, 'intro']);
+        }
         if (isset($timeSinceStart)) {
             $this->metrics->set('music_time_since_load', ($end - $timeSinceStart) * 1000, [$system]);
         }
+    }
+
+    /**
+     * @param  int  $musicId
+     * @param  string  $musicFile
+     * @param  non-empty-string  $system
+     * @return void
+     */
+    public function loadArmedMusic(
+        int    $musicId,
+        string $musicFile,
+        string $system = 'evo5',
+    ): void {
+        $start = microtime(true);
+        try {
+            $music = MusicMode::get($musicId);
+            if ($music->armedFile === null) {
+                return;
+            }
+            $armedFile = str_replace('.mp3', '.armed.mp3', $musicFile);
+            if (!file_exists($music->armedFile)) {
+                App::getInstance()->getLogger()->warning('Music file does not exist - ' . $music->armedFile);
+            } elseif (!copy($music->armedFile, $armedFile)) {
+                App::getInstance()->getLogger()->warning('Music copy failed - ' . $music->armedFile);
+            }
+        } catch (ModelNotFoundException | ValidationException | DirectoryCreationException) {
+            // Not critical, doesn't need to do anything
+        }
+        $end = microtime(true);
+        $this->metrics->set('load_music_time', ($end - $start) * 1000, [$system, 'armed']);
     }
 
     /**

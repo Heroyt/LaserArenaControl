@@ -14,7 +14,7 @@ use RuntimeException;
 #[PrimaryKey('id_music')]
 class MusicMode extends Model
 {
-    public const TABLE = 'music';
+    public const string TABLE = 'music';
 
     #[Required]
     #[StringLength(1, 80)]
@@ -22,6 +22,11 @@ class MusicMode extends Model
     public ?string $group = null;
     #[Required]
     public string $fileName = '';
+    public ?string $introFile = null;
+    public ?string $endingFile = null;
+
+    public ?string $armedFile = null;
+
     public int $order = 0;
     /** @var int Preview start time in seconds */
     public int $previewStart = 0;
@@ -44,6 +49,30 @@ class MusicMode extends Model
 
     public function getMediaUrl(): string {
         return str_replace(ROOT, App::getInstance()->getBaseUrl(), $this->fileName);
+    }
+
+    public function getIntroFileName(): ?string {
+        return $this->introFile === null ? null : basename($this->introFile);
+    }
+
+    public function getArmedFileName(): ?string {
+        return $this->armedFile === null ? null : basename($this->armedFile);
+    }
+
+    public function getEndingFileName(): ?string {
+        return $this->endingFile === null ? null : basename($this->endingFile);
+    }
+
+    public function getIntroMediaUrl(): ?string {
+        return $this->introFile === null ? null : str_replace(ROOT, App::getInstance()->getBaseUrl(), $this->introFile);
+    }
+
+    public function getEndingMediaUrl(): ?string {
+        return $this->endingFile === null ? null : str_replace(ROOT, App::getInstance()->getBaseUrl(), $this->endingFile);
+    }
+
+    public function getArmedMediaUrl(): ?string {
+        return $this->armedFile === null ? null : str_replace(ROOT, App::getInstance()->getBaseUrl(), $this->armedFile);
     }
 
     public function setPreviewStartFromFormatted(string $formatted): MusicMode {

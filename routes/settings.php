@@ -51,6 +51,10 @@ $music->post('upload', [Music::class, 'upload']);
 
 $musicId = $music->group('{id}');
 $musicId->delete('', [Music::class, 'delete']);
+$musicId->post('intro', [Music::class, 'uploadIntro']);
+$musicId->post('ending', [Music::class, 'uploadEnding']);
+$musicId->post('armed', [Music::class, 'uploadArmed']);
+
 
 if ($featureConfig->isFeatureEnabled('groups')) {
     $settings->get('groups', [Settings::class, 'group'])->name('settings-groups');

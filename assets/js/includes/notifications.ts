@@ -1,4 +1,5 @@
 import {Toast} from 'bootstrap';
+import {ErrorResponse, ResponseError} from './apiClient';
 
 export type ToastData = {
 	title?: string,
@@ -38,4 +39,51 @@ export function triggerNotification(data: ToastData, autohide : boolean = true):
 		autohide,
 	});
 	toastObj.show();
+}
+
+export async function triggerNotificationError(error : Error|ResponseError, autohide: boolean = true) : Promise<void> {
+	console.error(error);
+	if (error instanceof ResponseError) {
+		const data = await error.data as ErrorResponse | object;
+		if ('title' in data && 'detail' in data) {
+			triggerNotification(
+				{
+					type: 'danger',
+					title: data.title,
+					content: data.detail,
+				},
+				autohide,
+			);
+			return;
+		}
+		if ('title' in data) {
+			triggerNotification(
+				{
+					type: 'danger',
+					content: data.title,
+				},
+				autohide,
+			);
+			return;
+		}
+		if ('error' in data && typeof data.error === 'string') {
+			triggerNotification(
+				{
+					type: 'danger',
+					content: data.error,
+				},
+				autohide,
+			);
+			return;
+		}
+	}
+
+	// Generic error
+	triggerNotification(
+		{
+			type: 'danger',
+			title: 'Error',
+			content: error.toString(),
+		}
+	)
 }

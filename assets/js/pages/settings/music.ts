@@ -1,15 +1,21 @@
 import {startLoading, stopLoading} from '../../loaders';
 import {toAscii} from '../../includes/functions';
 import Sortable from 'sortablejs';
-import {Tooltip} from 'bootstrap';
 import {Music} from '../../interfaces/gameInterfaces';
 import autocomplete, {AutocompleteItem} from 'autocompleter';
 import {fetchPost, ResponseError} from '../../includes/apiClient';
-import {deleteMusic, MusicUploadResponse} from '../../api/endpoints/settings/music';
+import {
+	deleteMusic,
+	MusicUploadResponse,
+	uploadMusicArmed,
+	uploadMusicEnding,
+	uploadMusicIntro,
+} from '../../api/endpoints/settings/music';
 import {initTooltips} from '../../includes/tooltips';
-import {lang} from '../../includes/frameworkFunctions';
 import {initImageUploadPreview} from '../../includes/imageUploadPreview';
 import {initMusicPlay} from '../../components/musicPlay';
+import {initCollapse} from '../../includes/collapse';
+import {triggerNotificationError} from '../../includes/notifications';
 
 
 export default function initMusicSettings() {
@@ -166,6 +172,7 @@ export default function initMusicSettings() {
 
 	function initMusic(elem: HTMLDivElement) {
 		initImageUploadPreview(elem);
+		initCollapse(elem);
 		const id = parseInt(elem.dataset.id);
 
 		const group = elem.querySelector('.music-group') as HTMLInputElement;
@@ -204,11 +211,88 @@ export default function initMusicSettings() {
 						stopLoading();
 						recountMusic();
 					})
-					.catch(() => {
+					.catch(e => {
+						triggerNotificationError(e);
 						stopLoading(false);
 					});
 			});
 		}
-		initMusicPlay(elem);
+		initMusicPlay(elem.querySelector<HTMLDivElement>('.music-input-group'));
+
+		const armedGroup = elem.querySelector<HTMLDivElement>('.armed-group');
+		if (armedGroup) {
+			const armedInput = armedGroup.querySelector<HTMLInputElement>('.armed-upload');
+			const playBtn = armedGroup.querySelector<HTMLButtonElement>('.play-music');
+			initMusicPlay(armedGroup);
+			if (armedInput && playBtn) {
+				armedInput.addEventListener('change', () => {
+					if (armedInput.files.length === 0) {
+						return;
+					}
+					startLoading();
+					uploadMusicArmed(id, armedInput.files[0])
+						.then(response => {
+							armedGroup.querySelector<HTMLSpanElement>('label span').innerText = response.values.name;
+							playBtn.dataset.file = response.values.url;
+							playBtn.dispatchEvent(new CustomEvent('reload'));
+							stopLoading(true);
+						})
+						.catch(e => {
+							stopLoading(false);
+							triggerNotificationError(e);
+						});
+				});
+			}
+		}
+		const introGroup = elem.querySelector<HTMLDivElement>('.intro-group');
+		if (introGroup) {
+			const introInput = introGroup.querySelector<HTMLInputElement>('.intro-upload');
+			const playBtn = introGroup.querySelector<HTMLButtonElement>('.play-music');
+			initMusicPlay(introGroup);
+			if (introInput && playBtn) {
+				introInput.addEventListener('change', () => {
+					if (introInput.files.length === 0) {
+						return;
+					}
+					startLoading();
+					uploadMusicIntro(id, introInput.files[0])
+						.then(response => {
+							introGroup.querySelector<HTMLSpanElement>('label span').innerText = response.values.name;
+							playBtn.dataset.file = response.values.url;
+							playBtn.dispatchEvent(new CustomEvent('reload'));
+							stopLoading(true);
+						})
+						.catch(e => {
+							stopLoading(false);
+							triggerNotificationError(e);
+						});
+				});
+			}
+		}
+		const endingGroup = elem.querySelector<HTMLDivElement>('.ending-group');
+		if (endingGroup) {
+			const endingInput = endingGroup.querySelector<HTMLInputElement>('.ending-upload');
+			const playBtn = endingGroup.querySelector<HTMLButtonElement>('.play-music');
+			initMusicPlay(endingGroup);
+			if (endingInput && playBtn) {
+				endingInput.addEventListener('change', () => {
+					if (endingInput.files.length === 0) {
+						return;
+					}
+					startLoading();
+					uploadMusicEnding(id, endingInput.files[0])
+						.then(response => {
+							endingGroup.querySelector<HTMLSpanElement>('label span').innerText = response.values.name;
+							playBtn.dataset.file = response.values.url;
+							playBtn.dispatchEvent(new CustomEvent('reload'));
+							stopLoading(true);
+						})
+						.catch(e => {
+							stopLoading(false);
+							triggerNotificationError(e);
+						});
+				});
+			}
+		}
 	}
 }

@@ -1,6 +1,7 @@
 import {Tooltip} from 'bootstrap';
 import {startLoading, stopLoading} from '../loaders';
 import {setGate, setGateEvent, setGateIdle, setGateLoaded} from '../api/endpoints/gate';
+import {triggerNotificationError} from '../includes/notifications';
 
 export function gateActions() {
     (document.querySelectorAll('[data-toggle="gate"]') as NodeListOf<HTMLButtonElement>).forEach(btn => {
@@ -20,8 +21,8 @@ export function gateActions() {
                         btn.classList.add('btn-success');
                     }
                 })
-                .catch(response => {
-                    console.error(response);
+                .catch(e => {
+		                triggerNotificationError(e);
                     stopLoading(false, true);
                 });
         });
@@ -43,8 +44,8 @@ export function gateActions() {
                         btn.classList.add('btn-success');
                     }
                 })
-                .catch(response => {
-                    console.error(response);
+                .catch(e => {
+		                triggerNotificationError(e);
                     stopLoading(false, true);
                 });
         });
@@ -65,8 +66,8 @@ export function gateActions() {
                         btn.classList.add('btn-success');
                     }
                 })
-                .catch(response => {
-                    console.error(response);
+                .catch(e => {
+		                triggerNotificationError(e);
                     stopLoading(false, true);
                 });
         });
@@ -104,8 +105,8 @@ export function gateActions() {
 				.then(() => {
 					stopLoading(true, true);
 				})
-				.catch(response => {
-					console.error(response);
+				.catch(e => {
+					triggerNotificationError(e);
 					stopLoading(false, true);
 				});
 		});

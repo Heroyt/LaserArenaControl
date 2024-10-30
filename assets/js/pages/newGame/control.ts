@@ -10,6 +10,7 @@ import {
     getCurrentControlStatus
 } from "../../api/endpoints/control";
 import {ResponseError} from "../../includes/apiClient";
+import {triggerNotificationError} from '../../includes/notifications';
 
 export enum GameStatus {
     DOWNLOAD, STANDBY, ARMED, PLAYING,
@@ -66,9 +67,9 @@ export default class Control {
                 this.statusGettingInProgress = false;
                 this.setCurrentStatus(response.status);
             })
-            .catch(error => {
+            .catch(e => {
+		            triggerNotificationError(e);
                 this.statusGettingInProgress = false;
-                console.error(error);
             })
     }
 
@@ -122,8 +123,8 @@ export default class Control {
                 stopLoading(true, true);
             })
             .catch(async error => {
+		            triggerNotificationError(error);
                 stopLoading(false, true);
-                console.error(error);
                 if (error instanceof ResponseError) {
                     const data = await error.getDataFromResponse()
                     if (data && data.message && data.message === 'DOWNLOAD') {
@@ -151,7 +152,7 @@ export default class Control {
                                     this.setCurrentStatus('STANDBY');
                                 })
                                 .catch(error => {
-                                    console.error(error);
+		                                triggerNotificationError(error);
                                     if (error.data && error.data.message && error.data.message === 'DOWNLOAD') {
                                         this.setCurrentStatus('DOWNLOAD');
                                     }
@@ -196,7 +197,7 @@ export default class Control {
                 stopLoading(true, true);
             })
             .catch(error => {
-                console.error(error);
+		            triggerNotificationError(error);
                 stopLoading(false, true);
             })
 
@@ -215,7 +216,7 @@ export default class Control {
                 stopLoading(true);
             })
             .catch(async error => {
-                console.error(error);
+		            triggerNotificationError(error);
                 if (error instanceof ResponseError) {
                     const data = await error.getDataFromResponse()
                     if (data && data.message && data.message === 'DOWNLOAD') {
@@ -242,8 +243,8 @@ export default class Control {
                 stopLoading(true, true);
             })
             .catch(async error => {
+	            triggerNotificationError(error);
                 stopLoading(false, true);
-                console.error(error);
                 if (error instanceof ResponseError) {
                     const data = await error.getDataFromResponse()
                     if (data && data.message && data.message === 'DOWNLOAD') {
@@ -275,7 +276,7 @@ export default class Control {
                     stopLoading(true, true);
                 })
                 .catch(error => {
-                    console.error(error);
+		                triggerNotificationError(error);
                     stopLoading(false, true);
                 });
         });
@@ -295,7 +296,7 @@ export default class Control {
                     stopLoading(true, true);
                 })
                 .catch(error => {
-                    console.error(error);
+		                triggerNotificationError(error);
                     stopLoading(false, true);
                 });
         });

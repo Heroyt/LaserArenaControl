@@ -1,6 +1,7 @@
 import autocomplete, {AutocompleteItem} from 'autocompleter';
 import {findGroups} from '../api/endpoints/gameGroups';
 import {GameGroupData} from '../interfaces/gameInterfaces';
+import {triggerNotificationError} from '../includes/notifications';
 
 interface GroupAutocompleteItem extends AutocompleteItem {
 	label: string,
@@ -24,7 +25,8 @@ export function initGroupAutocomplete(input : HTMLInputElement, callback: (name:
 					});
 					update(autocompleteData);
 				})
-				.catch(() => {
+				.catch(e => {
+					triggerNotificationError(e);
 					update([]);
 				});
 		},

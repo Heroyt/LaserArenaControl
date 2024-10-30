@@ -1,5 +1,6 @@
 import {customFetch, FormSaveResponse, RequestMethod} from './apiClient';
 import {startLoading, stopLoading} from '../loaders';
+import {triggerNotificationError} from './notifications';
 
 export function initAutoSaveForm() {
 	// Autosave form
@@ -69,7 +70,7 @@ export function initAutoSaveForm() {
 						form.dispatchEvent(new CustomEvent('autosaved', {detail: result}));
 					})
 					.catch(err => {
-						console.error(err);
+						triggerNotificationError(err);
 						autosaving--;
 						stopLoading(false, smallLoader);
 						saveButtons.forEach(button => {

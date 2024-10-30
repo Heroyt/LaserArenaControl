@@ -10,6 +10,7 @@ import {getLastGames, LoadGameResponse, sendLoadGame} from '../../api/endpoints/
 import {initPrintButtons} from '../../components/resultsPrinting';
 import {lang} from '../../includes/frameworkFunctions';
 import {validateForm} from './validate';
+import {triggerNotificationError} from '../../includes/notifications';
 
 declare global {
 	const gameData: GameData;
@@ -28,7 +29,8 @@ function initGatesControls() {
 				.then(() => {
 					stopLoading();
 				})
-				.catch(() => {
+				.catch((e) => {
+					triggerNotificationError(e);
 					stopLoading(false);
 				});
 		});
@@ -40,7 +42,8 @@ function initGatesControls() {
 				.then(() => {
 					stopLoading();
 				})
-				.catch(() => {
+				.catch(e => {
+					triggerNotificationError(e);
 					stopLoading(false);
 				});
 		});
@@ -231,8 +234,8 @@ export default function initNewGamePage() {
 					},
 				);
 			})
-			.catch(() => {
-
+			.catch((e) => {
+				triggerNotificationError(e);
 			});
 	}
 
@@ -246,7 +249,8 @@ export default function initNewGamePage() {
 					control.loadGame(mode, callback);
 				}
 			})
-			.catch(() => {
+			.catch(e => {
+				triggerNotificationError(e);
 				stopLoading(false);
 			});
 	}
@@ -261,7 +265,8 @@ export default function initNewGamePage() {
 					control.loadStart(mode, callback);
 				}
 			})
-			.catch(() => {
+			.catch(e => {
+				triggerNotificationError(e);
 				stopLoading(false);
 			});
 	}

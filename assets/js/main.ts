@@ -12,7 +12,7 @@ import {gameTimer} from './includes/gameTimer';
 import {initLoaders, startLoading, stopLoading} from './loaders';
 import {initSelectDescription} from './includes/selectDescription';
 import {customFetch} from './includes/apiClient';
-import {triggerNotification} from './includes/notifications';
+import {triggerNotification, triggerNotificationError} from './includes/notifications';
 import {lang} from './includes/frameworkFunctions';
 
 declare global {
@@ -115,7 +115,7 @@ window.addEventListener('load', () => {
 					}
 				})
 				.catch(e => {
-					console.error(e);
+					triggerNotificationError(e);
 					stopLoading(false);
 				});
 		})

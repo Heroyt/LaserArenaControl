@@ -1,5 +1,6 @@
 import {startLoading, stopLoading} from "../../loaders";
 import {updateGameGroup} from "../../api/endpoints/gameGroups";
+import {triggerNotificationError} from '../../includes/notifications';
 
 export default function initGroupsSettings() {
     const activeGroups = document.getElementById('active-groups') as HTMLDivElement;
@@ -25,7 +26,8 @@ export default function initGroupsSettings() {
                     .then(() => {
                         stopLoading(true, true);
                     })
-                    .catch(() => {
+                    .catch(e => {
+		                    triggerNotificationError(e);
                         stopLoading(false, true);
                     })
             }, 1000);
@@ -45,7 +47,8 @@ export default function initGroupsSettings() {
                     group.dataset.active = '0';
                     inactiveGroups.prepend(group);
                 })
-                .catch(() => {
+                .catch(e => {
+		                triggerNotificationError(e);
                     stopLoading(false, true);
                 })
         });
@@ -64,7 +67,8 @@ export default function initGroupsSettings() {
                     group.dataset.active = '1';
                     activeGroups.append(group);
                 })
-                .catch(() => {
+                .catch(e => {
+		                triggerNotificationError(e);
                     stopLoading(false, true);
                 })
         });

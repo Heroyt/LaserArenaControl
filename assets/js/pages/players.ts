@@ -1,6 +1,6 @@
 import {loadPlayersTable, syncPlayers} from '../api/endpoints/players';
 import {startLoading, stopLoading} from '../loaders';
-import {triggerNotification} from '../includes/notifications';
+import {triggerNotification, triggerNotificationError} from '../includes/notifications';
 
 interface TableParams {
 	search: string;
@@ -24,7 +24,8 @@ export default function initPlayers() {
 					});
 					stopLoading(true, true);
 				})
-				.catch(() => {
+				.catch(e => {
+					triggerNotificationError(e);
 					stopLoading(false, true);
 				})
 				.finally(() => {
@@ -96,7 +97,8 @@ export default function initPlayers() {
 				initTable(newTable);
 				stopLoading(true, true);
 			})
-			.catch(() => {
+			.catch(e => {
+				triggerNotificationError(e);
 				stopLoading(false, true);
 			});
 	}
@@ -119,7 +121,8 @@ export default function initPlayers() {
 				}
 				stopLoading(true, true);
 			})
-			.catch(() => {
+			.catch(e => {
+				triggerNotificationError(e);
 				stopLoading(false, true);
 			});
 	}

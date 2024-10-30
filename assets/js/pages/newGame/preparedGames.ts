@@ -10,6 +10,7 @@ import {
 	sendPreparedGame,
 } from '../../api/endpoints/preparedGames';
 import {initTooltips} from '../../includes/tooltips';
+import {triggerNotificationError} from '../../includes/notifications';
 
 const borderColors = {
 	'prepared': 'gray',
@@ -38,7 +39,7 @@ export default class NewGamesPrepared {
 					this.updatePreparedGames();
 				})
 				.catch(e => {
-					console.error(e);
+					triggerNotificationError(e);
 					stopLoading(false);
 				});
 		});
@@ -53,7 +54,7 @@ export default class NewGamesPrepared {
 					this.updatePreparedGames();
 				})
 				.catch(e => {
-					console.error(e);
+					triggerNotificationError(e);
 					stopLoading(false);
 				});
 		});
@@ -84,7 +85,7 @@ export default class NewGamesPrepared {
 				})
 				.catch(e => {
 					stopLoading(false);
-					console.error(e);
+					triggerNotificationError(e);
 				});
 		});
 	}

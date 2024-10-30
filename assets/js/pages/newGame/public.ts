@@ -3,6 +3,7 @@ import {validateForm} from './validate';
 import {startLoading, stopLoading} from '../../loaders';
 import {sendPreparedGamePublic} from '../../api/endpoints/preparedGames';
 import {initGroupAutocomplete} from '../../components/groupSearch';
+import {triggerNotificationError} from '../../includes/notifications';
 
 export default function initNewGamePage() {
 	const form = document.getElementById('new-game-content') as HTMLFormElement;
@@ -48,7 +49,7 @@ export default function initNewGamePage() {
 				stopLoading(true);
 			})
 			.catch(e => {
-				console.error(e);
+				triggerNotificationError(e);
 				stopLoading(false);
 			});
 	});

@@ -8,6 +8,7 @@ import CustomLoadMode from './customLoadMode';
 import Sortable from 'sortablejs/modular/sortable.core.esm.js';
 import CustomSwapPlugin from './customSwapPlugin';
 import {collapseClose} from '../includes/collapse';
+import {triggerNotificationError} from '../includes/notifications';
 
 declare global {
 	const messages: { [index: string]: string };
@@ -254,8 +255,8 @@ export default class Game {
 						this.loadedModeScript = new module.default;
 						this.loadedModeScript.init();
 					})
-					.catch(error => {
-						console.error(error);
+					.catch(e => {
+						triggerNotificationError(e);
 					});
 			}
 

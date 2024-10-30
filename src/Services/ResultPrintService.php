@@ -102,8 +102,11 @@ readonly class ResultPrintService
                                  'dist/',
                                  'assets/images/print/',
                                  'upload/',
+                                 'upload/print/',
+                                 'uploads/',
+                                 'uploads/print/',
                                  ],
-                  ['', '', '', '', ''],
+                  ['', '', '', '', '', '', '', ''],
                   $this->getResultsHtml(
                       $game,
                       $style,

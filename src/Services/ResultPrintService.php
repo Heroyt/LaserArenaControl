@@ -101,10 +101,10 @@ readonly class ResultPrintService
                                  'dist/results/',
                                  'dist/',
                                  'assets/images/print/',
-                                 'upload/',
                                  'upload/print/',
-                                 'uploads/',
+                                 'upload/',
                                  'uploads/print/',
+                                 'uploads/',
                                  ],
                   ['', '', '', '', '', '', '', ''],
                   $this->getResultsHtml(

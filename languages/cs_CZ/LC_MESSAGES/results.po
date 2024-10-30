@@ -810,3 +810,11 @@ msgstr ""
 
 msgid "Sniper"
 msgstr ""
+
+msgctxt "style"
+msgid "Výchozí"
+msgstr ""
+
+msgctxt "style"
+msgid "Tabulkové"
+msgstr ""

@@ -40,15 +40,15 @@
     {var App\GameModels\Game\Player|App\GameModels\Game\Team|null $win = $game->getMode()?->getWin($game)}
 	<div class="results-win">
 		{if is_null($win)}
-			<div class="print-primary">
+			<div style="--team-color: var(--print-primary);">
                 {_'Remíza', domain: 'results'}
 			</div>
 		{elseif $win instanceof App\GameModels\Game\Team}
-            <div class="bg-team-{$win?->color}">
+            <div style="--team-color: var(--team-{$win->color});">
                 {_'Vítězství', domain: 'results'}: {$win?->name}
 			</div>
 		{elseif $win instanceof App\GameModels\Game\Player}
-            <div class="{if $game->getMode()?->isSolo()}print-primary{else}bg-team-{$win?->getTeam()?->color}{/if}">
+            <div style="--team-color: var({if $game->getMode()?->isSolo()}--print-primary{else}--team{$win->getTeam()->color}{/if});">
                 {_'Vítězství', domain: 'results'}: {$win?->name}
 			</div>
 		{/if}
@@ -56,38 +56,26 @@
 {/define}
 
 {define resultsHeader}
-	<table class="results-header text-print-primary colorless">
-		<tr>
-            <th>{_'Datum', domain: 'results', context: 'info'}:</th>
-            <td>{$game->start?->format('d.m.Y H:i:s')}</td>
-		</tr>
-		<tr>
-            <th>{_'Herní mód', domain: 'results', context: 'info'}:</th>
-            <td>{_$game->getMode()??->getName(), context: 'gameModes'}</td>
-            <th>{_'Počet hráčů', domain: 'results', context: 'info'}:</th>
-			<td>{$game->getPlayersSorted()|length}</td>
-            <th>{_'Počet týmů', domain: 'results', context: 'info'}:</th>
-			<td>{$game->getTeamsSorted()|length}</td>
-		</tr>
-	</table>
-	<table class="results-scoring mb-0 table colorless print-dark">
-		<tr>
-            <td>{_'Zásah protihráče', domain: 'results', context: 'scoring'}: {$game->scoring->hitOther}</td>
-            <td>{_'Zasažen protihráčem', domain: 'results', context: 'scoring'}: {$game->scoring->deathOther}</td>
-            <td>{_'Zásah spoluhráče', domain: 'results', context: 'scoring'}: {$game->scoring->hitOwn}</td>
-            <td>{_'Zasažen spouhráčem', domain: 'results', context: 'scoring'}: {$game->scoring->deathOwn}</td>
-            <td>{_'Zasažen minou', domain: 'results', context: 'scoring'}: {$game->scoring->hitPod}</td>
-		</tr>
-		<tr>
-            <td>{_'Body za výstřel', domain: 'results', context: 'scoring'}: {$game->scoring->shot}</td>
-            <td>{_'Samopal', domain: 'results', context: 'scoring'}: {$game->scoring->machineGun}</td>
-            <td>{_'Neviditelnost', domain: 'results', context: 'scoring'}: {$game->scoring->invisibility}</td>
-            <td>{_'Agent', domain: 'results', context: 'scoring'}: {$game->scoring->agent}</td>
-            <td>{_'Štít', domain: 'results', context: 'scoring'}: {$game->scoring->shield}</td>
-		</tr>
-	</table>
+	<div class="results-header text-black text-start">
+		<div class="my-1">
+			<strong>{_'Kód hry', domain: 'results', context: 'info'}:</strong>
+			{$game->code} {ifset $game->fileNumber}({$game->fileNumber}){/ifset}
+		</div>
+		<div class="my-1">
+			<strong>{_'Datum', domain: 'results', context: 'info'}:</strong>
+			{$game->start->format('d.m.Y H:i:s')}
+		</div>
+		<div class="my-1">
+			<strong>{_'Herní mód', domain: 'results', context: 'info'}:</strong>
+			{_$game->getMode()??->getName(), context: 'gameModes'}
+		</div>
+		<div n:if="$game->getMusic() !== null">
+			<strong>{_'Hudební mód', domain: 'results', context: 'info'}:</strong>
+			{$game->getMusic()->name}
+		</div>
+	</div>
 	<div class="results-qr text-end">
-		<a href="{$publicUrl}" class="d-block mb-2 text-white">{$publicUrl}</a>
+		<a href="{$publicUrl}" class="d-block mb-2 text-black">{$publicUrl}</a>
 		{$qr|noescape}
 	</div>
 {/define}

@@ -38,10 +38,11 @@ tables:
 		order: 0
 		definition: '''
 			(
-			  `id_user` int(11) unsigned NOT NULL,
+			  `id_user` int(11) unsigned NOT NULL AUTO_INCREMENT,
               `code` varchar(10) NOT NULL,
               `nickname` varchar(20) NOT NULL,
               `email` varchar(50) NOT NULL,
+              `rank` int(11) NOT NULL DEFAULT 100,
               PRIMARY KEY (`id_user`),
               UNIQUE KEY `code` (`code`)
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

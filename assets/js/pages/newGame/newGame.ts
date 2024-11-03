@@ -273,7 +273,8 @@ export default function initNewGamePage() {
 
 	function handleLoad(response : LoadGameResponse) : string {
 		stopLoading();
-		if (!response.values.mode || response.values.mode === '') {
+		console.log(response.values);
+		if (!('mode' in response.values) || response.values.mode === '') {
 			console.error('Got invalid mode');
 			return '';
 		}

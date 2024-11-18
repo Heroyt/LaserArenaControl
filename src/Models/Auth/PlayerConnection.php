@@ -13,7 +13,7 @@ use Lsr\Core\Models\Model;
 #[PrimaryKey('id_connection')]
 class PlayerConnection extends Model
 {
-    public const TABLE = 'player_connected_accounts';
+    public const string TABLE = 'player_connected_accounts';
 
     public ConnectionType $type;
     #[ManyToOne]

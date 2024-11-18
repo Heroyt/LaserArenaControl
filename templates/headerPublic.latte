@@ -2,7 +2,7 @@
 {var string $mode = $page->app->getRequest()->getCookieParams()['mode'] ?? 'light'}
 
 {define header}
-	<header class="navbar navbar-expand-lg navbar-light py-1 fixed-top bg-body-tertiary">
+	<header class="navbar navbar-expand-sm navbar-light py-1 fixed-top bg-body-tertiary">
 		<div class="container-fluid">
 			<a href="{link 'public'}" class="navbar-brand  d-flex">
 				{svgIcon 'Vesta', width: 'auto', height: '1.75rem'}
@@ -91,8 +91,8 @@
 {/define}
 
 {define menu}
-	<div class="collapse navbar-collapse text-end text-lg-start" id="navBarContent">
-		<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+	<div class="collapse navbar-collapse text-end text-sm-start" id="navBarContent">
+		<ul class="navbar-nav me-auto mb-2 mb-sm-0">
 			{foreach App\Core\App::getMenu('public') as $key => $menuItem}
 				<li class="nav-item{if count($menuItem->children) > 0} dropdown{/if}">
 					{if count($menuItem->children) > 0}

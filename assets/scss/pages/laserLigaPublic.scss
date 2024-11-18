@@ -1,0 +1,23 @@
+h1 {
+	svg {
+		display: block;
+		margin: 0 auto .5rem;
+		path {
+			fill: currentColor;
+			stroke: none;
+		}
+	}
+}
+
+.liga-link {
+	svg {
+		max-height: 10rem;
+
+		rect {
+			fill: transparent;
+		}
+		path {
+			fill: currentColor;
+		}
+	}
+}

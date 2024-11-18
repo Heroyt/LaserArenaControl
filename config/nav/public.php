@@ -27,6 +27,12 @@ $menu = [
     'icon'  => $fontawesome->solid('music'),
     'order' => 10,
   ],
+  [
+    'name' => lang('Laser Liga', context: 'pageTitles'),
+    'route' => 'public-liga',
+    'icon'  => $fontawesome->solid('user'),
+    'order' => 30,
+  ],
 ];
 
 //$featureConfig = App::getService('features');

@@ -4633,3 +4633,55 @@ msgstr ""
 msgctxt "errors"
 msgid "Nepodařilo se uložit hudební mód."
 msgstr ""
+
+msgid "Uložit"
+msgstr ""
+
+msgid "Týmy"
+msgstr ""
+
+msgctxt "groupName"
+msgid "Rychle a laserově"
+msgstr ""
+
+msgctxt "game"
+msgid "Pokud jste registrovaní v <a href=\"%s\">Laser Lize</a>, svůj účet najdete pomocí tlačítka %s."
+msgstr ""
+
+msgctxt "pageTitles"
+msgid "Laser Liga"
+msgstr ""
+
+msgid "Portál pro hráče laser game."
+msgstr ""
+
+msgid "Registrovat"
+msgstr ""
+
+msgid "Co je to Laser liga?"
+msgstr ""
+
+msgid "Laser liga je portál pro hráče laser game. Sjednocuje výsledky a poskytuje statistiky z několika arén po celém česku."
+msgstr ""
+
+msgid "Hráči soupeří o pozice v globálním žebříčku. Laser liga zároveň umožňuje arénám pořádat turnaje na kterých hráči poměřují své dovednosti s laserem."
+msgstr ""
+
+msgid "Tak na co čekáš?"
+msgstr ""
+
+msgid "Registrovat se v Laser Lize"
+msgstr ""
+
+msgid "Naši nejlepší hráči"
+msgstr ""
+
+msgid "Zobrazit profil"
+msgstr ""
+
+msgctxt "settings"
+msgid "ID arény v laser lize (z URL)"
+msgstr ""
+
+msgid "Pusťte si <a href=\"%s\">ukázky</a>"
+msgstr ""

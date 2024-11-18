@@ -1,0 +1,118 @@
+{layout '../../@layoutPublic.latte'}
+
+{templateType App\Templates\Public\LaserLigaTemplate}
+
+{block content}
+	<h1 class="mt-5 text-center">
+		{svgIcon 'Vesta', 'auto', '5rem'}
+		Laser Liga
+		<br>
+		<span class="fs-4 fw-normal">{_'Portál pro hráče laser game.'}</span>
+	</h1>
+
+	<div class="liga-link my-3 text-center">
+		{$qr|noescape}
+		<div>laserliga.cz</div>
+	</div>
+
+	<p class="text-center">
+		<button type="button" class="btn btn-primary mt-2" data-bs-toggle="modal" data-bs-target="#register">
+			{faSolid 'user-plus'}
+			{_'Registrovat'}
+		</button>
+	</p>
+
+	<h2 class="mt-4">{_'Co je to Laser liga?'}</h2>
+	<p>{_'Laser liga je portál pro hráče laser game. Sjednocuje výsledky a poskytuje statistiky z několika arén po celém česku.'}</p>
+	<p>{_'Hráči soupeří o pozice v globálním žebříčku. Laser liga zároveň umožňuje arénám pořádat turnaje na kterých hráči poměřují své dovednosti s laserem.'}</p>
+	<p>{_'Tak na co čekáš?'}</p>
+
+	<h2 class="mt-4">{_'Naši nejlepší hráči'}</h2>
+	<div id="top-players" data-show="{_'Zobrazit profil'}">
+
+	</div>
+
+	<div class="modal" id="player-profile" tabindex="-1">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title"></h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<iframe src="" class="w-100" style="min-height: 50rem;"></iframe>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal" id="register" tabindex="-1">
+		<form class="modal-dialog modal-dialog-centered" id="liga-register-form" method="post">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">{_'Registrovat se v Laser Lize'}</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<div class="form-group mb-3">
+						<div class="form-floating {ifset $errors['name']}is-invalid{/ifset}">
+							<input type="text" name="name"
+								   class="form-control {ifset $errors['name']}is-invalid{/ifset}"
+								   id="loginName" placeholder="Player" aria-describedby="loginName-description"
+								   autocomplete="nickname" required
+								   value="{ifset $registerValues['name']}{$registerValues['name']}{/ifset}">
+							<label for="loginName">{_'Jméno'}:</label>
+						</div>
+						<div class="invalid-feedback">
+							{ifset $errors['name']}
+								{$errors['name']}
+							{/ifset}
+						</div>
+						<div class="form-text" id="loginName-description">
+							{_'Vaše jméno/přezdívka do hry.'}
+							<a tabindex="0" role="button" data-bs-trigger="focus" class="btn btn-info btn-sm ms-2"
+							   data-bs-html="true"
+							   data-toggle="popover" data-bs-title="{_'Jak poznat dobrou přezdívku?'}"
+							   data-bs-content="{_'Dobrá přezdívka je klíčovou součástí každého hráče.<br>Pokud přezdívku ještě nemáte, je dobré myslet na následující body:<ol><li><strong>Unikátní</strong> - Přezdívka není křestní jméno. Je jen vaše. Snažte se vyvarovat běžným přezdívkám jako <i>Terminátor</i>, ale i jménům jako <i>Honza</i>.</li><li><strong>Dobře vyslovitelná</strong> - Náhodná směť čísel a písmen také není ideální.</li><li><strong>Osobní</strong> - Přezdívka se vám musí líbit. Přemýšlejte nad tím, že vás ostatní hráči budou přezdívkou oslovovat.</li></ol>'}">
+								{faSolid 'question'}
+							</a>
+						</div>
+					</div>
+					<div class="form-group mb-3">
+						<div class="form-floating {ifset $errors['email']}is-invalid{/ifset}">
+							<input type="email" name="email"
+								   class="form-control {ifset $errors['email']}is-invalid{/ifset}"
+								   id="loginEmail" placeholder="mail@mail.cz"
+								   autocomplete="username email" required
+								   value="{ifset $registerValues['email']}{$registerValues['email']}{/ifset}">
+							<label for="loginEmail">{_'E-mail'}:</label>
+						</div>
+						<div class="invalid-feedback">
+							{ifset $errors['email']}
+								{$errors['email']}
+							{/ifset}
+						</div>
+					</div>
+					<div class="form-group mb-3">
+						<div class="form-floating {ifset $errors['password']}is-invalid{/ifset}">
+							<input type="password" name="password"
+								   class="form-control {ifset $errors['password']}is-invalid{/ifset}"
+								   id="loginPassword"
+								   placeholder="****"
+								   autocomplete="password" required>
+							<label for="loginPassword">{_'Heslo'}:</label>
+						</div>
+						<div class="invalid-feedback">
+							{ifset $errors['password']}
+								{$errors['password']}
+							{/ifset}
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="submit" class="btn btn-success">{_'Odeslat', context: 'actions'}</button>
+				</div>
+			</div>
+		</form>
+	</div>
+{/block}

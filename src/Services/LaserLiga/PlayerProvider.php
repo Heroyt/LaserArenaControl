@@ -197,7 +197,7 @@ readonly class PlayerProvider
      * @param  ResponseInterface  $response
      * @return Player[]
      */
-    private function getPlayersFromResponse(ResponseInterface $response, bool $noSave = false): array {
+    public function getPlayersFromResponse(ResponseInterface $response, bool $noSave = false): array {
         if ($response->getStatusCode() !== 200) {
             return [];
         }

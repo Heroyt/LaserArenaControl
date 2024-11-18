@@ -139,6 +139,14 @@ export default function route(pageInfo: PageInfo): void {
 				module.default();
 			});
 			break;
+		case 'public-liga':
+		case 'public-liga-post':
+			import(
+				/* webpackChunkName: "public-laserliga" */
+				'./pages/public/laserliga'
+				).then(module => {
+				module.default();
+			});
 	}
 
 	if ((pageInfo.routeName ?? '').startsWith('gate')) {

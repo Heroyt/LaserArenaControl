@@ -23,7 +23,7 @@
 {var string[] $groupNames = ['Šmoulové', 'Oslava - Karel', 'Kamarádi', 'Rozlučka!', 'Laserové Lamy', 'Šílení Střelci', 'Vesmírní Piráti', 'Rychle a laserově']}
 
 {block content}
-    <form method="post" action="" id="new-game-content" class="w-100">
+    <form method="post" action="" id="new-game-content" class="w-100 mt-5">
 		{if $featureConfig->isFeatureEnabled('groups')}
 			<section id="group-select-section">
 				<input type="hidden" name="groupSelect" value="new-custom" id="group-select">
@@ -120,6 +120,14 @@
         <h4 class="text-center">
             {_'Hráči', context: 'game'}
         </h4>
+        <p>
+        {capture $searchBtn}
+        	<button type="button" class="btn btn-info btn-sm">
+				{faSolid 'search'}
+			</button>
+        {/capture}
+        {_'Pokud jste registrovaní v <a href="%s">Laser Lize</a>, svůj účet najdete pomocí tlačítka %s.', context: 'game', format: [$app::getLink(['public', 'liga']), $searchBtn]|noescape}
+        </p>
         {foreach $vests as $vest}
             {include vestRow, $vest}
         {/foreach}
@@ -199,6 +207,9 @@
             {faSolid 'shuffle'}
         </button>
     </div>
+    <div class="form-text">
+    	{_'Pusťte si <a href="%s">ukázky</a>', format: [$app::getLink(['public', 'music'])]|noescape}
+	</div>
 {/define}
 
 {define sectionTeamsRandom}

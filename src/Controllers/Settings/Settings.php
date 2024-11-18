@@ -151,6 +151,10 @@ class Settings extends Controller
             if (isset($apiKey)) {
                 Info::set('liga_api_key', $apiKey);
             }
+            $arenaId = $request->getPost('arena_id');
+            if (isset($arenaId) && is_numeric($arenaId)) {
+                Info::set('liga_arena_id', (int) $arenaId);
+            }
             $lmx = $request->getPost('lmx_ip');
             if (isset($lmx)) {
                 Info::set('lmx_ip', $lmx);

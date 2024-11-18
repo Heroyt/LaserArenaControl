@@ -18,8 +18,8 @@ parameters:
 		controllers:
 			- %constants.appDir%src/Controllers
 	gamesSync:
-		limit: 5
-		timeout: 15.0
+		limit: 200
+		timeout: 20.0
 	redis:
 		host: redis
 	fairTeams:

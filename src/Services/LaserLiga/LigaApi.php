@@ -135,48 +135,50 @@ class LigaApi
                 );
             }
             // Remove unfinished games
-            if ($game->isFinished()) {
-                // Check assigned users
-                try {
-                    // Get user data from game
-                    $response = $this->client->get('games/' . $game->code . '/users');
-                    if ($response->getStatusCode() === 200) {
-                        $response->getBody()->rewind();
+            if (!$game->isFinished()) {
+                continue;
+            }
+            // Check assigned users
+            try {
+                // Get user data from game
+                $response = $this->client->get('games/' . $game->code . '/users');
+                if ($response->getStatusCode() === 200) {
+                    $response->getBody()->rewind();
 
-                        /** @var LigaPlayerData[] $users */
-                        $users = $this->serializer->deserialize(
-                            $response->getBody()->getContents(),
-                            LigaPlayerData::class . '[]',
-                            'json'
-                        );
-                        if (!empty($users)) {
-                            // Assign user objects for each user got
-                            foreach ($users as $vest => $userData) {
-                                $player = $game->getVestPlayer($vest);
-                                if (isset($player)) {
-                                    $player->user = $playerProvider->getPlayerObjectFromData($userData);
-                                    // Sync new user
-                                    if (!isset($player->user->id)) {
-                                        $player->user->save();
-                                    }
-                                    $player->save();
+                    /** @var LigaPlayerData[] $users */
+                    $users = $this->serializer->deserialize(
+                        $response->getBody()->getContents(),
+                        LigaPlayerData::class . '[]',
+                        'json'
+                    );
+                    if (!empty($users)) {
+                        // Assign user objects for each user got
+                        foreach ($users as $vest => $userData) {
+                            $player = $game->getVestPlayer($vest);
+                            if (isset($player) && !isset($player->user)) {
+                                $player->user = $playerProvider->getPlayerObjectFromData($userData);
+                                // Sync new user
+                                if (!isset($player->user->id)) {
+                                    $player->user->save();
                                 }
+                                $player->save();
                             }
                         }
                     }
-                } catch (GuzzleException | ValidationException) {
                 }
-
-                foreach ($this->getExtensions() as $extension) {
-                    $extension->processGameBeforeSync($game);
-                }
-
-                $gamesData[] = $game;
+            } catch (GuzzleException | ValidationException) {
             }
+
+            foreach ($this->getExtensions() as $extension) {
+                $extension->processGameBeforeSync($game);
+            }
+
+            $gamesData[] = $game;
         }
 
         // Build a request
         try {
+            $this->logger->debug('Syncing '.count($gamesData).' games');
             $config = [
                 'body' => $this->serializer->serialize(['system' => $system, 'games' => $gamesData], 'json'),
             ];

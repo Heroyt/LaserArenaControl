@@ -8,9 +8,9 @@ Func GetGameStatus()
 	EndIf
 	Local $win = WinGetHandle("LaserMaxx EVO-5 Console")
 	Local $music = ControlGetText($win, "", 349)
-	If $music = "EVO-5 LaserMixx Standard Standby.mp3" Or $music = "EVO-5 LaserMixx Standard Gameover.mp3" Then
+	If StringInStr($music, "standby", 0) > 0 Or StringInStr($music, "gameover", 0) > 0 Then
 		Return "STANDBY"
-	ElseIf $music = "EVO-5 LaserMixx Standard Armed.mp3" Then
+	ElseIf StringInStr($music, "armed", 0) > 0 Then
 		Return "ARMED"
 	EndIf
 	Return "PLAYING"

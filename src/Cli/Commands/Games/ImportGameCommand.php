@@ -92,13 +92,14 @@ class ImportGameCommand extends Command
             if (isset($game->resultsFile) && file_exists($game->resultsFile)) {
                 $file = $game->resultsFile;
             } else if ($game instanceof Game && !empty($game->fileNumber)) {
-                $files = glob($dir . str_pad((string) $game->fileNumber, 4, '0', STR_PAD_LEFT) . '*.game');
+                $pattern = $dir . str_pad((string) $game->fileNumber, 4, '0', STR_PAD_LEFT) . '*.game';
+                $files = glob($pattern);
                 if (empty($files)) {
-                    $output->writeln('<error>Cannot find game file.</error>');
+                    $output->writeln('<error>Cannot find game file. '.$pattern.'</error>');
                 return self::FAILURE;
                 }
                 if (count($files) > 1) {
-                    $output->writeln('<error>Found more than one suitable game file. '.$dir . $game->fileNumber . '*.game'.'</error>');
+                    $output->writeln('<error>Found more than one suitable game file. '.$pattern.'</error>');
                     $output->writeln(implode(', ', $files));
                 return self::FAILURE;
                 }

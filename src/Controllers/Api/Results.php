@@ -194,6 +194,9 @@ class Results extends ApiController
             );
         }
 
+        $id = $gameObj->id;
+        $code = $gameObj->code;
+
         $gameObj->clearCache();
 
         if (isset($gameObj->resultsFile) && file_exists($gameObj->resultsFile)) {
@@ -296,6 +299,9 @@ class Results extends ApiController
                 // Empty game - no shots, no hits, etc..
                 return $this->respond(new ErrorResponse('Game is empty', type: ErrorType::VALIDATION), 400);
             }
+
+            $gameObj->id = $id;
+            $gameObj->code = $code;
 
             if (!$gameObj->save()) {
                 throw new ResultsParseException('Failed saving game into DB.');

@@ -25,7 +25,7 @@ class ImportGameCommand extends Command
     public function __construct(
         private readonly ImportService $importService,
         private readonly PlayerProvider $playerProvider,
-      private readonly Serializer $serializer,
+        private readonly Serializer $serializer,
     ) {
         parent::__construct('games:import');
     }
@@ -67,93 +67,41 @@ class ImportGameCommand extends Command
             return self::FAILURE;
         }
 
+        $dir = trailingslashit($dir);
+
         if (!empty($gameCode)) {
             try {
                 $game = GameFactory::getByCode($gameCode);
             } catch (\Throwable $e) {
                 $output->writeln(
-                  '<error>Error: Game not found - '.$e->getMessage().'.</error>'
+                    '<error>Error: Game not found - ' . $e->getMessage() . '.</error>'
                 );
                 return self::FAILURE;
             }
 
             if (!isset($game)) {
                 $output->writeln(
-                  '<error>Error: Game not found.</error>'
+                    '<error>Error: Game not found.</error>'
                 );
                 return self::FAILURE;
             }
 
-            $id = $game->id;
-            $code = $game->code;
+            $response = $this->importService->importGame($game, $dir);
 
-            $game->clearCache();
-
-            if (isset($game->resultsFile) && file_exists($game->resultsFile)) {
-                $file = $game->resultsFile;
-            } else if ($game instanceof Game && !empty($game->fileNumber)) {
-                $pattern = $dir . str_pad((string) $game->fileNumber, 4, '0', STR_PAD_LEFT) . '*.game';
-                $files = glob($pattern);
-                if (empty($files)) {
-                    $output->writeln('<error>Cannot find game file. '.$pattern.'</error>');
-                return self::FAILURE;
+            if ($response instanceof ErrorResponse) {
+                $output->writeln('<error>' . $response->title . '</error>');
+                if (!empty($response->values)) {
+                    $output->setVerbosity(OutputInterface::VERBOSITY_VERBOSE);
+                    $output->writeln($this->serializer->serialize($response->values, 'json'));
+                    $output->setVerbosity(OutputInterface::VERBOSITY_NORMAL);
                 }
-                if (count($files) > 1) {
-                    $output->writeln('<error>Found more than one suitable game file. '.$pattern.'</error>');
-                    $output->writeln(implode(', ', $files));
-                return self::FAILURE;
-                }
-                $file = $files[0];
-            } else {
-                $output->writeln('<error>Cannot get game file number.</error>');
                 return self::FAILURE;
             }
 
-            try {
-                /** @var class-string<ResultsParserInterface> $class */
-                $class = 'App\\Tools\\ResultParsing\\' . ucfirst($game::SYSTEM) . '\\ResultsParser';
-
-                if (!class_exists($class)) {
-                    $output->writeln('<error>No parser for this game (' . $game::SYSTEM . ')</error>');
-                    return self::FAILURE;
-                }
-                if (!$class::checkFile($file)) {
-                    $output->writeln('<error>Game file cannot be parsed: ' . $file.'</error>');
-                    return self::FAILURE;
-                }
-                $parser = new $class($this->playerProvider);
-                $parser->setFile($file);
-                $game = $parser->parse();
-
-                // Check players
-                $null = true;
-                /** @var Player $player */
-                foreach ($game->getPlayers() as $player) {
-                    if ($player->score !== 0 || $player->shots !== 0) {
-                        $null = false;
-                        break;
-                    }
-                }
-                if ($null) {
-                    $output->writeln('<error>Game is empty</error>');
-                    return self::FAILURE;
-                }
-
-                $game->id = $id;
-                $game->code = $code;
-
-                if (!$game->save()) {
-                    $output->writeln('<error>Failed saving game into DB.</error>');
-                    return self::FAILURE;
-                }
-            } catch (\Exception $e) {
-                $output->writeln('<error>Error while parsing game file. '.$e->getMessage().'</error>');
-                return self::FAILURE;
-            }
-            $output->setVerbosity(OutputInterface::VERBOSITY_VERBOSE);
-            $output->writeln($this->serializer->serialize($game, 'json'));
-            $output->setVerbosity(OutputInterface::VERBOSITY_NORMAL);
             $output->writeln('<info>Game imported.</info>');
+            $output->setVerbosity(OutputInterface::VERBOSITY_VERBOSE);
+            $output->writeln($this->serializer->serialize($response->values, 'json'));
+            $output->setVerbosity(OutputInterface::VERBOSITY_NORMAL);
             return self::SUCCESS;
         }
 

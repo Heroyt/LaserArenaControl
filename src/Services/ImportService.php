@@ -18,6 +18,7 @@ use App\GameModels\Factory\GameFactory;
 use App\GameModels\Game\Game;
 use App\GameModels\Game\Player;
 use App\Services\LaserLiga\LigaApi;
+use App\Services\LaserLiga\PlayerProvider;
 use App\Tools\AbstractResultsParser;
 use App\Tools\Interfaces\ResultsParserInterface;
 use Dibi\Exception;
@@ -55,6 +56,7 @@ class ImportService
         Config                          $config,
         private readonly FeatureConfig  $featureConfig,
         private readonly Metrics $metrics,
+        private readonly PlayerProvider     $playerProvider,
     ) {
         $this->gameLoadedTime = (int) ($config->getConfig('ENV')['GAME_LOADED_TIME'] ?? 300);
         $this->gameStartedTime = (int) ($config->getConfig('ENV')['GAME_STARTED_TIME'] ?? 1800);
@@ -86,10 +88,10 @@ class ImportService
             $files = glob($pattern);
             if (empty($files)) {
                 return new ErrorResponse(
-                      'Cannot find game file.',
-                      type  : ErrorType::NOT_FOUND,
-                      values: ['path' => $pattern]
-                  );
+                    'Cannot find game file.',
+                    type  : ErrorType::NOT_FOUND,
+                    values: ['path' => $pattern]
+                );
             }
             if (count($files) > 1) {
                 return new ErrorResponse(

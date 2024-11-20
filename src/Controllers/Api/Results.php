@@ -37,7 +37,6 @@ class Results extends ApiController
     private int $gameStartedTime;
 
     public function __construct(
-        private readonly PlayerProvider $playerProvider,
         private readonly ImportService  $importService,
         Config                          $config,
         private readonly TaskProducer   $taskProducer,

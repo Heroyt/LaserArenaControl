@@ -24,7 +24,6 @@ class ImportGameCommand extends Command
 {
     public function __construct(
         private readonly ImportService $importService,
-        private readonly PlayerProvider $playerProvider,
         private readonly Serializer $serializer,
     ) {
         parent::__construct('games:import');

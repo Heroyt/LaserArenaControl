@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: Slovak\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2024-07-08 15:43\n"
+"PO-Revision-Date: 2024-12-07 16:14\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=4; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 3;\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -809,5 +809,13 @@ msgid "Ztráty základny"
 msgstr ""
 
 msgid "Sniper"
+msgstr ""
+
+msgctxt "style"
+msgid "Výchozí"
+msgstr ""
+
+msgctxt "style"
+msgid "Tabulkové"
 msgstr ""
 

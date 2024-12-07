@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: Czech\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2024-12-07 16:14\n"
+"PO-Revision-Date: 2024-12-07 16:59\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=4; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 3;\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -100,11 +100,11 @@ msgstr "CSGO"
 
 msgctxt "gameModes"
 msgid "Team deathmatch"
-msgstr ""
+msgstr "Team deathmatch"
 
 msgctxt "gameModes"
 msgid "Deathmatch"
-msgstr ""
+msgstr "Deathmatch"
 
 msgid "Jazyk"
 msgstr "Jazyk"
@@ -1004,7 +1004,7 @@ msgid "Test - solo"
 msgstr "Test - solo"
 
 msgid "Variace herních módů označují malé změny v nastavení hry, jako například délku hry. Při načtení hry do konzole se vybírá mód, jehož jméno se získá přidáním potřebných přípon za nastavený základní název v konzoli. Pokud je tedy mód \"TeamDeathmatch\" a má vybranou variaci délky 15 minut, která má příponu \"-10\", výsledný vybraný mód z konzole bude mít název \"TeamDeathmatch-15\"."
-msgstr ""
+msgstr "Variace herních módů označují malé změny v nastavení hry, jako například délku hry. Při načtení hry do konzole se vybírá mód, jehož jméno se získá přidáním potřebných přípon za nastavený základní název v konzoli. Pokud je tedy mód \"TeamDeathmatch\" a má vybranou variaci délky 15 minut, která má příponu \"-10\", výsledný vybraný mód z konzole bude mít název \"TeamDeathmatch-15\"."
 
 msgid "Hodnoty variace můžete řadit. Jako výchozí se vždy použije první hodnota (nahoře v seznamu)."
 msgstr "Hodnoty variace můžete řadit. Jako výchozí se vždy použije první hodnota (nahoře v seznamu)."
@@ -1028,7 +1028,7 @@ msgid "Názvy nejsou kontrolované striktně. Nezáleží na velkých/malých p�
 msgstr "Názvy nejsou kontrolované striktně. Nezáleží na velkých/malých písmenech. Zadaný název může být jen podřetězec celého názvu v konzoli."
 
 msgid "Např. při módu \"1-TEAM-DEATHMATCH\" stačí, aby byl zde zadaný text \"1-TEAM\" nebo \"team-deathmatch\"."
-msgstr ""
+msgstr "Např. při módu \"1-TEAM-DEATHMATCH\" stačí, aby byl zde zadaný text \"1-TEAM\" nebo \"team-deathmatch\"."
 
 msgctxt "game.modes"
 msgid "Povolené barvy"
@@ -4374,336 +4374,336 @@ msgstr "Vypnout mezipaměť"
 
 msgctxt "month"
 msgid "Červenec"
-msgstr ""
+msgstr "Červenec"
 
 msgid "Výsledková tabule"
-msgstr ""
+msgstr "Výsledková tabule"
 
 msgctxt "month"
 msgid "Únor"
-msgstr ""
+msgstr "Únor"
 
 msgctxt "month"
 msgid "Květen"
-msgstr ""
+msgstr "Květen"
 
 msgctxt "month"
 msgid "Září"
-msgstr ""
+msgstr "Září"
 
 msgctxt "month"
 msgid "Prosinec"
-msgstr ""
+msgstr "Prosinec"
 
 msgid "Playlisty"
-msgstr ""
+msgstr "Playlisty"
 
 msgid "Smazat"
-msgstr ""
+msgstr "Smazat"
 
 msgid "Skupiny"
-msgstr ""
+msgstr "Skupiny"
 
 msgid "Vytvořit"
-msgstr ""
+msgstr "Vytvořit"
 
 msgid "Deaktivovat"
-msgstr ""
+msgstr "Deaktivovat"
 
 msgid "Hráč"
-msgstr ""
+msgstr "Hráč"
 
 msgid "Zrušit"
-msgstr ""
+msgstr "Zrušit"
 
 msgid "Smazat vše"
-msgstr ""
+msgstr "Smazat vše"
 
 msgid "Obsazený"
-msgstr ""
+msgstr "Obsazený"
 
 msgid "Nahrát"
-msgstr ""
+msgstr "Nahrát"
 
 msgid "Tables"
-msgstr ""
+msgstr "Stoly"
 
 msgid "Turnaje"
-msgstr ""
+msgstr "Turnaje"
 
 msgid "Seznam her"
-msgstr ""
+msgstr "Seznam her"
 
 msgid "Čas"
-msgstr ""
+msgstr "Čas"
 
 msgid "Herní mód"
-msgstr ""
+msgstr "Herní mód"
 
 msgid "Hráči"
-msgstr ""
+msgstr "Hráči"
 
 msgid "Tisk"
-msgstr ""
+msgstr "Tisk"
 
 msgid "Vítěz"
-msgstr ""
+msgstr "Vítěz"
 
 msgid "Odeslat"
-msgstr ""
+msgstr "Odeslat"
 
 msgid "Nebyla nalezena žádná hra"
-msgstr ""
+msgstr "Nebyla nalezena žádná hra"
 
 msgctxt "month"
 msgid "Srpen"
-msgstr ""
+msgstr "Srpen"
 
 msgid "Herní módy"
-msgstr ""
+msgstr "Herní módy"
 
 msgid "Např. při módu \"1-TEAM-DEATHMACH\" stačí, aby byl zde zadaný text \"1-TEAM\" nebo \"team-deathmach\"."
-msgstr ""
+msgstr "Např. při módu \"1-TEAM-DEATHMACH\" stačí, aby byl zde zadaný text \"1-TEAM\" nebo \"team-deathmach\"."
 
 msgid "Variace herních módů označují malé změny v nastavení hry, jako například délku hry. Při načtení hry do konzole se vybírá mód, jehož jméno se získá přidáním potřebných přípon za nastavený základní název v konzoli. Pokud je tedy mód \"TeamDeathmach\" a má vybranou variaci délky 15 minut, která má příponu \"-10\", výsledný vybraný mód z konzole bude mít název \"TeamDeathmach-15\"."
-msgstr ""
+msgstr "Variace herních módů označují malé změny v nastavení hry, jako například délku hry. Při načtení hry do konzole se vybírá mód, jehož jméno se získá přidáním potřebných přípon za nastavený základní název v konzoli. Pokud je tedy mód \"TeamDeathmach\" a má vybranou variaci délky 15 minut, která má příponu \"-10\", výsledný vybraný mód z konzole bude mít název \"TeamDeathmach-15\"."
 
 msgid "Popis"
-msgstr ""
+msgstr "Popis"
 
 msgctxt "game.modes"
 msgid "Zda se herní mód zobrazuje na výběr hráčům."
-msgstr ""
+msgstr "Zda se herní mód zobrazuje na výběr hráčům."
 
 msgctxt "game"
 msgid "Hráči"
-msgstr ""
+msgstr "Hráči"
 
 msgctxt "image"
 msgid "Pozadí"
-msgstr ""
+msgstr "Pozadí"
 
 msgctxt "image"
 msgid "Ikona"
-msgstr ""
+msgstr "Ikona"
 
 msgid "Veřejný"
-msgstr ""
+msgstr "Veřejný"
 
 msgid "Kód hráče"
-msgstr ""
+msgstr "Kód hráče"
 
 msgid "Email"
-msgstr ""
+msgstr "Email"
 
 msgid "Herní úroveň"
-msgstr ""
+msgstr "Herní úroveň"
 
 msgid "Načíst další"
-msgstr ""
+msgstr "Načíst další"
 
 msgctxt "pageTitles"
 msgid "Registrovaní hráči"
-msgstr ""
+msgstr "Registrovaní hráči"
 
 msgctxt "pageTitles"
 msgid "Nastavení - Tisk"
-msgstr ""
+msgstr "Nastavení - Tisk"
 
 msgid "Registrovaní hráči"
-msgstr ""
+msgstr "Registrovaní hráči"
 
 msgid "Synchronizace byla naplánována"
-msgstr ""
+msgstr "Synchronizace byla naplánována"
 
 msgid "Synchronizace proběhne na pozadí během pár minut."
-msgstr ""
+msgstr "Synchronizace proběhne na pozadí během pár minut."
 
 msgctxt ".player"
 msgid "Zásahy"
-msgstr ""
+msgstr "Zásahy"
 
 msgctxt ".player"
 msgid "Smrti"
-msgstr ""
+msgstr "Smrti"
 
 msgctxt "print"
 msgid "Kopie"
-msgstr ""
+msgstr "Kopie"
 
 msgid "Počet sloupců"
-msgstr ""
+msgstr "Počet sloupců"
 
 msgid "Počet řádků"
-msgstr ""
+msgstr "Počet řádků"
 
 msgid "Přetažením stolu v mřížce upravujete rozložení stolů při zadávání hry. Mělo by odpovídat fyzickému rozmístění stolů."
-msgstr ""
+msgstr "Přetažením stolu v mřížce upravujete rozložení stolů při zadávání hry. Mělo by odpovídat fyzickému rozmístění stolů."
 
 msgid "Velikost stolu roztahuje stůl na více řádků (směrem dolů) nebo sloupců (směrem nahoru). Níže se velikosti nemění. Mění se jen na stránce zadávání her."
-msgstr ""
+msgstr "Velikost stolu roztahuje stůl na více řádků (směrem dolů) nebo sloupců (směrem nahoru). Níže se velikosti nemění. Mění se jen na stránce zadávání her."
 
 msgid "Velikost"
-msgstr ""
+msgstr "Velikost"
 
 msgctxt "pageTitles.settings"
 msgid "Tipy"
-msgstr ""
+msgstr "Tipy"
 
 msgctxt "pageTitles"
 msgid "Systém"
-msgstr ""
+msgstr "Systém"
 
 msgctxt "pageTitles.system"
 msgid "Soft-reset"
-msgstr ""
+msgstr "Soft-reset"
 
 msgctxt "pageTitles.system"
 msgid "Hard-reset"
-msgstr ""
+msgstr "Hard-reset"
 
 msgctxt "pageTitles.system"
 msgid "Kamery reset"
-msgstr ""
+msgstr "Kamery reset"
 
 msgctxt "pageTitles"
 msgid "Mezipaměť"
-msgstr ""
+msgstr "Mezipaměť"
 
 msgctxt "null"
 msgid "Systém se restartuje"
 msgid_plural "null"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "Systém se restartuje"
+msgstr[1] "Systém se restartuje"
+msgstr[2] "Systém se restartuje"
+msgstr[3] "Systém se restartuje"
 
 msgctxt "null"
 msgid "Restart může chvíli trvat."
 msgid_plural "null"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "Restart může chvíli trvat."
+msgstr[1] "Restart může chvíli trvat."
+msgstr[2] "Restart může chvíli trvat."
+msgstr[3] "Restart může chvíli trvat."
 
 msgctxt "music"
 msgid "Test"
-msgstr ""
+msgstr "Test"
 
 msgctxt "music"
 msgid "AI"
-msgstr ""
+msgstr "AI"
 
 msgctxt "pageTitles"
 msgid "Hudební módy"
-msgstr ""
+msgstr "Hudební módy"
 
 msgid "Pojmenujte svou skupinu. Výsledky v LaserLize (pod QR kódem) se vám sloučí dohromady."
-msgstr ""
+msgstr "Pojmenujte svou skupinu. Výsledky v LaserLize (pod QR kódem) se vám sloučí dohromady."
 
 msgctxt "groupName"
 msgid "Oslava - Karel"
-msgstr ""
+msgstr "Oslava - Karel"
 
 msgctxt "groupName"
 msgid "Šmoulové"
-msgstr ""
+msgstr "Šmoulové"
 
 msgctxt "groupName"
 msgid "Kamarádi"
-msgstr ""
+msgstr "Kamarádi"
 
 msgctxt "groupName"
 msgid "Rozlučka!"
-msgstr ""
+msgstr "Rozlučka!"
 
 msgctxt "groupName"
 msgid "Šílení Střelci"
-msgstr ""
+msgstr "Šílení Střelci"
 
 msgctxt "groupName"
 msgid "Laserové Lamy"
-msgstr ""
+msgstr "Laserové Lamy"
 
 msgctxt "groupName"
 msgid "Vesmírní Piráti"
-msgstr ""
+msgstr "Vesmírní Piráti"
 
 msgid "Úvodní hudba"
-msgstr ""
+msgstr "Úvodní hudba"
 
 msgid "Hudba pro nahrané vesty"
-msgstr ""
+msgstr "Hudba pro nahrané vesty"
 
 msgid "Závěrečná hudba"
-msgstr ""
+msgstr "Závěrečná hudba"
 
 msgctxt "errors"
 msgid "Nepodařilo se uložit hudební mód."
-msgstr ""
+msgstr "Nepodařilo se uložit hudební mód."
 
 msgid "Uložit"
-msgstr ""
+msgstr "Uložit"
 
 msgid "Týmy"
-msgstr ""
+msgstr "Týmy"
 
 msgctxt "groupName"
 msgid "Rychle a laserově"
-msgstr ""
+msgstr "Rychle a laserově"
 
 msgctxt "game"
 msgid "Pokud jste registrovaní v <a href=\"%s\">Laser Lize</a>, svůj účet najdete pomocí tlačítka %s."
-msgstr ""
+msgstr "Pokud jste registrovaní v <a href=\"%s\">Laser Lize</a>, svůj účet najdete pomocí tlačítka %s."
 
 msgctxt "pageTitles"
 msgid "Laser Liga"
-msgstr ""
+msgstr "Laser Liga"
 
 msgid "Portál pro hráče laser game."
-msgstr ""
+msgstr "Portál pro hráče laser game."
 
 msgid "Registrovat"
-msgstr ""
+msgstr "Registrovat"
 
 msgid "Co je to Laser liga?"
-msgstr ""
+msgstr "Co je to Laser liga?"
 
 msgid "Laser liga je portál pro hráče laser game. Sjednocuje výsledky a poskytuje statistiky z několika arén po celém česku."
-msgstr ""
+msgstr "Laser liga je portál pro hráče laser game. Sjednocuje výsledky a poskytuje statistiky z několika arén po celém česku."
 
 msgid "Hráči soupeří o pozice v globálním žebříčku. Laser liga zároveň umožňuje arénám pořádat turnaje na kterých hráči poměřují své dovednosti s laserem."
-msgstr ""
+msgstr "Hráči soupeří o pozice v globálním žebříčku. Laser liga zároveň umožňuje arénám pořádat turnaje na kterých hráči poměřují své dovednosti s laserem."
 
 msgid "Tak na co čekáš?"
-msgstr ""
+msgstr "Tak na co čekáš?"
 
 msgid "Registrovat se v Laser Lize"
-msgstr ""
+msgstr "Registrovat se v Laser Lize"
 
 msgid "Naši nejlepší hráči"
-msgstr ""
+msgstr "Naši nejlepší hráči"
 
 msgid "Zobrazit profil"
-msgstr ""
+msgstr "Zobrazit profil"
 
 msgctxt "settings"
 msgid "ID arény v laser lize (z URL)"
-msgstr ""
+msgstr "ID arény v laser lize (z URL)"
 
 msgid "Pusťte si <a href=\"%s\">ukázky</a>"
-msgstr ""
+msgstr "Pusťte si <a href=\"%s\">ukázky</a>"
 
 msgctxt "pageTitles"
 msgid "Dnešní hry"
-msgstr ""
+msgstr "Dnešní hry"
 
 msgid "Dnešní hry"
-msgstr ""
+msgstr "Dnešní hry"
 
 msgid "Výsledky ze hry"
-msgstr ""
+msgstr "Výsledky ze hry"
 
 msgid "Dnes se nehrály žádné hry."
-msgstr ""
+msgstr "Dnes se nehrály žádné hry."
 

@@ -176,7 +176,7 @@
 
 {define playerShots, App\GameModels\Game\Player $player, int $maxShots}
     <div n:if="$game->getMode()?->settings?->playerShots" class="player-shots">
-        {var int $step = ceil($maxShots / 10)}
+        {var int $step = ceil(($maxShots === 0 ? 1000 : $maxShots) / 10)}
         {var int $count = ceil($player->shots / $step)}
         <svg viewBox="0 0 1720 504" class="mb-1">
             <g n:for="$i = 0; $i < $count; $i++" transform="translate({172*$i})">

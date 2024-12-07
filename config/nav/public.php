@@ -22,6 +22,12 @@ $menu = [
     'order' => 0,
   ],
   [
+    'name' => lang('Dnešní hry', context: 'pageTitles'),
+    'route' => 'public-games',
+    'icon'  => $fontawesome->solid('list'),
+    'order' => 5,
+  ],
+  [
     'name' => lang('Hudební módy', context: 'pageTitles'),
     'route' => 'public-music',
     'icon'  => $fontawesome->solid('music'),

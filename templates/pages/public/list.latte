@@ -1,0 +1,56 @@
+{layout '../../@layoutPublic.latte'}
+
+{templateType App\Templates\Public\GamesListTemplate}
+
+
+{define addHead}
+	{\App\Tools\Color::getGamesColor($games)|noescape}
+{/define}
+
+{block content}
+	<h2 class="mt-5">
+		{_'Dnešní hry'} - {$date->format('j. n. Y')}
+	</h2>
+
+	{if count($games) === 0}
+		{alertWarning lang('Dnes se nehrály žádné hry.')}
+	{else}
+		<table class="table">
+			<thead>
+			<tr>
+				<th>{_'Akce'}</th>
+				<th>{_'Čas'}</th>
+				<th>{_'Herní mód'}</th>
+				<th>{_'Hráči'}</th>
+			</tr>
+			</thead>
+			<tbody>
+			<tr n:foreach="$games as $game">
+				{do $game->loadTeams()}
+				<td>
+					<div class="btn-group btn-group-lg">
+						<a href="{link ['public', 'system' => $game::SYSTEM, 'game' => $game->code]}"
+						   class="btn btn-success" data-toggle="tooltip" title="{_'Použít pro novou hru'}">
+							{faSolid 'plus'}
+						</a>
+						<a href="{link ['public', 'games', $game->code]}"
+						   class="btn btn-info" data-toggle="tooltip" title="{_'Výsledky ze hry'}">
+							{faSolid 'eye'}
+						</a>
+					</div>
+				</td>
+				<td>{$game->start?->format('H:i')}</td>
+				<td data-mode="{$game->getMode()::class}">{$game->getMode()?->getName()}</td>
+				<td>
+				<span n:foreach="$game->getPlayersSorted() as $player"
+						data-toggle="tooltip"
+						title="{_'%s skóre', format: [number_format($player->score, 0, ',', '&nbsp;')]|noescape}"
+						class="badge bg-{$player->getTeam() !== null ? $player->getTeam()->getTeamBgClass(true) : 'dark'}">
+					{$player->position}.&nbsp;{$player->name}
+				</span>
+				</td>
+			</tr>
+			</tbody>
+		</table>
+	{/if}
+{/block}

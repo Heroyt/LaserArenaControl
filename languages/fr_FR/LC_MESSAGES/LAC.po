@@ -4633,3 +4633,16 @@ msgstr ""
 
 msgid "Pusťte si <a href=\"%s\">ukázky</a>"
 msgstr ""
+
+msgctxt "pageTitles"
+msgid "Dnešní hry"
+msgstr ""
+
+msgid "Dnešní hry"
+msgstr ""
+
+msgid "Výsledky ze hry"
+msgstr ""
+
+msgid "Dnes se nehrály žádné hry."
+msgstr ""

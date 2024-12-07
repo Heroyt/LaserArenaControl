@@ -1,0 +1,45 @@
+{layout '../../@layoutPublic.latte'}
+
+{templateType App\Templates\Public\GamesDetailTemplate}
+
+{block addHead}
+<style>
+	svg {
+		max-height: 10rem;
+		max-width: 10rem;
+		aspect-ratio: 1;
+		margin-left: auto;
+		display: block;
+	}
+</style>
+{/block}
+
+{block content}
+	<p class="mt-5">
+		<a href="{link ['public', 'games']}" class="btn btn-warning">
+			{faSolid 'angle-left'}
+			{_'Zpět'}
+		</a>
+	</p>
+
+	<div class="d-flex justify-content-between mb-3">
+		<div>
+			<h2>
+				{_'Výsledky ze hry'}
+			</h2>
+			<h3>{$game->start?->format('j. n. Y H:i:s')}</h3>
+			<p class="text-muted">{$code}</p>
+			<p>{$game->getMode()?->getName()}</p>
+			<p>{$game->getMusic()?->name}</p>
+		</div>
+
+		<div>
+			{$qr|noescape}
+			<div class="mt-2">
+				{$publicUrl}
+			</div>
+		</div>
+	</div>
+
+	<iframe src="{$publicUrl}?iframe=1" frameborder="0" class="w-100" style="height: 600px;"></iframe>
+{/block}

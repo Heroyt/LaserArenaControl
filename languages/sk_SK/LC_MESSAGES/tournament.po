@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: Slovak\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2024-09-19 12:28\n"
+"PO-Revision-Date: 2024-12-07 16:14\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=4; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 3;\n"
 "X-Crowdin-Project: laserarenacontrol\n"
@@ -136,5 +136,106 @@ msgid "Prohry"
 msgstr ""
 
 msgid "Odehrané turnaje"
+msgstr ""
+
+msgid "Název týmu"
+msgstr ""
+
+msgctxt "team.player"
+msgid "Jméno"
+msgstr ""
+
+msgctxt "team.player"
+msgid "Příjmení"
+msgstr ""
+
+msgctxt "team.player"
+msgid "Přezdívka"
+msgstr ""
+
+msgctxt "team.player"
+msgid "Náhradník"
+msgstr ""
+
+msgid "Přidat tým"
+msgstr ""
+
+msgid "Typ turnaje"
+msgstr ""
+
+msgid "Počet vzájemných her"
+msgstr ""
+
+msgid "Délka hry"
+msgstr ""
+
+msgctxt "game_length"
+msgid "v minutách"
+msgstr ""
+
+msgid "Přestávka mezi hrami"
+msgstr ""
+
+msgid "Čas na začátku turnaje"
+msgstr ""
+
+msgid "Počet her na tým v základní skupině"
+msgstr ""
+
+msgid "Maximální počet kol baráže"
+msgstr ""
+
+msgid "Počet her"
+msgstr ""
+
+msgid "Předpokládaná délka turnaje"
+msgstr ""
+
+msgid "Předpokládaný počet her na tým"
+msgstr ""
+
+msgid "Předpokládaný čas ve hře na tým"
+msgstr ""
+
+msgid "Turnaj už byl rozlosován"
+msgstr ""
+
+msgid "Smazat rozlosování"
+msgstr ""
+
+msgid "Tým 1"
+msgstr ""
+
+msgid "Tým 2"
+msgstr ""
+
+msgid "Tým 3"
+msgstr ""
+
+msgid "Tým 4"
+msgstr ""
+
+msgid "Celkem her"
+msgstr ""
+
+msgid "Celkové"
+msgstr ""
+
+msgid "Individální"
+msgstr ""
+
+msgid "Hráč"
+msgstr ""
+
+msgid "Nejpřesnější hráči"
+msgstr ""
+
+msgid "Největší mimoňi"
+msgstr ""
+
+msgid "Výstřely"
+msgstr ""
+
+msgid "Zabijáci vlastních"
 msgstr ""
 

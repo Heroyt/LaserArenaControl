@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: English\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2024-09-21 20:28\n"
+"PO-Revision-Date: 2024-12-07 16:14\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -4481,5 +4481,177 @@ msgstr ""
 
 msgctxt "print"
 msgid "Kopie"
+msgstr ""
+
+msgid "Počet sloupců"
+msgstr ""
+
+msgid "Počet řádků"
+msgstr ""
+
+msgid "Přetažením stolu v mřížce upravujete rozložení stolů při zadávání hry. Mělo by odpovídat fyzickému rozmístění stolů."
+msgstr ""
+
+msgid "Velikost stolu roztahuje stůl na více řádků (směrem dolů) nebo sloupců (směrem nahoru). Níže se velikosti nemění. Mění se jen na stránce zadávání her."
+msgstr ""
+
+msgid "Velikost"
+msgstr ""
+
+msgctxt "pageTitles.settings"
+msgid "Tipy"
+msgstr ""
+
+msgctxt "pageTitles"
+msgid "Systém"
+msgstr ""
+
+msgctxt "pageTitles.system"
+msgid "Soft-reset"
+msgstr ""
+
+msgctxt "pageTitles.system"
+msgid "Hard-reset"
+msgstr ""
+
+msgctxt "pageTitles.system"
+msgid "Kamery reset"
+msgstr ""
+
+msgctxt "pageTitles"
+msgid "Mezipaměť"
+msgstr ""
+
+msgctxt "null"
+msgid "Systém se restartuje"
+msgid_plural "null"
+msgstr[0] ""
+msgstr[1] ""
+
+msgctxt "null"
+msgid "Restart může chvíli trvat."
+msgid_plural "null"
+msgstr[0] ""
+msgstr[1] ""
+
+msgctxt "music"
+msgid "Test"
+msgstr ""
+
+msgctxt "music"
+msgid "AI"
+msgstr ""
+
+msgctxt "pageTitles"
+msgid "Hudební módy"
+msgstr ""
+
+msgid "Pojmenujte svou skupinu. Výsledky v LaserLize (pod QR kódem) se vám sloučí dohromady."
+msgstr ""
+
+msgctxt "groupName"
+msgid "Oslava - Karel"
+msgstr ""
+
+msgctxt "groupName"
+msgid "Šmoulové"
+msgstr ""
+
+msgctxt "groupName"
+msgid "Kamarádi"
+msgstr ""
+
+msgctxt "groupName"
+msgid "Rozlučka!"
+msgstr ""
+
+msgctxt "groupName"
+msgid "Šílení Střelci"
+msgstr ""
+
+msgctxt "groupName"
+msgid "Laserové Lamy"
+msgstr ""
+
+msgctxt "groupName"
+msgid "Vesmírní Piráti"
+msgstr ""
+
+msgid "Úvodní hudba"
+msgstr ""
+
+msgid "Hudba pro nahrané vesty"
+msgstr ""
+
+msgid "Závěrečná hudba"
+msgstr ""
+
+msgctxt "errors"
+msgid "Nepodařilo se uložit hudební mód."
+msgstr ""
+
+msgid "Uložit"
+msgstr ""
+
+msgid "Týmy"
+msgstr ""
+
+msgctxt "groupName"
+msgid "Rychle a laserově"
+msgstr ""
+
+msgctxt "game"
+msgid "Pokud jste registrovaní v <a href=\"%s\">Laser Lize</a>, svůj účet najdete pomocí tlačítka %s."
+msgstr ""
+
+msgctxt "pageTitles"
+msgid "Laser Liga"
+msgstr ""
+
+msgid "Portál pro hráče laser game."
+msgstr ""
+
+msgid "Registrovat"
+msgstr ""
+
+msgid "Co je to Laser liga?"
+msgstr ""
+
+msgid "Laser liga je portál pro hráče laser game. Sjednocuje výsledky a poskytuje statistiky z několika arén po celém česku."
+msgstr ""
+
+msgid "Hráči soupeří o pozice v globálním žebříčku. Laser liga zároveň umožňuje arénám pořádat turnaje na kterých hráči poměřují své dovednosti s laserem."
+msgstr ""
+
+msgid "Tak na co čekáš?"
+msgstr ""
+
+msgid "Registrovat se v Laser Lize"
+msgstr ""
+
+msgid "Naši nejlepší hráči"
+msgstr ""
+
+msgid "Zobrazit profil"
+msgstr ""
+
+msgctxt "settings"
+msgid "ID arény v laser lize (z URL)"
+msgstr ""
+
+msgid "Pusťte si <a href=\"%s\">ukázky</a>"
+msgstr ""
+
+msgctxt "pageTitles"
+msgid "Dnešní hry"
+msgstr ""
+
+msgid "Dnešní hry"
+msgstr ""
+
+msgid "Výsledky ze hry"
+msgstr ""
+
+msgid "Dnes se nehrály žádné hry."
 msgstr ""
 

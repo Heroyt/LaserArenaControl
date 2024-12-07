@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: English\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2024-06-05 11:17\n"
+"PO-Revision-Date: 2024-12-07 16:14\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -775,26 +775,26 @@ msgstr "Destroyed bases of the team"
 
 msgctxt "mode.zakladny"
 msgid "Dolní základna"
-msgstr ""
+msgstr "Bottom base"
 
 msgctxt "mode.zakladny"
 msgid "Horní základna"
-msgstr ""
+msgstr "Top base"
 
 msgid "Skóre"
-msgstr ""
+msgstr "Score"
 
 msgid "Výstřely"
-msgstr ""
+msgstr "Shots"
 
 msgid "Zásahy"
-msgstr ""
+msgstr "Hits"
 
 msgid "Smrti"
-msgstr ""
+msgstr "Deaths"
 
 msgid "Ztráty základny"
-msgstr ""
+msgstr "Base losses"
 
 msgid "Sniper"
 msgstr ""
@@ -806,3 +806,4 @@ msgstr ""
 msgctxt "style"
 msgid "Tabulkové"
 msgstr ""
+

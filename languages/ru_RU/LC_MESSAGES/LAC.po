@@ -6,7 +6,7 @@ msgstr ""
 "Language-Team: Russian\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2024-06-05 11:16\n"
+"PO-Revision-Date: 2024-12-07 16:14\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=4; plural=((n%10==1 && n%100!=11) ? 0 : ((n%10 >= 2 && n%10 <=4 && (n%100 < 12 || n%100 > 14)) ? 1 : ((n%10 == 0 || (n%10 >= 5 && n%10 <=9)) || (n%100 >= 11 && n%100 <= 14)) ? 2 : 3));\n"
 "Project-Id-Version: laserarenacontrol\n"
@@ -1354,9 +1354,6 @@ msgid "Jméno, e-mail, kód hráče"
 msgstr ""
 
 msgid "Nastavit výsledkovou tabuli na souhrn"
-msgstr ""
-
-msgid "Obsazený"
 msgstr ""
 
 msgid "Plánované turnaje"
@@ -4257,5 +4254,440 @@ msgstr ""
 
 msgctxt "pageTitles.settings"
 msgid "Mezipaměť"
+msgstr ""
+
+msgctxt "pageTitles.settings"
+msgid "Skupiny"
+msgstr ""
+
+msgctxt "null"
+msgid "Obsazený"
+msgid_plural "null"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+msgid "Zobrazit poslední hru na výsledkové tabuli"
+msgstr ""
+
+msgctxt "month"
+msgid "Červen"
+msgstr ""
+
+msgid "Zobrazit poslední hru"
+msgstr ""
+
+msgctxt "settings"
+msgid "Vzhled"
+msgstr ""
+
+msgctxt "settings.theme"
+msgid "Hlavní barva"
+msgstr ""
+
+msgctxt "settings.theme"
+msgid "Nastavení primárně pro barvy výsledkové tabule."
+msgstr ""
+
+msgctxt "settings.theme"
+msgid "Primární barva"
+msgstr ""
+
+msgctxt "settings.theme.primary_color"
+msgid "Barva se používá pro zvýraznění některých prvků hlavně na výsledkové tabuli."
+msgstr ""
+
+msgctxt "settings.theme"
+msgid "Sekundární barva"
+msgstr ""
+
+msgctxt "settings.theme.secondary_color"
+msgid "Barva se používá pro zvýraznění některých prvků (pozadí) hlavně na výsledkové tabuli."
+msgstr ""
+
+msgid "Detail skupiny"
+msgstr ""
+
+msgid "Vyplňte název"
+msgstr ""
+
+msgid "Skupina %s"
+msgstr ""
+
+msgid "Zobrazit detail skupiny"
+msgstr ""
+
+msgid "Cenová kategorie"
+msgstr ""
+
+msgid "Zaplaceno"
+msgstr ""
+
+msgid "Odehráno"
+msgstr ""
+
+msgid "Celkem"
+msgstr ""
+
+msgid "Nezaplaceno"
+msgstr ""
+
+msgid "Zbývá zaplatit"
+msgstr ""
+
+msgid "Nastavit všem"
+msgstr ""
+
+msgid "Tisknout"
+msgstr ""
+
+msgid "Cenové úrovně"
+msgstr ""
+
+msgctxt "pricegroups.name"
+msgid "Základní, student,..."
+msgstr ""
+
+msgid "Vyplňte cenu"
+msgstr ""
+
+msgctxt "print"
+msgid "Vypnout mezipaměť"
+msgstr ""
+
+msgctxt "month"
+msgid "Červenec"
+msgstr ""
+
+msgid "Výsledková tabule"
+msgstr ""
+
+msgctxt "month"
+msgid "Únor"
+msgstr ""
+
+msgctxt "month"
+msgid "Květen"
+msgstr ""
+
+msgctxt "month"
+msgid "Září"
+msgstr ""
+
+msgctxt "month"
+msgid "Prosinec"
+msgstr ""
+
+msgid "Playlisty"
+msgstr ""
+
+msgid "Smazat"
+msgstr ""
+
+msgid "Skupiny"
+msgstr ""
+
+msgid "Vytvořit"
+msgstr ""
+
+msgid "Deaktivovat"
+msgstr ""
+
+msgid "Hráč"
+msgstr ""
+
+msgid "Zrušit"
+msgstr ""
+
+msgid "Smazat vše"
+msgstr ""
+
+msgid "Obsazený"
+msgstr ""
+
+msgid "Nahrát"
+msgstr ""
+
+msgid "Tables"
+msgstr ""
+
+msgid "Turnaje"
+msgstr ""
+
+msgid "Seznam her"
+msgstr ""
+
+msgid "Čas"
+msgstr ""
+
+msgid "Herní mód"
+msgstr ""
+
+msgid "Hráči"
+msgstr ""
+
+msgid "Tisk"
+msgstr ""
+
+msgid "Vítěz"
+msgstr ""
+
+msgid "Odeslat"
+msgstr ""
+
+msgid "Nebyla nalezena žádná hra"
+msgstr ""
+
+msgctxt "month"
+msgid "Srpen"
+msgstr ""
+
+msgid "Herní módy"
+msgstr ""
+
+msgid "Např. při módu \"1-TEAM-DEATHMACH\" stačí, aby byl zde zadaný text \"1-TEAM\" nebo \"team-deathmach\"."
+msgstr ""
+
+msgid "Variace herních módů označují malé změny v nastavení hry, jako například délku hry. Při načtení hry do konzole se vybírá mód, jehož jméno se získá přidáním potřebných přípon za nastavený základní název v konzoli. Pokud je tedy mód \"TeamDeathmach\" a má vybranou variaci délky 15 minut, která má příponu \"-10\", výsledný vybraný mód z konzole bude mít název \"TeamDeathmach-15\"."
+msgstr ""
+
+msgid "Popis"
+msgstr ""
+
+msgctxt "game.modes"
+msgid "Zda se herní mód zobrazuje na výběr hráčům."
+msgstr ""
+
+msgctxt "game"
+msgid "Hráči"
+msgstr ""
+
+msgctxt "image"
+msgid "Pozadí"
+msgstr ""
+
+msgctxt "image"
+msgid "Ikona"
+msgstr ""
+
+msgid "Veřejný"
+msgstr ""
+
+msgid "Kód hráče"
+msgstr ""
+
+msgid "Email"
+msgstr ""
+
+msgid "Herní úroveň"
+msgstr ""
+
+msgid "Načíst další"
+msgstr ""
+
+msgctxt "pageTitles"
+msgid "Registrovaní hráči"
+msgstr ""
+
+msgctxt "pageTitles"
+msgid "Nastavení - Tisk"
+msgstr ""
+
+msgid "Registrovaní hráči"
+msgstr ""
+
+msgid "Synchronizace byla naplánována"
+msgstr ""
+
+msgid "Synchronizace proběhne na pozadí během pár minut."
+msgstr ""
+
+msgctxt ".player"
+msgid "Zásahy"
+msgstr ""
+
+msgctxt ".player"
+msgid "Smrti"
+msgstr ""
+
+msgctxt "print"
+msgid "Kopie"
+msgstr ""
+
+msgid "Počet sloupců"
+msgstr ""
+
+msgid "Počet řádků"
+msgstr ""
+
+msgid "Přetažením stolu v mřížce upravujete rozložení stolů při zadávání hry. Mělo by odpovídat fyzickému rozmístění stolů."
+msgstr ""
+
+msgid "Velikost stolu roztahuje stůl na více řádků (směrem dolů) nebo sloupců (směrem nahoru). Níže se velikosti nemění. Mění se jen na stránce zadávání her."
+msgstr ""
+
+msgid "Velikost"
+msgstr ""
+
+msgctxt "pageTitles.settings"
+msgid "Tipy"
+msgstr ""
+
+msgctxt "pageTitles"
+msgid "Systém"
+msgstr ""
+
+msgctxt "pageTitles.system"
+msgid "Soft-reset"
+msgstr ""
+
+msgctxt "pageTitles.system"
+msgid "Hard-reset"
+msgstr ""
+
+msgctxt "pageTitles.system"
+msgid "Kamery reset"
+msgstr ""
+
+msgctxt "pageTitles"
+msgid "Mezipaměť"
+msgstr ""
+
+msgctxt "null"
+msgid "Systém se restartuje"
+msgid_plural "null"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+msgctxt "null"
+msgid "Restart může chvíli trvat."
+msgid_plural "null"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+msgctxt "music"
+msgid "Test"
+msgstr ""
+
+msgctxt "music"
+msgid "AI"
+msgstr ""
+
+msgctxt "pageTitles"
+msgid "Hudební módy"
+msgstr ""
+
+msgid "Pojmenujte svou skupinu. Výsledky v LaserLize (pod QR kódem) se vám sloučí dohromady."
+msgstr ""
+
+msgctxt "groupName"
+msgid "Oslava - Karel"
+msgstr ""
+
+msgctxt "groupName"
+msgid "Šmoulové"
+msgstr ""
+
+msgctxt "groupName"
+msgid "Kamarádi"
+msgstr ""
+
+msgctxt "groupName"
+msgid "Rozlučka!"
+msgstr ""
+
+msgctxt "groupName"
+msgid "Šílení Střelci"
+msgstr ""
+
+msgctxt "groupName"
+msgid "Laserové Lamy"
+msgstr ""
+
+msgctxt "groupName"
+msgid "Vesmírní Piráti"
+msgstr ""
+
+msgid "Úvodní hudba"
+msgstr ""
+
+msgid "Hudba pro nahrané vesty"
+msgstr ""
+
+msgid "Závěrečná hudba"
+msgstr ""
+
+msgctxt "errors"
+msgid "Nepodařilo se uložit hudební mód."
+msgstr ""
+
+msgid "Uložit"
+msgstr ""
+
+msgid "Týmy"
+msgstr ""
+
+msgctxt "groupName"
+msgid "Rychle a laserově"
+msgstr ""
+
+msgctxt "game"
+msgid "Pokud jste registrovaní v <a href=\"%s\">Laser Lize</a>, svůj účet najdete pomocí tlačítka %s."
+msgstr ""
+
+msgctxt "pageTitles"
+msgid "Laser Liga"
+msgstr ""
+
+msgid "Portál pro hráče laser game."
+msgstr ""
+
+msgid "Registrovat"
+msgstr ""
+
+msgid "Co je to Laser liga?"
+msgstr ""
+
+msgid "Laser liga je portál pro hráče laser game. Sjednocuje výsledky a poskytuje statistiky z několika arén po celém česku."
+msgstr ""
+
+msgid "Hráči soupeří o pozice v globálním žebříčku. Laser liga zároveň umožňuje arénám pořádat turnaje na kterých hráči poměřují své dovednosti s laserem."
+msgstr ""
+
+msgid "Tak na co čekáš?"
+msgstr ""
+
+msgid "Registrovat se v Laser Lize"
+msgstr ""
+
+msgid "Naši nejlepší hráči"
+msgstr ""
+
+msgid "Zobrazit profil"
+msgstr ""
+
+msgctxt "settings"
+msgid "ID arény v laser lize (z URL)"
+msgstr ""
+
+msgid "Pusťte si <a href=\"%s\">ukázky</a>"
+msgstr ""
+
+msgctxt "pageTitles"
+msgid "Dnešní hry"
+msgstr ""
+
+msgid "Dnešní hry"
+msgstr ""
+
+msgid "Výsledky ze hry"
+msgstr ""
+
+msgid "Dnes se nehrály žádné hry."
 msgstr ""
 

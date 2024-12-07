@@ -6,132 +6,137 @@ msgstr ""
 "Language-Team: Spanish\n"
 "Last-Translator: Tomáš Vojík <vojik@wboy.cz>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2024-06-05 12:40\n"
+"PO-Revision-Date: 2024-12-07 16:14\n"
 "POT-Creation-Date: 2021-12-01 12:05+0100\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Crowdin-Project: laserarenacontrol\n"
+"X-Crowdin-Project-ID: 515800\n"
+"X-Crowdin-Language: es-ES\n"
+"X-Crowdin-File: /master/languages/tournament.pot\n"
+"X-Crowdin-File-ID: 76\n"
 "Project-Id-Version: laserarenacontrol\n"
 
 msgctxt "vests"
 msgid "Přerozdělit"
-msgstr ""
+msgstr "Redistribuir"
 
 msgctxt "vests"
 msgid "Všechny"
 msgstr ""
 
 msgid "Turnaj"
-msgstr ""
+msgstr "Torneo"
 
 msgid "Začátek"
-msgstr ""
+msgstr "Inicio"
 
 msgid "Domácí"
-msgstr ""
+msgstr "Local"
 
 msgid "Hosté"
-msgstr ""
+msgstr "Visitantes"
 
 msgid "Skupina"
-msgstr ""
+msgstr "Grupo"
 
 msgid "Týmy"
-msgstr ""
+msgstr "Equipos"
 
 msgid "Rozlosování"
-msgstr ""
+msgstr "Sorteo"
 
 msgid "Hrát"
-msgstr ""
+msgstr "Jugar"
 
 msgid "Výsledky"
-msgstr ""
+msgstr "Resultados"
 
 msgid "Výsledková tabule"
-msgstr ""
+msgstr "Pantalla de resultados"
 
 msgid "Pořadí"
-msgstr ""
+msgstr "Clasificación"
 
 msgid "Tým"
-msgstr ""
+msgstr "Equipo"
 
 msgid "Skóre"
-msgstr ""
+msgstr "Puntuación"
 
 msgid "Body"
-msgstr ""
+msgstr "Puntos"
 
 msgid "Nový turnaj"
-msgstr ""
+msgstr "Nuevo torneo"
 
 msgid "Název turnaje"
-msgstr ""
+msgstr "Nombre del torneo"
 
 msgid "Turnaj XYZ"
-msgstr ""
+msgstr "Torneo XYZ"
 
 msgid "Formát"
-msgstr ""
+msgstr "Formato"
 
 msgid "Týmový"
 msgstr ""
 
 msgid "Sólo"
-msgstr ""
+msgstr "Solo"
 
 msgid "Začátek turnaje"
-msgstr ""
+msgstr "Inicio del torneo"
 
 msgid "Velikost týmu"
 msgstr ""
 
 msgid "Týmů ve hře"
-msgstr ""
+msgstr "Equipos en el juego"
 
 msgid "Body za výhru"
-msgstr ""
+msgstr "Puntos por la victoria"
 
 msgid "Body za remízu"
-msgstr ""
+msgstr "Puntos por el empate"
 
 msgid "Body za prohru"
-msgstr ""
+msgstr "Puntos por la pérdida"
 
 msgid "Poslední místo. Ve hře 3 týmů je to 3. místo, ve hře čtyř týmů je to 4. místo."
-msgstr ""
+msgstr "Último puesto. En un partido de 3 equipos es el 3er puesto, en un partido de 4 equipos es el 4º puesto."
 
 msgid "Body za druhé místo"
-msgstr ""
+msgstr "Puntos por el 2º puesto"
 
 msgid "Jen pro hru 3 a 4 týmů ve hře."
-msgstr ""
+msgstr "Solo para jugar 3 y 4 equipos en el juego."
 
 msgid "Body za třetí místo"
-msgstr ""
+msgstr "Puntos por el 3er puesto"
 
 msgid "Jen pro hru 4 týmů ve hře."
-msgstr ""
+msgstr "Solo para jugar 4 equipos en el juego."
 
 msgid "Synchronizovat"
-msgstr ""
+msgstr "Sincronizar"
 
 msgid "Plánované turnaje"
-msgstr ""
+msgstr "Torneos planeados"
 
 msgid "Týmů ve hře: %d"
-msgstr ""
+msgstr "Equipos en el juego: %d"
 
 msgid "Výhry"
-msgstr ""
+msgstr "Victorias"
 
 msgid "Remízy"
-msgstr ""
+msgstr "Empates"
 
 msgid "Prohry"
-msgstr ""
+msgstr "Pérdidas"
 
 msgid "Odehrané turnaje"
-msgstr ""
+msgstr "Torneos jugados"
 
 msgid "Název týmu"
 msgstr ""
@@ -233,3 +238,4 @@ msgstr ""
 
 msgid "Zabijáci vlastních"
 msgstr ""
+

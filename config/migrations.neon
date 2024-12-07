@@ -326,6 +326,7 @@ tables:
 			-
 				name: start
 				columns: ['start']
+				unique: true
 			-
 				name: end
 				columns: ['end']
@@ -403,6 +404,7 @@ tables:
 			-
 				name: start
 				columns: ['start']
+				unique: true
 			-
 				name: end
 				columns: ['end']
@@ -525,6 +527,11 @@ tables:
 				column: id_user
 				refTable: App\Models\Auth\Player
 				refColumn: id_user
+		indexes:
+			-
+				name: 'game_vest'
+				columns: ['id_game', 'vest']
+				unique: true
 	App\GameModels\Game\Evo6\Player:
 		order: 3
 		definition: '''
@@ -579,6 +586,11 @@ tables:
 				column: id_user
 				refTable: App\Models\Auth\Player
 				refColumn: id_user
+		indexes:
+			-
+				name: 'game_vest'
+				columns: ['id_game', 'vest']
+				unique: true
 	evo5_hits:
 		order: 4
 		definition: '''

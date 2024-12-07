@@ -411,6 +411,7 @@ class LigaApi
      */
     public function getExtensions(): array {
         if (!isset($this->extensions)) {
+            /** @var LigaApiExtensionInterface|LigaApiExtensionInterface[]|null $extensions */
             $extensions = App::getServiceByType(LigaApiExtensionInterface::class);
             if ($extensions === null) {
                 $extensions = [];

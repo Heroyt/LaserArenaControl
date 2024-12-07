@@ -63,7 +63,7 @@ class Player implements JsonSerializable
         $this->vests[$player->vest]++;
 
         // Add aggregate values for game mode
-        if (isset($game->getMode()?->id)) {
+        if (isset($game->getMode()->id)) {
             if (!isset($this->gameModes[$game->getMode()->id])) {
                 $this->gameModes[$game->getMode()->id] = new PlayerModeAggregate($game->getMode());
             }
@@ -76,7 +76,7 @@ class Player implements JsonSerializable
 
     /**
      * @param string $name
-     * @param array  $arguments
+     * @param array<int, mixed>  $arguments
      *
      * @return mixed
      */
@@ -347,12 +347,7 @@ class Player implements JsonSerializable
     }
 
     /**
-     * Specify data which should be serialized to JSON
-     *
-     * @link  http://php.net/manual/en/jsonserializable.jsonserialize.php
-     * @return mixed data which can be serialized by <b>json_encode</b>,
-     * which is a value of any type other than a resource.
-     * @since 5.4.0
+     * @return array<string,mixed>
      */
     public function jsonSerialize(): array {
         $data = get_object_vars($this);

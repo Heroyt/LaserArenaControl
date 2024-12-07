@@ -20,7 +20,8 @@ use Spiral\RoadRunner\Metrics\Metrics;
  *      playlist?:numeric,
  *      use-playlist?:numeric,
  *      music?: numeric,
- *      groupSelect?:numeric|'new',
+ *      groupSelect?:numeric|'new'|'new-custom',
+ *      groupName?:string,
  *      tableSelect?:numeric,
  *      game-mode?:numeric,
  *      variation?:array<numeric,string>,
@@ -41,10 +42,7 @@ abstract class LasermaxxGameLoader implements LoaderInterface
     }
 
     /**
-     * @param  int  $musicId
-     * @param  string  $musicFile
      * @param  non-empty-string  $system
-     * @return void
      */
     public function loadMusic(
         int    $musicId,

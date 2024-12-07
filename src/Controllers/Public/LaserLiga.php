@@ -160,7 +160,8 @@ class LaserLiga extends Controller
                     return new ErrorResponse(lang('Nepodařilo se stáhnout informace o hráčích'), exception: $e);
                 }
 
-                return $this->playerProvider->getPlayersFromResponse($response, true);
+                $players =  $this->playerProvider->getPlayersFromResponse($response, true);
+                return $players ?? new ErrorResponse(lang('Nepodařilo se stáhnout informace o hráčích'));
             },
             [
                              $this->cache::Tags => ['api', 'players'],

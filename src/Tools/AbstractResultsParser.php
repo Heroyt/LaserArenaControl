@@ -21,15 +21,11 @@ use Lsr\Exceptions\FileException;
  */
 abstract class AbstractResultsParser implements ResultsParserInterface
 {
+    /** @var array<string,string[][]> */
     protected array $matches = [];
     protected string $fileName = '';
     protected string $fileContents = '';
 
-    /**
-     * @param  string  $fileName
-     *
-     * @throws FileException
-     */
     public function __construct(
         protected readonly PlayerProvider $playerProvider,
     ) {
@@ -40,7 +36,6 @@ abstract class AbstractResultsParser implements ResultsParserInterface
      */
     public function getFileLines(): iterable {
         $separator = "\r\n";
-        /** @var string|false $line */
         $line = strtok($this->getFileContents(), $separator);
         while ($line !== false) {
             yield $line;
@@ -92,12 +87,10 @@ abstract class AbstractResultsParser implements ResultsParserInterface
     }
 
     /**
-     * @param  string  $fileContents
-     *
      * @return $this
      */
-    public function setContents(string $fileContents): static {
-        $this->fileContents = $fileContents;
+    public function setContents(string $contents): static {
+        $this->fileContents = $contents;
         $this->matches = [];
         return $this;
     }

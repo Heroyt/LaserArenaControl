@@ -22,11 +22,11 @@ trait GroupLoading
         }
 
         if ($data['groupSelect'] === 'new-custom') {
-            $name = $data['groupName'];
+            $name = $data['groupName'] ?? '';
             if (empty($name)) {
                 $name = sprintf(
                     lang('Skupina %s'),
-                    isset($game->start) ? date('d.m.Y H:i') : ''
+                    date('d.m.Y H:i')
                 );
             }
 

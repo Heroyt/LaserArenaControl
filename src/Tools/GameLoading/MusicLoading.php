@@ -21,6 +21,9 @@ trait MusicLoading
     private Logger $logger;
     private bool $loadAsync;
 
+    /**
+     * @param  non-empty-string  $system
+     */
     protected function loadOrPlanMusic(int $musicId, string $system = 'evo5'): void {
         // Always eager-load armed music
         $this->loadArmedMusic($musicId, $this::MUSIC_FILE, $system);
@@ -80,7 +83,9 @@ trait MusicLoading
 
     protected function getTaskProducer(): TaskProducer {
         if (!isset($this->taskProducer)) {
-            $this->taskProducer = App::getService('taskProducer');
+            $taskProducer = App::getService('taskProducer');
+            assert($taskProducer instanceof TaskProducer);
+            $this->taskProducer = $taskProducer;
         }
         return $this->taskProducer;
     }

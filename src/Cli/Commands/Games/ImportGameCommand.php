@@ -66,6 +66,7 @@ class ImportGameCommand extends Command
             return self::FAILURE;
         }
 
+        /** @var non-empty-string $dir */
         $dir = trailingslashit($dir);
 
         if (!empty($gameCode)) {

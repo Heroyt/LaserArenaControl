@@ -89,13 +89,14 @@ class LMXController
      * @throws Exception
      */
     public static function getStatus(string $ip): string {
-      /** @var Cache $cache */
         $cache = App::getService('cache');
+        assert($cache instanceof Cache);
         return $cache->load(
             'lmx.status.' . $ip,
             static fn() => self::sendCommand($ip, self::GET_STATUS_COMMAND),
+            /** @phpstan-ignore argument.type */
             [
-            $cache::Expire => 5,
+                $cache::Expire => 5,
             ]
         );
     }

@@ -28,6 +28,7 @@ use Lsr\Core\Exceptions\ValidationException;
 use Lsr\Core\Requests\Dto\ErrorResponse;
 use Lsr\Core\Requests\Dto\SuccessResponse;
 use Lsr\Core\Requests\Enums\ErrorType;
+use Lsr\Exceptions\FileException;
 use Lsr\Logging\Exceptions\DirectoryCreationException;
 use Lsr\Logging\Logger;
 use Nette\DI\MissingServiceException;
@@ -62,6 +63,13 @@ class ImportService
         $this->gameStartedTime = (int) ($config->getConfig('ENV')['GAME_STARTED_TIME'] ?? 1800);
     }
 
+    /**
+     * @throws ResultsParseException
+     * @throws Throwable
+     * @throws FileException
+     * @throws ValidationException
+     * @throws ModelNotFoundException
+     */
     public function importGame(Game $game, string $resultsDir): SuccessResponse|ErrorResponse {
         $logger = new Logger(LOG_DIR . 'results/', 'import');
 

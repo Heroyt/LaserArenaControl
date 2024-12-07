@@ -43,6 +43,20 @@ class GameGroups extends Controller
         return $this->respond($data);
     }
 
+    public function findGroups(Request $request): ResponseInterface {
+        /** @var string $search */
+        $search = $request->getGet('search', '');
+
+        return $this->respond(
+            array_values(
+                GameGroup::query()
+                        ->where('[name] LIKE %~like~', $search)
+                        ->where('[active] = 1')
+                        ->get()
+            )
+        );
+    }
+
     /**
      * @param  GameGroup  $group
      * @return ResponseInterface

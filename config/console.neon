@@ -11,6 +11,7 @@ services:
 	command.games.import: App\Cli\Commands\Games\ImportGameCommand
 	command.games.sync: App\Cli\Commands\Games\SyncGameCommand
 	command.games.skills: App\Cli\Commands\Games\RecalculateSkillsGameCommand
+	command.games.deduplicate: App\Cli\Commands\Games\DeduplicateCommand
 
 	command.regression.hits: App\Cli\Commands\Regression\CalculateHitsRegressionCommand
 	command.regression.hitsOwn: App\Cli\Commands\Regression\CalculateHitsOwnRegressionCommand
@@ -28,3 +29,4 @@ services:
 	command.vests.sync: App\Cli\Commands\Vests\SyncVestsCommand
 
 	command.laserliga.syncPlayers: App\Cli\Commands\LaserLiga\SyncPlayersCommand
+	command.laserliga.syncMusic: App\Cli\Commands\LaserLiga\SyncMusicCommand

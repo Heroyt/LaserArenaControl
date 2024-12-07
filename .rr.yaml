@@ -57,6 +57,7 @@ metrics:
       help: "How much time does it take to load a selected game music."
       labels:
         - system
+        - type
     music_time_since_load:
       type: gauge
       help: "How much time does it take to load a selected game music since game load."
@@ -75,6 +76,8 @@ metrics:
     restart_called:
       type: counter
       help: "How many times was server restart called"
+      labels:
+        - container
     cron_job_started:
       type: counter
       help: "Amount of started cron jobs"

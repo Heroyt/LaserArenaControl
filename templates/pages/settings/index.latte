@@ -16,6 +16,11 @@
 			<input type="text" name="api_key" class="form-control" id="api_key"
 				   value="{\App\Core\Info::get('liga_api_key', '')}">
 		</div>
+        <div class="form-group my-3" n:if="$featureConfig->isFeatureEnabled('liga')">
+            <label for="arena_id">{_'ID arény v laser lize (z URL)', context: 'settings'}:</label>
+			<input type="number" name="arena_id" class="form-control" id="arena_id"
+				   value="{\App\Core\Info::get('liga_arena_id', '')}">
+		</div>
 		<div class="form-group my-3" n:if="$featureConfig->isFeatureEnabled('control')">
             <label for="lmx_ip">{_'IP adresa LaserMaxx konzole', context: 'settings'}:</label>
 			<input type="text" name="lmx_ip" class="form-control" id="lmx_ip"
@@ -89,7 +94,7 @@
             </div>
             <button id="create-price-group" type="button" class="btn btn-success create" data-toggle="tooltip"
                     title="{_'Vytvořit'}">
-                <i class="fa-solid fa-plus"></i>
+                {faSolid 'plus'}
             </button>
         </div>
         <template id="new-price-group-template">{include priceGroup}</template>
@@ -117,7 +122,7 @@
             <label for="price-group-{$id}-price">{_'Cena'}</label>
         </div>
         <button type="button" class="btn btn-danger delete" data-toggle="tooltip" title="{_'Smazat'}">
-            <i class="fa-solid fa-trash"></i>
+            {faSolid 'trash'}
         </button>
     </div>
 {/define}

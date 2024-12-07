@@ -1,0 +1,11 @@
+{layout '../../@layoutPublic.latte'}
+
+{templateType App\Templates\Public\MusicTemplate}
+
+{block content}
+	<div class="music-groups-wrapper mt-5" data-count="{count($music)}">
+		{foreach $music as $musicGroup}
+			{include '../../components/music/musicModeCard.latte', $musicGroup, true, true}
+		{/foreach}
+	</div>
+{/block}

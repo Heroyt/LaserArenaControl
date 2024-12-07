@@ -135,48 +135,50 @@ class LigaApi
                 );
             }
             // Remove unfinished games
-            if ($game->isFinished()) {
-                // Check assigned users
-                try {
-                    // Get user data from game
-                    $response = $this->client->get('games/' . $game->code . '/users');
-                    if ($response->getStatusCode() === 200) {
-                        $response->getBody()->rewind();
+            if (!$game->isFinished()) {
+                continue;
+            }
+            // Check assigned users
+            try {
+                // Get user data from game
+                $response = $this->client->get('games/' . $game->code . '/users');
+                if ($response->getStatusCode() === 200) {
+                    $response->getBody()->rewind();
 
-                        /** @var LigaPlayerData[] $users */
-                        $users = $this->serializer->deserialize(
-                            $response->getBody()->getContents(),
-                            LigaPlayerData::class . '[]',
-                            'json'
-                        );
-                        if (!empty($users)) {
-                            // Assign user objects for each user got
-                            foreach ($users as $vest => $userData) {
-                                $player = $game->getVestPlayer($vest);
-                                if (isset($player)) {
-                                    $player->user = $playerProvider->getPlayerObjectFromData($userData);
-                                    // Sync new user
-                                    if (!isset($player->user->id)) {
-                                        $player->user->save();
-                                    }
-                                    $player->save();
+                    /** @var LigaPlayerData[] $users */
+                    $users = $this->serializer->deserialize(
+                        $response->getBody()->getContents(),
+                        LigaPlayerData::class . '[]',
+                        'json'
+                    );
+                    if (!empty($users)) {
+                        // Assign user objects for each user got
+                        foreach ($users as $vest => $userData) {
+                            $player = $game->getVestPlayer($vest);
+                            if (isset($player) && !isset($player->user)) {
+                                $player->user = $playerProvider->getPlayerObjectFromData($userData);
+                                // Sync new user
+                                if (!isset($player->user->id)) {
+                                    $player->user->save();
                                 }
+                                $player->save();
                             }
                         }
                     }
-                } catch (GuzzleException | ValidationException) {
                 }
-
-                foreach ($this->getExtensions() as $extension) {
-                    $extension->processGameBeforeSync($game);
-                }
-
-                $gamesData[] = $game;
+            } catch (GuzzleException | ValidationException) {
             }
+
+            foreach ($this->getExtensions() as $extension) {
+                $extension->processGameBeforeSync($game);
+            }
+
+            $gamesData[] = $game;
         }
 
         // Build a request
         try {
+            $this->logger->debug('Syncing '.count($gamesData).' games');
             $config = [
                 'body' => $this->serializer->serialize(['system' => $system, 'games' => $gamesData], 'json'),
             ];
@@ -230,76 +232,6 @@ class LigaApi
     }
 
     /**
-     * @param  MusicMode  $mode
-     * @return bool
-     */
-    public function syncMusicMode(MusicMode $mode): bool {
-        try {
-            if (!$mode->public) {
-                $response = $this->client->delete('music/' . $mode->id);
-                $response->getBody()->rewind();
-                $body = $response->getBody()->getContents();
-                if ($response->getStatusCode() !== 200) {
-                    $this->logger->error('Music delete failed: ' . $body);
-                    return false;
-                }
-                return true;
-            }
-
-            $config = [
-                'body' => $this->serializer->serialize(
-                    [
-                    'music' => [
-                        [
-                            'id' => $mode->id,
-                            'name' => $mode->name,
-                            'order' => $mode->order,
-                            'previewStart' => $mode->previewStart,
-                        ],
-                    ],
-                    ],
-                    'json'
-                ),
-            ];
-            $config['headers']['Content-Type'] = 'application/json';
-            $config['headers']['Content-Length'] = strlen($config['body']);
-
-            $response = $this->client->post('music', $config);
-            $response->getBody()->rewind();
-            $body = $response->getBody()->getContents();
-            if ($response->getStatusCode() !== 200) {
-                $this->logger->error('Music sync failed: ' . $body);
-                return false;
-            }
-
-            $response = $this->client->post('music/' . $mode->id . '/upload', [
-                'headers' => [
-                    'Authorization' => 'Bearer ' . $this->apiKey,
-                ],
-                'multipart' => [
-                    [
-                        'name' => 'media',
-                        'contents' => Utils::tryFopen($mode->fileName, 'r'),
-                    ],
-                ],
-            ]);
-            $response->getBody()->rewind();
-            $body = $response->getBody()->getContents();
-            if ($response->getStatusCode() !== 200) {
-                $this->logger->error('Music upload failed: ' . $body);
-                return false;
-            }
-        } catch (GuzzleException $e) {
-            $this->logger->error('Api request failed');
-            $this->logger->error($e->getMessage());
-            $this->logger->debug($e->getTraceAsString());
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
      * @return bool
      * @throws ValidationException
      */
@@ -307,16 +239,15 @@ class LigaApi
         $musicModes = MusicMode::getAll();
 
         // Sync data
-        $private = [];
         $data = [];
         foreach ($musicModes as $mode) {
             if (!$mode->public) {
-                $private[] = $mode->id;
                 continue;
             }
             $data[] = [
                 'id' => $mode->id,
                 'name' => $mode->name,
+                'group' => $mode->group,
                 'order' => $mode->order,
                 'previewStart' => $mode->previewStart,
             ];
@@ -338,9 +269,21 @@ class LigaApi
                 return false;
             }
 
-            foreach ($private as $id) {
-                $this->client->deleteAsync('music/' . $id);
-            }
+            $ids = array_map(static fn($data) => $data['id'], $data);
+            $config = [
+              'body' => $this->serializer->serialize(
+                [
+                    'whitelist' => $ids,
+                ],
+                'json',
+              ),
+              'headers' => [
+                'Content-Type' => 'application/json',
+              ],
+            ];
+            $config['headers']['Content-Length'] = strlen($config['body']);
+            $this->client->deleteAsync('music', $config);
+            $this->logger->debug('Removing music modes except: '.implode(',', $ids));
 
             // Upload files
             foreach ($musicModes as $mode) {
@@ -357,10 +300,24 @@ class LigaApi
                 $delimiter = '-------------' . $boundary;
 
                 $fileName = basename($previewFile);
+                $files = [['name' => 'media', 'fileName' => $fileName, 'contents' => $media, 'type' => 'audio/mpeg']];
+
+                $icon = $mode->getIcon();
+                if ($icon !== null) {
+                    $iconMedia = Utils::tryGetContents(Utils::tryFopen($icon->getPath(), 'r'));
+                    $files[] = ['name' => 'icon', 'fileName' => basename($icon->getPath()), 'contents' => $iconMedia, 'type' => $icon->getMimeType()];
+                }
+
+                $background = $mode->getBackgroundImage();
+                if ($background !== null) {
+                    $backgroundMedia = Utils::tryGetContents(Utils::tryFopen($background->getPath(), 'r'));
+                    $files[] = ['name' => 'background', 'fileName' => basename($background->getPath()), 'contents' => $backgroundMedia, 'type' => $background->getMimeType()];
+                }
+
                 $post_data = $this->buildDataFiles(
                     $boundary,
                     [],
-                    [['name' => 'media', 'fileName' => $fileName, 'contents' => $media, 'type' => 'audio/mpeg']]
+                    $files
                 );
 
                 $ch = curl_init(trailingSlashIt($this->url) . 'api/music/' . $mode->id . '/upload');
@@ -381,12 +338,15 @@ class LigaApi
                 ]);
                 $body = curl_exec($ch);
                 $info = curl_getinfo($ch);
+                $this->logger->debug('Music upload response: '.$body);
                 if ($info['http_code'] !== 200) {
                     $this->logger->error(
                         'Music upload failed: ' . $body . ' ' .
                         $this->serializer->serialize($info, 'json')
                     );
-                    return false;
+                    if ($info['http_code'] !== 404) {
+                        return false;
+                    }
                 }
             }
         } catch (GuzzleException $e) {
@@ -451,6 +411,7 @@ class LigaApi
      */
     public function getExtensions(): array {
         if (!isset($this->extensions)) {
+            /** @var LigaApiExtensionInterface|LigaApiExtensionInterface[]|null $extensions */
             $extensions = App::getServiceByType(LigaApiExtensionInterface::class);
             if ($extensions === null) {
                 $extensions = [];

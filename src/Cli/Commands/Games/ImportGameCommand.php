@@ -4,18 +4,27 @@ namespace App\Cli\Commands\Games;
 
 use App\Cli\Colors;
 use App\Cli\Enums\ForegroundColors;
+use App\Exceptions\ResultsParseException;
+use App\GameModels\Factory\GameFactory;
+use App\GameModels\Game\Lasermaxx\Game;
+use App\GameModels\Game\Player;
 use App\Services\ImportService;
+use App\Services\LaserLiga\PlayerProvider;
+use App\Tools\Interfaces\ResultsParserInterface;
 use Lsr\Core\Requests\Dto\ErrorResponse;
+use Lsr\Core\Requests\Enums\ErrorType;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Serializer\Serializer;
 
 class ImportGameCommand extends Command
 {
     public function __construct(
-        private readonly ImportService $importService
+        private readonly ImportService $importService,
+        private readonly Serializer $serializer,
     ) {
         parent::__construct('games:import');
     }
@@ -42,10 +51,12 @@ class ImportGameCommand extends Command
             'Limit games to import.'
         );
         $this->addArgument('directory', InputArgument::REQUIRED, 'Results directory');
+        $this->addArgument('game', InputArgument::OPTIONAL, 'Game code');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int {
         $dir = $input->getArgument('directory');
+        $gameCode = $input->getArgument('game');
         $limit = (int) $input->getOption('limit');
 
         if (!file_exists($dir) || !is_dir($dir)) {
@@ -53,6 +64,45 @@ class ImportGameCommand extends Command
                 Colors::color(ForegroundColors::RED) . 'Error: argument must be a valid directory.' . Colors::reset()
             );
             return self::FAILURE;
+        }
+
+        /** @var non-empty-string $dir */
+        $dir = trailingslashit($dir);
+
+        if (!empty($gameCode)) {
+            try {
+                $game = GameFactory::getByCode($gameCode);
+            } catch (\Throwable $e) {
+                $output->writeln(
+                    '<error>Error: Game not found - ' . $e->getMessage() . '.</error>'
+                );
+                return self::FAILURE;
+            }
+
+            if (!isset($game)) {
+                $output->writeln(
+                    '<error>Error: Game not found.</error>'
+                );
+                return self::FAILURE;
+            }
+
+            $response = $this->importService->importGame($game, $dir);
+
+            if ($response instanceof ErrorResponse) {
+                $output->writeln('<error>' . $response->title . '</error>');
+                if (!empty($response->values)) {
+                    $output->setVerbosity(OutputInterface::VERBOSITY_VERBOSE);
+                    $output->writeln($this->serializer->serialize($response->values, 'json'));
+                    $output->setVerbosity(OutputInterface::VERBOSITY_NORMAL);
+                }
+                return self::FAILURE;
+            }
+
+            $output->writeln('<info>Game imported.</info>');
+            $output->setVerbosity(OutputInterface::VERBOSITY_VERBOSE);
+            $output->writeln($this->serializer->serialize($response->values, 'json'));
+            $output->setVerbosity(OutputInterface::VERBOSITY_NORMAL);
+            return self::SUCCESS;
         }
 
         $response = $this->importService->import($dir, $input->getOption('all'), $limit, $output);

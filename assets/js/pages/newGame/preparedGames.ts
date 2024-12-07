@@ -10,6 +10,7 @@ import {
 	sendPreparedGame,
 } from '../../api/endpoints/preparedGames';
 import {initTooltips} from '../../includes/tooltips';
+import {triggerNotificationError} from '../../includes/notifications';
 
 const borderColors = {
 	'prepared': 'gray',
@@ -38,7 +39,7 @@ export default class NewGamesPrepared {
 					this.updatePreparedGames();
 				})
 				.catch(e => {
-					console.error(e);
+					triggerNotificationError(e);
 					stopLoading(false);
 				});
 		});
@@ -53,7 +54,7 @@ export default class NewGamesPrepared {
 					this.updatePreparedGames();
 				})
 				.catch(e => {
-					console.error(e);
+					triggerNotificationError(e);
 					stopLoading(false);
 				});
 		});
@@ -84,7 +85,7 @@ export default class NewGamesPrepared {
 				})
 				.catch(e => {
 					stopLoading(false);
-					console.error(e);
+					triggerNotificationError(e);
 				});
 		});
 	}
@@ -108,10 +109,11 @@ export default class NewGamesPrepared {
 			const tmp = document.createElement('div');
 			let playersHTML = '';
 			Object.values(preparedGameData.data.players).forEach(player => {
-				playersHTML += `<span class="badge m-1 text-bg-team-${system}-${player.teamNum}">${player.name}</span>`;
+				playersHTML += `<span class="badge m-1 ${(player.teamNum || player.teamNum === 0 ? `text-bg-team-${system}-${player.teamNum}` : 'text-bg-secondary')}">${player.name}</span>`;
 			});
 			tmp.innerHTML = `<div class="prepared-game card mb-4 border-4 border-${borderColors[preparedGameData.type]}" data-id="${preparedGameData.id_game}">` +
 				`<div class="card-body">` +
+				(preparedGameData.data.group ? `<h5 class="card-title">${preparedGameData.data.group.name}</h5>` : '') +
 				`<div class="input-group w-100">` +
 				`<span class="game-mode flex-grow-1 input-group-text">${preparedGameData.data.mode.name}</span>` +
 				`<button type="button" data-toggle="tooltip" title="${messages.load}" class="btn btn-success load"><i class="fa-solid fa-upload"></i></button>` +

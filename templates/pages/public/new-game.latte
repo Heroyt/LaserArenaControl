@@ -20,15 +20,25 @@
 '6-stars' => svgIcon('6-stars'),
 ]}
 
+{var string[] $groupNames = ['Šmoulové', 'Oslava - Karel', 'Kamarádi', 'Rozlučka!', 'Laserové Lamy', 'Šílení Střelci', 'Vesmírní Piráti', 'Rychle a laserově']}
+
 {block content}
-    <form method="post" action="" id="new-game-content" class="w-100">
+    <form method="post" action="" id="new-game-content" class="w-100 mt-5">
+		{if $featureConfig->isFeatureEnabled('groups')}
+			<section id="group-select-section">
+				<input type="hidden" name="groupSelect" value="new-custom" id="group-select">
+				<label class="form-label" for="new-group-name">{_'Název skupiny'}:</label>
+				<input type="text" id="new-group-name" class="form-control" name="groupName" value="" placeholder="{_$groupNames[array_rand($groupNames)], context: 'groupName'}">
+				<div class="form-text">{_'Pojmenujte svou skupinu. Výsledky v LaserLize (pod QR kódem) se vám sloučí dohromady.'}</div>
+			</section>
+		{/if}
         <section id="vests-control">
             {include sectionVestsControl}
         </section>
         <section id="vests">
             {include sectionVests}
         </section>
-        {cache 'newGame-'.$lang.'-game-mode', tags: ['templates.newGame', 'templates', 'templates.'.$lang, App\GameModels\Game\GameModes\AbstractMode::TABLE]}
+        {cache 'newGame-'.$lang.'-game-mode-public', tags: ['templates.newGame', 'templates', 'templates.'.$lang, App\GameModels\Game\GameModes\AbstractMode::TABLE]}
             <section id="game-mode">
                 {include sectionGameMode}
             </section>
@@ -55,7 +65,7 @@
         {block $include}{/block}
     {/foreach}
     {include userSearchModal}
-    {include 'helpers/musicModesDisplay.latte', $musicGroups}
+    {include '../new-game/helpers/musicModesDisplay.latte', $musicGroups}
     {var int $order = 0}
     {foreach $addedTemplates->offcanvas as $include}
         {block $include}{/block}
@@ -101,7 +111,7 @@
     </label>
     <button type="button" class="btn btn-danger" id="clear-all" data-toggle="tooltip"
             title="{_'Smazat vše', context: 'actions'}">
-        <i class="fa-solid fa-trash"></i>
+        {faSolid 'trash'}
     </button>
 {/define}
 
@@ -110,6 +120,14 @@
         <h4 class="text-center">
             {_'Hráči', context: 'game'}
         </h4>
+        <p>
+        {capture $searchBtn}
+        	<button type="button" class="btn btn-info btn-sm">
+				{faSolid 'search'}
+			</button>
+        {/capture}
+        {_'Pokud jste registrovaní v <a href="%s">Laser Lize</a>, svůj účet najdete pomocí tlačítka %s.', context: 'game', format: [$app::getLink(['public', 'liga']), $searchBtn]|noescape}
+        </p>
         {foreach $vests as $vest}
             {include vestRow, $vest}
         {/foreach}
@@ -133,7 +151,7 @@
         </select>
         <button type="button" data-toggle="shuffle" title="{_'Náhodně', context: 'actions'}"
                 data-target="#game-mode-select" class="btn btn-purple-500">
-            <i class="fa-solid fa-shuffle"></i>
+            {faSolid 'shuffle'}
         </button>
     </div>
     <div id="game-mode-description" class="select-description text-muted" data-target="#game-mode-select"></div>
@@ -142,22 +160,13 @@
 {define sectionGameModeVariations}
     <button class="btn btn-info w-100" type="button" id="hide-variations" data-toggle="collapse"
             data-target="#game-mode-variations-collapse">
-        <i class="fa-solid fa-eye"></i>
-        <i class="fa-solid fa-eye-slash d-none"></i>
+        {faSolid 'eye'}
+        {faSolid 'eye-slash', 'd-none'}
         {_'Variace', context: 'gameModes'}
     </button>
     <div class="collapse-grid show" id="game-mode-variations-collapse">
         <div id="game-mode-variations-wrapper" class="collapse-inner bg-background-1 p-3 rounded-bottom"></div>
     </div>
-    {if $featureConfig->isFeatureEnabled('gates') && !empty(App\Core\Info::get('gates_ips'))}
-        <div class="mt-3" id="gatesControl">
-            <h3>{_'Brány'}</h3>
-            <div class="btn-group">
-                <button type="button" class="btn btn-success" id="startGates">{_'Zapnout brány'}</button>
-                <button type="button" class="btn btn-danger" id="stopGates">{_'Vypnout brány'}</button>
-            </div>
-        </div>
-    {/if}
 {/define}
 
 {define sectionMusic}
@@ -187,17 +196,20 @@
         <input type="checkbox" id="music-mode-grouped" value="1" class="btn-check">
         <label for="music-mode-grouped" class="btn btn-outline-primary" data-toggle="tooltip"
                title="{_'Slučovat hudební skupiny'}">
-            <i class="fa-solid fa-layer-group"></i>
+            {faSolid 'layer-group'}
         </label>
         <button type="button" data-bs-toggle="modal" data-bs-target="#music-modes-display" class="btn btn-info"
                 data-toggle="tooltip" title="{_'Zobrazit přehled hudebních módů'}">
-            <i class="fa-solid fa-eye"></i>
+            {faSolid 'eye'}
         </button>
         <button type="button" data-toggle="shuffle" title="{_'Náhodně', context: 'actions'}"
                 data-target="#music-select" class="btn btn-purple-500">
-            <i class="fa-solid fa-shuffle"></i>
+            {faSolid 'shuffle'}
         </button>
     </div>
+    <div class="form-text">
+    	{_'Pusťte si <a href="%s">ukázky</a>', format: [$app::getLink(['public', 'music'])]|noescape}
+	</div>
 {/define}
 
 {define sectionTeamsRandom}
@@ -217,11 +229,11 @@
         </div>
         <div class="btn-group">
             <button type="button" class="btn btn-purple-500" id="random-teams">
-                <i class="fa-solid fa-shuffle"></i>
+                {faSolid 'shuffle'}
                 {_'Náhodně', context: 'actions'}
             </button>
             <button type="button" class="btn btn-success" id="random-fair-teams">
-                <i class="fa-solid fa-star"></i>
+                {faSolid 'star'}
                 {_'Náhodně fér', context: 'actions'}
             </button>
         </div>
@@ -254,7 +266,7 @@
             {$vest->vestNum}
         </label>
         <div class="input-group-text handle cursor-grab bg-secondary text-bg-secondary px-2">
-            <i class="fa-solid fa-grip-lines"></i>
+            {faSolid 'grip-lines'}
         </div>
         <input id="player-name-{$vest->vestNum}" tabindex="{$vest->vestNum}" type="text"
                class="form-control player-name" autocomplete="off"
@@ -262,7 +274,7 @@
                name="player[{$vest->vestNum}][name]" maxlength="12">
         <button type="button" class="btn btn-info btn-sm search-user" data-toggle="tooltip"
                 title="{_'Vyhledat hráče'}">
-            <i class="fa-solid fa-search"></i>
+            {faSolid 'search'}
         </button>
         <input type="hidden" name="player[{$vest->vestNum}][code]" value="" class="user-code"
                id="user-{$vest->vestNum}-code">
@@ -322,7 +334,7 @@
             </label>
         </div>
         <button type="button" class="btn btn-danger clear" title="{_'Smazat'}">
-            <i class="fa-solid fa-trash"></i>
+            {faSolid 'trash'}
         </button>
     </div>
 {/define}

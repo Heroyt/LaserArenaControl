@@ -45,13 +45,10 @@ trait WithMetadata
         if ($decodedJson === false) {
             return [];
         }
-        if ($decodedJson !== false) {
-            try {
-                /** @var array<string,string> $meta Meta data from game */
-                return json_decode($decodedJson, true, 512, JSON_THROW_ON_ERROR);
-            } catch (JsonException) {
-                // Ignore meta
-            }
+        try {
+            return json_decode($decodedJson, true, 512, JSON_THROW_ON_ERROR);
+        } catch (JsonException) {
+            // Ignore meta
         }
         return [];
     }
@@ -184,13 +181,14 @@ trait WithMetadata
         foreach ($game->getPlayers() as $player) {
             // Names from game are strictly ASCII
             // If a name contained any non ASCII character, it is coded in the metadata
-            if (!empty($meta['p' . $player->vest . 'n'])) {
+            if (!empty($meta['p' . $player->vest . 'n']) && is_string($meta['p' . $player->vest . 'n'])) {
                 $player->name = $meta['p' . $player->vest . 'n'];
             }
 
             // Check for player's user code
             if (!empty($meta['p' . $player->vest . 'u'])) {
                 $code = $meta['p' . $player->vest . 'u'];
+                assert(is_string($code));
                 $user = User::getByCode($code);
 
                 // Check the public API for user by code

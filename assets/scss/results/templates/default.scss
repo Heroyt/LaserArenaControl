@@ -6,28 +6,30 @@
 	display: grid;
 	grid-gap: .5rem;
 	grid-template-areas:
-	   '. qr'
 		 'info qr'
-		 'scores scores'
+		 // 'scores scores'
 		 'win win'
 		 'players players'
 		 'today today'
 		 'hits teams'
-		 'hits bests';
+		 'hits bests'
+		 '. .';
 	grid-template-columns: 1fr 1fr;
-	grid-template-rows: 2cm auto;
+	grid-template-rows: 2.5cm auto auto auto auto auto 1fr;
 	justify-content: start;
+	height: 26.7cm;
 	--font-size: 6pt;
 
 	&.solo {
 		grid-template-areas:
-		 '. qr'
 		 'info qr'
-		 'scores scores'
+		 // 'scores scores'
 		 'win win'
 		 'players players'
 		 'today today'
-		 'hits bests';
+		 'hits bests'
+		 '. .';
+		grid-template-rows: 2.5cm auto auto auto auto 1fr;
 	}
 
 	> * {
@@ -67,15 +69,9 @@
 
 	.results-header {
 		grid-area: info;
-		max-width: 20cm;
+		max-width: 7cm;
 		width: 100%;
-
-		td,
-		th {
-			border: none;
-			padding: .3rem .5rem;
-			text-align: left;
-		}
+		align-self: start;
 	}
 
 	th,
@@ -88,7 +84,6 @@
 	}
 
 	table {
-		border: 1px solid var(--print-dark);
 		border-radius: 10px;
 		caption-side: top;
 		max-width: 100%;
@@ -134,17 +129,10 @@
 		}
 	}
 
-	.results-scoring {
-		grid-area: scores;
-
-		td, th {
-			padding: .1rem;
-		}
-	}
-
 	.results-hits {
 		grid-area: hits;
 		table-layout: fixed;
+		align-self: start;
 
 		--size-x: 5rem;
 		--size-y: calc(var(--size-x) / 3);
@@ -170,6 +158,7 @@
 
 	.results-teams {
 		grid-area: teams;
+		align-self: start;
 	}
 
 	.results-players {
@@ -186,6 +175,7 @@
 
 	.results-bests {
 		grid-area: bests;
+		align-self: end;
 
 		.w-100 {
 			border: 1px solid var(--print-dark);
@@ -208,10 +198,14 @@
 		grid-area: win;
 
 		> div {
+			border: 2px solid var(--team-color);
 			border-radius: 10px;
+			--team-color: var(--print-primary);
+			--text-color: var(--team-color);
+			color: var(--team-color);
 			font-size: 1.5em;
 			font-weight: bold;
-			padding: 1em 0;
+			padding: .5rem 7rem;
 			text-align: center;
 			text-transform: uppercase;
 		}
@@ -224,5 +218,10 @@
 		transform: rotate(90deg) translate(var(--size-y), var(--size-y));
 		z-index: 2;
 	}
+}
 
+.container-print-wrapper {
+	.tip {
+		bottom: 1.7cm;
+	}
 }

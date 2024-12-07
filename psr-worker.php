@@ -4,6 +4,7 @@ use App\Controllers\E404;
 use App\Controllers\E500;
 use App\Core\App;
 use App\Core\Info;
+use App\Services\FontAwesomeManager;
 use App\Services\TaskProducer;
 use App\Tasks\GameImportTask;
 use App\Tasks\Payloads\GameImportPayload;
@@ -124,6 +125,9 @@ switch ($env->getMode()) {
         $e500 = $app::getServiceByType(E500::class);
         assert($e500 instanceof E500, 'Invalid controller instance from DI');
 
+        $fontawesome = $app::getService('fontawesome');
+        assert($fontawesome instanceof FontAwesomeManager, 'Invalid fontawesome manager instance from DI');
+
         while (true) {
             // Clear static cache
             Info::clearStaticCache();
@@ -168,6 +172,7 @@ switch ($env->getMode()) {
                     );
                     $session->close();
                     $app->translations->updateTranslations();
+                    $fontawesome->saveIcons();
                 } catch (RouteNotFoundException $e) { // 404 error
                     if (isset($e404)) {
                         $e404->init($request);

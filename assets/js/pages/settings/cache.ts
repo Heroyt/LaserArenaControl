@@ -1,5 +1,6 @@
 import {startLoading, stopLoading} from "../../loaders";
 import {fetchPost} from "../../includes/apiClient";
+import {triggerNotificationError} from '../../includes/notifications';
 
 export default function initCacheSettings() {
 
@@ -16,7 +17,8 @@ export default function initCacheSettings() {
 				.then(() => {
 					stopLoading();
 				})
-				.catch(() => {
+				.catch(e => {
+					triggerNotificationError(e);
 					stopLoading(false);
 				})
 		});

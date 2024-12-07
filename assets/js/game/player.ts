@@ -3,6 +3,7 @@ import {startLoading, stopLoading} from '../loaders';
 import Game from './game';
 import {updateVests, VestData} from '../api/endpoints/settings/vests';
 import {initTooltips} from '../includes/tooltips';
+import {triggerNotificationError} from '../includes/notifications';
 
 export default class Player {
 
@@ -202,7 +203,8 @@ export default class Player {
 						.then(response => {
                             stopLoading(response.success, true);
 						})
-						.catch(() => {
+						.catch(e => {
+							triggerNotificationError(e);
 							stopLoading(false, true);
 						});
 

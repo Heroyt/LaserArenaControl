@@ -21,10 +21,15 @@ trait MusicLoading
     private Logger $logger;
     private bool $loadAsync;
 
+    /**
+     * @param  non-empty-string  $system
+     */
     protected function loadOrPlanMusic(int $musicId, string $system = 'evo5'): void {
-        // Lazy load music file in the background
-        // This is useful if the music mode should be copied to some network-attached directory
-        // which could take a few seconds.
+        // Always eager-load armed music
+        $this->loadArmedMusic($musicId, $this::MUSIC_FILE, $system);
+
+        // Lazy-load music file in the background.
+        // This is useful if the music mode should be copied to some network-attached directory, which could take a few seconds.
         if ($this->isLoadAsync()) {
             $this->getLogger()->debug('Loading music (' . $musicId . ') - ASYNC');
             try {
@@ -78,7 +83,9 @@ trait MusicLoading
 
     protected function getTaskProducer(): TaskProducer {
         if (!isset($this->taskProducer)) {
-            $this->taskProducer = App::getService('taskProducer');
+            $taskProducer = App::getService('taskProducer');
+            assert($taskProducer instanceof TaskProducer);
+            $this->taskProducer = $taskProducer;
         }
         return $this->taskProducer;
     }

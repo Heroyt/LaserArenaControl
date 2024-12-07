@@ -8,6 +8,7 @@ import CustomLoadMode from './customLoadMode';
 import Sortable from 'sortablejs/modular/sortable.core.esm.js';
 import CustomSwapPlugin from './customSwapPlugin';
 import {collapseClose} from '../includes/collapse';
+import {triggerNotificationError} from '../includes/notifications';
 
 declare global {
 	const messages: { [index: string]: string };
@@ -30,15 +31,16 @@ export default class Game {
 	players: Map<String, Player>;
 	teams: Map<String, Team>;
 
-	$group: HTMLSelectElement|null;
-	$table: HTMLSelectElement|null;
+	$newGroupName: HTMLInputElement | null;
+	$group: HTMLSelectElement | HTMLInputElement | null;
+	$table: HTMLSelectElement | null;
 
 	$gameMode: HTMLSelectElement;
 	$musicMode: HTMLSelectElement;
 	$groupMusicModes: HTMLInputElement;
 	$groupMusicModesLabel: HTMLLabelElement;
-	$playlist: HTMLSelectElement|null;
-	$usePlaylist: HTMLInputElement|null;
+	$playlist: HTMLSelectElement | null;
+	$usePlaylist: HTMLInputElement | null;
 	$teams: NodeListOf<HTMLInputElement>;
 	$maxSkill: NodeListOf<HTMLInputElement>;
 	$modeVariations: HTMLDivElement;
@@ -74,7 +76,8 @@ export default class Game {
 		this.players = new Map;
 		this.teams = new Map;
 
-		this.$group = document.getElementById('group-select') as HTMLSelectElement;
+		this.$newGroupName = document.getElementById('new-group-name') as HTMLInputElement;
+		this.$group = document.getElementById('group-select') as HTMLSelectElement | HTMLInputElement;
 		this.$table = document.getElementById('table-select') as HTMLSelectElement;
 
 		this.$gameMode = document.getElementById('game-mode-select') as HTMLSelectElement;
@@ -136,7 +139,7 @@ export default class Game {
 				title: messages.atLeastTwoTeams,
 				trigger: 'manual',
 				customClass: 'tooltip-danger',
-			}
+			},
 		);
 
 		(document.querySelectorAll('.vest-row') as NodeListOf<HTMLDivElement>).forEach(row => {
@@ -208,7 +211,7 @@ export default class Game {
 			this.clearAll();
 		});
 
-		this.$gameMode.addEventListener('change', (e : CustomEvent) => {
+		this.$gameMode.addEventListener('change', (e: CustomEvent) => {
 			if (this.loadedModeScript !== null) {
 				this.loadedModeScript.cancel();
 				this.loadedModeScript = null;
@@ -237,8 +240,8 @@ export default class Game {
 			console.log(variations);
 			this.updateModeVariations(variations);
 			if (e.detail) {
-				const variationValues = e.detail as {[key: number] : string};
-				for(const [id, value] of Object.entries(variationValues)) {
+				const variationValues = e.detail as { [key: number]: string };
+				for (const [id, value] of Object.entries(variationValues)) {
 					this.setVariationValue(id, value);
 				}
 			}
@@ -252,8 +255,8 @@ export default class Game {
 						this.loadedModeScript = new module.default;
 						this.loadedModeScript.init();
 					})
-					.catch(error => {
-						console.error(error);
+					.catch(e => {
+						triggerNotificationError(e);
 					});
 			}
 
@@ -313,6 +316,16 @@ export default class Game {
 		if (this.$group) {
 			this.$group.addEventListener('change', () => {
 				this.$group.dispatchEvent(new Event('update', {bubbles: true}));
+				if (this.$newGroupName) {
+					if (this.$group instanceof HTMLSelectElement) {
+						let name = '';
+						const option = this.$group.querySelector<HTMLOptionElement>(`option[value="${this.$group.value}"]`);
+						if (option) {
+							name = option.innerText;
+						}
+						this.$newGroupName.value = name;
+					}
+				}
 			});
 		}
 
@@ -349,8 +362,7 @@ export default class Game {
 					if (e.target instanceof HTMLButtonElement && e.target.dataset.id) {
 						this.unGroupMusicModes();
 						this.$musicMode.value = e.target.dataset.id;
-					}
-					else {
+					} else {
 						this.groupMusicModes();
 						this.$musicMode.value = musicModeCard.dataset.value;
 					}
@@ -472,6 +484,9 @@ export default class Game {
 		if (this.$group) {
 			this.$group.value = '';
 			this.$group.dispatchEvent(new Event('change', {bubbles: true}));
+		}
+		if (this.$newGroupName) {
+			this.$newGroupName.value = '';
 		}
 
 		if (this.$table) {
@@ -795,22 +810,41 @@ export default class Game {
 		}
 		if (this.$group) {
 			if (data.group) {
-				this.$group.value = data.group.id.toString();
-				//console.log('group value', data.group.id.toString(), this.$group.value);
+				if (data.group.id) {
+					if (data.group.id === -1) { // New group
+						if (this.$group instanceof HTMLSelectElement) {
+							let option = this.$group.querySelector<HTMLOptionElement>(`option[value="new-custom"]`);
+							if (!option) {
+								option = document.createElement('option');
+								option.value = 'new-custom';
+								this.$group.appendChild(option);
+							}
+							option.innerText = data.group.name;
+						}
+						this.$group.value = 'new-custom';
+						this.$newGroupName.value = data.group.name;
+					} else {
+						this.$group.value = data.group.id.toString();
+						this.$newGroupName.value = data.group.name;
+						//console.log('group value', data.group.id.toString(), this.$group.value);
 
-				// If the group is currently not active, it can still be loaded back.
-				// In that case an option should be appended because the group still exists, it's just not visible.
-				if (this.$group.value !== data.group.id.toString()) {
-					const option = document.createElement('option');
-					option.value = data.group.id.toString();
-					option.innerText = data.group.name;
-					this.$group.appendChild(option);
-					this.$group.value = data.group.id.toString();
-					//console.log('created option', option, this.$group.value);
+						// If the group is currently not active, it can still be loaded back.
+						// In that case an option should be appended because the group still exists, it's just not visible.
+						if (this.$group.value !== data.group.id.toString()) {
+							const option = document.createElement('option');
+							option.value = data.group.id.toString();
+							option.innerText = data.group.name;
+							this.$group.appendChild(option);
+							this.$group.value = data.group.id.toString();
+							this.$newGroupName.value = data.group.name;
+							//console.log('created option', option, this.$group.value);
+						}
+					}
 				}
 				document.dispatchEvent(new CustomEvent('game-group-import', {detail: data.group}));
 			} else {
 				this.$group.value = '';
+				this.$newGroupName.value = '';
 			}
 		}
 		if (this.$table) {
@@ -880,9 +914,17 @@ export default class Game {
 		}
 
 		if (this.$group && this.$group.value !== '' && this.$group.value !== 'new') {
+			const isNew = this.$group.value === 'new-custom';
+			let name = this.$newGroupName.value;
+			if (this.$group instanceof HTMLSelectElement) {
+				const option = this.$group.querySelector<HTMLOptionElement>(`option[value="${this.$group.value}"]`) as HTMLOptionElement;
+				if (option) {
+					name = option.innerText;
+				}
+			}
 			data.group = {
-				id: parseInt(this.$group.value),
-				name: (this.$group.querySelector(`option[value="${this.$group.value}"]`) as HTMLOptionElement).innerText,
+				id: isNew ? -1 : parseInt(this.$group.value),
+				name: name,
 				active: true,
 			};
 		}

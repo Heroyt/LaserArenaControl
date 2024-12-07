@@ -15,8 +15,9 @@ use App\Controllers\NewGame;
 use App\Controllers\Players;
 use App\Controllers\PreparedGames;
 use App\Controllers\Results;
-use App\Controllers\Roadrunner;
-use App\Controllers\System;
+use App\Controllers\System\Cache;
+use App\Controllers\System\Roadrunner;
+use App\Controllers\System\System;
 use App\Core\App;
 use App\Services\FeatureConfig;
 use Lsr\Core\Routing\Route;
@@ -27,7 +28,6 @@ $featureConfig = App::getService('features');
 Route::get('/lang/{lang}', [Lang::class, 'setLang']);
 
 Route::get('/', [NewGame::class, 'show'])->name('dashboard');
-Route::get('/public', [NewGame::class, 'public'])->name('public');
 
 Route::group('/results')
   ->get('/', [Results::class, 'show'])
@@ -81,6 +81,7 @@ $preparedId->delete('', [PreparedGames::class, 'delete'])->post('/delete', [Prep
 
 $groups = Route::group('gameGroups');
 $groups->get('', [GameGroups::class, 'listGroups']);
+$groups->get('find', [GameGroups::class, 'findGroups']);
 $groups->post('', [GameGroups::class, 'create']);
 
 $groupsId = $groups->group('{id}');
@@ -107,5 +108,8 @@ $roadrunner->get('reset', [Roadrunner::class, 'reset'])->name('resetRoadrunnerGe
 $roadrunner->post('reset', [Roadrunner::class, 'reset'])->name('resetRoadrunner');
 
 $system = Route::group('system');
+$system->get('cache', [Cache::class, 'show'])->name('settings-cache');
 $system->get('restart', [System::class, 'restart'])->name('resetDockerGet');
 $system->post('restart', [System::class, 'restart'])->name('resetDocker');
+$system->get('ffmpeg/restart', [System::class, 'restartFfmpeg'])->name('resetFFMPEGDockerGet');
+$system->post('ffmpeg/restart', [System::class, 'restartFfmpeg'])->name('resetFFMPEGDocker');

@@ -18,8 +18,8 @@ parameters:
 		controllers:
 			- %constants.appDir%src/Controllers
 	gamesSync:
-		limit: 5
-		timeout: 15.0
+		limit: 200
+		timeout: 20.0
 	redis:
 		host: redis
 	fairTeams:
@@ -85,6 +85,7 @@ services:
 				gates: false
 				groups: true
 				tables: true
+				rtsp: true
 
 	guzzle: App\Services\GuzzleFactory
 	liga: App\Services\LaserLiga\LigaApi::getInstance(@metrics, @symfony.serializer, @guzzle)
@@ -108,6 +109,8 @@ services:
 	result.parser.evo6: App\Tools\ResultParsing\Evo6\ResultsParser
 
 	gameHighlight: App\Services\GameHighlight\GameHighlightService(tagged(highlightChecker))
+
+	fontawesome: App\Services\FontAwesomeManager
 
 	theme:
 		type: App\Models\DataObjects\Theme

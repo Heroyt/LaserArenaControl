@@ -13,17 +13,22 @@ use App\Cli\Colors;
 use App\Cli\Enums\ForegroundColors;
 use App\Core\App;
 use App\Core\Info;
+use App\Exceptions\ResultsParseException;
 use App\GameModels\Factory\GameFactory;
 use App\GameModels\Game\Game;
 use App\GameModels\Game\Player;
 use App\Services\LaserLiga\LigaApi;
+use App\Services\LaserLiga\PlayerProvider;
 use App\Tools\AbstractResultsParser;
+use App\Tools\Interfaces\ResultsParserInterface;
 use Dibi\Exception;
 use Lsr\Core\Config;
 use Lsr\Core\Exceptions\ModelNotFoundException;
 use Lsr\Core\Exceptions\ValidationException;
 use Lsr\Core\Requests\Dto\ErrorResponse;
+use Lsr\Core\Requests\Dto\SuccessResponse;
 use Lsr\Core\Requests\Enums\ErrorType;
+use Lsr\Exceptions\FileException;
 use Lsr\Logging\Exceptions\DirectoryCreationException;
 use Lsr\Logging\Logger;
 use Nette\DI\MissingServiceException;
@@ -52,9 +57,145 @@ class ImportService
         Config                          $config,
         private readonly FeatureConfig  $featureConfig,
         private readonly Metrics $metrics,
+        private readonly PlayerProvider     $playerProvider,
     ) {
         $this->gameLoadedTime = (int) ($config->getConfig('ENV')['GAME_LOADED_TIME'] ?? 300);
         $this->gameStartedTime = (int) ($config->getConfig('ENV')['GAME_STARTED_TIME'] ?? 1800);
+    }
+
+    /**
+     * @throws ResultsParseException
+     * @throws Throwable
+     * @throws FileException
+     * @throws ValidationException
+     * @throws ModelNotFoundException
+     */
+    public function importGame(Game $game, string $resultsDir): SuccessResponse|ErrorResponse {
+        $logger = new Logger(LOG_DIR . 'results/', 'import');
+
+        $id = $game->id;
+        $code = $game->code;
+
+        $playerIds = [];
+        $teamIds = [];
+
+        foreach ($game->getPlayers() as $player) {
+            $playerIds[$player->vest] = $player->id;
+        }
+
+        foreach ($game->getTeams() as $team) {
+            $teamIds[$team->color] = $team->id;
+        }
+
+        $game->clearCache();
+
+        if (isset($game->resultsFile) && file_exists($game->resultsFile)) {
+            $file = $game->resultsFile;
+        } else if ($game instanceof \App\GameModels\Game\Lasermaxx\Game && !empty($game->fileNumber)) {
+            $pattern = $resultsDir . str_pad((string) $game->fileNumber, 4, '0', STR_PAD_LEFT) . '*.game';
+            $files = glob($pattern);
+            if (empty($files)) {
+                return new ErrorResponse(
+                    'Cannot find game file.',
+                    type  : ErrorType::NOT_FOUND,
+                    values: ['path' => $pattern]
+                );
+            }
+            if (count($files) > 1) {
+                return new ErrorResponse(
+                    'Found more than one suitable game file.',
+                    type  : ErrorType::INTERNAL,
+                    values: ['path' => $pattern, 'files' => $files]
+                );
+            }
+            $file = $files[0];
+        } else {
+            return new ErrorResponse(
+                'Cannot get game file number.',
+                type  : ErrorType::NOT_FOUND,
+                values: ['game' => $game]
+            );
+        }
+
+        try {
+            $logger->info('Importing file: ' . $file);
+            /** @var class-string<ResultsParserInterface> $class */
+            $class = 'App\\Tools\\ResultParsing\\' . ucfirst($game::SYSTEM) . '\\ResultsParser';
+            if (!class_exists($class)) {
+                return
+                  new ErrorResponse('No parser for this game (' . $game::SYSTEM . ')', type: ErrorType::INTERNAL);
+            }
+            if (!$class::checkFile($file)) {
+                return
+                  new ErrorResponse('Game file cannot be parsed: ' . $file, type: ErrorType::INTERNAL);
+            }
+            $parser = new $class($this->playerProvider);
+            $parser->setFile($file);
+            $game = $parser->parse();
+
+            $now = time();
+
+            if (!isset($game->importTime)) {
+                $logger->debug('Game is not finished');
+
+                // The game is not finished and does not contain any results
+                // It is either:
+                // - an old, un-played game
+                // - freshly loaded game
+                // - started and not finished game
+                // An old game should be ignored, the other 2 cases should be logged and an event should be sent.
+                // But only the latest game should be considered
+
+                // The game is started
+                if (
+                    $game->started && isset($game->fileTime) && ($now - $game->fileTime->getTimestamp(
+                    )) <= $this->gameStartedTime
+                ) {
+                    $logger->debug('Game is started');
+                }
+                // The game is loaded
+                if (
+                    !$game->started && isset($game->fileTime) && ($now - $game->fileTime->getTimestamp(
+                    )) <= $this->gameLoadedTime
+                ) {
+                    $logger->debug('Game is loaded');
+                }
+                return new ErrorResponse('Game is not finished', type: ErrorType::VALIDATION);
+            }
+
+            // Check players
+            $null = true;
+            /** @var Player $player */
+            foreach ($game->getPlayers() as $player) {
+                if (isset($playerIds[$player->vest])) {
+                    $player->id = $playerIds[$player->vest];
+                }
+                if ($player->score !== 0 || $player->shots !== 0) {
+                    $null = false;
+                    break;
+                }
+            }
+            foreach ($game->getTeams() as $team) {
+                if (isset($teamIds[$team->color])) {
+                    $team->id = $teamIds[$team->color];
+                }
+            }
+            if ($null) {
+                $logger->warning('Game is empty');
+                // Empty game - no shots, no hits, etc..
+                return new ErrorResponse('Game is empty', type: ErrorType::VALIDATION);
+            }
+
+            $game->id = $id;
+            $game->code = $code;
+
+            if (!$game->save()) {
+                throw new ResultsParseException('Failed saving game into DB.');
+            }
+        } catch (Exception $e) {
+            return new ErrorResponse('Error while parsing game file.', type: ErrorType::INTERNAL, exception: $e);
+        }
+        return new SuccessResponse(values: ['game' => $game]);
     }
 
     /**

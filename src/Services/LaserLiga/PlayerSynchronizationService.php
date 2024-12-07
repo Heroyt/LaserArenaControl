@@ -31,6 +31,10 @@ readonly class PlayerSynchronizationService
         }
         // Find public players - should auto-update all local players
         $publicPlayersAll = $this->playerProvider->findAllPublicPlayersByCodes($codes);
+        if ($publicPlayersAll === null) {
+            return; // Error
+        }
+
         $publicPlayers = [];
         foreach ($publicPlayersAll as $player) {
             $publicPlayers[$player->getCode()] = $player;
@@ -44,6 +48,10 @@ readonly class PlayerSynchronizationService
 
             // Try to find
             $playersNew = $this->playerProvider->findAllPublicPlayersByOldCode($code, true);
+            if ($playersNew === null) {
+                continue; // Error
+            }
+
             $found = false;
             foreach ($playersNew as $playerNew) {
                 if ($player->email === $playerNew->email) {

@@ -29,7 +29,11 @@ class TopPlayerSkills implements WidgetInterface, WithGameIdsInterface
     }
 
     /**
-     * @inheritDoc
+     * @param  Game|null  $game
+     * @param  DateTimeInterface|null  $date
+     * @param  string[]|null  $systems
+     * @return array{topPlayers: Player[]}
+     * @throws Throwable
      */
     public function getData(?Game $game = null, ?DateTimeInterface $date = null, ?array $systems = []): array {
         return [
@@ -38,6 +42,7 @@ class TopPlayerSkills implements WidgetInterface, WithGameIdsInterface
     }
 
     /**
+     * @param string[]|null $systems
      * @return Player[]
      * @throws Throwable
      */

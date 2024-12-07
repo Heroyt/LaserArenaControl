@@ -37,7 +37,6 @@ class Results extends ApiController
     private int $gameStartedTime;
 
     public function __construct(
-        private readonly PlayerProvider $playerProvider,
         private readonly ImportService  $importService,
         Config                          $config,
         private readonly TaskProducer   $taskProducer,
@@ -170,7 +169,6 @@ class Results extends ApiController
         content: new OA\JsonContent(ref: '#/components/schemas/ErrorResponse')
     )]
     public function importGame(Request $request, string $game = ''): ResponseInterface {
-        $logger = new Logger(LOG_DIR . 'results/', 'import');
         $dir = $request->getPost('dir', DEFAULT_RESULTS_DIR);
         assert(is_string($dir) && $dir !== '', 'Invalid results directory');
         $resultsDir = trailingSlashIt($dir);
@@ -194,119 +192,14 @@ class Results extends ApiController
             );
         }
 
-        $gameObj->clearCache();
-
-        if (isset($gameObj->resultsFile) && file_exists($gameObj->resultsFile)) {
-            $file = $gameObj->resultsFile;
-        } else if ($gameObj instanceof Game && !empty($gameObj->fileNumber)) {
-            $files = glob($resultsDir . str_pad((string) $gameObj->fileNumber, 4, '0', STR_PAD_LEFT) . '*.game');
-            if (empty($files)) {
-                return $this->respond(
-                    new ErrorResponse(
-                        'Cannot find game file.',
-                        type  : ErrorType::NOT_FOUND,
-                        values: ['path' => $resultsDir . $gameObj->fileNumber . '*.game']
-                    ),
-                    404
-                );
-            }
-            if (count($files) > 1) {
-                return $this->respond(
-                    new ErrorResponse(
-                        'Found more than one suitable game file.',
-                        type  : ErrorType::INTERNAL,
-                        values: ['path' => $resultsDir . $gameObj->fileNumber . '*.game', 'files' => $files]
-                    ),
-                    500
-                );
-            }
-            $file = $files[0];
-        } else {
-            return $this->respond(
-                new ErrorResponse(
-                    'Cannot get game file number.',
-                    type  : ErrorType::NOT_FOUND,
-                    values: ['game' => $gameObj]
-                ),
-                417,
-            );
-        }
-
-        try {
-            $logger->info('Importing file: ' . $file);
-            /** @var class-string<ResultsParserInterface> $class */
-            $class = 'App\\Tools\\ResultParsing\\' . ucfirst($gameObj::SYSTEM) . '\\ResultsParser';
-            if (!class_exists($class)) {
-                return $this->respond(
-                    new ErrorResponse('No parser for this game (' . $gameObj::SYSTEM . ')', type: ErrorType::INTERNAL),
-                    500,
-                );
-            }
-            if (!$class::checkFile($file)) {
-                return $this->respond(
-                    new ErrorResponse('Game file cannot be parsed: ' . $file, type: ErrorType::INTERNAL),
-                    500,
-                );
-            }
-            $parser = new $class($this->playerProvider);
-            $parser->setFile($file);
-            $gameObj = $parser->parse();
-
-            $now = time();
-
-            if (!isset($gameObj->importTime)) {
-                $logger->debug('Game is not finished');
-
-                // The game is not finished and does not contain any results
-                // It is either:
-                // - an old, un-played game
-                // - freshly loaded game
-                // - started and not finished game
-                // An old game should be ignored, the other 2 cases should be logged and an event should be sent.
-                // But only the latest game should be considered
-
-                // The game is started
-                if (
-                    $gameObj->started && isset($gameObj->fileTime) && ($now - $gameObj->fileTime->getTimestamp(
-                    )) <= $this->gameStartedTime
-                ) {
-                    $logger->debug('Game is started');
-                }
-                // The game is loaded
-                if (
-                    !$gameObj->started && isset($gameObj->fileTime) && ($now - $gameObj->fileTime->getTimestamp(
-                    )) <= $this->gameLoadedTime
-                ) {
-                    $logger->debug('Game is loaded');
-                }
-                return $this->respond(new ErrorResponse('Game is not finished', type: ErrorType::VALIDATION), 400);
-            }
-
-            // Check players
-            $null = true;
-            /** @var Player $player */
-            foreach ($gameObj->getPlayers() as $player) {
-                if ($player->score !== 0 || $player->shots !== 0) {
-                    $null = false;
-                    break;
-                }
-            }
-            if ($null) {
-                $logger->warning('Game is empty');
-                // Empty game - no shots, no hits, etc..
-                return $this->respond(new ErrorResponse('Game is empty', type: ErrorType::VALIDATION), 400);
-            }
-
-            if (!$gameObj->save()) {
-                throw new ResultsParseException('Failed saving game into DB.');
-            }
-        } catch (Exception $e) {
-            return $this->respond(
-                new ErrorResponse('Error while parsing game file.', type: ErrorType::INTERNAL, exception: $e),
-                500
-            );
-        }
-        return $this->respond(new SuccessResponse());
+        $response = $this->importService->importGame($gameObj, $resultsDir);
+        $responseCode = $response instanceof SuccessResponse ? 200 : match ($response->type) {
+            ErrorType::VALIDATION                    => 400,
+            ErrorType::DATABASE, ErrorType::INTERNAL => 500,
+            ErrorType::NOT_FOUND                     => 404,
+            ErrorType::ACCESS                        => 403,
+        };
+        return $this->respond($response, $responseCode);
     }
 
     /**

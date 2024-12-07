@@ -2,6 +2,7 @@ import {initCollapse} from '../../includes/collapse';
 import {getGateScreenSettings} from '../../api/endpoints/settings/gate';
 import {initSelectDescription} from '../../includes/selectDescription';
 import {initImageUploadPreview} from '../../includes/imageUploadPreview';
+import {triggerNotificationError} from '../../includes/notifications';
 
 type GateSettingsSaveResponse = {
 	success: boolean,
@@ -234,7 +235,8 @@ export default function initGateSettings() {
 					settingsWrapper.innerHTML = result;
 					initSettings();
 				})
-				.catch(() => {
+				.catch(e => {
+					triggerNotificationError(e);
 					settingsCache.set(typeValue, '');
 				});
 		};

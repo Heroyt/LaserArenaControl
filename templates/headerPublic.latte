@@ -2,20 +2,21 @@
 {var string $mode = $page->app->getRequest()->getCookieParams()['mode'] ?? 'light'}
 
 {define header}
-	<header class="navbar navbar-expand-lg navbar-light py-1 fixed-top bg-body-tertiary">
+	<header class="navbar navbar-expand-sm navbar-light py-1 fixed-top bg-body-tertiary">
 		<div class="container-fluid">
 			<a href="{link 'public'}" class="navbar-brand  d-flex">
 				{svgIcon 'Vesta', width: 'auto', height: '1.75rem'}
 				<div class="mx-2 d-none d-md-inline">LaserArenaControl</div>
 			</a>
+			{include menu}
 			<div class="actions ms-auto d-flex align-items-stretch">
                 <button class="btn {if isset($mode) && $mode === 'light'}btn-dark{else}btn-light{/if}"
                         type="button" id="modeSwitch"
                         title="{if isset($mode) && $mode === 'light'}{translate}Přepnout na tmavý režim{/translate}{else}{translate}Přepnout na světlý režim{/translate}{/if}"
                         data-light-title="{translate}Přepnout na světlý režim{/translate}"
                         data-dark-title="{translate}Přepnout na tmavý režim{/translate}">
-					<i class="fa-solid fa-moon"></i>
-					<i class="fa-solid fa-sun"></i>
+                    {faSolid 'moon'}
+                    {faSolid 'sun'}
 				</button>
                 {var string $selectedLang = $page->app->translations->getLangId()}
                 {var string $selectedCountry = $page->app->translations->getCountry()}
@@ -45,7 +46,7 @@
 				<button class="navbar-toggler ms-2  border-black" type="button" data-bs-toggle="collapse"
 						data-bs-target="#navBarContent"
                         aria-controls="navBarContent" aria-expanded="false" aria-label="{_'Toggle navigation'}">
-					<i class="fa-solid fa-bars"></i>
+                    {faSolid 'bars'}
 				</button>
 			</div>
 			<script>
@@ -87,4 +88,46 @@
 			</script>
 		</div>
 	</header>
+{/define}
+
+{define menu}
+	<div class="collapse navbar-collapse text-end text-sm-start" id="navBarContent">
+		<ul class="navbar-nav me-auto mb-2 mb-sm-0">
+			{foreach App\Core\App::getMenu('public') as $key => $menuItem}
+				<li class="nav-item{if count($menuItem->children) > 0} dropdown{/if}">
+					{if count($menuItem->children) > 0}
+						<a class="nav-link dropdown-toggle" id="navbarDropdown{$key}"
+						   role="button"
+						   data-bs-toggle="dropdown" aria-expanded="false">
+							{if !empty($menuItem->icon)}
+								<i class="{$menuItem->icon}"></i>
+							{/if}
+									{$menuItem->name}
+						</a>
+						<ul class="dropdown-menu" aria-labelledby="navbarDropdown{$key}">
+							<li n:foreach="$menuItem->children as $child">
+								<a class="dropdown-item "
+								   href="{$child->url}" n:attr="data-restart: str_contains($child->url, 'restart') || str_contains($child->url, 'reset')">
+									{if !empty($child->icon)}
+										<i class="{$child->icon}"></i>
+									{/if}
+											{$child->name}
+								</a>
+							</li>
+						</ul>
+					{else}
+						<a class="nav-link{if $menuItem->active} active{else} {/if}"
+						   aria-current="page"
+								n:attr="data-restart: str_contains($menuItem->url, 'restart') || str_contains($menuItem->url, 'reset')"
+						   href="{$menuItem->url}">
+							{if !empty($menuItem->icon)}
+								<i class="{$menuItem->icon}"></i>
+							{/if}
+									{$menuItem->name}
+						</a>
+					{/if}
+				</li>
+			{/foreach}
+		</ul>
+	</div>
 {/define}

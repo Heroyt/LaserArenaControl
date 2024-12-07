@@ -2,78 +2,42 @@
 {var string $mode = $page->app->getRequest()->getCookieParams()['mode'] ?? 'light'}
 
 {define header}
-	<header class="navbar navbar-expand-lg navbar-light py-1 fixed-top bg-body-tertiary">
+	<header class="navbar navbar-expand-xl navbar-light py-1 fixed-top bg-body-tertiary">
 		<div class="container-fluid">
 			<a href="{getUrl}" class="navbar-brand d-flex" aria-label="LaserArenaControl">
 				{svgIcon 'Vesta', width: 'auto', height: '1.75rem'}
-				<div class="mx-2 d-none d-md-inline">LaserArenaControl</div>
+				<div class="mx-2 d-none d-xl-inline">LaserArenaControl</div>
 			</a>
-			<div class="collapse navbar-collapse text-end text-lg-start" id="navBarContent">
-				<ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    {foreach App\Core\App::getMenu() as $key => $menuItem}
-						<li class="nav-item{if count($menuItem->children) > 0} dropdown{/if}">
-							{if count($menuItem->children) > 0}
-								<a class="nav-link dropdown-toggle" id="navbarDropdown{$key}"
-								   role="button"
-								   data-bs-toggle="dropdown" aria-expanded="false">
-									{if !empty($menuItem->icon)}
-										<i class="{$menuItem->icon}"></i>
-									{/if}
-									{$menuItem->name}
-								</a>
-								<ul class="dropdown-menu" aria-labelledby="navbarDropdown{$key}">
-									<li n:foreach="$menuItem->children as $child">
-										<a class="dropdown-item " href="{$child->url}">
-											{if !empty($child->icon)}
-												<i class="{$child->icon}"></i>
-											{/if}
-											{$child->name}
-										</a>
-									</li>
-								</ul>
-							{else}
-								<a class="nav-link{if $menuItem->active} active{else} {/if}"
-								   aria-current="page"
-								   href="{$menuItem->url}">
-									{if !empty($menuItem->icon)}
-										<i class="{$menuItem->icon}"></i>
-									{/if}
-									{$menuItem->name}
-								</a>
-							{/if}
-						</li>
-					{/foreach}
-				</ul>
-			</div>
+			{include menu}
 			<div class="actions ms-auto d-flex align-items-stretch">
 				<div class="game-timer" style="display:none;">
 					<div class="time" data-start="" data-length="">00:00</div>
 				</div>
-                <button class="btn {if isset($mode) && $mode === 'light'}btn-dark{else}btn-light{/if}"
-                        type="button" id="modeSwitch"
-                        title="{if isset($mode) && $mode === 'light'}{translate}Přepnout na tmavý režim{/translate}{else}{translate}Přepnout na světlý režim{/translate}{/if}"
-                        data-light-title="{translate}Přepnout na světlý režim{/translate}"
-                        data-dark-title="{translate}Přepnout na tmavý režim{/translate}">
-					<i class="fa-solid fa-moon"></i>
-					<i class="fa-solid fa-sun"></i>
+				<button class="btn {if isset($mode) && $mode === 'light'}btn-dark{else}btn-light{/if}"
+						type="button" id="modeSwitch"
+						title="{if isset($mode) && $mode === 'light'}{translate}Přepnout na tmavý režim{/translate}{else}{translate}Přepnout na světlý režim{/translate}{/if}"
+						data-light-title="{translate}Přepnout na světlý režim{/translate}"
+						data-dark-title="{translate}Přepnout na tmavý režim{/translate}">
+					{faSolid 'moon'}
+					{faSolid 'sun'}
 				</button>
-                {var string $selectedLang = $page->app->translations->getLangId()}
+				{var string $selectedLang = $page->app->translations->getLangId()}
                 {var string $selectedCountry = $page->app->translations->getCountry()}
 				<button class="btn btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown"
 						aria-expanded="false">
 					<img src="{getUrl}assets/flags/{\Lsr\Core\Constants::COUNTRIES[$selectedCountry]|escapeUrl}.png"
 						 style="height: 2rem; width: 2rem;"
-                         data-lang="{$selectedLang}"
-                         data-country="{$selectedCountry}"
+						 data-lang="{$selectedLang}"
+						 data-country="{$selectedCountry}"
 						 alt="{\Lsr\Core\Constants::COUNTRIES[$selectedCountry]}">
 				</button>
 				<ul class="dropdown-menu bg-white" style="min-width: 5rem;left:auto;margin-left: 2.8rem;top:3rem;">
-                    {foreach $page->app->translations->supportedLanguages as $lang => $country}
+					{foreach $page->app->translations->supportedLanguages as $lang => $country}
 						{continueIf $selectedLang === $lang}
 						<li>
-                            <a class="dropdown-item"
-                               href="{link ['lang', $lang, 'redirect' => $page->app->getRequest()->getPath()]}"
-                               data-set-lang="{$lang}">
+							<a class="dropdown-item"
+							   href="{link ['lang', $lang, 'redirect' => $page->app->getRequest()->getPath()]}"
+							   data-set-lang="{$lang}">
 								<img class="mx-auto d-block"
 									 src="{getUrl}assets/flags/{\Lsr\Core\Constants::COUNTRIES[$country]|escapeUrl}.png"
 									 style="height: 2rem; width: 2rem;"
@@ -84,26 +48,26 @@
 				</ul>
 				<button class="navbar-toggler ms-2  border-black" type="button" data-bs-toggle="collapse"
 						data-bs-target="#navBarContent"
-                        aria-controls="navBarContent" aria-expanded="false" aria-label="{_'Toggle navigation'}">
-					<i class="fa-solid fa-bars"></i>
+						aria-controls="navBarContent" aria-expanded="false" aria-label="{_'Toggle navigation'}">
+					{faSolid 'bars'}
 				</button>
 			</div>
 			<script>
-                const dataTheme = document.documentElement.dataset.bsTheme ?? null;
-                let currentColorScheme = dataTheme ? dataTheme : window.matchMedia("(prefers-color-scheme: dark)").matches ? 'dark' : 'light';
+				const dataTheme = document.documentElement.dataset.bsTheme ?? null;
+				let currentColorScheme = dataTheme ? dataTheme : window.matchMedia("(prefers-color-scheme: dark)").matches ? 'dark' : 'light';
 				const modeSwitch = document.getElementById('modeSwitch');
-                const lightLabel = modeSwitch.dataset.lightTitle;
-                const darkLabel = modeSwitch.dataset.darkTitle;
+				const lightLabel = modeSwitch.dataset.lightTitle;
+				const darkLabel = modeSwitch.dataset.darkTitle;
 
 				document.documentElement.setAttribute('data-bs-theme', currentColorScheme);
 				if (currentColorScheme === 'dark') {
 					modeSwitch.classList.remove('btn-dark');
 					modeSwitch.classList.add('btn-light');
-                    modeSwitch.title = lightLabel;
+					modeSwitch.title = lightLabel;
 				} else {
 					modeSwitch.classList.add('btn-dark');
 					modeSwitch.classList.remove('btn-light');
-                    modeSwitch.title = darkLabel;
+					modeSwitch.title = darkLabel;
 				}
 				modeSwitch.addEventListener('click', () => {
 					if (currentColorScheme === 'dark') {
@@ -112,14 +76,14 @@
 						document.body.classList.remove('darkMode');
 						document.body.classList.add('lightMode');
 						currentColorScheme = 'light';
-                        modeSwitch.title = darkLabel;
+						modeSwitch.title = darkLabel;
 					} else {
 						modeSwitch.classList.remove('btn-dark');
 						modeSwitch.classList.add('btn-light');
 						document.body.classList.add('darkMode');
 						document.body.classList.remove('lightMode');
 						currentColorScheme = 'dark';
-                        modeSwitch.title = lightLabel;
+						modeSwitch.title = lightLabel;
 					}
 					document.documentElement.setAttribute('data-bs-theme', currentColorScheme);
 					document.cookie = `mode=` + currentColorScheme;
@@ -127,4 +91,46 @@
 			</script>
 		</div>
 	</header>
+{/define}
+
+{define menu}
+	<div class="collapse navbar-collapse text-start" id="navBarContent">
+		<ul class="navbar-nav me-auto mb-2 mb-xl-0">
+			{foreach App\Core\App::getMenu() as $key => $menuItem}
+				<li class="nav-item{if count($menuItem->children) > 0} dropdown{/if}">
+					{if count($menuItem->children) > 0}
+						<a class="nav-link dropdown-toggle" id="navbarDropdown{$key}"
+						   role="button"
+						   data-bs-toggle="dropdown" aria-expanded="false">
+							{if !empty($menuItem->icon)}
+								<i class="{$menuItem->icon}"></i>
+							{/if}
+									{$menuItem->name}
+						</a>
+						<ul class="dropdown-menu" aria-labelledby="navbarDropdown{$key}">
+							<li n:foreach="$menuItem->children as $child">
+								<a class="dropdown-item "
+								   href="{$child->url}" n:attr="data-restart: str_contains($child->url, 'restart') || str_contains($child->url, 'reset')">
+									{if !empty($child->icon)}
+										<i class="{$child->icon}"></i>
+									{/if}
+											{$child->name}
+								</a>
+							</li>
+						</ul>
+					{else}
+						<a class="nav-link{if $menuItem->active} active{else} {/if}"
+						   aria-current="page"
+								n:attr="data-restart: str_contains($menuItem->url, 'restart') || str_contains($menuItem->url, 'reset')"
+						   href="{$menuItem->url}">
+							{if !empty($menuItem->icon)}
+								<i class="{$menuItem->icon}"></i>
+							{/if}
+									{$menuItem->name}
+						</a>
+					{/if}
+				</li>
+			{/foreach}
+		</ul>
+	</div>
 {/define}

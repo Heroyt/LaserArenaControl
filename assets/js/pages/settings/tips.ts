@@ -1,6 +1,7 @@
 import {startLoading, stopLoading} from '../../loaders';
 import {deleteTip} from '../../api/endpoints/settings/tips';
 import {FormSaveResponse} from '../../includes/apiClient';
+import {triggerNotificationError} from '../../includes/notifications';
 
 interface SaveResponse extends FormSaveResponse {
 	ids: {
@@ -119,7 +120,7 @@ export default function initTips() {
 					})
 					.catch((e) => {
 						stopLoading(false, true);
-						console.error(e);
+						triggerNotificationError(e);
 					})
 			}
 			else {

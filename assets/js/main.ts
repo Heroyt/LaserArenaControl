@@ -9,8 +9,11 @@ import {initTooltips} from './includes/tooltips';
 import {initCollapse} from './includes/collapse';
 import {initAutoSaveForm} from './includes/autoSaveForm';
 import {gameTimer} from './includes/gameTimer';
-import {initLoaders} from './loaders';
+import {initLoaders, startLoading, stopLoading} from './loaders';
 import {initSelectDescription} from './includes/selectDescription';
+import {customFetch} from './includes/apiClient';
+import {triggerNotification, triggerNotificationError} from './includes/notifications';
+import {lang} from './includes/frameworkFunctions';
 
 declare global {
 	const page: PageInfo;
@@ -86,6 +89,36 @@ window.addEventListener('load', () => {
 			setCookie('lang', lang);
 			window.location.reload();
 		});
+	});
+	document.querySelectorAll<HTMLAnchorElement>('a[data-restart]').forEach(element => {
+		element.addEventListener('click', async (e) => {
+			const href = element.href;
+			if (!href) {
+				return;
+			}
+			e.preventDefault();
+			startLoading();
+			const title = await lang('Systém se restartuje');
+			const content = await lang('Restart může chvíli trvat.');
+			customFetch(href, 'POST')
+				.then(async (response : string) => {
+					if (response === 'Restarting...') {
+						stopLoading(true);
+						triggerNotification({
+							title,
+							content,
+							type: 'info'
+						});
+					}
+					else {
+						stopLoading(false);
+					}
+				})
+				.catch(e => {
+					triggerNotificationError(e);
+					stopLoading(false);
+				});
+		})
 	});
 
 	// Pages

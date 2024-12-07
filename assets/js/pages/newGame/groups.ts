@@ -14,6 +14,7 @@ import {GroupLoadType, NewGameGroupInterface} from '../../interfaces/groups';
 import {startLoading, stopLoading} from '../../loaders';
 import {Modal} from 'bootstrap';
 import {GroupDetailPlayer} from './groupDetail';
+import {triggerNotificationError} from '../../includes/notifications';
 
 export default class NewGameGroup implements NewGameGroupInterface {
 
@@ -175,7 +176,8 @@ export default class NewGameGroup implements NewGameGroupInterface {
 						newGroupName.value = '';
 						this.updateGroups();
 					})
-					.catch(() => {
+					.catch(e => {
+						triggerNotificationError(e);
 						stopLoading(false);
 					});
 			});
@@ -245,7 +247,8 @@ export default class NewGameGroup implements NewGameGroupInterface {
 					.then(() => {
 						document.dispatchEvent(new CustomEvent('loading.small.stop'));
 					})
-					.catch(() => {
+					.catch(e => {
+						triggerNotificationError(e);
 						document.dispatchEvent(new CustomEvent('loading.small.error'));
 					});
 			}, 1000);
@@ -259,7 +262,8 @@ export default class NewGameGroup implements NewGameGroupInterface {
 					this.game.$group.querySelector(`option[value="${id}"]`).remove();
 					group.remove();
 				})
-				.catch(() => {
+				.catch(e => {
+					triggerNotificationError(e);
 					document.dispatchEvent(new CustomEvent('loading.small.error'));
 				});
 		});
@@ -360,7 +364,7 @@ export default class NewGameGroup implements NewGameGroupInterface {
 				initCollapse(this.gameGroupsWrapper);
 			})
 			.catch(e => {
-				console.error(e);
+				triggerNotificationError(e);
 			});
 	}
 
@@ -661,7 +665,7 @@ export default class NewGameGroup implements NewGameGroupInterface {
 				this.groups.set(group.id, group);
 			})
 			.catch(e => {
-				console.error(e);
+				triggerNotificationError(e);
 				stopLoading(false, true);
 			});
 	}

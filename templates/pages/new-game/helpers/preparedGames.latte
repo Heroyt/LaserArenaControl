@@ -3,7 +3,7 @@
 		 aria-labelledby="preparedGamesLabel">
 		<div class="offcanvas-tag bg-danger text-bg-danger" data-bs-toggle="offcanvas" data-bs-target="#preparedGames"
 			 style="--order:{$order};">
-            <i class="fa-solid fa-clipboard-list"></i>
+            {faSolid 'clipboard-list'}
 			<span>
 				{_'Připravené'}
 			</span>
@@ -11,12 +11,12 @@
 		<div class="offcanvas-header">
             <h5 class="offcanvas-title" id="preparedGamesLabel">{_'Připravené hry'}</h5>
 			<button type="button" class="btn btn-link" data-bs-dismiss="offcanvas" aria-label="Close">
-				<i class="fa-solid fa-xmark"></i>
+				{faSolid 'xmark'}
 			</button>
 		</div>
 		<div class="offcanvas-actions p-3">
 			<button type="button" class="btn btn-danger btn-lg" id="deleteAllPreparedGames">
-				<i class="fa-solid fa-trash"></i>
+				{faSolid 'trash'}
                 {_'Smazat vše'}
 			</button>
 		</div>

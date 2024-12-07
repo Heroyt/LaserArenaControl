@@ -134,7 +134,6 @@ class GameGroup extends Model
               CacheParent::Expire => '1 months',
             ];
             try {
-                // @phpstan-ignore-next-line
                 [$this->players, $this->teams] = $cache->load(
                     'group/' . $this->id . '/players',
                     function () use ($games): array {
@@ -166,7 +165,6 @@ class GameGroup extends Model
               CacheParent::Expire => '1 months',
             ];
             try {
-                /** @phpstan-ignore-next-line */
                 $this->games = $cache->load(
                     'group/' . $this->id . '/games',
                     [$this, 'loadGames'],
@@ -178,7 +176,6 @@ class GameGroup extends Model
                 $cache->save('group/' . $this->id . '/games', $this->games, $dependencies);
             }
         }
-        /** @phpstan-ignore-next-line */
         return $this->games;
     }
 
@@ -200,13 +197,13 @@ class GameGroup extends Model
 
     /**
      * @param  Game[]  $games
-     * @return array{0:Player[],1:Team[]}
+     * @return array{0:array<string,Player>,1:array<string,Team>}
      */
     public function loadPlayersAndTeams(array $games): array {
         $players = [];
         $teams = [];
         foreach ($games as $game) {
-            /** @var \App\GameModels\Game\Team[] $team */
+            /** @var \App\GameModels\Game\Team $team */
             foreach ($game->getTeams() as $team) {
                 $tPlayers = [];
                 $tPlayerNames = [];

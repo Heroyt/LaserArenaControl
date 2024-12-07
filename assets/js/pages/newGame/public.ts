@@ -2,6 +2,8 @@ import Game from '../../game/game';
 import {validateForm} from './validate';
 import {startLoading, stopLoading} from '../../loaders';
 import {sendPreparedGamePublic} from '../../api/endpoints/preparedGames';
+import {initGroupAutocomplete} from '../../components/groupSearch';
+import {triggerNotificationError} from '../../includes/notifications';
 
 export default function initNewGamePage() {
 	const form = document.getElementById('new-game-content') as HTMLFormElement;
@@ -47,7 +49,7 @@ export default function initNewGamePage() {
 				stopLoading(true);
 			})
 			.catch(e => {
-				console.error(e);
+				triggerNotificationError(e);
 				stopLoading(false);
 			});
 	});
@@ -62,4 +64,16 @@ export default function initNewGamePage() {
 				userSearch.initGame(game);
 			},
 		);
+
+	if (game.$newGroupName) {
+		game.$newGroupName.addEventListener('input', () => {
+			game.$group.value = 'new-custom';
+			form.dispatchEvent(new Event('update'));
+		});
+		initGroupAutocomplete(game.$newGroupName, (name, id) => {
+			game.$newGroupName.value = name;
+			game.$group.value = id.toString();
+			form.dispatchEvent(new Event('update'));
+		});
+	}
 }

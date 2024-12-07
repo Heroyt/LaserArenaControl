@@ -49,7 +49,16 @@ class LasermaxxLoadData
      * @return string
      */
     public function encodeMeta(): string {
-        return base64_encode(gzdeflate(gzdeflate(json_encode($this->meta, JSON_THROW_ON_ERROR), 9), 9));
+        $meta = json_encode($this->meta, JSON_THROW_ON_ERROR);
+        $meta = gzdeflate($meta, 9);
+        if (!is_string($meta)) {
+            return '';
+        }
+        $meta = gzdeflate($meta, 9);
+        if (!is_string($meta)) {
+            return '';
+        }
+        return base64_encode($meta);
     }
 
     /**

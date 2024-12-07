@@ -122,15 +122,31 @@ export default function route(pageInfo: PageInfo): void {
 				module.default();
 			});
 			break;
-      case 'results':
-      case 'results-game':
-          import(
-              /* webpackChunkName: "results" */
-              './pages/results'
-              ).then(module => {
-              module.default();
-          });
-          break;
+		case 'results':
+		case 'results-game':
+			import(
+				/* webpackChunkName: "results" */
+				'./pages/results'
+				).then(module => {
+				module.default();
+			});
+			break;
+		case 'public-music':
+			import(
+				/* webpackChunkName: "public-music" */
+				'./pages/public/music'
+				).then(module => {
+				module.default();
+			});
+			break;
+		case 'public-liga':
+		case 'public-liga-post':
+			import(
+				/* webpackChunkName: "public-laserliga" */
+				'./pages/public/laserliga'
+				).then(module => {
+				module.default();
+			});
 	}
 
 	if ((pageInfo.routeName ?? '').startsWith('gate')) {

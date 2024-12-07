@@ -1,6 +1,7 @@
 import autocomplete, {AutocompleteItem} from 'autocompleter';
 import {UserSearchData} from "../interfaces/userSearchData";
 import {findUsers} from "../api/endpoints/userSearch";
+import {triggerNotificationError} from '../includes/notifications';
 
 interface UserSearchAutocompleteItem extends AutocompleteItem {
     label: string,
@@ -23,7 +24,8 @@ export function initUserAutocomplete(input: HTMLInputElement, callback: (name: s
                     });
                     update(autocompleteData);
                 })
-                .catch(() => {
+                .catch(e => {
+		                triggerNotificationError(e);
                     update([]);
                 });
         },

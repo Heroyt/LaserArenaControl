@@ -34,7 +34,7 @@
                 </td>
                 <td class="align-middle">
                     <button class="btn btn-danger remove" type="button" data-id="{$tip->id}">
-                        <i class="fa-solid fa-trash"></i><span class="visually-hidden">{_'Smazat', context: 'actions'}</span>
+                        {faSolid 'trash'}<span class="visually-hidden">{_'Smazat', context: 'actions'}</span>
                     </button>
                 </td>
             </tr>
@@ -53,7 +53,7 @@
                 </td>
                 <td class="align-middle">
                     <button class="btn btn-danger remove" type="button" data-id="#">
-                        <i class="fa-solid fa-trash"></i><span class="visually-hidden">{_'Smazat', context: 'actions'}</span>
+                        {faSolid 'trash'}<span class="visually-hidden">{_'Smazat', context: 'actions'}</span>
                     </button>
                 </td>
             </tr>
@@ -61,7 +61,7 @@
 
         <p class="my-2">
             <button class="btn btn-success btn-lg" type="button" id="add">
-                <i class="fa-solid fa-plus"></i>
+                {faSolid 'plus'}
                 {_'Přidat', context: 'actions'}
             </button>
         </p>

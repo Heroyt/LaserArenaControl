@@ -11,7 +11,7 @@
             <div class="player">
                 <div class="position">{$iterator->counter}.</div>
                 <div class="name">{$player->name}</div>
-                <div class="skill">{$player->skill|number:0,',',' '} <i class="fa-solid fa-medal"></i></div>
+                <div class="skill">{$player->skill|number:0,',',' '} {faSolid 'medal'}</div>
             </div>
         {else}
             <div class="no-players">

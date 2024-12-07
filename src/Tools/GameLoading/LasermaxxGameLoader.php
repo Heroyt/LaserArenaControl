@@ -20,7 +20,8 @@ use Spiral\RoadRunner\Metrics\Metrics;
  *      playlist?:numeric,
  *      use-playlist?:numeric,
  *      music?: numeric,
- *      groupSelect?:numeric|'new',
+ *      groupSelect?:numeric|'new'|'new-custom',
+ *      groupName?:string,
  *      tableSelect?:numeric,
  *      game-mode?:numeric,
  *      variation?:array<numeric,string>,
@@ -32,10 +33,70 @@ use Spiral\RoadRunner\Metrics\Metrics;
  */
 abstract class LasermaxxGameLoader implements LoaderInterface
 {
+    use GroupLoading;
+
     public function __construct(
         protected readonly Latte   $latte,
         protected readonly Metrics $metrics,
     ) {
+    }
+
+    /**
+     * @param  non-empty-string  $system
+     */
+    public function loadMusic(
+        int    $musicId,
+        string $musicFile,
+        string $system = 'evo5',
+        ?float $timeSinceStart = null
+    ): void {
+        $startPlay = microtime(true);
+        $endPlay = null;
+        try {
+            $music = MusicMode::get($musicId);
+            if (!file_exists($music->fileName)) {
+                App::getInstance()->getLogger()->warning('Music file does not exist - ' . $music->fileName);
+            } elseif (!copy($music->fileName, $musicFile)) {
+                App::getInstance()->getLogger()->warning('Music copy failed - ' . $music->fileName);
+            }
+            $endPlay = microtime(true);
+
+            if ($music->introFile !== null) {
+                $startIntro = microtime(true);
+                $introFile = str_replace('.mp3', '.intro.mp3', $musicFile);
+                if (!file_exists($music->introFile)) {
+                    App::getInstance()->getLogger()->warning('Music file does not exist - ' . $music->introFile);
+                } elseif (!copy($music->introFile, $introFile)) {
+                    App::getInstance()->getLogger()->warning('Music copy failed - ' . $music->introFile);
+                }
+                $endIntro = microtime(true);
+            }
+
+            if ($music->endingFile !== null) {
+                $startEnding = microtime(true);
+                $endingFile = str_replace('.mp3', '.gameover.mp3', $musicFile);
+                if (!file_exists($music->endingFile)) {
+                    App::getInstance()->getLogger()->warning('Music file does not exist - ' . $music->endingFile);
+                } elseif (!copy($music->endingFile, $endingFile)) {
+                    App::getInstance()->getLogger()->warning('Music copy failed - ' . $music->endingFile);
+                }
+                $endEnding = microtime(true);
+            }
+        } catch (ModelNotFoundException | ValidationException | DirectoryCreationException) {
+            // Not critical, doesn't need to do anything
+        }
+        $end = microtime(true);
+        $endPlay ??= $end;
+        $this->metrics->set('load_music_time', ($endPlay - $startPlay) * 1000, [$system, 'play']);
+        if (isset($startIntro, $endIntro)) {
+            $this->metrics->set('load_music_time', ($endIntro - $startIntro) * 1000, [$system, 'intro']);
+        }
+        if (isset($startEnding, $endEnding)) {
+            $this->metrics->set('load_music_time', ($endEnding - $startEnding) * 1000, [$system, 'intro']);
+        }
+        if (isset($timeSinceStart)) {
+            $this->metrics->set('music_time_since_load', ($end - $timeSinceStart) * 1000, [$system]);
+        }
     }
 
     /**
@@ -44,28 +105,28 @@ abstract class LasermaxxGameLoader implements LoaderInterface
      * @param  non-empty-string  $system
      * @return void
      */
-    public function loadMusic(
+    public function loadArmedMusic(
         int    $musicId,
         string $musicFile,
         string $system = 'evo5',
-        ?float $timeSinceStart = null
     ): void {
         $start = microtime(true);
         try {
             $music = MusicMode::get($musicId);
-            if (!file_exists($music->fileName)) {
-                App::getInstance()->getLogger()->warning('Music file does not exist - ' . $music->fileName);
-            } elseif (!copy($music->fileName, $musicFile)) {
-                App::getInstance()->getLogger()->warning('Music copy failed - ' . $music->fileName);
+            if ($music->armedFile === null) {
+                return;
+            }
+            $armedFile = str_replace('.mp3', '.armed.mp3', $musicFile);
+            if (!file_exists($music->armedFile)) {
+                App::getInstance()->getLogger()->warning('Music file does not exist - ' . $music->armedFile);
+            } elseif (!copy($music->armedFile, $armedFile)) {
+                App::getInstance()->getLogger()->warning('Music copy failed - ' . $music->armedFile);
             }
         } catch (ModelNotFoundException | ValidationException | DirectoryCreationException) {
             // Not critical, doesn't need to do anything
         }
         $end = microtime(true);
-        $this->metrics->set('load_music_time', ($end - $start) * 1000, [$system]);
-        if (isset($timeSinceStart)) {
-            $this->metrics->set('music_time_since_load', ($end - $timeSinceStart) * 1000, [$system]);
-        }
+        $this->metrics->set('load_music_time', ($end - $start) * 1000, [$system, 'armed']);
     }
 
     /**
@@ -86,9 +147,7 @@ abstract class LasermaxxGameLoader implements LoaderInterface
         /** @var array<int,string> $hashData */
         $hashData = [];
 
-        if (!empty($data['groupSelect'])) {
-            $loadData->meta['group'] = $data['groupSelect'];
-        }
+        $this->prepareGroup($loadData, $data);
 
         if (!empty($data['tableSelect'])) {
             $loadData->meta['table'] = $data['tableSelect'];

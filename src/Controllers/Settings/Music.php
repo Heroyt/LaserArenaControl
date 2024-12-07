@@ -14,12 +14,10 @@ use JsonException;
 use Lsr\Core\Controllers\Controller;
 use Lsr\Core\Exceptions\ModelNotFoundException;
 use Lsr\Core\Exceptions\ValidationException;
+use Lsr\Core\Requests\Dto\ErrorResponse;
+use Lsr\Core\Requests\Dto\SuccessResponse;
+use Lsr\Core\Requests\Enums\ErrorType;
 use Lsr\Core\Requests\Request;
-use Lsr\Core\Routing\Attributes\Delete;
-use Lsr\Core\Routing\Attributes\Get;
-use Lsr\Core\Routing\Attributes\Post;
-use Lsr\Core\Templating\Latte;
-use Lsr\Exceptions\TemplateDoesNotExistException;
 use Lsr\Logging\Exceptions\DirectoryCreationException;
 use Nyholm\Psr7\UploadedFile;
 use Psr\Http\Message\ResponseInterface;
@@ -38,24 +36,12 @@ class Music extends Controller
         parent::__construct();
     }
 
-    /**
-     * @return ResponseInterface
-     * @throws JsonException
-     * @throws TemplateDoesNotExistException
-     * @throws ValidationException
-     */
     public function show(): ResponseInterface {
         $this->params['music'] = MusicMode::getAll();
         $this->params['playlists'] = Playlist::getAll();
         return $this->view('pages/settings/music');
     }
 
-    /**
-     * @param  Request  $request
-     *
-     * @return ResponseInterface
-     * @throws JsonException
-     */
     public function upload(Request $request): ResponseInterface {
         $allMusic = [];
 
@@ -146,18 +132,12 @@ class Music extends Controller
         return $this->customRespond($request, ['music' => $allMusic]);
     }
 
-    /**
-     * @param  Request  $request
-     *
-     * @return ResponseInterface
-     * @throws JsonException
-     * @throws ModelNotFoundException
-     * @throws ValidationException
-     */
     public function save(Request $request): ResponseInterface {
         /** @var UploadedFile[][][] $files */
         $files = $request->getUploadedFiles();
-        foreach ($request->getPost('music', []) as $id => $info) {
+        /** @var array{name:string,group:string,order:numeric-string,public?:string,previewStart?:numeric-string}[] $musicInfo */
+        $musicInfo = $request->getPost('music', []);
+        foreach ($musicInfo as $id => $info) {
             try {
                 $music = MusicMode::get((int) $id);
                 $music->name = $info['name'];
@@ -330,6 +310,96 @@ class Music extends Controller
             );
         }
         return $this->app->redirect(['settings', 'music'], $request);
+    }
+
+    public function uploadIntro(MusicMode $music, Request $request): ResponseInterface {
+        $files = $request->getUploadedFiles();
+        if (isset($files['intro']) && $files['intro'] instanceof UploadedFile) {
+            $file = $files['intro'];
+            $savePath = UPLOAD_DIR . $music->id . '_intro.mp3';
+            $response = $this->processMediaUpload($file, $savePath);
+            if ($response !== null) {
+                return $response;
+            }
+
+            $music->introFile = $savePath;
+            if (!$music->save()) {
+                return $this->respond(new ErrorResponse(lang('Nepodařilo se uložit hudební mód.', context: 'errors'), ErrorType::DATABASE), 500);
+            }
+
+            return $this->respond(new SuccessResponse(values: ['url' => $music->getIntroMediaUrl(), 'name' => $music->getIntroFileName()]));
+        }
+        return $this->respond(new ErrorResponse('No file was uploaded', ErrorType::VALIDATION), 400);
+    }
+
+    private function processMediaUpload(UploadedFile $file, string $savePath): ?ResponseInterface {
+        $name = basename($file->getClientFilename());
+
+        // Handle form errors
+        if ($file->getError() !== UPLOAD_ERR_OK) {
+            $error = match ($file->getError()) {
+                UPLOAD_ERR_INI_SIZE => lang('Nahraný soubor je příliš velký', context: 'errors') . ' - ' . $name,
+                UPLOAD_ERR_FORM_SIZE  => lang('Form size is to large', context: 'errors') . ' - ' . $name,
+                UPLOAD_ERR_PARTIAL    => lang('The uploaded file was only partially uploaded.', context: 'errors') . ' - ' . $name,
+                UPLOAD_ERR_CANT_WRITE => lang('Failed to write file to disk.', context: 'errors') . ' - ' . $name,
+                default               => lang('Error while uploading a file.', context: 'errors') . ' - ' . $name,
+            };
+            return $this->respond(new ErrorResponse($error, ErrorType::VALIDATION), 400);
+        }
+
+        // Check file type
+        $fileType = strtolower(pathinfo($name, PATHINFO_EXTENSION));
+        if ($fileType !== 'mp3') {
+            return $this->respond(new ErrorResponse(lang('File must be an mp3.', context: 'errors'), ErrorType::VALIDATION), 400);
+        }
+
+        // Upload file
+        try {
+            $file->moveTo($savePath);
+        } catch (RuntimeException $e) {
+            return $this->respond(new ErrorResponse(lang('File upload failed.', context: 'errors'), exception: $e), 500);
+        }
+        return null;
+    }
+
+    public function uploadEnding(MusicMode $music, Request $request): ResponseInterface {
+        $files = $request->getUploadedFiles();
+        if (isset($files['ending']) && $files['ending'] instanceof UploadedFile) {
+            $file = $files['ending'];
+            $savePath = UPLOAD_DIR . $music->id . '_ending.mp3';
+            $response = $this->processMediaUpload($file, $savePath);
+            if ($response !== null) {
+                return $response;
+            }
+
+            $music->endingFile = $savePath;
+            if (!$music->save()) {
+                return $this->respond(new ErrorResponse(lang('Nepodařilo se uložit hudební mód.', context: 'errors'), ErrorType::DATABASE), 500);
+            }
+
+            return $this->respond(new SuccessResponse(values: ['url' => $music->getEndingMediaUrl(), 'name' => $music->getEndingFileName()]));
+        }
+        return $this->respond(new ErrorResponse('No file was uploaded', ErrorType::VALIDATION), 400);
+    }
+
+    public function uploadArmed(MusicMode $music, Request $request): ResponseInterface {
+        $files = $request->getUploadedFiles();
+        if (isset($files['armed']) && $files['armed'] instanceof UploadedFile) {
+            $file = $files['armed'];
+            $savePath = UPLOAD_DIR . $music->id . '_armed.mp3';
+            $response = $this->processMediaUpload($file, $savePath);
+            if ($response !== null) {
+                return $response;
+            }
+
+            $music->armedFile = $savePath;
+            if (!$music->save()) {
+                return $this->respond(new ErrorResponse(lang('Nepodařilo se uložit hudební mód.', context: 'errors'), ErrorType::DATABASE), 500);
+            }
+
+            return $this->respond(new SuccessResponse(values: ['url' => $music->getArmedMediaUrl(), 'name' => $music->getArmedFileName()]));
+        }
+        return $this->respond(new ErrorResponse('No file was uploaded', ErrorType::VALIDATION), 400);
     }
 
     /**

@@ -23,8 +23,6 @@ $settings->post('vests', [Settings::class, 'saveVests']);
 $settings->get('print', [PrintSettings::class, 'show'])->name('settings-print');
 $settings->post('print', [PrintSettings::class, 'save']);
 
-$settings->get('cache', [Settings::class, 'cache'])->name('settings-cache');
-
 $gate = $settings->group('gate');
 $gate->get('', [Gate::class, 'gate'])->name('settings-gate');
 $gate->post('', [Gate::class, 'saveGate']);
@@ -53,6 +51,10 @@ $music->post('upload', [Music::class, 'upload']);
 
 $musicId = $music->group('{id}');
 $musicId->delete('', [Music::class, 'delete']);
+$musicId->post('intro', [Music::class, 'uploadIntro']);
+$musicId->post('ending', [Music::class, 'uploadEnding']);
+$musicId->post('armed', [Music::class, 'uploadArmed']);
+
 
 if ($featureConfig->isFeatureEnabled('groups')) {
     $settings->get('groups', [Settings::class, 'group'])->name('settings-groups');

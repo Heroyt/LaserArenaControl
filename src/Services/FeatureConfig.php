@@ -27,7 +27,6 @@ class FeatureConfig
         // Initialize feature array from config
         foreach ($config->getConfig('ENV') as $key => $value) {
             if (str_starts_with($key, 'FEATURE_')) {
-                /** @var string $key */
                 $key = strtolower(str_replace('FEATURE_', '', $key));
                 $this->features[$key] = (is_int($value) && $value > 0) || (is_string($value) && strtolower(
                     $value

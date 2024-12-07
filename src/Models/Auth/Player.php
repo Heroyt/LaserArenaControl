@@ -15,7 +15,7 @@ use Lsr\Core\Models\Model;
 #[PrimaryKey('id_user')]
 class Player extends Model
 {
-    public const TABLE = 'players';
+    public const string TABLE = 'players';
 
     /** @var string Unique code for each player - two players can have the same code if they are from different arenas. */
     #[PlayerCode]

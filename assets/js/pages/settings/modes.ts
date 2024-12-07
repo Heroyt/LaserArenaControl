@@ -13,6 +13,7 @@ import {
 	getGameModeVariations,
 } from '../../api/endpoints/settings/modes';
 import {fetchPost, ResponseError} from '../../includes/apiClient';
+import {triggerNotificationError} from '../../includes/notifications';
 
 export default function initModesSettings() {
     const modesWrapper = document.getElementById('modes') as HTMLDivElement;
@@ -76,8 +77,8 @@ export default function initModesSettings() {
 
                 stopLoading(true);
             })
-            .catch(error => {
-                console.error(error);
+            .catch(e => {
+		            triggerNotificationError(e);
                 stopLoading(false);
             })
     }
@@ -100,8 +101,8 @@ export default function initModesSettings() {
                 .then(_ => {
                     stopLoading(true, true);
                 })
-                .catch(error => {
-                    console.error(error);
+                .catch(e => {
+		                triggerNotificationError(e);
                     stopLoading(false, true);
                 })
         })
@@ -113,7 +114,7 @@ export default function initModesSettings() {
                     stopLoading(true, true);
                 })
                 .catch(error => {
-                    console.error(error);
+		                triggerNotificationError(error);
                     stopLoading(false, true);
                 })
         })
@@ -134,7 +135,7 @@ export default function initModesSettings() {
                     }
                 })
                 .catch(error => {
-                    console.error(error);
+	                triggerNotificationError(error);
                     stopLoading(false, true);
                 })
         })
@@ -230,7 +231,7 @@ export default function initModesSettings() {
                                     stopLoading();
                                 })
                                 .catch(async error => {
-                                    console.error(error)
+	                                triggerNotificationError(error);
                                     stopLoading(false);
                                     if (error instanceof ResponseError && (await error.data).error) {
                                         newVariationTooltipError.setContent({
@@ -344,7 +345,7 @@ export default function initModesSettings() {
                         stopLoading(true);
                     })
                     .catch(error => {
-                        stopLoading(false);
+		                    triggerNotificationError(error);
                         console.error(error);
                     })
             });
@@ -371,7 +372,7 @@ export default function initModesSettings() {
                         stopLoading(true);
                     })
                     .catch(error => {
-                        console.error(error);
+		                    triggerNotificationError(error);
                         stopLoading(false);
                     });
             });
@@ -400,7 +401,7 @@ export default function initModesSettings() {
                         namesModal.show();
                     })
                     .catch(error => {
-                        console.error(error);
+		                    triggerNotificationError(error);
                         stopLoading(false);
                     });
 
@@ -430,7 +431,7 @@ export default function initModesSettings() {
                         wrapper.remove();
                     })
                     .catch(error => {
-                        console.error(error);
+		                    triggerNotificationError(error);
                         stopLoading(false);
                     })
             });

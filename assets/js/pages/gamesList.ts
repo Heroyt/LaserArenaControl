@@ -5,6 +5,7 @@ import {ErrorResponse, FormSaveResponse} from '../includes/apiClient';
 import {createGameGroup, getGameGroups} from '../api/endpoints/gameGroups';
 import {planGameHighlightsTask, planGamePrecacheTask} from '../api/endpoints/tasks';
 import {GameGroupData} from '../interfaces/gameInterfaces';
+import {triggerNotificationError} from '../includes/notifications';
 
 export default function initGamesList() {
 	const checkAll = document.getElementById('game-select-check-all') as HTMLInputElement;
@@ -97,7 +98,8 @@ export default function initGamesList() {
 					stopLoading(true);
 					window.location.reload();
 				})
-				.catch(() => {
+				.catch(e => {
+					triggerNotificationError(e);
 					stopLoading(false);
 				});
 		});
@@ -117,7 +119,8 @@ export default function initGamesList() {
 				.then(() => {
 					stopLoading(true);
 				})
-				.catch(() => {
+				.catch(e => {
+					triggerNotificationError(e);
 					stopLoading(false);
 				});
 		});
@@ -136,7 +139,8 @@ export default function initGamesList() {
 				.then(() => {
 					stopLoading(true);
 				})
-				.catch(() => {
+				.catch(e => {
+					triggerNotificationError(e);
 					stopLoading(false);
 				});
 
@@ -157,7 +161,8 @@ export default function initGamesList() {
 					stopLoading(true);
 					location.reload();
 				})
-				.catch(() => {
+				.catch(e => {
+					triggerNotificationError(e);
 					stopLoading(false);
 				});
 		});
@@ -176,7 +181,8 @@ export default function initGamesList() {
 				.then(() => {
 					stopLoading(true);
 				})
-				.catch(() => {
+				.catch(e => {
+					triggerNotificationError(e);
 					stopLoading(false);
 				});
 
@@ -196,7 +202,8 @@ export default function initGamesList() {
 				.then(() => {
 					stopLoading(true);
 				})
-				.catch(() => {
+				.catch(e => {
+					triggerNotificationError(e);
 					stopLoading(false);
 				});
 
@@ -256,7 +263,7 @@ export default function initGamesList() {
 						}
 					})
 					.catch(e => {
-						console.error(e);
+						triggerNotificationError(e);
 						stopLoading(false, true);
 					});
 			}
@@ -340,7 +347,7 @@ export default function initGamesList() {
 				stopLoading(true);
 			})
 			.catch(e => {
-				console.error(e);
+				triggerNotificationError(e);
 				stopLoading(false);
 			});
 	});

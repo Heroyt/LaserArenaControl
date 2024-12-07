@@ -63,18 +63,16 @@ readonly class PlayerProvider
     /**
      * Find players using the public API.
      *
-     * @param  string  $search
-     *
-     * @return Player[]
+     * @return Player[]|null
      */
-    public function findPlayersPublic(string $search, bool $noSave = false): array {
+    public function findPlayersPublic(string $search, bool $noSave = false): ?array {
         try {
             $response = $this->api->get('players', ['search' => $search], ['timeout' => 10]);
         } catch (GuzzleException) {
-            return [];
+            return null;
         }
         if ($response->getStatusCode() !== 200) {
-            return [];
+            return null;
         }
         return $this->getPlayersFromResponse($response, $noSave);
     }
@@ -85,8 +83,6 @@ readonly class PlayerProvider
      * If the player already exists in database, it returns the updated model from DB.
      *
      * @warning Does not check the validity of input array. It will throw a warning if the input is not valid.
-     *
-     * @param  LigaPlayerData  $data
      *
      * @return Player
      */
@@ -147,69 +143,61 @@ readonly class PlayerProvider
         $response->getBody()->rewind();
         $body = $response->getBody()->getContents();
 
-        try {
-            $data = $this->serializer->deserialize($body, LigaPlayerData::class, 'json');
-        } catch (JsonException) {
-            return null;
-        }
+        $data = $this->serializer->deserialize($body, LigaPlayerData::class, 'json');
 
         return $this->getPlayerObjectFromData($data, $noSave);
     }
 
     /**
-     * @return Player[]
+     * @return Player[]|null
      */
-    public function findAllPublicPlayers(bool $noSave = false): array {
+    public function findAllPublicPlayers(bool $noSave = false): ?array {
         try {
             $response = $this->api->get('players', ['arena' => 'self'], config: ['timeout' => 10]);
         } catch (GuzzleException) {
-            return [];
+            return null;
         }
         return $this->getPlayersFromResponse($response, $noSave);
     }
 
     /**
      * @param  string[]  $codes
-     * @return Player[]
+     * @return Player[]|null
      */
-    public function findAllPublicPlayersByCodes(array $codes, bool $noSave = false): array {
+    public function findAllPublicPlayersByCodes(array $codes, bool $noSave = false): ?array {
         try {
             $response = $this->api->get('players', ['codes' => $codes], config: ['timeout' => 10]);
         } catch (GuzzleException) {
-            return [];
+            return null;
         }
         return $this->getPlayersFromResponse($response, $noSave);
     }
 
     /**
-     * @return Player[]
+     * @return Player[]|null
      */
-    public function findAllPublicPlayersByOldCode(string $code, bool $noSave = false): array {
+    public function findAllPublicPlayersByOldCode(string $code, bool $noSave = false): ?array {
         try {
             $response = $this->api->get('players/old/' . $code, config: ['timeout' => 10]);
         } catch (GuzzleException) {
-            return [];
+            return null;
         }
         return $this->getPlayersFromResponse($response, $noSave);
     }
 
     /**
      * @param  ResponseInterface  $response
-     * @return Player[]
+     * @return Player[]|null
      */
-    private function getPlayersFromResponse(ResponseInterface $response, bool $noSave = false): array {
+    public function getPlayersFromResponse(ResponseInterface $response, bool $noSave = false): ?array {
         if ($response->getStatusCode() !== 200) {
-            return [];
+            return null;
         }
         $response->getBody()->rewind();
         $body = $response->getBody()->getContents();
 
-        try {
-            /** @var LigaPlayerData[] $data */
-            $data = $this->serializer->deserialize($body, LigaPlayerData::class . '[]', 'json');
-        } catch (JsonException) {
-            return [];
-        }
+        /** @var LigaPlayerData[] $data */
+        $data = $this->serializer->deserialize($body, LigaPlayerData::class . '[]', 'json');
 
         // Transform JSON data into model objects
         $objects = [];

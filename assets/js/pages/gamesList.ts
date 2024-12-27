@@ -86,64 +86,33 @@ export default function initGamesList() {
 	const reImportBtns = document.querySelectorAll('.re-import') as NodeListOf<HTMLButtonElement>;
 	reImportBtns.forEach(btn => {
 		const gameCode = btn.dataset.code;
-		btn.addEventListener('click', () => {
-			startLoading();
-			const codes = getCheckedGameCodes(gameCode);
-			const promises: Promise<FormSaveResponse>[] = [];
-			for (const code of codes) {
-				promises.push(reimportResults(code));
-			}
-			Promise.all(promises)
-				.then(() => {
-					stopLoading(true);
-					window.location.reload();
-				})
-				.catch(e => {
-					triggerNotificationError(e);
-					stopLoading(false);
-				});
+		btn.addEventListener('click', async () => {
+			await processBatched(
+				getCheckedGameCodes(gameCode),
+				reimportResults,
+			);
+			window.location.reload();
 		});
 	});
 
 	const syncBtns = document.querySelectorAll('.liga-sync') as NodeListOf<HTMLButtonElement>;
 	syncBtns.forEach(btn => {
 		const gameCode = btn.dataset.code;
-		btn.addEventListener('click', () => {
-			startLoading();
-			const codes = getCheckedGameCodes(gameCode);
-			const promises: Promise<FormSaveResponse>[] = [];
-			for (const code of codes) {
-				promises.push(syncGame(code));
-			}
-			Promise.all(promises)
-				.then(() => {
-					stopLoading(true);
-				})
-				.catch(e => {
-					triggerNotificationError(e);
-					stopLoading(false);
-				});
+		btn.addEventListener('click', async () => {
+			await processBatched(
+				getCheckedGameCodes(gameCode),
+				syncGame,
+			);
 		});
 	});
 	const recalcPointsBtns = document.querySelectorAll('.recalc-skill') as NodeListOf<HTMLButtonElement>;
 	recalcPointsBtns.forEach(btn => {
 		const gameCode = btn.dataset.code;
-		btn.addEventListener('click', () => {
-			startLoading();
-			const codes = getCheckedGameCodes(gameCode);
-			const promises: Promise<FormSaveResponse>[] = [];
-			for (const code of codes) {
-				promises.push(recalcGameSkill(code));
-			}
-			Promise.all(promises)
-				.then(() => {
-					stopLoading(true);
-				})
-				.catch(e => {
-					triggerNotificationError(e);
-					stopLoading(false);
-				});
-
+		btn.addEventListener('click', async () => {
+			await processBatched(
+				getCheckedGameCodes(gameCode),
+				recalcGameSkill,
+			);
 		});
 	});
 	const soloSwitchBtns = document.querySelectorAll('.solo-switch') as NodeListOf<HTMLButtonElement>;
@@ -170,43 +139,21 @@ export default function initGamesList() {
 	const precacheBtns = document.querySelectorAll('.plan-precache') as NodeListOf<HTMLButtonElement>;
 	precacheBtns.forEach(btn => {
 		const gameCode = btn.dataset.code;
-		btn.addEventListener('click', () => {
-			startLoading();
-			const codes = getCheckedGameCodes(gameCode);
-			const promises: Promise<void | ErrorResponse>[] = [];
-			for (const code of codes) {
-				promises.push(planGamePrecacheTask(code));
-			}
-			Promise.all(promises)
-				.then(() => {
-					stopLoading(true);
-				})
-				.catch(e => {
-					triggerNotificationError(e);
-					stopLoading(false);
-				});
-
+		btn.addEventListener('click', async () => {
+			await processBatched(
+				getCheckedGameCodes(gameCode),
+				planGamePrecacheTask,
+			);
 		});
 	});
 	const highlightsBtns = document.querySelectorAll('.plan-highlights') as NodeListOf<HTMLButtonElement>;
 	highlightsBtns.forEach(btn => {
 		const gameCode = btn.dataset.code;
-		btn.addEventListener('click', () => {
-			startLoading();
-			const codes = getCheckedGameCodes(gameCode);
-			const promises: Promise<void | ErrorResponse>[] = [];
-			for (const code of codes) {
-				promises.push(planGameHighlightsTask(code));
-			}
-			Promise.all(promises)
-				.then(() => {
-					stopLoading(true);
-				})
-				.catch(e => {
-					triggerNotificationError(e);
-					stopLoading(false);
-				});
-
+		btn.addEventListener('click', async () => {
+			await processBatched(
+				getCheckedGameCodes(gameCode),
+				planGameHighlightsTask,
+			);
 		});
 	});
 
@@ -305,50 +252,67 @@ export default function initGamesList() {
 			groupName = (groupModalSelect.querySelector(`option[value="${groupId}"]`) as HTMLOptionElement).innerText;
 		}
 
-		const promises: Promise<FormSaveResponse>[] = [];
-		for (const code of groupCodes) {
-			promises.push(setGameGroup(code, groupId));
-		}
-
-		Promise.all(promises)
-			.then(() => {
-				// Update data for all games
-				for (const code of groupCodes) {
-					const btns = document.querySelectorAll<HTMLButtonElement>(`.select-group[data-code="${code}"]`);
-					const groupVal = groupId === 0 ? '' : groupId.toString();
-					for (const btn of btns) {
-						const tooltip = Tooltip.getOrCreateInstance(btn);
-						if (groupId === 0) {
-							btn.classList.add('btn-primary');
-							btn.classList.remove('btn-success');
-							btn.title = btn.dataset.label;
-							btn.ariaLabel = btn.dataset.label;
-							btn.dataset.bsOriginalTitle = btn.dataset.label;
-							tooltip.setContent({'.tooltip-inner': btn.dataset.label});
-						} else {
-							btn.classList.remove('btn-primary');
-							btn.classList.add('btn-success');
-							btn.title = groupName;
-							btn.ariaLabel = groupName;
-							btn.dataset.bsOriginalTitle = groupName;
-							tooltip.setContent({'.tooltip-inner': groupName});
-						}
-						btn.dataset.group = groupVal;
-						btn.setAttribute('data-group', groupVal);
-						btn.dataset.groupname = groupName;
-						btn.setAttribute('data-groupname', groupName);
+		await processBatched(
+			groupCodes,
+			async (code) => {
+				const res = await setGameGroup(code, groupId);
+				const btns = document.querySelectorAll<HTMLButtonElement>(`.select-group[data-code="${code}"]`);
+				const groupVal = groupId === 0 ? '' : groupId.toString();
+				for (const btn of btns) {
+					const tooltip = Tooltip.getOrCreateInstance(btn);
+					if (groupId === 0) {
+						btn.classList.add('btn-primary');
+						btn.classList.remove('btn-success');
+						btn.title = btn.dataset.label;
+						btn.ariaLabel = btn.dataset.label;
+						btn.dataset.bsOriginalTitle = btn.dataset.label;
+						tooltip.setContent({'.tooltip-inner': btn.dataset.label});
+					} else {
+						btn.classList.remove('btn-primary');
+						btn.classList.add('btn-success');
+						btn.title = groupName;
+						btn.ariaLabel = groupName;
+						btn.dataset.bsOriginalTitle = groupName;
+						tooltip.setContent({'.tooltip-inner': groupName});
 					}
-					const check = document.querySelector<HTMLInputElement>(`.game-select-check[value="${code}"]`);
-					check.dataset.group = groupVal;
-					check.setAttribute('data-group', groupVal);
-					check.dataset.groupname = groupName;
-					check.setAttribute('data-groupname', groupName);
+					btn.dataset.group = groupVal;
+					btn.setAttribute('data-group', groupVal);
+					btn.dataset.groupname = groupName;
+					btn.setAttribute('data-groupname', groupName);
 				}
-				stopLoading(true);
-			})
-			.catch(e => {
-				triggerNotificationError(e);
-				stopLoading(false);
-			});
+				const check = document.querySelector<HTMLInputElement>(`.game-select-check[value="${code}"]`);
+				check.dataset.group = groupVal;
+				check.setAttribute('data-group', groupVal);
+				check.dataset.groupname = groupName;
+				check.setAttribute('data-groupname', groupName);
+				return res;
+			},
+		);
 	});
+}
+
+async function processBatched(codes: Generator<string> | string[], callback: (code: string) => Promise<FormSaveResponse | void | ErrorResponse>, batchSize: number = 5) {
+	let batch: Promise<void>[] = [];
+	startLoading();
+	for (const code of codes) {
+		batch.push((async () => {
+			try {
+				await callback(code);
+			} catch (e) {
+				await triggerNotificationError(e);
+			}
+		})());
+
+		if (batch.length >= batchSize) {
+			// Send batch
+			await Promise.all(batch);
+			batch = [];
+		}
+	}
+
+	if (batch.length > 0) {
+		// Send last batch
+		await Promise.all(batch);
+	}
+	stopLoading(true);
 }

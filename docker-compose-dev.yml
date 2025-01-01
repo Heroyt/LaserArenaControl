@@ -60,6 +60,8 @@ services:
       - "2112:2112"
     networks:
       - backend
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     environment:
       LAC_VERSION: "dev"
       APP_NAME: "Laser arena control"

@@ -178,7 +178,7 @@ class LigaApi
 
         // Build a request
         try {
-            $this->logger->debug('Syncing '.count($gamesData).' games');
+            $this->logger->debug('Syncing ' . count($gamesData) . ' games');
             $config = [
                 'body' => $this->serializer->serialize(['system' => $system, 'games' => $gamesData], 'json'),
             ];
@@ -191,9 +191,9 @@ class LigaApi
             $response = $this->client->post('games', $config);
             $status = $response->getStatusCode();
             if ($status > 299) {
+                $response->getBody()->rewind();
                 $this->logger->error(
-                    'Request failed: ' .
-                    $this->serializer->serialize($response->getBody()->getContents(), 'json')
+                    'Request failed (' . $status . '): ' . $this->serializer->serialize($response->getBody()->getContents(), 'json')
                 );
                 return false;
             }
@@ -209,6 +209,23 @@ class LigaApi
         }
 
         return true;
+    }
+
+    /**
+     * @return LigaApiExtensionInterface[]
+     */
+    public function getExtensions(): array {
+        if (!isset($this->extensions)) {
+            /** @var LigaApiExtensionInterface|LigaApiExtensionInterface[]|null $extensions */
+            $extensions = App::getServiceByType(LigaApiExtensionInterface::class);
+            if ($extensions === null) {
+                $extensions = [];
+            } else if (!is_array($extensions)) {
+                $extensions = [$extensions];
+            }
+            $this->extensions = $extensions;
+        }
+        return $this->extensions;
     }
 
     /**
@@ -272,10 +289,10 @@ class LigaApi
             $ids = array_map(static fn($data) => $data['id'], $data);
             $config = [
               'body' => $this->serializer->serialize(
-                [
+                  [
                     'whitelist' => $ids,
-                ],
-                'json',
+                  ],
+                  'json',
               ),
               'headers' => [
                 'Content-Type' => 'application/json',
@@ -283,7 +300,7 @@ class LigaApi
             ];
             $config['headers']['Content-Length'] = strlen($config['body']);
             $this->client->deleteAsync('music', $config);
-            $this->logger->debug('Removing music modes except: '.implode(',', $ids));
+            $this->logger->debug('Removing music modes except: ' . implode(',', $ids));
 
             // Upload files
             foreach ($musicModes as $mode) {
@@ -338,7 +355,7 @@ class LigaApi
                 ]);
                 $body = curl_exec($ch);
                 $info = curl_getinfo($ch);
-                $this->logger->debug('Music upload response: '.$body);
+                $this->logger->debug('Music upload response: ' . $body);
                 if ($info['http_code'] !== 200) {
                     $this->logger->error(
                         'Music upload failed: ' . $body . ' ' .
@@ -404,23 +421,6 @@ class LigaApi
             $this->makeClient();
         }
         return $this->client;
-    }
-
-    /**
-     * @return LigaApiExtensionInterface[]
-     */
-    public function getExtensions(): array {
-        if (!isset($this->extensions)) {
-            /** @var LigaApiExtensionInterface|LigaApiExtensionInterface[]|null $extensions */
-            $extensions = App::getServiceByType(LigaApiExtensionInterface::class);
-            if ($extensions === null) {
-                $extensions = [];
-            } else if (!is_array($extensions)) {
-                $extensions = [$extensions];
-            }
-            $this->extensions = $extensions;
-        }
-        return $this->extensions;
     }
 
     /**

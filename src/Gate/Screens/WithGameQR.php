@@ -14,23 +14,24 @@ trait WithGameQR
     /**
      * Get SVG QR code for game
      *
-     * @param Game $game
+     * @param  Game  $game
      *
      * @return string
      */
-    protected function getQR(Game $game): string {
-        $result = Builder::create()
-                         ->data($this->getPublicUrl($game))
-                         ->writer(new SvgWriter())
-                         ->encoding(new Encoding('UTF-8'))
-                         ->errorCorrectionLevel(ErrorCorrectionLevel::Low)
-                         ->build();
-        return $result->getString();
+    protected function getQR(Game $game) : string {
+        return new Builder(
+          writer              : new SvgWriter(),
+          data                : $this->getPublicUrl($game),
+          encoding            : new Encoding('UTF-8'),
+          errorCorrectionLevel: ErrorCorrectionLevel::Low
+        )
+          ->build()
+          ->getString();
     }
 
-    protected function getPublicUrl(Game $game): string {
+    protected function getPublicUrl(Game $game) : string {
         /** @var string $url */
         $url = Info::get('liga_api_url');
-        return trailingSlashIt($url) . 'g/' . $game->code;
+        return trailingSlashIt($url).'g/'.$game->code;
     }
 }

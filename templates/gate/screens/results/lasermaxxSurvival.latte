@@ -28,9 +28,9 @@
 {/define}
 
 {define partPlayers}
-    {var int $playerCount = count($game->getPlayers())}
-    <div n:foreach="$game->getPlayersSorted() as $player"
-            data-team="{$player->getTeam()->id}"
+	{var int $playerCount = count($game->players)}
+	<div n:foreach="$game->playersSorted as $player"
+			data-team="{$player->team->id}"
             data-score="{$player->score}"
             data-position="{$iterator->counter}"
             {if property_exists($player,'ammoRest')}
@@ -48,7 +48,7 @@
             {$iterator->counter}.
         </div>
         <div class="rank-name">
-            <div class="name text-team-{$game::SYSTEM}-{$player->getTeamColor()}">
+			<div class="name text-team-{$game::SYSTEM}-{$player->color}">
                 {$player->name}
             </div>
             <div class="rank">
@@ -94,9 +94,9 @@
 {/define}
 
 {define partTeams}
-    {var int $totalScore = array_sum(array_map(function($team){ return $team->score > 0 ? $team->score : 0;},$game->getTeams()->getAll()))}
+	{var int $totalScore = array_sum(array_map(function($team){ return $team->score > 0 ? $team->score : 0;},$game->teams->getAll()))}
     {var App\GameModels\Game\Team|null $win = $mode->getWin($game)}
-    <div n:foreach="$game->getTeamsSorted() as $team" class="team text-bg-team-{$game::SYSTEM}-{$team->color}"
+	<div n:foreach="$game->teamsSorted as $team" class="team text-bg-team-{$game::SYSTEM}-{$team->color}"
                                                       style="height:calc({100*($team->score > 0 ? $team->score : 0) / ($totalScore > 0 ? $totalScore : 1)|noescape}% - .2rem);">
         <div class="name">
             <div class="text-center crown">

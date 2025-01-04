@@ -33,7 +33,6 @@ use Symfony\Component\Console\Command\LazyCommand;
 use Symfony\Component\Console\CommandLoader\CommandLoaderInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
-
 use function array_keys;
 use function array_map;
 use function array_shift;
@@ -63,68 +62,68 @@ final class ConsoleExtension extends CompilerExtension
 
     private ServiceDefinition $commandsDebugCommandDefinition;
 
-    public function getConfigSchema(): Schema {
+    public function getConfigSchema() : Schema {
         return Expect::structure(
-            [
+          [
             'autowired'       => Expect::string(Application::class),
             'catchExceptions' => Expect::bool(false),
             'name'            => Expect::anyOf(
-                Expect::string(),
-                Expect::null(),
+              Expect::string(),
+              Expect::null(),
             )->dynamic()->default(null),
             'version'         => Expect::anyOf(
-                Expect::string(),
-                Expect::int(),
-                Expect::float(),
-                Expect::null(),
+              Expect::string(),
+              Expect::int(),
+              Expect::float(),
+              Expect::null(),
             )->dynamic()->default(null),
             'di'              => Expect::structure(
-                [
+              [
                 'parameters' => Expect::structure(
-                    [
+                  [
                     'backup' => Expect::bool(false),
-                    ]
+                  ]
                 ),
-                ]
+              ]
             ),
             'discovery'       => Expect::structure(
-                [
+              [
                 'tag' => Expect::anyOf(
-                    Expect::string(),
-                    Expect::null(),
+                  Expect::string(),
+                  Expect::null(),
                 )->default(null),
-                ]
+              ]
             ),
             'http'            => Expect::structure(
-                [
+              [
                 'override' => Expect::bool(false),
                 'url'      => Expect::anyOf(
-                    Expect::string(),
-                    Expect::null(),
+                  Expect::string(),
+                  Expect::null(),
                 )
                                     ->dynamic()
                                     ->default(null)
                                     ->assert(
-                                        static fn($url): bool => $url === null
+                                      static fn($url) : bool => $url === null
                                         || $url instanceof DynamicParameter
                                         || Validators::isUrl($url),
-                                        'has to be valid URL',
+                                      'has to be valid URL',
                                     ),
                 'headers'  => Expect::arrayOf(
-                    Expect::anyOf(Expect::string(), Expect::null()),
-                    Expect::string(),
+                  Expect::anyOf(Expect::string(), Expect::null()),
+                  Expect::string(),
                 )->default(
-                    [
+                  [
                     'user-agent' => 'orisai/nette-console',
-                    ]
+                  ]
                 ),
-                ]
+              ]
             ),
-            ]
+          ]
         );
     }
 
-    public function loadConfiguration(): void {
+    public function loadConfiguration() : void {
         parent::loadConfiguration();
 
         $builder = $this->getContainerBuilder();
@@ -136,39 +135,40 @@ final class ConsoleExtension extends CompilerExtension
     }
 
     private function registerApplication(
-        ServiceDefinition $commandLoaderDefinition,
-        stdClass          $config,
-        ContainerBuilder  $builder
-    ): void {
+      ServiceDefinition $commandLoaderDefinition,
+      stdClass          $config,
+      ContainerBuilder  $builder
+    ) : void {
         $this->applicationDefinition = $applicationDefinition = $builder->addDefinition($this->prefix('application'))
                                                                         ->setFactory($config->autowired)
                                                                         ->setAutowired($config->autowired)
                                                                         ->addSetup('setAutoExit', [false])
                                                                         ->addSetup(
-                                                                            'setCatchExceptions',
-                                                                            [$config->catchExceptions]
+                                                                          'setCatchExceptions',
+                                                                          [$config->catchExceptions]
                                                                         )
                                                                         ->addSetup(
-                                                                            'setCommandLoader',
-                                                                            [$commandLoaderDefinition]
+                                                                          'setCommandLoader',
+                                                                          [$commandLoaderDefinition]
                                                                         );
 
         if ($config->name !== null) {
             if ($config->name instanceof DynamicParameter) {
                 $applicationDefinition->addSetup(
-                    'setName',
-                    [
+                  'setName',
+                  [
                     new Literal(
-                        "(string) (!in_array(?, [null, ''], true) ? ? : 'UNKNOWN')",
-                        [
+                      "(string) (!in_array(?, [null, ''], true) ? ? : 'UNKNOWN')",
+                      [
                         $config->name,
                         new Literal('?'),
                         $config->name,
-                        ],
+                      ],
                     ),
-                    ]
+                  ]
                 );
-            } else {
+            }
+            else {
                 $applicationDefinition->addSetup('setName', [$config->name]);
             }
         }
@@ -176,19 +176,20 @@ final class ConsoleExtension extends CompilerExtension
         if ($config->version !== null) {
             if ($config->version instanceof DynamicParameter) {
                 $applicationDefinition->addSetup(
-                    'setVersion',
-                    [
+                  'setVersion',
+                  [
                     new Literal(
-                        "(string) (!in_array(?, [null, ''], true) ? ? : 'UNKNOWN')",
-                        [
+                      "(string) (!in_array(?, [null, ''], true) ? ? : 'UNKNOWN')",
+                      [
                         $config->version,
                         new Literal('?'),
                         $config->version,
-                        ],
+                      ],
                     ),
-                    ]
+                  ]
                 );
-            } else {
+            }
+            else {
                 $applicationDefinition->addSetup('setVersion', [(string) $config->version]);
             }
         }
@@ -196,14 +197,14 @@ final class ConsoleExtension extends CompilerExtension
         $this->compiler->addExportedType($config->autowired);
     }
 
-    private function registerCommandLoader(ContainerBuilder $builder): ServiceDefinition {
+    private function registerCommandLoader(ContainerBuilder $builder) : ServiceDefinition {
         return $this->commandLoaderDefinition = $builder->addDefinition($this->prefix('commandLoader'))
                                                         ->setFactory(LazyCommandLoader::class)
                                                         ->setType(CommandLoaderInterface::class)
                                                         ->setAutowired(false);
     }
 
-    private function registerDIParametersCommand(stdClass $config, ContainerBuilder $builder): void {
+    private function registerDIParametersCommand(stdClass $config, ContainerBuilder $builder) : void {
         $this->parameters = $builder->parameters;
 
         $this->diParametersCommandDefinition = $builder->addDefinition($this->prefix('command.diParameters'))
@@ -211,16 +212,16 @@ final class ConsoleExtension extends CompilerExtension
                                                        ->addTag($config->discovery->tag ?? self::DefaultCommandTag, []);
     }
 
-    private function registerCommandsDebugCommand(stdClass $config, ContainerBuilder $builder): void {
+    private function registerCommandsDebugCommand(stdClass $config, ContainerBuilder $builder) : void {
         $this->commandsDebugCommandDefinition = $builder->addDefinition($this->prefix('command.commandsDebug'))
                                                         ->setFactory(CommandsDebugCommand::class)
                                                         ->addTag(
-                                                            $config->discovery->tag ?? self::DefaultCommandTag,
-                                                            []
+                                                          $config->discovery->tag ?? self::DefaultCommandTag,
+                                                          []
                                                         );
     }
 
-    public function beforeCompile(): void {
+    public function beforeCompile() : void {
         parent::beforeCompile();
 
         $builder = $this->getContainerBuilder();
@@ -236,11 +237,11 @@ final class ConsoleExtension extends CompilerExtension
     }
 
     private function addCommandsToApplication(
-        ServiceDefinition $commandLoaderDefinition,
-        ServiceDefinition $applicationDefinition,
-        stdClass          $config,
-        ContainerBuilder  $builder
-    ): void {
+      ServiceDefinition $commandLoaderDefinition,
+      ServiceDefinition $applicationDefinition,
+      stdClass          $config,
+      ContainerBuilder  $builder
+    ) : void {
         $tagName = $config->discovery->tag;
         $commandDefinitions = $this->findCommandDefinitions($tagName, $builder);
 
@@ -254,9 +255,9 @@ final class ConsoleExtension extends CompilerExtension
             }
 
             $commandConfig = $this->configureCommand(
-                $commandDefinition,
-                $builder,
-                $tagName ?? self::DefaultCommandTag,
+              $commandDefinition,
+              $builder,
+              $tagName ?? self::DefaultCommandTag,
             );
 
             $processedCommandDefinition = $commandConfig[0];
@@ -265,7 +266,8 @@ final class ConsoleExtension extends CompilerExtension
 
             if ($commandName !== null) {
                 $commandsMap[$commandName] = $processedCommandDefinition->getName();
-            } else {
+            }
+            else {
                 $applicationDefinition->addSetup('add', [$processedCommandDefinition]);
             }
 
@@ -282,33 +284,33 @@ final class ConsoleExtension extends CompilerExtension
         $commandLoaderDefinition->setArguments([$commandsMap]);
 
         $this->commandsDebugCommandDefinition->setArguments(
-            [
+          [
             'commands' => $notLazyCommands,
-            ]
+          ]
         );
     }
 
     /**
      * @return array<Definition>
      */
-    private function findCommandDefinitions(?string $tagName, ContainerBuilder $builder): array {
+    private function findCommandDefinitions(?string $tagName, ContainerBuilder $builder) : array {
         return $tagName === null
           ? $builder->findByType(Command::class)
           : array_map(
-              static fn(string $name): Definition => $builder->getDefinition($name),
-              array_keys($builder->findByTag($tagName)),
+            static fn(string $name) : Definition => $builder->getDefinition($name),
+            array_keys($builder->findByTag($tagName)),
           );
     }
 
-    private function isCommandFromAnotherConsole(ServiceDefinition $definition): bool {
+    private function isCommandFromAnotherConsole(ServiceDefinition $definition) : bool {
         $definitionName = $definition->getName();
         assert(is_string($definitionName));
 
         foreach ($this->compiler->getExtensions(self::class) as $extension) {
 
             if (
-                $extension->name !== $this->name
-                && (str_starts_with($definitionName, "$extension->name.lazy.")
+              $extension->name !== $this->name
+              && (str_starts_with($definitionName, "$extension->name.lazy.")
                 || str_starts_with($definitionName, "$extension->name.command."))
             ) {
                 return true;
@@ -322,10 +324,10 @@ final class ConsoleExtension extends CompilerExtension
      * @return array{ServiceDefinition, string|null, string|null}
      */
     private function configureCommand(
-        ServiceDefinition $definition,
-        ContainerBuilder  $builder,
-        string            $tagName
-    ): array {
+      ServiceDefinition $definition,
+      ContainerBuilder  $builder,
+      string            $tagName
+    ) : array {
         [$name, $description] = $this->getCommandMeta($definition, $tagName);
         [$newDefinition, $name] = $this->processCommandDefinition($definition, $name, $description, $builder);
 
@@ -335,7 +337,7 @@ final class ConsoleExtension extends CompilerExtension
     /**
      * @return array{string|null, string|null}
      */
-    private function getCommandMeta(ServiceDefinition $definition, string $tagName): array {
+    private function getCommandMeta(ServiceDefinition $definition, string $tagName) : array {
         $name = null;
         $description = null;
 
@@ -399,11 +401,11 @@ final class ConsoleExtension extends CompilerExtension
      * @return array{ServiceDefinition, string|null}
      */
     private function processCommandDefinition(
-        ServiceDefinition $definition,
-        ?string           $name,
-        ?string           $description,
-        ContainerBuilder  $builder
-    ): array {
+      ServiceDefinition $definition,
+      ?string           $name,
+      ?string           $description,
+      ContainerBuilder  $builder
+    ) : array {
         $aliases = null;
         $hidden = null;
 
@@ -414,7 +416,8 @@ final class ConsoleExtension extends CompilerExtension
             if ($name === '') {
                 $hidden = true;
                 $name = array_shift($aliases);
-            } else {
+            }
+            else {
                 $hidden = false;
             }
         }
@@ -422,20 +425,20 @@ final class ConsoleExtension extends CompilerExtension
         if ($name !== null && $description !== null) {
             $newDefinition = $builder->addDefinition("$this->name.lazy.{$definition->getName()}")
                                      ->setFactory(
-                                         LazyCommand::class,
-                                         [
+                                       LazyCommand::class,
+                                       [
                                          $name,
                                          $aliases,
                                          $description,
                                          $hidden,
                                          new PhpLiteral(
-                                             'fn(): ? => $this->getService(?)',
-                                             [
+                                           'fn(): ? => $this->getService(?)',
+                                           [
                                              new PhpLiteral(Command::class),
                                              $definition->getName(),
-                                             ]
+                                           ]
                                          ),
-                                         ]
+                                       ]
                                      );
 
             return [$newDefinition, $name];
@@ -460,7 +463,7 @@ final class ConsoleExtension extends CompilerExtension
         return [$definition, $name];
     }
 
-    private function configureDIParametersCommand(stdClass $config, ContainerBuilder $builder): void {
+    private function configureDIParametersCommand(stdClass $config, ContainerBuilder $builder) : void {
         $commandDefinition = $this->diParametersCommandDefinition;
 
         $exportIsDisabled = $this->isParametersExportDisabled($builder);
@@ -473,7 +476,7 @@ final class ConsoleExtension extends CompilerExtension
         }
     }
 
-    private function isParametersExportDisabled(ContainerBuilder $builder): bool {
+    private function isParametersExportDisabled(ContainerBuilder $builder) : bool {
         if ($this->parameters !== []) {
             if ($builder->parameters === []) {
                 return true;
@@ -490,7 +493,7 @@ final class ConsoleExtension extends CompilerExtension
         return false;
     }
 
-    private function setDispatcher(ServiceDefinition $applicationDefinition, ContainerBuilder $builder): void {
+    private function setDispatcher(ServiceDefinition $applicationDefinition, ContainerBuilder $builder) : void {
         $dispatcherName = $builder->getByType(EventDispatcherInterface::class);
 
         if ($dispatcherName === null) {
@@ -498,18 +501,18 @@ final class ConsoleExtension extends CompilerExtension
         }
 
         $applicationDefinition->addSetup(
-            'setDispatcher',
-            [
+          'setDispatcher',
+          [
             $builder->getDefinition($dispatcherName),
-            ]
+          ]
         );
     }
 
     private function configureHttpRequest(
-        ServiceDefinition $applicationDefinition,
-        stdClass          $config,
-        ContainerBuilder  $builder
-    ): void {
+      ServiceDefinition $applicationDefinition,
+      stdClass          $config,
+      ContainerBuilder  $builder
+    ) : void {
         $httpConfig = $config->http;
 
         if (!$httpConfig->override) {
@@ -526,7 +529,7 @@ final class ConsoleExtension extends CompilerExtension
                               ->withContext("Option '$this->name > http > override' is enabled.")
                               ->withProblem("Service of type '$factoryClass' not found.")
                               ->withSolution(
-                                  "Register extension '$httpExtensionClass' or '$factoryClassShort' service."
+                                "Register extension '$httpExtensionClass' or '$factoryClassShort' service."
                               );
 
             throw InvalidState::create()
@@ -537,12 +540,12 @@ final class ConsoleExtension extends CompilerExtension
 
         assert($requestFactoryDefinition instanceof ServiceDefinition);
         $requestFactoryDefinition->setFactory(
-            ConsoleRequestFactory::class,
-            [
+          ConsoleRequestFactory::class,
+          [
             'url'              => $httpConfig->url,
             'argvOptionName'   => $optionName,
             'configOptionName' => "$this->name > http > url",
-            ]
+          ]
         );
 
         foreach ($httpConfig->headers as $name => $value) {
@@ -562,28 +565,28 @@ final class ConsoleExtension extends CompilerExtension
             }
 
             $requestFactoryDefinition->addSetup(
-                'addHeader',
-                [
+              'addHeader',
+              [
                 $name,
                 $value,
-                ]
+              ]
             );
         }
 
         $applicationDefinition->addSetup(
-            '?->getDefinition()->addOption(?)',
-            [
+          '?->getDefinition()->addOption(?)',
+          [
             $applicationDefinition,
             new Statement(
-                InputOption::class,
-                [
+              InputOption::class,
+              [
                 $optionName,
                 null,
                 InputOption::VALUE_REQUIRED,
                 'URL address of simulated HTTP request',
-                ]
+              ]
             ),
-            ],
+          ],
         );
     }
 }

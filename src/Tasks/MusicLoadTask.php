@@ -13,14 +13,13 @@ use Throwable;
  */
 class MusicLoadTask implements TaskDispatcherInterface
 {
-    public function __construct() {
-    }
+    public function __construct() {}
 
-    public static function getDiName(): string {
+    public static function getDiName() : string {
         return 'task.musicLoad';
     }
 
-    public function process(ReceivedTaskInterface $task): void {
+    public function process(ReceivedTaskInterface $task) : void {
         /** @var MusicLoadPayload $payload */
         $payload = igbinary_unserialize($task->getPayload());
 

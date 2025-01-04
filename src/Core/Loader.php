@@ -19,7 +19,7 @@ namespace App\Core;
 use Dibi\DriverException;
 use Dibi\Exception;
 use LAC\Modules\Core\Module;
-use Lsr\Core\DB;
+use Lsr\Db\DB;
 use Lsr\Helpers\Tools\Timer;
 use RuntimeException;
 
@@ -46,7 +46,7 @@ class Loader
      * @since   1.0
      * @version 1.0
      */
-    public static function init(): void {
+    public static function init() : void {
         // Initialize app
         Timer::start('core.init.app');
         App::prettyUrl();
@@ -72,28 +72,28 @@ class Loader
      * @since   1.0
      * @version 1.0
      */
-    public static function initDB(): void {
+    public static function initDB() : void {
         if (isset($_ENV['noDb'])) {
             return;
         }
         try {
-            DB::init();
+            DB::init(App::getService('db.connection'));
         } catch (Exception | DriverException $e) {
             App::getInstance()->getLogger()->error(
-                'Cannot connect to the database! (' . $e->getCode() . ') ' . $e->getMessage()
+              'Cannot connect to the database! ('.$e->getCode().') '.$e->getMessage()
             );
             throw new RuntimeException(
-                'Cannot connect to the database!' . PHP_EOL .
-                $e->getMessage() . PHP_EOL .
-                $e->getTraceAsString() . PHP_EOL .
-                json_encode(App::getInstance()->config->getConfig(), JSON_THROW_ON_ERROR),
-                $e->getCode(),
-                $e
+              'Cannot connect to the database!'.PHP_EOL.
+              $e->getMessage().PHP_EOL.
+              $e->getTraceAsString().PHP_EOL.
+              json_encode(App::getInstance()->config->getConfig(), JSON_THROW_ON_ERROR),
+              $e->getCode(),
+              $e
             );
         }
     }
 
-    public static function loadModules(): void {
+    public static function loadModules() : void {
         /** @var string[] $modules */
         $modules = App::getContainer()->findByType(Module::class);
         foreach ($modules as $moduleName) {

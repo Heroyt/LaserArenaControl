@@ -10,10 +10,10 @@ use Psr\Http\Message\ResponseInterface;
 
 class Mount extends ApiController
 {
-    public function mount(Request $request): ResponseInterface {
+    public function mount(Request $request) : ResponseInterface {
         try {
-            $logger = new Logger(LOG_DIR . 'api/', 'mount');
-            $logger->info('Remounting all (' . $request->getIp() . ')');
+            $logger = new Logger(LOG_DIR.'api/', 'mount');
+            $logger->info('Remounting all ('.$request->getIp().')');
         } catch (DirectoryCreationException $e) {
             $logger = null;
         }

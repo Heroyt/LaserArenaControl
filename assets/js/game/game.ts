@@ -156,9 +156,9 @@ export default class Game {
 		});
 		console.log(this);
 
-		const variations: {
-			[index: number]: VariationsValue[]
-		} = JSON.parse((this.$gameMode.querySelector(`option[value="${this.$gameMode.value}"]`) as HTMLOptionElement).dataset.variations);
+		const selectedOption = this.$gameMode.querySelector(`option[value="${this.$gameMode.value}"]`) as HTMLOptionElement;
+		const variationRaw = selectedOption.dataset.variations ?? '[]';
+		const variations: { [index: number]: VariationsValue[] } = variationRaw ? JSON.parse(variationRaw) : [];
 		console.log(variations);
 		this.updateModeVariations(variations);
 
@@ -234,9 +234,9 @@ export default class Game {
 			);
 			this.updateAllowedTeams(teams);
 
-			const variations: {
-				[index: number]: VariationsValue[]
-			} = JSON.parse((this.$gameMode.querySelector(`option[value="${this.$gameMode.value}"]`) as HTMLOptionElement).dataset.variations);
+			const selectedOption = this.$gameMode.querySelector(`option[value="${this.$gameMode.value}"]`) as HTMLOptionElement;
+			const variationRaw = selectedOption.dataset.variations ?? '[]';
+			const variations: { [index: number]: VariationsValue[] } = variationRaw ? JSON.parse(variationRaw) : [];
 			console.log(variations);
 			this.updateModeVariations(variations);
 			if (e.detail) {

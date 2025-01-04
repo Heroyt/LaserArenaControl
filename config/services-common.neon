@@ -5,18 +5,23 @@ includes:
 	- console.neon
 	- symfony.neon
 extensions:
-	caching: Nette\Bridges\CacheDI\CacheExtension(%constants.tempDir%)
+	cache: Lsr\Caching\DI\CacheExtension
 	decorator: Nette\DI\Extensions\DecoratorExtension
 	inject: Nette\DI\Extensions\InjectExtension
+	routing: Lsr\Core\Routing\DI\RoutingExtension
 parameters:
+	db:
+		driver: mysqli
+		lazy: true
+		host: db
+		port: 3306
+		collate: utf8mb4
+		database: lac
+		user: root
+		password: 'laser-arena-control'
 	gotenberg:
 		host: gotenberg
 		port: 3000
-	routing:
-		routeFiles:
-			- %constants.appDir%routes
-		controllers:
-			- %constants.appDir%src/Controllers
 	gamesSync:
 		limit: 200
 		timeout: 20.0
@@ -27,6 +32,7 @@ parameters:
 		maxIterationsWithoutImprovement: 100
 services:
 	# Core
+	db.connection: Lsr\Db\Connection(config: %db%)
 	app: App\Core\App
 	translations:
 		create: Lsr\Core\Translations
@@ -58,9 +64,8 @@ services:
 		setup:
 			- connect(%redis.host%)
 
-	caching.journal: Lsr\Core\Caching\RedisJournal(@redis)
-	cache.storage: Lsr\Core\Caching\RedisStorage(@redis, '', @caching.journal)
-	cache: Lsr\Core\Caching\Cache(@cache.storage, null, %constants.debug%)
+	cache.journal: Lsr\Caching\Redis\RedisJournal(@redis)
+	cache.storage: Lsr\Caching\Redis\RedisStorage(@redis, '', @cache.journal)
 
 	templating.latte.lac:
 		create: App\Latte\LacExtension
@@ -117,6 +122,14 @@ services:
 		create: App\Models\DataObjects\Theme::get()
 
 	fairteams: App\Services\FairTeams(%fairTeams%)
+
+cache:
+	cacheDir: %constants.tempDir%
+routing:
+	routeFiles:
+		- %constants.appDir%routes
+	controllers:
+		- %constants.appDir%src/Controllers
 
 search:
 	highlightCheckers:

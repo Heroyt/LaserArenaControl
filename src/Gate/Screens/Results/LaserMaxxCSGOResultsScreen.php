@@ -12,28 +12,28 @@ class LaserMaxxCSGOResultsScreen extends AbstractResultsScreen
     /**
      * @inheritDoc
      */
-    public static function getName(): string {
+    public static function getName() : string {
         return lang('LaserMaxx výsledky z módu CSGO', context: 'screens', domain: 'gate');
     }
 
-    public static function getDescription(): string {
+    public static function getDescription() : string {
         return lang(
-            'Obrazovka zobrazující výsledky LaserMaxx z módu CSGO.',
-            context: 'screens.description',
-            domain : 'gate'
+                   'Obrazovka zobrazující výsledky LaserMaxx z módu CSGO.',
+          context: 'screens.description',
+          domain : 'gate'
         );
     }
 
     /**
      * @inheritDoc
      */
-    public static function getDiKey(): string {
+    public static function getDiKey() : string {
         return 'gate.screens.results.lasermaxx.csgo';
     }
 
-    public function isActive(): bool {
+    public function isActive() : bool {
         try {
-            return parent::isActive() && $this->getGame()?->getMode() instanceof CSGO;
+            return parent::isActive() && $this->game?->mode instanceof CSGO;
         } catch (GameModeNotFoundException) {
             return false;
         }
@@ -42,8 +42,8 @@ class LaserMaxxCSGOResultsScreen extends AbstractResultsScreen
     /**
      * @inheritDoc
      */
-    public function run(): ResponseInterface {
-        $game = $this->getGame();
+    public function run() : ResponseInterface {
+        $game = $this->game;
 
         if (!isset($game)) {
             return $this->respond(new ErrorResponse('Cannot show screen without game.'), 412);
@@ -54,11 +54,11 @@ class LaserMaxxCSGOResultsScreen extends AbstractResultsScreen
         }
 
         return $this->view(
-            'gate/screens/results/lasermaxxCSGO',
-            [
-                'game'   => $game,
-                'addCss' => ['gate/resultsCSGO.css'],
-            ]
+          'gate/screens/results/lasermaxxCSGO',
+          [
+            'game'   => $game,
+            'addCss' => ['gate/resultsCSGO.css'],
+          ]
         );
     }
 }

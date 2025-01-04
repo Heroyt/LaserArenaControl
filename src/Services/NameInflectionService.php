@@ -13,44 +13,44 @@ use App\Helpers\Gender;
 class NameInflectionService
 {
     public const array CASES = [
-        1 => 'nominative',
-        2 => 'genitive',
-        3 => 'dative',
-        4 => 'accusative',
-        5 => 'vocative',
-        6 => 'locative',
-        7 => 'instrumental',
+      1 => 'nominative',
+      2 => 'genitive',
+      3 => 'dative',
+      4 => 'accusative',
+      5 => 'vocative',
+      6 => 'locative',
+      7 => 'instrumental',
     ];
     public const array INFLECTION_LANGUAGES = ['cs'];
     /** @var array<string,array{1?:string,2?:string,3?:string,4?:string,5?:string,6?:string,7?:string}> */
     private static array $memory = [];
     /** @var array{m:string[],f:string[],o:string[]}[] */
     private static array $suffixes = [
-        1 => ['m' => [], 'f' => [], 'o' => []],
-        2 => ['m' => [], 'f' => [], 'o' => []],
-        3 => ['m' => [], 'f' => [], 'o' => []],
-        4 => ['m' => [], 'f' => [], 'o' => []],
-        5 => ['m' => [], 'f' => [], 'o' => []],
-        6 => ['m' => [], 'f' => [], 'o' => []],
-        7 => ['m' => [], 'f' => [], 'o' => []],
+      1 => ['m' => [], 'f' => [], 'o' => []],
+      2 => ['m' => [], 'f' => [], 'o' => []],
+      3 => ['m' => [], 'f' => [], 'o' => []],
+      4 => ['m' => [], 'f' => [], 'o' => []],
+      5 => ['m' => [], 'f' => [], 'o' => []],
+      6 => ['m' => [], 'f' => [], 'o' => []],
+      7 => ['m' => [], 'f' => [], 'o' => []],
     ];
     private static bool $checkedLang;
 
-    public static function nominative(string $name): string {
+    public static function nominative(string $name) : string {
         return $name;
     }
 
-    public static function genitive(string $name): string {
+    public static function genitive(string $name) : string {
         return self::transform($name, 2);
     }
 
     /**
-     * @param string   $name
-     * @param int<1,7> $case
+     * @param  string  $name
+     * @param  int<1,7>  $case
      *
      * @return string
      */
-    private static function transform(string $name, int $case): string {
+    private static function transform(string $name, int $case) : string {
         $name = trim($name);
         $memoryKey = $name;
 
@@ -62,7 +62,7 @@ class NameInflectionService
         $numbers = $matches[2] ?? '';
 
         if (str_ends_with($name, ' ')) {
-            $numbers = ' ' . $numbers;
+            $numbers = ' '.$numbers;
             $name = trim($name);
         }
 
@@ -85,7 +85,7 @@ class NameInflectionService
         if ($match) {
             $name = mb_substr($name, 0, -1 * mb_strlen($match));
         }
-        $name .= $suffix . $numbers;
+        $name .= $suffix.$numbers;
         if ($isUppercase) {
             $name = mb_strtoupper($name);
         }
@@ -93,7 +93,7 @@ class NameInflectionService
         return $name;
     }
 
-    private static function checkLang(): bool {
+    private static function checkLang() : bool {
         if (isset(self::$checkedLang)) {
             return self::$checkedLang;
         }
@@ -102,12 +102,12 @@ class NameInflectionService
     }
 
     /**
-     * @param string               $name
-     * @param array<string,string> $suffixes
+     * @param  string  $name
+     * @param  array<string,string>  $suffixes
      *
      * @return array{0:string,1:string}
      */
-    private static function getMatchingSuffix(string $name, array $suffixes): array {
+    private static function getMatchingSuffix(string $name, array $suffixes) : array {
         // it is important(!) to try suffixes from longest to shortest
         foreach (range(mb_strlen($name), 1) as $length) {
             $suffix = mb_substr($name, -1 * $length);
@@ -120,14 +120,14 @@ class NameInflectionService
     }
 
     /**
-     * @param Gender   $gender
-     * @param int<1,7> $case
+     * @param  Gender  $gender
+     * @param  int<1,7>  $case
      *
      * @return array<string,string>
      */
-    private static function getSuffixes(Gender $gender, int $case): array {
+    private static function getSuffixes(Gender $gender, int $case) : array {
         if (empty(self::$suffixes[$case][$gender->value])) {
-            $file = ROOT . 'include/data/' . $gender->value . '_' . self::CASES[$case] . '_suffixes.txt';
+            $file = ROOT.'include/data/'.$gender->value.'_'.self::CASES[$case].'_suffixes.txt';
             if (!file_exists($file)) {
                 self::$suffixes[$case][$gender->value] = [];
                 return [];
@@ -136,30 +136,30 @@ class NameInflectionService
             self::$suffixes[$case][$gender->value] = $contents === false ?
               [] :
               unserialize(
-                  $contents,
-                  ['allowed_classes' => false]
+                $contents,
+                ['allowed_classes' => false]
               );
         }
         return self::$suffixes[$case][$gender->value];
     }
 
-    public static function dative(string $name): string {
+    public static function dative(string $name) : string {
         return self::transform($name, 3);
     }
 
-    public static function accusative(string $name): string {
+    public static function accusative(string $name) : string {
         return self::transform($name, 4);
     }
 
-    public static function vocative(string $name): string {
+    public static function vocative(string $name) : string {
         return self::transform($name, 5);
     }
 
-    public static function locative(string $name): string {
+    public static function locative(string $name) : string {
         return self::transform($name, 6);
     }
 
-    public static function instrumental(string $name): string {
+    public static function instrumental(string $name) : string {
         return self::transform($name, 7);
     }
 }

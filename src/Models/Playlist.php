@@ -4,48 +4,26 @@ namespace App\Models;
 
 use Dibi\DriverException;
 use Dibi\Exception;
-use Lsr\Core\DB;
-use Lsr\Core\Exceptions\ValidationException;
-use Lsr\Core\Models\Attributes\ManyToMany;
-use Lsr\Core\Models\Attributes\PrimaryKey;
-use Lsr\Core\Models\LoadingType;
-use Lsr\Core\Models\Model;
+use Lsr\Db\DB;
+use Lsr\Orm\Attributes\PrimaryKey;
+use Lsr\Orm\Attributes\Relations\ManyToMany;
+use Lsr\Orm\ModelCollection;
 
 #[PrimaryKey('id_playlist')]
-class Playlist extends Model
+class Playlist extends BaseModel
 {
-    public const TABLE = 'playlists';
+    public const string TABLE = 'playlists';
 
     public string $name;
 
-    /** @var MusicMode[] */
-    #[ManyToMany(through: 'playlist_music', foreignKey: 'id_music', localKey: 'id_playlist', class: MusicMode::class, loadingType: LoadingType::LAZY)]
-    public array $music = [];
+    /** @var ModelCollection<MusicMode> */
+    #[ManyToMany(through: 'playlist_music', foreignKey: 'id_music', localKey: 'id_playlist', class: MusicMode::class)]
+    public ModelCollection $music;
 
     private bool $loadedMusic = false;
     private bool $musicChanged = false;
 
-    /**
-     * @return MusicMode[]
-     * @throws ValidationException
-     */
-    public function getMusic(): array {
-        if (empty($this->music) && !$this->loadedMusic) {
-            $this->music = MusicMode::query()
-                                    ->where(
-                                        'id_music IN %sql',
-                                        DB::select('playlist_music', 'id_music')
-                                        ->where('id_playlist = %i', $this->id)
-                                        ->fluent
-                                    )
-                                    ->cacheTags($this::TABLE . '/' . $this->id . '/relations')
-                                    ->get();
-            $this->loadedMusic = true;
-        }
-        return $this->music;
-    }
-
-    public function hasMusicMode(MusicMode $musicMode): bool {
+    public function hasMusicMode(MusicMode $musicMode) : bool {
         foreach ($this->getMusic() as $music) {
             if ($musicMode->id === $music->id) {
                 return true;
@@ -55,10 +33,40 @@ class Playlist extends Model
     }
 
     /**
-     * @return int[]
-     * @throws ValidationException
+     * @return ModelCollection<MusicMode>
      */
-    public function getMusicIds(): array {
+    public function getMusic() : ModelCollection {
+        if (empty($this->music) && !$this->loadedMusic) {
+            $this->music = new ModelCollection(
+              MusicMode::query()
+                       ->where(
+                         'id_music IN %sql',
+                         DB::select('playlist_music', 'id_music')
+                           ->where('id_playlist = %i', $this->id)
+                           ->fluent
+                       )
+                       ->cacheTags($this::TABLE.'/'.$this->id.'/relations')
+                       ->get()
+            );
+            $this->loadedMusic = true;
+        }
+        return $this->music;
+    }
+
+    /**
+     * @param  MusicMode[]|ModelCollection<MusicMode>  $music
+     * @return $this
+     */
+    public function setMusic(array | ModelCollection $music) : static {
+        $this->music = $music instanceof ModelCollection ? $music : new ModelCollection($music);
+        $this->musicChanged = true;
+        return $this;
+    }
+
+    /**
+     * @return int[]
+     */
+    public function getMusicIds() : array {
         $ids = [];
         foreach ($this->getMusic() as $music) {
             $ids[] = $music->id;
@@ -66,11 +74,11 @@ class Playlist extends Model
         return $ids;
     }
 
-    public function save(): bool {
+    public function save() : bool {
         return parent::save() && $this->saveMusic();
     }
 
-    public function saveMusic(): bool {
+    public function saveMusic() : bool {
         if (!$this->musicChanged) {
             return true;
         }
@@ -89,15 +97,5 @@ class Playlist extends Model
         }
         $this->clearCache();
         return true;
-    }
-
-    /**
-     * @param  MusicMode[]  $music
-     * @return $this
-     */
-    public function setMusic(array $music): static {
-        $this->music = $music;
-        $this->musicChanged = true;
-        return $this;
     }
 }

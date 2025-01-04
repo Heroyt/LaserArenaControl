@@ -8,7 +8,6 @@ use Nette\DI\Container;
 use Orisai\Exceptions\Logic\InvalidArgument;
 use Orisai\Exceptions\Message;
 use Orisai\Utils\Reflection\Classes;
-
 use function array_key_exists;
 use function array_keys;
 use function get_class;
@@ -31,7 +30,7 @@ abstract class ServiceManager
     /**
      * @param  int|string  $key
      */
-    protected function hasService($key): bool {
+    protected function hasService($key) : bool {
         return array_key_exists($key, $this->serviceMap);
     }
 
@@ -41,7 +40,7 @@ abstract class ServiceManager
      * @param  class-string<T>  $type
      * @return T|null
      */
-    protected function getTypedService($key, string $type): ?object {
+    protected function getTypedService($key, string $type) : ?object {
         $service = $this->getService($key);
 
         if ($service === null) {
@@ -58,7 +57,7 @@ abstract class ServiceManager
     /**
      * @param  int|string  $key
      */
-    protected function getService($key): ?object {
+    protected function getService($key) : ?object {
         $serviceName = $this->serviceMap[$key] ?? null;
         if ($serviceName === null) {
             return null;
@@ -72,7 +71,7 @@ abstract class ServiceManager
      * @param  class-string  $expectedType
      * @return never
      */
-    protected function throwInvalidServiceType($key, string $expectedType, object $service): void {
+    protected function throwInvalidServiceType($key, string $expectedType, object $service) : void {
         $serviceClass = get_class($service);
         $serviceName = $this->getServiceName($key);
         $selfClass = static::class;
@@ -82,7 +81,7 @@ abstract class ServiceManager
                           ->withContext("Service '$serviceName' returns instance of $serviceClass.")
                           ->withProblem("$selfClass supports only instances of $expectedType.")
                           ->withSolution(
-                              "Remove service from $className or make the service return supported object type."
+                            "Remove service from $className or make the service return supported object type."
                           );
 
         throw InvalidArgument::create()
@@ -92,7 +91,7 @@ abstract class ServiceManager
     /**
      * @param  int|string  $key
      */
-    protected function getServiceName($key): string {
+    protected function getServiceName($key) : string {
         if (!isset($this->serviceMap[$key])) {
             $class = static::class;
             $function = __FUNCTION__;
@@ -115,7 +114,7 @@ abstract class ServiceManager
      * @param  class-string<T>  $type
      * @return T
      */
-    protected function getTypedServiceOrThrow($key, string $type): object {
+    protected function getTypedServiceOrThrow($key, string $type) : object {
         $service = $this->getService($key);
 
         if ($service === null) {
@@ -134,14 +133,14 @@ abstract class ServiceManager
      * @param  class-string  $expectedType
      * @return never
      */
-    protected function throwMissingService($key, string $expectedType): void {
+    protected function throwMissingService($key, string $expectedType) : void {
         $selfClass = static::class;
         $className = Classes::getShortName($selfClass);
 
         $message = Message::create()
                           ->withContext("Trying to get service by key '$key' from $selfClass.")
                           ->withProblem(
-                              "No service is registered under that key but service of type $expectedType is required."
+                            "No service is registered under that key but service of type $expectedType is required."
                           )
                           ->withSolution("Add service with key '$key' to $className.");
 
@@ -152,7 +151,7 @@ abstract class ServiceManager
     /**
      * @return array<int, int|string>
      */
-    protected function getKeys(): array {
+    protected function getKeys() : array {
         return array_keys($this->serviceMap);
     }
 }

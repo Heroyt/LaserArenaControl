@@ -43,12 +43,12 @@ class ResultParserTest extends Unit
 
     protected function validateGame(Game $game, string $file, array $meta): void {
         $this->assertEquals($meta['system'], $game::SYSTEM, 'Value is different (file: ' . $file . ')');
-        $this->assertEquals($meta['playerCount'], $game->getPlayerCount(), 'Value is different (file: ' . $file . ')');
-        $this->assertEquals($meta['teamCount'], $game->getTeamCount(), 'Value is different (file: ' . $file . ')');
+        $this->assertEquals($meta['playerCount'], $game->playerCount, 'Value is different (file: '.$file.')');
+        $this->assertEquals($meta['teamCount'], $game->teamCount, 'Value is different (file: '.$file.')');
         $this->assertEquals($meta['start']->getTimestamp(), $game->start->getTimestamp(), 'Value is different (file: ' . $file . ')');
         $this->assertEquals($meta['end']->getTimestamp(), $game->end->getTimestamp(), 'Value is different (file: ' . $file . ')');
 
-        $mode = $game->getMode();
+        $mode = $game->mode;
         $this->assertEquals($meta['mode'], $mode->getName(), 'Value is different (file: ' . $file . ')');
         $this->assertEquals($meta['modeType'], $mode->type, 'Value is different (file: ' . $file . ')');
 
@@ -59,7 +59,7 @@ class ResultParserTest extends Unit
             $this->assertEquals($value, $game->scoring->{$key}, 'Value is different (file: ' . $file . ')');
         }
 
-        foreach ($game->getPlayers() as $player) {
+        foreach ($game->players as $player) {
             $playerData = $meta['players'][(string) $player->vest];
             foreach ($playerData as $key => $value) {
                 switch ($key) {
@@ -70,7 +70,7 @@ class ResultParserTest extends Unit
                         $this->assertEquals($value, $player->user?->code, $file);
                         break;
                     case 'team':
-                        $this->assertEquals($value, $player->getTeamColor(), $file);
+                        $this->assertEquals($value, $player->color, $file);
                         break;
                     case 'bonusCount':
                         $this->assertEquals($value, $player->getBonusCount(), $file);
@@ -91,7 +91,7 @@ class ResultParserTest extends Unit
                 }
             }
         }
-        foreach ($game->getTeams() as $team) {
+        foreach ($game->teams as $team) {
             $teamData = $meta['teams'][(string) $team->color];
             foreach ($teamData as $key => $value) {
                 $this->assertEquals($value, $team->{$key}, $file);

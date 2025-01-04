@@ -21,12 +21,12 @@ class CSRFCheck implements Middleware
 {
     use MiddlewareResponder;
 
-    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler) : ResponseInterface {
         $csrfName = implode('/', $request->path);
         if (!formValid($csrfName)) {
             return $this->respond(
-                $request,
-                new ErrorResponse('Request expired', ErrorType::ACCESS, 'Try reloading the page.'),
+              $request,
+              new ErrorResponse('Request expired', ErrorType::ACCESS, 'Try reloading the page.'),
             );
         }
 

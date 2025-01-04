@@ -1,6 +1,8 @@
 [roadrunner]
-ref = "v2024.2.1"
+# ref -> reference, tag, commit or branch
+ref = "v2024.3.1"
 
+# the debug option is used to build RR with debug symbols to profile it with pprof
 [debug]
 enabled = true
 
@@ -26,14 +28,10 @@ metrics = { ref = "v5.0.4", owner = "roadrunner-server", repository = "metrics" 
 http = { ref = "v5.0.4", owner = "roadrunner-server", repository = "http" }
 gzip = { ref = "v5.0.4", owner = "roadrunner-server", repository = "gzip" }
 prometheus = { ref = "v5.0.3", owner = "roadrunner-server", repository = "prometheus" }
-headers = { ref = "v5.0.2", owner = "roadrunner-server", repository = "headers" }
+headers = { ref = "v5.0.4", owner = "roadrunner-server", repository = "headers" }
 static = { ref = "v5.0.3", owner = "roadrunner-server", repository = "static" }
 proxy = { ref = "v5.0.4", owner = "roadrunner-server", repository = "proxy_ip_parser" }
 send = { ref = "v5.0.1", owner = "roadrunner-server", repository = "send" }
-#cache = { ref = "v1.6.49", owner = "darkweak", repository = "souin", folder = "/plugins/roadrunner" }
-
-# OpenTelemetry
-otel = { ref = "v5.0.3", owner = "roadrunner-server", repository = "otel" }
 
 # SERVER
 server = { ref = "v5.1.2", owner = "roadrunner-server", repository = "server" }

@@ -13,9 +13,8 @@ class FairTeamDto
      * @param  int  $skill
      */
     public function __construct(
-        public int $key,
-        public array $players = [],
-        public int $skill = 0,
-    ) {
-    }
+      public int   $key,
+      public array $players = [],
+      public int   $skill = 0,
+    ) {}
 }

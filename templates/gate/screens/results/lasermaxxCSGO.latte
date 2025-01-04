@@ -8,9 +8,9 @@
 
 {define content}
     <section class="teams">
-        {var App\GameModels\Game\Team|null $win = $game->getMode()?->getWin($game)}
-        <div class="team" n:foreach="$game->getTeamsSorted() as $team">
-            <div class="name text-bg-team-{$game::SYSTEM}-{$team->getTeamColor()}">
+		{var App\GameModels\Game\Team|null $win = $game->mode?->getWin($game)}
+		<div class="team" n:foreach="$game->teamsSorted as $team">
+			<div class="name text-bg-team-{$game::SYSTEM}-{$team->color}">
                 <div class="text-center">
                     {if is_null($win)}
                         {svgIcon 'shield', '2rem'}
@@ -23,7 +23,7 @@
                 {$team->name}
             </div>
             <div class="players">
-                {include partPlayers, players: $team->getPlayersSorted()}
+				{include partPlayers, players: $team->playersSorted}
             </div>
         </div>
     </section>
@@ -33,8 +33,8 @@
     {varType App\GameModels\Game\Evo5\Player[] $players}
     <div n:foreach="$players as $player"
             class="player text-center text-grey-text {if $player->deaths >= $game->lives}dead{/if}">
-        {svgIcon ($player->deaths < $game->lives ? 'Vesta' . $player->getTeamColor() : 'skull'), '', '2rem'}
-        <div class="name text-team-{$game::SYSTEM}-{$player->getTeamColor()}">
+		{svgIcon ($player->deaths < $game->lives ? 'Vesta' . $player->color : 'skull'), '', '2rem'}
+		<div class="name text-team-{$game::SYSTEM}-{$player->color}">
             {$player->name}
         </div>
         <div class="hits-deaths">

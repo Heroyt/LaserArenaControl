@@ -8,33 +8,34 @@ namespace App\Core\Collections;
 
 use App\Core\Interfaces\CollectionInterface;
 use App\Core\Interfaces\CollectionQueryFilterInterface;
+use Lsr\Orm\Model;
 
 /**
- * @template T of \Lsr\Core\Models\Model
+ * @template T of Model
  * @implements CollectionQueryFilterInterface<T>
  */
 class CollectionQueryFilter implements CollectionQueryFilterInterface
 {
     /**
-     * @param string $name
-     * @param T[]    $values
-     * @param bool   $method
+     * @param  string  $name
+     * @param  T[]  $values
+     * @param  bool  $method
      */
     public function __construct(
-        public string $name,
-        public array  $values = [],
-        public bool   $method = false
-    ) {
-    }
+      public string $name,
+      public array  $values = [],
+      public bool   $method = false
+    ) {}
 
-    public function apply(CollectionInterface $collection): CollectionQueryFilterInterface {
+    public function apply(CollectionInterface $collection) : CollectionQueryFilterInterface {
         $remove = [];
         foreach ($collection as $key => $model) {
             $modelValues = $this->method ? $model->{$this->name}() : $model->{$this->name};
             $filter = false;
             if (is_array($modelValues)) {
                 // TODO: Compare arrays
-            } else {
+            }
+            else {
                 $filter = in_array($modelValues, $this->values, false);
             }
             if (!$filter) {

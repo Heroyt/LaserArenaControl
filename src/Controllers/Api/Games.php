@@ -11,11 +11,10 @@ use App\Services\SyncService;
 use DateTimeImmutable;
 use Exception;
 use Lsr\Core\Controllers\ApiController;
-use Lsr\Core\Exceptions\ModelNotFoundException;
-use Lsr\Core\Exceptions\ValidationException;
 use Lsr\Core\Requests\Request;
-use Lsr\Core\Templating\Latte;
 use Lsr\Logging\Exceptions\DirectoryCreationException;
+use Lsr\ObjectValidation\Exceptions\ValidationException;
+use Lsr\Orm\Exceptions\ModelNotFoundException;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
 
@@ -25,13 +24,13 @@ use Throwable;
 class Games extends ApiController
 {
     public function __construct(
-        private readonly GameSimulator        $gameSimulator,
-        private readonly GameHighlightService $highlightService,
+      private readonly GameSimulator        $gameSimulator,
+      private readonly GameHighlightService $highlightService,
     ) {
         parent::__construct();
     }
 
-    public function cheat(Request $request): ResponseInterface {
+    public function cheat(Request $request) : ResponseInterface {
         $code = $request->params['code'] ?? '';
         if (empty($code)) {
             return $this->respond(['error' => 'Invalid code'], 400);
@@ -50,19 +49,19 @@ class Games extends ApiController
             return $this->respond(['error' => 'Invalid player'], 400);
         }
 
-        $playerObj = $game->getPlayers()->get($player);
+        $playerObj = $game->players->get($player);
         if (!isset($playerObj)) {
             return $this->respond(['error' => 'Player not found'], 404);
         }
 
         $enemies = [];
-        if ($game->getMode()?->isTeam()) {
+        if ($game->mode?->isTeam()) {
             /** @var Team $team */
-            foreach ($game->getTeams() as $team) {
-                if ($team->color === $playerObj->getTeam()->color) {
+            foreach ($game->teams as $team) {
+                if ($team->color === $playerObj->team->color) {
                     continue;
                 }
-                foreach ($team->getPlayers() as $player2) {
+                foreach ($team->players as $player2) {
                     $enemies[] = $player2;
                 }
             }
@@ -81,12 +80,12 @@ class Games extends ApiController
     }
 
     /**
-     * @param Request $request
+     * @param  Request  $request
      *
      * @return ResponseInterface
      * @throws Throwable
      */
-    public function syncGames(Request $request): ResponseInterface {
+    public function syncGames(Request $request) : ResponseInterface {
         $limit = (int) ($request->params['limit'] ?? 5);
         $timeout = $request->getGet('timeout');
         $timeout = isset($timeout) ? (float) $timeout : null;
@@ -100,7 +99,7 @@ class Games extends ApiController
      * @throws ModelNotFoundException
      * @throws Throwable
      */
-    public function syncGame(string $code): ResponseInterface {
+    public function syncGame(string $code) : ResponseInterface {
         if (empty($code)) {
             return $this->respond(['error' => 'Invalid code'], 400);
         }
@@ -123,12 +122,12 @@ class Games extends ApiController
     /**
      * Get list of all games
      *
-     * @param Request $request
+     * @param  Request  $request
      *
      * @return ResponseInterface
      * @throws Throwable
      */
-    public function listGames(Request $request): ResponseInterface {
+    public function listGames(Request $request) : ResponseInterface {
         $date = $request->getGet('date');
         if (!empty($date)) {
             try {
@@ -136,7 +135,8 @@ class Games extends ApiController
             } catch (Exception $e) {
                 return $this->respond(['error' => 'Invalid parameter: "date"', 'exception' => $e->getMessage()], 400);
             }
-        } else {
+        }
+        else {
             $date = null;
         }
         // TODO: Possibly more filters
@@ -159,7 +159,7 @@ class Games extends ApiController
         }
         if (!empty($orderBy)) {
             if (!in_array($orderBy, ['start', 'end', 'code', 'id_game'], true)) {
-                return $this->respond(['error' => 'Invalid orderBy field: ' . $orderBy], 400);
+                return $this->respond(['error' => 'Invalid orderBy field: '.$orderBy], 400);
             }
             $query->orderBy($orderBy);
             if (!empty($desc)) {
@@ -180,12 +180,12 @@ class Games extends ApiController
     /**
      * Get one game's data by its code
      *
-     * @param Request $request
+     * @param  Request  $request
      *
      * @return ResponseInterface
      * @throws Throwable
      */
-    public function getGame(Request $request): ResponseInterface {
+    public function getGame(Request $request) : ResponseInterface {
         $gameCode = $request->params['code'] ?? '';
         if (empty($gameCode)) {
             return $this->respond(['error' => 'Invalid code'], 400);
@@ -198,12 +198,12 @@ class Games extends ApiController
     }
 
     /**
-     * @param Request $request
+     * @param  Request  $request
      *
      * @return ResponseInterface
      * @throws Throwable
      */
-    public function setGroup(string $code, Request $request): ResponseInterface {
+    public function setGroup(string $code, Request $request) : ResponseInterface {
         if (empty($code)) {
             return $this->respond(['error' => 'Invalid code'], 400);
         }
@@ -222,11 +222,12 @@ class Games extends ApiController
                 $game->group = GameGroup::get($group);
             } catch (ModelNotFoundException | ValidationException | DirectoryCreationException $e) {
                 return $this->respond(
-                    ['error' => 'Game group not found', 'exception' => $e->getMessage(), 'trace' => $e->getTrace()],
-                    404
+                  ['error' => 'Game group not found', 'exception' => $e->getMessage(), 'trace' => $e->getTrace()],
+                  404
                 );
             }
-        } else {
+        }
+        else {
             $game->group = null;
         }
 
@@ -240,12 +241,12 @@ class Games extends ApiController
         return $this->respond(['success' => true]);
     }
 
-    public function simulate(): ResponseInterface {
+    public function simulate() : ResponseInterface {
         $this->gameSimulator->simulate();
         return $this->respond(['success' => true]);
     }
 
-    public function getHighlights(string $code, Request $request): ResponseInterface {
+    public function getHighlights(string $code, Request $request) : ResponseInterface {
 
         try {
             $game = GameFactory::getByCode($code);
@@ -257,10 +258,10 @@ class Games extends ApiController
         }
 
         return $this->respond(
-            $this->highlightService->getHighlightsForGame(
-                $game,
-                !$request->getGet('no-cache')
-            )
+          $this->highlightService->getHighlightsForGame(
+            $game,
+            !$request->getGet('no-cache')
+          )
         );
     }
 }

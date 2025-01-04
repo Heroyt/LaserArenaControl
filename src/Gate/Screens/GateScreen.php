@@ -29,22 +29,21 @@ abstract class GateScreen
 
     protected ?CustomEventDto $triggerEvent = null;
 
-    public function __construct(protected readonly Latte $latte) {
-    }
+    public function __construct(protected readonly Latte $latte) {}
 
     /**
      * Get screen name
      *
      * @return string
      */
-    abstract public static function getName(): string;
+    abstract public static function getName() : string;
 
     /**
      * get screen description
      *
      * @return string
      */
-    public static function getDescription(): string {
+    public static function getDescription() : string {
         return '';
     }
 
@@ -53,7 +52,7 @@ abstract class GateScreen
      *
      * @return string
      */
-    public static function getGroup(): string {
+    public static function getGroup() : string {
         return '';
     }
 
@@ -62,14 +61,14 @@ abstract class GateScreen
      *
      * @return string
      */
-    abstract public static function getDiKey(): string;
+    abstract public static function getDiKey() : string;
 
     /**
      * Checks if this screen should be active under the current conditions.
      *
      * @return bool
      */
-    public function isActive(): bool {
+    public function isActive() : bool {
         if ($this instanceof ReloadTimerInterface) {
             $timer = $this->getReloadTimer();
             return !isset($timer) || $timer > 0;
@@ -82,23 +81,23 @@ abstract class GateScreen
      *
      * @return ResponseInterface Response containing the screen view
      */
-    abstract public function run(): ResponseInterface;
+    abstract public function run() : ResponseInterface;
 
     /**
      * @param  string[]  $systems
      *
      * @return $this
      */
-    public function setSystems(array $systems): GateScreen {
+    public function setSystems(array $systems) : GateScreen {
         $this->systems = $systems;
         return $this;
     }
 
-    public function getGame(): ?Game {
+    public function getGame() : ?Game {
         return $this->game;
     }
 
-    public function setGame(?Game $game): GateScreen {
+    public function setGame(?Game $game) : GateScreen {
         $this->game = $game;
         return $this;
     }
@@ -107,12 +106,12 @@ abstract class GateScreen
      * @param  array<string,mixed>  $params
      * @return $this
      */
-    public function setParams(array $params): GateScreen {
+    public function setParams(array $params) : GateScreen {
         $this->params = $params;
         return $this;
     }
 
-    public function setTriggerEvent(?CustomEventDto $triggerEvent): GateScreen {
+    public function setTriggerEvent(?CustomEventDto $triggerEvent) : GateScreen {
         $this->triggerEvent = $triggerEvent;
         return $this;
     }
@@ -124,24 +123,24 @@ abstract class GateScreen
      * @return ResponseInterface
      * @throws TemplateDoesNotExistException
      */
-    protected function view(string $template, array $params): ResponseInterface {
+    protected function view(string $template, array $params) : ResponseInterface {
         if ($this instanceof ReloadTimerInterface && $this->reloadTime <= 0) {
             $this->setReloadTime($this->getReloadTimer() ?? -1);
         }
 
         $response = $this
           ->respond(
-              $this->latte
+            $this->latte
               ->viewToString(
-                  $template,
-                  array_merge(
-                      $this->params,
-                      [
-                      'addJs'       => ['gate/defaultScreen.js'],
-                      'reloadTimer' => $this->reloadTime,
-                      ],
-                      $params
-                  )
+                $template,
+                array_merge(
+                  $this->params,
+                  [
+                    'addJs'       => ['gate/defaultScreen.js'],
+                    'reloadTimer' => $this->reloadTime,
+                  ],
+                  $params
+                )
               )
           )
           ->withHeader('Content-Type', 'text/html')
@@ -162,7 +161,7 @@ abstract class GateScreen
         return $response;
     }
 
-    public function setReloadTime(int $reloadTime): GateScreen {
+    public function setReloadTime(int $reloadTime) : GateScreen {
         $this->reloadTime = $reloadTime;
         return $this;
     }
@@ -175,10 +174,10 @@ abstract class GateScreen
      * @return ResponseInterface
      */
     protected function respond(
-        string | array | object $data,
-        int                     $code = 200,
-        array                   $headers = []
-    ): ResponseInterface {
+      string | array | object $data,
+      int                     $code = 200,
+      array                   $headers = []
+    ) : ResponseInterface {
         $response = new Response(new \Nyholm\Psr7\Response($code, $headers));
 
         if (is_string($data)) {
@@ -188,11 +187,11 @@ abstract class GateScreen
         return $response->withJsonBody($data);
     }
 
-    public function getTrigger(): ?ScreenTriggerType {
+    public function getTrigger() : ?ScreenTriggerType {
         return $this->trigger;
     }
 
-    public function setTrigger(ScreenTriggerType $trigger): static {
+    public function setTrigger(ScreenTriggerType $trigger) : static {
         $this->trigger = $trigger;
         return $this;
     }

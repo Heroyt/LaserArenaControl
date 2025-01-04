@@ -17,11 +17,11 @@ class Color
     /**
      * Get CSS definition for team colors used in games
      *
-     * @param Game[] $games
+     * @param  Game[]  $games
      *
      * @return string
      */
-    public static function getGamesColor(array $games): string {
+    public static function getGamesColor(array $games) : string {
         /** @var array<string, string[]> $styles */
         $styles = [];
         foreach ($games as $game) {
@@ -33,19 +33,19 @@ class Color
         $classes = '';
         $return = '<style>:root{';
         /**
-         * @var string   $system
+         * @var string $system
          * @var string[] $colors
          */
         foreach ($styles as $system => $colors) {
             $system = Strings::toSnakeCase($system, '-');
             foreach ($colors as $key => $color) {
                 $fontColor = self::getFontColor($color);
-                $var = 'team-' . $system . '-' . $key;
-                $return .= '--' . $var . ': ' . $color . ';';
-                $classes .= '.bg-' . $var . '{background-color: var(--' . $var . ');color:' . $fontColor . ';}';
+                $var = 'team-'.$system.'-'.$key;
+                $return .= '--'.$var.': '.$color.';';
+                $classes .= '.bg-'.$var.'{background-color: var(--'.$var.');color:'.$fontColor.';}';
             }
         }
-        $return .= '}' . $classes . '</style>';
+        $return .= '}'.$classes.'</style>';
 
         return $return;
     }
@@ -53,21 +53,22 @@ class Color
     /**
      * Get the font color for given background color
      *
-     * @param string $backgroundColor
-     * @param bool   $returnHex If true, return get string ("#000" or "#fff"), else return classname ("text-dark", "text-light")
+     * @param  string  $backgroundColor
+     * @param  bool  $returnHex  If true, return get string ("#000" or "#fff"), else return classname ("text-dark",
+     *   "text-light")
      *
      * @return string
      */
-    public static function getFontColor(string $backgroundColor, bool $returnHex = true): string {
+    public static function getFontColor(string $backgroundColor, bool $returnHex = true) : string {
         if ($backgroundColor[0] === '#') {
             $backgroundColor = substr($backgroundColor, 1);
         }
         $r = $g = $b = 0;
         switch (strlen($backgroundColor)) {
             case 3:
-                $r = hexdec($backgroundColor[0] . $backgroundColor[0]);
-                $g = hexdec($backgroundColor[1] . $backgroundColor[1]);
-                $b = hexdec($backgroundColor[2] . $backgroundColor[2]);
+                $r = hexdec($backgroundColor[0].$backgroundColor[0]);
+                $g = hexdec($backgroundColor[1].$backgroundColor[1]);
+                $b = hexdec($backgroundColor[2].$backgroundColor[2]);
                 break;
             case 6:
                 $r = hexdec(substr($backgroundColor, 0, 2));

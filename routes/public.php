@@ -8,7 +8,9 @@ use App\Controllers\Public\Music;
 use App\Controllers\Public\NewGame;
 use Lsr\Core\Routing\Route;
 
-$publicGroup = Route::group('public');
+/** @var \Lsr\Core\Routing\Router $this */
+
+$publicGroup = $this->group('public');
 
 $publicGroup->get('', [NewGame::class, 'show'])->name('public');
 $publicGroup->get('games', [GamesList::class, 'show'])->name('public-games');

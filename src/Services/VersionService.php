@@ -20,7 +20,7 @@ class VersionService
     /**
      * @return string returns 'dev' if no version is found
      */
-    public function getLastAvailableVersion(): string {
+    public function getLastAvailableVersion() : string {
         $versions = $this->getAvailableVersions();
         if (empty($versions)) {
             return 'dev';
@@ -31,7 +31,7 @@ class VersionService
     /**
      * @return string[] Versions sorted in ascending order
      */
-    public function getAvailableVersions(): array {
+    public function getAvailableVersions() : array {
         if (!isset($this->availableVersions)) {
             $this->execCommand('git fetch --all --tags');
             $versions = $this->execCommand('git tag -l');
@@ -49,11 +49,11 @@ class VersionService
     }
 
     /**
-     * @param string $command
+     * @param  string  $command
      *
      * @return string[] All lines got from the command
      */
-    private function execCommand(string $command): array {
+    private function execCommand(string $command) : array {
         if (!str_contains($command, '2>&1')) {
             $command .= ' 2>&1'; // Add stderr redirect to stdout
         }
@@ -61,7 +61,10 @@ class VersionService
         $out = exec($command, $output, $returnCode);
         if ($out === false || $returnCode !== 0) {
             try {
-                $this->getLogger()->error('Running command `' . $command . '` failed.', ['code' => $returnCode, 'output' => $output]);
+                $this->getLogger()->error(
+                  'Running command `'.$command.'` failed.',
+                  ['code' => $returnCode, 'output' => $output]
+                );
             } catch (DirectoryCreationException) {
             }
             throw new RuntimeException('Failed to run command');
@@ -73,14 +76,14 @@ class VersionService
      * @return Logger
      * @throws DirectoryCreationException
      */
-    private function getLogger(): Logger {
+    private function getLogger() : Logger {
         if (!isset($this->logger)) {
-            $this->logger = new Logger(LOG_DIR . 'services/', 'version');
+            $this->logger = new Logger(LOG_DIR.'services/', 'version');
         }
         return $this->logger;
     }
 
-    public function getCurrentVersion(): string {
+    public function getCurrentVersion() : string {
         if (!isset($this->currentVersion)) {
             $lines = $this->execCommand('git branch --show-current');
             $branch = 'master';

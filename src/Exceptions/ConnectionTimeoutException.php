@@ -12,10 +12,10 @@ class ConnectionTimeoutException extends Exception
      *
      * @link  http://php.net/manual/en/exception.construct.php
      *
-     * @param string         $message  [optional] The Exception message to throw.
-     * @param int            $code     [optional] The Exception code.
-     * @param int            $timeout
-     * @param Throwable|null $previous [optional] The previous throwable used for the exception chaining.
+     * @param  string  $message  [optional] The Exception message to throw.
+     * @param  int  $code  [optional] The Exception code.
+     * @param  int  $timeout
+     * @param  Throwable|null  $previous  [optional] The previous throwable used for the exception chaining.
      *
      * @since 5.1.0
      */

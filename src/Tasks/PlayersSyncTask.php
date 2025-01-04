@@ -9,15 +9,14 @@ use Throwable;
 class PlayersSyncTask implements TaskDispatcherInterface
 {
     public function __construct(
-        private readonly PlayerSynchronizationService $synchronizationService,
-    ) {
-    }
+      private readonly PlayerSynchronizationService $synchronizationService,
+    ) {}
 
-    public static function getDiName(): string {
+    public static function getDiName() : string {
         return 'task.ligaPlayersSync';
     }
 
-    public function process(ReceivedTaskInterface $task): void {
+    public function process(ReceivedTaskInterface $task) : void {
         try {
             $this->synchronizationService->syncAllLocalPlayers();
             $this->synchronizationService->syncAllArenaPlayers();

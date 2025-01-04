@@ -14,20 +14,19 @@ class Team implements JsonSerializable
     private int $color;
 
     public function __construct(
-        public readonly string $id,
-        public string          $name,
-        public string          $system,
-    ) {
-    }
+      public readonly string $id,
+      public string          $name,
+      public string          $system,
+    ) {}
 
-    public function addPlayer(Player ...$players): static {
+    public function addPlayer(Player ...$players) : static {
         foreach ($players as $player) {
             $this->players[$player->asciiName] = $player;
         }
         return $this;
     }
 
-    public function addColor(int $color): static {
+    public function addColor(int $color) : static {
         if (!isset($this->colors[$color])) {
             $this->colors[$color] = 0;
         }
@@ -40,20 +39,20 @@ class Team implements JsonSerializable
     /**
      * @return array<string,mixed>
      */
-    public function jsonSerialize(): array {
+    public function jsonSerialize() : array {
         return [
-            'id'      => $this->id,
-            'name'    => $this->name,
-            'system'  => $this->system,
-            'color'   => $this->getColor(),
-            'players' => $this->getPlayers(),
+          'id'      => $this->id,
+          'name'    => $this->name,
+          'system'  => $this->system,
+          'color'   => $this->getColor(),
+          'players' => $this->players,
         ];
     }
 
     /**
      * @return int
      */
-    public function getColor(): int {
+    public function getColor() : int {
         if (!isset($this->color)) {
             if (empty($this->colors)) {
                 throw new RuntimeException('Cannot get team\'s color.');
@@ -67,7 +66,7 @@ class Team implements JsonSerializable
     /**
      * @return Player[]
      */
-    public function getPlayers(): array {
+    public function getPlayers() : array {
         return $this->players;
     }
 }

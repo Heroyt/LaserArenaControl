@@ -10,14 +10,14 @@ namespace App\Gate\Settings;
  */
 enum AnimationType : string
 {
-    case FADE = 'fade';
-    case SCALE = 'scale';
-    case SLIDE_TOP = 'slide_top';
+    case FADE        = 'fade';
+    case SCALE       = 'scale';
+    case SLIDE_TOP   = 'slide_top';
     case SLIDE_RIGHT = 'slide_right';
-    case SLIDE_LEFT = 'slide_left';
+    case SLIDE_LEFT  = 'slide_left';
     case SLIDE_BOTTOM = 'slide_bottom';
 
-    public function getReadableName(): string {
+    public function getReadableName() : string {
         return match ($this) {
             self::FADE         => lang('Prolnutí', context: 'animation'),
             self::SCALE        => lang('Zmenšení', context: 'animation'),

@@ -6,15 +6,17 @@
 
 namespace App\Core\Interfaces;
 
+use Lsr\Orm\Model;
+
 /**
- * @template T of \Lsr\Core\Models\Model
+ * @template T of Model
  */
 interface CollectionQueryFilterInterface
 {
     /**
-     * @param CollectionInterface<T> $collection
+     * @param  CollectionInterface<T>  $collection
      *
      * @return CollectionQueryFilterInterface<T>
      */
-    public function apply(CollectionInterface $collection): CollectionQueryFilterInterface;
+    public function apply(CollectionInterface $collection) : CollectionQueryFilterInterface;
 }

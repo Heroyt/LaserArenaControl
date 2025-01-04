@@ -27,4 +27,4 @@ services:
 		[@symfony.normalizer.dibiRow, @symfony.denormalizer.array, @symfony.normalizer.datetime, @symfony.normalizer.enum, @symfony.normalizer.json, @symfony.normalizer.object],
 		[@symfony.encoder.json, @symfony.encoder.xml, @symfony.encoder.csv]
 	)
-	mapper: Lsr\Core\Mapper(@symfony.serializer)
+	mapper: Lsr\Serializer\Mapper(@symfony.serializer)

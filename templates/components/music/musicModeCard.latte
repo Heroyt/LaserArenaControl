@@ -5,22 +5,26 @@
 }
 
 <div class="music-mode" data-value="{$musicGroup->getValue()}">
-    {if $musicGroup->getBackgroundImage() !== null}
-        {var string[] $paths = $musicGroup->getBackgroundImage()?->getOptimized()}
-        <img class="background"
-             loading="lazy"
-             src="{$paths['250-webp'] ?? $paths['250'] ?? $paths['webp'] ?? $paths['original']}"
-             alt="{_'Pozadí'}">
-    {/if}
-    <div n:if="$musicGroup->getIcon() !== null" class="icon">
-        {var App\Models\DataObjects\Image $icon = $musicGroup->getIcon()}
-        {if $icon->getType() === 'svg'}
-            {file_get_contents($icon->getPath())|noescape}
-        {else}
-            {var string[] $paths = $icon->getOptimized()}
-            <img src="{$paths['original']}" alt="{_'Ikona'}">
-        {/if}
-    </div>
+	{try}
+		{if $musicGroup->getBackgroundImage() !== null}
+			{var string[] $paths = $musicGroup->getBackgroundImage()?->getOptimized()}
+			<img class="background"
+				 loading="lazy"
+				 src="{$paths['250-webp'] ?? $paths['250'] ?? $paths['webp'] ?? $paths['original']}"
+				 alt="{_'Pozadí'}">
+		{/if}
+	{/try}
+    {try}
+		<div n:if="$musicGroup->getIcon() !== null" class="icon">
+			{var App\Models\DataObjects\Image $icon = $musicGroup->getIcon()}
+			{if $icon->getType() === 'svg'}
+				{file_get_contents($icon->getPath())|noescape}
+			{else}
+				{var string[] $paths = $icon->getOptimized()}
+				<img src="{$paths['original']}" alt="{_'Ikona'}">
+			{/if}
+		</div>
+	{/try}
 	{if $showPlay && count($musicGroup->music) === 1}
 		<div class="music-mode-name-play">
 			<div class="name">
@@ -55,7 +59,7 @@
 			{/if}
 		</div>
 	{/if}
-    <div n:if="count($musicGroup->music) > 1" class="children">
+	<div n:if="count($musicGroup->music) > 1" class="children">
 		{if $showPlay}
 			<div n:foreach="$musicGroup->music as $musicMode" class="child" data-id="{$musicMode->id}">
 				<div class="name">
@@ -86,5 +90,5 @@
 				{_$musicMode->name, context: 'music'}
 			</button>
 		{/if}
-    </div>
+	</div>
 </div>

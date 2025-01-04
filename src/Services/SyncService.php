@@ -25,7 +25,7 @@ class SyncService
      * @return int
      * @throws Throwable
      */
-    public static function syncGames(int $limit = 5, ?float $timeout = null): int {
+    public static function syncGames(int $limit = 5, ?float $timeout = null) : int {
         $logger = new Logger(LOG_DIR, 'sync');
         /** @var Row[] $gameRows */
         $gameRows = GameFactory::queryGames(true, fields: ['sync'])
@@ -40,9 +40,15 @@ class SyncService
             return 0;
         }
 
-        $message = 'Starting sync for games: ' . implode(', ', array_map(static function (object $row) {
-                return $row->id_game . ' - ' . $row->code;
-        }, $gameRows));
+        $message = 'Starting sync for games: '.implode(
+            ', ',
+            array_map(
+              static function (object $row) {
+                  return $row->id_game.' - '.$row->code;
+              },
+              $gameRows
+            )
+          );
         $logger->info($message);
 
         // Split games by their system
@@ -65,13 +71,13 @@ class SyncService
         // Sync each system individually
         foreach ($systems as $system => $games) {
             $systemStart = microtime(true);
-            $logger->info('Synchronizing "' . $system . '" system. (' . count($games) . ' games)');
+            $logger->info('Synchronizing "'.$system.'" system. ('.count($games).' games)');
             $systemTimes[$system] = 0.0;
             // Send request in batches of 2 games max
             //$batchNum = 1;
             foreach ($games as $key => $game) {
                 if (!$game->sync()) {
-                    $logger->warning('Failed to synchronize "' . $system . '" system (game ' . $key . ')');
+                    $logger->warning('Failed to synchronize "'.$system.'" system (game '.$key.')');
                     continue;
                 }
                 $synced++;
@@ -80,9 +86,9 @@ class SyncService
         }
         $message = 'Synchronization end. Times: ';
         foreach ($systemTimes as $system => $time) {
-            $message .= $system . ': ' . $time . 's (avg: ' . ($time / count($systems[$system])) . 's), ';
+            $message .= $system.': '.$time.'s (avg: '.($time / count($systems[$system])).'s), ';
         }
-        $message .= 'total: ' . (microtime(true) - $start) . 's.';
+        $message .= 'total: '.(microtime(true) - $start).'s.';
         $logger->info($message);
 
         return $synced;

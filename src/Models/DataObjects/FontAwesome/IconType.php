@@ -16,7 +16,7 @@ enum IconType : string
     case REGULAR = 'regular';
     case BRAND = 'brands';
 
-    public function print(PrintContext $context): string {
+    public function print(PrintContext $context) : string {
         return $context->format('%dump', $this->value);
     }
 }

@@ -40,6 +40,7 @@ composer dump-autoload
 
 # Use PNPM or NPM
 source ~/.bashrc
+source ~/.shrc
 if ! command -v pnpm &> /dev/null
 then
   echo "Running with NPM"

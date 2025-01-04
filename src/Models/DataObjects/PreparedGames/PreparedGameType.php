@@ -9,7 +9,7 @@ namespace App\Models\DataObjects\PreparedGames;
  */
 enum PreparedGameType : string
 {
-    case PREPARED = 'prepared';
+    case PREPARED   = 'prepared';
     case USER_LOCAL = 'user-local';
     case USER_PUBLIC = 'user-public';
 }

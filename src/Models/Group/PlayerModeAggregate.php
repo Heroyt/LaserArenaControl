@@ -11,13 +11,12 @@ class PlayerModeAggregate
     use PlayerAggregate;
 
     public function __construct(
-        public readonly AbstractMode $mode,
-    ) {
-    }
+      public readonly AbstractMode $mode,
+    ) {}
 
-    public function addGame(GamePlayer $player, ?Game $game = null): void {
+    public function addGame(GamePlayer $player, ?Game $game = null) : void {
         if (!isset($game)) {
-            $game = $player->getGame();
+            $game = $player->game;
         }
 
         // Prevent duplicate adding

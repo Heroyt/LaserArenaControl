@@ -1,4 +1,4 @@
-FROM php:8.3-cli as php
+FROM php:8.4-cli AS php
 
 # Setup
 RUN apt-get update  \
@@ -100,14 +100,14 @@ RUN sed -i -e 's/# cs_CZ.UTF-8 UTF-8/cs_CZ.UTF-8 UTF-8/' /etc/locale.gen \
     && locale-gen cs_CZ.UTF-8 \
     && update-locale
 
-FROM golang:1.23 as golang
-FROM ghcr.io/roadrunner-server/velox:latest as roadrunner
+FROM golang:1.23 AS golang
+FROM ghcr.io/roadrunner-server/velox:latest AS roadrunner
 
 COPY --from=golang /usr/local/go/ /usr/local/go/
 
 ENV APP_VERSION="1.0.0"
 ARG BUILD_TIME="$(date +%FT%T%z)"
-ENV VERSION="v2024.2.1"
+ENV VERSION="v2024.3.1"
 ARG RT_TOKEN="undefined"
 
 COPY docker/velox_rr_2024.toml .
@@ -132,6 +132,7 @@ COPY --from=node_base /usr/local/bin/node /usr/local/bin/node
 RUN ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm
 
 # Install PNPM
+RUN wget -qO- https://get.pnpm.io/install.sh | ENV="$HOME/.shrc" SHELL="$(which sh)" sh -
 RUN wget -qO- https://get.pnpm.io/install.sh | ENV="$HOME/.bashrc" SHELL="$(which bash)" bash -
 
 # Project files

@@ -37,7 +37,7 @@
         <div n:class="collapse-grid, !isset($gate) ? show" id="gate-{$gateKey}-screens">
             <div class="collapse-inner">
                 <div class="list-group gate-screens">
-                    <div class="list-group-item gate-screen" n:foreach="$gate?->getScreens() ?? [] as $screen"
+					<div class="list-group-item gate-screen" n:foreach="$gate?->screens ?? [] as $screen"
                          data-id="{$screen->id}" data-delete-key="{$formName}[{$gateKey}][delete-screens][]">
                         {include
                             gateScreen,

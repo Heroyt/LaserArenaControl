@@ -25,17 +25,17 @@
     {var int $maxScore = $game->getMaxScore()}
     {var int $minScore = $game->getMinScore()}
     {var int $totalHeight = $maxScore - ($minScore < 0 ? $minScore : 0)}
-    {var int $count = count($game->getPlayers())}
+	{var int $count = count($game->players)}
     <section class="results-players" style="grid-template-columns: repeat({$count}, 1fr)">
-        {foreach $game->getPlayersSorted() as $player}
+		{foreach $game->playersSorted as $player}
             {varType App\GameModels\Game\Lasermaxx\Player $player}
             <div n:class="results-player, rounded, p-2, $player->ammoRest > 0 ? bg-white, flex-fill, $player->ammoRest <= 0 ? dead"
-                    style="--team-color: var(--team-{$player->getTeamColor()});">
+					style="--team-color: var(--team-{$player->color});">
                 <div class="player-head">
                     {var array $rank = $player->getBestAt()}
                     {svgIcon $rank['icon'], '', 15}
                     {var int $len = strlen($player->name)}
-                    <div class="player-name text-center text-team-{$player->getTeamColor()}"
+					<div class="player-name text-center text-team-{$player->color}"
                          {ifset $fontSize[$len]}style="--font-size: {$fontSize[$len]}pt;"{/ifset}>
                         {$player->name}
                     </div>
@@ -48,7 +48,7 @@
                 {include playerShots, $player, $game->ammo}
                 {include playerHits, $player}
                 {include playerFavourites, $player}
-                {if method_exists($game, 'isMinesOn') && $game->isMinesOn() && $game->getMode()?->settings?->playerMines}
+                {if method_exists($game, 'isMinesOn') && $game->isMinesOn() && $game->mode?->settings?->playerMines}
                     {include playerMines, $player}
                 {/if}
             </div>
@@ -57,7 +57,7 @@
 {/define}
 
 {define playerShots, App\GameModels\Game\Lasermaxx\Player $player, int $maxShots}
-    <div n:if="$game->getMode()?->settings?->playerShots" class="player-shots">
+	<div n:if="$game->mode?->settings?->playerShots" class="player-shots">
         {var int $step = ceil($maxShots / 10)}
         {var int $count = ceil(($game->ammo - $player->shots) / $step)}
         <svg viewBox="0 0 1720 504" class="mb-1">

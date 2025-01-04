@@ -23,19 +23,19 @@ class GeneralStats implements WidgetInterface, WithGameIdsInterface
     /**
      * @inheritDoc
      */
-    public function getHash(?Game $game = null, ?DateTimeInterface $date = null, ?array $systems = []): string {
+    public function getHash(?Game $game = null, ?DateTimeInterface $date = null, ?array $systems = []) : string {
         if (isset($this->hash)) {
             return $this->hash;
         }
         $data = $this->getData($game, $date, $systems);
-        $hash = $data['gameCount'] . $data['teamCount'] . $data['playerCount'];
+        $hash = $data['gameCount'].$data['teamCount'].$data['playerCount'];
         foreach ($data['topScores'] as $player) {
-            $hash .= $player->name . $player->score;
+            $hash .= $player->name.$player->score;
         }
-        $hash .= isset($data['topAccuracy']) ? $data['topAccuracy']->name . $data['topAccuracy']->accuracy : '';
-        $hash .= isset($data['topShots']) ? $data['topShots']->name . $data['topShots']->accuracy : '';
-        $hash .= isset($data['topHits']) ? $data['topHits']->name . $data['topHits']->accuracy : '';
-        $hash .= isset($data['topDeaths']) ? $data['topDeaths']->name . $data['topDeaths']->accuracy : '';
+        $hash .= isset($data['topAccuracy']) ? $data['topAccuracy']->name.$data['topAccuracy']->accuracy : '';
+        $hash .= isset($data['topShots']) ? $data['topShots']->name.$data['topShots']->accuracy : '';
+        $hash .= isset($data['topHits']) ? $data['topHits']->name.$data['topHits']->accuracy : '';
+        $hash .= isset($data['topDeaths']) ? $data['topDeaths']->name.$data['topDeaths']->accuracy : '';
         $this->hash = md5($hash);
         return $this->hash;
     }
@@ -43,7 +43,7 @@ class GeneralStats implements WidgetInterface, WithGameIdsInterface
     /**
      * @inheritDoc
      */
-    public function getData(?Game $game = null, ?DateTimeInterface $date = null, ?array $systems = []): array {
+    public function getData(?Game $game = null, ?DateTimeInterface $date = null, ?array $systems = []) : array {
         if (isset($this->data)) {
             return $this->data;
         }
@@ -69,8 +69,8 @@ class GeneralStats implements WidgetInterface, WithGameIdsInterface
                 $count = 0;
                 foreach ($topScores as $score) {
                     $topScores[] = PlayerFactory::getById(
-                        (int) $score->id_player,
-                        ['system' => (string) $score->system]
+                      (int) $score->id_player,
+                      ['system' => (string) $score->system]
                     );
                     if ((++$count) > 3) {
                         break;
@@ -82,8 +82,8 @@ class GeneralStats implements WidgetInterface, WithGameIdsInterface
             $topHits = $q->orderBy('[hits]')->desc()->fetch(cache: false);
             if (isset($topHits)) {
                 $topHits = PlayerFactory::getById(
-                    (int) $topHits->id_player,
-                    ['system' => (string) $topHits->system]
+                  (int) $topHits->id_player,
+                  ['system' => (string) $topHits->system]
                 );
             }
             $q = PlayerFactory::queryPlayers($gameIds);
@@ -91,8 +91,8 @@ class GeneralStats implements WidgetInterface, WithGameIdsInterface
             $topDeaths = $q->orderBy('[deaths]')->desc()->fetch(cache: false);
             if (isset($topDeaths)) {
                 $topDeaths = PlayerFactory::getById(
-                    (int) $topDeaths->id_player,
-                    ['system' => (string) $topDeaths->system]
+                  (int) $topDeaths->id_player,
+                  ['system' => (string) $topDeaths->system]
                 );
             }
             $q = PlayerFactory::queryPlayers($gameIds);
@@ -100,8 +100,8 @@ class GeneralStats implements WidgetInterface, WithGameIdsInterface
             $topAccuracy = $q->orderBy('[accuracy]')->desc()->fetch(cache: false);
             if (isset($topAccuracy)) {
                 $topAccuracy = PlayerFactory::getById(
-                    (int) $topAccuracy->id_player,
-                    ['system' => (string) $topAccuracy->system]
+                  (int) $topAccuracy->id_player,
+                  ['system' => (string) $topAccuracy->system]
                 );
             }
             $q = PlayerFactory::queryPlayers($gameIds);
@@ -109,8 +109,8 @@ class GeneralStats implements WidgetInterface, WithGameIdsInterface
             $topShots = $q->orderBy('[shots]')->desc()->fetch(cache: false);
             if (isset($topShots)) {
                 $topShots = PlayerFactory::getById(
-                    (int) $topShots->id_player,
-                    ['system' => (string) $topShots->system]
+                  (int) $topShots->id_player,
+                  ['system' => (string) $topShots->system]
                 );
             }
         }
@@ -132,15 +132,15 @@ class GeneralStats implements WidgetInterface, WithGameIdsInterface
         return $this->data;
     }
 
-    public function getTemplate(): string {
+    public function getTemplate() : string {
         return 'generalStats.latte';
     }
 
-    public function getSettingsTemplate(): string {
+    public function getSettingsTemplate() : string {
         return '';
     }
 
-    public function refresh(): static {
+    public function refresh() : static {
         $this->data = null;
         $this->hash = null;
         $this->gameIds = null;

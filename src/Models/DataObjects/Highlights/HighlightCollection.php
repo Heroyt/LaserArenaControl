@@ -20,7 +20,7 @@ class HighlightCollection implements Countable, Iterator, JsonSerializable
     private array $flattened = [];
     private int $index = 0;
 
-    public function sort(): HighlightCollection {
+    public function sort() : HighlightCollection {
         $this->flattened = [];
         $this->getAll();
         return $this;
@@ -29,7 +29,7 @@ class HighlightCollection implements Countable, Iterator, JsonSerializable
     /**
      * @return GameHighlight[] Sorted by their rarityScore in descending order
      */
-    public function getAll(): array {
+    public function getAll() : array {
         if ($this->count === count($this->flattened)) {
             return $this->flattened;
         }
@@ -38,13 +38,13 @@ class HighlightCollection implements Countable, Iterator, JsonSerializable
         return $this->flattened;
     }
 
-    public function changeRarity(GameHighlight $highlight, int $rarity): HighlightCollection {
+    public function changeRarity(GameHighlight $highlight, int $rarity) : HighlightCollection {
         $this->remove($highlight);
         $highlight->rarityScore = $rarity;
         return $this->add($highlight);
     }
 
-    public function remove(GameHighlight $highlight): HighlightCollection {
+    public function remove(GameHighlight $highlight) : HighlightCollection {
         $key = array_search($highlight, $this->data[$highlight->rarityScore], true);
         if ($key !== false) {
             unset($this->data[$highlight->rarityScore][$key]);
@@ -53,41 +53,41 @@ class HighlightCollection implements Countable, Iterator, JsonSerializable
         return $this;
     }
 
-    public function add(GameHighlight $highlight): HighlightCollection {
+    public function add(GameHighlight $highlight) : HighlightCollection {
         $this->data[$highlight->rarityScore] ??= [];
         $this->data[$highlight->rarityScore][] = $highlight;
         $this->count++;
         return $this;
     }
 
-    public function current(): GameHighlight {
+    public function current() : GameHighlight {
         return $this->getAll()[$this->index];
     }
 
-    public function next(): void {
+    public function next() : void {
         $this->index++;
     }
 
-    public function key(): int {
+    public function key() : int {
         return $this->index;
     }
 
-    public function valid(): bool {
+    public function valid() : bool {
         return isset($this->getAll()[$this->index]);
     }
 
-    public function rewind(): void {
+    public function rewind() : void {
         $this->index = 0;
     }
 
-    public function count(): int {
+    public function count() : int {
         return $this->count;
     }
 
     /**
      * @return GameHighlight[]
      */
-    public function jsonSerialize(): array {
+    public function jsonSerialize() : array {
         return $this->getAll();
     }
 }

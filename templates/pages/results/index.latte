@@ -16,7 +16,7 @@
 				<option n:foreach="$games as $game" {if $selected?->code === $game->code}selected{/if}
 						value="{$game->code}">
 					{ifset $game->fileNumber}{$game->fileNumber}: {/ifset}
-                    {$game->start?->format('H:i')} - {$game->getMode()?->getName()} ({$game->getPlayers()|length})
+                    {$game->start?->format('H:i')} - {$game->mode?->getName()} ({$game->players|length})
 				</option>
 			</select>
             <label for="selectStyle">{_'Styl', domain: 'results', context: 'style'}:</label>

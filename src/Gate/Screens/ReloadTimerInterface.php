@@ -4,7 +4,7 @@ namespace App\Gate\Screens;
 
 interface ReloadTimerInterface
 {
-    public function getReloadStartTime(): int;
+    public function getReloadStartTime() : int;
 
-    public function getReloadTimer(): ?int;
+    public function getReloadTimer() : ?int;
 }

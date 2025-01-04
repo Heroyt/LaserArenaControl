@@ -18,55 +18,55 @@ class VestGunAfterGameScreen extends GateScreen implements ReloadTimerInterface,
     /**
      * @inheritDoc
      */
-    public static function getName(): string {
+    public static function getName() : string {
         return lang('Připněte zbraň na vestu', domain: 'gate', context: 'screens');
     }
 
-    public static function getDescription(): string {
+    public static function getDescription() : string {
         return lang('Informační obrazovka s animací připnutí zbraně na vestu.', domain: 'gate', context: 'screens');
     }
 
     /**
      * @inheritDoc
      */
-    public static function getDiKey(): string {
+    public static function getDiKey() : string {
         return 'gate.screens.vest_gun_after_game';
     }
 
     /**
      * @inheritDoc
      */
-    public static function getSettingsForm(): string {
+    public static function getSettingsForm() : string {
         return 'gate/settings/vestGunAfterGame.latte';
     }
 
     /**
      * @inheritDoc
      */
-    public static function buildSettingsFromForm(array $data): GateSettings {
+    public static function buildSettingsFromForm(array $data) : GateSettings {
         return new VestGunAfterGameSettings(
-            isset($data['time']) ? (int) $data['time'] : null,
+          isset($data['time']) ? (int) $data['time'] : null,
         );
     }
 
     /**
      * @inheritDoc
      */
-    public function run(): ResponseInterface {
+    public function run() : ResponseInterface {
         return $this->view(
-            'gate/screens/vestGunAfterGame',
-            [
+          'gate/screens/vestGunAfterGame',
+          [
             'settings' => $this->getSettings(),
             'addCss'   => ['gate/vestGunAfterGame.css'],
             //'addJs'   => ['gate/vestGunAfterGame.js'],
-            ]
+          ]
         );
     }
 
     /**
      * @inheritDoc
      */
-    public function getSettings(): VestGunAfterGameSettings {
+    public function getSettings() : VestGunAfterGameSettings {
         if (!isset($this->settings)) {
             $this->settings = new VestGunAfterGameSettings();
         }
@@ -76,7 +76,7 @@ class VestGunAfterGameScreen extends GateScreen implements ReloadTimerInterface,
     /**
      * @inheritDoc
      */
-    public function setSettings(GateSettings $settings): static {
+    public function setSettings(GateSettings $settings) : static {
         $this->settings = $settings;
         return $this;
     }

@@ -12,22 +12,22 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class RecalculateSkillsGameCommand extends Command
 {
-    public static function getDefaultName(): ?string {
+    public static function getDefaultName() : ?string {
         return 'regression:skills';
     }
 
-    public static function getDefaultDescription(): ?string {
+    public static function getDefaultDescription() : ?string {
         return 'Recalculate game skills.';
     }
 
-    protected function configure(): void {
+    protected function configure() : void {
         $this->addArgument('offset', InputArgument::OPTIONAL, 'Games DB offset', 0);
         $this->addArgument('limit', InputArgument::OPTIONAL, 'Games DB limit', 200);
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): int {
-        $limit = (int)$input->getArgument('limit');
-        $offset = (int)$input->getArgument('offset');
+    protected function execute(InputInterface $input, OutputInterface $output) : int {
+        $limit = (int) $input->getArgument('limit');
+        $offset = (int) $input->getArgument('offset');
 
         $games = GameFactory::queryGames(true)->orderBy('start')->desc()->getIterator($offset, $limit);
 
@@ -40,14 +40,14 @@ class RecalculateSkillsGameCommand extends Command
             $game->calculateSkills();
             if (!$game->save()) {
                 $output->writeln(
-                    Colors::color(ForegroundColors::RED) . 'Failed to save game into DB' . Colors::reset()
+                  Colors::color(ForegroundColors::RED).'Failed to save game into DB'.Colors::reset()
                 );
             }
             unset($game);
         }
 
         $output->writeln(
-            Colors::color(ForegroundColors::GREEN) . 'Done' . Colors::reset()
+          Colors::color(ForegroundColors::GREEN).'Done'.Colors::reset()
         );
         return self::SUCCESS;
     }

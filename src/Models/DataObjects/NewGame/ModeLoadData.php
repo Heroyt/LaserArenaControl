@@ -12,6 +12,6 @@ class ModeLoadData
     public int $id = 0;
     public string $name = '';
     public GameModeType $type = GameModeType::TEAM;
-    /** @var array<string|int,string>  */
+    /** @var array<string|int,string> */
     public array $variations = [];
 }

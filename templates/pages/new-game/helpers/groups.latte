@@ -90,7 +90,7 @@
                                         {$team->name}
                                     </label>
                                 </li>
-                                <li n:foreach="$team->getPlayers() as $pName => $player"
+								<li n:foreach="$team->players as $pName => $player"
                                         class="list-group-item group-player" data-player="{$pName}">
                                     <label class="h-100 w-100 d-flex align-items-center cursor-pointer">
                                         <strong class="col-2 counter">{$iterator->counter}.</strong>

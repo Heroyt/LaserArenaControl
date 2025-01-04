@@ -18,11 +18,11 @@ use Endroid\QrCode\Builder\Builder;
 use Endroid\QrCode\Encoding\Encoding;
 use Endroid\QrCode\ErrorCorrectionLevel;
 use Endroid\QrCode\Writer\SvgWriter;
-use Lsr\Core\Exceptions\ModelNotFoundException;
-use Lsr\Core\Exceptions\ValidationException;
 use Lsr\Core\Templating\Latte;
 use Lsr\Exceptions\TemplateDoesNotExistException;
 use Lsr\Helpers\Tools\Strings;
+use Lsr\ObjectValidation\Exceptions\ValidationException;
+use Lsr\Orm\Exceptions\ModelNotFoundException;
 
 /**
  *
@@ -30,10 +30,9 @@ use Lsr\Helpers\Tools\Strings;
 readonly class ResultPrintService
 {
     public function __construct(
-        private GotenbergService $gotenberg,
-        private Latte            $latte
-    ) {
-    }
+      private GotenbergService $gotenberg,
+      private Latte            $latte
+    ) {}
 
     /**
      * Generate PDF results for a game
@@ -48,13 +47,13 @@ readonly class ResultPrintService
      * @throws TemplateDoesNotExistException
      */
     public function getResultsPdf(
-        Game   $game,
-        int    $style,
-        string $template,
-        int    $copies = 1,
-        bool   $cache = true
-    ): string {
-        $pdfFile = $this->getTmpDir() . $this->getResultsFileName($game, $style, $template, $copies) . '.pdf';
+      Game   $game,
+      int    $style,
+      string $template,
+      int    $copies = 1,
+      bool   $cache = true
+    ) : string {
+        $pdfFile = $this->getTmpDir().$this->getResultsFileName($game, $style, $template, $copies).'.pdf';
         if ($cache && file_exists($pdfFile)) {
             return $pdfFile;
         }
@@ -66,25 +65,25 @@ readonly class ResultPrintService
         }
         $templateObj = PrintTemplate::getBySlug($template);
 
-        $bg = ROOT . ($templateObj?->orientation === PrintOrientation::landscape ? $styleObj->bgLandscape :
+        $bg = ROOT.($templateObj?->orientation === PrintOrientation::landscape ? $styleObj->bgLandscape :
             $styleObj->bg);
 
         $additionalFiles = [
-          ROOT . 'dist/main.css',
-          ROOT . 'dist/results/' . $template . '.css',
+          ROOT.'dist/main.css',
+          ROOT.'dist/results/'.$template.'.css',
           $bg,
         ];
 
         try {
-            $mode = $game->getMode();
+            $mode = $game->mode;
             if ($mode instanceof CustomResultsMode) {
                 $customTemplate = $mode->getCustomResultsTemplate();
                 if ($customTemplate !== '') {
-                    if (file_exists(ROOT . 'dist/results/' . $customTemplate . '.css')) {
-                        $additionalFiles[] = ROOT . 'dist/results/' . $customTemplate . '.css';
+                    if (file_exists(ROOT.'dist/results/'.$customTemplate.'.css')) {
+                        $additionalFiles[] = ROOT.'dist/results/'.$customTemplate.'.css';
                     }
-                    if (file_exists(ROOT . 'dist/results/' . $template . '_' . $customTemplate . '.css')) {
-                        $additionalFiles[] = ROOT . 'dist/results/' . $template . '_' . $customTemplate . '.css';
+                    if (file_exists(ROOT.'dist/results/'.$template.'_'.$customTemplate.'.css')) {
+                        $additionalFiles[] = ROOT.'dist/results/'.$template.'_'.$customTemplate.'.css';
                     }
                 }
             }
@@ -95,8 +94,8 @@ readonly class ResultPrintService
           ->gotenberg
           ->chromium
           ->getFromHTML(
-              str_replace(
-                  [
+                             str_replace(
+                               [
                                  App::getInstance()->getBaseUrl(),
                                  'dist/results/',
                                  'dist/',
@@ -105,17 +104,17 @@ readonly class ResultPrintService
                                  'upload/',
                                  'uploads/print/',
                                  'uploads/',
-                                 ],
-                  ['', '', '', '', '', '', '', ''],
-                  $this->getResultsHtml(
-                      $game,
-                      $style,
-                      $template,
-                      $copies,
-                      $cache
-                  )
-              ),
-              additionalFiles: $additionalFiles,
+                               ],
+                               ['', '', '', '', '', '', '', ''],
+                               $this->getResultsHtml(
+                                 $game,
+                                 $style,
+                                 $template,
+                                 $copies,
+                                 $cache
+                               )
+                             ),
+            additionalFiles: $additionalFiles,
           );
 
         if (!empty($content)) {
@@ -125,8 +124,8 @@ readonly class ResultPrintService
         return '';
     }
 
-    public function getTmpDir(): string {
-        $dir = TMP_DIR . 'results/';
+    public function getTmpDir() : string {
+        $dir = TMP_DIR.'results/';
         if (is_dir($dir) || (mkdir($dir) && is_dir($dir))) {
             return $dir;
         }
@@ -142,17 +141,17 @@ readonly class ResultPrintService
      * @return string
      */
     public function getResultsFileName(
-        Game   $game,
-        int    $style,
-        string $template,
-        int    $copies,
-        bool   $view = false
-    ): string {
-        return $game->code . '-' .
-          $template . '-' .
-          $style . 'x' .
-          $copies . '.' .
-          App::getShortLanguageCode() .
+      Game   $game,
+      int    $style,
+      string $template,
+      int    $copies,
+      bool   $view = false
+    ) : string {
+        return $game->code.'-'.
+          $template.'-'.
+          $style.'x'.
+          $copies.'.'.
+          App::getShortLanguageCode().
           ($view ? '.view' : '');
     }
 
@@ -169,12 +168,12 @@ readonly class ResultPrintService
      * @throws TemplateDoesNotExistException
      */
     public function getResultsHtml(
-        Game   $game,
-        int    $style,
-        string $template,
-        int    $copies = 1,
-        bool   $cache = true
-    ): string {
+      Game   $game,
+      int    $style,
+      string $template,
+      int    $copies = 1,
+      bool   $cache = true
+    ) : string {
         bdump($cache);
         $htmlFile = $this->getHtmlFilePath($game, $style, $template, $copies);
         if ($cache && file_exists($htmlFile)) {
@@ -194,8 +193,8 @@ readonly class ResultPrintService
      * @param  int  $copies
      * @return string
      */
-    public function getHtmlFilePath(Game $game, int $style, string $template, int $copies = 1): string {
-        return $this->getTmpDir() . $this->getResultsFileName($game, $style, $template, $copies) . '.html';
+    public function getHtmlFilePath(Game $game, int $style, string $template, int $copies = 1) : string {
+        return $this->getTmpDir().$this->getResultsFileName($game, $style, $template, $copies).'.html';
     }
 
     /**
@@ -206,10 +205,10 @@ readonly class ResultPrintService
      * @return string
      * @throws TemplateDoesNotExistException
      */
-    public function generateResultsHtml(Game $game, int $style, string $template, int $copies): string {
-        $namespace = '\\App\\GameModels\\Game\\' . Strings::toPascalCase($game::SYSTEM) . '\\';
-        $teamClass = $namespace . 'Team';
-        $playerClass = $namespace . 'Player';
+    public function generateResultsHtml(Game $game, int $style, string $template, int $copies) : string {
+        $namespace = '\\App\\GameModels\\Game\\'.Strings::toPascalCase($game::SYSTEM).'\\';
+        $teamClass = $namespace.'Team';
+        $playerClass = $namespace.'Player';
         /** @var Player<Game, Team> $player */
         $player = new $playerClass();
         /** @var Team<Player, Game> $team */
@@ -222,27 +221,30 @@ readonly class ResultPrintService
         }
 
         $params = new ResultsParams(
-            $game,
-            $printStyle,
-            PrintTemplate::getBySlug($template),
-            new Today($game, $player, $team),
-            $this->getPublicUrl($game),
-            $this->getQR($game),
-            App::getShortLanguageCode(),
-            $copies,
+          $game,
+          $printStyle,
+          PrintTemplate::getBySlug($template),
+          new Today($game, $player, $team),
+          $this->getPublicUrl($game),
+          $this->getQR($game),
+          App::getShortLanguageCode(),
+          $copies,
         );
         $params->app = App::getInstance();
 
         try {
-            $mode = $game->getMode();
+            $mode = $game->mode;
             if ($mode instanceof CustomResultsMode) {
                 $customTemplate = $mode->getCustomResultsTemplate();
                 if ($customTemplate !== '') {
-                    $customFile = TEMPLATE_DIR . 'results/templates/' . $template . '/' . $customTemplate . '.latte';
+                    $customFile = TEMPLATE_DIR.'results/templates/'.$template.'/'.$customTemplate.'.latte';
                     if (file_exists($customFile)) {
-                        $template .= '/' . $customTemplate;
-                    } elseif (file_exists(TEMPLATE_DIR . 'results/templates/' . $customTemplate . '.latte')) {
-                        $template = $customTemplate;
+                        $template .= '/'.$customTemplate;
+                    }
+                    else {
+                        if (file_exists(TEMPLATE_DIR.'results/templates/'.$customTemplate.'.latte')) {
+                            $template = $customTemplate;
+                        }
                     }
                 }
             }
@@ -250,7 +252,7 @@ readonly class ResultPrintService
         }
 
         try {
-            $html = $this->latte->viewToString('results/templates/' . $template, $params);
+            $html = $this->latte->viewToString('results/templates/'.$template, $params);
         } catch (TemplateDoesNotExistException) {
             $html = $this->latte->viewToString('results/templates/default', $params);
         }
@@ -263,10 +265,10 @@ readonly class ResultPrintService
      * @param  Game<Team, Player>  $game
      * @return string
      */
-    public function getPublicUrl(Game $game): string {
+    public function getPublicUrl(Game $game) : string {
         /** @var string $url */
         $url = Info::get('liga_api_url');
-        return trailingSlashIt($url) . 'g/' . $game->code;
+        return trailingSlashIt($url).'g/'.$game->code;
     }
 
     /**
@@ -276,13 +278,13 @@ readonly class ResultPrintService
      *
      * @return string
      */
-    public function getQR(Game $game): string {
-        $result = Builder::create()
-                         ->data($this->getPublicUrl($game))
-                         ->writer(new SvgWriter())
-                         ->encoding(new Encoding('UTF-8'))
-                         ->errorCorrectionLevel(ErrorCorrectionLevel::Low)
-                         ->build();
+    public function getQR(Game $game) : string {
+        $result = new Builder(
+          writer              : new SvgWriter(),
+          data                : $this->getPublicUrl($game),
+          encoding            : new Encoding('UTF-8'),
+          errorCorrectionLevel: ErrorCorrectionLevel::Low
+        )->build();
         return $result->getString();
     }
 }

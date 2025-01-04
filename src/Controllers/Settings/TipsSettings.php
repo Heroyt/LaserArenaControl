@@ -6,13 +6,13 @@ use App\GameModels\Tip;
 use Dibi\DriverException;
 use JsonException;
 use Lsr\Core\Controllers\Controller;
-use Lsr\Core\Exceptions\ModelNotFoundException;
-use Lsr\Core\Exceptions\ValidationException;
 use Lsr\Core\Requests\Dto\ErrorResponse;
 use Lsr\Core\Requests\Dto\SuccessResponse;
 use Lsr\Core\Requests\Request;
 use Lsr\Core\Translations;
 use Lsr\Exceptions\TemplateDoesNotExistException;
+use Lsr\ObjectValidation\Exceptions\ValidationException;
+use Lsr\Orm\Exceptions\ModelNotFoundException;
 use Psr\Http\Message\ResponseInterface;
 
 /**
@@ -23,7 +23,7 @@ class TipsSettings extends Controller
     public string $title = 'Nastavení - Tipy';
 
     public function __construct(
-        private readonly Translations $translations,
+      private readonly Translations $translations,
     ) {
         parent::__construct();
     }
@@ -35,7 +35,7 @@ class TipsSettings extends Controller
      * @throws TemplateDoesNotExistException
      * @throws ValidationException
      */
-    public function show(): ResponseInterface {
+    public function show() : ResponseInterface {
         $this->params['tips'] = Tip::getAll();
         $this->params['languages'] = $this->translations->supportedLanguages;
         return $this->view('pages/settings/tips');
@@ -45,7 +45,7 @@ class TipsSettings extends Controller
      * @throws DriverException
      * @throws JsonException
      */
-    public function save(Request $request): ResponseInterface {
+    public function save(Request $request) : ResponseInterface {
         $ids = [
           'old' => [],
           'new' => [],
@@ -75,7 +75,8 @@ class TipsSettings extends Controller
                     $tips['old'][$id] = $tip->id;
                 }
             }
-        } else {
+        }
+        else {
             $request->passErrors[] = lang('Chybný požadavek');
         }
 
@@ -98,24 +99,25 @@ class TipsSettings extends Controller
                     $ids['new'][$id] = $tip->id;
                 }
             }
-        } else {
+        }
+        else {
             $request->passErrors[] = lang('Chybný požadavek');
         }
 
         if ($request->isAjax()) {
             return $this->respond(
-                [
+              [
                 'success' => empty($request->passErrors),
                 'errors'  => $request->passErrors,
                 'ids' => $ids,
-                ],
-                empty($request->passErrors) ? 200 : 500
+              ],
+              empty($request->passErrors) ? 200 : 500
             );
         }
         return $this->app->redirect('settings-tips', $request);
     }
 
-    public function remove(Tip $tip, Request $request): ResponseInterface {
+    public function remove(Tip $tip, Request $request) : ResponseInterface {
         if (!$tip->delete()) {
             $err = lang('Nepodařilo se odstranit entitu', context: 'errors');
             if ($request->isAjax()) {

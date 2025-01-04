@@ -14,34 +14,34 @@ use Symfony\Component\Console\Output\OutputInterface;
 class SyncVestsCommand extends Command
 {
     public function __construct(
-        private readonly LigaApi $api,
-        ?string $name = null
+      private readonly LigaApi $api,
+      ?string                  $name = null
     ) {
         parent::__construct($name);
     }
 
-    public static function getDefaultName(): ?string {
+    public static function getDefaultName() : ?string {
         return 'vests:sync';
     }
 
-    public static function getDefaultDescription(): ?string {
+    public static function getDefaultDescription() : ?string {
         return 'Sync vests to laser liga.';
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): int {
+    protected function execute(InputInterface $input, OutputInterface $output) : int {
         if ($this->api->syncVests()) {
             $output->writeln(
-                Colors::color(ForegroundColors::GREEN) .
-                'Synchronized vests' .
-                Colors::reset()
+              Colors::color(ForegroundColors::GREEN).
+              'Synchronized vests'.
+              Colors::reset()
             );
             return self::SUCCESS;
         }
 
         $output->writeln(
-            Colors::color(ForegroundColors::RED) .
-            'Sync failed' .
-            Colors::reset()
+          Colors::color(ForegroundColors::RED).
+          'Sync failed'.
+          Colors::reset()
         );
         return self::FAILURE;
     }

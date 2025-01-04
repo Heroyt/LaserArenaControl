@@ -4,31 +4,31 @@ namespace App\Core\Collections;
 
 use App\Core\Interfaces\CollectionInterface;
 use App\Core\Interfaces\CollectionQueryFilterInterface;
+use Lsr\Orm\Model;
 
 /**
- * @template T of \Lsr\Core\Models\Model
+ * @template T of Model
  * @implements CollectionQueryFilterInterface<T>
  */
 class CollectionCompareFilter implements CollectionQueryFilterInterface
 {
     /**
-     * @param string     $property
-     * @param Comparison $comparison
-     * @param T          $value
+     * @param  string  $property
+     * @param  Comparison  $comparison
+     * @param  T  $value
      */
     public function __construct(
-        public string     $property,
-        public Comparison $comparison,
-        public mixed      $value,
-    ) {
-    }
+      public string     $property,
+      public Comparison $comparison,
+      public mixed      $value,
+    ) {}
 
     /**
-     * @param CollectionInterface<T> $collection
+     * @param  CollectionInterface<T>  $collection
      *
      * @return CollectionQueryFilterInterface<T>
      */
-    public function apply(CollectionInterface $collection): CollectionQueryFilterInterface {
+    public function apply(CollectionInterface $collection) : CollectionQueryFilterInterface {
         $remove = [];
         foreach ($collection as $key => $value) {
             if (property_exists($value, $this->property)) {

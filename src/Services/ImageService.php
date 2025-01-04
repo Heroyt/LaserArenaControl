@@ -8,7 +8,6 @@ use GdImage;
 use InvalidArgumentException;
 use Lsr\Exceptions\FileException;
 use RuntimeException;
-
 use function imagecreatefromgif;
 use function imagecreatefromjpeg;
 use function imagecreatefrompng;
@@ -23,7 +22,7 @@ readonly class ImageService
      * @param  int[]  $sizes
      */
     public function __construct(
-        public array $sizes = [
+      public array $sizes = [
         1000,
         800,
         500,
@@ -31,9 +30,8 @@ readonly class ImageService
         300,
         200,
         150,
-        ]
-    ) {
-    }
+      ]
+    ) {}
 
     /**
      * @param  string  $file
@@ -41,18 +39,18 @@ readonly class ImageService
      * @return void
      * @throws FileException
      */
-    public function optimize(string $file): void {
+    public function optimize(string $file) : void {
         if (!file_exists($file)) {
-            throw new FileException('File doesn\'t exist - ' . $file);
+            throw new FileException('File doesn\'t exist - '.$file);
         }
 
         $type = strtolower(pathinfo($file, PATHINFO_EXTENSION));
         $name = pathinfo($file, PATHINFO_FILENAME);
-        $path = pathinfo($file, PATHINFO_DIRNAME) . '/';
+        $path = pathinfo($file, PATHINFO_DIRNAME).'/';
 
-        $optimizedDir = $path . 'optimized';
+        $optimizedDir = $path.'optimized';
         if (!is_dir($optimizedDir) && !mkdir($optimizedDir) && !is_dir($optimizedDir)) {
-            throw new FileException('Cannot create an optimized image directory - ' . $file);
+            throw new FileException('Cannot create an optimized image directory - '.$file);
         }
 
         $image = match ($type) {
@@ -60,7 +58,7 @@ readonly class ImageService
             'png'         => imagecreatefrompng($file),
             'gif'         => imagecreatefromgif($file),
             'webp'        => imagecreatefromwebp($file),
-            default       => throw new RuntimeException('Invalid image type: ' . $type),
+            default => throw new RuntimeException('Invalid image type: '.$type),
         };
 
         if ($image === false) {
@@ -81,12 +79,12 @@ readonly class ImageService
             imagefilledrectangle($image, 0, 0, 150, 30, $bgc);
 
             /* Output an error message */
-            imagestring($image, 1, 5, 5, 'Error loading ' . $file, $tc);
+            imagestring($image, 1, 5, 5, 'Error loading '.$file, $tc);
             //throw new RuntimeException('Failed to read image - '.$file);
         }
 
         if ($type !== 'webp') {
-            imagewebp($image, $optimizedDir . '/' . $name . '.webp');
+            imagewebp($image, $optimizedDir.'/'.$name.'.webp');
         }
 
         $originalWidth = imagesx($image);
@@ -102,7 +100,7 @@ readonly class ImageService
                 continue;
             }
 
-            $resizedFileName = $optimizedDir . '/' . $name . 'x' . $size . '.' . $type;
+            $resizedFileName = $optimizedDir.'/'.$name.'x'.$size.'.'.$type;
             match ($type) {
                 'jpg', 'jpeg' => imagejpeg($resized, $resizedFileName),
                 'png'         => imagepng($resized, $resizedFileName),
@@ -110,7 +108,7 @@ readonly class ImageService
                 default => null,
             };
 
-            imagewebp($resized, $optimizedDir . '/' . $name . 'x' . $size . '.webp');
+            imagewebp($resized, $optimizedDir.'/'.$name.'x'.$size.'.webp');
         }
 
     }
@@ -118,7 +116,7 @@ readonly class ImageService
     /**
      * @return int[]
      */
-    public function getSizes(): array {
+    public function getSizes() : array {
         return $this->sizes;
     }
 
@@ -129,7 +127,7 @@ readonly class ImageService
      *
      * @return GdImage|false
      */
-    public function resize(GdImage $image, ?int $width = null, ?int $height = null): GdImage | false {
+    public function resize(GdImage $image, ?int $width = null, ?int $height = null) : GdImage | false {
         if ($width === null && $height === null) {
             throw new InvalidArgumentException('At least 1 argument $width or $height must be set.');
         }
@@ -169,7 +167,8 @@ readonly class ImageService
         if ($ratio1 > $ratio2) {
             $resizedWidth = $originalWidth * $height / $originalHeight;
             $srcX = ($resizedWidth - $width) / 2;
-        } else {
+        }
+        else {
             $resizedHeight = $originalHeight * $width / $originalWidth;
             $srcY = ($resizedHeight - $height) / 2;
         }

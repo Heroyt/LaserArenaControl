@@ -18,12 +18,11 @@ readonly class LastResultsResponse
      * @param  string  $contents2
      */
     public function __construct(
-        #[Property(type: 'array', items: new Items(type: 'string'))]
-        public array $files,
-        #[Property]
-        public string $contents1,
-        #[Property]
-        public string $contents2,
-    ) {
-    }
+      #[Property(type: 'array', items: new Items(type: 'string'))]
+      public array  $files,
+      #[Property]
+      public string $contents1,
+      #[Property]
+      public string $contents2,
+    ) {}
 }

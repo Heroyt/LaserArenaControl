@@ -9,7 +9,7 @@ interface TaskDispatcherInterface
     /**
      * @return non-empty-string
      */
-    public static function getDiName(): string;
+    public static function getDiName() : string;
 
-    public function process(ReceivedTaskInterface $task): void;
+    public function process(ReceivedTaskInterface $task) : void;
 }

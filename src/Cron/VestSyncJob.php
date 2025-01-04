@@ -14,12 +14,11 @@ use Spiral\RoadRunner\Metrics\Metrics;
 final readonly class VestSyncJob implements Job
 {
     public function __construct(
-        private LigaApi $api,
-        private Metrics $metrics,
-    ) {
-    }
+      private LigaApi $api,
+      private Metrics $metrics,
+    ) {}
 
-    public function run(JobLock $lock): void {
+    public function run(JobLock $lock) : void {
         $this->metrics->add('cron_job_started', 1, ['vest_sync']);
         $lock->refresh(120.0);
         if ($this->api->syncVests()) {
@@ -31,7 +30,7 @@ final readonly class VestSyncJob implements Job
         $this->metrics->add('cron_job_error', 1, ['vest_sync']);
     }
 
-    public function getName(): string {
+    public function getName() : string {
         return 'Vest sync';
     }
 }

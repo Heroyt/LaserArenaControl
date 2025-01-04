@@ -20,9 +20,9 @@ use App\Tools\AbstractResultsParser;
 use App\Tools\ResultParsing\WithMetadata;
 use DateTime;
 use JsonException;
-use Lsr\Core\Exceptions\ValidationException;
 use Lsr\Logging\Exceptions\DirectoryCreationException;
 use Lsr\Logging\Logger;
+use Lsr\ObjectValidation\Exceptions\ValidationException;
 use Throwable;
 
 /**
@@ -42,7 +42,7 @@ class ResultsParser extends AbstractResultsParser
     /**
      * @inheritDoc
      */
-    public static function getFileGlob(): string {
+    public static function getFileGlob() : string {
         return '*.game';
     }
 
@@ -52,7 +52,7 @@ class ResultsParser extends AbstractResultsParser
      *
      * @inheritDoc
      */
-    public static function checkFile(string $fileName = '', string $contents = ''): bool {
+    public static function checkFile(string $fileName = '', string $contents = '') : bool {
         if (empty($fileName) && empty($contents)) {
             return false;
         }
@@ -83,7 +83,7 @@ class ResultsParser extends AbstractResultsParser
      * @throws Throwable
      * @noinspection PhpDuplicateSwitchCaseBodyInspection
      */
-    public function parse(): Game {
+    public function parse() : Game {
         $game = new Game();
 
         // Results file info
@@ -102,7 +102,7 @@ class ResultsParser extends AbstractResultsParser
 
         // Check if parsing is successful and lines were found
         if (empty($titles) || empty($argsAll)) {
-            throw new ResultsParseException('The results file cannot be parsed: ' . $this->fileName);
+            throw new ResultsParseException('The results file cannot be parsed: '.$this->fileName);
         }
 
         /** @var array<string,string> $meta Meta data from game */
@@ -123,7 +123,7 @@ class ResultsParser extends AbstractResultsParser
                 case 'SITE':
                     if ($args[2] !== 'EVO-5 MAXX') {
                         throw new ResultsParseException(
-                            'Invalid results system type. - ' . $title . ': ' . json_encode($args, JSON_THROW_ON_ERROR)
+                          'Invalid results system type. - '.$title.': '.json_encode($args, JSON_THROW_ON_ERROR)
                         );
                     }
                     break;
@@ -169,9 +169,9 @@ class ResultsParser extends AbstractResultsParser
                         throw new ResultsParseException('Invalid argument count in TIMING');
                     }
                     $game->timing = new Timing(
-                        before: (int) $args[0],
-                        gameLength: (int) $args[1],
-                        after: (int) $args[2]
+                      before    : (int) $args[0],
+                      gameLength: (int) $args[1],
+                      after     : (int) $args[2]
                     );
                     $dateStart = $args[3];
                     if ($dateStart !== $this::EMPTY_DATE) {
@@ -306,10 +306,10 @@ class ResultsParser extends AbstractResultsParser
                 case 'GROUP':
                     if ($argsCount !== 2) {
                         throw new ResultsParseException(
-                            'Invalid argument count in GROUP - ' . $argsCount . ' ' . json_encode(
-                                $args,
-                                JSON_THROW_ON_ERROR
-                            )
+                          'Invalid argument count in GROUP - '.$argsCount.' '.json_encode(
+                            $args,
+                            JSON_THROW_ON_ERROR
+                          )
                         );
                     }
                     // Parse metadata
@@ -328,7 +328,7 @@ class ResultsParser extends AbstractResultsParser
                         throw new ResultsParseException('Invalid argument count in PACK');
                     }
                     $player = new Player();
-                    $game->getPlayers()->set($player, (int) $args[0]);
+                    $game->players->set($player, (int) $args[0]);
                     $player->setGame($game);
                     $player->vest = (int) $args[0];
                     $keysVests[$player->vest] = $currKey++;
@@ -346,7 +346,7 @@ class ResultsParser extends AbstractResultsParser
                         throw new ResultsParseException('Invalid argument count in TEAM');
                     }
                     $team = new Team();
-                    $game->getTeams()->set($team, (int) $args[0]);
+                    $game->teams->set($team, (int) $args[0]);
                     $team->setGame($game);
                     $team->name = substr($args[1], 0, 15);
                     $team->color = (int) $args[0];
@@ -367,13 +367,13 @@ class ResultsParser extends AbstractResultsParser
                         throw new ResultsParseException('Invalid argument count in PACKX');
                     }
                     /** @var Player|null $player */
-                    $player = $game->getPlayers()->get((int) $args[0]);
+                    $player = $game->players->get((int) $args[0]);
                     if (!isset($player)) {
                         throw new ResultsParseException(
-                            'Cannot find Player - ' . json_encode(
-                                $args[0],
-                                JSON_THROW_ON_ERROR
-                            ) . PHP_EOL . $this->fileName . ':' . PHP_EOL . $this->fileContents
+                          'Cannot find Player - '.json_encode(
+                            $args[0],
+                            JSON_THROW_ON_ERROR
+                          ).PHP_EOL.$this->fileName.':'.PHP_EOL.$this->fileContents
                         );
                     }
                     $player->score = (int) $args[1];
@@ -411,13 +411,13 @@ class ResultsParser extends AbstractResultsParser
                         throw new ResultsParseException('Invalid argument count in PACKY');
                     }
                     /** @var Player|null $player */
-                    $player = $game->getPlayers()->get((int) $args[0]);
+                    $player = $game->players->get((int) $args[0]);
                     if (!isset($player)) {
                         throw new ResultsParseException(
-                            'Cannot find Player - ' . json_encode(
-                                $args[0],
-                                JSON_THROW_ON_ERROR
-                            ) . PHP_EOL . $this->fileName . ':' . PHP_EOL . $this->fileContents
+                          'Cannot find Player - '.json_encode(
+                            $args[0],
+                            JSON_THROW_ON_ERROR
+                          ).PHP_EOL.$this->fileName.':'.PHP_EOL.$this->fileContents
                         );
                     }
                     $player->shotPoints = (int) ($args[1] ?? 0);
@@ -446,13 +446,13 @@ class ResultsParser extends AbstractResultsParser
                         throw new ResultsParseException('Invalid argument count in TEAMX');
                     }
                     /** @var Team|null $team */
-                    $team = $game->getTeams()->get((int) $args[0]);
+                    $team = $game->teams->get((int) $args[0]);
                     if (!isset($team)) {
                         throw new ResultsParseException(
-                            'Cannot find Team - ' . json_encode(
-                                $args[0],
-                                JSON_THROW_ON_ERROR
-                            ) . PHP_EOL . $this->fileName . ':' . PHP_EOL . $this->fileContents
+                          'Cannot find Team - '.json_encode(
+                            $args[0],
+                            JSON_THROW_ON_ERROR
+                          ).PHP_EOL.$this->fileName.':'.PHP_EOL.$this->fileContents
                         );
                     }
                     $team->score = (int) $args[1];
@@ -467,16 +467,16 @@ class ResultsParser extends AbstractResultsParser
                         throw new ResultsParseException('Invalid argument count in HITS');
                     }
                     /** @var Player|null $player */
-                    $player = $game->getPlayers()->get((int) $args[0]);
+                    $player = $game->players->get((int) $args[0]);
                     if (!isset($player)) {
                         throw new ResultsParseException(
-                            'Cannot find Player - ' . json_encode(
-                                $args[0],
-                                JSON_THROW_ON_ERROR
-                            ) . PHP_EOL . $this->fileName . ':' . PHP_EOL . $this->fileContents
+                          'Cannot find Player - '.json_encode(
+                            $args[0],
+                            JSON_THROW_ON_ERROR
+                          ).PHP_EOL.$this->fileName.':'.PHP_EOL.$this->fileContents
                         );
                     }
-                    foreach ($game->getPlayers() as $player2) {
+                    foreach ($game->players as $player2) {
                         $player->addHits($player2, (int) ($args[$keysVests[$player2->vest] ?? -1] ?? 0));
                     }
                     break;
@@ -490,11 +490,11 @@ class ResultsParser extends AbstractResultsParser
             // TODO: Figure out the unknown arguments
         }
         // Set player teams
-        foreach ($game->getPlayers()->getAll() as $player) {
+        foreach ($game->players->getAll() as $player) {
             // Find team
-            foreach ($game->getTeams()->getAll() as $team) {
+            foreach ($game->teams->getAll() as $team) {
                 if ($player->teamNum === $team->color) {
-                    $player->setTeam($team);
+                    $player->team = $team;
                     break;
                 }
             }
@@ -506,14 +506,15 @@ class ResultsParser extends AbstractResultsParser
             $this->setGroupFromMeta($game, $meta);
             $this->setPlayersMeta($game, $meta);
             $this->setTeamsMeta($game, $meta);
-        } else {
+        }
+        else {
             try {
-                $logger = new Logger(LOG_DIR . 'results/', 'import');
+                $logger = new Logger(LOG_DIR.'results/', 'import');
                 $logger->warning('Game meta is not valid.', $meta);
             } catch (DirectoryCreationException) {
             }
         }
-        $mode = $game->getMode();
+        $mode = $game->mode;
         if ($mode instanceof ModifyScoresMode) {
             $mode->modifyResults($game);
         }
@@ -532,7 +533,7 @@ class ResultsParser extends AbstractResultsParser
      *
      * @return string[] Separated and trimmed arguments, not type-casted
      */
-    private function getArgs(string $args): array {
+    private function getArgs(string $args) : array {
         return array_map('trim', explode(',', $args));
     }
 }

@@ -1,5 +1,7 @@
 <?php
+
 declare(strict_types=1);
+
 namespace App\Templates\Public;
 
 use App\GameModels\Game\Game;
@@ -14,5 +16,4 @@ class GamesDetailTemplate extends TemplateParameters
     public string $code;
     public Game $game;
     public string $qr;
-
 }

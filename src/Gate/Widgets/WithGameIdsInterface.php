@@ -13,14 +13,14 @@ interface WithGameIdsInterface
      * @return array<string,int[]>
      */
     public function getGameIds(
-        ?DateTimeInterface $dateFrom = null,
-        ?DateTimeInterface $dateTo = null,
-        ?array             $systems = []
-    ): array;
+      ?DateTimeInterface $dateFrom = null,
+      ?DateTimeInterface $dateTo = null,
+      ?array             $systems = []
+    ) : array;
 
     /**
      * @param  array<string, int[]>  $gameIds
      * @return $this
      */
-    public function setGameIds(array $gameIds): static;
+    public function setGameIds(array $gameIds) : static;
 }

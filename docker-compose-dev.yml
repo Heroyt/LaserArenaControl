@@ -39,7 +39,9 @@ services:
       REDIS_HOST: "redis"
   php:
     restart: unless-stopped
-    image: "heroyt/laser-arena-control:latest"
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile
     working_dir: /var/www/
     command:
       - /bin/bash
@@ -92,9 +94,7 @@ services:
       - http://web:80/stub_status
   web:
     restart: unless-stopped
-    build:
-      context: ./
-      dockerfile: docker/nginx/Dockerfile
+    image: nginx:alpine
     depends_on:
       - php
       - db

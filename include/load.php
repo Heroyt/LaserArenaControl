@@ -17,29 +17,27 @@ use Gettext\Loader\PoLoader;
 use Gettext\Translations;
 use Latte\Bridges\Tracy\BlueScreenPanel;
 use Latte\Bridges\Tracy\LattePanel;
-use Lsr\Core\DB;
+use Lsr\Core\Tracy\RoutingTracyPanel;
+use Lsr\Core\Tracy\TranslationTracyPanel;
 use Lsr\Helpers\Tools\Timer;
-use Lsr\Helpers\Tracy\CacheTracyPanel;
-use Lsr\Helpers\Tracy\DbTracyPanel;
-use Lsr\Helpers\Tracy\RoutingTracyPanel;
 use Lsr\Helpers\Tracy\TimerTracyPanel;
-use Lsr\Helpers\Tracy\TranslationTracyPanel;
 use Nette\Bridges\DITracy\ContainerPanel;
 use Nette\Bridges\HttpTracy\SessionPanel;
 use Tracy\Debugger;
 use Tracy\NativeSession;
+use Lsr\Db\DB;
 
 if (!defined('ROOT')) {
-    define("ROOT", dirname(__DIR__) . '/');
+    define("ROOT", dirname(__DIR__).'/');
 }
 
 date_default_timezone_set('Europe/Prague');
 
 // Autoload libraries
-require_once ROOT . 'vendor/autoload.php';
+require_once ROOT.'vendor/autoload.php';
 
 // Load all globals and constants
-require_once ROOT . 'include/config.php';
+require_once ROOT.'include/config.php';
 
 Timer::start('core.init');
 
@@ -57,18 +55,16 @@ Debugger::setSessionStorage(new NativeSession());
 
 // Register custom tracy panels
 Debugger::getBar()
-    ->addPanel(new TimerTracyPanel())
-    ->addPanel(new CacheTracyPanel())
-    ->addPanel(new DbTracyPanel())
-    ->addPanel(new TranslationTracyPanel())
-    ->addPanel(new RoutingTracyPanel());
+  ->addPanel(new TimerTracyPanel())
+  ->addPanel(new TranslationTracyPanel())
+  ->addPanel(new RoutingTracyPanel());
 
 Loader::init();
 
 define('CHECK_TRANSLATIONS', (bool) (App::getInstance()->config->getConfig()['General']['TRANSLATIONS'] ?? false));
 define(
-    'TRANSLATIONS_COMMENTS',
-    (bool) (App::getInstance()->config->getConfig()['General']['TRANSLATIONS_COMMENTS'] ?? false)
+  'TRANSLATIONS_COMMENTS',
+  (bool) (App::getInstance()->config->getConfig()['General']['TRANSLATIONS_COMMENTS'] ?? false)
 );
 
 // Translations update
@@ -81,12 +77,12 @@ if (!PRODUCTION) {
     /** @var string[] $languages */
     $languages = App::getInstance()->getSupportedLanguages();
     foreach ($languages as $lang => $country) {
-        $concatLang = $lang . '_' . $country;
-        $path = LANGUAGE_DIR . '/' . $concatLang;
+        $concatLang = $lang.'_'.$country;
+        $path = LANGUAGE_DIR.'/'.$concatLang;
         if (!is_dir($path)) {
             continue;
         }
-        $file = $path . '/LC_MESSAGES/' . LANGUAGE_FILE_NAME . '.po';
+        $file = $path.'/LC_MESSAGES/'.LANGUAGE_FILE_NAME.'.po';
         $translations[$concatLang] = $poLoader->loadFile($file);
     }
     Timer::stop('core.init.translations');
@@ -95,7 +91,7 @@ if (!PRODUCTION) {
 if (defined('INDEX') && PHP_SAPI !== 'cli') {
     // Register library tracy panels
     if (!isset($_ENV['noDb'])) {
-        (new Panel())->register(DB::getConnection());
+        (new Panel())->register(DB::getConnection()->connection);
     }
     if (!PRODUCTION) {
         Debugger::getBar()

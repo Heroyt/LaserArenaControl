@@ -13,28 +13,28 @@ use Spiral\RoadRunner\Jobs\Task\ReceivedTaskInterface;
 class GamePrecacheTask implements TaskDispatcherInterface
 {
     public function __construct(
-        private ResultsPrecacheService $precacheService
-    ) {
-    }
+      private ResultsPrecacheService $precacheService
+    ) {}
 
-    public static function getDiName(): string {
+    public static function getDiName() : string {
         return 'task.gamesPrecache';
     }
 
     /**
-     * @param ReceivedTaskInterface $task
+     * @param  ReceivedTaskInterface  $task
      * @return void
      * @throws JobsException
      */
-    public function process(ReceivedTaskInterface $task): void {
+    public function process(ReceivedTaskInterface $task) : void {
         /** @var GamePrecachePayload $payload */
         $payload = igbinary_unserialize($task->getPayload());
 
         if (isset($payload->code)) {
-            echo 'Precaching game: ' . $payload->code;
+            echo 'Precaching game: '.$payload->code;
             if ($this->precacheService->precacheGameByCode($payload->code, $payload->style, $payload->template)) {
                 $task->complete();
-            } else {
+            }
+            else {
                 $task->fail('Game precache failed');
             }
             return;
@@ -42,7 +42,8 @@ class GamePrecacheTask implements TaskDispatcherInterface
 
         if ($this->precacheService->precacheNextGame($payload->style, $payload->template)) {
             $task->complete();
-        } else {
+        }
+        else {
             $task->fail('Game precache failed');
         }
     }

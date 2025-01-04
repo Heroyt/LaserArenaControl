@@ -10,7 +10,7 @@ readonly class VestGunAfterGameSettings extends GateSettings
     use WithTime;
 
     public function __construct(
-        ?int $time = null,
+      ?int $time = null,
     ) {
         $this->time = $time;
     }

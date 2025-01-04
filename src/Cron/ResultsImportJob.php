@@ -19,17 +19,17 @@ final readonly class ResultsImportJob implements Job
     private Logger $logger;
 
     public function __construct(
-        private ImportService $importService,
-        private Metrics $metrics,
+      private ImportService $importService,
+      private Metrics       $metrics,
     ) {
         $this->logger = new Logger(LOG_DIR, 'cron');
     }
 
-    public function getName(): string {
+    public function getName() : string {
         return 'Import results';
     }
 
-    public function run(JobLock $lock): void {
+    public function run(JobLock $lock) : void {
         $this->metrics->add('cron_job_started', 1, ['results_import']);
 
         $lock->refresh(30.0);
@@ -45,8 +45,8 @@ final readonly class ResultsImportJob implements Job
 
         if ($response instanceof ErrorResponse) {
             $this->logger->error(
-                $response->title . (!empty($response->detail) ? ' ' . $response->detail : ''),
-                $response->values ?? []
+              $response->title.(!empty($response->detail) ? ' '.$response->detail : ''),
+              $response->values ?? []
             );
             if (isset($response->exception)) {
                 $this->logger->exception($response->exception);
@@ -56,7 +56,7 @@ final readonly class ResultsImportJob implements Job
         }
 
         if ($response->imported) {
-            $this->logger->info('Imported ' . $response->imported . '/' . $response->total . ' results.');
+            $this->logger->info('Imported '.$response->imported.'/'.$response->total.' results.');
         }
         $this->metrics->add('cron_job_ok', 1, ['results_import']);
     }

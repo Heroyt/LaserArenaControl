@@ -17,8 +17,8 @@ use Dibi\DriverException;
 use Dibi\Exception;
 use GuzzleHttp\Exception\GuzzleException;
 use JsonException;
-use Lsr\Core\Caching\Cache;
-use Lsr\Core\DB;
+use Lsr\Caching\Cache;
+use Lsr\Db\DB;
 use Throwable;
 
 class GameHighlightService
@@ -37,13 +37,13 @@ class GameHighlightService
     private array $teamCheckers = [];
 
     /**
-     * @param array<GameHighlightChecker|PlayerHighlightChecker|TeamHighlightChecker> $checkers
+     * @param  array<GameHighlightChecker|PlayerHighlightChecker|TeamHighlightChecker>  $checkers
      */
     public function __construct(
-        array                          $checkers,
-        private readonly Cache         $cache,
-        private readonly LigaApi       $api,
-        private readonly FeatureConfig $config,
+      array                          $checkers,
+      private readonly Cache         $cache,
+      private readonly LigaApi       $api,
+      private readonly FeatureConfig $config,
     ) {
         // Distribute checkers
         foreach ($checkers as $checker) {
@@ -63,46 +63,46 @@ class GameHighlightService
      * @param  DateTimeInterface  $date
      * @return HighlightDto[]
      */
-    public function getHighlightsDataForDay(DateTimeInterface $date): array {
+    public function getHighlightsDataForDay(DateTimeInterface $date) : array {
         $highlights = [];
         $rows = DB::select(self::TABLE, '*')
                   ->where('DATE([datetime]) = %d AND [object] IS NOT NULL', $date)
                   ->orderBy('rarity')
                   ->desc()
                   ->cacheTags(
-                      'highlights',
-                      'highlights/' . $date->format('Y-m-d'),
-                      'games/' . $date->format('Y-m-d')
+                    'highlights',
+                    'highlights/'.$date->format('Y-m-d'),
+                    'games/'.$date->format('Y-m-d')
                   )
                   ->fetchAll();
         foreach ($rows as $row) {
             try {
                 $highlights[] = new HighlightDto(
-                    $row->code,
-                    $row->datetime,
-                    $row->rarity,
-                    GameHighlightType::from($row->type),
-                    $row->description,
-                    isset($row->players) ? json_decode($row->players, true) : null,
-                    isset($row->object) ? igbinary_unserialize($row->object) : null,
+                  $row->code,
+                  $row->datetime,
+                  $row->rarity,
+                  GameHighlightType::from($row->type),
+                  $row->description,
+                  isset($row->players) ? json_decode($row->players, true) : null,
+                  isset($row->object) ? igbinary_unserialize($row->object) : null,
                 );
-            } catch (\Throwable) {
+            } catch (Throwable) {
 
             }
         }
         return $highlights;
     }
 
-    public function getHighlightsForDay(DateTimeInterface $date): HighlightCollection {
+    public function getHighlightsForDay(DateTimeInterface $date) : HighlightCollection {
         /** @var string[] $rows */
         $rows = DB::select(self::TABLE, '[object]')
                   ->where('DATE([datetime]) = %d AND [object] IS NOT NULL', $date)
                   ->orderBy('rarity')
                   ->desc()
                   ->cacheTags(
-                      'highlights',
-                      'highlights/' . $date->format('Y-m-d'),
-                      'games/' . $date->format('Y-m-d')
+                    'highlights',
+                    'highlights/'.$date->format('Y-m-d'),
+                    'games/'.$date->format('Y-m-d')
                   )
                   ->fetchPairs();
 
@@ -122,13 +122,13 @@ class GameHighlightService
      * @template T of Team
      * @template P of Player
      *
-     * @param Game<T, P> $game
-     * @param bool       $cache
+     * @param  Game<T, P>  $game
+     * @param  bool  $cache
      *
      * @return HighlightCollection
      * @throws Throwable Cache error
      */
-    public function getHighlightsForGame(Game $game, bool $cache = true): HighlightCollection {
+    public function getHighlightsForGame(Game $game, bool $cache = true) : HighlightCollection {
         $dependencies = [
           'tags' => $this->getCacheTags($game),
         ];
@@ -136,18 +136,35 @@ class GameHighlightService
             $highlights = $this->loadHighlightsForGame($game);
             // Cache result
             $this->cache->save(
-                'game.' . $game->code . '.highlights.' . App::getShortLanguageCode(),
-                $highlights,
-                $dependencies,
+              'game.'.$game->code.'.highlights.'.App::getShortLanguageCode(),
+              $highlights,
+              $dependencies,
             );
             return $highlights;
         }
 
         return $this->cache->load(
-            'game.' . $game->code . '.highlights.' . App::getShortLanguageCode(),
-            fn ()=> $this->loadHighlightsForGame($game),
-            $dependencies,
+          'game.'.$game->code.'.highlights.'.App::getShortLanguageCode(),
+          fn() => $this->loadHighlightsForGame($game),
+          $dependencies,
         );
+    }
+
+    /**
+     * @param  Game  $game
+     * @return string[]
+     */
+    private function getCacheTags(Game $game) : array {
+        return [
+          'highlights',
+          'highlights/'.$game->start?->format('Y-m-d'),
+          'games',
+          'games/'.$game::SYSTEM,
+          'games/'.$game::SYSTEM.'/'.$game->id,
+          'games/'.$game->code,
+          'games/'.$game->start?->format('Y-m-d'),
+          'games/'.$game->code.'/highlights',
+        ];
     }
 
     /**
@@ -159,7 +176,7 @@ class GameHighlightService
      * @return HighlightCollection
      * @throws GuzzleException
      */
-    private function loadHighlightsForGame(Game $game, bool $generate = false): HighlightCollection {
+    private function loadHighlightsForGame(Game $game, bool $generate = false) : HighlightCollection {
         $ligaActive = $this->config->isFeatureEnabled('LIGA') && $game->sync;
         $highlights = null;
         if ($generate) {
@@ -187,13 +204,13 @@ class GameHighlightService
     /**
      * @template T of Team
      * @template P of Player
-     * @param Game<T,P> $game
+     * @param  Game<T,P>  $game
      * @return HighlightCollection
      * @throws GuzzleException
      * @throws JsonException
      */
-    private function getHighlightsFromLiga(Game $game): HighlightCollection {
-        $response = $this->api->get('/api/games/' . $game->code . '/highlights');
+    private function getHighlightsFromLiga(Game $game) : HighlightCollection {
+        $response = $this->api->get('/api/games/'.$game->code.'/highlights');
         $response->getBody()->rewind();
         $contents = $response->getBody()->getContents();
 
@@ -209,22 +226,22 @@ class GameHighlightService
 
         foreach ($highlights as $highlight) {
             $collection->add(
-                (GameHighlightType::from($highlight['type'])->getHighlightClass()::fromJson($highlight, $game))
+              (GameHighlightType::from($highlight['type'])->getHighlightClass()::fromJson($highlight, $game))
             );
         }
         return $collection;
     }
 
-    private function generateHighlightsForGame(Game $game): HighlightCollection {
+    private function generateHighlightsForGame(Game $game) : HighlightCollection {
         $highlights = new HighlightCollection();
 
-        foreach ($game->getTeams() as $team) {
+        foreach ($game->teams as $team) {
             foreach ($this->teamCheckers as $checker) {
                 $checker->checkTeam($team, $highlights);
             }
         }
 
-        foreach ($game->getPlayers() as $player) {
+        foreach ($game->players as $player) {
             foreach ($this->playerCheckers as $checker) {
                 $checker->checkPlayer($player, $highlights);
             }
@@ -243,24 +260,24 @@ class GameHighlightService
      * @return bool
      * @throws DriverException
      */
-    private function saveHighlightCollection(HighlightCollection $collection, Game $game): bool {
+    private function saveHighlightCollection(HighlightCollection $collection, Game $game) : bool {
         try {
             DB::getConnection()->begin();
             foreach ($collection->getAll() as $highlight) {
                 DB::replace(
-                    $this::TABLE,
-                    [
-                      'code'        => $game->code,
-                      'datetime'    => $game->start,
-                      'rarity'      => $highlight->rarityScore,
-                      'type'        => $highlight->type->value,
-                      'description' => $highlight->getDescription(),
-                      'players'     => json_encode(
-                          $this->getHighlightPlayers($highlight, $game),
-                          JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
-                      ),
-                      'object'      => igbinary_serialize($highlight),
-                    ]
+                  $this::TABLE,
+                  [
+                    'code'        => $game->code,
+                    'datetime'    => $game->start,
+                    'rarity'      => $highlight->rarityScore,
+                    'type'        => $highlight->type->value,
+                    'description' => $highlight->getDescription(),
+                    'players'     => json_encode(
+                      $this->getHighlightPlayers($highlight, $game),
+                      JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
+                    ),
+                    'object'      => igbinary_serialize($highlight),
+                  ]
                 );
             }
             DB::getConnection()->commit();
@@ -270,12 +287,12 @@ class GameHighlightService
         }
 
         $this->cache->clean(
-            [
+          [
             $this->cache::Tags => [
-            'games/' . $game->code . '/highlights',
-            'highlights/' . $game->start->format('d-m-Y'),
+              'games/'.$game->code.'/highlights',
+              'highlights/'.$game->start->format('d-m-Y'),
             ],
-            ]
+          ]
         );
 
         return true;
@@ -284,12 +301,12 @@ class GameHighlightService
     /**
      * Get players from highlight
      *
-     * @param GameHighlight $highlight
-     * @param Game          $game
+     * @param  GameHighlight  $highlight
+     * @param  Game  $game
      *
      * @return array{name:string,label:string,user:string|null}[]
      */
-    public function getHighlightPlayers(GameHighlight $highlight, Game $game): array {
+    public function getHighlightPlayers(GameHighlight $highlight, Game $game) : array {
         preg_match_all($this::PLAYER_REGEXP, $highlight->getDescription(), $matches, PREG_SET_ORDER);
         $players = [];
         foreach ($matches as $match) {
@@ -302,19 +319,19 @@ class GameHighlightService
     }
 
     /**
-     * @param string $name
-     * @param Game   $game
+     * @param  string  $name
+     * @param  Game  $game
      *
      * @return Player|null
      */
-    private function getPlayerByName(string $name, Game $game): ?Player {
+    private function getPlayerByName(string $name, Game $game) : ?Player {
         if (isset($this->playerCache[$game->code][$name])) {
             return $this->playerCache[$game->code][$name];
         }
         if (!isset($this->playerCache[$game->code])) {
             $this->playerCache[$game->code] = [];
         }
-        $this->playerCache[$game->code][$name] = $game->getPlayers()->query()->filter('name', $name)->first();
+        $this->playerCache[$game->code][$name] = $game->players->query()->filter('name', $name)->first();
         return $this->playerCache[$game->code][$name];
     }
 
@@ -322,17 +339,17 @@ class GameHighlightService
      * @template T of Team
      * @template P of Player
      *
-     * @param Game<T,P> $game
+     * @param  Game<T,P>  $game
      *
      * @return HighlightCollection
      */
-    private function loadHighlightsForGameFromDb(Game $game): HighlightCollection {
+    private function loadHighlightsForGameFromDb(Game $game) : HighlightCollection {
         $highlights = new HighlightCollection();
         /** @var string[] $objects */
         $objects = DB::select($this::TABLE, '[object]')
                      ->where('[code] = %s && [object] IS NOT NULL', $game->code)
-        ->cacheTags(...$this->getCacheTags($game))
-        ->fetchPairs();
+          ->cacheTags(...$this->getCacheTags($game))
+          ->fetchPairs();
 
         foreach ($objects as $object) {
             $highlight = @igbinary_unserialize($object);
@@ -344,49 +361,32 @@ class GameHighlightService
     }
 
     /**
-     * @param  Game  $game
-     * @return string[]
-     */
-    private function getCacheTags(Game $game): array {
-        return [
-          'highlights',
-          'highlights/' . $game->start?->format('Y-m-d'),
-          'games',
-          'games/' . $game::SYSTEM,
-          'games/' . $game::SYSTEM . '/' . $game->id,
-          'games/' . $game->code,
-          'games/' . $game->start?->format('Y-m-d'),
-          'games/' . $game->code . '/highlights',
-        ];
-    }
-
-    /**
      * @template T of Team
      * @template P of Player
      *
-     * @param string    $highlightDescription
-     * @param Game<T,P> $game
+     * @param  string  $highlightDescription
+     * @param  Game<T,P>  $game
      *
      * @return string
      */
-    public function playerNamesToLinks(string $highlightDescription, Game $game): string {
+    public function playerNamesToLinks(string $highlightDescription, Game $game) : string {
         return preg_replace_callback(
-            $this::PLAYER_REGEXP,
-            function (array $matches) use ($game) {
-                $playerName = $matches[1];
-                $label = $matches[2] ?? $playerName;
+          $this::PLAYER_REGEXP,
+          function (array $matches) use ($game) {
+              $playerName = $matches[1];
+              $label = $matches[2] ?? $playerName;
 
-                $player = $this->getPlayerByName($playerName, $game);
-                if (!isset($player)) {
-                    return $label;
-                }
-                return '<a href="#player-' . str_replace(' ', '_', $playerName) . '" ' .
-                    'class="player-link" ' .
-                    'data-user="' . $player->user?->getCode() . '" ' .
-                    'data-name="' . $playerName . '"  ' .
-                    'data-vest="' . $player->vest . '">' . $label . '</a>';
-            },
-            $highlightDescription
+              $player = $this->getPlayerByName($playerName, $game);
+              if (!isset($player)) {
+                  return $label;
+              }
+              return '<a href="#player-'.str_replace(' ', '_', $playerName).'" '.
+                'class="player-link" '.
+                'data-user="'.$player->user?->getCode().'" '.
+                'data-name="'.$playerName.'"  '.
+                'data-vest="'.$player->vest.'">'.$label.'</a>';
+          },
+          $highlightDescription
         );
     }
 }

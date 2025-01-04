@@ -8,7 +8,7 @@ use App\GameModels\Vest;
 use App\Services\LaserLiga\LigaApi;
 use Codeception\Stub;
 use Codeception\Test\Unit;
-use Lsr\Core\DB;
+use Lsr\Db\DB;
 use Spiral\RoadRunner\Metrics\Metrics;
 use Symfony\Component\Serializer\Serializer;
 use Tests\Mocks\ClientMock;

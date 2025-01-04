@@ -3,7 +3,7 @@
 {varType App\GameModels\Game\Lasermaxx\Game $game}
 {varType string $qr}
 
-{var bool $includeTeams = $game->getMode()?->isTeam() && $game->getMode()?->settings?->partTeams}
+{var bool $includeTeams = $game->mode?->isTeam() && $game->mode?->settings?->partTeams}
 
 {define containerClasses}
     results results-game-{$game->id} {if !$includeTeams}no-teams{/if}
@@ -27,11 +27,11 @@
 {/define}
 
 {define partPlayers}
-    {var int $playerCount = count($game->getPlayers())}
-    <div class="player text-grey-text" n:foreach="$game->getPlayersSorted() as $player"
+	{var int $playerCount = count($game->players)}
+	<div class="player text-grey-text" n:foreach="$game->playersSorted as $player"
          style="--multiplier: {((-0.05 * ($playerCount - 11)) + 1)|noescape}; --delay: {$iterator->counter * 30}ms;"
          data-score="{$player->score}"
-         data-position="{$iterator->counter}" data-team="{$player->getTeam()->id}">
+		 data-position="{$iterator->counter}" data-team="{$player->team->id}">
         {var array $rank = $player->getBestAt()}
         <div class="position" data-value="{$iterator->counter}">
             {$iterator->counter}.
@@ -40,7 +40,7 @@
             <img src="https://laserliga.cz/user/{$player->user->getCode()}/avatar" alt="Avatar" class="player-avatar"/>
         {/ifset}
         <div class="rank-name">
-            <div class="name text-team-{$game::SYSTEM}-{$player->getTeamColor()}">
+				<div class="name text-team-{$game::SYSTEM}-{$player->color}">
                 {$player->name}
             </div>
             <div class="rank">
@@ -73,9 +73,9 @@
 {/define}
 
 {define partTeams}
-    {var int $totalScore = array_sum(array_map(function(App\GameModels\Game\Team $team){ return $team->score > 0 ? $team->score : 0;},$game->getTeams()->getAll()))}
-    {var App\GameModels\Game\Team|null $win = $game->getMode()?->getWin($game)}
-    <div n:foreach="$game->getTeamsSorted() as $team" class="team text-bg-team-{$game::SYSTEM}-{$team->color}"
+	{var int $totalScore = array_sum(array_map(function(App\GameModels\Game\Team $team){ return $team->score > 0 ? $team->score : 0;},$game->teams->getAll()))}
+	{var App\GameModels\Game\Team|null $win = $game->mode?->getWin($game)}
+	<div n:foreach="$game->teamsSorted as $team" class="team text-bg-team-{$game::SYSTEM}-{$team->color}"
                                                       style="height:calc({100*($team->score > 0 ? $team->score : 0) / ($totalScore > 0 ? $totalScore : 1)|noescape}% - .2rem);"
                                                       data-team="{$team->id}">
         <div class="name">

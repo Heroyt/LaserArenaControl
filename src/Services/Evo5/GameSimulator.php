@@ -26,19 +26,18 @@ class GameSimulator
     public const int DEATH_OWN_STD_DEVIATION = 5;
 
     public function __construct(
-        private readonly Latte                    $latte,
-        private readonly RegressionStatCalculator $regressionCalculator,
-    ) {
-    }
+      private readonly Latte                    $latte,
+      private readonly RegressionStatCalculator $regressionCalculator,
+    ) {}
 
     /**
      * @throws GameModeNotFoundException
      * @throws InsuficientRegressionDataException
      * @throws TemplateDoesNotExistException
      */
-    public function simulate(): void {
-        $loadDir = LMX_DIR . Info::get('evo5_load_file', 'games/');
-        $loadFile = $loadDir . '0000.game';
+    public function simulate() : void {
+        $loadDir = LMX_DIR.Info::get('evo5_load_file', 'games/');
+        $loadFile = $loadDir.'0000.game';
         if (!file_exists($loadFile)) {
             throw new RuntimeException('No game file to simulate');
         }
@@ -70,9 +69,9 @@ class GameSimulator
             switch ($title) {
                 case 'GROUP':
                     $decodedJson = gzinflate(
-                        (string)gzinflate(
-                            (string)base64_decode($args[1])
-                        )
+                      (string) gzinflate(
+                        (string) base64_decode($args[1])
+                      )
                     );
                     if ($decodedJson !== false) {
                         try {
@@ -92,34 +91,34 @@ class GameSimulator
                 // - 2 unknown arguments
                 case 'PACK':
                     $players[] = [
-                        'vest' => $args[0],
-                        'name' => $args[1],
-                        'team' => $args[2],
-                        'vip' => $args[4],
-                        'score' => 0,
-                        'shots' => 0,
-                        'hits' => 0,
-                        'deaths' => 0,
-                        'position' => 0,
-                        'scoreForShots' => 0,
-                        'scoreForBonuses' => 0,
-                        'scoreForPowers' => 0,
-                        'scoreForPodDeaths' => 0,
-                        'ammoRemaining' => 0,
-                        'accuracy' => 0,
-                        'podHits' => 0,
-                        'agent' => 0,
-                        'invisibility' => 0,
-                        'machineGun' => 0,
-                        'shield' => 0,
-                        'enemyHits' => 0,
-                        'teammateHits' => 0,
-                        'enemyDeaths' => 0,
-                        'teammateDeaths' => 0,
-                        'lives' => 0,
-                        'scoreForHits' => 0,
-                        'vipHits' => 0,
-                        'playerHits' => [],
+                      'vest'              => $args[0],
+                      'name'              => $args[1],
+                      'team'              => $args[2],
+                      'vip'               => $args[4],
+                      'score'             => 0,
+                      'shots'             => 0,
+                      'hits'              => 0,
+                      'deaths'            => 0,
+                      'position'          => 0,
+                      'scoreForShots'     => 0,
+                      'scoreForBonuses'   => 0,
+                      'scoreForPowers'    => 0,
+                      'scoreForPodDeaths' => 0,
+                      'ammoRemaining'     => 0,
+                      'accuracy'          => 0,
+                      'podHits'           => 0,
+                      'agent'             => 0,
+                      'invisibility'      => 0,
+                      'machineGun'        => 0,
+                      'shield'            => 0,
+                      'enemyHits'         => 0,
+                      'teammateHits'      => 0,
+                      'enemyDeaths'       => 0,
+                      'teammateDeaths'    => 0,
+                      'lives'             => 0,
+                      'scoreForHits'      => 0,
+                      'vipHits'           => 0,
+                      'playerHits'        => [],
                     ];
                     break;
                 // TEAM contains team info
@@ -128,11 +127,11 @@ class GameSimulator
                 // - Player count
                 case 'TEAM':
                     $teams[$args[0]] = [
-                        'key' => $args[0],
-                        'name' => $args[1],
-                        'playerCount' => $args[2],
-                        'score' => 0,
-                        'position' => 0,
+                      'key'         => $args[0],
+                      'name'        => $args[1],
+                      'playerCount' => $args[2],
+                      'score'       => 0,
+                      'position'    => 0,
                     ];
                     break;
             }
@@ -149,30 +148,30 @@ class GameSimulator
         $teamsCounts = [];
         $teamMedians = [];
         foreach ($teams as $key => $team) {
-            $teamsCounts[$team['key']] = ['team' => (int)$team['playerCount'], 'enemy' => 0];
+            $teamsCounts[$team['key']] = ['team' => (int) $team['playerCount'], 'enemy' => 0];
             foreach ($teams as $key2 => $team2) {
                 if ($key === $key2) {
                     continue;
                 }
-                $teamsCounts[$team['key']]['enemy'] += (int)$team2['playerCount'];
+                $teamsCounts[$team['key']]['enemy'] += (int) $team2['playerCount'];
             }
             $teamMedians[$team['key']] = [
-                'hits' => RegressionCalculator::calculateRegressionPrediction(
-                    [$teamsCounts[$team['key']]['team'], $teamsCounts[$team['key']]['enemy'], $gameLength],
-                    $hitsModel
-                ),
-                'deaths' => RegressionCalculator::calculateRegressionPrediction(
-                    [$teamsCounts[$team['key']]['team'], $teamsCounts[$team['key']]['enemy'], $gameLength],
-                    $deathsModel
-                ),
-                'hitsOwn' => RegressionCalculator::calculateRegressionPrediction(
-                    [$teamsCounts[$team['key']]['team'], $teamsCounts[$team['key']]['enemy'], $gameLength],
-                    $hitsOwnModel
-                ),
-                'deathsOwn' => RegressionCalculator::calculateRegressionPrediction(
-                    [$teamsCounts[$team['key']]['team'], $teamsCounts[$team['key']]['enemy'], $gameLength],
-                    $deathsOwnModel
-                ),
+              'hits'      => RegressionCalculator::calculateRegressionPrediction(
+                [$teamsCounts[$team['key']]['team'], $teamsCounts[$team['key']]['enemy'], $gameLength],
+                $hitsModel
+              ),
+              'deaths'    => RegressionCalculator::calculateRegressionPrediction(
+                [$teamsCounts[$team['key']]['team'], $teamsCounts[$team['key']]['enemy'], $gameLength],
+                $deathsModel
+              ),
+              'hitsOwn'   => RegressionCalculator::calculateRegressionPrediction(
+                [$teamsCounts[$team['key']]['team'], $teamsCounts[$team['key']]['enemy'], $gameLength],
+                $hitsOwnModel
+              ),
+              'deathsOwn' => RegressionCalculator::calculateRegressionPrediction(
+                [$teamsCounts[$team['key']]['team'], $teamsCounts[$team['key']]['enemy'], $gameLength],
+                $deathsOwnModel
+              ),
             ];
         }
 
@@ -180,20 +179,20 @@ class GameSimulator
         $playerScores = [];
         foreach ($players as $key => $player) {
             $players[$key]['enemyHits'] = $this->randomValue(
-                $teamMedians[$player['team']]['hits'],
-                $this::HIT_STD_DEVIATION
+              $teamMedians[$player['team']]['hits'],
+              $this::HIT_STD_DEVIATION
             );
             $players[$key]['teammateHits'] = $this->randomValue(
-                $teamMedians[$player['team']]['hitsOwn'],
-                $this::HIT_OWN_STD_DEVIATION
+              $teamMedians[$player['team']]['hitsOwn'],
+              $this::HIT_OWN_STD_DEVIATION
             );
             $players[$key]['enemyDeaths'] = $this->randomValue(
-                $teamMedians[$player['team']]['deaths'],
-                $this::DEATH_STD_DEVIATION
+              $teamMedians[$player['team']]['deaths'],
+              $this::DEATH_STD_DEVIATION
             );
             $players[$key]['teammateDeaths'] = $this->randomValue(
-                $teamMedians[$player['team']]['deathsOwn'],
-                $this::DEATH_OWN_STD_DEVIATION
+              $teamMedians[$player['team']]['deathsOwn'],
+              $this::DEATH_OWN_STD_DEVIATION
             );
             $players[$key]['hits'] = $players[$key]['enemyHits'] + $players[$key]['teammateHits'];
             $players[$key]['deaths'] = $players[$key]['enemyDeaths'] + $players[$key]['teammateDeaths'];
@@ -210,12 +209,12 @@ class GameSimulator
             $teams[$player['team']]['score'] += $players[$key]['score'];
 
             $hitsOwn = $this->randomSumDistribution(
-                $players[$key]['teammateHits'],
-                $teamsCounts[$player['team']]['team'] - 1
+              $players[$key]['teammateHits'],
+              $teamsCounts[$player['team']]['team'] - 1
             );
             $hitsEnemy = $this->randomSumDistribution(
-                $players[$key]['enemyHits'],
-                $teamsCounts[$player['team']]['enemy']
+              $players[$key]['enemyHits'],
+              $teamsCounts[$player['team']]['enemy']
             );
 
             foreach ($players as $key2 => $player2) {
@@ -252,17 +251,20 @@ class GameSimulator
         }
 
 
-        $content = $this->latte->viewToString('gameFiles/evo5Results', [
+        $content = $this->latte->viewToString(
+          'gameFiles/evo5Results',
+          [
             'players' => $players,
             'teams' => $teams,
-            'meta' => $meta,
+            'meta'  => $meta,
             'start' => $start,
-            'end' => $end,
-        ]);
-        file_put_contents(LMX_DIR . 'results/simulated.game', $content);
+            'end'   => $end,
+          ]
+        );
+        file_put_contents(LMX_DIR.'results/simulated.game', $content);
     }
 
-    private function randomValue(float $median, float $stdDeviation): int {
+    private function randomValue(float $median, float $stdDeviation) : int {
         // Generate two random numbers between 0 and 1
         $num1 = rand() / getrandmax();
         $num2 = rand() / getrandmax();
@@ -271,7 +273,7 @@ class GameSimulator
         $z = sqrt(-2 * log($num1)) * cos(2 * M_PI * $num2);
 
         // Scale and shift the standard normal deviation to get the desired median and standard deviation
-        $value = (int)round($median + ($stdDeviation * $z));
+        $value = (int) round($median + ($stdDeviation * $z));
 
         // Make sure that the value is not negative
         if ($value < 0) {
@@ -281,11 +283,11 @@ class GameSimulator
     }
 
     /**
-     * @param int $sum
-     * @param int $count
+     * @param  int  $sum
+     * @param  int  $count
      * @return int[]
      */
-    private function randomSumDistribution(int $sum, int $count): array {
+    private function randomSumDistribution(int $sum, int $count) : array {
         // Generate N-1 random partition points
         $partition_points = [];
         for ($i = 0; $i < $count - 1; $i++) {

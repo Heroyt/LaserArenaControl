@@ -15,10 +15,10 @@ interface PlayerHighlightChecker
      * @template T of Team
      * @template G of Game
      *
-     * @param Player<G, T>        $player
-     * @param HighlightCollection $highlights
+     * @param  Player<G, T>  $player
+     * @param  HighlightCollection  $highlights
      *
      * @return void
      */
-    public function checkPlayer(Player $player, HighlightCollection $highlights): void;
+    public function checkPlayer(Player $player, HighlightCollection $highlights) : void;
 }

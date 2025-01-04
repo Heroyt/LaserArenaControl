@@ -6,8 +6,8 @@ use App\Models\MusicMode;
 use App\Services\FeatureConfig;
 use App\Services\TaskProducer;
 use App\Tasks\Payloads\MusicTrimPreviewPayload;
-use Lsr\Core\Exceptions\ModelNotFoundException;
-use Lsr\Core\Exceptions\ValidationException;
+use Lsr\ObjectValidation\Exceptions\ValidationException;
+use Lsr\Orm\Exceptions\ModelNotFoundException;
 use Spiral\RoadRunner\Jobs\Exception\JobsException;
 use Spiral\RoadRunner\Jobs\Options;
 use Spiral\RoadRunner\Jobs\Task\ReceivedTaskInterface;
@@ -15,16 +15,15 @@ use Spiral\RoadRunner\Jobs\Task\ReceivedTaskInterface;
 class MusicTrimPreviewTask implements TaskDispatcherInterface
 {
     public function __construct(
-        private readonly FeatureConfig $config,
-        private readonly TaskProducer  $taskProducer,
-    ) {
-    }
+      private readonly FeatureConfig $config,
+      private readonly TaskProducer  $taskProducer,
+    ) {}
 
-    public static function getDiName(): string {
+    public static function getDiName() : string {
         return 'task.musicTrimPreview';
     }
 
-    public function process(ReceivedTaskInterface $task): void {
+    public function process(ReceivedTaskInterface $task) : void {
         /** @var MusicTrimPreviewPayload $payload */
         $payload = igbinary_unserialize($task->getPayload());
 

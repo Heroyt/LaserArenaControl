@@ -16,8 +16,7 @@ class TaskProducer
     /** @var PreparedTaskInterface[] */
     private array $planned = [];
 
-    public function __construct(private readonly Queue $queue) {
-    }
+    public function __construct(private readonly Queue $queue) {}
 
     /**
      * @param  class-string<TaskDispatcherInterface>  $dispatcher
@@ -26,11 +25,11 @@ class TaskProducer
      * @return void
      * @throws JobsException
      */
-    public function push(string $dispatcher, ?object $payload, ?OptionsInterface $options = null): void {
+    public function push(string $dispatcher, ?object $payload, ?OptionsInterface $options = null) : void {
         $this->queue->push(
-            $dispatcher::getDiName(),
-            igbinary_serialize($payload) ?? '',
-            $options,
+          $dispatcher::getDiName(),
+          igbinary_serialize($payload) ?? '',
+          $options,
         );
     }
 
@@ -41,14 +40,14 @@ class TaskProducer
      * @return PreparedTaskInterface
      */
     public function plan(
-        string            $dispatcher,
-        ?object           $payload,
-        ?OptionsInterface $options = null
-    ): PreparedTaskInterface {
+      string            $dispatcher,
+      ?object           $payload,
+      ?OptionsInterface $options = null
+    ) : PreparedTaskInterface {
         $task = $this->queue->create(
-            $dispatcher::getDiName(),
-            igbinary_serialize($payload) ?? '',
-            $options,
+          $dispatcher::getDiName(),
+          igbinary_serialize($payload) ?? '',
+          $options,
         );
         $this->planned[] = $task;
         return $task;
@@ -58,7 +57,7 @@ class TaskProducer
      * @return void
      * @throws JobsException
      */
-    public function dispatch(): void {
+    public function dispatch() : void {
         $this->queue->dispatchMany(...$this->planned);
         $this->planned = [];
     }

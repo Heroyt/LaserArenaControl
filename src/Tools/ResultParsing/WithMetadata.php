@@ -9,8 +9,8 @@ use App\Models\Auth\Player as User;
 use App\Models\GameGroup;
 use App\Models\MusicMode;
 use JsonException;
-use Lsr\Core\Exceptions\ModelNotFoundException;
-use Lsr\Core\Exceptions\ValidationException;
+use Lsr\Orm\Exceptions\ModelNotFoundException;
+use Lsr\Orm\Exceptions\ValidationException;
 
 /**
  * Helper methods for decoding and parsing metadata for a Game
@@ -25,7 +25,7 @@ trait WithMetadata
      *
      * @return array<string,string|numeric>
      */
-    protected function decodeMetadata(string $encoded): array {
+    protected function decodeMetadata(string $encoded) : array {
         $encoded = trim($encoded);
         if ($encoded === '') {
             return [];
@@ -63,19 +63,19 @@ trait WithMetadata
      *
      * @return bool
      */
-    protected function validateMetadata(array $meta, Game $game): bool {
+    protected function validateMetadata(array $meta, Game $game) : bool {
         if (empty($meta)) {
             return false;
         }
 
         if (!empty($meta['hash'])) {
             $players = [];
-            foreach ($game->getPlayers() as $player) {
-                $players[(int) $player->vest] = $player->vest . '-' . $player->name;
+            foreach ($game->players as $player) {
+                $players[(int) $player->vest] = $player->vest.'-'.$player->name;
             }
             ksort($players);
             // Calculate and compare hash
-            $hash = md5($game->modeName . ';' . implode(';', $players));
+            $hash = md5($game->modeName.';'.implode(';', $players));
             if ($hash === $meta['hash']) {
                 $game->setMeta($meta);
                 return true;
@@ -113,7 +113,7 @@ trait WithMetadata
      *
      * @return void
      */
-    protected function setMusicModeFromMeta(Game $game, array $meta): void {
+    protected function setMusicModeFromMeta(Game $game, array $meta) : void {
         if (empty($meta['music']) || ((int) $meta['music']) < 1) {
             return;
         }
@@ -122,6 +122,7 @@ trait WithMetadata
             $game->music = MusicMode::get((int) $meta['music']);
         } catch (ModelNotFoundException | ValidationException) {
             // Ignore
+            $game->music = null;
         }
     }
 
@@ -136,7 +137,7 @@ trait WithMetadata
      *
      * @return void
      */
-    protected function setGroupFromMeta(Game $game, array $meta): void {
+    protected function setGroupFromMeta(Game $game, array $meta) : void {
         if (empty($meta['group'])) {
             return;
         }
@@ -156,8 +157,8 @@ trait WithMetadata
         if (!isset($group)) {
             $group = new GameGroup();
             $group->name = sprintf(
-                lang('Skupina %s'),
-                isset($game->start) ? $game->start->format('d.m.Y H:i') : ''
+              lang('Skupina %s'),
+              isset($game->start) ? $game->start->format('d.m.Y H:i') : ''
             );
         }
 
@@ -176,18 +177,18 @@ trait WithMetadata
      *
      * @return void
      */
-    protected function setPlayersMeta(Game $game, array $meta): void {
+    protected function setPlayersMeta(Game $game, array $meta) : void {
         /** @var Player $player */
-        foreach ($game->getPlayers() as $player) {
+        foreach ($game->players as $player) {
             // Names from game are strictly ASCII
             // If a name contained any non ASCII character, it is coded in the metadata
-            if (!empty($meta['p' . $player->vest . 'n']) && is_string($meta['p' . $player->vest . 'n'])) {
-                $player->name = $meta['p' . $player->vest . 'n'];
+            if (!empty($meta['p'.$player->vest.'n']) && is_string($meta['p'.$player->vest.'n'])) {
+                $player->name = $meta['p'.$player->vest.'n'];
             }
 
             // Check for player's user code
-            if (!empty($meta['p' . $player->vest . 'u'])) {
-                $code = $meta['p' . $player->vest . 'u'];
+            if (!empty($meta['p'.$player->vest.'u'])) {
+                $code = $meta['p'.$player->vest.'u'];
                 assert(is_string($code));
                 $user = User::getByCode($code);
 
@@ -221,13 +222,13 @@ trait WithMetadata
      *
      * @return void
      */
-    protected function setTeamsMeta(Game $game, array $meta): void {
+    protected function setTeamsMeta(Game $game, array $meta) : void {
         /** @var Team $team */
-        foreach ($game->getTeams() as $team) {
+        foreach ($game->teams as $team) {
             // Names from game are strictly ASCII
             // If a name contained any non ASCII character, it is coded in the metadata
-            if (!empty($meta['t' . $team->color . 'n'])) {
-                $team->name = (string) $meta['t' . $team->color . 'n'];
+            if (!empty($meta['t'.$team->color.'n'])) {
+                $team->name = (string) $meta['t'.$team->color.'n'];
             }
         }
     }

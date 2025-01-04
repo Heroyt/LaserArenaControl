@@ -88,15 +88,15 @@ foreach ($query->execute() as $row) {
             $player->minesHits = $playerRow->player_mines_hits;
             $player->teamNum = $playerRow->player_team;
             $player->position = $playerRow->player_order;
-            $game->getPlayers()->set($player, $player->vest);
+            $game->players->set($player, $player->vest);
             $player->setGame($game);
         }
 
-        foreach ($game->getPlayers()->getAll() as $player) {
+        foreach ($game->players->getAll() as $player) {
             // Find team
-            foreach ($game->getTeams()->getAll() as $team) {
+            foreach ($game->teams->getAll() as $team) {
                 if ($player->teamNum === $team->color) {
-                    $player->setTeam($team);
+                    $player->team = $team;
                     break;
                 }
             }
@@ -104,7 +104,7 @@ foreach ($query->execute() as $row) {
         $hits = $db->select('*')->from('evo5_hits')->where('pid IN %in', array_keys($pids))->fetchAssoc('pid|vest');
         foreach ($pids as $pid => $player) {
             foreach ($hits[$pid] ?? [] as $vest => $val) {
-                $target = $game->getPlayers()->get($vest);
+                $target = $game->players->get($vest);
                 $player->addHits($target, $val->count);
             }
         }

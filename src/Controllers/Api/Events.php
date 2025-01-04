@@ -10,12 +10,12 @@ use Psr\Http\Message\ResponseInterface;
 class Events extends ApiController
 {
     public function __construct(
-        private readonly EventService $eventService
+      private readonly EventService $eventService
     ) {
         parent::__construct();
     }
 
-    public function triggerEvent(Request $request): ResponseInterface {
+    public function triggerEvent(Request $request) : ResponseInterface {
         $type = $request->getPost('type', '');
         if (empty($type)) {
             return $this->respond(['error' => 'Type must be a non-empty string'], 400);

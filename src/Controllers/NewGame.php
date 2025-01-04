@@ -4,25 +4,17 @@
 
 namespace App\Controllers;
 
-use App\Core\App;
-use App\DataObjects\NewGame\HookedTemplates;
 use App\Exceptions\GameModeNotFoundException;
 use App\GameModels\Factory\GameFactory;
 use App\GameModels\Factory\GameModeFactory;
-use App\GameModels\Vest;
 use App\Gate\Models\GateScreenModel;
-use App\Gate\Models\MusicGroupDto;
 use App\Models\MusicMode;
-use App\Models\Playlist;
-use App\Models\PriceGroup;
-use App\Services\FeatureConfig;
 use App\Templates\NewGame\NewGameParams;
-use LAC\Modules\Core\ControllerDecoratorInterface;
 use Lsr\Core\Controllers\Controller;
-use Lsr\Core\Exceptions\ValidationException;
 use Lsr\Core\Requests\Request;
 use Lsr\Exceptions\TemplateDoesNotExistException;
 use Lsr\Interfaces\RequestInterface;
+use Lsr\ObjectValidation\Exceptions\ValidationException;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
 
@@ -35,7 +27,7 @@ class NewGame extends Controller
 
     protected string $title = 'Nová hra';
 
-    public function init(RequestInterface $request): void {
+    public function init(RequestInterface $request) : void {
         parent::init($request);
         $this->baseInit($request);
     }
@@ -48,7 +40,7 @@ class NewGame extends Controller
      * @throws Throwable
      * @throws ValidationException
      */
-    public function show(Request $request): ResponseInterface {
+    public function show(Request $request) : ResponseInterface {
         $this->initNewGameParams($request);
         $this->params->gameModes = GameModeFactory::getAll(['system' => $this->params->system]);
         $this->params->musicModes = MusicMode::getAll();

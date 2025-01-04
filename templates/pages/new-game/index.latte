@@ -236,7 +236,7 @@
             <option n:foreach="$gameModes as $mode" value="{$mode->id}" data-type="{$mode->type->value}"
                                                     data-name="{$mode->getName()}"
                                                     data-teams="{$mode->teams}"
-                                                    data-variations='{json_encode($mode->getVariations())}'
+                                                    data-variations='{$mode->variations|json}'
                                                     data-description="{_$mode->description, context: 'gameModes'}"
                                                     data-active="{json_encode($mode->active)}"
                     {if $mode instanceof App\GameModels\Game\GameModes\CustomLoadMode}data-script="{$mode->getNewGameScriptToRun()}"{/if}>

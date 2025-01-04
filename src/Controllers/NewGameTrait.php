@@ -1,5 +1,7 @@
 <?php
+
 declare(strict_types=1);
+
 namespace App\Controllers;
 
 use App\Core\App;
@@ -15,8 +17,8 @@ use LAC\Modules\Core\ControllerDecoratorInterface;
 use Lsr\Core\Requests\Request;
 use Lsr\Interfaces\RequestInterface;
 
-trait NewGameTrait {
-
+trait NewGameTrait
+{
     public HookedTemplates $hookedTemplates;
     /** @var ControllerDecoratorInterface[] */
     protected array $decorators = [];
@@ -39,18 +41,20 @@ trait NewGameTrait {
             $decorator->setController($this)->init();
         }
     }
-    protected function initMusicGroups(): void {
+
+    protected function initMusicGroups() : void {
         $this->params->musicGroups = [];
         foreach ($this->params->musicModes as $music) {
             if (!$music->public) {
                 continue;
             }
-            $group = $music->group ?? $music->name;
+            $group = empty($music->group) ? $music->name : $music->group;
             $this->params->musicGroups[$group] ??= new MusicGroupDto($group);
             $this->params->musicGroups[$group]->music[] = $music;
         }
     }
-    protected function initNewGameParams(Request $request): void {
+
+    protected function initNewGameParams(Request $request) : void {
         $this->hookedTemplates = new HookedTemplates();
         $this->params->addedTemplates = $this->hookedTemplates;
         $this->params->featureConfig = $this->featureConfig;

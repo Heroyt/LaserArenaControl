@@ -3,6 +3,7 @@
 namespace App\Api\DataObjects\Vests;
 
 use App\GameModels\Game\Enums\VestStatus;
+use DateTimeImmutable;
 
 class LigaVest
 {
@@ -10,5 +11,5 @@ class LigaVest
     public string $system;
     public VestStatus $status;
     public ?string $info = null;
-    public \DateTimeImmutable $updatedAt;
+    public DateTimeImmutable $updatedAt;
 }

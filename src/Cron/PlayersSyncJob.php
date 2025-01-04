@@ -14,12 +14,11 @@ use Spiral\RoadRunner\Metrics\Metrics;
 final readonly class PlayersSyncJob implements Job
 {
     public function __construct(
-        private PlayerSynchronizationService $synchronizationService,
-        private Metrics $metrics,
-    ) {
-    }
+      private PlayerSynchronizationService $synchronizationService,
+      private Metrics                      $metrics,
+    ) {}
 
-    public function run(JobLock $lock): void {
+    public function run(JobLock $lock) : void {
         $this->metrics->add('cron_job_started', 1, ['liga_players_sync']);
         $lock->refresh(120.0);
         $this->synchronizationService->syncAllLocalPlayers();
@@ -28,7 +27,7 @@ final readonly class PlayersSyncJob implements Job
         $this->metrics->add('cron_job_ok', 1, ['liga_players_sync']);
     }
 
-    public function getName(): string {
+    public function getName() : string {
         return 'Vest sync';
     }
 }

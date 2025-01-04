@@ -11,11 +11,11 @@ use App\Models\Group\PlayerPayInfoDto;
 use App\Models\Group\Team;
 use DateTimeImmutable;
 use DateTimeInterface;
-use Lsr\Core\Caching\Cache;
-use Lsr\Core\Exceptions\ValidationException;
-use Lsr\Core\Models\Attributes\PrimaryKey;
-use Lsr\Core\Models\Model;
+use Lsr\Caching\Cache;
 use Lsr\Helpers\Tools\Strings;
+use Lsr\Orm\Attributes\JsonExclude;
+use Lsr\Orm\Attributes\NoDB;
+use Lsr\Orm\Attributes\PrimaryKey;
 use Nette\Caching\Cache as CacheParent;
 use Throwable;
 
@@ -25,7 +25,7 @@ use Throwable;
  * @use WithMetaData<GroupMeta>
  */
 #[PrimaryKey('id_group')]
-class GameGroup extends Model
+class GameGroup extends BaseModel
 {
     /** @phpstan-use WithMetaData<GroupMeta> */
     use WithMetaData;
@@ -37,31 +37,89 @@ class GameGroup extends Model
     public ?DateTimeInterface $createdAt = null;
 
     /** @var Game[] */
-    private array $games = [];
+    #[NoDB, JsonExclude]
+    public array $games = [] {
+        get {
+            if (empty($this->games)) {
+                /** @var Cache $cache */
+                $cache = App::getService('cache');
+                $dependencies = [
+                  CacheParent::Tags   => ['gameGroups', 'group/'.$this->id.'/games'],
+                  CacheParent::Expire => '1 months',
+                ];
+                try {
+                    $this->games = $cache->load(
+                      'group/'.$this->id.'/games',
+                      [$this, 'loadGames'],
+                      $dependencies
+                    );
+                } catch (Throwable $e) {
+                    $this->getLogger()->exception($e);
+                    $this->games = $this->loadGames();
+                    $cache->save('group/'.$this->id.'/games', $this->games, $dependencies);
+                }
+            }
+            return $this->games;
+        }
+    }
 
     /** @var GroupPlayer[] */
-    private array $players = [];
-    /** @var array<string, Team> */
-    private array $teams = [];
+    #[NoDB, JsonExclude]
+    public array $players = [] {
+        get {
+            if (!empty($this->players)) {
+                return $this->players;
+            }
+            $games = $this->games;
+            if (empty($games)) {
+                return [];
+            }
 
-    public function save(): bool {
-        $this->createdAt ??= new DateTimeImmutable();
-        return parent::save();
+            /** @var Cache $cache */
+            $cache = App::getService('cache');
+            $dependencies = [
+              CacheParent::Tags   => ['gameGroups', 'group/'.$this->id.'/players'],
+              CacheParent::Expire => '1 months',
+            ];
+            try {
+                [$this->players, $this->teams] = $cache->load(
+                  'group/'.$this->id.'/players',
+                  function () use ($games) : array {
+                      return $this->loadPlayersAndTeams($games);
+                  },
+                  $dependencies,
+                );
+            } catch (Throwable $e) {
+                $this->getLogger()->exception($e);
+                $teamsAndPlayers = $this->loadPlayersAndTeams($games);
+                $cache->save('group/'.$this->id.'/players', $teamsAndPlayers, $dependencies);
+                [$this->players, $this->teams] = $teamsAndPlayers;
+            }
+            return $this->players;
+        }
+    }
+    /** @var array<string, Team> */
+    #[NoDB, JsonExclude]
+    public array $teams = [] {
+        get {
+            if (empty($this->teams) && empty($this->players)) {
+                return [];
+            }
+            return $this->teams;
+        }
     }
 
     /**
      * @return static[]
-     * @throws ValidationException
      */
-    public static function getActive(): array {
+    public static function getActive() : array {
         return static::query()->where('[active] = 1')->get();
     }
 
     /**
      * @return static[]
-     * @throws ValidationException
      */
-    public static function getActiveByDate(bool $descending = true): array {
+    public static function getActiveByDate(bool $descending = true) : array {
         $query = static::query()
                        ->where('[active] = 1')
                        ->orderBy('[created_at]');
@@ -77,9 +135,8 @@ class GameGroup extends Model
 
     /**
      * @return static[]
-     * @throws ValidationException
      */
-    public static function getAllByDate(bool $descending = true): array {
+    public static function getAllByDate(bool $descending = true) : array {
         $query = static::query()
                        ->orderBy('[created_at]');
         if ($descending) {
@@ -92,102 +149,27 @@ class GameGroup extends Model
         return $query->get();
     }
 
-    public function jsonSerialize(): array {
+    public function save() : bool {
+        $this->createdAt ??= new DateTimeImmutable();
+        return parent::save();
+    }
+
+    public function jsonSerialize() : array {
         $data = parent::jsonSerialize();
         $data['meta'] = $this->getMeta();
         return $data;
     }
 
-    /**
-     * @post Games are loaded
-     * @post Teams are loaded
-     * @post Players are loaded
-     *
-     * @return array<string, Team>
-     * @throws Throwable
-     */
-    public function getTeams(): array {
-        if (empty($this->teams) && empty($this->getPlayers())) {
-            return [];
-        }
-        return $this->teams;
-    }
-
-    /**
-     * @post Games are loaded
-     * @post Teams are loaded
-     * @post Players are loaded
-     *
-     * @return GroupPlayer[]
-     * @throws Throwable
-     */
-    public function getPlayers(): array {
-        $games = $this->getGames();
-        if (empty($games)) {
-            return [];
-        }
-        if (empty($this->players)) {
-            /** @var Cache $cache */
-            $cache = App::getService('cache');
-            $dependencies = [
-              CacheParent::Tags   => ['gameGroups', 'group/' . $this->id . '/players'],
-              CacheParent::Expire => '1 months',
-            ];
-            try {
-                [$this->players, $this->teams] = $cache->load(
-                    'group/' . $this->id . '/players',
-                    function () use ($games): array {
-                        return $this->loadPlayersAndTeams($games);
-                    },
-                    $dependencies,
-                );
-            } catch (Throwable $e) {
-                $this->getLogger()->exception($e);
-                $teamsAndPlayers = $this->loadPlayersAndTeams($games);
-                $cache->save('group/' . $this->id . '/players', $teamsAndPlayers, $dependencies);
-                [$this->players, $this->teams] = $teamsAndPlayers;
-            }
-        }
-
-        return $this->players;
-    }
 
     /**
      * @return Game[]
      * @throws Throwable
      */
-    public function getGames(): array {
-        if (empty($this->games)) {
-            /** @var Cache $cache */
-            $cache = App::getService('cache');
-            $dependencies = [
-              CacheParent::Tags   => ['gameGroups', 'group/' . $this->id . '/games'],
-              CacheParent::Expire => '1 months',
-            ];
-            try {
-                $this->games = $cache->load(
-                    'group/' . $this->id . '/games',
-                    [$this, 'loadGames'],
-                    $dependencies
-                );
-            } catch (Throwable $e) {
-                $this->getLogger()->exception($e);
-                $this->games = $this->loadGames();
-                $cache->save('group/' . $this->id . '/games', $this->games, $dependencies);
-            }
-        }
-        return $this->games;
-    }
-
-    /**
-     * @return Game[]
-     * @throws Throwable
-     */
-    public function loadGames(): array {
+    public function loadGames() : array {
         $games = [];
         $rows = GameFactory::queryGames(true, fields: ['id_group'])
                            ->where('[id_group] = %i', $this->id)
-                           ->cacheTags('group/' . $this->id . '/games')
+          ->cacheTags('group/'.$this->id.'/games')
                            ->fetchAll();
         foreach ($rows as $row) {
             $games[] = GameFactory::getByCode($row->code);
@@ -197,24 +179,24 @@ class GameGroup extends Model
 
     /**
      * @param  Game[]  $games
-     * @return array{0:array<string,Player>,1:array<string,Team>}
+     * @return array{0:array<string,GroupPlayer>,1:array<string,Team>}
      */
-    public function loadPlayersAndTeams(array $games): array {
+    public function loadPlayersAndTeams(array $games) : array {
         $players = [];
         $teams = [];
         foreach ($games as $game) {
             /** @var \App\GameModels\Game\Team $team */
-            foreach ($game->getTeams() as $team) {
+            foreach ($game->teams as $team) {
                 $tPlayers = [];
                 $tPlayerNames = [];
                 /** @var Player $player */
-                foreach ($team->getPlayers() as $player) {
+                foreach ($team->players as $player) {
                     $asciiName = Strings::toAscii($player->name);
                     $tPlayerNames[] = $asciiName;
                     if (!isset($players[$asciiName])) {
                         $players[$asciiName] = new GroupPlayer(
-                            $asciiName,
-                            clone $player
+                          $asciiName,
+                          clone $player
                         );
                         $players[$asciiName]->name = $player->name;
                     }
@@ -246,8 +228,8 @@ class GameGroup extends Model
 
         // Sort players by their skill in descending order
         uasort(
-            $players,
-            static fn(GroupPlayer $playerA, GroupPlayer $playerB) => $playerB->getSkill() - $playerA->getSkill()
+          $players,
+          static fn(GroupPlayer $playerA, GroupPlayer $playerB) => $playerB->getSkill() - $playerA->getSkill()
         );
 
         return [$players, $teams];
@@ -257,31 +239,31 @@ class GameGroup extends Model
      * @return GroupPlayer[]
      * @throws Throwable
      */
-    public function getPlayersSortedByName(): array {
-        $players = $this->getPlayers();
+    public function getPlayersSortedByName() : array {
+        $players = $this->players;
         uasort(
-            $players,
-            static fn(GroupPlayer $a, GroupPlayer $b) => strcmp(strtolower($a->name), strtolower($b->name))
+          $players,
+          static fn(GroupPlayer $a, GroupPlayer $b) => strcmp(strtolower($a->name), strtolower($b->name))
         );
         return $players;
     }
 
-    public function clearCache(): void {
+    public function clearCache() : void {
         parent::clearCache();
         if (isset($this->id)) {
             /** @var Cache $cache */
             $cache = App::getService('cache');
             $cache->clean(
-                [
+              [
                 CacheParent::Tags => [
-                  'group/' . $this->id . '/games',
-                  'group/' . $this->id . '/players',
+                  'group/'.$this->id.'/games',
+                  'group/'.$this->id.'/players',
                 ],
-                ]
+              ]
             );
-            $cache->remove('group/' . $this->id . '/players');
-            $cache->remove('group/' . $this->id . '/games');
-            $cache->remove('group/' . $this->id . '/games/ids');
+            $cache->remove('group/'.$this->id.'/players');
+            $cache->remove('group/'.$this->id.'/games');
+            $cache->remove('group/'.$this->id.'/games/ids');
         }
     }
 }

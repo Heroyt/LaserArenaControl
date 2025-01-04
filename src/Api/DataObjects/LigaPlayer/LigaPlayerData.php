@@ -20,11 +20,11 @@ class LigaPlayerData
      */
     public ?array $codeHistory = null;
 
-    public function addConnection(LigaPlayerConnection $connection): void {
+    public function addConnection(LigaPlayerConnection $connection) : void {
         $this->connections[] = $connection;
     }
 
-    public function removeConnection(LigaPlayerConnection $connection): void {
+    public function removeConnection(LigaPlayerConnection $connection) : void {
         foreach ($this->connections as $key => $test) {
             if ($test === $connection) {
                 unset($this->connections[$key]);

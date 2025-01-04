@@ -11,8 +11,7 @@ readonly class RtspSettings extends GateSettings
      * @param  string[]  $streams
      */
     public function __construct(
-        public array $streams = [],
-        public int   $maxStreams = 9,
-    ) {
-    }
+      public array $streams = [],
+      public int   $maxStreams = 9,
+    ) {}
 }

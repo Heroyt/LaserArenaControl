@@ -6,12 +6,12 @@ use App\Core\App;
 use App\Gate\Logic\ScreenTriggerType;
 use App\Gate\Screens\GateScreen;
 use App\Gate\Settings\GateSettings;
-use Lsr\Core\Caching\Cache;
-use Lsr\Core\Exceptions\ValidationException;
-use Lsr\Core\Models\Attributes\OneToMany;
-use Lsr\Core\Models\Attributes\PrimaryKey;
-use Lsr\Core\Models\LoadingType;
-use Lsr\Core\Models\Model;
+use App\Models\BaseModel;
+use Lsr\Caching\Cache;
+use Lsr\ObjectValidation\Exceptions\ValidationException;
+use Lsr\Orm\Attributes\PrimaryKey;
+use Lsr\Orm\Attributes\Relations\OneToMany;
+use Lsr\Orm\ModelCollection;
 use Nette\Utils\Strings;
 use OpenApi\Attributes as OA;
 
@@ -19,7 +19,7 @@ use OpenApi\Attributes as OA;
  *
  */
 #[PrimaryKey('id_gate'), OA\Schema]
-class GateType extends Model
+class GateType extends BaseModel
 {
     public const string TABLE = 'gate_types';
 
@@ -32,27 +32,27 @@ class GateType extends Model
     #[OA\Property]
     public bool $locked = false;
 
-    /** @var GateScreenModel[] */
-    #[OneToMany(class: GateScreenModel::class, loadingType: LoadingType::LAZY)]
-    public array $screens;
+    /** @var ModelCollection<GateScreenModel> */
+    #[OneToMany(class: GateScreenModel::class, factoryMethod: 'loadScreens')]
+    public ModelCollection $screens;
 
-    public static function getBySlug(string $slug): ?GateType {
+    public static function getBySlug(string $slug) : ?GateType {
         /** @var Cache $cache */
         $cache = App::getService('cache');
         return $cache->load(
-            'gateType.slug.' . $slug,
-            fn() => static::query()->where('slug = %s', $slug)->first(),
-            [
+          'gateType.slug.'.$slug,
+          fn() => static::query()->where('slug = %s', $slug)->first(),
+          [
             $cache::Tags   => array_merge(
-                ['models', self::TABLE, self::TABLE . '/' . $slug],
-                self::CACHE_TAGS
+              ['models', self::TABLE, self::TABLE.'/'.$slug],
+              self::CACHE_TAGS
             ),
             $cache::Expire => '7 days',
-            ]
+          ]
         );
     }
 
-    public function getQueryData(): array {
+    public function getQueryData() : array {
         $data = parent::getQueryData();
         if (empty($data['slug'])) {
             $data['slug'] = $this->getSlug();
@@ -60,81 +60,33 @@ class GateType extends Model
         return $data;
     }
 
-    public function getSlug(): string {
+    public function getSlug() : string {
         if (empty($this->slug)) {
             $this->slug = str_replace(' ', '-', strtolower(Strings::toAscii($this->name)));
             // Test uniqueness
             $count = static::query()->where('slug LIKE %like~', $this->slug)->count();
             if ($count > 0) {
-                $this->slug .= '_' . $count;
+                $this->slug .= '_'.$count;
             }
         }
         return $this->slug;
     }
 
-    public function setSlug(string $slug): GateType {
+    public function setSlug(string $slug) : GateType {
         $this->slug = $slug;
         return $this;
     }
 
-    public function addScreenModel(GateScreenModel ...$screens): GateType {
-        // Load screens if needed
-        $this->getScreens();
-
+    public function addScreenModel(GateScreenModel ...$screens) : GateType {
         foreach ($screens as $screen) {
-            $this->screens[] = $screen;
+            $this->screens->add($screen);
             $screen->gate = $this;
         }
 
         return $this;
     }
 
-    /**
-     * @return GateScreenModel[]
-     * @throws ValidationException
-     */
-    public function getScreens(): array {
-        if (!isset($this->screens)) {
-            if (!isset($this->id)) {
-                return [];
-            }
-            /** @var Cache $cache */
-            $cache = App::getService('cache');
-            $this->screens = $cache->load(
-                'gateType.' . $this->id . '.screens',
-                fn() => $this->loadScreens(),
-                [
-                $cache::Tags   => array_merge(
-                    [
-                    'models',
-                    GateScreenModel::TABLE,
-                    $this::TABLE,
-                    $this::TABLE . '/' . $this->id,
-                    $this::TABLE . '/' . $this->id . '/relations',
-                    ],
-                    GateScreenModel::CACHE_TAGS
-                ),
-                $cache::Expire => '7 days',
-                ]
-            );
-        }
-        return $this->screens;
-    }
-
-    private function loadScreens(): array {
-        $this->screens = isset($this->id) ?
-          GateScreenModel::query()
-                         ->where('id_gate = %i', $this->id)
-                         ->orderBy('order')
-                         ->get() :
-          [];
-        return $this->screens;
-    }
-
-    public function removeScreenModel(GateScreenModel ...$screens): GateType {
-        // Load screens if needed
-        $this->getScreens();
-
+    public function removeScreenModel(GateScreenModel ...$screens) : GateType {
         foreach ($screens as $key2 => $findScreen) {
             foreach ($this->screens as $key => $screen) {
                 if ($screen->id === $findScreen->id) {
@@ -148,14 +100,11 @@ class GateType extends Model
     }
 
     public function addScreen(
-        GateScreen        $screen,
-        ?GateSettings     $settings = null,
-        ScreenTriggerType $trigger = ScreenTriggerType::DEFAULT,
-        int               $order = 0
-    ): GateType {
-        // Load screens if needed
-        $this->getScreens();
-
+      GateScreen        $screen,
+      ?GateSettings     $settings = null,
+      ScreenTriggerType $trigger = ScreenTriggerType::DEFAULT,
+      int               $order = 0
+    ) : GateType {
         $screenModel = new GateScreenModel();
         $screenModel->setScreen($screen);
         if (isset($settings)) {
@@ -163,17 +112,17 @@ class GateType extends Model
         }
         $screenModel->order = $order;
         $screenModel->trigger = $trigger;
-        $this->screens[] = $screenModel;
+        $this->screens->add($screenModel);
         $screenModel->gate = $this;
 
         return $this;
     }
 
     public function findScreen(
-        string            $screenType,
-        ScreenTriggerType $trigger = ScreenTriggerType::DEFAULT,
-    ): ?GateScreenModel {
-        foreach ($this->getScreens() as $screen) {
+      string            $screenType,
+      ScreenTriggerType $trigger = ScreenTriggerType::DEFAULT,
+    ) : ?GateScreenModel {
+        foreach ($this->screens as $screen) {
             if ($screen->screenSerialized === $screenType && $screen->trigger === $trigger) {
                 return $screen;
             }
@@ -186,9 +135,9 @@ class GateType extends Model
      * @return GateScreenModel[]
      * @throws ValidationException
      */
-    public function getScreensForTrigger(ScreenTriggerType $trigger): array {
+    public function getScreensForTrigger(ScreenTriggerType $trigger) : array {
         $screens = [];
-        foreach ($this->getScreens() as $screen) {
+        foreach ($this->screens as $screen) {
             if ($screen->trigger === $trigger) {
                 $screens[] = $screen;
             }
@@ -196,11 +145,11 @@ class GateType extends Model
         return $screens;
     }
 
-    public function save(): bool {
+    public function save() : bool {
         return parent::save() && $this->saveScreens();
     }
 
-    public function saveScreens(): bool {
+    public function saveScreens() : bool {
         $success = true;
 
         if (isset($this->screens)) {
@@ -214,45 +163,78 @@ class GateType extends Model
 
         /** @var Cache $cache */
         $cache = App::getService('cache');
-        $cache->remove('gateType.' . $this->id . '.screens');
+        $cache->remove('gateType.'.$this->id.'.screens');
 
         return $success;
     }
 
-    public function setName(string $name): GateType {
+    public function setName(string $name) : GateType {
         $this->name = $name;
         return $this;
     }
 
-    public function setDescription(?string $description): GateType {
+    public function setDescription(?string $description) : GateType {
         $this->description = $description;
         return $this;
     }
 
-    public function setLocked(bool $locked): GateType {
+    public function setLocked(bool $locked) : GateType {
         $this->locked = $locked;
         return $this;
     }
 
-    public function getUrl(): string {
+    public function getUrl() : string {
         return App::getLink($this->getPath());
     }
 
     /**
      * @return string[]
      */
-    public function getPath(): array {
+    public function getPath() : array {
         return ['gate', $this->slug];
     }
 
-    public function clearCache(): void {
+    public function clearCache() : void {
         parent::clearCache();
         /** @var Cache $cache */
         $cache = App::getService('cache');
         $cache->clean(
-            [
+          [
             $cache::Tags => ['core.menu'],
+          ]
+        );
+    }
+
+    /**
+     * @return ModelCollection<GateScreenModel>
+     */
+    protected function loadScreens() : ModelCollection {
+        if (!isset($this->id)) {
+            return new ModelCollection();
+        }
+        /** @var Cache $cache */
+        $cache = App::getService('cache');
+        return new ModelCollection(
+          $cache->load(
+            'gateType.'.$this->id.'.screens',
+            fn() => GateScreenModel::query()
+                                   ->where('id_gate = %i', $this->id)
+                                   ->orderBy('order')
+                                   ->get(),
+            [
+              $cache::Tags   => array_merge(
+                [
+                  'models',
+                  GateScreenModel::TABLE,
+                  $this::TABLE,
+                  $this::TABLE.'/'.$this->id,
+                  $this::TABLE.'/'.$this->id.'/relations',
+                ],
+                GateScreenModel::CACHE_TAGS
+              ),
+              $cache::Expire => '7 days',
             ]
+          )
         );
     }
 }

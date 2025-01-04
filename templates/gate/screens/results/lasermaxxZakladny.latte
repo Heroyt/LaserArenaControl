@@ -10,9 +10,9 @@
 {define content}
     <section class="teams">
         {var App\GameModels\Game\Team|null $win = $mode->getWin($game)}
-        <div class="team" n:foreach="$game->getTeamsSorted() as $team">
+		<div class="team" n:foreach="$game->teamsSorted as $team">
             {varType App\GameModels\Game\Lasermaxx\Team $team}
-            <div class="team-header text-center text-bg-team-{$game::SYSTEM}-{$team->getTeamColor()}">
+			<div class="team-header text-center text-bg-team-{$game::SYSTEM}-{$team->color}">
                 <div>
                     {if is_null($win)}
                         {svgIcon 'shield', '2rem'}
@@ -30,7 +30,7 @@
                 </div>
             </div>
             <div class="players">
-                {include partPlayers, players: $team->getPlayersSorted()}
+				{include partPlayers, players: $team->playersSorted}
             </div>
         </div>
     </section>
@@ -39,7 +39,7 @@
 {define partPlayers}
     {varType App\GameModels\Game\Evo5\Player[] $players}
     <div n:foreach="$players as $player" class="player text-center text-grey-text">
-        <div class="name text-team-{$game::SYSTEM}-{$player->getTeamColor()}">
+		<div class="name text-team-{$game::SYSTEM}-{$player->color}">
             {$player->name}
         </div>
         <div class="hits-deaths">

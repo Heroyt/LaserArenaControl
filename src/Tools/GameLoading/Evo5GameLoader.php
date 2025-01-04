@@ -14,24 +14,24 @@ class Evo5GameLoader extends LasermaxxGameLoader
     use MusicLoading;
 
     public const string DI_NAME = 'evo5.gameLoader';
-    public const string MUSIC_FILE = LMX_DIR . 'music/evo5.mp3';
+    public const string MUSIC_FILE = LMX_DIR.'music/evo5.mp3';
 
     /**
      * Prepare a game for loading
      *
-     * @param GameData $data
+     * @param  GameData  $data
      *
      * @return MetaLoadData Metadata
      * @throws TemplateDoesNotExistException
      */
-    public function loadGame(array $data): array {
+    public function loadGame(array $data) : array {
         $loadData = $this->loadLasermaxxGame($data);
 
         // Render the game info into a load file
         $content = $this->latte->viewToString('gameFiles/evo5', $loadData->getParams());
-        $loadDir = LMX_DIR . Info::get('evo5_load_file', 'games/');
+        $loadDir = LMX_DIR.Info::get('evo5_load_file', 'games/');
         if (file_exists($loadDir) && is_dir($loadDir)) {
-            file_put_contents($loadDir . '0000.game', $content);
+            file_put_contents($loadDir.'0000.game', $content);
         }
 
         // Set up a correct music file

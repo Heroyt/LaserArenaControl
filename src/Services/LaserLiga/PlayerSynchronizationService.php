@@ -9,16 +9,15 @@ use App\Models\Auth\Player;
 readonly class PlayerSynchronizationService
 {
     public function __construct(
-        private PlayerProvider $playerProvider,
-    ) {
-    }
+      private PlayerProvider $playerProvider,
+    ) {}
 
-    public function syncAllArenaPlayers(): void {
+    public function syncAllArenaPlayers() : void {
         // Should save all found players
         $this->playerProvider->findAllPublicPlayers();
     }
 
-    public function syncAllLocalPlayers(): void {
+    public function syncAllLocalPlayers() : void {
         // Get all local players
         $playersAll = Player::getAll();
         // Get all player codes

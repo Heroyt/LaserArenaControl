@@ -4,7 +4,7 @@ namespace App\Gate\Screens;
 
 trait WithReloadTimer
 {
-    public function getReloadTimer(): ?int {
+    public function getReloadTimer() : ?int {
         if (!($this instanceof WithSettings)) {
             return null;
         }
@@ -22,11 +22,11 @@ trait WithReloadTimer
         return $settings->time - (time() - $startTime) + 2;
     }
 
-    public function getReloadStartTime(): int {
+    public function getReloadStartTime() : int {
         $trigger = $this->getTrigger();
         if (isset($trigger) && $trigger->isReloadTimeSettable()) {
-            return $trigger->getReloadTimeFrom($this->getGame());
+            return $trigger->getReloadTimeFrom($this->game);
         }
-        return ($this->getGame()->end ?? $this->getGame()->start ?? $this->getGame()->fileTime)?->getTimestamp() ?? -1;
+        return ($this->game->end ?? $this->game->start ?? $this->game->fileTime)?->getTimestamp() ?? -1;
     }
 }

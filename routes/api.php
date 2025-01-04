@@ -22,7 +22,9 @@ use App\Controllers\Api\Tasks;
 use App\Controllers\Api\Updater;
 use Lsr\Core\Routing\Route;
 
-$apiGroup = Route::group('api')
+/** @var \Lsr\Core\Routing\Router $this */
+
+$apiGroup = $this->group('api')
                  ->post('mount', [Mount::class, 'mount'])
                  ->post('update', [Updater::class, 'update'])
                  ->post('build', [Updater::class, 'build'])

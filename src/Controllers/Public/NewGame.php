@@ -1,5 +1,7 @@
 <?php
+
 declare(strict_types=1);
+
 namespace App\Controllers\Public;
 
 use App\Controllers\NewGameTrait;
@@ -9,21 +11,23 @@ use App\GameModels\Factory\GameModeFactory;
 use App\Models\MusicMode;
 use App\Templates\NewGame\NewGameParams;
 use Lsr\Core\Controllers\Controller;
-use Lsr\Core\Exceptions\ValidationException;
 use Lsr\Core\Requests\Request;
 use Lsr\Exceptions\TemplateDoesNotExistException;
 use Lsr\Interfaces\RequestInterface;
+use Lsr\ObjectValidation\Exceptions\ValidationException;
 use Psr\Http\Message\ResponseInterface;
+use Throwable;
 
 /**
  * @property NewGameParams $params
  */
-class NewGame extends Controller {
+class NewGame extends Controller
+{
     use NewGameTrait;
 
     protected string $title = 'Nová hra';
 
-    public function init(RequestInterface $request): void {
+    public function init(RequestInterface $request) : void {
         parent::init($request);
         $this->baseInit($request);
     }
@@ -34,9 +38,9 @@ class NewGame extends Controller {
      * @throws GameModeNotFoundException
      * @throws TemplateDoesNotExistException
      * @throws ValidationException
-     * @throws \Throwable
+     * @throws Throwable
      */
-    public function show(Request $request): ResponseInterface {
+    public function show(Request $request) : ResponseInterface {
         $this->initNewGameParams($request);
         $this->params->gameModes = GameModeFactory::getAll(['system' => $this->params->system, 'public' => true]);
         $this->params->musicModes = MusicMode::query()->where('public = 1')->orderBy('order')->get();

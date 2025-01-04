@@ -1,11 +1,14 @@
 <?php
+
 declare(strict_types=1);
+
 namespace App\Controllers\Public;
 
 use App\Core\Info;
 use App\GameModels\Factory\GameFactory;
 use App\Templates\Public\GamesDetailTemplate;
 use App\Templates\Public\GamesListTemplate;
+use DateTimeImmutable;
 use Endroid\QrCode\Builder\Builder;
 use Endroid\QrCode\Encoding\Encoding;
 use Endroid\QrCode\Writer\SvgWriter;
@@ -15,11 +18,10 @@ use Psr\Http\Message\ResponseInterface;
 
 class GamesList extends Controller
 {
-
     public function show(Request $request) : ResponseInterface {
         $this->params = new GamesListTemplate($this->params);
 
-        $this->params->date = new \DateTimeImmutable($request->getGet('date', 'now'));
+        $this->params->date = new DateTimeImmutable($request->getGet('date', 'now'));
         $this->params->games = GameFactory::getByDate($this->params->date, true);
 
         return $this->view('pages/public/list');
@@ -31,14 +33,14 @@ class GamesList extends Controller
         $this->params->publicUrl = trailingSlashIt(Info::get('liga_api_url', 'https://laserliga.cz')).'g/'.$code;
         $this->params->code = $code;
         $this->params->game = GameFactory::getByCode($code);
-        $this->params->qr = Builder::create()
-                                   ->data($this->params->publicUrl)
-                                   ->writer(new SvgWriter())
-                                   ->encoding(new Encoding('UTF-8'))
-                                   ->build()
-                                   ->getString();
+        $this->params->qr = new Builder(
+          writer  : new SvgWriter(),
+          data    : $this->params->publicUrl,
+          encoding: new Encoding('UTF-8'),
+        )
+          ->build()
+          ->getString();
 
         return $this->view('pages/public/detail');
     }
-
 }

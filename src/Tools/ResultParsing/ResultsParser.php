@@ -20,12 +20,11 @@ class ResultsParser
     private ?ResultsParserInterface $parser;
 
     /**
-     * @param PlayerProvider $playerProvider
+     * @param  PlayerProvider  $playerProvider
      */
     public function __construct(
-        protected readonly PlayerProvider $playerProvider,
-    ) {
-    }
+      protected readonly PlayerProvider $playerProvider,
+    ) {}
 
     /**
      * Parse a given game file
@@ -33,7 +32,7 @@ class ResultsParser
      * @return G
      * @throws ResultsParseException
      */
-    public function parse(): Game {
+    public function parse() : Game {
         return $this->findParser()->parse();
     }
 
@@ -41,30 +40,31 @@ class ResultsParser
      * @return ResultsParserInterface<G>
      * @throws ResultsParseException
      */
-    private function findParser(): ResultsParserInterface {
+    private function findParser() : ResultsParserInterface {
         if (!isset($this->parser)) {
             $baseNamespace = 'App\\Tools\\ResultParsing\\';
             foreach (GameFactory::getSupportedSystems() as $system) {
                 /** @var class-string<ResultsParserInterface<G>> $class */
-                $class = $baseNamespace . ucfirst($system) . '\\ResultsParser';
+                $class = $baseNamespace.ucfirst($system).'\\ResultsParser';
                 if (class_exists($class) && $class::checkFile($this->fileName, $this->contents)) {
                     $this->parser = new $class($this->playerProvider);
                     if (!empty($this->fileName)) {
                         $this->parser->setFile($this->fileName);
-                    } else {
+                    }
+                    else {
                         $this->parser->setContents($this->contents);
                     }
                     return $this->parser;
                 }
             }
-            throw new ResultsParseException('Cannot find parser for given results file: ' . $this->fileName);
+            throw new ResultsParseException('Cannot find parser for given results file: '.$this->fileName);
         }
         return $this->parser;
     }
 
-    public function setFile(string $fileName): ResultsParser {
+    public function setFile(string $fileName) : ResultsParser {
         if (!file_exists($fileName) || !is_readable($fileName)) {
-            throw new FileException('File "' . $fileName . '" does not exist or is not readable');
+            throw new FileException('File "'.$fileName.'" does not exist or is not readable');
         }
         $this->fileName = $fileName;
         $this->contents = '';
@@ -72,7 +72,7 @@ class ResultsParser
         return $this;
     }
 
-    public function setContents(string $contents): ResultsParser {
+    public function setContents(string $contents) : ResultsParser {
         $this->fileName = '';
         $this->contents = $contents;
         $this->parser = null;

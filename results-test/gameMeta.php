@@ -37,7 +37,7 @@ foreach ($files as $file) {
       'teams' => [],
     ];
 
-    foreach ($game->getPlayers() as $player) {
+    foreach ($game->players as $player) {
         $playerData = [
           'name' => $player->name,
           'user' => $player->user?->id,

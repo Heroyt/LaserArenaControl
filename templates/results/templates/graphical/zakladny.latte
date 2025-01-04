@@ -1,7 +1,7 @@
 {templateType App\Templates\Results\ResultsParams}
 {layout '../../@printLayout.latte'}
 
-{var App\GameModels\Game\Evo5\GameModes\Zakladny $mode = $game->getMode()}
+{var App\GameModels\Game\Evo5\GameModes\Zakladny $mode = $game->mode}
 
 {import '../graphical_base.latte'}
 
@@ -24,7 +24,7 @@
 {/define}
 
 {define containerClasses}
-    template-graphical zakladny {if $game->getPlayerCount() > 10}too-many-players{/if}
+	template-graphical zakladny {if $game->playerCount > 10}too-many-players{/if}
 {/define}
 
 {define content}
@@ -37,7 +37,7 @@
 {define resultsTeams}
     {var App\GameModels\Game\Team|null $win = $mode->getWin($game)}
     <div class="results-zakladny-teams">
-        <div n:foreach="$game->getTeams() as $team"
+		<div n:foreach="$game->teams as $team"
                 {varType App\GameModels\Game\Lasermaxx\Team $team}
                 class="team rounded" style="--team-color: var(--team-{$team->color});">
             <div class="team-head">
@@ -55,7 +55,7 @@
                     {$mode->getBasesDestroyed($team)}
                 </div>
             </div>
-            {include resultsPlayers, players: $team->getPlayersSorted()}
+			{include resultsPlayers, players: $team->playersSorted}
         </div>
     </div>
 {/define}
@@ -68,7 +68,7 @@
             <div n:class="results-player, rounded, p-2, bg-white, flex-fill">
                 <div class="player-head">
                     {var int $len = strlen($player->name)}
-                    <div class="player-name text-center text-team-{$player->getTeamColor()}"
+					<div class="player-name text-center text-team-{$player->color}"
                          {ifset $fontSize[$len]}style="--font-size: {$fontSize[$len]}pt;"{/ifset}>
                         {$player->name}
                     </div>

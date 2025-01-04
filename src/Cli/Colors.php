@@ -20,13 +20,17 @@ class Colors
     /**
      * Set an output color to
      *
-     * @param ForegroundColors|null $foreground
-     * @param BackgroundColors|null $background
-     * @param TextAttributes|null   $attribute
+     * @param  ForegroundColors|null  $foreground
+     * @param  BackgroundColors|null  $background
+     * @param  TextAttributes|null  $attribute
      *
      * @return string
      */
-    public static function color(?ForegroundColors $foreground = null, ?BackgroundColors $background = null, ?TextAttributes $attribute = null): string {
+    public static function color(
+      ?ForegroundColors $foreground = null,
+      ?BackgroundColors $background = null,
+      ?TextAttributes   $attribute = null
+    ) : string {
         $return = '';
         if (isset($attribute)) {
             $return .= $attribute->value;
@@ -40,7 +44,7 @@ class Colors
         return $return;
     }
 
-    public static function reset(): string {
+    public static function reset() : string {
         return self::COLOR_RESET;
     }
 }

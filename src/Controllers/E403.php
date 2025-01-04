@@ -40,7 +40,7 @@ class E403 extends Controller
     protected string $description = 'Access denied';
 
 
-    public function show(Request $request): ResponseInterface {
+    public function show(Request $request) : ResponseInterface {
         if ($request->header('Accept') === 'application/json') {
             return $this->respond(['error' => 'Unauthorized'], 403);
         }

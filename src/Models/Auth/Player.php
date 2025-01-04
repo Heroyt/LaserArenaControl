@@ -3,17 +3,18 @@
 namespace App\Models\Auth;
 
 use App\Models\Auth\Validators\PlayerCode;
+use App\Models\BaseModel;
 use InvalidArgumentException;
-use Lsr\Core\DB;
-use Lsr\Core\Exceptions\ValidationException;
-use Lsr\Core\Models\Attributes\NoDB;
-use Lsr\Core\Models\Attributes\OneToMany;
-use Lsr\Core\Models\Attributes\PrimaryKey;
-use Lsr\Core\Models\Attributes\Validation\Email;
-use Lsr\Core\Models\Model;
+use Lsr\Db\DB;
+use Lsr\ObjectValidation\Attributes\Email;
+use Lsr\ObjectValidation\Exceptions\ValidationException;
+use Lsr\Orm\Attributes\NoDB;
+use Lsr\Orm\Attributes\PrimaryKey;
+use Lsr\Orm\Attributes\Relations\OneToMany;
+use Lsr\Orm\ModelCollection;
 
 #[PrimaryKey('id_user')]
-class Player extends Model
+class Player extends BaseModel
 {
     public const string TABLE = 'players';
 
@@ -24,9 +25,9 @@ class Player extends Model
     #[Email]
     public string $email;
 
-    /** @var PlayerConnection[] */
-    #[OneToMany(class: PlayerConnection::class)]
-    public array $connections = [];
+    /** @var ModelCollection<PlayerConnection> */
+    #[OneToMany(class: PlayerConnection::class, factoryMethod: 'loadConnections')]
+    public ModelCollection $connections;
 
     public int $rank = 100;
 
@@ -36,7 +37,7 @@ class Player extends Model
     #[NoDB]
     public array $codeHistory = [];
 
-    public static function getByCode(string $code): ?static {
+    public static function getByCode(string $code) : ?static {
         $code = strtoupper(trim($code));
         if (preg_match('/(\d)+-([A-Z\d]{5})/', $code) !== 1) {
             throw new InvalidArgumentException('Code is not valid');
@@ -45,78 +46,78 @@ class Player extends Model
     }
 
     /**
-     * @param string $code
-     * @param Player $player
+     * @param  string  $code
+     * @param  Player  $player
      *
      * @return void
-     * @throws ValidationException
      */
-    public static function validateCode(string $code, Player $player): void {
+    public static function validateCode(string $code, Player $player, string $propertyPrefix = '') : void {
         if (!$player->validateUniqueCode($code)) {
-            throw new ValidationException('Invalid player\'s code. Must be unique.');
+            throw ValidationException::createWithValue(
+              $player,
+              $propertyPrefix.'code',
+              'Invalid player\'s code. Must be unique.',
+              $code
+            );
         }
     }
 
     /**
      * Validate the unique player's code to be unique for all player in one arena
      *
-     * @param string $code
+     * @param  string  $code
      *
      * @return bool
      */
-    public function validateUniqueCode(string $code): bool {
+    public function validateUniqueCode(string $code) : bool {
         $id = DB::select($this::TABLE, $this::getPrimaryKey())->where('[code] = %s', $code)->fetchSingle();
         return !isset($id) || $id === $this->id;
     }
 
     /**
-     * @return string
+     * @return ModelCollection<PlayerConnection>
      */
-    public function getCode(): string {
-        return $this->code;
+    public function loadConnections() : ModelCollection {
+        return new ModelCollection(PlayerConnection::getForPlayer($this));
     }
 
-    /**
-     * @return PlayerConnection[]
-     * @throws ValidationException
-     */
-    public function getConnections(): array {
-        if (empty($this->connections)) {
-            $this->connections = PlayerConnection::getForPlayer($this);
-        }
-        return $this->connections;
-    }
-
-    public function addConnection(PlayerConnection $connection): Player {
+    public function addConnection(PlayerConnection $connection) : Player {
         // Find duplicates
         $found = false;
-        foreach ($this->getConnections() as $connectionToTest) {
+        foreach ($this->connections as $connectionToTest) {
             if ($connectionToTest->type === $connection->type && $connection->identifier === $connectionToTest->identifier) {
                 $found = true;
                 break;
             }
         }
         if (!$found) {
-            $this->connections[] = $connection;
+            $this->connections->add($connection);
         }
         return $this;
     }
 
-    public function jsonSerialize(): array {
+    public function jsonSerialize() : array {
         $connections = [];
         try {
-            foreach ($this->getConnections() as $connection) {
+            foreach ($this->connections as $connection) {
                 $connections[] = ['type' => $connection->type->value, 'identifier' => $connection->identifier];
             }
         } catch (ValidationException) {
         }
         return [
-            'id'          => $this->id,
-            'nickname'    => $this->nickname,
-            'code'        => $this->getCode(),
-            'email'       => $this->email,
-            'rank'        => $this->rank,
-            'connections' => $connections,
+          'id'          => $this->id,
+          'nickname'    => $this->nickname,
+          'code'        => $this->getCode(),
+          'email'       => $this->email,
+          'rank'        => $this->rank,
+          'connections' => $connections,
         ];
+    }
+
+    /**
+     * @return string
+     */
+    public function getCode() : string {
+        return $this->code;
     }
 }

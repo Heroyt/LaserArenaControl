@@ -29,7 +29,7 @@ use App\Gate\Settings\TimerSettings;
 use App\Gate\Settings\VestGunAfterGameSettings;
 use App\Gate\Settings\VestsSettings;
 use Dibi\Exception;
-use Lsr\Core\DB;
+use Lsr\Db\DB;
 
 /**
  * Class that initially seeds the database
@@ -848,7 +848,7 @@ class Seeder implements InstallInterface
     /**
      * @inheritDoc
      */
-    public static function install(bool $fresh = false): bool {
+    public static function install(bool $fresh = false) : bool {
         try {
             // Game modes
             if ($fresh) {
@@ -858,10 +858,10 @@ class Seeder implements InstallInterface
                 DB::insertIgnore(AbstractMode::TABLE, $insert);
             }
             if ($fresh) {
-                DB::delete(AbstractMode::TABLE . '-names', ['1=1']);
+                DB::delete(AbstractMode::TABLE.'-names', ['1=1']);
             }
             foreach (self::GAME_MODE_NAMES as $insert) {
-                DB::insertIgnore(AbstractMode::TABLE . '-names', $insert);
+                DB::insertIgnore(AbstractMode::TABLE.'-names', $insert);
             }
 
             // Print styles
@@ -886,12 +886,12 @@ class Seeder implements InstallInterface
             }
             foreach (self::TIPS as $id => $tip) {
                 DB::insertIgnore(
-                    Tip::TABLE,
-                    [
+                  Tip::TABLE,
+                  [
                     'id_tip' => $id,
                     'text'   => $tip['text'],
                     'translations' => igbinary_serialize($tip['translations']),
-                    ]
+                  ]
                 );
             }
 
@@ -936,10 +936,10 @@ class Seeder implements InstallInterface
 
 
             $idleScreen->setSettings(
-                new TimerSettings(
-                    [$child1, $child2, $child3],
-                    60
-                )
+              new TimerSettings(
+                [$child1, $child2, $child3],
+                60
+              )
             );
 
             $vestsScreens = $defaultGate->getScreensForTrigger(ScreenTriggerType::GAME_LOADED);
@@ -995,10 +995,10 @@ class Seeder implements InstallInterface
 
 
             if (!$defaultGate->save()) {
-                echo 'Failed to save default gate.' . PHP_EOL;
+                echo 'Failed to save default gate.'.PHP_EOL;
             }
         } catch (Exception $e) {
-            echo $e->getMessage() . PHP_EOL . $e->getSql() . PHP_EOL;
+            echo $e->getMessage().PHP_EOL.$e->getSql().PHP_EOL;
             return false;
         }
         return true;

@@ -7,8 +7,7 @@ use App\Core\App;
 use App\Models\Auth\Player;
 use App\Models\Auth\PlayerConnection;
 use GuzzleHttp\Exception\GuzzleException;
-use JsonException;
-use Lsr\Core\Exceptions\ValidationException;
+use Lsr\ObjectValidation\Exceptions\ValidationException;
 use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\Serializer\Serializer;
 
@@ -26,10 +25,9 @@ use Symfony\Component\Serializer\Serializer;
 readonly class PlayerProvider
 {
     public function __construct(
-        private LigaApi    $api,
-        private Serializer $serializer,
-    ) {
-    }
+      private LigaApi    $api,
+      private Serializer $serializer,
+    ) {}
 
     /**
      * @param  string  $search
@@ -38,12 +36,13 @@ readonly class PlayerProvider
      * @return Player[]
      * @throws ValidationException
      */
-    public function findPlayersLocal(string $search, bool $includeMail = true): array {
+    public function findPlayersLocal(string $search, bool $includeMail = true) : array {
         $query = Player::query();
         // Check code format
         if (preg_match('/^(\d+-[A-Z\d]{1,5})$/', trim($search), $matches) === 1) {
             $query->where('[code] LIKE %like~', $matches[1]);
-        } else {
+        }
+        else {
             $where = [
               ['[code] LIKE %~like~', $search],
               ['[nickname] LIKE %~like~', $search],
@@ -52,8 +51,8 @@ readonly class PlayerProvider
                 $where[] = ['[email] LIKE %~like~', $search];
             }
             $query->where(
-                '%or',
-                $where
+              '%or',
+              $where
             );
         }
 
@@ -65,7 +64,7 @@ readonly class PlayerProvider
      *
      * @return Player[]|null
      */
-    public function findPlayersPublic(string $search, bool $noSave = false): ?array {
+    public function findPlayersPublic(string $search, bool $noSave = false) : ?array {
         try {
             $response = $this->api->get('players', ['search' => $search], ['timeout' => 10]);
         } catch (GuzzleException) {
@@ -78,6 +77,28 @@ readonly class PlayerProvider
     }
 
     /**
+     * @param  ResponseInterface  $response
+     * @return Player[]|null
+     */
+    public function getPlayersFromResponse(ResponseInterface $response, bool $noSave = false) : ?array {
+        if ($response->getStatusCode() !== 200) {
+            return null;
+        }
+        $response->getBody()->rewind();
+        $body = $response->getBody()->getContents();
+
+        /** @var LigaPlayerData[] $data */
+        $data = $this->serializer->deserialize($body, LigaPlayerData::class.'[]', 'json');
+
+        // Transform JSON data into model objects
+        $objects = [];
+        foreach ($data as $playerData) {
+            $objects[] = $this->getPlayerObjectFromData($playerData, $noSave);
+        }
+        return $objects;
+    }
+
+    /**
      * Parse data from API and return player object.
      *
      * If the player already exists in database, it returns the updated model from DB.
@@ -86,7 +107,7 @@ readonly class PlayerProvider
      *
      * @return Player
      */
-    public function getPlayerObjectFromData(LigaPlayerData $data, bool $noSave = false): Player {
+    public function getPlayerObjectFromData(LigaPlayerData $data, bool $noSave = false) : Player {
         // Try to find existing player first
         $player = Player::getByCode($data->code);
         if ($noSave || !isset($player)) {
@@ -117,7 +138,7 @@ readonly class PlayerProvider
             // Update player data from public
             try {
                 $player->save();
-            } catch (ValidationException $e) {
+            } catch (\Lsr\Orm\Exceptions\ValidationException $e) {
                 App::getInstance()->getLogger()->exception($e);
             }
         }
@@ -131,9 +152,9 @@ readonly class PlayerProvider
      *
      * @return Player|null
      */
-    public function findPublicPlayerByCode(string $code, bool $noSave = false): ?Player {
+    public function findPublicPlayerByCode(string $code, bool $noSave = false) : ?Player {
         try {
-            $response = $this->api->get('players/' . $code, config: ['timeout' => 10]);
+            $response = $this->api->get('players/'.$code, config: ['timeout' => 10]);
         } catch (GuzzleException) {
             return null;
         }
@@ -151,7 +172,7 @@ readonly class PlayerProvider
     /**
      * @return Player[]|null
      */
-    public function findAllPublicPlayers(bool $noSave = false): ?array {
+    public function findAllPublicPlayers(bool $noSave = false) : ?array {
         try {
             $response = $this->api->get('players', ['arena' => 'self'], config: ['timeout' => 10]);
         } catch (GuzzleException) {
@@ -164,7 +185,7 @@ readonly class PlayerProvider
      * @param  string[]  $codes
      * @return Player[]|null
      */
-    public function findAllPublicPlayersByCodes(array $codes, bool $noSave = false): ?array {
+    public function findAllPublicPlayersByCodes(array $codes, bool $noSave = false) : ?array {
         try {
             $response = $this->api->get('players', ['codes' => $codes], config: ['timeout' => 10]);
         } catch (GuzzleException) {
@@ -176,34 +197,12 @@ readonly class PlayerProvider
     /**
      * @return Player[]|null
      */
-    public function findAllPublicPlayersByOldCode(string $code, bool $noSave = false): ?array {
+    public function findAllPublicPlayersByOldCode(string $code, bool $noSave = false) : ?array {
         try {
-            $response = $this->api->get('players/old/' . $code, config: ['timeout' => 10]);
+            $response = $this->api->get('players/old/'.$code, config: ['timeout' => 10]);
         } catch (GuzzleException) {
             return null;
         }
         return $this->getPlayersFromResponse($response, $noSave);
-    }
-
-    /**
-     * @param  ResponseInterface  $response
-     * @return Player[]|null
-     */
-    public function getPlayersFromResponse(ResponseInterface $response, bool $noSave = false): ?array {
-        if ($response->getStatusCode() !== 200) {
-            return null;
-        }
-        $response->getBody()->rewind();
-        $body = $response->getBody()->getContents();
-
-        /** @var LigaPlayerData[] $data */
-        $data = $this->serializer->deserialize($body, LigaPlayerData::class . '[]', 'json');
-
-        // Transform JSON data into model objects
-        $objects = [];
-        foreach ($data as $playerData) {
-            $objects[] = $this->getPlayerObjectFromData($playerData, $noSave);
-        }
-        return $objects;
     }
 }

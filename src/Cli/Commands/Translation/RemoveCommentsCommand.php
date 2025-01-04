@@ -14,15 +14,15 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class RemoveCommentsCommand extends Command
 {
-    public static function getDefaultName(): ?string {
+    public static function getDefaultName() : ?string {
         return 'translations:remove-comments';
     }
 
-    public static function getDefaultDescription(): ?string {
+    public static function getDefaultDescription() : ?string {
         return 'Remove comments from all translation files.';
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): int {
+    protected function execute(InputInterface $input, OutputInterface $output) : int {
         $poLoader = new PoLoader();
         $poGenerator = new PoGenerator();
         /** @var Translations[] $translations */
@@ -32,12 +32,12 @@ class RemoveCommentsCommand extends Command
         $template = null;
 
         foreach ($languages as $lang => $country) {
-            $concatLang = $lang . '_' . $country;
-            $path = LANGUAGE_DIR . '/' . $concatLang;
+            $concatLang = $lang.'_'.$country;
+            $path = LANGUAGE_DIR.'/'.$concatLang;
             if (!is_dir($path)) {
                 continue;
             }
-            $file = $path . '/LC_MESSAGES/' . LANGUAGE_FILE_NAME . '.po';
+            $file = $path.'/LC_MESSAGES/'.LANGUAGE_FILE_NAME.'.po';
             $translation = $poLoader->loadFile($file);
             $count = 0;
 
@@ -67,13 +67,13 @@ class RemoveCommentsCommand extends Command
                     }
                     $string->translatePlural(...$plural);
                 }
-                $poGenerator->generateFile($template, LANGUAGE_DIR . LANGUAGE_FILE_NAME . '.pot');
+                $poGenerator->generateFile($template, LANGUAGE_DIR.LANGUAGE_FILE_NAME.'.pot');
                 $output->writeln('Generated the template POT file.');
             }
         }
 
         $output->writeln(
-            Colors::color(ForegroundColors::GREEN) . 'Done' . Colors::reset()
+          Colors::color(ForegroundColors::GREEN).'Done'.Colors::reset()
         );
         return self::SUCCESS;
     }

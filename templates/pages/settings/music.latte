@@ -130,7 +130,9 @@
 			</div>
 			<label for="music-{$id}-background" data-toggle="tooltip" title="{_'Pozadí', context: 'image'}"
 				   class="image-input-with-preview">
-				{var App\Models\DataObjects\Image|null $backgroundImage = $musicMode?->getBackgroundImage()}
+				{try}
+					{var App\Models\DataObjects\Image|null $backgroundImage = $musicMode?->getBackgroundImage()}
+				{/try}
 				{if !isset($backgroundImage)}
 					<img src="{getUrl}assets/images/placeholder.png" alt="{_'Pozadí', 'image'}">
 				{elseif $backgroundImage->getType() === 'svg'}
@@ -145,7 +147,9 @@
 			</label>
 			<label for="music-{$id}-icon" class="image-input-with-preview" data-toggle="tooltip"
 				   title="{_'Ikona', context: 'image'}">
-				{var App\Models\DataObjects\Image|null $icon = $musicMode?->getIcon()}
+				{try}
+					{var App\Models\DataObjects\Image|null $icon = $musicMode?->getIcon()}
+				{/try}
 				{if !isset($icon)}
 					<img src="{getUrl}assets/images/placeholder.png" alt="{_'Pozadí', 'image'}">
 				{elseif $icon->getType() === 'svg'}

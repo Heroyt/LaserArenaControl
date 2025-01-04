@@ -42,16 +42,16 @@ class E404 extends Controller
      */
     protected string $description = 'Page not found';
 
-    public function show(Request $request, ?Throwable $e = null): ResponseInterface {
+    public function show(Request $request, ?Throwable $e = null) : ResponseInterface {
         if (str_contains($request->getHeaderLine('Accept'), 'application/json')) {
             return $this->respond(
-                new ErrorResponse(
-                    'Resource not found',
-                    type: ErrorType::NOT_FOUND,
-                    detail: $e?->getMessage(),
-                    exception: $e,
-                ),
-                404
+              new ErrorResponse(
+                           'Resource not found',
+                type     : ErrorType::NOT_FOUND,
+                detail   : $e?->getMessage(),
+                exception: $e,
+              ),
+              404
             );
         }
         $this->params['exception'] = $e;

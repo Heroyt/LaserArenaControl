@@ -9,12 +9,12 @@ use App\Services\TaskProducer;
 use App\Tasks\GameImportTask;
 use App\Tasks\Payloads\GameImportPayload;
 use App\Tasks\TaskDispatcherInterface;
-use Lsr\Core\Models\ModelRepository;
 use Lsr\Core\Requests\Dto\ErrorResponse;
 use Lsr\Core\Requests\Enums\ErrorType;
 use Lsr\Core\Requests\Exceptions\RouteNotFoundException;
 use Lsr\Core\Requests\RequestFactory;
 use Lsr\Logging\Logger;
+use Lsr\Orm\ModelRepository;
 use Nyholm\Psr7\Factory\Psr17Factory;
 use Nyholm\Psr7\Response;
 use Spiral\RoadRunner\Environment;
@@ -52,7 +52,7 @@ if (
     Debugger::$logDirectory = LOG_DIR;
 }
 
-switch ($env->getMode()) {
+switch ($env->mode) {
     case Mode::MODE_JOBS:
         $consumer = new Consumer();
         /** @var Spiral\RoadRunner\Jobs\Task\ReceivedTaskInterface $task */

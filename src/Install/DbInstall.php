@@ -8,11 +8,11 @@ namespace App\Install;
 
 use App\Core\Info;
 use Dibi\Exception;
-use Lsr\Core\DB;
 use Lsr\Core\Exceptions\CyclicDependencyException;
 use Lsr\Core\Migrations\MigrationLoader;
-use Lsr\Core\Models\Model;
+use Lsr\Db\DB;
 use Lsr\Exceptions\FileException;
+use Lsr\Orm\Model;
 use Nette\Utils\AssertionException;
 use ReflectionClass;
 use ReflectionException;
@@ -31,21 +31,21 @@ class DbInstall implements InstallInterface
     /**
      * Install all database tables
      *
-     * @param bool $fresh
+     * @param  bool  $fresh
      *
      * @return bool
      */
-    public static function install(bool $fresh = false): bool {
+    public static function install(bool $fresh = false) : bool {
         // Load migration files
-        $loader = new MigrationLoader(ROOT . 'config/migrations.neon');
+        $loader = new MigrationLoader(ROOT.'config/migrations.neon');
         try {
             $loader->load();
-            $modules = glob(ROOT . 'modules/*/config/migrations.neon');
+            $modules = glob(ROOT.'modules/*/config/migrations.neon');
             foreach ($modules as $module) {
                 $loader->migrations = $loader::merge($loader->migrations, $loader->loadFile($module));
             }
         } catch (CyclicDependencyException | FileException | \Nette\Neon\Exception | AssertionException $e) {
-            echo "\e[0;31m" . $e->getMessage() . "\e[m\n" . $e->getTraceAsString() . "\n";
+            echo "\e[0;31m".$e->getMessage()."\e[m\n".$e->getTraceAsString()."\n";
             return false;
         }
 
@@ -76,7 +76,7 @@ class DbInstall implements InstallInterface
                         continue;
                     }
                 }
-                echo 'Creating table ' . $tableName . "\n";
+                echo 'Creating table '.$tableName."\n";
                 $definition = $info->definition;
                 $connection->query("CREATE TABLE IF NOT EXISTS %n $definition", $tableName);
             }
@@ -84,7 +84,7 @@ class DbInstall implements InstallInterface
             // Update tables
             if (!$fresh) {
                 /** @var array<string,string> $tableVersions */
-                $tableVersions = (array)Info::get('db_version', []);
+                $tableVersions = (array) Info::get('db_version', []);
 
                 // Update all tables if there have been any changes to the tables
                 foreach ($tables as $tableName => $info) {
@@ -110,7 +110,7 @@ class DbInstall implements InstallInterface
 
                         // Run ALTER TABLE queries for current version
                         foreach ($queries as $query) {
-                            echo 'Altering table: ' . $tableName . ' - ' . $query . PHP_EOL;
+                            echo 'Altering table: '.$tableName.' - '.$query.PHP_EOL;
                             try {
                                 $connection->query("ALTER TABLE %n $query;", $tableName);
                             } catch (Exception $e) {
@@ -162,12 +162,13 @@ class DbInstall implements InstallInterface
                     for ($i = 0, $iMax = count($index->columns); $i < $iMax; $i++) {
                         $columns[] = '%n';
                     }
-                    echo 'Creating ' . ($index->unique ? 'UNIQUE ' : '') . 'index on: ' . $tableName . ' - ' . $index->name . ' (' . implode(', ', $index->columns) . ')' . PHP_EOL;
+                    echo 'Creating '.($index->unique ? 'UNIQUE ' :
+                        '').'index on: '.$tableName.' - '.$index->name.' ('.implode(', ', $index->columns).')'.PHP_EOL;
                     $connection->query(
-                        'CREATE ' . ($index->unique ? 'UNIQUE ' : '') . 'INDEX %n ON %n (' . implode(',', $columns) . ');',
-                        $index->name,
-                        $tableName,
-                        ...$index->columns,
+                         'CREATE '.($index->unique ? 'UNIQUE ' : '').'INDEX %n ON %n ('.implode(',', $columns).');',
+                         $index->name,
+                         $tableName,
+                      ...$index->columns,
                     );
                 }
 
@@ -183,16 +184,20 @@ class DbInstall implements InstallInterface
 
                     $indexNames[] = $foreignKey->column;
 
-                    echo 'Checking foreign keys for relation ' . $tableName . '.' . $foreignKey->column . '->' . $refTable . '.' . $foreignKey->refColumn . PHP_EOL;
+                    echo 'Checking foreign keys for relation '.$tableName.'.'.$foreignKey->column.'->'.$refTable.'.'.$foreignKey->refColumn.PHP_EOL;
 
                     // Check current foreign keys
                     $fks = $connection
-                      ->select('CONSTRAINT_NAME')
+                      ->select(null, 'CONSTRAINT_NAME')
                       ->from('INFORMATION_SCHEMA.KEY_COLUMN_USAGE')
                       ->where('REFERENCED_TABLE_SCHEMA = (SELECT DATABASE())')
                       ->where('TABLE_NAME = %s', $tableName)
                       ->where('COLUMN_NAME = %s', $foreignKey->column)
-                      ->where('REFERENCED_TABLE_NAME = %s AND REFERENCED_COLUMN_NAME = %s', $refTable, $foreignKey->refColumn)
+                      ->where(
+                        'REFERENCED_TABLE_NAME = %s AND REFERENCED_COLUMN_NAME = %s',
+                        $refTable,
+                        $foreignKey->refColumn
+                      )
                       ->fetchPairs();
                     $count = count($fks);
                     if ($count === 1) {
@@ -200,44 +205,47 @@ class DbInstall implements InstallInterface
                         continue;
                     }
                     if ($count > 1) {
-                        echo 'Multiple foreign keys found for relation ' . $tableName . '.' . $foreignKey->column . '->' . $refTable . '.' . $foreignKey->refColumn . ' - ' . implode(', ', $fks) . PHP_EOL;
+                        echo 'Multiple foreign keys found for relation '.$tableName.'.'.$foreignKey->column.'->'.$refTable.'.'.$foreignKey->refColumn.' - '.implode(
+                            ', ',
+                            $fks
+                          ).PHP_EOL;
                         // FK already exists, but is duplicated
                         array_shift($fks); // Remove first element
                         // Drop any duplicate foreign key
                         foreach ($fks as $fkName) {
                             try {
-                                echo 'DROPPING foreign key on: ' . $tableName . ' - ' . $fkName . PHP_EOL;
+                                echo 'DROPPING foreign key on: '.$tableName.' - '.$fkName.PHP_EOL;
                                 $connection->query('ALTER TABLE %n DROP FOREIGN KEY %n;', $tableName, $fkName);
                             } catch (Exception $e) {
-                                echo $e->getMessage() . PHP_EOL;
+                                echo $e->getMessage().PHP_EOL;
                             }
                         }
                         continue;
                     }
 
                     // Create new foreign key
-                    echo 'Creating foreign key on: ' . $tableName . ' - ' . $foreignKey->column . '->' . $refTable . '.' . $foreignKey->refColumn . PHP_EOL;
+                    echo 'Creating foreign key on: '.$tableName.' - '.$foreignKey->column.'->'.$refTable.'.'.$foreignKey->refColumn.PHP_EOL;
                     $connection->query(
-                        'ALTER TABLE %n ADD FOREIGN KEY (%n) REFERENCES %n (%n) ON DELETE %SQL ON UPDATE %SQL;',
-                        $tableName,
-                        $foreignKey->column,
-                        $refTable,
-                        $foreignKey->refColumn,
-                        $foreignKey->onDelete,
-                        $foreignKey->onUpdate,
+                      'ALTER TABLE %n ADD FOREIGN KEY (%n) REFERENCES %n (%n) ON DELETE %SQL ON UPDATE %SQL;',
+                      $tableName,
+                      $foreignKey->column,
+                      $refTable,
+                      $foreignKey->refColumn,
+                      $foreignKey->onDelete,
+                      $foreignKey->onUpdate,
                     );
                 }
 
                 // DROP all undefined indexes
-                echo 'DROPPING indexes on ' . $tableName . ' other then: ' . implode(', ', $indexNames) . PHP_EOL;
+                echo 'DROPPING indexes on '.$tableName.' other then: '.implode(', ', $indexNames).PHP_EOL;
                 $indexes = $connection->query("SHOW INDEX FROM %n WHERE key_name NOT IN %in;", $tableName, $indexNames)
                                       ->fetchAll();
                 foreach ($indexes as $row) {
                     try {
-                        echo 'DROPPING index on: ' . $tableName . ' - ' . $row->Key_name . PHP_EOL;
+                        echo 'DROPPING index on: '.$tableName.' - '.$row->Key_name.PHP_EOL;
                         $connection->query('DROP INDEX %n ON %n;', $row->Key_name, $tableName);
                     } catch (Exception $e) {
-                        echo $e->getMessage() . PHP_EOL;
+                        echo $e->getMessage().PHP_EOL;
                     }
                 }
             }
@@ -245,7 +253,8 @@ class DbInstall implements InstallInterface
             // Game mode view
             $connection->query("DROP VIEW IF EXISTS `vModesNames`");
             $connection->query("DROP VIEW IF EXISTS `vmodesnames`");
-            $connection->query(<<<SQL
+            $connection->query(
+              <<<SQL
                 CREATE VIEW IF NOT EXISTS `vModesNames`
                 AS SELECT
                    `a`.`id_mode` AS `id_mode`,
@@ -261,7 +270,8 @@ class DbInstall implements InstallInterface
             // RegressionData view
             $connection->query("DROP VIEW IF EXISTS `vEvo5RegressionData`");
             $connection->query("DROP VIEW IF EXISTS `vevo5regressiondata`");
-            $connection->query(<<<SQL
+            $connection->query(
+              <<<SQL
                 CREATE VIEW IF NOT EXISTS `vEvo5RegressionData`
                 AS SELECT
                    `p`.`id_game` AS `id_game`,
@@ -286,7 +296,8 @@ class DbInstall implements InstallInterface
             );
             $connection->query("DROP VIEW IF EXISTS `vEvo6RegressionData`");
             $connection->query("DROP VIEW IF EXISTS `vevo6regressiondata`");
-            $connection->query(<<<SQL
+            $connection->query(
+              <<<SQL
                 CREATE VIEW IF NOT EXISTS `vEvo6RegressionData`
                 AS SELECT
                    `p`.`id_game` AS `id_game`,
@@ -310,7 +321,7 @@ class DbInstall implements InstallInterface
                 SQL
             );
         } catch (Exception $e) {
-            echo "\e[0;31m" . $e->getMessage() . "\e[m\n" . $e->getSql() . "\n";
+            echo "\e[0;31m".$e->getMessage()."\e[m\n".$e->getSql()."\n";
             return false;
         }
 
@@ -320,11 +331,11 @@ class DbInstall implements InstallInterface
     /**
      * Get a table name for a Model class
      *
-     * @param class-string $className
+     * @param  class-string  $className
      *
      * @return string|null
      */
-    protected static function getTableNameFromClass(string $className): ?string {
+    protected static function getTableNameFromClass(string $className) : ?string {
         // Check static cache
         if (isset(static::$classTables[$className])) {
             return static::$classTables[$className];

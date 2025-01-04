@@ -61,12 +61,12 @@
 					</label>
 				</td>
                 <td>{$game->start?->format('H:i')}</td>
-                <td data-mode="{$game->getMode()::class}">{$game->getMode()?->getName()}</td>
+				<td data-mode="{$game->mode::class}">{$game->mode?->getName()}</td>
 				<td>
-				<span n:foreach="$game->getPlayersSorted() as $player"
+				<span n:foreach="$game->playersSorted as $player"
 						data-toggle="tooltip"
                         title="{_'%s skóre', format: [number_format($player->score, 0, ',', '&nbsp;')]|noescape}"
-						class="badge bg-{$player->getTeam() !== null ? $player->getTeam()->getTeamBgClass(true) : 'dark'}">
+						class="badge bg-{$player->team !== null ? $player->team->getTeamBgClass(true) : 'dark'}">
 					{$player->position}.&nbsp;{$player->name}
 				</span>
 				</td>

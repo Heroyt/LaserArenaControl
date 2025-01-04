@@ -8,21 +8,21 @@ namespace App\Services;
 trait MatrixOperations
 {
     /**
-     * @param numeric[][] $mat
+     * @param  numeric[][]  $mat
      *
      * @return numeric[][]
      */
-    public function matTranspose(array $mat): array {
+    public function matTranspose(array $mat) : array {
         return (count($mat) === 1) ? array_chunk($mat[0], 1) : array_map(null, ...$mat);
     }
 
     /**
-     * @param numeric[][] $mat1
-     * @param numeric[][] $mat2
+     * @param  numeric[][]  $mat1
+     * @param  numeric[][]  $mat2
      *
      * @return numeric[][]
      */
-    public function matMultiply(array $mat1, array $mat2): array {
+    public function matMultiply(array $mat1, array $mat2) : array {
         $result = [];
         $rows1 = count($mat1);
         $cols1 = count($mat1[0]);
@@ -42,11 +42,11 @@ trait MatrixOperations
     }
 
     /**
-     * @param numeric[][] $matrix
+     * @param  numeric[][]  $matrix
      *
      * @return numeric[][]
      */
-    public function matInverse(array $matrix): array {
+    public function matInverse(array $matrix) : array {
         $n = count($matrix);
         $identity = $this->identityMatrix($n);
 
@@ -54,7 +54,7 @@ trait MatrixOperations
             $divisor = $matrix[$j][$j];
             $matrix[$j][$j] = 1;
 
-            if (((int)$divisor) !== 0) {
+            if (((int) $divisor) !== 0) {
                 for ($k = 0; $k < $n; $k++) {
                     $matrix[$j][$k] /= $divisor;
                     $identity[$j][$k] /= $divisor;
@@ -77,11 +77,11 @@ trait MatrixOperations
     }
 
     /**
-     * @param int $n
+     * @param  int  $n
      *
      * @return int[][]
      */
-    public function identityMatrix(int $n): array {
+    public function identityMatrix(int $n) : array {
         $matrix = [];
         for ($i = 0; $i < $n; $i++) {
             for ($j = 0; $j < $n; $j++) {

@@ -12,12 +12,12 @@ class RegressionCalculator
     /**
      * Calculate prediction value based on a regression model
      *
-     * @param numeric[] $inputs Input values in order without the constant 1
-     * @param numeric[] $model  Calculated regression model coefficients. First argument should be the model constant.
+     * @param  numeric[]  $inputs  Input values in order without the constant 1
+     * @param  numeric[]  $model  Calculated regression model coefficients. First argument should be the model constant.
      *
      * @return float
      */
-    public static function calculateRegressionPrediction(array $inputs, array $model): float {
+    public static function calculateRegressionPrediction(array $inputs, array $model) : float {
         // Coefficient order: $in[0]*coeff[1] + $in[1]*$coeff[2] + $in[2]*$coeff[3]... + $in[0] * $in[1] * $coeff[x] + ... ($in[0] ^ 2) * $coeff[y] + ...
         $coefficientCount = count($model);
         $inputCount = count($inputs);
@@ -66,12 +66,12 @@ class RegressionCalculator
     }
 
     /**
-     * @param numeric[][] $matF Inputs
-     * @param numeric[][] $matY Outputs
+     * @param  numeric[][]  $matF  Inputs
+     * @param  numeric[][]  $matY  Outputs
      *
      * @return numeric[]
      */
-    public function regression(array $matF, array $matY): array {
+    public function regression(array $matF, array $matY) : array {
         // Calculate simple linear model
         $matFT = $this->matTranspose($matF);
         $matG = $this->matMultiply($matFT, $matY);
@@ -82,12 +82,12 @@ class RegressionCalculator
     }
 
     /**
-     * @param numeric[][] $inputs
-     * @param numeric[]   $model
+     * @param  numeric[][]  $inputs
+     * @param  numeric[]  $model
      *
      * @return numeric[]
      */
-    public function calculatePredictions(array $inputs, array $model): array {
+    public function calculatePredictions(array $inputs, array $model) : array {
         $predictions = [];
         foreach ($inputs as $input) {
             $value = 0.0;
@@ -100,12 +100,12 @@ class RegressionCalculator
     }
 
     /**
-     * @param numeric[] $predictions
-     * @param numeric[] $actual
+     * @param  numeric[]  $predictions
+     * @param  numeric[]  $actual
      *
      * @return float
      */
-    public function calculateRSquared(array $predictions, array $actual): float {
+    public function calculateRSquared(array $predictions, array $actual) : float {
         $count = count($actual);
         $mean = array_sum($actual) / $count;
         $sst = 0;

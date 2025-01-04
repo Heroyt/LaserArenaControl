@@ -10,10 +10,12 @@ use App\Core\App;
 use App\Services\FeatureConfig;
 use Lsr\Core\Routing\Route;
 
+/** @var \Lsr\Core\Routing\Router $this */
+
 /** @var FeatureConfig $featureConfig */
 $featureConfig = App::getService('features');
 
-$settings = Route::group('settings');
+$settings = $this->group('settings');
 $settings->get('', [Settings::class, 'show'])->name('settings');
 $settings->post('', [Settings::class, 'saveGeneral']);
 

@@ -21,42 +21,42 @@ class GeneralStatsScreen extends GateScreen
     /**
      * @inheritDoc
      */
-    public static function getName(): string {
+    public static function getName() : string {
         return lang('Základní měsíční statistiky', context: 'screens', domain: 'gate');
     }
 
-    public static function getDescription(): string {
+    public static function getDescription() : string {
         return lang(
-            'Obrazovka zobrazující nejlepší hráče a počet odehraných her pro aktuální měsíc.',
-            context: 'screens.description',
-            domain : 'gate'
+                   'Obrazovka zobrazující nejlepší hráče a počet odehraných her pro aktuální měsíc.',
+          context: 'screens.description',
+          domain : 'gate'
         );
     }
 
     /**
      * @inheritDoc
      */
-    public static function getDiKey(): string {
+    public static function getDiKey() : string {
         return 'gate.screens.idle.month.stats';
     }
 
-    public static function getGroup(): string {
+    public static function getGroup() : string {
         return lang('Měsíční statistiky', context: 'screens.groups', domain: 'gate');
     }
 
     /**
      * @inheritDoc
      */
-    public function run(): ResponseInterface {
+    public function run() : ResponseInterface {
         $date = (string) App::getInstance()->getRequest()->getGet('date', 'now');
         $today = new DateTimeImmutable($date);
         $monthStart = new DateTimeImmutable($today->format('Y-m-01'));
         $monthEnd = new DateTimeImmutable($today->format('Y-m-t'));
 
         $query = GameFactory::queryGames(true)->where(
-            'DATE(start) BETWEEN %d AND %d',
-            $monthStart,
-            $monthEnd
+          'DATE(start) BETWEEN %d AND %d',
+          $monthStart,
+          $monthEnd
         );
         if (count($this->systems) > 0) {
             $query->where('system IN %in', $this->systems);
@@ -91,8 +91,8 @@ class GeneralStatsScreen extends GateScreen
             if (!empty($topScores)) {
                 foreach ($topScores as $score) {
                     $topScores[] = PlayerFactory::getById(
-                        (int) $score->id_player,
-                        ['system' => (string) $score->system]
+                      (int) $score->id_player,
+                      ['system' => (string) $score->system]
                     );
                 }
             }
@@ -101,8 +101,8 @@ class GeneralStatsScreen extends GateScreen
             $topHits = $q->orderBy('[hits]')->desc()->fetch(cache: false);
             if (isset($topHits)) {
                 $topHits = PlayerFactory::getById(
-                    (int) $topHits->id_player,
-                    ['system' => (string) $topHits->system]
+                  (int) $topHits->id_player,
+                  ['system' => (string) $topHits->system]
                 );
             }
             $q = PlayerFactory::queryPlayers($gameIds);
@@ -110,8 +110,8 @@ class GeneralStatsScreen extends GateScreen
             $topDeaths = $q->orderBy('[deaths]')->desc()->fetch(cache: false);
             if (isset($topDeaths)) {
                 $topDeaths = PlayerFactory::getById(
-                    (int) $topDeaths->id_player,
-                    ['system' => (string) $topDeaths->system]
+                  (int) $topDeaths->id_player,
+                  ['system' => (string) $topDeaths->system]
                 );
             }
             $q = PlayerFactory::queryPlayers($gameIds);
@@ -119,8 +119,8 @@ class GeneralStatsScreen extends GateScreen
             $topAccuracy = $q->orderBy('[accuracy]')->desc()->fetch(cache: false);
             if (isset($topAccuracy)) {
                 $topAccuracy = PlayerFactory::getById(
-                    (int) $topAccuracy->id_player,
-                    ['system' => (string) $topAccuracy->system]
+                  (int) $topAccuracy->id_player,
+                  ['system' => (string) $topAccuracy->system]
                 );
             }
             $q = PlayerFactory::queryPlayers($gameIds);
@@ -128,8 +128,8 @@ class GeneralStatsScreen extends GateScreen
             $topShots = $q->orderBy('[shots]')->desc()->fetch(cache: false);
             if (isset($topShots)) {
                 $topShots = PlayerFactory::getById(
-                    (int) $topShots->id_player,
-                    ['system' => (string) $topShots->system]
+                  (int) $topShots->id_player,
+                  ['system' => (string) $topShots->system]
                 );
             }
         }
@@ -153,11 +153,11 @@ class GeneralStatsScreen extends GateScreen
         }
 
         return $this->view(
-            'gate/screens/generalMonthStats',
-            [
+          'gate/screens/generalMonthStats',
+          [
             'monthName'   => lang(Constants::MONTH_NAMES[(int) $today->format('m')], context: 'month'),
             'year'        => $today->format('Y'),
-            'screenHash'  => md5($today->format('Ym') . json_encode($data, JSON_THROW_ON_ERROR)),
+            'screenHash' => md5($today->format('Ym').json_encode($data, JSON_THROW_ON_ERROR)),
             'gameCount'   => $gameCount,
             'teamCount'   => $teamCount,
             'playerCount' => $playerCount,
@@ -168,7 +168,7 @@ class GeneralStatsScreen extends GateScreen
             'topShots'    => $topShots,
             'addJs'       => ['gate/today.js'],
             'addCss'      => ['gate/todayStats.css'],
-            ]
+          ]
         );
     }
 }

@@ -8,6 +8,7 @@ use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use RegexIterator;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -81,6 +82,7 @@ class ClearLogsCommand extends Command
         $all = $input->getOption('all');
         if ($all) {
             $helper = $this->getHelper('question');
+            assert($helper instanceof QuestionHelper);
             $question = new ConfirmationQuestion(
               'Are you sure, you want to delete all log files and log archives? [y|N] ',
               false
@@ -169,7 +171,7 @@ class ClearLogsCommand extends Command
             }
             if ($type === 'zip') {
                 [$year, $month, $week] = explode('-', $date);
-                $date = (new DateTimeImmutable())->setISODate($year, $week);
+                $date = new DateTimeImmutable()->setISODate((int) $year, (int) $week);
             }
             else {
                 try {

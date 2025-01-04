@@ -14,6 +14,8 @@
 namespace App\Controllers;
 
 use Lsr\Core\Controllers\Controller;
+use Lsr\Core\Requests\Dto\ErrorResponse;
+use Lsr\Core\Requests\Enums\ErrorType;
 use Lsr\Core\Requests\Request;
 use Psr\Http\Message\ResponseInterface;
 
@@ -41,8 +43,14 @@ class E403 extends Controller
 
 
     public function show(Request $request) : ResponseInterface {
-        if ($request->header('Accept') === 'application/json') {
-            return $this->respond(['error' => 'Unauthorized'], 403);
+        if (str_contains($request->getHeaderLine('Accept'), 'application/json')) {
+            return $this->respond(
+              new ErrorResponse(
+                      'Unauthorized',
+                type: ErrorType::ACCESS,
+              ),
+              403
+            );
         }
         return $this->view('errors/E403')
                     ->withStatus(403);

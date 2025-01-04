@@ -144,6 +144,7 @@ abstract class GateScreen
               )
           )
           ->withHeader('Content-Type', 'text/html')
+          /** @phpstan-ignore nullsafe.neverNull */
           ->withHeader('X-Trigger', $this->getTrigger()?->value ?? 'null');
         if ($this->reloadTime > 0) {
             return $response->withHeader('X-Reload-Time', (string) $this->reloadTime);

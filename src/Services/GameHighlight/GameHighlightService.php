@@ -152,7 +152,7 @@ class GameHighlightService
 
     /**
      * @param  Game  $game
-     * @return string[]
+     * @return non-empty-string[]
      */
     private function getCacheTags(Game $game) : array {
         return [

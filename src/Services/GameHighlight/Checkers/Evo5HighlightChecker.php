@@ -13,7 +13,7 @@ use App\Services\GenderService;
 
 class Evo5HighlightChecker implements GameHighlightChecker
 {
-    public const DUPLICATE_MAX_POWER = 99999;
+    public const int DUPLICATE_MAX_POWER = 99999;
 
     /**
      * @inheritDoc

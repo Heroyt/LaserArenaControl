@@ -12,6 +12,7 @@ use App\Gate\Screens\GateScreen;
 use App\Gate\Screens\ReloadTimerInterface;
 use App\Gate\Screens\WithSettings;
 use DateTimeImmutable;
+use Dibi\Row;
 use Lsr\Core\Config;
 use Lsr\Core\Constants;
 use Lsr\ObjectValidation\Exceptions\ValidationException;
@@ -157,11 +158,12 @@ class Gate
             $loadedSystem = Info::get($checkSystem.'-game-loaded');
             if (isset($loadedSystem) && $loadedSystem->fileTime?->getTimestamp() > $maxTime) {
                 $maxGame = $loadedSystem;
-                $maxTime = $loadedSystem->fileTime?->getTimestamp();
+                $maxTime = $loadedSystem->fileTime->getTimestamp();
             }
         }
 
         $query = $system === 'all' ? GameFactory::queryGames(true) : GameFactory::queryGamesSystem($system, true);
+        /** @var null|Row $row */
         $row = $query->where('end > %dt', $maxTime)->orderBy('end')->desc()->fetch();
         if (isset($row) && $row->end?->getTimestamp() > $maxTime) {
             $maxGame = GameFactory::getById($row->id_game, ['system' => $row->system]);

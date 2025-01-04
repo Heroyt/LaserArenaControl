@@ -37,17 +37,19 @@ class GateType extends BaseModel
     public ModelCollection $screens;
 
     public static function getBySlug(string $slug) : ?GateType {
-        /** @var Cache $cache */
         $cache = App::getService('cache');
+        assert($cache instanceof Cache);
+        /** @var non-empty-string[] $tags */
+        $tags = array_merge(
+          ['models', self::TABLE, self::TABLE.'/'.$slug],
+          self::CACHE_TAGS
+        );
         return $cache->load(
           'gateType.slug.'.$slug,
           fn() => static::query()->where('slug = %s', $slug)->first(),
           [
-            $cache::Tags   => array_merge(
-              ['models', self::TABLE, self::TABLE.'/'.$slug],
-              self::CACHE_TAGS
-            ),
-            $cache::Expire => '7 days',
+            Cache::Tags   => $tags,
+            Cache::Expire => '7 days',
           ]
         );
     }
@@ -212,8 +214,21 @@ class GateType extends BaseModel
         if (!isset($this->id)) {
             return new ModelCollection();
         }
-        /** @var Cache $cache */
+
+        /** @var non-empty-string[] $tags */
+        $tags = array_merge(
+          [
+            'models',
+            GateScreenModel::TABLE,
+            $this::TABLE,
+            $this::TABLE.'/'.$this->id,
+            $this::TABLE.'/'.$this->id.'/relations',
+          ],
+          GateScreenModel::CACHE_TAGS
+        );
+
         $cache = App::getService('cache');
+        assert($cache instanceof Cache);
         return new ModelCollection(
           $cache->load(
             'gateType.'.$this->id.'.screens',
@@ -222,17 +237,8 @@ class GateType extends BaseModel
                                    ->orderBy('order')
                                    ->get(),
             [
-              $cache::Tags   => array_merge(
-                [
-                  'models',
-                  GateScreenModel::TABLE,
-                  $this::TABLE,
-                  $this::TABLE.'/'.$this->id,
-                  $this::TABLE.'/'.$this->id.'/relations',
-                ],
-                GateScreenModel::CACHE_TAGS
-              ),
-              $cache::Expire => '7 days',
+              Cache::Tags   => $tags,
+              Cache::Expire => '7 days',
             ]
           )
         );

@@ -11,6 +11,7 @@ use App\Models\BaseModel;
 use Lsr\Caching\Cache;
 use Lsr\Orm\Attributes\PrimaryKey;
 use Lsr\Orm\Attributes\Relations\ManyToOne;
+use Lsr\Orm\Exceptions\ModelNotFoundException;
 use OpenApi\Attributes as OA;
 
 /**
@@ -56,7 +57,6 @@ class GateScreenModel extends BaseModel
             $settings = igbinary_unserialize($this->settingsSerialized);
             $this->settings = $settings === false ? null : $settings;
         }
-        // @phpstan-ignore-next-line
         return $this->settings;
     }
 
@@ -66,6 +66,9 @@ class GateScreenModel extends BaseModel
         return $this;
     }
 
+    /**
+     * @return array{id:int|null,gate:int|null,order:int,screen_serialized:string,settings_serialized:string,trigger:ScreenTriggerType,triggerValue:string|null}
+     */
     public function __serialize() : array {
         return [
           'id'                  => $this->id,
@@ -78,6 +81,11 @@ class GateScreenModel extends BaseModel
         ];
     }
 
+    /**
+     * @param  array{id?:int|null,gate?:int|null,order?:int,screen_serialized:string,settings_serialized:string,trigger:ScreenTriggerType,triggerValue?:string|null}  $data
+     * @return void
+     * @throws ModelNotFoundException
+     */
     public function __unserialize(array $data) : void {
         if (isset($data['gate'])) {
             $this->gate = GateType::get($data['gate']);
@@ -92,13 +100,13 @@ class GateScreenModel extends BaseModel
 
     public function getScreen() : GateScreen {
         if (!isset($this->screen)) {
-            // @phpstan-ignore-next-line
-            $this->screen = App::getService($this->screenSerialized);
+            $screen = App::getService($this->screenSerialized);
+            assert($screen instanceof GateScreen);
+            $this->screen = $screen;
             if (isset($this->trigger)) {
                 $this->screen->setTrigger($this->trigger);
             }
         }
-        // @phpstan-ignore-next-line
         return $this->screen;
     }
 

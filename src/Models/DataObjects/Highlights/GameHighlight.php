@@ -9,10 +9,10 @@ use OpenApi\Attributes as OA;
 #[OA\Schema(properties: [new OA\Property(property: 'description', type: 'string')])]
 class GameHighlight implements JsonSerializable
 {
-    public const VERY_HIGH_RARITY = 100;
-    public const HIGH_RARITY = 90;
-    public const MEDIUM_RARITY = 50;
-    public const LOW_RARITY = 10;
+    public const int VERY_HIGH_RARITY = 100;
+    public const int HIGH_RARITY = 90;
+    public const int MEDIUM_RARITY = 50;
+    public const int LOW_RARITY = 10;
 
     /**
      * @param  GameHighlightType  $type
@@ -31,9 +31,11 @@ class GameHighlight implements JsonSerializable
 
     /**
      * @param  array{type:string,score:int,value:string,description:string}  $data
+     * @param  Game  $game
      * @return static
      */
     public static function fromJson(array $data, Game $game) : static {
+        /** @phpstan-ignore new.static */
         return new static(
           GameHighlightType::from($data['type']),
           $data['value'],
@@ -41,6 +43,9 @@ class GameHighlight implements JsonSerializable
         );
     }
 
+    /**
+     * @return array<string,mixed>
+     */
     public function jsonSerialize() : array {
         return [
           'type'        => $this->type,

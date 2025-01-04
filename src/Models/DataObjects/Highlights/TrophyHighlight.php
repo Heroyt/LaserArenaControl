@@ -31,18 +31,22 @@ class TrophyHighlight extends GameHighlight
     }
 
     /**
-     * @param  array{type:string,score:int,value:string,description:string,player:array{vest:numeric,name:string}}  $data
+     * @param  array{type:string,score:int,value:string,description:string,player:array{vest:int|string,name:string}}  $data
      * @param  Game  $game
      * @return static
      */
     public static function fromJson(array $data, Game $game) : static {
-        return new self(
+        /** @phpstan-ignore new.static */
+        return new static(
           $data['value'],
           $game->getVestPlayer($data['player']['vest']),
           $data['score'],
         );
     }
 
+    /**
+     * @return array<string,mixed>
+     */
     public function jsonSerialize() : array {
         $data = parent::jsonSerialize();
         $data['player'] = ['vest' => $this->player->vest, 'name' => $this->player->name];
@@ -60,6 +64,7 @@ class TrophyHighlight extends GameHighlight
         $fields = $this->player->trophy::getFields();
         $name = $this->player->name;
         if ($this->value === 'favouriteTarget') {
+            /** @phpstan-ignore nullsafe.neverNull */
             $name2 = $this->player->favouriteTarget?->name ?? '';
             $gender = GenderService::rankWord($name);
             return sprintf(
@@ -77,6 +82,7 @@ class TrophyHighlight extends GameHighlight
             );
         }
         if ($this->value === 'favouriteTargetOf') {
+            /** @phpstan-ignore nullsafe.neverNull */
             $name2 = $this->player->favouriteTargetOf?->name ?? '';
             $gender = GenderService::rankWord($name);
             return sprintf(

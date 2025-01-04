@@ -106,7 +106,7 @@ class ResultsScreen extends GateScreen implements ResultsScreenInterface
             default => throw new Exception('Cannot find results screen for system '.$system),
         };
 
-        assert($this->childScreen instanceof ResultsScreenInterface, '');
+        assert($this->childScreen instanceof ResultsScreenInterface && $this->childScreen instanceof GateScreen, '');
         $this->childScreen->setGame($game)
                           ->setSettings($this->getSettings())
                           ->setParams($this->params);

@@ -8,6 +8,7 @@ namespace App\Install;
 
 use App\Core\Info;
 use Dibi\Exception;
+use Dibi\Row;
 use Lsr\Core\Exceptions\CyclicDependencyException;
 use Lsr\Core\Migrations\MigrationLoader;
 use Lsr\Db\DB;
@@ -41,8 +42,10 @@ class DbInstall implements InstallInterface
         try {
             $loader->load();
             $modules = glob(ROOT.'modules/*/config/migrations.neon');
-            foreach ($modules as $module) {
-                $loader->migrations = $loader::merge($loader->migrations, $loader->loadFile($module));
+            if ($modules !== false) {
+                foreach ($modules as $module) {
+                    $loader->migrations = $loader::merge($loader->migrations, $loader->loadFile($module));
+                }
             }
         } catch (CyclicDependencyException | FileException | \Nette\Neon\Exception | AssertionException $e) {
             echo "\e[0;31m".$e->getMessage()."\e[m\n".$e->getTraceAsString()."\n";
@@ -238,6 +241,7 @@ class DbInstall implements InstallInterface
 
                 // DROP all undefined indexes
                 echo 'DROPPING indexes on '.$tableName.' other then: '.implode(', ', $indexNames).PHP_EOL;
+                /** @var Row[] $indexes */
                 $indexes = $connection->query("SHOW INDEX FROM %n WHERE key_name NOT IN %in;", $tableName, $indexNames)
                                       ->fetchAll();
                 foreach ($indexes as $row) {

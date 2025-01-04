@@ -3,7 +3,6 @@
 namespace App\Controllers\Api;
 
 use App\Core\App;
-use JsonException;
 use Lsr\Core\Controllers\ApiController;
 use Lsr\Core\Requests\Request;
 use Lsr\Logging\Exceptions\DirectoryCreationException;
@@ -12,10 +11,6 @@ use Psr\Http\Message\ResponseInterface;
 
 class Debug extends ApiController
 {
-    /**
-     * @return void
-     * @throws JsonException
-     */
     public function disable() : ResponseInterface {
         /** @var string $contents */
         $contents = file_get_contents(PRIVATE_DIR.'config.ini');
@@ -28,10 +23,6 @@ class Debug extends ApiController
         return $this->respond(['success' => true]);
     }
 
-    /**
-     * @return void
-     * @throws JsonException
-     */
     public function incrementCache() : ResponseInterface {
         $version = App::getCacheVersion();
         /** @var string $contents */
@@ -45,10 +36,6 @@ class Debug extends ApiController
         return $this->respond(['success' => true]);
     }
 
-    /**
-     * @return void
-     * @throws JsonException
-     */
     public function enable() : ResponseInterface {
         /** @var string $contents */
         $contents = file_get_contents(PRIVATE_DIR.'config.ini');
@@ -61,12 +48,6 @@ class Debug extends ApiController
         return $this->respond(['success' => true]);
     }
 
-    /**
-     * @param  Request  $request
-     *
-     * @return void
-     * @throws JsonException
-     */
     public function pwd(Request $request) : ResponseInterface {
         try {
             $logger = new Logger(LOG_DIR.'api/', 'mount');
@@ -87,12 +68,6 @@ class Debug extends ApiController
         return $this->respond(['success' => true, 'output' => $out]);
     }
 
-    /**
-     * @param  Request  $request
-     *
-     * @return void
-     * @throws JsonException
-     */
     public function glob(Request $request) : ResponseInterface {
         $param = urldecode($request->getGet('param', ''));
         if (empty($param)) {
@@ -101,12 +76,6 @@ class Debug extends ApiController
         return $this->respond(['success' => true, 'output' => glob($param)]);
     }
 
-    /**
-     * @param  Request  $request
-     *
-     * @return void
-     * @throws JsonException
-     */
     public function whoami(Request $request) : ResponseInterface {
         try {
             $logger = new Logger(LOG_DIR.'api/', 'mount');

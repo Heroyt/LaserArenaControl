@@ -29,7 +29,12 @@ class RecalculateSkillsGameCommand extends Command
         $limit = (int) $input->getArgument('limit');
         $offset = (int) $input->getArgument('offset');
 
-        $games = GameFactory::queryGames(true)->orderBy('start')->desc()->getIterator($offset, $limit);
+        $games = GameFactory::queryGames(true)
+                            ->orderBy('start')
+                            ->desc()
+                            ->offset($offset)
+                            ->limit($limit)
+                            ->fetchIterator();
 
         foreach ($games as $row) {
             $game = GameFactory::getByCode($row->code);

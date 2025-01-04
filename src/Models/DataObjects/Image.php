@@ -5,22 +5,25 @@ namespace App\Models\DataObjects;
 use App\Services\ImageService;
 use Lsr\Core\App;
 use Lsr\Exceptions\FileException;
-use RuntimeException;
 
 class Image
 {
+
+    public readonly string $image;
     private string $name;
     private string $path;
     private ?string $type = null;
 
+    /** @var array{original?:string,webp?:string}|array<string|numeric-string,string> */
     private array $optimized = [];
 
+    /** @var array<string,array{original?:string,webp?:string}> */
+    private array $customSizes = [];
+
     public function __construct(
-      public readonly string $image
+      string $image
     ) {
-        if (!file_exists($image)) {
-            throw new RuntimeException('Image doesn\'t exist.');
-        }
+        $this->image = file_exists($image) ? $image : ROOT.'assets/images/questionmark.jpg';
 
         $this->name = pathinfo($this->image, PATHINFO_FILENAME);
         $this->path = pathinfo($this->image, PATHINFO_DIRNAME).'/';
@@ -34,11 +37,12 @@ class Image
             return $optimized[$index];
         }
         $index = (string) $size;
+        /** @phpstan-ignore-next-line */
         return $optimized[$index] ?? $optimized['webp'] ?? $optimized['original'];
     }
 
     /**
-     * @return array<string,string>
+     * @return array<string|numeric-string,string>
      */
     public function getOptimized() : array {
         if (!empty($this->optimized)) {
@@ -70,12 +74,12 @@ class Image
     private function pathToUrl(string $file) : string {
         $path = explode('/', str_replace(ROOT, '', $file));
         $index = count($path) - 1;
-        $path[$index] = urlencode($path[$index]);
+        $path[$index] = rawurlencode($path[$index]);
         return App::getInstance()->getBaseUrl().implode('/', $path);
     }
 
     /**
-     * @param  array<string,string>  $images
+     * @param  array<string|numeric-string,string>  $images
      *
      * @return void
      */
@@ -90,24 +94,31 @@ class Image
 
         $optimizedDir = $this->path.'optimized/';
 
-        /** @var ImageService $imageService */
         $imageService = App::getService('image');
+        assert($imageService instanceof ImageService);
         foreach ($imageService->getSizes() as $size) {
             $file = $optimizedDir.$this->name.'x'.$size.'.'.$this->getType();
             if (file_exists($file)) {
+                /** @phpstan-ignore parameterByRef.type */
                 $images[(string) $size] = $this->pathToUrl($file);
             }
             $file = $optimizedDir.$this->name.'x'.$size.'.webp';
             if (file_exists($file)) {
-                $images[$size.'-webp'] = $this->pathToUrl($file);
+                /** @phpstan-ignore parameterByRef.type */
+                $images[($size.'-webp')] = $this->pathToUrl($file);
             }
         }
     }
 
+    /**
+     * Returns the image extension in lowercase
+     *
+     * @return string
+     */
     public function getType() : string {
         if (!isset($this->type)) {
             // Default to using provided extension
-            $this->type = strtolower(pathinfo($this->image, PATHINFO_EXTENSION));
+            $this->type ??= strtolower(pathinfo($this->image, PATHINFO_EXTENSION));
             if (function_exists('exif_imagetype')) {
                 /** @var int|false $type */
                 $type = exif_imagetype($this->image);
@@ -134,7 +145,11 @@ class Image
         }
         $webp = $this->path.'optimized/'.$this->name.'.webp';
         if (!file_exists($webp)) {
-            return null;
+            $this->optimize();
+            if (!file_exists($webp)) {
+                return null;
+            }
+            return $this->pathToUrl($webp);
         }
         return $this->pathToUrl($webp);
     }
@@ -149,9 +164,73 @@ class Image
             return;
         }
 
-        /** @var ImageService $imageService */
         $imageService = App::getService('image');
+        assert($imageService instanceof ImageService, 'Invalid DI service');
+
         $imageService->optimize($this->image);
+    }
+
+    /**
+     * @param  int<1,max>|null  $width
+     * @param  int<1,max>|null  $height
+     * @return array{original?:string,webp?:string}
+     * @throws FileException
+     */
+    public function getResized(?int $width = null, ?int $height = null) : array {
+        if ($width === null && $height === null) {
+            return [
+              'original' => $this->getUrl(),
+              'webp'     => $this->getWebp(),
+            ];
+        }
+
+        $key = ($width ?? 'auto').'x'.($height ?? 'auto');
+        if (isset($this->customSizes[$key])) {
+            return $this->customSizes[$key];
+        }
+
+        $this->customSizes[$key] = [];
+
+        // Try to find existing images
+        $optimizedPath = $this->path.'optimized/'.$this->name.'.'.$key.'.';
+        $originalFile = $optimizedPath.$this->getType();
+        $webpFile = $optimizedPath.'webp';
+
+        if (file_exists($originalFile)) {
+            $this->customSizes[$key]['original'] = $this->pathToUrl($originalFile);
+        }
+        if (file_exists($webpFile)) {
+            $this->customSizes[$key]['webp'] = $this->pathToUrl($webpFile);
+        }
+        if (isset($this->customSizes[$key]['original'], $this->customSizes[$key]['webp'])) {
+            return $this->customSizes[$key];
+        }
+
+        $imageService = App::getService('image');
+        assert($imageService instanceof ImageService, 'Invalid DI service');
+
+        $image = $imageService->loadFile($this->image);
+        $resizedOriginal = null;
+
+        if (!isset($this->customSizes[$key]['original'])) {
+            $resizedOriginal = $imageService->resize($image, $width, $height);
+            $imageService->save($resizedOriginal, $originalFile);
+            $this->customSizes[$key]['original'] = $this->pathToUrl($originalFile);
+        }
+
+        if (!isset($this->customSizes[$key]['webp'])) {
+            if (!isset($resizedOriginal)) {
+                $resizedOriginal = $imageService->resize($image, $width, $height);
+            }
+            bdump($imageService->save($resizedOriginal, $webpFile));
+            $this->customSizes[$key]['webp'] = $this->pathToUrl($webpFile);
+        }
+
+        return $this->customSizes[$key];
+    }
+
+    public function getPath() : string {
+        return $this->image;
     }
 
     public function getMimeType() : string {
@@ -168,9 +247,5 @@ class Image
             'svg'  => 'image/svg+xml',
             default => 'image/jpeg',
         };
-    }
-
-    public function getPath() : string {
-        return $this->image;
     }
 }

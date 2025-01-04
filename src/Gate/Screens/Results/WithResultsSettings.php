@@ -23,6 +23,7 @@ trait WithResultsSettings
     }
 
     public function setSettings(GateSettings $settings) : static {
+        /** @phpstan-ignore instanceof.alwaysTrue */
         if (!($settings instanceof ResultsSettings)) {
             throw new InvalidArgumentException(
               '$settings must be an instance of '.ResultsSettings::class.', '.$settings::class.' provided.'

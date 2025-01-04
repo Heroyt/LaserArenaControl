@@ -14,16 +14,23 @@ class Cache extends Controller
 
     public function clearAll() : ResponseInterface {
         $this->cache->clean([\Nette\Caching\Cache::All => true]);
-        /** @var string[] $files */
+        $cache = glob(TMP_DIR.'*.cache');
+        $php = glob(TMP_DIR.'*.php');
+        $phpLock = glob(TMP_DIR.'*.php.lock');
+        $di = glob(TMP_DIR.'di/*');
+        $results = glob(TMP_DIR.'results/*');
+        $resultsCache = glob(TMP_DIR.'resultCaches/*');
+        $latte = glob(TMP_DIR.'latte/*');
+        $models = glob(TMP_DIR.'models/*');
         $files = array_merge(
-          glob(TMP_DIR.'*.cache'),
-          glob(TMP_DIR.'*.php'),
-          glob(TMP_DIR.'*.php.lock'),
-          glob(TMP_DIR.'di/*'),
-          glob(TMP_DIR.'results/*'),
-          glob(TMP_DIR.'resultCaches/*'),
-          glob(TMP_DIR.'latte/*'),
-          glob(TMP_DIR.'models/*'),
+          $cache === false ? [] : $cache,
+          $php === false ? [] : $php,
+          $phpLock === false ? [] : $phpLock,
+          $di === false ? [] : $di,
+          $results === false ? [] : $results,
+          $resultsCache === false ? [] : $resultsCache,
+          $latte === false ? [] : $latte,
+          $models === false ? [] : $models,
         );
         $deleted = 0;
         foreach ($files as $file) {
@@ -40,11 +47,13 @@ class Cache extends Controller
     }
 
     public function clearDi() : ResponseInterface {
-        /** @var string[] $files */
+        $php = glob(TMP_DIR.'*.php');
+        $phpLock = glob(TMP_DIR.'*.php.lock');
+        $di = glob(TMP_DIR.'di/*');
         $files = array_merge(
-          glob(TMP_DIR.'*.php'),
-          glob(TMP_DIR.'*.php.lock'),
-          glob(TMP_DIR.'di/*'),
+          $php === false ? [] : $php,
+          $phpLock === false ? [] : $phpLock,
+          $di === false ? [] : $di,
         );
         $deleted = 0;
         foreach ($files as $file) {
@@ -56,35 +65,41 @@ class Cache extends Controller
     }
 
     public function clearModels() : ResponseInterface {
-        /** @var string[] $files */
         $files = glob(TMP_DIR.'models/*');
         $deleted = 0;
-        foreach ($files as $file) {
-            if (unlink($file)) {
-                $deleted++;
+        if ($files !== false) {
+            foreach ($files as $file) {
+                if (unlink($file)) {
+                    $deleted++;
+                }
             }
         }
         return $this->respond(['status' => 'ok', 'deleted' => $deleted, 'total' => count($files)]);
     }
 
     public function clearConfig() : ResponseInterface {
-        /** @var string[] $files */
         $files = glob(TMP_DIR.'*.cache');
         $deleted = 0;
-        foreach ($files as $file) {
-            if (unlink($file)) {
-                $deleted++;
+        if ($files !== false) {
+            foreach ($files as $file) {
+                if (unlink($file)) {
+                    $deleted++;
+                }
             }
         }
         return $this->respond(['status' => 'ok', 'deleted' => $deleted, 'total' => count($files)]);
     }
 
     public function clearResults() : ResponseInterface {
-        /** @var string[] $files */
-        $files = array_merge(
-          glob(TMP_DIR.'results/*'),
-          glob(TMP_DIR.'resultCaches/*'),
-        );
+        $results = glob(TMP_DIR.'results/*');
+        $caches = glob(TMP_DIR.'resultCaches/*');
+        if ($results === false) {
+            $results = [];
+        }
+        if ($caches === false) {
+            $caches = [];
+        }
+        $files = array_merge($results, $caches);
         $deleted = 0;
         foreach ($files as $file) {
             if (unlink($file)) {
@@ -95,12 +110,13 @@ class Cache extends Controller
     }
 
     public function clearLatte() : ResponseInterface {
-        /** @var string[] $files */
         $files = glob(TMP_DIR.'latte/*');
         $deleted = 0;
-        foreach ($files as $file) {
-            if (unlink($file)) {
-                $deleted++;
+        if ($files !== false) {
+            foreach ($files as $file) {
+                if (unlink($file)) {
+                    $deleted++;
+                }
             }
         }
         return $this->respond(['status' => 'ok', 'deleted' => $deleted, 'total' => count($files)]);

@@ -9,6 +9,8 @@ extensions:
 	decorator: Nette\DI\Extensions\DecoratorExtension
 	inject: Nette\DI\Extensions\InjectExtension
 	routing: Lsr\Core\Routing\DI\RoutingExtension
+di:
+	lazy: true
 parameters:
 	db:
 		driver: mysqli

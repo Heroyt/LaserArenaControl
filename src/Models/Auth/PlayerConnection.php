@@ -3,9 +3,9 @@
 namespace App\Models\Auth;
 
 use App\Exceptions\DuplicateRecordException;
-use App\Models\Auth\Enums\ConnectionType;
 use App\Models\BaseModel;
 use Lsr\Db\DB;
+use Lsr\LaserLiga\Enums\ConnectionType;
 use Lsr\ObjectValidation\Exceptions\ValidationException;
 use Lsr\Orm\Attributes\PrimaryKey;
 use Lsr\Orm\Attributes\Relations\ManyToOne;

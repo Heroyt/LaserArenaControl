@@ -9,6 +9,7 @@ extensions:
 	decorator: Nette\DI\Extensions\DecoratorExtension
 	inject: Nette\DI\Extensions\InjectExtension
 	routing: Lsr\Core\Routing\DI\RoutingExtension
+	di: Nette\DI\Extensions\DIExtension
 di:
 	lazy: true
 parameters:
@@ -101,6 +102,7 @@ services:
 
 	gamesImport: App\Services\ImportService
 	gamesLoad: App\Tools\GameLoading\GameLoader
+	gameModeProvider: App\Services\GameModeProvider
 
 	gotenberg: App\Services\GotenbergService(%gotenberg.host%, %gotenberg.port%)
 	resultPrint: App\Services\ResultPrintService
@@ -111,9 +113,10 @@ services:
 	evo5.gameLoader: App\Tools\GameLoading\Evo5GameLoader
 	evo6.gameLoader: App\Tools\GameLoading\Evo6GameLoader
 
-	result.parser: App\Tools\ResultParsing\ResultsParser
-	result.parser.evo5: App\Tools\ResultParsing\Evo5\ResultsParser
-	result.parser.evo6: App\Tools\ResultParsing\Evo6\ResultsParser
+	result.parser: Lsr\Lg\Results\ResultsParser(['evo5' => @result.parser.evo5, 'evo6' => @result.parser.evo6])
+	results.logger: Lsr\Logging\Logger(%logger.dir%, 'results')
+	result.parser.evo5: App\Tools\ResultParsing\Evo5\ResultsParser(gameClass: App\GameModels\Game\Evo5\Game, logger: @results.logger)
+	result.parser.evo6: App\Tools\ResultParsing\Evo6\ResultsParser(gameClass: App\GameModels\Game\Evo6\Game, logger: @results.logger)
 
 	gameHighlight: App\Services\GameHighlight\GameHighlightService(tagged(highlightChecker))
 

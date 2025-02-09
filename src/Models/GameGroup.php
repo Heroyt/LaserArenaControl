@@ -13,6 +13,7 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use Lsr\Caching\Cache;
 use Lsr\Helpers\Tools\Strings;
+use Lsr\Lg\Results\Interface\Models\GameGroupInterface;
 use Lsr\Orm\Attributes\JsonExclude;
 use Lsr\Orm\Attributes\NoDB;
 use Lsr\Orm\Attributes\PrimaryKey;
@@ -25,7 +26,7 @@ use Throwable;
  * @use WithMetaData<GroupMeta>
  */
 #[PrimaryKey('id_group')]
-class GameGroup extends BaseModel
+class GameGroup extends BaseModel implements GameGroupInterface
 {
     /** @phpstan-use WithMetaData<GroupMeta> */
     use WithMetaData;

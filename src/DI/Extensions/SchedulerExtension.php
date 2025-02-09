@@ -8,6 +8,7 @@ use App\DI\Definitions\DefinitionsLoader;
 use App\Tracy\SchedulerTracyLogger;
 use Closure;
 use Cron\CronExpression;
+use Lsr\Logging\Logger;
 use Nette\DI\CompilerExtension;
 use Nette\DI\ContainerBuilder;
 use Nette\DI\Definitions\ServiceDefinition;
@@ -188,6 +189,7 @@ final class SchedulerExtension extends CompilerExtension
                                            'jobManager'   => $this->registerJobManager($builder, $config),
                                            'errorHandler' => $this->registerErrorHandler($config),
                                            'executor'     => $this->registerExecutor($builder, $config),
+                                           'logger' => $this->registerLogger($builder),
                                          ]
                                        );
 
@@ -366,7 +368,7 @@ final class SchedulerExtension extends CompilerExtension
         ) {
             /** @infection-ignore-all */
             return $builder->addDefinition($this->prefix('executor'))
-                           ->setFactory(ProcessJobExecutor::class)
+              ->setFactory(ProcessJobExecutor::class, ['logger' => $this->prefix('logger')])
                            ->addSetup(
                              'setExecutable',
                              [
@@ -378,6 +380,17 @@ final class SchedulerExtension extends CompilerExtension
         }
 
         return null;
+    }
+
+    public function registerLogger(ContainerBuilder $builder) : ServiceDefinition {
+        return $builder->addDefinition($this->prefix('logger'))
+                       ->setFactory(
+                         Logger::class,
+                         [
+                           'path'     => '%logger.dir%',
+                           'fileName' => 'scheduler',
+                         ]
+                       );
     }
 
     /**

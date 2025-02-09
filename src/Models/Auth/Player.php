@@ -6,6 +6,7 @@ use App\Models\Auth\Validators\PlayerCode;
 use App\Models\BaseModel;
 use InvalidArgumentException;
 use Lsr\Db\DB;
+use Lsr\LaserLiga\PlayerInterface;
 use Lsr\ObjectValidation\Attributes\Email;
 use Lsr\ObjectValidation\Exceptions\ValidationException;
 use Lsr\Orm\Attributes\NoDB;
@@ -14,7 +15,7 @@ use Lsr\Orm\Attributes\Relations\OneToMany;
 use Lsr\Orm\ModelCollection;
 
 #[PrimaryKey('id_user')]
-class Player extends BaseModel
+class Player extends BaseModel implements PlayerInterface
 {
     public const string TABLE = 'players';
 
@@ -51,7 +52,7 @@ class Player extends BaseModel
      *
      * @return void
      */
-    public static function validateCode(string $code, Player $player, string $propertyPrefix = '') : void {
+    public static function validateCode(string $code, PlayerInterface $player, string $propertyPrefix = '') : void {
         if (!$player->validateUniqueCode($code)) {
             throw ValidationException::createWithValue(
               $player,

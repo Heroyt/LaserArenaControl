@@ -5,7 +5,6 @@ namespace App\Gate\Screens\MonthStats;
 use App\Core\App;
 use App\GameModels\Factory\GameFactory;
 use App\GameModels\Factory\PlayerFactory;
-use App\GameModels\Game\Enums\GameModeType;
 use App\GameModels\Game\Player;
 use App\Gate\Screens\GateScreen;
 use DateTimeImmutable;
@@ -18,6 +17,7 @@ use Lsr\Core\Requests\Request;
 use Lsr\Core\Templating\Latte;
 use Lsr\Db\DB;
 use Lsr\Interfaces\RequestInterface;
+use Lsr\Lg\Results\Enums\GameModeType;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
 

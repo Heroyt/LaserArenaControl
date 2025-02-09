@@ -6,13 +6,13 @@ use App\Core\Info;
 use App\Exceptions\GameModeNotFoundException;
 use App\Exceptions\InsuficientRegressionDataException;
 use App\GameModels\Factory\GameModeFactory;
-use App\GameModels\Game\Enums\GameModeType;
 use App\GameModels\Tools\Lasermaxx\RegressionStatCalculator;
 use App\Services\RegressionCalculator;
 use DateTimeImmutable;
 use JsonException;
 use Lsr\Core\Templating\Latte;
 use Lsr\Exceptions\TemplateDoesNotExistException;
+use Lsr\Lg\Results\Enums\GameModeType;
 use RuntimeException;
 
 /**

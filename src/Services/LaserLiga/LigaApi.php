@@ -6,8 +6,6 @@
 
 namespace App\Services\LaserLiga;
 
-use App\Api\DataObjects\LigaPlayer\LigaPlayerData;
-use App\Api\DataObjects\Vests\LigaVest;
 use App\Core\App;
 use App\Core\Info;
 use App\GameModels\Game\Game;
@@ -21,6 +19,8 @@ use GuzzleHttp\Psr7\Utils;
 use InvalidArgumentException;
 use JsonException;
 use LAC\Modules\Core\LigaApiExtensionInterface;
+use Lsr\LaserLiga\DataObjects\LigaPlayer\LigaPlayerData;
+use Lsr\LaserLiga\DataObjects\Vests\LigaVest;
 use Lsr\Logging\Logger;
 use Lsr\ObjectValidation\Exceptions\ValidationException;
 use Psr\Http\Message\ResponseInterface;

@@ -2,11 +2,12 @@
 
 namespace App\Services\LaserLiga;
 
-use App\Api\DataObjects\LigaPlayer\LigaPlayerData;
 use App\Core\App;
 use App\Models\Auth\Player;
 use App\Models\Auth\PlayerConnection;
 use GuzzleHttp\Exception\GuzzleException;
+use Lsr\LaserLiga\DataObjects\LigaPlayer\LigaPlayerData;
+use Lsr\LaserLiga\PlayerProviderInterface;
 use Lsr\ObjectValidation\Exceptions\ValidationException;
 use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\Serializer\Serializer;
@@ -22,7 +23,7 @@ use Symfony\Component\Serializer\Serializer;
  *     connections:array{type:string,identifier:string}[]
  * }
  */
-readonly class PlayerProvider
+readonly class PlayerProvider implements PlayerProviderInterface
 {
     public function __construct(
       private LigaApi    $api,

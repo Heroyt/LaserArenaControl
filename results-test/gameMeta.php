@@ -2,7 +2,7 @@
 
 use App\Core\App;
 use App\GameModels\Game\Evo6\Player;
-use App\Tools\ResultParsing\ResultsParser;
+use Lsr\Lg\Results\ResultsParser;
 use Symfony\Component\Serializer\Serializer;
 
 const ROOT = __DIR__ . '/../';
@@ -11,7 +11,7 @@ require ROOT . 'include/load.php';
 $files = glob(ROOT . '/results-test/*_archive.game');
 
 $resultParser = App::getServiceByType(ResultsParser::class);
-$serializer = App\Core\App::getServiceByType(Serializer::class);
+$serializer = App::getServiceByType(Serializer::class);
 
 foreach ($files as $file) {
     $resultParser->setFile($file);

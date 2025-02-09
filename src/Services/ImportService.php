@@ -13,20 +13,20 @@ use App\Cli\Colors;
 use App\Cli\Enums\ForegroundColors;
 use App\Core\App;
 use App\Core\Info;
-use App\Exceptions\ResultsParseException;
 use App\GameModels\Factory\GameFactory;
 use App\GameModels\Game\Game;
 use App\GameModels\Game\Player;
 use App\Services\LaserLiga\LigaApi;
 use App\Services\LaserLiga\PlayerProvider;
-use App\Tools\AbstractResultsParser;
-use App\Tools\Interfaces\ResultsParserInterface;
 use Dibi\Exception;
 use Lsr\Core\Config;
 use Lsr\Core\Requests\Dto\ErrorResponse;
 use Lsr\Core\Requests\Dto\SuccessResponse;
 use Lsr\Core\Requests\Enums\ErrorType;
 use Lsr\Exceptions\FileException;
+use Lsr\Lg\Results\AbstractResultsParser;
+use Lsr\Lg\Results\Exception\ResultsParseException;
+use Lsr\Lg\Results\Interface\ResultsParserInterface;
 use Lsr\Logging\Exceptions\DirectoryCreationException;
 use Lsr\Logging\Logger;
 use Lsr\ObjectValidation\Exceptions\ValidationException;
@@ -320,6 +320,7 @@ class ImportService
 
                     try {
                         $parser->setFile($file);
+                        /** @var Game $game */
                         $game = $parser->parse();
                         if (!isset($game->importTime)) {
                             $logger->debug('Game is not finished');

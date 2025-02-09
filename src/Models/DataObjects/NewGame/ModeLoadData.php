@@ -2,7 +2,7 @@
 
 namespace App\Models\DataObjects\NewGame;
 
-use App\GameModels\Game\Enums\GameModeType;
+use Lsr\Lg\Results\Enums\GameModeType;
 
 /**
  *

@@ -4,13 +4,14 @@ namespace App\Models;
 
 use App\Core\App;
 use App\Models\DataObjects\Image;
+use Lsr\Lg\Results\Interface\Models\MusicModeInterface;
 use Lsr\ObjectValidation\Attributes\Required;
 use Lsr\ObjectValidation\Attributes\StringLength;
 use Lsr\Orm\Attributes\PrimaryKey;
 use RuntimeException;
 
 #[PrimaryKey('id_music')]
-class MusicMode extends BaseModel
+class MusicMode extends BaseModel implements MusicModeInterface
 {
     public const string TABLE = 'music';
 

@@ -1,10 +1,10 @@
 <?php
 
-use App\GameModels\Game\Enums\GameModeType;
 use App\GameModels\Game\Evo5\Game;
 use App\GameModels\Game\Evo5\Player;
 use App\GameModels\Game\Evo5\Team;
 use Dibi\Connection;
+use Lsr\Lg\Results\Enums\GameModeType;
 
 define("ROOT", dirname(__DIR__).'/');
 const INDEX = false;

@@ -278,6 +278,9 @@ tables:
 			`scoring_power_invisibility` int(11) DEFAULT NULL,
 			`scoring_power_agent` int(11) DEFAULT NULL,
 			`scoring_power_shield` int(11) DEFAULT NULL,
+			`reload_clips` int(11) unsigned DEFAULT 0,
+			`allow_friendly_fire` tinyint(1) unsigned DEFAULT 0,
+			`anti_stalking` tinyint(1) unsigned DEFAULT 0,
 			`code` varchar(50) DEFAULT NULL,
 			`respawn` smallint(4) unsigned DEFAULT NULL,
 			`lives` int(10) unsigned DEFAULT NULL,
@@ -306,6 +309,10 @@ tables:
 				- 'ADD `results_file` varchar(255) DEFAULT NULL AFTER `end`'
 			0.5.1:
 				- 'ADD `meta` BLOB DEFAULT NULL'
+			0.6.0:
+				- 'ADD `reload_clips` int(11) unsigned DEFAULT 0 AFTER `scoring_power_shield`'
+				- 'ADD `allow_friendly_fire` tinyint(1) unsigned DEFAULT 0 AFTER `reload_clips`'
+				- 'ADD `anti_stalking` tinyint(1) unsigned DEFAULT 0 AFTER `allow_friendly_fire`'
 		foreignKeys:
 			-
 				column: id_music
@@ -346,6 +353,7 @@ tables:
 			`id_music` int(11) unsigned DEFAULT NULL,
 			`id_group` int(11) unsigned DEFAULT NULL,
 			`game_type` enum('TEAM','SOLO') NOT NULL DEFAULT 'TEAM',
+			`game_style_type` tinyint(2) unsigned DEFAULT 0,
 			`mode_name` varchar(100) DEFAULT NULL,
 			`file_time` datetime DEFAULT NULL,
 			`import_time` datetime DEFAULT NULL,
@@ -367,6 +375,36 @@ tables:
 			`scoring_power_agent` int(11) DEFAULT NULL,
 			`scoring_power_shield` int(11) DEFAULT NULL,
 			`scoring_highscore` int(11) DEFAULT NULL,
+			`scoring_accuracy_bonus` tinyint(2) unsigned DEFAULT 0,
+			`scoring_accuracy_threshold` tinyint(3) unsigned DEFAULT 0,
+			`scoring_accuracy_threshold_bonus` mediumint(6) DEFAULT 0,
+			`scoring_encouragement_bonus` tinyint(2) unsigned DEFAULT 0,
+			`scoring_encouragement_bonus_score` mediumint(6) DEFAULT 0,
+			`scoring_power` mediumint(6) DEFAULT 0,
+			`scoring_penalty` mediumint(6) DEFAULT 0,
+			`scoring_activity` mediumint(6) DEFAULT 0,
+			`scoring_knockout` mediumint(6) DEFAULT 0,
+			`reload_clips` int(11) unsigned DEFAULT 0,
+			`allow_friendly_fire` tinyint(1) unsigned DEFAULT 0,
+			`anti_stalking` tinyint(1) unsigned DEFAULT 0,
+			`blast_shots` tinyint(1) unsigned DEFAULT 0,
+			`trigger_speed` tinyint(2) unsigned DEFAULT 0,
+			`vip_lives` smallint(5) unsigned DEFAULT 0,
+			`vip_ammo` smallint(5) unsigned DEFAULT 0,
+			`vip_respawn` tinyint(3) unsigned DEFAULT 5,
+			`vip_kill_team` tinyint(1) unsigned DEFAULT 0,
+			`vip_hit_score` mediumint(6) DEFAULT 0,
+			`vip_hit_type` tinyint(2) DEFAULT 0,
+			`vip_blast_shots` tinyint(1) unsigned DEFAULT 0,
+			`vip_ignore_teammate_hits` tinyint(1) unsigned DEFAULT 0,
+			`zombie_lives` smallint(5) unsigned DEFAULT 0,
+			`zombie_ammo` smallint(5) unsigned DEFAULT 0,
+			`zombie_infect_hits` tinyint(3) unsigned DEFAULT 0,
+			`zombie_special` tinyint(1) unsigned DEFAULT 0,
+			`zombie_team_number` tinyint(2) unsigned DEFAULT 0,
+			`hit_gain_ammo` tinyint(3) unsigned DEFAULT 0,
+			`hit_gain_lives` tinyint(3) unsigned DEFAULT 0,
+			`respawn_lives` tinyint(3) unsigned DEFAULT 0,
 			`code` varchar(50) DEFAULT NULL,
 			`respawn` smallint(4) unsigned DEFAULT NULL,
 			`lives` int(10) unsigned DEFAULT NULL,
@@ -384,6 +422,40 @@ tables:
 		modifications:
 			0.1:
 				- 'ADD `meta` BLOB DEFAULT NULL'
+			0.2:
+				- 'ADD `game_style_type` tinyint(2) unsigned DEFAULT 0 AFTER `game_type`'
+				- 'ADD `scoring_accuracy_bonus` tinyint(2) unsigned DEFAULT 0 AFTER `scoring_highscore`'
+				- 'ADD `scoring_accuracy_threshold` tinyint(3) unsigned DEFAULT 0 AFTER `scoring_accuracy_bonus`'
+				- 'ADD `scoring_accuracy_threshold_bonus` mediumint(6) DEFAULT 0 AFTER `scoring_accuracy_threshold`'
+				- 'ADD `scoring_encouragement_bonus` tinyint(2) unsigned DEFAULT 0 AFTER `scoring_accuracy_threshold_bonus`'
+				- 'ADD `scoring_encouragement_bonus_score` mediumint(6) DEFAULT 0 AFTER `scoring_encouragement_bonus`'
+				- 'ADD `scoring_power` mediumint(6) DEFAULT 0 AFTER `scoring_encouragement_bonus_score`'
+				- 'ADD `scoring_penalty` mediumint(6) DEFAULT 0 AFTER `scoring_power`'
+				- 'ADD `scoring_activity` mediumint(6) DEFAULT 0 AFTER `scoring_penalty`'
+				- 'ADD `scoring_knockout` mediumint(6) DEFAULT 0 AFTER `scoring_activity`'
+				- 'ADD `reload_clips` int(11) unsigned DEFAULT 0 AFTER `scoring_knockout`'
+				- 'ADD `allow_friendly_fire` tinyint(1) unsigned DEFAULT 0 AFTER `reload_clips`'
+				- 'ADD `anti_stalking` tinyint(1) unsigned DEFAULT 0 AFTER `allow_friendly_fire`'
+				- 'ADD `blast_shots` tinyint(1) unsigned DEFAULT 0 AFTER `anti_stalking`'
+				- 'ADD `trigger_speed` tinyint(2) unsigned DEFAULT 0 AFTER `blast_shots`'
+				- 'ADD `vip_lives` smallint(5) unsigned DEFAULT 0 AFTER `trigger_speed`'
+				- 'ADD `vip_ammo` smallint(5) unsigned DEFAULT 0 AFTER `vip_lives`'
+				- 'ADD `vip_respawn` tinyint(3) unsigned DEFAULT 5 AFTER `vip_ammo`'
+				- 'ADD `vip_kill_team` tinyint(1) unsigned DEFAULT 0 AFTER `vip_respawn`'
+				- 'ADD `vip_hit_score` mediumint(6) DEFAULT 0 AFTER `vip_kill_team`'
+				- 'ADD `vip_hit_type` tinyint(2) DEFAULT 0 AFTER `vip_hit_score`'
+				- 'ADD `vip_blast_shots` tinyint(1) unsigned DEFAULT 0 AFTER `vip_hit_type`'
+				- 'ADD `vip_ignore_teammate_hits` tinyint(1) unsigned DEFAULT 0 AFTER `vip_blast_shots`'
+				- 'ADD `zombie_lives` smallint(5) unsigned DEFAULT 0 AFTER `vip_ignore_teammate_hits`'
+				- 'ADD `zombie_ammo` smallint(5) unsigned DEFAULT 0 AFTER `zombie_lives`'
+				- 'ADD `zombie_infect_hits` tinyint(3) unsigned DEFAULT 0 AFTER `zombie_ammo`'
+				- 'ADD `zombie_special` tinyint(1) unsigned DEFAULT 0 AFTER `zombie_infect_hits`'
+				- 'ADD `zombie_team_number` tinyint(2) unsigned DEFAULT 0 AFTER `zombie_special`'
+				- 'ADD `hit_gain_ammo` tinyint(3) unsigned DEFAULT 0 AFTER `zombie_team_number`'
+				- 'ADD `hit_gain_lives` tinyint(3) unsigned DEFAULT 0 AFTER `hit_gain_ammo`'
+				- 'ADD `respawn_lives` tinyint(3) unsigned DEFAULT 0 AFTER `hit_gain_lives`'
+			0.2.1:
+				- 'ADD `results_file` varchar(255) DEFAULT NULL'
 		foreignKeys:
 			-
 				column: id_music
@@ -481,6 +553,7 @@ tables:
 			`score_bonus` int(11) NOT NULL DEFAULT 0,
 			`score_powers` int(11) NOT NULL DEFAULT 0,
 			`score_mines` int(11) NOT NULL DEFAULT 0,
+			`score_accuracy` int(11) NOT NULL DEFAULT 0,
 			`ammo_rest` int(10) unsigned NOT NULL DEFAULT 0,
 			`mines_hits` int(10) unsigned NOT NULL DEFAULT 0,
 			`hits_other` int(10) unsigned NOT NULL DEFAULT 0,
@@ -514,6 +587,8 @@ tables:
 				- 'ADD `relative_deaths` decimal(11,4) DEFAULT NULL'
 			0.4.0:
 				- 'ADD `my_lasermaxx` varchar(100) NOT NULL DEFAULT '''''
+			0.5.0:
+				- 'ADD `score_accuracy` int(11) NOT NULL DEFAULT 0 AFTER `score_mines`'
 		foreignKeys:
 			-
 				column: id_game
@@ -553,18 +628,28 @@ tables:
 			`score_bonus` int(11) NOT NULL DEFAULT 0,
 			`score_powers` int(11) NOT NULL DEFAULT 0,
 			`score_mines` int(11) NOT NULL DEFAULT 0,
+			`score_vip` int(11) NOT NULL DEFAULT 0,
+			`score_activity` int(11) NOT NULL DEFAULT 0,
+			`score_encouragement` int(11) NOT NULL DEFAULT 0,
+			`score_knockout` int(11) NOT NULL DEFAULT 0,
+			`score_penalty` int(11) NOT NULL DEFAULT 0,
+			`score_reality` int(11) NOT NULL DEFAULT 0,
+			`score_accuracy` int(11) NOT NULL DEFAULT 0,
 			`ammo_rest` int(10) unsigned NOT NULL DEFAULT 0,
 			`mines_hits` int(10) unsigned NOT NULL DEFAULT 0,
 			`hits_other` int(10) unsigned NOT NULL DEFAULT 0,
 			`hits_own` int(10) unsigned NOT NULL DEFAULT 0,
 			`deaths_other` int(10) unsigned NOT NULL DEFAULT 0,
 			`deaths_own` int(10) unsigned NOT NULL DEFAULT 0,
-			`bonuses_agent` int(10) unsigned NOT NULL DEFAULT 0,
+			`bonuses` int(10) unsigned NOT NULL DEFAULT 0,
 			`vip` tinyint(1) unsigned NOT NULL DEFAULT 0,
 			`relative_hits` decimal(11,4) DEFAULT NULL,
 			`relative_deaths` decimal(11,4) DEFAULT NULL,
 			`my_lasermaxx` varchar(100) NOT NULL DEFAULT '',
 			`calories` int(10) unsigned NOT NULL DEFAULT 0,
+			`activity` int(10) unsigned NOT NULL DEFAULT 0,
+			`penalty_count` int(10) unsigned NOT NULL DEFAULT 0,
+			`birthday` tinyint(1) unsigned NOT NULL DEFAULT 0,
 			PRIMARY KEY (`id_player`),
 			KEY `id_game` (`id_game`),
 			KEY `id_team` (`id_team`),
@@ -591,6 +676,20 @@ tables:
 				name: 'game_vest'
 				columns: ['id_game', 'vest']
 				unique: true
+		modifications:
+			0.1:
+				- 'ADD `score_vip` int(11) NOT NULL DEFAULT 0 AFTER `score_mines`'
+				- 'ADD `score_activity` int(11) NOT NULL DEFAULT 0 AFTER `score_vip`'
+				- 'ADD `score_encouragement` int(11) NOT NULL DEFAULT 0 AFTER `score_activity`'
+				- 'ADD `score_knockout` int(11) NOT NULL DEFAULT 0 AFTER `score_encouragement`'
+				- 'ADD `score_penalty` int(11) NOT NULL DEFAULT 0 AFTER `score_knockout`'
+				- 'ADD `score_reality` int(11) NOT NULL DEFAULT 0 AFTER `score_penalty`'
+				- 'ADD `score_accuracy` int(11) NOT NULL DEFAULT 0 AFTER `score_reality`'
+				- 'ADD `activity` int(10) unsigned NOT NULL DEFAULT 0 AFTER `calories`'
+				- 'ADD `penalty_count` int(10) unsigned NOT NULL DEFAULT 0 AFTER `activity`'
+				- 'ADD `birthday` tinyint(1) unsigned NOT NULL DEFAULT 0 AFTER `penalty_count`'
+			0.2:
+				- 'ADD `bonuses` int(10) unsigned NOT NULL DEFAULT 0 AFTER `deaths_own`'
 	evo5_hits:
 		order: 4
 		definition: '''

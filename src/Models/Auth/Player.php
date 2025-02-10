@@ -4,6 +4,7 @@ namespace App\Models\Auth;
 
 use App\Models\Auth\Validators\PlayerCode;
 use App\Models\BaseModel;
+use DateTimeInterface;
 use InvalidArgumentException;
 use Lsr\Db\DB;
 use Lsr\LaserLiga\PlayerInterface;
@@ -25,6 +26,7 @@ class Player extends BaseModel implements PlayerInterface
     public string $nickname;
     #[Email]
     public string $email;
+    public ?DateTimeInterface $birthday = null;
 
     /** @var ModelCollection<PlayerConnection> */
     #[OneToMany(class: PlayerConnection::class, factoryMethod: 'loadConnections')]

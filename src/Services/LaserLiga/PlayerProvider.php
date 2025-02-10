@@ -120,11 +120,13 @@ readonly class PlayerProvider implements PlayerProviderInterface
             $player->nickname !== $data->nickname
             || $player->email !== $data->email
             || $player->rank !== $data->stats->rank
+            || $player->birthday?->format('Y-m-d') !== $data->birthday?->format('Y-m-d')
           );
         $player->nickname = $data->nickname;
         $player->code = $data->code;
         $player->email = $data->email;
         $player->rank = $data->stats->rank;
+        $player->birthday = $data->birthday;
         foreach ($data->connections ?? [] as $connectionData) {
             $connection = new PlayerConnection();
             $connection->type = $connectionData->type;

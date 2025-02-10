@@ -43,6 +43,7 @@ tables:
               `nickname` varchar(20) NOT NULL,
               `email` varchar(50) NOT NULL,
               `rank` int(11) NOT NULL DEFAULT 100,
+              `birthday` date DEFAULT NULL,
               PRIMARY KEY (`id_user`),
               UNIQUE KEY `code` (`code`)
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -52,6 +53,9 @@ tables:
 				name: 'code'
 				columns: ['code']
 				unique: true
+		modifications:
+			0.1:
+				- 'ADD `birthday` date DEFAULT NULL'
 	App\Models\Auth\PlayerConnection:
 		order: 1
 		definition: '''

@@ -113,6 +113,7 @@ class Player extends BaseModel implements PlayerInterface
           'code'        => $this->getCode(),
           'email'       => $this->email,
           'rank'        => $this->rank,
+          'birthday' => $this->birthday,
           'connections' => $connections,
         ];
     }

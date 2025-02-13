@@ -23,6 +23,7 @@ export interface PlayerData {
 	name: string,
 	code?: string,
 	vip?: boolean,
+	birthday?: boolean;
 	score?: number,
 	skill: number,
 	avgSkill?: number,

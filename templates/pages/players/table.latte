@@ -37,6 +37,17 @@
                 </span>
             </div>
         </th>
+        <th n:class="sortable, $sort === 'birthday' && $desc ? 'sort-desc', $sort === 'birthday' && !$desc ? 'sort-asc'"
+                data-sortable="true" data-name="birthday">
+            <div class="h-100 w-100 d-flex align-items-center justify-content-between">
+                {_'Narozeniny'}
+                <span class="sort ms-2">
+                    {faSolid 'sort'}
+                    {faSolid 'sort-up'}
+                    {faSolid 'sort-down'}
+                </span>
+            </div>
+        </th>
         <th n:class="text-end, sortable, $sort === 'rank' && $desc ? 'sort-desc', $sort === 'rank' && !$desc ? 'sort-asc'" data-sortable="true" data-name="rank">
             <div class="h-100 w-100 d-flex align-items-center justify-content-between">
                 {_'Herní úroveň'}
@@ -59,6 +70,9 @@
         </td>
         <td>
             <a href="mailto:{$player->email}">{$player->email}</a>
+        </td>
+        <td>
+            {$player->birthday?->format('j. n. Y')}
         </td>
         <td class="text-end">{$player->rank} {faSolid 'star'}</td>
     </tr>

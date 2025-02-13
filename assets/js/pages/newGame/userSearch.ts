@@ -87,11 +87,18 @@ export default class UserSearch {
 				}
 			});
 
-			initUserAutocomplete(player.$name, (name, code, rank) => {
+			initUserAutocomplete(player.$name, (name, code, rank, birthday) => {
 				player.name = name;
 				player.$name.value = name;
 				player.realSkill = rank;
 				player.setUserCode(code);
+				if (birthday) {
+					const today = new Date();
+					const birthdayDate = new Date(birthday);
+
+					// Check if player has birthday today
+					player.setBirthday(today.getDate() === birthdayDate.getDate() && today.getMonth() === birthdayDate.getMonth());
+				}
 				player.update();
 				player.game.reassignPlayerSkills();
 			});
@@ -121,6 +128,13 @@ export default class UserSearch {
 				this.searchedPlayer.name = playerData.nickname;
 				this.searchedPlayer.realSkill = playerData.rank;
 				this.searchedPlayer.setUserCode(playerData.code);
+				if (playerData.birthday) {
+					const today = new Date();
+					const birthdayDate = new Date(playerData.birthday);
+
+					// Check if player has birthday today
+					this.searchedPlayer.setBirthday(today.getDate() === birthdayDate.getDate() && today.getMonth() === birthdayDate.getMonth());
+				}
 				this.searchedPlayer.update();
 				this.searchedPlayer.game.reassignPlayerSkills();
 			}

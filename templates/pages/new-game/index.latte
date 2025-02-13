@@ -15,6 +15,7 @@
 {/foreach}
 
 {var string[] $icons = [
+'cake' => svgIcon('cake', '1.5rem'),
 '1-stars' => svgIcon('1-stars'),
 '2-stars' => svgIcon('2-stars'),
 '3-stars' => svgIcon('3-stars'),
@@ -425,6 +426,18 @@
                            for="team-color-{$vest->vestNum}-{$key}">&nbsp;</label>
                 {/foreach}
             </div>
+        </div>
+        <div>
+            <input type="radio" name="player[{$vest->vestNum}][birthday]" value="0" class="player-birthday-input"
+                   id="player-birthday-{$vest->vestNum}-0" checked/>
+            <label class="player-birthday bg-grey" for="player-birthday-{$vest->vestNum}-1">
+                {$icons['cake']|noescape}
+            </label>
+            <input type="radio" name="player[{$vest->vestNum}][birthday]" value="1" class="player-birthday-input"
+                   id="player-birthday-{$vest->vestNum}-1"/>
+            <label class="player-birthday bg-purple-300" for="player-birthday-{$vest->vestNum}-0">
+                {$icons['cake']|noescape}
+            </label>
         </div>
         <div>
             <input type="radio" name="player[{$vest->vestNum}][vip]" value="0" class="player-vip-input"

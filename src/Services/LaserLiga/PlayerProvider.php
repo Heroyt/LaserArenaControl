@@ -131,7 +131,7 @@ readonly class PlayerProvider implements PlayerProviderInterface
             $connection = new PlayerConnection();
             $connection->type = $connectionData->type;
             $connection->identifier = $connectionData->identifier;
-            $player->addConnection($connection);
+            $player->connections[] = $connection;
         }
         if (isset($data->codeHistory)) {
             $player->codeHistory = $data->codeHistory;

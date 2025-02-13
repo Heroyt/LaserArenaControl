@@ -1,6 +1,6 @@
-import {SwapOptions} from "sortablejs/plugins";
-import Sortable, {SortableOptions} from "sortablejs";
-import Game from "./game";
+import {SwapOptions} from 'sortablejs/plugins';
+import Sortable, {SortableOptions} from 'sortablejs';
+import Game from './game';
 
 interface SortableSwapOptions extends SortableOptions, SwapOptions {
 	game?: Game,
@@ -114,6 +114,11 @@ class CustomSwap {
 					const v1 = player1.vip;
 					player1._setVip(player2.vip);
 					player2._setVip(v1);
+
+					// Swap birthday
+					const b1 = player1.birthday;
+					player1._setBirthday(player2.birthday);
+					player2._setBirthday(b1);
 
 					// Swap player code
 					const u1 = player1.userCode;

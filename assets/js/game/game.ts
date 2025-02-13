@@ -755,6 +755,10 @@ export default class Game {
 					player.setVip(playerData.vip);
 				}
 
+				if (playerData.birthday) {
+					player.setBirthday(playerData.birthday);
+				}
+
 				if (playerData.code) {
 					player.setUserCode(playerData.code);
 				}
@@ -940,6 +944,7 @@ export default class Game {
 			data.players[player.vest] = {
 				name: player.name,
 				vip: player.vip,
+				birthday: player.birthday,
 				vest: typeof player.vest === 'string' ? parseInt(player.vest) : player.vest,
 				teamNum: parseInt(player.team),
 				color: parseInt(player.team),

@@ -84,7 +84,7 @@ class Players extends Controller
 
     public function show(Request $request) : ResponseInterface {
         $perPage = 20;
-        $fields = ['nickname', 'code', 'email', 'rank'];
+        $fields = ['nickname', 'code', 'email', 'birthday', 'rank'];
         $sort = $request->getGet('sort', 'nickname');
         if (!in_array($sort, $fields, true)) {
             $sort = 'nickname';

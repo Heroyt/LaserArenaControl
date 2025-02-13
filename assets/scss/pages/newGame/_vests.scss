@@ -56,12 +56,14 @@
 }
 
 .player-skill-input,
-.player-vip-input {
+.player-vip-input,
+.player-birthday-input {
 	display: none;
 }
 
 label.player-skill,
-label.player-vip {
+label.player-vip,
+label.player-birthday {
 	align-items: center;
 	cursor: pointer;
 	display: none;
@@ -72,8 +74,17 @@ label.player-vip {
 	width: 2.5rem;
 }
 
-input[type="radio"]:checked + label.player-skill,
-input[type="radio"]:checked + label.player-vip {
+label.player-birthday {
+	width: 2rem;
+
+	svg {
+		width: 1.5rem;
+	}
+}
+
+input[type='radio']:checked + label.player-skill,
+input[type='radio']:checked + label.player-vip,
+input[type='radio']:checked + label.player-birthday {
 	display: flex;
 }
 

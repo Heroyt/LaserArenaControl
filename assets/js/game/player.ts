@@ -5,6 +5,10 @@ import {updateVests, VestData} from '../api/endpoints/settings/vests';
 import {initTooltips} from '../includes/tooltips';
 import {triggerNotificationError} from '../includes/notifications';
 
+declare class CustomPopover extends Popover {
+	_getTipElement(): HTMLDivElement;
+}
+
 export default class Player {
 
 	vest: number | string;
@@ -19,6 +23,7 @@ export default class Player {
 	team: string | null = null;
 	name: string = '';
 	vip: boolean = false;
+	birthday: boolean = false;
 
 	allowedTeams: string[] = ['0', '1', '2', '3', '4', '5'];
 
@@ -30,9 +35,10 @@ export default class Player {
 	$teams: NodeListOf<HTMLInputElement>;
 	$skills: NodeListOf<HTMLInputElement>;
 	$vip: NodeListOf<HTMLInputElement>;
+	$birthday: NodeListOf<HTMLInputElement>;
 	$clear: HTMLButtonElement;
 
-	popover: Popover|null = null;
+	popover: CustomPopover | null = null;
 	selectTeamTooltip: Tooltip;
 	atLeastTwoTeamsTooltip: Tooltip;
 
@@ -53,13 +59,14 @@ export default class Player {
 		this.$teams = row.querySelectorAll('.team-color-input');
 		this.$skills = row.querySelectorAll('.player-skill-input');
 		this.$vip = row.querySelectorAll('.player-vip-input');
+		this.$birthday = row.querySelectorAll('.player-birthday-input');
 		this.$clear = row.querySelector('.clear');
 
 		this.initEvents();
 
 		const tmp = document.createElement('div');
 		tmp.innerHTML = `<div class="btn-group my-3 shadow"><input type="radio" class="btn-check" name="vest[status]" id="vest-status-ok" autocomplete="off" value="ok"><label class="btn btn-outline-success" for="vest-status-ok">${messages.vestOk}</label><input type="radio" class="btn-check" name="vest[status]" id="vest-status-playable" autocomplete="off" value="playable"><label class="btn btn-outline-warning" for="vest-status-playable">${messages.vestPlayable}</label><input type="radio" class="btn-check" name="vest[status]" id="vest-status-broken" autocomplete="off" value="broken" ><label class="btn btn-outline-danger" for="vest-status-broken">${messages.vestBroken}</label></div><textarea class="form-control" name="vest[info]" id="vest-info" cols="20" rows="4">${this.$vest.dataset.info}</textarea>`;
-		if (!this.$vest.dataset.hideStatus){
+		if (!this.$vest.dataset.hideStatus) {
 			this.popover = new Popover(
 				this.$vest,
 				{
@@ -67,8 +74,8 @@ export default class Player {
 					title: 'Stav vesty',
 					content: tmp,
 					html: true,
-				}
-			);
+				},
+			) as CustomPopover;
 		}
 		this.selectTeamTooltip = new Tooltip(
 			this.row.querySelector('.team-select'),
@@ -76,15 +83,15 @@ export default class Player {
 				title: messages.missingPlayerTeam,
 				trigger: 'manual',
 				customClass: 'tooltip-danger',
-			}
-		)
+			},
+		);
 		this.atLeastTwoTeamsTooltip = new Tooltip(
 			this.row.querySelector('.team-select'),
 			{
 				title: messages.atLeastTwoTeams,
 				trigger: 'manual',
 				customClass: 'tooltip-danger',
-			}
+			},
 		);
 
 		const input = tmp.querySelector(`input[value="${this.$vest.dataset.status.toLowerCase()}"]`) as HTMLInputElement;
@@ -148,6 +155,12 @@ export default class Player {
 			});
 		});
 
+		this.$birthday.forEach($birthday => {
+			$birthday.addEventListener('change', () => {
+				this.update();
+			});
+		});
+
 		this.$clear.addEventListener('click', () => {
 			this.clear();
 		});
@@ -172,10 +185,10 @@ export default class Player {
 					return;
 				}
 				player.popover.hide();
-			})
+			});
 
 			// Check the correct input
-			const input = this.popover._getTipElement().querySelector(`input[value="${this.$vest.dataset.status.toLowerCase()}"]`) as HTMLInputElement;
+			const input = this.popover._getTipElement().querySelector<HTMLInputElement>(`input[value="${this.$vest.dataset.status.toLowerCase()}"]`);
 			if (input) {
 				input.checked = true;
 			}
@@ -187,8 +200,8 @@ export default class Player {
 			this.popover._getTipElement().querySelectorAll('input, textarea').forEach(input => {
 				input.addEventListener(input.tagName === 'input' ? 'change' : 'input', () => {
 					startLoading(true);
-                    let data: VestData = {
-						vest: {}
+					let data: VestData = {
+						vest: {},
 					};
 					const status = (this.popover._getTipElement().querySelector(`input:checked`) as HTMLInputElement).value;
 					data.vest[this.vest] = {
@@ -199,12 +212,12 @@ export default class Player {
 					this.$vest.setAttribute('data-status', status);
 					this.$vest.dataset.info = textarea.value;
 					this.$vest.setAttribute('data-info', textarea.value);
-                    updateVests(data)
+					updateVests(data)
 						.then(response => {
-                            stopLoading(response.success, true);
+							stopLoading(response.success, true);
 						})
-						.catch(e => {
-							triggerNotificationError(e);
+						.catch(async (e) => {
+							await triggerNotificationError(e);
 							stopLoading(false, true);
 						});
 
@@ -233,28 +246,28 @@ export default class Player {
 
 					initTooltips(this.$vest);
 				});
-			})
+			});
 		});
 
 		document.addEventListener('keydown', e => {
-            if (e.ctrlKey && (e.code.includes('Digit') || e.code === 'KeyS' || e.code === 'Backspace' || e.code === 'Delete')) {
+			if (e.ctrlKey && (e.code.includes('Digit') || e.code === 'KeyS' || e.code === 'Backspace' || e.code === 'Delete')) {
 				e.preventDefault();
 			}
 		});
 
 		this.$name.addEventListener('keyup', e => {
-            if (e.code === 'ArrowUp') { // Arrow up
+			if (e.code === 'ArrowUp') { // Arrow up
 				if (this.skill === this.maxSkill) {
 					this.setSkill(1);
 				} else {
-					this.setSkill(this.skill + 1)
+					this.setSkill(this.skill + 1);
 				}
 				return;
-            } else if (e.code === 'ArrowUp') { // Arrow down
+			} else if (e.code === 'ArrowUp') { // Arrow down
 				if (this.skill === 1) {
 					this.setSkill(this.maxSkill);
 				} else {
-					this.setSkill(this.skill - 1)
+					this.setSkill(this.skill - 1);
 				}
 				return;
 			}
@@ -267,9 +280,9 @@ export default class Player {
 				if (this.$teams[index]) {
 					this.setTeam(this.$teams[index].value);
 				}
-            } else if (e.code === 'KeyS') { // s
+			} else if (e.code === 'KeyS') { // s
 				this.setVip(!this.vip);
-            } else if (e.code === 'Backspace' || e.code === 'Delete') { // Backspace or delete
+			} else if (e.code === 'Backspace' || e.code === 'Delete') { // Backspace or delete
 				this.clear();
 			}
 		});
@@ -279,7 +292,7 @@ export default class Player {
 				'user-search',
 				{
 					detail: this,
-				}
+				},
 			);
 			this.row.dispatchEvent(event);
 		});
@@ -312,13 +325,13 @@ export default class Player {
 
 	update(): void {
 		if (this.name.trim() === '' && this.$name.value.trim() !== '') {
-			const e = new Event("player-activate", {
+			const e = new Event('player-activate', {
 				bubbles: true,
 			});
 			this.$name.dispatchEvent(e);
 		}
 		if (this.name.trim() !== '' && this.$name.value.trim() === '') {
-			const e = new Event("player-deactivate", {
+			const e = new Event('player-deactivate', {
 				bubbles: true,
 			});
 			this.$name.dispatchEvent(e);
@@ -342,13 +355,13 @@ export default class Player {
 					}
 				}
 
-                this.row.dataset.team = this.team;
+				this.row.dataset.team = this.team;
 				found = true;
 			}
 		});
 		if (!found) {
 			this.team = null;
-            this.row.dataset.team = '0';
+			this.row.dataset.team = '0';
 
 			this.row.style.removeProperty('--shadow-color');
 			this.$vest.style.removeProperty('background-color');
@@ -395,15 +408,29 @@ export default class Player {
 			}
 		}
 
+		if (this.$birthday.length > 0) {
+			found = false;
+			this.$birthday.forEach($birthday => {
+				if ($birthday.checked) {
+					this.birthday = parseInt($birthday.value) > 0;
+					found = true;
+				}
+			});
+			if (!found) {
+				this.birthday = false;
+				this.$birthday[0].checked = true;
+			}
+		}
+
 		this.row.dispatchEvent(
-			new Event("update", {
+			new Event('update', {
 				bubbles: true,
-			})
+			}),
 		);
 		this.row.dispatchEvent(
-			new Event("update-player", {
+			new Event('update-player', {
 				bubbles: true,
-			})
+			}),
 		);
 	}
 
@@ -445,6 +472,18 @@ export default class Player {
 		});
 	}
 
+	setBirthday(birthday: boolean): void {
+		this._setBirthday(birthday);
+		this.update();
+	}
+
+	_setBirthday(birthday: boolean): void {
+		const value = birthday ? 1 : 0;
+		this.$birthday.forEach($birthday => {
+			$birthday.checked = parseInt($birthday.value) === value;
+		});
+	}
+
 	isActive(): boolean {
 		return this.name.trim() !== '';
 	}
@@ -461,7 +500,8 @@ export default class Player {
 	}
 
 	resetUserCode(): void {
-		this.setUserCode('')
+		this.setUserCode('');
+		this.setBirthday(false);
 	}
 
 	setUserCode(code: string): void {

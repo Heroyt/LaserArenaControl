@@ -1,6 +1,6 @@
 import autocomplete, {AutocompleteItem} from 'autocompleter';
-import {UserSearchData} from "../interfaces/userSearchData";
-import {findUsers} from "../api/endpoints/userSearch";
+import {UserSearchData} from '../interfaces/userSearchData';
+import {findUsers} from '../api/endpoints/userSearch';
 import {triggerNotificationError} from '../includes/notifications';
 
 interface UserSearchAutocompleteItem extends AutocompleteItem {
@@ -8,7 +8,7 @@ interface UserSearchAutocompleteItem extends AutocompleteItem {
     data: UserSearchData
 }
 
-export function initUserAutocomplete(input: HTMLInputElement, callback: (name: string, code: string, rank: number) => void): void {
+export function initUserAutocomplete(input: HTMLInputElement, callback: (name: string, code: string, rank: number, birthday?: string | null) => void): void {
     autocomplete<UserSearchAutocompleteItem>({
         input,
         emptyMsg: '',
@@ -30,7 +30,7 @@ export function initUserAutocomplete(input: HTMLInputElement, callback: (name: s
                 });
         },
         onSelect: item => {
-            callback(item.data.nickname, item.data.code, item.data.rank);
+            callback(item.data.nickname, item.data.code, item.data.rank, item.data.birthday);
         }
     });
 }

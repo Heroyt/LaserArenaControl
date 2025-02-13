@@ -4,5 +4,6 @@ export interface UserSearchData {
 	code: string;
 	email: string;
 	rank: number;
+	birthday?: string | null;
 	connections: { type: string, identifier: string }[];
 }

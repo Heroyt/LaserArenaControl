@@ -1,5 +1,6 @@
 import {customFetch, fetchGet, fetchPost, FormSaveResponse} from '../../includes/apiClient';
 import {GameData} from '../../interfaces/gameInterfaces';
+import {System} from '../../interfaces/system';
 
 export type PreparedGameType = 'prepared' | 'user-local' | 'user-public';
 export type PreparedGameData = {
@@ -8,6 +9,7 @@ export type PreparedGameData = {
 	data: GameData,
 	type: PreparedGameType,
 	active: 0 | 1 | boolean,
+	system: System,
 }
 
 export async function deleteAllPreparedGames(): Promise<FormSaveResponse> {
@@ -19,6 +21,7 @@ export async function deletePreparedGame(id: number): Promise<FormSaveResponse> 
 }
 
 export async function sendPreparedGame(data: GameData): Promise<FormSaveResponse> {
+	data.system = system.id;
 	return fetchPost('/prepared', data);
 }
 

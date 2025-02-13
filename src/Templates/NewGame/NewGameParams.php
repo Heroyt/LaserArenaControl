@@ -10,6 +10,7 @@ use App\Gate\Models\MusicGroupDto;
 use App\Models\MusicMode;
 use App\Models\Playlist;
 use App\Models\PriceGroup;
+use App\Models\System;
 use App\Services\FeatureConfig;
 use Lsr\Core\Controllers\TemplateParameters;
 
@@ -18,7 +19,9 @@ class NewGameParams extends TemplateParameters
     public HookedTemplates $addedTemplates;
     public FeatureConfig $featureConfig;
     public ?Game $loadGame = null;
-    public string $system;
+    public System $system;
+    /** @var System[] */
+    public array $systems = [];
     /** @var Vest[] */
     public array $vests = [];
     /** @var string[] */

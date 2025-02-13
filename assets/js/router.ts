@@ -43,9 +43,10 @@ export default function route(pageInfo: PageInfo): void {
 			});
 			break;
 		case 'settings-vests':
+		case 'settings-systems':
 			import(
-				/* webpackChunkName: "settingsVest" */
-				'./pages/settings/vests'
+				/* webpackChunkName: "settingsSystems" */
+				'./pages/settings/systems'
 				).then(module => {
 				module.default();
 			});

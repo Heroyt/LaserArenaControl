@@ -1,0 +1,280 @@
+{templateType App\Templates\Settings\SystemsSettingsParameters}
+{layout '../../@layout.latte'}
+
+{block content}
+	<form action="{link ['settings', 'systems']}" method="post" class="text-center autosave"
+		  id="systems-settings-form">
+		<div class="me-4 last-save-wrapper text-end position-fixed end-0">
+			{_'Naposledy uloženo:'} <span class="last-save" data-target="#systems-settings-form">{_'nikdy'}</span>
+		</div>
+		<h2>{_'Nastavení LG systémů', context: 'settings'}</h2>
+		<ul class="nav nav-tabs" id="systems" role="tablist">
+			<li class="nav-item" role="presentation" n:foreach="$systems as $system">
+				<button class="nav-link {if $iterator->first}active{/if}" id="system-tab-{$system->id}"
+						data-bs-toggle="tab"
+						data-bs-target="#system-{$system->id}" type="button" role="tab"
+						aria-controls="system-{$system->id}"
+						aria-selected="{if $iterator->first}true{/if}">
+					{$system->name}
+				</button>
+			</li>
+			<li class="nav-item">
+				<button type="button" class="nav-link btn btn-success" data-bs-toggle="modal"
+						data-bs-target="#new-system-modal">
+					{faSolid 'plus'}
+				</button>
+			</li>
+		</ul>
+		<div class="tab-content" id="systems-content">
+			<div n:foreach="$systems as $system"
+					class="tab-pane row fade system-tab {if $iterator->first}show active{/if}"
+					id="system-{$system->id}" role="tabpanel" data-id="{$system->id}"
+					aria-labelledby="system-tab-{$system->id}">
+				{include systemSettings, $system, $vests[$system->id], $vestsGrid[$system->id], $columnCounts[$system->id], $rowCounts[$system->id]}
+			</div>
+		</div>
+
+		<p class="my-4">
+			<button class="btn btn-success btn-lg" type="submit" data-action="autosave" data-prevent="true">
+				{_'Odeslat', context: 'actions'}
+			</button>
+		</p>
+	</form>
+
+	<div class="modal fade" id="new-system-modal" tabindex="-1">
+		<div class="modal-dialog modal-xl">
+			<form class="modal-content" method="post" action="{link ['settings', 'systems', 'create']}"
+				  id="new-system-form">
+				<div class="modal-header">
+					<h5 class="modal-title">{_'Nový LG systém'}</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<div class="form-group mb-2">
+						<label class="form-label" for="new-system-name">{_'Název systému'}:</label>
+						<input type="text" class="form-control" id="new-system-name" name="name" required>
+					</div>
+					<div class="form-group mb-2">
+						<label class="form-label" for="new-system-type">{_'Typ vybavení'}:</label>
+						<select name="type" id="new-system-type" class="form-select">
+							<option n:foreach="App\Models\SystemType::cases() as $type" n:attr="disabled: !$type->isActive()"
+									value="{$type->value}">
+								{$type->getReadableName()}
+							</option>
+						</select>
+					</div>
+					<div class="form-group mb-2">
+						<label class="form-label" for="new-system-vests">{_'Počet vest'}:</label>
+						<input type="number" class="form-control" id="new-system-vests" name="vests" min="1" value="11"
+							   required>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="submit" class="btn-success btn">{_'Vytvořit'}</button>
+				</div>
+			</form>
+		</div>
+	</div>
+{/block}
+
+{define systemSettings, App\Models\System $system, App\GameModels\Vest[] $vests, App\GameModels\Vest[][] $vestsGrid, int $columnCount, int $rowCount}
+	<h3 class="mt-3 mb-4">{_'Nastavení systému %s', context: 'settings', format: [$system->name]}</h3>
+	<div class="row">
+		<aside class="col-12 col-sm-3">
+			<ul class="nav nav-pills flex-sm-column position-sticky" style="top: 4rem;">
+				<li class="nav-item">
+					<a href="#system-{$system->id}-general" class="nav-link active" aria-current="page"
+					   id="system-tab-{$system->id}-general"
+					   data-bs-toggle="tab"
+					   role="tab"
+					   aria-controls="system-{$system->id}-general"
+					   aria-selected="true">
+						{_'Obecné', context: 'settings'}
+					</a>
+				</li>
+				<li class="nav-item">
+					<a href="#system-{$system->id}-vests" class="nav-link" id="system-tab-{$system->id}-vests"
+					   data-bs-toggle="tab"
+					   role="tab"
+					   aria-controls="system-{$system->id}-vests"
+					   aria-selected="false">
+						{_'Vesty', context: 'settings'}
+					</a>
+				</li>
+				<li class="nav-item">
+					<a href="#system-{$system->id}-grid" class="nav-link" id="system-tab-{$system->id}-grid"
+					   data-bs-toggle="tab"
+					   role="tab"
+					   aria-controls="system-{$system->id}-grid"
+					   aria-selected="false">
+						{_'Rozlození vest', context: 'settings'}
+					</a>
+				</li>
+			</ul>
+		</aside>
+		<main class="tab-content col-12 col-sm-9" id="system-tabs-{$system->id}">
+			<div class="tab-pane fade show active" id="system-{$system->id}-general" role="tabpanel"
+				 aria-labelledby="system-tab-{$system->id}-general">
+				{include systemSettingsGeneral, $system}
+			</div>
+			<div class="tab-pane fade" id="system-{$system->id}-vests" role="tabpanel"
+				 aria-labelledby="system-tab-{$system->id}-vests">
+				{include vestSettings, $system, $vests}
+			</div>
+			<div class="tab-pane fade vests-layout" id="system-{$system->id}-grid" role="tabpanel"
+				 aria-labelledby="system-tab-{$system->id}-grid">
+				{include vestGrid, $system, $vestsGrid, $columnCount, $rowCount}
+			</div>
+		</main>
+	</div>
+{/define}
+
+{define systemSettingsGeneral, App\Models\System $system}
+	<div class="form-group mb-2">
+		<label class="form-label" for="system-{$system->id}-name">{_'Název systému'}:</label>
+		<input type="text" class="form-control" id="system-{$system->id}-name" name="systems[{$system->id}][name]"
+			   value="{$system->name}" required>
+	</div>
+	<div class="form-group mb-2">
+		<label class="form-label" for="system-{$system->id}-type">{_'Typ vybavení'}:</label>
+		<select name="systems[{$system->id}][type]" id="system-{$system->id}-type" class="form-select">
+			<option n:foreach="App\Models\SystemType::cases() as $type" n:attr="disabled: !$type->isActive(), selected: $type === $system->type"
+					value="{$type->value}">
+				{$type->getReadableName()}
+			</option>
+		</select>
+	</div>
+	<div class="form-group mb-2">
+		<label class="form-label" for="system-{$system->id}-ip">{_'IP adresa konzole'}:</label>
+		<input type="text" class="form-control" id="system-{$system->id}-ip" name="systems[{$system->id}][ip]"
+			   value="{$system->systemIp}" required>
+	</div>
+	<div class="form-group mb-2">
+		<label class="form-label" for="system-{$system->id}-results_dir">{_'Cesta k adresáři výsledků'}:</label>
+		<input type="text" class="form-control" id="system-{$system->id}-results_dir"
+			   name="systems[{$system->id}][results_dir]" value="{$system->resultsDir}" required>
+	</div>
+	<div class="form-group mb-2">
+		<label class="form-label" for="system-{$system->id}-load_dir">{_'Cesta k adresáři pro nahrání her'}:</label>
+		<input type="text" class="form-control" id="system-{$system->id}-load_dir"
+			   name="systems[{$system->id}][load_dir]" value="{$system->gameLoadDir}" required>
+	</div>
+	<div class="form-group mb-2">
+		<label class="form-label" for="system-{$system->id}-music_dir">{_'Cesta k adresáři hudby'}:</label>
+		<input type="text" class="form-control" id="system-{$system->id}-music_dir"
+			   name="systems[{$system->id}][music_dir]" value="{$system->musicDir}" required>
+	</div>
+	<div class="form-group mb-2 form-check form-switch">
+		<input type="checkbox" class="form-check-input" role="switch" id="system-{$system->id}-active"
+			   name="systems[{$system->id}][active]" value="1" {if $system->active}checked{/if}>
+		<label for="system-{$system->id}-active" class="form-check-label">{_'Aktivní'}</label>
+	</div>
+	<div class="form-group mb-2 form-check form-switch">
+		<input type="checkbox" class="form-check-input" role="switch" id="system-{$system->id}-default"
+			   name="systems[{$system->id}][default]" value="1" {if $system->default}checked{/if}>
+		<label for="system-{$system->id}-default" class="form-check-label">{_'Výchozí'}</label>
+	</div>
+{/define}
+
+{define vestSettings, App\Models\System $system, App\GameModels\Vest[] $vests}
+	<div class="input-group mb-3">
+		<input type="number" value="1" min="1" max="50" class="form-control add-vests-count">
+		<button type="button" class="btn btn-success add-vests">{_'Přidat vesty'}</button>
+	</div>
+	<div class="vests d-flex justify-content-evenly flex-wrap align-items-center w-100">
+		<div n:foreach="$vests as $vest" class="vest p-3 shadow rounded m-3 text-white {switch $vest->status}
+					{case App\GameModels\Game\Enums\VestStatus::OK}bg-success
+					{case App\GameModels\Game\Enums\VestStatus::PLAYABLE}bg-warning
+					{case App\GameModels\Game\Enums\VestStatus::BROKEN}bg-danger
+		         {/switch}" data-id="{$vest->id}">
+			<button type="button" class="btn btn-danger delete ms-auto mb-2 d-block"
+					data-confirm="{_'Opravdu chcete smazat vestu?'}">{faSolid 'trash'}</button>
+			<div class="icon">
+				<span n:class="vest-type, $vest->type !== App\GameModels\VestType::VEST ? d-none">
+					{svgIcon 'Vesta', '', '3rem'}
+				</span>
+				<span n:class="gun-type, $vest->type !== App\GameModels\VestType::GUN ? d-none">
+					{svgIcon 'gun', '', '3rem'}
+				</span>
+			</div>
+			<input type="number" name="vests[{$vest->id}][vest_num]" class="form-control" value="{$vest->vestNum}">
+			<div>
+				<div class="btn-group my-3 shadow">
+					{foreach App\GameModels\VestType::cases() as $type}
+						<input type="radio" class="btn-check vest-type" name="vests[{$vest->id}][type]"
+							   id="vest-type-{$vest->id}-{$type->value}"
+							   autocomplete="off" value="{$type->value}"
+							   {if $vest->type === $type}checked{/if}>
+						<label class="btn btn-outline-light"
+							   for="vest-type-{$vest->id}-{$type->value}">{$type->getReadableName()}</label>
+					{/foreach}
+				</div>
+			</div>
+			<div>
+				<div class="btn-group my-3 shadow">
+					<input type="radio" class="btn-check vest-status" name="vests[{$vest->id}][status]"
+						   id="vest-status-{$vest->id}-ok"
+						   autocomplete="off" value="ok"
+						   {if $vest->status === App\GameModels\Game\Enums\VestStatus::OK}checked{/if}>
+					<label class="btn btn-outline-success"
+						   for="vest-status-{$vest->id}-ok">{_'V pořádku', context: 'settings.vests.status'}</label>
+					<input type="radio" class="btn-check vest-status" name="vests[{$vest->id}][status]"
+						   id="vest-status-{$vest->id}-playable"
+						   autocomplete="off" value="playable"
+						   {if $vest->status === App\GameModels\Game\Enums\VestStatus::PLAYABLE}checked{/if}>
+					<label class="btn btn-outline-warning"
+						   for="vest-status-{$vest->id}-playable">{_'Hratelná', context: 'settings.vests.status'}</label>
+					<input type="radio" class="btn-check vest-status" name="vests[{$vest->id}][status]"
+						   id="vest-status-{$vest->id}-broken"
+						   autocomplete="off" value="broken"
+						   {if $vest->status === App\GameModels\Game\Enums\VestStatus::BROKEN}checked{/if}>
+					<label class="btn btn-outline-danger"
+						   for="vest-status-{$vest->id}-broken">{_'Nefunkční', context: 'settings.vests.status'}</label>
+				</div>
+			</div>
+			<label for="vest-{$vest->id}-info">{_'Porucha', context: 'settings.vests'}:</label>
+			<textarea class="form-control" name="vests[{$vest->id}][info]" id="vest-{$vest->id}-info" cols="20"
+					  rows="4">{$vest->info}</textarea>
+		</div>
+	</div>
+{/define}
+
+{define vestGrid, App\Models\System $system, App\GameModels\Vest[][] $vestsGrid, int $columnCount, int $rowCount}
+	<div class="form-group">
+		<label for="columns-{$system->id}" class="form-label">{_'Počet sloupců'}:</label>
+		<input type="number" class="form-control columns-input" name="systems[{$system->id}][columns]"
+			   id="columns-{$system->id}" value="{$columnCount}" min="1" max="50">
+	</div>
+	<div class="form-group">
+		<label for="rows-{$system->id}" class="form-label">{_'Počet řádků'}:</label>
+		<input type="number" class="form-control rows-input" name="systems[{$system->id}][rows]" id="rows-{$system->id}"
+			   value="{$rowCount}" min="1" max="50">
+	</div>
+	<p class="my-3">{_'Přetažením vest v mřížce upravujete zobrazení vest na výsledkové tabuli. Mělo by odpovídat fyzickému rozmístění vest na stojanech.'}</p>
+	<div class="vest-grid draggable-grid mt-3" style="--columns: {$columnCount}; --rows: {$rowCount};">
+		{for $row = 1; $row <= $rowCount; $row++}
+			{for $col = 1; $col <= $columnCount; $col++}
+				{if isset($vestsGrid[$row][$col])}
+					<div class="vest draggable-item" data-id="{$vestsGrid[$row][$col]->id}" data-row="{$row}"
+						 data-col="{$col}">
+						{switch    $vestsGrid[$row][$col]->type}
+							{case App\GameModels\VestType::GUN}
+							{svgIcon 'gun', '', '3rem'}
+							{default}
+							{svgIcon 'Vesta', '', '3rem'}
+						{/switch}
+						<div class="num">
+							{$vestsGrid[$row][$col]->vestNum}
+						</div>
+						<input type="hidden" class="col-input" name="vests[{$vestsGrid[$row][$col]->id}][col]"
+							   value="{$col}">
+						<input type="hidden" class="row-input" name="vests[{$vestsGrid[$row][$col]->id}][row]"
+							   value="{$row}">
+					</div>
+				{else}
+					<div class="draggable-empty" data-row="{$row}" data-col="{$col}"></div>
+				{/if}
+			{/for}
+		{/for}
+	</div>
+{/define}

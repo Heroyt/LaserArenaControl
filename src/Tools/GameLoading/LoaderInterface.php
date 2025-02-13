@@ -2,8 +2,15 @@
 
 namespace App\Tools\GameLoading;
 
+use App\Models\System;
+
 interface LoaderInterface
 {
+    public System $system {
+        get;
+        set;
+    }
+
     /**
      * Prepare a game for loading
      *

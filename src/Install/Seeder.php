@@ -36,10 +36,10 @@ use Lsr\Db\DB;
  */
 class Seeder implements InstallInterface
 {
-    public const GAME_MODES = [
+    public const array GAME_MODES = [
       [
         'id_mode'              => 1,
-        'system'               => 'evo5',
+        'systems' => 'evo5,evo6',
         'name'                 => 'Team Deathmatch',
         'description'          => 'Classic team game.',
         'load_name'            => '1-TEAM-DEATHMACH',
@@ -79,7 +79,7 @@ class Seeder implements InstallInterface
       ],
       [
         'id_mode'              => 2,
-        'system'               => 'evo5',
+        'systems' => 'evo5,evo6',
         'name'                 => 'Deathmatch',
         'description'          => 'Classic free for all game.',
         'load_name'            => '2-SOLO-DEATHMACH',
@@ -119,7 +119,7 @@ class Seeder implements InstallInterface
       ],
       [
         'id_mode'              => 3,
-        'system'               => 'evo5',
+        'systems' => 'evo5,evo6',
         'name'                 => 'CSGO',
         'description'          => 'Náročná hra o přežití se 3mi životy.',
         'load_name'            => '3-TEAM-CSGO',
@@ -159,7 +159,7 @@ class Seeder implements InstallInterface
       ],
       [
         'id_mode'              => 4,
-        'system'               => 'evo5',
+        'systems' => 'evo5,evo6',
         'name'                 => 'Základny',
         'description'          => 'Strategická hra, kdy 2 týmy bojují proti sobě o zničení základny druhého týmu.',
         'load_name'            => '3-TEAM-Zakladny',
@@ -199,7 +199,7 @@ class Seeder implements InstallInterface
       ],
       [
         'id_mode'              => 5,
-        'system'               => 'evo5',
+        'systems' => 'evo5,evo6',
         'name'                 => 'Barvičky',
         'description'          => 'Rychlá, šílená hra. Po pár smrtích se přebarvíš na barvu toho, kdo tě trefil.',
         'load_name'            => '3-TEAM-Barvicky',
@@ -239,7 +239,7 @@ class Seeder implements InstallInterface
       ],
       [
         'id_mode'              => 6,
-        'system'               => 'evo5',
+        'systems' => 'evo5,evo6',
         'name'                 => 'T.M.A',
         'description'          => 'Klasická hra, ale tentokrát bez světel.',
         'load_name'            => '3-TEAM-TMA',
@@ -279,7 +279,7 @@ class Seeder implements InstallInterface
       ],
       [
         'id_mode'              => 7,
-        'system'               => 'evo5',
+        'systems' => 'evo5,evo6',
         'name'                 => 'T.M.A - solo',
         'description'          => 'Klasická hra, ale tentokrát bez světel.',
         'load_name'            => '3-SOLO-TMA',
@@ -319,7 +319,7 @@ class Seeder implements InstallInterface
       ],
       [
         'id_mode'              => 8,
-        'system'               => 'evo5',
+        'systems' => 'evo5,evo6',
         'name'                 => 'Apokalypsa',
         'description'          => 'Hra na zombíky! Vybraní hráči jsou zombie, kteří se snaží infikovat ostatní hráče.',
         'load_name'            => '3-TEAM-Apokalypsa',
@@ -359,7 +359,7 @@ class Seeder implements InstallInterface
       ],
       [
         'id_mode'              => 9,
-        'system'               => 'evo5',
+        'systems' => 'evo5,evo6',
         'name'                 => 'Survival',
         'description'          => 'Strategická hra s omezeným počtem životů a nábojů.',
         'load_name'            => '3-SOLO-SURVIVAL',
@@ -399,7 +399,7 @@ class Seeder implements InstallInterface
       ],
       [
         'id_mode'              => 10,
-        'system'               => 'evo5',
+        'systems' => 'evo5,evo6',
         'name'                 => 'Survival',
         'description'          => 'Strategická hra s omezeným počtem životů a nábojů.',
         'load_name'            => '3-TEAM-SURVIVAL',
@@ -765,85 +765,7 @@ class Seeder implements InstallInterface
       ],
     ];
 
-    public const array VESTS = [
-      [
-        'id_vest'  => 1,
-        'vest_num' => 1,
-        'system'   => 'evo5',
-        'grid_col' => 1,
-        'grid_row' => 1,
-      ],
-      [
-        'id_vest'  => 2,
-        'vest_num' => 2,
-        'system'   => 'evo5',
-        'grid_col' => 1,
-        'grid_row' => 2,
-      ],
-      [
-        'id_vest'  => 3,
-        'vest_num' => 3,
-        'system'   => 'evo5',
-        'grid_col' => 1,
-        'grid_row' => 3,
-      ],
-      [
-        'id_vest'  => 4,
-        'vest_num' => 4,
-        'system'   => 'evo5',
-        'grid_col' => 1,
-        'grid_row' => 4,
-      ],
-      [
-        'id_vest'  => 5,
-        'vest_num' => 5,
-        'system'   => 'evo5',
-        'grid_col' => 1,
-        'grid_row' => 6,
-      ],
-      [
-        'id_vest'  => 6,
-        'vest_num' => 6,
-        'system'   => 'evo5',
-        'grid_col' => 1,
-        'grid_row' => 6,
-      ],
-      [
-        'id_vest'  => 7,
-        'vest_num' => 7,
-        'system'   => 'evo5',
-        'grid_col' => 3,
-        'grid_row' => 6,
-      ],
-      [
-        'id_vest'  => 8,
-        'vest_num' => 8,
-        'system'   => 'evo5',
-        'grid_col' => 4,
-        'grid_row' => 6,
-      ],
-      [
-        'id_vest'  => 9,
-        'vest_num' => 9,
-        'system'   => 'evo5',
-        'grid_col' => 5,
-        'grid_row' => 6,
-      ],
-      [
-        'id_vest'  => 10,
-        'vest_num' => 10,
-        'system'   => 'evo5',
-        'grid_col' => 5,
-        'grid_row' => 5,
-      ],
-      [
-        'id_vest'  => 11,
-        'vest_num' => 11,
-        'system'   => 'evo5',
-        'grid_col' => 5,
-        'grid_row' => 4,
-      ],
-    ];
+    public const array VESTS = [];
 
     /**
      * @inheritDoc

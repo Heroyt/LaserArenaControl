@@ -71,13 +71,13 @@ $menu['settings'] = [
       'order' => 0,
     ],
     [
-      'name' => lang('Výsledková tabule', context: 'pageTitles.settings'),
-      'route' => 'settings-gate',
+      'name'  => lang('Systémy lasergame', context: 'pageTitles.settings'),
+      'route' => 'settings-systems',
       'order' => 10,
     ],
     [
-      'name' => lang('Vesty', context: 'pageTitles.settings'),
-      'route' => 'settings-vests',
+      'name' => lang('Výsledková tabule', context: 'pageTitles.settings'),
+      'route' => 'settings-gate',
       'order' => 20,
     ],
     [

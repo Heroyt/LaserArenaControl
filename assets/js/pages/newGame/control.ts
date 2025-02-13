@@ -1,15 +1,15 @@
-import {Modal} from "bootstrap";
-import EventServerInstance from "../../EventServer";
-import {startLoading, stopLoading} from "../../loaders";
+import {Modal} from 'bootstrap';
+import EventServerInstance from '../../EventServer';
+import {startLoading, stopLoading} from '../../loaders';
 import {
-    controlCancelDownload,
-    controlLoadSafe,
-    controlRetryDownload,
-    controlStartSafe,
-    controlStop,
-    getCurrentControlStatus
-} from "../../api/endpoints/control";
-import {ResponseError} from "../../includes/apiClient";
+	controlCancelDownload,
+	controlLoadSafe,
+	controlRetryDownload,
+	controlStartSafe,
+	controlStop,
+	getCurrentControlStatus,
+} from '../../api/endpoints/control';
+import {ResponseError} from '../../includes/apiClient';
 import {triggerNotificationError} from '../../includes/notifications';
 
 export enum GameStatus {
@@ -74,7 +74,7 @@ export default class Control {
     }
 
     getCurrentStatus() {
-        return getCurrentControlStatus();
+	    return getCurrentControlStatus(system.id);
     }
 
     setCurrentStatus(status: string): void {
@@ -109,7 +109,7 @@ export default class Control {
 
     loadGame(mode: string, callback: null | (() => void) = null) {
         startLoading(true);
-        controlLoadSafe(mode)
+	    controlLoadSafe(mode, system.id)
             .then(response => {
                 if (response.status !== 'ok') {
                     this.setCurrentStatus(response.status);
@@ -146,7 +146,7 @@ export default class Control {
                         case 'ARMED':
                         case 'PLAYING':
                             this._currentStatus = response.status === 'ARMED' ? GameStatus.ARMED : GameStatus.PLAYING;
-                            controlStop()
+	                        controlStop(system.id)
                                 .then(() => {
                                     stopLoading(true, true);
                                     this.setCurrentStatus('STANDBY');
@@ -205,7 +205,7 @@ export default class Control {
 
     sendStart() {
         startLoading(true);
-        controlStartSafe()
+	    controlStartSafe(null, system.id)
             .then(response => {
                 if (response.status !== 'ok') {
                     this.setCurrentStatus(response.status);
@@ -229,7 +229,7 @@ export default class Control {
 
     loadStart(mode: string, callback: null | (() => void) = null) {
         startLoading(true);
-        controlStartSafe(mode)
+	    controlStartSafe(mode, system.id)
             .then(response => {
                 if (response.status !== 'ok') {
                     this.setCurrentStatus(response.status);
@@ -271,7 +271,7 @@ export default class Control {
             }
 
             startLoading(true);
-            controlRetryDownload()
+	        controlRetryDownload(system.id)
                 .then(() => {
                     stopLoading(true, true);
                 })
@@ -291,7 +291,7 @@ export default class Control {
             }
 
             startLoading(true);
-            controlCancelDownload()
+	        controlCancelDownload(system.id)
                 .then(() => {
                     stopLoading(true, true);
                 })

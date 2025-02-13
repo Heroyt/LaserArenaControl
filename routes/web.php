@@ -20,7 +20,6 @@ use App\Controllers\System\Roadrunner;
 use App\Controllers\System\System;
 use App\Core\App;
 use App\Services\FeatureConfig;
-use Lsr\Core\Routing\Route;
 
 /** @var \Lsr\Core\Routing\Router $this */
 
@@ -94,16 +93,24 @@ $groupsId->get('print', [GameGroups::class, 'printPlayerList']);
 
 $control = $this->group('control');
 $control->get('status', [GameControl::class, 'status'])->name('getGameStatus');
+$control->get('status/{id}', [GameControl::class, 'status']);
 
 $control->post('load', [GameControl::class, 'load'])->name('loadGame');
+$control->post('load/{id}', [GameControl::class, 'load']);
 $control->post('loadSafe', [GameControl::class, 'loadSafe'])->name('loadGameSafe');
+$control->post('loadSafe/{id}', [GameControl::class, 'loadSafe']);
 
 $control->post('start', [GameControl::class, 'start'])->name('startGame');
+$control->post('start/{id}', [GameControl::class, 'start']);
 $control->post('startSafe', [GameControl::class, 'startSafe'])->name('startGameSafe');
+$control->post('startSafe/{id}', [GameControl::class, 'startSafe']);
 
 $control->post('stop', [GameControl::class, 'stop'])->name('stopGame');
+$control->post('stop/{id}', [GameControl::class, 'stop']);
 $control->post('retry', [GameControl::class, 'retryDownload'])->name('retryDownload');
+$control->post('retry/{id}', [GameControl::class, 'retryDownload']);
 $control->post('cancel', [GameControl::class, 'cancelDownload'])->name('cancelDownload');
+$control->post('cancel/{id}', [GameControl::class, 'cancelDownload']);
 
 $roadrunner = $this->group('roadrunner');
 $roadrunner->get('reset', [Roadrunner::class, 'reset'])->name('resetRoadrunnerGet');

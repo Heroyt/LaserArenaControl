@@ -5,12 +5,13 @@ use App\Controllers\Settings\Modes;
 use App\Controllers\Settings\Music;
 use App\Controllers\Settings\PrintSettings;
 use App\Controllers\Settings\Settings;
+use App\Controllers\Settings\SystemsSettings;
 use App\Controllers\Settings\TipsSettings;
 use App\Core\App;
 use App\Services\FeatureConfig;
-use Lsr\Core\Routing\Route;
+use Lsr\Core\Routing\Router;
 
-/** @var \Lsr\Core\Routing\Router $this */
+/** @var Router $this */
 
 /** @var FeatureConfig $featureConfig */
 $featureConfig = App::getService('features');
@@ -19,8 +20,14 @@ $settings = $this->group('settings');
 $settings->get('', [Settings::class, 'show'])->name('settings');
 $settings->post('', [Settings::class, 'saveGeneral']);
 
+$settings->get('systems', [SystemsSettings::class, 'show'])->name('settings-systems');
+$settings->post('systems', [SystemsSettings::class, 'save']);
+$settings->post('systems/create', [SystemsSettings::class, 'create']);
+$settings->post('systems/{id}/add-vests', [SystemsSettings::class, 'addVests']);
+
 $settings->get('vests', [Settings::class, 'vests'])->name('settings-vests');
 $settings->post('vests', [Settings::class, 'saveVests']);
+$settings->delete('vests/{id}', [SystemsSettings::class, 'deleteVest']);
 
 $settings->get('print', [PrintSettings::class, 'show'])->name('settings-print');
 $settings->post('print', [PrintSettings::class, 'save']);

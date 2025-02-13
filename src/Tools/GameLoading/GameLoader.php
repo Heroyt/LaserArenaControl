@@ -3,6 +3,8 @@
 namespace App\Tools\GameLoading;
 
 use App\Core\App;
+use App\Models\System;
+use App\Models\SystemType;
 use InvalidArgumentException;
 use Throwable;
 
@@ -15,12 +17,11 @@ class GameLoader
     private array $loaders = [];
 
     /**
-     * @param  string  $system
      * @param  array<string,mixed>  $data
      *
      * @return array<string, string|numeric> Metadata
      */
-    public function loadGame(string $system, array $data) : array {
+    public function loadGame(string | int | System $system, array $data) : array {
         $loader = $this->findGameLoader($system);
         if (!isset($loader)) {
             throw new InvalidArgumentException('Cannot find loader for system - '.$system);
@@ -36,12 +37,30 @@ class GameLoader
      *
      * @return LoaderInterface|null
      */
-    private function findGameLoader(string $system) : ?LoaderInterface {
+    private function findGameLoader(string | int | System $system) : ?LoaderInterface {
+        if (is_numeric($system)) {
+            $system = System::get((int) $system);
+        }
+        else if (is_string($system)) {
+            $type = SystemType::tryFrom($system);
+            if ($type === null) {
+                throw new InvalidArgumentException('Invalid system type');
+            }
+            $systems = System::getForType($type);
+            if (empty($systems)) {
+                throw new InvalidArgumentException('Invalid system type');
+            }
+            $system = first($systems);
+        }
+
+        $systemStr = $system->type->value;
+
         try {
-            // @phpstan-ignore-next-line
-            $this->loaders[$system] ??= App::getService($system.'.gameLoader');
-            // @phpstan-ignore-next-line
-            return $this->loaders[$system];
+            $loader = App::getService($systemStr.'.gameLoader');
+            assert($loader instanceof LoaderInterface);
+            $loader->system = $system;
+            $this->loaders[$systemStr] ??= $loader;
+            return $this->loaders[$systemStr];
         } catch (Throwable) {
             return null;
         }

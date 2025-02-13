@@ -1,12 +1,10 @@
 {templateType App\Tools\GameLoading\LasermaxxLoadData}
 {block |trim|replace:"\t",''}
-	{varType string $metaString}
-
 	{syntax double}
-		GROUP{,{{$metaString}}}#
+		GROUP{,{{$metaString}},1}#
 
 		{{foreach $players as $player}}
-		PACK{{{$player->vest}},{{$player->name}},{{$player->team}},0,{{$player->vip ? 1 : 0}},0,0}#
+		PACK{{{$player->vest}},{{$player->name}},{{$player->team}},0,{{$player->vip ? 1 : 0}},0,0,{{$player->birthday ? 1 : 0}}}#
 		{{/foreach}}
 
 		{{foreach $teams as $team}}

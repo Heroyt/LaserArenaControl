@@ -76,7 +76,7 @@ export interface GameData {
 	playlist?: number,
 	group?: GameGroupDataBase,
 	table?: TableData,
-	system?: string,
+	system?: string | number,
 }
 
 interface ModeSettings {

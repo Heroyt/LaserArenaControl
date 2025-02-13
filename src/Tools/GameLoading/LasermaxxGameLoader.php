@@ -8,6 +8,7 @@ use App\GameModels\Factory\GameModeFactory;
 use App\GameModels\Game\GameModes\CustomLoadMode;
 use App\Models\MusicMode;
 use App\Models\Playlist;
+use App\Models\System;
 use Lsr\Core\Templating\Latte;
 use Lsr\Helpers\Tools\Strings;
 use Lsr\Logging\Exceptions\DirectoryCreationException;
@@ -25,7 +26,7 @@ use Spiral\RoadRunner\Metrics\Metrics;
  *      tableSelect?:numeric,
  *      game-mode?:numeric,
  *      variation?:array<numeric,string>,
- *      player?:array{name:string,team?:string,vip?:numeric-string,code:string}[],
+ *      player?:array{name:string,team?:string,vip?:numeric-string,birthday?:numeric-string,code:string}[],
  *      team?:array{name:string}[],
  *      mode?:string,
  *      meta?:array<string,mixed>
@@ -34,6 +35,8 @@ use Spiral\RoadRunner\Metrics\Metrics;
 abstract class LasermaxxGameLoader implements LoaderInterface
 {
     use GroupLoading;
+
+    public System $system;
 
     public function __construct(
       protected readonly Latte   $latte,
@@ -201,6 +204,7 @@ abstract class LasermaxxGameLoader implements LoaderInterface
               $asciiName,
               (string) $player['team'],
               ((int) ($player['vip'] ?? 0)) === 1,
+              birthday: ((int) ($player['birthday'] ?? 0)) === 1,
             );
             if (!isset($teams[(string) $player['team']])) {
                 $teams[(string) $player['team']] = 0;

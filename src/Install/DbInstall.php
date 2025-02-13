@@ -117,8 +117,14 @@ class DbInstall implements InstallInterface
                             try {
                                 $connection->query("ALTER TABLE %n $query;", $tableName);
                             } catch (Exception $e) {
-                                if ($e->getCode() === 1060 || $e->getCode() === 1061) {
+                                if (
+                                  $e->getCode() === 1060
+                                  || $e->getCode() === 1061
+                                  || $e->getCode() === 1091
+                                  || ($e->getCode() === 1054 && str_starts_with(strtolower($query), 'drop column'))
+                                ) {
                                     // Duplicate column <-> already created
+                                    // Or column does not exist <-> already dropped
                                     continue;
                                 }
                                 throw $e;
@@ -259,10 +265,10 @@ class DbInstall implements InstallInterface
             $connection->query("DROP VIEW IF EXISTS `vmodesnames`");
             $connection->query(
               <<<SQL
-                CREATE VIEW IF NOT EXISTS `vModesNames`
+                CREATE OR REPLACE VIEW `vModesNames`
                 AS SELECT
                    `a`.`id_mode` AS `id_mode`,
-                   `a`.`system` AS `system`,
+                   `a`.`systems` AS `systems`,
                    `a`.`name` AS `name`,
                    `a`.`description` AS `description`,
                    `a`.`type` AS `type`,
@@ -325,7 +331,7 @@ class DbInstall implements InstallInterface
                 SQL
             );
         } catch (Exception $e) {
-            echo "\e[0;31m".$e->getMessage()."\e[m\n".$e->getSql()."\n";
+            echo "\e[0;31m (".$e->getCode().") ".$e->getMessage()."\e[m\n".$e->getSql()."\n";
             return false;
         }
 

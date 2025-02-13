@@ -24,6 +24,14 @@
 ]}
 
 {block content}
+    <div n:if="count($systems) > 1" class="d-flex justify-content-end mb-3">
+        <div id="systems" class="form-floating" style="min-width:15rem;">
+            <select class="form-select" id="systems-select" aria-label="{_'Vybrat LG systém', context: 'game'}">
+                <option n:foreach="$systems as $sys" n:attr="value: $sys->id, selected: $sys === $system">{$sys->name}</option>
+            </select>
+            <label for="last-games">{_'Vybrat LG systém', context: 'game'}</label>
+        </div>
+    </div>
     <form method="post" action="" id="new-game-content" class="w-100">
         {cache 'newGame-'.$lang.'-controls', tags: ['templates.newGame', 'templates', 'templates.'.$lang]}
             {include sectionControls}
@@ -379,7 +387,13 @@
     <div class="input-group my-2 shadow-in-place vest-row rounded" data-vest="{$vest->vestNum}">
         <div class="input-group-text px-2 bg-light text-black vest-num cursor-pointer"
              data-status="{$vest->status->value}" data-info="{$vest->info}">
-            <div>
+            <div class="num">
+                {switch $vest->type}
+                    {case App\GameModels\VestType::GUN}
+                    {svgIcon 'gun', '', '1em'}
+                    {default}
+                    {svgIcon 'Vesta', '', '1em'}
+                {/switch}
                 {$vest->vestNum}
             </div>
             {if $vest->status === App\GameModels\Game\Enums\VestStatus::PLAYABLE}

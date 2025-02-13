@@ -14,17 +14,18 @@ tables:
 			0.1:
 				- 'CHANGE `value` `value` BLOB DEFAULT NULL;'
 	App\GameModels\Vest:
-		order: 0
+		order: 1
 		definition: '''
 			(
             	`id_vest` int(11) unsigned NOT NULL AUTO_INCREMENT,
             	`vest_num` int(11) NOT NULL,
-            	`system` varchar(50) NOT NULL DEFAULT '',
+            	`id_system` int(11) unsigned DEFAULT NULL,
             	`grid_col` int(10) unsigned DEFAULT NULL,
             	`grid_row` int(10) unsigned DEFAULT NULL,
             	`status` enum('ok','playable','broken') NOT NULL DEFAULT 'ok',
                 `info` text DEFAULT NULL,
             	`updated_at` datetime DEFAULT NULL ON UPDATE current_timestamp(),
+            	`type` varchar(50) NOT NULL DEFAULT 'vest',
             	PRIMARY KEY (`id_vest`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 		'''
@@ -34,6 +35,17 @@ tables:
 			0.2:
 				- "ADD `status` enum('ok','playable','broken') NOT NULL DEFAULT 'ok';"
 				- "ADD `info` text DEFAULT NULL;"
+			0.3:
+				- 'DROP COLUMN `system`'
+				- 'ADD `id_system` int(11) unsigned DEFAULT NULL'
+			0.3.1:
+				- 'ADD `type` varchar(50) NOT NULL DEFAULT "vest"'
+		foreignKeys:
+			-
+				column: id_system
+				refTable: App\Models\System
+				refColumn: id_system
+				onDelete: 'SET NULL'
 	App\Models\Auth\Player:
 		order: 0
 		definition: '''
@@ -125,7 +137,7 @@ tables:
 		definition: '''
 		(
         	`id_mode` int(11) unsigned NOT NULL AUTO_INCREMENT,
-        	`system` varchar(10) DEFAULT NULL,
+        	`systems` text DEFAULT NULL,
         	`name` varchar(50) DEFAULT NULL,
         	`alias` varchar(50) DEFAULT NULL,
         	`description` text DEFAULT NULL,
@@ -177,6 +189,9 @@ tables:
 			0.3:
 				- 'ADD `active` tinyint(1) NOT NULL DEFAULT 1 AFTER `public`'
 				- 'ADD `alias` varchar(50) DEFAULT '''' AFTER `name`'
+			0.4:
+				- 'DROP COLUMN `system`'
+				- 'ADD `systems` text DEFAULT NULL AFTER `id_mode`'
 	game_modes-names:
 		order: 1
 		definition: '''
@@ -749,12 +764,20 @@ tables:
 			`data` text NOT NULL,
 			`type` enum('prepared','user-local','user-public') NOT NULL DEFAULT 'prepared',
 			`active` tinyint(1) NOT NULL DEFAULT 1,
+			`id_system` int(11) unsigned DEFAULT NULL,
 			PRIMARY KEY (`id_game`)
 		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 		'''
 		modifications:
 			0.1:
 				- 'ADD `type` enum(''prepared'',''user-local'',''user-public'') NOT NULL DEFAULT ''prepared'''
+			0.2:
+				- 'ADD `id_system` int(11) unsigned DEFAULT NULL'
+		foreignKeys:
+			-
+				column: id_system
+				refTable: App\Models\System
+				refColumn: id_system
 	App\Models\Playlist:
 		order: 0
 		definition: '''
@@ -925,3 +948,25 @@ tables:
 		modifications:
 			0.1:
 				- 'ADD `translations` BLOB DEFAULT NULL'
+	App\Models\System:
+		order: 0
+		definition: '''
+		(
+			`id_system` int(11) unsigned NOT NULL AUTO_INCREMENT,
+			`name` varchar(100) NOT NULL,
+			`type` varchar(100) NOT NULL,
+			`system_ip` varchar(100) NOT NULL DEFAULT '',
+			`results_dir` varchar(255) NOT NULL DEFAULT '',
+			`game_load_dir` varchar(255) NOT NULL DEFAULT '',
+			`music_dir` varchar(255) NOT NULL DEFAULT '',
+			`column_count` tinyint(3) unsigned NOT NULL DEFAULT 15,
+			`row_count` tinyint(3) unsigned NOT NULL DEFAULT 15,
+			`default` bool NOT NULL DEFAULT false,
+			`active` bool NOT NULL DEFAULT true,
+			PRIMARY KEY (`id_system`)
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+		'''
+		modifications:
+			0.1:
+				- 'ADD `column_count` tinyint(3) unsigned NOT NULL DEFAULT 15'
+				- 'ADD `row_count` tinyint(3) unsigned NOT NULL DEFAULT 15'

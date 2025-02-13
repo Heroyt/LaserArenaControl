@@ -109,7 +109,7 @@ export default class NewGamesPrepared {
 			const tmp = document.createElement('div');
 			let playersHTML = '';
 			Object.values(preparedGameData.data.players).forEach(player => {
-				playersHTML += `<span class="badge m-1 ${(player.teamNum || player.teamNum === 0 ? `text-bg-team-${system}-${player.teamNum}` : 'text-bg-secondary')}">${player.name}</span>`;
+				playersHTML += `<span class="badge m-1 ${(player.teamNum || player.teamNum === 0 ? `text-bg-team-${preparedGameData.system?.type ?? system.type}-${player.teamNum}` : 'text-bg-secondary')}">${player.name}</span>`;
 			});
 			tmp.innerHTML = `<div class="prepared-game card mb-4 border-4 border-${borderColors[preparedGameData.type]}" data-id="${preparedGameData.id_game}">` +
 				`<div class="card-body">` +

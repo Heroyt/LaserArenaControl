@@ -24,7 +24,22 @@
 .vest-num {
 	display: flex;
 	justify-content: space-between;
-	width: 3.5em;
+	width: 4em;
+
+	.num {
+		align-items: center;
+		display: flex;
+	}
+
+	svg {
+		margin-right: .2rem;
+		max-height: 1rem;
+		max-width: 1rem;
+
+		path {
+			fill: currentColor;
+		}
+	}
 
 	.fa-solid {
 		text-shadow: 0 0 1rem rgba(0, 0, 0, .6);

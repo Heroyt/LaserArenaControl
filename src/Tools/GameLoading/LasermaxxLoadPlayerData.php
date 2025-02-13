@@ -13,5 +13,6 @@ class LasermaxxLoadPlayerData
       public string  $team,
       public bool    $vip = false,
       public ?string $code = null,
+      public bool $birthday = false,
     ) {}
 }

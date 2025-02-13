@@ -1,5 +1,6 @@
 {layout '../../@layout.latte'}
 
+{varType App\Models\System[] $systems}
 {varType App\GameModels\Vest[][] $vests}
 {varType App\GameModels\Vest[][][] $vestsGrid}
 {varType int[] $columnCounts}
@@ -13,22 +14,22 @@
 		</div>
         <h2>{_'Vest settings', context: 'settings'}:</h2>
         <ul class="nav nav-tabs" id="systems" role="tablist">
-            <li class="nav-item" role="presentation" n:foreach="$vests as $colorSystem => $v">
-                <button class="nav-link {if $iterator->first}active{/if}" id="system-tab-{$colorSystem}"
+			<li class="nav-item" role="presentation" n:foreach="$systems as $system">
+				<button class="nav-link {if $iterator->first}active{/if}" id="system-tab-{$system->id}"
                         data-bs-toggle="tab"
-                        data-bs-target="#vests-{$colorSystem}" type="button" role="tab"
-                        aria-controls="vests-{$colorSystem}"
+						data-bs-target="#vests-{$system->id}" type="button" role="tab"
+						aria-controls="vests-{$system->id}"
                         aria-selected="{if $iterator->first}true{/if}">
-                    {_$colorSystem, context: 'systems'}
+					{$system->name}
                 </button>
             </li>
-            <li class="nav-item" role="presentation" n:foreach="$vests as $colorSystem => $v">
-                <button class="nav-link" id="system-tab-{$colorSystem}-layout"
+			<li class="nav-item" role="presentation" n:foreach="$systems as $system">
+				<button class="nav-link" id="system-tab-{$system->id}-layout"
                         data-bs-toggle="tab"
-                        data-bs-target="#vests-{$colorSystem}-layout" type="button" role="tab"
-                        aria-controls="vests-{$colorSystem}-layout"
+						data-bs-target="#vests-{$system->id}-layout" type="button" role="tab"
+						aria-controls="vests-{$system->id}-layout"
                         aria-selected="false">
-                    {_'Rozložení'} - {_$colorSystem, context: 'systems'}
+					{_'Rozložení'} - {$system->name}
                 </button>
             </li>
         </ul>

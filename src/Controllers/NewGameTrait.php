@@ -6,17 +6,22 @@ namespace App\Controllers;
 
 use App\Core\App;
 use App\DataObjects\NewGame\HookedTemplates;
-use App\GameModels\Factory\GameFactory;
 use App\GameModels\Vest;
 use App\Gate\Models\MusicGroupDto;
 use App\Models\Playlist;
 use App\Models\PriceGroup;
+use App\Models\System;
 use App\Services\FeatureConfig;
 use App\Templates\NewGame\NewGameParams;
 use LAC\Modules\Core\ControllerDecoratorInterface;
 use Lsr\Core\Requests\Request;
 use Lsr\Interfaces\RequestInterface;
+use Lsr\Interfaces\SessionInterface;
+use Lsr\Orm\Exceptions\ModelNotFoundException;
 
+/**
+ * @property NewGameParams $params
+ */
 trait NewGameTrait
 {
     public HookedTemplates $hookedTemplates;
@@ -25,6 +30,7 @@ trait NewGameTrait
 
     public function __construct(
       private readonly FeatureConfig $featureConfig,
+      private readonly SessionInterface $session,
     ) {
         parent::__construct();
         $this->params = new NewGameParams();
@@ -59,14 +65,39 @@ trait NewGameTrait
         $this->params->addedTemplates = $this->hookedTemplates;
         $this->params->featureConfig = $this->featureConfig;
 
-        /** @phpstan-ignore-next-line */
-        $this->params->system = $request->getGet('system', first(GameFactory::getSupportedSystems()));
+        $this->params->systems = System::getActive();
+
+        $systemId = $request->getGet('system');
+        if ($systemId === null) {
+            $systemId = $this->session->get('active_lg_system');
+        }
+        if ($systemId === null) {
+            $this->params->system = System::getDefault();
+        }
+        else if (is_numeric($systemId)) {
+            try {
+                $this->params->system = System::get((int) $systemId);
+            } catch (ModelNotFoundException) {
+                $this->params->system = System::getDefault();
+            }
+        }
+        else {
+            $this->params->system = array_find(
+              $this->params->systems,
+              static fn(System $system) => $system->type->value === $systemId
+            );
+        }
+
+        if ($this->params->system === null) {
+            $this->params->system = first($this->params->systems);
+        }
+        $this->session->set('active_lg_system', $this->params->system->id);
+
         $this->params->vests = Vest::getForSystem($this->params->system);
-        $this->params->colors = GameFactory::getAllTeamsColors()[$this->params->system];
-        $this->params->teamNames = GameFactory::getAllTeamsNames()[$this->params->system];
+        $this->params->colors = $this->params->system->type->getColors();
+        $this->params->teamNames = $this->params->system->type->getTeamNames();
         $this->params->playlists = Playlist::getAll();
         $this->params->priceGroups = PriceGroup::getAll();
         $this->params->priceGroupsAll = PriceGroup::query()->get(); // Get event the deleted price groups
-
     }
 }

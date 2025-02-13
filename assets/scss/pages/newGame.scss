@@ -10,11 +10,11 @@
 	display: grid;
 	grid-gap: 1rem;
 	grid-template-columns: [main-start vests-start control-start] 1fr 1fr 1fr 1fr 1fr 1fr [vests-end settings-start mode-start control-end games-start] 1fr 1fr [teams-start] 1fr [mode-end games-end print-start music-start] 1fr [teams-end] 1fr 1fr [music-end main-end print-end settings-end];
-	grid-template-rows: [main-start control-start games-start print-start] auto [control-end games-end print-end vestcontrol-start mode-start music-start] auto [vestcontrol-end mode-end music-end game-start variations-start] auto [variations-end random-start] auto [random-end teams-start] auto [teams-end main-end game-end];
+	grid-template-rows: [main-start control-start games-start print-start] auto [control-end games-end print-end vestcontrol-start mode-start music-start] auto [vestcontrol-end mode-end music-end game-start variations-start] auto [variations-end random-start] auto [random-end teams-start] auto [teams-end] auto [main-end game-end];
 
 	@include media-breakpoint-down(xl) {
 		grid-template-columns: [main-start vests-start control-start] 1fr 1fr 1fr 1fr 1fr 1fr [control-end games-start] 1fr 1fr [vests-end mode-start settings-start teams-start music-start] 1fr [games-end print-start] 1fr 1fr 1fr [mode-end teams-end music-end main-end print-end settings-end];
-		grid-template-rows: [main-start control-start games-start print-start] auto [control-end games-end print-end vestcontrol-start music-start] auto [music-end vestcontrol-end game-start mode-start] auto [mode-end variations-start] auto [variations-end random-start] auto [random-end teams-start] auto [teams-end main-end game-end];
+		grid-template-rows: [main-start control-start games-start print-start] auto [control-end games-end print-end vestcontrol-start music-start] auto [music-end vestcontrol-end game-start mode-start] auto [mode-end variations-start] auto [variations-end random-start] auto [random-end teams-start] auto [teams-end] auto [main-end game-end];
 	}
 
 	@include media-breakpoint-down(lg) {

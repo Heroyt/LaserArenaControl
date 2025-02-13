@@ -11,10 +11,11 @@ import {initPrintButtons} from '../../components/resultsPrinting';
 import {lang} from '../../includes/frameworkFunctions';
 import {validateForm} from './validate';
 import {triggerNotificationError} from '../../includes/notifications';
+import {System} from '../../interfaces/system';
 
 declare global {
 	const gameData: GameData;
-	const system: string;
+	const system: System;
 	const vestIcon: string;
 }
 
@@ -190,6 +191,16 @@ export default function initNewGamePage() {
 
 	initPrintButtons();
 
+	const systemSelect = document.getElementById('systems-select') as HTMLSelectElement;
+	if (systemSelect) {
+		systemSelect.addEventListener('change', () => {
+			const systemId = parseInt(systemSelect.value);
+			const params = new URLSearchParams(window.location.search);
+			params.append('system', systemId.toString());
+			window.location.href = window.location.href.split('?')[0] + '?' + params.toString();
+		});
+	}
+
 	function loadLastGames() {
 		getLastGames()
 			.then(response => {
@@ -241,7 +252,7 @@ export default function initNewGamePage() {
 
 	function loadGame(data: FormData, callback: null | (() => void) = null): void {
 		startLoading();
-		sendLoadGame(system, data)
+		sendLoadGame(system.id, data)
 			.then(response => {
 				const mode = handleLoad(response)
 
@@ -257,7 +268,7 @@ export default function initNewGamePage() {
 
 	function loadStartGame(data: FormData, callback: null | (() => void) = null): void {
 		startLoading();
-		sendLoadGame(system, data)
+		sendLoadGame(system.id, data)
 			.then(response => {
 				const mode = handleLoad(response)
 

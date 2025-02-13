@@ -76,4 +76,14 @@ export default function initNewGamePage() {
 			form.dispatchEvent(new Event('update'));
 		});
 	}
+
+	const systemSelect = document.getElementById('systems-select') as HTMLSelectElement;
+	if (systemSelect) {
+		systemSelect.addEventListener('change', () => {
+			const systemId = parseInt(systemSelect.value);
+			const params = new URLSearchParams(window.location.search);
+			params.append('system', systemId.toString());
+			window.location.href = window.location.href.split('?')[0] + '?' + params.toString();
+		});
+	}
 }

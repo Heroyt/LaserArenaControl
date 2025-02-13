@@ -13,6 +13,7 @@ use App\GameModels\Vest;
 use App\Models\DataObjects\Theme;
 use App\Models\GameGroup;
 use App\Models\PriceGroup;
+use App\Models\System;
 use App\Services\FeatureConfig;
 use Dibi\Exception;
 use JsonException;
@@ -63,6 +64,7 @@ class Settings extends Controller
      */
     public function vests() : ResponseInterface {
         $vests = Vest::getAll();
+        $this->params['systems'] = System::getAll();
         $this->params['vests'] = [];
         $this->params['vestsGrid'] = [];
 
@@ -75,24 +77,27 @@ class Settings extends Controller
         $this->params['rowCounts'] = [];
 
         foreach ($vests as $vest) {
-            $this->params['columnCounts'][$vest->system] ??= (int) Info::get($system.'_column_count', 15);
-            $this->params['rowCounts'][$vest->system] ??= (int) Info::get($system.'_row_count', 15);
+            $this->params['columnCounts'][$vest->system->id] ??= $vest->system->columnCount;
+            $this->params['rowCounts'][$vest->system->id] ??= $vest->system->rowCount;
 
-            $this->params['vests'][$vest->system][] = $vest;
+            $this->params['vests'][$vest->system->id][] = $vest;
             $row = max($vest->gridRow, 1);
             $col = max($vest->gridCol, 1);
 
-            $this->params['vestsGrid'][$vest->system][$row] ??= [];
+            $this->params['vestsGrid'][$vest->system->id][$row] ??= [];
 
             // If duplicate, find first available column
-            while (isset($this->params['vestsGrid'][$vest->system][$row][$col])) {
+            while (isset($this->params['vestsGrid'][$vest->system->id][$row][$col])) {
                 $col++;
             }
 
-            $this->params['columnCounts'][$vest->system] = max($this->params['columnCounts'][$vest->system], $col);
-            $this->params['rowCounts'][$vest->system] = max($this->params['rowCounts'][$vest->system], $row);
+            $this->params['columnCounts'][$vest->system->id] = max(
+              $this->params['columnCounts'][$vest->system->id],
+              $col
+            );
+            $this->params['rowCounts'][$vest->system->id] = max($this->params['rowCounts'][$vest->system->id], $row);
 
-            $this->params['vestsGrid'][$vest->system][$row][$col] = $vest;
+            $this->params['vestsGrid'][$vest->system->id][$row][$col] = $vest;
         }
         return $this->view('pages/settings/vests');
     }
@@ -107,11 +112,21 @@ class Settings extends Controller
      */
     public function saveVests(Request $request) : ResponseInterface {
         try {
-            foreach ($request->getPost('columns', []) as $system => $count) {
-                Info::set($system.'_column_count', (int) $count);
+            $systems = System::getAll();
+            foreach ($request->getPost('columns', []) as $systemId => $count) {
+                if (!isset($systems[(int) $systemId])) {
+                    throw new ModelNotFoundException('System not found');
+                }
+                $systems[(int) $systemId]->columnCount = (int) $count;
             }
-            foreach ($request->getPost('rows', []) as $system => $count) {
-                Info::set($system.'_row_count', (int) $count);
+            foreach ($request->getPost('rows', []) as $systemId => $count) {
+                if (!isset($systems[(int) $systemId])) {
+                    throw new ModelNotFoundException('System not found');
+                }
+                $systems[(int) $systemId]->rowCount = (int) $count;
+            }
+            foreach ($systems as $system) {
+                $system->save();
             }
             foreach ($request->getPost('vest', []) as $id => $info) {
                 $vest = Vest::get($id);

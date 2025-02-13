@@ -24,16 +24,20 @@ trait MusicLoading
     /**
      * @param  non-empty-string  $system
      */
-    protected function loadOrPlanMusic(int $musicId, string $system = 'evo5') : void {
+    protected function loadOrPlanMusic(int $musicId) : void {
+        $musicFile = trailingSlashIt($this->system->musicDir).$this->system->type->value.'.mp3';
+        if (!file_exists($musicFile)) {
+            $musicFile = $this::MUSIC_FILE;
+        }
         // Always eager-load armed music
-        $this->loadArmedMusic($musicId, $this::MUSIC_FILE, $system);
+        $this->loadArmedMusic($musicId, $musicFile, $this->system->type->value);
 
         // Lazy-load music file in the background.
         // This is useful if the music mode should be copied to some network-attached directory, which could take a few seconds.
         if ($this->isLoadAsync()) {
             $this->getLogger()->debug('Loading music ('.$musicId.') - ASYNC');
             try {
-                $this->planMusicLoad($musicId, $system);
+                $this->planMusicLoad($musicId);
                 return;
             } catch (JobsException $e) {
                 $this->getLogger()->exception($e);
@@ -43,7 +47,7 @@ trait MusicLoading
         $this->getLogger()->debug('Loading music ('.$musicId.') - Direct');
 
         // Load music file right now
-        $this->loadMusic($musicId, $this::MUSIC_FILE, $system);
+        $this->loadMusic($musicId, $musicFile, $this->system->type->value);
     }
 
     protected function isLoadAsync() : bool {
@@ -73,10 +77,12 @@ trait MusicLoading
      * @return void
      * @throws JobsException
      */
-    protected function planMusicLoad(int $musicId, string $system = 'evo5') : void {
+    protected function planMusicLoad(int $musicId) : void {
         $this->getTaskProducer()->push(
           MusicLoadTask::class,
-          new MusicLoadPayload($musicId, $this::MUSIC_FILE, $this::DI_NAME, $system, microtime(true)),
+          new MusicLoadPayload(
+            $musicId, $this::MUSIC_FILE, $this::DI_NAME, $this->system->type->value, microtime(true)
+          ),
           new Options(priority: 1) // Priority job should be done as soon as possible
         );
     }

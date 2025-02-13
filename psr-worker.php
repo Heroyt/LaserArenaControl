@@ -52,7 +52,7 @@ if (
     Debugger::$logDirectory = LOG_DIR;
 }
 
-switch ($env->mode) {
+switch ($env->getMode()) {
     case Mode::MODE_JOBS:
         $consumer = new Consumer();
         /** @var Spiral\RoadRunner\Jobs\Task\ReceivedTaskInterface $task */
@@ -169,6 +169,7 @@ switch ($env->mode) {
                     $psr7->respond(
                         $app->run()
                           ->withAddedHeader('Content-Language', $app->translations->getLang())
+                          ->withAddedHeader('Set-Cookie', $session->getCookieHeader())
                     );
                     $session->close();
                     $app->translations->updateTranslations();

@@ -70,6 +70,11 @@ services:
 	cache.journal: Lsr\Caching\Redis\RedisJournal(@redis)
 	cache.storage: Lsr\Caching\Redis\RedisStorage(@redis, '', @cache.journal)
 
+	session:
+		create: App\Core\RedisSession(@redis)
+		setup:
+			- init()
+
 	templating.latte.lac:
 		create: App\Latte\LacExtension
 		tags:

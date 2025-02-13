@@ -48,7 +48,7 @@
     "ext-pcntl": "*",
     "lsr/interfaces": "^0.3",
     "lsr/helpers": "^0.3",
-    "lsr/core": "^0.3.x-dev",
+    "lsr/core": "^0.3",
     "lsr/routing": "^0.3",
     "lsr/logging": "^0.3",
     "lsr/request": "^0.3",

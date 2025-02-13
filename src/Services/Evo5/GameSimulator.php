@@ -4,7 +4,7 @@ namespace App\Services\Evo5;
 
 use App\Core\Info;
 use App\Exceptions\GameModeNotFoundException;
-use App\Exceptions\InsuficientRegressionDataException;
+use App\Exceptions\InsufficientRegressionDataException;
 use App\GameModels\Factory\GameModeFactory;
 use App\GameModels\Tools\Lasermaxx\RegressionStatCalculator;
 use App\Services\RegressionCalculator;
@@ -32,7 +32,7 @@ class GameSimulator
 
     /**
      * @throws GameModeNotFoundException
-     * @throws InsuficientRegressionDataException
+     * @throws InsufficientRegressionDataException
      * @throws TemplateDoesNotExistException
      */
     public function simulate() : void {

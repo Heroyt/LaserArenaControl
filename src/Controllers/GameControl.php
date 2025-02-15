@@ -47,7 +47,7 @@ class GameControl extends Controller
         return $this->respond(new SuccessResponse(values: ['status' => $response]));
     }
 
-    public function loadSafe(?System $system = null, Request $request) : ResponseInterface {
+    public function loadSafe(Request $request, ?System $system = null) : ResponseInterface {
         $ip = $this->getSystemIp($system);
         if ($ip === null) {
             return $this->respond(new ErrorResponse('LaserMaxx IP is not defined'), 500);
@@ -81,7 +81,7 @@ class GameControl extends Controller
         return $this->respond(new SuccessResponse());
     }
 
-    public function load(?System $system = null, Request $request) : ResponseInterface {
+    public function load(Request $request, ?System $system = null) : ResponseInterface {
         $ip = $this->getSystemIp($system);
         if ($ip === null) {
             return $this->respond(new ErrorResponse('LaserMaxx IP is not defined'), 500);
@@ -100,7 +100,7 @@ class GameControl extends Controller
         return $this->respond(new SuccessResponse());
     }
 
-    public function startSafe(?System $system = null, Request $request) : ResponseInterface {
+    public function startSafe(Request $request, ?System $system = null) : ResponseInterface {
         $ip = $this->getSystemIp($system);
         if ($ip === null) {
             return $this->respond(new ErrorResponse('LaserMaxx IP is not defined'), 500);

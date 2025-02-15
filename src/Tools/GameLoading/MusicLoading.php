@@ -72,10 +72,14 @@ trait MusicLoading
      * @throws JobsException
      */
     protected function planMusicLoad(int $musicId) : void {
+        $musicFile = trailingSlashIt($this->system->musicDir).$this->system->type->value.'.mp3';
+        if (!file_exists($this->system->musicDir) || !is_dir($this->system->musicDir)) {
+            $musicFile = $this::MUSIC_FILE;
+        }
         $this->getTaskProducer()->push(
           MusicLoadTask::class,
           new MusicLoadPayload(
-            $musicId, $this::MUSIC_FILE, $this::DI_NAME, $this->system->type->value, microtime(true)
+            $musicId, $musicFile, $this::DI_NAME, $this->system->type->value, microtime(true)
           ),
           new Options(priority: 1) // Priority job should be done as soon as possible
         );

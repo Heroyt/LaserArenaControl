@@ -19,7 +19,7 @@ class ConnectionTimeoutException extends Exception
      *
      * @since 5.1.0
      */
-    public function __construct($message = "", $code = 0, public int $timeout = 60, Throwable $previous = null) {
+    public function __construct($message = "", $code = 0, public int $timeout = 60, ?Throwable $previous = null) {
         parent::__construct($message, $code, $previous);
     }
 }

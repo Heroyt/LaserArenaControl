@@ -33,7 +33,7 @@ final readonly class ResultsImportJob implements Job
         $this->metrics->add('cron_job_started', 1, ['results_import']);
 
         $lock->refresh(30.0);
-        foreach (System::getActive() as $system) {
+        foreach (System::getActive(false) as $system) {
             $resultsDir = $system->resultsDir;
             if (!file_exists($resultsDir)) {
                 continue;
@@ -41,7 +41,7 @@ final readonly class ResultsImportJob implements Job
 
             $this->metrics->add('import_planned', 1, ['cron']);
             try {
-                $response = $this->importService->import(DEFAULT_RESULTS_DIR);
+                $response = $this->importService->import($resultsDir);
             } catch (Throwable $e) {
                 $this->logger->exception($e);
                 $this->metrics->add('cron_job_error', 1, ['results_import']);

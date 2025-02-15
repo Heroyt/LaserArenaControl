@@ -61,12 +61,13 @@ jobs:
 
       - name: Build the Docker image
         id: build
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: .
           file: ./docker/Dockerfile
-          build-args: |
+          secrets: |
             RT_TOKEN=${{ github.token }}
+          build-args: |
             BUILD_TIME=$(date +%FT%T%z)
           platforms: ${{ matrix.platform }}
           labels: ${{ steps.meta.outputs.labels }}

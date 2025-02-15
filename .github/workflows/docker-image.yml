@@ -7,7 +7,7 @@ on:
       - docker/Dockerfile
       - docker/core/*
       - docker/velox_rr_2024.toml
-    branches: [ stable ]
+    branches: [ stable, staging ]
     tags:
       - '*'
   pull_request:
@@ -16,7 +16,7 @@ on:
       - docker/Dockerfile
       - docker/core/*
       - docker/velox_rr_2024.toml
-    branches: [ stable ]
+    branches: [ stable, staging ]
 
 env:
   REGISTRY_IMAGE: heroyt/laser-arena-control

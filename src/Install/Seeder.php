@@ -28,6 +28,7 @@ use App\Gate\Settings\ResultsSettings;
 use App\Gate\Settings\TimerSettings;
 use App\Gate\Settings\VestGunAfterGameSettings;
 use App\Gate\Settings\VestsSettings;
+use App\Models\System;
 use Dibi\Exception;
 use Lsr\Db\DB;
 
@@ -914,6 +915,21 @@ class Seeder implements InstallInterface
             $musicScreen->triggerValue = lang('Hudba');
             $musicScreen->setSettings(new MusicModeSettings());
             $musicScreen->screenSerialized = MusicModesScreen::getDiKey();
+
+            // SYSTEMS
+            if (!System::exists(1)) {
+                DB::insertIgnore(
+                  System::TABLE,
+                  [
+                    'id_system' => 1,
+                    'name'      => 'Evo5',
+                    'type'      => 'evo5',
+                    'default'   => true,
+                    'active'    => true,
+                  ]
+                );
+                DB::update(Vest::TABLE, ['id_system' => 1], ['id_system IS NULL']);
+            }
 
 
             if (!$defaultGate->save()) {

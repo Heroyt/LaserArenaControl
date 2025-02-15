@@ -131,6 +131,7 @@ readonly class PlayerProvider implements PlayerProviderInterface
             $connection = new PlayerConnection();
             $connection->type = $connectionData->type;
             $connection->identifier = $connectionData->identifier;
+            /** @phpstan-ignore offsetAssign.dimType */
             $player->connections[] = $connection;
         }
         if (isset($data->codeHistory)) {

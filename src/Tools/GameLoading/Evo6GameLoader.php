@@ -36,7 +36,7 @@ class Evo6GameLoader extends LasermaxxGameLoader
 
         // Set up a correct music file
         if (isset($loadData->meta['music'])) {
-            $this->loadOrPlanMusic((int) $loadData->meta['music'], 'evo6');
+            $this->loadOrPlanMusic((int) $loadData->meta['music']);
         }
 
         return $loadData->meta;

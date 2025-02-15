@@ -464,8 +464,8 @@ class LigaApi
         $vestsAll = Vest::getAll();
         $vests = [];
         foreach ($vestsAll as $vest) {
-            $vests[$vest->system] ??= [];
-            $vests[$vest->system][$vest->vestNum] = $vest;
+            $vests[$vest->system->type->value] ??= [];
+            $vests[$vest->system->type->value][$vest->vestNum] = $vest;
         }
 
         // Get updates from laser liga

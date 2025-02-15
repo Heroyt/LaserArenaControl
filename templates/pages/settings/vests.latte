@@ -80,9 +80,9 @@
 	{varType App\GameModels\Vest[] $systemVests}
 	<div class="vests d-flex justify-content-evenly flex-wrap align-items-center w-100">
 		<div n:foreach="$systemVests as $vest" class="vest p-4 shadow rounded m-4 text-white {switch $vest->status}
-					{case App\GameModels\Game\Enums\VestStatus::OK}bg-success
-					{case App\GameModels\Game\Enums\VestStatus::PLAYABLE}bg-warning
-					{case App\GameModels\Game\Enums\VestStatus::BROKEN}bg-danger
+					{case Lsr\LaserLiga\Enums\VestStatus::OK}bg-success
+					{case Lsr\LaserLiga\Enums\VestStatus::PLAYABLE}bg-warning
+					{case Lsr\LaserLiga\Enums\VestStatus::BROKEN}bg-danger
 		         {/switch}">
 			{svgIcon 'Vesta', '', '3rem'}
 			<input type="number" name="vest[{$vest->id}][vest_num]" class="form-control" value="{$vest->vestNum}">
@@ -91,19 +91,19 @@
 					<input type="radio" class="btn-check" name="vest[{$vest->id}][status]"
 						   id="vest-status-{$vest->id}-ok"
 						   autocomplete="off" value="ok"
-						   {if $vest->status === App\GameModels\Game\Enums\VestStatus::OK}checked{/if}>
+						   {if $vest->status === Lsr\LaserLiga\Enums\VestStatus::OK}checked{/if}>
 					<label class="btn btn-outline-success"
                            for="vest-status-{$vest->id}-ok">{_'V pořádku', context: 'settings.vests.status'}</label>
 					<input type="radio" class="btn-check" name="vest[{$vest->id}][status]"
 						   id="vest-status-{$vest->id}-playable"
 						   autocomplete="off" value="playable"
-						   {if $vest->status === App\GameModels\Game\Enums\VestStatus::PLAYABLE}checked{/if}>
+						   {if $vest->status === Lsr\LaserLiga\Enums\VestStatus::PLAYABLE}checked{/if}>
 					<label class="btn btn-outline-warning"
                            for="vest-status-{$vest->id}-playable">{_'Hratelná', context: 'settings.vests.status'}</label>
 					<input type="radio" class="btn-check" name="vest[{$vest->id}][status]"
 						   id="vest-status-{$vest->id}-broken"
 						   autocomplete="off" value="broken"
-						   {if $vest->status === App\GameModels\Game\Enums\VestStatus::BROKEN}checked{/if}>
+						   {if $vest->status === Lsr\LaserLiga\Enums\VestStatus::BROKEN}checked{/if}>
 					<label class="btn btn-outline-danger"
                            for="vest-status-{$vest->id}-broken">{_'Nefunkční', context: 'settings.vests.status'}</label>
 				</div>

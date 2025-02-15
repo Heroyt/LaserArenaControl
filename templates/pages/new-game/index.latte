@@ -397,9 +397,9 @@
                 {/switch}
                 {$vest->vestNum}
             </div>
-            {if $vest->status === App\GameModels\Game\Enums\VestStatus::PLAYABLE}
+			{if $vest->status === Lsr\LaserLiga\Enums\VestStatus::PLAYABLE}
                 <div class="{faSolid('circle-exclamation')} text-warning" data-toggle="tooltip" role="tooltip" title="{$vest->info}"></div>
-            {elseif $vest->status === App\GameModels\Game\Enums\VestStatus::BROKEN}
+			{elseif $vest->status === Lsr\LaserLiga\Enums\VestStatus::BROKEN}
                 <div class="{faSolid('circle-exclamation')} text-danger" data-toggle="tooltip" role="tooltip" title="{$vest->info}"></div>
             {/if}
         </div>

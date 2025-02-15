@@ -21,9 +21,6 @@ trait MusicLoading
     private Logger $logger;
     private bool $loadAsync;
 
-    /**
-     * @param  non-empty-string  $system
-     */
     protected function loadOrPlanMusic(int $musicId) : void {
         $musicFile = trailingSlashIt($this->system->musicDir).$this->system->type->value.'.mp3';
         if (!file_exists($musicFile)) {
@@ -72,9 +69,6 @@ trait MusicLoading
     }
 
     /**
-     * @param  int  $musicId
-     * @param  string  $system
-     * @return void
      * @throws JobsException
      */
     protected function planMusicLoad(int $musicId) : void {

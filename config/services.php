@@ -15,4 +15,9 @@ $services = [
 $services[] = PRODUCTION ? ROOT . 'config/services.neon' : ROOT . 'config/servicesDebug.neon';
 
 $modules = glob(ROOT . 'modules/*/config/services.neon');
+
+if (file_exists(ROOT.'private/config.neon')) {
+    $services[] = ROOT.'private/config.neon';
+}
+
 return $modules === false ? $services : array_merge($services, $modules);

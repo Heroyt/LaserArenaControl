@@ -23,7 +23,7 @@ trait MusicLoading
 
     protected function loadOrPlanMusic(int $musicId) : void {
         $musicFile = trailingSlashIt($this->system->musicDir).$this->system->type->value.'.mp3';
-        if (!file_exists($musicFile)) {
+        if (!file_exists($this->system->musicDir) || !is_dir($this->system->musicDir)) {
             $musicFile = $this::MUSIC_FILE;
         }
         // Always eager-load armed music

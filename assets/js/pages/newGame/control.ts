@@ -65,7 +65,7 @@ export default class Control {
         this.getCurrentStatus()
             .then(response => {
                 this.statusGettingInProgress = false;
-                this.setCurrentStatus(response.status);
+	            this.setCurrentStatus(response);
             })
             .catch(e => {
 		            triggerNotificationError(e);
@@ -73,8 +73,9 @@ export default class Control {
             })
     }
 
-    getCurrentStatus() {
-	    return getCurrentControlStatus(system.id);
+	async getCurrentStatus() {
+		const response = await getCurrentControlStatus(system.id);
+		return response.values.status;
     }
 
     setCurrentStatus(status: string): void {
@@ -111,8 +112,8 @@ export default class Control {
         startLoading(true);
 	    controlLoadSafe(mode, system.id)
             .then(response => {
-                if (response.status !== 'ok') {
-                    this.setCurrentStatus(response.status);
+	            if ('status' in response.values) {
+		            this.setCurrentStatus(response.values.status);
                     stopLoading(false, true);
                     return;
                 }
@@ -138,14 +139,14 @@ export default class Control {
         startLoading(true);
         this.getCurrentStatus()
             .then(response => {
-                if (response.status) {
-                    switch (response.status) {
+	            if (response) {
+		            switch (response) {
                         case 'STANDBY':
                             this._currentStatus = GameStatus.STANDBY;
                             break;
                         case 'ARMED':
                         case 'PLAYING':
-                            this._currentStatus = response.status === 'ARMED' ? GameStatus.ARMED : GameStatus.PLAYING;
+	                        this._currentStatus = response === 'ARMED' ? GameStatus.ARMED : GameStatus.PLAYING;
 	                        controlStop(system.id)
                                 .then(() => {
                                     stopLoading(true, true);
@@ -173,8 +174,8 @@ export default class Control {
         this.getCurrentStatus()
             .then(response => {
                 stopLoading(true, true);
-                if (response.status) {
-                    switch (response.status) {
+	            if (response) {
+		            switch (response) {
                         case 'STANDBY':
                             this._currentStatus = GameStatus.STANDBY;
                             loadStartGame(data, null);
@@ -207,8 +208,8 @@ export default class Control {
         startLoading(true);
 	    controlStartSafe(null, system.id)
             .then(response => {
-                if (response.status !== 'ok') {
-                    this.setCurrentStatus(response.status);
+	            if ('status' in response.values) {
+		            this.setCurrentStatus(response.values.status);
                     stopLoading(false);
                     return;
                 }
@@ -231,8 +232,8 @@ export default class Control {
         startLoading(true);
 	    controlStartSafe(mode, system.id)
             .then(response => {
-                if (response.status !== 'ok') {
-                    this.setCurrentStatus(response.status);
+	            if ('status' in response.values) {
+		            this.setCurrentStatus(response.values.status);
                     stopLoading(false, true);
                     return;
                 }

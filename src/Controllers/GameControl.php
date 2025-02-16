@@ -71,7 +71,7 @@ class GameControl extends Controller
             );
         }
         if ($response === 'PLAYING' || $response === 'DOWNLOAD') {
-            return $this->respond(['status' => $response]);
+            return $this->respond(new SuccessResponse(values: ['status' => $response]));
         }
         $response = LMXController::load($ip, $modeName);
         $this->metrics->set('control_time', (microtime(true) - $start) * 1000, ['loadSafe']);
@@ -120,7 +120,7 @@ class GameControl extends Controller
             );
         }
         if ($response === 'PLAYING' || $response === 'DOWNLOAD') {
-            return $this->respond(['status' => $response]);
+            return $this->respond(new SuccessResponse(values: ['status' => $response]));
         }
         if ($response === 'STANDBY') {
             $modeName = $request->getPost('mode', '');

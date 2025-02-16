@@ -19,6 +19,7 @@ use App\GameModels\Game\Player;
 use App\Services\LaserLiga\LigaApi;
 use App\Services\LaserLiga\PlayerProvider;
 use Dibi\Exception;
+use Lsr\Caching\Cache;
 use Lsr\Core\Config;
 use Lsr\Core\Requests\Dto\ErrorResponse;
 use Lsr\Core\Requests\Dto\SuccessResponse;
@@ -58,6 +59,7 @@ class ImportService
       private readonly FeatureConfig  $featureConfig,
       private readonly Metrics        $metrics,
       private readonly PlayerProvider $playerProvider,
+      private readonly Cache $cache,
     ) {
         $this->gameLoadedTime = (int) ($config->getConfig('ENV')['GAME_LOADED_TIME'] ?? 300);
         $this->gameStartedTime = (int) ($config->getConfig('ENV')['GAME_STARTED_TIME'] ?? 1800);
@@ -197,6 +199,7 @@ class ImportService
                 throw new ResultsParseException('Failed saving game into DB.');
             }
             $game::clearModelCache();
+            $this->cache->clean([$this->cache::Tags => ['games/'.$game->start->format('Y-m-d')]]);
         } catch (Exception $e) {
             return new ErrorResponse('Error while parsing game file.', type: ErrorType::INTERNAL, exception: $e);
         }
@@ -392,6 +395,8 @@ class ImportService
                             );
                             continue;
                         }
+                        $game::clearModelCache();
+                        $this->cache->clean([$this->cache::Tags => ['games/'.$game->start->format('Y-m-d')]]);
 
                         // Refresh the started-game info to stop the game timer
                         /** @var Game|null $startedGame */

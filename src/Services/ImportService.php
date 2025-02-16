@@ -196,6 +196,7 @@ class ImportService
             if (!$game->save()) {
                 throw new ResultsParseException('Failed saving game into DB.');
             }
+            $game::clearModelCache();
         } catch (Exception $e) {
             return new ErrorResponse('Error while parsing game file.', type: ErrorType::INTERNAL, exception: $e);
         }

@@ -25,6 +25,7 @@ use Throwable;
 class Gate
 {
     public const string MANUAL_RESULTS_GAME_META = 'manual-gate';
+    public const int RESULTS_TIME = 120; // 2 minutes
 
     private ?int $tmpResultsTime = null;
 
@@ -164,8 +165,8 @@ class Gate
 
         $query = $system === 'all' ? GameFactory::queryGames(true) : GameFactory::queryGamesSystem($system, true);
         /** @var null|Row $row */
-        $row = $query->where('end > %dt', $maxTime)->orderBy('end')->desc()->fetch();
-        if (isset($row) && $row->end?->getTimestamp() > $maxTime) {
+        $row = $query->where('end > %dt', ($maxTime - self::RESULTS_TIME))->orderBy('end')->desc()->fetch();
+        if (isset($row) && ($row->end?->getTimestamp() + self::RESULTS_TIME) > $maxTime) {
             $maxGame = GameFactory::getById($row->id_game, ['system' => $row->system]);
         }
 

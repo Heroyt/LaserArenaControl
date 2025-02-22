@@ -57,6 +57,7 @@ services:
 				- 'highlights'
 				- 'tournament'
 
+
 	version: App\Services\VersionService
 	regression: App\Services\RegressionCalculator
 

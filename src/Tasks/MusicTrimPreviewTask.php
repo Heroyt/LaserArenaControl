@@ -4,33 +4,41 @@ namespace App\Tasks;
 
 use App\Models\MusicMode;
 use App\Services\FeatureConfig;
-use App\Services\TaskProducer;
+use App\Tasks\Payloads\MusicSyncPayload;
 use App\Tasks\Payloads\MusicTrimPreviewPayload;
 use Lsr\ObjectValidation\Exceptions\ValidationException;
 use Lsr\Orm\Exceptions\ModelNotFoundException;
+use Lsr\Roadrunner\Tasks\TaskPayloadInterface;
+use Lsr\Roadrunner\Tasks\TaskProducer;
 use Spiral\RoadRunner\Jobs\Exception\JobsException;
 use Spiral\RoadRunner\Jobs\Options;
 use Spiral\RoadRunner\Jobs\Task\ReceivedTaskInterface;
 
-class MusicTrimPreviewTask implements TaskDispatcherInterface
+readonly class MusicTrimPreviewTask implements \Lsr\Roadrunner\Tasks\TaskDispatcherInterface
 {
     public function __construct(
-      private readonly FeatureConfig $config,
-      private readonly TaskProducer  $taskProducer,
+      private FeatureConfig $config,
+      private TaskProducer  $taskProducer,
     ) {}
 
     public static function getDiName() : string {
         return 'task.musicTrimPreview';
     }
 
-    public function process(ReceivedTaskInterface $task) : void {
-        /** @var MusicTrimPreviewPayload $payload */
-        $payload = igbinary_unserialize($task->getPayload());
+    public function process(ReceivedTaskInterface $task, ?TaskPayloadInterface $payload = null) : void {
+        if ($payload === null) {
+            $task->nack('Missing payload');
+            return;
+        }
+        if (!($payload instanceof MusicTrimPreviewPayload)) {
+            $task->nack('Invalid payload');
+            return;
+        }
 
         try {
             $music = MusicMode::get($payload->musicModeId);
         } catch (ModelNotFoundException | ValidationException $e) {
-            $task->fail($e);
+            $task->nack($e);
             return;
         }
 
@@ -38,11 +46,15 @@ class MusicTrimPreviewTask implements TaskDispatcherInterface
 
         if ($this->config->isFeatureEnabled('liga')) {
             try {
-                $this->taskProducer->push(MusicSyncTask::class, $music, new Options(priority: 99));
+                $this->taskProducer->push(
+                  MusicSyncTask::class,
+                  new MusicSyncPayload($music),
+                  new Options(priority: 99)
+                );
             } catch (JobsException) {
             }
         }
 
-        $task->complete();
+        $task->ack();
     }
 }

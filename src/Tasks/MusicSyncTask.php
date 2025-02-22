@@ -4,28 +4,30 @@ namespace App\Tasks;
 
 use App\Services\LaserLiga\LigaApi;
 use Lsr\ObjectValidation\Exceptions\ValidationException;
+use Lsr\Roadrunner\Tasks\TaskDispatcherInterface;
+use Lsr\Roadrunner\Tasks\TaskPayloadInterface;
 use Spiral\RoadRunner\Jobs\Task\ReceivedTaskInterface;
 
-class MusicSyncTask implements TaskDispatcherInterface
+readonly class MusicSyncTask implements TaskDispatcherInterface
 {
     public function __construct(
-      private readonly LigaApi $api,
+      private LigaApi $api,
     ) {}
 
     public static function getDiName() : string {
         return 'task.musicSync';
     }
 
-    public function process(ReceivedTaskInterface $task) : void {
+    public function process(ReceivedTaskInterface $task, ?TaskPayloadInterface $payload = null) : void {
         try {
             if ($this->api->syncMusicModes()) {
-                $task->complete();
+                $task->ack();
                 return;
             }
         } catch (ValidationException $e) {
-            $task->fail($e);
+            $task->nack($e);
             return;
         }
-        $task->fail('Error');
+        $task->nack('Error');
     }
 }

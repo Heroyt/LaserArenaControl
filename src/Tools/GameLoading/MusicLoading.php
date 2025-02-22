@@ -3,11 +3,11 @@
 namespace App\Tools\GameLoading;
 
 use App\Core\App;
-use App\Services\TaskProducer;
 use App\Tasks\MusicLoadTask;
 use App\Tasks\Payloads\MusicLoadPayload;
 use Lsr\Core\Config;
 use Lsr\Logging\Logger;
+use Lsr\Roadrunner\Tasks\TaskProducer;
 use Spiral\RoadRunner\Jobs\Exception\JobsException;
 use Spiral\RoadRunner\Jobs\Options;
 

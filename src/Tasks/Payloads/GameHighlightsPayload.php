@@ -2,7 +2,9 @@
 
 namespace App\Tasks\Payloads;
 
-readonly class GameHighlightsPayload
+use Lsr\Roadrunner\Tasks\TaskPayloadInterface;
+
+readonly class GameHighlightsPayload implements TaskPayloadInterface
 {
     public function __construct(
       public ?string $code = null,

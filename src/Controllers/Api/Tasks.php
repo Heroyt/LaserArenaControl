@@ -3,7 +3,6 @@
 namespace App\Controllers\Api;
 
 use App\GameModels\Factory\GameFactory;
-use App\Services\TaskProducer;
 use App\Tasks\GameHighlightsTask;
 use App\Tasks\GamePrecacheTask;
 use App\Tasks\Payloads\GameHighlightsPayload;
@@ -12,6 +11,7 @@ use Lsr\Core\Controllers\ApiController;
 use Lsr\Core\Requests\Dto\ErrorResponse;
 use Lsr\Core\Requests\Enums\ErrorType;
 use Lsr\Core\Requests\Request;
+use Lsr\Roadrunner\Tasks\TaskProducer;
 use OpenApi\Attributes as OA;
 use Psr\Http\Message\ResponseInterface;
 use Spiral\RoadRunner\Jobs\Exception\JobsException;

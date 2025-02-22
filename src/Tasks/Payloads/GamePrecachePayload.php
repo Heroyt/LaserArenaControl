@@ -2,7 +2,9 @@
 
 namespace App\Tasks\Payloads;
 
-readonly class GamePrecachePayload
+use Lsr\Roadrunner\Tasks\TaskPayloadInterface;
+
+readonly class GamePrecachePayload implements TaskPayloadInterface
 {
     public function __construct(
       public ?string $code = null,

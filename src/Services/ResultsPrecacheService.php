@@ -14,6 +14,7 @@ use App\Tasks\GamePrecacheTask;
 use App\Tasks\Payloads\GameHighlightsPayload;
 use App\Tasks\Payloads\GamePrecachePayload;
 use Lsr\Exceptions\TemplateDoesNotExistException;
+use Lsr\Roadrunner\Tasks\TaskProducer;
 use Redis;
 use Spiral\RoadRunner\Jobs\Exception\JobsException;
 use Throwable;

@@ -17,6 +17,7 @@ use Lsr\Core\Controllers\Controller;
 use Lsr\Core\Requests\Dto\ErrorResponse;
 use Lsr\Core\Requests\Enums\ErrorType;
 use Lsr\Core\Requests\Request;
+use Lsr\Roadrunner\ErrorHandlers\HttpErrorHandler;
 use Psr\Http\Message\ResponseInterface;
 
 /**
@@ -30,7 +31,7 @@ use Psr\Http\Message\ResponseInterface;
  * @version 1.0
  * @since   1.0
  */
-class E403 extends Controller
+class E403 extends Controller implements HttpErrorHandler
 {
     /**
      * @var string $title Page name
@@ -41,18 +42,24 @@ class E403 extends Controller
      */
     protected string $description = 'Access denied';
 
-
-    public function show(Request $request) : ResponseInterface {
+    public function showError(Request $request, ?\Throwable $error = null) : ResponseInterface {
         if (str_contains($request->getHeaderLine('Accept'), 'application/json')) {
             return $this->respond(
               new ErrorResponse(
-                      'Unauthorized',
-                type: ErrorType::ACCESS,
+                           'Access denied',
+                type     : ErrorType::ACCESS,
+                detail   : $error?->getMessage(),
+                exception: $error
               ),
               403
             );
         }
-        return $this->view('errors/E403')
-                    ->withStatus(403);
+        if (str_contains($request->getHeaderLine('Accept'), 'text/html')) {
+            $this->params['exception'] = $error;
+            return $this->view('errors/E403')
+                        ->withStatus(403);
+        }
+
+        return $this->respond('Access denied - '.$error->getMessage(), 403, ['Content-Type' => 'text/plain']);
     }
 }

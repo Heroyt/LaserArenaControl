@@ -43,6 +43,7 @@ class E403 extends Controller implements HttpErrorHandler
     protected string $description = 'Access denied';
 
     public function showError(Request $request, ?\Throwable $error = null) : ResponseInterface {
+        $this->init($request);
         if (str_contains($request->getHeaderLine('Accept'), 'application/json')) {
             return $this->respond(
               new ErrorResponse(

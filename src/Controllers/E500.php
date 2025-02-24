@@ -44,6 +44,7 @@ class E500 extends Controller implements HttpErrorHandler
     protected string $description = 'Page not found';
 
     public function showError(Request $request, ?Throwable $error = null) : ResponseInterface {
+        $this->init($request);
         if (str_contains($request->getHeaderLine('Accept'), 'application/json')) {
             return $this->respond(
               new ErrorResponse(

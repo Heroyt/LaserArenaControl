@@ -32,6 +32,7 @@ services:
 	task.musicSync: App\Tasks\MusicSyncTask
 	task.musicLoad: App\Tasks\MusicLoadTask
 	task.ligaPlayersSync: App\Tasks\PlayersSyncTask
+	task.handleCommand: App\Tasks\HandleCommandTask
 
 	# Cron jobs
 	cron.gamesSync: App\Cron\GamesSyncJob(limit: %gamesSync.limit%, timeout: %gamesSync.timeout%)

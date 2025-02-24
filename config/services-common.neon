@@ -4,12 +4,14 @@ includes:
 	- roadrunner.neon
 	- console.neon
 	- symfony.neon
+	- cqrs.neon
 extensions:
 	cache: Lsr\Caching\DI\CacheExtension
 	decorator: Nette\DI\Extensions\DecoratorExtension
 	inject: Nette\DI\Extensions\InjectExtension
 	routing: Lsr\Core\Routing\DI\RoutingExtension
 	di: Nette\DI\Extensions\DIExtension
+	search: Nette\DI\Extensions\SearchExtension(%constants.tempDir%)
 di:
 	lazy: true
 parameters:

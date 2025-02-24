@@ -78,7 +78,8 @@
     "symfony/property-access": "^7.1",
     "lsr/laser-liga-api": "^0.1.1",
     "lsr/lg-result-parsing": "dev-master",
-    "lsr/roadrunner": "^0.1.0"
+    "lsr/roadrunner": "^0.1.0",
+    "lsr/cqrs": "^0.1.0"
   },
   "require-dev": {
     "roave/security-advisories": "dev-latest",

@@ -248,6 +248,7 @@
                                                     data-variations='{$mode->variations|json}'
                                                     data-description="{_$mode->description, context: 'gameModes'}"
                                                     data-active="{json_encode($mode->active)}"
+													data-class="{$mode::class}"
                     {if $mode instanceof App\GameModels\Game\GameModes\CustomLoadMode}data-script="{$mode->getNewGameScriptToRun()}"{/if}>
                 {if $iterator->first}{do $firstDescription = $mode->description}{/if}
                 {_$mode->getName(), context: 'gameModes'}

@@ -113,7 +113,8 @@
 				</div>
 				<div class="modal-body">
 					<div class="form-check form-switch d-none" data-name="dummy">
-						<input class="form-check-input" type="checkbox" role="switch" name="mode[#id#][settings][dummy]"
+						<input class="form-check-input" type="checkbox" role="switch" switch
+							   name="mode[#id#][settings][dummy]"
 							   checked value="1"
 							   id="mode-#id#-dummy">
 						<label class="form-check-label" for="mode-#id#-dummy"></label>
@@ -296,7 +297,8 @@
 
 {define modeSettingsCheck, string $name, string $label, string $info}
 	<div class="form-check form-switch" data-name="{$name}">
-		<input class="form-check-input" type="checkbox" role="switch" name="mode[#id#][settings][{$name}]" value="1"
+		<input class="form-check-input" type="checkbox" role="switch" switch name="mode[#id#][settings][{$name}]"
+			   value="1"
 			   id="mode-#id#-{$name}">
 		<label class="form-check-label" for="mode-#id#-{$name}">
             {_$label, context: 'game.modes.settings'}

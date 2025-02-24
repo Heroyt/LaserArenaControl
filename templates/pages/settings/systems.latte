@@ -165,12 +165,12 @@
 			   name="systems[{$system->id}][music_dir]" value="{$system->musicDir}" required>
 	</div>
 	<div class="form-group mb-2 form-check form-switch">
-		<input type="checkbox" class="form-check-input" role="switch" id="system-{$system->id}-active"
+		<input type="checkbox" class="form-check-input" role="switch" switch id="system-{$system->id}-active"
 			   name="systems[{$system->id}][active]" value="1" {if $system->active}checked{/if}>
 		<label for="system-{$system->id}-active" class="form-check-label">{_'Aktivní'}</label>
 	</div>
 	<div class="form-group mb-2 form-check form-switch">
-		<input type="checkbox" class="form-check-input" role="switch" id="system-{$system->id}-default"
+		<input type="checkbox" class="form-check-input" role="switch" switch id="system-{$system->id}-default"
 			   name="systems[{$system->id}][default]" value="1" {if $system->default}checked{/if}>
 		<label for="system-{$system->id}-default" class="form-check-label">{_'Výchozí'}</label>
 	</div>

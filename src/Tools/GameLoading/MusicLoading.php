@@ -87,7 +87,7 @@ trait MusicLoading
 
     protected function getTaskProducer() : TaskProducer {
         if (!isset($this->taskProducer)) {
-            $taskProducer = App::getService('taskProducer');
+            $taskProducer = App::getService('roadrunner.tasks.producer');
             assert($taskProducer instanceof TaskProducer);
             $this->taskProducer = $taskProducer;
         }

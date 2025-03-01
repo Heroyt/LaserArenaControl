@@ -27,7 +27,6 @@ use Lsr\Core\Requests\Enums\ErrorType;
 use Lsr\Exceptions\FileException;
 use Lsr\Lg\Results\AbstractResultsParser;
 use Lsr\Lg\Results\Exception\ResultsParseException;
-use Lsr\Lg\Results\Interface\ResultsParserInterface;
 use Lsr\Logging\Exceptions\DirectoryCreationException;
 use Lsr\Logging\Logger;
 use Lsr\ObjectValidation\Exceptions\ValidationException;
@@ -125,17 +124,16 @@ class ImportService
 
         try {
             $logger->info('Importing file: '.$file);
-            /** @var class-string<ResultsParserInterface> $class */
-            $class = 'App\\Tools\\ResultParsing\\'.ucfirst($game::SYSTEM).'\\ResultsParser';
-            if (!class_exists($class)) {
-                return
-                  new ErrorResponse('No parser for this game ('.$game::SYSTEM.')', type: ErrorType::INTERNAL);
+            try {
+                /** @var AbstractResultsParser $parser */
+                $parser = App::getService('result.parser.'.$game::SYSTEM);
+            } catch (MissingServiceException $e) {
+                return new ErrorResponse('No parser for this game ('.$game::SYSTEM.')', type: ErrorType::INTERNAL);
             }
-            if (!$class::checkFile($file)) {
+            if (!$parser::checkFile($file)) {
                 return
                   new ErrorResponse('Game file cannot be parsed: '.$file, type: ErrorType::INTERNAL);
             }
-            $parser = new $class($this->playerProvider);
             $parser->setFile($file);
             $game = $parser->parse();
 

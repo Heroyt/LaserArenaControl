@@ -1,0 +1,19 @@
+{layout '../@layout.latte'}
+
+{varType string $screenHash}
+{varType ?App\GameModels\Game\Game $game}
+
+{define containerClasses}
+	game-status-screen
+{/define}
+
+{define content}
+	<meta data-hash="{$screenHash}">
+	<div class="game-players">
+		{ifset $game}
+			<div n:foreach="$game->players as $player" class="badge text-bg-team-{$game::SYSTEM}-{$player->color}">
+				{$player->name}
+			</div>
+		{/ifset}
+	</div>
+{/define}

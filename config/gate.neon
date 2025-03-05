@@ -8,6 +8,7 @@ services:
 	gate.screens.music: App\Gate\Screens\MusicModesScreen
 	gate.screens.rtsp: App\Gate\Screens\RtspScreen
 	gate.screens.vest_gun_after_game: App\Gate\Screens\VestGunAfterGameScreen
+	gate.screens.game_status: App\Gate\Screens\GameStatusScreen
 
 	gate.screens.idle.stats: App\Gate\Screens\DayStats\GeneralStatsScreen
 	gate.screens.idle.stats_cameras: App\Gate\Screens\DayStats\WithRtsp\GeneralStatsWithRtspScreen

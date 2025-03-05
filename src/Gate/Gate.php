@@ -115,7 +115,7 @@ class Gate
             return $defaultScreen;
         }
 
-        throw new RuntimeException('No valid screen found to display.');
+        throw new RuntimeException('No valid screen found to display. '.count($screens));
     }
 
     /**

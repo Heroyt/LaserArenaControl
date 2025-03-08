@@ -1,6 +1,35 @@
 <?php
 declare(strict_types=1);
 
+enum AmmoClipsSettings : int
+{
+    case OFF                                = 0;
+    case RELOAD_AFTER_5_SECONDS             = 41;
+    case RELOAD_AFTER_5_TRIGGER_PULLS       = 42;
+    case RELOAD_AFTER_PRESSING_CHEST_BUTTON = 3;
+}
+
+enum GameType : int
+{
+    case SOLO                = 0;
+    case TEAM                = 1;
+    case TEAM_CAPTURE        = 2;
+    case ZOMBIES_SOLO        = 3;
+    case ZOMBIES_TEAM        = 4;
+    case VIP                 = 5;
+    case CROSSFIRE           = 6;
+    case SENSORTAG_SOLO      = 7;
+    case SENSORTAG_TEAM      = 8;
+    case ROCK_PAPER_SCISSORS = 9;
+    case PARALLEL            = 10;
+}
+
+enum TeamOrSolo : int
+{
+    case TEAM = 0;
+    case SOLO = 1;
+}
+
 $system = $argv[1] ?? 'evo6';
 $format = $argv[2] ?? 'sql';
 
@@ -9,8 +38,8 @@ $defaultSettings = [
   "Description"               => '',
   "HighScore"                 => 0,
   "HighScoreName"             => null,
-  "TeamOrSolo"                => 0,
   // 0 = team, 1 = solo
+  "TeamOrSolo"         => TeamOrSolo::TEAM,
   "HitYouSc"                  => -50,
   "YouHitSc"                  => 100,
   "HitYouMateSc"              => -50,
@@ -99,17 +128,17 @@ $defaultSettings = [
   "MineTeam04"                => 0,
   "MineName04"                => 'Unnamed Unit',
   "MineOn05"                  => false,
-  "MineType05"                => 0,
-  "MineTeam05"                => 0,
-  "MineName05"                => 'Unnamed Unit',
-  "MineOn06"                  => false,
-  "MineType06"                => 0,
-  "MineTeam06"                => 0,
-  "MineName06"                => 'Unnamed Unit',
-  "MineOn07"                  => false,
-  "MineType07"                => 0,
-  "MineTeam07"                => 0,
-  "MineName07"                => 'Unnamed Unit',
+  "MineType05"         => 2,
+  "MineTeam05"         => 6,
+  "MineName05"         => 'MiniMina',
+  "MineOn06"           => true,
+  "MineType06"         => 2,
+  "MineTeam06"         => 6,
+  "MineName06"         => 'MinaHorni',
+  "MineOn07"           => true,
+  "MineType07"         => 2,
+  "MineTeam07"         => 6,
+  "MineName07"         => 'MinaD/Brana',
   "ForceLasersOff"            => false,
   "VirtualAmmoClips"          => false,
   "MusicOnStart"              => false,
@@ -162,16 +191,16 @@ $defaultSettings = [
   "SpecialPacksBlinkArmed"    => true,
   "EncouragementType"         => 0,
   "EncouragementBonus"        => 0,
-  "FormatNumber"              => 1,
+  "FormatNumber"       => GameType::TEAM,
   "VipTerminate"              => 0,
   "KnockoutOn"                => false,
   "KnockoutBonusPoints"       => 100,
-  "AmmoClips"                 => 0,
+  "AmmoClips"          => AmmoClipsSettings::OFF,
   // 0 = off, 41 = reload after 5 seconds, 42 = reload after 5 trigger pulls, 3 = reload after pressing chest button
   "Reality"                   => '0',
   "PrintCards"                => false,
-  "AmmoAsClips"               => 25359,
-  "AmmoAsClipsTrooper"        => 25359,
+  "AmmoAsClips"        => clips(15),
+  "AmmoAsClipsTrooper" => clips(15),
   "VirtualAmmoClipsTrooper"   => false,
   "AssistMakeTenfoldHits"     => false,
   "AssistMakeBazookaHits"     => false,
@@ -233,6 +262,28 @@ $gameLengthVariations = [
   ],
   '-13' => [
     'PlayTime' => 13,
+  ],
+  '-10' => [
+    'PlayTime' => 10,
+  ],
+];
+$gameLengthVariationsMin = [
+  ''    => [
+    'PlayTime' => 15,
+  ],
+  '-10' => [
+    'PlayTime' => 10,
+  ],
+];
+$gameLengthVariationsExtended = [
+  ''    => [
+    'PlayTime' => 15,
+  ],
+  '-13' => [
+    'PlayTime' => 13,
+  ],
+  '-12' => [
+    'PlayTime' => 12,
   ],
   '-10' => [
     'PlayTime' => 10,
@@ -301,33 +352,49 @@ $noVariations = [
 ];
 
 $modes = [
-  '1-T-DM'       => [
+  '00-T-TURNAJ'   => [
+    'settings'   => [
+      'Description'  => 'Klasicka tymova hra - turnaj',
+      'TeamOrSolo'   => TeamOrSolo::TEAM,
+      'FormatNumber' => GameType::TEAM,
+    ],
+    'variations' => $noVariations,
+  ],
+  '00-S-TURNAJ'   => [
+    'settings'   => [
+      'Description'  => 'Klasicka solo hra - turnaj',
+      'TeamOrSolo'   => TeamOrSolo::SOLO,
+      'FormatNumber' => GameType::SOLO,
+    ],
+    'variations' => $noVariations,
+  ],
+  '01-T-DM'       => [
     'settings'   => [
       'Description'  => 'Klasicka tymova hra',
-      'TeamOrSolo'   => 0,
-      'FormatNumber' => 1,
+      'TeamOrSolo'   => TeamOrSolo::TEAM,
+      'FormatNumber' => GameType::TEAM,
     ],
     'variations' => [
-      'gameLength' => $gameLengthVariations,
+      'gameLength' => $gameLengthVariationsExtended,
       'pods'       => $podsVariations,
       'hitstreak'  => $hitStreakVariations,
     ],
   ],
-  '1-T-TMA'      => [
+  '01-T-TMA'      => [
     'settings'   => [
       'Description'          => 'Klasicka tymova hra ve tme',
-      'TeamOrSolo'           => 0,
+      'TeamOrSolo'         => TeamOrSolo::TEAM,
       'PacksColor'           => 0,
       'PlayFlash'            => 0,
       'HitFlash'             => 6,
-      'AmmoClips'            => 42,
+      'AmmoClips'          => AmmoClipsSettings::RELOAD_AFTER_5_TRIGGER_PULLS,
       'VirtualAmmoClips'     => true,
       'VirtualAmmoClipsAuto' => true,
       'HitStreakOn'          => true,
       'HitstreakLength'      => 5,
       'HitstreakReward'      => 12,
-      'AmmoAsClips'          => 25359,
-      'AmmoAsClipsTrooper'   => 25359,
+      'AmmoAsClips'        => clips(15),
+      'AmmoAsClipsTrooper' => clips(15),
       'TeamHits'             => false,
     ],
     'variations' => [
@@ -335,34 +402,34 @@ $modes = [
       'pods'       => $podsVariations,
     ],
   ],
-  '2-S-DM'       => [
+  '02-S-DM'       => [
     'settings'   => [
       'Description'  => 'Klasicka solo hra',
-      'TeamOrSolo'   => 1,
-      'FormatNumber' => 0,
+      'TeamOrSolo'   => TeamOrSolo::SOLO,
+      'FormatNumber' => GameType::SOLO,
     ],
     'variations' => [
-      'gameLength' => $gameLengthVariations,
+      'gameLength' => $gameLengthVariationsExtended,
       'pods'       => $podsVariations,
       'hitstreak'  => $hitStreakVariations,
     ],
   ],
-  '2-S-TMA'      => [
+  '02-S-TMA'      => [
     'settings'   => [
       'Description'          => 'Klasicka solo hra ve tme',
-      'TeamOrSolo'           => 1,
-      'FormatNumber'         => 0,
+      'TeamOrSolo'         => TeamOrSolo::SOLO,
+      'FormatNumber'       => GameType::SOLO,
       'PacksColor'           => 0,
       'PlayFlash'            => 0,
       'HitFlash'             => 6,
-      'AmmoClips'            => 42,
+      'AmmoClips'          => AmmoClipsSettings::RELOAD_AFTER_5_TRIGGER_PULLS,
       'VirtualAmmoClips'     => true,
       'VirtualAmmoClipsAuto' => true,
       'HitStreakOn'          => true,
       'HitstreakLength'      => 5,
       'HitstreakReward'      => 12,
-      'AmmoAsClips'          => 25359,
-      'AmmoAsClipsTrooper'   => 25359,
+      'AmmoAsClips'        => clips(15),
+      'AmmoAsClipsTrooper' => clips(15),
       'TeamHits'             => false,
     ],
     'variations' => [
@@ -370,11 +437,11 @@ $modes = [
       'pods'       => $podsVariations,
     ],
   ],
-  '3-S-NABOJU'   => [
+  '03-S-NABOJU'   => [
     'settings'   => [
       'Description'  => 'Solo hra s omezenym poctem naboju',
-      'TeamOrSolo'   => 1,
-      'FormatNumber' => 0,
+      'TeamOrSolo'   => TeamOrSolo::SOLO,
+      'FormatNumber' => GameType::SOLO,
       'TriggerSpeed' => 1,
     ],
     'variations' => [
@@ -392,34 +459,44 @@ $modes = [
       'pods' => $podsVariations,
     ],
   ],
-  '4-S-SURVIVAL' => [
+  '04-S-SURVIVAL' => [
     'settings'   => [
-      'Description'  => 'Omezeny pocet zivotu a naboju',
-      'TeamOrSolo'   => 1,
-      'FormatNumber' => 0,
-      'Ammo'         => 300,
-      'Lives'        => 30,
+      'Description'          => 'Omezeny pocet zivotu a naboju',
+      'TeamOrSolo'           => TeamOrSolo::SOLO,
+      'FormatNumber'         => GameType::SOLO,
+      'Ammo'                 => 300,
+      'Lives'                => 30,
+      'AmmoClips'            => AmmoClipsSettings::RELOAD_AFTER_5_SECONDS, // Auto-reload after 5 seconds
+      'VirtualAmmoClips'     => true,
+      'VirtualAmmoClipsAuto' => true,
+      'AmmoAsClips'          => clips(10, 30), // 30*10
+      'AmmoAsClipsTrooper'   => clips(10, 30), // 30*10
     ],
     'variations' => [
       'pods' => $podsVariations,
     ],
   ],
-  '4-T-SURVIVAL' => [
+  '04-T-SURVIVAL' => [
     'settings'   => [
-      'Description'  => 'Omezeny pocet zivotu a naboju',
-      'TeamOrSolo'   => 0,
-      'FormatNumber' => 1,
-      'Ammo'         => 300,
-      'Lives'        => 30,
+      'Description'          => 'Omezeny pocet zivotu a naboju',
+      'TeamOrSolo'           => TeamOrSolo::TEAM,
+      'FormatNumber'         => GameType::TEAM,
+      'Ammo'                 => 300,
+      'Lives'                => 30,
+      'AmmoClips'            => AmmoClipsSettings::RELOAD_AFTER_5_SECONDS, // Auto-reload after 5 seconds
+      'VirtualAmmoClips'     => true,
+      'VirtualAmmoClipsAuto' => true,
+      'AmmoAsClips'          => clips(10, 30), // 30*10
+      'AmmoAsClipsTrooper'   => clips(10, 30), // 30*10
     ],
     'variations' => [
       'pods' => $podsVariations,
     ],
   ],
-  '5-ZAKLADNY'   => [
+  '05-ZAKLADNY'   => [
     'settings'   => [
       'Description'          => 'Takticka hra dvou tymu, kteri si vzajemne utoci na zakladny.',
-      'TeamOrSolo'           => 0,
+      'TeamOrSolo'         => TeamOrSolo::TEAM,
       'Lives'                => 900,
       'TeamHits'             => false,
       'MineOn06'             => true,
@@ -430,11 +507,11 @@ $modes = [
       'MineType07'           => 4,
       'MineTeam07'           => 1,
       'MineName07'           => 'ZakladnaDolni',
-      'AmmoClips'            => 42,
+      'AmmoClips'          => AmmoClipsSettings::RELOAD_AFTER_5_TRIGGER_PULLS,
       'VirtualAmmoClips'     => true,
       'VirtualAmmoClipsAuto' => true,
-      'AmmoAsClips'          => 25359,
-      'AmmoAsClipsTrooper'   => 25359,
+      'AmmoAsClips'        => clips(15),
+      'AmmoAsClipsTrooper' => clips(15),
       'HitStreakOn'          => true,
       'HitstreakLength'      => 5,
       'HitstreakReward'      => 2,
@@ -452,31 +529,183 @@ $modes = [
       ],
     ],
   ],
-  '6-CSGO'       => [
+  '06-CSGO'       => [
     'settings'   => [
       'Description' => 'Kazdy tym zacina v jednom z domecku. Kazdy ma jen 3 zivoty.',
       'Lives'       => 3,
-      'TeamOrSolo'  => 0,
+      'TeamOrSolo' => TeamOrSolo::TEAM,
       'HitTime'     => 1,
     ],
     'variations' => $noVariations,
   ],
+  '07-APOKALYPSA' => [
+    'settings'   => [
+      'Description'           => 'Zombie mod. Cerveny tym jsou zombie a snazi se infikovat ostatni tymy. Zombie ma 10 zivotu. Hrac se infikuje po 3 zasazich.',
+      'TeamOrSolo'            => TeamOrSolo::TEAM,
+      'FormatNumber'          => GameType::ZOMBIES_TEAM,
+      'VampireOn'             => true,
+      'VampireColor'          => 0,
+      'VampireLives'          => 10,
+      'VampireAmmo'           => 9999,
+      'VampireSpecialPlayers' => false,
+      'VampireResistance'     => 3,
+      'VampireRainbow'        => false,
+    ],
+    'variations' => $noVariations,
+  ],
+  '08-BARVICKY'   => [
+    'settings'   => [
+      'Description'      => 'Silena hra, kdy po trech zasazich zmenis barvu tymu na toho, kdo te trefil posledni.',
+      'TeamOrSolo'       => TeamOrSolo::TEAM,
+      'FormatNumber'     => GameType::TEAM_CAPTURE,
+      'SwitchOn'         => true,
+      'SwitchResistance' => 3,
+    ],
+    'variations' => $noVariations,
+  ],
+  '09-KNP'        => [
+    'system'     => 'evo6',
+    'settings'   => [
+      'Description'  => 'Kamen, nuzky, papir. Cerveny tym je kamen, zeleny nuzky, modry papir.',
+      "TeamHits"     => true,
+      'TeamOrSolo'   => TeamOrSolo::TEAM,
+      'FormatNumber' => GameType::ROCK_PAPER_SCISSORS,
+    ],
+    'variations' => [
+      'gameLength' => $gameLengthVariationsMin,
+      'pods'       => $podsVariations,
+    ],
+  ],
+  '10-T-REVOLVER' => [
+    'system'     => 'evo6',
+    'settings'   => [
+      'Description'          => 'Omezeny pocet naboju v zasobniku. Za zasah se jeden naboj ziska zpet. Dlouhe prebijeni.',
+      "TeamHits"             => true,
+      'TeamOrSolo'           => TeamOrSolo::TEAM,
+      'FormatNumber'         => GameType::TEAM,
+      'HitgainAmmo'          => 1,
+      'AmmoClips'            => AmmoClipsSettings::RELOAD_AFTER_5_SECONDS,
+      'VirtualAmmoClips'     => true,
+      'VirtualAmmoClipsAuto' => true,
+      'AmmoAsClips'          => clips(6),
+      'AmmoAsClipsTrooper'   => clips(6),
+    ],
+    'variations' => [
+      'ammo' => [
+        '-6'  => [
+          'AmmoAsClips'        => clips(6),
+          'AmmoAsClipsTrooper' => clips(6),
+        ],
+        '-10' => [
+          'AmmoAsClips'        => clips(10),
+          'AmmoAsClipsTrooper' => clips(10),
+        ],
+      ],
+      'pods' => $podsVariations,
+    ],
+  ],
+  '10-S-REVOLVER' => [
+    'system'     => 'evo6',
+    'settings'   => [
+      'Description'          => 'Omezeny pocet naboju v zasobniku. Za zasah se jeden naboj ziska zpet. Dlouhe prebijeni.',
+      'TeamOrSolo'           => TeamOrSolo::SOLO,
+      'FormatNumber'         => GameType::SOLO,
+      'HitgainAmmo'          => 1,
+      'AmmoClips'            => AmmoClipsSettings::RELOAD_AFTER_5_SECONDS,
+      'VirtualAmmoClips'     => true,
+      'VirtualAmmoClipsAuto' => true,
+      'AmmoAsClips'          => clips(6),
+      'AmmoAsClipsTrooper'   => clips(6),
+    ],
+    'variations' => [
+      'ammo' => [
+        '-6'  => [
+          'AmmoAsClips'        => clips(6),
+          'AmmoAsClipsTrooper' => clips(6),
+        ],
+        '-10' => [
+          'AmmoAsClips'        => clips(10),
+          'AmmoAsClipsTrooper' => clips(10),
+        ],
+      ],
+      'pods' => $podsVariations,
+    ],
+  ],
+  '11-SENSORTAG'  => [
+    'system'     => 'evo6',
+    'settings'   => [
+      'Description'  => 'Kazdy zasah do cidla ho vypne. Hrac konci, jakmile ma vypnute vsechny cidla.',
+      'Lives'        => 5,
+      'TeamOrSolo'   => TeamOrSolo::SOLO,
+      'FormatNumber' => GameType::SENSORTAG_SOLO,
+    ],
+    'variations' => [
+      'gameLength' => $gameLengthVariationsMin,
+      'pods'       => $podsVariations,
+    ],
+  ],
+  '12-GLADIATOR'  => [
+    'system'     => 'evo6',
+    'settings'   => [
+      'Description'          => 'Omezeny pocet zivotu, za zasah hrac zivot ziska zpet, pokud hraci zivoty dojdou, musi cekat 20s na oziveni.',
+      'TeamOrSolo'           => TeamOrSolo::SOLO,
+      'FormatNumber'         => GameType::SOLO,
+      'HitgainLives'         => 1,
+      'Lives'                => 5,
+      'AmmoClips'            => AmmoClipsSettings::RELOAD_AFTER_5_SECONDS,
+      'VirtualAmmoClips'     => true,
+      'VirtualAmmoClipsAuto' => true,
+      'AmmoAsClips'          => clips(15),
+      'AmmoAsClipsTrooper'   => clips(15),
+      "RespawnWhen"          => 1,
+      "RespawnLives"         => 2,
+      "RespawnWhenParam1"    => 20,
+      "ShowdownOn"           => true,
+      "ShowdownLeds"         => 0,
+      "ShowdownBlast"        => false,
+      "ShowdownMinutes"      => 3,
+      "ShowdownHittype"      => 1,
+    ],
+    'variations' => [
+      'pods' => $podsVariations,
+    ],
+  ],
 ];
 
 $inserts = [];
+$count = 0;
 
 // Print csv header
 if ($format === 'csv') {
-    echo implode(',', array_map(fn(string $value) => "\"$value\"", array_keys($defaultSettings)))."\n";
+    echo implode(
+        ',',
+        array_map(
+          fn(string $value) => "\"$value\"",
+          array_filter(
+            array_keys($defaultSettings),
+            fn(string $key) => ($system === 'evo5' && !in_array($key, $evo6Fields, true))
+              || ($system === 'evo6' && !in_array($key, $evo5ExclusiveFields, true))
+          )
+        )
+      )."\n";
 }
 
 foreach ($modes as $name => $mode) {
+    if (isset($mode['system']) && $mode['system'] !== $system) {
+        continue;
+    }
     $settings = array_merge($defaultSettings, $mode['settings']);
     variations($name, $settings, $mode['variations']);
 }
 
+fwrite(STDERR, "$count modes generated\n");
+if ($count > 100) {
+    // Print a red warning on stderr
+    fwrite(STDERR, "\033[1;31mWarning: More than 100 modes generated.\033[0m\n");
+}
+
 function printMode(string $name, array $settings) : void {
-    global $system, $format, $evo6Fields, $evo5ExclusiveFields;
+    global $system, $format, $evo6Fields, $evo5ExclusiveFields, $count;
     if ($system === 'evo5') {
         foreach ($evo6Fields as $field) {
             unset($settings[$field]);
@@ -500,11 +729,19 @@ function printMode(string $name, array $settings) : void {
             echo "INSERT INTO Profiles ($columns) VALUES ($values);\n";
             break;
     }
+    $count++;
 }
 
 function formatCsvValue(mixed $value) : string {
+    if ($value instanceof BackedEnum) {
+        $value = $value->value;
+    }
+
     if (is_string($value)) {
         return "\"$value\"";
+    }
+    if (is_int($value)) {
+        return (string) $value;
     }
     if (is_bool($value)) {
         return '"'.($value ? 'true' : 'false').'"';
@@ -516,6 +753,10 @@ function formatCsvValue(mixed $value) : string {
 }
 
 function formatSqlValue(mixed $value) : mixed {
+    if ($value instanceof BackedEnum) {
+        $value = $value->value;
+    }
+
     if (is_string($value)) {
         return "'$value'";
     }
@@ -540,4 +781,16 @@ function variations(string $name, array $settings, array $others) : void {
         $variationSettings = array_merge($settings, $variationSettings);
         variations($variationName, $variationSettings, $others);
     }
+}
+
+/**
+ * @param  int<0,255>  $ammoPerClip
+ * @param  int<0,255>  $clips
+ * @return int
+ */
+function clips(int $ammoPerClip, int $clips = 255) : int {
+    assert($ammoPerClip > 0 && $ammoPerClip < 256);
+    assert($clips > 0 && $clips < 256);
+
+    return $ammoPerClip + ($clips << 8);
 }

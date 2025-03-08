@@ -112,7 +112,7 @@ export default class Control {
         startLoading(true);
 	    controlLoadSafe(mode, system.id)
             .then(response => {
-	            if ('status' in response.values) {
+                if ('values' in response && 'status' in response.values) {
 		            this.setCurrentStatus(response.values.status);
                     stopLoading(false, true);
                     return;
@@ -208,7 +208,7 @@ export default class Control {
         startLoading(true);
 	    controlStartSafe(null, system.id)
             .then(response => {
-	            if ('status' in response.values) {
+                if ('values' in response && 'status' in response.values) {
 		            this.setCurrentStatus(response.values.status);
                     stopLoading(false);
                     return;
@@ -232,7 +232,7 @@ export default class Control {
         startLoading(true);
 	    controlStartSafe(mode, system.id)
             .then(response => {
-	            if ('status' in response.values) {
+                if ('values' in response && 'status' in response.values) {
 		            this.setCurrentStatus(response.values.status);
                     stopLoading(false, true);
                     return;

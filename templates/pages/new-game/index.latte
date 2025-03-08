@@ -43,7 +43,7 @@
         <section id="vests">
             {include sectionVests}
         </section>
-        {cache 'newGame-'.$lang.'-game-mode', tags: ['templates.newGame', 'templates', 'templates.mode', 'templates.'.$lang, App\GameModels\Game\GameModes\AbstractMode::TABLE]}
+        {cache 'newGame-'.$system->type->value.'-'.$lang.'-game-mode', tags: ['templates.newGame', 'templates', 'templates.mode', 'templates.'.$lang, App\GameModels\Game\GameModes\AbstractMode::TABLE]}
             <section id="game-mode">
                 {include sectionGameMode}
             </section>

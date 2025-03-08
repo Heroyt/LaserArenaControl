@@ -16,6 +16,7 @@ trait BaseGameModeQueryTrait
       private readonly bool $cache = true,
     ) {
         $this->query = DB::select(AbstractMode::TABLE, 'id_mode, name, systems, type')
+          ->orderBy('[order], [name]')
                          ->cacheTags(AbstractMode::TABLE, AbstractMode::TABLE.'/query');
     }
 

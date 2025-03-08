@@ -138,6 +138,7 @@ tables:
 		(
         	`id_mode` int(11) unsigned NOT NULL AUTO_INCREMENT,
         	`systems` text DEFAULT NULL,
+        	`order` int(10) unsigned NOT NULL DEFAULT 0,
         	`name` varchar(50) DEFAULT NULL,
         	`alias` varchar(50) DEFAULT NULL,
         	`description` text DEFAULT NULL,
@@ -192,6 +193,8 @@ tables:
 			0.4:
 				- 'DROP COLUMN `system`'
 				- 'ADD `systems` text DEFAULT NULL AFTER `id_mode`'
+			0.5:
+				- 'ADD `order` int(10) unsigned NOT NULL DEFAULT 0 AFTER `systems`'
 	game_modes-names:
 		order: 1
 		definition: '''

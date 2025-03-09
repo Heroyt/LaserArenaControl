@@ -34,15 +34,17 @@ class LasermaxxLoadData
      *     meta: MetaLoadData,
      *     players: LasermaxxLoadPlayerData[],
      *     teams: LasermaxxLoadTeamData[],
-     *     metaString: string
+     *     metaString: string,
+     *     soloTeam: int<0,5>,
      * }
      */
     public function getParams() : array {
         return [
-          'meta'    => $this->meta,
-          'players' => $this->players,
-          'teams'   => $this->teams,
+          'meta'     => $this->meta,
+          'players'  => $this->players,
+          'teams'    => $this->teams,
           'metaString' => $this->encodeMeta(),
+          'soloTeam' => $this->soloTeam,
         ];
     }
 

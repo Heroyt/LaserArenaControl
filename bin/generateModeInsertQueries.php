@@ -579,7 +579,7 @@ $modes = [
   '10-T-REVOLVER' => [
     'system'     => 'evo6',
     'settings'   => [
-      'Description'          => 'Omezeny pocet naboju v zasobniku. Za zasah se jeden naboj ziska zpet. Dlouhe prebijeni.',
+      'Description'  => 'Omezeny pocet naboju v zasobniku. Pomalejsi strelba. Dlouhe prebijeni.',
       "TeamHits"             => true,
       'TeamOrSolo'           => TeamOrSolo::TEAM,
       'FormatNumber'         => GameType::TEAM,
@@ -589,6 +589,7 @@ $modes = [
       'VirtualAmmoClipsAuto' => true,
       'AmmoAsClips'          => clips(6),
       'AmmoAsClipsTrooper'   => clips(6),
+      'TriggerSpeed' => 1,
     ],
     'variations' => [
       'ammo' => [
@@ -607,7 +608,7 @@ $modes = [
   '10-S-REVOLVER' => [
     'system'     => 'evo6',
     'settings'   => [
-      'Description'          => 'Omezeny pocet naboju v zasobniku. Za zasah se jeden naboj ziska zpet. Dlouhe prebijeni.',
+      'Description'  => 'Omezeny pocet naboju v zasobniku. Pomalejsi strelba. Dlouhe prebijeni.',
       'TeamOrSolo'           => TeamOrSolo::SOLO,
       'FormatNumber'         => GameType::SOLO,
       'HitgainAmmo'          => 1,
@@ -616,6 +617,7 @@ $modes = [
       'VirtualAmmoClipsAuto' => true,
       'AmmoAsClips'          => clips(6),
       'AmmoAsClipsTrooper'   => clips(6),
+      'TriggerSpeed' => 1,
     ],
     'variations' => [
       'ammo' => [
@@ -631,19 +633,6 @@ $modes = [
       'pods' => $podsVariations,
     ],
   ],
-  '11-SENSORTAG'  => [
-    'system'     => 'evo6',
-    'settings'   => [
-      'Description'  => 'Kazdy zasah do cidla ho vypne. Hrac konci, jakmile ma vypnute vsechny cidla.',
-      'Lives'        => 5,
-      'TeamOrSolo'   => TeamOrSolo::SOLO,
-      'FormatNumber' => GameType::SENSORTAG_SOLO,
-    ],
-    'variations' => [
-      'gameLength' => $gameLengthVariationsMin,
-      'pods'       => $podsVariations,
-    ],
-  ],
   '12-GLADIATOR'  => [
     'system'     => 'evo6',
     'settings'   => [
@@ -651,23 +640,26 @@ $modes = [
       'TeamOrSolo'           => TeamOrSolo::SOLO,
       'FormatNumber'         => GameType::SOLO,
       'HitgainLives'         => 1,
-      'Lives'                => 5,
+      'Lives'                => 10,
       'AmmoClips'            => AmmoClipsSettings::RELOAD_AFTER_5_SECONDS,
       'VirtualAmmoClips'     => true,
       'VirtualAmmoClipsAuto' => true,
       'AmmoAsClips'          => clips(15),
       'AmmoAsClipsTrooper'   => clips(15),
       "RespawnWhen"          => 1,
-      "RespawnLives"         => 2,
-      "RespawnWhenParam1"    => 20,
+      "RespawnLives"         => 4,
+      "RespawnWhenParam1"    => 30,
       "ShowdownOn"           => true,
-      "ShowdownLeds"         => 0,
+      "ShowdownLeds"         => 3,
       "ShowdownBlast"        => false,
-      "ShowdownMinutes"      => 3,
-      "ShowdownHittype"      => 1,
+      "ShowdownMinutes"      => 1,
+      "ShowdownHittype"      => 2,
+      "AssistOn"             => true,
+      "AssistMakeDoubleHits" => true,
     ],
     'variations' => [
-      'pods' => $podsVariations,
+      'gameLength' => $gameLengthVariations,
+      'pods'       => $podsVariations,
     ],
   ],
 ];

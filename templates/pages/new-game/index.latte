@@ -428,7 +428,7 @@
                 {/foreach}
             </div>
         </div>
-        <div>
+		<div class="player-birthday">
             <input type="radio" name="player[{$vest->vestNum}][birthday]" value="0" class="player-birthday-input"
                    id="player-birthday-{$vest->vestNum}-0" checked/>
             <label class="player-birthday bg-grey" for="player-birthday-{$vest->vestNum}-1">
@@ -440,7 +440,7 @@
                 {$icons['cake']|noescape}
             </label>
         </div>
-        <div>
+		<div class="player-vip">
             <input type="radio" name="player[{$vest->vestNum}][vip]" value="0" class="player-vip-input"
                    id="player-vip-{$vest->vestNum}-0" checked/>
             <label class="player-vip bg-secondary" for="player-vip-{$vest->vestNum}-1">

@@ -187,7 +187,11 @@ abstract class LasermaxxGameLoader implements LoaderInterface
             if (empty(trim($player['name']))) {
                 continue;
             }
-            if (!isset($player['team']) || $player['team'] === '') {
+            if (isset($mode) && $mode->isSolo()) {
+                // Default team for solo game
+                $player['team'] = '2';
+            }
+            else if (!isset($player['team']) || $player['team'] === '') {
                 if (!isset($mode) || $mode->isTeam()) {
                     continue;
                 }

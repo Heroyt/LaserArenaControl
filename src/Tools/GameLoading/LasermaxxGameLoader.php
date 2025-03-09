@@ -6,6 +6,7 @@ use App\Core\App;
 use App\Exceptions\GameModeNotFoundException;
 use App\GameModels\Factory\GameModeFactory;
 use App\GameModels\Game\GameModes\CustomLoadMode;
+use App\Models\GameModeVariation;
 use App\Models\MusicMode;
 use App\Models\Playlist;
 use App\Models\System;
@@ -166,7 +167,10 @@ abstract class LasermaxxGameLoader implements LoaderInterface
         if (empty($loadData->meta['mode']) && isset($mode)) {
             $loadData->meta['mode'] = $mode->loadName;
             if (!empty($data['variation'])) {
-                uksort($data['variation'], static fn($a, $b) => ((int) $a) - ((int) $b));
+                uksort(
+                  $data['variation'],
+                  static fn($a, $b) => GameModeVariation::get((int) $a)->order - GameModeVariation::get((int) $b)->order
+                );
                 $loadData->meta['variations'] = [];
                 foreach ($data['variation'] as $id => $suffix) {
                     $loadData->meta['variations'][$id] = $suffix;

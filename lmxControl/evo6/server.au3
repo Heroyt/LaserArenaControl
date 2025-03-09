@@ -31,6 +31,7 @@ Func received($iSocket, $sIP, $sData, $sPar)
 		DebugLog($g_logFile, "Received data: " & " > [" & $i & "] " & $data[$i], @ScriptName, @ScriptLineNumber)
 	Next
 	Local $status = GetGameStatus()
+	Local $err = ""
 	If $status = "DOWNLOAD" Then
 		DebugLog($g_logFile, "Downloading scores", @ScriptName, @ScriptLineNumber)
 		Local $win = WinGetHandle($g_WinName)
@@ -49,10 +50,11 @@ Func received($iSocket, $sIP, $sData, $sPar)
 		Switch $action
 			Case "load"
 				DebugLog($g_logFile, "Load game", @ScriptName, @ScriptLineNumber)
-				If load($parameter) Then
+				$err = load($parameter)
+				If $err == "" Then
 					_TCPServer_Send($iSocket, "ok")
 				Else
-					_TCPServer_Send($iSocket, "error")
+					_TCPServer_Send($iSocket, $err)
 				EndIf
 			Case "start"
 				DebugLog($g_logFile, "Start game", @ScriptName, @ScriptLineNumber)
@@ -63,14 +65,15 @@ Func received($iSocket, $sIP, $sData, $sPar)
                 EndIf
 			Case "loadStart"
 				DebugLog($g_logFile, "Load Start game", @ScriptName, @ScriptLineNumber)
-				If load($parameter) Then
+				$err = load($parameter)
+				If $err == "" Then
 					If start() Then
 						_TCPServer_Send($iSocket, "ok")
 					Else
 						_TCPServer_Send($iSocket, "error")
 					EndIf
 				Else
-					_TCPServer_Send($iSocket, "error")
+					_TCPServer_Send($iSocket, $err)
 				EndIf
 			Case "end"
 				DebugLog($g_logFile, "End game", @ScriptName, @ScriptLineNumber)

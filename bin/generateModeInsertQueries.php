@@ -30,6 +30,42 @@ enum TeamOrSolo : int
     case SOLO = 1;
 }
 
+enum Flash : int
+{
+    case OFF              = 0;
+    case ON               = 1;
+    case FADE_ULTRA_FAST  = 2;
+    case FADE_VERY_FAST   = 3;
+    case FADE_FAST        = 4;
+    case FADE_NORMAL      = 5;
+    case FADE_SLOW        = 6;
+    case BLINK_ULTRA_FAST = 7;
+    case BLINK_VERY_FAST  = 8;
+    case BLINK_FAST       = 9;
+    case BLINK_NORMAL     = 10;
+    case BLINK_SLOW       = 11;
+    case HEART            = 12;
+    case HEART_FAST       = 13;
+    case HEART_INVERSE    = 14;
+    case FADE_TO_OFF      = 15;
+    case RAINBOW          = 16;
+    case POWER_BLINK      = 17;
+    case POLICE_SIREN     = 18;
+
+    public function evo6Value() : int {
+        return $this->value;
+    }
+
+    public function evo5Value() : int {
+        return match ($this) {
+            self::FADE_TO_OFF                 => self::FADE_SLOW->value,
+            self::POWER_BLINK                 => self::BLINK_FAST->value,
+            self::POLICE_SIREN, self::RAINBOW => 15, // Evo5 rainbow
+            default                           => $this->value,
+        };
+    }
+}
+
 $system = $argv[1] ?? 'evo6';
 $format = $argv[2] ?? 'sql';
 
@@ -60,11 +96,11 @@ $defaultSettings = [
   "PlayColor"                 => 15,
   "HitColor"                  => 15,
   "GameoverColor"             => 15,
-  "ArmedFlash"                => 1,
-  "StartFlash"                => 5,
-  "PlayFlash"                 => 1,
-  "HitFlash"                  => 0,
-  "GameoverFlash"             => 15,
+  "ArmedFlash"         => Flash::ON,
+  "StartFlash"         => Flash::FADE_NORMAL,
+  "PlayFlash"          => Flash::ON,
+  "HitFlash"           => Flash::OFF,
+  "GameoverFlash"      => Flash::RAINBOW,
   "Ammo"                      => 9999,
   "Lives"                     => 999,
   "FrontTrigger"              => false,
@@ -385,8 +421,8 @@ $modes = [
       'Description'          => 'Klasicka tymova hra ve tme',
       'TeamOrSolo'         => TeamOrSolo::TEAM,
       'PacksColor'           => 0,
-      'PlayFlash'            => 0,
-      'HitFlash'             => 6,
+      'PlayFlash'          => Flash::OFF,
+      'HitFlash'           => Flash::HEART,
       'AmmoClips'          => AmmoClipsSettings::RELOAD_AFTER_5_TRIGGER_PULLS,
       'VirtualAmmoClips'     => true,
       'VirtualAmmoClipsAuto' => true,
@@ -420,8 +456,8 @@ $modes = [
       'TeamOrSolo'         => TeamOrSolo::SOLO,
       'FormatNumber'       => GameType::SOLO,
       'PacksColor'           => 0,
-      'PlayFlash'            => 0,
-      'HitFlash'             => 6,
+      'PlayFlash'          => Flash::OFF,
+      'HitFlash'           => Flash::HEART,
       'AmmoClips'          => AmmoClipsSettings::RELOAD_AFTER_5_TRIGGER_PULLS,
       'VirtualAmmoClips'     => true,
       'VirtualAmmoClipsAuto' => true,
@@ -726,7 +762,7 @@ function printMode(string $name, array $settings) : void {
 
 function formatCsvValue(mixed $value) : string {
     if ($value instanceof BackedEnum) {
-        $value = $value->value;
+        $value = enumValue($value);
     }
 
     if (is_string($value)) {
@@ -746,7 +782,7 @@ function formatCsvValue(mixed $value) : string {
 
 function formatSqlValue(mixed $value) : mixed {
     if ($value instanceof BackedEnum) {
-        $value = $value->value;
+        $value = enumValue($value);
     }
 
     if (is_string($value)) {
@@ -759,6 +795,17 @@ function formatSqlValue(mixed $value) : mixed {
         return 'null';
     }
     return $value;
+}
+
+function enumValue(BackedEnum $enum) : mixed {
+    global $system;
+    if ($system === 'evo5' && method_exists($enum, 'evo5Value')) {
+        return $enum->evo5Value();
+    }
+    if ($system === 'evo6' && method_exists($enum, 'evo6Value')) {
+        return $enum->evo6Value();
+    }
+    return $enum->value;
 }
 
 function variations(string $name, array $settings, array $others) : void {

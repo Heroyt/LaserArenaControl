@@ -20,11 +20,13 @@ class LasermaxxLoadData
      * @param  MetaLoadData  $meta
      * @param  LasermaxxLoadPlayerData[]  $players
      * @param  LasermaxxLoadTeamData[]  $teams
+     * @param  int<0,5>  $soloTeam
      */
     public function __construct(
       public array $meta = [],
       public array $players = [],
       public array $teams = [],
+      public int $soloTeam = 2,
     ) {}
 
     /**

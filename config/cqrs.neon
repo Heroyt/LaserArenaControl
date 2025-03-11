@@ -6,13 +6,6 @@ cqrs:
 services:
 	cqrs.asyncBus: App\CQRS\AsyncCommandBus
 search:
-	cqrs.commands:
-		in: '%constants.appDir%src/CQRS/Commands'
-		implements:
-			- Lsr\CQRS\CommandInterface
-		tags:
-			- cqrs
-			- cqrs.command
 	cqrs.queries:
 		in: '%constants.appDir%src/CQRS/Queries'
 		implements:

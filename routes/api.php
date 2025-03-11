@@ -20,7 +20,6 @@ use App\Controllers\Api\PriceGroups;
 use App\Controllers\Api\Results;
 use App\Controllers\Api\Tasks;
 use App\Controllers\Api\Updater;
-use Lsr\Core\Routing\Route;
 
 /** @var \Lsr\Core\Routing\Router $this */
 

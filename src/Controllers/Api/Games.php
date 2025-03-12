@@ -13,16 +13,17 @@ use App\Services\Evo5\GameSimulator;
 use App\Services\GameHighlight\GameHighlightService;
 use App\Services\SyncService;
 use Dibi\Exception;
-use Lsr\Core\Attributes\MapRequest;
 use Lsr\Core\Controllers\ApiController;
 use Lsr\Core\Requests\Dto\ErrorResponse;
 use Lsr\Core\Requests\Dto\SuccessResponse;
 use Lsr\Core\Requests\Enums\ErrorType;
 use Lsr\Core\Requests\Request;
+use Lsr\Core\Requests\Validation\RequestValidationMapper;
 use Lsr\CQRS\CommandBus;
 use Lsr\Logging\Exceptions\DirectoryCreationException;
 use Lsr\ObjectValidation\Exceptions\ValidationException;
 use Lsr\Orm\Exceptions\ModelNotFoundException;
+use Lsr\Serializer\Mapper;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
 
@@ -121,10 +122,12 @@ class Games extends ApiController
      * @throws Throwable
      * @throws Exception
      */
-    public function listGames(
-      #[MapRequest]
-      ListRequest $filters
-    ) : ResponseInterface {
+    public function listGames(Mapper $mapper, Request $request) : ResponseInterface {
+        // Map and validate request
+        $requestMapper = new RequestValidationMapper($mapper);
+        $requestMapper->setRequest($request);
+        $filters = $requestMapper->mapQueryToObject(ListRequest::class);
+
         $queryClass = $filters->expand ? GameListQuery::class : GameRowListQuery::class;
         $query = new $queryClass($filters->excludeFinished, $filters->date);
 

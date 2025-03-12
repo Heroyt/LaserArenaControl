@@ -36,6 +36,8 @@ final readonly class SetGameGroupCommandHandler implements CommandHandlerInterfa
         try {
             if ($game->save()) {
                 $this->commandBus->dispatchAsync(new RecalculateSkillsCommand($game));
+                $game->clearCache();
+                $game->group->clearCache();
                 return true;
             }
         } catch (Throwable) {

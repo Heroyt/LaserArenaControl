@@ -9,7 +9,7 @@ use App\Models\GameGroup;
 use Lsr\CQRS\CommandInterface;
 
 /**
- * @implements CommandInterface<bool>
+ * @implements CommandInterface<array|false>
  */
 final readonly class SetGameGroupCommand implements CommandInterface
 {

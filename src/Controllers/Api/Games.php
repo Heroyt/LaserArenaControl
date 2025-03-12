@@ -185,8 +185,8 @@ class Games extends ApiController
             }
         }
 
-        if ($this->commandBus->dispatch(new SetGameGroupCommand($game, $group))) {
-            return $this->respond(new SuccessResponse('Group set'));
+        if (($values = $this->commandBus->dispatch(new SetGameGroupCommand($game, $group))) !== false) {
+            return $this->respond(new SuccessResponse('Group set', values: $values));
         }
         return $this->respond(new ErrorResponse('Group set failed', ErrorType::INTERNAL), 500);
     }

@@ -20,7 +20,7 @@ final readonly class SetGameGroupCommandHandler implements CommandHandlerInterfa
     /**
      * @param  SetGameGroupCommand  $command
      */
-    public function handle(CommandInterface $command) : bool {
+    public function handle(CommandInterface $command) : array | false {
         assert($command instanceof SetGameGroupCommand);
 
         // Refresh game
@@ -38,7 +38,7 @@ final readonly class SetGameGroupCommandHandler implements CommandHandlerInterfa
                 $this->commandBus->dispatchAsync(new RecalculateSkillsCommand($game));
                 $game->clearCache();
                 $game->group->clearCache();
-                return true;
+                return ['game' => $game->code, 'group' => $game->group->id];
             }
         } catch (Throwable) {
         }

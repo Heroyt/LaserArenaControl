@@ -121,7 +121,10 @@ class Games extends ApiController
      * @throws Throwable
      * @throws Exception
      */
-    public function listGames(#[MapRequest] ListRequest $filters) : ResponseInterface {
+    public function listGames(
+      #[MapRequest]
+      ListRequest $filters
+    ) : ResponseInterface {
         $queryClass = $filters->expand ? GameListQuery::class : GameRowListQuery::class;
         $query = new $queryClass($filters->excludeFinished, $filters->date);
 

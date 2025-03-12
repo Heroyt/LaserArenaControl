@@ -270,14 +270,14 @@ class GameGroup extends BaseModel implements GameGroupInterface
         }
     }
 
-    public function getPlayerByName(string $name) : ?GroupPlayerInterface {
-        $name = Strings::toAscii($name);
-        return array_find($this->players, static fn(\App\Models\Group\Player $player) => $player->asciiName === $name);
-    }
-
     public function getPlayer(PlayerInterface $player) : ?GroupPlayerInterface {
         $name = $player->name;
         return $this->getPlayerByName($name);
+    }
+
+    public function getPlayerByName(string $name) : ?GroupPlayerInterface {
+        $name = Strings::toAscii($name);
+        return array_find($this->players, static fn(\App\Models\Group\Player $player) => $player->asciiName === $name);
     }
 
     public function getGamesCodes() : array {

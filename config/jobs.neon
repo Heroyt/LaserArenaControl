@@ -6,23 +6,32 @@ orisai.scheduler:
 	errorHandler: tracy
 	jobs:
 		gamesSync:
+			# Every 5 minutes
 			expression: */5 * * * *
 			callback: [@cron.gamesSync, 'run']
 		#gamesPrecache:
 		#	expression: * * * * *
 		#	callback: [@cron.gamesPrecache, 'run']
 		vestSync:
+			# Every 15 minutes
 			expression: */15 * * * *
 			callback: [@cron.vestSync, 'run']
 		logArchive:
+			# Every day at 6:00
 			expression: 0 6 * * *
 			callback: [@cron.logArchive, 'run']
 		playersSync:
+			# Every day at 6:30
 			expression: 30 6 * * *
 			callback: [@cron.ligaPlayerSync, 'run']
 		resultsImport:
+			# Every minute
 			expression: * * * * *
 			callback: [@cron.resultsImport, 'run']
+		clearGroups:
+			# Every day at 6:00
+			expression: 0 6 * * *
+			callback: [@cron.clearGroups, 'run']
 services:
 	# Jobs tasks
 	task.gamesPrecache: App\Tasks\GamePrecacheTask
@@ -41,3 +50,4 @@ services:
 	cron.gamesPrecache: App\Cron\GamesPrecacheJob
 	cron.resultsImport: App\Cron\ResultsImportJob
 	cron.ligaPlayerSync: App\Cron\PlayersSyncJob
+	cron.clearGroups: App\Cron\ClearGroupsJob

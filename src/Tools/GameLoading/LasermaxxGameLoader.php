@@ -165,7 +165,7 @@ abstract class LasermaxxGameLoader implements LoaderInterface
         } catch (GameModeNotFoundException) {
         }
         if (empty($loadData->meta['mode']) && isset($mode)) {
-            $loadData->meta['mode'] = $mode->loadName;
+            $loadData->meta['mode'] = strtolower($mode->loadName);
             if (!empty($data['variation'])) {
                 uksort(
                   $data['variation'],

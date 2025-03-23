@@ -12,8 +12,30 @@ extensions:
 	routing: Lsr\Core\Routing\DI\RoutingExtension
 	di: Nette\DI\Extensions\DIExtension
 	search: Nette\DI\Extensions\SearchExtension(%constants.tempDir%)
+	lsr: Lsr\Core\DI\LsrExtension
 di:
 	lazy: true
+lsr:
+	appDir: %constants.appDir%
+	tempDir: %constants.tempDir%
+	latte:
+		tempDir: %constants.tempDir%latte/
+	translations:
+		defaultLang: cs_CZ
+		supportedLanguages:
+			- 'cs_CZ'
+			- 'en_US'
+			- 'de_DE'
+			- 'fr_FR'
+			- 'sk_SK'
+			- 'es_ES'
+		domains:
+			- 'results'
+			- 'gate'
+			- 'tips'
+			- 'cli'
+			- 'highlights'
+			- 'tournament'
 parameters:
 	db:
 		driver: mysqli
@@ -38,27 +60,7 @@ parameters:
 services:
 	# Core
 	db.connection: Lsr\Db\Connection(config: %db%)
-	app: App\Core\App
-	translations:
-		create: Lsr\Core\Translations
-		arguments:
-			config: @config
-			defaultLang: 'cs_CZ'
-			supportedLanguages:
-				- 'cs_CZ'
-				- 'en_US'
-				- 'de_DE'
-				- 'fr_FR'
-				- 'sk_SK'
-				- 'es_ES'
-			textDomains:
-				- 'results'
-				- 'gate'
-				- 'tips'
-				- 'cli'
-				- 'highlights'
-				- 'tournament'
-
+	lsr.app: App\Core\App
 
 	version: App\Services\VersionService
 	regression: App\Services\RegressionCalculator
@@ -148,6 +150,13 @@ routing:
 		- %constants.appDir%src/Controllers
 
 search:
+	controllers:
+		in: '%constants.appDir%src/Controllers'
+		extends:
+			- Lsr\Core\Controllers\Controller
+			- Lsr\Core\Controllers\ApiController
+		tags:
+			- controllers
 	highlightCheckers:
 		in: '%constants.appDir%/src/Services/GameHighlight/Checkers'
 		implements:

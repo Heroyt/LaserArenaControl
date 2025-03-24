@@ -162,6 +162,10 @@ class Settings extends Controller
      */
     public function saveGeneral(Request $request) : ResponseInterface {
         try {
+            $apiUrl = $request->getPost('api_url');
+            if (isset($apiUrl)) {
+                Info::set('liga_api_url', $apiUrl);
+            }
             $apiKey = $request->getPost('api_key');
             if (isset($apiKey)) {
                 Info::set('liga_api_key', $apiKey);

@@ -47,7 +47,7 @@ class AssignGameModesCommand extends Command
             }
             $game->getMode();
             $output->writeln(
-              $game->code.' Mode: '.$game->modeName.' ('.$game->gameType->value.') '.($game->mode->name ?? 'unknown').' '.($game->mode->id ?? 'NULL')
+              $game->code.' '.$game::SYSTEM.' Mode: '.$game->modeName.' ('.$game->gameType->value.') '.($game->mode->name ?? 'unknown').' '.($game->mode->id ?? 'NULL').' '.$game->mode::class
             );
             if (!$game->save()) {
                 $output->writeln('<error>Failed to save game into DB</error>');

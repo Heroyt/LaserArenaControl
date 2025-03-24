@@ -31,12 +31,14 @@ use App\Gate\Settings\VestsSettings;
 use App\Models\System;
 use Dibi\Exception;
 use Lsr\Db\DB;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Class that initially seeds the database
  */
 class Seeder implements InstallInterface
 {
+    use InstallPrints;
     public const array GAME_MODES = [
       [
         'id_mode'              => 1,
@@ -771,8 +773,9 @@ class Seeder implements InstallInterface
     /**
      * @inheritDoc
      */
-    public static function install(bool $fresh = false) : bool {
+    public static function install(bool $fresh = false, ?OutputInterface $output = null) : bool {
         try {
+            self::printInfo('Seeding...', $output);
             // Game modes
             if ($fresh) {
                 DB::delete(AbstractMode::TABLE, ['1=1']);
@@ -933,10 +936,10 @@ class Seeder implements InstallInterface
 
 
             if (!$defaultGate->save()) {
-                echo 'Failed to save default gate.'.PHP_EOL;
+                self::printDebug('Failed to save default gate.', $output);
             }
         } catch (Exception $e) {
-            echo $e->getMessage().PHP_EOL.$e->getSql().PHP_EOL;
+            self::printException($e, $output);
             return false;
         }
         return true;

@@ -8,20 +8,32 @@ namespace App\Install;
 
 use App\Core\App;
 use LAC\Modules\Core\Module;
+use Symfony\Component\Console\Output\OutputInterface;
 
 class Install implements InstallInterface
 {
-    public static function install(bool $fresh = false) : bool {
-        return DbInstall::install($fresh) && Seeder::install($fresh) && self::installModules();
+    use InstallPrints;
+
+
+    public static function install(bool $fresh = false, ?OutputInterface $output = null) : bool {
+        self::printInfo('Starting installation', $output);
+        if (DbInstall::install($fresh, $output) && Seeder::install($fresh, $output) && self::installModules($output)) {
+            self::printInfo('Installation successful', $output);
+            return true;
+        }
+        else {
+            self::printError('Installation failed', $output);
+            return false;
+        }
     }
 
-    private static function installModules() : bool {
+    private static function installModules(?OutputInterface $output) : bool {
         /** @var string[] $modules */
         $modules = App::getContainer()->findByType(Module::class);
         foreach ($modules as $moduleName) {
             /** @var Module $module */
             $module = App::getService($moduleName);
-            echo 'Installing module '.$module::NAME.PHP_EOL;
+            self::printInfo('Installing module '.$module::NAME, $output);
             $module->install();
         }
         return true;

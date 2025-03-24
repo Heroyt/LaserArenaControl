@@ -52,9 +52,7 @@ class AssignGameModesCommand extends Command
               ->type($game->gameType)
               ->systems($game::SYSTEM);
             $mode = $query->get();
-            $output->setVerbosity(OutputInterface::VERBOSITY_DEBUG);
             $game->mode = GameModeFactory::find($game->modeName, $game->gameType, $game::SYSTEM, $output);
-            $output->setVerbosity(OutputInterface::VERBOSITY_NORMAL);
             $output->writeln(
               'Game: '
               .$game->code.' '

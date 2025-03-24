@@ -6,6 +6,7 @@ namespace App\Cli\Commands\Games;
 use App\CQRS\Queries\GameModes\FindModeByNameQuery;
 use App\DataObjects\Db\Games\MinimalGameRow;
 use App\GameModels\Factory\GameFactory;
+use App\GameModels\Factory\GameModeFactory;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -51,15 +52,17 @@ class AssignGameModesCommand extends Command
               ->type($game->gameType)
               ->systems($game::SYSTEM);
             $mode = $query->get();
-            $game->getMode();
+            $output->setVerbosity(OutputInterface::VERBOSITY_DEBUG);
+            $game->mode = GameModeFactory::find($game->modeName, $game->gameType, $game::SYSTEM, $output);
+            $output->setVerbosity(OutputInterface::VERBOSITY_NORMAL);
             $output->writeln(
-              $game->code.' '
-              .$game::SYSTEM
-              .' Mode: '
-              .str_pad($game->modeName, 20).' ('.$game->gameType->value.') '
+              'Game: '
+              .$game->code.' '
+              .$game::SYSTEM.' '
+              .str_pad($game->modeName, 16).' ('.$game->gameType->value.') '
               .str_pad($game->mode->name ?? 'unknown', 20).' '
-              .' DB: '.str_pad(($mode === null ? 'not found' : $mode->id_mode.' '.$mode->name), 20)
-              .str_pad((string) ($game->mode->id ?? 'NULL'), 4).' '
+              .' DB: '.str_pad(($mode === null ? 'not found' : str_pad((string) $mode->id_mode, 2).' '.$mode->name), 22)
+              .' Class: '.str_pad((string) ($game->mode->id ?? 'NULL'), 4).' '
               .$game->mode::class
             );
             if (!$game->save()) {

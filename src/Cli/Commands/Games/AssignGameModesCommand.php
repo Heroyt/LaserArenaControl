@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Cli\Commands\Games;
 
+use App\CQRS\Queries\GameModes\FindModeByNameQuery;
 use App\DataObjects\Db\Games\MinimalGameRow;
 use App\GameModels\Factory\GameFactory;
 use Symfony\Component\Console\Command\Command;
@@ -45,15 +46,21 @@ class AssignGameModesCommand extends Command
             if (!isset($game)) {
                 continue;
             }
+            $query = new FindModeByNameQuery()
+              ->consoleName($game->modeName)
+              ->type($game->gameType)
+              ->systems($game::SYSTEM);
+            $mode = $query->get();
             $game->getMode();
             $output->writeln(
-              $game->code.' '.$game::SYSTEM.' Mode: '.str_pad(
-                $game->modeName,
-                20
-              ).' ('.$game->gameType->value.') '.str_pad($game->mode->name ?? 'unknown', 20).' '.str_pad(
-                (string) ($game->mode->id ?? 'NULL'),
-                4
-              ).' '.$game->mode::class
+              $game->code.' '
+              .$game::SYSTEM
+              .' Mode: '
+              .str_pad($game->modeName, 20).' ('.$game->gameType->value.') '
+              .str_pad($game->mode->name ?? 'unknown', 20).' '
+              .' DB: '.str_pad(($mode === null ? 'not found' : $mode->id_mode.' '.$mode->name), 20)
+              .str_pad((string) ($game->mode->id ?? 'NULL'), 4).' '
+              .$game->mode::class
             );
             if (!$game->save()) {
                 $output->writeln('<error>Failed to save game into DB</error>');

@@ -268,7 +268,7 @@ readonly class ResultPrintService
     public function getPublicUrl(Game $game) : string {
         /** @var string $url */
         $url = Info::get('liga_api_url');
-        return trailingSlashIt($url).'g/'.$game->code;
+        return trailingSlashIt($url).'g/'.$game->code.'?mtm_campaign=QR&mtm_kwd=print';
     }
 
     /**

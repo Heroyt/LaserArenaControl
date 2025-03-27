@@ -172,30 +172,31 @@ tables:
 			`id_team` int(11) unsigned DEFAULT NULL,
 			`id_user` int(11) unsigned DEFAULT NULL,
 			`name` varchar(20) NOT NULL DEFAULT '',
-			`score` int(11) NOT NULL DEFAULT 0,
-			`skill` int(11) NOT NULL DEFAULT 0,
-			`vest` int(10) unsigned NOT NULL DEFAULT 0,
-			`shots` int(10) unsigned NOT NULL DEFAULT 0,
-			`accuracy` int(10) unsigned NOT NULL DEFAULT 0,
-			`hits` int(10) unsigned NOT NULL DEFAULT 0,
-			`deaths` int(10) unsigned NOT NULL DEFAULT 0,
-			`position` int(10) unsigned NOT NULL DEFAULT 0,
-			`shot_points` int(11) NOT NULL DEFAULT 0,
-			`score_bonus` int(11) NOT NULL DEFAULT 0,
-			`score_powers` int(11) NOT NULL DEFAULT 0,
-			`score_mines` int(11) NOT NULL DEFAULT 0,
-			`score_vip` int(11) NOT NULL DEFAULT 0,
-			`score_accuracy` int(11) NOT NULL DEFAULT 0,
-			`ammo_rest` int(10) unsigned NOT NULL DEFAULT 0,
-			`mines_hits` int(10) unsigned NOT NULL DEFAULT 0,
-			`hits_other` int(10) unsigned NOT NULL DEFAULT 0,
-			`hits_own` int(10) unsigned NOT NULL DEFAULT 0,
-			`deaths_other` int(10) unsigned NOT NULL DEFAULT 0,
-			`deaths_own` int(10) unsigned NOT NULL DEFAULT 0,
-			`bonus_agent` int(10) unsigned NOT NULL DEFAULT 0,
-			`bonus_invisibility` int(10) unsigned NOT NULL DEFAULT 0,
-			`bonus_machine_gun` int(10) unsigned NOT NULL DEFAULT 0,
-			`bonus_shield` int(10) unsigned NOT NULL DEFAULT 0,
+			`score` mediumint(7) NOT NULL DEFAULT 0,
+			`skill` smallint(5) NOT NULL DEFAULT 0,
+			`vest` tinyint(2) unsigned NOT NULL DEFAULT 0,
+			`shots` smallint(5) unsigned NOT NULL DEFAULT 0,
+			`accuracy` tinyint(3) unsigned NOT NULL DEFAULT 0,
+			`hits` smallint(5) unsigned NOT NULL DEFAULT 0,
+			`deaths` smallint(5) unsigned NOT NULL DEFAULT 0,
+			`position` tinyint(2) unsigned NOT NULL DEFAULT 0,
+			`shot_points` mediumint(7) NOT NULL DEFAULT 0,
+			`score_bonus` mediumint(7) NOT NULL DEFAULT 0,
+			`score_powers` mediumint(7) NOT NULL DEFAULT 0,
+			`score_mines` mediumint(7) NOT NULL DEFAULT 0,
+			`score_vip` mediumint(7) NOT NULL DEFAULT 0,
+			`score_accuracy` mediumint(7) NOT NULL DEFAULT 0,
+			`lives_rest` smallint(5) unsigned NOT NULL DEFAULT 0,
+			`ammo_rest` mediumint(7) unsigned NOT NULL DEFAULT 0,
+			`mines_hits` smallint(5) unsigned NOT NULL DEFAULT 0,
+			`hits_other` smallint(5) unsigned NOT NULL DEFAULT 0,
+			`hits_own` smallint(5) unsigned NOT NULL DEFAULT 0,
+			`deaths_other` smallint(5) unsigned NOT NULL DEFAULT 0,
+			`deaths_own` smallint(5) unsigned NOT NULL DEFAULT 0,
+			`bonus_agent` tinyint(3) unsigned NOT NULL DEFAULT 0,
+			`bonus_invisibility` tinyint(3) unsigned NOT NULL DEFAULT 0,
+			`bonus_machine_gun` tinyint(3) unsigned NOT NULL DEFAULT 0,
+			`bonus_shield` tinyint(3) unsigned NOT NULL DEFAULT 0,
 			`vip` tinyint(1) unsigned NOT NULL DEFAULT 0,
 			`relative_hits` decimal(11,4) DEFAULT NULL,
 			`relative_deaths` decimal(11,4) DEFAULT NULL,
@@ -212,7 +213,7 @@ tables:
 		modifications:
 			0.1.0:
 				- 'ADD `id_user` INT(11)  UNSIGNED  NULL  DEFAULT NULL  AFTER `id_team`'
-				- 'ADD `skill` INT(11)  NOT NULL DEFAULT 0  AFTER `score`'
+				- 'ADD `skill` smallint(5)  NOT NULL DEFAULT 0  AFTER `score`'
 			0.2.0:
 				- 'ADD `vip` tinyint(1) unsigned NOT NULL DEFAULT 0 AFTER `bonus_shield`'
 			0.3.0:
@@ -221,9 +222,11 @@ tables:
 			0.4.0:
 				- 'ADD `my_lasermaxx` varchar(100) NOT NULL DEFAULT '''''
 			0.5.0:
-				- 'ADD `score_accuracy` int(11) NOT NULL DEFAULT 0'
+				- 'ADD `score_accuracy` mediumint(7) NOT NULL DEFAULT 0'
 			0.5.1:
-				- 'ADD `score_vip` int(11) NOT NULL DEFAULT 0'
+				- 'ADD `score_vip` mediumint(7) NOT NULL DEFAULT 0'
+			0.5.2:
+				- 'ADD `lives_rest` smallint(5) unsigned NOT NULL DEFAULT 0'
 		foreignKeys:
 			-
 				column: id_game

@@ -181,39 +181,40 @@ tables:
 			`id_team` int(11) unsigned DEFAULT NULL,
 			`id_user` int(11) unsigned DEFAULT NULL,
 			`name` varchar(20) NOT NULL DEFAULT '',
-			`score` int(11) NOT NULL DEFAULT 0,
-			`skill` int(11) NOT NULL DEFAULT 0,
-			`vest` int(10) unsigned NOT NULL DEFAULT 0,
-			`shots` int(10) unsigned NOT NULL DEFAULT 0,
-			`accuracy` int(10) unsigned NOT NULL DEFAULT 0,
-			`hits` int(10) unsigned NOT NULL DEFAULT 0,
-			`deaths` int(10) unsigned NOT NULL DEFAULT 0,
-			`position` int(10) unsigned NOT NULL DEFAULT 0,
-			`shot_points` int(11) NOT NULL DEFAULT 0,
-			`score_bonus` int(11) NOT NULL DEFAULT 0,
-			`score_powers` int(11) NOT NULL DEFAULT 0,
-			`score_mines` int(11) NOT NULL DEFAULT 0,
-			`score_vip` int(11) NOT NULL DEFAULT 0,
-			`score_activity` int(11) NOT NULL DEFAULT 0,
-			`score_encouragement` int(11) NOT NULL DEFAULT 0,
-			`score_knockout` int(11) NOT NULL DEFAULT 0,
-			`score_penalty` int(11) NOT NULL DEFAULT 0,
-			`score_reality` int(11) NOT NULL DEFAULT 0,
-			`score_accuracy` int(11) NOT NULL DEFAULT 0,
-			`ammo_rest` int(10) unsigned NOT NULL DEFAULT 0,
-			`mines_hits` int(10) unsigned NOT NULL DEFAULT 0,
-			`hits_other` int(10) unsigned NOT NULL DEFAULT 0,
-			`hits_own` int(10) unsigned NOT NULL DEFAULT 0,
-			`deaths_other` int(10) unsigned NOT NULL DEFAULT 0,
-			`deaths_own` int(10) unsigned NOT NULL DEFAULT 0,
-			`bonuses` int(10) unsigned NOT NULL DEFAULT 0,
+			`score` mediumint(7) NOT NULL DEFAULT 0,
+			`skill` smallint(5) NOT NULL DEFAULT 0,
+			`vest` tinyint(2) unsigned NOT NULL DEFAULT 0,
+			`shots` smallint(5) unsigned NOT NULL DEFAULT 0,
+			`accuracy` tinyint(3) unsigned NOT NULL DEFAULT 0,
+			`hits` smallint(5) unsigned NOT NULL DEFAULT 0,
+			`deaths` smallint(5) unsigned NOT NULL DEFAULT 0,
+			`position` tinyint(2) unsigned NOT NULL DEFAULT 0,
+			`shot_points` mediumint(7) NOT NULL DEFAULT 0,
+			`score_bonus` mediumint(7) NOT NULL DEFAULT 0,
+			`score_powers` mediumint(7) NOT NULL DEFAULT 0,
+			`score_mines` mediumint(7) NOT NULL DEFAULT 0,
+			`score_vip` mediumint(7) NOT NULL DEFAULT 0,
+			`score_activity` mediumint(7) NOT NULL DEFAULT 0,
+			`score_encouragement` mediumint(7) NOT NULL DEFAULT 0,
+			`score_knockout` mediumint(7) NOT NULL DEFAULT 0,
+			`score_penalty` mediumint(7) NOT NULL DEFAULT 0,
+			`score_reality` mediumint(7) NOT NULL DEFAULT 0,
+			`score_accuracy` mediumint(7) NOT NULL DEFAULT 0,
+			`lives_rest` smallint(5) unsigned NOT NULL DEFAULT 0,
+			`ammo_rest` mediumint(7) unsigned NOT NULL DEFAULT 0,
+			`mines_hits` smallint(5) unsigned NOT NULL DEFAULT 0,
+			`hits_other` smallint(5) unsigned NOT NULL DEFAULT 0,
+			`hits_own` smallint(5) unsigned NOT NULL DEFAULT 0,
+			`deaths_other` smallint(5) unsigned NOT NULL DEFAULT 0,
+			`deaths_own` smallint(5) unsigned NOT NULL DEFAULT 0,
+			`bonuses` tinyint(3) unsigned NOT NULL DEFAULT 0,
 			`vip` tinyint(1) unsigned NOT NULL DEFAULT 0,
 			`relative_hits` decimal(11,4) DEFAULT NULL,
 			`relative_deaths` decimal(11,4) DEFAULT NULL,
 			`my_lasermaxx` varchar(100) NOT NULL DEFAULT '',
-			`calories` int(10) unsigned NOT NULL DEFAULT 0,
-			`activity` int(10) unsigned NOT NULL DEFAULT 0,
-			`penalty_count` int(10) unsigned NOT NULL DEFAULT 0,
+			`calories` smallint(4) unsigned NOT NULL DEFAULT 0,
+			`activity` smallint(4) unsigned NOT NULL DEFAULT 0,
+			`penalty_count` tinyint(3) unsigned NOT NULL DEFAULT 0,
 			`birthday` tinyint(1) unsigned NOT NULL DEFAULT 0,
 			`kd` decimal(11,4) GENERATED ALWAYS AS (`hits` / `deaths`) VIRTUAL,
 			PRIMARY KEY (`id_player`),
@@ -243,19 +244,21 @@ tables:
 				columns: ['id_game', 'vest']
 				unique: true
 		modifications:
-			0.1:
-				- 'ADD `score_vip` int(11) NOT NULL DEFAULT 0'
-				- 'ADD `score_activity` int(11) NOT NULL DEFAULT 0'
-				- 'ADD `score_encouragement` int(11) NOT NULL DEFAULT 0'
-				- 'ADD `score_knockout` int(11) NOT NULL DEFAULT 0'
-				- 'ADD `score_penalty` int(11) NOT NULL DEFAULT 0'
-				- 'ADD `score_reality` int(11) NOT NULL DEFAULT 0'
-				- 'ADD `score_accuracy` int(11) NOT NULL DEFAULT 0'
-				- 'ADD `activity` int(10) unsigned NOT NULL DEFAULT 0'
-				- 'ADD `penalty_count` int(10) unsigned NOT NULL DEFAULT 0'
+			0.1.0:
+				- 'ADD `score_vip` mediumint(5) NOT NULL DEFAULT 0'
+				- 'ADD `score_activity` mediumint(5) NOT NULL DEFAULT 0'
+				- 'ADD `score_encouragement` mediumint(5) NOT NULL DEFAULT 0'
+				- 'ADD `score_knockout` mediumint(5) NOT NULL DEFAULT 0'
+				- 'ADD `score_penalty` mediumint(5) NOT NULL DEFAULT 0'
+				- 'ADD `score_reality` mediumint(5) NOT NULL DEFAULT 0'
+				- 'ADD `score_accuracy` mediumint(5) NOT NULL DEFAULT 0'
+				- 'ADD `activity` smallint(4) unsigned NOT NULL DEFAULT 0'
+				- 'ADD `penalty_count` tinyint(3) unsigned NOT NULL DEFAULT 0'
 				- 'ADD `birthday` tinyint(1) unsigned NOT NULL DEFAULT 0'
-			0.2:
-				- 'ADD `bonuses` int(10) unsigned NOT NULL DEFAULT 0'
+			0.2.0:
+				- 'ADD `bonuses` tinyint(3) unsigned NOT NULL DEFAULT 0'
+			0.3.0:
+				- 'ADD `lives_rest` smallint(5) unsigned NOT NULL DEFAULT 0'
 	evo6_hits:
 		order: 4
 		definition: '''

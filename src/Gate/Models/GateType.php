@@ -9,6 +9,9 @@ use App\Gate\Settings\GateSettings;
 use App\Models\BaseModel;
 use Lsr\Caching\Cache;
 use Lsr\ObjectValidation\Exceptions\ValidationException;
+use Lsr\Orm\Attributes\Hooks\AfterDelete;
+use Lsr\Orm\Attributes\Hooks\AfterInsert;
+use Lsr\Orm\Attributes\Hooks\AfterUpdate;
 use Lsr\Orm\Attributes\PrimaryKey;
 use Lsr\Orm\Attributes\Relations\OneToMany;
 use Lsr\Orm\ModelCollection;
@@ -196,6 +199,7 @@ class GateType extends BaseModel
         return ['gate', $this->slug];
     }
 
+    #[AfterUpdate, AfterInsert, AfterDelete]
     public function clearCache() : void {
         parent::clearCache();
         /** @var Cache $cache */

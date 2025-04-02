@@ -16,6 +16,9 @@ use Lsr\Helpers\Tools\Strings;
 use Lsr\Lg\Results\Interface\Models\GameGroupInterface;
 use Lsr\Lg\Results\Interface\Models\GroupPlayerInterface;
 use Lsr\Lg\Results\Interface\Models\PlayerInterface;
+use Lsr\Orm\Attributes\Hooks\AfterDelete;
+use Lsr\Orm\Attributes\Hooks\AfterInsert;
+use Lsr\Orm\Attributes\Hooks\AfterUpdate;
 use Lsr\Orm\Attributes\JsonExclude;
 use Lsr\Orm\Attributes\NoDB;
 use Lsr\Orm\Attributes\PrimaryKey;
@@ -251,6 +254,7 @@ class GameGroup extends BaseModel implements GameGroupInterface
         return $players;
     }
 
+    #[AfterUpdate, AfterInsert, AfterDelete]
     public function clearCache() : void {
         parent::clearCache();
         if (isset($this->id)) {

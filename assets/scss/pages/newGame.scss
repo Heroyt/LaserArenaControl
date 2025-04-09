@@ -1,3 +1,4 @@
+@use '../functions';
 @import '~bootstrap/scss/functions';
 @import '~bootstrap/scss/variables';
 @import '~bootstrap/scss/variables-dark';
@@ -6,34 +7,352 @@
 @import '../mixins';
 @import 'newGame/music';
 
+$areas: (
+		hide-results: (
+				default: (
+						col: [0, 9],
+						row: [0, 1],
+				),
+				xl: (
+						col: [0, 9],
+						row: [0, 1],
+				),
+				lg: (
+						col: [0, 4],
+						row: [0, 1],
+				),
+				md: (
+						col: [0, 2],
+						row: [1, 2],
+				),
+				sm: (
+						col: [0, 1],
+						row: [1, 2],
+				),
+		),
+		systems: (
+				default: (
+						col: [9, 'end'],
+						row: [0, 1],
+				),
+				xl: (
+						col: [9, 'end'],
+						row: [0, 1],
+				),
+				lg: (
+						col: [4, 'end'],
+						row: [0, 1],
+				),
+				md: (
+						col: [0, 2],
+						row: [0, 1],
+				),
+				sm: (
+						col: [0, 1],
+						row: [0, 1],
+				),
+		),
+		vests: (
+				default: (
+						col: [0, 6],
+				),
+				xl: (
+						col: [0, 8],
+				),
+				lg: (
+						col: [0, 4],
+				),
+				md: (
+						col: [0, 'end'],
+				),
+				sm: (
+						col: [0, 1],
+				),
+		),
+		control: (
+				default: (
+						col: [0, 6],
+						row: [1, 2],
+				),
+				xl: (
+						col: [0, 6],
+						row: [1, 2],
+				),
+				lg: (
+						col: [0, 4],
+						row: [1, 2],
+				),
+				md: (
+						col: [0, 'end'],
+						row: [2, 3],
+				),
+				sm: (
+						col: [0, 'end'],
+						row: [2, 3],
+				),
+		),
+		settings: (
+				default: (
+						col: [6, 'end'],
+				),
+				xl: (
+						col: [8, 'end'],
+				),
+				lg: (
+						col: [4, 'end'],
+				),
+				md: (
+						col: [0, 'end'],
+				),
+				sm: (
+						col: [0, 'end'],
+				),
+		),
+		mode: (
+				default: (
+						col: [6, 9],
+						row: [2, 3],
+				),
+				xl: (
+						col: [8, 'end'],
+						row: [3, 4],
+				),
+				lg: (
+						col: [4, 'end'],
+						row: [4, 5],
+				),
+				md: (
+						col: [0, 1],
+						row: [4, 5],
+				),
+				sm: (
+						col: [0, 'end'],
+						row: [5, 6],
+				),
+		),
+		games: (
+				default: (
+						col: [6, 9],
+						row: [1, 2],
+				),
+				xl: (
+						col: [6, 9],
+						row: [1, 2],
+				),
+				lg: (
+						col: [4, 'end'],
+						row: [2, 3],
+				),
+				md: (
+						col: [0, 1],
+						row: [3, 4],
+				),
+				sm: (
+						col: [0, 'end'],
+						row: [4, 5],
+				),
+		),
+		music: (
+				default: (
+						col: [9, 'end'],
+						row: [2, 3],
+				),
+				xl: (
+						col: [8, 'end'],
+						row: [2, 3],
+				),
+				lg: (
+						col: [4, 'end'],
+						row: [3, 4],
+				),
+				md: (
+						col: [1, 'end'],
+						row: [4, 5],
+				),
+				sm: (
+						col: [0, 'end'],
+						row: [6, 7],
+				),
+		),
+		print: (
+				default: (
+						col: [9, 'end'],
+						row: [1, 2],
+				),
+				xl: (
+						col: [9, 'end'],
+						row: [1, 2],
+				),
+				lg: (
+						col: [4, 'end'],
+						row: [1, 2],
+				),
+				md: (
+						col: [1, 'end'],
+						row: [3, 4],
+				),
+				sm: (
+						col: [0, 'end'],
+						row: [3, 4],
+				),
+		),
+		vestcontrol: (
+				default: (
+						row: [2, 3],
+				),
+				xl: (
+						row: [2, 3],
+				),
+				lg: (
+						row: [2, 3],
+				),
+				md: (
+						row: [6, 7],
+				),
+				sm: (
+						row: [8, 9],
+				),
+		),
+		variations: (
+				default: (
+						row: [3, 4],
+				),
+				xl: (
+						row: [4, 5],
+				),
+				lg: (
+						row: [5, 6],
+				),
+				md: (
+						row: [5, 6],
+				),
+				sm: (
+						row: [7, 8],
+				),
+		),
+		random: (
+				default: (
+						row: [4, 5],
+				),
+				xl: (
+						row: [5, 6],
+				),
+				lg: (
+						row: [7, 8],
+				),
+				md: (
+						row: [7, 8],
+				),
+				sm: (
+						row: [9, 10],
+				),
+		),
+		game: (
+				default: (
+						row: [3, 'end'],
+				),
+				xl: (
+						row: [3, 'end'],
+				),
+				lg: (
+						row: [3, 7],
+				),
+				md: (
+						row: [8, 9],
+				),
+				sm: (
+						row: [10, 11],
+				),
+		),
+		teams: (
+				default: (
+						col: [8, 10],
+						row: [5, 6],
+				),
+				xl: (
+						col: [8, 'end'],
+						row: [6, 7],
+				),
+				lg: (
+						col: [0, 4],
+						row: [7, 8],
+				),
+				md: (
+						col: [0, 'end'],
+						row: [9, 10],
+				),
+				sm: (
+						col: [0, 'end'],
+						row: [11, 'end'],
+				),
+		),
+);
+
 #new-game-content {
 	display: grid;
 	grid-gap: 1rem;
-	grid-template-columns: [main-start vests-start control-start] 1fr 1fr 1fr 1fr 1fr 1fr [vests-end settings-start mode-start control-end games-start] 1fr 1fr [teams-start] 1fr [mode-end games-end print-start music-start] 1fr [teams-end] 1fr 1fr [music-end main-end print-end settings-end];
-	grid-template-rows: [main-start control-start games-start print-start] auto [control-end games-end print-end vestcontrol-start mode-start music-start] auto [vestcontrol-end mode-end music-end game-start variations-start] auto [variations-end random-start] auto [random-end teams-start] auto [teams-end] auto [main-end game-end];
 
-	@include media-breakpoint-down(xl) {
-		grid-template-columns: [main-start vests-start control-start] 1fr 1fr 1fr 1fr 1fr 1fr [control-end games-start] 1fr 1fr [vests-end mode-start settings-start teams-start music-start] 1fr [games-end print-start] 1fr 1fr 1fr [mode-end teams-end music-end main-end print-end settings-end];
-		grid-template-rows: [main-start control-start games-start print-start] auto [control-end games-end print-end vestcontrol-start music-start] auto [music-end vestcontrol-end game-start mode-start] auto [mode-end variations-start] auto [variations-end random-start] auto [random-end teams-start] auto [teams-end] auto [main-end game-end];
-	}
+	@include responsiveGridTemplate(
+					$areas,
+					(
+							default: (
+									cols: 12,
+									rows: 7,
+							),
+							xl: (
+									cols: 12,
+									rows: 8,
+							),
+							lg: (
+									cols: 6,
+									rows: 8,
+									customRows: (6: 1fr),
+							),
+							md: (
+									cols: 2,
+									rows: 10,
+							),
+							sm: (
+									cols: 1,
+									rows: 12,
+							),
+					)
+	);
 
-	@include media-breakpoint-down(lg) {
-		grid-template-columns: [main-start vests-start control-start teams-start] 1fr 1fr 1fr 1fr [teams-end control-end vests-end settings-start mode-start music-start print-start games-start] 1fr 1fr [games-end print-end mode-end music-end main-end settings-end];
-		grid-template-rows: [main-start control-start print-start] auto [control-end print-end games-start vestcontrol-start] auto [vestcontrol-end games-end music-start game-start] auto [music-end mode-start] auto [mode-end variations-start] auto [variations-end] 1fr [game-end random-start teams-start] auto [random-end teams-end main-end ];
-	}
-
-	@include media-breakpoint-down(md) {
-		grid-template-columns: [main-start vests-start control-start teams-start settings-start mode-start games-start] 1fr [games-end mode-end music-start print-start] 1fr [ print-end music-end main-end settings-end teams-end control-end vests-end];
-		grid-template-rows: [main-start control-start] auto [control-end print-start games-start ] auto [print-end games-end music-start mode-start] auto [music-end mode-end variations-start] auto [variations-end vestcontrol-start] auto [vestcontrol-end random-start] auto [random-end game-start] auto [game-end teams-start] auto [ teams-end main-end ];
-	}
-
-	@include media-breakpoint-down(sm) {
-		grid-template-columns: [main-start vests-start control-start teams-start settings-start mode-start games-start music-start print-start] 1fr [games-end mode-end print-end music-end main-end settings-end teams-end control-end vests-end];
-		grid-template-rows: [main-start control-start] auto [control-end print-start] auto [print-end games-start] auto [games-end mode-start] auto [mode-end music-start] auto [music-end variations-start] auto [variations-end vestcontrol-start] auto [vestcontrol-end random-start] auto [random-end game-start] auto [game-end teams-start] auto [ teams-end main-end ];
-
-	}
+	// grid-template-columns: functions.templateColumns(12, $areas);
+	// grid-template-rows: functions.templateRows(7, $areas);
+	//
+	// @include media-breakpoint-down(xl) {
+	// 	grid-template-columns: functions.templateColumns(12, $areas, 'xl');
+	// 	grid-template-rows: functions.templateRows(8, $areas, 'xl', auto, (6: 1fr));
+	// }
+	//
+	// @include media-breakpoint-down(lg) {
+	// 	grid-template-columns: functions.templateColumns(6, $areas, 'lg');
+	// 	grid-template-rows: functions.templateRows(8, $areas, 'lg', auto, (6: 1fr));
+	// }
+	//
+	// @include media-breakpoint-down(md) {
+	// 	grid-template-columns: functions.templateColumns(2, $areas, 'md');
+	// 	grid-template-rows: functions.templateRows(10, $areas, 'md');
+	// }
+	//
+	// @include media-breakpoint-down(sm) {
+	// 	grid-template-columns: functions.templateColumns(1, $areas, 'sm');
+	// 	grid-template-rows: functions.templateRows(12, $areas, 'sm');
+	//
+	// }
 
 
 	@import 'newGame/common';
 	@import 'newGame/control';
+
+	#hide-results-wrapper {
+		align-self: end;
+		grid-area: hide-results;
+	}
+
+	#systems {
+		grid-area: systems;
+	}
 }

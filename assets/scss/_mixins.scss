@@ -1,3 +1,6 @@
+@use 'functions';
+@use 'sass:map';
+
 // Toggles
 //
 // Used in conjunction with global variables to enable certain theme features.
@@ -40,3 +43,38 @@
 @import '~bootstrap/scss/mixins/clearfix';
 @import '~bootstrap/scss/mixins/container';
 @import '~bootstrap/scss/mixins/grid';
+
+@mixin responsiveGridTemplate($areas, $breakpoints) {
+	@each $breakpoint, $values in $breakpoints {
+		$cols: map.get($values, 'cols');
+		$rows: map.get($values, 'rows');
+		$colUnit: 1fr;
+		$rowUnit: auto;
+		$customCols: ();
+		$customRows: ();
+
+		@if map.has-key($values, 'colUnit') {
+			$colUnit: map.get($values, 'colUnit');
+		}
+		@if map.has-key($values, 'rowUnit') {
+			$rowUnit: map.get($values, 'rowUnit');
+		}
+		@if map.has-key($values, 'customCols') {
+			$customCols: map.get($values, 'customCols');
+		}
+		@if map.has-key($values, 'customRows') {
+			$customRows: map.get($values, 'customRows');
+		}
+
+		@if $breakpoint == 'default' {
+			grid-template-columns: functions.templateColumns($cols, $areas, $breakpoint, $colUnit, $customCols);
+			grid-template-rows: functions.templateRows($rows, $areas, $breakpoint, $rowUnit, $customRows);
+		} @else {
+			@include media-breakpoint-down($breakpoint) {
+				grid-template-columns: functions.templateColumns($cols, $areas, $breakpoint, $colUnit, $customCols);
+				grid-template-rows: functions.templateRows($rows, $areas, $breakpoint, $rowUnit, $customRows);
+
+			}
+		}
+	}
+}

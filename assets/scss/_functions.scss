@@ -1,4 +1,7 @@
 @use 'sass:map';
+@use 'sass:list';
+@use 'sass:string';
+@use 'sass:meta';
 @use '~bootstrap/scss/functions' as bs;
 
 @function getUtilityColors($colors) {
@@ -40,19 +43,19 @@
 	$map: ();
 	@each $name, $values in $colors {
 		@each $weight, $color in $values {
-			@if type-of($color) == "map" {
+			@if type-of($color) == 'map' {
 				$map: map.merge(
 						$map,
 						(
-							"#{map.get($color, "alias")}": map.get($color, "color"),
-							"#{$name}-#{$weight}": map.get($color, "color"),
+							'#{map.get($color, "alias")}': map.get($color, 'color'),
+							'#{$name}-#{$weight}': map.get($color, 'color'),
 						)
 				);
 			} @else {
 				$map: map.merge(
 						$map,
 						(
-							"#{$name}-#{$weight}": $color,
+							'#{$name}-#{$weight}': $color,
 						)
 				)
 			}
@@ -68,7 +71,7 @@
 			@each $weight, $color in $values {
 				@if (type-of($color) == 'map') {
 					@if (map.get($color, 'color') == $colorSearch) {
-						$result: var(--#{map.get($color, "alias")});
+						$result: var(--#{map.get($color, 'alias')});
 					}
 				} @else {
 					@if ($color == $colorSearch) {
@@ -79,4 +82,140 @@
 		}
 	}
 	@return $result;
+}
+
+@function templateColumns($cols, $areas, $breakpoint : default, $colUnit : 1fr, $customCols: null) {
+	$open: (main: true);
+	$definition: '[ main-start ';
+	$bracketOpen: true;
+
+	// Loop through all columns
+	@for $col from 0 through ($cols - 1) {
+		// Check all defined areas
+		@each $area, $values in $areas {
+			@if map.has-key($values, $breakpoint, 'col') {
+				// Check if area should open
+				@if list.nth(map.get($values, $breakpoint, 'col'), 1) == $col {
+					$open: map.set($open, $area, true);
+					@if not $bracketOpen {
+						$definition: $definition + '[ ';
+						$bracketOpen: true;
+					}
+					$definition: $definition + $area + '-start ';
+				}
+
+				// Check if area should close
+				@if list.nth(map.get($values, $breakpoint, 'col'), 2) == $col {
+					$open: map.set($open, $area, false);
+					@if not $bracketOpen {
+						$definition: $definition + '[ ';
+						$bracketOpen: true;
+					}
+					$definition: $definition + $area + '-end ';
+				}
+			}
+		}
+
+		// Close open bracket
+		@if ($bracketOpen) {
+			$definition: $definition + '] ';
+			$bracketOpen: false;
+		}
+
+		// Add column
+		$unit: $colUnit;
+		@if meta.type-of($customCols) == 'list' and list.length($customCols) > $col {
+			$unit: list.nth($customCols, $col + 1);
+		} @else if meta.type-of($customCols) == 'map' and map.has-key($customCols, $col) {
+			$unit: map.get($customCols, $col);
+		}
+		$definition: $definition + $unit + ' ';
+	}
+
+	// Close all open areas at the end
+	@each $area, $isOpen in $open {
+		@if $isOpen {
+			@if not $bracketOpen {
+				$definition: $definition + '[ ';
+				$bracketOpen: true;
+			}
+			$definition: $definition + $area + '-end ';
+		}
+	}
+
+	// Close last open bracket
+	@if ($bracketOpen) {
+		$definition: $definition + '] ';
+		$bracketOpen: false;
+	}
+
+	@return string.unquote($definition);
+}
+
+@function templateRows($rows, $areas, $breakpoint : default, $rowUnit: auto, $customRows: null) {
+	$open: (main: true);
+	$definition: '[ main-start ';
+	$bracketOpen: true;
+
+	// Loop through all rows
+	@for $row from 0 through ($rows - 1) {
+		// Check all defined areas
+		@each $area, $values in $areas {
+			@if map.has-key($values, $breakpoint, 'row') {
+				// Check if area should open
+				@if list.nth(map.get($values, $breakpoint, 'row'), 1) == $row {
+					$open: map.set($open, $area, true);
+					@if not $bracketOpen {
+						$definition: $definition + '[ ';
+						$bracketOpen: true;
+					}
+					$definition: $definition + $area + '-start ';
+				}
+
+				// Check if area should close
+				@if list.nth(map.get($values, $breakpoint, 'row'), 2) == $row {
+					$open: map.set($open, $area, false);
+					@if not $bracketOpen {
+						$definition: $definition + '[ ';
+						$bracketOpen: true;
+					}
+					$definition: $definition + $area + '-end ';
+				}
+			}
+		}
+
+		// Close open bracket
+		@if ($bracketOpen) {
+			$definition: $definition + '] ';
+			$bracketOpen: false;
+		}
+
+		// Add row
+		$unit: $rowUnit;
+		@if meta.type-of($customRows) == 'list' and list.length($customRows) > $row {
+			$unit: list.nth($customRows, $row + 1);
+		} @else if meta.type-of($customRows) == 'map' and map.has-key($customRows, $row) {
+			$unit: map.get($customRows, $row);
+		}
+		$definition: $definition + $unit + ' ';
+	}
+
+	// Close all open areas at the end
+	@each $area, $isOpen in $open {
+		@if $isOpen {
+			@if not $bracketOpen {
+				$definition: $definition + '[ ';
+				$bracketOpen: true;
+			}
+			$definition: $definition + $area + '-end ';
+		}
+	}
+
+	// Close last open bracket
+	@if ($bracketOpen) {
+		$definition: $definition + '] ';
+		$bracketOpen: false;
+	}
+
+	@return string.unquote($definition);
 }

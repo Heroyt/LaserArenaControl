@@ -1,0 +1,21 @@
+{parameters
+	App\GameModels\Game\Game $game,
+	App\GameModels\Game\Team $team,
+	App\GameModels\Game\Team|null $win = null,
+	int $totalScore = 0,
+}
+<div class="team text-bg-team-{$game::SYSTEM}-{$team->color}"
+	 style="height:calc({100*($team->score > 0 ? $team->score : 0) / ($totalScore > 0 ? $totalScore : 1)|noescape}% - .2rem);"
+	 data-team="{$team->id}">
+	<div class="name">
+		<div class="text-center crown">
+			{if $win === null || $win?->id === $team->id}
+				{svgIcon 'crown', '2rem'}
+			{/if}
+		</div>
+		{$team->name}
+	</div>
+	<div class="score text-end" data-score="{$team->score}">
+		<span class="value">{$team->score|number:0,',','&nbsp;'|noescape}</span> {faSolid 'star'}
+	</div>
+</div>

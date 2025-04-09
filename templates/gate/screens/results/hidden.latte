@@ -1,30 +1,28 @@
 {layout '../../@layout.latte'}
 
-{varType App\GameModels\Game\Lasermaxx\Game $game}
-{varType string $qr}
+{varType App\GameModels\Game\Game $game}
 
 {var bool $includeTeams = $game->mode?->isTeam() && $game->mode?->settings?->partTeams}
 
 {define containerClasses}
-    results results-game-{$game->id} {if !$includeTeams}no-teams{/if}
+	results results-game-{$game->id} results-hidden {if !$includeTeams}no-teams{/if}
 {/define}
 
 {define content}
-    <section class="info" data-game="{$game->code}">
-		{$qr|noescape}
-		<h3>{_'On-line detailní výsledky', domain: 'results'}</h3>
-    </section>
-    <section class="players">
+	<section class="info">
+		<h3 class="fs-1">{_'Výsledky jsou tajemnství', domain: 'gate'}</h3>
+	</section>
+	<section class="players">
 		{var int $playerCount = count($game->players)}
 		{foreach $game->playersSorted as $player}
 			{include 'lasermaxxRankablePlayer.latte', $game, $player, $playerCount, $iterator->counter}
 		{/foreach}
-    </section>
-    <section class="teams" n:if="$includeTeams">
+	</section>
+	<section class="teams" n:if="$includeTeams">
 		{var int $totalScore = array_sum(array_map(function(App\GameModels\Game\Team $team){ return $team->score > 0 ? $team->score : 0;},$game->teams->getAll()))}
 		{var App\GameModels\Game\Team|null $win = $game->mode?->getWin($game)}
 		{foreach $game->teamsSorted as $team}
 			{include 'lasermaxxRankableTeam.latte', $game, $team, $win, $totalScore}
 		{/foreach}
-    </section>
+	</section>
 {/define}

@@ -1,5 +1,5 @@
-import {shuffle} from "../../includes/functions";
-import {PlayerData, TeamData} from "./types";
+import {shuffle} from '../../includes/functions';
+import {PlayerData, TeamData} from './types';
 
 /**
  * Run results animation
@@ -75,7 +75,7 @@ export function animateResults(wrapper: HTMLDivElement) {
  * @param minScore Min score of all players
  * @param maxScore Max score of all players
  */
-function initPlayer(player: HTMLDivElement, key: number, minScore: number, maxScore: number): PlayerData {
+export function initPlayer(player: HTMLDivElement, key: number, minScore: number, maxScore: number): PlayerData {
     // Prepare the animation in
     player.style.animationDelay = `${30 * key}ms`;
     player.style.order = key.toString();
@@ -184,7 +184,7 @@ function setPlayerFinished(playerData: PlayerData) {
  * Reorder all players by their current score
  * @param playersData All players
  */
-function reorderPlayers(playersData: PlayerData[]): void {
+export function reorderPlayers(playersData: PlayerData[]): void {
     const playerCount: number = playersData.length;
 
     // Sort players by current score
@@ -207,7 +207,7 @@ const minTeamHeight = parseFloat(getComputedStyle(document.body).fontSize) * 8;
  * Reorder all teams by their current score
  * @param teamsData
  */
-function reorderTeams(teamsData: Map<string, TeamData>): void {
+export function reorderTeams(teamsData: Map<string, TeamData>): void {
     if (teamsData.size === 0) {
         return;
     }
@@ -469,7 +469,7 @@ function animate(playersData: PlayerData[], teamsData: Map<string, TeamData>, pl
  * Calculate and update the accuracy svg for player
  * @param playerData
  */
-function updateAccuracySVG(playerData: PlayerData) {
+export function updateAccuracySVG(playerData: PlayerData) {
     playerData.accuracy.valueEl.innerHTML = `${Math.round(playerData.accuracy.current)}%`;
     playerData.accuracy.svgEl.setAttribute('stroke-dasharray', `${Math.round(playerData.accuracy.current * Math.PI * 2 * playerData.accuracy.radius * 100) / 10000} ${playerData.accuracy.secondDashArray}`);
 }

@@ -1,30 +1,24 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Gate\Screens\Results;
 
-use App\Exceptions\GameModeNotFoundException;
-use App\GameModels\Game\Evo5\GameModes\M100Naboju;
-use App\Gate\Screens\WithGameQR;
 use Lsr\Core\Requests\Dto\ErrorResponse;
 use Psr\Http\Message\ResponseInterface;
 
-/**
- *
- */
-class LaserMaxx100NabojuResultsScreen extends AbstractResultsScreen
+class ResultsHiddenScreen extends AbstractResultsScreen
 {
-    use WithGameQR;
 
     /**
      * @inheritDoc
      */
     public static function getName() : string {
-        return lang('LaserMaxx výsledky z módu 100 nábojů', context: 'screens', domain: 'gate');
+        return lang('Skryté výsledky', context: 'screens', domain: 'gate');
     }
 
     public static function getDescription() : string {
         return lang(
-                   'Obrazovka zobrazující výsledky LaserMaxx z módu 100 nábojů.',
+                   'Obrazovka zobrazí jen zprávu, že výsledky jsou skryté.',
           context: 'screens.description',
           domain : 'gate'
         );
@@ -34,17 +28,9 @@ class LaserMaxx100NabojuResultsScreen extends AbstractResultsScreen
      * @inheritDoc
      */
     public static function getDiKey() : string {
-        return 'gate.screens.results.lasermaxx.100naboju';
+        return 'gate.screens.results.hidden';
     }
-
-    public function isActive() : bool {
-        try {
-            return parent::isActive() && $this->game?->mode instanceof M100Naboju;
-        } catch (GameModeNotFoundException) {
-            return false;
-        }
-    }
-
+    
     /**
      * @inheritDoc
      */
@@ -60,11 +46,11 @@ class LaserMaxx100NabojuResultsScreen extends AbstractResultsScreen
         }
 
         return $this->view(
-          'gate/screens/results/lasermaxx100naboju',
+          'gate/screens/results/hidden',
           [
             'game'   => $game,
-            'qr'     => $this->getQR($game),
             'mode'   => $game->mode,
+            'addJs'  => ['gate/resultsHidden.js'],
             'addCss' => ['gate/results.css'],
           ]
         );

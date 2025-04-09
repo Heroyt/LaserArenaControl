@@ -30,7 +30,8 @@ use Spiral\RoadRunner\Metrics\Metrics;
  *      player?:array{name:string,team?:string,vip?:numeric-string,birthday?:numeric-string,code:string}[],
  *      team?:array{name:string}[],
  *      mode?:string,
- *      meta?:array<string,mixed>
+ *      meta?:array<string,mixed>,
+ *      hideResults?:string|bool,
  *   }
  */
 abstract class LasermaxxGameLoader implements LoaderInterface
@@ -147,6 +148,7 @@ abstract class LasermaxxGameLoader implements LoaderInterface
                   'music'    => empty($data['music']) ? null : $data['music'],
                   'mode'     => $data['mode'] ?? '',
                   'loadTime' => time(),
+                  'resultsHidden' => !empty($data['hideResults']),
                   ...($data['meta'] ?? []),
                 ],
         );

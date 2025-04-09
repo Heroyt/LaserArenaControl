@@ -12,6 +12,7 @@ namespace App\Tools\GameLoading;
  *     group?: numeric|string,
  *     type?: numeric|string,
  *     variations?: array<int, string>,
+ *     resultsHidden?: bool,
  * }
  */
 class LasermaxxLoadData

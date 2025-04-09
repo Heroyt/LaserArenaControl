@@ -35,18 +35,16 @@ class GameLoading extends ApiController
         if (is_numeric($system)) {
             $system = System::get($system);
         }
-        else {
-            if (is_string($system)) {
-                $type = SystemType::tryFrom($system);
-                if ($type === null) {
-                    return $this->respond(new ErrorResponse('Invalid system type'), 400);
-                }
-                $systems = System::getForType($type);
-                if (empty($systems)) {
-                    return $this->respond(new ErrorResponse('No systems found'), 404);
-                }
-                $system = first($systems);
+        else if (is_string($system)) {
+            $type = SystemType::tryFrom($system);
+            if ($type === null) {
+                return $this->respond(new ErrorResponse('Invalid system type'), 400);
             }
+            $systems = System::getForType($type);
+            if (empty($systems)) {
+                return $this->respond(new ErrorResponse('No systems found'), 404);
+            }
+            $system = first($systems);
         }
         try {
             // @phpstan-ignore-next-line

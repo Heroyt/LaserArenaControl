@@ -84,7 +84,7 @@ class GateType extends BaseModel
 
     public function addScreenModel(GateScreenModel ...$screens) : GateType {
         foreach ($screens as $screen) {
-            $this->screens->add($screen);
+            $this->screens->models[] = $screen;
             $screen->gate = $this;
         }
 
@@ -117,7 +117,7 @@ class GateType extends BaseModel
         }
         $screenModel->order = $order;
         $screenModel->trigger = $trigger;
-        $this->screens->add($screenModel);
+        $this->screens->models[] = $screenModel;
         $screenModel->gate = $this;
 
         return $this;

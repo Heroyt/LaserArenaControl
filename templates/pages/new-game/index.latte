@@ -25,15 +25,19 @@
 ]}
 
 {block content}
-    <div n:if="count($systems) > 1" class="d-flex justify-content-end mb-3">
-        <div id="systems" class="form-floating" style="min-width:15rem;">
-            <select class="form-select" id="systems-select" aria-label="{_'Vybrat LG systém', context: 'game'}">
-                <option n:foreach="$systems as $sys" n:attr="value: $sys->id, selected: $sys === $system">{$sys->name}</option>
-            </select>
-            <label for="last-games">{_'Vybrat LG systém', context: 'game'}</label>
-        </div>
-    </div>
-    <form method="post" action="" id="new-game-content" class="w-100">
+	<form method="post" action="" id="new-game-content" class="w-100">
+		<div id="hide-results-wrapper" class="form-check form-switch">
+			<input type="checkbox" class="form-check-input" name="hideResults" role="switch" id="hide-results"
+				   value="1"/>
+			<label class="form-check-label"
+				   for="hide-results">{_'Skrýt výsledky na výsledkové tabuli', context: 'game'}</label>
+		</div>
+		<div n:if="count($systems) > 1" id="systems" class="form-floating" style="min-width:15rem;">
+			<select class="form-select" id="systems-select" aria-label="{_'Vybrat LG systém', context: 'game'}">
+				<option n:foreach="$systems as $sys" n:attr="value: $sys->id, selected: $sys === $system">{$sys->name}</option>
+			</select>
+			<label for="last-games">{_'Vybrat LG systém', context: 'game'}</label>
+		</div>
         {cache 'newGame-'.$lang.'-controls', tags: ['templates.newGame', 'templates', 'templates.'.$lang]}
             {include sectionControls}
         {/cache}

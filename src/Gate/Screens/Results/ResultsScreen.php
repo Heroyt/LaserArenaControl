@@ -86,6 +86,13 @@ class ResultsScreen extends GateScreen implements ResultsScreenInterface
             throw new RuntimeException('Game must be set.');
         }
 
+        // Check if game results should be hidden
+        if (($game->getMeta() ?? [])['resultsHidden'] ?? false) {
+            $this->childScreen = App::getService('gate.screens.results.hidden');
+            $this->childScreen->setGame($game)->setParams($this->params);
+            return $this->childScreen;
+        }
+
         // Find correct screen based on game
         $mode = $game->mode;
         if ($mode instanceof CustomResultsMode) {

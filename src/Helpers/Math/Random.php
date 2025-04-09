@@ -43,6 +43,10 @@ class Random
      * @return int[]
      */
     public static function randomSumDistribution(int $sum, int $count) : array {
+        if ($count < 2) {
+            return [$sum];
+        }
+
         $randomizer = new Randomizer();
 
         // Generate N-1 random partition points

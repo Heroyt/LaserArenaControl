@@ -440,7 +440,9 @@ function animate(playersData: PlayerData[], teamsData: Map<string, TeamData>, pl
                     .filter(value => {
                         return value.trim() === '';
                     });
-                playerData.scoreEl.classList.add(...classes);
+	            if (classes.length > 0) {
+		            playerData.scoreEl.classList.add(...classes);
+	            }
             }
         });
         // Reset the manually set wrapper display

@@ -270,13 +270,15 @@ export default class Game {
 			);
 		});
 
-		this.$hideResults.addEventListener('click', (e) => {
-			this.$hideResults.dispatchEvent(
-				new Event('update', {
-					bubbles: true,
-				}),
-			);
-		});
+		if (this.$hideResults) {
+			this.$hideResults.addEventListener('click', (e) => {
+				this.$hideResults.dispatchEvent(
+					new Event('update', {
+						bubbles: true,
+					}),
+				);
+			});
+		}
 
 		this.$musicMode.addEventListener('change', () => {
 			this.$musicMode.dispatchEvent(
@@ -486,7 +488,9 @@ export default class Game {
 			team.clear();
 		});
 
-		this.$hideResults.checked = false;
+		if (this.$hideResults) {
+			this.$hideResults.checked = false;
+		}
 		this.$gameMode.value = (this.$gameMode.firstElementChild as HTMLOptionElement).value;
 		//this.$musicMode.value = (this.$musicMode.firstElementChild as HTMLOptionElement).value;
 
@@ -820,7 +824,7 @@ export default class Game {
 
 			this.$musicMode.dispatchEvent(e);
 		}
-		if ('hideResults' in data) {
+		if ('hideResults' in data && this.$hideResults) {
 			this.$hideResults.checked = data.hideResults;
 		}
 		if (data.playlist && this.$playlist) {
@@ -926,7 +930,7 @@ export default class Game {
 			},
 			players: {},
 			teams: {},
-			hideResults: this.$hideResults.checked,
+			hideResults: this.$hideResults ? this.$hideResults.checked : false,
 		};
 
 		if (this.$playlist && this.$playlist.value) {

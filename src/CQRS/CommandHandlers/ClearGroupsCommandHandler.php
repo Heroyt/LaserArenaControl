@@ -9,6 +9,8 @@ use App\Models\GameGroup;
 use DateTimeImmutable;
 use Lsr\CQRS\CommandHandlerInterface;
 use Lsr\CQRS\CommandInterface;
+use Lsr\Db\DB;
+use Lsr\Logging\Logger;
 
 class ClearGroupsCommandHandler implements CommandHandlerInterface
 {
@@ -18,12 +20,17 @@ class ClearGroupsCommandHandler implements CommandHandlerInterface
      */
     public function handle(CommandInterface $command) : ClearGroupsCommandResponse {
         assert($command instanceof ClearGroupsCommand);
+        $logger = new Logger(LOG_DIR, 'clear_groups');
+        $logger->info('Clearing groups...');
         $response = new ClearGroupsCommandResponse();
 
-        $groups = GameGroup::getActive();
+        $groups = DB::select(GameGroup::TABLE, '*')
+                    ->where('[active] = 1')
+                    ->fetchIterator(false);
         $hourAgo = new DateTimeImmutable('-1 hour');
         $twoDaysAgo = new DateTimeImmutable('-2 days');
-        foreach ($groups as $group) {
+        foreach ($groups as $row) {
+            $group = GameGroup::get($row->id_group, $row);
             // Filter out groups that were created in the last hour
             if ($group->createdAt !== null && $group->createdAt > $hourAgo) {
                 continue;
@@ -31,7 +38,10 @@ class ClearGroupsCommandHandler implements CommandHandlerInterface
             // Check if group has games
             if (count($group->games) === 0) {
                 // Delete groups without games
-                $group->delete();
+                if (!$group->delete()) {
+                    $logger->error('Failed to delete group: '.$group->id);
+                    continue;
+                }
                 $response->deleted++;
             }
             // Check if group's last game is older than 2 days.
@@ -44,11 +54,15 @@ class ClearGroupsCommandHandler implements CommandHandlerInterface
             if ($lastDate < $twoDaysAgo) {
                 // Hide groups with games older than 2 days
                 $group->active = false;
-                $group->save();
+                if (!$group->save()) {
+                    $logger->error('Failed to hide group: '.$group->id);
+                    continue;
+                }
                 $response->hidden++;
             }
         }
         GameGroup::clearModelCache();
+        $logger->info('Cleared groups: '.$response->deleted.' deleted, '.$response->hidden.' hidden');
 
         return $response;
     }

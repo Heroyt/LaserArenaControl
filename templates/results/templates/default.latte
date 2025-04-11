@@ -67,7 +67,7 @@
 		</div>
 		<div class="my-1">
 			<strong>{_'Herní mód', domain: 'results', context: 'info'}:</strong>
-			{_$game->mode?->getName(), context: 'gameModes'}
+			{_$game->mode?->getName(), domain: 'gameModes'}
 		</div>
 		<div n:if="$game->getMusic() !== null">
 			<strong>{_'Hudební mód', domain: 'results', context: 'info'}:</strong>

@@ -227,7 +227,7 @@
 				<input type="text" class="form-control modeName" name="mode[{$id}][name]"
 					   id="mode-name-{$id}"
                        placeholder="{_'Herní mód', context: 'game.modes'}"
-                       value="{ifset $mode}{_$mode->getName(), context: 'gameModes'}{/ifset}"/>
+					   value="{ifset $mode}{_$mode->getName(), domain: 'gameModes'}{/ifset}"/>
                 <label for="mode-name-{$id}">{_'Název'}</label>
 			</div>
 			<div class="form-floating mb-2">
@@ -240,7 +240,7 @@
 			<div class="form-floating mb-2">
 						<textarea type="text" class="form-control modeDescription" name="mode[{$id}][description]"
 								  id="mode-description-{$id}" style="height: 100px;"
-                                  placeholder="{_'Popis', context: 'game.modes'}">{ifset $mode}{_$mode->description, context: 'gameModes'}{/ifset}</textarea>
+								  placeholder="{_'Popis', context: 'game.modes'}">{ifset $mode}{_$mode->description, context: $mode->getName(), domain: 'gameModes'}{/ifset}</textarea>
                 <label for="mode-description-{$id}">{_'Popis'}</label>
 			</div>
 			<div>

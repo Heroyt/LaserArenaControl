@@ -28,7 +28,7 @@
 	{if $showPlay && count($musicGroup->music) === 1}
 		<div class="music-mode-name-play">
 			<div class="name">
-				{_$musicGroup->name, context: 'music'}
+				{_$musicGroup->name, domain: 'music'}
 			</div>
 			<div class="d-flex align-items-center music">
 				<div class="time-music font-monospace">
@@ -53,9 +53,9 @@
 	{else}
 		<div class="name">
 			{if count($musicGroup->music) === 1}
-				{_$musicGroup->music[0]->name, context: 'music'}
+				{_$musicGroup->music[0]->name, domain: 'music'}
 			{else}
-				{_$musicGroup->name, context: 'music.group'}
+				{_$musicGroup->name, context: 'group', domain: 'music'}
 			{/if}
 		</div>
 	{/if}
@@ -63,7 +63,7 @@
 		{if $showPlay}
 			<div n:foreach="$musicGroup->music as $musicMode" class="child" data-id="{$musicMode->id}">
 				<div class="name">
-					{_$musicMode->name, context: 'music'}
+					{_$musicMode->name, domain: 'music'}
 				</div>
 				<div class="d-flex align-items-center music">
 					<div class="time-music font-monospace">
@@ -87,7 +87,7 @@
 			</div>
 		{else}
 			<button type="button" n:foreach="$musicGroup->music as $musicMode" class="child" data-id="{$musicMode->id}">
-				{_$musicMode->name, context: 'music'}
+				{_$musicMode->name, domain: 'music'}
 			</button>
 		{/if}
 	</div>

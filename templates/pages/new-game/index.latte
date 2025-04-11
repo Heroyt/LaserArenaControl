@@ -244,18 +244,22 @@
         {_'Herní mód', context: 'game'}:
     </label>
     <div class="input-group">
+		{var string $firstMode = ''}
         {var string $firstDescription = ''}
         <select name="game-mode" id="game-mode-select" class="form-select">
             <option n:foreach="$gameModes as $mode" value="{$mode->id}" data-type="{$mode->type->value}"
                                                     data-name="{$mode->getName()}"
                                                     data-teams="{$mode->teams}"
                                                     data-variations='{$mode->variations|json}'
-                                                    data-description="{_$mode->description, context: 'gameModes'}"
+													data-description="{_$mode->description, context: $mode->getName(), domain: 'gameModes'}"
                                                     data-active="{json_encode($mode->active)}"
 													data-class="{$mode::class}"
                     {if $mode instanceof App\GameModels\Game\GameModes\CustomLoadMode}data-script="{$mode->getNewGameScriptToRun()}"{/if}>
-                {if $iterator->first}{do $firstDescription = $mode->description}{/if}
-                {_$mode->getName(), context: 'gameModes'}
+				{if $iterator->first}
+					{do $firstDescription = $mode->description}
+					{do $firstMode = $mode->getName()}
+				{/if}
+				{_$mode->getName(), domain: 'gameModes'}
             </option>
         </select>
         <button type="button" data-toggle="shuffle" title="{_'Náhodně', context: 'actions'}"
@@ -265,7 +269,7 @@
     </div>
     <div id="game-mode-description" class="select-description text-muted" data-target="#game-mode-select">
         {if $firstDescription !== ''}
-            {_$firstDescription, context: 'gameModes'}
+			{_$firstDescription, context: $firstMode, domain: 'gameModes'}
         {/if}
     </div>
 {/define}

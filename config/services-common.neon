@@ -29,13 +29,17 @@ lsr:
 			- 'fr_FR'
 			- 'sk_SK'
 			- 'es_ES'
+			- 'uk_UA'
 		domains:
 			- 'results'
 			- 'gate'
-			- 'tips'
-			- 'cli'
 			- 'highlights'
+			- 'gameModes'
+			- 'music'
+			- 'titles'
+			- 'achievements'
 			- 'tournament'
+			- 'highlights'
 parameters:
 	db:
 		driver: mysqli

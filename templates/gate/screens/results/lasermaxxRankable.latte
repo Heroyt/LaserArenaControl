@@ -17,7 +17,7 @@
 	{var int $playerCount = count($game->players)}
 	{var int $cols = ceil($playerCount / 11)}
 	{var int $rows = ceil($playerCount / $cols)}
-	<section class="players"
+	<section class="players players-cols-{$cols}"
 			 style="--cols: {$cols}; --rows: {$rows}; --multiplier: {((-0.05 * ($rows - 11)) + 1)|noescape};">
 		{foreach $game->playersSorted as $player}
 			{include 'lasermaxxRankablePlayer.latte', $game, $player, $playerCount, $iterator->counter}

@@ -65,6 +65,12 @@
 		grid-gap: .2rem;
 		grid-template: repeat(var(--rows, 11), 1fr) / repeat(var(--cols, 1), 1fr);
 		justify-content: flex-end;
+
+		&.players-cols-2 {
+			.title {
+				display: none;
+			}
+		}
 	}
 
 	.teams {
@@ -191,7 +197,7 @@
 
 		> .position {
 			font-size: calc(1.7rem * var(--multiplier));
-			max-width: 5rem;
+			max-width: 4.5rem;
 			text-align: center;
 		}
 

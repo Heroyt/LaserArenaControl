@@ -12,9 +12,14 @@
 	<section class="info">
 		<h3 class="fs-1">{_'Výsledky jsou tajemnství', domain: 'gate'}</h3>
 	</section>
-	<section class="players">
-		{var int $playerCount = count($game->players)}
-		{foreach $game->playersSorted as $player}
+	{var int $playerCount = count($game->players)}
+	{var int $cols = ceil($playerCount / 11)}
+	{var int $rows = ceil($playerCount / $cols)}
+	<section class="players"
+			 style="--cols: {$cols}; --rows: {$rows}; --multiplier: {((-0.05 * ($rows - 11)) + 1)|noescape};">
+		{var App\GameModels\Game\Player[] $players = $game->players->getAll()}
+		{do shuffle($players)}
+		{foreach $players as $player}
 			{include 'lasermaxxRankablePlayer.latte', $game, $player, $playerCount, $iterator->counter}
 		{/foreach}
 	</section>

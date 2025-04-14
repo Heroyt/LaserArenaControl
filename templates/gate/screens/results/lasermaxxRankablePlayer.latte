@@ -5,12 +5,12 @@
 	int $counter = 0,
 }
 <div class="player text-grey-text"
-	 style="--multiplier: {((-0.05 * ($playerCount - 11)) + 1)|noescape}; --delay: {$iterator->counter * 30}ms;"
+	 style="--delay: {$counter * 30}ms; view-transition-name: player-{$player->vest};"
 	 data-score="{$player->score}"
-	 data-position="{$iterator->counter}" data-team="{$player->team->id}">
+	 data-position="{$counter}" data-team="{$player->team->id}">
 	{var array $rank = $player->getBestAt()}
-	<div class="position" data-value="{$iterator->counter}">
-		{$iterator->counter}.
+	<div class="position" data-value="{$counter}">
+		{$counter}.
 	</div>
 	{ifset $player->user}
 		<img src="https://laserliga.cz/user/{$player->user->getCode()}/avatar" alt="Avatar" class="player-avatar"/>

@@ -120,14 +120,9 @@ export default class ResultsHiddenScreen implements GateScreen {
 			playerData.player.style.animationDelay = null;
 			playerData.player.classList.add('animating');
 			playerData.player.classList.remove('animate-in');
-
-			// Set the absolute positions for each player to allow position switching
-			playerData.player.style.top = `calc(${key} * (100% - (.2rem * var(--multiplier) * ${playerCount - 1})) / ${playerCount})`;
-			playerData.player.style.height = `calc(((100% - (.2rem * var(--multiplier) * ${playerCount - 1})) / ${playerCount}) - 0.4rem * var(--multiplier))`;
 		});
 
 		// Rewrite the default flex display to allow position switching
-		playersWrapper.style.display = 'block';
 		if (teamsWrapper) {
 			teamsWrapper.style.display = 'block';
 		}
@@ -208,7 +203,7 @@ export default class ResultsHiddenScreen implements GateScreen {
 
 		// Start animation
 		setTimeout(() => {
-			draw(20);
+			draw(40);
 		}, 20);
 	}
 

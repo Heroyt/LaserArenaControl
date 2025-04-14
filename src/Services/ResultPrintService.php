@@ -241,10 +241,8 @@ readonly class ResultPrintService
                     if (file_exists($customFile)) {
                         $template .= '/'.$customTemplate;
                     }
-                    else {
-                        if (file_exists(TEMPLATE_DIR.'results/templates/'.$customTemplate.'.latte')) {
-                            $template = $customTemplate;
-                        }
+                    else if (file_exists(TEMPLATE_DIR.'results/templates/'.$customTemplate.'.latte')) {
+                        $template = $customTemplate;
                     }
                 }
             }

@@ -17,6 +17,25 @@
 12 => 4,
 ]}
 
+{define results}
+	{var int $maxPlayersPerPage = 11}
+	{var int $minPlayersPerPage = 6}
+	{var bool $showHits = $game->mode?->settings?->partHits && $game->players->count() < 7}
+	{var App\GameModels\Tip[] $tips = array_values(\App\GameModels\Tip::shuffled())}
+	{* Split large number of players to multiple pages *}
+	<main n:foreach="($game->playersSorted->getAll()|splitGroups:$minPlayersPerPage, $maxPlayersPerPage) as $players"
+			class="container-print-wrapper">
+		<img src="{getUrl}{($template->orientation === App\GameModels\Game\Enums\PrintOrientation::landscape ? $style->bgLandscape : $style->bg)|noescape}"
+			 alt="background" class="bg-img">
+		<div class="container-print {include containerClasses}">
+			{include content, $players, $showHits}
+		</div>
+		<div class="tip">
+			<span class="content">{_'Tip #%d', domain: 'tips', format: [$tips[$iterator->counter0]?->id]}: {$tips[$iterator->counter0]?->translate()}</span>
+		</div>
+	</main>
+{/define}
+
 {define teamColor}
     {default int $teamColor = 0}
     <span class="team-color bg-team-{$teamColor}"></span>
@@ -26,15 +45,23 @@
 	template-graphical {if $game->mode?->isSolo()}solo{/if} {if $game->mode?->settings?->partHits && count($game->players) < 7}less-players{/if}
 {/define}
 
-{define content}
+{define content, App\GameModels\Game\Player[] $players = [], ?bool $showHits = null}
+	{if empty($players)}
+		{do $players = $game->playersSorted->getAll()}
+	{/if}
+	{if $showHits === null}
+		{do $showHits = $game->mode?->settings?->partHits && count($game->players) < 7}
+	{/if}
+
     {include resultsHeader}
+
 	{if $game->mode?->isTeam() && $game->mode?->settings?->partTeams}
         {include resultsTeams}
     {/if}
 	{if $game->mode?->settings?->partPlayers}
-        {include resultsPlayers}
+		{include resultsPlayers, $players}
     {/if}
-	{if $game->mode?->settings?->partHits && count($game->players) < 7}
+	{if $showHits}
         {include resultsHits}
     {/if}
     {include legend}
@@ -127,15 +154,14 @@
     </div>
 {/define}
 
-{define resultsPlayers}
+{define resultsPlayers, App\GameModels\Game\Player[] $players}
     {var int $maxScore = $game->getMaxScore()}
     {var int $minScore = $game->getMinScore()}
 	{var int $maxShots = $game->players->query()->sortBy('shots')->desc()->first()->shots}
     {var int $totalHeight = $maxScore - ($minScore < 0 ? $minScore : 0)}
-	{var int $count = count($game->players)}
+	{var int $count = count($players)}
     <section class="results-players" style="grid-template-columns: repeat({$count}, 1fr);">
-		{foreach $game->playersSorted as $player}
-			{varType App\GameModels\Game\Player $player}
+		{foreach $players as $player}
             <div class="results-player rounded bg-white flex-fill"
 				 style="--team-color: var(--team-{$player->color});">
                 <div class="player-head">

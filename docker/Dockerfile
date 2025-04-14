@@ -27,17 +27,16 @@ COPY docker/core/php.ini "$PHP_INI_DIR/php.ini"
 COPY docker/core/php-staging.ini "$PHP_INI_DIR/php-staging.ini"
 
 # PHP extensions
-RUN docker-php-ext-install  \
-    mysqli  \
-    curl  \
-    gettext  \
-    sockets  \
-    pdo_mysql  \
-    zip  \
-    pcntl  \
-    intl  \
-    opcache  \
-    gd
+RUN docker-php-ext-install mysqli
+RUN docker-php-ext-install curl
+RUN docker-php-ext-install gettext
+RUN docker-php-ext-install sockets
+RUN docker-php-ext-install pdo_mysql
+RUN docker-php-ext-install zip
+RUN docker-php-ext-install pcntl
+RUN docker-php-ext-install intl
+RUN docker-php-ext-install opcache
+RUN docker-php-ext-install gd
 
 # Imagick
 RUN apt-get update &&  \
@@ -96,6 +95,7 @@ RUN sed -i -e 's/# cs_CZ.UTF-8 UTF-8/cs_CZ.UTF-8 UTF-8/' /etc/locale.gen \
 	&& sed -i -e 's/# sk_SK.UTF-8 UTF-8/sk_SK.UTF-8 UTF-8/' /etc/locale.gen \
 	&& sed -i -e 's/# ru_RU.UTF-8 UTF-8/ru_RU.UTF-8 UTF-8/' /etc/locale.gen \
 	&& sed -i -e 's/# es_ES.UTF-8 UTF-8/es_ES.UTF-8 UTF-8/' /etc/locale.gen \
+	&& sed -i -e 's/# uk_UA.UTF-8 UTF-8/uk_UA.UTF-8 UTF-8/' /etc/locale.gen \
     && dpkg-reconfigure --frontend=noninteractive locales \
     && locale-gen cs_CZ.UTF-8 \
     && update-locale

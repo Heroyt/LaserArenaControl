@@ -45,7 +45,7 @@ class Gate
         $screens = $gate->screens;
 
         /** @var CustomEventDto|null $customEvent */
-        $customEvent = Info::get('gate-event');
+        $customEvent = Info::get('gate-event', useCache: false);
 
         $activeGateType = ScreenTriggerType::DEFAULT;
 
@@ -137,9 +137,9 @@ class Gate
         $maxTime = 0;
 
         /** @var Game|null $test */
-        $test = Info::get('gate-game');
+        $test = Info::get('gate-game', useCache: false);
         /** @var int $gateTime */
-        $gateTime = Info::get('gate-time', $now);
+        $gateTime = Info::get('gate-time', $now, useCache: false);
         if (isset($test) && ($now - $gateTime) <= $this->getTmpResultsTime()) {
             // Set the correct (fake) end time
             $test->end = (new DateTimeImmutable())->setTimestamp($gateTime);
@@ -149,14 +149,14 @@ class Gate
 
         foreach ($systems as $checkSystem) {
             /** @var Game|null $startedSystem */
-            $startedSystem = Info::get($checkSystem.'-game-started');
+            $startedSystem = Info::get($checkSystem.'-game-started', useCache: false);
             if (isset($startedSystem) && $startedSystem->start->getTimestamp() > $maxTime) {
                 $maxGame = $startedSystem;
                 $maxTime = $startedSystem->start->getTimestamp();
             }
 
             /** @var Game|null $loadedSystem */
-            $loadedSystem = Info::get($checkSystem.'-game-loaded');
+            $loadedSystem = Info::get($checkSystem.'-game-loaded', useCache: false);
             if (isset($loadedSystem) && $loadedSystem->fileTime?->getTimestamp() > $maxTime) {
                 $maxGame = $loadedSystem;
                 $maxTime = $loadedSystem->fileTime->getTimestamp();

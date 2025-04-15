@@ -171,7 +171,13 @@ abstract class LasermaxxGameLoader implements LoaderInterface
             if (!empty($data['variation'])) {
                 uksort(
                   $data['variation'],
-                  static fn($a, $b) => GameModeVariation::get((int) $a)->order - GameModeVariation::get((int) $b)->order
+                  static function ($a, $b) {
+                      try {
+                          return GameModeVariation::get((int) $a)->order - GameModeVariation::get((int) $b)->order;
+                      } catch (ModelNotFoundException) {
+                          return 0;
+                      }
+                  }
                 );
                 $loadData->meta['variations'] = [];
                 foreach ($data['variation'] as $id => $suffix) {

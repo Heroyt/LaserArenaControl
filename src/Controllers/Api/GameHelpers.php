@@ -200,9 +200,9 @@ class GameHelpers extends ApiController
         }
 
         if ($this->commandBus->dispatch(new RecalculateScoresCommand($game))) {
-            return $this->respond(new SuccessResponse('Skills recalculated'));
+            return $this->respond(new SuccessResponse('Scores recalculated'));
         }
 
-        return $this->respond(new ErrorResponse('Skills recalculation failed', ErrorType::INTERNAL), 500);
+        return $this->respond(new ErrorResponse('Scores recalculation failed', ErrorType::INTERNAL), 500);
     }
 }

@@ -2,7 +2,7 @@ FROM php:8.4-cli AS php
 
 # Setup
 RUN apt-get update  \
-    && apt-get -y install  \
+    && apt-get -y install --no-install-recommends  \
         apt-utils  \
         wget  \
         git  \
@@ -100,10 +100,10 @@ RUN sed -i -e 's/# cs_CZ.UTF-8 UTF-8/cs_CZ.UTF-8 UTF-8/' /etc/locale.gen \
     && locale-gen cs_CZ.UTF-8 \
     && update-locale
 
-FROM golang:1.24 AS golang
+#FROM golang:1.24 AS golang
 FROM ghcr.io/roadrunner-server/velox:latest AS roadrunner
 
-COPY --from=golang /usr/local/go/ /usr/local/go/
+#COPY --from=golang /usr/local/go/ /usr/local/go/
 
 ENV APP_VERSION="1.0.0"
 ARG BUILD_TIME="$(date +%FT%T%z)"

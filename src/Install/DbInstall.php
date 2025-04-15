@@ -139,6 +139,7 @@ class DbInstall implements InstallInterface
                                   || $e->getCode() === 1061
                                   || $e->getCode() === 1091
                                   || ($e->getCode() === 1054 && str_starts_with(strtolower($query), 'drop column'))
+                                  || ($e->getCode() === 1075 && str_starts_with(strtolower($query), 'drop primary key'))
                                 ) {
                                     // Duplicate column <-> already created
                                     // Or column does not exist <-> already dropped

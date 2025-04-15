@@ -186,6 +186,7 @@ tables:
 		order: 0
 		definition: '''
 		(
+		  `id_highlight` int(11) unsigned NOT NULL AUTO_INCREMENT,
           `code` varchar(50) NOT NULL,
           `datetime` datetime NOT NULL,
           `rarity` int(10) unsigned NOT NULL DEFAULT 0,
@@ -194,9 +195,18 @@ tables:
           `players` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`players`)),
           `object` blob DEFAULT NULL,
           `users` longtext GENERATED ALWAYS AS (json_extract(`players`,'$[*].user')) VIRTUAL,
-          PRIMARY KEY (`code`,`type`,`description`)
+          PRIMARY KEY (`id_highlight`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 		'''
+		modifications:
+			0.1:
+				- 'DROP PRIMARY KEY'
+				- 'ADD `id_highlight` int(11) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST'
+		indexes:
+			-
+				name: 'code_type_description'
+				columns: ['code', 'type', 'description']
+				unique: true
 	'prepared_games':
 		order: 0
 		definition: '''

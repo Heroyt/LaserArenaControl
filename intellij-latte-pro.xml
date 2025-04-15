@@ -94,5 +94,7 @@
         <filter name="json" description="Json encode a value"/>
         <filter name="xml" description="XML encode a value"/>
         <filter name="csv" description="csv encode a value"/>
+        <filter name="splitGroups"
+                description="Split an array into similar-sized groups between min and max group size."/>
     </filters>
 </latte>

@@ -25,15 +25,19 @@
 ]}
 
 {block content}
-    <div n:if="count($systems) > 1" class="d-flex justify-content-end mb-3">
-        <div id="systems" class="form-floating" style="min-width:15rem;">
-            <select class="form-select" id="systems-select" aria-label="{_'Vybrat LG systém', context: 'game'}">
-                <option n:foreach="$systems as $sys" n:attr="value: $sys->id, selected: $sys === $system">{$sys->name}</option>
-            </select>
-            <label for="last-games">{_'Vybrat LG systém', context: 'game'}</label>
-        </div>
-    </div>
-    <form method="post" action="" id="new-game-content" class="w-100">
+	<form method="post" action="" id="new-game-content" class="w-100">
+		<div id="hide-results-wrapper" class="form-check form-switch">
+			<input type="checkbox" class="form-check-input" name="hideResults" role="switch" id="hide-results"
+				   value="1"/>
+			<label class="form-check-label"
+				   for="hide-results">{_'Skrýt výsledky na výsledkové tabuli', context: 'game'}</label>
+		</div>
+		<div n:if="count($systems) > 1" id="systems" class="form-floating" style="min-width:15rem;">
+			<select class="form-select" id="systems-select" aria-label="{_'Vybrat LG systém', context: 'game'}">
+				<option n:foreach="$systems as $sys" n:attr="value: $sys->id, selected: $sys === $system">{$sys->name}</option>
+			</select>
+			<label for="last-games">{_'Vybrat LG systém', context: 'game'}</label>
+		</div>
         {cache 'newGame-'.$lang.'-controls', tags: ['templates.newGame', 'templates', 'templates.'.$lang]}
             {include sectionControls}
         {/cache}
@@ -43,7 +47,7 @@
         <section id="vests">
             {include sectionVests}
         </section>
-        {cache 'newGame-'.$lang.'-game-mode', tags: ['templates.newGame', 'templates', 'templates.mode', 'templates.'.$lang, App\GameModels\Game\GameModes\AbstractMode::TABLE]}
+        {cache 'newGame-'.$system->type->value.'-'.$lang.'-game-mode', tags: ['templates.newGame', 'templates', 'templates.mode', 'templates.'.$lang, App\GameModels\Game\GameModes\AbstractMode::TABLE]}
             <section id="game-mode">
                 {include sectionGameMode}
             </section>
@@ -240,17 +244,22 @@
         {_'Herní mód', context: 'game'}:
     </label>
     <div class="input-group">
+		{var string $firstMode = ''}
         {var string $firstDescription = ''}
         <select name="game-mode" id="game-mode-select" class="form-select">
             <option n:foreach="$gameModes as $mode" value="{$mode->id}" data-type="{$mode->type->value}"
                                                     data-name="{$mode->getName()}"
                                                     data-teams="{$mode->teams}"
                                                     data-variations='{$mode->variations|json}'
-                                                    data-description="{_$mode->description, context: 'gameModes'}"
+													data-description="{_$mode->description, context: $mode->getName(), domain: 'gameModes'}"
                                                     data-active="{json_encode($mode->active)}"
+													data-class="{$mode::class}"
                     {if $mode instanceof App\GameModels\Game\GameModes\CustomLoadMode}data-script="{$mode->getNewGameScriptToRun()}"{/if}>
-                {if $iterator->first}{do $firstDescription = $mode->description}{/if}
-                {_$mode->getName(), context: 'gameModes'}
+				{if $iterator->first}
+					{do $firstDescription = $mode->description}
+					{do $firstMode = $mode->getName()}
+				{/if}
+				{_$mode->getName(), domain: 'gameModes'}
             </option>
         </select>
         <button type="button" data-toggle="shuffle" title="{_'Náhodně', context: 'actions'}"
@@ -260,7 +269,7 @@
     </div>
     <div id="game-mode-description" class="select-description text-muted" data-target="#game-mode-select">
         {if $firstDescription !== ''}
-            {_$firstDescription, context: 'gameModes'}
+			{_$firstDescription, context: $firstMode, domain: 'gameModes'}
         {/if}
     </div>
 {/define}
@@ -427,7 +436,7 @@
                 {/foreach}
             </div>
         </div>
-        <div>
+		<div class="player-birthday">
             <input type="radio" name="player[{$vest->vestNum}][birthday]" value="0" class="player-birthday-input"
                    id="player-birthday-{$vest->vestNum}-0" checked/>
             <label class="player-birthday bg-grey" for="player-birthday-{$vest->vestNum}-1">
@@ -439,7 +448,7 @@
                 {$icons['cake']|noescape}
             </label>
         </div>
-        <div>
+		<div class="player-vip">
             <input type="radio" name="player[{$vest->vestNum}][vip]" value="0" class="player-vip-input"
                    id="player-vip-{$vest->vestNum}-0" checked/>
             <label class="player-vip bg-secondary" for="player-vip-{$vest->vestNum}-1">

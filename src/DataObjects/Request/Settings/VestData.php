@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace App\DataObjects\Request\Settings;
 
-use App\GameModels\Game\Enums\VestStatus;
 use App\GameModels\VestType;
+use Lsr\LaserLiga\Enums\VestStatus;
 
 class VestData
 {

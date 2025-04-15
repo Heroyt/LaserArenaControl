@@ -17,6 +17,7 @@ use Lsr\Core\Controllers\Controller;
 use Lsr\Core\Requests\Dto\ErrorResponse;
 use Lsr\Core\Requests\Enums\ErrorType;
 use Lsr\Core\Requests\Request;
+use Lsr\Roadrunner\ErrorHandlers\HttpErrorHandler;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
 
@@ -31,7 +32,7 @@ use Throwable;
  * @version 1.0
  * @since   1.0
  */
-class E404 extends Controller
+class E404 extends Controller implements HttpErrorHandler
 {
     /**
      * @var string $title Page name
@@ -42,19 +43,29 @@ class E404 extends Controller
      */
     protected string $description = 'Page not found';
 
-    public function show(Request $request, ?Throwable $e = null) : ResponseInterface {
+    public function showError(Request $request, ?Throwable $error = null) : ResponseInterface {
+        $this->init($request);
         if (str_contains($request->getHeaderLine('Accept'), 'application/json')) {
             return $this->respond(
               new ErrorResponse(
                            'Resource not found',
                 type     : ErrorType::NOT_FOUND,
-                detail   : $e?->getMessage(),
-                exception: $e,
+                detail   : $error?->getMessage(),
+                exception: $error
               ),
               404
             );
         }
-        $this->params['exception'] = $e;
-        return $this->view('errors/E404')->withStatus(404);
+        if (str_contains($request->getHeaderLine('Accept'), 'text/html')) {
+            $this->params['exception'] = $error;
+            return $this->view('errors/E404')
+                        ->withStatus(404);
+        }
+
+        return $this->respond(
+          'Resource not found - '.($error?->getMessage() ?? 'unknown error'),
+          404,
+          ['Content-Type' => 'text/plain']
+        );
     }
 }

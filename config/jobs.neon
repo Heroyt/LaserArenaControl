@@ -6,31 +6,33 @@ orisai.scheduler:
 	errorHandler: tracy
 	jobs:
 		gamesSync:
+			# Every 5 minutes
 			expression: */5 * * * *
 			callback: [@cron.gamesSync, 'run']
 		#gamesPrecache:
 		#	expression: * * * * *
 		#	callback: [@cron.gamesPrecache, 'run']
 		vestSync:
+			# Every 15 minutes
 			expression: */15 * * * *
 			callback: [@cron.vestSync, 'run']
 		logArchive:
+			# Every day at 6:00
 			expression: 0 6 * * *
 			callback: [@cron.logArchive, 'run']
 		playersSync:
+			# Every day at 6:30
 			expression: 30 6 * * *
 			callback: [@cron.ligaPlayerSync, 'run']
 		resultsImport:
+			# Every minute
 			expression: * * * * *
 			callback: [@cron.resultsImport, 'run']
+		clearGroups:
+			# Every day at 6:00
+			expression: 0 6 * * *
+			callback: [@cron.clearGroups, 'run']
 services:
-	# Jobs queue
-	jobs: Spiral\RoadRunner\Jobs\Jobs(@rpc)
-	queue:
-		type: Spiral\RoadRunner\Jobs\Queue
-		create: @jobs::connect(%jobs.queue%)
-	taskProducer: App\Services\TaskProducer(@queue)
-
 	# Jobs tasks
 	task.gamesPrecache: App\Tasks\GamePrecacheTask
 	task.gamesHighlights: App\Tasks\GameHighlightsTask
@@ -39,6 +41,7 @@ services:
 	task.musicSync: App\Tasks\MusicSyncTask
 	task.musicLoad: App\Tasks\MusicLoadTask
 	task.ligaPlayersSync: App\Tasks\PlayersSyncTask
+	task.handleCommand: App\Tasks\HandleCommandTask
 
 	# Cron jobs
 	cron.gamesSync: App\Cron\GamesSyncJob(limit: %gamesSync.limit%, timeout: %gamesSync.timeout%)
@@ -47,3 +50,4 @@ services:
 	cron.gamesPrecache: App\Cron\GamesPrecacheJob
 	cron.resultsImport: App\Cron\ResultsImportJob
 	cron.ligaPlayerSync: App\Cron\PlayersSyncJob
+	cron.clearGroups: App\Cron\ClearGroupsJob

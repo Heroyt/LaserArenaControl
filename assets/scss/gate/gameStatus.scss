@@ -1,0 +1,29 @@
+@import '../pages/gate/parts';
+
+#gate main {
+	.timer.timer-game-status {
+		bottom: auto;
+		font-size: 13rem;
+		left: 50%;
+		top: calc(26% - 3rem);
+		transform: translate(-50%);
+		width: 50%;
+	}
+
+	.content.game-status-screen {
+		.game-players {
+			align-items: flex-start;
+			display: flex;
+			flex-wrap: wrap;
+			gap: .5rem;
+			grid-column: 3/9;
+			grid-row: 3/4;
+			justify-content: center;
+
+			.badge {
+				font-size: 2.5rem;
+			}
+		}
+	}
+
+}

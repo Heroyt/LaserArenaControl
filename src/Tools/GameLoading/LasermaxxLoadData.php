@@ -12,6 +12,7 @@ namespace App\Tools\GameLoading;
  *     group?: numeric|string,
  *     type?: numeric|string,
  *     variations?: array<int, string>,
+ *     resultsHidden?: bool,
  * }
  */
 class LasermaxxLoadData
@@ -20,11 +21,13 @@ class LasermaxxLoadData
      * @param  MetaLoadData  $meta
      * @param  LasermaxxLoadPlayerData[]  $players
      * @param  LasermaxxLoadTeamData[]  $teams
+     * @param  int<0,5>  $soloTeam
      */
     public function __construct(
       public array $meta = [],
       public array $players = [],
       public array $teams = [],
+      public int $soloTeam = 2,
     ) {}
 
     /**
@@ -32,15 +35,17 @@ class LasermaxxLoadData
      *     meta: MetaLoadData,
      *     players: LasermaxxLoadPlayerData[],
      *     teams: LasermaxxLoadTeamData[],
-     *     metaString: string
+     *     metaString: string,
+     *     soloTeam: int<0,5>,
      * }
      */
     public function getParams() : array {
         return [
-          'meta'    => $this->meta,
-          'players' => $this->players,
-          'teams'   => $this->teams,
+          'meta'     => $this->meta,
+          'players'  => $this->players,
+          'teams'    => $this->teams,
           'metaString' => $this->encodeMeta(),
+          'soloTeam' => $this->soloTeam,
         ];
     }
 

@@ -19,8 +19,9 @@
     "docs": "doxygen",
     "build-production": "composer update --no-dev && composer dump-autoload --no-dev && npm install && npm run buildDev",
     "build": "composer update && composer dump-autoload && npm install && npm run build",
-    "docker-arm": "docker buildx build --platform linux/arm64 . --file docker/Dockerfile --tag heroyt/laser-arena-control:roadrunner-latest --tag heroyt/laser-arena-control:roadrunner --tag heroyt/laser-arena-control:latest --push --build-arg \"RT_TOKEN=$RT_TOKEN\" --build-arg \"BUILD_TIME=$(date +%FT%T%z)\"",
-    "docker": "docker buildx build --platform linux/arm64,linux/amd64 . --file docker/Dockerfile --tag heroyt/laser-arena-control:roadrunner-latest --tag heroyt/laser-arena-control:roadrunner --tag heroyt/laser-arena-control:latest --push --build-arg \"RT_TOKEN=$RT_TOKEN\" --build-arg \"BUILD_TIME=$(date +%FT%T%z)\"",
+    "docker-arm": "docker buildx build --platform linux/arm64 . --file docker/Dockerfile --tag heroyt/laser-arena-control:roadrunner-latest --tag heroyt/laser-arena-control:roadrunner --tag heroyt/laser-arena-control:latest --push --secret type=env,id=RT_TOKEN --build-arg \"BUILD_TIME=$(date +%FT%T%z)\"",
+    "docker-amd": "docker buildx build --platform linux/amd64 . --file docker/Dockerfile --tag heroyt/laser-arena-control:roadrunner-latest --tag heroyt/laser-arena-control:roadrunner --tag heroyt/laser-arena-control:latest --push --secret type=env,id=RT_TOKEN --build-arg \"BUILD_TIME=$(date +%FT%T%z)\"",
+    "docker": "docker buildx build --platform linux/arm64,linux/amd64 . --file docker/Dockerfile --tag heroyt/laser-arena-control:roadrunner-latest --tag heroyt/laser-arena-control:roadrunner --tag heroyt/laser-arena-control:latest --push --secret type=env,id=RT_TOKEN --build-arg \"BUILD_TIME=$(date +%FT%T%z)\"",
     "swagger": "./vendor/bin/openapi src vendor/lsr/request/src modules -o docs/swagger.yaml",
     "phpstan": "./vendor/bin/phpstan",
     "phpcbf": "./vendor/bin/phpcbf"
@@ -76,7 +77,9 @@
     "symfony/serializer": "^7.1",
     "symfony/property-access": "^7.1",
     "lsr/laser-liga-api": "^0.1.1",
-    "lsr/lg-result-parsing": "dev-master"
+    "lsr/lg-result-parsing": "dev-master",
+    "lsr/roadrunner": "^0.1.0",
+    "lsr/cqrs": "^0.1.0"
   },
   "require-dev": {
     "roave/security-advisories": "dev-latest",

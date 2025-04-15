@@ -8,7 +8,6 @@ namespace App\Controllers\Settings;
 
 use App\Core\Info;
 use App\GameModels\Factory\GameFactory;
-use App\GameModels\Game\Enums\VestStatus;
 use App\GameModels\Vest;
 use App\Models\DataObjects\Theme;
 use App\Models\GameGroup;
@@ -21,6 +20,7 @@ use Lsr\Core\Controllers\Controller;
 use Lsr\Core\Requests\Request;
 use Lsr\Exceptions\TemplateDoesNotExistException;
 use Lsr\Interfaces\RequestInterface;
+use Lsr\LaserLiga\Enums\VestStatus;
 use Lsr\ObjectValidation\Exceptions\ValidationException;
 use Lsr\Orm\Exceptions\ModelNotFoundException;
 use Nyholm\Psr7\UploadedFile;
@@ -162,6 +162,10 @@ class Settings extends Controller
      */
     public function saveGeneral(Request $request) : ResponseInterface {
         try {
+            $apiUrl = $request->getPost('api_url');
+            if (isset($apiUrl)) {
+                Info::set('liga_api_url', $apiUrl);
+            }
             $apiKey = $request->getPost('api_key');
             if (isset($apiKey)) {
                 Info::set('liga_api_key', $apiKey);

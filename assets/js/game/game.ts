@@ -45,6 +45,7 @@ export default class Game {
 	$maxSkill: NodeListOf<HTMLInputElement>;
 	$modeVariations: HTMLDivElement;
 	$variationsHideBtn: HTMLButtonElement;
+	$hideResults: HTMLInputElement;
 
 	$shuffleTeams: HTMLButtonElement;
 	$shuffleFairTeams: HTMLButtonElement;
@@ -90,6 +91,8 @@ export default class Game {
 		this.$maxSkill = document.querySelectorAll('.maxSkill');
 		this.$modeVariations = document.getElementById('game-mode-variations-wrapper') as HTMLDivElement;
 		this.$variationsHideBtn = document.getElementById('hide-variations') as HTMLButtonElement;
+
+		this.$hideResults = document.getElementById('hide-results') as HTMLInputElement;
 
 		this.$shuffleTeams = document.getElementById('random-teams') as HTMLButtonElement;
 		this.$shuffleFairTeams = document.getElementById('random-fair-teams') as HTMLButtonElement;
@@ -266,6 +269,16 @@ export default class Game {
 				}),
 			);
 		});
+
+		if (this.$hideResults) {
+			this.$hideResults.addEventListener('click', (e) => {
+				this.$hideResults.dispatchEvent(
+					new Event('update', {
+						bubbles: true,
+					}),
+				);
+			});
+		}
 
 		this.$musicMode.addEventListener('change', () => {
 			this.$musicMode.dispatchEvent(
@@ -475,6 +488,9 @@ export default class Game {
 			team.clear();
 		});
 
+		if (this.$hideResults) {
+			this.$hideResults.checked = false;
+		}
 		this.$gameMode.value = (this.$gameMode.firstElementChild as HTMLOptionElement).value;
 		//this.$musicMode.value = (this.$musicMode.firstElementChild as HTMLOptionElement).value;
 
@@ -808,6 +824,9 @@ export default class Game {
 
 			this.$musicMode.dispatchEvent(e);
 		}
+		if ('hideResults' in data && this.$hideResults) {
+			this.$hideResults.checked = data.hideResults;
+		}
 		if (data.playlist && this.$playlist) {
 			this.$playlist.value = data.playlist.toString();
 			this.$playlist.dispatchEvent(e);
@@ -911,6 +930,7 @@ export default class Game {
 			},
 			players: {},
 			teams: {},
+			hideResults: this.$hideResults ? this.$hideResults.checked : false,
 		};
 
 		if (this.$playlist && this.$playlist.value) {

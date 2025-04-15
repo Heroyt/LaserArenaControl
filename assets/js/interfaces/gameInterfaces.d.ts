@@ -78,6 +78,7 @@ export interface GameData {
 	group?: GameGroupDataBase,
 	table?: TableData,
 	system?: string | number,
+	hideResults?: boolean,
 }
 
 interface ModeSettings {

@@ -19,6 +19,7 @@ use App\GameModels\Game\Player;
 use App\Services\LaserLiga\LigaApi;
 use App\Services\LaserLiga\PlayerProvider;
 use Dibi\Exception;
+use Lsr\Caching\Cache;
 use Lsr\Core\Config;
 use Lsr\Core\Requests\Dto\ErrorResponse;
 use Lsr\Core\Requests\Dto\SuccessResponse;
@@ -26,7 +27,6 @@ use Lsr\Core\Requests\Enums\ErrorType;
 use Lsr\Exceptions\FileException;
 use Lsr\Lg\Results\AbstractResultsParser;
 use Lsr\Lg\Results\Exception\ResultsParseException;
-use Lsr\Lg\Results\Interface\ResultsParserInterface;
 use Lsr\Logging\Exceptions\DirectoryCreationException;
 use Lsr\Logging\Logger;
 use Lsr\ObjectValidation\Exceptions\ValidationException;
@@ -58,6 +58,7 @@ class ImportService
       private readonly FeatureConfig  $featureConfig,
       private readonly Metrics        $metrics,
       private readonly PlayerProvider $playerProvider,
+      private readonly Cache $cache,
     ) {
         $this->gameLoadedTime = (int) ($config->getConfig('ENV')['GAME_LOADED_TIME'] ?? 300);
         $this->gameStartedTime = (int) ($config->getConfig('ENV')['GAME_STARTED_TIME'] ?? 1800);
@@ -123,17 +124,16 @@ class ImportService
 
         try {
             $logger->info('Importing file: '.$file);
-            /** @var class-string<ResultsParserInterface> $class */
-            $class = 'App\\Tools\\ResultParsing\\'.ucfirst($game::SYSTEM).'\\ResultsParser';
-            if (!class_exists($class)) {
-                return
-                  new ErrorResponse('No parser for this game ('.$game::SYSTEM.')', type: ErrorType::INTERNAL);
+            try {
+                /** @var AbstractResultsParser $parser */
+                $parser = App::getService('result.parser.'.$game::SYSTEM);
+            } catch (MissingServiceException $e) {
+                return new ErrorResponse('No parser for this game ('.$game::SYSTEM.')', type: ErrorType::INTERNAL);
             }
-            if (!$class::checkFile($file)) {
+            if (!$parser::checkFile($file)) {
                 return
                   new ErrorResponse('Game file cannot be parsed: '.$file, type: ErrorType::INTERNAL);
             }
-            $parser = new $class($this->playerProvider);
             $parser->setFile($file);
             $game = $parser->parse();
 
@@ -196,6 +196,8 @@ class ImportService
             if (!$game->save()) {
                 throw new ResultsParseException('Failed saving game into DB.');
             }
+            $game::clearModelCache();
+            $this->cache->clean([$this->cache::Tags => ['games/'.$game->start->format('Y-m-d')]]);
         } catch (Exception $e) {
             return new ErrorResponse('Error while parsing game file.', type: ErrorType::INTERNAL, exception: $e);
         }
@@ -391,6 +393,8 @@ class ImportService
                             );
                             continue;
                         }
+                        $game::clearModelCache();
+                        $this->cache->clean([$this->cache::Tags => ['games/'.$game->start->format('Y-m-d')]]);
 
                         // Refresh the started-game info to stop the game timer
                         /** @var Game|null $startedGame */

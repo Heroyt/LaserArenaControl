@@ -4,21 +4,49 @@ includes:
 	- roadrunner.neon
 	- console.neon
 	- symfony.neon
+	- cqrs.neon
 extensions:
 	cache: Lsr\Caching\DI\CacheExtension
 	decorator: Nette\DI\Extensions\DecoratorExtension
 	inject: Nette\DI\Extensions\InjectExtension
 	routing: Lsr\Core\Routing\DI\RoutingExtension
 	di: Nette\DI\Extensions\DIExtension
+	search: Nette\DI\Extensions\SearchExtension(%constants.tempDir%)
+	lsr: Lsr\Core\DI\LsrExtension
 di:
 	lazy: true
+lsr:
+	appDir: %constants.appDir%
+	tempDir: %constants.tempDir%
+	latte:
+		tempDir: %constants.tempDir%latte/
+	translations:
+		defaultLang: cs_CZ
+		supportedLanguages:
+			- 'cs_CZ'
+			- 'en_US'
+			- 'de_DE'
+			- 'fr_FR'
+			- 'sk_SK'
+			- 'es_ES'
+			- 'uk_UA'
+		domains:
+			- 'results'
+			- 'gate'
+			- 'highlights'
+			- 'gameModes'
+			- 'music'
+			- 'titles'
+			- 'achievements'
+			- 'tournament'
+			- 'highlights'
 parameters:
 	db:
 		driver: mysqli
 		lazy: true
 		host: db
 		port: 3306
-		collate: utf8mb4
+		charset: utf8mb4
 		database: lac
 		user: root
 		password: 'laser-arena-control'
@@ -36,26 +64,7 @@ parameters:
 services:
 	# Core
 	db.connection: Lsr\Db\Connection(config: %db%)
-	app: App\Core\App
-	translations:
-		create: Lsr\Core\Translations
-		arguments:
-			config: @config
-			defaultLang: 'cs_CZ'
-			supportedLanguages:
-				- 'cs_CZ'
-				- 'en_US'
-				- 'de_DE'
-				- 'fr_FR'
-				- 'sk_SK'
-				- 'es_ES'
-			textDomains:
-				- 'results'
-				- 'gate'
-				- 'tips'
-				- 'cli'
-				- 'highlights'
-				- 'tournament'
+	lsr.app: App\Core\App
 
 	version: App\Services\VersionService
 	regression: App\Services\RegressionCalculator
@@ -119,9 +128,12 @@ services:
 	evo6.gameLoader: App\Tools\GameLoading\Evo6GameLoader
 
 	result.parser: Lsr\Lg\Results\ResultsParser(['evo5' => @result.parser.evo5, 'evo6' => @result.parser.evo6])
+	results.generator: Lsr\Lg\Results\ResultsGenerator(['evo5' => @result.generator.evo5, 'evo6' => @result.generator.evo6])
 	results.logger: Lsr\Logging\Logger(%logger.dir%, 'results')
 	result.parser.evo5: App\Tools\ResultParsing\Evo5\ResultsParser(gameClass: App\GameModels\Game\Evo5\Game, logger: @results.logger)
 	result.parser.evo6: App\Tools\ResultParsing\Evo6\ResultsParser(gameClass: App\GameModels\Game\Evo6\Game, logger: @results.logger)
+	result.generator.evo5: Lsr\Lg\Results\LaserMaxx\Evo5\ResultsGenerator
+	result.generator.evo6: Lsr\Lg\Results\LaserMaxx\Evo6\ResultsGenerator
 
 	gameHighlight: App\Services\GameHighlight\GameHighlightService(tagged(highlightChecker))
 
@@ -142,6 +154,13 @@ routing:
 		- %constants.appDir%src/Controllers
 
 search:
+	controllers:
+		in: '%constants.appDir%src/Controllers'
+		extends:
+			- Lsr\Core\Controllers\Controller
+			- Lsr\Core\Controllers\ApiController
+		tags:
+			- controllers
 	highlightCheckers:
 		in: '%constants.appDir%/src/Services/GameHighlight/Checkers'
 		implements:

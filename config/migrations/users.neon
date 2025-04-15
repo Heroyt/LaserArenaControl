@@ -1,0 +1,48 @@
+tables:
+	App\Models\Auth\Player:
+		order: 0
+		definition: '''
+			(
+			  `id_user` int(11) unsigned NOT NULL AUTO_INCREMENT,
+              `code` varchar(10) NOT NULL,
+              `nickname` varchar(20) NOT NULL,
+              `email` varchar(50) NOT NULL,
+              `rank` int(11) NOT NULL DEFAULT 100,
+              `birthday` date DEFAULT NULL,
+              PRIMARY KEY (`id_user`),
+              UNIQUE KEY `code` (`code`)
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+			'''
+		indexes:
+			-
+				name: 'code'
+				columns: ['code']
+				unique: true
+		modifications:
+			0.1:
+				- 'ADD `birthday` date DEFAULT NULL'
+	App\Models\Auth\PlayerConnection:
+		order: 1
+		definition: '''
+			(
+              `id_connection` int(11) unsigned NOT NULL AUTO_INCREMENT,
+              `id_user` int(11) unsigned NOT NULL,
+              `type` enum('rfid','laserforce','mylasermaxx','other') NOT NULL,
+              `identifier` tinytext NOT NULL,
+              PRIMARY KEY (`id_connection`),
+              KEY `id_user` (`id_user`),
+              CONSTRAINT `user_connected_accounts_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `players` (`id_user`) ON DELETE CASCADE ON UPDATE CASCADE
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+            '''
+		modifications:
+			0.1:
+				- "CHANGE `type` `type` ENUM('rfid','laserforce','mylasermaxx','other')  CHARACTER SET utf8mb4  COLLATE utf8mb4_general_ci  NOT NULL;"
+		indexes:
+			-
+				name: 'id_user'
+				columns: ['id_user']
+		foreignKeys:
+			-
+				column: id_user
+				refTable: App\Models\Auth\Player
+				refColumn: id_user

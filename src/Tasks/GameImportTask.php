@@ -6,6 +6,8 @@ use App\Services\ImportService;
 use App\Tasks\Payloads\GameImportPayload;
 use Lsr\Core\Requests\Dto\ErrorResponse;
 use Lsr\Orm\Exceptions\ModelNotFoundException;
+use Lsr\Roadrunner\Tasks\TaskDispatcherInterface;
+use Lsr\Roadrunner\Tasks\TaskPayloadInterface;
 use Spiral\RoadRunner\Jobs\Exception\JobsException;
 use Spiral\RoadRunner\Jobs\Task\ReceivedTaskInterface;
 use Throwable;
@@ -27,15 +29,21 @@ readonly class GameImportTask implements TaskDispatcherInterface
 
     /**
      * @param  ReceivedTaskInterface  $task
+     * @param  TaskPayloadInterface|null  $payload
      * @return void
      * @throws JobsException
      * @throws ModelNotFoundException
      * @throws Throwable
      */
-    public function process(ReceivedTaskInterface $task) : void {
-        /** @var GameImportPayload $payload */
-        $payload = igbinary_unserialize($task->getPayload());
-        assert($payload->dir !== '', 'Import directory cannot be empty');
+    public function process(ReceivedTaskInterface $task, ?TaskPayloadInterface $payload = null) : void {
+        if ($payload === null) {
+            $task->nack('Missing payload');
+            return;
+        }
+        if (!($payload instanceof GameImportPayload) || $payload->dir === '') {
+            $task->nack('Invalid payload');
+            return;
+        }
 
         $response = $this->importService->import($payload->dir);
 

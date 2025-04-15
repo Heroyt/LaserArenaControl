@@ -5,13 +5,15 @@ namespace App\Tasks;
 use App\GameModels\Factory\GameFactory;
 use App\Services\GameHighlight\GameHighlightService;
 use App\Tasks\Payloads\GameHighlightsPayload;
+use Lsr\Roadrunner\Tasks\TaskDispatcherInterface;
+use Lsr\Roadrunner\Tasks\TaskPayloadInterface;
 use Spiral\RoadRunner\Jobs\Exception\JobsException;
 use Spiral\RoadRunner\Jobs\Task\ReceivedTaskInterface;
 
 /**
  *
  */
-class GameHighlightsTask implements TaskDispatcherInterface
+readonly class GameHighlightsTask implements TaskDispatcherInterface
 {
     public function __construct(
       private GameHighlightService $highlightService
@@ -22,22 +24,25 @@ class GameHighlightsTask implements TaskDispatcherInterface
     }
 
     /**
-     * @param  ReceivedTaskInterface  $task
-     * @return void
      * @throws JobsException
      */
-    public function process(ReceivedTaskInterface $task) : void {
-        /** @var GameHighlightsPayload $payload */
-        $payload = igbinary_unserialize($task->getPayload());
-
+    public function process(ReceivedTaskInterface $task, ?TaskPayloadInterface $payload = null) : void {
+        if ($payload === null) {
+            $task->nack('Missing payload');
+            return;
+        }
+        if (!($payload instanceof GameHighlightsPayload)) {
+            $task->nack('Invalid payload');
+            return;
+        }
         if (!isset($payload->code)) {
-            $task->fail('Missing game code in payload');
+            $task->nack('Missing game code in payload');
             return;
         }
         echo 'Loading game highlights: '.$payload->code;
         $game = GameFactory::getByCode($payload->code);
         if (!isset($game)) {
-            $task->fail('Game not found');
+            $task->nack('Game not found');
             return;
         }
         $highlights = $this->highlightService->getHighlightsForGame($game, false);
@@ -47,6 +52,6 @@ class GameHighlightsTask implements TaskDispatcherInterface
         else {
             echo 'Loaded '.$highlights->count().' highlights';
         }
-        $task->complete();
+        $task->ack();
     }
 }

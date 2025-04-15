@@ -1,13 +1,25 @@
-parameters:
+extensions:
+	roadrunner: Lsr\Roadrunner\DI\RoadrunnerExtension
+roadrunner:
+	workers:
+		http: @roadrunner.worker.http
+		file_watch: @roadrunner.worker.file_watch
 	rpc:
-		connection: 'tcp://localhost:6001'
+		host: 'tcp://localhost'
+		port: 6001
 	jobs:
 		queue: tasks
+		serializer: @roadrunner.tasks.serializer
 services:
-	rpc:
-		type: Spiral\Goridge\RPC\RPC
-		create: Spiral\Goridge\RPC\RPC::create(%rpc.connection%)
-	asyncRpc:
-		type: Spiral\Goridge\RPC\MultiRPC
-		create: Spiral\Goridge\RPC\MultiRPC::create(%rpc.connection%)
-	metrics: Spiral\RoadRunner\Metrics\Metrics(@rpc)
+	metrics: Spiral\RoadRunner\Metrics\Metrics(@roadrunner.rpc)
+
+	roadrunner.tasks.serializer: Lsr\Roadrunner\Tasks\Serializers\IgBinaryTaskSerializer
+
+	# Workers
+	roadrunner.worker.http: App\Core\Workers\HttpWorker(@roadrunner.httpErrorHandler.500, @roadrunner.httpErrorHandler.404, @roadrunner.httpErrorHandler.403)
+	roadrunner.worker.file_watch: App\Core\Workers\FileWatchWorker
+
+	# HTTP error handlers
+	roadrunner.httpErrorHandler.404: App\Controllers\E404
+	roadrunner.httpErrorHandler.403: App\Controllers\E403
+	roadrunner.httpErrorHandler.500: App\Controllers\E500

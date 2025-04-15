@@ -37,11 +37,43 @@ class LacExtension extends Extension
 
     public function getFilters() : array {
         return [
-          'escapeJs' => [$this, 'escapeJs'],
-          'json'     => [$this, 'filterJson'],
-          'xml'      => [$this, 'filterXml'],
-          'csv'      => [$this, 'csvSerialize'],
+          'escapeJs'    => $this->escapeJs(...),
+          'json'        => $this->filterJson(...),
+          'xml'         => $this->filterXml(...),
+          'csv'         => $this->csvSerialize(...),
+          'splitGroups' => $this->filterSplitGroups(...),
         ];
+    }
+
+    /**
+     * @template T
+     * @param  T[]  $elements
+     * @param  int  $min
+     * @param  int  $max
+     * @return T[][]
+     */
+    public function filterSplitGroups(array $elements, int $min = 1, int $max = 10) : array {
+        $total = count($elements);
+        if ($total < $max) {
+            return [$elements]; // The elements fit into one group
+        }
+
+        // Try to split the groups evenly
+        $maxRemainder = 0;
+        $maxGroupSize = $max;
+        for ($i = $max; $i >= $min; $i--) {
+            $remainder = $total % $i;
+            if ($remainder === 0) {
+                return array_chunk($elements, $i);
+            }
+            if ($remainder > $maxRemainder) {
+                $maxRemainder = $remainder;
+                $maxGroupSize = $i;
+            }
+        }
+
+        // If elements cannot be split evenly, split them into group that have the largest remainder
+        return array_chunk($elements, $maxGroupSize);
     }
 
     public function getFunctions() : array {

@@ -13,23 +13,23 @@ Func load($mode)
 	Local $win = WinWaitActivate($g_WinName)
 	If $win = 0 Then
 		ErrorLog("Cannot activate the main window for load", @ScriptName, @ScriptLineNumber)
-		Return False
+		Return "Cannot activate the main window for load"
 	EndIf
 
 	;Load 0000.game
 	If ClickButton($win, $g_LoadGroupBtnId) = False Then ; Should open a new dialog window
-		ErrorLog("Load game click failed", @ScriptName, @ScriptLineNumber)
-		Return False
+		ErrorLog("Load group click failed", @ScriptName, @ScriptLineNumber)
+		Return "Load group click failed"
 	EndIf
 	Local $win2 = WinWait($g_LoadGroupWinName, "", 20)
 	If $win2 = 0 Then
 		;MsgBox($MB_OK, "Error", "Waiting for Load game file window timed out")
-		ErrorLog("Load game file window time out", @ScriptName, @ScriptLineNumber)
-		Return False
+		ErrorLog("Load group file window time out", @ScriptName, @ScriptLineNumber)
+		Return "Load group file window time out"
 	Endif
 	If WinWaitActivate($win2) = 0 Then
 		ErrorLog("Failed to activate the load window", @ScriptName, @ScriptLineNumber)
-		Return False
+		Return "Failed to activate the load group window"
 	EndIf
 	Sleep(200)
 
@@ -37,13 +37,13 @@ Func load($mode)
 	Sleep(200)
 	; Click "Load" button, which should load the game config
 	If ClickButton($win2, "[CLASS:Button; INSTANCE:1]") = False Then
-		ErrorLog("Load game config click failed", @ScriptName, @ScriptLineNumber)
-		Return False
+		ErrorLog("Load group config click failed", @ScriptName, @ScriptLineNumber)
+		Return "Load group config click failed"
 	EndIf
 	If WinWaitClose($win2, "", 10) = 0 Then
 		;MsgBox($MB_OK, "Error", "Waiting for Load game file window timed out")
 		ErrorLog("Load window close timeout", @ScriptName, @ScriptLineNumber)
-		Return False
+		Return "Load window close timeout"
 	Endif
 
 	; Wait for all loading to finish
@@ -53,13 +53,13 @@ Func load($mode)
 	$win = WinWaitActivate($g_WinName)
 	If $win = 0 Then
 		ErrorLog("Failed to reactivate the main window", @ScriptName, @ScriptLineNumber)
-    	Return False
+    	Return "Failed to reactivate the main window"
     EndIf
 	Local $hListView = ControlGetHandle($win, "", $g_ModeSelectBox)
 	If $hListView = 0 Then
 		;MsgBox($MB_OK, "Error", "Cannot find game mode select")
 		ErrorLog("Cannot find game mode select", @ScriptName, @ScriptLineNumber)
-		Return False
+		Return "Cannot find game mode select"
 	EndIf
 	Local $iItemCnt = ControlListView($win, "", $hListView, "GetItemCount")
 
@@ -78,7 +78,7 @@ Func load($mode)
 	If Not $modeFound Then
 		;MsgBox($MB_OK, "Error", "Could not find mode: " & $mode)
 		ErrorLog("Game mode cannot be found - " & $mode, @ScriptName, @ScriptLineNumber)
-		Return False
+		Return "Game mode cannot be found - " & $mode
 	EndIf
 
 	Sleep(200)
@@ -94,11 +94,21 @@ Func load($mode)
 			ClickButton($win, $g_LoadGameBtnId)
 	EndSwitch
 
+	Sleep(1000)
+
+	Local $popup = WinWaitActivate("[TITLE:LMXconsole; CLASS:#32770]")
+	If ($popup <> 0) Then
+	    DebugLog($g_logFile, "Popup window appeared", @ScriptName, @ScriptLineNumber)
+	    ClickButton($popup, "[CLASS:Button;INSTANCE:1]")
+	Else
+	    DebugLog($g_logFile, "No popup window appeared", @ScriptName, @ScriptLineNumber)
+	EndIf
+
 	; Wait for the game load process to end, otherwise the window will become active again after and the return to the previously active window will not work
-	Sleep(6000)
+	Sleep(5000)
 
 	; Return to the previously active window
 	; Doesn't matter if it fails
 	WinActivate($activeWin)
-	return True
+	return ""
 EndFunc

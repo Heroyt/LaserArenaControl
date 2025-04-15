@@ -1,6 +1,4 @@
 %players-teams {
-	display: flex;
-	flex-direction: column;
 	padding-bottom: 2.5rem;
 	position: relative;
 	width: 100%;
@@ -62,8 +60,17 @@
 
 	.players {
 		@extend %players-teams;
+		display: grid;
 		grid-area: players;
+		grid-gap: .2rem;
+		grid-template: repeat(var(--rows, 11), 1fr) / repeat(var(--cols, 1), 1fr);
 		justify-content: flex-end;
+
+		&.players-cols-2 {
+			.title {
+				display: none;
+			}
+		}
 	}
 
 	.teams {
@@ -79,6 +86,7 @@
 	}
 
 	.player {
+		animation-duration: 200ms;
 		background-color: rgba(255, 255, 255, .9);
 		flex: 1;
 
@@ -103,11 +111,11 @@
 			opacity: 0;
 		}
 
-		&.animating {
-			position: absolute;
-			top: 0;
-			transition: top 200ms ease-in-out;
-		}
+		// &.animating {
+		// 	position: absolute;
+		// 	top: 0;
+		// 	transition: top 200ms ease-in-out;
+		// }
 
 		&.done {
 			animation: wave 1000ms ease forwards calc(1000ms + (var(--delay, 0ms) * 2));
@@ -189,7 +197,7 @@
 
 		> .position {
 			font-size: calc(1.7rem * var(--multiplier));
-			max-width: 5rem;
+			max-width: 4.5rem;
 			text-align: center;
 		}
 

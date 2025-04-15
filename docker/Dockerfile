@@ -2,7 +2,7 @@ FROM php:8.4-cli AS php
 
 # Setup
 RUN apt-get update  \
-    && apt-get -y install  \
+    && apt-get -y install --no-install-recommends  \
         apt-utils  \
         wget  \
         git  \
@@ -27,17 +27,16 @@ COPY docker/core/php.ini "$PHP_INI_DIR/php.ini"
 COPY docker/core/php-staging.ini "$PHP_INI_DIR/php-staging.ini"
 
 # PHP extensions
-RUN docker-php-ext-install  \
-    mysqli  \
-    curl  \
-    gettext  \
-    sockets  \
-    pdo_mysql  \
-    zip  \
-    pcntl  \
-    intl  \
-    opcache  \
-    gd
+RUN docker-php-ext-install mysqli
+RUN docker-php-ext-install curl
+RUN docker-php-ext-install gettext
+RUN docker-php-ext-install sockets
+RUN docker-php-ext-install pdo_mysql
+RUN docker-php-ext-install zip
+RUN docker-php-ext-install pcntl
+RUN docker-php-ext-install intl
+RUN docker-php-ext-install opcache
+RUN docker-php-ext-install gd
 
 # Imagick
 RUN apt-get update &&  \
@@ -96,24 +95,25 @@ RUN sed -i -e 's/# cs_CZ.UTF-8 UTF-8/cs_CZ.UTF-8 UTF-8/' /etc/locale.gen \
 	&& sed -i -e 's/# sk_SK.UTF-8 UTF-8/sk_SK.UTF-8 UTF-8/' /etc/locale.gen \
 	&& sed -i -e 's/# ru_RU.UTF-8 UTF-8/ru_RU.UTF-8 UTF-8/' /etc/locale.gen \
 	&& sed -i -e 's/# es_ES.UTF-8 UTF-8/es_ES.UTF-8 UTF-8/' /etc/locale.gen \
+	&& sed -i -e 's/# uk_UA.UTF-8 UTF-8/uk_UA.UTF-8 UTF-8/' /etc/locale.gen \
     && dpkg-reconfigure --frontend=noninteractive locales \
     && locale-gen cs_CZ.UTF-8 \
     && update-locale
 
-FROM golang:1.23 AS golang
+#FROM golang:1.24 AS golang
 FROM ghcr.io/roadrunner-server/velox:latest AS roadrunner
 
-COPY --from=golang /usr/local/go/ /usr/local/go/
+#COPY --from=golang /usr/local/go/ /usr/local/go/
 
 ENV APP_VERSION="1.0.0"
 ARG BUILD_TIME="$(date +%FT%T%z)"
 ENV VERSION="v2024.3.1"
-ARG RT_TOKEN="undefined"
 
 COPY docker/velox_rr_2024.toml .
 
 ENV CGO_ENABLED=0
-RUN vx build -c velox_rr_2024.toml -o /usr/bin/
+RUN --mount=type=secret,id=RT_TOKEN,env=RT_TOKEN \
+    vx build -c velox_rr_2024.toml -o /usr/bin/
 
 FROM node:current-slim AS node_base
 FROM composer:latest AS composer

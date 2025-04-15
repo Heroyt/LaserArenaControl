@@ -7,6 +7,7 @@ use App\Exceptions\GameModeNotFoundException;
 use App\Exceptions\InsufficientRegressionDataException;
 use App\GameModels\Factory\GameModeFactory;
 use App\GameModels\Tools\Lasermaxx\RegressionStatCalculator;
+use App\Helpers\Math\Random;
 use App\Services\RegressionCalculator;
 use DateTimeImmutable;
 use JsonException;
@@ -178,19 +179,19 @@ class GameSimulator
 
         $playerScores = [];
         foreach ($players as $key => $player) {
-            $players[$key]['enemyHits'] = $this->randomValue(
+            $players[$key]['enemyHits'] = Random::randomNormal(
               $teamMedians[$player['team']]['hits'],
               $this::HIT_STD_DEVIATION
             );
-            $players[$key]['teammateHits'] = $this->randomValue(
+            $players[$key]['teammateHits'] = Random::randomNormal(
               $teamMedians[$player['team']]['hitsOwn'],
               $this::HIT_OWN_STD_DEVIATION
             );
-            $players[$key]['enemyDeaths'] = $this->randomValue(
+            $players[$key]['enemyDeaths'] = Random::randomNormal(
               $teamMedians[$player['team']]['deaths'],
               $this::DEATH_STD_DEVIATION
             );
-            $players[$key]['teammateDeaths'] = $this->randomValue(
+            $players[$key]['teammateDeaths'] = Random::randomNormal(
               $teamMedians[$player['team']]['deathsOwn'],
               $this::DEATH_OWN_STD_DEVIATION
             );
@@ -208,11 +209,11 @@ class GameSimulator
 
             $teams[$player['team']]['score'] += $players[$key]['score'];
 
-            $hitsOwn = $this->randomSumDistribution(
+            $hitsOwn = Random::randomSumDistribution(
               $players[$key]['teammateHits'],
               $teamsCounts[$player['team']]['team'] - 1
             );
-            $hitsEnemy = $this->randomSumDistribution(
+            $hitsEnemy = Random::randomSumDistribution(
               $players[$key]['enemyHits'],
               $teamsCounts[$player['team']]['enemy']
             );
@@ -264,45 +265,4 @@ class GameSimulator
         file_put_contents(LMX_DIR.'results/simulated.game', $content);
     }
 
-    private function randomValue(float $median, float $stdDeviation) : int {
-        // Generate two random numbers between 0 and 1
-        $num1 = rand() / getrandmax();
-        $num2 = rand() / getrandmax();
-
-        // Calculate the standard normal deviation
-        $z = sqrt(-2 * log($num1)) * cos(2 * M_PI * $num2);
-
-        // Scale and shift the standard normal deviation to get the desired median and standard deviation
-        $value = (int) round($median + ($stdDeviation * $z));
-
-        // Make sure that the value is not negative
-        if ($value < 0) {
-            return 0;
-        }
-        return $value;
-    }
-
-    /**
-     * @param  int  $sum
-     * @param  int  $count
-     * @return int[]
-     */
-    private function randomSumDistribution(int $sum, int $count) : array {
-        // Generate N-1 random partition points
-        $partition_points = [];
-        for ($i = 0; $i < $count - 1; $i++) {
-            $partition_points[] = rand(0, $sum);
-        }
-        sort($partition_points);
-
-        // Compute the N parts
-        $parts = [];
-        $parts[] = $partition_points[0];
-        for ($i = 1; $i < $count - 1; $i++) {
-            $parts[] = $partition_points[$i] - $partition_points[$i - 1];
-        }
-        $parts[] = $sum - $partition_points[$count - 2];
-
-        return $parts;
-    }
 }

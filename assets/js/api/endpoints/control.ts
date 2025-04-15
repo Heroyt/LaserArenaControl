@@ -1,9 +1,9 @@
-import {fetchGet, fetchPost} from '../../includes/apiClient';
+import {fetchGet, fetchPost, SuccessResponse} from '../../includes/apiClient';
 
 export type GameControlStatus = 'DOWNLOAD' | 'STANDBY' | 'ARMED' | 'PLAYING';
-export type GameControlStatusResponse = { status: GameControlStatus };
-export type GameControlResponse = { status: 'ok' | 'error', error?: string };
-export type GameControlSafeResponse = { status: 'ok' | 'error' | GameControlStatus, error?: string };
+export type GameControlStatusResponse = SuccessResponse<{ status?: GameControlStatus }>;
+export type GameControlResponse = SuccessResponse<{ status?: GameControlStatus }>;
+export type GameControlSafeResponse = SuccessResponse<{ status?: GameControlStatus }>;
 
 export async function getCurrentControlStatus(systemId: number | null = null): Promise<GameControlStatusResponse> {
 	return fetchGet('/control/status' + (systemId ? '/' + systemId : ''));

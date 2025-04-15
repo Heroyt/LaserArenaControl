@@ -1,0 +1,48 @@
+{parameters
+	App\GameModels\Game\Game $game,
+	App\GameModels\Game\Player $player,
+	int $playerCount,
+	int $counter = 0,
+}
+<div class="player text-grey-text"
+	 style="--delay: {$counter * 30}ms; view-transition-name: player-{$player->vest};"
+	 data-score="{$player->score}"
+	 data-position="{$counter}" data-team="{$player->team->id}">
+	{var array $rank = $player->getBestAt()}
+	<div class="position" data-value="{$counter}">
+		{$counter}.
+	</div>
+	{ifset $player->user}
+		<img src="https://laserliga.cz/user/{$player->user->getCode()}/avatar" alt="Avatar" class="player-avatar"/>
+	{/ifset}
+	<div class="rank-name">
+		<div class="name text-team-{$game::SYSTEM}-{$player->color}">
+			{$player->name}
+		</div>
+		<div class="rank">
+			{svgIcon $rank['icon'], '', 15}
+			{$rank['name']}
+			{var $count = count($player->getAllBestAt()) - 1}
+			{if $count > 0}
+				+&nbsp;{$count}&nbsp;{faSolid 'trophy'}
+			{/if}
+		</div>
+	</div>
+	{ifset $player->user}
+		<img src="https://laserliga.cz/user/{$player->user->getCode()}/title/svg" alt="title" class="title"/>
+	{/ifset}
+	<div class="score text-end {switch $counter}
+			{case 1} text-gold
+			{case 2} text-dark-silver
+			{case 3} text-bronze
+		   {/switch}
+			{if $player->score < 0}text-danger{/if}"
+		 data-class="{switch $counter}
+			{case 1} text-gold
+			{case 2} text-dark-silver
+			{case 3} text-bronze
+		   {/switch}{if $player->score < 0}text-danger{/if}">
+		<span class="value">{$player->score|number:0,',','&nbsp;'|noescape}</span>
+		{faSolid 'star'}
+	</div>
+</div>

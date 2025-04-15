@@ -5,23 +5,29 @@ namespace App\Tasks;
 use App\Core\App;
 use App\Tasks\Payloads\MusicLoadPayload;
 use App\Tools\GameLoading\LoaderInterface;
+use Lsr\Roadrunner\Tasks\TaskDispatcherInterface;
+use Lsr\Roadrunner\Tasks\TaskPayloadInterface;
 use Spiral\RoadRunner\Jobs\Task\ReceivedTaskInterface;
 use Throwable;
 
 /**
  *
  */
-class MusicLoadTask implements TaskDispatcherInterface
+readonly class MusicLoadTask implements TaskDispatcherInterface
 {
-    public function __construct() {}
-
     public static function getDiName() : string {
         return 'task.musicLoad';
     }
 
-    public function process(ReceivedTaskInterface $task) : void {
-        /** @var MusicLoadPayload $payload */
-        $payload = igbinary_unserialize($task->getPayload());
+    public function process(ReceivedTaskInterface $task, ?TaskPayloadInterface $payload = null) : void {
+        if ($payload === null) {
+            $task->nack('Missing payload');
+            return;
+        }
+        if (!($payload instanceof MusicLoadPayload)) {
+            $task->nack('Invalid payload');
+            return;
+        }
 
         try {
             $loader = App::getService($payload->loader);

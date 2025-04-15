@@ -368,7 +368,7 @@ final class SchedulerExtension extends CompilerExtension
         ) {
             /** @infection-ignore-all */
             return $builder->addDefinition($this->prefix('executor'))
-              ->setFactory(ProcessJobExecutor::class, ['logger' => $this->prefix('logger')])
+              ->setFactory(ProcessJobExecutor::class, ['logger' => '@'.$this->prefix('logger')])
                            ->addSetup(
                              'setExecutable',
                              [

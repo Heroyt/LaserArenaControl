@@ -1,0 +1,400 @@
+tables:
+	App\GameModels\Game\Evo6\Game:
+		order: 1
+		definition: '''
+		(
+			`id_game` int(11) unsigned NOT NULL AUTO_INCREMENT,
+			`id_mode` int(11) unsigned DEFAULT NULL,
+			`id_music` int(11) unsigned DEFAULT NULL,
+			`id_group` int(11) unsigned DEFAULT NULL,
+			`game_type` enum('TEAM','SOLO') NOT NULL DEFAULT 'TEAM',
+			`game_style_type` tinyint(2) unsigned DEFAULT 0,
+			`mode_name` varchar(100) DEFAULT NULL,
+			`file_time` datetime DEFAULT NULL,
+			`import_time` datetime DEFAULT NULL,
+			`start` datetime DEFAULT NULL,
+			`end` datetime DEFAULT NULL,
+			`results_file` varchar(255) DEFAULT NULL,
+			`file_number` int(11) DEFAULT NULL,
+			`timing_before` int(10) unsigned DEFAULT NULL,
+			`timing_game_length` int(10) unsigned DEFAULT NULL,
+			`timing_after` int(10) unsigned DEFAULT NULL,
+			`scoring_hit_other` int(11) DEFAULT NULL,
+			`scoring_hit_own` int(11) DEFAULT NULL,
+			`scoring_death_other` int(11) DEFAULT NULL,
+			`scoring_death_own` int(11) DEFAULT NULL,
+			`scoring_hit_pod` int(11) DEFAULT NULL,
+			`scoring_shot` int(11) DEFAULT NULL,
+			`scoring_power_machine_gun` int(11) DEFAULT NULL,
+			`scoring_power_invisibility` int(11) DEFAULT NULL,
+			`scoring_power_agent` int(11) DEFAULT NULL,
+			`scoring_power_shield` int(11) DEFAULT NULL,
+			`scoring_highscore` int(11) DEFAULT NULL,
+			`scoring_accuracy_bonus` tinyint(2) unsigned DEFAULT 0,
+			`scoring_accuracy_threshold` tinyint(3) unsigned DEFAULT 0,
+			`scoring_accuracy_threshold_bonus` mediumint(6) DEFAULT 0,
+			`scoring_encouragement_bonus` tinyint(2) unsigned DEFAULT 0,
+			`scoring_encouragement_bonus_score` mediumint(6) DEFAULT 0,
+			`scoring_power` mediumint(6) DEFAULT 0,
+			`scoring_penalty` mediumint(6) DEFAULT 0,
+			`scoring_activity` mediumint(6) DEFAULT 0,
+			`scoring_knockout` mediumint(6) DEFAULT 0,
+			`reload_clips` int(11) unsigned DEFAULT 0,
+			`allow_friendly_fire` tinyint(1) unsigned DEFAULT 0,
+			`anti_stalking` tinyint(1) unsigned DEFAULT 0,
+			`blast_shots` tinyint(1) unsigned DEFAULT 0,
+			`trigger_speed` tinyint(2) unsigned DEFAULT 0,
+			`vip_on` bool DEFAULT false,
+			`vip_lives` smallint(5) unsigned DEFAULT 0,
+			`vip_ammo` smallint(5) unsigned DEFAULT 0,
+			`vip_respawn` tinyint(3) unsigned DEFAULT 5,
+			`vip_kill_team` tinyint(1) unsigned DEFAULT 0,
+			`vip_hit_score` mediumint(6) DEFAULT 0,
+			`vip_hit_type` tinyint(2) DEFAULT 0,
+			`vip_blast_shots` tinyint(1) unsigned DEFAULT 0,
+			`vip_ignore_teammate_hits` tinyint(1) unsigned DEFAULT 0,
+			`zombie_on` bool DEFAULT false,
+			`zombie_lives` smallint(5) unsigned DEFAULT 0,
+			`zombie_ammo` smallint(5) unsigned DEFAULT 0,
+			`zombie_infect_hits` tinyint(3) unsigned DEFAULT 0,
+			`zombie_special` tinyint(1) unsigned DEFAULT 0,
+			`zombie_team_number` tinyint(2) unsigned DEFAULT 0,
+			`switch_on` bool DEFAULT false,
+			`switch_lives` tinyint(3) unsigned DEFAULT 0,
+			`hit_gain_ammo` tinyint(3) unsigned DEFAULT 0,
+			`hit_gain_lives` tinyint(3) unsigned DEFAULT 0,
+			`respawn_lives` tinyint(3) unsigned DEFAULT 0,
+			`code` varchar(50) DEFAULT NULL,
+			`respawn` smallint(4) unsigned DEFAULT NULL,
+			`lives` int(10) unsigned DEFAULT NULL,
+			`ammo` int(10) unsigned DEFAULT NULL,
+			`sync` TINYINT(1)  NOT NULL  DEFAULT 0,
+			`meta` BLOB DEFAULT NULL,
+			PRIMARY KEY (`id_game`),
+			UNIQUE KEY `code` (`code`),
+			KEY `id_mode` (`id_mode`),
+			CONSTRAINT `evo6_games_ibfk_1` FOREIGN KEY (`id_mode`) REFERENCES `game_modes` (`id_mode`) ON DELETE SET NULL ON UPDATE CASCADE,
+			CONSTRAINT `evo6_games_ibfk_2` FOREIGN KEY (`id_music`) REFERENCES `music` (`id_music`) ON DELETE SET NULL ON UPDATE CASCADE,
+			CONSTRAINT `evo6_games_ibfk_3` FOREIGN KEY (`id_group`) REFERENCES `game_groups` (`id_group`) ON DELETE SET NULL ON UPDATE CASCADE
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+		'''
+		modifications:
+			0.1:
+				- 'ADD `meta` BLOB DEFAULT NULL'
+			0.2:
+				- 'ADD `game_style_type` tinyint(2) unsigned DEFAULT 0'
+				- 'ADD `scoring_accuracy_bonus` tinyint(2) unsigned DEFAULT 0'
+				- 'ADD `scoring_accuracy_threshold` tinyint(3) unsigned DEFAULT 0'
+				- 'ADD `scoring_accuracy_threshold_bonus` mediumint(6) DEFAULT 0'
+				- 'ADD `scoring_encouragement_bonus` tinyint(2) unsigned DEFAULT 0'
+				- 'ADD `scoring_encouragement_bonus_score` mediumint(6) DEFAULT 0'
+				- 'ADD `scoring_power` mediumint(6) DEFAULT 0'
+				- 'ADD `scoring_penalty` mediumint(6) DEFAULT 0'
+				- 'ADD `scoring_activity` mediumint(6) DEFAULT 0'
+				- 'ADD `scoring_knockout` mediumint(6) DEFAULT 0'
+				- 'ADD `reload_clips` int(11) unsigned DEFAULT 0'
+				- 'ADD `allow_friendly_fire` tinyint(1) unsigned DEFAULT 0'
+				- 'ADD `anti_stalking` tinyint(1) unsigned DEFAULT 0'
+				- 'ADD `blast_shots` tinyint(1) unsigned DEFAULT 0'
+				- 'ADD `trigger_speed` tinyint(2) unsigned DEFAULT 0'
+				- 'ADD `vip_lives` smallint(5) unsigned DEFAULT 0'
+				- 'ADD `vip_ammo` smallint(5) unsigned DEFAULT 0'
+				- 'ADD `vip_respawn` tinyint(3) unsigned DEFAULT 5'
+				- 'ADD `vip_kill_team` tinyint(1) unsigned DEFAULT 0'
+				- 'ADD `vip_hit_score` mediumint(6) DEFAULT 0'
+				- 'ADD `vip_hit_type` tinyint(2) DEFAULT 0'
+				- 'ADD `vip_blast_shots` tinyint(1) unsigned DEFAULT 0'
+				- 'ADD `vip_ignore_teammate_hits` tinyint(1) unsigned DEFAULT 0'
+				- 'ADD `zombie_lives` smallint(5) unsigned DEFAULT 0'
+				- 'ADD `zombie_ammo` smallint(5) unsigned DEFAULT 0'
+				- 'ADD `zombie_infect_hits` tinyint(3) unsigned DEFAULT 0'
+				- 'ADD `zombie_special` tinyint(1) unsigned DEFAULT 0'
+				- 'ADD `zombie_team_number` tinyint(2) unsigned DEFAULT 0'
+				- 'ADD `hit_gain_ammo` tinyint(3) unsigned DEFAULT 0'
+				- 'ADD `hit_gain_lives` tinyint(3) unsigned DEFAULT 0'
+				- 'ADD `respawn_lives` tinyint(3) unsigned DEFAULT 0'
+			0.2.1:
+				- 'ADD `results_file` varchar(255) DEFAULT NULL'
+			0.4.0:
+				- 'ADD `switch_on` bool DEFAULT false'
+				- 'ADD `switch_lives` tinyint(3) unsigned DEFAULT 0'
+				- 'ADD `vip_on` bool DEFAULT false'
+				- 'ADD `zombie_on` bool DEFAULT false'
+		foreignKeys:
+			-
+				column: id_music
+				refTable: App\Models\MusicMode
+				refColumn: id_music
+				onDelete: 'SET NULL'
+			-
+				column: id_mode
+				refTable: App\GameModels\Game\GameModes\AbstractMode
+				refColumn: id_mode
+				onDelete: 'SET NULL'
+			-
+				column: id_group
+				refTable: App\Models\GameGroup
+				refColumn: id_group
+				onDelete: 'SET NULL'
+		indexes:
+			-
+				name: start
+				columns: ['start']
+				unique: true
+			-
+				name: end
+				columns: ['end']
+			-
+				name: code
+				columns: ['code']
+				unique: true
+			-
+				name: sync
+				columns: ['sync']
+	App\GameModels\Game\Evo6\Team:
+		order: 2
+		definition: '''
+		(
+			`id_team` int(11) unsigned NOT NULL AUTO_INCREMENT,
+			`id_game` int(11) unsigned NOT NULL,
+			`color` int(10) unsigned DEFAULT NULL,
+			`score` int(11) NOT NULL DEFAULT 0,
+			`bonus` int(11) DEFAULT NULL,
+			`position` int(10) unsigned NOT NULL DEFAULT 0,
+			`name` varchar(20) DEFAULT NULL,
+			PRIMARY KEY (`id_team`),
+			KEY `id_game` (`id_game`),
+			CONSTRAINT `evo6_teams_ibfk_1` FOREIGN KEY (`id_game`) REFERENCES `evo6_games` (`id_game`) ON DELETE CASCADE ON UPDATE CASCADE
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+		'''
+		foreignKeys:
+			-
+				column: id_game
+				refTable: App\GameModels\Game\Evo6\Game
+				refColumn: id_game
+	App\GameModels\Game\Evo6\Player:
+		order: 3
+		definition: '''
+		(
+			`id_player` int(11) unsigned NOT NULL AUTO_INCREMENT,
+			`id_game` int(11) unsigned NOT NULL,
+			`id_team` int(11) unsigned DEFAULT NULL,
+			`id_user` int(11) unsigned DEFAULT NULL,
+			`name` varchar(20) NOT NULL DEFAULT '',
+			`score` mediumint(7) NOT NULL DEFAULT 0,
+			`skill` smallint(5) NOT NULL DEFAULT 0,
+			`vest` tinyint(2) unsigned NOT NULL DEFAULT 0,
+			`shots` smallint(5) unsigned NOT NULL DEFAULT 0,
+			`accuracy` tinyint(3) unsigned NOT NULL DEFAULT 0,
+			`hits` smallint(5) unsigned NOT NULL DEFAULT 0,
+			`deaths` smallint(5) unsigned NOT NULL DEFAULT 0,
+			`position` tinyint(2) unsigned NOT NULL DEFAULT 0,
+			`shot_points` mediumint(7) NOT NULL DEFAULT 0,
+			`score_bonus` mediumint(7) NOT NULL DEFAULT 0,
+			`score_powers` mediumint(7) NOT NULL DEFAULT 0,
+			`score_mines` mediumint(7) NOT NULL DEFAULT 0,
+			`score_vip` mediumint(7) NOT NULL DEFAULT 0,
+			`score_activity` mediumint(7) NOT NULL DEFAULT 0,
+			`score_encouragement` mediumint(7) NOT NULL DEFAULT 0,
+			`score_knockout` mediumint(7) NOT NULL DEFAULT 0,
+			`score_penalty` mediumint(7) NOT NULL DEFAULT 0,
+			`score_reality` mediumint(7) NOT NULL DEFAULT 0,
+			`score_accuracy` mediumint(7) NOT NULL DEFAULT 0,
+			`lives_rest` smallint(5) unsigned NOT NULL DEFAULT 0,
+			`ammo_rest` mediumint(7) unsigned NOT NULL DEFAULT 0,
+			`mines_hits` smallint(5) unsigned NOT NULL DEFAULT 0,
+			`hits_other` smallint(5) unsigned NOT NULL DEFAULT 0,
+			`hits_own` smallint(5) unsigned NOT NULL DEFAULT 0,
+			`deaths_other` smallint(5) unsigned NOT NULL DEFAULT 0,
+			`deaths_own` smallint(5) unsigned NOT NULL DEFAULT 0,
+			`bonuses` tinyint(3) unsigned NOT NULL DEFAULT 0,
+			`vip` tinyint(1) unsigned NOT NULL DEFAULT 0,
+			`relative_hits` decimal(11,4) DEFAULT NULL,
+			`relative_deaths` decimal(11,4) DEFAULT NULL,
+			`my_lasermaxx` varchar(100) NOT NULL DEFAULT '',
+			`calories` smallint(4) unsigned NOT NULL DEFAULT 0,
+			`activity` smallint(4) unsigned NOT NULL DEFAULT 0,
+			`penalty_count` tinyint(3) unsigned NOT NULL DEFAULT 0,
+			`birthday` tinyint(1) unsigned NOT NULL DEFAULT 0,
+			`kd` decimal(11,4) GENERATED ALWAYS AS (`hits` / `deaths`) VIRTUAL,
+			PRIMARY KEY (`id_player`),
+			KEY `id_game` (`id_game`),
+			KEY `id_team` (`id_team`),
+			CONSTRAINT `evo6_players_ibfk_1` FOREIGN KEY (`id_game`) REFERENCES `evo6_games` (`id_game`) ON DELETE CASCADE ON UPDATE CASCADE,
+			CONSTRAINT `evo6_players_ibfk_2` FOREIGN KEY (`id_team`) REFERENCES `evo6_teams` (`id_team`) ON DELETE SET NULL ON UPDATE CASCADE,
+			CONSTRAINT `evo6_players_ibfk_3` FOREIGN KEY (`id_user`) REFERENCES `players` (`id_user`) ON DELETE SET NULL ON UPDATE CASCADE
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+		'''
+		foreignKeys:
+			-
+				column: id_game
+				refTable: App\GameModels\Game\Evo6\Game
+				refColumn: id_game
+			-
+				column: id_team
+				refTable: App\GameModels\Game\Evo6\Team
+				refColumn: id_team
+			-
+				column: id_user
+				refTable: App\Models\Auth\Player
+				refColumn: id_user
+		indexes:
+			-
+				name: 'game_vest'
+				columns: ['id_game', 'vest']
+				unique: true
+		modifications:
+			0.1.0:
+				- 'ADD `score_vip` mediumint(5) NOT NULL DEFAULT 0'
+				- 'ADD `score_activity` mediumint(5) NOT NULL DEFAULT 0'
+				- 'ADD `score_encouragement` mediumint(5) NOT NULL DEFAULT 0'
+				- 'ADD `score_knockout` mediumint(5) NOT NULL DEFAULT 0'
+				- 'ADD `score_penalty` mediumint(5) NOT NULL DEFAULT 0'
+				- 'ADD `score_reality` mediumint(5) NOT NULL DEFAULT 0'
+				- 'ADD `score_accuracy` mediumint(5) NOT NULL DEFAULT 0'
+				- 'ADD `activity` smallint(4) unsigned NOT NULL DEFAULT 0'
+				- 'ADD `penalty_count` tinyint(3) unsigned NOT NULL DEFAULT 0'
+				- 'ADD `birthday` tinyint(1) unsigned NOT NULL DEFAULT 0'
+			0.2.0:
+				- 'ADD `bonuses` tinyint(3) unsigned NOT NULL DEFAULT 0'
+			0.3.0:
+				- 'ADD `lives_rest` smallint(5) unsigned NOT NULL DEFAULT 0'
+	evo6_hits:
+		order: 4
+		definition: '''
+		(
+			`id_player` int(11) unsigned NOT NULL,
+			`id_target` int(11) unsigned NOT NULL,
+			`count` int(10) unsigned DEFAULT NULL,
+			PRIMARY KEY (`id_player`,`id_target`),
+			KEY `id_target` (`id_target`),
+			KEY `id_player` (`id_player`),
+			CONSTRAINT `evo6_hits_ibfk_1` FOREIGN KEY (`id_player`) REFERENCES `evo6_players` (`id_player`) ON DELETE CASCADE ON UPDATE CASCADE,
+			CONSTRAINT `evo6_hits_ibfk_2` FOREIGN KEY (`id_target`) REFERENCES `evo6_players` (`id_player`) ON DELETE CASCADE ON UPDATE CASCADE
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+		'''
+		foreignKeys:
+			-
+				column: id_player
+				refTable: App\GameModels\Game\Evo6\Player
+				refColumn: id_player
+			-
+				column: id_target
+				refTable: App\GameModels\Game\Evo6\Player
+				refColumn: id_player
+	mvEvo6RegressionData:
+		order: 0
+		definition: '''
+		(
+          `id_game` int(11) unsigned NOT NULL,
+          `hits` int(10) unsigned NOT NULL,
+          `deaths` int(10) unsigned NOT NULL,
+          `hits_other` int(10) unsigned NOT NULL,
+          `deaths_other` int(10) unsigned NOT NULL,
+          `hits_own` int(10) unsigned NOT NULL,
+          `deaths_own` int(10) unsigned NOT NULL,
+          `id_team` int(11) unsigned DEFAULT NULL,
+          `game_type` enum('TEAM','SOLO') NOT NULL,
+          `game_length` bigint(21) DEFAULT NULL,
+          `teammates` bigint(21) NOT NULL,
+          `enemies` bigint(21) NOT NULL,
+          `teams` bigint(21) DEFAULT NULL,
+          `id_mode` int(11) unsigned NOT NULL,
+          `rankable` tinyint(1) NOT NULL,
+          KEY `id_game` (`id_game`),
+          KEY `game_type` (`game_type`),
+          KEY `game_type_2` (`game_type`,`teams`),
+          KEY `rankable` (`rankable`),
+          KEY `id_game_2` (`id_game`,`enemies`,`teammates`),
+          KEY `id_mode` (`id_mode`),
+          KEY `game_type_3` (`game_type`,`rankable`,`teams`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+		'''
+		indexes:
+			-
+				name: 'id_game'
+				columns: ['id_game']
+			-
+				name: 'game_type'
+				columns: ['game_type']
+			-
+				name: 'game_type_2'
+				columns: ['game_type', 'teams']
+			-
+				name: 'rankable'
+				columns: ['rankable']
+			-
+				name: 'id_game_2'
+				columns: ['id_game', 'enemies', 'teammates']
+			-
+				name: 'id_mode'
+				columns: ['id_mode']
+			-
+				name: 'game_type_3'
+				columns: ['game_type', 'rankable', 'teams']
+views:
+	vEvo6GamesStats: '''
+		SELECT
+		   `g`.`id_game` AS `id_game`,
+		   `g`.`id_music` AS `id_music`,
+		   `g`.`id_group` AS `id_group`,
+		   `g`.`game_type` AS `game_type`,
+		   `g`.`code` AS `code`,
+		   `g`.`start` AS `start`,
+		   `g`.`end` AS `end`,
+		   `g`.`id_mode` AS `id_mode`,
+		   `m`.`name` AS `mode`,
+		   `m`.`rankable` AS `rankable`,
+		   (
+				SELECT
+					COUNT(*)
+				FROM `evo6_players` `p`
+				WHERE `g`.`id_game` = `p`.`id_game`
+			) AS `player_count`,
+			(
+				SELECT
+					COUNT(*)
+				FROM `evo6_teams` `t`
+				WHERE `g`.`id_game` = `t`.`id_game`
+			) AS `team_count`
+		FROM `evo6_games` `g`
+		JOIN `game_modes` `m` ON `g`.`id_mode` = `m`.`id_mode`
+	'''
+	vEvo6RegressionData: '''
+		SELECT `p`.`id_game`                                 AS `id_game`,
+			   `p`.`hits`                                    AS `hits`,
+			   `p`.`deaths`                                  AS `deaths`,
+			   `p`.`hits_other`                              AS `hits_other`,
+			   `p`.`deaths_other`                            AS `deaths_other`,
+			   `p`.`hits_own`                                AS `hits_own`,
+			   `p`.`deaths_own`                              AS `deaths_own`,
+			   `p`.`id_team`                                 AS `id_team`,
+			   `g`.`game_type`                               AS `game_type`,
+			   timestampdiff(MINUTE, `g`.`start`, `g`.`end`) AS `game_length`,
+			   `t`.`teammates_count`                         AS `teammates`,
+			   `e`.`enemies_count`                           AS `enemies`,
+			   (SELECT COUNT(*)
+				FROM `evo6_teams` `t`
+				WHERE `t`.`id_game` = `p`.`id_game`)         AS `teams`,
+			   `m`.`id_mode`                                 AS `id_mode`,
+			   `m`.`rankable`                                AS `rankable`
+		FROM `evo6_players` `p`
+				 JOIN `evo6_games` `g` ON `p`.`id_game` = `g`.`id_game`
+				 JOIN `game_modes` `m`
+					  ON `g`.`id_mode` = `m`.`id_mode` OR
+						 `g`.`id_mode` IS NULL AND `m`.`id_mode` = if(`g`.`game_type` = 'TEAM', 1, 2)
+				 JOIN (SELECT `evo6_players`.`id_team` AS `id_team`,
+							  COUNT(*)                 AS `teammates_count`
+					   FROM `evo6_players`
+					   GROUP BY `evo6_players`.`id_team`) `t`
+					  ON `p`.`id_team` = `t`.`id_team`
+				 JOIN (SELECT `evo6_players`.`id_game` AS `id_game`,
+							  `evo6_players`.`id_team` AS `id_team`,
+							  COUNT(*)                 AS `enemies_count`
+					   FROM `evo6_players`
+					   GROUP BY `evo6_players`.`id_game`, `evo6_players`.`id_team`) `e`
+					  ON `p`.`id_game` = `e`.`id_game` AND `p`.`id_team` <> `e`.`id_team`
+		WHERE `g`.`start` IS NOT NULL
+		  AND `g`.`end` IS NOT NULL
+		  AND (`t`.`teammates_count` > 0 OR `g`.`game_type` = 'SOLO')
+	'''

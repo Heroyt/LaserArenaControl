@@ -2,19 +2,23 @@
 
 namespace App\Controllers\Api;
 
+use App\Controllers\WithGameCodeParam;
 use App\Core\Info;
+use App\CQRS\Commands\AssignGameModeCommand;
+use App\CQRS\Commands\RecalculateScoresCommand;
+use App\CQRS\Commands\RecalculateSkillsCommand;
 use App\Exceptions\GameModeNotFoundException;
 use App\GameModels\Factory\GameFactory;
 use App\GameModels\Factory\GameModeFactory;
 use App\GameModels\Game\Game;
-use App\GameModels\Game\Player;
 use JsonException;
 use Lsr\Core\Config;
 use Lsr\Core\Controllers\ApiController;
+use Lsr\Core\Requests\Dto\ErrorResponse;
+use Lsr\Core\Requests\Dto\SuccessResponse;
+use Lsr\Core\Requests\Enums\ErrorType;
 use Lsr\Core\Requests\Request;
-use Lsr\Lg\Results\Enums\GameModeType;
-use Lsr\ObjectValidation\Exceptions\ValidationException;
-use Lsr\Orm\Exceptions\ModelNotFoundException;
+use Lsr\CQRS\CommandBus;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
 
@@ -23,16 +27,15 @@ use Throwable;
  */
 class GameHelpers extends ApiController
 {
+    use WithGameCodeParam;
+
     public function __construct(
       private readonly Config $config,
+      private readonly CommandBus $commandBus,
     ) {
         parent::__construct();
     }
 
-    /**
-     * @return never
-     * @throws JsonException
-     */
     public function getLoadedGameInfo(Request $request) : ResponseInterface {
         // Allow for filtering games just from one system
         $system = $request->getGet('system', 'all');
@@ -79,7 +82,10 @@ class GameHelpers extends ApiController
         }
 
         if (!isset($game)) {
-            return $this->respond(['error' => 'No game found', 'games' => $allGames], 404);
+            return $this->respond(
+              new ErrorResponse('No game found', ErrorType::NOT_FOUND, values: ['games' => $allGames]),
+              404
+            );
         }
 
         return $this->respond(
@@ -99,17 +105,14 @@ class GameHelpers extends ApiController
     }
 
     /**
-     * @return never
-     * @throws JsonException
-     * @throws ModelNotFoundException
-     * @throws ValidationException
+     * @return ResponseInterface
      */
     public function getGateGameInfo() : ResponseInterface {
         /** @var Game|null $game */
         $game = Info::get('gate-game');
 
         if (!isset($game)) {
-            return $this->respond(['error' => 'No game found'], 404);
+            return $this->respond(new ErrorResponse('No game found', ErrorType::NOT_FOUND), 404);
         }
 
         return $this->respond(
@@ -129,120 +132,77 @@ class GameHelpers extends ApiController
     }
 
     /**
-     * @param  Request  $request
-     *
-     * @return never
-     * @throws JsonException
+     * @param  string  $code
+     * @return ResponseInterface
      * @throws Throwable
      */
-    public function recalcSkill(Request $request) : ResponseInterface {
-        $code = $request->params['code'] ?? '';
-        if (empty($code)) {
-            return $this->respond(['error' => 'Invalid code'], 400);
-        }
-        $game = GameFactory::getByCode($code);
-        if (!isset($game)) {
-            return $this->respond(['error' => 'Game not found'], 404);
+    public function recalcSkill(string $code = '') : ResponseInterface {
+        $game = $this->getGameFromCode($code);
+        if ($game instanceof ErrorResponse) {
+            return $this->respond($game, $game->type->httpCode());
         }
 
-        try {
-            $game->calculateSkills();
-            $game->sync = false;
-            $game->save();
-            $game->sync();
-        } catch (ModelNotFoundException | ValidationException $e) {
-            return $this->respond(['error' => 'Error while saving the player data', 'exception' => $e], 500);
+        if ($this->commandBus->dispatch(new RecalculateSkillsCommand($game))) {
+            return $this->respond(new SuccessResponse('Skills recalculated'));
         }
 
-        return $this->respond(['status' => 'OK']);
+        return $this->respond(new ErrorResponse('Skills recalculation failed', ErrorType::INTERNAL), 500);
     }
 
     /**
+     * @param  string  $code
      * @param  Request  $request
      *
-     * @return never
+     * @return ResponseInterface
+     * @throws GameModeNotFoundException
      * @throws JsonException
      * @throws Throwable
-     * @throws GameModeNotFoundException
      */
-    public function changeGameMode(Request $request) : ResponseInterface {
-        $code = $request->params['code'] ?? '';
-        if (empty($code)) {
-            return $this->respond(['error' => 'Invalid code'], 400);
-        }
-
-        // Find game
-        $game = GameFactory::getByCode($code);
-        if (!isset($game)) {
-            return $this->respond(['error' => 'Game not found'], 404);
+    public function changeGameMode(string $code, Request $request) : ResponseInterface {
+        $game = $this->getGameFromCode($code);
+        if ($game instanceof ErrorResponse) {
+            return $this->respond($game, $game->type->httpCode());
         }
 
         // Find game mode
         $gameModeId = (int) $request->getPost('mode', 0);
         if ($gameModeId < 1) {
-            return $this->respond(['error' => 'Invalid game mode ID'], 400);
+            return $this->respond(new ErrorResponse('Invalid game mode ID', ErrorType::VALIDATION), 400);
         }
         $gameMode = GameModeFactory::getById($gameModeId, ['system' => $game::SYSTEM]);
         if (!isset($gameMode)) {
-            return $this->respond(['error' => 'Game mode not found'], 404);
+            return $this->respond(new ErrorResponse('Game mode not found', ErrorType::NOT_FOUND), 404);
         }
 
-        $previousType = $game->gameType;
+        $response = $this->commandBus->dispatch(new AssignGameModeCommand($game, $gameMode));
 
-        // Set the new mode
-        $game->gameType = $gameMode->type;
-        $game->mode = $gameMode;
-
-        // Check mode type change
-        if ($previousType !== $game->mode) {
-            if ($previousType === GameModeType::SOLO) {
-                return $this->respond(['error' => 'Cannot change mode from solo to team'], 400);
-            }
-
-            // Assign all players to one team
-            $team = $game->teams->first();
-            if (!isset($team)) {
-                return $this->respond(['error' => 'Error while getting a team from a game'], 500);
-            }
-            /** @var Player $player */
-            foreach ($game->players as $player) {
-                $player->team = $team;
-            }
+        if (!$response->success) {
+            $errorType = $response->exception !== null ? ErrorType::INTERNAL : ErrorType::VALIDATION;
+            $this->respond(
+              new ErrorResponse($response->message, $errorType, exception: $response->exception),
+              $errorType === ErrorType::INTERNAL ? 500 : 400
+            );
         }
 
-        $game->recalculateScores();
-
-        if (!$game->save()) {
-            $game->sync();
-            return $this->respond(['error' => 'Error saving game'], 500);
-        }
-
-        return $this->respond(['status' => 'OK']);
+        return $this->respond(new SuccessResponse('Game mode changed'));
     }
 
     /**
-     * @param  Request  $request
+     * @param  string  $code
      *
-     * @return never
-     * @throws JsonException
+     * @return ResponseInterface
      * @throws Throwable
      */
-    public function recalcScores(Request $request) : ResponseInterface {
-        $code = $request->params['code'] ?? '';
-        if (empty($code)) {
-            return $this->respond(['error' => 'Invalid code'], 400);
-        }
-        $game = GameFactory::getByCode($code);
-        if (!isset($game)) {
-            return $this->respond(['error' => 'Game not found'], 404);
+    public function recalcScores(string $code) : ResponseInterface {
+        $game = $this->getGameFromCode($code);
+        if ($game instanceof ErrorResponse) {
+            return $this->respond($game, $game->type->httpCode());
         }
 
-        $game->recalculateScores();
-        if (!$game->save()) {
-            $game->sync();
-            return $this->respond(['error' => 'Error saving game'], 500);
+        if ($this->commandBus->dispatch(new RecalculateScoresCommand($game))) {
+            return $this->respond(new SuccessResponse('Scores recalculated'));
         }
 
-        return $this->respond(['status' => 'OK']);
+        return $this->respond(new ErrorResponse('Scores recalculation failed', ErrorType::INTERNAL), 500);
     }
 }

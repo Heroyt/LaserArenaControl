@@ -2,7 +2,9 @@
 
 namespace App\Tasks\Payloads;
 
-readonly class MusicLoadPayload
+use Lsr\Roadrunner\Tasks\TaskPayloadInterface;
+
+readonly class MusicLoadPayload implements TaskPayloadInterface
 {
     public function __construct(
       public int    $musicId,

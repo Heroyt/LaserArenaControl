@@ -9,6 +9,9 @@ use App\Gate\Screens\WithSettings;
 use App\Gate\Settings\GateSettings;
 use App\Models\BaseModel;
 use Lsr\Caching\Cache;
+use Lsr\Orm\Attributes\Hooks\AfterDelete;
+use Lsr\Orm\Attributes\Hooks\AfterInsert;
+use Lsr\Orm\Attributes\Hooks\AfterUpdate;
 use Lsr\Orm\Attributes\PrimaryKey;
 use Lsr\Orm\Attributes\Relations\ManyToOne;
 use Lsr\Orm\Exceptions\ModelNotFoundException;
@@ -141,6 +144,7 @@ class GateScreenModel extends BaseModel
         return $this;
     }
 
+    #[AfterUpdate, AfterInsert, AfterDelete]
     public function clearCache() : void {
         if (isset($this->gate)) {
             /** @var Cache $cache */

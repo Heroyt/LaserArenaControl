@@ -14,6 +14,11 @@ use DateTimeInterface;
 use Lsr\Caching\Cache;
 use Lsr\Helpers\Tools\Strings;
 use Lsr\Lg\Results\Interface\Models\GameGroupInterface;
+use Lsr\Lg\Results\Interface\Models\GroupPlayerInterface;
+use Lsr\Lg\Results\Interface\Models\PlayerInterface;
+use Lsr\Orm\Attributes\Hooks\AfterDelete;
+use Lsr\Orm\Attributes\Hooks\AfterInsert;
+use Lsr\Orm\Attributes\Hooks\AfterUpdate;
 use Lsr\Orm\Attributes\JsonExclude;
 use Lsr\Orm\Attributes\NoDB;
 use Lsr\Orm\Attributes\PrimaryKey;
@@ -249,6 +254,7 @@ class GameGroup extends BaseModel implements GameGroupInterface
         return $players;
     }
 
+    #[AfterUpdate, AfterInsert, AfterDelete]
     public function clearCache() : void {
         parent::clearCache();
         if (isset($this->id)) {
@@ -266,5 +272,23 @@ class GameGroup extends BaseModel implements GameGroupInterface
             $cache->remove('group/'.$this->id.'/games');
             $cache->remove('group/'.$this->id.'/games/ids');
         }
+    }
+
+    public function getPlayer(PlayerInterface $player) : ?GroupPlayerInterface {
+        $name = $player->name;
+        return $this->getPlayerByName($name);
+    }
+
+    public function getPlayerByName(string $name) : ?GroupPlayerInterface {
+        $name = Strings::toAscii($name);
+        return array_find($this->players, static fn(\App\Models\Group\Player $player) => $player->asciiName === $name);
+    }
+
+    public function getGamesCodes() : array {
+        return array_map(static fn(Game $game) => $game->code, $this->games);
+    }
+
+    public function getDateRange(string $format = 'd.m.Y') : string {
+        return '';
     }
 }

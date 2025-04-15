@@ -4,13 +4,13 @@ namespace App\Controllers;
 
 use App\Models\Auth\Player;
 use App\Services\LaserLiga\PlayerProvider;
-use App\Services\TaskProducer;
 use App\Tasks\PlayersSyncTask;
 use InvalidArgumentException;
 use Lsr\Core\Controllers\Controller;
 use Lsr\Core\Requests\Dto\ErrorResponse;
 use Lsr\Core\Requests\Dto\SuccessResponse;
 use Lsr\Core\Requests\Request;
+use Lsr\Roadrunner\Tasks\TaskProducer;
 use Psr\Http\Message\ResponseInterface;
 use Spiral\RoadRunner\Jobs\Exception\JobsException;
 

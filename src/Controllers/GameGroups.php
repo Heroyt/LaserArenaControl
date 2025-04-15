@@ -86,6 +86,7 @@ class GameGroups extends Controller
         } catch (ValidationException $e) {
             return $this->respond(['error' => 'Validation failed', 'exception' => $e->getMessage()], 400);
         }
+        GameGroup::clearModelCache();
         return $this->respond(['status' => 'ok', 'id' => $group->id]);
     }
 

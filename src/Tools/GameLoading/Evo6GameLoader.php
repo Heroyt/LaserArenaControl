@@ -29,7 +29,10 @@ class Evo6GameLoader extends LasermaxxGameLoader
 
         // Render the game info into a load file
         $content = $this->latte->viewToString('gameFiles/evo6', $loadData->getParams());
-        $loadDir = LMX_DIR.Info::get('evo6_load_file', 'games/');
+        $loadDir = $this->system->gameLoadDir;
+        if (!file_exists($loadDir) || !is_dir($loadDir)) {
+            $loadDir = LMX_DIR.Info::get('evo6_load_file', 'games/');
+        }
         if (file_exists($loadDir) && is_dir($loadDir)) {
             file_put_contents(trailingSlashIt($loadDir).'0000.game', $content);
         }

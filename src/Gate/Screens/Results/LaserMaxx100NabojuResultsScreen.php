@@ -19,7 +19,7 @@ class LaserMaxx100NabojuResultsScreen extends AbstractResultsScreen
      * @inheritDoc
      */
     public static function getName() : string {
-        return lang('LaserMaxx výsledky z módu 100 nábojů', domain: 'gate', context: 'screens');
+        return lang('LaserMaxx výsledky z módu 100 nábojů', context: 'screens', domain: 'gate');
     }
 
     public static function getDescription() : string {

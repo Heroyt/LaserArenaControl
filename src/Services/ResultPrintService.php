@@ -241,10 +241,8 @@ readonly class ResultPrintService
                     if (file_exists($customFile)) {
                         $template .= '/'.$customTemplate;
                     }
-                    else {
-                        if (file_exists(TEMPLATE_DIR.'results/templates/'.$customTemplate.'.latte')) {
-                            $template = $customTemplate;
-                        }
+                    else if (file_exists(TEMPLATE_DIR.'results/templates/'.$customTemplate.'.latte')) {
+                        $template = $customTemplate;
                     }
                 }
             }
@@ -268,7 +266,7 @@ readonly class ResultPrintService
     public function getPublicUrl(Game $game) : string {
         /** @var string $url */
         $url = Info::get('liga_api_url');
-        return trailingSlashIt($url).'g/'.$game->code;
+        return trailingSlashIt($url).'g/'.$game->code.'?mtm_campaign=QR&mtm_kwd=print';
     }
 
     /**

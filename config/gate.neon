@@ -8,6 +8,7 @@ services:
 	gate.screens.music: App\Gate\Screens\MusicModesScreen
 	gate.screens.rtsp: App\Gate\Screens\RtspScreen
 	gate.screens.vest_gun_after_game: App\Gate\Screens\VestGunAfterGameScreen
+	gate.screens.game_status: App\Gate\Screens\GameStatusScreen
 
 	gate.screens.idle.stats: App\Gate\Screens\DayStats\GeneralStatsScreen
 	gate.screens.idle.stats_cameras: App\Gate\Screens\DayStats\WithRtsp\GeneralStatsWithRtspScreen
@@ -18,6 +19,7 @@ services:
 	gate.screens.idle.month.top_players: App\Gate\Screens\MonthStats\TopPlayersScreen
 
 	gate.screens.results: App\Gate\Screens\Results\ResultsScreen
+	gate.screens.results.hidden: App\Gate\Screens\Results\ResultsHiddenScreen
 	gate.screens.results.lasermaxx.rankable: App\Gate\Screens\Results\LaserMaxxRankableResultsScreen
 	gate.screens.results.lasermaxx.csgo: App\Gate\Screens\Results\LaserMaxxCSGOResultsScreen
 	gate.screens.results.lasermaxx.zakladny: App\Gate\Screens\Results\LaserMaxxZakladnyResultsScreen

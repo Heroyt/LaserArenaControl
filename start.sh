@@ -24,6 +24,12 @@ if [ "$LAC_VERSION" = "stable" ]; then
 
   composer update
   php install.php
+elif [ "$LAC_VERSION" = "staging" ]; then
+  git switch staging
+  git pull --recurse-submodules origin staging
+
+  composer update
+  php install.php
 elif [ "$LAC_VERSION" != "dev" ]; then
   git checkout "v${LAC_VERSION}" -b "stable"
   git -C src/GameModels fetch --all --tags

@@ -6,6 +6,7 @@ use App\Core\App;
 use App\Exceptions\GameModeNotFoundException;
 use App\GameModels\Factory\GameModeFactory;
 use App\GameModels\Game\GameModes\CustomLoadMode;
+use App\Models\GameModeVariation;
 use App\Models\MusicMode;
 use App\Models\Playlist;
 use App\Models\System;
@@ -29,7 +30,8 @@ use Spiral\RoadRunner\Metrics\Metrics;
  *      player?:array{name:string,team?:string,vip?:numeric-string,birthday?:numeric-string,code:string}[],
  *      team?:array{name:string}[],
  *      mode?:string,
- *      meta?:array<string,mixed>
+ *      meta?:array<string,mixed>,
+ *      hideResults?:string|bool,
  *   }
  */
 abstract class LasermaxxGameLoader implements LoaderInterface
@@ -146,6 +148,7 @@ abstract class LasermaxxGameLoader implements LoaderInterface
                   'music'    => empty($data['music']) ? null : $data['music'],
                   'mode'     => $data['mode'] ?? '',
                   'loadTime' => time(),
+                  'resultsHidden' => !empty($data['hideResults']),
                   ...($data['meta'] ?? []),
                 ],
         );
@@ -160,13 +163,22 @@ abstract class LasermaxxGameLoader implements LoaderInterface
         }
 
         try {
-            $mode = GameModeFactory::getById((int) ($data['game-mode'] ?? 0));
+            $mode = GameModeFactory::getById((int) ($data['game-mode'] ?? 0), ['system' => $this->system]);
         } catch (GameModeNotFoundException) {
         }
         if (empty($loadData->meta['mode']) && isset($mode)) {
-            $loadData->meta['mode'] = $mode->loadName;
+            $loadData->meta['mode'] = strtolower($mode->loadName);
             if (!empty($data['variation'])) {
-                uksort($data['variation'], static fn($a, $b) => ((int) $a) - ((int) $b));
+                uksort(
+                  $data['variation'],
+                  static function ($a, $b) {
+                      try {
+                          return GameModeVariation::get((int) $a)->order - GameModeVariation::get((int) $b)->order;
+                      } catch (ModelNotFoundException) {
+                          return 0;
+                      }
+                  }
+                );
                 $loadData->meta['variations'] = [];
                 foreach ($data['variation'] as $id => $suffix) {
                     $loadData->meta['variations'][$id] = $suffix;
@@ -183,7 +195,11 @@ abstract class LasermaxxGameLoader implements LoaderInterface
             if (empty(trim($player['name']))) {
                 continue;
             }
-            if (!isset($player['team']) || $player['team'] === '') {
+            if (isset($mode) && $mode->isSolo()) {
+                // Default team for solo game
+                $player['team'] = '2';
+            }
+            else if (!isset($player['team']) || $player['team'] === '') {
                 if (!isset($mode) || $mode->isTeam()) {
                     continue;
                 }

@@ -208,23 +208,11 @@ export default class ResultsHiddenScreen implements GateScreen {
 	}
 
 	private randomIncrement(current: number, min: number, max: number, maxStep: number = 250): number {
-		if (max
-
-	<= min) {
+		if (max <= min) {
 			throw new Error("Max value must be greater than min value in randomIncrement");
 		}
 		const ratio = (current - min) / (max - min);
-		const isNegative = Math.random()
-
-	< ratio;
-		const magnitude = Math.random() * maxStep;
-		return Math.round(isNegative ? -magnitude : magnitude);
-	}
-
-		const ratio = (current - min) / (max - min);
-		const isNegative = Math.random()
-
-	< ratio;
+		const isNegative = Math.random() < ratio;
 		const magnitude = Math.random() * maxStep;
 		return Math.round(isNegative ? -magnitude : magnitude);
 	}

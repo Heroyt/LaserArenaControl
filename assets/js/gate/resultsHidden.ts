@@ -221,5 +221,13 @@ export default class ResultsHiddenScreen implements GateScreen {
 		return Math.round(isNegative ? -magnitude : magnitude);
 	}
 
+		const ratio = (current - min) / (max - min);
+		const isNegative = Math.random()
+
+	< ratio;
+		const magnitude = Math.random() * maxStep;
+		return Math.round(isNegative ? -magnitude : magnitude);
+	}
+
 
 }

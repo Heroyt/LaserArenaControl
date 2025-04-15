@@ -13,16 +13,18 @@
 		<h3 class="fs-1">{_'Výsledky jsou tajemnství', domain: 'gate'}</h3>
 	</section>
 	{var int $playerCount = count($game->players)}
-	{var int $cols = ceil($playerCount / 11)}
-	{var int $rows = ceil($playerCount / $cols)}
-	<section class="players"
-			 style="--cols: {$cols}; --rows: {$rows}; --multiplier: {((-0.05 * ($rows - 11)) + 1)|noescape};">
-		{var App\GameModels\Game\Player[] $players = $game->players->getAll()}
-		{do shuffle($players)}
-		{foreach $players as $player}
-			{include 'lasermaxxRankablePlayer.latte', $game, $player, $playerCount, $iterator->counter}
-		{/foreach}
-	</section>
+	{if $playerCount > 0}
+		{var int $cols = ceil($playerCount / 11)}
+		{var int $rows = ceil($playerCount / $cols)}
+		<section class="players"
+				 style="--cols: {$cols}; --rows: {$rows}; --multiplier: {((-0.05 * ($rows - 11)) + 1)|noescape};">
+			{var App\GameModels\Game\Player[] $players = $game->players->getAll()}
+			{do shuffle($players)}
+			{foreach $players as $player}
+				{include 'lasermaxxRankablePlayer.latte', $game, $player, $playerCount, $iterator->counter}
+			{/foreach}
+		</section>
+	{/if}
 	<section class="teams" n:if="$includeTeams">
 		{var int $totalScore = array_sum(array_map(function(App\GameModels\Game\Team $team){ return $team->score > 0 ? $team->score : 0;},$game->teams->getAll()))}
 		{var App\GameModels\Game\Team|null $win = $game->mode?->getWin($game)}

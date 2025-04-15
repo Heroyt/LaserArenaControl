@@ -51,7 +51,7 @@ Func received($iSocket, $sIP, $sData, $sPar)
 			Case "load"
 				DebugLog($g_logFile, "Load game", @ScriptName, @ScriptLineNumber)
 				$err = load($parameter)
-				If $err == "" Then
+				If $err = "" Then
 					_TCPServer_Send($iSocket, "ok")
 				Else
 					_TCPServer_Send($iSocket, $err)
@@ -66,7 +66,7 @@ Func received($iSocket, $sIP, $sData, $sPar)
 			Case "loadStart"
 				DebugLog($g_logFile, "Load Start game", @ScriptName, @ScriptLineNumber)
 				$err = load($parameter)
-				If $err == "" Then
+				If $err = "" Then
 					If start() Then
 						_TCPServer_Send($iSocket, "ok")
 					Else

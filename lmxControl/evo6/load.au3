@@ -94,8 +94,18 @@ Func load($mode)
 			ClickButton($win, $g_LoadGameBtnId)
 	EndSwitch
 
+	Sleep(1000)
+
+	Local $popup = WinWaitActivate("[TITLE:LMXconsole; CLASS:#32770]")
+	If ($popup <> 0) Then
+	    DebugLog($g_logFile, "Popup window appeared", @ScriptName, @ScriptLineNumber)
+	    ClickButton($popup, "[CLASS:Button;INSTANCE:1]")
+	Else
+	    DebugLog($g_logFile, "No popup window appeared", @ScriptName, @ScriptLineNumber)
+	EndIf
+
 	; Wait for the game load process to end, otherwise the window will become active again after and the return to the previously active window will not work
-	Sleep(6000)
+	Sleep(5000)
 
 	; Return to the previously active window
 	; Doesn't matter if it fails

@@ -65,10 +65,14 @@ class Info
     }
 
     private static function getValue(string $key) : ?string {
-        return DB::select(self::TABLE, '[value]')
-                 ->where('[key] = %s', $key)
-                 ->cacheTags('info', 'info/'.$key)
-                 ->fetchSingle(false);
+        try {
+            return DB::select(self::TABLE, '[value]')
+                     ->where('[key] = %s', $key)
+                     ->cacheTags('info', 'info/'.$key)
+                     ->fetchSingle(false);
+        } catch (Exception) {
+            return null;
+        }
     }
 
     /**

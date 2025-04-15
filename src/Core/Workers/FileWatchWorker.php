@@ -54,7 +54,7 @@ class FileWatchWorker implements Worker
                 /** @var array{directory?:string,eventTime?:string,file?:string,op?:string,path?:string} $data */
                 $data = json_decode($payload->body, true, 512, JSON_THROW_ON_ERROR);
                 $dir = (string) ($data['directory'] ?? '');
-                if (empty($resultsDir)) {
+                if (empty($dir)) {
                     $this->logger->error('Missing required argument "directory". Valid results directory is expected.');
                     $this->worker->respond(new Payload('ERROR'));
                 }

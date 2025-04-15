@@ -62,6 +62,10 @@ class E404 extends Controller implements HttpErrorHandler
                         ->withStatus(404);
         }
 
-        return $this->respond('Resource not found - '.$error->getMessage(), 404, ['Content-Type' => 'text/plain']);
+        return $this->respond(
+          'Resource not found - '.($error?->getMessage() ?? 'unknown error'),
+          404,
+          ['Content-Type' => 'text/plain']
+        );
     }
 }

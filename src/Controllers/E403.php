@@ -61,6 +61,10 @@ class E403 extends Controller implements HttpErrorHandler
                         ->withStatus(403);
         }
 
-        return $this->respond('Access denied - '.$error->getMessage(), 403, ['Content-Type' => 'text/plain']);
+        return $this->respond(
+          'Access denied - '.($error?->getMessage() ?? 'unknown error'),
+          403,
+          ['Content-Type' => 'text/plain']
+        );
     }
 }

@@ -26,8 +26,15 @@ class SimulateGameCommand extends Command
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) : int {
-        $this->gameSimulator->simulate();
-        return self::SUCCESS;
+        try {
+            $output->writeln('<info>Starting game simulation...</info>');
+            $this->gameSimulator->simulate();
+            $output->writeln('<info>Simulation completed successfully.</info>');
+            return self::SUCCESS;
+        } catch (\Exception $e) {
+            $output->writeln('<error>Simulation failed: ' . $e->getMessage() . '</error>');
+            return self::FAILURE;
+        }
     }
 
 }

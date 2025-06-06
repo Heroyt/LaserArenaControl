@@ -5,6 +5,7 @@ namespace App\CQRS\CommandHandlers;
 
 use App\CQRS\Commands\RecalculateSkillsCommand;
 use App\CQRS\Commands\SetGameGroupCommand;
+use App\CQRS\Commands\SyncGameCommand;
 use Lsr\CQRS\CommandBus;
 use Lsr\CQRS\CommandHandlerInterface;
 use Lsr\CQRS\CommandInterface;
@@ -36,6 +37,7 @@ final readonly class SetGameGroupCommandHandler implements CommandHandlerInterfa
         try {
             if ($game->save()) {
                 $this->commandBus->dispatchAsync(new RecalculateSkillsCommand($game));
+                $this->commandBus->dispatchAsync(new SyncGameCommand($game));
                 $game->clearCache();
                 $game->group?->clearCache();
                 return ['game' => $game->code, 'group' => $game->group?->id];

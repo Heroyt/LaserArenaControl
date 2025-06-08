@@ -58,9 +58,6 @@ class GotenbergService
      * @return ResponseInterface|null
      */
     public function get(string $path, array $query = [], array $headers = []) : ?ResponseInterface {
-        if (!isset($this->client)) {
-            $this->makeClient();
-        }
         try {
             $response = $this->client->post(
               $path.'?'.http_build_query($query),
@@ -93,9 +90,6 @@ class GotenbergService
      * @return ResponseInterface|null
      */
     public function post(string $path, array $formData = [], array $headers = []) : ?ResponseInterface {
-        if (!isset($this->client)) {
-            $this->makeClient();
-        }
         if (!isset($headers['Accept'])) {
             $headers['Accept'] = 'application/pdf';
         }

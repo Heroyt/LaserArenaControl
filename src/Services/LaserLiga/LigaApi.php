@@ -20,6 +20,7 @@ use InvalidArgumentException;
 use JsonException;
 use LAC\Modules\Core\LigaApiExtensionInterface;
 use Lsr\LaserLiga\DataObjects\LigaPlayer\LigaPlayerData;
+use Lsr\LaserLiga\DataObjects\LigaSystem;
 use Lsr\LaserLiga\DataObjects\Vests\LigaVest;
 use Lsr\Logging\Logger;
 use Lsr\ObjectValidation\Exceptions\ValidationException;
@@ -439,7 +440,7 @@ class LigaApi
      * @return Client
      */
     public function getClient(bool $remake = false) : Client {
-        if (!isset($this->client) || $remake) {
+        if ($remake) {
             $this->makeClient();
         }
         return $this->client;
@@ -482,10 +483,14 @@ class LigaApi
                 );
 
                 foreach ($data as $vestData) {
-                    if (!isset($vests[$vestData->system][$vestData->vestNum])) {
+                    $systemKey = $vestData->system;
+                    if ($systemKey instanceof LigaSystem) {
+                        $systemKey = $systemKey->type;
+                    }
+                    if (!isset($vests[$systemKey][$vestData->vestNum])) {
                         continue;
                     }
-                    $vest = $vests[$vestData->system][$vestData->vestNum];
+                    $vest = $vests[$systemKey][$vestData->vestNum];
                     if ($vest->updatedAt < $vestData->updatedAt) {
                         $vest->status = $vestData->status;
                         $vest->info = $vestData->info;

@@ -2,8 +2,6 @@
 
 namespace App\Cli\Commands\Regression;
 
-use App\Cli\Colors;
-use App\Cli\Enums\ForegroundColors;
 use App\Exceptions\InsufficientRegressionDataException;
 use App\GameModels\Factory\GameModeFactory;
 use App\GameModels\Tools\Lasermaxx\RegressionStatCalculator;
@@ -29,12 +27,36 @@ class UpdateRegressionModelsCommand extends Command
     }
 
     protected function execute(InputInterface $input, OutputInterface $output) : int {
-        $this->calculator->updateHitsModel(GameModeType::SOLO);
-        $this->calculator->updateHitsModel(GameModeType::TEAM);
-        $this->calculator->updateDeathsModel(GameModeType::SOLO);
-        $this->calculator->updateDeathsModel(GameModeType::TEAM);
-        $this->calculator->updateHitsOwnModel();
-        $this->calculator->updateDeathsOwnModel();
+        try {
+            $this->calculator->updateHitsModel(GameModeType::SOLO);
+        } catch (InsufficientRegressionDataException) {
+            $output->writeln('<comment>Insufficient data for SOLO mode, skipping hits model update.</comment>');
+        }
+        try {
+            $this->calculator->updateHitsModel(GameModeType::TEAM);
+        } catch (InsufficientRegressionDataException) {
+            $output->writeln('<comment>Insufficient data for TEAM mode, skipping hits model update.</comment>');
+        }
+        try {
+            $this->calculator->updateDeathsModel(GameModeType::SOLO);
+        } catch (InsufficientRegressionDataException) {
+            $output->writeln('<comment>Insufficient data for SOLO mode, skipping deaths model update.</comment>');
+        }
+        try {
+            $this->calculator->updateDeathsModel(GameModeType::TEAM);
+        } catch (InsufficientRegressionDataException) {
+            $output->writeln('<comment>Insufficient data for TEAM mode, skipping deaths model update.</comment>');
+        }
+        try {
+            $this->calculator->updateHitsOwnModel();
+        } catch (InsufficientRegressionDataException) {
+            $output->writeln('<comment>Insufficient data for SOLO mode, skipping hits own model update.</comment>');
+        }
+        try {
+            $this->calculator->updateDeathsOwnModel();
+        } catch (InsufficientRegressionDataException) {
+            $output->writeln('<comment>Insufficient data for SOLO mode, skipping deaths own model update.</comment>');
+        }
 
         $modes = GameModeFactory::getAll(['rankable' => false]);
         foreach ($modes as $mode) {
@@ -52,16 +74,12 @@ class UpdateRegressionModelsCommand extends Command
                 }
             } catch (InsufficientRegressionDataException) {
                 $output->writeln(
-                  Colors::color(ForegroundColors::RED).
-                  sprintf('Insufficient data for game mode: %s (#%d)', $mode->name, $mode->id).
-                  Colors::reset()
+                  sprintf('<error>Insufficient data for game mode: %s (#%d)</error>', $mode->name, $mode->id)
                 );
             }
         }
 
-        $output->writeln(
-          Colors::color(ForegroundColors::GREEN).'Updated all models'.Colors::reset()
-        );
+        $output->writeln('<info>Updated all models</info>');
         return self::SUCCESS;
     }
 }

@@ -1,5 +1,5 @@
 [roadrunner]
-ref = "v2024.3.4"
+ref = "v2025.1.1"
 
 [debug]
 enabled = false
@@ -11,57 +11,147 @@ mode = "production"
 [github.token]
 token = "${RT_TOKEN}"
 
-# ref -> master, commit or tag
-[github.plugins]
 # LOGS
-appLogger = { ref = "v5.1.4", owner = "roadrunner-server", repository = "app-logger" }
-logger = { ref = "v5.1.4", owner = "roadrunner-server", repository = "logger" }
-lock = { ref = "v5.1.4", owner = "roadrunner-server", repository = "lock" }
-rpc = { ref = "v5.1.4", owner = "roadrunner-server", repository = "rpc" }
+[github.plugins.appLogger]
+ref = "v5.1.7"
+owner = "roadrunner-server"
+repository = "app-logger"
+
+[github.plugins.logger]
+ref = "v5.1.7"
+owner = "roadrunner-server"
+repository = "logger"
+
+[github.plugins.lock]
+ref = "v5.1.7"
+owner = "roadrunner-server"
+repository = "lock"
+
+[github.plugins.rpc]
+ref = "v5.1.7"
+owner = "roadrunner-server"
+repository = "rpc"
 
 # CENTRIFUGE BROADCASTING PLATFORM
-centrifuge = { ref = "v5.1.4", owner = "roadrunner-server", repository = "centrifuge" }
+[github.plugins.centrifuge]
+ref = "v5.1.7"
+owner = "roadrunner-server"
+repository = "centrifuge"
 
 # METRICS
-metrics = { ref = "v5.1.4", owner = "roadrunner-server", repository = "metrics" }
+[github.plugins.metrics]
+ref = "v5.1.7"
+owner = "roadrunner-server"
+repository = "metrics"
+
+[github.plugins.otel]
+ref = "v5.1.7"
+owner = "roadrunner-server"
+repository = "otel"
 
 # HTTP + MIDDLEWARE
-http = { ref = "v5.2.3", owner = "roadrunner-server", repository = "http" }
-gzip = { ref = "v5.1.4", owner = "roadrunner-server", repository = "gzip" }
-prometheus = { ref = "v5.1.4", owner = "roadrunner-server", repository = "prometheus" }
-headers = { ref = "v5.1.4", owner = "roadrunner-server", repository = "headers" }
-static = { ref = "v5.1.3", owner = "roadrunner-server", repository = "static" }
-proxy = { ref = "v5.1.4", owner = "roadrunner-server", repository = "proxy_ip_parser" }
-send = { ref = "v5.1.3", owner = "roadrunner-server", repository = "send" }
+[github.plugins.http]
+ref = "v5.2.6"
+owner = "roadrunner-server"
+repository = "http"
+
+[github.plugins.gzip]
+ref = "v5.1.7"
+owner = "roadrunner-server"
+repository = "gzip"
+
+[github.plugins.prometheus]
+ref = "v5.1.6"
+owner = "roadrunner-server"
+repository = "prometheus"
+
+[github.plugins.headers]
+ref = "v5.1.7"
+owner = "roadrunner-server"
+repository = "headers"
+
+[github.plugins.static]
+ref = "v5.1.5"
+owner = "roadrunner-server"
+repository = "static"
+
+[github.plugins.proxy]
+ref = "v5.1.7"
+owner = "roadrunner-server"
+repository = "proxy_ip_parser"
+
+[github.plugins.send]
+ref = "v5.1.4"
+owner = "roadrunner-server"
+repository = "send"
 
 # SERVER
-server = { ref = "v5.2.5", owner = "roadrunner-server", repository = "server" }
+[github.plugins.server]
+ref = "v5.2.8"
+owner = "roadrunner-server"
+repository = "server"
 
 # SERVICE aka lightweit systemd
-service = { ref = "v5.1.4", owner = "roadrunner-server", repository = "service" }
+[github.plugins.service]
+ref = "v5.1.7"
+owner = "roadrunner-server"
+repository = "service"
 
 # JOBS
-jobs = { ref = "v5.1.4", owner = "roadrunner-server", repository = "jobs" }
-amqp = { ref = "v5.1.4", owner = "roadrunner-server", repository = "amqp" }
-sqs = { ref = "v5.1.4", owner = "roadrunner-server", repository = "sqs" }
-nats = { ref = "v5.1.4", owner = "roadrunner-server", repository = "nats" }
-kafka = { ref = "v5.1.4", owner = "roadrunner-server", repository = "kafka" }
+[github.plugins.jobs]
+ref = "v5.1.7"
+owner = "roadrunner-server"
+repository = "jobs"
+
+[github.plugins.amqp]
+ref = "v5.2.1"
+owner = "roadrunner-server"
+repository = "amqp"
 
 # KV
-kv = { ref = "v5.2.4", owner = "roadrunner-server", repository = "kv" }
-memory = { ref = "v5.2.4", owner = "roadrunner-server", repository = "memory" }
-redis = { ref = "v5.1.4", owner = "roadrunner-server", repository = "redis" }
+[github.plugins.kv]
+ref = "v5.2.7"
+owner = "roadrunner-server"
+repository = "kv"
+
+[github.plugins.boltdb]
+ref = "v5.1.7"
+owner = "roadrunner-server"
+repository = "boltdb"
+
+[github.plugins.memory]
+ref = "v5.2.7"
+owner = "roadrunner-server"
+repository = "memory"
+
+[github.plugins.redis]
+ref = "v5.1.8"
+owner = "roadrunner-server"
+repository = "redis"
+
+[github.plugins.memcached]
+ref = "v5.1.7"
+owner = "roadrunner-server"
+repository = "memcached"
 
 # FILESERVER (static files)
-fileserver = { ref = "v5.1.4", owner = "roadrunner-server", repository = "fileserver" }
+[github.plugins.fileserver]
+ref = "v5.1.7"
+owner = "roadrunner-server"
+repository = "fileserver"
 
 # gRPC plugin
-grpc = { ref = "v5.1.4", owner = "roadrunner-server", repository = "grpc" }
+[github.plugins.grpc]
+ref = "v5.2.1"
+owner = "roadrunner-server"
+repository = "grpc"
 
-# HEALTHCHECKS + READINESS CHECKS
-status = { ref = "v5.1.4", owner = "roadrunner-server", repository = "status" }
+[github.plugins.status]
+ref = "v5.1.7"
+owner = "roadrunner-server"
+repository = "status"
 
-# TCP for the RAW TCP PAYLOADS
-tcp = { ref = "v5.1.4", owner = "roadrunner-server", repository = "tcp" }
-
-fileWatch = { ref = "master", owner = "LaserLiga", repository = "rr_file_watch" }
+[github.plugins.tcp]
+ref = "v5.1.7"
+owner = "roadrunner-server"
+repository = "tcp"

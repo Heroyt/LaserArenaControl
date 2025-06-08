@@ -1,30 +1,10 @@
-FROM php:8.4-cli AS php
+FROM php:8.4-cli-alpine AS ext-builder
 
-# Setup
-RUN apt-get update  \
-    && apt-get -y install --no-install-recommends  \
-        apt-utils  \
-        wget  \
-        git  \
-        build-essential  \
-        gettext  \
-        cron  \
-        zlib1g-dev \
-        libzip-dev \
-        unzip \
-        libicu-dev \
-        cifs-utils \
-        ffmpeg \
-        libpng-dev \
-        libwebp-dev \
-        curl \
-        libcurl4-openssl-dev \
-        nano \
-    && rm -rf /var/lib/apt/lists/* # Clear apt cache
-
-#RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
-COPY docker/core/php.ini "$PHP_INI_DIR/php.ini"
-COPY docker/core/php-staging.ini "$PHP_INI_DIR/php-staging.ini"
+# Install build dependencies
+RUN apk add --no-cache --virtual .build-deps \
+        wget git gettext gettext-dev icu-dev zip unzip ffmpeg libpng-dev libwebp-dev libzip-dev \
+        libcurl curl-dev nano build-base autoconf make gcc g++ libc-dev linux-headers \
+        pcre-dev libtool libxml2-dev oniguruma-dev icu-libs imagemagick-dev imagemagick bash
 
 # PHP extensions
 RUN docker-php-ext-install mysqli
@@ -39,66 +19,46 @@ RUN docker-php-ext-install opcache
 RUN docker-php-ext-install gd
 
 # Imagick
-RUN apt-get update &&  \
-    apt-get install -y libmagickwand-dev --no-install-recommends &&  \
-    rm -rf /var/lib/apt/lists/*  # Clear apt cache
-
-# Build imagick from source (PHP 8.3)
 RUN git clone https://github.com/Imagick/imagick.git --depth 1 /tmp/imagick && \
-    cd /tmp/imagick && \
-    git fetch origin master && \
-    git switch master && \
     cd /tmp/imagick && \
     phpize && \
     ./configure && \
     make && \
     make install && \
     cd / && \
-    rm -rf /tmp/imagick # Clean up sources
+    rm -rf /tmp/imagick
 
-# Igbinary
-RUN pecl install igbinary
+# Igbinary, APCu, Redis
+RUN pecl install igbinary apcu redis
 
 # Enable extensions
-RUN docker-php-ext-enable  \
-    mysqli  \
-    curl  \
-    gettext  \
-    sockets  \
-    pdo_mysql  \
-    zip  \
-    pcntl  \
-    intl  \
-    opcache  \
-    imagick  \
-    igbinary
-RUN docker-php-ext-configure  \
-    gd --with-jpeg --with-freetype --with-webp &&  \
-    docker-php-ext-install gd
+RUN docker-php-ext-enable imagick igbinary apcu redis
 
-# APCu cache
-RUN pecl install apcu
-RUN docker-php-ext-enable apcu
+# Final image
+FROM php:8.4-cli-alpine AS php
 
-# Redis
-RUN pecl install redis
-RUN docker-php-ext-enable redis
+# Install runtime dependencies only
+RUN apk add --no-cache \
+        wget git gettext icu-libs zip unzip ffmpeg libpng libwebp libzip libcurl curl nano \
+        imagemagick \
+        openssh-client \
+        tzdata \
+        nodejs npm \
+        cronie
 
-# Setup gettext languages
-RUN apt-get update &&  \
-    apt-get install -y locales locales-all &&  \
-    rm -rf /var/lib/apt/lists/* # Clear apt cache
-RUN sed -i -e 's/# cs_CZ.UTF-8 UTF-8/cs_CZ.UTF-8 UTF-8/' /etc/locale.gen \
-	&& sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen \
-	&& sed -i -e 's/# de_DE.UTF-8 UTF-8/de_DE.UTF-8 UTF-8/' /etc/locale.gen \
-	&& sed -i -e 's/# fr_FR.UTF-8 UTF-8/fr_FR.UTF-8 UTF-8/' /etc/locale.gen \
-	&& sed -i -e 's/# sk_SK.UTF-8 UTF-8/sk_SK.UTF-8 UTF-8/' /etc/locale.gen \
-	&& sed -i -e 's/# ru_RU.UTF-8 UTF-8/ru_RU.UTF-8 UTF-8/' /etc/locale.gen \
-	&& sed -i -e 's/# es_ES.UTF-8 UTF-8/es_ES.UTF-8 UTF-8/' /etc/locale.gen \
-	&& sed -i -e 's/# uk_UA.UTF-8 UTF-8/uk_UA.UTF-8 UTF-8/' /etc/locale.gen \
-    && dpkg-reconfigure --frontend=noninteractive locales \
-    && locale-gen cs_CZ.UTF-8 \
-    && update-locale
+COPY docker/core/php.ini "$PHP_INI_DIR/php.ini"
+COPY docker/core/php-staging.ini "$PHP_INI_DIR/php-staging.ini"
+
+# Copy built extensions from builder
+COPY --from=ext-builder /usr/local/lib/php/extensions/ /usr/local/lib/php/extensions/
+COPY --from=ext-builder /usr/local/etc/php/conf.d/ /usr/local/etc/php/conf.d/
+
+# Enable extensions (in case conf.d is not enough)
+RUN docker-php-ext-enable mysqli curl gettext sockets pdo_mysql zip pcntl intl opcache gd imagick igbinary apcu redis
+
+# Setup gettext languages (Alpine way)
+RUN apk add --no-cache --virtual .locale-build musl-locales musl-locales-lang && \
+    echo "export LANG=en_US.UTF-8" >> /etc/profile
 
 #FROM golang:1.24 AS golang
 FROM ghcr.io/roadrunner-server/velox:latest AS roadrunner
@@ -106,8 +66,7 @@ FROM ghcr.io/roadrunner-server/velox:latest AS roadrunner
 #COPY --from=golang /usr/local/go/ /usr/local/go/
 
 ENV APP_VERSION="1.0.0"
-ARG BUILD_TIME="$(date +%FT%T%z)"
-ENV VERSION="v2024.3.1"
+ENV VERSION="v2025.1.1"
 
 COPY docker/velox_rr_2024.toml .
 
@@ -129,12 +88,12 @@ COPY --from=composer /usr/bin/composer /usr/local/bin/composer
 COPY --from=roadrunner /usr/bin/rr /usr/local/bin/rr
 COPY --from=node_base /usr/local/lib/node_modules /usr/local/lib/node_modules
 COPY --from=node_base /usr/local/bin/node /usr/local/bin/node
-RUN ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm
+RUN ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm || true
 
-# Install PNPM
-RUN wget -qO- https://get.pnpm.io/install.sh | ENV="$HOME/.shrc" SHELL="$(which sh)" sh -
-RUN wget -qO- https://get.pnpm.io/install.sh | ENV="$HOME/.bashrc" SHELL="$(which bash)" bash -
-
+# Install PNPM (official method for Docker)
+RUN npm install -g corepack
+RUN corepack enable  \
+    && corepack prepare pnpm@latest --activate
 # Project files
 RUN mkdir -p "/var/www/.npm" && chown -R 33:33 "/var/www/.npm"
 
@@ -164,7 +123,8 @@ RUN mkdir -p lmx/games
 ENV COMPOSER_ALLOW_SUPERUSER=1
 
 # Copy shell scripts
-COPY start.sh start.sh
+COPY start.sh /usr/local/bin/start.sh
+RUN chmod +x /usr/local/bin/start.sh
 
 # Initialize crontab
 RUN crontab -l | { cat; echo "* * * * * /usr/local/bin/php /var/www/bin/scheduler.php >> /var/www/logs/cron.log 2>&1"; } | crontab -
@@ -172,9 +132,12 @@ RUN crontab -l | { cat; echo "* * * * * /usr/local/bin/php /var/www/bin/schedule
 RUN chmod 0777 -R logs
 RUN chmod 0777 -R temp
 
-SHELL ["/bin/bash"]
+SHELL ["/bin/sh", "-c"]
+
+# HEALTHCHECK for RoadRunner status plugin
+HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
+  CMD wget --spider --quiet http://localhost:2114/health || exit 1
 
 # Start command
-# Updates project, builds it and runs a start script which starts WS event server and Apache
-ENTRYPOINT ["/bin/bash", "./start.sh"]
-CMD ["/bin/bash", "./start.sh"]
+ENTRYPOINT ["/usr/local/bin/start.sh"]
+CMD ["/usr/local/bin/start.sh"]

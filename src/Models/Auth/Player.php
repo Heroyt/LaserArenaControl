@@ -101,14 +101,14 @@ class Player extends BaseModel implements PlayerInterface
 
     public function jsonSerialize() : array {
         $connections = [];
-        try {
-            foreach ($this->connections as $connection) {
-                if ($connection instanceof PlayerConnection) {
-                    $connections[] = ['type' => $connection->type->value, 'identifier' => $connection->identifier];
-                }
-            }
-        } catch (ValidationException) {
-        }
+//        try {
+//            foreach ($this->connections as $connection) {
+//                if ($connection instanceof PlayerConnection) {
+//                    $connections[] = ['type' => $connection->type->value, 'identifier' => $connection->identifier];
+//                }
+//            }
+//        } catch (ValidationException) {
+//        }
         return [
           'id'          => $this->id,
           'nickname'    => $this->nickname,

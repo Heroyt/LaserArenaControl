@@ -235,12 +235,16 @@ try {
 
 // Update CACHE_VERSION in config.ini to current timestamp
 const configPath = './private/config.ini';
-if (fs.existsSync(configPath)) {
-    let config = fs.readFileSync(configPath, 'utf8');
-    const now = Math.floor(Date.now() / 1000);
-    config = config.replace(/(CACHE_VERSION\s*=\s*)\d+/, `$1${now}`);
-    fs.writeFileSync(configPath, config);
-    console.log(`Updated CACHE_VERSION in config.ini to ${now}`);
+try {
+    if (fs.existsSync(configPath)) {
+        let config = fs.readFileSync(configPath, 'utf8');
+        const now = Math.floor(Date.now() / 1000);
+        config = config.replace(/(CACHE_VERSION\s*=\s*)\d+/, `$1${now}`);
+        fs.writeFileSync(configPath, config);
+        console.log(`Updated CACHE_VERSION in config.ini to ${now}`);
+    }
+} catch (error) {
+    console.warn(`Failed to update CACHE_VERSION: ${error.message}`);
 }
 
 // Set SASS_LOG_LEVEL to error to silence deprecation warnings globally

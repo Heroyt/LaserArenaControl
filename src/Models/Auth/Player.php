@@ -103,7 +103,9 @@ class Player extends BaseModel implements PlayerInterface
         $connections = [];
         try {
             foreach ($this->connections as $connection) {
-                $connections[] = ['type' => $connection->type->value, 'identifier' => $connection->identifier];
+                if ($connection !== null) {
+                    $connections[] = ['type' => $connection->type->value, 'identifier' => $connection->identifier];
+                }
             }
         } catch (ValidationException) {
         }

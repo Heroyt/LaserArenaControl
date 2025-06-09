@@ -60,6 +60,7 @@ services:
     ports:
       - "6001:6001"
       - "2112:2112"
+      - "2114:2114"
     networks:
       - backend
     extra_hosts:
@@ -74,7 +75,7 @@ services:
       DB_PASSWORD: "laser-arena-control"
       FEATURE_EVENT_SERVER: true
       FEATURE_LEAGUE: true
-      FEATURE_CONTROL: false
+      FEATURE_CONTROL: true
       FEATURE_GATES: false
       FEATURE_TABLES: true
       FEATURE_GROUPS: true
@@ -94,7 +95,9 @@ services:
       - http://web:80/stub_status
   web:
     restart: unless-stopped
-    image: nginx:alpine
+    build:
+      context: .
+      dockerfile: ./docker/nginx/Dockerfile
     depends_on:
       - php
       - db

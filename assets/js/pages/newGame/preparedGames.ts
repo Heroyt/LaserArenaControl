@@ -11,6 +11,7 @@ import {
 } from '../../api/endpoints/preparedGames';
 import {initTooltips} from '../../includes/tooltips';
 import {triggerNotificationError} from '../../includes/notifications';
+import DOMPurify from 'dompurify';
 
 const borderColors = {
 	'prepared': 'gray',
@@ -111,7 +112,8 @@ export default class NewGamesPrepared {
 			Object.values(preparedGameData.data.players).forEach(player => {
 				playersHTML += `<span class="badge m-1 ${(player.teamNum || player.teamNum === 0 ? `text-bg-team-${preparedGameData.system?.type ?? system.type}-${player.teamNum}` : 'text-bg-secondary')}">${player.name}</span>`;
 			});
-			tmp.innerHTML = `<div class="prepared-game card mb-4 border-4 border-${borderColors[preparedGameData.type]}" data-id="${preparedGameData.id_game}">` +
+			tmp.innerHTML = DOMPurify.sanitize(
+				`<div class="prepared-game card mb-4 border-4 border-${borderColors[preparedGameData.type]}" data-id="${preparedGameData.id_game}">` +
 				`<div class="card-body">` +
 				(preparedGameData.data.group ? `<h5 class="card-title">${preparedGameData.data.group.name}</h5>` : '') +
 				`<div class="input-group w-100">` +
@@ -121,7 +123,8 @@ export default class NewGamesPrepared {
 				`</div>` +
 				`<div class="players mt-2">${playersHTML}</div>` +
 				`</div>` +
-				`</div>`;
+				`</div>`
+			);
 			preparedGameWrapper = tmp.firstElementChild as HTMLDivElement;
 			preparedGameWrapper.dataset.game = JSON.stringify(preparedGameData.data);
 			this.gamesPreparedWrapper.appendChild(preparedGameWrapper);

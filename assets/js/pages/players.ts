@@ -1,6 +1,7 @@
 import {loadPlayersTable, syncPlayers} from '../api/endpoints/players';
 import {startLoading, stopLoading} from '../loaders';
 import {triggerNotification, triggerNotificationError} from '../includes/notifications';
+import DOMPurify from 'dompurify';
 
 interface TableParams {
 	search: string;
@@ -90,7 +91,7 @@ export default function initPlayers() {
 		loadPlayersTable(sort, desc, search, page)
 			.then(result => {
 				const temp = document.createElement('div');
-				temp.innerHTML = result;
+				temp.innerHTML = DOMPurify.sanitize(result);
 				const newTable = temp.firstElementChild as HTMLTableElement;
 				playersTable.replaceWith(newTable);
 				playersTable = newTable;

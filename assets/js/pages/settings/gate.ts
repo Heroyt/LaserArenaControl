@@ -3,6 +3,7 @@ import {getGateScreenSettings} from '../../api/endpoints/settings/gate';
 import {initSelectDescription} from '../../includes/selectDescription';
 import {initImageUploadPreview} from '../../includes/imageUploadPreview';
 import {triggerNotificationError} from '../../includes/notifications';
+import DOMPurify from 'dompurify';
 
 type GateSettingsSaveResponse = {
 	success: boolean,
@@ -141,8 +142,10 @@ export default function initGateSettings() {
 				screen.dataset.key = `new-${newScreenCounter}`;
 				screen.setAttribute('data-key', `new-${newScreenCounter}`);
 
-				screen.innerHTML = screenTemplate.innerHTML
-					.replaceAll('#key#', `new-${newScreenCounter}`);
+				screen.innerHTML = DOMPurify.sanitize(
+					screenTemplate.innerHTML
+						.replaceAll('#key#', `new-${newScreenCounter}`),
+				);
 
 				screensWrapper.appendChild(screen);
 				initGateScreen(screen, true);
@@ -223,7 +226,7 @@ export default function initGateSettings() {
 		const updateSettings = () => {
 			const typeValue = type.value;
 			if (settingsCache.has(typeValue)) {
-				settingsWrapper.innerHTML = settingsCache.get(typeValue);
+				settingsWrapper.innerHTML = DOMPurify.sanitize(settingsCache.get(typeValue));
 				initSettings();
 				return;
 			}
@@ -232,7 +235,7 @@ export default function initGateSettings() {
 			getGateScreenSettings(typeValue, Object.assign({}, settingsWrapper.dataset))
 				.then((result) => {
 					settingsCache.set(typeValue, result);
-					settingsWrapper.innerHTML = result;
+					settingsWrapper.innerHTML = DOMPurify.sanitize(result);
 					initSettings();
 				})
 				.catch(e => {

@@ -1,6 +1,7 @@
 import {prepareFetch, processResponse} from '../includes/apiClient';
 import {getGameHighlights} from '../api/endpoints/games';
 import GateScreen from '../gate/gateScreen';
+import DOMPurify from 'dompurify';
 
 declare global {
 	let tips: string[];
@@ -52,7 +53,6 @@ export function loadContent(path: string, reloadTimeout: { timeout: null | NodeJ
 	// Load content
 	prepareFetch(path, 'GET')
 		.then(async (response) => {
-
 			// Setup next auto-reload
 			clearTimeout(reloadTimeout.timeout);
 			console.log(Array.from(response.headers.entries()));
@@ -83,7 +83,7 @@ export function loadContent(path: string, reloadTimeout: { timeout: null | NodeJ
 				console.log('Invalid content type');
 				return;
 			}
-			contentNew.innerHTML = await processResponse(response.headers.get('Content-Type'), response);
+			contentNew.innerHTML = DOMPurify.sanitize(await processResponse(response.headers.get('Content-Type'), response));
 
 			// Find new container classes
 			const meta = contentNew.querySelector<HTMLMetaElement>('meta[name="container-classes"]');
@@ -243,7 +243,7 @@ export function tipsRotations() {
 		}
 
 		// Add a new tip
-		tipNew.innerHTML = tips[counter];
+		tipNew.innerText = tips[counter];
 		tipWrapper.appendChild(tipNew);
 
 		// Animate old tips out

@@ -1,6 +1,7 @@
 import initJsColor from '../../jscolor';
 import {createPriceGroup, deletePriceGroup} from '../../api/endpoints/priceGroups';
 import {startLoading, stopLoading} from '../../loaders';
+import DOMPurify from 'dompurify';
 
 export default function initGeneralSettings() {
 	const logoWrapper = document.getElementById('logo-wrapper') as HTMLDivElement;
@@ -11,7 +12,7 @@ export default function initGeneralSettings() {
 			const fileReader = new FileReader();
 			fileReader.readAsDataURL(files);
 			fileReader.addEventListener("load", function () {
-				logoWrapper.innerHTML = `<img src="${this.result}" class="img-fluid arena-logo" style="max-height: 200px;" alt="logo" id="arena-logo-image" />`;
+				logoWrapper.innerHTML = DOMPurify.sanitize(`<img src="${this.result}" class="img-fluid arena-logo" style="max-height: 200px;" alt="logo" id="arena-logo-image" />`);
 			});
 		}
 	});
@@ -37,7 +38,7 @@ export default function initGeneralSettings() {
 				priceInput.value = '';
 
 				// Copy template
-				tmp.innerHTML = priceGroupTemplate.innerHTML.replaceAll('#', priceGroup.id.toString());
+				tmp.innerHTML = DOMPurify.sanitize(priceGroupTemplate.innerHTML.replaceAll('#', priceGroup.id.toString()));
 				const priceGroupWrapper = tmp.firstElementChild as HTMLDivElement;
 				priceGroupWrapper.querySelector<HTMLInputElement>('.name-input').value = priceGroup.name;
 				priceGroupWrapper.querySelector<HTMLInputElement>('.price-input').valueAsNumber = priceGroup.price;

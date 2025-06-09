@@ -26,6 +26,7 @@
     "@svta/common-media-library": "^0.12.4",
     "autocompleter": "^9.3.2",
     "bootstrap": "^5.3.6",
+    "dompurify": "^3.2.6",
     "flatpickr": "^4.6.13",
     "hls.js": "^1.6.5",
     "sortablejs": "^1.15.6",

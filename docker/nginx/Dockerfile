@@ -38,11 +38,16 @@ RUN git clone https://github.com/arut/nginx-rtmp-module.git \
 FROM base AS final
 
 # Install ffmpeg for HLS streaming support
-RUN apk add --no-cache ffmpeg
+RUN apk add --no-cache ffmpeg pcre
 
 # Copy built nginx from build stage
-COPY --from=build /usr/local/nginx/sbin/nginx /usr/sbin/nginx
-COPY --from=build /usr/local/nginx/modules /usr/local/nginx/modules
+COPY --from=build /usr/local/lib/libcrypto* /usr/local/lib/
+COPY --from=build /usr/local/lib/libssl* /usr/local/lib/
+COPY --from=build /etc/nginx /etc/nginx
+COPY --from=build /usr/lib/nginx/modules /usr/lib/nginx/modules
+COPY --from=build /usr/sbin/nginx /usr/sbin/nginx
+
+ENV LD_LIBRARY_PATH=/usr/local/lib
 
 # Create necessary directories
 RUN mkdir -p /var/www/hls /var/www/dash

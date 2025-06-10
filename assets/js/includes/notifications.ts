@@ -1,5 +1,6 @@
 import {Toast} from 'bootstrap';
 import {ErrorResponse, ResponseError} from './apiClient';
+import DOMPurify from 'dompurify';
 
 export type ToastData = {
 	title?: string,
@@ -31,7 +32,7 @@ export function triggerNotification(data: ToastData, autohide : boolean = true):
 
 	const body = document.createElement('div');
 	body.classList.add('toast-body', 'text-start');
-	body.innerHTML = data.content;
+	body.innerHTML = DOMPurify.sanitize(data.content);
 	toast.appendChild(body);
 
 	toasts.appendChild(toast);

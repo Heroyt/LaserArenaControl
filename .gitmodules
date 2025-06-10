@@ -17,3 +17,4 @@
 [submodule "languages"]
 	path = languages
 	url = https://github.com/Heroyt/LACTranslations
+	branch = master

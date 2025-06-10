@@ -7,7 +7,6 @@ use App\GameModels\Factory\TeamFactory;
 use App\GameModels\Game\Game;
 use App\GameModels\Game\Player;
 use DateTimeInterface;
-use Dibi\Row;
 
 class GeneralStats implements WidgetInterface, WithGameIdsInterface
 {
@@ -78,7 +77,7 @@ class GeneralStats implements WidgetInterface, WithGameIdsInterface
                 }
             }
             $q = PlayerFactory::queryPlayers($gameIds);
-            /** @var null|Row{id_player:int,system:string} $topHits */
+            /** @var null|object{id_player:int,system:string} $topHits */
             $topHits = $q->orderBy('[hits]')->desc()->fetch(cache: false);
             if (isset($topHits)) {
                 $topHits = PlayerFactory::getById(
@@ -87,7 +86,7 @@ class GeneralStats implements WidgetInterface, WithGameIdsInterface
                 );
             }
             $q = PlayerFactory::queryPlayers($gameIds);
-            /** @var null|Row{id_player:int,system:string} $topDeaths */
+            /** @var null|object{id_player:int,system:string} $topDeaths */
             $topDeaths = $q->orderBy('[deaths]')->desc()->fetch(cache: false);
             if (isset($topDeaths)) {
                 $topDeaths = PlayerFactory::getById(
@@ -96,7 +95,7 @@ class GeneralStats implements WidgetInterface, WithGameIdsInterface
                 );
             }
             $q = PlayerFactory::queryPlayers($gameIds);
-            /** @var null|Row{id_player:int,system:string} $topAccuracy */
+            /** @var null|object{id_player:int,system:string} $topAccuracy */
             $topAccuracy = $q->orderBy('[accuracy]')->desc()->fetch(cache: false);
             if (isset($topAccuracy)) {
                 $topAccuracy = PlayerFactory::getById(
@@ -105,7 +104,7 @@ class GeneralStats implements WidgetInterface, WithGameIdsInterface
                 );
             }
             $q = PlayerFactory::queryPlayers($gameIds);
-            /** @var null|Row{id_player:int,system:string} $topShots */
+            /** @var null|object{id_player:int,system:string} $topShots */
             $topShots = $q->orderBy('[shots]')->desc()->fetch(cache: false);
             if (isset($topShots)) {
                 $topShots = PlayerFactory::getById(

@@ -15,6 +15,7 @@ import {startLoading, stopLoading} from '../../loaders';
 import {Modal} from 'bootstrap';
 import {GroupDetailPlayer} from './groupDetail';
 import {triggerNotificationError} from '../../includes/notifications';
+import DOMPurify from 'dompurify';
 
 export default class NewGameGroup implements NewGameGroupInterface {
 
@@ -398,9 +399,11 @@ export default class NewGameGroup implements NewGameGroupInterface {
 		let group = this.gameGroupsWrapper.querySelector(`.game-group[data-id="${groupData.id}"]`) as HTMLDivElement;
 		if (!group) {
 			const tmp = document.createElement('div');
-			tmp.innerHTML = this.gameGroupTemplate.innerHTML
+			tmp.innerHTML = DOMPurify.sanitize(
+				this.gameGroupTemplate.innerHTML
 				.replaceAll('#id#', groupData.id.toString())
-				.replaceAll('#name#', groupData.name);
+					.replaceAll('#name#', groupData.name)
+			);
 			group = tmp.firstElementChild as HTMLDivElement;
 			this.gameGroupsWrapper.appendChild(group);
 			this.initGroup(group);

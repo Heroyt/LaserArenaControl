@@ -4,6 +4,7 @@ import {getTopPlayers, LigaPlayer, registerPlayer} from '../../api/endpoints/pla
 import {triggerNotificationError} from '../../includes/notifications';
 import {ErrorResponse, ResponseError} from '../../includes/apiClient';
 import {Modal} from 'bootstrap';
+import DOMPurify from 'dompurify';
 
 export default function initLaserLiga() : void {
 	initPopover();
@@ -61,7 +62,9 @@ export default function initLaserLiga() : void {
 				for (const player of players) {
 					const playerWrapper = document.createElement('div');
 					playerWrapper.classList.add('card');
-					playerWrapper.innerHTML = `<div class="card-body text-center"><img src="https://laserliga.cz/user/${player.code}/avatar" alt="${player.nickname}" class="avatar" style="max-height: 5rem;" /><h3 class="card-title">${i}. <strong class="text-primary">${player.nickname}</strong></h3><h4>${player.code}</h4><img src="https://laserliga.cz/user/${player.code}/title/svg" alt="title" class="title" style="max-height: 1.5rem;"><p class="my-2">${player.rank.toLocaleString()} <i class="fa-solid fa-star"></i></p><p><button type="button" class="btn btn-primary"><i class="fa-solid fa-eye"></i> ${topPlayers.dataset.show}</button></p>`;
+					playerWrapper.innerHTML = DOMPurify.sanitize(
+						`<div class="card-body text-center"><img src="https://laserliga.cz/user/${player.code}/avatar" alt="${player.nickname}" class="avatar" style="max-height: 5rem;" /><h3 class="card-title">${i}. <strong class="text-primary">${player.nickname}</strong></h3><h4>${player.code}</h4><img src="https://laserliga.cz/user/${player.code}/title/svg" alt="title" class="title" style="max-height: 1.5rem;"><p class="my-2">${player.rank.toLocaleString()} <i class="fa-solid fa-star"></i></p><p><button type="button" class="btn btn-primary"><i class="fa-solid fa-eye"></i> ${topPlayers.dataset.show}</button></p>`,
+					);
 					topPlayers.appendChild(playerWrapper);
 					playerWrapper.addEventListener('click', () => {
 						showPlayerProfile(player);

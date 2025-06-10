@@ -119,7 +119,15 @@ const buildOptions = {
     external: ['/assets/fonts/*', '/assets/images/*'],
     plugins: [
         sassPlugin({
-            embedded: true, cssImports: true, async transform(source, _) {
+            embedded: true,
+            cssImports: true,
+            quietDeps: true, // suppress deprecation warnings from dependencies
+            silenceDeprecations: [
+                'import',
+                'global-builtin',
+                'color-functions'
+            ],
+            async transform(source, _) {
                 const {css} = await postcss([autoprefixer, cssnanoPlugin({preset: 'default'})])
                         .process(source, {
                             from: 'assets/scss', to: 'dist/scss'
@@ -224,5 +232,22 @@ try {
 } catch (e) {
     console.error(e);
 }
+
+// Update CACHE_VERSION in config.ini to current timestamp
+const configPath = './private/config.ini';
+try {
+    if (fs.existsSync(configPath)) {
+        let config = fs.readFileSync(configPath, 'utf8');
+        const now = Math.floor(Date.now() / 1000);
+        config = config.replace(/(CACHE_VERSION\s*=\s*)\d+/, `$1${now}`);
+        fs.writeFileSync(configPath, config);
+        console.log(`Updated CACHE_VERSION in config.ini to ${now}`);
+    }
+} catch (error) {
+    console.warn(`Failed to update CACHE_VERSION: ${error.message}`);
+}
+
+// Set SASS_LOG_LEVEL to error to silence deprecation warnings globally
+process.env.SASS_LOG_LEVEL = 'error';
 
 console.timeEnd('Build');

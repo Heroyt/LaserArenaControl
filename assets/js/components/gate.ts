@@ -83,7 +83,15 @@ export function loadContent(path: string, reloadTimeout: { timeout: null | NodeJ
 				console.log('Invalid content type');
 				return;
 			}
-			contentNew.innerHTML = DOMPurify.sanitize(await processResponse(response.headers.get('Content-Type'), response));
+			contentNew.innerHTML = DOMPurify.sanitize(
+				await processResponse(response.headers.get('Content-Type'), response),
+				{
+					// Need to allow meta tags because they are used to load additional JS modules and styles.
+					ADD_TAGS: ['meta'],
+					ADD_ATTR: ['content'],
+					ADD_URI_SAFE_ATTR: ['content'],
+				},
+			);
 
 			// Find new container classes
 			const meta = contentNew.querySelector<HTMLMetaElement>('meta[name="container-classes"]');

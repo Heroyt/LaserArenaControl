@@ -57,8 +57,8 @@ class GateType extends BaseModel
         );
     }
 
-    public function getQueryData() : array {
-        $data = parent::getQueryData();
+    public function getQueryData(bool $filterChanged = true) : array {
+        $data = parent::getQueryData($filterChanged);
         if (empty($data['slug'])) {
             $data['slug'] = $this->getSlug();
         }

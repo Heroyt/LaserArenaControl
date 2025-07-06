@@ -32,20 +32,20 @@ else
   if [ "$LAC_VERSION" = "stable" ]; then
     git switch stable
     git pull --recurse-submodules origin stable
-    composer update
-    php install.php
   elif [ "$LAC_VERSION" = "staging" ]; then
     git switch staging
     git pull --recurse-submodules origin staging
-    composer update
-    php install.php
   else
     git checkout "v${LAC_VERSION}" -b "stable"
     git -C src/GameModels fetch --all --tags
     git -C src/GameModels checkout "v${LAC_MODELS_VERSION}" -b "stable"
-    composer update
-    php install.php
   fi
+fi
+
+if [ ! -f "composer.lock" ]; then
+  composer update
+else
+  composer install
 fi
 
 composer preload || true
@@ -79,6 +79,8 @@ else
   fi
   pnpm run build
 fi
+
+./bin/console install
 
 # Clear DI, model and info cache
 ./bin/console cache:clean -dmic

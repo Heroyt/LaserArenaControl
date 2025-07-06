@@ -3,6 +3,7 @@
 set -e
 
 echo "Entry: $SHELL $0"
+echo "Version: $LAC_VERSION"
 
 if [ "$LAC_VERSION" != "dev" ]; then
   if [ -n "$SSH_KEY" ] && [ -f "$SSH_KEY" ]; then
@@ -32,61 +33,75 @@ else
   if [ "$LAC_VERSION" = "stable" ]; then
     git switch stable
     git pull --recurse-submodules origin stable
-    composer update
-    php install.php
   elif [ "$LAC_VERSION" = "staging" ]; then
     git switch staging
     git pull --recurse-submodules origin staging
-    composer update
-    php install.php
   else
     git checkout "v${LAC_VERSION}" -b "stable"
     git -C src/GameModels fetch --all --tags
     git -C src/GameModels checkout "v${LAC_MODELS_VERSION}" -b "stable"
-    composer update
-    php install.php
   fi
+fi
+
+if [ ! -f "composer.lock" ]; then
+  composer update
+else
+  composer install
 fi
 
 composer preload || true
 composer dump-autoload
 
-# Use PNPM or NPM
-if ! command -v pnpm >/dev/null 2>&1; then
-  echo "Running with NPM"
-  if [ ! -f "package-lock.json" ]; then
-    npm update
+# Function to run asset compilation in background
+build_assets() {
+  echo "Building assets in background..."
+  # Use PNPM or NPM
+  if ! command -v pnpm >/dev/null 2>&1; then
+    echo "Running with NPM"
+    if [ ! -f "package-lock.json" ]; then
+      npm update
+    else
+      npm install
+    fi
+    npm run build
   else
-    npm install
-  fi
-  npm run build
-else
-  echo "Running with PNPM"
-  export CI="true"
-  if [ ! -f "pnpm-lock.yaml" ]; then
-    pnpm update
-  else
-    if ! pnpm install; then
-      # Check for outdated lockfile error and run update if needed
-      if grep -q 'ERR_PNPM_OUTDATED_LOCKFILE' pnpm-debug.log 2>/dev/null; then
-        echo "pnpm install failed due to outdated lockfile. Running pnpm update..."
+    echo "Running with PNPM"
+    export CI="true"
+    if [ ! -f "pnpm-lock.yaml" ]; then
+      pnpm update
+    else
+      # Try pnpm install with frozen lockfile first
+      if ! pnpm install; then
+        echo "pnpm install failed (likely due to outdated lockfile). Running pnpm update..."
         pnpm update
-      else
-        echo "pnpm install failed. See pnpm-debug.log for details."
-        exit 1
       fi
     fi
+    pnpm run build
   fi
-  pnpm run build
-fi
+  echo "Asset build completed"
+}
 
-# Clear DI, model and info cache
+# Function to run optional setup tasks in background
+run_optional_setup() {
+  echo "Running optional setup tasks in background..."
+
+  # These can run after the server is already serving requests
+  ./bin/console translations:compile
+  ./bin/console regression:update
+  ./bin/console theme:generate
+
+  echo "Optional setup tasks completed"
+}
+
+# Start asset compilation in background
+build_assets &
+ASSET_BUILD_PID=$!
+
+# Run critical setup that must complete before server starts
+./bin/console install
+
+# Clear DI, model and info cache - this is critical for proper operation
 ./bin/console cache:clean -dmic
-
-# Prepare some tasks
-./bin/console translations:compile
-./bin/console regression:update
-./bin/console theme:generate
 
 # Cleanup restart.txt if not correctly removed to prevent immediate restart of container
 if [ -f ./temp/restart.txt ]; then
@@ -96,16 +111,33 @@ fi
 # Start cron service
 crond
 
-# Run project
-echo 'Starting...'
+# Start optional setup tasks in background
+run_optional_setup &
+OPTIONAL_SETUP_PID=$!
+
+# Start the server immediately - don't wait for asset build to complete
+echo 'Starting server...'
 echo "$PWD"
 rr -v
 rr serve -c .rr.yaml -p &
+RR_PID=$!
 
+echo "Server started, waiting for asset build to complete..."
+
+# Wait for asset build to complete, but don't block the server
+wait $ASSET_BUILD_PID
+echo "Asset build finished"
+
+# Monitor for restart requests
 while true; do
   if [ -f ./temp/restart.txt ]; then
     echo "Restarting container..."
     rm -f ./temp/restart.txt
+
+    # Kill background processes
+    kill $RR_PID 2>/dev/null || true
+    kill $OPTIONAL_SETUP_PID 2>/dev/null || true
+
     rr stop
     exit 0
   fi

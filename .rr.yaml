@@ -145,6 +145,8 @@ file_watch:
       max_worker_memory: 256
   dir: "./lmx/results"
   regexp: ".*\\.game"
+eventserver:
+  address: "0.0.0.0:8080"
 logs:
   encoding: console
   level: debug

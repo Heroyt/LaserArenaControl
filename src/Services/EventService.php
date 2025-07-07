@@ -9,7 +9,8 @@ namespace App\Services;
 use App\Core\App;
 use JsonException;
 use Lsr\Core\Config;
-use Redis;
+use Spiral\Goridge\RPC\RPC;
+use Throwable;
 
 /**
  * Service for broadcasting WS events to front-end users
@@ -19,7 +20,7 @@ class EventService
     private static string $eventUrl;
 
     public function __construct(
-      private readonly Redis $redis,
+      private readonly RPC $rpc,
     ) {}
 
     public static function getEventUrl() : string {
@@ -65,7 +66,21 @@ class EventService
         if (is_array($message)) {
             $message = json_encode($message, JSON_THROW_ON_ERROR);
         }
-        $id = $this->redis->xAdd('events:'.$type, '*', ['message' => $message], 10, true);
-        return !empty($id);
+        try {
+            $id = $this->rpc->call(
+              'eventserver.TriggerEvent',
+              [
+                'Type'    => $type,
+                'Message' => $message,
+              ]
+            );
+            return !empty($id);
+        } catch (Throwable $e) {
+            App::getInstance()->getLogger()->error(
+              'EventService: Failed to trigger event',
+              ['type' => $type, 'message' => $message, 'error' => $e->getMessage()]
+            );
+            return false;
+        }
     }
 }

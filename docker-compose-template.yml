@@ -81,7 +81,6 @@ services:
     depends_on:
       - php
       - db
-      - cache
     ports:
       - "80:80"
       - "443:443/tcp"

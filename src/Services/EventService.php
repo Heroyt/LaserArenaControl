@@ -9,7 +9,7 @@ namespace App\Services;
 use App\Core\App;
 use JsonException;
 use Lsr\Core\Config;
-use Redis;
+use Spiral\Goridge\RPC\RPC;
 
 /**
  * Service for broadcasting WS events to front-end users
@@ -19,7 +19,7 @@ class EventService
     private static string $eventUrl;
 
     public function __construct(
-      private readonly Redis $redis,
+      private readonly RPC $rpc,
     ) {}
 
     public static function getEventUrl() : string {
@@ -65,7 +65,13 @@ class EventService
         if (is_array($message)) {
             $message = json_encode($message, JSON_THROW_ON_ERROR);
         }
-        $id = $this->redis->xAdd('events:'.$type, '*', ['message' => $message], 10, true);
+        $id = $this->rpc->call(
+          'eventserver.TriggerEvent',
+          [
+            'Type'    => $type,
+            'Message' => $message,
+          ]
+        );
         return !empty($id);
     }
 }

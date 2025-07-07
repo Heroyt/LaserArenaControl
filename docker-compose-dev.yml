@@ -22,21 +22,7 @@ services:
       - backend
       - frontend
     volumes:
-      - /Users/Heroyt/Projects/LaserArenaControl/docker/redis/data:/data
-  eventServer:
-    restart: unless-stopped
-    image: heroyt/lac-event-server:latest
-    ports:
-      - "9999:8080"
-    networks:
-      - backend
-      - frontend
-    depends_on:
-      - redis
-    links:
-      - redis
-    environment:
-      REDIS_HOST: "redis"
+      - ./docker/redis/data:/data
   php:
     restart: unless-stopped
     build:
@@ -45,9 +31,6 @@ services:
       secrets:
         - RT_TOKEN
     working_dir: /var/www/
-    command:
-      - /bin/bash
-      - ./start.sh
     links:
       - db
       - redis
@@ -58,11 +41,12 @@ services:
       - ./:/var/www
       - ./fpm/:/etc/php/
       - ./docker/core/php.ini:/usr/local/etc/php/php.ini
-      - /Users/heroyt/Projects/lsr-packages/:/Users/heroyt/Projects/lsr-packages/
     ports:
+      - "8001:8001"
       - "6001:6001"
       - "2112:2112"
       - "2114:2114"
+      - "9999:8080"
     networks:
       - backend
     extra_hosts:
@@ -104,7 +88,7 @@ services:
       - php
       - db
     ports:
-      - "8001:80"
+      - "80:80"
       - "443:443/tcp"
       - "443:443/udp"
       - "1935:1935"
@@ -114,11 +98,11 @@ services:
     links:
       - php
     volumes:
-      - /Users/Heroyt/Projects/LaserArenaControl:/var/www
-      - /Users/Heroyt/Projects/LaserArenaControl/docker/nginx/nginx.conf:/etc/nginx/nginx.conf
-      - /Users/Heroyt/Projects/LaserArenaControl/docker/nginx/fastcgi_params.conf:/etc/nginx/fastcgi_params.conf
-      - /Users/Heroyt/Projects/LaserArenaControl/docker/nginx/mime-types.conf:/etc/nginx/mime-types.conf
-      - /Users/Heroyt/Projects/LaserArenaControl/docker/nginx/ssl:/etc/nginx/ssl
+      - ./:/var/www
+      - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./docker/nginx/fastcgi_params.conf:/etc/nginx/fastcgi_params.conf
+      - ./docker/nginx/mime-types.conf:/etc/nginx/mime-types.conf
+      - ./docker/nginx/ssl:/etc/nginx/ssl
   gotenberg:
     restart: unless-stopped
     image: gotenberg/gotenberg:8

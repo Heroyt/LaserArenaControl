@@ -1,108 +1,140 @@
-version: "3"
 services:
-    db:
-        restart: always
-        image: "mariadb:10.6.9"
-        ports:
-            - "3307:3306"
-        environment:
-            MYSQL_ROOT_PASSWORD: "laser-arena-control"
-            MARIADB_ROOT_PASSWORD: "laser-arena-control"
-            MYSQL_DATABASE: "lac"
-            MARIADB_DATABASE: "lac"
-        volumes:
-            - mariadb:/var/lib/mysql
-        networks:
-            - backend
-    redis:
-      restart: always
-      image: redis/redis-stack-server:latest
-      ports:
-        - "6379:6379"
-      networks:
-        - backend
-        - frontend
-      volumes:
-        - redis-data:/data
-    eventServer:
-      restart: always
-      image: heroyt/lac-event-server:latest
-      ports:
-        - "9999:8080"
-      networks:
-        - backend
-        - frontend
-      depends_on:
-        - redis
-      links:
-        - redis
-      environment:
-        REDIS_HOST: "redis"
-    php:
-        restart: always
-        image: "heroyt/laser-arena-control:latest"
-        working_dir: /var/www/
-        links:
-            - db
-            - redis
-        depends_on:
-            - db
-            - redis
-        volumes:
-            - lac-data:/var/www
-            - lmx:/var/www/lmx
-            - /home/lac/private:/var/www/private
-            - /home/lac/logs:/var/www/logs
-            - /home/lac/uploads:/var/www/upload
-        networks:
-            - backend
-        environment:
-            APP_NAME: "Laser arena control"
-            DB_HOST: "db"
-            DB_PORT: 3306
-            DB_DATABASE: "lac"
-            DB_USER: "root"
-            DB_PASSWORD: "laser-arena-control"
-            FEATURE_EVENT_SERVER: true
-            FEATURE_LEAGUE: true
-            FEATURE_CONTROL: false
-            FEATURE_GATES: false
-            FEATURE_TABLES: true
-            FEATURE_GROUPS: true
-    web:
-        restart: always
-        image: nginx
-        depends_on:
-            - php
-            - db
-            - cache
-        ports:
-            - "8001:80"
-        networks:
-            - backend
-            - frontend
-        links:
-            - php
-        volumes:
-            - app-data:/var/www
-            - /home/lac/nginx:/etc/nginx
-    gotenberg:
-      restart: always
-        image: gotenberg/gotenberg:7
-        networks:
-            - backend
-        ports:
-            - "3000:3000"
+  db:
+    restart: unless-stopped
+    image: "mariadb:10.6.9"
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: "laser-arena-control"
+      MARIADB_ROOT_PASSWORD: "laser-arena-control"
+      MYSQL_DATABASE: "lac"
+      MARIADB_DATABASE: "lac"
+    volumes:
+      - mariadb:/var/lib/mysql
+    networks:
+      - backend
+  redis:
+    restart: unless-stopped
+    image: eqalpha/keydb:latest
+    ports:
+      - "6379:6379"
+    networks:
+      - backend
+      - frontend
+    volumes:
+      - redis-data:/data
+  php:
+    restart: unless-stopped
+    image: "heroyt/laser-arena-control:latest"
+    working_dir: /var/www/
+    links:
+      - db
+      - redis
+    depends_on:
+      - db
+      - redis
+    volumes:
+      - lac-data:/var/www
+      - lmx:/var/www/lmx
+      - /home/lac/private:/var/www/private
+      - /home/lac/logs:/var/www/logs
+      - /home/lac/uploads:/var/www/upload
+    ports:
+      - "8001:8001"
+      - "6001:6001"
+      - "2112:2112"
+      - "2114:2114"
+      - "9999:8080"
+    networks:
+      - backend
+    environment:
+      LAC_VERSION: "stable"
+      APP_NAME: "Laser arena control"
+      DB_HOST: "db"
+      DB_PORT: 3306
+      DB_DATABASE: "lac"
+      DB_USER: "root"
+      DB_PASSWORD: "laser-arena-control"
+      FEATURE_EVENT_SERVER: true
+      FEATURE_LEAGUE: true
+      FEATURE_CONTROL: false
+      FEATURE_GATES: false
+      FEATURE_TABLES: true
+      FEATURE_GROUPS: true
+  nginx_exporter:
+    restart: unless-stopped
+    image: nginx/nginx-prometheus-exporter:latest
+    ports:
+      - "9113:9113"
+    links:
+      - web
+    networks:
+      - backend
+    depends_on:
+      - web
+    command:
+      - -nginx.scrape-uri
+      - http://web:80/stub_status
+  web:
+    restart: unless-stopped
+    image: nginx
+    depends_on:
+      - php
+      - db
+    ports:
+      - "80:80"
+      - "443:443/tcp"
+      - "443:443/udp"
+      - "1935:1935"
+    networks:
+      - backend
+      - frontend
+    links:
+      - php
+    volumes:
+      - app-data:/var/www
+      - /home/lac/nginx:/etc/nginx
+  gotenberg:
+    restart: unless-stopped
+    image: gotenberg/gotenberg:8
+    networks:
+      - backend
+    ports:
+      - "3000:3000"
+  grafana:
+    restart: unless-stopped
+    image: grafana/grafana-oss
+    ports:
+      - "3001:3000"
+    links:
+      - prometheus
+    volumes:
+      - grafana-storage:/var/lib/grafana
+    networks:
+      - backend
+  prometheus:
+    restart: unless-stopped
+    image: prom/prometheus
+    ports:
+      - "9090:9090"
+    links:
+      - php
+    networks:
+      - backend
+    volumes:
+      - prometheus-storage:/prometheus
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
 volumes:
-    mariadb:
-    app-data:
-    redis-data:
-    lmx:
-        driver: local
-        driver_opts:
-            type: cifs
-            device: "//your.ip/lasermaxx/shared"
-            o: username=xxxx,password=xxxxx,rw,file_mode=0777,dir_mode=0777
+  mariadb:
+  grafana-storage:
+  app-data:
+  redis-data:
+  lmx:
+    driver: local
+    driver_opts:
+      type: cifs
+      device: "//your.ip/lasermaxx/shared"
+      o: username=xxxx,password=xxxxx,rw,file_mode=0777,dir_mode=0777
 networks:
-    backend:
-    frontend:
+  backend:
+  frontend:

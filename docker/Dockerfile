@@ -62,8 +62,8 @@ RUN apk add --no-cache --virtual .locale-build musl-locales musl-locales-lang &&
 
 FROM ghcr.io/roadrunner-server/velox:latest AS roadrunner
 
-ENV APP_VERSION="1.0.0"
-ENV VERSION="v2025.1.2"
+ARG APP_VERSION="1.0.0"
+ARG VERSION="v2025.1.2"
 
 COPY docker/velox_rr.toml .
 
@@ -82,7 +82,6 @@ LABEL cz.laserliga.author="Tomáš Vojík"
 LABEL cz.laserliga.contact="info@laserliga.cz"
 
 COPY --from=composer /usr/bin/composer /usr/local/bin/composer
-COPY --from=roadrunner /usr/bin/rr /usr/local/bin/rr
 COPY --from=node_base /usr/local/lib/node_modules /usr/local/lib/node_modules
 COPY --from=node_base /usr/local/bin/node /usr/local/bin/node
 RUN ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm || true
@@ -130,6 +129,8 @@ RUN chmod 0777 -R logs
 RUN chmod 0777 -R temp
 
 SHELL ["/bin/sh", "-c"]
+
+COPY --from=roadrunner /usr/bin/rr /usr/local/bin/rr
 
 # HEALTHCHECK for RoadRunner status plugin
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \

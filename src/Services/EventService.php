@@ -10,6 +10,7 @@ use App\Core\App;
 use JsonException;
 use Lsr\Core\Config;
 use Spiral\Goridge\RPC\RPC;
+use Throwable;
 
 /**
  * Service for broadcasting WS events to front-end users
@@ -65,13 +66,21 @@ class EventService
         if (is_array($message)) {
             $message = json_encode($message, JSON_THROW_ON_ERROR);
         }
-        $id = $this->rpc->call(
-          'eventserver.TriggerEvent',
-          [
-            'Type'    => $type,
-            'Message' => $message,
-          ]
-        );
-        return !empty($id);
+        try {
+            $id = $this->rpc->call(
+              'eventserver.TriggerEvent',
+              [
+                'Type'    => $type,
+                'Message' => $message,
+              ]
+            );
+            return !empty($id);
+        } catch (Throwable $e) {
+            App::getInstance()->getLogger()->error(
+              'EventService: Failed to trigger event',
+              ['type' => $type, 'message' => $message, 'error' => $e->getMessage()]
+            );
+            return false;
+        }
     }
 }

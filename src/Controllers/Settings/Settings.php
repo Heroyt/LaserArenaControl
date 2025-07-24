@@ -36,9 +36,7 @@ class Settings extends Controller
 
     public function __construct(
       private readonly FeatureConfig $featureConfig,
-    ) {
-        parent::__construct();
-    }
+    ) {}
 
     public function init(RequestInterface $request) : void {
         parent::init($request);

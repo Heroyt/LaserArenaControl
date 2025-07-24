@@ -32,7 +32,7 @@ trait NewGameTrait
       private readonly FeatureConfig $featureConfig,
       private readonly SessionInterface $session,
     ) {
-        parent::__construct();
+
         $this->params = new NewGameParams();
     }
 

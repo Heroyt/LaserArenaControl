@@ -32,9 +32,7 @@ class Modes extends Controller
 {
     public function __construct(
       private readonly Cache $cache,
-    ) {
-        parent::__construct();
-    }
+    ) {}
 
     /**
      * @param  Request  $request

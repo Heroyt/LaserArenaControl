@@ -19,9 +19,7 @@ class GameControl extends Controller
 {
     public function __construct(
       private readonly Metrics $metrics,
-    ) {
-        parent::__construct();
-    }
+    ) {}
 
     public function status(?System $system = null) : ResponseInterface {
         $ip = $this->getSystemIp($system);

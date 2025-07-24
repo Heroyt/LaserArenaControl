@@ -38,9 +38,7 @@ class Games extends ApiController
       private readonly GameSimulator        $gameSimulator,
       private readonly GameHighlightService $highlightService,
       private readonly CommandBus $commandBus,
-    ) {
-        parent::__construct();
-    }
+    ) {}
 
     public function cheat(string $code, Request $request) : ResponseInterface {
         $game = $this->getGameFromCode($code);

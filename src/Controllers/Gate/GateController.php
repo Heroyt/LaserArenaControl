@@ -34,9 +34,7 @@ class GateController extends Controller
     public function __construct(
       private readonly EventService $eventService,
       private readonly Gate         $gate
-    ) {
-        parent::__construct();
-    }
+    ) {}
 
     /**
      * @param  string  $gate

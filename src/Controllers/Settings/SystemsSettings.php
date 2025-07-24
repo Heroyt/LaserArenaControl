@@ -24,9 +24,7 @@ class SystemsSettings extends Controller
 
     public function __construct(
       private readonly Mapper $mapper
-    ) {
-        parent::__construct();
-    }
+    ) {}
 
     public function show() : ResponseInterface {
         $this->params = new SystemsSettingsParameters($this->params);

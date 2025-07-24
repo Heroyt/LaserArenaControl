@@ -8,9 +8,7 @@ use Psr\Http\Message\ResponseInterface;
 
 class Cache extends Controller
 {
-    public function __construct(protected CacheService $cache) {
-        parent::__construct();
-    }
+    public function __construct(protected CacheService $cache) {}
 
     public function clearAll() : ResponseInterface {
         $this->cache->clean([\Nette\Caching\Cache::All => true]);

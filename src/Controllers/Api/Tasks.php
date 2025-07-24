@@ -20,9 +20,7 @@ class Tasks extends ApiController
 {
     public function __construct(
       private readonly TaskProducer $taskProducer
-    ) {
-        parent::__construct();
-    }
+    ) {}
 
     #[OA\Post(
       path       : '/api/tasks/precache',

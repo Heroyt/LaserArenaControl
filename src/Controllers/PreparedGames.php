@@ -27,9 +27,7 @@ class PreparedGames extends Controller
       private readonly Cache      $cache,
       private readonly Serializer $serializer,
       private readonly SessionInterface $session,
-    ) {
-        parent::__construct();
-    }
+    ) {}
 
     public function deleteAll() : ResponseInterface {
         DB::update($this::TABLE, ['active' => 0], ['active = 1']);

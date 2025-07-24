@@ -3,6 +3,8 @@
   "description": "Syst\u00e9m pro lep\u0161\u00ed zpracov\u00e1n\u00ed a sjednocen\u00ed v\u00fdsledk\u016f LaserGame z r\u016fzn\u00fdch ar\u00e9n a r\u016fzn\u00fdch v\u00fdrobc\u016f.",
   "type": "project",
   "version": "0.5.1",
+  "minimum-stability": "dev",
+  "prefer-stable": true,
   "repositories": [
     {
       "type": "composer",
@@ -56,7 +58,6 @@
     "lsr/cache": "^0.3.1",
     "lsr/db": "^0.3",
     "ext-zlib": "*",
-    "heroyt/tournament-generator": "^0.5",
     "orisai/scheduler": "^2.1",
     "symfony/lock": "^7",
     "diego-ninja/composer-preload": "^1.0",

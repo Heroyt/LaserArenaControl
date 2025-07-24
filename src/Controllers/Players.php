@@ -19,9 +19,7 @@ class Players extends Controller
     public function __construct(
       private readonly PlayerProvider $playerProvider,
       private readonly TaskProducer   $taskProducer,
-    ) {
-        parent::__construct();
-    }
+    ) {}
 
     public function getPlayer(string $code) : ResponseInterface {
         try {

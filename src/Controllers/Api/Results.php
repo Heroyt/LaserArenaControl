@@ -36,7 +36,7 @@ class Results extends ApiController
       private readonly TaskProducer  $taskProducer,
       private readonly Metrics       $metrics,
     ) {
-        parent::__construct();
+
         $this->gameLoadedTime = (int) ($config->getConfig('ENV')['GAME_LOADED_TIME'] ?? 300);
         $this->gameStartedTime = (int) ($config->getConfig('ENV')['GAME_STARTED_TIME'] ?? 1800);
     }

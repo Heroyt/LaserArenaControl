@@ -11,9 +11,7 @@ class Helpers extends ApiController
 {
     public function __construct(
       private readonly Translations $translations,
-    ) {
-        parent::__construct();
-    }
+    ) {}
 
 
     public function translate(Request $request) : ResponseInterface {

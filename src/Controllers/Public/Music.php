@@ -16,7 +16,7 @@ use Psr\Http\Message\ResponseInterface;
 class Music extends Controller
 {
     public function __construct() {
-        parent::__construct();
+
         $this->params = new MusicTemplate();
     }
 

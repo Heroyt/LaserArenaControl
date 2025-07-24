@@ -19,9 +19,7 @@ class GameLoading extends ApiController
     public function __construct(
       private readonly GameLoader $loader,
       private readonly Metrics    $metrics,
-    ) {
-        parent::__construct();
-    }
+    ) {}
 
     /**
      * @param  non-empty-string|int|System  $system

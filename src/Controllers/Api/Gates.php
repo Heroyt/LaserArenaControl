@@ -14,7 +14,7 @@ class Gates extends ApiController
     private array $ips;
 
     public function __construct() {
-        parent::__construct();
+
         $this->ips = (array) Info::get('gates_ips', []);
     }
 

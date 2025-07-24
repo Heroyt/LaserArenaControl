@@ -32,9 +32,7 @@ class Music extends Controller
     public function __construct(
       private readonly TaskProducer  $taskProducer,
       private readonly FeatureConfig $config,
-    ) {
-        parent::__construct();
-    }
+    ) {}
 
     public function show() : ResponseInterface {
         $this->params['music'] = MusicMode::getAll();

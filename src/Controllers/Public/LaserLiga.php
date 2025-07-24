@@ -33,7 +33,7 @@ class LaserLiga extends Controller
       private readonly PlayerProvider $playerProvider,
       private readonly Cache          $cache,
     ) {
-        parent::__construct();
+
         $this->params = new LaserLigaTemplate();
     }
 

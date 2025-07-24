@@ -32,9 +32,7 @@ class GameHelpers extends ApiController
     public function __construct(
       private readonly Config $config,
       private readonly CommandBus $commandBus,
-    ) {
-        parent::__construct();
-    }
+    ) {}
 
     public function getLoadedGameInfo(Request $request) : ResponseInterface {
         // Allow for filtering games just from one system

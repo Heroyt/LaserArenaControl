@@ -31,9 +31,7 @@ class Results extends Controller
     public function __construct(
       private readonly ResultPrintService $printService,
       private readonly Metrics            $metrics,
-    ) {
-        parent::__construct();
-    }
+    ) {}
 
     /**
      * @param  Request  $request

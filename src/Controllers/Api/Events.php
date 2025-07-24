@@ -14,9 +14,7 @@ class Events extends ApiController
 {
     public function __construct(
       private readonly EventService $eventService
-    ) {
-        parent::__construct();
-    }
+    ) {}
 
     public function triggerEvent(Request $request) : ResponseInterface {
         $type = $request->getPost('type', '');

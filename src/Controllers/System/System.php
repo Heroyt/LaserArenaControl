@@ -14,9 +14,7 @@ class System extends Controller
 {
     public function __construct(
       private readonly MetricsInterface $metrics,
-    ) {
-        parent::__construct();
-    }
+    ) {}
 
     #[OA\Get(
       path       : '/system/restart',

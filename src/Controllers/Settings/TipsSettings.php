@@ -24,9 +24,7 @@ class TipsSettings extends Controller
 
     public function __construct(
       private readonly Translations $translations,
-    ) {
-        parent::__construct();
-    }
+    ) {}
 
     /**
      * @return ResponseInterface

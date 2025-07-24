@@ -17,9 +17,7 @@ class Roadrunner extends Controller
     public function __construct(
       private readonly AsyncRPCInterface $rpc,
       private readonly MetricsInterface  $metrics,
-    ) {
-        parent::__construct();
-    }
+    ) {}
 
     #[OA\Get(
       path       : '/roadrunner/reset',

@@ -41,6 +41,7 @@ export default class Player {
 	popover: CustomPopover | null = null;
 	selectTeamTooltip: Tooltip;
 	atLeastTwoTeamsTooltip: Tooltip;
+	vestId: number;
 
 	/**
 	 * @param vest {String}
@@ -48,6 +49,7 @@ export default class Player {
 	 * @param game {Game}
 	 */
 	constructor(vest: number | string, row: HTMLElement, game: Game) {
+		this.vestId = parseInt(row.dataset.vestId ?? vest.toString());
 		this.vest = vest;
 		this.row = row;
 		this.game = game;
@@ -204,7 +206,7 @@ export default class Player {
 						vest: {},
 					};
 					const status = (this.popover._getTipElement().querySelector(`input:checked`) as HTMLInputElement).value;
-					data.vest[this.vest] = {
+					data.vest[this.vestId] = {
 						status,
 						info: textarea.value,
 					};

@@ -268,7 +268,7 @@
 
 {define vestRow}
     {varType App\GameModels\Vest $vest}
-    <div class="input-group my-2 shadow-in-place vest-row rounded" data-vest="{$vest->vestNum}">
+    <div class="input-group my-2 shadow-in-place vest-row rounded" data-vest="{$vest->vestNum}" data-vest-id="{$vest->id}">
         <label class="input-group-text px-2 bg-light text-black vest-num cursor-pointer" data-hide-status="1"
              data-status="" data-info="" for="player-name-{$vest->vestNum}">
 			<span class="num">

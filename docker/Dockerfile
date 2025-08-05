@@ -1,4 +1,4 @@
-FROM php:8.4-cli-alpine AS ext-builder
+FROM php:8.4-cli-alpine3.22 AS ext-builder
 
 # Install build dependencies
 RUN apk add --no-cache --virtual .build-deps \

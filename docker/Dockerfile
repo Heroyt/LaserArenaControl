@@ -35,7 +35,7 @@ RUN pecl install igbinary apcu redis
 RUN docker-php-ext-enable imagick igbinary apcu redis
 
 # Final image
-FROM php:8.4-cli-alpine AS php
+FROM php:8.5.0RC2-cli-alpine AS php
 
 # Install runtime dependencies only
 RUN apk add --no-cache \

@@ -52,7 +52,7 @@
     "lsr/interfaces": "^0.3",
     "lsr/helpers": "^0.3",
     "lsr/core": "^0.3",
-    "lsr/routing": "^0.3",
+    "lsr/routing": "^0.3.11",
     "lsr/logging": "^0.3",
     "lsr/request": "^0.3",
     "lsr/cache": "^0.3.1",
@@ -80,7 +80,12 @@
     "lsr/laser-liga-api": "^0.1.1",
     "lsr/lg-result-parsing": "dev-master",
     "lsr/roadrunner": "^0.1.0",
-    "lsr/cqrs": "^0.1.0"
+    "lsr/cqrs": "^0.1.0",
+    "phpstan/phpdoc-parser": "^2.3",
+    "phpdocumentor/reflection-docblock": "^5.6",
+    "orisai/utils": "^1.0",
+    "orisai/nette-scheduler": "^1.3",
+    "orisai/nette-console": "^1.4"
   },
   "require-dev": {
     "roave/security-advisories": "dev-latest",

@@ -4,6 +4,7 @@ namespace App\Controllers\Api;
 
 use App\Api\Response\Results\LastResultsResponse;
 use App\GameModels\Factory\GameFactory;
+use App\GameModels\Game\Game;
 use App\Services\ImportService;
 use App\Tasks\GameImportTask;
 use App\Tasks\Payloads\GameImportPayload;
@@ -227,7 +228,10 @@ class Results extends ApiController
         $resultsDir = trailingSlashIt($resultsDir);
         $resultFilesAll = [];
         foreach (GameFactory::getSupportedSystems() as $system) {
-            /** @var class-string<ResultsParserInterface> $class */
+            /**
+             * @var class-string<ResultsParserInterface<Game>> $class
+             * @phpstan-ignore missingType.generics
+             */
             $class = 'App\\Tools\\ResultParsing\\'.ucfirst($system).'\\ResultsParser';
             if (!class_exists($class)) {
                 continue;

@@ -210,6 +210,7 @@ class GateController extends Controller
      *
      * @return Game|ErrorResponse
      * @throws Throwable
+     * @phpstan-ignore missingType.generics
      */
     private function getGame(Request $request) : Game | ErrorResponse {
         /** @var 'last'|numeric $gamePost */

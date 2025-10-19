@@ -7,7 +7,6 @@ use App\CQRS\Commands\SetGameGroupCommand;
 use App\CQRS\Queries\Games\GameListQuery;
 use App\CQRS\Queries\Games\GameRowListQuery;
 use App\DataObjects\Request\Api\Games\ListRequest;
-use App\GameModels\Game\Team;
 use App\Models\GameGroup;
 use App\Services\Evo5\GameSimulator;
 use App\Services\GameHighlight\GameHighlightService;
@@ -58,7 +57,6 @@ class Games extends ApiController
 
         $enemies = [];
         if ($game->mode?->isTeam()) {
-            /** @var Team $team */
             foreach ($game->teams as $team) {
                 if ($team->color === $playerObj->team->color) {
                     continue;

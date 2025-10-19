@@ -11,36 +11,53 @@ use App\GameModels\Game\Player;
 trait GeneralStatsData
 {
     /**
+     * @template P of Player
      * @param  array<string, int[]>  $gameIdsRankable
      * @param  array<string, int[]>  $gameIdsAll
      * @return array{
-     *     topScores: Player[],
-     *     topHits: Player|null,
-     *     topDeaths: Player|null,
-     *     topAccuracy: Player|null,
-     *     topShots: Player|null,
+     *     topScores: P[],
+     *     topHits: P|null,
+     *     topDeaths: P|null,
+     *     topAccuracy: P|null,
+     *     topShots: P|null,
      *     gameCount: int<0, max>,
      *     teamCount: int<0, max>,
      *     playerCount: int<0, max>
      *         }
+     * @phpstan-ignore method.templateTypeNotInParameter
      */
     protected function getTopPlayersData(array $gameIdsRankable, array $gameIdsAll) : array {
-        /** @var Player[] $topScores */
+        /**
+         * @var P[] $topScores
+         */
         $topScores = [];
-        /** @var Player|null $topHits */
+        /**
+         * @var P|null $topHits
+         */
         $topHits = null;
-        /** @var Player|null $topDeaths */
+        /**
+         * @var P|null $topDeaths
+         */
         $topDeaths = null;
-        /** @var Player|null $topAccuracy */
+        /**
+         * @var P|null $topAccuracy
+         */
         $topAccuracy = null;
-        /** @var Player|null $topShots */
+        /**
+         * @var P|null $topShots
+         */
         $topShots = null;
 
         if (!empty($gameIdsRankable)) {
+            /** @var P[] $topScores */
             $topScores = $this->getTopPlayers('score', 3, $gameIdsRankable);
+            /** @var P $topHits */
             $topHits = $this->getTopPlayer('hits', $gameIdsRankable);
+            /** @var P $topDeaths */
             $topDeaths = $this->getTopPlayer('deaths', $gameIdsRankable);
+            /** @var P $topAccuracy */
             $topAccuracy = $this->getTopPlayer('accuracy', $gameIdsRankable, conditions: [['[shots] >= 50']]);
+            /** @var P $topShots */
             $topShots = $this->getTopPlayer('shots', $gameIdsRankable);
         }
 
@@ -66,6 +83,7 @@ trait GeneralStatsData
      * @param  bool  $desc
      * @param  array{0:string,1?:mixed,2?:mixed,3?:mixed}[]  $conditions
      * @return Player[]
+     * @phpstan-ignore missingType.generics
      */
     protected function getTopPlayers(
       string $statType,
@@ -101,6 +119,7 @@ trait GeneralStatsData
      * @param  bool  $desc
      * @param  array{0:string,1?:mixed,2?:mixed,3?:mixed}[]  $conditions
      * @return Player|null
+     * @phpstan-ignore missingType.generics
      */
     protected function getTopPlayer(
       string $statType,

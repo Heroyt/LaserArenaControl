@@ -78,7 +78,8 @@ class MusicCount implements WidgetInterface, WithGameIdsInterface
     }
 
     /**
-     * @param  Game|null  $game
+     * @template G of Game
+     * @param  G|null  $game
      * @param  DateTimeInterface|null  $date
      * @param  string[]|null  $systems
      * @return string

@@ -14,6 +14,11 @@ use Lsr\CQRS\CommandInterface;
  */
 final readonly class SetGameGroupCommand implements CommandInterface
 {
+    /**
+     * @template G of Game
+     * @param  G  $game
+     * @param  GameGroup|null  $group
+     */
     public function __construct(
       public Game       $game,
       public ?GameGroup $group,

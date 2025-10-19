@@ -30,6 +30,7 @@ class App extends \Lsr\Core\App
      * @return non-empty-string
      */
     public static function getShortLanguageCode() : string {
+        /** @phpstan-ignore return.type */
         return self::getInstance()->translations->getLang();
     }
 }

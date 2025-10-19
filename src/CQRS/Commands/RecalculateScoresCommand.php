@@ -13,6 +13,10 @@ use Lsr\CQRS\CommandInterface;
  */
 final readonly class RecalculateScoresCommand implements CommandInterface
 {
+    /**
+     * @template G of Game
+     * @param  G  $game
+     */
     public function __construct(
       public Game $game,
     ) {}

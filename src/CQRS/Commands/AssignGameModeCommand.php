@@ -15,6 +15,11 @@ use Lsr\CQRS\CommandInterface;
  */
 final readonly class AssignGameModeCommand implements CommandInterface
 {
+    /**
+     * @template G of Game
+     * @param  G  $game
+     * @param  AbstractMode|null  $mode
+     */
     public function __construct(
       public Game          $game,
       public ?AbstractMode $mode = null,

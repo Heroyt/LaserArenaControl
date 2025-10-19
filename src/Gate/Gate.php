@@ -129,6 +129,7 @@ class Gate
      *
      * @return Game|null
      * @throws Throwable
+     * @phpstan-ignore missingType.generics
      */
     public function getActiveGame(string $system = 'all') : ?Game {
         $systems = [$system];
@@ -140,11 +141,10 @@ class Gate
         $maxGame = null;
         $maxTime = 0;
 
-        /** @var Game|null $test */
         $test = Info::get('gate-game', useCache: false);
         /** @var int $gateTime */
         $gateTime = Info::get('gate-time', $now, useCache: false);
-        if (isset($test) && ($now - $gateTime) <= $this->getTmpResultsTime()) {
+        if ($test instanceof Game && ($now - $gateTime) <= $this->getTmpResultsTime()) {
             // Set the correct (fake) end time
             $test->end = (new DateTimeImmutable())->setTimestamp($gateTime);
             $test->setMetaValue($this::MANUAL_RESULTS_GAME_META, true);
@@ -152,16 +152,14 @@ class Gate
         }
 
         foreach ($systems as $checkSystem) {
-            /** @var Game|null $startedSystem */
             $startedSystem = Info::get($checkSystem.'-game-started', useCache: false);
-            if (isset($startedSystem) && $startedSystem->start->getTimestamp() > $maxTime) {
+            if ($startedSystem instanceof Game && $startedSystem->start->getTimestamp() > $maxTime) {
                 $maxGame = $startedSystem;
                 $maxTime = $startedSystem->start->getTimestamp();
             }
 
-            /** @var Game|null $loadedSystem */
             $loadedSystem = Info::get($checkSystem.'-game-loaded', useCache: false);
-            if (isset($loadedSystem) && $loadedSystem->fileTime?->getTimestamp() > $maxTime) {
+            if ($loadedSystem instanceof Game && $loadedSystem->fileTime?->getTimestamp() > $maxTime) {
                 $maxGame = $loadedSystem;
                 $maxTime = $loadedSystem->fileTime->getTimestamp();
             }

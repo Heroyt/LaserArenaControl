@@ -5,6 +5,7 @@ namespace App\Gate\Widgets;
 use App\GameModels\Factory\PlayerFactory;
 use App\GameModels\Game\Game;
 use App\GameModels\Game\Player;
+use App\GameModels\Game\Team;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Throwable;
@@ -17,6 +18,7 @@ class TopPlayerSkills implements WidgetInterface, WithGameIdsInterface
 
     /**
      * @var Player[]
+     * @phpstan-ignore missingType.generics
      */
     private ?array $topPlayers = null;
 
@@ -29,13 +31,17 @@ class TopPlayerSkills implements WidgetInterface, WithGameIdsInterface
     }
 
     /**
-     * @param  Game|null  $game
+     * @template T of Team
+     * @template P of Player
+     * @template G of Game<T,P>
+     * @param  G|null  $game
      * @param  DateTimeInterface|null  $date
      * @param  string[]|null  $systems
-     * @return array{topPlayers: Player[]}
+     * @return array{topPlayers: P[]}
      * @throws Throwable
      */
     public function getData(?Game $game = null, ?DateTimeInterface $date = null, ?array $systems = []) : array {
+        /** @phpstan-ignore return.type */
         return [
           'topPlayers' => $this->getTopPlayers($date, $systems),
         ];
@@ -45,6 +51,7 @@ class TopPlayerSkills implements WidgetInterface, WithGameIdsInterface
      * @param  string[]|null  $systems
      * @return Player[]
      * @throws Throwable
+     * @phpstan-ignore missingType.generics
      */
     private function getTopPlayers(?DateTimeInterface $date = null, ?array $systems = []) : array {
         if (!isset($this->topPlayers)) {

@@ -48,7 +48,6 @@ class GameHelpers extends ApiController
 
         $now = time();
 
-        /** @var Game|null $game */
         $game = null;
         $allGames = [];
 
@@ -57,10 +56,9 @@ class GameHelpers extends ApiController
 
         // Try to find the last loaded or started games in selected systems
         foreach ($systems as $system) {
-            /** @var Game|null $started */
             $started = Info::get($system.'-game-started');
             $allGames['started'] = $started;
-            if (isset($started) && ($now - $started->start?->getTimestamp()) <= $gameStartedTime) {
+            if ($started instanceof Game && ($now - $started->start?->getTimestamp()) <= $gameStartedTime) {
                 if (isset($this->game) && $this->game->fileTime > $started->fileTime) {
                     continue;
                 }
@@ -70,10 +68,9 @@ class GameHelpers extends ApiController
                 continue;
             }
 
-            /** @var Game|null $loaded */
             $loaded = Info::get($system.'-game-loaded');
             $allGames['loaded'] = $loaded;
-            if (isset($loaded) && ($now - $loaded->fileTime?->getTimestamp()) <= $gameLoadedTime) {
+            if ($loaded instanceof Game && ($now - $loaded->fileTime?->getTimestamp()) <= $gameLoadedTime) {
                 if (isset($this->game) && $this->game->fileTime > $loaded->fileTime) {
                     continue;
                 }
@@ -108,10 +105,9 @@ class GameHelpers extends ApiController
      * @return ResponseInterface
      */
     public function getGateGameInfo() : ResponseInterface {
-        /** @var Game|null $game */
         $game = Info::get('gate-game');
 
-        if (!isset($game)) {
+        if (!($game instanceof Game)) {
             return $this->respond(new ErrorResponse('No game found', ErrorType::NOT_FOUND), 404);
         }
 

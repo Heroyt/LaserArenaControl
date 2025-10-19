@@ -19,6 +19,7 @@ abstract class GateScreen
     /** @var string[] */
     protected array $systems = [];
 
+    /** @phpstan-ignore missingType.generics */
     protected ?Game $game = null;
 
     /** @var array<string,mixed>|TemplateParameters */
@@ -94,10 +95,19 @@ abstract class GateScreen
         return $this;
     }
 
+    /**
+     * @return Game|null
+     * @phpstan-ignore missingType.generics
+     */
     public function getGame() : ?Game {
         return $this->game;
     }
 
+    /**
+     * @template G of Game
+     * @param  G|null  $game
+     * @return $this
+     */
     public function setGame(?Game $game) : GateScreen {
         $this->game = $game;
         return $this;

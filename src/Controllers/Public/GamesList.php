@@ -29,19 +29,29 @@ class GamesList extends Controller
         return $this->view('pages/public/list');
     }
 
+    /**
+     * @param  non-empty-string  $code
+     * @return ResponseInterface
+     * @throws \Endroid\QrCode\Exception\ValidationException
+     * @throws \JsonException
+     * @throws \Lsr\Exceptions\TemplateDoesNotExistException
+     * @throws \Throwable
+     */
     public function detail(string $code) : ResponseInterface {
         $this->params = new GamesDetailTemplate($this->params);
 
         $this->params->publicUrl = trailingSlashIt(Info::get('liga_api_url', 'https://laserliga.cz')).'g/'.$code;
         $this->params->code = $code;
         $this->params->game = GameFactory::getByCode($code);
-        $this->params->qr = new Builder(
+        $qr = new Builder(
           writer  : new SvgWriter(),
           data    : $this->params->publicUrl,
           encoding: new Encoding('UTF-8'),
         )
           ->build()
           ->getString();
+        assert(!empty($qr));
+        $this->params->qr = $qr;
 
         return $this->view('pages/public/detail');
     }

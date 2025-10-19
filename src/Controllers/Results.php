@@ -100,6 +100,7 @@ class Results extends Controller
       string  $template = 'default',
       ?int    $style = null
     ) : ResponseInterface {
+        $copies = max(1, $copies);
         $style ??= PrintStyle::getActiveStyleId();
         $cache = !($request->getGet('nocache', 0));
         //$colorless = ($request->params['type'] ?? 'color') === 'colorless';
@@ -112,7 +113,7 @@ class Results extends Controller
 
         if (!($request->getGet('html', 0))) {
             $pdfFile = $this->printService->getResultsPdf($game, $style, $template, $copies, $cache);
-            if ($pdfFile !== '' && file_exists($pdfFile)) {
+            if (file_exists($pdfFile)) {
                 /** @var non-empty-string[] $labels */
                 $labels = [App::getShortLanguageCode(), $template];
                 $this->metrics->add('results_printed', $copies, $labels);

@@ -19,6 +19,7 @@ class GameListQuery implements QueryInterface
      * @return Game[]
      * @throws Exception
      * @throws Throwable
+     * @phpstan-ignore missingType.generics
      */
     public function get() : array {
         $rows = $this->query->fetchAllDto(MinimalGameRow::class, cache: $this->cache);

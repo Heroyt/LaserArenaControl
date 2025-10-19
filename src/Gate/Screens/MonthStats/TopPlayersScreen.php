@@ -100,19 +100,40 @@ class TopPlayersScreen extends GateScreen
           'gate.month.'.$this->today->format('Ym').'.topPlayers',
           function () {
               // Get today's best players
-              /** @var Player|null $topScore */
+              /**
+               * @var Player|null $topScore
+               * @phpstan-ignore missingType.generics
+               */
               $topScore = null;
-              /** @var Player|null $topSkill */
+              /**
+               * @var Player|null $topSkill
+               * @phpstan-ignore missingType.generics
+               */
               $topSkill = null;
-              /** @var Player|null $topHits */
+              /**
+               * @var Player|null $topHits
+               * @phpstan-ignore missingType.generics
+               */
               $topHits = null;
-              /** @var Player|null $topDeaths */
+              /**
+               * @var Player|null $topDeaths
+               * @phpstan-ignore missingType.generics
+               */
               $topDeaths = null;
-              /** @var Player|null $topAccuracy */
+              /**
+               * @var Player|null $topAccuracy
+               * @phpstan-ignore missingType.generics
+               */
               $topAccuracy = null;
-              /** @var Player|null $topShots */
+              /**
+               * @var Player|null $topShots
+               * @phpstan-ignore missingType.generics
+               */
               $topShots = null;
-              /** @var Player|null $topHitsOwn */
+              /**
+               * @var Player|null $topHitsOwn
+               * @phpstan-ignore missingType.generics
+               */
               $topHitsOwn = null;
 
               if ($this->getGameCount() > 0) {
@@ -233,6 +254,7 @@ class TopPlayersScreen extends GateScreen
      * @param  array{0:string,1?:mixed,2?:mixed,3?:mixed}[]  $conditions
      * @return Player|null
      * @throws Throwable
+     * @phpstan-ignore missingType.generics
      */
     private function getTopPlayer(
       string        $field,

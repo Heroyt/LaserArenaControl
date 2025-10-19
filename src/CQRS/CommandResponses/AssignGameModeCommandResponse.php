@@ -11,10 +11,11 @@ use Throwable;
 final readonly class AssignGameModeCommandResponse
 {
     /**
+     * @template G of Game
      * @param  bool  $success
      * @param  ($success is false ? string : null)  $message
      * @param  ($success is false ? Throwable|null : null)  $exception
-     * @param  ($success is true ? Game : null)  $game
+     * @param  ($success is true ? G : null)  $game
      * @param  ($success is true ? AbstractMode : null)  $mode
      */
     public function __construct(

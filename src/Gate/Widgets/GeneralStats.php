@@ -12,10 +12,18 @@ class GeneralStats implements WidgetInterface, WithGameIdsInterface
     use GeneralStatsData;
 
     /**
-     * @var array{gameCount: int, teamCount: int, playerCount: int, topScores: Player[], topShots: Player|null,
-     *   topHits: Player|null, topDeaths: Player|null, topAccuracy: Player|null}|null
+     * @var array{
+     *     gameCount: int,
+     *     teamCount: int,
+     *     playerCount: int,
+     *     topScores: Player[],
+     *     topShots: Player|null,
+     *     topHits: Player|null,
+     *     topDeaths: Player|null,
+     *     topAccuracy: Player|null,
+     * }|null
      */
-    private ?array $data = null;
+    private ?array $data = null; // @phpstan-ignore-line
     private ?string $hash = null;
 
     /**

@@ -110,6 +110,7 @@ class Music extends Controller
                       'type'    => 'success',
                       'content' => lang('Saved successfully', context: 'form'),
                     ];
+                    $this->taskProducer->plan(MusicTrimPreviewTask::class, new MusicTrimPreviewPayload($music->id));
                 } catch (ValidationException $e) {
                     $request->passErrors[] = lang(
                                  'Failed to validate data before saving',
@@ -121,8 +122,6 @@ class Music extends Controller
         else {
             $request->passErrors[] = lang('No file uploaded', context: 'errors');
         }
-
-        $this->taskProducer->plan(MusicTrimPreviewTask::class, new MusicTrimPreviewPayload($music->id));
         if ($this->config->isFeatureEnabled('liga')) {
             $this->taskProducer->plan(MusicSyncTask::class, null, new Options(priority: 99));
         }
@@ -162,6 +161,7 @@ class Music extends Controller
 
                             // Delete all optimized images
                             $images = glob(UPLOAD_DIR.'optimized/music-'.$id.'-background*');
+                            assert($images !== false);
                             foreach ($images as $file) {
                                 unlink($file);
                             }
@@ -206,6 +206,7 @@ class Music extends Controller
 
                             // Delete all optimized images
                             $images = glob(UPLOAD_DIR.'optimized/music-'.$id.'-icon*');
+                            assert($images !== false);
                             foreach ($images as $file) {
                                 unlink($file);
                             }
@@ -252,7 +253,9 @@ class Music extends Controller
         }
 
         $playlistIds = [];
-        foreach ($request->getPost('playlist', []) as $id => $data) {
+        /** @var array<string, array{name?:string,music?:numeric[]}> $post */
+        $post = $request->getPost('playlist', []);
+        foreach ($post as $id => $data) {
             if (empty($data['name'])) {
                 continue;
             }
@@ -264,7 +267,7 @@ class Music extends Controller
             else {
                 try {
                     $playlist = Playlist::get((int) $id);
-                } catch (ModelNotFoundException | ValidationException $e) {
+                } catch (ModelNotFoundException) {
                     $playlist = new Playlist();
                     $new = true;
                 }

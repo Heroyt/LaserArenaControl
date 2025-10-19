@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Helpers\Math;
@@ -7,7 +8,6 @@ use Random\Randomizer;
 
 class Random
 {
-
     /**
      * Generate a random value based on a normal distribution
      *
@@ -66,5 +66,4 @@ class Random
 
         return $parts;
     }
-
 }

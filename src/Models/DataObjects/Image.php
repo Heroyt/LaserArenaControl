@@ -8,7 +8,6 @@ use Lsr\Exceptions\FileException;
 
 class Image
 {
-
     public readonly string $image;
     private string $name;
     private string $path;
@@ -37,7 +36,6 @@ class Image
             return $optimized[$index];
         }
         $index = (string) $size;
-        /** @phpstan-ignore-next-line */
         return $optimized[$index] ?? $optimized['webp'] ?? $optimized['original'];
     }
 

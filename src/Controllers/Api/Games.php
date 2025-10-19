@@ -21,7 +21,6 @@ use Lsr\Core\Requests\Request;
 use Lsr\Core\Requests\Validation\RequestValidationMapper;
 use Lsr\CQRS\CommandBus;
 use Lsr\Logging\Exceptions\DirectoryCreationException;
-use Lsr\ObjectValidation\Exceptions\ValidationException;
 use Lsr\Orm\Exceptions\ModelNotFoundException;
 use Lsr\Serializer\Mapper;
 use Psr\Http\Message\ResponseInterface;
@@ -46,12 +45,13 @@ class Games extends ApiController
             return $this->respond($game, $game->type->httpCode());
         }
 
+        /** @var numeric|string $player */
         $player = $request->getPost('player', 0);
         if (empty($player)) {
             return $this->respond(['error' => 'Invalid player'], 400);
         }
 
-        $playerObj = $game->players->get($player);
+        $playerObj = $game->players->get((int) $player);
         if (!isset($playerObj)) {
             return $this->respond(['error' => 'Player not found'], 404);
         }
@@ -70,7 +70,7 @@ class Games extends ApiController
         }
 
         $addHits = $request->getGet('addHits');
-        if (isset($addHits)) {
+        if (isset($addHits) && !empty($enemies)) {
             $hits = (int) $addHits;
             $playerObj->hits += $hits;
             for ($i = 0; $i < $hits; $i++) {
@@ -171,11 +171,12 @@ class Games extends ApiController
         }
 
         $group = null;
+        /** @var numeric|string $groupId */
         $groupId = $request->getPost('groupId', 0);
         if ($groupId > 0) {
             try {
-                $group = GameGroup::get($groupId);
-            } catch (ModelNotFoundException | ValidationException | DirectoryCreationException $e) {
+                $group = GameGroup::get((int) $groupId);
+            } catch (ModelNotFoundException | DirectoryCreationException $e) {
                 return $this->respond(
                   new ErrorResponse('Group not found', ErrorType::NOT_FOUND, exception: $e),
                   404

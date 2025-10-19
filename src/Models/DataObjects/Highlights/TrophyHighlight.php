@@ -4,7 +4,6 @@ namespace App\Models\DataObjects\Highlights;
 
 use App\GameModels\Game\Game;
 use App\GameModels\Game\Player;
-use App\GameModels\Game\Team;
 use App\Helpers\Gender;
 use App\Services\GenderService;
 use App\Services\NameInflectionService;
@@ -16,10 +15,9 @@ use Throwable;
 class TrophyHighlight extends GameHighlight
 {
     /**
-     * @template T of Team
-     * @template G of Game
+     * @template P of Player
      * @param  string  $value
-     * @param  Player<G,T>  $player
+     * @param  P  $player
      * @param  int  $rarityScore
      */
     public function __construct(
@@ -31,8 +29,9 @@ class TrophyHighlight extends GameHighlight
     }
 
     /**
+     * @template G of Game
      * @param  array{type:string,score:int,value:string,description:string,player:array{vest:int|string,name:string}}  $data
-     * @param  Game  $game
+     * @param  G  $game
      * @return static
      */
     public static function fromJson(array $data, Game $game) : static {

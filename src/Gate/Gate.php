@@ -53,14 +53,16 @@ class Gate
         if (isset($customEvent) && $customEvent->time > time()) {
             $activeGateType = ScreenTriggerType::CUSTOM;
         }
-        else if (isset($game)) {
-            $isManual = $game->getMeta()[$this::MANUAL_RESULTS_GAME_META] ?? false;
-            $activeGateType = match (true) {
-                $isManual => ScreenTriggerType::RESULTS_MANUAL,
-                $game->isFinished() => ScreenTriggerType::GAME_ENDED,
-                $game->isStarted()  => ScreenTriggerType::GAME_PLAYING,
-                default             => ScreenTriggerType::GAME_LOADED,
-            };
+        else {
+            if (isset($game)) {
+                $isManual = $game->getMeta()[$this::MANUAL_RESULTS_GAME_META] ?? false;
+                $activeGateType = match (true) {
+                    $isManual           => ScreenTriggerType::RESULTS_MANUAL,
+                    $game->isFinished() => ScreenTriggerType::GAME_ENDED,
+                    $game->isStarted()  => ScreenTriggerType::GAME_PLAYING,
+                    default             => ScreenTriggerType::GAME_LOADED,
+                };
+            }
         }
 
         $systems = [$system];
@@ -101,11 +103,13 @@ class Gate
                     return $screen;
                 }
             }
-            else if ($screenModel->trigger === ScreenTriggerType::DEFAULT) {
-                $defaultScreen = $screenModel->getScreen()->setGame($game)->setSystems($systems);
-                $settings = $screenModel->getSettings();
-                if (isset($settings) && method_exists($defaultScreen, 'setSettings')) {
-                    $defaultScreen->setSettings($settings);
+            else {
+                if ($screenModel->trigger === ScreenTriggerType::DEFAULT) {
+                    $defaultScreen = $screenModel->getScreen()->setGame($game)->setSystems($systems);
+                    $settings = $screenModel->getSettings();
+                    if (isset($settings) && method_exists($defaultScreen, 'setSettings')) {
+                        $defaultScreen->setSettings($settings);
+                    }
                 }
             }
         }

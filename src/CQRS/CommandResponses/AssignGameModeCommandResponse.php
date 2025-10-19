@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\CQRS\CommandResponses;
@@ -9,7 +10,6 @@ use Throwable;
 
 final readonly class AssignGameModeCommandResponse
 {
-
     /**
      * @param  bool  $success
      * @param  ($success is false ? string : null)  $message
@@ -24,5 +24,4 @@ final readonly class AssignGameModeCommandResponse
       public ?Game         $game = null,
       public ?AbstractMode $mode = null,
     ) {}
-
 }

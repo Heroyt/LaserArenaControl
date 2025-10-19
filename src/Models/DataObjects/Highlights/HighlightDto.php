@@ -7,8 +7,14 @@ use App\GameModels\Game\Game;
 use App\Services\GameHighlight\GameHighlightService;
 use DateTimeInterface;
 
+/**
+ * @template G of Game
+ */
 class HighlightDto
 {
+    /**
+     * @var G|null
+     */
     private ?Game $game;
 
     /**
@@ -30,8 +36,14 @@ class HighlightDto
       readonly public ?GameHighlight    $object = null,
     ) {}
 
+    /**
+     * @return G|null
+     * @throws \Throwable
+     */
     public function getGame() : ?Game {
+        /** @phpstan-ignore assign.propertyType */
         $this->game ??= GameFactory::getByCode($this->code);
+        /** @phpstan-ignore return.type */
         return $this->game;
     }
 

@@ -9,11 +9,15 @@ use App\Gate\Models\GateScreenModel;
 use App\Gate\Models\GateType;
 use App\Gate\Screens\GateScreen;
 use App\Gate\Screens\WithSettings;
+use App\Http\Requests\Settings\Gate\GateSaveInfo;
+use App\Http\Requests\Settings\Gate\GateSaveRequest;
+use App\Http\Requests\Settings\Gate\ScreenSaveInfo;
 use Dibi\Exception;
 use Lsr\Core\Controllers\Controller;
 use Lsr\Core\Requests\Dto\ErrorResponse;
 use Lsr\Core\Requests\Enums\ErrorType;
 use Lsr\Core\Requests\Request;
+use Lsr\Core\Requests\Validation\RequestValidationMapper;
 use Lsr\Exceptions\TemplateDoesNotExistException;
 use Lsr\ObjectValidation\Exceptions\ValidationException;
 use Lsr\Orm\Exceptions\ModelNotFoundException;
@@ -23,6 +27,10 @@ use Psr\Http\Message\ResponseInterface;
 class Gate extends Controller
 {
     protected string $title = 'Nastavení - Výsledková tabule';
+
+    public function __construct(
+      private readonly RequestValidationMapper $requestMapper,
+    ) {}
 
 
     /**
@@ -73,26 +81,27 @@ class Gate extends Controller
      * @return ResponseInterface
      */
     public function saveGate(Request $request) : ResponseInterface {
+        $data = $this->requestMapper->setRequest($request)->mapBodyToObject(GateSaveRequest::class);
+
         try {
-            $offset = $request->getPost('timer_offset');
-            if (isset($offset)) {
-                Info::set('timer-offset', (int) $offset);
+            if (isset($data->timerOffset)) {
+                Info::set('timer-offset', $data->timerOffset);
             }
-            $show = $request->getPost('timer_show');
-            if (isset($show)) {
-                Info::set('timer_show', (int) $show);
+            if (isset($data->timerShow)) {
+                Info::set('timer_show', $data->timerShow);
             }
-            Info::set('timer_on_inactive_screen', !empty($request->getPost('timer_on_inactive_screen')));
+            Info::set('timer_on_inactive_screen', $data->timerOnInactiveScreen);
             $files = $request->getUploadedFiles();
             if (
               isset($files['background']) &&
               $files['background'] instanceof UploadedFile &&
               $files['background']->getError() === UPLOAD_ERR_OK
             ) {
-                /** @var UploadedFile $file */
                 $file = $files['background'];
                 // Remove old uploaded files
-                foreach (glob(UPLOAD_DIR.'gate.*') as $old) {
+                $files = glob(UPLOAD_DIR.'gate.*');
+                assert($files !== false);
+                foreach ($files as $old) {
                     unlink($old);
                 }
                 // Save new file
@@ -107,10 +116,10 @@ class Gate extends Controller
         $newScreenIds = [];
 
         // Update existing gates
-        foreach ($request->getPost('gate', []) as $id => $gateData) {
+        foreach ($data->gate as $id => $gateData) {
             try {
                 $gateType = GateType::get((int) $id);
-            } catch (ModelNotFoundException | ValidationException $e) {
+            } catch (ModelNotFoundException $e) {
                 bdump('Gate type #'.$id.' not found.');
                 bdump($e);
                 continue;
@@ -119,16 +128,16 @@ class Gate extends Controller
         }
 
         // Create new gates
-        foreach ($request->getPost('new-gate', []) as $key => $gateData) {
+        foreach ($data->newGate as $key => $gateData) {
             $gateType = new GateType();
             $this->processGateType($gateType, $gateData, $request, $key, $newGateIds, $newScreenIds);
         }
 
         // Remove deleted gates
-        foreach ($request->getPost('delete-gate', []) as $id) {
+        foreach ($data->deleteGate as $id) {
             try {
                 $gateType = GateType::get((int) $id);
-            } catch (ModelNotFoundException | ValidationException $e) {
+            } catch (ModelNotFoundException $e) {
                 bdump('Gate type #'.$id.' not found.');
                 bdump($e);
                 continue;
@@ -154,17 +163,17 @@ class Gate extends Controller
 
     /**
      * @param  GateType  $gateType
-     * @param  array{name?:string,slug?:string,screen?:array{type?:string,trigger?:string,trigger_value?:string,settings?:array<string,mixed>}[],new-screen?:array{type?:string,trigger?:string,trigger_value?:string,settings?:array<string,mixed>}[],delete-screens?:numeric-string[]}  $gateData
+     * @param  GateSaveInfo  $gateData
      * @param  Request  $request
      * @param  string|int  $gateKey
-     * @param  array  $newGateIds
-     * @param  array  $newScreenIds
+     * @param  array<string|int,int>  $newGateIds
+     * @param  array<string|int,int[]>  $newScreenIds
      * @return void
      * @throws ValidationException
      */
     private function processGateType(
       GateType     $gateType,
-      array        $gateData,
+      GateSaveInfo $gateData,
       Request      $request,
       string | int $gateKey,
       array        &$newGateIds,
@@ -172,18 +181,18 @@ class Gate extends Controller
     ) : void {
         $new = !isset($gateType->id);
         bdump($new);
-        if (!empty($gateData['name'])) {
-            $gateType->setName($gateData['name']);
+        if (!empty($gateData->name)) {
+            $gateType->setName($gateData->name);
         }
-        if (!empty($gateData['slug'])) {
-            $gateType->setSlug($gateData['slug']);
+        if (!empty($gateData->slug)) {
+            $gateType->setSlug($gateData->slug);
         }
 
         // Process screens
-        foreach ($gateData['screen'] ?? [] as $screenId => $screenData) {
+        foreach ($gateData->screen as $screenId => $screenData) {
             try {
                 $screenModel = GateScreenModel::get((int) $screenId);
-            } catch (ModelNotFoundException | ValidationException $e) {
+            } catch (ModelNotFoundException $e) {
                 bdump('Gate screen #'.$screenId.' not found.');
                 bdump($e);
                 continue;
@@ -194,19 +203,19 @@ class Gate extends Controller
 
         $newScreenIds[$gateKey] ??= [];
         $newScreens = [];
-        foreach ($gateData['new-screen'] ?? [] as $key => $screenData) {
+        foreach ($gateData->newScreen as $key => $screenData) {
             $screenModel = new GateScreenModel();
             $this->processScreen($screenModel, $screenData);
             $gateType->addScreenModel($screenModel);
             $newScreens[$key] = $screenModel;
         }
 
-        if (isset($gateData['delete-screens'])) {
+        if (!empty($gateData->deleteScreen)) {
             $screens = $gateType->screens;
-            foreach ($gateData['delete-screens'] as $id) {
+            foreach ($gateData->deleteScreen as $id) {
                 try {
-                    $screenModel = GateScreenModel::get((int) $id);
-                } catch (ModelNotFoundException | ValidationException $e) {
+                    $screenModel = GateScreenModel::get($id);
+                } catch (ModelNotFoundException $e) {
                     bdump('Gate screen #'.$id.' not found.');
                     bdump($e);
                     continue;
@@ -229,38 +238,42 @@ class Gate extends Controller
                   $gateType->name
                 );
             }
-            else if ($new || $newScreens) {
-                $newGateIds[$gateKey] = $gateType->id;
-                foreach ($newScreens as $key => $screen) {
-                    if (isset($screen->id)) {
-                        $newScreenIds[$gateKey][$key] = $screen->id;
+            else {
+                if ($new || $newScreens) {
+                    assert($gateType->id !== null);
+                    $newGateIds[$gateKey] = $gateType->id;
+                    foreach ($newScreens as $key => $screen) {
+                        if (isset($screen->id)) {
+                            $newScreenIds[$gateKey][$key] = $screen->id;
+                        }
                     }
                 }
             }
         }
     }
 
-    /**
-     * @param  GateScreenModel  $screenModel
-     * @param  array{type?:string,order?:numeric,trigger?:string,trigger_value?:string,settings?:array<string,mixed>}  $screenData
-     * @return void
-     */
-    private function processScreen(GateScreenModel $screenModel, array $screenData) : void {
-        if (isset($screenData['type']) && (!isset($screenModel->screenSerialized) || $screenData['type'] !== $screenModel->screenSerialized)) {
-            // @phpstan-ignore-next-line
-            $screenModel->setScreen(App::getService($screenData['type']));
+    private function processScreen(GateScreenModel $screenModel, ScreenSaveInfo $screenData) : void {
+        if (
+          $screenData->type !== null
+          && (!isset($screenModel->screenSerialized) || $screenData->type !== $screenModel->screenSerialized)
+        ) {
+            $screen = App::getService($screenData->type);
+            if (!($screen instanceof GateScreen)) {
+                throw new ValidationException('Invalid screen type: '.$screenData->type);
+            }
+            $screenModel->setScreen($screen);
         }
-        if (isset($screenData['trigger'])) {
-            $screenModel->setTrigger(ScreenTriggerType::from($screenData['trigger']));
+        if ($screenData->trigger !== null) {
+            $screenModel->setTrigger($screenData->trigger);
         }
-        if (isset($screenData['order'])) {
-            $screenModel->setOrder((int) $screenData['order']);
+        if ($screenData->order !== null) {
+            $screenModel->setOrder((int) $screenData->order);
         }
-        if (isset($screenData['trigger_value']) && $screenModel->trigger === ScreenTriggerType::CUSTOM) {
-            $screenModel->setTriggerValue($screenData['trigger_value']);
+        if ($screenData->triggerValue !== null && $screenModel->trigger === ScreenTriggerType::CUSTOM) {
+            $screenModel->setTriggerValue($screenData->triggerValue);
         }
-        if (isset($screenData['settings']) && ($screen = $screenModel->getScreen()) instanceof WithSettings) {
-            $screenModel->setSettings($screen::buildSettingsFromForm($screenData['settings']));
+        if ($screenData->settings !== null && ($screen = $screenModel->getScreen()) instanceof WithSettings) {
+            $screenModel->setSettings($screen::buildSettingsFromForm($screenData->settings));
         }
     }
 }

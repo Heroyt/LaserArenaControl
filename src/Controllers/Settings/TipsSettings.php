@@ -69,8 +69,8 @@ class TipsSettings extends Controller
                     $tip->setTranslation($lang, str_replace("\n", '', trim($text)));
                 }
 
-                if ($tip->save() && $saveId) {
-                    $tips['old'][$id] = $tip->id;
+                if ($saveId && $tip->save()) {
+                    $ids['old'][$id] = $tip->id;
                 }
             }
         }

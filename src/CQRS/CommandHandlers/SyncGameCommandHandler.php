@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\CQRS\CommandHandlers;
@@ -10,13 +11,10 @@ use Throwable;
 
 class SyncGameCommandHandler implements CommandHandlerInterface
 {
-
     /**
      * @param  SyncGameCommand  $command
      */
     public function handle(CommandInterface $command) : bool {
-        assert($command instanceof SyncGameCommand);
-
         try {
             $command->game->fetch(true);
 

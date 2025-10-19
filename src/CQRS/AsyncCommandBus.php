@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\CQRS;
@@ -12,7 +13,6 @@ use Spiral\RoadRunner\Jobs\Exception\JobsException;
 
 readonly class AsyncCommandBus implements AsyncCommandBusInterface
 {
-
     public function __construct(
       private TaskProducer $taskProducer,
     ) {}

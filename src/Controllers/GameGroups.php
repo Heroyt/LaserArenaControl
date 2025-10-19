@@ -78,7 +78,9 @@ class GameGroups extends Controller
      */
     public function create(Request $request) : ResponseInterface {
         $group = new GameGroup();
-        $group->name = $request->getPost('name', sprintf(lang('Skupina %s'), date('d.m.Y H:i')));
+        /** @var string $name */
+        $name = $request->getPost('name', lang('Skupina %s', format: [date('d.m.Y H:i')]));
+        $group->name = $name;
         try {
             if (!$group->save()) {
                 return $this->respond(['error' => 'Save failed'], 500);
@@ -103,7 +105,7 @@ class GameGroups extends Controller
         if (!empty($name)) {
             $group->name = $name;
         }
-        /** @var bool|string|numeric $active */
+        /** @var bool|string|numeric|null $active */
         $active = $request->getPost('active');
         if ($active !== null) {
             $group->active = (is_bool($active) && $active) || (is_numeric(
@@ -111,8 +113,9 @@ class GameGroups extends Controller
                 ) && ((int) $active) === 1) || $active === 'true';
         }
 
+        /** @var null|array{payment?:array<string,array<string,mixed>>|mixed}|string $meta */
         $meta = $request->getPost('meta');
-        if (isset($meta) && is_array($meta)) {
+        if ($meta !== null && is_array($meta)) {
             if (isset($meta['payment']) && is_array($meta['payment'])) {
                 foreach ($meta['payment'] as $key => $data) {
                     $meta['payment'][$key] = new PlayerPayInfoDto(...$data);

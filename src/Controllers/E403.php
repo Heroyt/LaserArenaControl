@@ -19,6 +19,7 @@ use Lsr\Core\Requests\Enums\ErrorType;
 use Lsr\Core\Requests\Request;
 use Lsr\Roadrunner\ErrorHandlers\HttpErrorHandler;
 use Psr\Http\Message\ResponseInterface;
+use Throwable;
 
 /**
  * @class   E403
@@ -42,7 +43,7 @@ class E403 extends Controller implements HttpErrorHandler
      */
     protected string $description = 'Access denied';
 
-    public function showError(Request $request, ?\Throwable $error = null) : ResponseInterface {
+    public function showError(Request $request, ?Throwable $error = null) : ResponseInterface {
         $this->init($request);
         if (str_contains($request->getHeaderLine('Accept'), 'application/json')) {
             return $this->respond(

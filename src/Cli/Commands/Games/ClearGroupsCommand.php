@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Cli\Commands\Games;
@@ -10,7 +11,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 final class ClearGroupsCommand extends Command
 {
-
     public function __construct(
       private readonly CommandBus $commandBus
     ) {
@@ -33,5 +33,4 @@ final class ClearGroupsCommand extends Command
 
         return self::SUCCESS;
     }
-
 }

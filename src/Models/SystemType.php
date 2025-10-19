@@ -1,13 +1,13 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Models;
 
-use App\GameModels\Game\Evo5\Game;
+use App\GameModels\Game\Lasermaxx\Evo5\Game;
 
 enum SystemType : string
 {
-
     case EVO5       = 'evo5';
     case EVO6       = 'evo6';
     case LASERFORCE = 'laserforce';
@@ -39,12 +39,12 @@ enum SystemType : string
     }
 
     /**
-     * @return class-string<Game|\App\GameModels\Game\Evo6\Game|\App\GameModels\Game\LaserForce\Game>
+     * @return class-string<Game|\App\GameModels\Game\Lasermaxx\Evo6\Game|\App\GameModels\Game\LaserForce\Game>
      */
     public function getGameClass() : string {
         return match ($this) {
             self::EVO5       => Game::class,
-            self::EVO6       => \App\GameModels\Game\Evo6\Game::class,
+            self::EVO6 => \App\GameModels\Game\Lasermaxx\Evo6\Game::class,
             self::LASERFORCE => \App\GameModels\Game\LaserForce\Game::class,
         };
     }
@@ -60,5 +60,4 @@ enum SystemType : string
         return $game::getTeamNames();
 
     }
-
 }

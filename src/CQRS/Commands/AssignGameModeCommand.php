@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\CQRS\Commands;
@@ -14,7 +15,6 @@ use Lsr\CQRS\CommandInterface;
  */
 final readonly class AssignGameModeCommand implements CommandInterface
 {
-
     public function __construct(
       public Game          $game,
       public ?AbstractMode $mode = null,

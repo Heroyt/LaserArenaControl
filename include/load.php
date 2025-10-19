@@ -19,13 +19,13 @@ use Latte\Bridges\Tracy\BlueScreenPanel;
 use Latte\Bridges\Tracy\LattePanel;
 use Lsr\Core\Tracy\RoutingTracyPanel;
 use Lsr\Core\Tracy\TranslationTracyPanel;
+use Lsr\Db\DB;
 use Lsr\Helpers\Tools\Timer;
 use Lsr\Helpers\Tracy\TimerTracyPanel;
 use Nette\Bridges\DITracy\ContainerPanel;
 use Nette\Bridges\HttpTracy\SessionPanel;
 use Tracy\Debugger;
 use Tracy\NativeSession;
-use Lsr\Db\DB;
 
 if (!defined('ROOT')) {
     define("ROOT", dirname(__DIR__).'/');
@@ -101,6 +101,7 @@ if (defined('INDEX') && PHP_SAPI !== 'cli') {
     }
 }
 
+/** @phpstan-ignore staticMethod.internalClass */
 BlueScreenPanel::initialize();
 
 Timer::stop('core.init');

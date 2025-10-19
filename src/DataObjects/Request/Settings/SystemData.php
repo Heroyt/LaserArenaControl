@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\DataObjects\Request\Settings;
@@ -10,7 +11,6 @@ use Lsr\ObjectValidation\Attributes\StringLength;
 
 class SystemData
 {
-
     #[Required, StringLength(min: 3)]
     public string $name;
 
@@ -27,5 +27,4 @@ class SystemData
     public int $columns;
     #[Required, IntRange(min: 1, max: 255)]
     public int $rows;
-
 }

@@ -5,6 +5,7 @@ namespace App\Gate\Screens;
 use App\GameModels\Game\Game;
 use App\Gate\Logic\CustomEventDto;
 use App\Gate\Logic\ScreenTriggerType;
+use Lsr\Core\Controllers\TemplateParameters;
 use Lsr\Core\Requests\Response;
 use Lsr\Core\Templating\Latte;
 use Lsr\Exceptions\TemplateDoesNotExistException;
@@ -20,8 +21,8 @@ abstract class GateScreen
 
     protected ?Game $game = null;
 
-    /** @var array<string,mixed> */
-    protected array $params = [];
+    /** @var array<string,mixed>|TemplateParameters */
+    protected array | TemplateParameters $params = [];
 
     protected int $reloadTime = -1;
 
@@ -103,10 +104,10 @@ abstract class GateScreen
     }
 
     /**
-     * @param  array<string,mixed>  $params
+     * @param  array<string,mixed>|TemplateParameters  $params
      * @return $this
      */
-    public function setParams(array $params) : GateScreen {
+    public function setParams(array | TemplateParameters $params) : GateScreen {
         $this->params = $params;
         return $this;
     }
@@ -128,19 +129,24 @@ abstract class GateScreen
             $this->setReloadTime($this->getReloadTimer() ?? -1);
         }
 
+        // Merge parameters
+        $this->params['addJs'] = isset($this->params['addJs']) ?
+          array_merge($this->params['addJs'], ['gate/defaultScreen.js']) : ['gate/defaultScreen.js'];
+        $this->params['reloadTimer'] = $this->reloadTime;
+        foreach ($params as $key => $value) {
+            if (isset($this->params[$key]) && is_array($this->params[$key]) && is_array($value)) {
+                $this->params[$key] = array_merge($this->params[$key], $value);
+                continue;
+            }
+            $this->params[$key] = $value;
+        }
+
         $response = $this
           ->respond(
             $this->latte
               ->viewToString(
                 $template,
-                array_merge(
-                  $this->params,
-                  [
-                    'addJs'       => ['gate/defaultScreen.js'],
-                    'reloadTimer' => $this->reloadTime,
-                  ],
-                  $params
-                )
+                $this->params
               )
           )
           ->withHeader('Content-Type', 'text/html')

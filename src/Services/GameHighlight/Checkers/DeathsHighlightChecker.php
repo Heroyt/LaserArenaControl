@@ -2,8 +2,10 @@
 
 namespace App\Services\GameHighlight\Checkers;
 
+use App\GameModels\Game\Game;
 use App\GameModels\Game\Lasermaxx\Game as LaserMaxxGame;
 use App\GameModels\Game\Player;
+use App\GameModels\Game\Team;
 use App\Helpers\Gender;
 use App\Models\DataObjects\Highlights\GameHighlight;
 use App\Models\DataObjects\Highlights\GameHighlightType;
@@ -20,6 +22,12 @@ class DeathsHighlightChecker implements PlayerHighlightChecker
 {
     /**
      * @inheritDoc
+     *
+     * @template T of Team
+     * @template G of Game
+     * @template P of Player<G, T>
+     *
+     * @param  P  $player
      */
     public function checkPlayer(Player $player, HighlightCollection $highlights) : void {
         $name = $player->name;

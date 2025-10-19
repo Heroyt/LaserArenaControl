@@ -58,6 +58,7 @@ class VestsScreen extends GateScreen implements WithSettings, ReloadTimerInterfa
     }
 
     public function setSettings(GateSettings $settings) : static {
+        /** @phpstan-ignore instanceof.alwaysTrue */
         if (!($settings instanceof VestsSettings)) {
             throw new InvalidArgumentException(
               '$settings must be an instance of '.VestsSettings::class.', '.$settings::class.' provided.'
@@ -83,8 +84,10 @@ class VestsScreen extends GateScreen implements WithSettings, ReloadTimerInterfa
 
         // Calculate current screen hash (for caching)
         $data = [];
+        $vestPlayers = [];
         foreach ($game->players as $player) {
             $data[$player->vest] = $player->color.','.$player->name.','.$player->user?->getCode();
+            $vestPlayers[(string) $player->vest] = $player;
         }
         ksort($data);
         $screenHash = md5(implode(';', array_map(static fn($key) => $key.':'.$data[$key], array_keys($data))));
@@ -93,11 +96,12 @@ class VestsScreen extends GateScreen implements WithSettings, ReloadTimerInterfa
           ->view(
             'gate/screens/vests',
             [
-              'game'       => $game,
-              'screenHash' => $screenHash,
-              'vests'      => Vest::getForSystem($game::SYSTEM),
-              'addJs'      => ['gate/vests.js'],
-              'addCss'     => ['gate/vests.css'],
+              'game'        => $game,
+              'screenHash'  => $screenHash,
+              'vests'       => Vest::getForSystem($game::SYSTEM),
+              'vestPlayers' => $vestPlayers,
+              'addJs'       => ['gate/vests.js'],
+              'addCss'      => ['gate/vests.css'],
             ]
           );
     }

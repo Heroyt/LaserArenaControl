@@ -20,12 +20,15 @@ class App extends \Lsr\Core\App
               return $menuBuilder->getMenu($type);
           },
           [
-            $cache::Tags   => ['core', 'core.menu'],
-            $cache::Expire => '30 days',
+            'tags'   => ['core', 'core.menu'],
+            'expire' => '30 days',
           ]
         );
     }
 
+    /**
+     * @return non-empty-string
+     */
     public static function getShortLanguageCode() : string {
         return self::getInstance()->translations->getLang();
     }

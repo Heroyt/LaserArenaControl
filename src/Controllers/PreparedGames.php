@@ -48,14 +48,16 @@ class PreparedGames extends Controller
                 $system = null;
             }
         }
-        else if (is_string($system)) {
-            $type = SystemType::tryFrom($system);
-            if ($type !== null) {
-                $systems = System::getForType($type);
-                $system = first($systems);
-            }
-            else {
-                $system = null;
+        else {
+            if (is_string($system)) {
+                $type = SystemType::tryFrom($system);
+                if ($type !== null) {
+                    $systems = System::getForType($type);
+                    $system = first($systems);
+                }
+                else {
+                    $system = null;
+                }
             }
         }
         DB::insert(

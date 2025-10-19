@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\CQRS\Commands;
@@ -12,7 +13,6 @@ use Lsr\CQRS\CommandInterface;
  */
 final readonly class RecalculateScoresCommand implements CommandInterface
 {
-
     public function __construct(
       public Game $game,
     ) {}

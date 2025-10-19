@@ -120,7 +120,7 @@ class TopPlayersScreen extends GateScreen
                   $topSkill = $this->getTopPlayer('skill');
                   $topHits = $this->getTopPlayer('hits');
                   $topDeaths = $this->getTopPlayer('deaths');
-                  $topAccuracy = $this->getTopPlayer('accuracy');
+                  $topAccuracy = $this->getTopPlayer('accuracy', conditions: [['[shots] >= 50']]);
                   $topShots = $this->getTopPlayer('shots');
                   $topHitsOwn = $this->getTopPlayer('hits_own', type: GameModeType::TEAM);
               }
@@ -153,13 +153,13 @@ class TopPlayersScreen extends GateScreen
               ];
           },
           [
-            $this->cache::Tags   => [
+            'tags'   => [
               'gate',
               'gate.widgets',
               'gate.widgets.topPlayers',
               'games/'.$this->today->format('Y-m'),
             ],
-            $this->cache::Expire => '1 days',
+            'expire' => '1 days',
           ]
         );
 
@@ -230,10 +230,16 @@ class TopPlayersScreen extends GateScreen
      * @param  string  $field
      * @param  bool  $desc
      * @param  GameModeType|null  $type
+     * @param  array{0:string,1?:mixed,2?:mixed,3?:mixed}[]  $conditions
      * @return Player|null
      * @throws Throwable
      */
-    private function getTopPlayer(string $field, bool $desc = true, ?GameModeType $type = null) : Player | null {
+    private function getTopPlayer(
+      string        $field,
+      bool          $desc = true,
+      ?GameModeType $type = null,
+      array         $conditions = []
+    ) : Player | null {
         $gameIds = match ($type) {
             GameModeType::TEAM => $this->getGameIdsTeams(),
             GameModeType::SOLO => $this->getGameIdsSolo(),
@@ -244,7 +250,11 @@ class TopPlayersScreen extends GateScreen
             $q->desc();
         }
 
-        /** @var null|Row{id_player:int,system:string} $player */
+        if (!empty($conditions)) {
+            $q->where('%and', $conditions);
+        }
+
+        /** @var null|object{id_player:int,system:string} $player */
         $player = $q->fetch(cache: false);
 
         if (isset($player)) {
@@ -261,8 +271,8 @@ class TopPlayersScreen extends GateScreen
      * @throws Exception
      */
     private function getGameIdsTeams() : array {
-        if (isset($this->gameIdsTeams)) {
-            return $this->gameIdsTeams;
+        if (isset($this->gameIdsTeam)) {
+            return $this->gameIdsTeam;
         }
         $monthStart = new DateTimeImmutable($this->today?->format('Y-m-01'));
         $monthEnd = new DateTimeImmutable($this->today?->format('Y-m-t'));
@@ -281,12 +291,12 @@ class TopPlayersScreen extends GateScreen
         /** @var array<string,Row[]> $games */
         $games = $query->fetchAssoc('system|id_game', cache: false);
 
-        $this->gameIdsTeams = [];
+        $this->gameIdsTeam = [];
         foreach ($games as $system => $g) {
             /** @var array<int, Row> $g */
-            $this->gameIdsTeams[$system] = array_keys($g);
+            $this->gameIdsTeam[$system] = array_keys($g);
         }
-        return $this->gameIdsTeams;
+        return $this->gameIdsTeam;
     }
 
     /**

@@ -24,7 +24,7 @@ class TopPlayerSkills implements WidgetInterface, WithGameIdsInterface
     public function refresh() : static {
         $this->hash = null;
         $this->topPlayers = null;
-        $this->gameIds = null;
+        $this->setGameIds(null);
         return $this;
     }
 
@@ -49,8 +49,9 @@ class TopPlayerSkills implements WidgetInterface, WithGameIdsInterface
     private function getTopPlayers(?DateTimeInterface $date = null, ?array $systems = []) : array {
         if (!isset($this->topPlayers)) {
             $this->topPlayers = [];
-            if (!empty($this->gameIds)) {
-                $topScores = PlayerFactory::queryPlayers($this->gameIds)
+            $gameIds = $this->getGameIds(rankableOnly: true);
+            if (!empty($gameIds)) {
+                $topScores = PlayerFactory::queryPlayers($gameIds)
                                           ->orderBy('[skill]')
                                           ->desc()
                                           ->limit(10)

@@ -14,8 +14,9 @@ interface PlayerHighlightChecker
      *
      * @template T of Team
      * @template G of Game
+     * @template P of Player<G, T>
      *
-     * @param  Player<G, T>  $player
+     * @param  P  $player
      * @param  HighlightCollection  $highlights
      *
      * @return void

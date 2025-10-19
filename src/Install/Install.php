@@ -9,6 +9,7 @@ namespace App\Install;
 use App\Core\App;
 use LAC\Modules\Core\Module;
 use Symfony\Component\Console\Output\OutputInterface;
+use Throwable;
 
 class Install implements InstallInterface
 {
@@ -21,10 +22,9 @@ class Install implements InstallInterface
             self::printInfo('Installation successful', $output);
             return true;
         }
-        else {
-            self::printError('Installation failed', $output);
-            return false;
-        }
+
+        self::printError('Installation failed', $output);
+        return false;
     }
 
     private static function installModules(?OutputInterface $output) : bool {
@@ -34,7 +34,12 @@ class Install implements InstallInterface
             /** @var Module $module */
             $module = App::getService($moduleName);
             self::printInfo('Installing module '.$module::NAME, $output);
-            $module->install();
+            try {
+                $module->install();
+            } catch (Throwable $e) {
+                self::printError('Module '.$module::NAME.' installation failed: '.$e->getMessage(), $output);
+                return false;
+            }
         }
         return true;
     }

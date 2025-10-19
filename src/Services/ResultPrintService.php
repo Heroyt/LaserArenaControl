@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Core\App;
 use App\Core\Info;
-use App\Exceptions\GameModeNotFoundException;
 use App\GameModels\Game\Enums\PrintOrientation;
 use App\GameModels\Game\Game;
 use App\GameModels\Game\GameModes\CustomResultsMode;
@@ -14,6 +13,7 @@ use App\GameModels\Game\PrintTemplate;
 use App\GameModels\Game\Team;
 use App\GameModels\Game\Today;
 use App\Templates\Results\ResultsParams;
+use Dibi\Exception;
 use Endroid\QrCode\Builder\Builder;
 use Endroid\QrCode\Encoding\Encoding;
 use Endroid\QrCode\ErrorCorrectionLevel;
@@ -37,14 +37,17 @@ readonly class ResultPrintService
     /**
      * Generate PDF results for a game
      *
-     * @param  Game<Team, Player>  $game
+     * @template G of Game
+     * @param  G  $game
      * @param  int  $style
      * @param  string  $template
-     * @param  int  $copies
+     * @param  int<1,max>  $copies
      * @param  bool  $cache
      *
-     * @return string File path of the generated PDF file or empty string on error
+     * @return non-empty-string File path of the generated PDF file or empty string on error
+     * @throws Exception
      * @throws TemplateDoesNotExistException
+     * @throws \Endroid\QrCode\Exception\ValidationException
      */
     public function getResultsPdf(
       Game   $game,
@@ -74,20 +77,17 @@ readonly class ResultPrintService
           $bg,
         ];
 
-        try {
-            $mode = $game->mode;
-            if ($mode instanceof CustomResultsMode) {
-                $customTemplate = $mode->getCustomResultsTemplate();
-                if ($customTemplate !== '') {
-                    if (file_exists(ROOT.'dist/results/'.$customTemplate.'.css')) {
-                        $additionalFiles[] = ROOT.'dist/results/'.$customTemplate.'.css';
-                    }
-                    if (file_exists(ROOT.'dist/results/'.$template.'_'.$customTemplate.'.css')) {
-                        $additionalFiles[] = ROOT.'dist/results/'.$template.'_'.$customTemplate.'.css';
-                    }
+        $mode = $game->mode;
+        if ($mode instanceof CustomResultsMode) {
+            $customTemplate = $mode->getCustomResultsTemplate();
+            if ($customTemplate !== '') {
+                if (file_exists(ROOT.'dist/results/'.$customTemplate.'.css')) {
+                    $additionalFiles[] = ROOT.'dist/results/'.$customTemplate.'.css';
+                }
+                if (file_exists(ROOT.'dist/results/'.$template.'_'.$customTemplate.'.css')) {
+                    $additionalFiles[] = ROOT.'dist/results/'.$template.'_'.$customTemplate.'.css';
                 }
             }
-        } catch (GameModeNotFoundException) {
         }
 
         $content = $this
@@ -121,7 +121,7 @@ readonly class ResultPrintService
             file_put_contents($pdfFile, $content);
             return $pdfFile;
         }
-        return '';
+        throw new Exception('PDF generation failed');
     }
 
     public function getTmpDir() : string {
@@ -133,12 +133,13 @@ readonly class ResultPrintService
     }
 
     /**
-     * @param  Game<Team, Player>  $game
+     * @template G of Game
+     * @param  G  $game
      * @param  int  $style
      * @param  string  $template
-     * @param  int  $copies
+     * @param  int<1,max>  $copies
      * @param  bool  $view
-     * @return string
+     * @return non-empty-string
      */
     public function getResultsFileName(
       Game   $game,
@@ -158,14 +159,17 @@ readonly class ResultPrintService
     /**
      * Generate html results for a game
      *
-     * @param  Game<Team, Player>  $game
+     * @template G of Game
+     * @param  G  $game
      * @param  int  $style
      * @param  string  $template
-     * @param  int  $copies
+     * @param  int<1,max>  $copies
      * @param  bool  $cache
      *
-     * @return string Generated HTML
+     * @return non-empty-string Generated HTML
+     * @throws Exception
      * @throws TemplateDoesNotExistException
+     * @throws \Endroid\QrCode\Exception\ValidationException
      */
     public function getResultsHtml(
       Game   $game,
@@ -178,7 +182,7 @@ readonly class ResultPrintService
         $htmlFile = $this->getHtmlFilePath($game, $style, $template, $copies);
         if ($cache && file_exists($htmlFile)) {
             $html = file_get_contents($htmlFile);
-            if ($html !== false) {
+            if (!empty($html)) {
                 return $html;
             }
         }
@@ -187,31 +191,35 @@ readonly class ResultPrintService
     }
 
     /**
-     * @param  Game<Team, Player>  $game
+     * @template G of Game
+     * @param  G  $game
      * @param  int  $style
      * @param  string  $template
-     * @param  int  $copies
-     * @return string
+     * @param  int<1,max>  $copies
+     * @return non-empty-string
      */
     public function getHtmlFilePath(Game $game, int $style, string $template, int $copies = 1) : string {
         return $this->getTmpDir().$this->getResultsFileName($game, $style, $template, $copies).'.html';
     }
 
     /**
-     * @param  Game<Team, Player>  $game
+     * @template T of Team
+     * @template P of Player
+     * @template G of Game<T,P>
+     * @param  G  $game
      * @param  int  $style
      * @param  string  $template
-     * @param  int  $copies
-     * @return string
-     * @throws TemplateDoesNotExistException
+     * @param  int<1,max>  $copies
+     * @return non-empty-string
+     * @throws TemplateDoesNotExistException|Exception|\Endroid\QrCode\Exception\ValidationException
      */
     public function generateResultsHtml(Game $game, int $style, string $template, int $copies) : string {
         $namespace = '\\App\\GameModels\\Game\\'.Strings::toPascalCase($game::SYSTEM).'\\';
         $teamClass = $namespace.'Team';
         $playerClass = $namespace.'Player';
-        /** @var Player<Game, Team> $player */
+        /** @var P $player */
         $player = new $playerClass();
-        /** @var Team<Player, Game> $team */
+        /** @var T $team */
         $team = new $teamClass();
 
         try {
@@ -232,26 +240,25 @@ readonly class ResultPrintService
         );
         $params->app = App::getInstance();
 
-        try {
-            $mode = $game->mode;
-            if ($mode instanceof CustomResultsMode) {
-                $customTemplate = $mode->getCustomResultsTemplate();
-                if ($customTemplate !== '') {
-                    $customFile = TEMPLATE_DIR.'results/templates/'.$template.'/'.$customTemplate.'.latte';
-                    if (file_exists($customFile)) {
-                        $template .= '/'.$customTemplate;
-                    }
-                    else if (file_exists(TEMPLATE_DIR.'results/templates/'.$customTemplate.'.latte')) {
-                        $template = $customTemplate;
-                    }
+        $mode = $game->mode;
+        if ($mode instanceof CustomResultsMode) {
+            $customTemplate = $mode->getCustomResultsTemplate();
+            if ($customTemplate !== '') {
+                $customFile = TEMPLATE_DIR.'results/templates/'.$template.'/'.$customTemplate.'.latte';
+                if (file_exists($customFile)) {
+                    $template .= '/'.$customTemplate;
+                }
+                elseif (file_exists(TEMPLATE_DIR.'results/templates/'.$customTemplate.'.latte')) {
+                    $template = $customTemplate;
                 }
             }
-        } catch (GameModeNotFoundException) {
         }
 
         try {
+            /** @var non-empty-string $html */
             $html = $this->latte->viewToString('results/templates/'.$template, $params);
         } catch (TemplateDoesNotExistException) {
+            /** @var non-empty-string $html */
             $html = $this->latte->viewToString('results/templates/default', $params);
         }
 
@@ -260,8 +267,9 @@ readonly class ResultPrintService
     }
 
     /**
-     * @param  Game<Team, Player>  $game
-     * @return string
+     * @template G of Game
+     * @param  G  $game
+     * @return non-empty-string
      */
     public function getPublicUrl(Game $game) : string {
         /** @var string $url */
@@ -272,9 +280,11 @@ readonly class ResultPrintService
     /**
      * Get SVG QR code for game
      *
-     * @param  Game<Team, Player>  $game
+     * @template G of Game
+     * @param  G  $game
      *
-     * @return string
+     * @return non-empty-string
+     * @throws \Endroid\QrCode\Exception\ValidationException
      */
     public function getQR(Game $game) : string {
         $result = new Builder(
@@ -283,6 +293,8 @@ readonly class ResultPrintService
           encoding            : new Encoding('UTF-8'),
           errorCorrectionLevel: ErrorCorrectionLevel::Low
         )->build();
-        return $result->getString();
+        $qr = $result->getString();
+        assert(!empty($qr));
+        return $qr;
     }
 }

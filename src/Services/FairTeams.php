@@ -86,15 +86,19 @@ class FairTeams
 
             $score = abs($teams[$t1]->skill - $teamIdealScore) + abs($teams[$t2]->skill - $teamIdealScore);
 
-            $p1 = array_rand($teams[$t1]->players);
-            $player1 = $teams[$t1]->players[$p1];
-            $p2 = array_rand($teams[$t2]->players);
-            $player2 = $teams[$t2]->players[$p2];
+            $players1 = $teams[$t1]->players;
+            assert(!empty($players1));
+            $p1 = array_rand($players1);
+            $player1 = $players1[$p1];
+            $players2 = $teams[$t2]->players;
+            assert(!empty($players2));
+            $p2 = array_rand($players2);
+            $player2 = $players2[$p2];
 
             if ($player1->skill === $player2->skill) {
                 if (random_int(1, 2) < 2) {
-                    $teams[$t1]->players[$p1] = $player2;
-                    $teams[$t2]->players[$p2] = $player1;
+                    $players1[$p1] = $player2;
+                    $players2[$p2] = $player1;
                 }
                 $iterationsWithoutImprovement++;
                 continue;
@@ -105,8 +109,8 @@ class FairTeams
             $newScore = abs($score1 - $teamIdealScore) + abs($score2 - $teamIdealScore);
 
             if ($newScore < $score) {
-                $teams[$t1]->players[$p1] = $player2;
-                $teams[$t2]->players[$p2] = $player1;
+                $players1[$p1] = $player2;
+                $players2[$p2] = $player1;
                 $teams[$t1]->skill = $score1;
                 $teams[$t2]->skill = $score2;
 

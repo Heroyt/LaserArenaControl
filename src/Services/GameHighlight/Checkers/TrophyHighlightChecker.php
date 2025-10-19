@@ -3,8 +3,10 @@
 namespace App\Services\GameHighlight\Checkers;
 
 use App\Exceptions\GameModeNotFoundException;
+use App\GameModels\Game\Game;
 use App\GameModels\Game\Player;
 use App\GameModels\Game\PlayerTrophy;
+use App\GameModels\Game\Team;
 use App\Models\DataObjects\Highlights\GameHighlight;
 use App\Models\DataObjects\Highlights\HighlightCollection;
 use App\Models\DataObjects\Highlights\TrophyHighlight;
@@ -20,7 +22,12 @@ use Throwable;
 class TrophyHighlightChecker implements PlayerHighlightChecker
 {
     /**
-     * @param  Player  $player
+     *
+     * @template T of Team
+     * @template G of Game
+     * @template P of Player<G, T>
+     *
+     * @param  P  $player
      * @param  HighlightCollection  $highlights
      * @return void
      * @throws GameModeNotFoundException

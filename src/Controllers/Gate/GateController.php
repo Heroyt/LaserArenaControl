@@ -21,7 +21,6 @@ use Lsr\Core\Requests\Dto\ErrorResponse;
 use Lsr\Core\Requests\Dto\SuccessResponse;
 use Lsr\Core\Requests\Enums\ErrorType;
 use Lsr\Core\Requests\Request;
-use Lsr\ObjectValidation\Exceptions\ValidationException;
 use OpenApi\Attributes as OA;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
@@ -41,6 +40,7 @@ class GateController extends Controller
      * @return ResponseInterface
      */
     public function show(Request $request, string $gate = 'default') : ResponseInterface {
+        /** @var string $system */
         $system = $request->getGet('system', 'all');
 
         $gateType = GateType::getBySlug(empty($gate) ? 'default' : $gate);
@@ -58,8 +58,8 @@ class GateController extends Controller
             return $screen->run()
                           ->withHeader('Cache-Control', 'no-store')
                           ->withAddedHeader('X-Screen', $screen::getDiKey())
-                          ->withAddedHeader('X-Trigger', $screen->getTrigger()?->value ?? 'none');
-        } catch (ValidationException | Throwable $e) {
+              ->withAddedHeader('X-Trigger', $screen->getTrigger()->value ?? 'none');
+        } catch (Throwable $e) {
             return $this->respond(new ErrorResponse('An error has occured', exception: $e), 500);
         }
     }
@@ -104,7 +104,8 @@ class GateController extends Controller
       )
     )]
     public function setEvent(Request $request) : ResponseInterface {
-        $event = (string) $request->getPost('event', '');
+        /** @var string $event */
+        $event = $request->getPost('event', '');
         $time = (int) $request->getPost('time', 60);
 
         $dto = new CustomEventDto($event, time() + $time);

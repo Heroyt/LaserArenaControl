@@ -1,6 +1,7 @@
 {layout '../@layout.latte'}
 
 {varType App\GameModels\Game\Game $game}
+{varType App\GameModels\Game\Player[] $vestPlayers}
 {varType App\GameModels\Vest[] $vests}
 {varType string $screenHash}
 
@@ -15,14 +16,14 @@
         <div class="vest-grid pb-5" style="--cols: {$gridDimensions->cols}; --rows: {$gridDimensions->rows};"
              data-hash="{$screenHash}">
             <div n:foreach="$vests as $vest"
-                    {var App\GameModels\Game\Player|null $player = $game->getVestPlayer($vest->vestNum)}
-					class="vest shadow rounded-10 {ifset $player}text-bg-team-{$game::SYSTEM}-{$player->color} text-bg-team-{$game::SYSTEM}-{$player->color}{else}bg-white-forced text-grey-text{/ifset}"
+                    {var App\GameModels\Game\Player|null $player = $vestPlayers[$vest->vestNum] ?? null}
+					class="vest shadow rounded-10 {if $player !== null}text-bg-team-{$game::SYSTEM}-{$player->color} text-bg-team-{$game::SYSTEM}-{$player->color}{else}bg-white-forced text-grey-text{/if}"
                     style="grid-column: {$vest->gridCol};grid-row: {$vest->gridRow}; animation-delay: {300 + ($iterator->counter * 50)}ms;">
                 {svgIcon 'Vesta', '', 'calc(60vh / ' . $gridDimensions->rows . ')'}
-                {ifset $player}
+                {if $player !== null}
                     <div class="name">{$player->name}</div>
-                {/ifset}
-				<div class="number {ifset $player}text-team-{$game::SYSTEM}-{$player->color}{else}text-white-forced{/ifset}">{$vest->vestNum}</div>
+				{/if}
+				<div class="number {if $player !== null}text-team-{$game::SYSTEM}-{$player->color}{else}text-white-forced{/if}">{$vest->vestNum}</div>
             </div>
         </div>
     {/cache}

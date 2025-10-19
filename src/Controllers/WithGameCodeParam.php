@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Controllers;
@@ -11,7 +12,6 @@ use Throwable;
 
 trait WithGameCodeParam
 {
-
     protected function getGameFromCode(string $code) : Game | ErrorResponse {
         if (empty($code)) {
             return new ErrorResponse('Invalid code', ErrorType::VALIDATION);
@@ -26,5 +26,4 @@ trait WithGameCodeParam
         }
         return $game;
     }
-
 }

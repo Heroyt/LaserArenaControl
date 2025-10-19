@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\CQRS\Commands;
@@ -13,7 +14,6 @@ use Lsr\CQRS\CommandInterface;
  */
 final readonly class SetGameGroupCommand implements CommandInterface
 {
-
     public function __construct(
       public Game       $game,
       public ?GameGroup $group,

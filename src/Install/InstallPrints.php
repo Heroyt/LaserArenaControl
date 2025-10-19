@@ -1,15 +1,16 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Install;
 
 use Dibi\Exception;
 use Symfony\Component\Console\Output\OutputInterface;
+use Throwable;
 
 trait InstallPrints
 {
-
-    protected static function printException(\Throwable $e, ?OutputInterface $output = null) : void {
+    protected static function printException(Throwable $e, ?OutputInterface $output = null) : void {
         if ($output !== null) {
             $output->writeln("<error>".$e->getMessage()."</error>");
             $output->writeln($e->getTraceAsString());
@@ -60,5 +61,4 @@ trait InstallPrints
             echo $message."\n";
         }
     }
-
 }

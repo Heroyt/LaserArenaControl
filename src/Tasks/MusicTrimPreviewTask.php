@@ -8,13 +8,14 @@ use App\Tasks\Payloads\MusicSyncPayload;
 use App\Tasks\Payloads\MusicTrimPreviewPayload;
 use Lsr\ObjectValidation\Exceptions\ValidationException;
 use Lsr\Orm\Exceptions\ModelNotFoundException;
+use Lsr\Roadrunner\Tasks\TaskDispatcherInterface;
 use Lsr\Roadrunner\Tasks\TaskPayloadInterface;
 use Lsr\Roadrunner\Tasks\TaskProducer;
 use Spiral\RoadRunner\Jobs\Exception\JobsException;
 use Spiral\RoadRunner\Jobs\Options;
 use Spiral\RoadRunner\Jobs\Task\ReceivedTaskInterface;
 
-readonly class MusicTrimPreviewTask implements \Lsr\Roadrunner\Tasks\TaskDispatcherInterface
+readonly class MusicTrimPreviewTask implements TaskDispatcherInterface
 {
     public function __construct(
       private FeatureConfig $config,

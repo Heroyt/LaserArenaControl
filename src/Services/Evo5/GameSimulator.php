@@ -264,5 +264,4 @@ class GameSimulator
         );
         file_put_contents(LMX_DIR.'results/simulated.game', $content);
     }
-
 }

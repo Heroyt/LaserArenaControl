@@ -299,9 +299,8 @@ class DbInstall implements InstallInterface
             foreach ($loader->views as $name => $select) {
                 $connection->query(
                   <<<SQL
-					CREATE OR REPLACE VIEW `$name`
-					       AS $select;
-					SQL
+                    CREATE OR REPLACE VIEW `$name` AS $select;
+                    SQL
                 );
             }
         } catch (Exception $e) {

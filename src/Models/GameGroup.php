@@ -42,9 +42,11 @@ class GameGroup extends BaseModel implements GameGroupInterface
     public bool $active = true;
     public ?DateTimeInterface $createdAt = null;
 
-    /** @var Game[] */
+    /**
+     * @var Game[]
+     */
     #[NoDB, JsonExclude]
-    public array $games = [] {
+    public array $games = [] { // @phpstan-ignore missingType.generics
         get {
             if (empty($this->games)) {
                 /** @var Cache $cache */
@@ -170,6 +172,7 @@ class GameGroup extends BaseModel implements GameGroupInterface
     /**
      * @return Game[]
      * @throws Throwable
+     * @phpstan-ignore missingType.generics
      */
     public function loadGames() : array {
         $games = [];
@@ -184,18 +187,19 @@ class GameGroup extends BaseModel implements GameGroupInterface
     }
 
     /**
-     * @param  Game[]  $games
+     * @template T of \App\GameModels\Game\Team
+     * @template P of Player
+     * @template G of Game<T,P>
+     * @param  G[]  $games
      * @return array{0:array<string,GroupPlayer>,1:array<string,Team>}
      */
     public function loadPlayersAndTeams(array $games) : array {
         $players = [];
         $teams = [];
         foreach ($games as $game) {
-            /** @var \App\GameModels\Game\Team $team */
             foreach ($game->teams as $team) {
                 $tPlayers = [];
                 $tPlayerNames = [];
-                /** @var Player $player */
                 foreach ($team->players as $player) {
                     $asciiName = Strings::toAscii($player->name);
                     $tPlayerNames[] = $asciiName;
@@ -281,7 +285,7 @@ class GameGroup extends BaseModel implements GameGroupInterface
 
     public function getPlayerByName(string $name) : ?GroupPlayerInterface {
         $name = Strings::toAscii($name);
-        return array_find($this->players, static fn(\App\Models\Group\Player $player) => $player->asciiName === $name);
+        return array_find($this->players, static fn(GroupPlayer $player) => $player->asciiName === $name);
     }
 
     public function getGamesCodes() : array {

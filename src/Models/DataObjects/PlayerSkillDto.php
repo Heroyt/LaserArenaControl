@@ -23,6 +23,11 @@ class PlayerSkillDto
         return $dto;
     }
 
+    /**
+     * @template P of \App\GameModels\Game\Player
+     * @param  P  $player
+     * @return PlayerSkillDto
+     */
     public static function fromGamePlayer(\App\GameModels\Game\Player $player) : PlayerSkillDto {
         $dto = new self($player->name, $player->getSkill());
         $dto->code = $player->user?->getCode();

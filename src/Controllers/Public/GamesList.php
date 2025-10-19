@@ -21,7 +21,9 @@ class GamesList extends Controller
     public function show(Request $request) : ResponseInterface {
         $this->params = new GamesListTemplate($this->params);
 
-        $this->params->date = new DateTimeImmutable($request->getGet('date', 'now'));
+        /** @var string $date */
+        $date = $request->getGet('date', 'now');
+        $this->params->date = new DateTimeImmutable($date);
         $this->params->games = GameFactory::getByDate($this->params->date, true);
 
         return $this->view('pages/public/list');

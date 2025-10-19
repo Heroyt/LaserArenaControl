@@ -45,6 +45,20 @@ class GameControl extends Controller
         return $this->respond(new SuccessResponse(values: ['status' => $response]));
     }
 
+    /**
+     * @return non-empty-string|null
+     */
+    private function getSystemIp(?System $system = null) : ?string {
+        if ($system === null) {
+            $system = System::getDefault();
+        }
+
+        if ($system === null || empty($system->systemIp)) {
+            return null;
+        }
+        return $system->systemIp;
+    }
+
     public function loadSafe(Request $request, ?System $system = null) : ResponseInterface {
         $ip = $this->getSystemIp($system);
         if ($ip === null) {
@@ -52,6 +66,7 @@ class GameControl extends Controller
         }
         $this->metrics->add('control_load', 1);
         $start = microtime(true);
+        /** @var string $modeName */
         $modeName = $request->getPost('mode', '');
         if (empty($modeName)) {
             return $this->respond(new ErrorResponse('Missing required parameter - mode'), 400);
@@ -86,6 +101,7 @@ class GameControl extends Controller
         }
         $start = microtime(true);
         $this->metrics->add('control_load', 1);
+        /** @var string $modeName */
         $modeName = $request->getPost('mode', '');
         if (empty($modeName)) {
             return $this->respond(new ErrorResponse('Missing required parameter - mode'), 400);
@@ -121,6 +137,7 @@ class GameControl extends Controller
             return $this->respond(new SuccessResponse(values: ['status' => $response]));
         }
         if ($response === 'STANDBY') {
+            /** @var string $modeName */
             $modeName = $request->getPost('mode', '');
             if (empty($modeName)) {
                 return $this->respond(
@@ -201,19 +218,5 @@ class GameControl extends Controller
             return $this->respond(new ErrorResponse('API call failed', detail: $response), 500);
         }
         return $this->respond(new SuccessResponse());
-    }
-
-    /**
-     * @return non-empty-string|null
-     */
-    private function getSystemIp(?System $system = null) : ?string {
-        if ($system === null) {
-            $system = System::getDefault();
-        }
-
-        if ($system === null || empty($system->systemIp)) {
-            return null;
-        }
-        return $system->systemIp;
     }
 }

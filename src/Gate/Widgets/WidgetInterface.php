@@ -10,7 +10,8 @@ interface WidgetInterface
     public function refresh() : static;
 
     /**
-     * @param  Game|null  $game
+     * @template G of Game
+     * @param  G|null  $game
      * @param  DateTimeInterface|null  $date
      * @param  string[]|null  $systems
      * @return array<string,mixed>
@@ -18,7 +19,8 @@ interface WidgetInterface
     public function getData(?Game $game = null, ?DateTimeInterface $date = null, ?array $systems = []) : array;
 
     /**
-     * @param  Game|null  $game
+     * @template G of Game
+     * @param  G|null  $game
      * @param  DateTimeInterface|null  $date
      * @param  string[]|null  $systems
      * @return string

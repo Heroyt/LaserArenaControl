@@ -31,18 +31,20 @@ class GameLoading extends ApiController
     public function loadGame(string | int | System $system, Request $request) : ResponseInterface {
         $start = microtime(true);
         if (is_numeric($system)) {
-            $system = System::get($system);
+            $system = System::get((int) $system);
         }
-        else if (is_string($system)) {
-            $type = SystemType::tryFrom($system);
-            if ($type === null) {
-                return $this->respond(new ErrorResponse('Invalid system type'), 400);
+        else {
+            if (is_string($system)) {
+                $type = SystemType::tryFrom($system);
+                if ($type === null) {
+                    return $this->respond(new ErrorResponse('Invalid system type'), 400);
+                }
+                $systems = System::getForType($type);
+                if (empty($systems)) {
+                    return $this->respond(new ErrorResponse('No systems found'), 404);
+                }
+                $system = first($systems);
             }
-            $systems = System::getForType($type);
-            if (empty($systems)) {
-                return $this->respond(new ErrorResponse('No systems found'), 404);
-            }
-            $system = first($systems);
         }
         try {
             // @phpstan-ignore-next-line

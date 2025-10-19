@@ -15,9 +15,9 @@ use App\Core\App;
 use App\Core\Info;
 use App\GameModels\Factory\GameFactory;
 use App\GameModels\Game\Game;
+use App\GameModels\Game\Lasermaxx\Team;
 use App\GameModels\Game\Player;
 use App\Services\LaserLiga\LigaApi;
-use App\Services\LaserLiga\PlayerProvider;
 use Dibi\Exception;
 use Lsr\Caching\Cache;
 use Lsr\Core\Config;
@@ -51,20 +51,23 @@ class ImportService
     private int $gameStartedTime;
 
     public function __construct(
-      private readonly EventService   $eventService,
-      private readonly LockFactory    $lockFactory,
-      private readonly LigaApi        $ligaApi,
-      Config                          $config,
-      private readonly FeatureConfig  $featureConfig,
-      private readonly Metrics        $metrics,
-      private readonly PlayerProvider $playerProvider,
-      private readonly Cache $cache,
+      private readonly EventService  $eventService,
+      private readonly LockFactory   $lockFactory,
+      private readonly LigaApi       $ligaApi,
+      Config                         $config,
+      private readonly FeatureConfig $featureConfig,
+      private readonly Metrics       $metrics,
+      private readonly Cache         $cache,
     ) {
         $this->gameLoadedTime = (int) ($config->getConfig('ENV')['GAME_LOADED_TIME'] ?? 300);
         $this->gameStartedTime = (int) ($config->getConfig('ENV')['GAME_STARTED_TIME'] ?? 1800);
     }
 
     /**
+     * @template T of Team
+     * @template P of Player
+     * @template G of Game<T, P>
+     * @param  G  $game
      * @throws ResultsParseException
      * @throws Throwable
      * @throws FileException
@@ -93,7 +96,7 @@ class ImportService
         if (isset($game->resultsFile) && file_exists($game->resultsFile)) {
             $file = $game->resultsFile;
         }
-        else if ($game instanceof \App\GameModels\Game\Lasermaxx\Game && !empty($game->fileNumber)) {
+        elseif ($game instanceof \App\GameModels\Game\Lasermaxx\Game && !empty($game->fileNumber)) {
             $pattern = $resultsDir.str_pad((string) $game->fileNumber, 4, '0', STR_PAD_LEFT).'*.game';
             $files = glob($pattern);
             if (empty($files)) {
@@ -123,9 +126,9 @@ class ImportService
         try {
             $logger->info('Importing file: '.$file);
             try {
-                /** @var AbstractResultsParser $parser */
+                /** @var AbstractResultsParser<G> $parser */
                 $parser = App::getService('result.parser.'.$game::SYSTEM);
-            } catch (MissingServiceException $e) {
+            } catch (MissingServiceException) {
                 return new ErrorResponse('No parser for this game ('.$game::SYSTEM.')', type: ErrorType::INTERNAL);
             }
             if (!$parser::checkFile($file)) {
@@ -133,7 +136,6 @@ class ImportService
                   new ErrorResponse('Game file cannot be parsed: '.$file, type: ErrorType::INTERNAL);
             }
             $parser->setFile($file);
-            /** @var Game $game */
             $game = $parser->parse();
 
             $now = time();
@@ -168,7 +170,6 @@ class ImportService
 
             // Check players
             $null = true;
-            /** @var Player $player */
             foreach ($game->players as $player) {
                 if (isset($playerIds[$player->vest])) {
                     $player->id = $playerIds[$player->vest];
@@ -256,11 +257,17 @@ class ImportService
             $imported = 0;
             $total = 0;
             $start = microtime(true);
-            /** @var Game|null $lastUnfinishedGame */
+            /**
+             * @var Game|null $lastUnfinishedGame
+             * @phpstan-ignore missingType.generics
+             */
             $lastUnfinishedGame = null;
             $lastEvent = '';
 
-            /** @var Game[] $finishedGames */
+            /**
+             * @var Game[] $finishedGames
+             * @phpstan-ignore missingType.generics
+             */
             $finishedGames = [];
 
             // Ensure that the resultsDir has a trailing slash
@@ -276,7 +283,10 @@ class ImportService
 
                 // Find a parser for this system
                 try {
-                    /** @var AbstractResultsParser $parser */
+                    /**
+                     * @var AbstractResultsParser<Game> $parser
+                     * @phpstan-ignore missingType.generics
+                     */
                     $parser = App::getService('result.parser.'.$system);
                 } catch (MissingServiceException $e) {
                     $output?->writeln('Cannot find parser for system result.parser.'.$system);
@@ -321,7 +331,6 @@ class ImportService
 
                     try {
                         $parser->setFile($file);
-                        /** @var Game $game */
                         $game = $parser->parse();
                         if (!isset($game->importTime)) {
                             $logger->debug('Game is not finished');
@@ -370,7 +379,6 @@ class ImportService
 
                         // Check players
                         $null = true;
-                        /** @var Player $player */
                         foreach ($game->players as $player) {
                             if ($player->score !== 0 || $player->shots !== 0) {
                                 $null = false;
@@ -396,9 +404,8 @@ class ImportService
                         $this->cache->clean([$this->cache::Tags => ['games/'.$game->start->format('Y-m-d')]]);
 
                         // Refresh the started-game info to stop the game timer
-                        /** @var Game|null $startedGame */
                         $startedGame = Info::get($system.'-game-started');
-                        if (isset($startedGame) && $game->resultsFile === $startedGame->resultsFile) {
+                        if ($startedGame instanceof Game && $game->resultsFile === $startedGame->resultsFile) {
                             try {
                                 Info::set($system.'-game-started', null);
                             } catch (Exception) {
@@ -531,15 +538,13 @@ class ImportService
             if (is_string($error)) {
                 $info['error'] = $error;
             }
-            else {
-                if ($error instanceof \Exception) {
-                    $info = [
-                      'error'     => 'An exception has occurred.',
-                      'exception' => $error->getMessage(),
-                    ];
-                    if ($error instanceof Exception) {
-                        $info['sql'] = $error->getSql();
-                    }
+            elseif ($error instanceof \Exception) {
+                $info = [
+                  'error'     => 'An exception has occurred.',
+                  'exception' => $error->getMessage(),
+                ];
+                if ($error instanceof Exception) {
+                    $info['sql'] = $error->getSql();
                 }
             }
             $errors[] = $info;

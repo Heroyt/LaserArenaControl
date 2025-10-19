@@ -7,7 +7,6 @@ use App\GameModels\Factory\GameFactory;
 use App\Services\ImportService;
 use App\Tasks\GameImportTask;
 use App\Tasks\Payloads\GameImportPayload;
-use Lsr\Core\Config;
 use Lsr\Core\Controllers\ApiController;
 use Lsr\Core\Requests\Dto\ErrorResponse;
 use Lsr\Core\Requests\Dto\SuccessResponse;
@@ -27,19 +26,11 @@ use Throwable;
  */
 class Results extends ApiController
 {
-    private int $gameLoadedTime;
-    private int $gameStartedTime;
-
     public function __construct(
       private readonly ImportService $importService,
-      Config                         $config,
       private readonly TaskProducer  $taskProducer,
       private readonly Metrics       $metrics,
-    ) {
-
-        $this->gameLoadedTime = (int) ($config->getConfig('ENV')['GAME_LOADED_TIME'] ?? 300);
-        $this->gameStartedTime = (int) ($config->getConfig('ENV')['GAME_STARTED_TIME'] ?? 1800);
-    }
+    ) {}
 
     #[OA\Post(
       path       : '/api/results/import',
@@ -164,9 +155,10 @@ class Results extends ApiController
       content    : new OA\JsonContent(ref: '#/components/schemas/ErrorResponse')
     )]
     public function importGame(Request $request, string $game = '') : ResponseInterface {
+        /** @var string $dir */
         $dir = $request->getPost('dir', DEFAULT_RESULTS_DIR);
         assert($dir !== '', 'Invalid results directory');
-        $resultsDir = trailingSlashIt($dir ?? DEFAULT_RESULTS_DIR);
+        $resultsDir = trailingSlashIt($dir);
 
         try {
             $gameObj = GameFactory::getByCode($game);

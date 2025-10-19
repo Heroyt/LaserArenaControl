@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Gate\Screens;
@@ -7,7 +8,6 @@ use Psr\Http\Message\ResponseInterface;
 
 class GameStatusScreen extends GateScreen
 {
-
     /**
      * @inheritDoc
      */
@@ -28,7 +28,7 @@ class GameStatusScreen extends GateScreen
     public function run() : ResponseInterface {
         $hash = '';
         $hash .= $this->getGame()?->start?->getTimestamp() ?? '0';
-        foreach (($this->getGame()?->players ?? []) as $player) {
+        foreach (($this->getGame()->players ?? []) as $player) {
             $hash .= $player->vest.'-'.$player->name;
         }
         return $this->view(

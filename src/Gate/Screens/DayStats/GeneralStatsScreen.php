@@ -7,6 +7,7 @@ use App\Gate\Screens\GateScreen;
 use App\Gate\Widgets\GeneralStats;
 use DateTimeImmutable;
 use Lsr\Caching\Cache;
+use Lsr\Core\Requests\Request;
 use Lsr\Core\Templating\Latte;
 use Psr\Http\Message\ResponseInterface;
 
@@ -53,7 +54,10 @@ class GeneralStatsScreen extends GateScreen
      * @inheritDoc
      */
     public function run() : ResponseInterface {
-        $date = (string) App::getInstance()->getRequest()->getGet('date', 'now');
+        /** @var Request $request */
+        $request = App::getInstance()->getRequest();
+        /** @var string $date */
+        $date = $request->getGet('date', 'now');
         $today = new DateTimeImmutable($date);
 
         $this->generalStats->refresh();
@@ -68,13 +72,13 @@ class GeneralStatsScreen extends GateScreen
             ],
           ],
           [
-            $this->cache::Tags   => [
+            'tags'   => [
               'gate',
               'gate.widgets',
               'gate.widgets.generalStats',
               'games/'.$today->format('Y-m-d'),
             ],
-            $this->cache::Expire => '1 days',
+            'expire' => '1 days',
           ]
         );
 

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\CQRS\Queries\GameModes;
@@ -9,7 +10,6 @@ use Lsr\Db\Dibi\Fluent;
 
 trait BaseGameModeQueryTrait
 {
-
     protected(set) readonly Fluent $query;
 
     public function __construct(

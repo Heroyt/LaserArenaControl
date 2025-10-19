@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Core\App;
 use App\Core\Info;
 use App\GameModels\Factory\GameFactory;
 use App\GameModels\Game\Game;
@@ -9,6 +10,7 @@ use App\GameModels\Game\PrintStyle;
 use App\GameModels\Game\PrintTemplate;
 use App\Services\ResultPrintService;
 use Lsr\Core\Controllers\Controller;
+use Lsr\Core\Requests\Dto\ErrorResponse;
 use Lsr\Core\Requests\Request;
 use Lsr\Exceptions\TemplateDoesNotExistException;
 use Lsr\Logging\Exceptions\DirectoryCreationException;
@@ -74,16 +76,17 @@ class Results extends Controller
             $this->params['selected'] = $this->params['games'][0] ?? null;
         }
         $this->params['selectedStyle'] = (int) $request->getGet('style', PrintStyle::getActiveStyleId());
-        $this->params['selectedTemplate'] = $request->getGet(
-          'template',
-          Info::get('default_print_template', 'default')
-        );
+        /** @var string $defaultPrintTemplate */
+        $defaultPrintTemplate = Info::get('default_print_template', 'default');
+        $this->params['selectedTemplate'] = $request->getGet('template', $defaultPrintTemplate);
         $this->params['styles'] = PrintStyle::getAll();
         $this->params['templates'] = PrintTemplate::getAll();
         return $this->view('pages/results/index');
     }
 
     /**
+     * @param  non-empty-string  $template
+     *
      * @throws Throwable
      * @throws DirectoryCreationException
      * @throws ModelNotFoundException
@@ -98,7 +101,7 @@ class Results extends Controller
       ?int    $style = null
     ) : ResponseInterface {
         $style ??= PrintStyle::getActiveStyleId();
-        $cache = !$request->getGet('nocache', false);
+        $cache = !($request->getGet('nocache', 0));
         //$colorless = ($request->params['type'] ?? 'color') === 'colorless';
 
         $game = $code === 'last' ? GameFactory::getLastGame() : GameFactory::getByCode($code);
@@ -107,19 +110,26 @@ class Results extends Controller
             $this->respond('Game not found', 404);
         }
 
-        if (!$request->getGet('html', false)) {
+        if (!($request->getGet('html', 0))) {
             $pdfFile = $this->printService->getResultsPdf($game, $style, $template, $copies, $cache);
             if ($pdfFile !== '' && file_exists($pdfFile)) {
-                $this->metrics->add('results_printed', $copies, [$this->getApp()::getShortLanguageCode(), $template]);
-                $this->metrics->add('games_printed', 1, [$this->getApp()::getShortLanguageCode(), $template]);
+                /** @var non-empty-string[] $labels */
+                $labels = [App::getShortLanguageCode(), $template];
+                $this->metrics->add('results_printed', $copies, $labels);
+                $this->metrics->add('games_printed', 1, $labels);
+
+                $file = fopen($pdfFile, 'rb');
+                if ($file === false) {
+                    return $this->respond(new ErrorResponse('Cannot read PDF file'), 500);
+                }
                 return new Response(
                   200,
                   ['Content-Type' => 'application/pdf;filename=results.pdf'],
-                  fopen($pdfFile, 'rb')
+                  $file
                 );
             }
         }
-        Debugger::$showBar = (bool) $request->getGet('tracy', false);
+        Debugger::$showBar = (bool) $request->getGet('tracy', 0);
         return $this->respond(
           $this->printService->getResultsHtml($game, $style, $template, $copies, $cache)
         );

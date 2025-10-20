@@ -111,13 +111,17 @@ class Settings extends Controller
     public function saveVests(Request $request) : ResponseInterface {
         try {
             $systems = System::getAll();
-            foreach ($request->getPost('columns', []) as $systemId => $count) {
+            /** @var array<numeric,numeric> $post */
+            $post = $request->getPost('columns', []);
+            foreach ($post as $systemId => $count) {
                 if (!isset($systems[(int) $systemId])) {
                     throw new ModelNotFoundException('System not found');
                 }
                 $systems[(int) $systemId]->columnCount = (int) $count;
             }
-            foreach ($request->getPost('rows', []) as $systemId => $count) {
+            /** @var array<numeric, numeric> $post */
+            $post = $request->getPost('rows', []);
+            foreach ($post as $systemId => $count) {
                 if (!isset($systems[(int) $systemId])) {
                     throw new ModelNotFoundException('System not found');
                 }
@@ -126,8 +130,10 @@ class Settings extends Controller
             foreach ($systems as $system) {
                 $system->save();
             }
-            foreach ($request->getPost('vest', []) as $id => $info) {
-                $vest = Vest::get($id);
+            /** @var array<numeric, array{vest_num?:string,status?:string,info?:string,col?:numeric,row?:numeric}> $post */
+            $post = $request->getPost('vest', []);
+            foreach ($post as $id => $info) {
+                $vest = Vest::get((int) $id);
                 $vest->vestNum = $info['vest_num'] ?? $vest->vestNum;
                 $vest->status = VestStatus::from($info['status'] ?? $vest->status->value);
                 $vest->info = $info['info'] ?? $vest->info;
@@ -176,6 +182,7 @@ class Settings extends Controller
             if (isset($lmx)) {
                 Info::set('lmx_ip', $lmx);
             }
+            /** @var string|null $gates */
             $gates = $request->getPost('gates_ips');
             if (isset($gates)) {
                 Info::set('gates_ips', array_map('trim', explode(',', $gates)));
@@ -223,7 +230,12 @@ class Settings extends Controller
         }
         /** @var UploadedFile $file */
         $file = $files['logo'];
-        $name = basename($file->getClientFilename());
+        $clientFilename = $file->getClientFilename();
+        if (empty($clientFilename)) {
+            $request->passErrors[] = lang('Nelze nahrát soubor bez názvu.', context: 'errors');
+            return;
+        }
+        $name = basename($clientFilename);
         // Handle form errors
         if ($file->getError() !== UPLOAD_ERR_OK) {
             $request->passErrors[] = match ($file->getError()) {
@@ -240,8 +252,11 @@ class Settings extends Controller
         }
 
         // Remove old uploaded files
-        foreach (glob(UPLOAD_DIR.'logo.*') as $old) {
-            unlink($old);
+        $files = glob(UPLOAD_DIR.'logo.*');
+        if ($files !== false) {
+            foreach ($files as $old) {
+                unlink($old);
+            }
         }
 
         // Validate type
@@ -264,7 +279,7 @@ class Settings extends Controller
     }
 
     private function handlePriceGroups(Request $request) : void {
-        /** @var array<numeric, array{name?:string,price?:numeric}> $priceGroups */
+        /** @var array<numeric, array{name?:string,price?:numeric}>|string $priceGroups */
         $priceGroups = $request->getPost('pricegroups', []);
         if (!is_array($priceGroups) || empty($priceGroups)) {
             return;
@@ -273,7 +288,7 @@ class Settings extends Controller
         foreach ($priceGroups as $id => $priceGroupData) {
             try {
                 $priceGroup = PriceGroup::get((int) $id);
-            } catch (ModelNotFoundException | ValidationException $e) {
+            } catch (ModelNotFoundException $e) {
                 $request->passErrors[] = $e->getMessage();
                 continue;
             }

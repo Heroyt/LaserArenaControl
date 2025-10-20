@@ -2,8 +2,8 @@
 
 namespace App\Services\GameHighlight\Checkers;
 
-use App\GameModels\Game\Evo5\Player;
 use App\GameModels\Game\Game;
+use App\GameModels\Game\Lasermaxx\Evo5\Player;
 use App\Helpers\Gender;
 use App\Models\DataObjects\Highlights\GameHighlight;
 use App\Models\DataObjects\Highlights\GameHighlightType;
@@ -19,7 +19,7 @@ class Evo5HighlightChecker implements GameHighlightChecker
      * @inheritDoc
      */
     public function checkGame(Game $game, HighlightCollection $highlights) : void {
-        if (!$game instanceof \App\GameModels\Game\Evo5\Game) {
+        if (!$game instanceof \App\GameModels\Game\Lasermaxx\Evo5\Game) {
             return;
         }
 
@@ -40,12 +40,16 @@ class Evo5HighlightChecker implements GameHighlightChecker
                     $powersMax = $bonusCount;
                     $powersMaxPlayer = $player;
                 }
-                else if ($bonusCount > $powersSecondMax && $bonusCount < $powersMax) {
-                    $powersSecondMax = $bonusCount;
-                }
-                else if ($bonusCount === $powersMax) {
-                    $powersMax = self::DUPLICATE_MAX_POWER;
-                    $powersMaxPlayer = null;
+                else {
+                    if ($bonusCount > $powersSecondMax && $bonusCount < $powersMax) {
+                        $powersSecondMax = $bonusCount;
+                    }
+                    else {
+                        if ($bonusCount === $powersMax) {
+                            $powersMax = self::DUPLICATE_MAX_POWER;
+                            $powersMaxPlayer = null;
+                        }
+                    }
                 }
             }
         }

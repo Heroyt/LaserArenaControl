@@ -30,8 +30,9 @@ class GameHighlight implements JsonSerializable
     ) {}
 
     /**
+     * @template G of Game
      * @param  array{type:string,score:int,value:string,description:string}  $data
-     * @param  Game  $game
+     * @param  G  $game
      * @return static
      */
     public static function fromJson(array $data, Game $game) : static {

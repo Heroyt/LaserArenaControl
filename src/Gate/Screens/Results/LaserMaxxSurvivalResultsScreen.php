@@ -3,7 +3,7 @@
 namespace App\Gate\Screens\Results;
 
 use App\Exceptions\GameModeNotFoundException;
-use App\GameModels\Game\Evo5\GameModes\Survival;
+use App\GameModels\Game\Lasermaxx\Evo5\GameModes\Survival;
 use App\Gate\Screens\WithGameQR;
 use Lsr\Core\Requests\Dto\ErrorResponse;
 use Psr\Http\Message\ResponseInterface;

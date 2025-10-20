@@ -33,6 +33,7 @@ trait WithMetaData
         if (!isset($this->metaData)) {
             $this->metaData = !empty($this->meta) ? igbinary_unserialize($this->meta) : [];
         }
+        assert($this->metaData !== null);
         return $this->metaData;
     }
 

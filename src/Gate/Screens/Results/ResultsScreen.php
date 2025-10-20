@@ -87,8 +87,10 @@ class ResultsScreen extends GateScreen implements ResultsScreenInterface
         }
 
         // Check if game results should be hidden
-        if (($game->getMeta() ?? [])['resultsHidden'] ?? false) {
-            $this->childScreen = App::getService('gate.screens.results.hidden');
+        if ($game->getMeta()['resultsHidden'] ?? false) {
+            $childScreen = App::getService('gate.screens.results.hidden');
+            assert($childScreen instanceof ResultsScreenInterface);
+            $this->childScreen = $childScreen;
             $this->childScreen->setGame($game)->setParams($this->params);
             return $this->childScreen;
         }
@@ -107,15 +109,18 @@ class ResultsScreen extends GateScreen implements ResultsScreenInterface
         // Default to basic rankable
         /** @var 'evo5'|'evo6'|'laserforce'|string $system */
         $system = $game::SYSTEM;
-        // @phpstan-ignore-next-line
-        $this->childScreen ??= match ($system) {
-            'evo5', 'evo6' => App::getService('gate.screens.results.lasermaxx.rankable'),
-            default => throw new Exception('Cannot find results screen for system '.$system),
-        };
+        if (!isset($this->childScreen)) {
+            $screen = match ($system) {
+                'evo5', 'evo6' => App::getService('gate.screens.results.lasermaxx.rankable'),
+                default        => throw new Exception('Cannot find results screen for system '.$system),
+            };
+            assert($screen instanceof ResultsScreenInterface);
+            $this->childScreen = $screen;
+        }
 
-        assert($this->childScreen instanceof ResultsScreenInterface && $this->childScreen instanceof GateScreen, '');
-        $this->childScreen->setGame($game)
-                          ->setSettings($this->getSettings())
+        assert($this->childScreen instanceof GateScreen);
+        $this->childScreen->setSettings($this->getSettings())
+                          ->setGame($game)
                           ->setParams($this->params);
 
         return $this->childScreen;

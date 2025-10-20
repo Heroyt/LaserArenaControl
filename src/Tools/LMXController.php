@@ -62,7 +62,9 @@ class LMXController
                 lang('Nepodařilo se připojit k TCP serveru (%s:%d).'),
                 $ip,
                 self::PORT
-              ).' '.$errstr.' ('.$errno.')', $errno, $timeout
+              ).' '.$errstr.' ('.$errno.')',
+              $errno,
+              $timeout
             );
         }
         fwrite($fp, $command.':'.$parameters);

@@ -159,7 +159,12 @@ final class DateTimeNormalizer implements NormalizerInterface, DenormalizerInter
             if (array_key_exists('timezone', $data)) {
                 $timezone = new DateTimeZone($data['timezone']);
             }
-            return $this->createDateTime($data['date'], $type, $timezone, $context);
+            return $this->createDateTime(
+              $data['date'],
+              $type,
+              $timezone ?? new DateTimeZone('europe/prague'),
+              $context
+            );
         }
 
         if (!is_string($data) || '' === trim($data)) {
@@ -172,7 +177,7 @@ final class DateTimeNormalizer implements NormalizerInterface, DenormalizerInter
             );
         }
 
-        return $this->createDateTime($data, $type, $timezone, $context);
+        return $this->createDateTime($data, $type, $timezone ?? new DateTimeZone('europe/prague'), $context);
     }
 
     /**

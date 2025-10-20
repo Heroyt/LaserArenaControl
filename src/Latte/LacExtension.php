@@ -48,8 +48,8 @@ class LacExtension extends Extension
     /**
      * @template T
      * @param  T[]  $elements
-     * @param  int  $min
-     * @param  int  $max
+     * @param  int<1, max>  $min
+     * @param  int<1, max>  $max
      * @return T[][]
      */
     public function filterSplitGroups(array $elements, int $min = 1, int $max = 10) : array {

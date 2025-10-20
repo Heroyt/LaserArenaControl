@@ -44,6 +44,7 @@ class Modes extends Controller
      */
     public function modes(Request $request) : ResponseInterface {
         $this->params['system'] = $request->params['system'] ?? first(GameFactory::getSupportedSystems());
+        assert($this->params['system'] !== null);
         $this->params['modes'] = GameModeFactory::getAll(['system' => $this->params['system'], 'all' => true]);
         return $this->view('pages/settings/modes');
     }
@@ -59,7 +60,7 @@ class Modes extends Controller
     public function modeVariations(Request $request) : ResponseInterface {
         $id = $this->getRequestId($request);
         if ($id instanceof ErrorResponse) {
-            $this->respond($id, 400);
+            return $this->respond($id, 400);
         }
 
         try {
@@ -110,7 +111,7 @@ class Modes extends Controller
     public function modeSettings(Request $request) : ResponseInterface {
         $id = $this->getRequestId($request);
         if ($id instanceof ErrorResponse) {
-            $this->respond($id, 400);
+            return $this->respond($id, 400);
         }
 
         try {
@@ -134,7 +135,7 @@ class Modes extends Controller
     public function modeNames(Request $request) : ResponseInterface {
         $id = $this->getRequestId($request);
         if ($id instanceof ErrorResponse) {
-            $this->respond($id, 400);
+            return $this->respond($id, 400);
         }
 
         try {
@@ -146,6 +147,7 @@ class Modes extends Controller
             return $this->respond(['error' => 'Game mode not found', 'exception' => $e->getMessage()], 404);
         }
 
+        /** @var string[] $names */
         $names = DB::select('[game_modes-names]', 'sysName')->where('id_mode = %i', $id)->fetchPairs(cache: false);
         return $this->respond($names);
     }
@@ -198,6 +200,7 @@ class Modes extends Controller
      * @throws ValidationException
      */
     public function createVariation(Request $request) : ResponseInterface {
+        /** @var string $name */
         $name = $request->getPost('name', '');
         if (empty($name)) {
             return $this->respond(['error' => lang('Název nesmí být prázdný', context: 'errors')], 400);
@@ -229,8 +232,10 @@ class Modes extends Controller
      */
     public function save(Request $request) : ResponseInterface {
         $modes = [];
-        foreach ($request->getPost('mode', []) as $id => $values) {
-            bdump($values);
+
+        /** @var array<int, array{name?:string,type?:string,load?:string,description?:string,settings:array<string,mixed>,public?:string,active?:string,teams?:string[]}> $post */
+        $post = $request->getPost('mode', []);
+        foreach ($post as $id => $values) {
             try {
                 $mode = GameModeFactory::getById($id);
                 if (!isset($mode)) {
@@ -247,10 +252,8 @@ class Modes extends Controller
                     $mode->type = GameModeType::tryFrom($values['type']) ?? $mode->type;
                 }
             }
-            else {
-                if (isset($values['name'])) {
-                    $mode->alias = $values['name'] === $mode->name ? '' : $values['name'];
-                }
+            elseif (isset($values['name'])) {
+                $mode->alias = $values['name'] === $mode->name ? '' : $values['name'];
             }
             if (isset($values['load'])) {
                 $mode->loadName = $values['load'];
@@ -320,7 +323,7 @@ class Modes extends Controller
             return $this->saveResponse($request);
         }
 
-        /** @var array{name:string,values:array{value?:string,suffix?:string,order?:int}[]}[] $variations */
+        /** @var array{name:string,public?:string,values?:array{value?:string,suffix?:string,order?:int}[]}[] $variations */
         $variations = $request->getPost('variation', []);
 
         try {
@@ -383,7 +386,7 @@ class Modes extends Controller
     public function deleteGameMode(Request $request) : ResponseInterface {
         $id = $this->getRequestId($request);
         if ($id instanceof ErrorResponse) {
-            $this->respond($id, 400);
+            return $this->respond($id, 400);
         }
 
         try {

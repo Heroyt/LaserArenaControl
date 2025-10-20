@@ -14,6 +14,7 @@ use Lsr\Orm\Attributes\Hooks\AfterInsert;
 use Lsr\Orm\Attributes\Hooks\AfterUpdate;
 use Lsr\Orm\Attributes\PrimaryKey;
 use Lsr\Orm\Attributes\Relations\OneToMany;
+use Lsr\Orm\Interfaces\LoadedModel;
 use Lsr\Orm\ModelCollection;
 use Nette\Utils\Strings;
 use OpenApi\Attributes as OA;
@@ -212,7 +213,7 @@ class GateType extends BaseModel
     }
 
     /**
-     * @return ModelCollection<GateScreenModel>
+     * @return ModelCollection<GateScreenModel&LoadedModel>
      */
     protected function loadScreens() : ModelCollection {
         if (!isset($this->id)) {

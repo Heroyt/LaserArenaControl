@@ -48,10 +48,12 @@ class Players extends Controller
     }
 
     public function find(Request $request) : ResponseInterface {
+        /** @var string $search */
+        $search = $request->getGet('search', '');
         return $this->respond(
           array_values(
             $this->playerProvider->findPlayersLocal(
-              (string) $request->getGet('search', ''),
+              $search,
               empty($request->getGet('nomail', ''))
             )
           )
@@ -59,10 +61,10 @@ class Players extends Controller
     }
 
     public function findPublic(Request $request) : ResponseInterface {
+        /** @var string $search */
+        $search = $request->getGet('search', '');
         return $this->respond(
-          $this->playerProvider->findPlayersPublic(
-            (string) $request->getGet('search', '')
-          )
+          $this->playerProvider->findPlayersPublic($search) ?? []
         );
     }
 

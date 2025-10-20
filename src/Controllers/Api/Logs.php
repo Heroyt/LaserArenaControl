@@ -27,11 +27,13 @@ class Logs extends ApiController
             $logger = null;
         }
 
+        /** @var string $logFile */
         $logFile = $request->getGet('log', '');
         if (empty($logFile)) {
             return $this->respond('Missing required argument "log".', 400);
         }
         if (!file_exists(LOG_DIR.$logFile.'.log')) {
+            /** @var string $date */
             $date = $request->getGet('date', date('Y-m-d'));
             $logFile .= '-'.$date.'.log';
             if (!file_exists(LOG_DIR.$logFile) || !is_readable(LOG_DIR.$logFile)) {
@@ -59,11 +61,7 @@ class Logs extends ApiController
     }
 
     /**
-     * @param  Request  $request
-     *
-     * @return void
      * @throws ArchiveCreationException
-     * @throws JsonException
      */
     public function download(Request $request) : ResponseInterface {
         try {
@@ -73,7 +71,9 @@ class Logs extends ApiController
             $logger = null;
         }
 
+        /** @var string $logFile */
         $logFile = $request->getGet('log', '');
+        /** @var string $date */
         $date = $request->getGet('date', date('Y-m-d'));
         if (!empty($logFile)) {
             $logFile .= '-'.$date.'.log';

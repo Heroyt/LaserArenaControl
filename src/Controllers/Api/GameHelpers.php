@@ -36,7 +36,9 @@ class GameHelpers extends ApiController
 
     public function getLoadedGameInfo(Request $request) : ResponseInterface {
         // Allow for filtering games just from one system
+        /** @var string $system */
         $system = $request->getGet('system', 'all');
+        /** @var string[] $systems */
         $systems = [$system];
 
         // Fallback to all available systems
@@ -46,7 +48,6 @@ class GameHelpers extends ApiController
 
         $now = time();
 
-        /** @var Game|null $game */
         $game = null;
         $allGames = [];
 
@@ -55,23 +56,20 @@ class GameHelpers extends ApiController
 
         // Try to find the last loaded or started games in selected systems
         foreach ($systems as $system) {
-            /** @var Game|null $started */
             $started = Info::get($system.'-game-started');
             $allGames['started'] = $started;
-            if (isset($started) && ($now - $started->start?->getTimestamp()) <= $gameStartedTime) {
+            if ($started instanceof Game && ($now - $started->start?->getTimestamp()) <= $gameStartedTime) {
                 if (isset($this->game) && $this->game->fileTime > $started->fileTime) {
                     continue;
                 }
                 $started->end = null;
-                $started->finished = false;
                 $game = $started;
                 continue;
             }
 
-            /** @var Game|null $loaded */
             $loaded = Info::get($system.'-game-loaded');
             $allGames['loaded'] = $loaded;
-            if (isset($loaded) && ($now - $loaded->fileTime?->getTimestamp()) <= $gameLoadedTime) {
+            if ($loaded instanceof Game && ($now - $loaded->fileTime?->getTimestamp()) <= $gameLoadedTime) {
                 if (isset($this->game) && $this->game->fileTime > $loaded->fileTime) {
                     continue;
                 }
@@ -89,8 +87,8 @@ class GameHelpers extends ApiController
         return $this->respond(
           [
             'currentServerTime' => time(),
-            'started'           => $game->started,
-            'finished'          => $game->finished,
+            'started'  => $game->isStarted(),
+            'finished' => $game->isFinished(),
             'loadTime'          => $game->fileTime?->getTimestamp(),
             'startTime'         => $game->start?->getTimestamp(),
             'gameLength'        => !isset($game->timing) ? 0 : ($game->timing->gameLength * 60),
@@ -106,10 +104,9 @@ class GameHelpers extends ApiController
      * @return ResponseInterface
      */
     public function getGateGameInfo() : ResponseInterface {
-        /** @var Game|null $game */
         $game = Info::get('gate-game');
 
-        if (!isset($game)) {
+        if (!($game instanceof Game)) {
             return $this->respond(new ErrorResponse('No game found', ErrorType::NOT_FOUND), 404);
         }
 
@@ -117,8 +114,8 @@ class GameHelpers extends ApiController
           [
             'currentServerTime' => time(),
             'gateTime'          => Info::get('gate-time'),
-            'started'           => $game->started,
-            'finished'          => $game->finished,
+            'started'  => $game->isStarted(),
+            'finished' => $game->isFinished(),
             'loadTime'          => $game->fileTime?->getTimestamp(),
             'startTime'         => $game->start?->getTimestamp(),
             'gameLength'        => !isset($game->timing) ? 0 : ($game->timing->gameLength * 60),
@@ -177,7 +174,11 @@ class GameHelpers extends ApiController
         if (!$response->success) {
             $errorType = $response->exception !== null ? ErrorType::INTERNAL : ErrorType::VALIDATION;
             $this->respond(
-              new ErrorResponse($response->message, $errorType, exception: $response->exception),
+              new ErrorResponse(
+                           $response->message ?? 'error',
+                           $errorType,
+                exception: $response->exception
+              ),
               $errorType === ErrorType::INTERNAL ? 500 : 400
             );
         }

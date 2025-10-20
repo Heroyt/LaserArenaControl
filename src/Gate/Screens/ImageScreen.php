@@ -64,6 +64,10 @@ class ImageScreen extends GateScreen implements WithSettings, ReloadTimerInterfa
                 $dir = UPLOAD_DIR;
             }
             $name = $uploadedImage['image']->getClientFilename();
+            if (empty($name)) {
+                bdump('Uploaded file has no name.');
+                return new ImageSettings(null, $type, $animation, $time > 0 ? $time : null,);
+            }
             $extension = strtolower(pathinfo($name, PATHINFO_EXTENSION));
 
             // Validate image

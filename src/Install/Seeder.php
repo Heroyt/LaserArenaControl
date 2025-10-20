@@ -39,6 +39,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class Seeder implements InstallInterface
 {
     use InstallPrints;
+
     public const array GAME_MODES = [
       [
         'id_mode'              => 1,
@@ -768,8 +769,6 @@ class Seeder implements InstallInterface
       ],
     ];
 
-    public const array VESTS = [];
-
     /**
      * @inheritDoc
      */
@@ -819,14 +818,6 @@ class Seeder implements InstallInterface
                     'translations' => igbinary_serialize($tip['translations']),
                   ]
                 );
-            }
-
-            // Vests
-            if ($fresh) {
-                DB::delete(Vest::TABLE, ['1=1']);
-            }
-            foreach (self::VESTS as $row) {
-                DB::insertIgnore(Vest::TABLE, $row);
             }
 
             // Info

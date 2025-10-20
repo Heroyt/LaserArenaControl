@@ -23,7 +23,7 @@ class Events extends ApiController
         }
         /** @var string|array<string,string>|null $message */
         $message = $request->getPost('message');
-        if (!$this->eventService->trigger($type, $message ?? time())) {
+        if (!$this->eventService->trigger($type, $message ?? ((string) time()))) {
             return $this->respond(new ErrorResponse('Failed setting an event'), 500);
         }
         return $this->respond(new SuccessResponse('Event successfully triggered.'));

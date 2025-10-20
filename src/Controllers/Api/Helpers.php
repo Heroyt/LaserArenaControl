@@ -15,9 +15,11 @@ class Helpers extends ApiController
 
 
     public function translate(Request $request) : ResponseInterface {
+        $string = $request->getGet('string');
+        assert(is_string($string), 'string parameter is required and must be a string');
         return $this->respond(
           $this->translations->translate(
-                     (string) $request->getGet('string'),
+                     $string,
             plural : $request->getGet('plural'),
             num    : (int) ($request->getGet('count', 1)),
             context: $request->getGet('context', null),

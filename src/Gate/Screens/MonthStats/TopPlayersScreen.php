@@ -100,19 +100,40 @@ class TopPlayersScreen extends GateScreen
           'gate.month.'.$this->today->format('Ym').'.topPlayers',
           function () {
               // Get today's best players
-              /** @var Player|null $topScore */
+              /**
+               * @var Player|null $topScore
+               * @phpstan-ignore missingType.generics
+               */
               $topScore = null;
-              /** @var Player|null $topSkill */
+              /**
+               * @var Player|null $topSkill
+               * @phpstan-ignore missingType.generics
+               */
               $topSkill = null;
-              /** @var Player|null $topHits */
+              /**
+               * @var Player|null $topHits
+               * @phpstan-ignore missingType.generics
+               */
               $topHits = null;
-              /** @var Player|null $topDeaths */
+              /**
+               * @var Player|null $topDeaths
+               * @phpstan-ignore missingType.generics
+               */
               $topDeaths = null;
-              /** @var Player|null $topAccuracy */
+              /**
+               * @var Player|null $topAccuracy
+               * @phpstan-ignore missingType.generics
+               */
               $topAccuracy = null;
-              /** @var Player|null $topShots */
+              /**
+               * @var Player|null $topShots
+               * @phpstan-ignore missingType.generics
+               */
               $topShots = null;
-              /** @var Player|null $topHitsOwn */
+              /**
+               * @var Player|null $topHitsOwn
+               * @phpstan-ignore missingType.generics
+               */
               $topHitsOwn = null;
 
               if ($this->getGameCount() > 0) {
@@ -120,7 +141,7 @@ class TopPlayersScreen extends GateScreen
                   $topSkill = $this->getTopPlayer('skill');
                   $topHits = $this->getTopPlayer('hits');
                   $topDeaths = $this->getTopPlayer('deaths');
-                  $topAccuracy = $this->getTopPlayer('accuracy');
+                  $topAccuracy = $this->getTopPlayer('accuracy', conditions: [['[shots] >= 50']]);
                   $topShots = $this->getTopPlayer('shots');
                   $topHitsOwn = $this->getTopPlayer('hits_own', type: GameModeType::TEAM);
               }
@@ -138,6 +159,7 @@ class TopPlayersScreen extends GateScreen
                 'hitsOwn'   => [$topHitsOwn?->name, $topHitsOwn?->user?->getCode(), $topHitsOwn?->hitsOwn],
               ];
 
+              assert($this->today !== null);
               return [
                 [
                   'topScore'    => $topScore,
@@ -153,13 +175,13 @@ class TopPlayersScreen extends GateScreen
               ];
           },
           [
-            $this->cache::Tags   => [
+            'tags'   => [
               'gate',
               'gate.widgets',
               'gate.widgets.topPlayers',
               'games/'.$this->today->format('Y-m'),
             ],
-            $this->cache::Expire => '1 days',
+            'expire' => '1 days',
           ]
         );
 
@@ -201,8 +223,9 @@ class TopPlayersScreen extends GateScreen
         if (isset($this->gameIds)) {
             return $this->gameIds;
         }
-        $monthStart = new DateTimeImmutable($this->today?->format('Y-m-01'));
-        $monthEnd = new DateTimeImmutable($this->today?->format('Y-m-t'));
+        $this->today ??= new DateTimeImmutable();
+        $monthStart = new DateTimeImmutable($this->today->format('Y-m-01'));
+        $monthEnd = new DateTimeImmutable($this->today->format('Y-m-t'));
 
         $query = GameFactory::queryGames(true, fields: ['id_mode'])->where(
           'DATE(start) BETWEEN %d AND %d',
@@ -230,10 +253,17 @@ class TopPlayersScreen extends GateScreen
      * @param  string  $field
      * @param  bool  $desc
      * @param  GameModeType|null  $type
+     * @param  array{0:string,1?:mixed,2?:mixed,3?:mixed}[]  $conditions
      * @return Player|null
      * @throws Throwable
+     * @phpstan-ignore missingType.generics
      */
-    private function getTopPlayer(string $field, bool $desc = true, ?GameModeType $type = null) : Player | null {
+    private function getTopPlayer(
+      string        $field,
+      bool          $desc = true,
+      ?GameModeType $type = null,
+      array         $conditions = []
+    ) : Player | null {
         $gameIds = match ($type) {
             GameModeType::TEAM => $this->getGameIdsTeams(),
             GameModeType::SOLO => $this->getGameIdsSolo(),
@@ -244,7 +274,11 @@ class TopPlayersScreen extends GateScreen
             $q->desc();
         }
 
-        /** @var null|Row{id_player:int,system:string} $player */
+        if (!empty($conditions)) {
+            $q->where('%and', $conditions);
+        }
+
+        /** @var null|object{id_player:int,system:string} $player */
         $player = $q->fetch(cache: false);
 
         if (isset($player)) {
@@ -261,11 +295,12 @@ class TopPlayersScreen extends GateScreen
      * @throws Exception
      */
     private function getGameIdsTeams() : array {
-        if (isset($this->gameIdsTeams)) {
-            return $this->gameIdsTeams;
+        if (isset($this->gameIdsTeam)) {
+            return $this->gameIdsTeam;
         }
-        $monthStart = new DateTimeImmutable($this->today?->format('Y-m-01'));
-        $monthEnd = new DateTimeImmutable($this->today?->format('Y-m-t'));
+        $this->today ??= new DateTimeImmutable();
+        $monthStart = new DateTimeImmutable($this->today->format('Y-m-01'));
+        $monthEnd = new DateTimeImmutable($this->today->format('Y-m-t'));
 
         $query = GameFactory::queryGames(true, fields: ['id_mode', 'game_type'])->where(
           'DATE(start) BETWEEN %d AND %d',
@@ -281,12 +316,12 @@ class TopPlayersScreen extends GateScreen
         /** @var array<string,Row[]> $games */
         $games = $query->fetchAssoc('system|id_game', cache: false);
 
-        $this->gameIdsTeams = [];
+        $this->gameIdsTeam = [];
         foreach ($games as $system => $g) {
             /** @var array<int, Row> $g */
-            $this->gameIdsTeams[$system] = array_keys($g);
+            $this->gameIdsTeam[$system] = array_keys($g);
         }
-        return $this->gameIdsTeams;
+        return $this->gameIdsTeam;
     }
 
     /**
@@ -297,8 +332,9 @@ class TopPlayersScreen extends GateScreen
         if (isset($this->gameIdsSolo)) {
             return $this->gameIdsSolo;
         }
-        $monthStart = new DateTimeImmutable($this->today?->format('Y-m-01'));
-        $monthEnd = new DateTimeImmutable($this->today?->format('Y-m-t'));
+        $this->today ??= new DateTimeImmutable();
+        $monthStart = new DateTimeImmutable($this->today->format('Y-m-01'));
+        $monthEnd = new DateTimeImmutable($this->today->format('Y-m-t'));
 
         $query = GameFactory::queryGames(true, fields: ['id_mode', 'game_type'])->where(
           'DATE(start) BETWEEN %d AND %d',

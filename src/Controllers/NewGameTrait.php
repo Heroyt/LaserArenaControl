@@ -74,22 +74,27 @@ trait NewGameTrait
         if ($systemId === null) {
             $this->params->system = System::getDefault();
         }
-        else if (is_numeric($systemId)) {
-            try {
-                $this->params->system = System::get((int) $systemId);
-            } catch (ModelNotFoundException) {
-                $this->params->system = System::getDefault();
-            }
-        }
         else {
-            $this->params->system = array_find(
-              $this->params->systems,
-              static fn(System $system) => $system->type->value === $systemId
-            );
+            if (is_numeric($systemId)) {
+                try {
+                    $this->params->system = System::get((int) $systemId);
+                } catch (ModelNotFoundException) {
+                    $this->params->system = System::getDefault();
+                }
+            }
+            else {
+                $this->params->system = array_find(
+                  $this->params->systems,
+                  static fn(System $system) => $system->type->value === $systemId
+                );
+            }
         }
 
         if ($this->params->system === null) {
             $this->params->system = first($this->params->systems);
+        }
+        if ($this->params->system === null) {
+            throw new \RuntimeException('No active systems found');
         }
         $this->session->set('active_lg_system', $this->params->system->id);
 

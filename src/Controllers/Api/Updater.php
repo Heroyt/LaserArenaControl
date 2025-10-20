@@ -222,23 +222,21 @@ class Updater extends ApiController
             $logger = null;
         }
 
-        if ($request->getGet('npmOnly', false) === false) {
+        if (((bool) $request->getGet('npmOnly', 0)) === false) {
             /** @var string|false $out */
             $out = exec('npm run build 2>&1', $output, $returnCode);
         }
+        elseif (((bool) $request->getGet('composerOnly', 0)) === false) {
+            /** @var string|false $out */
+            $out = exec(
+              'COMPOSER_HOME=$(pwd) composer update 2>&1 && COMPOSER_HOME=$(pwd) composer dump-autoload 2>&1',
+              $output,
+              $returnCode
+            );
+        }
         else {
-            if ($request->getGet('composerOnly', false) === false) {
-                /** @var string|false $out */
-                $out = exec(
-                  'COMPOSER_HOME=$(pwd) composer update 2>&1 && COMPOSER_HOME=$(pwd) composer dump-autoload 2>&1',
-                  $output,
-                  $returnCode
-                );
-            }
-            else {
-                /** @var string|false $out */
-                $out = exec('COMPOSER_HOME=$(pwd) composer build 2>&1', $output, $returnCode);
-            }
+            /** @var string|false $out */
+            $out = exec('COMPOSER_HOME=$(pwd) composer build 2>&1', $output, $returnCode);
         }
 
         if ($out === false || $returnCode !== 0) {

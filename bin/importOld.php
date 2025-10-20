@@ -1,8 +1,8 @@
 <?php
 
-use App\GameModels\Game\Evo5\Game;
-use App\GameModels\Game\Evo5\Player;
-use App\GameModels\Game\Evo5\Team;
+use App\GameModels\Game\Lasermaxx\Evo5\Game;
+use App\GameModels\Game\Lasermaxx\Evo5\Player;
+use App\GameModels\Game\Lasermaxx\Evo5\Team;
 use Dibi\Connection;
 use Lsr\Lg\Results\Enums\GameModeType;
 

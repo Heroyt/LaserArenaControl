@@ -62,6 +62,10 @@ class E500 extends Controller implements HttpErrorHandler
                         ->withStatus(500);
         }
 
-        return $this->respond('Internal error - '.$error->getMessage(), 500, ['Content-Type' => 'text/plain']);
+        return $this->respond(
+          'Internal error - '.($error?->getMessage() ?? 'unknown error'),
+          500,
+          ['Content-Type' => 'text/plain']
+        );
     }
 }

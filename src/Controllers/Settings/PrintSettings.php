@@ -82,15 +82,12 @@ class PrintSettings extends Controller
 
                 /** @var array<int,array{background?:UploadedFile,background-landscape?:UploadedFile}> $files */
                 $files = $request->getUploadedFiles()['styles'] ?? [];
-                if (!is_array($files)) {
-                    $files = [];
-                }
-                /**
-                 * @var array{name:string,primary:string,dark:string,light:string,original-background?:string,original-background-landscape?:string} $info
-                 */
-                foreach ($request->getPost('styles', []) as $key => $info) {
+
+                /** @var array<numeric,array{name:string,primary:string,dark:string,light:string,original-background?:string,original-background-landscape?:string}> $post */
+                $post = $request->getPost('styles', []);
+                foreach ($post as $key => $info) {
                     $style = new PrintStyle();
-                    $style->id = $key;
+                    $style->id = (int) $key;
                     $style->name = $info['name'];
                     $style->colorPrimary = $info['primary'];
                     $style->colorDark = $info['dark'];
@@ -114,10 +111,9 @@ class PrintSettings extends Controller
                     $style->insert();
                 }
 
-                /**
-                 * @var array{style:int,dates:string} $info
-                 */
-                foreach ($request->getPost('dateRange', []) as $info) {
+                /** @var array<int, array{style:int,dates:string}> $post */
+                $post = $request->getPost('dateRange', []);
+                foreach ($post as $info) {
                     preg_match_all('/(\d{2}\.\d{2}\.\d{4})/', $info['dates'], $matches);
                     $dateFrom = new DateTimeImmutable($matches[0][1] ?? '');
                     $dateTo = new DateTimeImmutable($matches[1][1] ?? '');
@@ -177,7 +173,12 @@ class PrintSettings extends Controller
       PrintStyle   $style,
       bool         $landscape = false
     ) : void {
-        $name = basename($file->getClientFilename());
+        $clientFilename = $file->getClientFilename();
+        if (empty($clientFilename)) {
+            $request->passErrors[] = lang('Nelze nahrát soubor bez názvu.', context: 'errors');
+            return;
+        }
+        $name = basename($clientFilename);
         // Handle form errors
         if ($file->getError() !== UPLOAD_ERR_OK) {
             $request->passErrors[] = match ($file->getError()) {

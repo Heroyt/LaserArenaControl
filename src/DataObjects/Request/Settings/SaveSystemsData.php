@@ -1,11 +1,11 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\DataObjects\Request\Settings;
 
 class SaveSystemsData
 {
-
     /** @var SystemData[] */
     public array $systems = [];
 
@@ -33,5 +33,4 @@ class SaveSystemsData
     public function getSystems() : array {
         return $this->systems;
     }
-
 }

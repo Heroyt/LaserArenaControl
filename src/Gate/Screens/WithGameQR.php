@@ -7,6 +7,7 @@ use App\GameModels\Game\Game;
 use Endroid\QrCode\Builder\Builder;
 use Endroid\QrCode\Encoding\Encoding;
 use Endroid\QrCode\ErrorCorrectionLevel;
+use Endroid\QrCode\Exception\ValidationException;
 use Endroid\QrCode\Writer\SvgWriter;
 
 trait WithGameQR
@@ -14,12 +15,14 @@ trait WithGameQR
     /**
      * Get SVG QR code for game
      *
-     * @param  Game  $game
+     * @template G of Game
+     * @param  G  $game
      *
-     * @return string
+     * @return non-empty-string
+     * @throws ValidationException
      */
     protected function getQR(Game $game) : string {
-        return new Builder(
+        $return = new Builder(
           writer              : new SvgWriter(),
           data                : $this->getPublicUrl($game),
           encoding            : new Encoding('UTF-8'),
@@ -27,8 +30,15 @@ trait WithGameQR
         )
           ->build()
           ->getString();
+        assert(!empty($return));
+        return $return;
     }
 
+    /**
+     * @template G of Game
+     * @param  G  $game
+     * @return non-empty-string
+     */
     protected function getPublicUrl(Game $game) : string {
         /** @var string $url */
         $url = Info::get('liga_api_url');

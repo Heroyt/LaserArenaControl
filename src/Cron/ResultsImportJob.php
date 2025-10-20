@@ -35,7 +35,7 @@ final readonly class ResultsImportJob implements Job
         $lock->refresh(30.0);
         foreach (System::getActive(false) as $system) {
             $resultsDir = $system->resultsDir;
-            if (!file_exists($resultsDir)) {
+            if (empty($resultsDir) || !file_exists($resultsDir)) {
                 continue;
             }
 

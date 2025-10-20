@@ -4,6 +4,7 @@ namespace App\Services\GameHighlight\Checkers;
 
 use App\GameModels\Game\Game;
 use App\GameModels\Game\Player;
+use App\GameModels\Game\Team;
 use App\Helpers\Gender;
 use App\Models\DataObjects\Highlights\GameHighlight;
 use App\Models\DataObjects\Highlights\GameHighlightType;
@@ -19,14 +20,19 @@ class HitsHighlightChecker implements GameHighlightChecker, PlayerHighlightCheck
 {
     /**
      * @inheritDoc
+     *
+     * @template T of Team
+     * @template P of Player
+     * @template G of Game<T,P>
+     * @param  G  $game
      */
     public function checkGame(Game $game, HighlightCollection $highlights) : void {
         $pairs = [];
         $maxHitsOwn = 0;
-        /** @var Player[] $maxHitsOwnPlayers */
+        /** @var P[] $maxHitsOwnPlayers */
         $maxHitsOwnPlayers = [];
         $maxDeathsOwn = 0;
-        /** @var Player[] $maxDeathsOwnPlayers */
+        /** @var P[] $maxDeathsOwnPlayers */
         $maxDeathsOwnPlayers = [];
         foreach ($game->players->getAll() as $player) {
             if (
@@ -183,6 +189,14 @@ class HitsHighlightChecker implements GameHighlightChecker, PlayerHighlightCheck
         }
     }
 
+    /**
+     *
+     * @template T of Team
+     * @template G of Game
+     * @template P of Player<G, T>
+     *
+     * @param  P  $player
+     */
     public function checkPlayer(Player $player, HighlightCollection $highlights) : void {
         $name1 = $player->name;
         $gender1 = GenderService::rankWord($name1);
@@ -238,7 +252,6 @@ class HitsHighlightChecker implements GameHighlightChecker, PlayerHighlightCheck
                           ),
                           '@'.$name1.'@',
                           '@'.$name2.'@<'.NameInflectionService::accusative($name2).'>',
-                          /** @phpstan-ignore argument.type */
                           $player->getHitsPlayer($player->favouriteTarget),
                         ),
                         GameHighlight::VERY_HIGH_RARITY + 20

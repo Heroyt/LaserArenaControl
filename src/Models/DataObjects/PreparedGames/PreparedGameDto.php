@@ -5,10 +5,11 @@ namespace App\Models\DataObjects\PreparedGames;
 use App\Models\DataObjects\NewGame\GameLoadData;
 use App\Models\System;
 use DateTimeInterface;
+use JsonSerializable;
 use OpenApi\Attributes as OA;
 
 #[OA\Schema]
-class PreparedGameDto implements \JsonSerializable
+class PreparedGameDto implements JsonSerializable
 {
     #[OA\Property]
     public ?System $system {

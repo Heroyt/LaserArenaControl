@@ -17,7 +17,9 @@ class Color
     /**
      * Get CSS definition for team colors used in games
      *
-     * @param  Game[]  $games
+     * @template G of Game
+     *
+     * @param  G[]  $games
      *
      * @return string
      */

@@ -82,7 +82,10 @@
             </div>
 
             <div n:ifset="$topAccuracy" class="top-accuracy top-player">
-                <div class="label">{_'Nejlepší přesnost', domain: 'gate', context: 'topPlayers'}</div>
+				<div class="label">
+					{_'Nejlepší přesnost', domain: 'gate', context: 'topPlayers'}
+					<div class="text-muted">{_'Alespoň %d výstřel', 'Alespoň %d výstřelů', 50, domain: 'gate', context: 'topPlayers', format: [50]}</div>
+				</div>
                 <div class="player">
                     {include topPlayer, $topAccuracy}
                 </div>

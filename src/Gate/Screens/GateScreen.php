@@ -5,6 +5,7 @@ namespace App\Gate\Screens;
 use App\GameModels\Game\Game;
 use App\Gate\Logic\CustomEventDto;
 use App\Gate\Logic\ScreenTriggerType;
+use Lsr\Core\Controllers\TemplateParameters;
 use Lsr\Core\Requests\Response;
 use Lsr\Core\Templating\Latte;
 use Lsr\Exceptions\TemplateDoesNotExistException;
@@ -18,10 +19,11 @@ abstract class GateScreen
     /** @var string[] */
     protected array $systems = [];
 
+    /** @phpstan-ignore missingType.generics */
     protected ?Game $game = null;
 
-    /** @var array<string,mixed> */
-    protected array $params = [];
+    /** @var array<string,mixed>|TemplateParameters */
+    protected array | TemplateParameters $params = [];
 
     protected int $reloadTime = -1;
 
@@ -93,20 +95,29 @@ abstract class GateScreen
         return $this;
     }
 
+    /**
+     * @return Game|null
+     * @phpstan-ignore missingType.generics
+     */
     public function getGame() : ?Game {
         return $this->game;
     }
 
+    /**
+     * @template G of Game
+     * @param  G|null  $game
+     * @return $this
+     */
     public function setGame(?Game $game) : GateScreen {
         $this->game = $game;
         return $this;
     }
 
     /**
-     * @param  array<string,mixed>  $params
+     * @param  array<string,mixed>|TemplateParameters  $params
      * @return $this
      */
-    public function setParams(array $params) : GateScreen {
+    public function setParams(array | TemplateParameters $params) : GateScreen {
         $this->params = $params;
         return $this;
     }
@@ -128,19 +139,24 @@ abstract class GateScreen
             $this->setReloadTime($this->getReloadTimer() ?? -1);
         }
 
+        // Merge parameters
+        $this->params['addJs'] = isset($this->params['addJs']) ?
+          array_merge($this->params['addJs'], ['gate/defaultScreen.js']) : ['gate/defaultScreen.js'];
+        $this->params['reloadTimer'] = $this->reloadTime;
+        foreach ($params as $key => $value) {
+            if (isset($this->params[$key]) && is_array($this->params[$key]) && is_array($value)) {
+                $this->params[$key] = array_merge($this->params[$key], $value);
+                continue;
+            }
+            $this->params[$key] = $value;
+        }
+
         $response = $this
           ->respond(
             $this->latte
               ->viewToString(
                 $template,
-                array_merge(
-                  $this->params,
-                  [
-                    'addJs'       => ['gate/defaultScreen.js'],
-                    'reloadTimer' => $this->reloadTime,
-                  ],
-                  $params
-                )
+                $this->params
               )
           )
           ->withHeader('Content-Type', 'text/html')
@@ -162,8 +178,8 @@ abstract class GateScreen
         return $response;
     }
 
-    public function setReloadTime(int $reloadTime) : GateScreen {
-        $this->reloadTime = $reloadTime;
+    public function setReloadTime(?int $reloadTime) : GateScreen {
+        $this->reloadTime = $reloadTime ?? -1;
         return $this;
     }
 

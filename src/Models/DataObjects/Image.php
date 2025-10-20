@@ -8,7 +8,6 @@ use Lsr\Exceptions\FileException;
 
 class Image
 {
-
     public readonly string $image;
     private string $name;
     private string $path;
@@ -37,7 +36,6 @@ class Image
             return $optimized[$index];
         }
         $index = (string) $size;
-        /** @phpstan-ignore-next-line */
         return $optimized[$index] ?? $optimized['webp'] ?? $optimized['original'];
     }
 
@@ -133,6 +131,7 @@ class Image
                 }
             }
         }
+        assert($this->type !== null);
         return $this->type;
     }
 
@@ -173,7 +172,7 @@ class Image
     /**
      * @param  int<1,max>|null  $width
      * @param  int<1,max>|null  $height
-     * @return array{original?:string,webp?:string}
+     * @return array{original?:string,webp?:string|null}
      * @throws FileException
      */
     public function getResized(?int $width = null, ?int $height = null) : array {

@@ -72,6 +72,9 @@ class Cache extends Controller
                 }
             }
         }
+        else {
+            $files = [];
+        }
         return $this->respond(['status' => 'ok', 'deleted' => $deleted, 'total' => count($files)]);
     }
 
@@ -84,6 +87,9 @@ class Cache extends Controller
                     $deleted++;
                 }
             }
+        }
+        else {
+            $files = [];
         }
         return $this->respond(['status' => 'ok', 'deleted' => $deleted, 'total' => count($files)]);
     }
@@ -116,6 +122,9 @@ class Cache extends Controller
                     $deleted++;
                 }
             }
+        }
+        else {
+            $files = [];
         }
         return $this->respond(['status' => 'ok', 'deleted' => $deleted, 'total' => count($files)]);
     }

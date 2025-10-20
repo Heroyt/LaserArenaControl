@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Controllers\Settings;
@@ -21,7 +22,6 @@ use Psr\Http\Message\ResponseInterface;
 
 class SystemsSettings extends Controller
 {
-
     public function __construct(
       private readonly Mapper $mapper
     ) {}
@@ -31,27 +31,31 @@ class SystemsSettings extends Controller
 
         $this->params->systems = System::getAll();
         foreach ($this->params->systems as $system) {
-            $this->params->vests[$system->id] = [];
-            $this->params->vestsGrid[$system->id] = [];
-            $this->params->columnCounts[$system->id] = $system->columnCount;
-            $this->params->rowCounts[$system->id] = $system->rowCount;
+            /** @var int $systemId */
+            $systemId = $system->id;
+            $this->params->vests[$systemId] = [];
+            $this->params->vestsGrid[$systemId] = [];
+            $this->params->columnCounts[$systemId] = $system->columnCount;
+            $this->params->rowCounts[$systemId] = $system->rowCount;
         }
 
         foreach (Vest::getAll() as $vest) {
-            $this->params->vests[$vest->system->id][] = $vest;
+            /** @var int $systemId */
+            $systemId = $vest->system->id;
+            $this->params->vests[$systemId][] = $vest;
             $row = max($vest->gridRow, 1);
             $col = max($vest->gridCol, 1);
-            $this->params->vestsGrid[$vest->system->id][$row] ??= [];
+            $this->params->vestsGrid[$systemId][$row] ??= [];
 
             // If duplicate, find first available column
-            while (isset($this->params->vestsGrid[$vest->system->id][$row][$col])) {
+            while (isset($this->params->vestsGrid[$systemId][$row][$col])) {
                 $col++;
             }
 
-            $this->params->columnCounts[$vest->system->id] = max($this->params->columnCounts[$vest->system->id], $col);
-            $this->params->rowCounts[$vest->system->id] = max($this->params->rowCounts[$vest->system->id], $row);
+            $this->params->columnCounts[$systemId] = max($this->params->columnCounts[$systemId], $col);
+            $this->params->rowCounts[$systemId] = max($this->params->rowCounts[$systemId], $row);
 
-            $this->params->vestsGrid[$vest->system->id][$row][$col] = $vest;
+            $this->params->vestsGrid[$systemId][$row][$col] = $vest;
         }
 
         return $this->view('pages/settings/systems');
@@ -222,5 +226,4 @@ class SystemsSettings extends Controller
         }
         return $this->redirect('settings-systems');
     }
-
 }

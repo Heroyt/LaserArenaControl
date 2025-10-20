@@ -57,7 +57,6 @@ function getImageSrcSet(Image | string $image, bool $includeAllSizes = true): st
                 continue;
             }
             $index = (string) $size;
-            /** @phpstan-ignore isset.offset */
             if (isset($versions[$index])) {
                 $srcSet[] = $versions[$index] . ' ' . $size . 'w';
             }

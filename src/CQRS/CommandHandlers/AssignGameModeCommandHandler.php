@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\CQRS\CommandHandlers;
@@ -19,7 +20,6 @@ use Throwable;
 
 final readonly class AssignGameModeCommandHandler implements CommandHandlerInterface
 {
-
     public function __construct(
       private CommandBus $commandBus,
     ) {}
@@ -28,8 +28,6 @@ final readonly class AssignGameModeCommandHandler implements CommandHandlerInter
      * @param  AssignGameModeCommand  $command
      */
     public function handle(CommandInterface $command) : AssignGameModeCommandResponse {
-        assert($command instanceof AssignGameModeCommand);
-
         // Refresh game
         $game = $command->game;
         try {
@@ -42,10 +40,12 @@ final readonly class AssignGameModeCommandHandler implements CommandHandlerInter
 
         if ($command->mode !== null) {
             // Validate game mode system
-            if (!array_any(
-              $command->mode->allowedSystems,
-              fn(System $system) => $system->type->value === $game::SYSTEM
-            )) {
+            if (
+              !array_any(
+                $command->mode->allowedSystems,
+                fn(System $system) => $system->type->value === $game::SYSTEM
+              )
+            ) {
                 return new AssignGameModeCommandResponse(
                   false,
                   'Given game mode does not support the game\'s system ('.$game::SYSTEM.')'
@@ -53,7 +53,7 @@ final readonly class AssignGameModeCommandHandler implements CommandHandlerInter
             }
 
             // Check if game type is changing (only TEAM → SOLO is allowed)
-            if ($previousGameType !== $command->mode->gameType) {
+            if ($previousGameType !== $command->mode->type) {
                 if ($previousGameType === GameModeType::SOLO) {
                     return new AssignGameModeCommandResponse(false, 'Cannot change game type from solo to team');
                 }
@@ -63,7 +63,7 @@ final readonly class AssignGameModeCommandHandler implements CommandHandlerInter
                     return new AssignGameModeCommandResponse(false, 'Cannot find any team in the game');
                 }
 
-                $game->gameType = $command->mode->gameType;
+                $game->gameType = $command->mode->type;
 
                 // Assign all players to one team
                 foreach ($game->players as $player) {

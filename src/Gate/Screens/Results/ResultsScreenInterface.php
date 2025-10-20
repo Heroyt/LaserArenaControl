@@ -12,9 +12,12 @@ use App\Gate\Settings\ResultsSettings;
  */
 interface ResultsScreenInterface extends WithSettings
 {
-
     public function isActive() : bool;
 
+    /**
+     * @template G of Game
+     * @param  G|null  $game
+     * @return GateScreen
+     */
     public function setGame(?Game $game) : GateScreen;
-    
 }

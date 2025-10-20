@@ -14,6 +14,10 @@ class GamesListTemplate extends TemplateParameters
     use AutoFillParameters;
 
     public DateTimeInterface $date;
-    /** @var Game[] */
+
+    /**
+     * @var Game[]
+     * @phpstan-ignore missingType.generics
+     */
     public array $games;
 }

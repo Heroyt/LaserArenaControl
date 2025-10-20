@@ -12,6 +12,7 @@ class Highlights implements WidgetInterface
 {
     /**
      * @var HighlightDto[]
+     * @phpstan-ignore missingType.generics
      */
     private ?array $highlights = null;
 
@@ -30,6 +31,7 @@ class Highlights implements WidgetInterface
     /**
      * @param  DateTimeInterface  $date
      * @return HighlightDto[]
+     * @phpstan-ignore missingType.generics
      */
     private function getHighlights(DateTimeInterface $date) : array {
         if (!isset($this->highlights)) {

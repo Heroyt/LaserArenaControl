@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Cli\Commands\Games;
@@ -7,6 +8,7 @@ use App\CQRS\Queries\GameModes\FindModeByNameQuery;
 use App\DataObjects\Db\Games\MinimalGameRow;
 use App\GameModels\Factory\GameFactory;
 use App\GameModels\Factory\GameModeFactory;
+use App\Models\SystemType;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -47,19 +49,28 @@ class AssignGameModesCommand extends Command
             if (!isset($game)) {
                 continue;
             }
+            /** @var value-of<SystemType> $gameSystem */
+            $gameSystem = $game::SYSTEM;
             $query = new FindModeByNameQuery()
               ->consoleName($game->modeName)
               ->type($game->gameType)
-              ->systems($game::SYSTEM);
+              ->systems($gameSystem);
             $mode = $query->get();
-            $game->mode = GameModeFactory::find($game->modeName, $game->gameType, $game::SYSTEM, $output);
+            $game->mode = GameModeFactory::find($game->modeName, $game->gameType, $gameSystem);
             $output->writeln(
               'Game: '
               .$game->code.' '
-              .$game::SYSTEM.' '
+              .$gameSystem.' '
               .str_pad($game->modeName, 16).' ('.$game->gameType->value.') '
               .str_pad($game->mode->name ?? 'unknown', 20).' '
-              .' DB: '.str_pad(($mode === null ? 'not found' : str_pad((string) $mode->id_mode, 2).' '.$mode->name), 22)
+              .' DB: '.str_pad(
+                (
+                $mode === null ?
+                  'not found'
+                  : str_pad((string) $mode->id_mode, 2).' '.$mode->name
+                ),
+                22,
+              )
               .' Class: '.str_pad((string) ($game->mode->id ?? 'NULL'), 4).' '
               .$game->mode::class
             );
@@ -75,5 +86,4 @@ class AssignGameModesCommand extends Command
         $output->writeln('<info>Done - '.$count.' games</info>');
         return self::SUCCESS;
     }
-
 }

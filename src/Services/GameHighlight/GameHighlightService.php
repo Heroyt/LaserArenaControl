@@ -26,7 +26,10 @@ class GameHighlightService
     public const  string TABLE = 'game_highlights';
     public const string PLAYER_REGEXP = '/@([^@]+)@(?:<([^@]+)>)?/';
 
-    /** @var Player[][] */
+    /**
+     * @var array<string,array<string,Player|null>>
+     * @phpstan-ignore missingType.generics
+     */
     private array $playerCache = [];
 
     /** @var GameHighlightChecker[] */
@@ -62,6 +65,7 @@ class GameHighlightService
     /**
      * @param  DateTimeInterface  $date
      * @return HighlightDto[]
+     * @phpstan-ignore missingType.generics
      */
     public function getHighlightsDataForDay(DateTimeInterface $date) : array {
         $highlights = [];
@@ -121,8 +125,9 @@ class GameHighlightService
      *
      * @template T of Team
      * @template P of Player
+     * @template G of Game<T,P>
      *
-     * @param  Game<T, P>  $game
+     * @param  G  $game
      * @param  bool  $cache
      *
      * @return HighlightCollection
@@ -151,7 +156,10 @@ class GameHighlightService
     }
 
     /**
-     * @param  Game  $game
+     * @template T of Team
+     * @template P of Player
+     * @template G of Game<T,P>
+     * @param  G  $game
      * @return non-empty-string[]
      */
     private function getCacheTags(Game $game) : array {
@@ -170,8 +178,9 @@ class GameHighlightService
     /**
      * @template T of Team
      * @template P of Player
+     * @template G of Game<T,P>
      *
-     * @param  Game<T,P>  $game
+     * @param  G  $game
      * @param  bool  $generate
      * @return HighlightCollection
      * @throws GuzzleException
@@ -204,7 +213,8 @@ class GameHighlightService
     /**
      * @template T of Team
      * @template P of Player
-     * @param  Game<T,P>  $game
+     * @template G of Game<T,P>
+     * @param  G  $game
      * @return HighlightCollection
      * @throws GuzzleException
      * @throws JsonException
@@ -232,6 +242,13 @@ class GameHighlightService
         return $collection;
     }
 
+    /**
+     * @template T of Team
+     * @template P of Player
+     * @template G of Game<T,P>
+     * @param  G  $game
+     * @return HighlightCollection
+     */
     private function generateHighlightsForGame(Game $game) : HighlightCollection {
         $highlights = new HighlightCollection();
 
@@ -255,12 +272,18 @@ class GameHighlightService
     }
 
     /**
+     * @template T of Team
+     * @template P of Player
+     * @template G of Game<T,P>
+     *
      * @param  HighlightCollection  $collection
-     * @param  Game  $game
+     * @param  G  $game
      * @return bool
      * @throws DriverException
+     * @throws JsonException
      */
     private function saveHighlightCollection(HighlightCollection $collection, Game $game) : bool {
+        assert($game->isFinished());
         try {
             DB::getConnection()->begin();
             foreach ($collection->getAll() as $highlight) {
@@ -301,8 +324,12 @@ class GameHighlightService
     /**
      * Get players from highlight
      *
+     * @template T of Team
+     * @template P of Player
+     * @template G of Game<T,P>
+     *
      * @param  GameHighlight  $highlight
-     * @param  Game  $game
+     * @param  G  $game
      *
      * @return array{name:string,label:string,user:string|null}[]
      */
@@ -319,17 +346,20 @@ class GameHighlightService
     }
 
     /**
-     * @param  string  $name
-     * @param  Game  $game
+     * @template T of Team
+     * @template P of Player
+     * @template G of Game<T,P>
      *
-     * @return Player|null
+     * @param  string  $name
+     * @param  G  $game
+     *
+     * @return P|null
      */
     private function getPlayerByName(string $name, Game $game) : ?Player {
-        if (isset($this->playerCache[$game->code][$name])) {
+        $this->playerCache[$game->code] ??= [];
+        if (array_key_exists($name, $this->playerCache[$game->code])) { // Might be null, which is valid.
+            /** @phpstan-ignore return.type */
             return $this->playerCache[$game->code][$name];
-        }
-        if (!isset($this->playerCache[$game->code])) {
-            $this->playerCache[$game->code] = [];
         }
         $this->playerCache[$game->code][$name] = $game->players->query()->filter('name', $name)->first();
         return $this->playerCache[$game->code][$name];
@@ -338,8 +368,9 @@ class GameHighlightService
     /**
      * @template T of Team
      * @template P of Player
+     * @template G of Game<T,P>
      *
-     * @param  Game<T,P>  $game
+     * @param  G  $game
      *
      * @return HighlightCollection
      */
@@ -363,14 +394,15 @@ class GameHighlightService
     /**
      * @template T of Team
      * @template P of Player
+     * @template G of Game<T,P>
      *
      * @param  string  $highlightDescription
-     * @param  Game<T,P>  $game
+     * @param  G  $game
      *
      * @return string
      */
     public function playerNamesToLinks(string $highlightDescription, Game $game) : string {
-        return preg_replace_callback(
+        $replaced = preg_replace_callback(
           $this::PLAYER_REGEXP,
           function (array $matches) use ($game) {
               $playerName = $matches[1];
@@ -388,5 +420,6 @@ class GameHighlightService
           },
           $highlightDescription
         );
+        return $replaced ?? $highlightDescription;
     }
 }

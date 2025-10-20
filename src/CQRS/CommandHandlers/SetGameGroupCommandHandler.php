@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\CQRS\CommandHandlers;
@@ -20,10 +21,9 @@ final readonly class SetGameGroupCommandHandler implements CommandHandlerInterfa
 
     /**
      * @param  SetGameGroupCommand  $command
+     * @return array{game: string, group: int|null}|false
      */
     public function handle(CommandInterface $command) : array | false {
-        assert($command instanceof SetGameGroupCommand);
-
         // Refresh game
         $game = $command->game;
         try {

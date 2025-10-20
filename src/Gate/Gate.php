@@ -53,14 +53,16 @@ class Gate
         if (isset($customEvent) && $customEvent->time > time()) {
             $activeGateType = ScreenTriggerType::CUSTOM;
         }
-        else if (isset($game)) {
-            $isManual = $game->getMeta()[$this::MANUAL_RESULTS_GAME_META] ?? false;
-            $activeGateType = match (true) {
-                $isManual => ScreenTriggerType::RESULTS_MANUAL,
-                $game->isFinished() => ScreenTriggerType::GAME_ENDED,
-                $game->isStarted()  => ScreenTriggerType::GAME_PLAYING,
-                default             => ScreenTriggerType::GAME_LOADED,
-            };
+        else {
+            if (isset($game)) {
+                $isManual = $game->getMeta()[$this::MANUAL_RESULTS_GAME_META] ?? false;
+                $activeGateType = match (true) {
+                    $isManual           => ScreenTriggerType::RESULTS_MANUAL,
+                    $game->isFinished() => ScreenTriggerType::GAME_ENDED,
+                    $game->isStarted()  => ScreenTriggerType::GAME_PLAYING,
+                    default             => ScreenTriggerType::GAME_LOADED,
+                };
+            }
         }
 
         $systems = [$system];
@@ -101,11 +103,13 @@ class Gate
                     return $screen;
                 }
             }
-            else if ($screenModel->trigger === ScreenTriggerType::DEFAULT) {
-                $defaultScreen = $screenModel->getScreen()->setGame($game)->setSystems($systems);
-                $settings = $screenModel->getSettings();
-                if (isset($settings) && method_exists($defaultScreen, 'setSettings')) {
-                    $defaultScreen->setSettings($settings);
+            else {
+                if ($screenModel->trigger === ScreenTriggerType::DEFAULT) {
+                    $defaultScreen = $screenModel->getScreen()->setGame($game)->setSystems($systems);
+                    $settings = $screenModel->getSettings();
+                    if (isset($settings) && method_exists($defaultScreen, 'setSettings')) {
+                        $defaultScreen->setSettings($settings);
+                    }
                 }
             }
         }
@@ -125,6 +129,7 @@ class Gate
      *
      * @return Game|null
      * @throws Throwable
+     * @phpstan-ignore missingType.generics
      */
     public function getActiveGame(string $system = 'all') : ?Game {
         $systems = [$system];
@@ -136,11 +141,10 @@ class Gate
         $maxGame = null;
         $maxTime = 0;
 
-        /** @var Game|null $test */
         $test = Info::get('gate-game', useCache: false);
         /** @var int $gateTime */
         $gateTime = Info::get('gate-time', $now, useCache: false);
-        if (isset($test) && ($now - $gateTime) <= $this->getTmpResultsTime()) {
+        if ($test instanceof Game && ($now - $gateTime) <= $this->getTmpResultsTime()) {
             // Set the correct (fake) end time
             $test->end = (new DateTimeImmutable())->setTimestamp($gateTime);
             $test->setMetaValue($this::MANUAL_RESULTS_GAME_META, true);
@@ -148,16 +152,15 @@ class Gate
         }
 
         foreach ($systems as $checkSystem) {
-            /** @var Game|null $startedSystem */
             $startedSystem = Info::get($checkSystem.'-game-started', useCache: false);
-            if (isset($startedSystem) && $startedSystem->start->getTimestamp() > $maxTime) {
+            if ($startedSystem instanceof Game && $startedSystem->isStarted() && $startedSystem->start->getTimestamp(
+              ) > $maxTime) {
                 $maxGame = $startedSystem;
                 $maxTime = $startedSystem->start->getTimestamp();
             }
 
-            /** @var Game|null $loadedSystem */
             $loadedSystem = Info::get($checkSystem.'-game-loaded', useCache: false);
-            if (isset($loadedSystem) && $loadedSystem->fileTime?->getTimestamp() > $maxTime) {
+            if ($loadedSystem instanceof Game && $loadedSystem->fileTime?->getTimestamp() > $maxTime) {
                 $maxGame = $loadedSystem;
                 $maxTime = $loadedSystem->fileTime->getTimestamp();
             }

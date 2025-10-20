@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Controllers\Public;
 
-use App\Api\DataObjects\LigaPlayer\LigaPlayerData;
 use App\Core\Info;
 use App\Services\LaserLiga\LigaApi;
 use App\Services\LaserLiga\PlayerProvider;
@@ -18,6 +17,7 @@ use Lsr\Core\Controllers\Controller;
 use Lsr\Core\Requests\Dto\ErrorResponse;
 use Lsr\Core\Requests\Enums\ErrorType;
 use Lsr\Core\Requests\Request;
+use Lsr\LaserLiga\DataObjects\LigaPlayer\LigaPlayerData;
 use Nette\Utils\Validators;
 use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\Serializer\Serializer;
@@ -76,13 +76,11 @@ class LaserLiga extends Controller
         if (empty($email) || !is_string($email)) {
             $this->params->errors['email'] = lang('E-mail je povinný', context: 'errors');
         }
+        elseif (!Validators::isEmail($email)) {
+            $this->params->errors['email'] = lang('E-mail není platný', context: 'errors');
+        }
         else {
-            if (!Validators::isEmail($email)) {
-                $this->params->errors['email'] = lang('E-mail není platný', context: 'errors');
-            }
-            else {
-                $this->params->registerValues['email'] = $email;
-            }
+            $this->params->registerValues['email'] = $email;
         }
 
         $password = $request->getPost('password');
@@ -97,6 +95,7 @@ class LaserLiga extends Controller
                   new ErrorResponse(
                             lang('Formulář obsahuje chyby'),
                             ErrorType::VALIDATION,
+                    /** @phpstan-ignore argument.type */
                     values: $this->params->errors
                   ),
                   400
@@ -158,11 +157,12 @@ class LaserLiga extends Controller
     public function topPlayers() : ResponseInterface {
         $response = $this->cache->load(
           'topLigaPlayers',
+          /** @phpstan-ignore argument.type */
           function (array &$dependencies) {
               try {
                   $response = $this->api->get('players', ['arena' => 'self', 'limit' => 20], ['timeout' => 10]);
               } catch (GuzzleException $e) {
-                  $dependencies[$this->cache::Expire] = '1 minutes';
+                  $dependencies['expire'] = '1 minutes';
                   return new ErrorResponse(lang('Nepodařilo se stáhnout informace o hráčích'), exception: $e);
               }
 
@@ -170,8 +170,8 @@ class LaserLiga extends Controller
               return $players ?? new ErrorResponse(lang('Nepodařilo se stáhnout informace o hráčích'));
           },
           [
-            $this->cache::Tags   => ['api', 'players'],
-            $this->cache::Expire => '1 days',
+            'tags'   => ['api', 'players'],
+            'expire' => '1 days',
           ]
         );
 

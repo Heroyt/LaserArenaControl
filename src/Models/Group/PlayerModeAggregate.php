@@ -14,6 +14,14 @@ class PlayerModeAggregate
       public readonly AbstractMode $mode,
     ) {}
 
+    /**
+     * @template P of GamePlayer
+     * @template T of \App\GameModels\Game\Team
+     * @template G of Game<T,P>
+     * @param  P  $player
+     * @param  G|null  $game
+     * @return void
+     */
     public function addGame(GamePlayer $player, ?Game $game = null) : void {
         if (!isset($game)) {
             $game = $player->game;

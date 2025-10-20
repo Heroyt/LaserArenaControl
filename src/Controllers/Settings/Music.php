@@ -48,7 +48,14 @@ class Music extends Controller
             /** @var UploadedFile $file */
             foreach ($files['media'] as $file) {
                 $music = new MusicMode();
-                $name = basename($file->getClientFilename());
+
+                $clientFilename = $file->getClientFilename();
+                if (empty($clientFilename)) {
+                    $request->passErrors[] = lang('Nelze nahrát soubor bez názvu.', context: 'errors');
+                    continue;
+                }
+
+                $name = basename($clientFilename);
 
                 // Handle form errors
                 if ($file->getError() !== UPLOAD_ERR_OK) {
@@ -100,6 +107,7 @@ class Music extends Controller
                         $request->passErrors[] = lang('Failed to save data to the database', context: 'errors');
                         continue;
                     }
+                    assert($music->id !== null);
                     $allMusic[] = [
                       'id'       => $music->id,
                       'name'     => $music->name,
@@ -110,6 +118,7 @@ class Music extends Controller
                       'type'    => 'success',
                       'content' => lang('Saved successfully', context: 'form'),
                     ];
+                    $this->taskProducer->plan(MusicTrimPreviewTask::class, new MusicTrimPreviewPayload($music->id));
                 } catch (ValidationException $e) {
                     $request->passErrors[] = lang(
                                  'Failed to validate data before saving',
@@ -121,8 +130,6 @@ class Music extends Controller
         else {
             $request->passErrors[] = lang('No file uploaded', context: 'errors');
         }
-
-        $this->taskProducer->plan(MusicTrimPreviewTask::class, new MusicTrimPreviewPayload($music->id));
         if ($this->config->isFeatureEnabled('liga')) {
             $this->taskProducer->plan(MusicSyncTask::class, null, new Options(priority: 99));
         }
@@ -138,7 +145,8 @@ class Music extends Controller
         $musicInfo = $request->getPost('music', []);
         foreach ($musicInfo as $id => $info) {
             try {
-                $music = MusicMode::get((int) $id);
+                $id = (int) $id;
+                $music = MusicMode::get($id);
                 $music->name = $info['name'];
                 $music->group = empty($info['group']) ? null : $info['group'];
                 $music->order = (int) $info['order'];
@@ -146,12 +154,19 @@ class Music extends Controller
                 $previewStart = $music->previewStart;
                 $music->setPreviewStartFromFormatted($info['previewStart'] ?? '0');
                 if ($previewStart !== $music->previewStart) {
-                    $this->taskProducer->plan(MusicTrimPreviewTask::class, new MusicTrimPreviewPayload($music->id));
+                    $this->taskProducer->plan(MusicTrimPreviewTask::class, new MusicTrimPreviewPayload($id));
                 }
 
                 if (isset($files['music'][$id]['background'])) {
                     $file = $files['music'][$id]['background'];
-                    $name = basename($file->getClientFilename());
+
+                    $clientFilename = $file->getClientFilename();
+                    if (empty($clientFilename)) {
+                        $request->passErrors[] = lang('Nelze nahrát soubor bez názvu.', context: 'errors');
+                        continue;
+                    }
+
+                    $name = basename($clientFilename);
                     if ($file->getError() === UPLOAD_ERR_OK) {
                         $fileType = strtolower(pathinfo($name, PATHINFO_EXTENSION));
                         if (in_array($fileType, ['jpg', 'jpeg', 'png'], true)) {
@@ -162,6 +177,7 @@ class Music extends Controller
 
                             // Delete all optimized images
                             $images = glob(UPLOAD_DIR.'optimized/music-'.$id.'-background*');
+                            assert($images !== false);
                             foreach ($images as $file) {
                                 unlink($file);
                             }
@@ -195,7 +211,14 @@ class Music extends Controller
 
                 if (isset($files['music'][$id]['icon'])) {
                     $file = $files['music'][$id]['icon'];
-                    $name = basename($file->getClientFilename());
+
+                    $clientFilename = $file->getClientFilename();
+                    if (empty($clientFilename)) {
+                        $request->passErrors[] = lang('Nelze nahrát soubor bez názvu.', context: 'errors');
+                        continue;
+                    }
+
+                    $name = basename($clientFilename);
                     if ($file->getError() === UPLOAD_ERR_OK) {
                         $fileType = strtolower(pathinfo($name, PATHINFO_EXTENSION));
                         if (in_array($fileType, ['jpg', 'jpeg', 'png', 'svg'], true)) {
@@ -206,6 +229,7 @@ class Music extends Controller
 
                             // Delete all optimized images
                             $images = glob(UPLOAD_DIR.'optimized/music-'.$id.'-icon*');
+                            assert($images !== false);
                             foreach ($images as $file) {
                                 unlink($file);
                             }
@@ -252,7 +276,9 @@ class Music extends Controller
         }
 
         $playlistIds = [];
-        foreach ($request->getPost('playlist', []) as $id => $data) {
+        /** @var array<string, array{name?:string,music?:numeric[]}> $post */
+        $post = $request->getPost('playlist', []);
+        foreach ($post as $id => $data) {
             if (empty($data['name'])) {
                 continue;
             }
@@ -264,7 +290,7 @@ class Music extends Controller
             else {
                 try {
                     $playlist = Playlist::get((int) $id);
-                } catch (ModelNotFoundException | ValidationException $e) {
+                } catch (ModelNotFoundException) {
                     $playlist = new Playlist();
                     $new = true;
                 }
@@ -342,7 +368,14 @@ class Music extends Controller
     }
 
     private function processMediaUpload(UploadedFile $file, string $savePath) : ?ResponseInterface {
-        $name = basename($file->getClientFilename());
+        $clientFilename = $file->getClientFilename();
+        if (empty($clientFilename)) {
+            return $this->respond(
+              new ErrorResponse(lang('Nelze nahrát soubor bez názvu.', context: 'errors'), ErrorType::VALIDATION),
+              400
+            );
+        }
+        $name = basename($clientFilename);
 
         // Handle form errors
         if ($file->getError() !== UPLOAD_ERR_OK) {

@@ -12,8 +12,15 @@ class GamesDetailTemplate extends TemplateParameters
 {
     use AutoFillParameters;
 
+    /** @var non-empty-string */
     public string $publicUrl;
+    /** @var non-empty-string */
     public string $code;
+    /**
+     * @var Game
+     * @phpstan-ignore missingType.generics
+     */
     public Game $game;
+    /** @var non-empty-string */
     public string $qr;
 }

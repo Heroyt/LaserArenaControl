@@ -19,6 +19,7 @@ namespace App\Core;
 use Dibi\DriverException;
 use Dibi\Exception;
 use LAC\Modules\Core\Module;
+use Lsr\Db\Connection;
 use Lsr\Db\DB;
 use Lsr\Helpers\Tools\Timer;
 use RuntimeException;
@@ -77,7 +78,9 @@ class Loader
             return;
         }
         try {
-            DB::init(App::getService('db.connection'));
+            $db = App::getService('db.connection');
+            assert($db instanceof Connection);
+            DB::init($db);
         } catch (Exception | DriverException $e) {
             App::getInstance()->getLogger()->error(
               'Cannot connect to the database! ('.$e->getCode().') '.$e->getMessage()

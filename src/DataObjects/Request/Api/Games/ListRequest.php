@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\DataObjects\Request\Api\Games;
@@ -7,7 +8,6 @@ use DateTimeInterface;
 
 class ListRequest
 {
-
     public ?DateTimeInterface $date = null;
     public bool $expand = false;
     public bool $excludeFinished = false;
@@ -16,5 +16,4 @@ class ListRequest
     public ?string $system = null;
     public ?string $orderBy = null;
     public bool $desc = false;
-
 }

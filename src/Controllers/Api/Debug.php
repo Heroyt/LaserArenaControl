@@ -14,23 +14,27 @@ class Debug extends ApiController
     public function disable() : ResponseInterface {
         /** @var string $contents */
         $contents = file_get_contents(PRIVATE_DIR.'config.ini');
-        if (file_put_contents(
+        if (
+          file_put_contents(
             PRIVATE_DIR.'config.ini',
             str_replace('DEBUG = true', 'DEBUG = false', $contents)
-          ) === false) {
+          ) === false
+        ) {
             return $this->respond(['error' => 'Cannot write to config file.'], 500);
         }
         return $this->respond(['success' => true]);
     }
 
     public function incrementCache() : ResponseInterface {
-        $version = App::getCacheVersion();
+        $version = App::getInstance()->getCacheVersion();
         /** @var string $contents */
         $contents = file_get_contents(PRIVATE_DIR.'config.ini');
-        if (file_put_contents(
+        if (
+          file_put_contents(
             PRIVATE_DIR.'config.ini',
             str_replace('CACHE_VERSION = '.$version, 'CACHE_VERSION = '.($version + 1), $contents)
-          ) === false) {
+          ) === false
+        ) {
             return $this->respond(['error' => 'Cannot write to config file.'], 500);
         }
         return $this->respond(['success' => true]);
@@ -39,10 +43,12 @@ class Debug extends ApiController
     public function enable() : ResponseInterface {
         /** @var string $contents */
         $contents = file_get_contents(PRIVATE_DIR.'config.ini');
-        if (file_put_contents(
+        if (
+          file_put_contents(
             PRIVATE_DIR.'config.ini',
             str_replace('DEBUG = false', 'DEBUG = true', $contents)
-          ) === false) {
+          ) === false
+        ) {
             return $this->respond(['error' => 'Cannot write to config file.'], 500);
         }
         return $this->respond(['success' => true]);
@@ -69,7 +75,9 @@ class Debug extends ApiController
     }
 
     public function glob(Request $request) : ResponseInterface {
-        $param = urldecode($request->getGet('param', ''));
+        /** @var string $param */
+        $param = $request->getGet('param', '');
+        $param = urldecode($param);
         if (empty($param)) {
             return $this->respond(['error' => 'Missing required argument "param".'], 400);
         }

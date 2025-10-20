@@ -18,8 +18,12 @@ class NewGameParams extends TemplateParameters
 {
     public HookedTemplates $addedTemplates;
     public FeatureConfig $featureConfig;
+    /**
+     * @var Game|null
+     * @phpstan-ignore missingType.generics
+     */
     public ?Game $loadGame = null;
-    public System $system;
+    public ?System $system = null;
     /** @var System[] */
     public array $systems = [];
     /** @var Vest[] */

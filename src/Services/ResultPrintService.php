@@ -18,6 +18,7 @@ use Endroid\QrCode\Builder\Builder;
 use Endroid\QrCode\Encoding\Encoding;
 use Endroid\QrCode\ErrorCorrectionLevel;
 use Endroid\QrCode\Writer\SvgWriter;
+use InvalidArgumentException;
 use Lsr\Core\Templating\Latte;
 use Lsr\Exceptions\TemplateDoesNotExistException;
 use Lsr\Helpers\Tools\Strings;
@@ -66,10 +67,22 @@ readonly class ResultPrintService
         } catch (ModelNotFoundException | ValidationException) {
             $styleObj = new PrintStyle();
         }
+
+        if ($styleObj === null) {
+            throw new InvalidArgumentException('Print style '.$style.' does not exist');
+        }
+
         $templateObj = PrintTemplate::getBySlug($template);
 
-        $bg = ROOT.($templateObj?->orientation === PrintOrientation::landscape ? $styleObj->bgLandscape :
-            $styleObj->bg);
+        $bg = ROOT.(
+          $templateObj?->orientation === PrintOrientation::landscape ?
+            ($styleObj->bgLandscape ?? '') :
+            ($styleObj->bg ?? '')
+          );
+
+        if (!file_exists($bg)) {
+            throw new Exception('Background file '.$bg.' does not exist');
+        }
 
         $additionalFiles = [
           ROOT.'dist/main.css',
@@ -228,10 +241,18 @@ readonly class ResultPrintService
             $printStyle = new PrintStyle();
         }
 
+        if ($printStyle === null) {
+            throw new InvalidArgumentException('Print style '.$style.' does not exist');
+        }
+
+        $printTemplate = PrintTemplate::getBySlug($template);
+        if ($printTemplate === null) {
+            throw new InvalidArgumentException('Print template '.$template.' does not exist');
+        }
         $params = new ResultsParams(
           $game,
           $printStyle,
-          PrintTemplate::getBySlug($template),
+          $printTemplate,
           new Today($game, $player, $team),
           $this->getPublicUrl($game),
           $this->getQR($game),

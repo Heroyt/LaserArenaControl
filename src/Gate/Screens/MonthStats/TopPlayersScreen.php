@@ -159,6 +159,7 @@ class TopPlayersScreen extends GateScreen
                 'hitsOwn'   => [$topHitsOwn?->name, $topHitsOwn?->user?->getCode(), $topHitsOwn?->hitsOwn],
               ];
 
+              assert($this->today !== null);
               return [
                 [
                   'topScore'    => $topScore,
@@ -222,8 +223,9 @@ class TopPlayersScreen extends GateScreen
         if (isset($this->gameIds)) {
             return $this->gameIds;
         }
-        $monthStart = new DateTimeImmutable($this->today?->format('Y-m-01'));
-        $monthEnd = new DateTimeImmutable($this->today?->format('Y-m-t'));
+        $this->today ??= new DateTimeImmutable();
+        $monthStart = new DateTimeImmutable($this->today->format('Y-m-01'));
+        $monthEnd = new DateTimeImmutable($this->today->format('Y-m-t'));
 
         $query = GameFactory::queryGames(true, fields: ['id_mode'])->where(
           'DATE(start) BETWEEN %d AND %d',
@@ -296,8 +298,9 @@ class TopPlayersScreen extends GateScreen
         if (isset($this->gameIdsTeam)) {
             return $this->gameIdsTeam;
         }
-        $monthStart = new DateTimeImmutable($this->today?->format('Y-m-01'));
-        $monthEnd = new DateTimeImmutable($this->today?->format('Y-m-t'));
+        $this->today ??= new DateTimeImmutable();
+        $monthStart = new DateTimeImmutable($this->today->format('Y-m-01'));
+        $monthEnd = new DateTimeImmutable($this->today->format('Y-m-t'));
 
         $query = GameFactory::queryGames(true, fields: ['id_mode', 'game_type'])->where(
           'DATE(start) BETWEEN %d AND %d',
@@ -329,8 +332,9 @@ class TopPlayersScreen extends GateScreen
         if (isset($this->gameIdsSolo)) {
             return $this->gameIdsSolo;
         }
-        $monthStart = new DateTimeImmutable($this->today?->format('Y-m-01'));
-        $monthEnd = new DateTimeImmutable($this->today?->format('Y-m-t'));
+        $this->today ??= new DateTimeImmutable();
+        $monthStart = new DateTimeImmutable($this->today->format('Y-m-01'));
+        $monthEnd = new DateTimeImmutable($this->today->format('Y-m-t'));
 
         $query = GameFactory::queryGames(true, fields: ['id_mode', 'game_type'])->where(
           'DATE(start) BETWEEN %d AND %d',

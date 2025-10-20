@@ -173,7 +173,12 @@ class PrintSettings extends Controller
       PrintStyle   $style,
       bool         $landscape = false
     ) : void {
-        $name = basename($file->getClientFilename());
+        $clientFilename = $file->getClientFilename();
+        if (empty($clientFilename)) {
+            $request->passErrors[] = lang('Nelze nahrát soubor bez názvu.', context: 'errors');
+            return;
+        }
+        $name = basename($clientFilename);
         // Handle form errors
         if ($file->getError() !== UPLOAD_ERR_OK) {
             $request->passErrors[] = match ($file->getError()) {

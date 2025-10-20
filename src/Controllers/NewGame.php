@@ -42,7 +42,9 @@ class NewGame extends Controller
      */
     public function show(Request $request) : ResponseInterface {
         $this->initNewGameParams($request);
-        $this->params->gameModes = GameModeFactory::getAll(['system' => $this->params->system]);
+        $this->params->gameModes = $this->params->system ?
+          GameModeFactory::getAll(['system' => $this->params->system])
+          : [];
         $this->params->musicModes = MusicMode::getAll();
         $this->initMusicGroups();
         $this->params->addCss = ['pages/newGame.css'];
@@ -55,7 +57,9 @@ class NewGame extends Controller
         $gateActionScreens = GateScreenModel::query()->where('trigger_value IS NOT NULL')->get();
         $this->params->gateActions = [];
         foreach ($gateActionScreens as $gateActionScreen) {
-            $this->params->gateActions[$gateActionScreen->triggerValue] = $gateActionScreen->triggerValue;
+            if (!empty($gateActionScreen->triggerValue)) {
+                $this->params->gateActions[$gateActionScreen->triggerValue] = $gateActionScreen->triggerValue;
+            }
         }
 
         foreach ($this->decorators as $decorator) {

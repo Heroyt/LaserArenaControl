@@ -54,6 +54,7 @@ class Games extends ApiController
         if (!isset($playerObj)) {
             return $this->respond(['error' => 'Player not found'], 404);
         }
+        assert($playerObj->team !== null);
 
         $enemies = [];
         if ($game->mode?->isTeam()) {
@@ -75,6 +76,8 @@ class Games extends ApiController
                 $enemy = $enemies[array_rand($enemies)];
             }
         }
+
+        // TODO
 
         return $this->respond($game);
     }

@@ -131,6 +131,7 @@ class Image
                 }
             }
         }
+        assert($this->type !== null);
         return $this->type;
     }
 
@@ -171,7 +172,7 @@ class Image
     /**
      * @param  int<1,max>|null  $width
      * @param  int<1,max>|null  $height
-     * @return array{original?:string,webp?:string}
+     * @return array{original?:string,webp?:string|null}
      * @throws FileException
      */
     public function getResized(?int $width = null, ?int $height = null) : array {

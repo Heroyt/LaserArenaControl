@@ -153,7 +153,8 @@ class Gate
 
         foreach ($systems as $checkSystem) {
             $startedSystem = Info::get($checkSystem.'-game-started', useCache: false);
-            if ($startedSystem instanceof Game && $startedSystem->start->getTimestamp() > $maxTime) {
+            if ($startedSystem instanceof Game && $startedSystem->isStarted() && $startedSystem->start->getTimestamp(
+              ) > $maxTime) {
                 $maxGame = $startedSystem;
                 $maxTime = $startedSystem->start->getTimestamp();
             }

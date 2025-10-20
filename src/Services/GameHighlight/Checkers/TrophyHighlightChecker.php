@@ -49,14 +49,17 @@ class TrophyHighlightChecker implements PlayerHighlightChecker
                     switch ($trophy) {
                         case 'favouriteTarget':
                             $rarity = GameHighlight::MEDIUM_RARITY;
+                            assert($player->favouriteTarget !== null);
                             $rarity += round($player->getHitsPlayer($player->favouriteTarget) / 5);
                             break;
                         case 'favouriteTargetOf':
                             $rarity = GameHighlight::MEDIUM_RARITY;
-                            $rarity += round($player->favouriteTargetOf?->getHitsPlayer($player) / 5);
+                            assert($player->favouriteTargetOf !== null);
+                            $rarity += round($player->favouriteTargetOf->getHitsPlayer($player) / 5);
                             break;
                         case 'team-50':
                             $rarity = GameHighlight::MEDIUM_RARITY;
+                            assert($player->team !== null);
                             $rarity += 50 * min(1.0, ($player->score / $player->team->score));
                             break;
                     }

@@ -64,7 +64,7 @@ class Players extends Controller
         /** @var string $search */
         $search = $request->getGet('search', '');
         return $this->respond(
-          $this->playerProvider->findPlayersPublic($search)
+          $this->playerProvider->findPlayersPublic($search) ?? []
         );
     }
 

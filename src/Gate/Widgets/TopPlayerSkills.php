@@ -77,10 +77,13 @@ class TopPlayerSkills implements WidgetInterface, WithGameIdsInterface
 
             if (!empty($topScores)) {
                 foreach ($topScores as $score) {
-                    $this->topPlayers[] = PlayerFactory::getById(
+                    $player = PlayerFactory::getById(
                       (int) $score->id_player,
                       ['system' => (string) $score->system]
                     );
+                    if ($player !== null) {
+                        $this->topPlayers[] = $player;
+                    }
                 }
             }
         }

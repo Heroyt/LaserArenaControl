@@ -107,8 +107,8 @@ class Results extends Controller
 
         $game = $code === 'last' ? GameFactory::getLastGame() : GameFactory::getByCode($code);
 
-        if (!isset($game)) {
-            $this->respond('Game not found', 404);
+        if ($game === null) {
+            return $this->respond('Game not found', 404);
         }
 
         if (!($request->getGet('html', 0))) {

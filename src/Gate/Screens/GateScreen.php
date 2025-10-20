@@ -178,8 +178,8 @@ abstract class GateScreen
         return $response;
     }
 
-    public function setReloadTime(int $reloadTime) : GateScreen {
-        $this->reloadTime = $reloadTime;
+    public function setReloadTime(?int $reloadTime) : GateScreen {
+        $this->reloadTime = $reloadTime ?? -1;
         return $this;
     }
 

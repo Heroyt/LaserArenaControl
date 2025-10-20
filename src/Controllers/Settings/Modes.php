@@ -44,6 +44,7 @@ class Modes extends Controller
      */
     public function modes(Request $request) : ResponseInterface {
         $this->params['system'] = $request->params['system'] ?? first(GameFactory::getSupportedSystems());
+        assert($this->params['system'] !== null);
         $this->params['modes'] = GameModeFactory::getAll(['system' => $this->params['system'], 'all' => true]);
         return $this->view('pages/settings/modes');
     }

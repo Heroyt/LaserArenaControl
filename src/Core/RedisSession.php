@@ -70,11 +70,11 @@ class RedisSession implements SessionInterface
      */
     public function getParams() : array {
         return [
-          'lifetime' => $this->ttl,
-          'path'     => $this->path,
-          'domain'   => $this->domain,
-          'secure'   => $this->secure,
-          'httponly' => $this->httponly,
+          'lifetime' => $this->ttl ?? 0,
+          'path'     => $this->path ?? '/',
+          'domain'   => $this->domain ?? '',
+          'secure'   => $this->secure ?? false,
+          'httponly' => $this->httponly ?? true,
         ];
     }
 
@@ -238,13 +238,13 @@ class RedisSession implements SessionInterface
         App::cookieJar()
            ->set(
              self::SESSION_COOKIE_NAME,
-             $this->sessionId,
+             $this->sessionId ?? $this->generateSessionId(),
              /** @phpstan-ignore argument.type */
              time() + $this->ttl,
-             $this->path,
-             $this->domain,
-             $this->secure,
-             $this->httponly
+             $this->path ?? '/',
+             $this->domain ?? '',
+             $this->secure ?? false,
+             $this->httponly ?? true
            );
     }
 

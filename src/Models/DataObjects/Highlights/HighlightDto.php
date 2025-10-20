@@ -57,7 +57,7 @@ class HighlightDto
               return '<strong class="player-name" data-player="'.$playerName.'">'.$label.'</strong>';
           },
           $this->description
-        );
+        ) ?? $this->description;
     }
 
     public function getIcon() : string {

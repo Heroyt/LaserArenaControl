@@ -181,7 +181,10 @@ class GameGroup extends BaseModel implements GameGroupInterface
           ->cacheTags('group/'.$this->id.'/games')
                            ->fetchAll();
         foreach ($rows as $row) {
-            $games[] = GameFactory::getByCode($row->code);
+            $game = GameFactory::getByCode($row->code);
+            if ($game !== null) {
+                $games[] = $game;
+            }
         }
         return $games;
     }

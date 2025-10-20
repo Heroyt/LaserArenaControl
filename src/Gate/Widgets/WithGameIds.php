@@ -6,7 +6,6 @@ use App\GameModels\Factory\GameFactory;
 use App\GameModels\Game\GameModes\AbstractMode;
 use DateTimeImmutable;
 use DateTimeInterface;
-use Dibi\Row;
 use Lsr\Db\DB;
 
 trait WithGameIds
@@ -57,10 +56,9 @@ trait WithGameIds
                 $query->where('[id_mode] IN %in', $this->rankableModeIds);
             }
 
-            /** @var array<string,Row[]> $games */
+            /** @var array<string,array<int,object{id_game:int,system:string,id_mode:int,start:DateTimeInterface,end:DateTimeInterface}>> $games */
             $games = $query->fetchAssoc('system|id_game', cache: false);
             foreach ($games as $system => $systemGames) {
-                /** @var array<int, Row> $systemGames */
                 $gameIds[$system] ??= array_keys($systemGames);
             }
 
@@ -71,7 +69,12 @@ trait WithGameIds
                 $this->gameIds['all'] = $gameIds;
             }
         }
-        return $rankableOnly ? $this->gameIds['rankable'] : $this->gameIds['all'];
+        if ($rankableOnly) {
+            assert($this->gameIds['rankable'] !== null);
+            return $this->gameIds['rankable'];
+        }
+        assert($this->gameIds['all'] !== null);
+        return $this->gameIds['all'];
     }
 
     public function setGameIds(?array $gameIds) : static {

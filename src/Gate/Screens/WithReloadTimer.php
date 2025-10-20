@@ -23,6 +23,9 @@ trait WithReloadTimer
     }
 
     public function getReloadStartTime() : int {
+        if ($this->game === null) {
+            return -1;
+        }
         $trigger = $this->getTrigger();
         if (isset($trigger) && $trigger->isReloadTimeSettable()) {
             return $trigger->getReloadTimeFrom($this->game);

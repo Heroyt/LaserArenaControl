@@ -42,7 +42,9 @@ class NewGame extends Controller
      */
     public function show(Request $request) : ResponseInterface {
         $this->initNewGameParams($request);
-        $this->params->gameModes = GameModeFactory::getAll(['system' => $this->params->system, 'public' => true]);
+        $this->params->gameModes = $this->params->system !== null ?
+          GameModeFactory::getAll(['system' => $this->params->system, 'public' => true])
+          : [];
         $this->params->musicModes = MusicMode::query()->where('public = 1')->orderBy('order')->get();
         $this->initMusicGroups();
         $this->params->addCss = ['pages/newGamePublic.css'];

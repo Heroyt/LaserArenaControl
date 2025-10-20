@@ -48,7 +48,6 @@ class ImportService
     /** @var array{error?:string,exception?:string,sql?:string}[]|string[] */
     private array $errors = [];
     private int $gameLoadedTime;
-    private int $gameStartedTime;
 
     public function __construct(
       private readonly EventService  $eventService,
@@ -60,7 +59,6 @@ class ImportService
       private readonly Cache         $cache,
     ) {
         $this->gameLoadedTime = (int) ($config->getConfig('ENV')['GAME_LOADED_TIME'] ?? 300);
-        $this->gameStartedTime = (int) ($config->getConfig('ENV')['GAME_STARTED_TIME'] ?? 1800);
     }
 
     /**
@@ -140,7 +138,11 @@ class ImportService
 
             $now = time();
 
-            if (!isset($game->importTime)) {
+            // Check timestamps
+            $isStarted = $game->isStarted();
+            $isUpdated = isset($game->fileTime) && ($now - $game->fileTime->getTimestamp()) <= $this->gameLoadedTime;
+
+            if (!$game->isFinished()) {
                 $logger->debug('Game is not finished');
 
                 // The game is not finished and does not contain any results
@@ -151,21 +153,10 @@ class ImportService
                 // An old game should be ignored, the other 2 cases should be logged and an event should be sent.
                 // But only the latest game should be considered
 
-                // The game is started
-                if (
-                  isset($game->fileTime)
-                  && $game->isStarted()
-                  && ($now - $game->fileTime->getTimestamp()) <= $this->gameStartedTime
-                ) {
+                if ($isUpdated && $isStarted) { // The game is started
                     $logger->debug('Game is started');
                 }
-
-                // The game is loaded
-                if (
-                  isset($game->fileTime)
-                  && !$game->isStarted()
-                  && ($now - $game->fileTime->getTimestamp()) <= $this->gameLoadedTime
-                ) {
+                elseif ($isUpdated) { // The game is loaded
                     $logger->debug('Game is loaded');
                 }
                 return new ErrorResponse('Game is not finished', type: ErrorType::VALIDATION);
@@ -335,7 +326,13 @@ class ImportService
                     try {
                         $parser->setFile($file);
                         $game = $parser->parse();
-                        if (!isset($game->importTime)) {
+
+                        // Check timestamps
+                        $isStarted = $game->isStarted();
+                        $isUpdated = isset($game->fileTime) && ($now - $game->fileTime->getTimestamp(
+                            )) <= $this->gameLoadedTime;
+
+                        if (!$game->isFinished()) {
                             $logger->debug('Game is not finished');
                             $output?->writeln('Game is not finished');
 
@@ -351,23 +348,16 @@ class ImportService
                             // TODO: Detect manually stopped game and delete game-started
 
                             // The game is started
-                            if (
-                              isset($game->fileTime) &&
-                              $game->isStarted() &&
-                              ($now - $game->fileTime->getTimestamp()) <= $this->gameStartedTime
-                            ) {
+                            if ($isUpdated && $isStarted) {
                                 $lastUnfinishedGame = $game;
                                 $lastEvent = 'game-started';
                                 $logger->debug('Game is started');
                                 $output?->writeln('Game is started');
                                 continue;
                             }
+
                             // The game is loaded
-                            if (
-                              isset($game->fileTime) &&
-                              !$game->isStarted() &&
-                              ($now - $game->fileTime->getTimestamp()) <= $this->gameLoadedTime
-                            ) {
+                            if ($isUpdated) {
                                 // Check if the last unfinished game is not created later
                                 if (isset($lastUnfinishedGame) && $game->fileTime < $lastUnfinishedGame->fileTime) {
                                     continue;

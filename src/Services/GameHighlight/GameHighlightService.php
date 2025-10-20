@@ -27,7 +27,7 @@ class GameHighlightService
     public const string PLAYER_REGEXP = '/@([^@]+)@(?:<([^@]+)>)?/';
 
     /**
-     * @var Player[][]
+     * @var array<string,array<string,Player|null>>
      * @phpstan-ignore missingType.generics
      */
     private array $playerCache = [];
@@ -283,6 +283,7 @@ class GameHighlightService
      * @throws JsonException
      */
     private function saveHighlightCollection(HighlightCollection $collection, Game $game) : bool {
+        assert($game->isFinished());
         try {
             DB::getConnection()->begin();
             foreach ($collection->getAll() as $highlight) {
@@ -355,12 +356,10 @@ class GameHighlightService
      * @return P|null
      */
     private function getPlayerByName(string $name, Game $game) : ?Player {
-        if (isset($this->playerCache[$game->code][$name])) {
+        $this->playerCache[$game->code] ??= [];
+        if (array_key_exists($name, $this->playerCache[$game->code])) { // Might be null, which is valid.
             /** @phpstan-ignore return.type */
             return $this->playerCache[$game->code][$name];
-        }
-        if (!isset($this->playerCache[$game->code])) {
-            $this->playerCache[$game->code] = [];
         }
         $this->playerCache[$game->code][$name] = $game->players->query()->filter('name', $name)->first();
         return $this->playerCache[$game->code][$name];
@@ -403,7 +402,7 @@ class GameHighlightService
      * @return string
      */
     public function playerNamesToLinks(string $highlightDescription, Game $game) : string {
-        return preg_replace_callback(
+        $replaced = preg_replace_callback(
           $this::PLAYER_REGEXP,
           function (array $matches) use ($game) {
               $playerName = $matches[1];
@@ -421,5 +420,6 @@ class GameHighlightService
           },
           $highlightDescription
         );
+        return $replaced ?? $highlightDescription;
     }
 }

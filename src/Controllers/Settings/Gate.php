@@ -98,15 +98,21 @@ class Gate extends Controller
               $files['background']->getError() === UPLOAD_ERR_OK
             ) {
                 $file = $files['background'];
-                // Remove old uploaded files
-                $files = glob(UPLOAD_DIR.'gate.*');
-                assert($files !== false);
-                foreach ($files as $old) {
-                    unlink($old);
+                $clientFilename = $file->getClientFilename();
+                if (empty($clientFilename)) {
+                    $request->passErrors[] = lang('Nelze nahrát soubor bez názvu.', context: 'errors');
                 }
-                // Save new file
-                $extension = strtolower(pathinfo($file->getClientFilename(), PATHINFO_EXTENSION));
-                $file->moveTo(UPLOAD_DIR.'gate.'.$extension);
+                else {
+                    // Remove old uploaded files
+                    $files = glob(UPLOAD_DIR.'gate.*');
+                    assert($files !== false);
+                    foreach ($files as $old) {
+                        unlink($old);
+                    }
+                    // Save new file
+                    $extension = strtolower(pathinfo($clientFilename, PATHINFO_EXTENSION));
+                    $file->moveTo(UPLOAD_DIR.'gate.'.$extension);
+                }
             }
         } catch (Exception) {
             $request->passErrors[] = lang('Failed to save settings.', context: 'errors');
@@ -238,14 +244,11 @@ class Gate extends Controller
                   $gateType->name
                 );
             }
-            else {
-                if ($new || $newScreens) {
-                    assert($gateType->id !== null);
-                    $newGateIds[$gateKey] = $gateType->id;
-                    foreach ($newScreens as $key => $screen) {
-                        if (isset($screen->id)) {
-                            $newScreenIds[$gateKey][$key] = $screen->id;
-                        }
+            elseif ($new || $newScreens) {
+                $newGateIds[$gateKey] = $gateType->id;
+                foreach ($newScreens as $key => $screen) {
+                    if (isset($screen->id)) {
+                        $newScreenIds[$gateKey][$key] = $screen->id;
                     }
                 }
             }

@@ -76,6 +76,10 @@ class Info
     }
 
     private static function getUnserialized(?string $value, string $key) : mixed {
+        if ($value === null) {
+            return null;
+        }
+        
         $unserialized = igbinary_unserialize($value);
         if (
           ($unserialized === false && $value !== igbinary_serialize(false)) ||

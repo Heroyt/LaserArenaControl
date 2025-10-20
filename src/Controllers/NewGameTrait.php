@@ -93,6 +93,9 @@ trait NewGameTrait
         if ($this->params->system === null) {
             $this->params->system = first($this->params->systems);
         }
+        if ($this->params->system === null) {
+            throw new \RuntimeException('No active systems found');
+        }
         $this->session->set('active_lg_system', $this->params->system->id);
 
         $this->params->vests = Vest::getForSystem($this->params->system);

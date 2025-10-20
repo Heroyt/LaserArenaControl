@@ -174,7 +174,11 @@ class GameHelpers extends ApiController
         if (!$response->success) {
             $errorType = $response->exception !== null ? ErrorType::INTERNAL : ErrorType::VALIDATION;
             $this->respond(
-              new ErrorResponse($response->message, $errorType, exception: $response->exception),
+              new ErrorResponse(
+                           $response->message ?? 'error',
+                           $errorType,
+                exception: $response->exception
+              ),
               $errorType === ErrorType::INTERNAL ? 500 : 400
             );
         }

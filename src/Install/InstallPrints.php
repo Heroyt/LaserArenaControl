@@ -14,7 +14,7 @@ trait InstallPrints
         if ($output !== null) {
             $output->writeln("<error>".$e->getMessage()."</error>");
             $output->writeln($e->getTraceAsString());
-            if ($e instanceof Exception) {
+            if ($e instanceof Exception && $e->getSql() !== null) {
                 $output->writeln($e->getSql());
             }
         }

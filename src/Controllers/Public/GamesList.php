@@ -42,7 +42,11 @@ class GamesList extends Controller
 
         $this->params->publicUrl = trailingSlashIt(Info::get('liga_api_url', 'https://laserliga.cz')).'g/'.$code;
         $this->params->code = $code;
-        $this->params->game = GameFactory::getByCode($code);
+        $game = GameFactory::getByCode($code);
+        if ($game === null) {
+            return $this->view('pages/public/notFound')->withStatus(404);
+        }
+        $this->params->game = $game;
         $qr = new Builder(
           writer  : new SvgWriter(),
           data    : $this->params->publicUrl,

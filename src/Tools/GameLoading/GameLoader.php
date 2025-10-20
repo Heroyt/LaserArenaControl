@@ -41,18 +41,17 @@ class GameLoader
         if (is_numeric($system)) {
             $system = System::get((int) $system);
         }
-        else {
-            if (is_string($system)) {
-                $type = SystemType::tryFrom($system);
-                if ($type === null) {
-                    throw new InvalidArgumentException('Invalid system type');
-                }
-                $systems = System::getForType($type);
-                if (empty($systems)) {
-                    throw new InvalidArgumentException('Invalid system type');
-                }
-                $system = first($systems);
+        elseif (is_string($system)) {
+            $type = SystemType::tryFrom($system);
+            if ($type === null) {
+                throw new InvalidArgumentException('Invalid system type');
             }
+            $systems = System::getForType($type);
+            if (empty($systems)) {
+                throw new InvalidArgumentException('Invalid system type');
+            }
+            /** @var System $system */
+            $system = first($systems);
         }
 
         $systemStr = $system->type->value;

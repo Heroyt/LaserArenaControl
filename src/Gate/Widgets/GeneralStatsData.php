@@ -105,10 +105,13 @@ trait GeneralStatsData
         $topPlayers = $q->fetchAll(cache: false);
         $players = [];
         foreach ($topPlayers as $topPlayer) {
-            $players[] = PlayerFactory::getById(
+            $player = PlayerFactory::getById(
               (int) $topPlayer->id_player,
               ['system' => (string) $topPlayer->system]
             );
+            if ($player !== null) {
+                $players[] = $player;
+            }
         }
         return $players;
     }

@@ -128,7 +128,7 @@ class GeneralStatsScreen extends GateScreen
 
         // Add additional params for template
         $params['screenHash'] = md5($today->format('Ym').json_encode($hashData, JSON_THROW_ON_ERROR));
-        $params['mothName'] = lang(Constants::MONTH_NAMES[(int) $today->format('m')], context: 'month');
+        $params['monthName'] = lang(Constants::MONTH_NAMES[(int) $today->format('m')], context: 'month');
         $params['year'] = $today->format('Y');
         $params['addJs'] = ['gate/today.js'];
         $params['addCss'] = ['gate/todayStats.css'];

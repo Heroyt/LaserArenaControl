@@ -63,7 +63,6 @@ class GameHelpers extends ApiController
                     continue;
                 }
                 $started->end = null;
-                $started->finished = false;
                 $game = $started;
                 continue;
             }
@@ -88,8 +87,8 @@ class GameHelpers extends ApiController
         return $this->respond(
           [
             'currentServerTime' => time(),
-            'started'           => $game->started,
-            'finished'          => $game->finished,
+            'started'  => $game->isStarted(),
+            'finished' => $game->isFinished(),
             'loadTime'          => $game->fileTime?->getTimestamp(),
             'startTime'         => $game->start?->getTimestamp(),
             'gameLength'        => !isset($game->timing) ? 0 : ($game->timing->gameLength * 60),
@@ -115,8 +114,8 @@ class GameHelpers extends ApiController
           [
             'currentServerTime' => time(),
             'gateTime'          => Info::get('gate-time'),
-            'started'           => $game->started,
-            'finished'          => $game->finished,
+            'started'  => $game->isStarted(),
+            'finished' => $game->isFinished(),
             'loadTime'          => $game->fileTime?->getTimestamp(),
             'startTime'         => $game->start?->getTimestamp(),
             'gameLength'        => !isset($game->timing) ? 0 : ($game->timing->gameLength * 60),

@@ -153,15 +153,18 @@ class ImportService
 
                 // The game is started
                 if (
-                  $game->started && isset($game->fileTime) && ($now - $game->fileTime->getTimestamp(
-                    )) <= $this->gameStartedTime
+                  isset($game->fileTime)
+                  && $game->isStarted()
+                  && ($now - $game->fileTime->getTimestamp()) <= $this->gameStartedTime
                 ) {
                     $logger->debug('Game is started');
                 }
+
                 // The game is loaded
                 if (
-                  !$game->started && isset($game->fileTime) && ($now - $game->fileTime->getTimestamp(
-                    )) <= $this->gameLoadedTime
+                  isset($game->fileTime)
+                  && !$game->isStarted()
+                  && ($now - $game->fileTime->getTimestamp()) <= $this->gameLoadedTime
                 ) {
                     $logger->debug('Game is loaded');
                 }
@@ -349,8 +352,8 @@ class ImportService
 
                             // The game is started
                             if (
-                              $game->started &&
                               isset($game->fileTime) &&
+                              $game->isStarted() &&
                               ($now - $game->fileTime->getTimestamp()) <= $this->gameStartedTime
                             ) {
                                 $lastUnfinishedGame = $game;
@@ -361,8 +364,8 @@ class ImportService
                             }
                             // The game is loaded
                             if (
-                              !$game->started &&
                               isset($game->fileTime) &&
+                              !$game->isStarted() &&
                               ($now - $game->fileTime->getTimestamp()) <= $this->gameLoadedTime
                             ) {
                                 // Check if the last unfinished game is not created later
@@ -544,7 +547,7 @@ class ImportService
                   'exception' => $error->getMessage(),
                 ];
                 if ($error instanceof Exception) {
-                    $info['sql'] = $error->getSql();
+                    $info['sql'] = $error->getSql() ?? '';
                 }
             }
             $errors[] = $info;

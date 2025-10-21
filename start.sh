@@ -32,9 +32,11 @@ else
   git fetch --all --tags
   if [ "$LAC_VERSION" = "stable" ]; then
     git switch stable
+    git reset --hard origin/stable
     git pull --recurse-submodules origin stable
   elif [ "$LAC_VERSION" = "staging" ]; then
     git switch staging
+    git reset --hard origin/staging
     git pull --recurse-submodules origin staging
   else
     git checkout "v${LAC_VERSION}" -b "stable"
@@ -97,11 +99,11 @@ run_optional_setup() {
 build_assets &
 ASSET_BUILD_PID=$!
 
-# Run critical setup that must complete before server starts
-./bin/console install
-
 # Clear DI, model and info cache - this is critical for proper operation
 ./bin/console cache:clean -dmic
+
+# Run critical setup that must complete before server starts
+./bin/console install
 
 # Cleanup restart.txt if not correctly removed to prevent immediate restart of container
 if [ -f ./temp/restart.txt ]; then

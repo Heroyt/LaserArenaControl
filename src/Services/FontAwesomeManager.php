@@ -52,7 +52,7 @@ class FontAwesomeManager
         );
         sort($icons);
         foreach ($icons as $name) {
-            $content .= "\t'$name': \$fa-var-$name,\n";
+            $content .= "\t'$name': \$var-$name,\n";
         }
         $content .= ");\n";
         file_put_contents($file, $content);

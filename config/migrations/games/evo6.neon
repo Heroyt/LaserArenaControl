@@ -1,5 +1,5 @@
 tables:
-	App\GameModels\Game\Evo6\Game:
+	App\GameModels\Game\LaserMaxx\Evo6\Game:
 		order: 1
 		definition: '''
 		(
@@ -151,7 +151,7 @@ tables:
 			-
 				name: sync
 				columns: ['sync']
-	App\GameModels\Game\Evo6\Team:
+	App\GameModels\Game\LaserMaxx\Evo6\Team:
 		order: 2
 		definition: '''
 		(
@@ -170,9 +170,9 @@ tables:
 		foreignKeys:
 			-
 				column: id_game
-				refTable: App\GameModels\Game\Evo6\Game
+				refTable: App\GameModels\Game\LaserMaxx\Evo6\Game
 				refColumn: id_game
-	App\GameModels\Game\Evo6\Player:
+	App\GameModels\Game\LaserMaxx\Evo6\Player:
 		order: 3
 		definition: '''
 		(
@@ -228,11 +228,11 @@ tables:
 		foreignKeys:
 			-
 				column: id_game
-				refTable: App\GameModels\Game\Evo6\Game
+				refTable: App\GameModels\Game\LaserMaxx\Evo6\Game
 				refColumn: id_game
 			-
 				column: id_team
-				refTable: App\GameModels\Game\Evo6\Team
+				refTable: App\GameModels\Game\LaserMaxx\Evo6\Team
 				refColumn: id_team
 			-
 				column: id_user
@@ -276,11 +276,11 @@ tables:
 		foreignKeys:
 			-
 				column: id_player
-				refTable: App\GameModels\Game\Evo6\Player
+				refTable: App\GameModels\Game\LaserMaxx\Evo6\Player
 				refColumn: id_player
 			-
 				column: id_target
-				refTable: App\GameModels\Game\Evo6\Player
+				refTable: App\GameModels\Game\LaserMaxx\Evo6\Player
 				refColumn: id_player
 	mvEvo6RegressionData:
 		order: 0

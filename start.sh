@@ -103,7 +103,7 @@ ASSET_BUILD_PID=$!
 ./bin/console cache:clean -dmic
 
 # Run critical setup that must complete before server starts
-./bin/console install
+./bin/console install || { echo "console install failed, continuing"; true; }
 
 # Cleanup restart.txt if not correctly removed to prevent immediate restart of container
 if [ -f ./temp/restart.txt ]; then

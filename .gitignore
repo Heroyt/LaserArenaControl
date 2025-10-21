@@ -21,7 +21,6 @@ Icon
 Network Trash Folder
 Temporary Items
 .apdisk
-*.lock
 *-lock.json
 temp/
 dist/

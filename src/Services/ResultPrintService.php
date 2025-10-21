@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Core\App;
 use App\Core\Info;
+use App\GameModels\Factory\GameFactory;
 use App\GameModels\Game\Enums\PrintOrientation;
 use App\GameModels\Game\Game;
 use App\GameModels\Game\GameModes\CustomResultsMode;
@@ -21,7 +22,6 @@ use Endroid\QrCode\Writer\SvgWriter;
 use InvalidArgumentException;
 use Lsr\Core\Templating\Latte;
 use Lsr\Exceptions\TemplateDoesNotExistException;
-use Lsr\Helpers\Tools\Strings;
 use Lsr\ObjectValidation\Exceptions\ValidationException;
 use Lsr\Orm\Exceptions\ModelNotFoundException;
 
@@ -227,7 +227,7 @@ readonly class ResultPrintService
      * @throws TemplateDoesNotExistException|Exception|\Endroid\QrCode\Exception\ValidationException
      */
     public function generateResultsHtml(Game $game, int $style, string $template, int $copies) : string {
-        $namespace = '\\App\\GameModels\\Game\\'.Strings::toPascalCase($game::SYSTEM).'\\';
+        $namespace = '\\App\\GameModels\\Game\\'.GameFactory::systemToNamespace($game::SYSTEM).'\\';
         $teamClass = $namespace.'Team';
         $playerClass = $namespace.'Player';
         /** @var P $player */

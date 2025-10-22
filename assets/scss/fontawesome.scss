@@ -1,36 +1,20 @@
 // Font Awesome
-// $fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
-$fa-font-path: '/assets/fonts';
-@import '~@fortawesome/fontawesome-free/scss/functions';
-@import '~@fortawesome/fontawesome-free/scss/variables';
-@import 'fontawesome-icons';
-@import '~@fortawesome/fontawesome-free/scss/mixins';
-@import '~@fortawesome/fontawesome-free/scss/regular';
-@import '~@fortawesome/fontawesome-free/scss/solid';
 
-:root, :host {
-	--#{$fa-css-prefix}-style-family-brands: 'Font Awesome 6 Brands';
-	--#{$fa-css-prefix}-font-brands: normal 400 1em/1 'Font Awesome 6 Brands';
-}
+@use '~@fortawesome/fontawesome-free/scss/variables' with (
+	$font-path: '/assets/fonts',
+);
 
-@font-face {
-	font-family: 'Font Awesome 6 Brands';
-	font-style: normal;
-	font-weight: 400;
-	font-display: $fa-font-display;
-	src: url('#{$fa-font-path}/fa-brands-400.woff2') format('woff2'),
-	url('#{$fa-font-path}/fa-brands-400.ttf') format('truetype');
-}
+@use 'fontawesome-icons' as icons;
 
-.fab,
-.#{$fa-css-prefix}-brands {
-	font-weight: 400;
-}
+@use '~@fortawesome/fontawesome-free/scss/fontawesome';
+@use '~@fortawesome/fontawesome-free/scss/fa' as fa;
 
-@import '~@fortawesome/fontawesome-free/scss/core';
+@use '~@fortawesome/fontawesome-free/scss/regular' as fa-regular;
+@use '~@fortawesome/fontawesome-free/scss/solid' as fa-solid;
+@use '~@fortawesome/fontawesome-free/scss/brands' as fa-brands;
 
-@each $name, $icon in $icons {
-	.#{$fa-css-prefix}-#{$name}::before {
+@each $name, $icon in icons.$icons {
+	.#{fa.$css-prefix}-#{$name}::before {
 		content: unquote('"#{ $icon }"');
 	}
 }

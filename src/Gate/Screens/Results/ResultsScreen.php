@@ -150,6 +150,16 @@ class ResultsScreen extends GateScreen implements ResultsScreenInterface
             return $this->respond(new ErrorResponse('An error occured', exception: $e), 500);
         }
 
-        return $screen->run();
+        return $screen->run()
+                      ->withAddedHeader('X-Screen', $screen::getDiKey().' - '.$screen::class)
+                      ->withAddedHeader(
+                        'X-GameMode',
+                        $game->mode === null ? 'Unknown' :
+                          $game->mode->getName().' - '.$game->mode::class
+                      )
+                      ->withAddedHeader(
+                        'X-GameMode-CustomResults',
+                        $game->mode instanceof CustomResultsMode ? 'Yes' : 'No'
+                      );
     }
 }

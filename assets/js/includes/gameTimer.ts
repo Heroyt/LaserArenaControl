@@ -99,6 +99,11 @@ export function gameTimer() {
 			.then(response => {
 				if (response.ended) {
 					activeGame = null;
+					times.forEach(time => {
+						time.dataset.start = '0';
+						time.dataset.length = '0';
+						setTimes(time);
+					});
 					return;
 				}
 				activeGame = response.game;

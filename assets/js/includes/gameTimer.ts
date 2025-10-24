@@ -19,6 +19,19 @@ export function gameTimer() {
 	// Auto-reload timer on game started
 	EventServerInstance.addEventListener(['game-started', 'game-imported', 'game-loaded'], loadGameInfo);
 
+	let reloadInterval: NodeJS.Timeout | undefined; // Forcibly reload every 30 seconds in case of missed events
+	const setupReloadInterval = () => {
+		// If the timer is already running, clear it.
+		// This will happen if the game info is reloaded due to any event.
+		// We can restart the timer and fetch fresh data after another 30 seconds.
+		if (reloadInterval) {
+			clearTimeout(reloadInterval);
+		}
+		reloadInterval = setTimeout(() => {
+			loadGameInfo();
+		}, 30_000);
+	};
+
 	let offset = 0;
 	const serverTime = parseInt(times[0].dataset.servertime);
 	console.log(times[0].dataset.servertime, serverTime);
@@ -51,6 +64,7 @@ export function gameTimer() {
 	}
 
 	startTimer();
+	setupReloadInterval();
 
 	function startTimer() {
 		console.log('Starting timer...', endDate, offset);
@@ -115,6 +129,8 @@ export function gameTimer() {
 			})
 			.finally(() => {
 				document.dispatchEvent(new CustomEvent('active-game-data-loaded'));
+				// Reset the reload interval
+				setupReloadInterval();
 			});
 	}
 

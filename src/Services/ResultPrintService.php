@@ -227,6 +227,7 @@ readonly class ResultPrintService
      * @throws TemplateDoesNotExistException|Exception|\Endroid\QrCode\Exception\ValidationException
      */
     public function generateResultsHtml(Game $game, int $style, string $template, int $copies) : string {
+        assert(!empty($game::SYSTEM));
         $namespace = '\\App\\GameModels\\Game\\'.GameFactory::systemToNamespace($game::SYSTEM).'\\';
         $teamClass = $namespace.'Team';
         $playerClass = $namespace.'Player';

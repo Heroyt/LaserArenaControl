@@ -101,6 +101,7 @@ class GameHelpers extends ApiController
         ];
 
         if ($game instanceof \App\GameModels\Game\Lasermaxx\Game) {
+            $data['fileNum'] = $game->resultsFile;
             $data['playEndTime'] = $game->playEnd?->getTimestamp();
             $data['realEndTime'] = $game->realEnd?->getTimestamp();
         }

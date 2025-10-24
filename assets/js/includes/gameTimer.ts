@@ -97,13 +97,17 @@ export function gameTimer() {
 	function loadGameInfo() {
 		getLoadedGame()
 			.then(response => {
+				if (response.ended) {
+					activeGame = null;
+					return;
+				}
 				activeGame = response.game;
 				const data = response;
 				times.forEach(time => {
 					if (data.currentServerTime) {
 						time.dataset.servertime = data.currentServerTime.toString();
 					}
-					if (data.started && !data.finished && data.startTime) {
+					if (data.started && !data.ended && !data.finished && data.startTime) {
 						time.dataset.start = data.startTime.toString();
 						time.dataset.length = data.gameLength.toString();
 					} else {

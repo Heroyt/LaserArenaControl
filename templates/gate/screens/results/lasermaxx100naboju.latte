@@ -1,7 +1,7 @@
 {layout '../../@layout.latte'}
 
 {varType App\GameModels\Game\Lasermaxx\Game $game}
-{varType App\GameModels\Game\Evo5\GameModes\M100Naboju $mode}
+{varType App\GameModels\Game\Lasermaxx\GameModes\M100Naboju $mode}
 {varType string $qr}
 
 {var bool $includeTeams = $mode->isTeam() && $mode->settings->partTeams}
@@ -59,7 +59,7 @@
         <div class="accuracy">
             <svg viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg"
                  class="accuracy" xml:space="preserve"
-                 style="--color:var(--team-evo5-{$player->color});fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+                 style="--color:var(--team-{$player::SYSTEM|lower}-{$player->color});fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
 					{var int $circleRadius = 98}
                 <circle class="fill-circle" r="{$circleRadius}" cx="250" cy="250" fill="transparent" stroke="tomato"
                         stroke-width="{2*$circleRadius}"

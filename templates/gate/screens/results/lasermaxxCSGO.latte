@@ -30,7 +30,7 @@
 {/define}
 
 {define partPlayers}
-    {varType App\GameModels\Game\Evo5\Player[] $players}
+	{varType App\GameModels\Game\Lasermaxx\Player[] $players}
     <div n:foreach="$players as $player"
             class="player text-center text-grey-text {if $player->deaths >= $game->lives}dead{/if}">
 		{svgIcon ($player->deaths < $game->lives ? 'Vesta' . $player->color : 'skull'), '', '2rem'}

@@ -88,6 +88,7 @@ class GameHelpers extends ApiController
           'currentServerTime' => time(),
           'started'           => $game->isStarted(),
           'finished'          => $game->isFinished(),
+          'ended' => $game->isEnded(),
           'loadTime'          => $game->fileTime?->getTimestamp(),
           'startTime'         => $game->start?->getTimestamp(),
           'endTime'           => $game->end?->getTimestamp(),

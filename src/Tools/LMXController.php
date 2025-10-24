@@ -7,8 +7,8 @@
 namespace App\Tools;
 
 use App\Core\App;
+use App\Exceptions\ConnectionException;
 use App\Exceptions\ConnectionTimeoutException;
-use Exception;
 use Lsr\Caching\Cache;
 
 /**
@@ -16,42 +16,42 @@ use Lsr\Caching\Cache;
  */
 class LMXController
 {
-    public const PORT = 8081;
-    public const LOAD_COMMAND = 'load';
-    public const LOAD_START_COMMAND = 'loadStart';
-    public const START_COMMAND = 'start';
-    public const END_COMMAND = 'end';
-    public const GET_STATUS_COMMAND = 'status';
-    public const RETRY_DOWNLOAD_COMMAND = 'retryDownload';
-    public const CANCEL_DOWNLOAD_COMMAND = 'cancelDownload';
+    public const int PORT = 8081;
+    public const string LOAD_COMMAND = 'load';
+    public const string LOAD_START_COMMAND = 'loadStart';
+    public const string START_COMMAND = 'start';
+    public const string END_COMMAND = 'end';
+    public const string GET_STATUS_COMMAND = 'status';
+    public const string RETRY_DOWNLOAD_COMMAND = 'retryDownload';
+    public const string CANCEL_DOWNLOAD_COMMAND = 'cancelDownload';
 
-    public const OK_MESSAGE = 'ok';
-    public const INVALID_MESSAGE = 'invalid command';
+    public const string OK_MESSAGE = 'ok';
+    public const string INVALID_MESSAGE = 'invalid command';
 
-    public const DEFAULT_TIMEOUT = 30;
-    public const COMMAND_TIMEOUTS = [
+    public const int DEFAULT_TIMEOUT = 30;
+    public const array COMMAND_TIMEOUTS = [
       self::GET_STATUS_COMMAND => 3,
     ];
 
     /**
      * Retry scores download
      *
-     * @param  string  $ip
+     * @param  non-empty-string  $ip
      *
      * @return string 'ok'
-     * @throws Exception
+     * @throws ConnectionException
      */
     public static function retryDownload(string $ip) : string {
         return self::sendCommand($ip, self::RETRY_DOWNLOAD_COMMAND);
     }
 
     /**
-     * @param  string  $ip
-     * @param  string  $command
+     * @param  non-empty-string  $ip
+     * @param  non-empty-string  $command
      * @param  string  $parameters
      *
      * @return string Response
-     * @throws ConnectionTimeoutException
+     * @throws ConnectionException
      */
     public static function sendCommand(string $ip, string $command, string $parameters = '') : string {
         $timeout = self::COMMAND_TIMEOUTS[$command] ?? self::DEFAULT_TIMEOUT;
@@ -67,7 +67,17 @@ class LMXController
               $timeout
             );
         }
-        fwrite($fp, $command.':'.$parameters);
+        if (fwrite($fp, $command.':'.$parameters) === false) {
+            fclose($fp);
+            throw new ConnectionException(
+              sprintf(
+                lang('Nepodařilo se odeslat příkaz TCP serveru (%s:%d).'),
+                $ip,
+                self::PORT
+              ),
+              0,
+            );
+        }
         $response = '';
         while (!feof($fp)) {
             $response .= fgets($fp, 128);
@@ -79,10 +89,10 @@ class LMXController
     /**
      * Cancel scores download
      *
-     * @param  string  $ip
+     * @param  non-empty-string  $ip
      *
      * @return string 'ok'
-     * @throws Exception
+     * @throws ConnectionException
      */
     public static function cancelDownload(string $ip) : string {
         return self::sendCommand($ip, self::CANCEL_DOWNLOAD_COMMAND);
@@ -91,10 +101,10 @@ class LMXController
     /**
      * Get a current game status
      *
-     * @param  string  $ip
+     * @param  non-empty-string  $ip
      *
      * @return string 'ARMED'|'STANDBY'|'PLAYING'
-     * @throws Exception
+     * @throws ConnectionException
      */
     public static function getStatus(string $ip) : string {
         $cache = App::getService('cache');
@@ -112,10 +122,11 @@ class LMXController
     /**
      * Load a new game
      *
-     * @param  string  $ip
+     * @param  non-empty-string  $ip
      * @param  string  $gameMode  Game mode to load
      *
      * @return string Response
+     * @throws ConnectionException
      */
     public static function load(string $ip, string $gameMode) : string {
         return self::sendCommand($ip, self::LOAD_COMMAND, $gameMode);
@@ -124,10 +135,10 @@ class LMXController
     /**
      * Start a new game
      *
-     * @param  string  $ip
+     * @param  non-empty-string  $ip
      *
      * @return string
-     * @throws Exception
+     * @throws ConnectionException
      */
     public static function start(string $ip) : string {
         return self::sendCommand($ip, self::START_COMMAND);
@@ -136,10 +147,11 @@ class LMXController
     /**
      * Load a new game and start it
      *
-     * @param  string  $ip
+     * @param  non-empty-string  $ip
      * @param  string  $gameMode  Game mode to load
      *
      * @return string Response
+     * @throws ConnectionException
      */
     public static function loadStart(string $ip, string $gameMode) : string {
         return self::sendCommand($ip, self::LOAD_START_COMMAND, $gameMode);
@@ -148,10 +160,10 @@ class LMXController
     /**
      * Stop a currently running game
      *
-     * @param  string  $ip
+     * @param  non-empty-string  $ip
      *
      * @return string response
-     * @throws Exception
+     * @throws ConnectionException
      */
     public static function end(string $ip) : string {
         return self::sendCommand($ip, self::END_COMMAND);

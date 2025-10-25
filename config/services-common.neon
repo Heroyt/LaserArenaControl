@@ -157,7 +157,7 @@ routing:
 
 search:
 	controllers:
-		in: '%constants.appDir%src/Controllers'
+		in: '%constants.appDir%src/Http/Controllers'
 		extends:
 			- Lsr\Core\Controllers\Controller
 			- Lsr\Core\Controllers\ApiController

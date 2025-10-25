@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use App\Models\DataObjects\FontAwesome\FontAwesomeCollection;
-use App\Models\DataObjects\FontAwesome\IconType;
+use App\DataObjects\FontAwesome\FontAwesomeCollection;
+use App\DataObjects\FontAwesome\IconType;
 use InvalidArgumentException;
 use Symfony\Component\Serializer\Serializer;
 

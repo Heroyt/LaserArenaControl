@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Core\App;
-use App\Models\DataObjects\Image;
+use App\DataObjects\Image;
 use Lsr\Lg\Results\Interface\Models\MusicModeInterface;
 use Lsr\ObjectValidation\Attributes\Required;
 use Lsr\ObjectValidation\Attributes\StringLength;

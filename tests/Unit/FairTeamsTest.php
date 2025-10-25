@@ -2,8 +2,8 @@
 
 namespace Tests\Unit;
 
-use App\Models\DataObjects\FairTeamDto;
-use App\Models\DataObjects\PlayerSkillDto;
+use App\DataObjects\FairTeamDto;
+use App\DataObjects\PlayerSkillDto;
 use App\Services\FairTeams;
 use Codeception\Attribute\DataProvider;
 use Codeception\Attribute\Depends;

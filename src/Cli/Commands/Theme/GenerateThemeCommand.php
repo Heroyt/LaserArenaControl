@@ -4,7 +4,7 @@ namespace App\Cli\Commands\Theme;
 
 use App\Cli\Colors;
 use App\Cli\Enums\ForegroundColors;
-use App\Models\DataObjects\Theme;
+use App\DataObjects\Theme;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;

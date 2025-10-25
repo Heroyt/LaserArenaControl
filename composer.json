@@ -16,7 +16,6 @@
     }
   ],
   "scripts": {
-    "serve": "php -S localhost:8000 index.php",
     "test": "env XDEBUG_MODE=coverage php vendor/bin/codecept run --coverage --coverage-xml --coverage-html",
     "docs": "doxygen",
     "build-production": "composer update --no-dev && composer dump-autoload --no-dev && npm install && npm run buildDev",

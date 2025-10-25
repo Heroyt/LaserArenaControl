@@ -2,8 +2,8 @@
 
 namespace App\Gate\Widgets;
 
+use App\DataObjects\Highlights\HighlightDto;
 use App\GameModels\Game\Game;
-use App\Models\DataObjects\Highlights\HighlightDto;
 use App\Services\GameHighlight\GameHighlightService;
 use DateTimeImmutable;
 use DateTimeInterface;

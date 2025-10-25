@@ -2,11 +2,10 @@
 
 declare(strict_types=1);
 
-use App\Controllers\Public\GamesList;
-use App\Controllers\Public\LaserLiga;
-use App\Controllers\Public\Music;
-use App\Controllers\Public\NewGame;
-use Lsr\Core\Routing\Route;
+use App\Http\Controllers\Public\GamesList;
+use App\Http\Controllers\Public\LaserLiga;
+use App\Http\Controllers\Public\Music;
+use App\Http\Controllers\Public\NewGame;
 
 /** @var \Lsr\Core\Routing\Router $this */
 

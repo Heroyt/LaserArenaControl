@@ -2,14 +2,14 @@
 
 namespace App\Services\GameHighlight\Checkers;
 
+use App\DataObjects\Highlights\GameHighlight;
+use App\DataObjects\Highlights\HighlightCollection;
+use App\DataObjects\Highlights\TrophyHighlight;
 use App\Exceptions\GameModeNotFoundException;
 use App\GameModels\Game\Game;
 use App\GameModels\Game\Player;
 use App\GameModels\Game\PlayerTrophy;
 use App\GameModels\Game\Team;
-use App\Models\DataObjects\Highlights\GameHighlight;
-use App\Models\DataObjects\Highlights\HighlightCollection;
-use App\Models\DataObjects\Highlights\TrophyHighlight;
 use App\Services\GameHighlight\PlayerHighlightChecker;
 use Lsr\Logging\Exceptions\DirectoryCreationException;
 use Lsr\ObjectValidation\Exceptions\ValidationException;

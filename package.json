@@ -10,7 +10,7 @@
   ],
   "version": "0.5.1",
   "description": "",
-  "main": "index.php",
+  "main": "psr-worker.php",
   "directories": {
     "test": "tests"
   },

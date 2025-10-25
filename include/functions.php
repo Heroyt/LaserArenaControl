@@ -11,7 +11,7 @@
  */
 
 use App\Core\App;
-use App\Models\DataObjects\Image;
+use App\DataObjects\Image;
 use App\Services\ImageService;
 use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Component\Serializer\Encoder\JsonDecode;

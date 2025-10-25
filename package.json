@@ -34,7 +34,7 @@
   },
   "devDependencies": {
     "@types/bootstrap": "^5.2.10",
-    "@types/sortablejs": "^1.15.8",
+    "@types/sortablejs": "^1.15.9",
     "@types/web": "^0.0.280",
     "autoprefixer": "^10.4.21",
     "cssnano": "^7.1.1",
@@ -50,7 +50,6 @@
     "stylelint-config-standard": "^39.0.1",
     "stylelint-config-standard-scss": "^16.0.0",
     "typescript": "^5.9.3",
-    "unlighthouse": "^0.17.4",
     "url-toolkit": "2.2.5",
     "workbox-build": "^7.3.0",
     "workbox-navigation-preload": "^7.3.0",
@@ -61,5 +60,5 @@
   },
   "author": "Tomáš Vojík <vojik@wboy.cz>",
   "license": "GPL-3.0",
-  "packageManager": "pnpm@9.4.0"
+  "packageManager": "pnpm@10.19.0"
 }

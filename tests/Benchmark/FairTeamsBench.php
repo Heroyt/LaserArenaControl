@@ -2,7 +2,7 @@
 
 namespace Tests\Benchmark;
 
-use App\Models\DataObjects\PlayerSkillDto;
+use App\DataObjects\PlayerSkillDto;
 use App\Services\FairTeams;
 use Generator;
 use PhpBench\Attributes as Bench;

@@ -3,11 +3,11 @@
 namespace App\Gate\Screens;
 
 use App\Core\App;
+use App\DataObjects\Image;
 use App\Gate\Settings\AnimationType;
 use App\Gate\Settings\GateSettings;
 use App\Gate\Settings\ImageScreenType;
 use App\Gate\Settings\ImageSettings;
-use App\Models\DataObjects\Image;
 use Nyholm\Psr7\UploadedFile;
 use Psr\Http\Message\ResponseInterface;
 

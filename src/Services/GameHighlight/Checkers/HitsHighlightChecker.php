@@ -2,13 +2,13 @@
 
 namespace App\Services\GameHighlight\Checkers;
 
+use App\DataObjects\Highlights\GameHighlight;
+use App\DataObjects\Highlights\GameHighlightType;
+use App\DataObjects\Highlights\HighlightCollection;
 use App\GameModels\Game\Game;
 use App\GameModels\Game\Player;
 use App\GameModels\Game\Team;
 use App\Helpers\Gender;
-use App\Models\DataObjects\Highlights\GameHighlight;
-use App\Models\DataObjects\Highlights\GameHighlightType;
-use App\Models\DataObjects\Highlights\HighlightCollection;
 use App\Services\GameHighlight\GameHighlightChecker;
 use App\Services\GameHighlight\PlayerHighlightChecker;
 use App\Services\GenderService;

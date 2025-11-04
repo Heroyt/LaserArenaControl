@@ -16,7 +16,7 @@
 	{/try}
     {try}
 		<div n:if="$musicGroup->getIcon() !== null" class="icon">
-			{var App\Models\DataObjects\Image $icon = $musicGroup->getIcon()}
+			{var App\DataObjects\Image $icon = $musicGroup->getIcon()}
 			{if $icon->getType() === 'svg'}
 				{file_get_contents($icon->getPath())|noescape}
 			{else}

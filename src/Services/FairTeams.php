@@ -2,8 +2,8 @@
 
 namespace App\Services;
 
-use App\Models\DataObjects\FairTeamDto;
-use App\Models\DataObjects\PlayerSkillDto;
+use App\DataObjects\FairTeamDto;
+use App\DataObjects\PlayerSkillDto;
 use Random\RandomException;
 
 /**

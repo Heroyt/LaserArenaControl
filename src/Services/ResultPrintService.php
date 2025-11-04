@@ -13,7 +13,7 @@ use App\GameModels\Game\PrintStyle;
 use App\GameModels\Game\PrintTemplate;
 use App\GameModels\Game\Team;
 use App\GameModels\Game\Today;
-use App\Templates\Results\ResultsParams;
+use App\Http\Templates\Results\ResultsParams;
 use Dibi\Exception;
 use Endroid\QrCode\Builder\Builder;
 use Endroid\QrCode\Encoding\Encoding;

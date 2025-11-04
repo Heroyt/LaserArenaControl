@@ -60,3 +60,4 @@ lac
 !src/Cli/Commands/Logs/
 .pnpm-store
 assets/fonts/fa*
+assets/images/optimized

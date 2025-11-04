@@ -3,13 +3,13 @@
 namespace App\Services\GameHighlight;
 
 use App\Core\App;
+use App\DataObjects\Highlights\GameHighlight;
+use App\DataObjects\Highlights\GameHighlightType;
+use App\DataObjects\Highlights\HighlightCollection;
+use App\DataObjects\Highlights\HighlightDto;
 use App\GameModels\Game\Game;
 use App\GameModels\Game\Player;
 use App\GameModels\Game\Team;
-use App\Models\DataObjects\Highlights\GameHighlight;
-use App\Models\DataObjects\Highlights\GameHighlightType;
-use App\Models\DataObjects\Highlights\HighlightCollection;
-use App\Models\DataObjects\Highlights\HighlightDto;
 use App\Services\FeatureConfig;
 use App\Services\LaserLiga\LigaApi;
 use DateTimeInterface;

@@ -60,7 +60,7 @@
         <title>{_'Výsledková tabule'}</title>
         <link rel="stylesheet" href="{getUrl}dist/main.css?v={\App\Core\App::getInstance()->getCacheVersion()}">
         <link rel="stylesheet" href="{getUrl}dist/pages/gate.css?v={\App\Core\App::getInstance()->getCacheVersion()}">
-        <link rel="stylesheet" href="{getUrl}dist/theme.css?v={\App\Models\DataObjects\Theme::getCssVersion()}">
+        <link rel="stylesheet" href="{getUrl}dist/theme.css?v={\App\DataObjects\Theme::getCssVersion()}">
         <link n:foreach="$addCss as $file" rel="stylesheet" class="add-style"
                                            href="{getUrl}dist/{$file}?v={\App\Core\App::getInstance()->getCacheVersion()}">
         <style>

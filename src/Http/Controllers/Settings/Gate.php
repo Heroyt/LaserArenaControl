@@ -13,6 +13,7 @@ use App\Http\Requests\Settings\Gate\GateSaveInfo;
 use App\Http\Requests\Settings\Gate\GateSaveRequest;
 use App\Http\Requests\Settings\Gate\ScreenSaveInfo;
 use Dibi\Exception;
+use Lsr\Core\Attributes\MapRequest;
 use Lsr\Core\Controllers\Controller;
 use Lsr\Core\Requests\Dto\ErrorResponse;
 use Lsr\Core\Requests\Enums\ErrorType;
@@ -179,6 +180,7 @@ class Gate extends Controller
      */
     private function processGateType(
       GateType     $gateType,
+      #[MapRequest]
       GateSaveInfo $gateData,
       Request      $request,
       string | int $gateKey,
@@ -255,7 +257,11 @@ class Gate extends Controller
         }
     }
 
-    private function processScreen(GateScreenModel $screenModel, ScreenSaveInfo $screenData) : void {
+    private function processScreen(
+      GateScreenModel $screenModel,
+      #[MapRequest]
+      ScreenSaveInfo  $screenData,
+    ) : void {
         if (
           $screenData->type !== null
           && (!isset($screenModel->screenSerialized) || $screenData->type !== $screenModel->screenSerialized)

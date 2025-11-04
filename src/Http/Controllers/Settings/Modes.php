@@ -15,6 +15,7 @@ use JsonException;
 use Lsr\Caching\Cache;
 use Lsr\Core\Controllers\Controller;
 use Lsr\Core\Requests\Dto\ErrorResponse;
+use Lsr\Core\Requests\Enums\ErrorType;
 use Lsr\Core\Requests\Request;
 use Lsr\Db\DB;
 use Lsr\Exceptions\TemplateDoesNotExistException;
@@ -413,16 +414,16 @@ class Modes extends Controller
 
     public function createGameMode(Request $request) : ResponseInterface {
         $type = strtoupper($request->params['type'] ?? 'TEAM');
-        $system = $request->params['system'] ?? '';
+        $system = $request->params['system'] ?? null;
 
-        if (empty($system) || !in_array($system, GameFactory::getSupportedSystems(), true)) {
-            return $this->respond(['error' => 'Invalid system'], 400);
+        if (!empty($system) && !in_array($system, GameFactory::getSupportedSystems(), true)) {
+            return $this->respond(new ErrorResponse('Invalid system', ErrorType::VALIDATION), 400);
         }
 
         DB::insert(
           AbstractMode::TABLE,
           [
-            'system'    => $system,
+            'systems' => $system,
             'type'      => $type,
             'name'      => lang('Nový mód', context: 'gameModes'),
             'load_name' => 'game-mode',
@@ -434,7 +435,7 @@ class Modes extends Controller
                 throw new GameModeNotFoundException();
             }
         } catch (GameModeNotFoundException | Exception $e) {
-            return $this->respond(['error' => 'Save failed', 'exception' => $e]);
+            return $this->respond(new ErrorResponse('Save failed', ErrorType::INTERNAL, exception: $e), 500);
         }
 
         // Clear cache

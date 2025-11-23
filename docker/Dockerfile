@@ -4,7 +4,7 @@ FROM php:8.4-cli-alpine3.22 AS ext-builder
 RUN apk add --no-cache --virtual .build-deps \
         wget git gettext gettext-dev icu-dev zip unzip ffmpeg libzip-dev \
         libcurl curl-dev nano build-base autoconf make gcc g++ libc-dev linux-headers \
-        zlib-dev libjpeg-turbo libpng-dev libavif-dev libwebp-dev freetype-dev \
+        zlib-dev jpeg-dev libjpeg-turbo-dev libpng-dev libavif-dev libwebp-dev freetype-dev \
         pcre-dev libtool libxml2-dev oniguruma-dev icu-libs imagemagick-dev imagemagick bash
 
 RUN docker-php-ext-configure gd --with-jpeg --with-freetype --with-webp --with-avif

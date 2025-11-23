@@ -48,14 +48,14 @@ class TopPlayersScreen extends GateScreen
      * @inheritDoc
      */
     public static function getName() : string {
-        return lang('Nejlepší hráči měsíce', domain: 'gate', context: 'screens');
+        return lang('Nejlepší hráči měsíce', context: 'screens', domain: 'gate');
     }
 
     public static function getDescription() : string {
         return lang(
                    'Obrazovka zobrazující nejlepší hráče pro aktuální měsíc.',
-          domain : 'gate',
-          context: 'screens.description'
+            context: 'screens.description',
+            domain: 'gate'
         );
     }
 
@@ -227,17 +227,20 @@ class TopPlayersScreen extends GateScreen
         $monthStart = new DateTimeImmutable($this->today->format('Y-m-01'));
         $monthEnd = new DateTimeImmutable($this->today->format('Y-m-t'));
 
-        $query = GameFactory::queryGames(true, fields: ['id_mode'])->where(
-          'DATE(start) BETWEEN %d AND %d',
-          $monthStart,
-          $monthEnd
-        )->where(
-          'id_mode IN %sql',
-          DB::select('game_modes', 'id_mode')->where('rankable = 1')->fluent
-        );
+        $query = GameFactory::queryGames(true, fields: ['id_mode'])
+            ->where(
+                'DATE(start) BETWEEN %d AND %d',
+                $monthStart,
+                $monthEnd
+            )
+            ->where(
+                '(id_mode IN %sql OR id_mode IS NULL)',
+                DB::select('game_modes', 'id_mode')->where('rankable = 1')
+            );
         if (count($this->systems) > 0) {
             $query->where('system IN %in', $this->systems);
         }
+
         /** @var array<string,Row[]> $games */
         $games = $query->fetchAssoc('system|id_game', cache: false);
 

@@ -83,7 +83,8 @@
     "orisai/scheduler": "^2.1",
     "orisai/utils": "^1.0",
     "orisai/nette-scheduler": "^1.3",
-    "orisai/nette-console": "^1.4"
+    "orisai/nette-console": "^1.4",
+    "symfony/property-info": "^7.3"
   },
   "require-dev": {
     "roave/security-advisories": "dev-latest",

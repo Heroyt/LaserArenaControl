@@ -18,8 +18,8 @@ use Lsr\Core\Controllers\Controller;
 use Lsr\Core\Requests\Dto\ErrorResponse;
 use Lsr\Core\Requests\Enums\ErrorType;
 use Lsr\Core\Requests\Request;
-use Lsr\Core\Requests\Validation\RequestValidationMapper;
 use Lsr\Exceptions\TemplateDoesNotExistException;
+use Lsr\Logging\Logger;
 use Lsr\ObjectValidation\Exceptions\ValidationException;
 use Lsr\Orm\Exceptions\ModelNotFoundException;
 use Nyholm\Psr7\UploadedFile;
@@ -28,10 +28,6 @@ use Psr\Http\Message\ResponseInterface;
 class Gate extends Controller
 {
     protected string $title = 'Nastavení - Výsledková tabule';
-
-    public function __construct(
-      private readonly RequestValidationMapper $requestMapper,
-    ) {}
 
 
     /**
@@ -81,8 +77,9 @@ class Gate extends Controller
      *
      * @return ResponseInterface
      */
-    public function saveGate(Request $request) : ResponseInterface {
-        $data = $this->requestMapper->setRequest($request)->mapBodyToObject(GateSaveRequest::class);
+    public function saveGate(#[MapRequest] GateSaveRequest $data, Request $request): ResponseInterface
+    {
+        new Logger(LOG_DIR, 'gate-settings')->debug('Save data', ['data' => $data, 'post' => $request->getParsedBody()]);
 
         try {
             if (isset($data->timerOffset)) {
@@ -180,7 +177,6 @@ class Gate extends Controller
      */
     private function processGateType(
       GateType     $gateType,
-      #[MapRequest]
       GateSaveInfo $gateData,
       Request      $request,
       string | int $gateKey,
@@ -259,7 +255,6 @@ class Gate extends Controller
 
     private function processScreen(
       GateScreenModel $screenModel,
-      #[MapRequest]
       ScreenSaveInfo  $screenData,
     ) : void {
         if (

@@ -14,11 +14,12 @@ class GateSaveInfo
     /** @var array<int, ScreenSaveInfo> */
     public array $screen = [];
 
-    /** @var array<string|int, ScreenSaveInfo> */
+    /** @var array<string, ScreenSaveInfo> */
     #[SerializedName('new-screen')]
     public array $newScreen = [];
 
     /** @var int[] */
     #[SerializedName('delete-screens')]
     public array $deleteScreen = [];
+
 }

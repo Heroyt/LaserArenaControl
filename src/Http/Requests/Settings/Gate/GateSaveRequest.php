@@ -20,7 +20,7 @@ class GateSaveRequest
     /** @var array<int, GateSaveInfo> */
     public array $gate = [];
 
-    /** @var array<string|int, GateSaveInfo> */
+    /** @var array<string, GateSaveInfo> */
     #[SerializedName('new-gate')]
     public array $newGate = [];
 

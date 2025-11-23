@@ -140,8 +140,7 @@ abstract class GateScreen
         }
 
         // Merge parameters
-        $this->params['addJs'] = isset($this->params['addJs']) ?
-          array_merge($this->params['addJs'], ['gate/defaultScreen.js']) : ['gate/defaultScreen.js'];
+        $this->params['addJs'] = empty($this->params['addJs']) ? ['gate/defaultScreen.js'] : $this->params['addJs'];
         $this->params['reloadTimer'] = $this->reloadTime;
         foreach ($params as $key => $value) {
             if (isset($this->params[$key]) && is_array($this->params[$key]) && is_array($value)) {
@@ -161,7 +160,8 @@ abstract class GateScreen
           )
           ->withHeader('Content-Type', 'text/html')
           /** @phpstan-ignore nullsafe.neverNull */
-          ->withHeader('X-Trigger', $this->getTrigger()?->value ?? 'null');
+          ->withHeader('X-Trigger', $this->getTrigger()?->value ?? 'null')
+            ->withHeader('X-Systems', json_encode($this->systems));
         if ($this->reloadTime > 0) {
             return $response->withHeader('X-Reload-Time', (string) $this->reloadTime);
         }

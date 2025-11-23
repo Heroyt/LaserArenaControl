@@ -78,7 +78,7 @@ services:
 		setup:
 			- connect(%redis.host%)
 
-	cache.journal: Lsr\Caching\Redis\RedisJournal(@redis)
+#	cache.journal: Lsr\Caching\Redis\RedisJournal(@redis)
 	cache.storage: Lsr\Caching\Redis\RedisStorage(@redis, '', @cache.journal)
 
 	session:

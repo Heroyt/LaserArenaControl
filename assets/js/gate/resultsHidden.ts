@@ -1,7 +1,13 @@
 import GateScreen from './gateScreen';
 import {shuffle} from '../includes/functions';
 import {PlayerData, TeamData} from '../components/gate/types';
-import {initPlayer, reorderPlayers, reorderTeams, updateAccuracySVG} from '../components/gate/animateResults';
+import {
+    findMinMaxScores,
+    initPlayer,
+    reorderPlayers,
+    reorderTeams,
+    updateAccuracySVG
+} from '../components/gate/animateResults';
 
 const gameResultsExp = /results-game-(\d+)/;
 
@@ -63,19 +69,10 @@ export default class ResultsHiddenScreen implements GateScreen {
 		const playersData: PlayerData[] = [];
 		const teamsData: Map<string, TeamData> = new Map();
 
-		this.minScore = 99999;
-		this.maxScore = 0;
-
 		// Find min and max score for players
-		players.forEach(player => {
-			const score = parseInt(player.dataset.score);
-			if (score > this.maxScore) {
-				this.maxScore = score;
-			}
-			if (score < this.minScore) {
-				this.minScore = score;
-			}
-		});
+        const limits = findMinMaxScores(players);
+        this.minScore = limits.min;
+        this.maxScore = limits.max;
 
 		// Initialize teams - save team data and reset the score
 		teamsArray.forEach((team, key) => {

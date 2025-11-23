@@ -33,7 +33,7 @@
 		grid-area: info;
 		justify-content: center;
 		text-align: center;
-		transform: translateX(0);
+      translate: 0 0;
 		transition: transform 300ms ease;
 
 		svg {
@@ -42,7 +42,7 @@
 		}
 
 		&.hide {
-			transform: translateX(-50vw);
+          translate: -50vw 0;
 		}
 	}
 
@@ -89,6 +89,8 @@
 		animation-duration: 200ms;
 		background-color: rgba(255, 255, 255, .9);
 		flex: 1;
+      will-change: translate, scale;
+      transition: translate 200ms;
 
 		&.dead {
 			background-color: rgba(255, 200, 200, 0.9);
@@ -155,7 +157,7 @@
 	&.in {
 		.team {
 			animation: slide-in-right 500ms ease forwards 500ms;
-			transform: translateX(100vw);
+          translate: 100vw 0;
 		}
 	}
 
@@ -231,7 +233,7 @@
 			.fill-circle {
 				opacity: .4;
 				stroke: var(--color);
-				transform: rotate(-90deg);
+              rotate: -90deg;
 				transform-origin: center;
 			}
 		}

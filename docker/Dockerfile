@@ -2,9 +2,12 @@ FROM php:8.4-cli-alpine3.22 AS ext-builder
 
 # Install build dependencies
 RUN apk add --no-cache --virtual .build-deps \
-        wget git gettext gettext-dev icu-dev zip unzip ffmpeg libpng-dev libwebp-dev libzip-dev \
+        wget git gettext gettext-dev icu-dev zip unzip ffmpeg libzip-dev \
         libcurl curl-dev nano build-base autoconf make gcc g++ libc-dev linux-headers \
+        zlib-dev libpng-dev libavif-dev libwebp-dev freetype-dev \
         pcre-dev libtool libxml2-dev oniguruma-dev icu-libs imagemagick-dev imagemagick bash
+
+RUN docker-php-ext-configure gd --with-jpeg --with-freetype --with-webp --with-avif
 
 # PHP extensions
 RUN docker-php-ext-install mysqli

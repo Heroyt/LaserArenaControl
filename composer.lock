@@ -1502,16 +1502,16 @@
     },
     {
       "name": "lsr/core",
-      "version": "0.3.29",
+      "version": "0.3.30",
       "source": {
         "type": "git",
         "url": "https://github.com/Heroyt/lsr-core.git",
-        "reference": "87ff72ea0cb79ab0bd2204e0f8674820b1b82223"
+        "reference": "1bac574cfe4803c7707085b5875b1d832ecfcb14"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/Heroyt/lsr-core/zipball/87ff72ea0cb79ab0bd2204e0f8674820b1b82223",
-        "reference": "87ff72ea0cb79ab0bd2204e0f8674820b1b82223",
+        "url": "https://api.github.com/repos/Heroyt/lsr-core/zipball/1bac574cfe4803c7707085b5875b1d832ecfcb14",
+        "reference": "1bac574cfe4803c7707085b5875b1d832ecfcb14",
         "shasum": ""
       },
       "require": {
@@ -1583,10 +1583,10 @@
       ],
       "description": "Laser framework core.",
       "support": {
-        "source": "https://github.com/Heroyt/lsr-core/tree/v0.3.29",
+        "source": "https://github.com/Heroyt/lsr-core/tree/v0.3.30",
         "issues": "https://github.com/Heroyt/lsr-core/issues"
       },
-      "time": "2025-10-14T11:55:41+00:00"
+      "time": "2025-11-23T15:15:32+00:00"
     },
     {
       "name": "lsr/cqrs",

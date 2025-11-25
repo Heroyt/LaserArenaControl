@@ -75,6 +75,7 @@ class Settings extends Controller
         $this->params['rowCounts'] = [];
 
         foreach ($vests as $vest) {
+            assert($vest->system->id !== null);
             $this->params['columnCounts'][$vest->system->id] ??= $vest->system->columnCount;
             $this->params['rowCounts'][$vest->system->id] ??= $vest->system->rowCount;
 

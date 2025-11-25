@@ -24,7 +24,7 @@
     "docker-amd": "docker buildx build --platform linux/amd64 . --file docker/Dockerfile --tag heroyt/laser-arena-control:roadrunner-latest --tag heroyt/laser-arena-control:roadrunner --tag heroyt/laser-arena-control:latest --push --secret type=env,id=RT_TOKEN --build-arg \"BUILD_TIME=$(date +%FT%T%z)\"",
     "docker": "docker buildx build --platform linux/arm64,linux/amd64 . --file docker/Dockerfile --tag heroyt/laser-arena-control:roadrunner-latest --tag heroyt/laser-arena-control:roadrunner --tag heroyt/laser-arena-control:latest --push --secret type=env,id=RT_TOKEN --build-arg \"BUILD_TIME=$(date +%FT%T%z)\"",
     "swagger": "./vendor/bin/openapi src vendor/lsr/request/src modules -o docs/swagger.yaml",
-    "phpstan": "./vendor/bin/phpstan",
+    "phpstan": "./vendor/bin/phpstan --memory-limit=1G",
     "phpcbf": "./vendor/bin/phpcbf"
   },
   "require": {

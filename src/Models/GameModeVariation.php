@@ -26,6 +26,7 @@ class GameModeVariation extends BaseModel
      * @return GameModeVariationValue[]
      */
     public function getValuesForMode(AbstractMode $mode) : array {
+        assert($mode->id !== null);
         if (empty($this->valuesModes[$mode->id])) {
             $this->valuesModes[$mode->id] = [];
             $rows = DB::select(self::TABLE_VALUES, '[value], [suffix], [order]')

@@ -16,7 +16,7 @@ class SystemsSettingsParameters extends TemplateParameters
     /** @var System[] */
     public array $systems = [];
 
-    /** @var Vest */
+    /** @var Vest[][] */
     public array $vests = [];
     /** @var Vest[][][] Vest at [System][Row][Column] */
     public array $vestsGrid = [];

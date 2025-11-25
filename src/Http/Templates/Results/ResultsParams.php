@@ -14,7 +14,7 @@ use Lsr\Core\Controllers\TemplateParameters;
 class ResultsParams extends TemplateParameters
 {
     /**
-     * @param  Game  $game
+     * @param G $game
      * @param  PrintStyle  $style
      * @param  PrintTemplate  $template
      * @param  Today  $today

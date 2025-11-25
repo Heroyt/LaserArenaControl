@@ -2,7 +2,7 @@ import {customFetch, fetchGet, fetchPost, FormSaveResponse} from '../../includes
 import {GameData} from '../../interfaces/gameInterfaces';
 import {System} from '../../interfaces/system';
 
-export type PreparedGameType = 'prepared' | 'user-local' | 'user-public';
+export type PreparedGameType = 'prepared' | 'user-local' | 'user-public' | 'loaded';
 export type PreparedGameData = {
 	id_game: number,
 	datetime: string,

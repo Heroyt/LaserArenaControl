@@ -3,11 +3,11 @@ import {startLoading, stopLoading} from '../../loaders';
 import {GameData} from '../../interfaces/gameInterfaces';
 import Game from '../../game/game';
 import {
-	deleteAllPreparedGames,
-	deletePreparedGame,
-	getPreparedGames,
-	PreparedGameData,
-	sendPreparedGame,
+    deleteAllPreparedGames,
+    deletePreparedGame,
+    getPreparedGames,
+    PreparedGameData,
+    sendPreparedGame,
 } from '../../api/endpoints/preparedGames';
 import {initTooltips} from '../../includes/tooltips';
 import {triggerNotificationError} from '../../includes/notifications';
@@ -17,6 +17,7 @@ const borderColors = {
 	'prepared': 'gray',
 	'user-local': 'primary',
 	'user-public': 'info',
+    'loaded': 'success',
 }
 
 export default class NewGamesPrepared {

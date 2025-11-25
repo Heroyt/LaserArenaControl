@@ -15,7 +15,7 @@ import {triggerNotificationError} from '../../includes/notifications';
 import DOMPurify from 'dompurify';
 
 const borderColors = {
-	'prepared': 'gray',
+    'prepared': 'dark',
 	'user-local': 'primary',
 	'user-public': 'info',
     'loaded': 'success',

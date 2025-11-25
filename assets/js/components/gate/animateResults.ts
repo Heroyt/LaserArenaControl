@@ -199,7 +199,6 @@ export function getPlayerPositions(players: PlayerData[]): PlayerPositions {
 export function reorderPlayers(playersData: PlayerData[]): void {
     if (!positions) {
         positions = getPlayerPositions(playersData);
-        console.log(positions);
     }
 
     const playerCount: number = playersData.length;
@@ -213,7 +212,6 @@ export function reorderPlayers(playersData: PlayerData[]): void {
         const key = playersData.indexOf(playerData);
         const position = key + 1;
         const location = positions.get(position);
-        console.log(position, location);
         playerData.player.style.zIndex = (playerCount - key).toString();
         playerData.positionEl.innerText = `${position}.`;
 
@@ -221,7 +219,7 @@ export function reorderPlayers(playersData: PlayerData[]): void {
         const translateX = location.x - playerData.originalLocation.x;
         const translateY = location.y - playerData.originalLocation.y;
 
-        playerData.player.style.translate = `${translateX}px, ${translateY}px`;
+        playerData.player.style.translate = `${translateX}px ${translateY}px`;
 
         // playerData.player.style.top = `calc(${key} * (100% - (.2rem * var(--multiplier) * ${playerCount})) / ${playerCount})`;
     }

@@ -8,6 +8,7 @@ import {
     getPreparedGames,
     PreparedGameData,
     sendPreparedGame,
+    sendPreparedGameLoaded,
 } from '../../api/endpoints/preparedGames';
 import {initTooltips} from '../../includes/tooltips';
 import {triggerNotificationError} from '../../includes/notifications';
@@ -64,6 +65,12 @@ export default class NewGamesPrepared {
 		document.getElementById('preparedGames').addEventListener('show.bs.offcanvas', () => {
 			this.updatePreparedGames();
 		});
+
+        this.game.on('game-loading', async () => {
+            const data = this.game.export();
+            await sendPreparedGameLoaded(data);
+            this.updatePreparedGames();
+        })
 	}
 
 	initPreparedGame(preparedGameWrapper: HTMLDivElement): void {
@@ -104,7 +111,6 @@ export default class NewGamesPrepared {
 
 
 	addPreparedGame(preparedGameData: PreparedGameData) {
-
 		// Find an existing prepared game wrapper
 		let preparedGameWrapper = this.gamesPreparedWrapper.querySelector(`.prepared-game[data-id="${preparedGameData.id_game}"]`) as HTMLDivElement;
 		if (!preparedGameWrapper) {

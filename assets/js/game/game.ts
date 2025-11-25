@@ -66,6 +66,8 @@ export default class Game {
 
 	sortable: Sortable;
 
+    private eventListeners = new Map<string, Set<(...args: any[]) => void>>
+
 	constructor() {
 
 		this.variationMemory = JSON.parse(window.localStorage.getItem('modeVariationMemory'));
@@ -512,6 +514,7 @@ export default class Game {
 
 		const e = new Event('clear-all');
 		document.dispatchEvent(e);
+        this.dispatch('clear-all');
 	}
 
 	/**
@@ -1071,4 +1074,22 @@ export default class Game {
 			}
 		}
 	}
+
+    on(event: string, handler: (...args: any[]) => void) {
+        if (!this.eventListeners.has(event)) {
+            this.eventListeners.set(event, new Set);
+        }
+        const handlers = this.eventListeners.get(event);
+        handlers.add(handler);
+    }
+
+    dispatch(event: string, ...args: any[]) {
+        if (!this.eventListeners.has(event)) {
+            return;
+        }
+        const handlers = this.eventListeners.get(event);
+        for (const handler of handlers) {
+            handler(...args);
+        }
+    }
 }

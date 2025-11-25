@@ -131,6 +131,8 @@ export default function initNewGamePage() {
 			return;
 		}
 
+        game.dispatch('game-loading');
+
 		switch (data.get('action')) {
 			case 'load':
 				loadGame(data);

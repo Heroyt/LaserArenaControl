@@ -158,7 +158,9 @@ class Results extends ApiController
     public function importGame(Request $request, string $game = '') : ResponseInterface {
         /** @var string $dir */
         $dir = $request->getPost('dir', DEFAULT_RESULTS_DIR);
-        assert($dir !== '', 'Invalid results directory');
+        if (empty($dir)) {
+            $dir = DEFAULT_RESULTS_DIR;
+        }
         $resultsDir = trailingSlashIt($dir);
 
         try {

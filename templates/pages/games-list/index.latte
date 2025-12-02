@@ -65,7 +65,7 @@
 				<td>
 				<span n:foreach="$game->playersSorted as $player"
 						data-toggle="tooltip"
-                        title="{_'%s skóre', format: [number_format($player->score, 0, ',', '&nbsp;')]|noescape}"
+                        title="{_'%s skóre', format: [number_format($player->score, 0, ',', '&nbsp;')]}"
 						class="badge bg-{$player->team !== null ? $player->team->getTeamBgClass(true) : 'dark'}">
 					{$player->position}.&nbsp;{$player->name}
 				</span>

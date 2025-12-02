@@ -185,7 +185,7 @@ class IconNode extends StatementNode
               $ʟ_tmp = [$ʟ_tmp];
             }
             $ʟ_tmp = array_filter($ʟ_tmp);
-            echo '<i class="fa-'.($ʟ_style instanceof \App\DataObjects\FontAwesome\IconType ? $ʟ_style->value : $ʟ_style).' fa-'.$ʟ_icon.($ʟ_tmp ? ' '.Latte\Essential\Filters::stripHtml(implode(" ", array_unique($ʟ_tmp))) : '').'" '.%raw::attrs(isset($ʟ_attrs[0]) && is_array($ʟ_attrs[0]) ? $ʟ_attrs[0] : $ʟ_attrs, %dump).'></i>' %line;
+            echo '<i class="fa-'.($ʟ_style instanceof \App\DataObjects\FontAwesome\IconType ? $ʟ_style->value : $ʟ_style).' fa-'.$ʟ_icon.($ʟ_tmp ? ' '.\Latte\Runtime\HtmlHelpers::convertAttrToHtml(implode(" ", array_unique($ʟ_tmp))) : '').'" '.%raw::attrs(isset($ʟ_attrs[0]) && is_array($ʟ_attrs[0]) ? $ʟ_attrs[0] : $ʟ_attrs, %dump).'></i>' %line;
             XX,
           $this->style,
           $this->icon,

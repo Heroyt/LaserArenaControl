@@ -46,11 +46,8 @@ class IconNode extends StatementNode
             $style = NodeHelpers::toValue($node->style, constants: true);
             if (is_string($style)) {
                 $node->style = IconType::from($style);
-            }
-            else {
-                if ($style instanceof IconType) {
-                    $node->style = $style;
-                }
+            } elseif ($style instanceof IconType) {
+                $node->style = $style;
             }
         } catch (InvalidArgumentException) {
 

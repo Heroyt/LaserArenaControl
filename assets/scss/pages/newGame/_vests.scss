@@ -97,14 +97,39 @@ input[type='radio']:checked + label.player-birthday {
 	}
 }
 
-@container vest-row (width < 600px) {
-	@for $i from 0 to 5 {
-		.vest-row[data-team='#{$i}'] .team-select-wrapper {
-			.team-select {
-				translate: calc(-#{$i} * var(--width, 2rem)) 0;
-			}
-		}
-	}
+@include media-breakpoint-down(lg) {
+  @for $i from 0 to 5 {
+    .vest-row[data-team='#{$i}'] .team-select-wrapper {
+      .team-select {
+        translate: calc(-#{$i} * var(--width, 2rem)) 0;
+      }
+    }
+  }
+
+  .team-select-wrapper {
+    max-width: var(--width, 2rem);
+    transition: max-width 100ms ease;
+
+
+    &:hover {
+      max-width: calc(6 * var(--width, 2rem));
+
+      .team-select {
+        translate: 0 0 !important;
+      }
+    }
+  }
+}
+
+@supports (container-type: size) {
+  @container vest-row (width < 600px) {
+    @for $i from 0 to 5 {
+      .vest-row[data-team='#{$i}'] .team-select-wrapper {
+        .team-select {
+          translate: calc(-#{$i} * var(--width, 2rem)) 0;
+        }
+      }
+    }
 
 	.team-select-wrapper {
 		max-width: var(--width, 2rem);
@@ -114,11 +139,12 @@ input[type='radio']:checked + label.player-birthday {
 		&:hover {
 			max-width: calc(6 * var(--width, 2rem));
 
-			.team-select {
-				translate: 0 0 !important;
-			}
-		}
-	}
+        .team-select {
+          translate: 0 0 !important;
+        }
+      }
+    }
+  }
 }
 
 @include media-breakpoint-down(sm) {

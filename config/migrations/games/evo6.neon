@@ -174,7 +174,7 @@ tables:
 				refColumn: id_game
 		modifications:
 			0.1:
-				- 'CHANGE `name` varchar(100) DEFAULT NULL'
+				- 'CHANGE `name` `name` varchar(100) DEFAULT NULL'
 	App\GameModels\Game\Lasermaxx\Evo6\Player:
 		order: 3
 		definition: '''

@@ -161,7 +161,7 @@ tables:
 			`score` int(11) NOT NULL DEFAULT 0,
 			`bonus` int(11) DEFAULT NULL,
 			`position` int(10) unsigned NOT NULL DEFAULT 0,
-			`name` varchar(20) DEFAULT NULL,
+			`name` varchar(100) DEFAULT NULL,
 			PRIMARY KEY (`id_team`),
 			KEY `id_game` (`id_game`),
 			CONSTRAINT `evo6_teams_ibfk_1` FOREIGN KEY (`id_game`) REFERENCES `evo6_games` (`id_game`) ON DELETE CASCADE ON UPDATE CASCADE
@@ -172,6 +172,9 @@ tables:
 				column: id_game
 				refTable: App\GameModels\Game\Lasermaxx\Evo6\Game
 				refColumn: id_game
+		modifications:
+			0.1:
+				- 'CHANGE `name` varchar(100) DEFAULT NULL'
 	App\GameModels\Game\Lasermaxx\Evo6\Player:
 		order: 3
 		definition: '''

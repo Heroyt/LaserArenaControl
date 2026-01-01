@@ -104,12 +104,12 @@ http:
     - headers
     - http_metrics
   pool:
-#    debug: true
+    #debug: true
     num_workers: 5
     max_jobs: 5
     max_queue_size: 10
     supervisor:
-      max_worker_memory: 512
+      max_worker_memory: 1024
   headers:
     cors:
       allowed_origin: "*"
@@ -150,7 +150,7 @@ eventserver:
 logs:
   encoding: console
   level: debug
-  mode: production
+  mode: development
 #  file_logger_options:
 #    log_output: "logs/rr.log"
 #    max_size: 10

@@ -47,8 +47,8 @@ class GameSimulator
         $players = [];
         $teams = [];
 
-        $start = new DateTimeImmutable();
-        $end = new DateTimeImmutable('+ 15 minutes');
+        $start = new DateTimeImmutable('- 15 minutes');
+        $end = new DateTimeImmutable('now');
 
         $lives = 9999;
         $ammo = 9999;

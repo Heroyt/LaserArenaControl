@@ -71,6 +71,7 @@ class Games extends ApiController
         $addHits = $request->getGet('addHits');
         if (isset($addHits) && !empty($enemies)) {
             $hits = (int) $addHits;
+            /** @phpstan-ignore assign.propertyType */
             $playerObj->hits += $hits;
             for ($i = 0; $i < $hits; $i++) {
                 $enemy = $enemies[array_rand($enemies)];

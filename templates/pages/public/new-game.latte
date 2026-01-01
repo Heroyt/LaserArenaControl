@@ -137,7 +137,7 @@
         {_'Pokud jste registrovaní v <a href="%s">Laser Lize</a>, svůj účet najdete pomocí tlačítka %s.', context: 'game', format: [$app::getLink(['public', 'liga']), $searchBtn]|noescape}
         </p>
         {foreach $vests as $vest}
-            {include vestRow, $vest}
+            {include '../../components/new-game/vestRow.latte', $vest, $colors, $icons, true}
         {/foreach}
     </div>
 {/define}
@@ -284,16 +284,20 @@
         <div class="input-group-text handle cursor-grab bg-secondary text-bg-secondary px-2">
             {faSolid 'grip-lines'}
         </div>
+
         <input id="player-name-{$vest->vestNum}" tabindex="{$vest->vestNum}" type="text"
                class="form-control player-name" autocomplete="off"
                aria-label="{_'Přezdívka hráče na vestě %s', format:[$vest->vestNum]}"
                name="player[{$vest->vestNum}][name]" maxlength="12">
+
         <button type="button" class="btn btn-info btn-sm search-user" data-toggle="tooltip"
                 title="{_'Vyhledat hráče'}">
             {faSolid 'search'}
         </button>
+
         <input type="hidden" name="player[{$vest->vestNum}][code]" value="" class="user-code"
                id="user-{$vest->vestNum}-code">
+
         <div class="team-select-wrapper solo-hide">
             <div class="team-select">
                 {foreach $colors as $key => $color}
@@ -305,6 +309,7 @@
                 {/foreach}
             </div>
         </div>
+
 {*        <div>*}
 {*            <input type="radio" name="player[{$vest->vestNum}][vip]" value="0" class="player-vip-input"*}
 {*                   id="player-vip-{$vest->vestNum}-0" checked/>*}

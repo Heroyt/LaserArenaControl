@@ -34,7 +34,8 @@ export interface PlayerData {
 	deaths?: number,
 	shots?: number,
 	teamNum?: number,
-	color?: number
+    color?: number,
+    linkHash?: number,
 }
 
 export interface TeamData {

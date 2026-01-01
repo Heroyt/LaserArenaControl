@@ -69,7 +69,6 @@ export default class Game {
     private eventListeners = new Map<string, Set<(...args: any[]) => void>>
 
 	constructor() {
-
 		this.variationMemory = JSON.parse(window.localStorage.getItem('modeVariationMemory'));
 		if (!this.variationMemory) {
 			this.variationMemory = {};
@@ -390,6 +389,10 @@ export default class Game {
 				});
 			}
 		}
+
+        this.on('player-update', (player: Player) => {
+            this.checkPlayerLinks();
+        });
 	}
 
 	updateModeVariations(variations: { [index: number]: VariationsValue[] }) {
@@ -886,6 +889,8 @@ export default class Game {
 		if (this.$group) {
 			this.$group.dispatchEvent(e);
 		}
+
+        this.checkPlayerLinks();
 	}
 
 	reassignPlayerSkills(): void {
@@ -974,6 +979,9 @@ export default class Game {
 				skill: player.skill,
 				code: player.userCode,
 			};
+            if (player.isLinked) {
+                data.players[player.vest].linkHash = player.linkHash;
+            }
 		});
 
 		activeTeams.forEach(team => {
@@ -1090,6 +1098,31 @@ export default class Game {
         const handlers = this.eventListeners.get(event);
         for (const handler of handlers) {
             handler(...args);
+        }
+    }
+
+    checkPlayerLinks() {
+        // Group players by their identifier
+        const groups = new Map<string, Set<Player>>();
+        for (const [_, player] of this.players) {
+            if (!player.isActive()) {
+                continue;
+            }
+            const identifier = player.identifier;
+            if (!groups.has(identifier)) {
+                groups.set(identifier, new Set());
+            }
+            groups.get(identifier).add(player);
+        }
+
+        // If any group has more than 1 player, link them
+        for (const [_, group] of groups) {
+            if (group.size < 2) {
+                continue;
+            }
+            for (const player of group) {
+                player.setLinkedPlayers(group);
+            }
         }
     }
 }

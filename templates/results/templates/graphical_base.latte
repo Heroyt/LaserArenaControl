@@ -377,9 +377,9 @@
             {_'Zásahy hráčů', domain: 'results', context: 'hits'}
         </h4>
 		<div n:foreach="$game->playersSorted as $player"
-        {varType App\GameModels\Game\Player $player}
-		{var int $len = strlen($player->name)}
+            {varType App\GameModels\Game\Player $player}
                 class="player-hits w-100 bg-white rounded px-1 py-2 d-flex mt-1 align-items-center">
+            {var int $len = strlen($player->name)}
             <div class="player pe-1 border-end" style="width: 17.5%;">
 				<div class="text-uppercase fw-bold text-team-{$player->color}"
                      {ifset $fontSizeHits[$len]}style="--font-size: {$fontSizeHits[$len]}pt;"{/ifset}>
@@ -391,8 +391,9 @@
             </div>
 			<div n:foreach="$game->playersSorted->getAll() as $player2"
 					{varType App\GameModels\Game\Player $player2}
-                    style="width: {$width|noescape}%;" {var int $len2 = strlen($player2->name)}
+                    style="width: {$width|noescape}%;"
 					class="text-center px-1 {if $player->id === $player2->id}text-muted{elseif $player->favouriteTarget?->id === $player2->id}fw-bold text-print-primary{/if}">
+					{var int $len2 = strlen($player2->name)}
 				<div class="player-hit-name text-uppercase fw-bold {if $player->id !== $player2->id}text-team-{$player2->color}{/if}"
                      {ifset $fontSizeHits[$len2]}style="--font-size: {$fontSizeHits[$len2]}pt;"{/ifset}>
                     {$player2->name}

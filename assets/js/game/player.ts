@@ -9,11 +9,36 @@ declare class CustomPopover extends Popover {
 	_getTipElement(): HTMLDivElement;
 }
 
-export default class Player {
+const hashMemo = new Map<string, number>();
+const colors = [
+    '#e6194b',
+    '#3cb44b',
+    '#ffe119',
+    '#4363d8',
+    '#f58231',
+    '#911eb4',
+    '#46f0f0',
+    '#f032e6',
+    '#bcf60c',
+    '#fabebe',
+    '#008080',
+    '#e6beff',
+    '#9a6324',
+    '#fffac8',
+    '#800000',
+    '#aaffc3',
+    '#808000',
+    '#ffd8b1',
+    '#000075',
+    '#808080'
+];
 
+export default class Player {
 	vest: number | string;
 	row: HTMLElement;
 	game: Game;
+
+    linkedPlayers = new Set<Player>;
 
 	userCode: string = '';
 
@@ -118,8 +143,131 @@ export default class Player {
 		});
 	}
 
+    get identifier(): string {
+        if (this.userCode) {
+            return this.userCode;
+        }
+        return this.name + '|' + (this.team ?? '0');
+    }
+
+	clear(): void {
+		this.$name.value = '';
+		this.$teams.forEach($team => {
+			$team.checked = false;
+		});
+		if (this.$skills.length > 0) {
+			this.$skills.forEach($skill => {
+				$skill.checked = false;
+			});
+			this.$skills[0].checked = true;
+		}
+		if (this.$vip.length > 0) {
+			this.$vip.forEach($vip => {
+				$vip.checked = false;
+			});
+			this.$vip[0].checked = true;
+		}
+		this.realSkill = 1;
+		this.row.style.removeProperty('--shadow-color');
+		this.$vest.style.removeProperty('color');
+		this.$vest.style.removeProperty('background-color');
+		this.resetUserCode();
+		this.update();
+	}
+
+    get linkHash(): number {
+        if (hashMemo.has(this.identifier)) {
+            return hashMemo.get(this.identifier);
+        }
+        // Calculate hash of identifier
+        let hash = 0;
+        for (let i = 0; i < this.identifier.length; i++) {
+            hash = this.identifier.charCodeAt(i) + ((hash << 5) - hash);
+        }
+        hash = Math.abs(hash);
+        hashMemo.set(this.identifier, hash);
+        return hash;
+    }
+
+    get linkColor(): string {
+        // Use hash to select color
+        const index = this.linkHash % colors.length;
+        return colors[index];
+    }
+
+	setTeam(team: string): void {
+		this._setTeam(team);
+		this.update();
+	}
+
+	setSkill(skill: number): void {
+		this._setSkill(skill);
+		this.update();
+		this.realSkill = this.skill;
+	}
+
+    get isLinked(): boolean {
+        return this.linkedPlayers.size > 0;
+    }
+
+	setVip(vip: boolean): void {
+		this._setVip(vip);
+		this.update();
+	}
+
+	_setVip(vip: boolean): void {
+		const value = vip ? 1 : 0;
+		this.$vip.forEach($vip => {
+			$vip.checked = parseInt($vip.value) === value;
+		});
+	}
+
+	setBirthday(birthday: boolean): void {
+		this._setBirthday(birthday);
+		this.update();
+	}
+
+	_setBirthday(birthday: boolean): void {
+		const value = birthday ? 1 : 0;
+		this.$birthday.forEach($birthday => {
+			$birthday.checked = parseInt($birthday.value) === value;
+		});
+	}
+
+	isActive(): boolean {
+		return this.name.trim() !== '';
+	}
+
+	setMaxSkill(max: 3 | 6): void {
+		const label: HTMLLabelElement = this.row.querySelector('.maxSkillSwitch');
+
+		this.maxSkill = max;
+		if (max === 3) {
+			label.setAttribute('for', `player-skill-${this.vest}-1`);
+		} else {
+			label.setAttribute('for', `player-skill-${this.vest}-4`);
+		}
+	}
+
+	resetUserCode(): void {
+		this.setUserCode('');
+		this.setBirthday(false);
+	}
+
+	setUserCode(code: string): void {
+		this.userCode = code;
+		this.$userCode.value = code;
+
+		if (code.length > 0) {
+			this.$name.classList.add('fw-semibold');
+		} else {
+			this.$name.classList.remove('fw-semibold');
+		}
+	}
+
 	initEvents(): void {
 		this.$name.addEventListener('input', () => {
+            this.resetLinkedPlayers();
 			this.resetUserCode();
 			this.update();
 			this.realSkill = this.skill;
@@ -131,6 +279,7 @@ export default class Player {
 				this.selectTeamTooltip.hide();
 				this.atLeastTwoTeamsTooltip.hide();
 				this.game.atLeastTwoTeamsTooltip.hide();
+                this.resetLinkedPlayers();
 				this.update();
 			});
 			if (label) {
@@ -300,31 +449,6 @@ export default class Player {
 		});
 	}
 
-	clear(): void {
-		this.$name.value = '';
-		this.$teams.forEach($team => {
-			$team.checked = false;
-		});
-		if (this.$skills.length > 0) {
-			this.$skills.forEach($skill => {
-				$skill.checked = false;
-			});
-			this.$skills[0].checked = true;
-		}
-		if (this.$vip.length > 0) {
-			this.$vip.forEach($vip => {
-				$vip.checked = false;
-			});
-			this.$vip[0].checked = true;
-		}
-		this.realSkill = 1;
-		this.row.style.removeProperty('--shadow-color');
-		this.$vest.style.removeProperty('color');
-		this.$vest.style.removeProperty('background-color');
-		this.resetUserCode();
-		this.update();
-	}
-
 	update(): void {
 		if (this.name.trim() === '' && this.$name.value.trim() !== '') {
 			const e = new Event('player-activate', {
@@ -424,6 +548,7 @@ export default class Player {
 			}
 		}
 
+        this.game.dispatch('player-update', this);
 		this.row.dispatchEvent(
 			new Event('update', {
 				bubbles: true,
@@ -443,77 +568,56 @@ export default class Player {
 		this.selectTeamTooltip.hide();
 		this.atLeastTwoTeamsTooltip.hide();
 		this.game.atLeastTwoTeamsTooltip.hide();
-	}
-
-	setTeam(team: string): void {
-		this._setTeam(team);
-		this.update();
-	}
-
-	setSkill(skill: number): void {
-		this._setSkill(skill);
-		this.update();
-		this.realSkill = this.skill;
+        for (const player of this.linkedPlayers) {
+            player._setTeam(team);
+        }
 	}
 
 	_setSkill(skill: number) {
 		this.$skills.forEach($skill => {
 			$skill.checked = parseInt($skill.value) === skill;
 		});
+        for (const player of this.linkedPlayers) {
+            player.setSkill(skill);
+        }
 	}
 
-	setVip(vip: boolean): void {
-		this._setVip(vip);
-		this.update();
-	}
+    resetLinkedPlayers(): void {
+        for (const linkedPlayer of this.linkedPlayers) {
+            linkedPlayer.removeLinkedPlayer(this);
+        }
+        this.linkedPlayers.clear();
+        this.toggleLink();
+    }
 
-	_setVip(vip: boolean): void {
-		const value = vip ? 1 : 0;
-		this.$vip.forEach($vip => {
-			$vip.checked = parseInt($vip.value) === value;
-		});
-	}
+    addLinkedPlayer(player: Player): void {
+        this.linkedPlayers.add(player);
+        player.linkedPlayers.add(this);
+        this.toggleLink();
+    }
 
-	setBirthday(birthday: boolean): void {
-		this._setBirthday(birthday);
-		this.update();
-	}
+    removeLinkedPlayer(player: Player): void {
+        this.linkedPlayers.delete(player);
+        player.linkedPlayers.delete(this);
+        this.toggleLink();
+    }
 
-	_setBirthday(birthday: boolean): void {
-		const value = birthday ? 1 : 0;
-		this.$birthday.forEach($birthday => {
-			$birthday.checked = parseInt($birthday.value) === value;
-		});
-	}
+    setLinkedPlayers(players: Set<Player>): void {
+        // Copy set and remove self
+        this.linkedPlayers = new Set(players);
+        this.linkedPlayers.delete(this);
+        this.toggleLink();
+    }
 
-	isActive(): boolean {
-		return this.name.trim() !== '';
-	}
-
-	setMaxSkill(max: 3 | 6): void {
-		const label: HTMLLabelElement = this.row.querySelector('.maxSkillSwitch');
-
-		this.maxSkill = max;
-		if (max === 3) {
-			label.setAttribute('for', `player-skill-${this.vest}-1`);
-		} else {
-			label.setAttribute('for', `player-skill-${this.vest}-4`);
-		}
-	}
-
-	resetUserCode(): void {
-		this.setUserCode('');
-		this.setBirthday(false);
-	}
-
-	setUserCode(code: string): void {
-		this.userCode = code;
-		this.$userCode.value = code;
-
-		if (code.length > 0) {
-			this.$name.classList.add('fw-semibold');
-		} else {
-			this.$name.classList.remove('fw-semibold');
-		}
-	}
+    private toggleLink(): void {
+        this.linkedPlayers.delete(this); // Make sure self is not accidentally included
+        if (this.isLinked) {
+            // Show, set color and tooltip
+            this.row.classList.add('linked');
+            this.row.style.setProperty('--link-color', this.linkColor);
+            return;
+        }
+        // Hide link indicator
+        this.row.classList.remove('linked');
+    }
 }

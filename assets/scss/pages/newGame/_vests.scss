@@ -89,12 +89,29 @@ input[type='radio']:checked + label.player-birthday {
 }
 
 .vest-row {
+  --link-color: var(--primary);
 	container-name: vest-row;
 	container-type: inline-size;
+  position: relative;
 
 	&.highlight {
 		outline: 2px solid var(--danger);
 	}
+
+  .player-link {
+    display: none;
+    position: absolute;
+    color: var(--link-color);
+    top: -5px;
+    left: -5px;
+    z-index: 2;
+  }
+
+  &.linked {
+    .player-link {
+      display: block;
+    }
+  }
 }
 
 @include media-breakpoint-down(xl) {
@@ -131,13 +148,13 @@ input[type='radio']:checked + label.player-birthday {
       }
     }
 
-	.team-select-wrapper {
-		max-width: var(--width, 2rem);
-		transition: max-width 100ms ease;
+    .team-select-wrapper {
+      max-width: var(--width, 2rem);
+      transition: max-width 100ms ease;
 
 
-		&:hover {
-			max-width: calc(6 * var(--width, 2rem));
+      &:hover {
+        max-width: calc(6 * var(--width, 2rem));
 
         .team-select {
           translate: 0 0 !important;

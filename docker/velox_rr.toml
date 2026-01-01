@@ -1,15 +1,15 @@
 [roadrunner]
-ref = "v2025.1.4"
+ref = "v2025.1.5"
 
 [debug]
-enabled = false
+enabled = true
 
 [log]
-level = "info"
+level = "debug"
 mode = "production"
 
 [github.token]
-token = "${RT_TOKEN}"
+token = "${GITHUB_TOKEN}"
 
 # LOGS
 [github.plugins.appLogger]
@@ -37,6 +37,11 @@ repository = "rpc"
 ref = "v5.1.9"
 owner = "roadrunner-server"
 repository = "centrifuge"
+
+[github.plugins.temporal]
+ref = "v5.9.0"
+owner = "temporalio"
+repository = "roadrunner-temporal"
 
 # METRICS
 [github.plugins.metrics]
@@ -124,13 +129,6 @@ ref = "v5.1.10"
 owner = "roadrunner-server"
 repository = "redis"
 
-# FILESERVER (static files)
-[github.plugins.fileserver]
-ref = "v5.1.9"
-owner = "roadrunner-server"
-repository = "fileserver"
-
-# gRPC plugin
 [github.plugins.grpc]
 ref = "v5.2.3"
 owner = "roadrunner-server"

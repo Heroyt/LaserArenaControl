@@ -1,4 +1,4 @@
-FROM php:8.4-cli-alpine3.22 AS ext-builder
+FROM php:8.4-cli-alpine AS ext-builder
 
 # Install build dependencies
 RUN apk add --no-cache --virtual .build-deps \
@@ -66,15 +66,16 @@ RUN apk add --no-cache --virtual .locale-build musl-locales musl-locales-lang &&
 FROM ghcr.io/roadrunner-server/velox:latest AS roadrunner
 
 ARG APP_VERSION="1.0.0"
-ARG VERSION="v2025.1.4"
+ARG VERSION="v2025.1.5"
 
 COPY docker/velox_rr.toml .
 
 ENV CGO_ENABLED=0
-RUN --mount=type=secret,id=RT_TOKEN,env=RT_TOKEN \
+RUN --mount=type=secret,id=RT_TOKEN \
+    export GITHUB_TOKEN=$(cat /run/secrets/RT_TOKEN) && \
     vx build -c velox_rr.toml -o /usr/bin/
 
-FROM node:current-slim AS node_base
+FROM node:current-alpine AS node_base
 FROM composer:latest AS composer
 FROM php AS project
 
@@ -102,22 +103,24 @@ WORKDIR /var/www/
 # Initialize git and download project
 RUN git init \
     && mkdir -p modules \
-    && git remote add origin https://github.com/Heroyt/LaserArenaControl.git \
-    && git fetch --all --tags \
-    && git checkout -t origin/stable \
-    && git switch stable \
-    && git config pull.ff only --autostash \
-    && git pull \
-    && git submodule init && git submodule update --init --recursive --remote \
-    && git pull --recurse-submodules=yes
+    && git remote add origin https://github.com/Heroyt/LaserArenaControl.git
+RUN git fetch --all --tags \
+    && git config pull.ff only --autostash
+#    && git checkout -t origin/stable \
+#    && git switch stable \
+#    && git pull \
+#    && git submodule init && git submodule update --init --recursive --remote \
+#    && git pull --recurse-submodules=yes
 
 # Initialize all configs and create necessary directories
-RUN mv private/docker-config.ini private/config.ini
-RUN mkdir -p logs
-RUN mkdir -p temp
-RUN mkdir -p lmx
-RUN mkdir -p lmx/results
-RUN mkdir -p lmx/games
+RUN mkdir -p logs && \
+    mkdir -p temp && \
+    mkdir -p lmx && \
+    mkdir -p lmx6 && \
+    mkdir -p private && \
+    mkdir -p lmx/results && \
+    mkdir -p lmx/games
+COPY private/docker-config.ini private/config.ini
 
 ENV COMPOSER_ALLOW_SUPERUSER=1
 

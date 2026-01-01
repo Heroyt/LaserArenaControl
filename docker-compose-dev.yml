@@ -28,6 +28,8 @@ services:
     build:
       context: .
       dockerfile: ./docker/Dockerfile
+      tags:
+        - heroyt/laser-arena-control:latest
       secrets:
         - RT_TOKEN
     working_dir: /var/www/
@@ -43,6 +45,7 @@ services:
       - ./docker/core/php.ini:/usr/local/etc/php/php.ini
     ports:
       - "8001:8001"
+      - "8080:8080"
       - "6001:6001"
       - "2112:2112"
       - "2114:2114"
@@ -82,8 +85,8 @@ services:
   web:
     restart: unless-stopped
     build:
-      context: .
-      dockerfile: ./docker/nginx/Dockerfile
+      context: ./docker/
+      dockerfile: ./nginx/Dockerfile
     depends_on:
       - php
       - db

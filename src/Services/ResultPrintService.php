@@ -255,7 +255,7 @@ readonly class ResultPrintService
           $printStyle,
           $printTemplate,
           new Today($game, $player, $team),
-          $this->getPublicUrl($game),
+            $this->getPublicUrl($game, false),
           $this->getQR($game),
           App::getShortLanguageCode(),
           $copies,
@@ -293,10 +293,11 @@ readonly class ResultPrintService
      * @param  G  $game
      * @return non-empty-string
      */
-    public function getPublicUrl(Game $game) : string {
+    public function getPublicUrl(Game $game, bool $tracking = true): string
+    {
         /** @var string $url */
         $url = Info::get('liga_api_url');
-        return trailingSlashIt($url).'g/'.$game->code.'?mtm_campaign=QR&mtm_kwd=print';
+        return trailingSlashIt($url) . 'g/' . $game->code . ($tracking ? '?mtm_campaign=QR&mtm_kwd=print' : '');
     }
 
     /**

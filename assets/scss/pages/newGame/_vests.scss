@@ -114,7 +114,7 @@ input[type='radio']:checked + label.player-birthday {
   }
 }
 
-@include media-breakpoint-down(xl) {
+@include media-breakpoint-down(md) {
   @for $i from 0 to 5 {
     .vest-row[data-team='#{$i}'] .team-select-wrapper {
       .team-select {

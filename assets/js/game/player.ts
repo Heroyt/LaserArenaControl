@@ -93,7 +93,7 @@ export default class Player {
 
 		const tmp = document.createElement('div');
 		tmp.innerHTML = `<div class="btn-group my-3 shadow"><input type="radio" class="btn-check" name="vest[status]" id="vest-status-ok" autocomplete="off" value="ok"><label class="btn btn-outline-success" for="vest-status-ok">${messages.vestOk}</label><input type="radio" class="btn-check" name="vest[status]" id="vest-status-playable" autocomplete="off" value="playable"><label class="btn btn-outline-warning" for="vest-status-playable">${messages.vestPlayable}</label><input type="radio" class="btn-check" name="vest[status]" id="vest-status-broken" autocomplete="off" value="broken" ><label class="btn btn-outline-danger" for="vest-status-broken">${messages.vestBroken}</label></div><textarea class="form-control" name="vest[info]" id="vest-info" cols="20" rows="4">${this.$vest.dataset.info}</textarea>`;
-		if (!this.$vest.dataset.hideStatus) {
+        if (!this.$vest.dataset.hideStatus || this.$vest.dataset.hideStatus === '0' || this.$vest.dataset.hideStatus === 'false') {
 			this.popover = new Popover(
 				this.$vest,
 				{

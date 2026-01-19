@@ -48,7 +48,7 @@ export default class ResultsAnimation {
         let minScore: number = this.scoreRange.min;
         let maxScore: number = this.scoreRange.max;
 
-        this.info.classList.add('hide');
+        this.hideInfo();
 
         // Initialize teams - save team data and reset the score
         for (const team of this.teamsArray) {
@@ -94,6 +94,14 @@ export default class ResultsAnimation {
 
     stop() {
         this.stopFlag = true;
+    }
+
+    hideInfo() {
+        this.info.classList.add('hide');
+    }
+
+    showInfo() {
+        this.info.classList.remove('hide');
     }
 
     draw(increment: number, state: AnimationState): void {
@@ -346,7 +354,7 @@ export default class ResultsAnimation {
 
         // Show the results info block (QR code)
         setTimeout(() => {
-            this.info.classList.remove('hide');
+            this.showInfo();
         }, 200);
     }
 

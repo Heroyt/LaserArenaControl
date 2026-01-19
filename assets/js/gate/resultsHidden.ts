@@ -51,6 +51,11 @@ export default class ResultsHiddenScreen implements GateScreen {
 
 class HiddenResultsAnimation extends ResultsAnimation {
 
+    start() {
+        super.start();
+        this.showInfo();
+    }
+
     protected updatePlayerIteration(playerData: PlayerData, state: AnimationState) {
         // Add a random realistic value to a player
         // The "realistic" value is achieved by limittin the score between min and max scores

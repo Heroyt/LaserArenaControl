@@ -108,8 +108,15 @@ http:
     num_workers: 5
     max_jobs: 5
     max_queue_size: 10
+    destroy_timeout: 1s
+    dynamic_allocator:
+      max_workers: 25
+      spawn_rate: 10
+      idle_timeout: 10s
     supervisor:
+      watch_tick: 5s
       max_worker_memory: 1024
+      exec_ttl: 60s
   headers:
     cors:
       allowed_origin: "*"

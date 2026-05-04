@@ -72,7 +72,7 @@
 {/define}
 
 {define gameActionGroup, App\GameModels\Game\Game|null $game = null}
-    <button type="button" class="btn btn-{if $game?->getGroup() !== null}success{else}primary{/if} select-group"
+    <button type="button" class="btn btn-{if $game?->getGroup() !== null}primary{else}outline-primary{/if} select-group"
             data-toggle="tooltip"
             title="{if $game?->getGroup()?->name !== null}{$game?->getGroup()?->name}{else}{_'Vybrat skupinu'}{/if}"
             {ifset $game}data-code="{$game?->code}" data-group="{$game?->getGroup()?->id}"

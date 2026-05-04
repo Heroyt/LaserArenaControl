@@ -79,6 +79,23 @@
 @import 'components/music';
 @import 'components/playBtn';
 
+.btn.game-group-selected {
+  background-color: var(--group-color);
+  border-color: var(--group-color);
+  color: var(--group-text-color);
+
+  &:hover,
+  &:focus,
+  &:active,
+  &.active,
+  &:focus-visible {
+    background-color: var(--group-color);
+    border-color: var(--group-color);
+    color: var(--group-text-color);
+    filter: brightness(.95);
+  }
+}
+
 @import 'viewTransitions';
 
 #modeSwitch {

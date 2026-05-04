@@ -151,6 +151,7 @@ export default class Player {
     }
 
 	clear(): void {
+        this.resetLinkedPlayers();
 		this.$name.value = '';
 		this.$teams.forEach($team => {
 			$team.checked = false;
@@ -196,14 +197,28 @@ export default class Player {
     }
 
 	setTeam(team: string): void {
-		this._setTeam(team);
-		this.update();
+        const group = this.getLinkedGroup();
+        this.game.withSuspendedPlayerLinkCheck(() => {
+            for (const player of group) {
+                player._setTeam(team);
+            }
+            for (const player of group) {
+                player.update();
+            }
+        });
 	}
 
 	setSkill(skill: number): void {
-		this._setSkill(skill);
-		this.update();
-		this.realSkill = this.skill;
+        const group = this.getLinkedGroup();
+        this.game.withSuspendedPlayerLinkCheck(() => {
+            for (const player of group) {
+                player._setSkill(skill);
+            }
+            for (const player of group) {
+                player.update();
+                player.realSkill = player.skill;
+            }
+        });
 	}
 
     get isLinked(): boolean {
@@ -568,18 +583,12 @@ export default class Player {
 		this.selectTeamTooltip.hide();
 		this.atLeastTwoTeamsTooltip.hide();
 		this.game.atLeastTwoTeamsTooltip.hide();
-        for (const player of this.linkedPlayers) {
-            player._setTeam(team);
-        }
 	}
 
 	_setSkill(skill: number) {
 		this.$skills.forEach($skill => {
 			$skill.checked = parseInt($skill.value) === skill;
 		});
-        for (const player of this.linkedPlayers) {
-            player.setSkill(skill);
-        }
 	}
 
     resetLinkedPlayers(): void {
@@ -619,5 +628,11 @@ export default class Player {
         }
         // Hide link indicator
         this.row.classList.remove('linked');
+    }
+
+    private getLinkedGroup(): Set<Player> {
+        const group = new Set(this.linkedPlayers);
+        group.add(this);
+        return group;
     }
 }

@@ -67,6 +67,7 @@ export default class Game {
 	sortable: Sortable;
 
     private eventListeners = new Map<string, Set<(...args: any[]) => void>>
+    private suspendPlayerLinkCheck = 0;
 
 	constructor() {
 		this.variationMemory = JSON.parse(window.localStorage.getItem('modeVariationMemory'));
@@ -390,10 +391,25 @@ export default class Game {
 			}
 		}
 
-        this.on('player-update', (player: Player) => {
+        this.on('player-update', (_player: Player) => {
+            if (this.suspendPlayerLinkCheck > 0) {
+                return;
+            }
             this.checkPlayerLinks();
         });
 	}
+
+    withSuspendedPlayerLinkCheck<T>(callback: () => T): T {
+        this.suspendPlayerLinkCheck++;
+        try {
+            return callback();
+        } finally {
+            this.suspendPlayerLinkCheck--;
+            if (this.suspendPlayerLinkCheck === 0) {
+                this.checkPlayerLinks();
+            }
+        }
+    }
 
 	updateModeVariations(variations: { [index: number]: VariationsValue[] }) {
 		// Clear
@@ -1102,6 +1118,10 @@ export default class Game {
     }
 
     checkPlayerLinks() {
+        for (const [_, player] of this.players) {
+            player.setLinkedPlayers(new Set());
+        }
+
         // Group players by their identifier
         const groups = new Map<string, Set<Player>>();
         for (const [_, player] of this.players) {

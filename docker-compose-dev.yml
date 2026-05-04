@@ -68,6 +68,7 @@ services:
       FEATURE_GATES: false
       FEATURE_TABLES: true
       FEATURE_GROUPS: true
+      PHP_IDE_CONFIG: serverName=docker
   nginx_exporter:
     restart: unless-stopped
     image: nginx/nginx-prometheus-exporter:latest

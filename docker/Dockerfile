@@ -1,48 +1,32 @@
 FROM php:8.4-cli-alpine AS ext-builder
 
-# Install build dependencies
-RUN apk add --no-cache --virtual .build-deps \
-        wget git gettext gettext-dev icu-dev zip unzip ffmpeg libzip-dev \
-        libcurl curl-dev nano build-base autoconf make gcc g++ libc-dev linux-headers \
-        zlib-dev jpeg-dev libjpeg-turbo-dev libpng-dev libavif-dev libwebp-dev freetype-dev \
-        pcre-dev libtool libxml2-dev oniguruma-dev icu-libs imagemagick-dev imagemagick bash
+COPY --from=ghcr.io/mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
 
-RUN docker-php-ext-configure gd --with-jpeg --with-freetype --with-webp --with-avif
-
-# PHP extensions
-RUN docker-php-ext-install mysqli
-RUN docker-php-ext-install curl
-RUN docker-php-ext-install gettext
-RUN docker-php-ext-install sockets
-RUN docker-php-ext-install pdo_mysql
-RUN docker-php-ext-install zip
-RUN docker-php-ext-install pcntl
-RUN docker-php-ext-install intl
-RUN docker-php-ext-install opcache
-RUN docker-php-ext-install gd
-
-# Imagick
-RUN git clone https://github.com/Imagick/imagick.git --depth 1 /tmp/imagick && \
-    cd /tmp/imagick && \
-    phpize && \
-    ./configure && \
-    make && \
-    make install && \
-    cd / && \
-    rm -rf /tmp/imagick
-
-# Igbinary, APCu, Redis
-RUN pecl install igbinary apcu redis
-
-# Enable extensions
-RUN docker-php-ext-enable imagick igbinary apcu redis
+# PHP extensions and their transient build dependencies are handled by the installer.
+RUN install-php-extensions \
+        mysqli \
+        curl \
+        gettext \
+        sockets \
+        pdo_mysql \
+        zip \
+        pcntl \
+        intl \
+        opcache \
+        gd \
+        imagick \
+        igbinary \
+        apcu \
+        redis
 
 # Final image
 FROM php:8.4-cli-alpine AS php
 
 # Install runtime dependencies only
 RUN apk add --no-cache \
-        wget git gettext icu-libs zip unzip ffmpeg libpng libwebp libzip libcurl curl nano \
+        wget git gettext icu-libs zip unzip ffmpeg \
+        freetype libjpeg-turbo libpng libwebp libavif libxpm \
+        libzip libcurl curl lz4-libs nano \
         imagemagick \
         openssh-client \
         tzdata \
@@ -56,9 +40,6 @@ COPY docker/core/php-staging.ini "$PHP_INI_DIR/php-staging.ini"
 COPY --from=ext-builder /usr/local/lib/php/extensions/ /usr/local/lib/php/extensions/
 COPY --from=ext-builder /usr/local/etc/php/conf.d/ /usr/local/etc/php/conf.d/
 
-# Enable extensions (in case conf.d is not enough)
-RUN docker-php-ext-enable mysqli curl gettext sockets pdo_mysql zip pcntl intl opcache gd imagick igbinary apcu redis
-
 # Setup gettext languages (Alpine way)
 RUN apk add --no-cache --virtual .locale-build musl-locales musl-locales-lang && \
     echo "export LANG=en_US.UTF-8" >> /etc/profile
@@ -66,11 +47,12 @@ RUN apk add --no-cache --virtual .locale-build musl-locales musl-locales-lang &&
 FROM ghcr.io/roadrunner-server/velox:latest AS roadrunner
 
 ARG APP_VERSION="1.0.0"
-ARG VERSION="v2025.1.5"
+ARG VERSION="v2025.1.13"
 
 COPY docker/velox_rr.toml .
 
 ENV CGO_ENABLED=0
+ENV GOTOOLCHAIN=auto
 RUN --mount=type=secret,id=RT_TOKEN \
     export GITHUB_TOKEN=$(cat /run/secrets/RT_TOKEN) && \
     vx build -c velox_rr.toml -o /usr/bin/

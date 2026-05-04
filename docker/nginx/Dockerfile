@@ -24,11 +24,6 @@ RUN apk add --no-cache --virtual .build-deps \
 
 SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
 
-# Buld QuicTSL
-RUN git clone https://github.com/quictls/openssl.git /usr/src/quictls
-WORKDIR /usr/src/quictls
-RUN ./Configure && make && make install
-
 # Build nginx
 RUN wget "http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz" -O nginx.tar.gz &&  \
     rm -rf /usr/src/nginx /usr/src/extra_module && \
@@ -38,7 +33,7 @@ RUN wget "http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz" -O nginx.tar.
 WORKDIR /usr/src/nginx/nginx-${NGINX_VERSION}
 
 RUN CONFARGS=$(nginx -V 2>&1 | sed -n -e 's/^.*arguments: //p') && \
-    sh -c "./configure --with-compat $CONFARGS --with-http_v3_module --with-cc-opt=\"-I/usr/local/include/openssl\" --with-ld-opt=\"-L/usr/local/lib\"" &&  \
+    sh -c "./configure --with-compat $CONFARGS" &&  \
     make &&  \
     make install
 

@@ -1,5 +1,5 @@
 [roadrunner]
-ref = "v2025.1.5"
+ref = "v2025.1.13"
 
 [debug]
 enabled = true
@@ -39,44 +39,44 @@ owner = "roadrunner-server"
 repository = "centrifuge"
 
 [github.plugins.temporal]
-ref = "v5.9.0"
+ref = "v5.10.0"
 owner = "temporalio"
 repository = "roadrunner-temporal"
 
 # METRICS
 [github.plugins.metrics]
-ref = "v5.1.9"
+ref = "v5.2.0"
 owner = "roadrunner-server"
 repository = "metrics"
 
 [github.plugins.otel]
-ref = "v5.3.1"
+ref = "v5.5.0"
 owner = "roadrunner-server"
 repository = "otel"
 
 # HTTP + MIDDLEWARE
 [github.plugins.http]
-ref = "v5.2.8"
+ref = "v5.3.0"
 owner = "roadrunner-server"
 repository = "http"
 
 [github.plugins.gzip]
-ref = "v5.1.9"
+ref = "v5.3.0"
 owner = "roadrunner-server"
 repository = "gzip"
 
 [github.plugins.prometheus]
-ref = "v5.1.8"
+ref = "v5.2.0"
 owner = "roadrunner-server"
 repository = "prometheus"
 
 [github.plugins.headers]
-ref = "v5.1.9"
+ref = "v5.2.0"
 owner = "roadrunner-server"
 repository = "headers"
 
 [github.plugins.static]
-ref = "v5.1.7"
+ref = "v5.2.0"
 owner = "roadrunner-server"
 repository = "static"
 
@@ -86,7 +86,7 @@ owner = "roadrunner-server"
 repository = "proxy_ip_parser"
 
 [github.plugins.send]
-ref = "v5.1.6"
+ref = "v5.2.0"
 owner = "roadrunner-server"
 repository = "send"
 
@@ -130,7 +130,7 @@ owner = "roadrunner-server"
 repository = "redis"
 
 [github.plugins.grpc]
-ref = "v5.2.3"
+ref = "v5.3.0"
 owner = "roadrunner-server"
 repository = "grpc"
 

@@ -322,7 +322,6 @@ class ImportService
                     $total++;
                     $logger->info('Importing file: ' . $file);
                     $output?->writeln('Importing file: ' . $file);
-
                     try {
                         $parser->setFile($file);
                         $game = $parser->parse();

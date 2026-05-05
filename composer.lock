@@ -1665,16 +1665,16 @@
     },
     {
       "name": "lsr/db",
-      "version": "0.3.7",
+      "version": "0.3.9",
       "source": {
         "type": "git",
         "url": "https://github.com/Heroyt/lsr-db.git",
-        "reference": "8740065ac1e46938e14e1ebfc09de0a3f4f6ac7a"
+        "reference": "1daf8d66d1ed5fe8ffa741e8da43d6951758725d"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/Heroyt/lsr-db/zipball/8740065ac1e46938e14e1ebfc09de0a3f4f6ac7a",
-        "reference": "8740065ac1e46938e14e1ebfc09de0a3f4f6ac7a",
+        "url": "https://api.github.com/repos/Heroyt/lsr-db/zipball/1daf8d66d1ed5fe8ffa741e8da43d6951758725d",
+        "reference": "1daf8d66d1ed5fe8ffa741e8da43d6951758725d",
         "shasum": ""
       },
       "require": {
@@ -1690,7 +1690,7 @@
         "phpstan/phpstan": "^2.0",
         "phpstan/phpstan-dibi": "^2.0",
         "phpstan/phpstan-nette": "^2.0",
-        "phpunit/phpunit": "^11",
+        "phpunit/phpunit": "^12",
         "roave/security-advisories": "dev-latest"
       },
       "type": "library",
@@ -1728,10 +1728,10 @@
       ],
       "description": "Laser framework core - DB",
       "support": {
-        "source": "https://github.com/Heroyt/lsr-db/tree/v0.3.7",
+        "source": "https://github.com/Heroyt/lsr-db/tree/v0.3.9",
         "issues": "https://github.com/Heroyt/lsr-db/issues"
       },
-      "time": "2025-07-26T09:25:43+00:00"
+      "time": "2026-05-05T13:49:14+00:00"
     },
     {
       "name": "lsr/helpers",
@@ -2116,16 +2116,16 @@
     },
     {
       "name": "lsr/orm",
-      "version": "0.3.16",
+      "version": "0.3.17",
       "source": {
         "type": "git",
         "url": "https://github.com/Heroyt/lsr-orm.git",
-        "reference": "faeb9bcd97dd41410e6b80127ecd5e3c0ae98c92"
+        "reference": "000c7ca4e804c8e198515454e996896dd149d548"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/Heroyt/lsr-orm/zipball/faeb9bcd97dd41410e6b80127ecd5e3c0ae98c92",
-        "reference": "faeb9bcd97dd41410e6b80127ecd5e3c0ae98c92",
+        "url": "https://api.github.com/repos/Heroyt/lsr-orm/zipball/000c7ca4e804c8e198515454e996896dd149d548",
+        "reference": "000c7ca4e804c8e198515454e996896dd149d548",
         "shasum": ""
       },
       "require": {
@@ -2145,7 +2145,7 @@
         "phpstan/phpstan-nette": "^2.0",
         "phpunit/phpunit": "^12",
         "roave/security-advisories": "dev-latest",
-        "squizlabs/php_codesniffer": "^3.11"
+        "squizlabs/php_codesniffer": "^4"
       },
       "type": "library",
       "extra": {
@@ -2189,10 +2189,10 @@
       ],
       "description": "Laser framework core - ORM",
       "support": {
-        "source": "https://github.com/Heroyt/lsr-orm/tree/v0.3.16",
+        "source": "https://github.com/Heroyt/lsr-orm/tree/v0.3.17",
         "issues": "https://github.com/Heroyt/lsr-orm/issues"
       },
-      "time": "2025-12-02T18:09:44+00:00"
+      "time": "2026-05-05T13:42:07+00:00"
     },
     {
       "name": "lsr/request",
@@ -7861,16 +7861,16 @@
     },
     {
       "name": "phpunit/php-code-coverage",
-      "version": "14.1.6",
+      "version": "14.1.7",
       "source": {
         "type": "git",
         "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-        "reference": "4991e47adce8e31e554aee8fdaabfc3b1d60707d"
+        "reference": "da6e6b64940901650abcea62430c8c24926b7a71"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/4991e47adce8e31e554aee8fdaabfc3b1d60707d",
-        "reference": "4991e47adce8e31e554aee8fdaabfc3b1d60707d",
+        "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/da6e6b64940901650abcea62430c8c24926b7a71",
+        "reference": "da6e6b64940901650abcea62430c8c24926b7a71",
         "shasum": ""
       },
       "require": {
@@ -7927,7 +7927,7 @@
       "support": {
         "issues": "https://github.com/sebastianbergmann/php-code-coverage/issues",
         "security": "https://github.com/sebastianbergmann/php-code-coverage/security/policy",
-        "source": "https://github.com/sebastianbergmann/php-code-coverage/tree/14.1.6"
+        "source": "https://github.com/sebastianbergmann/php-code-coverage/tree/14.1.7"
       },
       "funding": [
         {
@@ -7947,7 +7947,7 @@
           "type": "tidelift"
         }
       ],
-      "time": "2026-04-24T13:10:08+00:00"
+      "time": "2026-05-04T15:51:53+00:00"
     },
     {
       "name": "phpunit/php-file-iterator",
@@ -8339,12 +8339,12 @@
       "source": {
         "type": "git",
         "url": "https://github.com/Roave/SecurityAdvisories.git",
-        "reference": "2221f6ef09e87784e78e188aadd8f7e3a50e679a"
+        "reference": "5cde5eaaa528567c22252d5c6b80c3e8648763e9"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/2221f6ef09e87784e78e188aadd8f7e3a50e679a",
-        "reference": "2221f6ef09e87784e78e188aadd8f7e3a50e679a",
+        "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/5cde5eaaa528567c22252d5c6b80c3e8648763e9",
+        "reference": "5cde5eaaa528567c22252d5c6b80c3e8648763e9",
         "shasum": ""
       },
       "conflict": {
@@ -8404,7 +8404,7 @@
         "awesome-support/awesome-support": "<=6.0.7",
         "aws/aws-sdk-php": "<=3.371.3",
         "ayacoo/redirect-tab": "<2.1.2|>=3,<3.1.7|>=4,<4.0.5",
-        "azuracast/azuracast": "<=0.23.3",
+        "azuracast/azuracast": "<=0.23.5",
         "b13/seo_basics": "<0.8.2",
         "backdrop/backdrop": "<=1.32",
         "backpack/crud": "<3.4.9",
@@ -8459,7 +8459,7 @@
         "cesnet/simplesamlphp-module-proxystatistics": "<3.1",
         "chriskacerguis/codeigniter-restserver": "<=2.7.1",
         "chrome-php/chrome": "<1.14",
-        "ci4-cms-erp/ci4ms": "<=0.31.6",
+        "ci4-cms-erp/ci4ms": "<=0.31.7",
         "civicrm/civicrm-core": ">=4.2,<4.2.9|>=4.3,<4.3.3",
         "ckeditor/ckeditor": "<4.25",
         "clickstorm/cs-seo": ">=6,<6.8|>=7,<7.5|>=8,<8.4|>=9,<9.3",
@@ -8511,6 +8511,7 @@
         "david-garcia/phpwhois": "<=4.3.1",
         "dbrisinajumi/d2files": "<1",
         "dcat/laravel-admin": "<=2.1.3|==2.2.0.0-beta|==2.2.2.0-beta",
+        "dedoc/scramble": ">=0.13.2,<0.13.22",
         "derhansen/fe_change_pwd": "<2.0.5|>=3,<3.0.3",
         "derhansen/sf_event_mgt": "<4.3.1|>=5,<5.1.1|>=7,<7.4",
         "desperado/xml-bundle": "<=0.1.7",
@@ -8830,6 +8831,7 @@
         "mautic/core-lib": ">=1.0.0.0-beta,<4.4.13|>=5.0.0.0-alpha,<5.1.1",
         "mautic/grapes-js-builder-bundle": ">=4,<4.4.18|>=5,<5.2.9|>=6,<6.0.7",
         "maximebf/debugbar": "<1.19",
+        "mckenziearts/livewire-markdown-editor": "<1.3",
         "mdanter/ecc": "<2",
         "mediawiki/abuse-filter": "<1.39.9|>=1.40,<1.41.3|>=1.42,<1.42.2",
         "mediawiki/cargo": "<3.8.3",
@@ -8873,6 +8875,7 @@
         "munkireport/softwareupdate": "<1.6",
         "mustache/mustache": ">=2,<2.14.1",
         "mwdelaney/wp-enable-svg": "<=0.2",
+        "nabeel/phpvms": "<7.0.6",
         "namshi/jose": "<2.2",
         "nasirkhan/laravel-starter": "<11.11",
         "nategood/httpful": "<1",
@@ -9269,7 +9272,7 @@
         "webcoast/deferred-image-processing": "<1.0.2",
         "webklex/laravel-imap": "<5.3",
         "webklex/php-imap": "<5.3",
-        "webonyx/graphql-php": "<=15.31.4",
+        "webonyx/graphql-php": "<15.32.2",
         "webpa/webpa": "<3.1.2",
         "webreinvent/vaahcms": "<=2.3.1",
         "wikibase/wikibase": "<=1.39.3",
@@ -9389,7 +9392,7 @@
           "type": "tidelift"
         }
       ],
-      "time": "2026-04-30T21:24:12+00:00"
+      "time": "2026-05-05T07:41:58+00:00"
     },
     {
       "name": "sebastian/cli-parser",

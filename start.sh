@@ -12,7 +12,7 @@ echo "Version: $LAC_VERSION"
 # Create necessary directories
 mkdir -p temp/latte
 mkdir -p temp/di
-mkdir -p temo/models
+mkdir -p temp/models
 mkdir -p temp/cache
 mkdir -p logs
 mkdir -p upload
@@ -54,27 +54,27 @@ fi
 # Update project
 echo "Fetching latest changes from GitHub..."
 echo "Versions: LAC_VERSION=${LAC_VERSION}, LAC_MODELS_VERSION=${LAC_MODELS_VERSION}"
-if [ "$LAC_VERSION" = "dev" ]; then
-  echo "Skipping git fetch for dev"
-  ensure_submodules
-else
-  git fetch --all --tags
-  if [ "$LAC_VERSION" = "stable" ]; then
-    git switch stable
-    git reset --hard origin/stable
-    git pull --recurse-submodules origin stable
-    ensure_submodules
-  elif [ "$LAC_VERSION" = "staging" ]; then
-    git switch staging
-    git reset --hard origin/staging
-    git pull --recurse-submodules origin staging
+  if [ "$LAC_VERSION" = "dev" ]; then
+    echo "Skipping git fetch for dev"
     ensure_submodules
   else
-    git checkout "v${LAC_VERSION}" -b "stable"
-    ensure_submodules
-    git -C src/GameModels fetch --all --tags
-    git -C src/GameModels checkout "v${LAC_MODELS_VERSION}" -b "stable"
-  fi
+    git fetch --all --tags
+    if [ "$LAC_VERSION" = "stable" ]; then
+      git switch stable
+      git reset --hard origin/stable
+      git pull --recurse-submodules origin stable
+      ensure_submodules
+    elif [ "$LAC_VERSION" = "staging" ]; then
+      git switch staging
+      git reset --hard origin/staging
+      git pull --recurse-submodules origin staging
+      ensure_submodules
+    else
+      git checkout "v${LAC_VERSION}" -b "stable"
+      ensure_submodules
+      git -C src/GameModels fetch --all --tags
+      git -C src/GameModels checkout "v${LAC_MODELS_VERSION}" -b "stable"
+    fi
 fi
 
 if [ ! -f "composer.lock" ]; then

@@ -149,7 +149,7 @@ class GateScreenModel extends BaseModel
         return $this;
     }
 
-    protected function transformSettingsForSave(?string $settingsSerialized): ?string
+    public function transformSettingsForSave(?string $settingsSerialized): ?string
     {
         if ($settingsSerialized === null) {
             return null;
@@ -157,7 +157,7 @@ class GateScreenModel extends BaseModel
         return base64_encode($settingsSerialized);
     }
 
-    protected function transformSettingsForLoad(?string $settingsSerialized): ?string
+    public function transformSettingsForLoad(?string $settingsSerialized): ?string
     {
         if ($settingsSerialized === null) {
             return null;

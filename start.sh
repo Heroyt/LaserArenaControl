@@ -103,6 +103,9 @@ run_optional_setup() {
 build_assets &
 ASSET_BUILD_PID=$!
 
+# Manually clear temp files
+rm -rf ./temp/di/* ./temp/models/* ./temp/cache/* ./temp/latte/* ./temp/*.php ./temp/*.lock || true
+
 # Run critical setup that must complete before server starts
 ./bin/console install || { echo "console install failed, continuing"; true; }
 

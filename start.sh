@@ -19,6 +19,7 @@ mkdir -p upload
 
 ensure_submodules() {
   if [ ! -f ".gitmodules" ]; then
+    echo "No .gitmodules file found, skipping submodule initialization"
     return 0
   fi
 

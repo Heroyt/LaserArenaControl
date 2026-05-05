@@ -14,6 +14,7 @@ use Lsr\Orm\Attributes\Hooks\AfterInsert;
 use Lsr\Orm\Attributes\Hooks\AfterUpdate;
 use Lsr\Orm\Attributes\PrimaryKey;
 use Lsr\Orm\Attributes\Relations\ManyToOne;
+use Lsr\Orm\Attributes\Transform;
 use Lsr\Orm\Exceptions\ModelNotFoundException;
 use OpenApi\Attributes as OA;
 
@@ -30,6 +31,7 @@ class GateScreenModel extends BaseModel
     public int $order = 0;
 
     public string $screenSerialized;
+    #[Transform(save: 'transformSettingsForSave', load: 'transformSettingsForLoad')]
     public ?string $settingsSerialized = null;
 
     public ScreenTriggerType $trigger = ScreenTriggerType::DEFAULT;
@@ -57,7 +59,7 @@ class GateScreenModel extends BaseModel
 
     public function getSettings() : ?GateSettings {
         if (!isset($this->settings) && isset($this->settingsSerialized)) {
-            $settings = igbinary_unserialize($this->settingsSerialized);
+            $settings = $this->unserializeSettings($this->settingsSerialized);
             $this->settings = $settings === false ? null : $settings;
         }
         return $this->settings;
@@ -145,6 +147,47 @@ class GateScreenModel extends BaseModel
     public function setSettingsSerialized(?string $settingsSerialized) : GateScreenModel {
         $this->settingsSerialized = $settingsSerialized;
         return $this;
+    }
+
+    public function transformSettingsForSave(?string $settingsSerialized): ?string
+    {
+        if ($settingsSerialized === null) {
+            return null;
+        }
+        return base64_encode($settingsSerialized);
+    }
+
+    public function transformSettingsForLoad(?string $settingsSerialized): ?string
+    {
+        if ($settingsSerialized === null) {
+            return null;
+        }
+        $decoded = base64_decode($settingsSerialized, true);
+        if ($decoded === false) {
+            return $settingsSerialized;
+        }
+        if ($this->canUnserializeSettings($decoded)) {
+            return $decoded;
+        }
+        return $settingsSerialized;
+    }
+
+    private function unserializeSettings(string $settingsSerialized): mixed
+    {
+        $decoded = base64_decode($settingsSerialized, true);
+        if ($decoded !== false && $this->canUnserializeSettings($decoded)) {
+            return igbinary_unserialize($decoded);
+        }
+        return igbinary_unserialize($settingsSerialized);
+    }
+
+    private function canUnserializeSettings(string $value): bool
+    {
+        $unserialized = @igbinary_unserialize($value);
+        return !(
+            ($unserialized === false && $value !== igbinary_serialize(false)) ||
+            ($unserialized === null && $value !== igbinary_serialize(null))
+        );
     }
 
     public function setTriggerValue(?string $triggerValue) : GateScreenModel {

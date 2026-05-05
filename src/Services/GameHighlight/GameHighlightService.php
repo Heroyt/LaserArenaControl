@@ -88,7 +88,7 @@ class GameHighlightService
                   GameHighlightType::from($row->type),
                   $row->description,
                   isset($row->players) ? json_decode($row->players, true) : null,
-                  isset($row->object) ? igbinary_unserialize($row->object) : null,
+                    isset($row->object) ? $this->unserializeHighlight($row->object) : null,
                 );
             } catch (Throwable) {
 
@@ -112,7 +112,7 @@ class GameHighlightService
 
         $highlights = new HighlightCollection();
         foreach ($rows as $row) {
-            $object = igbinary_unserialize($row);
+            $object = $this->unserializeHighlight($row);
             if ($object instanceof GameHighlight) {
                 $highlights->add($object);
             }
@@ -299,7 +299,7 @@ class GameHighlightService
                       $this->getHighlightPlayers($highlight, $game),
                       JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
                     ),
-                    'object'      => igbinary_serialize($highlight),
+                      'object' => base64_encode(igbinary_serialize($highlight)),
                   ]
                 );
             }
@@ -383,7 +383,7 @@ class GameHighlightService
           ->fetchPairs();
 
         foreach ($objects as $object) {
-            $highlight = @igbinary_unserialize($object);
+            $highlight = $this->unserializeHighlight($object);
             if ($highlight instanceof GameHighlight) {
                 $highlights->add($highlight);
             }
@@ -421,5 +421,23 @@ class GameHighlightService
           $highlightDescription
         );
         return $replaced ?? $highlightDescription;
+    }
+
+    private function unserializeHighlight(string $object): mixed
+    {
+        $decoded = base64_decode($object, true);
+        if ($decoded !== false && $this->canUnserializeHighlight($decoded)) {
+            return @igbinary_unserialize($decoded);
+        }
+        return @igbinary_unserialize($object);
+    }
+
+    private function canUnserializeHighlight(string $value): bool
+    {
+        $unserialized = @igbinary_unserialize($value);
+        return !(
+            ($unserialized === false && $value !== igbinary_serialize(false)) ||
+            ($unserialized === null && $value !== igbinary_serialize(null))
+        );
     }
 }

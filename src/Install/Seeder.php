@@ -815,7 +815,7 @@ class Seeder implements InstallInterface
                   [
                     'id_tip' => $id,
                     'text'   => $tip['text'],
-                    'translations' => igbinary_serialize($tip['translations']),
+                      'translations' => base64_encode(igbinary_serialize($tip['translations'])),
                   ]
                 );
             }

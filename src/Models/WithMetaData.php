@@ -48,7 +48,7 @@ trait WithMetaData
         return $this;
     }
 
-    protected function transformMetaForSave(?string $meta): ?string
+    public function transformMetaForSave(?string $meta): ?string
     {
         if ($meta === null) {
             return null;
@@ -56,7 +56,7 @@ trait WithMetaData
         return base64_encode($meta);
     }
 
-    protected function transformMetaForLoad(?string $meta): ?string
+    public function transformMetaForLoad(?string $meta): ?string
     {
         if ($meta === null) {
             return null;

@@ -9,6 +9,24 @@ RR_HEALTHCHECK_MAX_FAILURES="${RR_HEALTHCHECK_MAX_FAILURES:-3}"
 echo "Entry: $SHELL $0"
 echo "Version: $LAC_VERSION"
 
+# Create necessary directories
+mkdir -p temp/latte
+mkdir -p temp/di
+mkdir -p temo/models
+mkdir -p temp/cache
+mkdir -p logs
+mkdir -p upload
+
+if [ -f ".gitmodules" ]; then
+  if git submodule status --recursive 2>/dev/null | grep -q '^-'; then
+    echo "Initializing git submodules..."
+    git submodule sync --recursive
+    git submodule update --init --recursive
+  else
+    echo "Git submodules already initialized."
+  fi
+fi
+
 if [ "$LAC_VERSION" != "dev" ]; then
   if [ -n "$SSH_KEY" ] && [ -f "$SSH_KEY" ]; then
     eval "$(ssh-agent -s)" >/dev/null 2>&1

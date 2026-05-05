@@ -115,14 +115,39 @@ build_assets() {
   echo "Asset build completed"
 }
 
+run_step() {
+  STEP_NAME="$1"
+  shift
+  STEP_TIMEOUT="$1"
+  shift
+  echo "Running ${STEP_NAME}..."
+  if command -v timeout >/dev/null 2>&1; then
+    if timeout "$STEP_TIMEOUT" "$@"; then
+      echo "${STEP_NAME} completed"
+      return 0
+    fi
+  else
+    if "$@"; then
+      echo "${STEP_NAME} completed"
+      return 0
+    fi
+  fi
+  echo "${STEP_NAME} failed or timed out, continuing"
+  return 1
+}
+
+run_console() {
+  /usr/local/bin/php -d opcache.enable_cli=0 ./bin/console "$@"
+}
+
 # Function to run optional setup tasks in background
 run_optional_setup() {
   echo "Running optional setup tasks in background..."
 
   # These can run after the server is already serving requests
-  ./bin/console translations:compile
-  ./bin/console regression:update
-  ./bin/console theme:generate
+  run_console translations:compile
+  run_console regression:update
+  run_console theme:generate
 
   echo "Optional setup tasks completed"
 }
@@ -135,10 +160,10 @@ ASSET_BUILD_PID=$!
 rm -rf ./temp/di/* ./temp/models/* ./temp/cache/* ./temp/latte/* ./temp/*.php ./temp/*.lock || true
 
 # Run critical setup that must complete before server starts
-./bin/console install || { echo "console install failed, continuing"; true; }
+run_step "console install" 300 /usr/local/bin/php -d opcache.enable_cli=0 ./bin/console install
 
 # Clear DI, model and info cache - this is critical for proper operation
-./bin/console cache:clean -dmic
+run_step "cache clean" 120 /usr/local/bin/php -d opcache.enable_cli=0 ./bin/console cache:clean -dmic
 
 # Cleanup restart.txt if not correctly removed to prevent immediate restart of container
 if [ -f ./temp/restart.txt ]; then
@@ -159,17 +184,28 @@ rr -v
 rr serve -c .rr.yaml -p &
 RR_PID=$!
 
-echo "Server started, waiting for asset build to complete..."
+echo "Server started"
 
-# Wait for asset build to complete, but don't block the server
-wait $ASSET_BUILD_PID
-echo "Asset build finished"
+ASSET_BUILD_STATUS="running"
 
 # Monitor RoadRunner health and restart requests. Docker restart policy only
 # applies after this script exits, so we terminate the container ourselves
 # when RR is unhealthy or has already died.
 HEALTHCHECK_FAILURES=0
 while true; do
+  if [ "$ASSET_BUILD_STATUS" = "running" ]; then
+    if kill -0 $ASSET_BUILD_PID 2>/dev/null; then
+      :
+    else
+      if wait $ASSET_BUILD_PID; then
+        echo "Asset build finished"
+      else
+        echo "Asset build failed"
+      fi
+      ASSET_BUILD_STATUS="done"
+    fi
+  fi
+
   if ! kill -0 $RR_PID 2>/dev/null; then
     echo "RoadRunner process is not running, restarting container..."
     rr stop >/dev/null 2>&1 || true

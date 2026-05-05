@@ -7,6 +7,8 @@ on:
       - .github/workflows/docker-image.yml
       - docker/Dockerfile
       - docker/core/*
+      - docker/velox_rr.toml
+      - start.sh
       - ../../docker/velox_rr.toml
     branches: [ stable, staging ]
     tags:

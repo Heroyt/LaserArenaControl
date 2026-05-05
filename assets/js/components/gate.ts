@@ -22,6 +22,33 @@ let tipsHighlights: boolean = false;
 
 let container: HTMLElement = document.querySelector('main');
 
+function escapeHtml(value: string): string {
+    return value
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll('\'', '&#39;');
+}
+
+function formatHighlightDescription(description: string): string {
+    let lastIndex = 0;
+    let formatted = '';
+    const regex = /@([^@]+)@(?:<([^@]+)>)?/g;
+
+    for (const match of description.matchAll(regex)) {
+        const [fullMatch, playerName, playerLabel] = match;
+        const matchIndex = match.index ?? 0;
+
+        formatted += escapeHtml(description.slice(lastIndex, matchIndex));
+        formatted += `<strong class="player-name" data-player="${escapeHtml(playerName)}">${escapeHtml(playerLabel ?? playerName)}</strong>`;
+        lastIndex = matchIndex + fullMatch.length;
+    }
+
+    formatted += escapeHtml(description.slice(lastIndex));
+    return formatted;
+}
+
 function removePreviousContent(): void {
 	const elements = container.querySelectorAll('.content') as NodeListOf<HTMLDivElement>;
 	for (let i = 0; i < elements.length - 1; i++) {
@@ -223,9 +250,7 @@ export async function replaceTipsWithHighlights(wrapper: HTMLElement | Document 
 	// Highlights contain player names with their inflection, where the inflection is optional - '(name)<inflection>'
 	const highlights: string[] = [];
 	highlightsData.forEach(highlight => {
-		highlights.push(highlight.description.replace(/@([^@]+)@(?:<([^@]+)>)?/g, (_, group1: string, group2: string | undefined) => {
-			return `<strong class="player-name">${group2 ? group2 : group1}</strong>`;
-		}));
+        highlights.push(formatHighlightDescription(highlight.description));
 	});
 
 	// Replace tips with highlights
@@ -258,7 +283,10 @@ export function tipsRotations() {
 		}
 
 		// Add a new tip
-		tipNew.innerText = tips[counter];
+        tipNew.innerHTML = DOMPurify.sanitize(tips[counter], {
+            ALLOWED_TAGS: ['strong'],
+            ALLOWED_ATTR: ['class', 'data-player'],
+        });
 		tipWrapper.appendChild(tipNew);
 
 		// Animate old tips out

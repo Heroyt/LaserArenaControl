@@ -134,10 +134,11 @@ jobs:
   timeout: 120
   pipeline_size: 1000
   pool:
-    num_workers: 2
+    num_workers: 3
     max_jobs: 5
     supervisor:
       max_worker_memory: 512
+      exec_ttl: 120s
   consume: [ "tasks" ]
   pipelines:
     tasks: # RoadRunner queue identifier

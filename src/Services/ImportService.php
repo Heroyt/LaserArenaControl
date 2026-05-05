@@ -323,8 +323,19 @@ class ImportService
                     $logger->info('Importing file: ' . $file);
                     $output?->writeln('Importing file: ' . $file);
                     try {
+                        $logger->debug('Preparing parser for file', ['file' => $file, 'system' => $system]);
                         $parser->setFile($file);
+                        $logger->debug('Starting parser->parse()', ['file' => $file, 'system' => $system]);
                         $game = $parser->parse();
+                        $logger->debug(
+                            'Finished parser->parse()',
+                            [
+                                'file' => $file,
+                                'system' => $system,
+                                'code' => $game->code ?? null,
+                                'finished' => $game->isFinished(),
+                            ]
+                        );
 
                         // Check timestamps
                         $isStarted = $game->isStarted();
@@ -392,6 +403,10 @@ class ImportService
                             continue; // Empty game - no shots, no hits, etc..
                         }
 
+                        $logger->debug(
+                            'Starting game save from import loop',
+                            ['file' => $file, 'system' => $system, 'code' => $game->code ?? null]
+                        );
                         if (!$game->save()) {
                             $logger->error('Failed saving game into DB. ' . $file);
                             $output?->writeln(
@@ -401,6 +416,10 @@ class ImportService
                             );
                             continue;
                         }
+                        $logger->debug(
+                            'Finished game save from import loop',
+                            ['file' => $file, 'system' => $system, 'code' => $game->code ?? null]
+                        );
                         $game::clearModelCache();
                         $this->cache->clean([$this->cache::Tags => ['games/' . $game->start->format('Y-m-d')]]);
 

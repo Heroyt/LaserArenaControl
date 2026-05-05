@@ -79,7 +79,11 @@ trait MusicLoading
         $this->getTaskProducer()->push(
           MusicLoadTask::class,
           new MusicLoadPayload(
-            $musicId, $musicFile, $this::DI_NAME, $this->system->type->value, microtime(true)
+            $musicId,
+            $musicFile,
+            $this::DI_NAME,
+            $this->system->type->value,
+            microtime(true)
           ),
           new Options(priority: 1) // Priority job should be done as soon as possible
         );

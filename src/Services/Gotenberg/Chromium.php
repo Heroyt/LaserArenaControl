@@ -69,11 +69,15 @@ class Chromium
         ];
         $response = $this->service->post($this::PATHS['url'], $data, ['Gotenberg-Trace' => 'debug']);
 
-        if (!isset($response) || !$this->isResponseValid($response)) {
+        if ($response === null) {
+            $this->service->getLogger()->error('No response from Gotenberg service');
+            return '';
+        }
+
+        if (!$this->isResponseValid($response)) {
             $this->service->getLogger()->warning(
               'Invalid response '.json_encode(
                 [
-                  'isset' => isset($response),
                   'code'  => $response->getStatusCode() === 200,
                   'type'  => str_contains(
                     $response->getHeaderLine('Content-Type'),
@@ -127,11 +131,15 @@ class Chromium
         }
         $response = $this->service->post($this::PATHS['html'], $data);
 
-        if (!isset($response) || !$this->isResponseValid($response)) {
+        if ($response === null) {
+            $this->service->getLogger()->error('No response from Gotenberg service');
+            return '';
+        }
+
+        if (!$this->isResponseValid($response)) {
             $this->service->getLogger()->warning(
               'Invalid response '.json_encode(
                 [
-                  'isset' => isset($response),
                   'code'  => $response->getStatusCode() === 200,
                   'type'  => str_contains(
                     $response->getHeaderLine('Content-Type'),
@@ -179,11 +187,15 @@ class Chromium
         }
         $response = $this->service->post($this::PATHS['html'], $data);
 
-        if (!isset($response) || !$this->isResponseValid($response)) {
+        if ($response === null) {
+            $this->service->getLogger()->error('No response from Gotenberg service');
+            return '';
+        }
+
+        if (!$this->isResponseValid($response)) {
             $this->service->getLogger()->warning(
               'Invalid response '.json_encode(
                 [
-                  'isset' => isset($response),
                   'code'  => $response->getStatusCode() === 200,
                   'type'  => str_contains(
                     $response->getHeaderLine('Content-Type'),
@@ -236,11 +248,15 @@ class Chromium
         ];
         $response = $this->service->post($this::PATHS['html'], $data);
 
-        if (!isset($response) || !$this->isResponseValid($response)) {
+        if ($response === null) {
+            $this->service->getLogger()->error('No response from Gotenberg service');
+            return '';
+        }
+
+        if (!$this->isResponseValid($response)) {
             $this->service->getLogger()->warning(
               'Invalid response '.json_encode(
                 [
-                  'isset' => isset($response),
                   'code'  => $response->getStatusCode() === 200,
                   'type'  => str_contains(
                     $response->getHeaderLine('Content-Type'),

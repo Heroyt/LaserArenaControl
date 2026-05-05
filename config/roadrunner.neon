@@ -20,6 +20,6 @@ services:
 	roadrunner.worker.file_watch: App\Core\Workers\FileWatchWorker
 
 	# HTTP error handlers
-	roadrunner.httpErrorHandler.404: App\Controllers\E404
-	roadrunner.httpErrorHandler.403: App\Controllers\E403
-	roadrunner.httpErrorHandler.500: App\Controllers\E500
+	roadrunner.httpErrorHandler.404: App\Http\Controllers\E404
+	roadrunner.httpErrorHandler.403: App\Http\Controllers\E403
+	roadrunner.httpErrorHandler.500: App\Http\Controllers\E500

@@ -7,6 +7,65 @@ import {planGameHighlightsTask, planGamePrecacheTask} from '../api/endpoints/tas
 import {GameGroupData} from '../interfaces/gameInterfaces';
 import {triggerNotificationError} from '../includes/notifications';
 
+const groupColors = [
+    '#e6194b',
+    '#3cb44b',
+    '#ffe119',
+    '#4363d8',
+    '#f58231',
+    '#911eb4',
+    '#46f0f0',
+    '#f032e6',
+    '#bcf60c',
+    '#fabebe',
+    '#008080',
+    '#e6beff',
+    '#9a6324',
+    '#fffac8',
+    '#800000',
+    '#aaffc3',
+    '#808000',
+    '#ffd8b1',
+    '#000075',
+    '#808080',
+];
+
+function hashString(value: string): number {
+    let hash = 0;
+    for (let i = 0; i < value.length; i++) {
+        hash = value.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    return Math.abs(hash);
+}
+
+function getContrastColor(color: string): string {
+    const [r, g, b] = color.match(/[A-Fa-f0-9]{2}/g).map(value => parseInt(value, 16));
+    const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+    return brightness > 160 ? '#111111' : '#ffffff';
+}
+
+function getGroupColor(groupId: string, groupName: string): string {
+    const key = groupId || groupName;
+    return groupColors[hashString(key) % groupColors.length];
+}
+
+function applyGroupButtonState(btn: HTMLButtonElement, groupId: string, groupName: string): void {
+    if (groupId === '' && groupName === '') {
+        btn.classList.remove('game-group-selected');
+        btn.classList.remove('btn-primary');
+        btn.classList.add('btn-outline-primary');
+        btn.style.removeProperty('--group-color');
+        btn.style.removeProperty('--group-text-color');
+        return;
+    }
+
+    const groupColor = getGroupColor(groupId, groupName);
+    btn.classList.remove('btn-outline-primary');
+    btn.classList.add('btn-primary', 'game-group-selected');
+    btn.style.setProperty('--group-color', groupColor);
+    btn.style.setProperty('--group-text-color', getContrastColor(groupColor));
+}
+
 export default function initGamesList() {
 	const checkAll = document.getElementById('game-select-check-all') as HTMLInputElement;
 	const checks = document.querySelectorAll<HTMLInputElement>('.game-select-check');
@@ -180,6 +239,9 @@ export default function initGamesList() {
 	const groupBtns = document.querySelectorAll('.select-group') as NodeListOf<HTMLButtonElement>;
 	let groupCodes: string[] = [];
 	let gameGroups: GameGroupData[] = [];
+    groupBtns.forEach(btn => {
+        applyGroupButtonState(btn, btn.dataset.group ?? '', btn.dataset.groupname ?? '');
+    });
 	groupBtns.forEach(btn => {
 		btn.addEventListener('click', () => {
 			const gameCode = btn.dataset.code;
@@ -277,30 +339,27 @@ export default function initGamesList() {
 				groupCodes,
 				async (code) => {
 					const res = await setGameGroup(code, groupId);
-					const btns = document.querySelectorAll<HTMLButtonElement>(`.select-group[data-code="${code}"]`);
-					const groupVal = groupId === 0 ? '' : groupId.toString();
-					for (const btn of btns) {
-						const tooltip = Tooltip.getOrCreateInstance(btn);
-						if (groupId === 0) {
-							btn.classList.add('btn-primary');
-							btn.classList.remove('btn-success');
-							btn.title = btn.dataset.label;
-							btn.ariaLabel = btn.dataset.label;
-							btn.dataset.bsOriginalTitle = btn.dataset.label;
-							tooltip.setContent({'.tooltip-inner': btn.dataset.label});
-						} else {
-							btn.classList.remove('btn-primary');
-							btn.classList.add('btn-success');
-							btn.title = groupName;
-							btn.ariaLabel = groupName;
-							btn.dataset.bsOriginalTitle = groupName;
-							tooltip.setContent({'.tooltip-inner': groupName});
-						}
-						btn.dataset.group = groupVal;
-						btn.setAttribute('data-group', groupVal);
-						btn.dataset.groupname = groupName;
-						btn.setAttribute('data-groupname', groupName);
-					}
+                    const btns = document.querySelectorAll<HTMLButtonElement>(`.select-group[data-code="${code}"]`);
+                    const groupVal = groupId === 0 ? '' : groupId.toString();
+                    for (const btn of btns) {
+                        const tooltip = Tooltip.getOrCreateInstance(btn);
+                        if (groupId === 0) {
+                            btn.title = btn.dataset.label;
+                            btn.ariaLabel = btn.dataset.label;
+                            btn.dataset.bsOriginalTitle = btn.dataset.label;
+                            tooltip.setContent({'.tooltip-inner': btn.dataset.label});
+                        } else {
+                            btn.title = groupName;
+                            btn.ariaLabel = groupName;
+                            btn.dataset.bsOriginalTitle = groupName;
+                            tooltip.setContent({'.tooltip-inner': groupName});
+                        }
+                        btn.dataset.group = groupVal;
+                        btn.setAttribute('data-group', groupVal);
+                        btn.dataset.groupname = groupName;
+                        btn.setAttribute('data-groupname', groupName);
+                        applyGroupButtonState(btn, groupVal, groupName);
+                    }
 					const check = document.querySelector<HTMLInputElement>(`.game-select-check[value="${code}"]`);
 					check.dataset.group = groupVal;
 					check.setAttribute('data-group', groupVal);

@@ -5,21 +5,21 @@
  * @brief API route definitions
  */
 
-use App\Controllers\Api\Cache;
-use App\Controllers\Api\Debug;
-use App\Controllers\Api\Events;
-use App\Controllers\Api\GameHelpers;
-use App\Controllers\Api\GameLoading;
-use App\Controllers\Api\Games;
-use App\Controllers\Api\Gates;
-use App\Controllers\Api\Helpers;
-use App\Controllers\Api\LaserLiga;
-use App\Controllers\Api\Logs;
-use App\Controllers\Api\Mount;
-use App\Controllers\Api\PriceGroups;
-use App\Controllers\Api\Results;
-use App\Controllers\Api\Tasks;
-use App\Controllers\Api\Updater;
+use App\Http\Controllers\Api\Cache;
+use App\Http\Controllers\Api\Debug;
+use App\Http\Controllers\Api\Events;
+use App\Http\Controllers\Api\GameHelpers;
+use App\Http\Controllers\Api\GameLoading;
+use App\Http\Controllers\Api\Games;
+use App\Http\Controllers\Api\Gates;
+use App\Http\Controllers\Api\Helpers;
+use App\Http\Controllers\Api\LaserLiga;
+use App\Http\Controllers\Api\Logs;
+use App\Http\Controllers\Api\Mount;
+use App\Http\Controllers\Api\PriceGroups;
+use App\Http\Controllers\Api\Results;
+use App\Http\Controllers\Api\Tasks;
+use App\Http\Controllers\Api\Updater;
 
 /** @var \Lsr\Core\Routing\Router $this */
 

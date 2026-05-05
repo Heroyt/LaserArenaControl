@@ -3,11 +3,11 @@
 namespace App\Gate\Screens;
 
 use App\Core\App;
+use App\DataObjects\Image;
 use App\Gate\Settings\AnimationType;
 use App\Gate\Settings\GateSettings;
 use App\Gate\Settings\ImageScreenType;
 use App\Gate\Settings\ImageSettings;
-use App\Models\DataObjects\Image;
 use Nyholm\Psr7\UploadedFile;
 use Psr\Http\Message\ResponseInterface;
 
@@ -64,6 +64,10 @@ class ImageScreen extends GateScreen implements WithSettings, ReloadTimerInterfa
                 $dir = UPLOAD_DIR;
             }
             $name = $uploadedImage['image']->getClientFilename();
+            if (empty($name)) {
+                bdump('Uploaded file has no name.');
+                return new ImageSettings(null, $type, $animation, $time > 0 ? $time : null,);
+            }
             $extension = strtolower(pathinfo($name, PATHINFO_EXTENSION));
 
             // Validate image

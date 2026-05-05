@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Cron;
@@ -12,7 +13,6 @@ use Spiral\RoadRunner\Metrics\Metrics;
 
 final readonly class ClearGroupsJob implements Job
 {
-
     public function __construct(
       private CommandBus $commandBus,
       private Metrics    $metrics,

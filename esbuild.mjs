@@ -18,7 +18,8 @@ const subset = JSON.parse(fs.readFileSync('./assets/icons/fontawesome.json', 'ut
 await fontawesomeSubset(
         subset,
         "assets/fonts", {
-            package: 'free', targetFormats: ['woff2', "woff", 'sfnt'],
+            package: 'free',
+            targetFormats: ['woff2', "woff", 'sfnt'],
         }
 );
 console.timeEnd('Fontawesome');

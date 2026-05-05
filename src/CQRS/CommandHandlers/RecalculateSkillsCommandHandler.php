@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\CQRS\CommandHandlers;
@@ -11,13 +12,10 @@ use Throwable;
 
 final readonly class RecalculateSkillsCommandHandler implements CommandHandlerInterface
 {
-
     /**
      * @param  RecalculateSkillsCommand  $command
      */
     public function handle(CommandInterface $command) : bool {
-        assert($command instanceof RecalculateSkillsCommand);
-
         // Refresh game
         $game = $command->game;
         try {

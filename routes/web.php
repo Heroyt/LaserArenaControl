@@ -6,19 +6,19 @@
  * @author Tomáš Vojík <xvojik00@stud.fit.vutbr.cz>, <vojik@wboy.cz>
  */
 
-use App\Controllers\GameControl;
-use App\Controllers\GameGroups;
-use App\Controllers\GamesList;
-use App\Controllers\Gate\GateController;
-use App\Controllers\Lang;
-use App\Controllers\NewGame;
-use App\Controllers\Players;
-use App\Controllers\PreparedGames;
-use App\Controllers\Results;
-use App\Controllers\System\Cache;
-use App\Controllers\System\Roadrunner;
-use App\Controllers\System\System;
 use App\Core\App;
+use App\Http\Controllers\GameControl;
+use App\Http\Controllers\GameGroups;
+use App\Http\Controllers\GamesList;
+use App\Http\Controllers\Gate\GateController;
+use App\Http\Controllers\Lang;
+use App\Http\Controllers\NewGame;
+use App\Http\Controllers\Players;
+use App\Http\Controllers\PreparedGames;
+use App\Http\Controllers\Results;
+use App\Http\Controllers\System\Cache;
+use App\Http\Controllers\System\Roadrunner;
+use App\Http\Controllers\System\System;
 use App\Services\FeatureConfig;
 
 /** @var \Lsr\Core\Routing\Router $this */

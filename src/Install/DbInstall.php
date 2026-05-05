@@ -92,8 +92,12 @@ class DbInstall implements InstallInterface
                 if (class_exists($tableName)) {
                     $tableName = static::getTableNameFromClass($tableName);
                     if ($tableName === null) {
+                        self::printDebug('Table name from class '.$tableName.' cannot be found - skipping');
                         continue;
                     }
+                }
+                else {
+                    self::printDebug('Class '.$tableName.' does not exist - using table name as is');
                 }
                 self::printDebug('Creating table '.$tableName, $output);
                 $definition = $info->definition;
@@ -299,9 +303,8 @@ class DbInstall implements InstallInterface
             foreach ($loader->views as $name => $select) {
                 $connection->query(
                   <<<SQL
-					CREATE OR REPLACE VIEW `$name`
-					       AS $select;
-					SQL
+                    CREATE OR REPLACE VIEW `$name` AS $select;
+                    SQL
                 );
             }
         } catch (Exception $e) {

@@ -90,7 +90,7 @@ window.addEventListener('load', () => {
 			window.location.reload();
 		});
 	});
-	document.querySelectorAll<HTMLAnchorElement>('a[data-restart]').forEach(element => {
+    document.querySelectorAll<HTMLAnchorElement>('a[data-restart="true"]').forEach(element => {
 		element.addEventListener('click', async (e) => {
 			const href = element.href;
 			if (!href) {

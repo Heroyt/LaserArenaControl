@@ -2,8 +2,8 @@
 
 namespace App\Gate\Widgets;
 
+use App\DataObjects\Highlights\HighlightDto;
 use App\GameModels\Game\Game;
-use App\Models\DataObjects\Highlights\HighlightDto;
 use App\Services\GameHighlight\GameHighlightService;
 use DateTimeImmutable;
 use DateTimeInterface;
@@ -12,6 +12,7 @@ class Highlights implements WidgetInterface
 {
     /**
      * @var HighlightDto[]
+     * @phpstan-ignore missingType.generics
      */
     private ?array $highlights = null;
 
@@ -30,6 +31,7 @@ class Highlights implements WidgetInterface
     /**
      * @param  DateTimeInterface  $date
      * @return HighlightDto[]
+     * @phpstan-ignore missingType.generics
      */
     private function getHighlights(DateTimeInterface $date) : array {
         if (!isset($this->highlights)) {

@@ -1,7 +1,7 @@
 {layout '../@layout.latte'}
 
 {varType App\Gate\Settings\ImageSettings $settings}
-{varType App\Models\DataObjects\Image|null $image}
+{varType App\DataObjects\Image|null $image}
 
 {define containerClasses}
     image-screen animation-{$settings->animationType->value} layout-{$settings->screenType->value}

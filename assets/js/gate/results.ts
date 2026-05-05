@@ -1,5 +1,5 @@
 import GateScreen from './gateScreen';
-import {animateResults} from '../components/gate/animateResults';
+import ResultsAnimation from '../components/gate/animateResults';
 import {replaceTipsWithHighlights} from '../components/gate';
 
 const gameResultsExp = /results-game-(\d+)/;
@@ -7,6 +7,7 @@ const gameResultsExp = /results-game-(\d+)/;
 export default class ResultsScreen implements GateScreen {
 	content: HTMLDivElement;
 	private removePreviousContent: () => void;
+    private animation: ResultsAnimation;
 
 	init(content: HTMLDivElement, removePreviousContent: () => void): void {
 		this.content = content;
@@ -22,11 +23,13 @@ export default class ResultsScreen implements GateScreen {
 		}, 2000);
 
 		replaceTipsWithHighlights(this.content);
-		animateResults(this.content);
+        this.animation = new ResultsAnimation(this.content);
+        this.animation.start();
 	}
 
 	animateOut(): void {
 		this.content.classList.add('out');
+        this.animation.stop();
 	}
 
 	isSame(active: GateScreen): boolean {

@@ -2,10 +2,9 @@
 
 namespace App\Exceptions;
 
-use Exception;
 use Throwable;
 
-class ConnectionTimeoutException extends Exception
+class ConnectionTimeoutException extends ConnectionException
 {
     /**
      * Construct the exception. Note: The message is NOT binary safe.

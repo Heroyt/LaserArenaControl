@@ -2,7 +2,7 @@
 
 namespace App\Gate\Models;
 
-use App\Models\DataObjects\Image;
+use App\DataObjects\Image;
 use App\Models\MusicMode;
 
 class MusicGroupDto

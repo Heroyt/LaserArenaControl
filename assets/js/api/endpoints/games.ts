@@ -5,6 +5,7 @@ import {Highlight} from '../../components/gate/types';
 export type LoadedGameResponse = {
     started: boolean,
     finished: boolean,
+	ended: boolean,
     currentServerTime: number,
     startTime: number | null,
     gameLength: number,

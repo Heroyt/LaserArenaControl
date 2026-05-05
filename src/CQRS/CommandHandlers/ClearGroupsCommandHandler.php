@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\CQRS\CommandHandlers;
@@ -14,12 +15,10 @@ use Lsr\Logging\Logger;
 
 class ClearGroupsCommandHandler implements CommandHandlerInterface
 {
-
     /**
      * @param  ClearGroupsCommand  $command
      */
     public function handle(CommandInterface $command) : ClearGroupsCommandResponse {
-        assert($command instanceof ClearGroupsCommand);
         $logger = new Logger(LOG_DIR, 'clear_groups');
         $logger->info('Clearing groups...');
         $response = new ClearGroupsCommandResponse();

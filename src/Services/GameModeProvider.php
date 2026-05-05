@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Services;
@@ -10,7 +11,6 @@ use Lsr\Lg\Results\Interface\Models\GameModeInterface;
 
 class GameModeProvider implements GameModeProviderInterface
 {
-
     public function find(
       string       $name,
       GameModeType $type = GameModeType::TEAM,

@@ -21,7 +21,7 @@ class MusicCount implements WidgetInterface, WithGameIdsInterface
     public function refresh() : static {
         $this->hash = null;
         $this->musicCounts = null;
-        $this->gameIds = null;
+        $this->setGameIds(null);
         return $this;
     }
 
@@ -42,10 +42,11 @@ class MusicCount implements WidgetInterface, WithGameIdsInterface
             return $this->musicCounts;
         }
 
-        if (isset($this->gameIds)) {
+        $gameIdsAll = $this->getGameIds($date, $date, $systems);
+        if (!empty($gameIdsAll)) {
             $query = GameFactory::queryGames(true, null, ['id_music']);
             $where = [];
-            foreach ($this->gameIds as $system => $gameIds) {
+            foreach ($gameIdsAll as $system => $gameIds) {
                 $where[] = ['system = %s AND id_game IN %in', $system, $gameIds];
             }
             $query->where('%or', $where);
@@ -55,7 +56,7 @@ class MusicCount implements WidgetInterface, WithGameIdsInterface
             if (isset($systems) && count($systems) > 0) {
                 $query->where('system IN %in', $systems);
             }
-            $this->gameIds = [];
+            $this->gameIds['all'] = [];
         }
 
         /** @var array<string,Row[]> $games */
@@ -64,7 +65,7 @@ class MusicCount implements WidgetInterface, WithGameIdsInterface
 
         foreach ($games as $system => $systemGames) {
             /** @var array<int, Row> $systemGames */
-            $this->gameIds[$system] ??= array_keys($systemGames);
+            $this->gameIds['all'][$system] ??= array_keys($systemGames);
             foreach ($systemGames as $systemGame) {
                 if (isset($systemGame->id_music)) {
                     $this->musicCounts[$systemGame->id_music] ??= 0;
@@ -77,7 +78,8 @@ class MusicCount implements WidgetInterface, WithGameIdsInterface
     }
 
     /**
-     * @param  Game|null  $game
+     * @template G of Game
+     * @param  G|null  $game
      * @param  DateTimeInterface|null  $date
      * @param  string[]|null  $systems
      * @return string

@@ -12,6 +12,7 @@ extensions:
 	routing: Lsr\Core\Routing\DI\RoutingExtension
 	di: Nette\DI\Extensions\DIExtension
 	search: Nette\DI\Extensions\SearchExtension(%constants.tempDir%)
+	request: Lsr\Core\Requests\DI\RequestExtension
 	lsr: Lsr\Core\DI\LsrExtension
 di:
 	lazy: true
@@ -65,6 +66,7 @@ services:
 	# Core
 	db.connection: Lsr\Db\Connection(config: %db%)
 	lsr.app: App\Core\App
+	requestValidationMapper: Lsr\Core\Requests\Validation\RequestValidationMapper
 
 	version: App\Services\VersionService
 	regression: App\Services\RegressionCalculator
@@ -76,7 +78,7 @@ services:
 		setup:
 			- connect(%redis.host%)
 
-	cache.journal: Lsr\Caching\Redis\RedisJournal(@redis)
+#	cache.journal: Lsr\Caching\Redis\RedisJournal(@redis)
 	cache.storage: Lsr\Caching\Redis\RedisStorage(@redis, '', @cache.journal)
 
 	session:
@@ -130,8 +132,8 @@ services:
 	result.parser: Lsr\Lg\Results\ResultsParser(['evo5' => @result.parser.evo5, 'evo6' => @result.parser.evo6])
 	results.generator: Lsr\Lg\Results\ResultsGenerator(['evo5' => @result.generator.evo5, 'evo6' => @result.generator.evo6])
 	results.logger: Lsr\Logging\Logger(%logger.dir%, 'results')
-	result.parser.evo5: App\Tools\ResultParsing\Evo5\ResultsParser(gameClass: App\GameModels\Game\Evo5\Game, logger: @results.logger)
-	result.parser.evo6: App\Tools\ResultParsing\Evo6\ResultsParser(gameClass: App\GameModels\Game\Evo6\Game, logger: @results.logger)
+	result.parser.evo5: App\Tools\ResultParsing\Evo5\ResultsParser(gameClass: App\GameModels\Game\Lasermaxx\Evo5\Game, logger: @results.logger)
+	result.parser.evo6: App\Tools\ResultParsing\Evo6\ResultsParser(gameClass: App\GameModels\Game\Lasermaxx\Evo6\Game, logger: @results.logger)
 	result.generator.evo5: Lsr\Lg\Results\LaserMaxx\Evo5\ResultsGenerator
 	result.generator.evo6: Lsr\Lg\Results\LaserMaxx\Evo6\ResultsGenerator
 
@@ -140,8 +142,8 @@ services:
 	fontawesome: App\Services\FontAwesomeManager
 
 	theme:
-		type: App\Models\DataObjects\Theme
-		create: App\Models\DataObjects\Theme::get()
+		type: App\DataObjects\Theme
+		create: App\DataObjects\Theme::get()
 
 	fairteams: App\Services\FairTeams(%fairTeams%)
 
@@ -151,11 +153,11 @@ routing:
 	routeFiles:
 		- %constants.appDir%routes
 	controllers:
-		- %constants.appDir%src/Controllers
+		- %constants.appDir%src/Http/Controllers
 
 search:
 	controllers:
-		in: '%constants.appDir%src/Controllers'
+		in: '%constants.appDir%src/Http/Controllers'
 		extends:
 			- Lsr\Core\Controllers\Controller
 			- Lsr\Core\Controllers\ApiController

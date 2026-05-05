@@ -2,6 +2,10 @@
 
 set -e
 
+RR_HEALTHCHECK_URL="${RR_HEALTHCHECK_URL:-http://localhost:2114/health}"
+RR_HEALTHCHECK_INTERVAL="${RR_HEALTHCHECK_INTERVAL:-5}"
+RR_HEALTHCHECK_MAX_FAILURES="${RR_HEALTHCHECK_MAX_FAILURES:-3}"
+
 echo "Entry: $SHELL $0"
 echo "Version: $LAC_VERSION"
 
@@ -32,9 +36,11 @@ else
   git fetch --all --tags
   if [ "$LAC_VERSION" = "stable" ]; then
     git switch stable
+    git reset --hard origin/stable
     git pull --recurse-submodules origin stable
   elif [ "$LAC_VERSION" = "staging" ]; then
     git switch staging
+    git reset --hard origin/staging
     git pull --recurse-submodules origin staging
   else
     git checkout "v${LAC_VERSION}" -b "stable"
@@ -98,7 +104,7 @@ build_assets &
 ASSET_BUILD_PID=$!
 
 # Run critical setup that must complete before server starts
-./bin/console install
+./bin/console install || { echo "console install failed, continuing"; true; }
 
 # Clear DI, model and info cache - this is critical for proper operation
 ./bin/console cache:clean -dmic
@@ -128,8 +134,31 @@ echo "Server started, waiting for asset build to complete..."
 wait $ASSET_BUILD_PID
 echo "Asset build finished"
 
-# Monitor for restart requests
+# Monitor RoadRunner health and restart requests. Docker restart policy only
+# applies after this script exits, so we terminate the container ourselves
+# when RR is unhealthy or has already died.
+HEALTHCHECK_FAILURES=0
 while true; do
+  if ! kill -0 $RR_PID 2>/dev/null; then
+    echo "RoadRunner process is not running, restarting container..."
+    rr stop >/dev/null 2>&1 || true
+    exit 1
+  fi
+
+  if wget --spider --quiet "$RR_HEALTHCHECK_URL"; then
+    HEALTHCHECK_FAILURES=0
+  else
+    HEALTHCHECK_FAILURES=$((HEALTHCHECK_FAILURES + 1))
+    echo "RoadRunner healthcheck failed (${HEALTHCHECK_FAILURES}/${RR_HEALTHCHECK_MAX_FAILURES}): $RR_HEALTHCHECK_URL"
+    if [ "$HEALTHCHECK_FAILURES" -ge "$RR_HEALTHCHECK_MAX_FAILURES" ]; then
+      echo "RoadRunner healthcheck failed too many times, restarting container..."
+      kill $RR_PID 2>/dev/null || true
+      kill $OPTIONAL_SETUP_PID 2>/dev/null || true
+      rr stop >/dev/null 2>&1 || true
+      exit 1
+    fi
+  fi
+
   if [ -f ./temp/restart.txt ]; then
     echo "Restarting container..."
     rm -f ./temp/restart.txt
@@ -141,5 +170,5 @@ while true; do
     rr stop
     exit 0
   fi
-  sleep 5
+  sleep "$RR_HEALTHCHECK_INTERVAL"
 done

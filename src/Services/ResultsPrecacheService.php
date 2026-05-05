@@ -6,9 +6,7 @@ use App\Core\App;
 use App\Core\Info;
 use App\GameModels\Factory\GameFactory;
 use App\GameModels\Game\Game;
-use App\GameModels\Game\Player;
 use App\GameModels\Game\PrintStyle;
-use App\GameModels\Game\Team;
 use App\Tasks\GameHighlightsTask;
 use App\Tasks\GamePrecacheTask;
 use App\Tasks\Payloads\GameHighlightsPayload;
@@ -89,7 +87,8 @@ readonly class ResultsPrecacheService
     /**
      * Precache game results PDF
      *
-     * @param  Game<Team, Player>  $game
+     * @template G of Game
+     * @param  G  $game
      * @param  int|null  $style
      * @param  string|null  $template
      * @return bool False if pre-caching failed
@@ -105,6 +104,6 @@ readonly class ResultsPrecacheService
             App::getInstance()->getLogger()->exception($e);
             return false;
         }
-        return $file !== '' && file_exists($file);
+        return file_exists($file);
     }
 }

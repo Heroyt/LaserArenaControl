@@ -1,45 +1,32 @@
 FROM php:8.4-cli-alpine AS ext-builder
 
-# Install build dependencies
-RUN apk add --no-cache --virtual .build-deps \
-        wget git gettext gettext-dev icu-dev zip unzip ffmpeg libpng-dev libwebp-dev libzip-dev \
-        libcurl curl-dev nano build-base autoconf make gcc g++ libc-dev linux-headers \
-        pcre-dev libtool libxml2-dev oniguruma-dev icu-libs imagemagick-dev imagemagick bash
+COPY --from=ghcr.io/mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
 
-# PHP extensions
-RUN docker-php-ext-install mysqli
-RUN docker-php-ext-install curl
-RUN docker-php-ext-install gettext
-RUN docker-php-ext-install sockets
-RUN docker-php-ext-install pdo_mysql
-RUN docker-php-ext-install zip
-RUN docker-php-ext-install pcntl
-RUN docker-php-ext-install intl
-RUN docker-php-ext-install opcache
-RUN docker-php-ext-install gd
-
-# Imagick
-RUN git clone https://github.com/Imagick/imagick.git --depth 1 /tmp/imagick && \
-    cd /tmp/imagick && \
-    phpize && \
-    ./configure && \
-    make && \
-    make install && \
-    cd / && \
-    rm -rf /tmp/imagick
-
-# Igbinary, APCu, Redis
-RUN pecl install igbinary apcu redis
-
-# Enable extensions
-RUN docker-php-ext-enable imagick igbinary apcu redis
+# PHP extensions and their transient build dependencies are handled by the installer.
+RUN install-php-extensions \
+        mysqli \
+        curl \
+        gettext \
+        sockets \
+        pdo_mysql \
+        zip \
+        pcntl \
+        intl \
+        opcache \
+        gd \
+        imagick \
+        igbinary \
+        apcu \
+        redis
 
 # Final image
 FROM php:8.4-cli-alpine AS php
 
 # Install runtime dependencies only
 RUN apk add --no-cache \
-        wget git gettext icu-libs zip unzip ffmpeg libpng libwebp libzip libcurl curl nano \
+        wget git gettext icu-libs zip unzip ffmpeg \
+        freetype libjpeg-turbo libpng libwebp libavif libxpm \
+        libzip libcurl curl lz4-libs nano \
         imagemagick \
         openssh-client \
         tzdata \
@@ -53,9 +40,6 @@ COPY docker/core/php-staging.ini "$PHP_INI_DIR/php-staging.ini"
 COPY --from=ext-builder /usr/local/lib/php/extensions/ /usr/local/lib/php/extensions/
 COPY --from=ext-builder /usr/local/etc/php/conf.d/ /usr/local/etc/php/conf.d/
 
-# Enable extensions (in case conf.d is not enough)
-RUN docker-php-ext-enable mysqli curl gettext sockets pdo_mysql zip pcntl intl opcache gd imagick igbinary apcu redis
-
 # Setup gettext languages (Alpine way)
 RUN apk add --no-cache --virtual .locale-build musl-locales musl-locales-lang && \
     echo "export LANG=en_US.UTF-8" >> /etc/profile
@@ -63,15 +47,17 @@ RUN apk add --no-cache --virtual .locale-build musl-locales musl-locales-lang &&
 FROM ghcr.io/roadrunner-server/velox:latest AS roadrunner
 
 ARG APP_VERSION="1.0.0"
-ARG VERSION="v2025.1.2"
+ARG VERSION="v2025.1.13"
 
 COPY docker/velox_rr.toml .
 
 ENV CGO_ENABLED=0
-RUN --mount=type=secret,id=RT_TOKEN,env=RT_TOKEN \
+ENV GOTOOLCHAIN=auto
+RUN --mount=type=secret,id=RT_TOKEN \
+    export GITHUB_TOKEN=$(cat /run/secrets/RT_TOKEN) && \
     vx build -c velox_rr.toml -o /usr/bin/
 
-FROM node:current-slim AS node_base
+FROM node:current-alpine AS node_base
 FROM composer:latest AS composer
 FROM php AS project
 
@@ -99,22 +85,24 @@ WORKDIR /var/www/
 # Initialize git and download project
 RUN git init \
     && mkdir -p modules \
-    && git remote add origin https://github.com/Heroyt/LaserArenaControl.git \
-    && git fetch --all --tags \
-    && git checkout -t origin/stable \
-    && git switch stable \
-    && git config pull.ff only --autostash \
-    && git pull \
-    && git submodule init && git submodule update --init --recursive --remote \
-    && git pull --recurse-submodules=yes
+    && git remote add origin https://github.com/Heroyt/LaserArenaControl.git
+RUN git fetch --all --tags \
+    && git config pull.ff only --autostash
+#    && git checkout -t origin/stable \
+#    && git switch stable \
+#    && git pull \
+#    && git submodule init && git submodule update --init --recursive --remote \
+#    && git pull --recurse-submodules=yes
 
 # Initialize all configs and create necessary directories
-RUN mv private/docker-config.ini private/config.ini
-RUN mkdir -p logs
-RUN mkdir -p temp
-RUN mkdir -p lmx
-RUN mkdir -p lmx/results
-RUN mkdir -p lmx/games
+RUN mkdir -p logs && \
+    mkdir -p temp && \
+    mkdir -p lmx && \
+    mkdir -p lmx6 && \
+    mkdir -p private && \
+    mkdir -p lmx/results && \
+    mkdir -p lmx/games
+COPY private/docker-config.ini private/config.ini
 
 ENV COMPOSER_ALLOW_SUPERUSER=1
 

@@ -41,6 +41,7 @@ class RecalculateSkillsGameCommand extends Command
             if (!isset($game)) {
                 continue;
             }
+            assert($game->isFinished());
             $output->writeln(sprintf('Calculating game %s (%s)', $game->start->format('d.m.Y H:i'), $game->code));
             $game->calculateSkills();
             if (!$game->save()) {

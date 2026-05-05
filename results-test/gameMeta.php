@@ -1,7 +1,7 @@
 <?php
 
 use App\Core\App;
-use App\GameModels\Game\Evo6\Player;
+use App\GameModels\Game\Lasermaxx\Evo6\Player;
 use Lsr\Lg\Results\ResultsParser;
 use Symfony\Component\Serializer\Serializer;
 
@@ -51,7 +51,7 @@ foreach ($files as $file) {
           'team' => $player->teamNum,
           'hitsPlayer' => [],
         ];
-        if ($player instanceof \App\GameModels\Game\Evo5\Player) {
+        if ($player instanceof \App\GameModels\Game\Lasermaxx\Evo5\Player) {
             $playerData['shotPoints'] = $player->shotPoints;
             $playerData['scoreBonus'] = $player->scoreBonus;
             $playerData['scorePowers'] = $player->scorePowers;

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\CQRS\Commands;
@@ -12,7 +13,10 @@ use Lsr\CQRS\CommandInterface;
  */
 final readonly class RecalculateSkillsCommand implements CommandInterface
 {
-
+    /**
+     * @template G of Game
+     * @param  G  $game
+     */
     public function __construct(
       public Game $game,
     ) {}

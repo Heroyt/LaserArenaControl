@@ -2,10 +2,10 @@
 
 namespace App\Services\GameHighlight;
 
+use App\DataObjects\Highlights\HighlightCollection;
 use App\GameModels\Game\Game;
 use App\GameModels\Game\Player;
 use App\GameModels\Game\Team;
-use App\Models\DataObjects\Highlights\HighlightCollection;
 
 interface PlayerHighlightChecker
 {
@@ -14,8 +14,9 @@ interface PlayerHighlightChecker
      *
      * @template T of Team
      * @template G of Game
+     * @template P of Player<G, T>
      *
-     * @param  Player<G, T>  $player
+     * @param  P  $player
      * @param  HighlightCollection  $highlights
      *
      * @return void

@@ -2,12 +2,14 @@
 
 namespace App\Services\GameHighlight\Checkers;
 
+use App\DataObjects\Highlights\GameHighlight;
+use App\DataObjects\Highlights\HighlightCollection;
+use App\DataObjects\Highlights\TrophyHighlight;
 use App\Exceptions\GameModeNotFoundException;
+use App\GameModels\Game\Game;
 use App\GameModels\Game\Player;
 use App\GameModels\Game\PlayerTrophy;
-use App\Models\DataObjects\Highlights\GameHighlight;
-use App\Models\DataObjects\Highlights\HighlightCollection;
-use App\Models\DataObjects\Highlights\TrophyHighlight;
+use App\GameModels\Game\Team;
 use App\Services\GameHighlight\PlayerHighlightChecker;
 use Lsr\Logging\Exceptions\DirectoryCreationException;
 use Lsr\ObjectValidation\Exceptions\ValidationException;
@@ -20,7 +22,12 @@ use Throwable;
 class TrophyHighlightChecker implements PlayerHighlightChecker
 {
     /**
-     * @param  Player  $player
+     *
+     * @template T of Team
+     * @template G of Game
+     * @template P of Player<G, T>
+     *
+     * @param  P  $player
      * @param  HighlightCollection  $highlights
      * @return void
      * @throws GameModeNotFoundException
@@ -42,14 +49,17 @@ class TrophyHighlightChecker implements PlayerHighlightChecker
                     switch ($trophy) {
                         case 'favouriteTarget':
                             $rarity = GameHighlight::MEDIUM_RARITY;
+                            assert($player->favouriteTarget !== null);
                             $rarity += round($player->getHitsPlayer($player->favouriteTarget) / 5);
                             break;
                         case 'favouriteTargetOf':
                             $rarity = GameHighlight::MEDIUM_RARITY;
-                            $rarity += round($player->favouriteTargetOf?->getHitsPlayer($player) / 5);
+                            assert($player->favouriteTargetOf !== null);
+                            $rarity += round($player->favouriteTargetOf->getHitsPlayer($player) / 5);
                             break;
                         case 'team-50':
                             $rarity = GameHighlight::MEDIUM_RARITY;
+                            assert($player->team !== null);
                             $rarity += 50 * min(1.0, ($player->score / $player->team->score));
                             break;
                     }

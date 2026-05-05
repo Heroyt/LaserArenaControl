@@ -5,6 +5,7 @@ namespace App\Gate\Screens;
 use App\GameModels\Game\Game;
 use App\Gate\Logic\CustomEventDto;
 use App\Gate\Logic\ScreenTriggerType;
+use Lsr\Core\Controllers\TemplateParameters;
 use Lsr\Core\Requests\Response;
 use Lsr\Core\Templating\Latte;
 use Lsr\Exceptions\TemplateDoesNotExistException;
@@ -18,10 +19,11 @@ abstract class GateScreen
     /** @var string[] */
     protected array $systems = [];
 
+    /** @phpstan-ignore missingType.generics */
     protected ?Game $game = null;
 
-    /** @var array<string,mixed> */
-    protected array $params = [];
+    /** @var array<string,mixed>|TemplateParameters */
+    protected array|TemplateParameters $params = [];
 
     protected int $reloadTime = -1;
 
@@ -29,21 +31,24 @@ abstract class GateScreen
 
     protected ?CustomEventDto $triggerEvent = null;
 
-    public function __construct(protected readonly Latte $latte) {}
+    public function __construct(protected readonly Latte $latte)
+    {
+    }
 
     /**
      * Get screen name
      *
      * @return string
      */
-    abstract public static function getName() : string;
+    abstract public static function getName(): string;
 
     /**
      * get screen description
      *
      * @return string
      */
-    public static function getDescription() : string {
+    public static function getDescription(): string
+    {
         return '';
     }
 
@@ -52,7 +57,8 @@ abstract class GateScreen
      *
      * @return string
      */
-    public static function getGroup() : string {
+    public static function getGroup(): string
+    {
         return '';
     }
 
@@ -61,14 +67,15 @@ abstract class GateScreen
      *
      * @return string
      */
-    abstract public static function getDiKey() : string;
+    abstract public static function getDiKey(): string;
 
     /**
      * Checks if this screen should be active under the current conditions.
      *
      * @return bool
      */
-    public function isActive() : bool {
+    public function isActive(): bool
+    {
         if ($this instanceof ReloadTimerInterface) {
             $timer = $this->getReloadTimer();
             return !isset($timer) || $timer > 0;
@@ -81,104 +88,126 @@ abstract class GateScreen
      *
      * @return ResponseInterface Response containing the screen view
      */
-    abstract public function run() : ResponseInterface;
+    abstract public function run(): ResponseInterface;
 
     /**
-     * @param  string[]  $systems
+     * @param string[] $systems
      *
      * @return $this
      */
-    public function setSystems(array $systems) : GateScreen {
+    public function setSystems(array $systems): GateScreen
+    {
         $this->systems = $systems;
         return $this;
     }
 
-    public function getGame() : ?Game {
+    /**
+     * @return Game|null
+     * @phpstan-ignore missingType.generics
+     */
+    public function getGame(): ?Game
+    {
         return $this->game;
     }
 
-    public function setGame(?Game $game) : GateScreen {
+    /**
+     * @template G of Game
+     * @param G|null $game
+     * @return $this
+     */
+    public function setGame(?Game $game): GateScreen
+    {
         $this->game = $game;
         return $this;
     }
 
     /**
-     * @param  array<string,mixed>  $params
+     * @param array<string,mixed>|TemplateParameters $params
      * @return $this
      */
-    public function setParams(array $params) : GateScreen {
+    public function setParams(array|TemplateParameters $params): GateScreen
+    {
         $this->params = $params;
         return $this;
     }
 
-    public function setTriggerEvent(?CustomEventDto $triggerEvent) : GateScreen {
+    public function setTriggerEvent(?CustomEventDto $triggerEvent): GateScreen
+    {
         $this->triggerEvent = $triggerEvent;
         return $this;
     }
 
     /**
-     * @param  string  $template
-     * @param  array<string,mixed>  $params
+     * @param string $template
+     * @param array<string,mixed> $params
      *
      * @return ResponseInterface
      * @throws TemplateDoesNotExistException
      */
-    protected function view(string $template, array $params) : ResponseInterface {
+    protected function view(string $template, array $params): ResponseInterface
+    {
         if ($this instanceof ReloadTimerInterface && $this->reloadTime <= 0) {
             $this->setReloadTime($this->getReloadTimer() ?? -1);
         }
 
+        // Merge parameters
+        $this->params['addJs'] = empty($this->params['addJs']) ? ['gate/defaultScreen.js'] : $this->params['addJs'];
+        $this->params['reloadTimer'] = $this->reloadTime;
+        foreach ($params as $key => $value) {
+            if (isset($this->params[$key]) && is_array($this->params[$key]) && is_array($value)) {
+                $this->params[$key] = array_merge($this->params[$key], $value);
+                continue;
+            }
+            $this->params[$key] = $value;
+        }
+
         $response = $this
-          ->respond(
-            $this->latte
-              ->viewToString(
-                $template,
-                array_merge(
-                  $this->params,
-                  [
-                    'addJs'       => ['gate/defaultScreen.js'],
-                    'reloadTimer' => $this->reloadTime,
-                  ],
-                  $params
-                )
-              )
-          )
-          ->withHeader('Content-Type', 'text/html')
-          /** @phpstan-ignore nullsafe.neverNull */
-          ->withHeader('X-Trigger', $this->getTrigger()?->value ?? 'null');
+            ->respond(
+                $this->latte
+                    ->viewToString(
+                        $template,
+                        $this->params
+                    )
+            )
+            ->withHeader('Content-Type', 'text/html')
+            /** @phpstan-ignore nullsafe.neverNull */
+            ->withHeader('X-Trigger', $this->getTrigger()?->value ?? 'null')
+            ->withHeader('X-Systems', implode(',', $this->systems));
         if ($this->reloadTime > 0) {
-            return $response->withHeader('X-Reload-Time', (string) $this->reloadTime);
+            return $response->withHeader('X-Reload-Time', (string)$this->reloadTime);
         }
         if (isset($this->triggerEvent)) {
             $now = time();
             $response = $response
-              ->withHeader('X-Event', $this->triggerEvent->event)
-              ->withHeader('X-Now', (string) $now)
-              ->withHeader('X-Event-Time', (string) $this->triggerEvent->time);
+                ->withHeader('X-Event', $this->triggerEvent->event)
+                ->withHeader('X-Now', (string)$now)
+                ->withHeader('X-Event-Time', (string)$this->triggerEvent->time);
             if ($now < $this->triggerEvent->time) {
-                return $response->withHeader('X-Reload-Time', (string) ($this->triggerEvent->time - $now));
+                return $response->withHeader('X-Reload-Time', (string)($this->triggerEvent->time - $now));
             }
         }
         return $response;
     }
 
-    public function setReloadTime(int $reloadTime) : GateScreen {
-        $this->reloadTime = $reloadTime;
+    public function setReloadTime(?int $reloadTime): GateScreen
+    {
+        $this->reloadTime = $reloadTime ?? -1;
         return $this;
     }
 
     /**
-     * @param  string|array<string, mixed>|object  $data
-     * @param  int  $code
-     * @param  string[]  $headers
+     * @param string|array<string, mixed>|object $data
+     * @param int $code
+     * @param string[] $headers
      *
      * @return ResponseInterface
      */
     protected function respond(
-      string | array | object $data,
-      int                     $code = 200,
-      array                   $headers = []
-    ) : ResponseInterface {
+        string|array|object $data,
+        int                 $code = 200,
+        array               $headers = []
+    ): ResponseInterface
+    {
         $response = new Response(new \Nyholm\Psr7\Response($code, $headers));
 
         if (is_string($data)) {
@@ -188,11 +217,13 @@ abstract class GateScreen
         return $response->withJsonBody($data);
     }
 
-    public function getTrigger() : ?ScreenTriggerType {
+    public function getTrigger(): ?ScreenTriggerType
+    {
         return $this->trigger;
     }
 
-    public function setTrigger(ScreenTriggerType $trigger) : static {
+    public function setTrigger(ScreenTriggerType $trigger): static
+    {
         $this->trigger = $trigger;
         return $this;
     }

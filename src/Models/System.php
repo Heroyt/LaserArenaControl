@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Models;
@@ -10,7 +11,6 @@ use Stringable;
 #[PrimaryKey('id_system')]
 class System extends BaseModel implements Stringable
 {
-
     public const string TABLE = 'systems';
 
     public string $name;

@@ -46,15 +46,12 @@ trait PlayerAggregate
 
     protected int $accuracyAvg;
 
-    protected int | string $favouriteVest;
-
-    public function getSumShots() : int {
-        if (isset($this->shotsSum)) {
-            return $this->shotsSum;
-        }
-        $this->shotsSum = array_sum($this->shots);
-        return $this->shotsSum;
-    }
+    protected int $favouriteVest;
+    protected float $hitsOwnAvg;
+    protected int $hitsOwnSum;
+    protected float $deathsOwnAvg;
+    protected int $deathsOwnSum;
+    protected float $missesAvg;
 
     public function getAverageShots() : float {
         if (isset($this->shotsAvg)) {
@@ -119,6 +116,87 @@ trait PlayerAggregate
         return $this->scoreAvg;
     }
 
+    public function getAverageOwnHits() : float {
+        if (isset($this->hitsOwnAvg)) {
+            return $this->hitsOwnAvg;
+        }
+        if (count($this->hitsOwn) === 0) {
+            return 0;
+        }
+        $this->hitsOwnAvg = array_sum($this->hitsOwn) / count($this->hitsOwn);
+        return $this->hitsOwnAvg;
+    }
+
+    public function getSumOwnHits() : int {
+        if (isset($this->hitsOwnSum)) {
+            return $this->hitsOwnSum;
+        }
+        $this->hitsOwnSum = array_sum($this->hitsOwn);
+        return $this->hitsOwnSum;
+    }
+
+    public function getAverageOwnDeaths() : float {
+        if (isset($this->deathsOwnAvg)) {
+            return $this->deathsOwnAvg;
+        }
+        if (count($this->deathsOwn) === 0) {
+            return 0;
+        }
+        $this->deathsOwnAvg = array_sum($this->deathsOwn) / count($this->deathsOwn);
+        return $this->deathsOwnAvg;
+    }
+
+    public function getSumOwnDeaths() : int {
+        if (isset($this->deathsOwnSum)) {
+            return $this->deathsOwnSum;
+        }
+        $this->deathsOwnSum = array_sum($this->deathsOwn);
+        return $this->deathsOwnSum;
+    }
+
+    public function getAverageMisses() : float {
+        if (isset($this->missesAvg)) {
+            return $this->missesAvg;
+        }
+        if (count($this->hits) === 0) {
+            return 0;
+        }
+        $this->missesAvg = $this->getSumMisses() / count($this->hits);
+        return $this->missesAvg;
+    }
+
+    public function getSumMisses() : int {
+        return $this->getSumShots() - $this->getSumHits();
+    }
+
+    public function getSumShots() : int {
+        if (isset($this->shotsSum)) {
+            return $this->shotsSum;
+        }
+        $this->shotsSum = array_sum($this->shots);
+        return $this->shotsSum;
+    }
+
+    public function getSumHits() : int {
+        if (isset($this->hitsSum)) {
+            return $this->hitsSum;
+        }
+        $this->hitsSum = array_sum($this->hits);
+        return $this->hitsSum;
+    }
+
+    /**
+     * @return int[]
+     */
+    public function getMisses() : array {
+        $misses = [];
+        $count = count($this->hits);
+        for ($i = 0; $i < $count; $i++) {
+            $misses[] = $this->shots[$i] - $this->hits[$i];
+        }
+        return $misses;
+    }
+
     /**
      * @return int
      */
@@ -133,12 +211,12 @@ trait PlayerAggregate
         return $this->skillAvg;
     }
 
-    public function getFavouriteVest() : int | string {
+    public function getFavouriteVest() : int {
         if (isset($this->favouriteVest)) {
             return $this->favouriteVest;
         }
         arsort($this->vests);
-        $this->favouriteVest = array_key_first($this->vests) ?? 1;
+        $this->favouriteVest = (int) (array_key_first($this->vests) ?? 1);
         return $this->favouriteVest;
     }
 
@@ -148,14 +226,6 @@ trait PlayerAggregate
         }
         $this->kdAvg = $this->getSumHits() / ($this->getSumDeaths() === 0 ? 1 : $this->getSumDeaths());
         return $this->kdAvg;
-    }
-
-    public function getSumHits() : int {
-        if (isset($this->hitsSum)) {
-            return $this->hitsSum;
-        }
-        $this->hitsSum = array_sum($this->hits);
-        return $this->hitsSum;
     }
 
     public function getSumDeaths() : int {

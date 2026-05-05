@@ -6,16 +6,15 @@ use App\GameModels\Game\Game;
 use App\GameModels\Game\Player as GamePlayer;
 use App\GameModels\Game\Team;
 use JsonSerializable;
+use Lsr\Lg\Results\Interface\Models\GroupPlayerInterface;
 
 /**
  * Wrapper class to aggregate values from multiple player instances
  *
  * @method string getTeamColor()
  * @method string getColor()
- * @method Team getTeam()
- * @method Game getGame()
  */
-class Player implements JsonSerializable
+class Player implements JsonSerializable, GroupPlayerInterface
 {
     use PlayerAggregate;
 
@@ -24,11 +23,23 @@ class Player implements JsonSerializable
     /** @var PlayerModeAggregate[] $gameModes */
     public array $gameModes = [];
 
+    /**
+     * @template P of GamePlayer
+     * @param  P  $player
+     */
     public function __construct(
       public readonly string     $asciiName,
       public readonly GamePlayer $player,
     ) {}
 
+    /**
+     * @template P of GamePlayer
+     * @template T of Team
+     * @template G of Game<T,P>
+     * @param  P  $player
+     * @param  G|null  $game
+     * @return void
+     */
     public function addGame(GamePlayer $player, ?Game $game = null) : void {
         if (!isset($game)) {
             $game = $player->game;

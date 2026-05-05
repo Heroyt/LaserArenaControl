@@ -1,6 +1,6 @@
 import {prepareFetch, processResponse} from '../includes/apiClient';
 import {getGameHighlights} from '../api/endpoints/games';
-import GateScreen from '../gate/gateScreen';
+import GateScreen, {isScreen} from '../gate/gateScreen';
 import DOMPurify from 'dompurify';
 
 declare global {
@@ -122,31 +122,38 @@ export async function initContent(content: HTMLDivElement, previous: HTMLDivElem
 		link.classList.remove('add-style');
 	});
 
-	const scriptMeta = content.querySelector<HTMLMetaElement>('meta[name="add-script"]');
+    const scriptMetas = content.querySelectorAll<HTMLMetaElement>('meta[name="add-script"]');
 	let moduleClass: GateScreen = null;
-	if (scriptMeta) {
-		console.log(scriptMeta.content);
+    for (const scriptMeta of scriptMetas) {
+        console.log(scriptMeta.content);
 
-		// Cache loaded modules to prevent loading JS scripts all the time
-		let module: { default: new () => GateScreen };
-		if (loadedScreens.has(scriptMeta.content)) {
-			module = loadedScreens.get(scriptMeta.content);
-		} else {
-			module = await import(scriptMeta.content);
-			// Cache module for later use to prevent further import() call
-			loadedScreens.set(scriptMeta.content, module);
-		}
+        // Cache loaded modules to prevent loading JS scripts all the time
+        let module: { default: new () => GateScreen };
+        if (loadedScreens.has(scriptMeta.content)) {
+            module = loadedScreens.get(scriptMeta.content);
+        } else {
+            module = await import(scriptMeta.content);
+            // Cache module for later use to prevent further import() call
+            loadedScreens.set(scriptMeta.content, module);
+        }
+        // Check if module.default implements GateScreen
+        if (module.default && typeof module.default === 'function') {
+            const m = new module.default;
+            if (isScreen(m)) {
+                moduleClass = m;
+            }
+        }
+    }
+    if (moduleClass) {
+        // Initialize module
+        moduleClass.init(content, removePreviousContent);
 
-		// Initialize module
-		moduleClass = new module.default;
-		moduleClass.init(content, removePreviousContent);
-
-		// Check for module changes
-		if (lastScreen && moduleClass.isSame(lastScreen)) {
-			console.log('Skipping module - the screen is identical');
-			return;
-		}
-	} else {
+        // Check for module changes
+        if (lastScreen && moduleClass.isSame(lastScreen)) {
+            console.log('Skipping module - the screen is identical');
+            return;
+        }
+    } else {
 		console.error('No add-script found!');
 	}
 

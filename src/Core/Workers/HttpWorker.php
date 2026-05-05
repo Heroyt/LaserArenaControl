@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Core\Workers;
@@ -10,7 +11,6 @@ use Lsr\Roadrunner\ErrorHandlers\HttpErrorHandler;
 
 class HttpWorker extends \Lsr\Roadrunner\Workers\HttpWorker
 {
-
     public function __construct(
       HttpErrorHandler                    $error500Handler,
       HttpErrorHandler                    $error404Handler,
@@ -25,5 +25,4 @@ class HttpWorker extends \Lsr\Roadrunner\Workers\HttpWorker
         parent::handleRequest($request);
         $this->fontAwesome->saveIcons();
     }
-
 }

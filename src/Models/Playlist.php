@@ -7,6 +7,7 @@ use Dibi\Exception;
 use Lsr\Db\DB;
 use Lsr\Orm\Attributes\PrimaryKey;
 use Lsr\Orm\Attributes\Relations\ManyToMany;
+use Lsr\Orm\Interfaces\LoadedModel;
 use Lsr\Orm\ModelCollection;
 
 #[PrimaryKey('id_playlist')]
@@ -16,7 +17,7 @@ class Playlist extends BaseModel
 
     public string $name;
 
-    /** @var ModelCollection<MusicMode> */
+    /** @var ModelCollection<MusicMode&LoadedModel> */
     #[ManyToMany(through: 'playlist_music', foreignKey: 'id_music', localKey: 'id_playlist', class: MusicMode::class)]
     public ModelCollection $music;
 
@@ -33,7 +34,7 @@ class Playlist extends BaseModel
     }
 
     /**
-     * @return ModelCollection<MusicMode>
+     * @return ModelCollection<MusicMode&LoadedModel>
      */
     public function getMusic() : ModelCollection {
         if (empty($this->music) && !$this->loadedMusic) {
@@ -54,7 +55,7 @@ class Playlist extends BaseModel
     }
 
     /**
-     * @param  MusicMode[]|ModelCollection<MusicMode>  $music
+     * @param  (MusicMode&LoadedModel)[]|ModelCollection<MusicMode&LoadedModel>  $music
      * @return $this
      */
     public function setMusic(array | ModelCollection $music) : static {
@@ -69,6 +70,7 @@ class Playlist extends BaseModel
     public function getMusicIds() : array {
         $ids = [];
         foreach ($this->getMusic() as $music) {
+            assert($music->id !== null);
             $ids[] = $music->id;
         }
         return $ids;

@@ -214,7 +214,7 @@ tables:
 			`id_game` int(11) unsigned NOT NULL AUTO_INCREMENT,
 			`datetime` datetime NOT NULL DEFAULT current_timestamp(),
 			`data` text NOT NULL,
-			`type` enum('prepared','user-local','user-public') NOT NULL DEFAULT 'prepared',
+			`type` enum('prepared','user-local','user-public','loaded') NOT NULL DEFAULT 'prepared',
 			`active` tinyint(1) NOT NULL DEFAULT 1,
 			`id_system` int(11) unsigned DEFAULT NULL,
 			PRIMARY KEY (`id_game`)
@@ -225,6 +225,8 @@ tables:
 				- 'ADD `type` enum(''prepared'',''user-local'',''user-public'') NOT NULL DEFAULT ''prepared'''
 			0.2:
 				- 'ADD `id_system` int(11) unsigned DEFAULT NULL'
+			0.3:
+				- 'MODIFY COLUMN `type` enum(''prepared'',''user-local'',''user-public'',''loaded'') NOT NULL DEFAULT ''prepared'''
 		foreignKeys:
 			-
 				column: id_system

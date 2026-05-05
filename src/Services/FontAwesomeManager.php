@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use App\Models\DataObjects\FontAwesome\FontAwesomeCollection;
-use App\Models\DataObjects\FontAwesome\IconType;
+use App\DataObjects\FontAwesome\FontAwesomeCollection;
+use App\DataObjects\FontAwesome\IconType;
 use InvalidArgumentException;
 use Symfony\Component\Serializer\Serializer;
 
@@ -52,7 +52,7 @@ class FontAwesomeManager
         );
         sort($icons);
         foreach ($icons as $name) {
-            $content .= "\t'$name': \$fa-var-$name,\n";
+            $content .= "\t'$name': \$var-$name,\n";
         }
         $content .= ");\n";
         file_put_contents($file, $content);

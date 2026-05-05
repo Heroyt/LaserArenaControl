@@ -40,7 +40,7 @@
         <link rel="stylesheet" href="{getUrl}dist/fontawesome.css?v={$page->app->getCacheVersion()}">
     </noscript>
     <link rel="stylesheet" href="{getUrl}dist/main.css?v={$page->app->getCacheVersion()}">
-    <link rel="stylesheet" href="{getUrl}dist/theme.css?v={\App\Models\DataObjects\Theme::getCssVersion()}">
+    <link rel="stylesheet" href="{getUrl}dist/theme.css?v={\App\DataObjects\Theme::getCssVersion()}">
     <link n:foreach="$addCss as $file" rel="stylesheet"
                                        href="{getUrl}dist/{$file}?v={$page->app->getCacheVersion()}">
     <title>{$page->getTitle()}</title>

@@ -11,7 +11,7 @@
  */
 
 use App\Core\App;
-use App\Models\DataObjects\Image;
+use App\DataObjects\Image;
 use App\Services\ImageService;
 use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Component\Serializer\Encoder\JsonDecode;
@@ -57,7 +57,6 @@ function getImageSrcSet(Image | string $image, bool $includeAllSizes = true): st
                 continue;
             }
             $index = (string) $size;
-            /** @phpstan-ignore isset.offset */
             if (isset($versions[$index])) {
                 $srcSet[] = $versions[$index] . ' ' . $size . 'w';
             }

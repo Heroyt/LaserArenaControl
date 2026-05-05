@@ -131,7 +131,7 @@
 			<label for="music-{$id}-background" data-toggle="tooltip" title="{_'Pozadí', context: 'image'}"
 				   class="image-input-with-preview">
 				{try}
-					{var App\Models\DataObjects\Image|null $backgroundImage = $musicMode?->getBackgroundImage()}
+					{var App\DataObjects\Image|null $backgroundImage = $musicMode?->getBackgroundImage()}
 				{/try}
 				{if !isset($backgroundImage)}
 					<img src="{getUrl}assets/images/placeholder.png" alt="{_'Pozadí', 'image'}">
@@ -148,7 +148,7 @@
 			<label for="music-{$id}-icon" class="image-input-with-preview" data-toggle="tooltip"
 				   title="{_'Ikona', context: 'image'}">
 				{try}
-					{var App\Models\DataObjects\Image|null $icon = $musicMode?->getIcon()}
+					{var App\DataObjects\Image|null $icon = $musicMode?->getIcon()}
 				{/try}
 				{if !isset($icon)}
 					<img src="{getUrl}assets/images/placeholder.png" alt="{_'Pozadí', 'image'}">

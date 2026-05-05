@@ -21,7 +21,6 @@ Icon
 Network Trash Folder
 Temporary Items
 .apdisk
-*.lock
 *-lock.json
 temp/
 dist/
@@ -60,3 +59,5 @@ ssl
 lac
 !src/Cli/Commands/Logs/
 .pnpm-store
+assets/fonts/fa*
+assets/images/optimized

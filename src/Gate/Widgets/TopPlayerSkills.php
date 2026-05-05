@@ -5,6 +5,7 @@ namespace App\Gate\Widgets;
 use App\GameModels\Factory\PlayerFactory;
 use App\GameModels\Game\Game;
 use App\GameModels\Game\Player;
+use App\GameModels\Game\Team;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Throwable;
@@ -17,6 +18,7 @@ class TopPlayerSkills implements WidgetInterface, WithGameIdsInterface
 
     /**
      * @var Player[]
+     * @phpstan-ignore missingType.generics
      */
     private ?array $topPlayers = null;
 
@@ -24,18 +26,22 @@ class TopPlayerSkills implements WidgetInterface, WithGameIdsInterface
     public function refresh() : static {
         $this->hash = null;
         $this->topPlayers = null;
-        $this->gameIds = null;
+        $this->setGameIds(null);
         return $this;
     }
 
     /**
-     * @param  Game|null  $game
+     * @template T of Team
+     * @template P of Player
+     * @template G of Game<T,P>
+     * @param  G|null  $game
      * @param  DateTimeInterface|null  $date
      * @param  string[]|null  $systems
-     * @return array{topPlayers: Player[]}
+     * @return array{topPlayers: P[]}
      * @throws Throwable
      */
     public function getData(?Game $game = null, ?DateTimeInterface $date = null, ?array $systems = []) : array {
+        /** @phpstan-ignore return.type */
         return [
           'topPlayers' => $this->getTopPlayers($date, $systems),
         ];
@@ -45,12 +51,14 @@ class TopPlayerSkills implements WidgetInterface, WithGameIdsInterface
      * @param  string[]|null  $systems
      * @return Player[]
      * @throws Throwable
+     * @phpstan-ignore missingType.generics
      */
     private function getTopPlayers(?DateTimeInterface $date = null, ?array $systems = []) : array {
         if (!isset($this->topPlayers)) {
             $this->topPlayers = [];
-            if (!empty($this->gameIds)) {
-                $topScores = PlayerFactory::queryPlayers($this->gameIds)
+            $gameIds = $this->getGameIds(rankableOnly: true);
+            if (!empty($gameIds)) {
+                $topScores = PlayerFactory::queryPlayers($gameIds)
                                           ->orderBy('[skill]')
                                           ->desc()
                                           ->limit(10)
@@ -69,10 +77,13 @@ class TopPlayerSkills implements WidgetInterface, WithGameIdsInterface
 
             if (!empty($topScores)) {
                 foreach ($topScores as $score) {
-                    $this->topPlayers[] = PlayerFactory::getById(
+                    $player = PlayerFactory::getById(
                       (int) $score->id_player,
                       ['system' => (string) $score->system]
                     );
+                    if ($player !== null) {
+                        $this->topPlayers[] = $player;
+                    }
                 }
             }
         }

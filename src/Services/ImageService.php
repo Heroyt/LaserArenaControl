@@ -114,13 +114,6 @@ readonly class ImageService
     }
 
     /**
-     * @return list<int<1,max>>
-     */
-    public function getSizes() : array {
-        return $this->sizes;
-    }
-
-    /**
      * @param  GdImage  $image
      * @param  int<1,max>|null  $width
      * @param  int<1,max>|null  $height
@@ -213,4 +206,10 @@ readonly class ImageService
         return $out;
     }
 
+    /**
+     * @return list<int<1,max>>
+     */
+    public function getSizes() : array {
+        return $this->sizes;
+    }
 }

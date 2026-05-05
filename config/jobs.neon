@@ -1,6 +1,6 @@
 extensions:
-	orisai.scheduler: App\DI\Extensions\SchedulerExtension
-orisai.scheduler:
+	scheduler: OriNette\Scheduler\DI\SchedulerExtension
+scheduler:
 	console:
 		script: '%constants.appDir%bin/console'
 	errorHandler: tracy
@@ -33,6 +33,17 @@ orisai.scheduler:
 			expression: 0 6 * * *
 			callback: [@cron.clearGroups, 'run']
 services:
+	# Core scheduler
+	scheduler.logger: Lsr\Logging\Logger(%logger.dir%, 'scheduler')
+	scheduler.scheduler:
+		arguments:
+			logger: @scheduler.logger
+		alteration: true
+	scheduler.executor:
+		arguments:
+			logger: @scheduler.logger
+		alteration: true
+
 	# Jobs tasks
 	task.gamesPrecache: App\Tasks\GamePrecacheTask
 	task.gamesHighlights: App\Tasks\GameHighlightsTask

@@ -70,7 +70,15 @@ class GateScreenModel extends BaseModel
     }
 
     /**
-     * @return array{id:int|null,gate:int|null,order:int,screen_serialized:string,settings_serialized:string,trigger:ScreenTriggerType,triggerValue:string|null}
+     * @return array{
+     *     id:int|null,
+     *     gate:int|null,
+     *     order:int,
+     *     screen_serialized:string,
+     *     settings_serialized:string|null,
+     *     trigger:ScreenTriggerType,
+     *     triggerValue:string|null
+     * }
      */
     public function __serialize() : array {
         return [

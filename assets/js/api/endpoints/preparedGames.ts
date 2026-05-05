@@ -2,7 +2,7 @@ import {customFetch, fetchGet, fetchPost, FormSaveResponse} from '../../includes
 import {GameData} from '../../interfaces/gameInterfaces';
 import {System} from '../../interfaces/system';
 
-export type PreparedGameType = 'prepared' | 'user-local' | 'user-public';
+export type PreparedGameType = 'prepared' | 'user-local' | 'user-public' | 'loaded';
 export type PreparedGameData = {
 	id_game: number,
 	datetime: string,
@@ -23,6 +23,11 @@ export async function deletePreparedGame(id: number): Promise<FormSaveResponse> 
 export async function sendPreparedGame(data: GameData): Promise<FormSaveResponse> {
 	data.system = system.id;
 	return fetchPost('/prepared', data);
+}
+
+export async function sendPreparedGameLoaded(data: GameData): Promise<FormSaveResponse> {
+    data.system = system.id;
+    return fetchPost('/prepared/loaded', data);
 }
 
 export async function sendPreparedGamePublic(data: GameData): Promise<FormSaveResponse> {

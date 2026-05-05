@@ -66,8 +66,10 @@ export default class Game {
 
 	sortable: Sortable;
 
-	constructor() {
+    private eventListeners = new Map<string, Set<(...args: any[]) => void>>
+    private suspendPlayerLinkCheck = 0;
 
+	constructor() {
 		this.variationMemory = JSON.parse(window.localStorage.getItem('modeVariationMemory'));
 		if (!this.variationMemory) {
 			this.variationMemory = {};
@@ -388,7 +390,26 @@ export default class Game {
 				});
 			}
 		}
+
+        this.on('player-update', (_player: Player) => {
+            if (this.suspendPlayerLinkCheck > 0) {
+                return;
+            }
+            this.checkPlayerLinks();
+        });
 	}
+
+    withSuspendedPlayerLinkCheck<T>(callback: () => T): T {
+        this.suspendPlayerLinkCheck++;
+        try {
+            return callback();
+        } finally {
+            this.suspendPlayerLinkCheck--;
+            if (this.suspendPlayerLinkCheck === 0) {
+                this.checkPlayerLinks();
+            }
+        }
+    }
 
 	updateModeVariations(variations: { [index: number]: VariationsValue[] }) {
 		// Clear
@@ -512,6 +533,7 @@ export default class Game {
 
 		const e = new Event('clear-all');
 		document.dispatchEvent(e);
+        this.dispatch('clear-all');
 	}
 
 	/**
@@ -883,6 +905,8 @@ export default class Game {
 		if (this.$group) {
 			this.$group.dispatchEvent(e);
 		}
+
+        this.checkPlayerLinks();
 	}
 
 	reassignPlayerSkills(): void {
@@ -971,6 +995,9 @@ export default class Game {
 				skill: player.skill,
 				code: player.userCode,
 			};
+            if (player.isLinked) {
+                data.players[player.vest].linkHash = player.linkHash;
+            }
 		});
 
 		activeTeams.forEach(team => {
@@ -1071,4 +1098,51 @@ export default class Game {
 			}
 		}
 	}
+
+    on(event: string, handler: (...args: any[]) => void) {
+        if (!this.eventListeners.has(event)) {
+            this.eventListeners.set(event, new Set);
+        }
+        const handlers = this.eventListeners.get(event);
+        handlers.add(handler);
+    }
+
+    dispatch(event: string, ...args: any[]) {
+        if (!this.eventListeners.has(event)) {
+            return;
+        }
+        const handlers = this.eventListeners.get(event);
+        for (const handler of handlers) {
+            handler(...args);
+        }
+    }
+
+    checkPlayerLinks() {
+        for (const [_, player] of this.players) {
+            player.setLinkedPlayers(new Set());
+        }
+
+        // Group players by their identifier
+        const groups = new Map<string, Set<Player>>();
+        for (const [_, player] of this.players) {
+            if (!player.isActive()) {
+                continue;
+            }
+            const identifier = player.identifier;
+            if (!groups.has(identifier)) {
+                groups.set(identifier, new Set());
+            }
+            groups.get(identifier).add(player);
+        }
+
+        // If any group has more than 1 player, link them
+        for (const [_, group] of groups) {
+            if (group.size < 2) {
+                continue;
+            }
+            for (const player of group) {
+                player.setLinkedPlayers(group);
+            }
+        }
+    }
 }

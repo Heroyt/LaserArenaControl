@@ -1,13 +1,13 @@
 <?php
 
-use App\Controllers\Settings\Gate;
-use App\Controllers\Settings\Modes;
-use App\Controllers\Settings\Music;
-use App\Controllers\Settings\PrintSettings;
-use App\Controllers\Settings\Settings;
-use App\Controllers\Settings\SystemsSettings;
-use App\Controllers\Settings\TipsSettings;
 use App\Core\App;
+use App\Http\Controllers\Settings\Gate;
+use App\Http\Controllers\Settings\Modes;
+use App\Http\Controllers\Settings\Music;
+use App\Http\Controllers\Settings\PrintSettings;
+use App\Http\Controllers\Settings\Settings;
+use App\Http\Controllers\Settings\SystemsSettings;
+use App\Http\Controllers\Settings\TipsSettings;
 use App\Services\FeatureConfig;
 use Lsr\Core\Routing\Router;
 

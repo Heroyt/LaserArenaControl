@@ -10,19 +10,21 @@ export interface PlayerData {
 	 * Animation length in milliseconds
 	 */
 	length: number,
-	/**
+    /**
 	 * Real (final) position
 	 */
 	position: number,
-	/**
+    currentPosition: number;
+    originalLocation: { x: number, y: number };
+    /**
 	 * Real (final) score
 	 */
 	score: number,
-	/**
+    /**
 	 * Animated score
 	 */
 	currentScore: number,
-	/**
+    /**
 	 * Element that displays player's current position
 	 */
 	positionEl: HTMLDivElement,

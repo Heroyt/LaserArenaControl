@@ -102,8 +102,9 @@ class LigaApi
     /**
      * Synchronize games to public API
      *
+     * @template G of Game
      * @param  string  $system
-     * @param  Game[]  $games
+     * @param  G[]  $games
      * @param  float|null  $timeout
      * @param  bool  $recreateClient
      *
@@ -364,7 +365,7 @@ class LigaApi
                 curl_setopt_array(
                   $ch,
                   [
-                    CURLOPT_POST       => 1,
+                    CURLOPT_POST       => true,
                     CURLOPT_TIMEOUT    => 60,
                     CURLOPT_RETURNTRANSFER => true,
                     CURLOPT_POSTFIELDS => $post_data,

@@ -22,7 +22,7 @@ class CSRFCheck implements Middleware
     use MiddlewareResponder;
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler) : ResponseInterface {
-        $csrfName = implode('/', $request->path);
+        $csrfName = $request->getUri()->getPath();
         if (!formValid($csrfName)) {
             return $this->respond(
               $request,

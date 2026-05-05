@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Tasks;
@@ -11,7 +12,6 @@ use Spiral\RoadRunner\Jobs\Task\ReceivedTaskInterface;
 
 readonly class HandleCommandTask implements TaskDispatcherInterface
 {
-
     public function __construct(
       private CommandBus $commandBus
     ) {}

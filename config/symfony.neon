@@ -11,20 +11,51 @@ services:
 	symfony.lock.store: Symfony\Component\Lock\Store\RedisStore(@redis)
 	symfony.lock.factory: Symfony\Component\Lock\LockFactory(@symfony.lock.store)
 
-	symfony.info.reflectionextractor: Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor
+	symfony.info.reflectionextractor:
+		type: Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor
+		autowired: false
+	symfony.info.phpdoc:
+		type: Symfony\Component\PropertyInfo\Extractor\PhpDocExtractor
+		autowired: false
+	symfony.info.serializerextractor:
+		type: Symfony\Component\PropertyInfo\Extractor\SerializerExtractor
+		autowired: false
+	symfony.info.constructorextractor:
+		type: Symfony\Component\PropertyInfo\Extractor\ConstructorExtractor
+		autowired: false
+	symfony.info.phpstanextractor:
+		type: Symfony\Component\PropertyInfo\Extractor\PhpStanExtractor
+		autowired: false
+	symfony.info.propertyinfo: Symfony\Component\PropertyInfo\PropertyInfoExtractor(
+		listExtractors: [@symfony.info.reflectionextractor, @symfony.info.serializerextractor],
+		typeExtractors: [@symfony.info.phpdoc, @symfony.info.phpstanextractor, @symfony.info.reflectionextractor, @symfony.info.constructorextractor],
+		descriptionExtractors: [@symfony.info.phpdoc, @symfony.info.phpstanextractor],
+		accessExtractors: [@symfony.info.reflectionextractor],
+		initializableExtractors: [@symfony.info.reflectionextractor]
+	)
+
+	symfony.info.attributeLoader: Symfony\Component\Serializer\Mapping\Loader\AttributeLoader
+
+	symfony.info.classMetadataFactory: Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory(@symfony.info.attributeLoader)
+	symfony.info.nameconverter: Symfony\Component\Serializer\NameConverter\MetadataAwareNameConverter
 
 	symfony.denormalizer.array: Symfony\Component\Serializer\Normalizer\ArrayDenormalizer
 
 	symfony.normalizer.enum: Symfony\Component\Serializer\Normalizer\BackedEnumNormalizer
 	symfony.normalizer.json: Symfony\Component\Serializer\Normalizer\JsonSerializableNormalizer(defaultContext: %symfony.normalizer.context%)
-	symfony.normalizer.object: Symfony\Component\Serializer\Normalizer\ObjectNormalizer(propertyTypeExtractor: @symfony.info.reflectionextractor,defaultContext: %symfony.normalizer.context%)
+	symfony.normalizer.object: Symfony\Component\Serializer\Normalizer\ObjectNormalizer(
+		classMetadataFactory: @symfony.info.classMetadataFactory,
+		nameConverter: @symfony.info.nameconverter,
+		propertyTypeExtractor: @symfony.info.propertyinfo,
+		defaultContext: %symfony.normalizer.context%
+	)
 
 	symfony.encoder.json: Symfony\Component\Serializer\Encoder\JsonEncoder(defaultContext: %symfony.serializer.json.context%)
 	symfony.encoder.xml: Symfony\Component\Serializer\Encoder\XmlEncoder
 	symfony.encoder.csv: Symfony\Component\Serializer\Encoder\CsvEncoder
 
 	symfony.serializer: Symfony\Component\Serializer\Serializer(
-		[@symfony.normalizer.dibiRow, @symfony.denormalizer.array, @symfony.normalizer.datetime, @symfony.normalizer.enum, @symfony.normalizer.json, @symfony.normalizer.object],
+		[@symfony.normalizer.dibiRow, @symfony.normalizer.datetime, @symfony.normalizer.enum, @symfony.normalizer.json, @symfony.normalizer.object, @symfony.denormalizer.array],
 		[@symfony.encoder.json, @symfony.encoder.xml, @symfony.encoder.csv]
 	)
 	mapper: Lsr\Serializer\Mapper(@symfony.serializer)

@@ -45,20 +45,28 @@ final class ParametersSorter
                 $item = self::sortByType($item);
                 $type = self::TYPE_ARRAY;
             }
-            else if (is_bool($item)) {
-                $type = self::TYPE_BOOL;
-            }
-            else if (is_int($item) || is_float($item)) {
-                $type = self::TYPE_NUMBER;
-            }
-            else if (is_string($item)) {
-                $type = self::TYPE_STRING;
-            }
-            else if ($item === null) {
-                $type = self::TYPE_NULL;
-            }
             else {
-                $type = self::TYPE_OTHER;
+                if (is_bool($item)) {
+                    $type = self::TYPE_BOOL;
+                }
+                else {
+                    if (is_int($item) || is_float($item)) {
+                        $type = self::TYPE_NUMBER;
+                    }
+                    else {
+                        if (is_string($item)) {
+                            $type = self::TYPE_STRING;
+                        }
+                        else {
+                            if ($item === null) {
+                                $type = self::TYPE_NULL;
+                            }
+                            else {
+                                $type = self::TYPE_OTHER;
+                            }
+                        }
+                    }
+                }
             }
 
             $byType[$type][$key] = $item;

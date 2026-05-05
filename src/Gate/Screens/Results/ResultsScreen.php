@@ -87,8 +87,10 @@ class ResultsScreen extends GateScreen implements ResultsScreenInterface
         }
 
         // Check if game results should be hidden
-        if (($game->getMeta() ?? [])['resultsHidden'] ?? false) {
-            $this->childScreen = App::getService('gate.screens.results.hidden');
+        if ($game->getMeta()['resultsHidden'] ?? false) {
+            $childScreen = App::getService('gate.screens.results.hidden');
+            assert($childScreen instanceof ResultsScreenInterface);
+            $this->childScreen = $childScreen;
             $this->childScreen->setGame($game)->setParams($this->params);
             return $this->childScreen;
         }
@@ -107,15 +109,18 @@ class ResultsScreen extends GateScreen implements ResultsScreenInterface
         // Default to basic rankable
         /** @var 'evo5'|'evo6'|'laserforce'|string $system */
         $system = $game::SYSTEM;
-        // @phpstan-ignore-next-line
-        $this->childScreen ??= match ($system) {
-            'evo5', 'evo6' => App::getService('gate.screens.results.lasermaxx.rankable'),
-            default => throw new Exception('Cannot find results screen for system '.$system),
-        };
+        if (!isset($this->childScreen)) {
+            $screen = match ($system) {
+                'evo5', 'evo6' => App::getService('gate.screens.results.lasermaxx.rankable'),
+                default        => throw new Exception('Cannot find results screen for system '.$system),
+            };
+            assert($screen instanceof ResultsScreenInterface);
+            $this->childScreen = $screen;
+        }
 
-        assert($this->childScreen instanceof ResultsScreenInterface && $this->childScreen instanceof GateScreen, '');
-        $this->childScreen->setGame($game)
-                          ->setSettings($this->getSettings())
+        assert($this->childScreen instanceof GateScreen);
+        $this->childScreen->setSettings($this->getSettings())
+                          ->setGame($game)
                           ->setParams($this->params);
 
         return $this->childScreen;
@@ -145,6 +150,16 @@ class ResultsScreen extends GateScreen implements ResultsScreenInterface
             return $this->respond(new ErrorResponse('An error occured', exception: $e), 500);
         }
 
-        return $screen->run();
+        return $screen->run()
+                      ->withAddedHeader('X-Screen', $screen::getDiKey().' - '.$screen::class)
+                      ->withAddedHeader(
+                        'X-GameMode',
+                        $game->mode === null ? 'Unknown' :
+                          $game->mode->getName().' - '.$game->mode::class
+                      )
+                      ->withAddedHeader(
+                        'X-GameMode-CustomResults',
+                        $game->mode instanceof CustomResultsMode ? 'Yes' : 'No'
+                      );
     }
 }

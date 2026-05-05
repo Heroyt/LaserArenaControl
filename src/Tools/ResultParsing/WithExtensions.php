@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Tools\ResultParsing;
@@ -8,13 +9,10 @@ use App\GameModels\Game\Game;
 use Lsr\Lg\Results\Interface\Models\GameInterface;
 use Lsr\Lg\Results\Interface\ResultParserExtensionInterface;
 
-/**
- * @template G of Game
- */
 trait WithExtensions
 {
-
     /**
+     * @template G of Game
      * @param  G  $game
      * @param  array<string, mixed>  $meta
      *

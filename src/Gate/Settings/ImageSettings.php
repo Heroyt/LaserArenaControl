@@ -2,7 +2,7 @@
 
 namespace App\Gate\Settings;
 
-use App\Models\DataObjects\Image;
+use App\DataObjects\Image;
 
 /**
  *

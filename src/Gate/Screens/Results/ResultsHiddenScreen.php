@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Gate\Screens\Results;
@@ -8,7 +9,6 @@ use Psr\Http\Message\ResponseInterface;
 
 class ResultsHiddenScreen extends AbstractResultsScreen
 {
-
     /**
      * @inheritDoc
      */
@@ -30,7 +30,7 @@ class ResultsHiddenScreen extends AbstractResultsScreen
     public static function getDiKey() : string {
         return 'gate.screens.results.hidden';
     }
-    
+
     /**
      * @inheritDoc
      */

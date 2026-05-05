@@ -1,6 +1,6 @@
 extensions:
 	search: Nette\DI\Extensions\SearchExtension(%constants.tempDir%)
-	orisai.console: App\DI\Extensions\ConsoleExtension
+	orisai.console: OriNette\Console\DI\ConsoleExtension
 orisai.console:
 	name: 'Laser arena Control'
 search:

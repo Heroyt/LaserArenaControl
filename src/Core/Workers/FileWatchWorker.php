@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Core\Workers;
@@ -17,7 +18,6 @@ use Throwable;
 
 class FileWatchWorker implements Worker
 {
-
     public App $app {
         get {
             if (!isset($this->app)) {
@@ -48,14 +48,17 @@ class FileWatchWorker implements Worker
     public function run() : void {
         while ($payload = $this->worker->waitPayload()) {
             try {
+                /** @phpstan-ignore property.internalClass */
                 $this->logger->debug('file_watch: '.$payload->body);
 
                 // Parse payload
                 /** @var array{directory?:string,eventTime?:string,file?:string,op?:string,path?:string} $data */
+                /** @phpstan-ignore property.internalClass */
                 $data = json_decode($payload->body, true, 512, JSON_THROW_ON_ERROR);
                 $dir = (string) ($data['directory'] ?? '');
                 if (empty($dir)) {
                     $this->logger->error('Missing required argument "directory". Valid results directory is expected.');
+                    /** @phpstan-ignore new.internalClass, method.internalClass */
                     $this->worker->respond(new Payload('ERROR'));
                 }
 
@@ -66,6 +69,7 @@ class FileWatchWorker implements Worker
                   new GameImportPayload($dir),
                   new Options(priority: GameImportTask::PRIORITY),
                 );
+                /** @phpstan-ignore new.internalClass, method.internalClass */
                 $this->worker->respond(new Payload('OK'));
             } catch (Throwable $e) {
                 $this->handleError($e);
@@ -75,6 +79,7 @@ class FileWatchWorker implements Worker
 
     public function handleError(Throwable $error) : void {
         $this->logger->exception($error);
+        /** @phpstan-ignore new.internalClass, method.internalClass */
         $this->worker->respond(new Payload('ERROR'));
     }
 }

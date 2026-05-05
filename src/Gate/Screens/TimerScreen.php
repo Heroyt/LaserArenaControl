@@ -99,7 +99,7 @@ class TimerScreen extends GateScreen implements WithSettings
           ->setGame($this->game)
                               ->setParams($this->params);
         if ($screen instanceof WithSettings) {
-            $screen->setSettings($screenModel->getSettings());
+            $screen->setSettings($screenModel->getSettings() ?? new TimerSettings());
         }
 
         return $screen->run();

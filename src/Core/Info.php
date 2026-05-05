@@ -52,7 +52,7 @@ class Info
               'info.'.$key,
               static fn() => self::getValue($key),
               [
-                $cache::Tags => ['info', 'info/'.$key],
+                'tags' => ['info', 'info/'.$key],
               ]
             );
         } catch (Throwable) {
@@ -75,6 +75,26 @@ class Info
         }
     }
 
+    private static function getUnserialized(?string $value, string $key) : mixed {
+        if ($value === null) {
+            return null;
+        }
+        
+        $unserialized = igbinary_unserialize($value);
+        if (
+          ($unserialized === false && $value !== igbinary_serialize(false)) ||
+          ($unserialized === null && $value !== igbinary_serialize(null))
+        ) {
+            // Fallback to normal PHP serialization
+            /** @noinspection UnserializeExploitsInspection */
+            $unserialized = unserialize($value);
+            // Re-serialize the value
+            self::set($key, $unserialized);
+        }
+        self::$info[$key] = $unserialized;
+        return $unserialized;
+    }
+
     /**
      * @param  string  $key
      * @param  mixed  $value
@@ -85,7 +105,6 @@ class Info
     public static function set(string $key, mixed $value) : void {
         self::$info[$key] = $value; // Cache
         $serialized = igbinary_serialize($value);
-        /** @phpstan-ignore-next-line */
         DB::replace(
           self::TABLE,
           [
@@ -102,21 +121,5 @@ class Info
 
     public static function clearStaticCache() : void {
         self::$info = [];
-    }
-
-    private static function getUnserialized(?string $value, string $key) : mixed {
-        $unserialized = igbinary_unserialize($value);
-        if (
-          ($unserialized === false && $value !== igbinary_serialize(false)) ||
-          ($unserialized === null && $value !== igbinary_serialize(null))
-        ) {
-            // Fallback to normal PHP serialization
-            /** @noinspection UnserializeExploitsInspection */
-            $unserialized = unserialize($value);
-            // Re-serialize the value
-            self::set($key, $unserialized);
-        }
-        self::$info[$key] = $unserialized;
-        return $unserialized;
     }
 }

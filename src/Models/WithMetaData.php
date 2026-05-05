@@ -92,7 +92,7 @@ trait WithMetaData
 
     private function canUnserializeMeta(string $value): bool
     {
-        $unserialized = `@igbinary_unserialize`($value);
+        $unserialized = @igbinary_unserialize($value);
         return !(
             ($unserialized === false && $value !== igbinary_serialize(false)) ||
             ($unserialized === null && $value !== igbinary_serialize(null))

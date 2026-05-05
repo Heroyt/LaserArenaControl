@@ -78,18 +78,21 @@ trait WithMetaData
     {
         $decoded = base64_decode($meta, true);
         if ($decoded !== false && $this->canUnserializeMeta($decoded)) {
-            /** @var T|array<string,mixed> $data */
+            /** `@var` T|array<string,mixed> $data */
             $data = igbinary_unserialize($decoded);
             return $data;
         }
-        /** @var T|array<string,mixed> $data */
-        $data = igbinary_unserialize($meta);
-        return $data;
+        if ($this->canUnserializeMeta($meta)) {
+            /** `@var` T|array<string,mixed> $data */
+            $data = igbinary_unserialize($meta);
+            return $data;
+        }
+        return [];
     }
 
     private function canUnserializeMeta(string $value): bool
     {
-        $unserialized = @igbinary_unserialize($value);
+        $unserialized = `@igbinary_unserialize`($value);
         return !(
             ($unserialized === false && $value !== igbinary_serialize(false)) ||
             ($unserialized === null && $value !== igbinary_serialize(null))

@@ -43,7 +43,7 @@ lsr:
 			- 'highlights'
 parameters:
 	db:
-		driver: mysqli
+		driver: pdo
 		lazy: true
 		host: db
 		port: 3306

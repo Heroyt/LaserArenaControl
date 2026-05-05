@@ -17,15 +17,20 @@ mkdir -p temp/cache
 mkdir -p logs
 mkdir -p upload
 
-if [ -f ".gitmodules" ]; then
+ensure_submodules() {
+  if [ ! -f ".gitmodules" ]; then
+    return 0
+  fi
+
   if git submodule status --recursive 2>/dev/null | grep -q '^-'; then
     echo "Initializing git submodules..."
-    git submodule sync --recursive
-    git submodule update --init --recursive
   else
-    echo "Git submodules already initialized."
+    echo "Refreshing git submodules..."
   fi
-fi
+
+  git submodule sync --recursive
+  git submodule update --init --recursive
+}
 
 if [ "$LAC_VERSION" != "dev" ]; then
   if [ -n "$SSH_KEY" ] && [ -f "$SSH_KEY" ]; then
@@ -50,18 +55,22 @@ echo "Fetching latest changes from GitHub..."
 echo "Versions: LAC_VERSION=${LAC_VERSION}, LAC_MODELS_VERSION=${LAC_MODELS_VERSION}"
 if [ "$LAC_VERSION" = "dev" ]; then
   echo "Skipping git fetch for dev"
+  ensure_submodules
 else
   git fetch --all --tags
   if [ "$LAC_VERSION" = "stable" ]; then
     git switch stable
     git reset --hard origin/stable
     git pull --recurse-submodules origin stable
+    ensure_submodules
   elif [ "$LAC_VERSION" = "staging" ]; then
     git switch staging
     git reset --hard origin/staging
     git pull --recurse-submodules origin staging
+    ensure_submodules
   else
     git checkout "v${LAC_VERSION}" -b "stable"
+    ensure_submodules
     git -C src/GameModels fetch --all --tags
     git -C src/GameModels checkout "v${LAC_MODELS_VERSION}" -b "stable"
   fi

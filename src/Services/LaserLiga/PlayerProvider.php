@@ -157,18 +157,28 @@ readonly class PlayerProvider implements PlayerProviderInterface
      * @return Player|null
      */
     public function findPublicPlayerByCode(string $code, bool $noSave = false) : ?Player {
+        App::getInstance()->getLogger()->debug('PlayerProvider: lookup public player by code', ['code' => $code]);
         try {
             $response = $this->api->get('players/'.$code, config: ['timeout' => 10]);
-        } catch (GuzzleException) {
+        } catch (GuzzleException $e) {
+            App::getInstance()->getLogger()->warning(
+                'PlayerProvider: public player lookup failed',
+                ['code' => $code, 'error' => $e->getMessage()]
+            );
             return null;
         }
         if ($response->getStatusCode() !== 200) {
+            App::getInstance()->getLogger()->debug(
+                'PlayerProvider: public player lookup returned non-200',
+                ['code' => $code, 'status' => $response->getStatusCode()]
+            );
             return null;
         }
         $response->getBody()->rewind();
         $body = $response->getBody()->getContents();
 
         $data = $this->serializer->deserialize($body, LigaPlayerData::class, 'json');
+        App::getInstance()->getLogger()->debug('PlayerProvider: public player lookup finished', ['code' => $code]);
 
         return $this->getPlayerObjectFromData($data, $noSave);
     }

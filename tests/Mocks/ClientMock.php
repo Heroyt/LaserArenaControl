@@ -17,7 +17,7 @@ class ClientMock extends Client
         if (str_contains($uri, '/api/vests')) {
             return new Response(body: '[{"vestNum":"1","system":"evo5","status":"ok","info":null,"updatedAt":{"date":"2024-07-07 13:03:46.185466","timezone_type":3,"timezone":"UTC"}},{"vestNum":"2","system":"evo5","status":"playable","info":"test","updatedAt":{"date":"2024-07-07 13:03:46.185466","timezone_type":3,"timezone":"UTC"}},{"vestNum":"3","system":"evo5","status":"broken","info":"error","updatedAt":{"date":"2024-07-07 13:03:46.185466","timezone_type":3,"timezone":"UTC"}}]');
         }
-        parent::get($uri, $options);
+        return parent::get($uri, $options);
     }
 
     public function post($uri, array $options = []): ResponseInterface {

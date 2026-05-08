@@ -15,9 +15,11 @@ use Lsr\Caching\Cache;
 use Lsr\Exceptions\FileException;
 use Lsr\Lg\Results\AbstractResultsParser;
 use Lsr\Logging\Logger;
+use Lsr\Orm\ModelRepository;
 use ReflectionProperty;
 use RuntimeException;
 use Symfony\Component\Console\Output\OutputInterface;
+use TypeError;
 
 readonly class ResultFileImporter
 {
@@ -57,7 +59,16 @@ readonly class ResultFileImporter
         $logger->debug('Preparing parser for file', ['file' => $file, 'system' => $system]);
         $parser->setFile($file);
         $logger->debug('Starting parser->parse()', ['file' => $file, 'system' => $system]);
-        $game = $parser->parse();
+        try {
+            $game = $parser->parse();
+        } catch (TypeError $e) {
+            if (!$this->isOrmModelConfigCacheError($e)) {
+                throw $e;
+            }
+            $this->clearOrmModelConfigCache($logger);
+            $parser->setFile($file);
+            $game = $parser->parse();
+        }
         if (!$game instanceof Game) {
             throw new RuntimeException('Parsed result is not an application game model.');
         }
@@ -66,7 +77,7 @@ readonly class ResultFileImporter
             [
                 'file' => $file,
                 'system' => $system,
-                'code' => $game->code,
+                'code' => $this->getGameCode($game),
                 'finished' => $game->isFinished(),
             ]
         );
@@ -91,7 +102,17 @@ readonly class ResultFileImporter
             $parser->setContents(mb_convert_encoding($content, 'UTF-8'));
             $this->setParserFileName($parser, $tempFile);
             $logger->debug('Starting parser->parse() from inline content', ['file' => $file, 'system' => $system]);
-            $game = $parser->parse();
+            try {
+                $game = $parser->parse();
+            } catch (TypeError $e) {
+                if (!$this->isOrmModelConfigCacheError($e)) {
+                    throw $e;
+                }
+                $this->clearOrmModelConfigCache($logger);
+                $parser->setContents(mb_convert_encoding($content, 'UTF-8'));
+                $this->setParserFileName($parser, $tempFile);
+                $game = $parser->parse();
+            }
         } finally {
             if (is_file($tempFile) && !unlink($tempFile)) {
                 $logger->warning('Failed to remove inline result import temp file.', ['file' => $tempFile]);
@@ -114,7 +135,7 @@ readonly class ResultFileImporter
             [
                 'file' => $file,
                 'system' => $system,
-                'code' => $game->code,
+                'code' => $this->getGameCode($game),
                 'finished' => $game->isFinished(),
             ]
         );
@@ -184,7 +205,7 @@ readonly class ResultFileImporter
 
         $logger->debug(
             'Starting game save from import loop',
-            ['file' => $file, 'system' => $system, 'code' => $game->code ?? null]
+            ['file' => $file, 'system' => $system, 'code' => $this->getGameCode($game)]
         );
         if (!$game->save()) {
             $logger->error('Failed saving game into DB. ' . $file);
@@ -197,7 +218,7 @@ readonly class ResultFileImporter
         }
         $logger->debug(
             'Finished game save from import loop',
-            ['file' => $file, 'system' => $system, 'code' => $game->code ?? null]
+            ['file' => $file, 'system' => $system, 'code' => $this->getGameCode($game)]
         );
 
         $this->clearImportedGameState($game, $system, $logger);
@@ -209,6 +230,42 @@ readonly class ResultFileImporter
     private function formatDate(?DateTimeInterface $date): ?string
     {
         return $date?->format('c');
+    }
+
+    /** @phpstan-ignore-next-line missingType.generics */
+    private function getGameCode(Game $game): ?string
+    {
+        return isset($game->code) ? $game->code : null;
+    }
+
+    private function isOrmModelConfigCacheError(TypeError $e): bool
+    {
+        return str_contains($e->getMessage(), 'getModelConfig()')
+            && str_contains($e->getMessage(), 'ModelConfig')
+            && str_contains($e->getMessage(), 'int returned');
+    }
+
+    private function clearOrmModelConfigCache(Logger $logger): void
+    {
+        ModelRepository::$modelConfig = [];
+
+        $files = glob(TMP_DIR . 'models/*');
+        if ($files === false) {
+            $logger->warning('Failed to list ORM model config cache files for import retry.');
+            return;
+        }
+
+        $removed = 0;
+        foreach ($files as $file) {
+            if (is_file($file) && unlink($file)) {
+                $removed++;
+            }
+        }
+
+        $logger->warning(
+            'Cleared stale ORM model config cache after parser failure; retrying result import parse.',
+            ['removedFiles' => $removed]
+        );
     }
 
     private function createInlineSourceFile(string $file, string $content, int $mtime): string

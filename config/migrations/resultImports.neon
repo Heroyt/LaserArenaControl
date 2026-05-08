@@ -24,14 +24,7 @@ tables:
 			`last_event` varchar(50) DEFAULT NULL,
 			`created_at` datetime NOT NULL DEFAULT current_timestamp(),
 			`updated_at` datetime DEFAULT NULL ON UPDATE current_timestamp(),
-			PRIMARY KEY (`id_result_file_import`),
-			UNIQUE KEY `path_hash` (`path_hash`),
-			KEY `path` (`path`),
-			KEY `system_status` (`system`, `status`),
-			KEY `seen_version` (`seen_version`),
-			KEY `processed_version` (`processed_version`),
-			KEY `queued_at` (`queued_at`),
-			KEY `processed_at` (`processed_at`)
+			PRIMARY KEY (`id_result_file_import`)
 		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 		'''
 		indexes:

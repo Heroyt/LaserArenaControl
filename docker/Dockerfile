@@ -46,13 +46,23 @@ RUN apk add --no-cache --virtual .locale-build musl-locales musl-locales-lang &&
 
 FROM ghcr.io/roadrunner-server/velox:latest AS roadrunner
 
-ARG APP_VERSION="1.0.0"
+ARG APP_VERSION="1.0.1"
 ARG VERSION="v2025.1.13"
 
 COPY docker/velox_rr.toml .
 
 ENV CGO_ENABLED=0
 ENV GOTOOLCHAIN=auto
+# Temporary workaround for go.work support in Velox until it's officially supported
+RUN mv /usr/local/go/bin/go /usr/local/go/bin/go-real && \
+    printf '%s\n' \
+        '#!/bin/sh' \
+        'if [ -f go.work ]; then' \
+        '  /usr/local/go/bin/go-real work use' \
+        'fi' \
+        'exec /usr/local/go/bin/go-real "$@"' \
+        > /usr/local/go/bin/go && \
+    chmod +x /usr/local/go/bin/go
 RUN --mount=type=secret,id=RT_TOKEN \
     export GITHUB_TOKEN=$(cat /run/secrets/RT_TOKEN) && \
     vx build -c velox_rr.toml -o /usr/bin/

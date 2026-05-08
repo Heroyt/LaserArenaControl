@@ -46,7 +46,7 @@ RUN apk add --no-cache --virtual .locale-build musl-locales musl-locales-lang &&
 
 FROM ghcr.io/roadrunner-server/velox:latest AS roadrunner
 
-ARG APP_VERSION="1.0.1"
+ARG APP_VERSION="1.0.2"
 ARG VERSION="v2025.1.13"
 
 COPY docker/velox_rr.toml .

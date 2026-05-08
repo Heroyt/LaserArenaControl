@@ -182,7 +182,9 @@ file_watch:
     num_workers: 1
     supervisor:
       max_worker_memory: 256
-  dir: "./lmx/results"
+  dirs:
+    - "./lmx/results"
+    - "./lmx6/results"
   regexp: ".*\\.game"
 eventserver:
   address: "0.0.0.0:8080"

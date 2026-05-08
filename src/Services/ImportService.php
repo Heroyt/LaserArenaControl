@@ -17,9 +17,7 @@ use App\GameModels\Game\Game;
 use App\GameModels\Game\Lasermaxx\Team;
 use App\GameModels\Game\Player;
 use App\Http\Response\ImportResponse;
-use App\Services\LaserLiga\LigaApi;
 use Dibi\Exception;
-use Lsr\Caching\Cache;
 use Lsr\Core\Config;
 use Lsr\Core\Requests\Dto\ErrorResponse;
 use Lsr\Core\Requests\Dto\SuccessResponse;
@@ -51,13 +49,12 @@ class ImportService
     private int $gameLoadedTime;
 
     public function __construct(
-        private readonly EventService  $eventService,
-        private readonly LockFactory   $lockFactory,
-        private readonly LigaApi       $ligaApi,
-        Config                         $config,
-        private readonly FeatureConfig $featureConfig,
-        private readonly Metrics       $metrics,
-        private readonly Cache         $cache,
+        private readonly EventService              $eventService,
+        private readonly LockFactory               $lockFactory,
+        Config                                     $config,
+        private readonly Metrics                   $metrics,
+        private readonly ResultFileImporter        $resultFileImporter,
+        private readonly ResultFileImportFinalizer $resultFileImportFinalizer,
     )
     {
         $this->gameLoadedTime = (int)($config->getConfig('ENV')['GAME_LOADED_TIME'] ?? 300);
@@ -212,10 +209,9 @@ class ImportService
             if (!$game->save()) {
                 throw new ResultsParseException('Failed saving game into DB.');
             }
-            $game::clearModelCache();
-            $this->cache->clean([$this->cache::Tags => ['games/' . $game->start->format('Y-m-d')]]);
-            $this->eventService->trigger('game-imported', ['count' => 1]);
-            $this->processFinishedGames([$game], $logger);
+            $this->resultFileImporter->clearImportedGameState($game, $game::SYSTEM);
+            $this->resultFileImportFinalizer->triggerImported(1);
+            $this->resultFileImportFinalizer->finalize([$game], $logger);
         } catch (Exception $e) {
             return new ErrorResponse('Error while parsing game file.', type: ErrorType::INTERNAL, exception: $e);
         }
@@ -292,10 +288,6 @@ class ImportService
             $lastUnfinishedGame = null;
             $lastEvent = '';
 
-            /**
-             * @var Game[] $finishedGames
-             * @phpstan-ignore missingType.generics
-             */
             $finishedGames = [];
 
             // Ensure that the resultsDir has a trailing slash
@@ -358,119 +350,34 @@ class ImportService
                     $output?->writeln('Importing file: ' . $file);
                     try {
                         $lock->refresh(self::IMPORT_LOCK_TTL_SECONDS);
-                        $logger->debug('Preparing parser for file', ['file' => $file, 'system' => $system]);
-                        $parser->setFile($file);
-                        $logger->debug('Starting parser->parse()', ['file' => $file, 'system' => $system]);
-                        $game = $parser->parse();
-                        $logger->debug(
-                            'Finished parser->parse()',
-                            [
-                                'file' => $file,
-                                'system' => $system,
-                                'code' => $game->code ?? null,
-                                'finished' => $game->isFinished(),
-                            ]
+                        $result = $this->resultFileImporter->import(
+                            $parser,
+                            $system,
+                            $file,
+                            $now,
+                            $this->gameLoadedTime,
+                            $logger,
+                            $output,
                         );
 
-                        // Check timestamps
-                        $isStarted = $game->isStarted();
-                        $isUpdated = isset($game->fileTime) && ($now - $game->fileTime->getTimestamp()) <= $this->gameLoadedTime;
-
-                        if (!$game->isFinished()) {
-                            $logger->debug('Game is not finished');
-                            $output?->writeln('Game is not finished');
-                            $output?->writeln(
-                                json_encode([
-                                    'filetime' => $game->fileTime?->format('c'),
-                                    'start' => $game->start?->format('c'),
-                                    'end' => $game->end?->format('c'),
-                                    'importTime' => $game->importTime?->format('c'),
-                                    'now' => date('c', $now),
-                                ]),
-                                OutputInterface::VERBOSITY_VERBOSE
-                            );
-
-                            // The game is not finished and does not contain any results
-                            // It is either:
-                            // - an old, un-played game
-                            // - freshly loaded game
-                            // - started and not finished game
-                            // An old game should be ignored, the other 2 cases should be logged and an event
-                            // should be sent.
-                            // But only the latest game should be considered
-
-                            // TODO: Detect manually stopped game and delete game-started
-
-                            // The game is started
-                            if ($isUpdated && $isStarted) {
-                                $lastUnfinishedGame = $game;
-                                $lastEvent = 'game-started';
-                                $logger->debug('Game is started');
-                                $output?->writeln('Game is started');
+                        if ($result->unfinishedGame !== null) {
+                            if (
+                                isset($lastUnfinishedGame)
+                                && $result->unfinishedEvent === 'game-loaded'
+                                && $result->unfinishedGame->fileTime < $lastUnfinishedGame->fileTime
+                            ) {
                                 continue;
                             }
-
-                            // The game is loaded
-                            if ($isUpdated) {
-                                // Check if the last unfinished game is not created later
-                                if (isset($lastUnfinishedGame) && $game->fileTime < $lastUnfinishedGame->fileTime) {
-                                    continue;
-                                }
-                                $lastUnfinishedGame = $game;
-                                $lastEvent = 'game-loaded';
-                                $logger->debug('Game is loaded');
-                                $output?->writeln('Game is loaded');
-                            }
+                            $lastUnfinishedGame = $result->unfinishedGame;
+                            $lastEvent = $result->unfinishedEvent;
                             continue;
                         }
 
-                        // Check players
-                        $null = true;
-                        foreach ($game->players as $player) {
-                            if ($player->score !== 0 || $player->shots !== 0) {
-                                $null = false;
-                                break;
-                            }
-                        }
-                        if ($null) {
-                            $logger->warning('Game is empty');
-                            $output?->writeln('Game is empty');
-                            continue; // Empty game - no shots, no hits, etc..
-                        }
-
-                        $logger->debug(
-                            'Starting game save from import loop',
-                            ['file' => $file, 'system' => $system, 'code' => $game->code ?? null]
-                        );
-                        if (!$game->save()) {
-                            $logger->error('Failed saving game into DB. ' . $file);
-                            $output?->writeln(
-                                Colors::color(ForegroundColors::RED) .
-                                'Failed saving game into DB' .
-                                Colors::reset()
-                            );
+                        if (!$result->imported || $result->game === null) {
                             continue;
                         }
-                        $logger->debug(
-                            'Finished game save from import loop',
-                            ['file' => $file, 'system' => $system, 'code' => $game->code ?? null]
-                        );
-                        $game::clearModelCache();
-                        $this->cache->clean([$this->cache::Tags => ['games/' . $game->start->format('Y-m-d')]]);
 
-                        // Refresh the started-game info to stop the game timer
-                        $startedGame = Info::get($system . '-game-started');
-                        if ($startedGame instanceof Game && $game->resultsFile === $startedGame->resultsFile) {
-                            try {
-                                Info::set($system . '-game-started', null);
-                            } catch (Exception) {
-                            }
-                        }
-
-                        $gameModel = GameFactory::getById($game->id ?? 0, ['system' => $system]);
-                        if (isset($gameModel)) {
-                            $finishedGames[] = $gameModel;
-                        }
+                        $finishedGames[] = $result->game;
                         $imported++;
                         $importedSystem++;
                     } catch (Throwable $e) {
@@ -514,11 +421,8 @@ class ImportService
             }
 
             // Send event on new import
-            if ($imported > 0) {
-                $this->eventService->trigger('game-imported', ['count' => $imported]);
-            }
-
-            $this->processFinishedGames($finishedGames, $logger, $output);
+            $this->resultFileImportFinalizer->triggerImported($imported);
+            $this->resultFileImportFinalizer->finalize($finishedGames, $logger, $output);
 
             $lock->release();
             if (!empty($errors)) {
@@ -533,58 +437,6 @@ class ImportService
             );
         }
         return new ImportResponse(0, 0, 0, []);
-    }
-
-    /**
-     * @param Game[] $finishedGames
-     */
-    private function processFinishedGames(array $finishedGames, Logger $logger, ?OutputInterface $output = null): void
-    {
-        if (empty($finishedGames)) {
-            $logger->info('No games to synchronize to public');
-            return;
-        }
-
-        if ($this->featureConfig->isFeatureEnabled('liga')) {
-            $gamesBySystem = [];
-            foreach ($finishedGames as $finishedGame) {
-                $gamesBySystem[$finishedGame::SYSTEM][] = $finishedGame;
-            }
-
-            foreach ($gamesBySystem as $system => $games) {
-                if ($this->ligaApi->syncGames($system, $games)) {
-                    $logger->info('Synchronized games to public.', ['system' => $system, 'count' => count($games)]);
-                    foreach ($games as $finishedGame) {
-                        $finishedGame->sync = true;
-                        try {
-                            $finishedGame->save();
-                        } catch (ValidationException $e) {
-                            $output?->writeln(
-                                Colors::color(ForegroundColors::RED) .
-                                'Failed to synchronize games to public.' . $e->getMessage() .
-                                Colors::reset()
-                            );
-                            $logger->warning('Failed to synchronize games to public', ['system' => $system]);
-                            $logger->exception($e);
-                        }
-                    }
-                    continue;
-                }
-
-                $logger->warning('Failed to synchronize games to public', ['system' => $system]);
-                $output?->writeln(
-                    Colors::color(ForegroundColors::RED) .
-                    'Failed to synchronize games to public' .
-                    Colors::reset()
-                );
-            }
-        }
-
-        /** @var ResultsPrecacheService $precacheService */
-        $precacheService = App::getService('resultPrecache');
-        $precacheService->prepareGamePrecache(
-            ...array_map(static fn(Game $game) => $game->code, $finishedGames)
-        );
     }
 
     /**

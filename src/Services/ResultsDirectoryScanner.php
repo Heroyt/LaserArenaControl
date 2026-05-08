@@ -82,8 +82,15 @@ readonly class ResultsDirectoryScanner
                 }
                 $processedFiles[$file] = true;
 
-                if (str_ends_with($file, '0000.game') || !$parser::checkFile($file)) {
+                if (str_ends_with($file, '0000.game')) {
                     $invalid++;
+                    $errors[] = new ResultsScanError('Skipping file with invalid name ending with 0000.game', $file, $system);
+                    continue;
+                }
+
+                if (!$parser::checkFile($file)) {
+                    $invalid++;
+                    $errors[] = new ResultsScanError('Skipping file with invalid content', $file, $system);
                     continue;
                 }
 

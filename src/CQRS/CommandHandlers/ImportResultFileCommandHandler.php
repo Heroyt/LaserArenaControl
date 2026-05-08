@@ -1,0 +1,245 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\CQRS\CommandHandlers;
+
+use App\Core\App;
+use App\CQRS\Commands\ImportResultFileCommand;
+use App\DataObjects\Import\ImportResultFileCommandResult;
+use App\DataObjects\Import\ResultFileImportResult;
+use App\DataObjects\Import\ResultFileImportStatus;
+use App\Services\ResultFileImporter;
+use App\Services\ResultFileImportFinalizer;
+use App\Services\ResultFileImportStateRepository;
+use App\Services\ResultFileVersionFactory;
+use DateTimeImmutable;
+use Lsr\Core\Config;
+use Lsr\CQRS\CommandHandlerInterface;
+use Lsr\CQRS\CommandInterface;
+use Lsr\Lg\Results\AbstractResultsParser;
+use Lsr\Logging\Logger;
+use Nette\DI\MissingServiceException;
+use RuntimeException;
+use Symfony\Component\Lock\LockFactory;
+use Throwable;
+
+readonly class ImportResultFileCommandHandler implements CommandHandlerInterface
+{
+    private const int IMPORT_LOCK_TTL_SECONDS = 60;
+    private int $gameLoadedTime;
+
+    public function __construct(
+        private ResultFileImportStateRepository $stateRepository,
+        private ResultFileVersionFactory        $versionFactory,
+        private ResultFileImporter              $importer,
+        private ResultFileImportFinalizer       $finalizer,
+        private LockFactory                     $lockFactory,
+        Config                                  $config,
+    )
+    {
+        $this->gameLoadedTime = (int)($config->getConfig('ENV')['GAME_LOADED_TIME'] ?? 300);
+    }
+
+    /**
+     * @param ImportResultFileCommand $command
+     */
+    public function handle(CommandInterface $command): ImportResultFileCommandResult
+    {
+        $version = $command->toVersion();
+        $logger = new Logger(LOG_DIR . 'results/', 'import-command');
+        $startedAt = microtime(true);
+        $lock = $this->lockFactory->createLock(
+            'result-file-import-' . $command->pathHash,
+            ttl: self::IMPORT_LOCK_TTL_SECONDS
+        );
+
+        if (!$lock->acquire(false)) {
+            return new ImportResultFileCommandResult(
+                $command->path,
+                $command->version,
+                ResultFileImportStatus::SKIPPED,
+                event: 'locked',
+            );
+        }
+
+        try {
+            $state = $this->stateRepository->findByPathHash($command->pathHash);
+            if ($state === null || $state->seenVersion !== $command->version) {
+                return $this->stale($command, 'stale');
+            }
+
+            if ($state->processedVersion === $command->version) {
+                return new ImportResultFileCommandResult(
+                    $command->path,
+                    $command->version,
+                    ResultFileImportStatus::SKIPPED,
+                    event: 'already-processed',
+                );
+            }
+
+            if ($command->content !== null) {
+                $this->stateRepository->markFailed($version, 'Inline content import is not implemented yet.');
+                return new ImportResultFileCommandResult(
+                    $command->path,
+                    $command->version,
+                    ResultFileImportStatus::FAILED,
+                    error: 'Inline content import is not implemented yet.',
+                );
+            }
+
+            $currentVersion = $this->versionFactory->fromFile($command->path);
+            if ($currentVersion->version !== $command->version) {
+                return $this->stale($command, 'changed-on-disk');
+            }
+
+            $this->guardTimeout($startedAt, $command->timeoutSeconds);
+            if (!$this->stateRepository->markProcessing($version, new DateTimeImmutable())) {
+                return $this->stale($command, 'stale');
+            }
+
+            $lock->refresh(self::IMPORT_LOCK_TTL_SECONDS);
+            $parser = $this->getParser($command->system);
+            if (!$parser::checkFile($command->path)) {
+                $this->stateRepository->markFailed($version, 'Game file cannot be parsed: ' . $command->path);
+                return new ImportResultFileCommandResult(
+                    $command->path,
+                    $command->version,
+                    ResultFileImportStatus::FAILED,
+                    error: 'Game file cannot be parsed.',
+                );
+            }
+
+            $this->guardTimeout($startedAt, $command->timeoutSeconds);
+            $game = $this->importer->parse(
+                $parser,
+                $command->system,
+                $command->path,
+                $logger,
+            );
+            $this->guardTimeout($startedAt, $command->timeoutSeconds);
+
+            $state = $this->stateRepository->findByPathHash($command->pathHash);
+            if ($state === null || $state->seenVersion !== $command->version) {
+                return $this->stale($command, 'stale-after-import');
+            }
+
+            $result = $this->importer->importParsed(
+                $game,
+                $command->system,
+                $command->path,
+                time(),
+                $this->gameLoadedTime,
+                $logger,
+            );
+            $this->guardTimeout($startedAt, $command->timeoutSeconds);
+
+            return $this->complete($command, $result, $logger);
+        } catch (Throwable $e) {
+            try {
+                $this->stateRepository->markFailed($version, $e->getMessage());
+            } catch (Throwable) {
+            }
+            $logger->exception($e);
+            return new ImportResultFileCommandResult(
+                $command->path,
+                $command->version,
+                ResultFileImportStatus::FAILED,
+                error: $e->getMessage(),
+            );
+        } finally {
+            $lock->release();
+        }
+    }
+
+    private function stale(ImportResultFileCommand $command, string $event): ImportResultFileCommandResult
+    {
+        try {
+            $this->stateRepository->markStale($command->toVersion(), new DateTimeImmutable());
+        } catch (Throwable) {
+        }
+
+        return new ImportResultFileCommandResult(
+            $command->path,
+            $command->version,
+            ResultFileImportStatus::STALE,
+            event: $event,
+        );
+    }
+
+    private function guardTimeout(float $startedAt, int $timeoutSeconds): void
+    {
+        if ($timeoutSeconds > 0 && microtime(true) - $startedAt > $timeoutSeconds) {
+            throw new RuntimeException('Import timed out.');
+        }
+    }
+
+    /** @phpstan-ignore missingType.generics */
+    private function getParser(string $system): AbstractResultsParser
+    {
+        try {
+            $parser = App::getService('result.parser.' . $system);
+        } catch (MissingServiceException $e) {
+            throw new RuntimeException('No parser for this game system (' . $system . ')', previous: $e);
+        }
+        if (!$parser instanceof AbstractResultsParser) {
+            throw new RuntimeException('No parser for this game system (' . $system . ')');
+        }
+
+        return $parser;
+    }
+
+    private function complete(
+        ImportResultFileCommand $command,
+        ResultFileImportResult  $result,
+        Logger                  $logger,
+    ): ImportResultFileCommandResult
+    {
+        $version = $command->toVersion();
+        $now = new DateTimeImmutable();
+
+        if ($result->imported && $result->game !== null) {
+            $this->stateRepository->markImported($version, $now, $result->game->code);
+            $this->finalizer->triggerImported(1);
+            $this->finalizer->finalize([$result->game], $logger);
+
+            return new ImportResultFileCommandResult(
+                $command->path,
+                $command->version,
+                ResultFileImportStatus::IMPORTED,
+                gameCode: $result->game->code,
+                event: 'imported',
+            );
+        }
+
+        if ($result->unfinishedGame !== null) {
+            $this->stateRepository->markSkipped($version, $now, $result->unfinishedEvent);
+            return new ImportResultFileCommandResult(
+                $command->path,
+                $command->version,
+                ResultFileImportStatus::SKIPPED,
+                event: $result->unfinishedEvent,
+            );
+        }
+
+        if ($result->saveFailed) {
+            $this->stateRepository->markFailed($version, 'Failed saving game into DB.');
+            return new ImportResultFileCommandResult(
+                $command->path,
+                $command->version,
+                ResultFileImportStatus::FAILED,
+                event: 'save-failed',
+                error: 'Failed saving game into DB.',
+            );
+        }
+
+        $event = $result->empty ? 'empty' : 'skipped';
+        $this->stateRepository->markSkipped($version, $now, $event);
+        return new ImportResultFileCommandResult(
+            $command->path,
+            $command->version,
+            ResultFileImportStatus::SKIPPED,
+            event: $event,
+        );
+    }
+}

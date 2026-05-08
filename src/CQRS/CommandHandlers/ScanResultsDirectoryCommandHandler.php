@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace App\CQRS\CommandHandlers;
 
+use App\CQRS\Commands\ImportResultFileCommand;
 use App\CQRS\Commands\ScanResultsDirectoryCommand;
 use App\DataObjects\Import\ResultsScanResult;
 use App\Services\ResultsDirectoryScanner;
+use Lsr\CQRS\CommandBus;
 use Lsr\CQRS\CommandHandlerInterface;
 use Lsr\CQRS\CommandInterface;
 
@@ -14,6 +16,7 @@ readonly class ScanResultsDirectoryCommandHandler implements CommandHandlerInter
 {
     public function __construct(
         private ResultsDirectoryScanner $scanner,
+        private CommandBus $commandBus,
     )
     {
     }
@@ -23,6 +26,11 @@ readonly class ScanResultsDirectoryCommandHandler implements CommandHandlerInter
      */
     public function handle(CommandInterface $command): ResultsScanResult
     {
-        return $this->scanner->scan($command->dir, $command->all, $command->limit);
+        $result = $this->scanner->scan($command->dir, $command->all, $command->limit);
+        foreach ($result->queuedFiles as $queuedFile) {
+            $this->commandBus->dispatchAsync(ImportResultFileCommand::fromQueuedFile($queuedFile));
+        }
+
+        return $result;
     }
 }

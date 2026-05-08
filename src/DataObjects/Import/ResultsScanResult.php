@@ -7,6 +7,7 @@ namespace App\DataObjects\Import;
 readonly class ResultsScanResult
 {
     /**
+     * @param list<QueuedResultFileImport> $queuedFiles
      * @param list<ResultsScanError> $errors
      */
     public function __construct(
@@ -15,6 +16,7 @@ readonly class ResultsScanResult
         public int    $queued,
         public int    $unchanged,
         public int    $invalid,
+        public array $queuedFiles = [],
         public array  $errors = [],
     )
     {

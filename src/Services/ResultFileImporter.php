@@ -14,6 +14,7 @@ use DateTimeInterface;
 use Lsr\Caching\Cache;
 use Lsr\Lg\Results\AbstractResultsParser;
 use Lsr\Logging\Logger;
+use RuntimeException;
 use Symfony\Component\Console\Output\OutputInterface;
 
 readonly class ResultFileImporter
@@ -38,20 +39,53 @@ readonly class ResultFileImporter
         ?OutputInterface      $output = null,
     ): ResultFileImportResult
     {
+        $game = $this->parse($parser, $system, $file, $logger);
+
+        return $this->importParsed($game, $system, $file, $now, $gameLoadedTime, $logger, $output);
+    }
+
+    /** @phpstan-ignore-next-line missingType.generics */
+    public function parse(
+        AbstractResultsParser $parser,
+        string                $system,
+        string                $file,
+        Logger                $logger,
+    ): Game
+    {
         $logger->debug('Preparing parser for file', ['file' => $file, 'system' => $system]);
         $parser->setFile($file);
         $logger->debug('Starting parser->parse()', ['file' => $file, 'system' => $system]);
         $game = $parser->parse();
+        if (!$game instanceof Game) {
+            throw new RuntimeException('Parsed result is not an application game model.');
+        }
         $logger->debug(
             'Finished parser->parse()',
             [
                 'file' => $file,
                 'system' => $system,
-                'code' => $game->code ?? null,
+                'code' => $game->code,
                 'finished' => $game->isFinished(),
             ]
         );
 
+        return $game;
+    }
+
+    /**
+     * @template G of Game
+     * @param G $game
+     */
+    public function importParsed(
+        Game             $game,
+        string           $system,
+        string           $file,
+        int              $now,
+        int              $gameLoadedTime,
+        Logger           $logger,
+        ?OutputInterface $output = null,
+    ): ResultFileImportResult
+    {
         $isStarted = $game->isStarted();
         $isUpdated = isset($game->fileTime) && ($now - $game->fileTime->getTimestamp()) <= $gameLoadedTime;
 

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Core\App;
+use App\DataObjects\Import\QueuedResultFileImport;
 use App\DataObjects\Import\ResultFileImportStatus;
 use App\DataObjects\Import\ResultsScanError;
 use App\DataObjects\Import\ResultsScanResult;
@@ -40,6 +41,7 @@ readonly class ResultsDirectoryScanner
         $unchanged = 0;
         $invalid = 0;
         $errors = [];
+        $queuedFiles = [];
         $processedFiles = [];
         $queuedAt = new DateTimeImmutable();
 
@@ -100,6 +102,7 @@ readonly class ResultsDirectoryScanner
                         ResultFileImportStatus::QUEUED,
                         $queuedAt,
                     );
+                    $queuedFiles[] = QueuedResultFileImport::fromVersion($version, $system);
                     $queued++;
                 } catch (Throwable $e) {
                     $errors[] = new ResultsScanError($e->getMessage(), $file, $system);
@@ -113,6 +116,7 @@ readonly class ResultsDirectoryScanner
             queued: $queued,
             unchanged: $unchanged,
             invalid: $invalid,
+            queuedFiles: $queuedFiles,
             errors: $errors,
         );
     }

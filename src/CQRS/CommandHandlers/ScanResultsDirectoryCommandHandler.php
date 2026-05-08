@@ -33,8 +33,10 @@ readonly class ScanResultsDirectoryCommandHandler implements CommandHandlerInter
             $command->includeContent,
             $command->maxContentBytes,
         );
-        foreach ($result->queuedFiles as $queuedFile) {
-            $this->commandBus->dispatchAsync(ImportResultFileCommand::fromQueuedFile($queuedFile));
+        if ($command->queueImports) {
+            foreach ($result->queuedFiles as $queuedFile) {
+                $this->commandBus->dispatchAsync(ImportResultFileCommand::fromQueuedFile($queuedFile));
+            }
         }
 
         return $result;

@@ -29,7 +29,7 @@ final readonly class ImportResultFileCommand implements CommandInterface
     {
     }
 
-    public static function fromQueuedFile(QueuedResultFileImport $queuedFile): self
+    public static function fromQueuedFile(QueuedResultFileImport $queuedFile, int $timeoutSeconds = 30): self
     {
         return new self(
             path: $queuedFile->path,
@@ -40,6 +40,7 @@ final readonly class ImportResultFileCommand implements CommandInterface
             contentHash: $queuedFile->contentHash,
             version: $queuedFile->version,
             content: $queuedFile->content,
+            timeoutSeconds: $timeoutSeconds,
         );
     }
 

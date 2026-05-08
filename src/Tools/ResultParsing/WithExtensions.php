@@ -19,11 +19,11 @@ trait WithExtensions
      * @return void
      */
     protected function processExtensions(GameInterface $game, array $meta) : void {
-        $extensions = App::getContainer()->findByType(ResultParserExtensionInterface::class);
-        foreach ($extensions as $extensionName) {
-            /** @var ResultParserExtensionInterface $extensions */
-            $extensions = App::getService($extensionName);
-            $extensions->parse($game, $meta, $this);
+        $extensionNames = App::getContainer()->findByType(ResultParserExtensionInterface::class);
+        foreach ($extensionNames as $extensionName) {
+            /** @var ResultParserExtensionInterface $extension */
+            $extension = App::getService($extensionName);
+            $extension->parse($game, $meta, $this);
         }
     }
 }

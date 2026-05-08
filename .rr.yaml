@@ -111,7 +111,7 @@ http:
     destroy_timeout: 1s
     dynamic_allocator:
       max_workers: 25
-      spawn_rate: 10
+      spawn_rate: 2
       idle_timeout: 10s
     supervisor:
       watch_tick: 5s
@@ -134,11 +134,15 @@ jobs:
   timeout: 120
   pipeline_size: 1000
   pool:
-    num_workers: 3
-    max_jobs: 5
+    num_workers: 5
+    max_jobs: 10
     supervisor:
       max_worker_memory: 512
       exec_ttl: 120s
+    dynamic_allocator:
+      max_workers: 10
+      spawn_rate: 1
+      idle_timeout: 10s
   consume: [ "tasks" ]
   pipelines:
     tasks: # RoadRunner queue identifier

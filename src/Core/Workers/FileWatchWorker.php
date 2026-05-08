@@ -60,6 +60,7 @@ class FileWatchWorker implements Worker
                     $this->logger->error('Missing required argument "directory". Valid results directory is expected.');
                     /** @phpstan-ignore new.internalClass, method.internalClass */
                     $this->worker->respond(new Payload('ERROR'));
+                    continue;
                 }
 
                 // Plan import on watched dir

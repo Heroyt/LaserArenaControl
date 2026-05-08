@@ -304,7 +304,7 @@ class DbInstall implements InstallInterface
                 $connection->query(
                     <<<SQL
                     CREATE OR REPLACE VIEW `$name` AS $select;
-                      SQL
+                    SQL
                 );
             }
         } catch (Exception $e) {

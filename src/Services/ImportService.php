@@ -44,6 +44,7 @@ use Throwable;
 class ImportService
 {
     public const int ERROR_STATUS_INFO_SET = 1;
+    private const int IMPORT_LOCK_TTL_SECONDS = 60;
 
     /** @var array{error?:string,exception?:string,sql?:string}[]|string[] */
     private array $errors = [];
@@ -76,6 +77,7 @@ class ImportService
     public function importGame(Game $game, string $resultsDir): SuccessResponse|ErrorResponse
     {
         $logger = new Logger(LOG_DIR . 'results/', 'import');
+        $resultsDir = trailingSlashIt($resultsDir);
 
         $id = $game->id;
         $code = $game->code;
@@ -93,9 +95,29 @@ class ImportService
 
         $game->clearCache();
 
-        if (isset($game->resultsFile) && file_exists($game->resultsFile)) {
-            $file = $game->resultsFile;
-        } elseif ($game instanceof \App\GameModels\Game\Lasermaxx\Game && !empty($game->fileNumber)) {
+        $file = null;
+        if (!empty($game->resultsFile)) {
+            $resultsFile = $game->resultsFile;
+            $candidates = [$resultsFile];
+            if (pathinfo($resultsFile, PATHINFO_EXTENSION) === '') {
+                $candidates[] = $resultsFile . '.game';
+            }
+            if (!$this->isAbsolutePath($resultsFile)) {
+                $candidates[] = $resultsDir . $resultsFile;
+                if (pathinfo($resultsFile, PATHINFO_EXTENSION) === '') {
+                    $candidates[] = $resultsDir . $resultsFile . '.game';
+                }
+            }
+
+            foreach (array_unique($candidates) as $candidate) {
+                if (file_exists($candidate)) {
+                    $file = $candidate;
+                    break;
+                }
+            }
+        }
+
+        if ($file === null && $game instanceof \App\GameModels\Game\Lasermaxx\Game && !empty($game->fileNumber)) {
             $pattern = $resultsDir . str_pad((string)$game->fileNumber, 4, '0', STR_PAD_LEFT) . '*.game';
             $files = glob($pattern);
             if (empty($files)) {
@@ -113,7 +135,8 @@ class ImportService
                 );
             }
             $file = $files[0];
-        } else {
+        }
+        if ($file === null) {
             return new ErrorResponse(
                 'Cannot get game file number.',
                 type: ErrorType::NOT_FOUND,
@@ -191,10 +214,18 @@ class ImportService
             }
             $game::clearModelCache();
             $this->cache->clean([$this->cache::Tags => ['games/' . $game->start->format('Y-m-d')]]);
+            $this->eventService->trigger('game-imported', ['count' => 1]);
+            $this->processFinishedGames([$game], $logger);
         } catch (Exception $e) {
             return new ErrorResponse('Error while parsing game file.', type: ErrorType::INTERNAL, exception: $e);
         }
         return new SuccessResponse(values: ['game' => $game]);
+    }
+
+    private function isAbsolutePath(string $path): bool
+    {
+        return str_starts_with($path, DIRECTORY_SEPARATOR)
+            || preg_match('/^[a-z]:[\/\\\\]/i', $path) === 1;
     }
 
     /**
@@ -238,7 +269,10 @@ class ImportService
         $this->metrics->add('import_called', 1, [$resultsDir]);
 
         // Lock import to allow only 1 import process to run in this directory
-        $lock = $this->lockFactory->createLock('results-import-' . md5($resultsDir), ttl: 60);
+        $lock = $this->lockFactory->createLock(
+            'results-import-' . md5($resultsDir),
+            ttl: self::IMPORT_LOCK_TTL_SECONDS
+        );
 
         $output?->writeln('Waiting for lock');
         if ($lock->acquire(true)) {
@@ -323,6 +357,7 @@ class ImportService
                     $logger->info('Importing file: ' . $file);
                     $output?->writeln('Importing file: ' . $file);
                     try {
+                        $lock->refresh(self::IMPORT_LOCK_TTL_SECONDS);
                         $logger->debug('Preparing parser for file', ['file' => $file, 'system' => $system]);
                         $parser->setFile($file);
                         $logger->debug('Starting parser->parse()', ['file' => $file, 'system' => $system]);
@@ -448,8 +483,9 @@ class ImportService
                 $this->metrics->add('games_imported', $importedSystem, [$system]);
             }
 
-            // Update check timestamp
-            if ($imported > 0) {
+            // Update check timestamp after inspecting any eligible file.
+            $lock->refresh(self::IMPORT_LOCK_TTL_SECONDS);
+            if ($total > 0) {
                 try {
                     Info::set($resultsDir . 'check', $now);
                 } catch (Exception $e) {
@@ -482,45 +518,7 @@ class ImportService
                 $this->eventService->trigger('game-imported', ['count' => $imported]);
             }
 
-            // Try to synchronize finished games to public
-            if (!empty($finishedGames)) {
-                $system = $finishedGames[0]::SYSTEM;
-                if ($this->featureConfig->isFeatureEnabled('liga')) {
-                    if ($this->ligaApi->syncGames($system, $finishedGames)) {
-                        $logger->info('Synchronized games to public.');
-                        // Set the sync flag
-                        foreach ($finishedGames as $finishedGame) {
-                            $finishedGame->sync = true;
-                            try {
-                                $finishedGame->save();
-                            } catch (ValidationException $e) {
-                                $output?->writeln(
-                                    Colors::color(ForegroundColors::RED) .
-                                    'Failed to synchronize games to public.' . $e->getMessage() .
-                                    Colors::reset()
-                                );
-                                $logger->warning('Failed to synchronize games to public');
-                                $logger->exception($e);
-                            }
-                        }
-                    } else {
-                        $logger->warning('Failed to synchronize games to public');
-                        $output?->writeln(
-                            Colors::color(ForegroundColors::RED) .
-                            'Failed to synchronize games to public' .
-                            Colors::reset()
-                        );
-                    }
-                }
-
-                /** @var ResultsPrecacheService $precacheService */
-                $precacheService = App::getService('resultPrecache');
-                $precacheService->prepareGamePrecache(
-                    ...array_map(static fn(Game $game) => $game->code, $finishedGames)
-                );
-            } else {
-                $logger->info('No games to synchronize to public');
-            }
+            $this->processFinishedGames($finishedGames, $logger, $output);
 
             $lock->release();
             if (!empty($errors)) {
@@ -535,6 +533,58 @@ class ImportService
             );
         }
         return new ImportResponse(0, 0, 0, []);
+    }
+
+    /**
+     * @param Game[] $finishedGames
+     */
+    private function processFinishedGames(array $finishedGames, Logger $logger, ?OutputInterface $output = null): void
+    {
+        if (empty($finishedGames)) {
+            $logger->info('No games to synchronize to public');
+            return;
+        }
+
+        if ($this->featureConfig->isFeatureEnabled('liga')) {
+            $gamesBySystem = [];
+            foreach ($finishedGames as $finishedGame) {
+                $gamesBySystem[$finishedGame::SYSTEM][] = $finishedGame;
+            }
+
+            foreach ($gamesBySystem as $system => $games) {
+                if ($this->ligaApi->syncGames($system, $games)) {
+                    $logger->info('Synchronized games to public.', ['system' => $system, 'count' => count($games)]);
+                    foreach ($games as $finishedGame) {
+                        $finishedGame->sync = true;
+                        try {
+                            $finishedGame->save();
+                        } catch (ValidationException $e) {
+                            $output?->writeln(
+                                Colors::color(ForegroundColors::RED) .
+                                'Failed to synchronize games to public.' . $e->getMessage() .
+                                Colors::reset()
+                            );
+                            $logger->warning('Failed to synchronize games to public', ['system' => $system]);
+                            $logger->exception($e);
+                        }
+                    }
+                    continue;
+                }
+
+                $logger->warning('Failed to synchronize games to public', ['system' => $system]);
+                $output?->writeln(
+                    Colors::color(ForegroundColors::RED) .
+                    'Failed to synchronize games to public' .
+                    Colors::reset()
+                );
+            }
+        }
+
+        /** @var ResultsPrecacheService $precacheService */
+        $precacheService = App::getService('resultPrecache');
+        $precacheService->prepareGamePrecache(
+            ...array_map(static fn(Game $game) => $game->code, $finishedGames)
+        );
     }
 
     /**

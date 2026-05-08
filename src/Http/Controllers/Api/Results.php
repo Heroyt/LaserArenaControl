@@ -99,9 +99,9 @@ class Results extends ApiController
             if (!empty($sync)) {
                 $response = $this->importService->import($resultsDir);
                 if ($response instanceof ErrorResponse) {
-                    $this->respond($response, 500);
+                    return $this->respond($response, 500);
                 }
-                $this->respond($response);
+                return $this->respond($response);
             }
             else {
                 $this->metrics->add('import_planned', 1, ['api']);
@@ -112,9 +112,9 @@ class Results extends ApiController
                 );
             }
         } catch (JobsException $e) {
-            $this->respond(new ErrorResponse('Job push failed', exception: $e), 500);
+            return $this->respond(new ErrorResponse('Job push failed', exception: $e), 500);
         } catch (Throwable $e) {
-            $this->respond(new ErrorResponse('Internal error', exception: $e), 500);
+            return $this->respond(new ErrorResponse('Internal error', exception: $e), 500);
         }
         return $this->respond(new SuccessResponse());
     }
@@ -227,7 +227,7 @@ class Results extends ApiController
               400
             );
         }
-        $resultsDir = trailingSlashIt($resultsDir);
+        $resultsDir = $this->resolveResultsDir($resultsDir);
         $resultFilesAll = [];
         foreach (GameFactory::getSupportedSystems() as $system) {
             /**
@@ -238,27 +238,38 @@ class Results extends ApiController
             if (!class_exists($class)) {
                 continue;
             }
-            $files = glob(ROOT.$resultsDir.$class::getFileGlob());
-            assert(is_array($files), 'Glob failed');
-            $resultFilesAll[] = $files;
+            $files = glob($resultsDir . $class::getFileGlob());
+            if ($files !== false) {
+                $resultFilesAll[] = $files;
+            }
         }
 
         /** @var string[] $resultFiles */
-        $resultFiles = array_unique(array_merge(...$resultFilesAll));
+        $resultFiles = array_unique(array_merge([], ...$resultFilesAll));
 
         // Sort by time
         usort($resultFiles, static fn(string $a, string $b) => filemtime($b) - filemtime($a));
 
-        /** @var string $resultsContent1 */
+        if (empty($resultFiles)) {
+            return $this->respond(new ErrorResponse('No result files found.', type: ErrorType::NOT_FOUND), 404);
+        }
+
         $resultsContent1 = file_get_contents($resultFiles[0]);
-        /** @var string $resultsContent2 */
-        $resultsContent2 = file_get_contents($resultFiles[1]);
+        $resultsContent2 = isset($resultFiles[1]) ? file_get_contents($resultFiles[1]) : '';
         return $this->respond(
           new LastResultsResponse(
             $resultFiles,
-            utf8_encode($resultsContent1),
-            utf8_encode($resultsContent2),
+              utf8_encode($resultsContent1 === false ? '' : $resultsContent1),
+              utf8_encode($resultsContent2 === false ? '' : $resultsContent2),
           )
         );
+    }
+
+    private function resolveResultsDir(string $resultsDir): string
+    {
+        if (str_starts_with($resultsDir, DIRECTORY_SEPARATOR) || preg_match('/^[a-z]:[\/\\\\]/i', $resultsDir) === 1) {
+            return trailingSlashIt($resultsDir);
+        }
+        return trailingSlashIt(ROOT . $resultsDir);
     }
 }

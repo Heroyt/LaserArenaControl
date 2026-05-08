@@ -244,11 +244,11 @@ class Results extends ApiController
         $resultsContent1 = file_get_contents($resultFiles[0]);
         $resultsContent2 = isset($resultFiles[1]) ? file_get_contents($resultFiles[1]) : '';
         return $this->respond(
-          new LastResultsResponse(
-            $resultFiles,
-              utf8_encode($resultsContent1 === false ? '' : $resultsContent1),
-              utf8_encode($resultsContent2 === false ? '' : $resultsContent2),
-          )
+            new LastResultsResponse(
+                $resultFiles,
+                mb_convert_encoding($resultsContent1 === false ? '' : $resultsContent1, 'UTF-8', 'ISO-8859-1'),
+                mb_convert_encoding($resultsContent2 === false ? '' : $resultsContent2, 'UTF-8', 'ISO-8859-1'),
+            )
         );
     }
 

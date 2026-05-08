@@ -150,7 +150,7 @@ readonly class ResultFileImporter
             ['file' => $file, 'system' => $system, 'code' => $game->code ?? null]
         );
 
-        $this->clearImportedGameState($game, $system);
+        $this->clearImportedGameState($game, $system, $logger);
 
         $gameModel = GameFactory::getById($game->id ?? 0, ['system' => $system]);
         return ResultFileImportResult::imported($gameModel ?? $game);
@@ -165,7 +165,7 @@ readonly class ResultFileImporter
      * @template G of Game
      * @param G $game
      */
-    public function clearImportedGameState(Game $game, string $system): void
+    public function clearImportedGameState(Game $game, string $system, ?Logger $logger = null): void
     {
         $game::clearModelCache();
         if ($game->start !== null) {
@@ -176,7 +176,11 @@ readonly class ResultFileImporter
         if ($startedGame instanceof Game && $game->resultsFile === $startedGame->resultsFile) {
             try {
                 Info::set($system . '-game-started', null);
-            } catch (\Dibi\Exception) {
+            } catch (\Dibi\Exception $e) {
+                $logger?->error(
+                    'Failed to clear started game state after import',
+                    ['key' => $system . '-game-started', 'exception' => $e->getMessage()]
+                );
             }
         }
     }

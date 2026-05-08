@@ -56,10 +56,13 @@ readonly class ResultFileImportFinalizer
                         } catch (ValidationException $e) {
                             $output?->writeln(
                                 Colors::color(ForegroundColors::RED) .
-                                'Failed to synchronize games to public.' . $e->getMessage() .
+                                'Failed to save finished game after synchronization. ' . $e->getMessage() .
                                 Colors::reset()
                             );
-                            $logger->warning('Failed to synchronize games to public', ['system' => $system]);
+                            $logger->warning(
+                                'Failed to save finished game after synchronization',
+                                ['system' => $system, 'game' => $finishedGame->code, 'exception' => $e->getMessage()]
+                            );
                             $logger->exception($e);
                         }
                     }

@@ -68,12 +68,7 @@ readonly class ResultFileImportStateRepository
             'last_error' => null,
         ];
 
-        $state = $this->findByPathHash($version->pathHash);
-        if ($state === null) {
-            DB::insert(self::TABLE, $data);
-        } else {
-            DB::update(self::TABLE, $data, ['path_hash = %s', $version->pathHash]);
-        }
+        $this->upsert($data);
 
         $saved = $this->findByPathHash($version->pathHash);
         if ($saved === null) {
@@ -81,6 +76,41 @@ readonly class ResultFileImportStateRepository
         }
 
         return $saved;
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     * @throws Exception
+     */
+    private function upsert(array $data): void
+    {
+        $columns = array_keys($data);
+        $placeholders = array_map([$this, 'placeholder'], $data);
+        $updates = array_map(
+            static fn(string $column): string => sprintf('`%s` = VALUES(`%s`)', $column, $column),
+            array_diff($columns, ['path_hash'])
+        );
+
+        DB::query(
+            sprintf(
+                'INSERT INTO %%n (`%s`) VALUES (%s) ON DUPLICATE KEY UPDATE %s',
+                implode('`, `', $columns),
+                implode(', ', $placeholders),
+                implode(', ', $updates),
+            ),
+            self::TABLE,
+            ...array_values($data),
+        );
+    }
+
+    private function placeholder(mixed $value): string
+    {
+        return match (true) {
+            is_int($value) => '%i',
+            is_float($value) => '%f',
+            $value instanceof DateTimeInterface => '%dt',
+            default => '%s',
+        };
     }
 
     /**

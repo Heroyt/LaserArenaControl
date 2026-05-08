@@ -191,7 +191,7 @@ class ImportService
             if (!$game->save()) {
                 throw new ResultsParseException('Failed saving game into DB.');
             }
-            $this->resultFileImporter->clearImportedGameState($game, $game::SYSTEM);
+            $this->resultFileImporter->clearImportedGameState($game, $game::SYSTEM, $logger);
             $this->resultFileImportFinalizer->triggerImported(1);
             $this->resultFileImportFinalizer->finalize([$game], $logger);
         } catch (Exception $e) {

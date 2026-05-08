@@ -49,9 +49,11 @@ readonly class ResultsDirectoryScanner
         $errors = [];
         $queuedFiles = [];
         $processedFiles = [];
+        $candidateFiles = [];
         $queuedAt = new DateTimeImmutable();
 
-        foreach (GameFactory::getSupportedSystems() as $system) {
+        $supportedSystems = GameFactory::getSupportedSystems();
+        foreach ($supportedSystems as $system) {
             if ($limit > 0 && $seen >= $limit) {
                 break;
             }
@@ -74,26 +76,26 @@ readonly class ResultsDirectoryScanner
             }
 
             foreach ($files as $file) {
+                $candidateFiles[$file] = true;
                 if ($limit > 0 && $seen >= $limit) {
                     break;
                 }
                 if (isset($processedFiles[$file])) {
                     continue;
                 }
-                $processedFiles[$file] = true;
 
                 if (str_ends_with($file, '0000.game')) {
+                    $processedFiles[$file] = true;
                     $invalid++;
                     $errors[] = new ResultsScanError('Skipping file with invalid name ending with 0000.game', $file, $system);
                     continue;
                 }
 
                 if (!$parser::checkFile($file)) {
-                    $invalid++;
-                    $errors[] = new ResultsScanError('Skipping file with invalid content', $file, $system);
                     continue;
                 }
 
+                $processedFiles[$file] = true;
                 try {
                     $version = $this->versionFactory->fromFile($file);
                     $state = $this->stateRepository->findByPathHash($version->pathHash);
@@ -129,6 +131,14 @@ readonly class ResultsDirectoryScanner
                     $errors[] = new ResultsScanError($e->getMessage(), $file, $system);
                 }
             }
+        }
+
+        foreach (array_keys($candidateFiles) as $file) {
+            if (isset($processedFiles[$file])) {
+                continue;
+            }
+            $invalid++;
+            $errors[] = new ResultsScanError('Skipping file because no enabled parser accepted its content', $file);
         }
 
         return new ResultsScanResult(

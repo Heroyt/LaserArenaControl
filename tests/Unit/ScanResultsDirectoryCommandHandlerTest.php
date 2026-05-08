@@ -65,4 +65,42 @@ class ScanResultsDirectoryCommandHandlerTest extends TestCase
             )
         );
     }
+
+    public function testHandlerCanSkipQueueingImports(): void
+    {
+        $queuedFile = new QueuedResultFileImport(
+            '/tmp/results/0001.game',
+            sha1('/tmp/results/0001.game'),
+            'evo6',
+            123,
+            456,
+            str_repeat('a', 64),
+            sha1('/tmp/results/0001.game:123:456:' . str_repeat('a', 64)),
+        );
+        $result = new ResultsScanResult('/tmp/results/', 1, 1, 0, 0, [$queuedFile]);
+        $scanner = $this
+            ->getMockBuilder(ResultsDirectoryScanner::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['scan'])
+            ->getMock();
+        $commandBus = $this
+            ->getMockBuilder(CommandBus::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['dispatchAsync'])
+            ->getMock();
+        $scanner
+            ->expects($this->once())
+            ->method('scan')
+            ->willReturn($result);
+        $commandBus
+            ->expects($this->never())
+            ->method('dispatchAsync');
+
+        $handler = new ScanResultsDirectoryCommandHandler($scanner, $commandBus);
+
+        $this->assertSame(
+            $result,
+            $handler->handle(new ScanResultsDirectoryCommand('/tmp/results', queueImports: false))
+        );
+    }
 }

@@ -26,7 +26,13 @@ readonly class ScanResultsDirectoryCommandHandler implements CommandHandlerInter
      */
     public function handle(CommandInterface $command): ResultsScanResult
     {
-        $result = $this->scanner->scan($command->dir, $command->all, $command->limit);
+        $result = $this->scanner->scan(
+            $command->dir,
+            $command->all,
+            $command->limit,
+            $command->includeContent,
+            $command->maxContentBytes,
+        );
         foreach ($result->queuedFiles as $queuedFile) {
             $this->commandBus->dispatchAsync(ImportResultFileCommand::fromQueuedFile($queuedFile));
         }

@@ -44,7 +44,7 @@ class ScanResultsDirectoryCommandHandlerTest extends TestCase
         $scanner
             ->expects($this->once())
             ->method('scan')
-            ->with('/tmp/results', true, 5)
+            ->with('/tmp/results', true, 5, true, 1024)
             ->willReturn($result);
         $commandBus
             ->expects($this->once())
@@ -54,7 +54,15 @@ class ScanResultsDirectoryCommandHandlerTest extends TestCase
 
         $this->assertSame(
             $result,
-            $handler->handle(new ScanResultsDirectoryCommand('/tmp/results', all: true, limit: 5))
+            $handler->handle(
+                new ScanResultsDirectoryCommand(
+                    '/tmp/results',
+                    all: true,
+                    limit: 5,
+                    includeContent: true,
+                    maxContentBytes: 1024
+                )
+            )
         );
     }
 }

@@ -12,8 +12,10 @@ use App\GameModels\Factory\GameFactory;
 use App\GameModels\Game\Game;
 use DateTimeInterface;
 use Lsr\Caching\Cache;
+use Lsr\Exceptions\FileException;
 use Lsr\Lg\Results\AbstractResultsParser;
 use Lsr\Logging\Logger;
+use ReflectionProperty;
 use RuntimeException;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -61,6 +63,54 @@ readonly class ResultFileImporter
         }
         $logger->debug(
             'Finished parser->parse()',
+            [
+                'file' => $file,
+                'system' => $system,
+                'code' => $game->code,
+                'finished' => $game->isFinished(),
+            ]
+        );
+
+        return $game;
+    }
+
+    /** @phpstan-ignore-next-line missingType.generics */
+    public function parseContent(
+        AbstractResultsParser $parser,
+        string                $system,
+        string                $file,
+        string                $content,
+        int                   $mtime,
+        Logger                $logger,
+    ): Game
+    {
+        $logger->debug('Preparing parser for inline file content', ['file' => $file, 'system' => $system]);
+        $tempFile = $this->createInlineSourceFile($file, $content, $mtime);
+
+        try {
+            $parser->setContents(mb_convert_encoding($content, 'UTF-8'));
+            $this->setParserFileName($parser, $tempFile);
+            $logger->debug('Starting parser->parse() from inline content', ['file' => $file, 'system' => $system]);
+            $game = $parser->parse();
+        } finally {
+            if (is_file($tempFile) && !unlink($tempFile)) {
+                $logger->warning('Failed to remove inline result import temp file.', ['file' => $tempFile]);
+            }
+            $tempDir = dirname($tempFile);
+            $tempDirFiles = is_dir($tempDir) ? scandir($tempDir) : false;
+            if ($tempDirFiles === ['.', '..']) {
+                rmdir($tempDir);
+            }
+        }
+
+        if (!$game instanceof Game) {
+            throw new RuntimeException('Parsed result is not an application game model.');
+        }
+        if ($game->resultsFile === pathinfo($tempFile, PATHINFO_FILENAME)) {
+            $game->resultsFile = pathinfo($file, PATHINFO_FILENAME);
+        }
+        $logger->debug(
+            'Finished parser->parse() from inline content',
             [
                 'file' => $file,
                 'system' => $system,
@@ -159,6 +209,33 @@ readonly class ResultFileImporter
     private function formatDate(?DateTimeInterface $date): ?string
     {
         return $date?->format('c');
+    }
+
+    private function createInlineSourceFile(string $file, string $content, int $mtime): string
+    {
+        $dir = TMP_DIR . 'result-import-inline/' . sha1($file . ':' . $mtime . ':' . hash('sha256', $content)) . '/';
+        if (!is_dir($dir) && !mkdir($dir, recursive: true) && !is_dir($dir)) {
+            throw new RuntimeException('Failed to create inline result import directory.');
+        }
+
+        $basename = basename($file);
+        if ($basename === '' || $basename === '.' || $basename === '..') {
+            $basename = 'result.game';
+        }
+
+        $tempFile = $dir . $basename;
+        if (file_put_contents($tempFile, $content) === false) {
+            throw new FileException('Failed to write inline result import file.');
+        }
+        touch($tempFile, $mtime);
+
+        return $tempFile;
+    }
+
+    /** @phpstan-ignore missingType.generics */
+    private function setParserFileName(AbstractResultsParser $parser, string $file): void
+    {
+        new ReflectionProperty(AbstractResultsParser::class, 'fileName')->setValue($parser, $file);
     }
 
     /**

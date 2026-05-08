@@ -29,7 +29,13 @@ readonly class ResultsDirectoryScanner
     /**
      * @param non-empty-string $dir
      */
-    public function scan(string $dir, bool $all = false, int $limit = 0): ResultsScanResult
+    public function scan(
+        string $dir,
+        bool   $all = false,
+        int    $limit = 0,
+        bool   $includeContent = false,
+        int    $maxContentBytes = 65536,
+    ): ResultsScanResult
     {
         if (!is_dir($dir) || !is_readable($dir)) {
             throw new RuntimeException('Results directory does not exist or is not readable: ' . $dir);
@@ -102,7 +108,15 @@ readonly class ResultsDirectoryScanner
                         ResultFileImportStatus::QUEUED,
                         $queuedAt,
                     );
-                    $queuedFiles[] = QueuedResultFileImport::fromVersion($version, $system);
+                    $content = null;
+                    if ($includeContent && $version->size <= $maxContentBytes) {
+                        $content = file_get_contents($file);
+                        if ($content === false) {
+                            throw new RuntimeException('Failed to read result file content: ' . $file);
+                        }
+                    }
+
+                    $queuedFiles[] = QueuedResultFileImport::fromVersion($version, $system, $content);
                     $queued++;
                 } catch (Throwable $e) {
                     $errors[] = new ResultsScanError($e->getMessage(), $file, $system);

@@ -79,18 +79,21 @@ readonly class ImportResultFileCommandHandler implements CommandHandlerInterface
             }
 
             if ($command->content !== null) {
-                $this->stateRepository->markFailed($version, 'Inline content import is not implemented yet.');
-                return new ImportResultFileCommandResult(
-                    $command->path,
-                    $command->version,
-                    ResultFileImportStatus::FAILED,
-                    error: 'Inline content import is not implemented yet.',
-                );
-            }
-
-            $currentVersion = $this->versionFactory->fromFile($command->path);
-            if ($currentVersion->version !== $command->version) {
-                return $this->stale($command, 'changed-on-disk');
+                $payloadError = $this->validateInlineContent($command);
+                if ($payloadError !== null) {
+                    $this->stateRepository->markFailed($version, $payloadError);
+                    return new ImportResultFileCommandResult(
+                        $command->path,
+                        $command->version,
+                        ResultFileImportStatus::FAILED,
+                        error: $payloadError,
+                    );
+                }
+            } else {
+                $currentVersion = $this->versionFactory->fromFile($command->path);
+                if ($currentVersion->version !== $command->version) {
+                    return $this->stale($command, 'changed-on-disk');
+                }
             }
 
             $this->guardTimeout($startedAt, $command->timeoutSeconds);
@@ -100,7 +103,11 @@ readonly class ImportResultFileCommandHandler implements CommandHandlerInterface
 
             $lock->refresh(self::IMPORT_LOCK_TTL_SECONDS);
             $parser = $this->getParser($command->system);
-            if (!$parser::checkFile($command->path)) {
+            if (
+                $command->content === null
+                    ? !$parser::checkFile($command->path)
+                    : !$parser::checkFile($command->path, $command->content)
+            ) {
                 $this->stateRepository->markFailed($version, 'Game file cannot be parsed: ' . $command->path);
                 return new ImportResultFileCommandResult(
                     $command->path,
@@ -111,12 +118,21 @@ readonly class ImportResultFileCommandHandler implements CommandHandlerInterface
             }
 
             $this->guardTimeout($startedAt, $command->timeoutSeconds);
-            $game = $this->importer->parse(
-                $parser,
-                $command->system,
-                $command->path,
-                $logger,
-            );
+            $game = $command->content === null
+                ? $this->importer->parse(
+                    $parser,
+                    $command->system,
+                    $command->path,
+                    $logger,
+                )
+                : $this->importer->parseContent(
+                    $parser,
+                    $command->system,
+                    $command->path,
+                    $command->content,
+                    $command->mtime,
+                    $logger,
+                );
             $this->guardTimeout($startedAt, $command->timeoutSeconds);
 
             $state = $this->stateRepository->findByPathHash($command->pathHash);
@@ -172,6 +188,23 @@ readonly class ImportResultFileCommandHandler implements CommandHandlerInterface
         if ($timeoutSeconds > 0 && microtime(true) - $startedAt > $timeoutSeconds) {
             throw new RuntimeException('Import timed out.');
         }
+    }
+
+    private function validateInlineContent(ImportResultFileCommand $command): ?string
+    {
+        if ($command->content === null) {
+            return null;
+        }
+
+        if (strlen($command->content) !== $command->size) {
+            return 'Inline content size does not match queued file metadata.';
+        }
+
+        if (hash('sha256', $command->content) !== $command->contentHash) {
+            return 'Inline content hash does not match queued file metadata.';
+        }
+
+        return null;
     }
 
     /** @phpstan-ignore missingType.generics */

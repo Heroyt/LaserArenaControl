@@ -119,6 +119,8 @@ services:
 	gamesImport: App\Services\ImportService
 	resultFileImporter: App\Services\ResultFileImporter
 	resultFileImportFinalizer: App\Services\ResultFileImportFinalizer
+	resultFileImportStateRepository: App\Services\ResultFileImportStateRepository
+	resultFileVersionFactory: App\Services\ResultFileVersionFactory
 	gamesLoad: App\Tools\GameLoading\GameLoader
 	gameModeProvider: App\Services\GameModeProvider
 

@@ -121,6 +121,7 @@ services:
 	resultFileImportFinalizer: App\Services\ResultFileImportFinalizer
 	resultFileImportStateRepository: App\Services\ResultFileImportStateRepository
 	resultFileVersionFactory: App\Services\ResultFileVersionFactory
+	resultsDirectoryScanner: App\Services\ResultsDirectoryScanner
 	gamesLoad: App\Tools\GameLoading\GameLoader
 	gameModeProvider: App\Services\GameModeProvider
 

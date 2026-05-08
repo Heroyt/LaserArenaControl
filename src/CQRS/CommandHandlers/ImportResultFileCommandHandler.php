@@ -21,6 +21,7 @@ use Lsr\Lg\Results\AbstractResultsParser;
 use Lsr\Logging\Logger;
 use Nette\DI\MissingServiceException;
 use RuntimeException;
+use Spiral\RoadRunner\Metrics\Metrics;
 use Symfony\Component\Lock\LockFactory;
 use Throwable;
 
@@ -35,6 +36,7 @@ readonly class ImportResultFileCommandHandler implements CommandHandlerInterface
         private ResultFileImporter              $importer,
         private ResultFileImportFinalizer       $finalizer,
         private LockFactory                     $lockFactory,
+        private Metrics $metrics,
         Config                                  $config,
     )
     {
@@ -55,26 +57,34 @@ readonly class ImportResultFileCommandHandler implements CommandHandlerInterface
         );
 
         if (!$lock->acquire(false)) {
-            return new ImportResultFileCommandResult(
-                $command->path,
-                $command->version,
-                ResultFileImportStatus::SKIPPED,
-                event: 'locked',
+            return $this->recordMetrics(
+                $command,
+                new ImportResultFileCommandResult(
+                    $command->path,
+                    $command->version,
+                    ResultFileImportStatus::SKIPPED,
+                    event: 'locked',
+                ),
+                $startedAt,
             );
         }
 
         try {
             $state = $this->stateRepository->findByPathHash($command->pathHash);
             if ($state === null || $state->seenVersion !== $command->version) {
-                return $this->stale($command, 'stale');
+                return $this->recordMetrics($command, $this->stale($command, 'stale'), $startedAt);
             }
 
             if ($state->processedVersion === $command->version) {
-                return new ImportResultFileCommandResult(
-                    $command->path,
-                    $command->version,
-                    ResultFileImportStatus::SKIPPED,
-                    event: 'already-processed',
+                return $this->recordMetrics(
+                    $command,
+                    new ImportResultFileCommandResult(
+                        $command->path,
+                        $command->version,
+                        ResultFileImportStatus::SKIPPED,
+                        event: 'already-processed',
+                    ),
+                    $startedAt,
                 );
             }
 
@@ -82,23 +92,27 @@ readonly class ImportResultFileCommandHandler implements CommandHandlerInterface
                 $payloadError = $this->validateInlineContent($command);
                 if ($payloadError !== null) {
                     $this->stateRepository->markFailed($version, $payloadError);
-                    return new ImportResultFileCommandResult(
-                        $command->path,
-                        $command->version,
-                        ResultFileImportStatus::FAILED,
-                        error: $payloadError,
+                    return $this->recordMetrics(
+                        $command,
+                        new ImportResultFileCommandResult(
+                            $command->path,
+                            $command->version,
+                            ResultFileImportStatus::FAILED,
+                            error: $payloadError,
+                        ),
+                        $startedAt,
                     );
                 }
             } else {
                 $currentVersion = $this->versionFactory->fromFile($command->path);
                 if ($currentVersion->version !== $command->version) {
-                    return $this->stale($command, 'changed-on-disk');
+                    return $this->recordMetrics($command, $this->stale($command, 'changed-on-disk'), $startedAt);
                 }
             }
 
             $this->guardTimeout($startedAt, $command->timeoutSeconds);
             if (!$this->stateRepository->markProcessing($version, new DateTimeImmutable())) {
-                return $this->stale($command, 'stale');
+                return $this->recordMetrics($command, $this->stale($command, 'stale'), $startedAt);
             }
 
             $lock->refresh(self::IMPORT_LOCK_TTL_SECONDS);
@@ -109,15 +123,20 @@ readonly class ImportResultFileCommandHandler implements CommandHandlerInterface
                     : !$parser::checkFile($command->path, $command->content)
             ) {
                 $this->stateRepository->markFailed($version, 'Game file cannot be parsed: ' . $command->path);
-                return new ImportResultFileCommandResult(
-                    $command->path,
-                    $command->version,
-                    ResultFileImportStatus::FAILED,
-                    error: 'Game file cannot be parsed.',
+                return $this->recordMetrics(
+                    $command,
+                    new ImportResultFileCommandResult(
+                        $command->path,
+                        $command->version,
+                        ResultFileImportStatus::FAILED,
+                        error: 'Game file cannot be parsed.',
+                    ),
+                    $startedAt,
                 );
             }
 
             $this->guardTimeout($startedAt, $command->timeoutSeconds);
+            $parseStartedAt = microtime(true);
             $game = $command->content === null
                 ? $this->importer->parse(
                     $parser,
@@ -133,13 +152,19 @@ readonly class ImportResultFileCommandHandler implements CommandHandlerInterface
                     $command->mtime,
                     $logger,
                 );
+            $this->setMetric(
+                'result_file_import_parse_time',
+                (microtime(true) - $parseStartedAt) * 1000,
+                [$command->system, $command->pathHash],
+            );
             $this->guardTimeout($startedAt, $command->timeoutSeconds);
 
             $state = $this->stateRepository->findByPathHash($command->pathHash);
             if ($state === null || $state->seenVersion !== $command->version) {
-                return $this->stale($command, 'stale-after-import');
+                return $this->recordMetrics($command, $this->stale($command, 'stale-after-import'), $startedAt);
             }
 
+            $saveStartedAt = microtime(true);
             $result = $this->importer->importParsed(
                 $game,
                 $command->system,
@@ -148,20 +173,29 @@ readonly class ImportResultFileCommandHandler implements CommandHandlerInterface
                 $this->gameLoadedTime,
                 $logger,
             );
+            $this->setMetric(
+                'result_file_import_save_time',
+                (microtime(true) - $saveStartedAt) * 1000,
+                [$command->system, $command->pathHash],
+            );
             $this->guardTimeout($startedAt, $command->timeoutSeconds);
 
-            return $this->complete($command, $result, $logger);
+            return $this->recordMetrics($command, $this->complete($command, $result, $logger), $startedAt);
         } catch (Throwable $e) {
             try {
                 $this->stateRepository->markFailed($version, $e->getMessage());
             } catch (Throwable) {
             }
             $logger->exception($e);
-            return new ImportResultFileCommandResult(
-                $command->path,
-                $command->version,
-                ResultFileImportStatus::FAILED,
-                error: $e->getMessage(),
+            return $this->recordMetrics(
+                $command,
+                new ImportResultFileCommandResult(
+                    $command->path,
+                    $command->version,
+                    ResultFileImportStatus::FAILED,
+                    error: $e->getMessage(),
+                ),
+                $startedAt,
             );
         } finally {
             $lock->release();
@@ -188,6 +222,65 @@ readonly class ImportResultFileCommandHandler implements CommandHandlerInterface
         if ($timeoutSeconds > 0 && microtime(true) - $startedAt > $timeoutSeconds) {
             throw new RuntimeException('Import timed out.');
         }
+    }
+
+    private function recordMetrics(
+        ImportResultFileCommand       $command,
+        ImportResultFileCommandResult $result,
+        float                         $startedAt,
+    ): ImportResultFileCommandResult
+    {
+        $event = $result->event ?? 'none';
+        $this->addMetric(
+            'result_file_imports_total',
+            1,
+            [$command->system, $result->status->value, $event],
+        );
+        $this->setMetric(
+            'result_file_import_time',
+            (microtime(true) - $startedAt) * 1000,
+            [$command->system, $result->status->value, $event, $command->pathHash],
+        );
+
+        return $result;
+    }
+
+    /**
+     * @param non-empty-string $name
+     * @param string[] $labels
+     */
+    private function addMetric(string $name, int|float $value, array $labels = []): void
+    {
+        try {
+            $this->metrics->add($name, $value, $this->normalizeMetricLabels($labels));
+        } catch (Throwable) {
+        }
+    }
+
+    /**
+     * @param non-empty-string $name
+     * @param string[] $labels
+     */
+    private function setMetric(string $name, int|float $value, array $labels = []): void
+    {
+        try {
+            $this->metrics->set($name, $value, $this->normalizeMetricLabels($labels));
+        } catch (Throwable) {
+        }
+    }
+
+    /**
+     * @param string[] $labels
+     * @return list<non-empty-string>
+     */
+    private function normalizeMetricLabels(array $labels): array
+    {
+        $normalized = [];
+        foreach ($labels as $label) {
+            $normalized[] = $label === '' ? 'unknown' : $label;
+        }
+
+        return $normalized;
     }
 
     private function validateInlineContent(ImportResultFileCommand $command): ?string

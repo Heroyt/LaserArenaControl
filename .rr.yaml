@@ -22,6 +22,33 @@ metrics:
       help: "How many times was import pushed into task queue."
       labels:
         - producer
+    result_file_imports_total:
+      type: counter
+      help: "Total number of processed result file import commands."
+      labels:
+        - system
+        - status
+        - event
+    result_file_import_time:
+      type: gauge
+      help: "How long the last result file import command took in milliseconds."
+      labels:
+        - system
+        - status
+        - event
+        - path_hash
+    result_file_import_parse_time:
+      type: gauge
+      help: "How long parsing the last result file took in milliseconds."
+      labels:
+        - system
+        - path_hash
+    result_file_import_save_time:
+      type: gauge
+      help: "How long classifying and saving the last result file took in milliseconds."
+      labels:
+        - system
+        - path_hash
     games_synced:
       type: counter
       help: "How many games where synchronized to the Laser Liga."

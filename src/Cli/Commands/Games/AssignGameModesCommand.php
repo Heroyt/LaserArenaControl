@@ -16,20 +16,24 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class AssignGameModesCommand extends Command
 {
-    public static function getDefaultName() : ?string {
+    public static function getDefaultName(): ?string
+    {
         return 'games:game-modes';
     }
 
-    public static function getDefaultDescription() : ?string {
+    public static function getDefaultDescription(): ?string
+    {
         return 'Assign game modes to empty games.';
     }
 
-    protected function configure() : void {
+    protected function configure(): void
+    {
         $this->addArgument('offset', InputArgument::OPTIONAL, 'Games DB offset', 0);
         $this->addArgument('limit', InputArgument::OPTIONAL, 'Games DB limit', 200);
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output) : int {
+    protected function execute(InputInterface $input, OutputInterface $output): int
+    {
         $limit = (int) $input->getArgument('limit');
         $offset = (int) $input->getArgument('offset');
 
@@ -58,32 +62,31 @@ class AssignGameModesCommand extends Command
             $mode = $query->get();
             $game->mode = GameModeFactory::find($game->modeName, $game->gameType, $gameSystem);
             $output->writeln(
-              'Game: '
-              .$game->code.' '
-              .$gameSystem.' '
-              .str_pad($game->modeName, 16).' ('.$game->gameType->value.') '
-              .str_pad($game->mode->name ?? 'unknown', 20).' '
-              .' DB: '.str_pad(
-                (
-                $mode === null ?
-                  'not found'
-                  : str_pad((string) $mode->id_mode, 2).' '.$mode->name
-                ),
-                22,
-              )
-              .' Class: '.str_pad((string) ($game->mode->id ?? 'NULL'), 4).' '
-              .$game->mode::class
+                'Game: '
+                . $game->code . ' '
+                . $gameSystem . ' '
+                . str_pad($game->modeName, 16) . ' (' . $game->gameType->value . ') '
+                . str_pad($game->mode->name ?? 'unknown', 20) . ' '
+                . ' DB: ' . str_pad(
+                    (
+                    $mode === null ?
+                        'not found'
+                        : str_pad((string)$mode->id_mode, 2) . ' ' . $mode->name
+                    ),
+                    22,
+                )
+                . ' Class: ' . str_pad((string)($game->mode->id ?? 'NULL'), 4) . ' '
+                . $game->mode::class
             );
             if (!$game->save()) {
                 $output->writeln('<error>Failed to save game into DB</error>');
-            }
-            else {
+            } else {
                 $count++;
             }
             unset($game);
         }
 
-        $output->writeln('<info>Done - '.$count.' games</info>');
+        $output->writeln('<info>Done - ' . $count . ' games</info>');
         return self::SUCCESS;
     }
 }

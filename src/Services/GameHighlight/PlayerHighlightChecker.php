@@ -21,5 +21,5 @@ interface PlayerHighlightChecker
      *
      * @return void
      */
-    public function checkPlayer(Player $player, HighlightCollection $highlights) : void;
+    public function checkPlayer(Player $player, HighlightCollection $highlights): void;
 }

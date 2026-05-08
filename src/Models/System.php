@@ -26,7 +26,8 @@ class System extends BaseModel implements Stringable
     public bool $default = false;
     public bool $active = true;
 
-    public static function getDefault(bool $cache = true) : ?System {
+    public static function getDefault(bool $cache = true): ?System
+    {
         return self::query()->where('[default] = 1')->first($cache);
     }
 
@@ -34,7 +35,8 @@ class System extends BaseModel implements Stringable
      * @param  bool  $cache
      * @return System[]
      */
-    public static function getActive(bool $cache = true) : array {
+    public static function getActive(bool $cache = true): array
+    {
         return self::query()->where('active = 1')->get($cache);
     }
 
@@ -43,11 +45,13 @@ class System extends BaseModel implements Stringable
      * @param  bool  $cache
      * @return System[]
      */
-    public static function getForType(SystemType $type, bool $cache = true) : array {
+    public static function getForType(SystemType $type, bool $cache = true): array
+    {
         return self::query()->where('type = %s', $type->value)->get($cache);
     }
 
-    public function __toString() : string {
+    public function __toString(): string
+    {
         return $this->type->value;
     }
 }

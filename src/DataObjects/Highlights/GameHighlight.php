@@ -21,13 +21,15 @@ class GameHighlight implements JsonSerializable
      *                                       value = more important/interesting highlight
      */
     public function __construct(
-      #[OA\Property]
-      public readonly GameHighlightType $type,
-      #[OA\Property]
-      public string                     $value,
-      #[OA\Property]
-      public int                        $rarityScore = self::LOW_RARITY,
-    ) {}
+        #[OA\Property]
+        public readonly GameHighlightType $type,
+        #[OA\Property]
+        public string                     $value,
+        #[OA\Property]
+        public int                        $rarityScore = self::LOW_RARITY,
+    )
+    {
+    }
 
     /**
      * @template G of Game
@@ -35,19 +37,21 @@ class GameHighlight implements JsonSerializable
      * @param  G  $game
      * @return static
      */
-    public static function fromJson(array $data, Game $game) : static {
+    public static function fromJson(array $data, Game $game): static
+    {
         /** @phpstan-ignore new.static */
         return new static(
-          GameHighlightType::from($data['type']),
-          $data['value'],
-          $data['score'],
+            GameHighlightType::from($data['type']),
+            $data['value'],
+            $data['score'],
         );
     }
 
     /**
      * @return array<string,mixed>
      */
-    public function jsonSerialize() : array {
+    public function jsonSerialize(): array
+    {
         return [
           'type'        => $this->type,
           'score'       => $this->rarityScore,
@@ -56,7 +60,8 @@ class GameHighlight implements JsonSerializable
         ];
     }
 
-    public function getDescription() : string {
+    public function getDescription(): string
+    {
         return $this->value;
     }
 }

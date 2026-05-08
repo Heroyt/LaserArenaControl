@@ -29,29 +29,30 @@ class DeathsHighlightChecker implements PlayerHighlightChecker
      *
      * @param  P  $player
      */
-    public function checkPlayer(Player $player, HighlightCollection $highlights) : void {
+    public function checkPlayer(Player $player, HighlightCollection $highlights): void
+    {
         $name = $player->name;
         $gender = GenderService::rankWord($name);
         try {
             if (
-              property_exists($player, 'deathsOwn')
-              && property_exists($player, 'deathsOther')
-              && $player->deathsOwn > $player->deathsOther
-              && $player->game->mode?->isTeam()
+                property_exists($player, 'deathsOwn')
+                && property_exists($player, 'deathsOther')
+                && $player->deathsOwn > $player->deathsOther
+                && $player->game->mode?->isTeam()
             ) {
                 $highlights->add(
-                  new GameHighlight(
-                    GameHighlightType::DEATHS,
-                    sprintf(
-                      lang(
-                                 '%s zasáhlo více spoluhráčů, než protihráčů',
-                        context: 'deaths',
-                        domain : 'highlights'
-                      ),
-                      '@'.$name.'@<'.NameInflectionService::genitive($name).'>'
-                    ),
-                    GameHighlight::VERY_HIGH_RARITY + 20
-                  )
+                    new GameHighlight(
+                        GameHighlightType::DEATHS,
+                        sprintf(
+                            lang(
+                                '%s zasáhlo více spoluhráčů, než protihráčů',
+                                context: 'deaths',
+                                domain: 'highlights'
+                            ),
+                            '@' . $name . '@<' . NameInflectionService::genitive($name) . '>'
+                        ),
+                        GameHighlight::VERY_HIGH_RARITY + 20
+                    )
                 );
             }
         } catch (Throwable) {
@@ -67,40 +68,40 @@ class DeathsHighlightChecker implements PlayerHighlightChecker
 
                 if ($minutes / $gameLength > 0.3) {
                     $highlights->add(
-                      new GameHighlight(
-                        GameHighlightType::DEATHS,
-                        sprintf(
-                          lang(
-                                     match ($gender) {
-                                         Gender::MALE   => '%s strávil %s ve hře vypnutý.',
-                                         Gender::FEMALE => '%s strávila %s ve hře vypnutá.',
-                                         Gender::OTHER  => '%s strávilo %s ve hře vypnuté.',
-                                     }.($minutes / $gameLength > 0.5 ? ' To je víc než polovina hry!' : ''),
-                            context: 'deaths',
-                            domain : 'highlights'
-                          ),
-                          '@'.$name.'@',
-                          sprintf(
-                            lang(
-                              '%d minutu',
-                              '%d minut',
-                              (int) floor($minutes),
-                              'trvání'
-                            ),
-                            floor($minutes)
-                          ).
-                          (
-                          $seconds > 0 ?
-                            ' '.lang('a', context: 'spojka').' '.
+                        new GameHighlight(
+                            GameHighlightType::DEATHS,
                             sprintf(
-                              lang('%d sekundu', '%d sekund', $seconds, 'trvání'),
-                              $seconds
-                            )
-                            : ''
-                          )
-                        ),
-                        (int) (GameHighlight::MEDIUM_RARITY + round(50 * $minutes / $gameLength))
-                      )
+                                lang(
+                                    match ($gender) {
+                                        Gender::MALE => '%s strávil %s ve hře vypnutý.',
+                                        Gender::FEMALE => '%s strávila %s ve hře vypnutá.',
+                                        Gender::OTHER => '%s strávilo %s ve hře vypnuté.',
+                                    } . ($minutes / $gameLength > 0.5 ? ' To je víc než polovina hry!' : ''),
+                                    context: 'deaths',
+                                    domain: 'highlights'
+                                ),
+                                '@' . $name . '@',
+                                sprintf(
+                                    lang(
+                                        '%d minutu',
+                                        '%d minut',
+                                        (int)floor($minutes),
+                                        'trvání'
+                                    ),
+                                    floor($minutes)
+                                ) .
+                                (
+                                $seconds > 0 ?
+                                    ' ' . lang('a', context: 'spojka') . ' ' .
+                                    sprintf(
+                                        lang('%d sekundu', '%d sekund', $seconds, 'trvání'),
+                                        $seconds
+                                    )
+                                    : ''
+                                )
+                            ),
+                            (int)(GameHighlight::MEDIUM_RARITY + round(50 * $minutes / $gameLength))
+                        )
                     );
                 }
             }

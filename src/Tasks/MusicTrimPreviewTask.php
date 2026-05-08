@@ -18,15 +18,19 @@ use Spiral\RoadRunner\Jobs\Task\ReceivedTaskInterface;
 readonly class MusicTrimPreviewTask implements TaskDispatcherInterface
 {
     public function __construct(
-      private FeatureConfig $config,
-      private TaskProducer  $taskProducer,
-    ) {}
+        private FeatureConfig $config,
+        private TaskProducer  $taskProducer,
+    )
+    {
+    }
 
-    public static function getDiName() : string {
+    public static function getDiName(): string
+    {
         return 'task.musicTrimPreview';
     }
 
-    public function process(ReceivedTaskInterface $task, ?TaskPayloadInterface $payload = null) : void {
+    public function process(ReceivedTaskInterface $task, ?TaskPayloadInterface $payload = null): void
+    {
         if ($payload === null) {
             $task->nack('Missing payload');
             return;
@@ -48,9 +52,9 @@ readonly class MusicTrimPreviewTask implements TaskDispatcherInterface
         if ($this->config->isFeatureEnabled('liga')) {
             try {
                 $this->taskProducer->push(
-                  MusicSyncTask::class,
-                  new MusicSyncPayload($music),
-                  new Options(priority: 99)
+                    MusicSyncTask::class,
+                    new MusicSyncPayload($music),
+                    new Options(priority: 99)
                 );
             } catch (JobsException) {
             }

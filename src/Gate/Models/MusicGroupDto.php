@@ -13,10 +13,13 @@ class MusicGroupDto
     private ?Image $backgroundImage = null;
 
     public function __construct(
-      public string $name,
-    ) {}
+        public string $name,
+    )
+    {
+    }
 
-    public function getIcon() : ?Image {
+    public function getIcon(): ?Image
+    {
         if (!isset($this->icon)) {
             foreach ($this->music as $music) {
                 if (isset($music->icon)) {
@@ -28,7 +31,8 @@ class MusicGroupDto
         return $this->icon;
     }
 
-    public function getBackgroundImage() : ?Image {
+    public function getBackgroundImage(): ?Image
+    {
         if (!isset($this->backgroundImage)) {
             foreach ($this->music as $music) {
                 if (isset($music->backgroundImage)) {
@@ -40,9 +44,10 @@ class MusicGroupDto
         return $this->backgroundImage;
     }
 
-    public function getValue() : string {
+    public function getValue(): string
+    {
         if (count($this->music) > 1) {
-            return 'g-'.implode('-', array_map(static fn($music) => $music->id, $this->music));
+            return 'g-' . implode('-', array_map(static fn($music) => $music->id, $this->music));
         }
 
         return (string) $this->music[0]->id;

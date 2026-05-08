@@ -12,10 +12,11 @@ use Lsr\Lg\Results\Interface\Models\GameModeInterface;
 class GameModeProvider implements GameModeProviderInterface
 {
     public function find(
-      string       $name,
-      GameModeType $type = GameModeType::TEAM,
-      string       $system = ''
-    ) : ?GameModeInterface {
+        string       $name,
+        GameModeType $type = GameModeType::TEAM,
+        string       $system = ''
+    ): ?GameModeInterface
+    {
         return GameModeFactory::find($name, $type, $system);
     }
 }

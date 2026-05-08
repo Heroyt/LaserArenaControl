@@ -17,21 +17,25 @@ class CalculateHitsOwnRegressionCommand extends Command
         parent::__construct('regression:hits-own');
     }
 
-    public static function getDefaultName() : ?string {
+    public static function getDefaultName(): ?string
+    {
         return 'regression:hits-own';
     }
 
-    public static function getDefaultDescription() : ?string {
+    public static function getDefaultDescription(): ?string
+    {
         return 'Calculate teammate hits regression.';
     }
 
-    protected function configure() : void {
+    protected function configure(): void
+    {
         $this->addOption('teammates', 't', InputOption::VALUE_OPTIONAL, 'Teammate count', 5);
         $this->addOption('enemies', 'e', InputOption::VALUE_OPTIONAL, 'Enemy count', 5);
         $this->addOption('length', 'l', InputOption::VALUE_OPTIONAL, 'Game\'s length', 15);
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output) : int {
+    protected function execute(InputInterface $input, OutputInterface $output): int
+    {
         $teammates = (int) $input->getOption('teammates');
         $enemies = (int) $input->getOption('enemies');
         $length = (int) $input->getOption('length');
@@ -41,7 +45,7 @@ class CalculateHitsOwnRegressionCommand extends Command
         $expected = RegressionCalculator::calculateRegressionPrediction([$teammates, $enemies, $length], $model);
 
         $output->writeln(
-          Colors::color(ForegroundColors::GREEN).'Prediction: '.$expected.' hits'.Colors::reset()
+            Colors::color(ForegroundColors::GREEN) . 'Prediction: ' . $expected . ' hits' . Colors::reset()
         );
         return self::SUCCESS;
     }

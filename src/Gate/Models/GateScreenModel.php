@@ -41,9 +41,10 @@ class GateScreenModel extends BaseModel
     private ?GateSettings $settings = null;
 
     public static function createFromScreen(
-      GateScreen        $screen,
-      ScreenTriggerType $trigger = ScreenTriggerType::DEFAULT
-    ) : GateScreenModel {
+        GateScreen        $screen,
+        ScreenTriggerType $trigger = ScreenTriggerType::DEFAULT
+    ): GateScreenModel
+    {
         $model = new self();
         $model->setScreen($screen)->setTrigger($trigger);
         if ($screen instanceof WithSettings) {
@@ -52,12 +53,14 @@ class GateScreenModel extends BaseModel
         return $model;
     }
 
-    public function setTrigger(ScreenTriggerType $trigger) : GateScreenModel {
+    public function setTrigger(ScreenTriggerType $trigger): GateScreenModel
+    {
         $this->trigger = $trigger;
         return $this;
     }
 
-    public function getSettings() : ?GateSettings {
+    public function getSettings(): ?GateSettings
+    {
         if (!isset($this->settings) && isset($this->settingsSerialized)) {
             $settings = $this->unserializeSettings($this->settingsSerialized);
             $this->settings = $settings === false ? null : $settings;
@@ -65,7 +68,8 @@ class GateScreenModel extends BaseModel
         return $this->settings;
     }
 
-    public function setSettings(GateSettings $settings) : GateScreenModel {
+    public function setSettings(GateSettings $settings): GateScreenModel
+    {
         $this->settings = $settings;
         $this->settingsSerialized = igbinary_serialize($settings);
         return $this;
@@ -82,7 +86,8 @@ class GateScreenModel extends BaseModel
      *     triggerValue:string|null
      * }
      */
-    public function __serialize() : array {
+    public function __serialize(): array
+    {
         return [
           'id'                  => $this->id,
           'gate'                => isset($this->gate) ? $this->gate->id : null,
@@ -99,7 +104,8 @@ class GateScreenModel extends BaseModel
      * @return void
      * @throws ModelNotFoundException
      */
-    public function __unserialize(array $data) : void {
+    public function __unserialize(array $data): void
+    {
         if (isset($data['gate'])) {
             $this->gate = GateType::get($data['gate']);
         }
@@ -111,7 +117,8 @@ class GateScreenModel extends BaseModel
         $this->trigger = $data['trigger'];
     }
 
-    public function getScreen() : GateScreen {
+    public function getScreen(): GateScreen
+    {
         if (!isset($this->screen)) {
             $screen = App::getService($this->screenSerialized);
             assert($screen instanceof GateScreen);
@@ -123,28 +130,33 @@ class GateScreenModel extends BaseModel
         return $this->screen;
     }
 
-    public function setScreen(GateScreen $screen) : GateScreenModel {
+    public function setScreen(GateScreen $screen): GateScreenModel
+    {
         $this->screen = $screen;
         $this->screenSerialized = $screen::getDiKey();
         return $this;
     }
 
-    public function setGate(GateType $gate) : GateScreenModel {
+    public function setGate(GateType $gate): GateScreenModel
+    {
         $this->gate = $gate;
         return $this;
     }
 
-    public function setOrder(int $order) : GateScreenModel {
+    public function setOrder(int $order): GateScreenModel
+    {
         $this->order = $order;
         return $this;
     }
 
-    public function setScreenSerialized(string $screenSerialized) : GateScreenModel {
+    public function setScreenSerialized(string $screenSerialized): GateScreenModel
+    {
         $this->screenSerialized = $screenSerialized;
         return $this;
     }
 
-    public function setSettingsSerialized(?string $settingsSerialized) : GateScreenModel {
+    public function setSettingsSerialized(?string $settingsSerialized): GateScreenModel
+    {
         $this->settingsSerialized = $settingsSerialized;
         return $this;
     }
@@ -190,18 +202,20 @@ class GateScreenModel extends BaseModel
         );
     }
 
-    public function setTriggerValue(?string $triggerValue) : GateScreenModel {
+    public function setTriggerValue(?string $triggerValue): GateScreenModel
+    {
         $this->triggerValue = $triggerValue;
         return $this;
     }
 
     #[AfterUpdate, AfterInsert, AfterDelete]
-    public function clearCache() : void {
+    public function clearCache(): void
+    {
         if (isset($this->gate)) {
             /** @var Cache $cache */
             $cache = App::getService('cache');
-            $cache->remove('gateType.'.$this->gate->id.'.screens');
-            $cache->clean([$cache::Tags => [$this->gate::TABLE.'/'.$this->gate->id.'/relations',]]);
+            $cache->remove('gateType.' . $this->gate->id . '.screens');
+            $cache->clean([$cache::Tags => [$this->gate::TABLE . '/' . $this->gate->id . '/relations',]]);
         }
         parent::clearCache();
     }

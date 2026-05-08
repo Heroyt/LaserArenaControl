@@ -21,10 +21,11 @@ class GameLoader
      *
      * @return array<string, string|numeric> Metadata
      */
-    public function loadGame(string | int | System $system, array $data) : array {
+    public function loadGame(string|int|System $system, array $data): array
+    {
         $loader = $this->findGameLoader($system);
         if (!isset($loader)) {
-            throw new InvalidArgumentException('Cannot find loader for system - '.$system);
+            throw new InvalidArgumentException('Cannot find loader for system - ' . $system);
         }
 
         return $loader->loadGame($data);
@@ -37,11 +38,11 @@ class GameLoader
      *
      * @return LoaderInterface|null
      */
-    private function findGameLoader(string | int | System $system) : ?LoaderInterface {
+    private function findGameLoader(string|int|System $system): ?LoaderInterface
+    {
         if (is_numeric($system)) {
             $system = System::get((int) $system);
-        }
-        elseif (is_string($system)) {
+        } elseif (is_string($system)) {
             $type = SystemType::tryFrom($system);
             if ($type === null) {
                 throw new InvalidArgumentException('Invalid system type');
@@ -57,7 +58,7 @@ class GameLoader
         $systemStr = $system->type->value;
 
         try {
-            $loader = App::getService($systemStr.'.gameLoader');
+            $loader = App::getService($systemStr . '.gameLoader');
             assert($loader instanceof LoaderInterface);
             $loader->system = $system;
             $this->loaders[$systemStr] ??= $loader;

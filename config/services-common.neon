@@ -117,6 +117,11 @@ services:
 	playersSynchronization: App\Services\LaserLiga\PlayerSynchronizationService
 
 	gamesImport: App\Services\ImportService
+	resultFileImporter: App\Services\ResultFileImporter
+	resultFileImportFinalizer: App\Services\ResultFileImportFinalizer
+	resultFileImportStateRepository: App\Services\ResultFileImportStateRepository
+	resultFileVersionFactory: App\Services\ResultFileVersionFactory
+	resultsDirectoryScanner: App\Services\ResultsDirectoryScanner
 	gamesLoad: App\Tools\GameLoading\GameLoader
 	gameModeProvider: App\Services\GameModeProvider
 

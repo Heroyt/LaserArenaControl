@@ -15,26 +15,30 @@ class LaserMaxxZakladnyResultsScreen extends AbstractResultsScreen
     /**
      * @inheritDoc
      */
-    public static function getName() : string {
+    public static function getName(): string
+    {
         return lang('LaserMaxx výsledky z módu Základny', context: 'screens', domain: 'gate');
     }
 
-    public static function getDescription() : string {
+    public static function getDescription(): string
+    {
         return lang(
-                   'Obrazovka zobrazující výsledky LaserMaxx z módu Základny.',
-          context: 'screens.description',
-          domain : 'gate'
+            'Obrazovka zobrazující výsledky LaserMaxx z módu Základny.',
+            context: 'screens.description',
+            domain: 'gate'
         );
     }
 
     /**
      * @inheritDoc
      */
-    public static function getDiKey() : string {
+    public static function getDiKey(): string
+    {
         return 'gate.screens.results.lasermaxx.zakladny';
     }
 
-    public function isActive() : bool {
+    public function isActive(): bool
+    {
         try {
             return parent::isActive() && $this->game?->mode instanceof Zakladny;
         } catch (GameModeNotFoundException) {
@@ -45,7 +49,8 @@ class LaserMaxxZakladnyResultsScreen extends AbstractResultsScreen
     /**
      * @inheritDoc
      */
-    public function run() : ResponseInterface {
+    public function run(): ResponseInterface
+    {
         $game = $this->game;
 
         if (!isset($game)) {
@@ -57,12 +62,12 @@ class LaserMaxxZakladnyResultsScreen extends AbstractResultsScreen
         }
 
         return $this->view(
-          'gate/screens/results/lasermaxxZakladny',
-          [
+            'gate/screens/results/lasermaxxZakladny',
+            [
             'game'   => $game,
             'mode'   => $game->mode,
             'addCss' => ['gate/resultsZakladny.css'],
-          ]
+            ]
         );
     }
 }

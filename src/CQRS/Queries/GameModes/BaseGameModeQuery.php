@@ -17,7 +17,8 @@ readonly final class BaseGameModeQuery implements QueryInterface
      * @return iterable<BaseGameModeRow>
      * @throws Exception
      */
-    public function get() : iterable {
+    public function get(): iterable
+    {
         return $this->query->fetchAllDto(BaseGameModeRow::class, cache: $this->cache);
     }
 }

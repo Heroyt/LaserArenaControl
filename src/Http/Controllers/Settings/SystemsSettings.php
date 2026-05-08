@@ -23,10 +23,13 @@ use Psr\Http\Message\ResponseInterface;
 class SystemsSettings extends Controller
 {
     public function __construct(
-      private readonly Mapper $mapper
-    ) {}
+        private readonly Mapper $mapper
+    )
+    {
+    }
 
-    public function show() : ResponseInterface {
+    public function show(): ResponseInterface
+    {
         $this->params = new SystemsSettingsParameters($this->params);
 
         $this->params->systems = System::getAll();
@@ -61,20 +64,21 @@ class SystemsSettings extends Controller
         return $this->view('pages/settings/systems');
     }
 
-    public function create(Request $request) : ResponseInterface {
+    public function create(Request $request): ResponseInterface
+    {
         try {
             $data = new RequestValidationMapper($this->mapper)->setRequest($request)->mapBodyToObject(
-              CreateSystemData::class
+                CreateSystemData::class
             );
         } catch (ValidationException $e) {
             return $this->respond(
-              new ErrorResponse(
-                           lang('Chyba při validaci dat'),
-                           ErrorType::VALIDATION,
-                           $e->getMessage(),
-                exception: $e,
-              ),
-              400
+                new ErrorResponse(
+                    lang('Chyba při validaci dat'),
+                    ErrorType::VALIDATION,
+                    $e->getMessage(),
+                    exception: $e,
+                ),
+                400
             );
         }
 
@@ -84,8 +88,8 @@ class SystemsSettings extends Controller
 
         if (!$system->save()) {
             return $this->respond(
-              new ErrorResponse(lang('Chyba při ukládání systému'), ErrorType::DATABASE),
-              500
+                new ErrorResponse(lang('Chyba při ukládání systému'), ErrorType::DATABASE),
+                500
             );
         }
 
@@ -106,20 +110,21 @@ class SystemsSettings extends Controller
         return $this->redirect('settings-systems');
     }
 
-    public function save(Request $request) : ResponseInterface {
+    public function save(Request $request): ResponseInterface
+    {
         try {
             $data = new RequestValidationMapper($this->mapper)->setRequest($request)->mapBodyToObject(
-              SaveSystemsData::class
+                SaveSystemsData::class
             );
         } catch (ValidationException $e) {
             return $this->respond(
-              new ErrorResponse(
-                           lang('Chyba při validaci dat'),
-                           ErrorType::VALIDATION,
-                           $e->getMessage(),
-                exception: $e,
-              ),
-              400
+                new ErrorResponse(
+                    lang('Chyba při validaci dat'),
+                    ErrorType::VALIDATION,
+                    $e->getMessage(),
+                    exception: $e,
+                ),
+                400
             );
         }
 
@@ -128,13 +133,13 @@ class SystemsSettings extends Controller
                 $system = System::get((int) $id);
             } catch (ModelNotFoundException $e) {
                 return $this->respond(
-                  new ErrorResponse(
-                               lang('Systém neexistuje'),
-                               ErrorType::NOT_FOUND,
-                               $e->getMessage(),
-                    exception: $e,
-                  ),
-                  404
+                    new ErrorResponse(
+                        lang('Systém neexistuje'),
+                        ErrorType::NOT_FOUND,
+                        $e->getMessage(),
+                        exception: $e,
+                    ),
+                    404
                 );
             }
 
@@ -151,8 +156,8 @@ class SystemsSettings extends Controller
 
             if (!$system->save()) {
                 return $this->respond(
-                  new ErrorResponse(lang('Chyba při ukládání systému'), ErrorType::DATABASE),
-                  500
+                    new ErrorResponse(lang('Chyba při ukládání systému'), ErrorType::DATABASE),
+                    500
                 );
             }
             $system->clearCache();
@@ -163,13 +168,13 @@ class SystemsSettings extends Controller
                 $vest = Vest::get($id);
             } catch (ModelNotFoundException $e) {
                 return $this->respond(
-                  new ErrorResponse(
-                               lang('Vesta neexistuje'),
-                               ErrorType::NOT_FOUND,
-                               $e->getMessage(),
-                    exception: $e,
-                  ),
-                  404
+                    new ErrorResponse(
+                        lang('Vesta neexistuje'),
+                        ErrorType::NOT_FOUND,
+                        $e->getMessage(),
+                        exception: $e,
+                    ),
+                    404
                 );
             }
 
@@ -182,8 +187,8 @@ class SystemsSettings extends Controller
 
             if (!$vest->save()) {
                 return $this->respond(
-                  new ErrorResponse(lang('Chyba při ukládání vesty'), ErrorType::DATABASE),
-                  500
+                    new ErrorResponse(lang('Chyba při ukládání vesty'), ErrorType::DATABASE),
+                    500
                 );
             }
             $vest->clearCache();
@@ -195,7 +200,8 @@ class SystemsSettings extends Controller
         return $this->redirect('settings-systems');
     }
 
-    public function addVests(System $system, Request $request) : ResponseInterface {
+    public function addVests(System $system, Request $request): ResponseInterface
+    {
         $count = (int) $request->getPost('count');
 
         $systemCount = Vest::getVestCount($system);
@@ -217,7 +223,8 @@ class SystemsSettings extends Controller
         return $this->redirect('settings-systems');
     }
 
-    public function deleteVest(Vest $vest, Request $request) : ResponseInterface {
+    public function deleteVest(Vest $vest, Request $request): ResponseInterface
+    {
         $vest->delete();
         Vest::clearModelCache();
 

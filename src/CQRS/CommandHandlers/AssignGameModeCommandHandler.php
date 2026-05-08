@@ -21,13 +21,16 @@ use Throwable;
 final readonly class AssignGameModeCommandHandler implements CommandHandlerInterface
 {
     public function __construct(
-      private CommandBus $commandBus,
-    ) {}
+        private CommandBus $commandBus,
+    )
+    {
+    }
 
     /**
      * @param  AssignGameModeCommand  $command
      */
-    public function handle(CommandInterface $command) : AssignGameModeCommandResponse {
+    public function handle(CommandInterface $command): AssignGameModeCommandResponse
+    {
         // Refresh game
         $game = $command->game;
         try {
@@ -41,14 +44,14 @@ final readonly class AssignGameModeCommandHandler implements CommandHandlerInter
         if ($command->mode !== null) {
             // Validate game mode system
             if (
-              !array_any(
-                $command->mode->allowedSystems,
-                fn(System $system) => $system->type->value === $game::SYSTEM
-              )
+                !array_any(
+                    $command->mode->allowedSystems,
+                    fn(System $system) => $system->type->value === $game::SYSTEM
+                )
             ) {
                 return new AssignGameModeCommandResponse(
-                  false,
-                  'Given game mode does not support the game\'s system ('.$game::SYSTEM.')'
+                    false,
+                    'Given game mode does not support the game\'s system (' . $game::SYSTEM . ')'
                 );
             }
 
@@ -72,8 +75,7 @@ final readonly class AssignGameModeCommandHandler implements CommandHandlerInter
             }
 
             $game->mode = $command->mode;
-        }
-        else {
+        } else {
             // Find mode by name
             try {
                 $game->mode = GameModeFactory::findByName($game->modeName, $game->gameType, $game::SYSTEM);
@@ -94,8 +96,7 @@ final readonly class AssignGameModeCommandHandler implements CommandHandlerInter
         if ($previousGameType !== $game->gameType) {
             // If the game type has changed, recalculate scores synchronously
             $this->commandBus->dispatch(new RecalculateScoresCommand($game));
-        }
-        else {
+        } else {
             $this->commandBus->dispatchAsync(new RecalculateScoresCommand($game));
         }
 

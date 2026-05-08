@@ -31,9 +31,11 @@ class Results extends Controller
     protected string $description = '';
 
     public function __construct(
-      private readonly ResultPrintService $printService,
-      private readonly Metrics            $metrics,
-    ) {}
+        private readonly ResultPrintService $printService,
+        private readonly Metrics            $metrics,
+    )
+    {
+    }
 
     /**
      * @param  Request  $request
@@ -43,7 +45,8 @@ class Results extends Controller
      * @throws Throwable
      * @throws ValidationException
      */
-    public function show(Request $request) : ResponseInterface {
+    public function show(Request $request): ResponseInterface
+    {
         $rows = GameFactory::queryGames(true)->orderBy('start')->desc()->limit(10)->fetchAll(cache: false);
         if (count($rows) === 0) {
             return $this->view('pages/results/noGames');
@@ -67,10 +70,10 @@ class Results extends Controller
             $this->params['games'][] = GameFactory::getByCode($row->code);
         }
         usort(
-          $this->params['games'],
-          static function (?Game $game1, ?Game $game2) {
-              return $game2?->start?->getTimestamp() - $game1?->start?->getTimestamp();
-          }
+            $this->params['games'],
+            static function (?Game $game1, ?Game $game2) {
+                return $game2?->start?->getTimestamp() - $game1?->start?->getTimestamp();
+            }
         );
         if (!isset($this->params['selected'])) {
             $this->params['selected'] = $this->params['games'][0] ?? null;
@@ -94,12 +97,13 @@ class Results extends Controller
      * @throws TemplateDoesNotExistException
      */
     public function printGame(
-      Request $request,
-      string  $code = '',
-      int     $copies = 1,
-      string  $template = 'default',
-      ?int    $style = null
-    ) : ResponseInterface {
+        Request $request,
+        string  $code = '',
+        int     $copies = 1,
+        string  $template = 'default',
+        ?int    $style = null
+    ): ResponseInterface
+    {
         $copies = max(1, $copies);
         $style ??= PrintStyle::getActiveStyleId();
         $cache = !($request->getGet('nocache', 0));
@@ -124,15 +128,15 @@ class Results extends Controller
                     return $this->respond(new ErrorResponse('Cannot read PDF file'), 500);
                 }
                 return new Response(
-                  200,
-                  ['Content-Type' => 'application/pdf;filename=results.pdf'],
-                  $file
+                    200,
+                    ['Content-Type' => 'application/pdf;filename=results.pdf'],
+                    $file
                 );
             }
         }
         Debugger::$showBar = (bool) $request->getGet('tracy', 0);
         return $this->respond(
-          $this->printService->getResultsHtml($game, $style, $template, $copies, $cache)
+            $this->printService->getResultsHtml($game, $style, $template, $copies, $cache)
         );
     }
 }

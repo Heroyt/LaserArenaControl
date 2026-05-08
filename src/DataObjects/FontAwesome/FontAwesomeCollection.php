@@ -2498,8 +2498,10 @@ class FontAwesomeCollection
      * @param  string[]  $brands
      */
     public function __construct(
-      public array $solid = [],
-      public array $regular = [],
-      public array $brands = [],
-    ) {}
+        public array $solid = [],
+        public array $regular = [],
+        public array $brands = [],
+    )
+    {
+    }
 }

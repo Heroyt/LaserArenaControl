@@ -43,17 +43,18 @@ class E403 extends Controller implements HttpErrorHandler
      */
     protected string $description = 'Access denied';
 
-    public function showError(Request $request, ?Throwable $error = null) : ResponseInterface {
+    public function showError(Request $request, ?Throwable $error = null): ResponseInterface
+    {
         $this->init($request);
         if (str_contains($request->getHeaderLine('Accept'), 'application/json')) {
             return $this->respond(
-              new ErrorResponse(
-                           'Access denied',
-                type     : ErrorType::ACCESS,
-                detail   : $error?->getMessage(),
-                exception: $error
-              ),
-              403
+                new ErrorResponse(
+                    'Access denied',
+                    type: ErrorType::ACCESS,
+                    detail: $error?->getMessage(),
+                    exception: $error
+                ),
+                403
             );
         }
         if (str_contains($request->getHeaderLine('Accept'), 'text/html')) {
@@ -63,9 +64,9 @@ class E403 extends Controller implements HttpErrorHandler
         }
 
         return $this->respond(
-          'Access denied - '.($error?->getMessage() ?? 'unknown error'),
-          403,
-          ['Content-Type' => 'text/plain']
+            'Access denied - ' . ($error?->getMessage() ?? 'unknown error'),
+            403,
+            ['Content-Type' => 'text/plain']
         );
     }
 }

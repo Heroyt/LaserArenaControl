@@ -33,7 +33,8 @@ class TrophyHighlightChecker implements PlayerHighlightChecker
      * @throws GameModeNotFoundException
      * @throws Throwable
      */
-    public function checkPlayer(Player $player, HighlightCollection $highlights) : void {
+    public function checkPlayer(Player $player, HighlightCollection $highlights): void
+    {
         foreach (PlayerTrophy::SPECIAL_TROPHIES as $trophy) {
             try {
                 if ($player->trophy->check($trophy)) {
@@ -64,11 +65,11 @@ class TrophyHighlightChecker implements PlayerHighlightChecker
                             break;
                     }
                     $highlights->add(
-                      new TrophyHighlight(
-                        $trophy,
-                        $player,
-                        (int) $rarity
-                      )
+                        new TrophyHighlight(
+                            $trophy,
+                            $player,
+                            (int)$rarity
+                        )
                     );
                 }
             } catch (ModelNotFoundException | ValidationException | DirectoryCreationException) {

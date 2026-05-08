@@ -26,33 +26,38 @@ class ResultsScreen extends GateScreen implements ResultsScreenInterface
     /**
      * @inheritDoc
      */
-    public static function getName() : string {
+    public static function getName(): string
+    {
         return lang('Výsledky ze hry', context: 'screens', domain: 'gate');
     }
 
-    public static function getDescription() : string {
+    public static function getDescription(): string
+    {
         return lang(
-                   'Obrazovka zobrazující výsledky z her. Automaticky vybírá zobrazení podle herního módu.',
-          context: 'screens.description',
-          domain : 'gate'
+            'Obrazovka zobrazující výsledky z her. Automaticky vybírá zobrazení podle herního módu.',
+            context: 'screens.description',
+            domain: 'gate'
         );
     }
 
     /**
      * @inheritDoc
      */
-    public static function getSettingsForm() : string {
+    public static function getSettingsForm(): string
+    {
         return 'gate/settings/results.latte';
     }
 
     /**
      * @inheritDoc
      */
-    public static function buildSettingsFromForm(array $data) : GateSettings {
+    public static function buildSettingsFromForm(array $data): GateSettings
+    {
         return new ResultsSettings(isset($data['time']) ? (int) $data['time'] : null);
     }
 
-    public function isActive() : bool {
+    public function isActive(): bool
+    {
         $game = $this->game;
         if (!isset($game)) {
             return false;
@@ -76,7 +81,8 @@ class ResultsScreen extends GateScreen implements ResultsScreenInterface
      * @return ResultsScreenInterface
      * @throws GameModeNotFoundException
      */
-    private function getChildScreen() : ResultsScreenInterface {
+    private function getChildScreen(): ResultsScreenInterface
+    {
         if (isset($this->childScreen)) {
             return $this->childScreen;
         }
@@ -112,7 +118,7 @@ class ResultsScreen extends GateScreen implements ResultsScreenInterface
         if (!isset($this->childScreen)) {
             $screen = match ($system) {
                 'evo5', 'evo6' => App::getService('gate.screens.results.lasermaxx.rankable'),
-                default        => throw new Exception('Cannot find results screen for system '.$system),
+                default => throw new Exception('Cannot find results screen for system ' . $system),
             };
             assert($screen instanceof ResultsScreenInterface);
             $this->childScreen = $screen;
@@ -129,14 +135,16 @@ class ResultsScreen extends GateScreen implements ResultsScreenInterface
     /**
      * @inheritDoc
      */
-    public static function getDiKey() : string {
+    public static function getDiKey(): string
+    {
         return 'gate.screens.results';
     }
 
     /**
      * @inheritDoc
      */
-    public function run() : ResponseInterface {
+    public function run(): ResponseInterface
+    {
         $game = $this->game;
 
         if (!isset($game)) {
@@ -151,15 +159,15 @@ class ResultsScreen extends GateScreen implements ResultsScreenInterface
         }
 
         return $screen->run()
-                      ->withAddedHeader('X-Screen', $screen::getDiKey().' - '.$screen::class)
+            ->withAddedHeader('X-Screen', $screen::getDiKey() . ' - ' . $screen::class)
                       ->withAddedHeader(
-                        'X-GameMode',
-                        $game->mode === null ? 'Unknown' :
-                          $game->mode->getName().' - '.$game->mode::class
+                          'X-GameMode',
+                          $game->mode === null ? 'Unknown' :
+                              $game->mode->getName() . ' - ' . $game->mode::class
                       )
                       ->withAddedHeader(
-                        'X-GameMode-CustomResults',
-                        $game->mode instanceof CustomResultsMode ? 'Yes' : 'No'
+                          'X-GameMode-CustomResults',
+                          $game->mode instanceof CustomResultsMode ? 'Yes' : 'No'
                       );
     }
 }

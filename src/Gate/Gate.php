@@ -29,7 +29,9 @@ class Gate
 
     private ?int $tmpResultsTime = null;
 
-    public function __construct(readonly private Config $config) {}
+    public function __construct(readonly private Config $config)
+    {
+    }
 
     /**
      * Get an active screen for set gate and system.
@@ -41,7 +43,8 @@ class Gate
      * @throws Throwable
      * @throws ValidationException
      */
-    public function getCurrentScreen(GateType $gate, string $system = 'all') : GateScreen {
+    public function getCurrentScreen(GateType $gate, string $system = 'all'): GateScreen
+    {
         $screens = $gate->screens;
 
         /** @var CustomEventDto|null $customEvent */
@@ -71,14 +74,14 @@ class Gate
 
         foreach ($screens as $screenModel) {
             if (
-              $screenModel->trigger === $activeGateType
-              && (
+                $screenModel->trigger === $activeGateType
+                && (
                 (
                   $activeGateType === ScreenTriggerType::CUSTOM
                   && $screenModel->triggerValue === $customEvent?->event
                 )
                 || $activeGateType !== ScreenTriggerType::CUSTOM
-              )
+                )
             ) {
                 $screen = $screenModel->getScreen()
                                       ->setGame($game)
@@ -99,8 +102,7 @@ class Gate
                 if ($screen->isActive()) {
                     return $screen;
                 }
-            }
-            else {
+            } else {
                 if ($screenModel->trigger === ScreenTriggerType::DEFAULT) {
                     $defaultScreen = $screenModel->getScreen()->setGame($game)->setSystems($systems);
                     $settings = $screenModel->getSettings();
@@ -116,7 +118,7 @@ class Gate
             return $defaultScreen;
         }
 
-        throw new RuntimeException('No valid screen found to display. '.count($screens));
+        throw new RuntimeException('No valid screen found to display. ' . count($screens));
     }
 
     /**
@@ -128,7 +130,8 @@ class Gate
      * @throws Throwable
      * @phpstan-ignore missingType.generics
      */
-    public function getActiveGame(string $system = 'all') : ?Game {
+    public function getActiveGame(string $system = 'all'): ?Game
+    {
         $systems = [$system];
         if ($system === 'all') {
             $systems = GameFactory::getSupportedSystems();
@@ -149,14 +152,15 @@ class Gate
         }
 
         foreach ($systems as $checkSystem) {
-            $startedSystem = Info::get($checkSystem.'-game-started', useCache: false);
-            if ($startedSystem instanceof Game && $startedSystem->isStarted() && $startedSystem->start->getTimestamp(
-              ) > $maxTime) {
+            $startedSystem = Info::get($checkSystem . '-game-started', useCache: false);
+            if (
+                $startedSystem instanceof Game && $startedSystem->isStarted() && $startedSystem->start->getTimestamp() > $maxTime
+            ) {
                 $maxGame = $startedSystem;
                 $maxTime = $startedSystem->start->getTimestamp();
             }
 
-            $loadedSystem = Info::get($checkSystem.'-game-loaded', useCache: false);
+            $loadedSystem = Info::get($checkSystem . '-game-loaded', useCache: false);
             if ($loadedSystem instanceof Game && $loadedSystem->fileTime?->getTimestamp() > $maxTime) {
                 $maxGame = $loadedSystem;
                 $maxTime = $loadedSystem->fileTime->getTimestamp();
@@ -173,9 +177,10 @@ class Gate
         return $maxGame;
     }
 
-    private function getTmpResultsTime() : int {
+    private function getTmpResultsTime(): int
+    {
         $this->tmpResultsTime ??= (int) ($this->config->getConfig(
-          'ENV'
+            'ENV'
         )['TMP_GAME_RESULTS_TIME'] ?? Constants::TMP_GAME_RESULTS_TIME);
         return $this->tmpResultsTime;
     }

@@ -29,14 +29,15 @@ trait NewGameTrait
     protected array $decorators = [];
 
     public function __construct(
-      private readonly FeatureConfig $featureConfig,
-      private readonly SessionInterface $session,
+        private readonly FeatureConfig    $featureConfig,
+        private readonly SessionInterface $session,
     ) {
 
         $this->params = new NewGameParams();
     }
 
-    protected function baseInit(RequestInterface $request) : void {
+    protected function baseInit(RequestInterface $request): void
+    {
         /** @var array<string, mixed> $decorators */
         $decorators = App::getContainer()->findByTag('newGameDecorator');
         bdump($decorators);
@@ -48,7 +49,8 @@ trait NewGameTrait
         }
     }
 
-    protected function initMusicGroups() : void {
+    protected function initMusicGroups(): void
+    {
         $this->params->musicGroups = [];
         foreach ($this->params->musicModes as $music) {
             if (!$music->public) {
@@ -60,7 +62,8 @@ trait NewGameTrait
         }
     }
 
-    protected function initNewGameParams(Request $request) : void {
+    protected function initNewGameParams(Request $request): void
+    {
         $this->hookedTemplates = new HookedTemplates();
         $this->params->addedTemplates = $this->hookedTemplates;
         $this->params->featureConfig = $this->featureConfig;
@@ -73,19 +76,17 @@ trait NewGameTrait
         }
         if ($systemId === null) {
             $this->params->system = System::getDefault();
-        }
-        else {
+        } else {
             if (is_numeric($systemId)) {
                 try {
                     $this->params->system = System::get((int) $systemId);
                 } catch (ModelNotFoundException) {
                     $this->params->system = System::getDefault();
                 }
-            }
-            else {
+            } else {
                 $this->params->system = array_find(
-                  $this->params->systems,
-                  static fn(System $system) => $system->type->value === $systemId
+                    $this->params->systems,
+                    static fn(System $system) => $system->type->value === $systemId
                 );
             }
         }

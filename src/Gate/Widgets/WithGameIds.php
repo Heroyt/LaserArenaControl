@@ -24,9 +24,9 @@ trait WithGameIds
             if (!isset($this->rankableModeIds)) {
                 /** @var int[] $rows */
                 $rows = DB::select(AbstractMode::TABLE, 'id_mode')
-                          ->where('[rankable] = true')
-                          ->cacheTags(AbstractMode::TABLE)
-                          ->fetchPairs();
+                    ->where('[rankable] = true')
+                    ->cacheTags(AbstractMode::TABLE)
+                    ->fetchPairs();
                 $this->rankableModeIds = $rows;
             }
             return $this->rankableModeIds;
@@ -34,14 +34,15 @@ trait WithGameIds
     }
 
     public function getGameIds(
-      ?DateTimeInterface $dateFrom = null,
-      ?DateTimeInterface $dateTo = null,
-      ?array $systems = [],
-      bool   $rankableOnly = false,
-    ) : array {
+        ?DateTimeInterface $dateFrom = null,
+        ?DateTimeInterface $dateTo = null,
+        ?array             $systems = [],
+        bool               $rankableOnly = false,
+    ): array
+    {
         if (
-          ($rankableOnly && $this->gameIds['rankable'] === null)
-          || (!$rankableOnly && $this->gameIds['all'] === null)
+            ($rankableOnly && $this->gameIds['rankable'] === null)
+            || (!$rankableOnly && $this->gameIds['all'] === null)
         ) {
             $gameIds = [];
             $dateFrom ??= new DateTimeImmutable();
@@ -64,8 +65,7 @@ trait WithGameIds
 
             if ($rankableOnly) {
                 $this->gameIds['rankable'] = $gameIds;
-            }
-            else {
+            } else {
                 $this->gameIds['all'] = $gameIds;
             }
         }
@@ -77,7 +77,8 @@ trait WithGameIds
         return $this->gameIds['all'];
     }
 
-    public function setGameIds(?array $gameIds) : static {
+    public function setGameIds(?array $gameIds): static
+    {
         // Reset all game IDs if null is provided
         if ($gameIds === null) {
             $this->gameIds = [

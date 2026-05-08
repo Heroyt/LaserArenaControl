@@ -13,23 +13,26 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class DeduplicateCommand extends Command
 {
-    public static function getDefaultName() : ?string {
+    public static function getDefaultName(): ?string
+    {
         return 'games:deduplicate';
     }
 
-    public static function getDefaultDescription() : ?string {
+    public static function getDefaultDescription(): ?string
+    {
         return 'Remove duplicate games and players.';
     }
 
-    public function execute(InputInterface $input, OutputInterface $output) : int {
+    public function execute(InputInterface $input, OutputInterface $output): int
+    {
         DB::getConnection()->begin();
 
         foreach (GameFactory::getSupportedSystems() as $system) {
             $output->writeln(sprintf('Checking games for system <info>%s</info>', $system));
 
             $games = DB::select(
-              $system.'_games',
-              'GROUP_CONCAT([id_game]) as [ids], COUNT(*) as [count]'
+                $system . '_games',
+                'GROUP_CONCAT([id_game]) as [ids], COUNT(*) as [count]'
             )
                        ->groupBy('start')
                        ->having('[count] > 1')
@@ -47,17 +50,17 @@ class DeduplicateCommand extends Command
 
             try {
                 $output->writeln(sprintf('Removing %d duplicate games', count($removeIds)));
-                DB::delete($system.'_games', ['id_game IN %in', $removeIds]);
+                DB::delete($system . '_games', ['id_game IN %in', $removeIds]);
             } catch (Exception $e) {
-                $output->writeln('<error>'.$e->getMessage().'</error>');
+                $output->writeln('<error>' . $e->getMessage() . '</error>');
                 DB::getConnection()->rollback();
                 return self::FAILURE;
             }
 
             $output->writeln(sprintf('Checking players for system <info>%s</info>', $system));
             $players = DB::select(
-              $system.'_players',
-              'GROUP_CONCAT([id_player]) as [ids], COUNT(*) as [count]'
+                $system . '_players',
+                'GROUP_CONCAT([id_player]) as [ids], COUNT(*) as [count]'
             )
                          ->groupBy('id_game, vest')
                          ->having('[count] > 1')
@@ -75,9 +78,9 @@ class DeduplicateCommand extends Command
 
             try {
                 $output->writeln(sprintf('Removing %d duplicate players', count($removeIds)));
-                DB::delete($system.'_players', ['id_player IN %in', $removeIds]);
+                DB::delete($system . '_players', ['id_player IN %in', $removeIds]);
             } catch (Exception $e) {
-                $output->writeln('<error>'.$e->getMessage().'</error>');
+                $output->writeln('<error>' . $e->getMessage() . '</error>');
                 DB::getConnection()->rollback();
                 return self::FAILURE;
             }

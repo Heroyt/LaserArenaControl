@@ -7,6 +7,8 @@ use Lsr\Roadrunner\Tasks\TaskPayloadInterface;
 readonly class MusicTrimPreviewPayload implements TaskPayloadInterface
 {
     public function __construct(
-      public int $musicModeId
-    ) {}
+        public int $musicModeId
+    )
+    {
+    }
 }

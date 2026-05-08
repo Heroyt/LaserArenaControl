@@ -13,20 +13,23 @@ use Symfony\Component\Console\Output\OutputInterface;
 class UpdateRegressionModelsCommand extends Command
 {
     public function __construct(
-      private readonly RegressionStatCalculator $calculator,
+        private readonly RegressionStatCalculator $calculator,
     ) {
         parent::__construct('regression:update');
     }
 
-    public static function getDefaultName() : ?string {
+    public static function getDefaultName(): ?string
+    {
         return 'regression:update';
     }
 
-    public static function getDefaultDescription() : ?string {
+    public static function getDefaultDescription(): ?string
+    {
         return 'Update all regression models.';
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output) : int {
+    protected function execute(InputInterface $input, OutputInterface $output): int
+    {
         try {
             $this->calculator->updateHitsModel(GameModeType::SOLO);
         } catch (InsufficientRegressionDataException) {
@@ -60,7 +63,7 @@ class UpdateRegressionModelsCommand extends Command
 
         $modes = GameModeFactory::getAll(['rankable' => false]);
         foreach ($modes as $mode) {
-            $output->writeln('Calculating models for game mode: '.$mode->name);
+            $output->writeln('Calculating models for game mode: ' . $mode->name);
             try {
                 $output->writeln('Calculating hits model');
                 $this->calculator->updateHitsModel($mode->type, $mode);
@@ -74,7 +77,7 @@ class UpdateRegressionModelsCommand extends Command
                 }
             } catch (InsufficientRegressionDataException) {
                 $output->writeln(
-                  sprintf('<error>Insufficient data for game mode: %s (#%d)</error>', $mode->name, $mode->id)
+                    sprintf('<error>Insufficient data for game mode: %s (#%d)</error>', $mode->name, $mode->id)
                 );
             }
         }

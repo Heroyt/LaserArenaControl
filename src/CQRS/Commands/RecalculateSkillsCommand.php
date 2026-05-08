@@ -18,13 +18,16 @@ final readonly class RecalculateSkillsCommand implements CommandInterface
      * @param  G  $game
      */
     public function __construct(
-      public Game $game,
-    ) {}
+        public Game $game,
+    )
+    {
+    }
 
     /**
      * @inheritDoc
      */
-    public function getHandler() : string {
+    public function getHandler(): string
+    {
         return RecalculateSkillsCommandHandler::class;
     }
 }

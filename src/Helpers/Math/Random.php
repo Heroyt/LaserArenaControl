@@ -15,7 +15,8 @@ class Random
      * @param  float  $stdDeviation
      * @return int
      */
-    public static function randomNormal(float $median, float $stdDeviation) : int {
+    public static function randomNormal(float $median, float $stdDeviation): int
+    {
         $randomizer = new Randomizer();
 
         // Generate two random numbers between 0 and 1
@@ -42,7 +43,8 @@ class Random
      * @param  int  $count
      * @return int[]
      */
-    public static function randomSumDistribution(int $sum, int $count) : array {
+    public static function randomSumDistribution(int $sum, int $count): array
+    {
         if ($count < 2) {
             return [$sum];
         }

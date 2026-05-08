@@ -15,11 +15,13 @@ use Throwable;
  */
 readonly class MusicLoadTask implements TaskDispatcherInterface
 {
-    public static function getDiName() : string {
+    public static function getDiName(): string
+    {
         return 'task.musicLoad';
     }
 
-    public function process(ReceivedTaskInterface $task, ?TaskPayloadInterface $payload = null) : void {
+    public function process(ReceivedTaskInterface $task, ?TaskPayloadInterface $payload = null): void
+    {
         if ($payload === null) {
             $task->nack('Missing payload');
             return;

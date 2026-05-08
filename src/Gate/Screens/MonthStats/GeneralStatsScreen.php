@@ -24,33 +24,38 @@ class GeneralStatsScreen extends GateScreen
     /**
      * @inheritDoc
      */
-    public static function getName() : string {
+    public static function getName(): string
+    {
         return lang('Základní měsíční statistiky', context: 'screens', domain: 'gate');
     }
 
-    public static function getDescription() : string {
+    public static function getDescription(): string
+    {
         return lang(
-                   'Obrazovka zobrazující nejlepší hráče a počet odehraných her pro aktuální měsíc.',
-          context: 'screens.description',
-          domain : 'gate'
+            'Obrazovka zobrazující nejlepší hráče a počet odehraných her pro aktuální měsíc.',
+            context: 'screens.description',
+            domain: 'gate'
         );
     }
 
     /**
      * @inheritDoc
      */
-    public static function getDiKey() : string {
+    public static function getDiKey(): string
+    {
         return 'gate.screens.idle.month.stats';
     }
 
-    public static function getGroup() : string {
+    public static function getGroup(): string
+    {
         return lang('Měsíční statistiky', context: 'screens.groups', domain: 'gate');
     }
 
     /**
      * @inheritDoc
      */
-    public function run() : ResponseInterface {
+    public function run(): ResponseInterface
+    {
         /** @var Request $request */
         $request = App::getInstance()->getRequest();
         /** @var string $date */
@@ -61,9 +66,9 @@ class GeneralStatsScreen extends GateScreen
 
         $query = GameFactory::queryGames(true, fields: ['id_mode'])
                             ->where(
-                              'DATE(start) BETWEEN %d AND %d',
-                              $monthStart,
-                              $monthEnd
+                                'DATE(start) BETWEEN %d AND %d',
+                                $monthStart,
+                                $monthEnd
                             );
         if (count($this->systems) > 0) {
             $query->where('system IN %in', $this->systems);
@@ -85,10 +90,10 @@ class GeneralStatsScreen extends GateScreen
             /** @var array<int, Row> $g */
             $gameIdsAll[$system] = array_keys($g);
             $gameIdsRankable[$system] = array_keys(
-              array_filter(
-                $g,
-                static fn(Row $game) => in_array((int) $game->id_mode, $rankableModeIds, true)
-              )
+                array_filter(
+                    $g,
+                    static fn(Row $game) => in_array((int)$game->id_mode, $rankableModeIds, true)
+                )
             );
         }
 
@@ -127,7 +132,7 @@ class GeneralStatsScreen extends GateScreen
         }
 
         // Add additional params for template
-        $params['screenHash'] = md5($today->format('Ym').json_encode($hashData, JSON_THROW_ON_ERROR));
+        $params['screenHash'] = md5($today->format('Ym') . json_encode($hashData, JSON_THROW_ON_ERROR));
         $params['monthName'] = lang(Constants::MONTH_NAMES[(int) $today->format('m')], context: 'month');
         $params['year'] = $today->format('Y');
         $params['addJs'] = ['gate/today.js'];

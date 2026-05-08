@@ -29,10 +29,13 @@ class PrintSettings extends Controller
     public string $title = 'Nastavení - Tisk';
 
     public function __construct(
-      private readonly FeatureConfig $featureConfig,
-    ) {}
+        private readonly FeatureConfig $featureConfig,
+    )
+    {
+    }
 
-    public function init(RequestInterface $request) : void {
+    public function init(RequestInterface $request): void
+    {
         parent::init($request);
         $this->params['featureConfig'] = $this->featureConfig;
     }
@@ -44,7 +47,8 @@ class PrintSettings extends Controller
      * @throws TemplateDoesNotExistException
      * @throws ValidationException
      */
-    public function show() : ResponseInterface {
+    public function show(): ResponseInterface
+    {
         $this->params['styles'] = PrintStyle::getAll();
         $this->params['templates'] = PrintTemplate::getAll();
         $this->params['defaultTemplateId'] = Info::get('default_print_template', 'default');
@@ -56,7 +60,8 @@ class PrintSettings extends Controller
      * @throws DriverException
      * @throws JsonException
      */
-    public function save(Request $request) : ResponseInterface {
+    public function save(Request $request): ResponseInterface
+    {
         if ($this->validate($request)) {
             try {
                 DB::getConnection()->begin();
@@ -65,7 +70,7 @@ class PrintSettings extends Controller
                 Info::set('default_print_template', $request->getPost('default-template', 'default'));
 
                 // Delete all dates
-                DB::delete(PrintStyle::TABLE.'_dates', ['1=1']);
+                DB::delete(PrintStyle::TABLE . '_dates', ['1=1']);
 
                 // Delete all styles
                 DB::delete(PrintStyle::TABLE, ['1=1']);
@@ -73,9 +78,9 @@ class PrintSettings extends Controller
 
                 $printDir = 'upload/print/';
                 if (
-                  !file_exists(ROOT.'upload/print') && !mkdir($concurrentDirectory = ROOT.'upload/print') && !is_dir(
-                    $concurrentDirectory
-                  )
+                    !file_exists(ROOT . 'upload/print') && !mkdir($concurrentDirectory = ROOT . 'upload/print') && !is_dir(
+                        $concurrentDirectory
+                    )
                 ) {
                     $printDir = 'upload';
                 }
@@ -100,11 +105,11 @@ class PrintSettings extends Controller
                     }
                     if (isset($files[$key]['background-landscape'])) {
                         $this->processPrintFileUpload(
-                          $files[$key]['background-landscape'],
-                          $request,
-                          $printDir,
-                          $style,
-                          true
+                            $files[$key]['background-landscape'],
+                            $request,
+                            $printDir,
+                            $style,
+                            true
                         );
                     }
                     $style->default = $style->id === (int) ($request->getPost('default-style', 0));
@@ -118,31 +123,31 @@ class PrintSettings extends Controller
                     $dateFrom = new DateTimeImmutable($matches[0][1] ?? '');
                     $dateTo = new DateTimeImmutable($matches[1][1] ?? '');
                     DB::insert(
-                      PrintStyle::TABLE.'_dates',
-                      [
+                        PrintStyle::TABLE . '_dates',
+                        [
                         PrintStyle::getPrimaryKey() => $info['style'],
                         'date_from'                 => $dateFrom,
                         'date_to'                   => $dateTo,
-                      ]
+                        ]
                     );
                 }
 
                 DB::getConnection()->commit();
             } catch (Exception | DriverException $e) {
                 DB::getConnection()->rollback();
-                $request->passErrors[] = lang('Database error occurred.', context: 'errors').' '.$e->getMessage();
+                $request->passErrors[] = lang('Database error occurred.', context: 'errors') . ' ' . $e->getMessage();
             } catch (ValidationException $e) {
                 DB::getConnection()->rollback();
-                $request->passErrors[] = lang('Validation error:', context: 'errors').' '.$e->getMessage();
+                $request->passErrors[] = lang('Validation error:', context: 'errors') . ' ' . $e->getMessage();
             }
         }
         if ($request->isAjax()) {
             return $this->respond(
-              [
+                [
                 'success' => empty($request->passErrors),
                 'errors'  => $request->passErrors,
-              ],
-              empty($request->passErrors) ? 200 : 500
+                ],
+                empty($request->passErrors) ? 200 : 500
             );
         }
         return $this->app->redirect('settings-print', $request);
@@ -153,7 +158,8 @@ class PrintSettings extends Controller
      *
      * @return bool
      */
-    private function validate(Request $request) : bool {
+    private function validate(Request $request): bool
+    {
         // TODO: Actually validate request..
         return count($request->passErrors) === 0;
     }
@@ -167,12 +173,13 @@ class PrintSettings extends Controller
      * @return void
      */
     private function processPrintFileUpload(
-      UploadedFile $file,
-      Request      $request,
-      string       $printDir,
-      PrintStyle   $style,
-      bool         $landscape = false
-    ) : void {
+        UploadedFile $file,
+        Request      $request,
+        string       $printDir,
+        PrintStyle   $style,
+        bool         $landscape = false
+    ): void
+    {
         $clientFilename = $file->getClientFilename();
         if (empty($clientFilename)) {
             $request->passErrors[] = lang('Nelze nahrát soubor bez názvu.', context: 'errors');
@@ -182,18 +189,18 @@ class PrintSettings extends Controller
         // Handle form errors
         if ($file->getError() !== UPLOAD_ERR_OK) {
             $request->passErrors[] = match ($file->getError()) {
-                UPLOAD_ERR_INI_SIZE   => lang('Nahraný soubor je příliš velký', context: 'errors').' - '.$name,
-                UPLOAD_ERR_FORM_SIZE  => lang('Form size is to large', context: 'errors').' - '.$name,
+                UPLOAD_ERR_INI_SIZE => lang('Nahraný soubor je příliš velký', context: 'errors') . ' - ' . $name,
+                UPLOAD_ERR_FORM_SIZE => lang('Form size is to large', context: 'errors') . ' - ' . $name,
                 UPLOAD_ERR_PARTIAL    => lang(
-                             'The uploaded file was only partially uploaded.',
+                        'The uploaded file was only partially uploaded.',
                     context: 'errors'
-                  ).' - '.$name,
-                UPLOAD_ERR_CANT_WRITE => lang('Failed to write file to disk.', context: 'errors').' - '.$name,
-                default               => lang('Error while uploading a file.', context: 'errors').' - '.$name,
+                    ) . ' - ' . $name,
+                UPLOAD_ERR_CANT_WRITE => lang('Failed to write file to disk.', context: 'errors') . ' - ' . $name,
+                default => lang('Error while uploading a file.', context: 'errors') . ' - ' . $name,
             };
             return;
         }
-        $name = $printDir.$name;
+        $name = $printDir . $name;
         $check = getimagesize($file->getStream()->getMetadata('uri'));
         if ($check === false) {
             $request->passErrors[] = lang('File upload failed.', context: 'errors');
@@ -204,23 +211,22 @@ class PrintSettings extends Controller
         $fileType = strtolower(pathinfo($name, PATHINFO_EXTENSION));
         if (!in_array($fileType, $validTypes)) {
             $request->passErrors[] = lang(
-                       'Nahraný soubor musí být v jednom z formátů: %s.',
-              context: 'errors',
-              format : [implode(', ', $validTypes)]
+                'Nahraný soubor musí být v jednom z formátů: %s.',
+                context: 'errors',
+                format: [implode(', ', $validTypes)]
             );
             return;
         }
 
         try {
-            $file->moveTo(ROOT.$name);
+            $file->moveTo(ROOT . $name);
             if ($landscape) {
                 $style->bgLandscape = $name;
-            }
-            else {
+            } else {
                 $style->bg = $name;
             }
         } catch (RuntimeException $e) {
-            $request->passErrors[] = lang('File upload failed.', context: 'errors').$e->getMessage();
+            $request->passErrors[] = lang('File upload failed.', context: 'errors') . $e->getMessage();
         }
     }
 }

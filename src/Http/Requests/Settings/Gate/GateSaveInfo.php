@@ -21,5 +21,4 @@ class GateSaveInfo
     /** @var int[] */
     #[SerializedName('delete-screens')]
     public array $deleteScreen = [];
-
 }

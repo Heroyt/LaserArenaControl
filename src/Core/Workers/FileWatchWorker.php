@@ -4,13 +4,11 @@ declare(strict_types=1);
 
 namespace App\Core\Workers;
 
-use App\Tasks\GameImportTask;
-use App\Tasks\Payloads\GameImportPayload;
+use App\CQRS\Commands\ScanResultsDirectoryCommand;
 use Lsr\Core\App;
+use Lsr\CQRS\CommandBus;
 use Lsr\Logging\Logger;
-use Lsr\Roadrunner\Tasks\TaskProducer;
 use Lsr\Roadrunner\Workers\Worker;
-use Spiral\RoadRunner\Jobs\Options;
 use Spiral\RoadRunner\Metrics\Metrics;
 use Spiral\RoadRunner\Payload;
 use Spiral\RoadRunner\Worker as RrWorker;
@@ -39,17 +37,18 @@ class FileWatchWorker implements Worker
     private RrWorker $worker;
 
     public function __construct(
-      private readonly TaskProducer $taskProducer,
-      private readonly Metrics      $metrics,
+        private readonly CommandBus $commandBus,
+        private readonly Metrics    $metrics,
     ) {
         $this->worker = RrWorker::create();
     }
 
-    public function run() : void {
+    public function run(): void
+    {
         while ($payload = $this->worker->waitPayload()) {
             try {
                 /** @phpstan-ignore property.internalClass */
-                $this->logger->debug('file_watch: '.$payload->body);
+                $this->logger->debug('file_watch: ' . $payload->body);
 
                 // Parse payload
                 /** @var array{directory?:string,eventTime?:string,file?:string,op?:string,path?:string} $data */
@@ -60,15 +59,12 @@ class FileWatchWorker implements Worker
                     $this->logger->error('Missing required argument "directory". Valid results directory is expected.');
                     /** @phpstan-ignore new.internalClass, method.internalClass */
                     $this->worker->respond(new Payload('ERROR'));
+                    continue;
                 }
 
                 // Plan import on watched dir
                 $this->metrics->add('import_planned', 1, ['file_watch']);
-                $this->taskProducer->push(
-                  GameImportTask::class,
-                  new GameImportPayload($dir),
-                  new Options(priority: GameImportTask::PRIORITY),
-                );
+                $this->commandBus->dispatchAsync(new ScanResultsDirectoryCommand($dir));
                 /** @phpstan-ignore new.internalClass, method.internalClass */
                 $this->worker->respond(new Payload('OK'));
             } catch (Throwable $e) {
@@ -77,7 +73,8 @@ class FileWatchWorker implements Worker
         }
     }
 
-    public function handleError(Throwable $error) : void {
+    public function handleError(Throwable $error): void
+    {
         $this->logger->exception($error);
         /** @phpstan-ignore new.internalClass, method.internalClass */
         $this->worker->respond(new Payload('ERROR'));

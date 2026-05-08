@@ -16,7 +16,8 @@ trait GroupLoading
      * @param  LasermaxxLoadData  $loadData
      * @param  GameData  $data
      */
-    public function prepareGroup(LasermaxxLoadData $loadData, array $data) : void {
+    public function prepareGroup(LasermaxxLoadData $loadData, array $data): void
+    {
         if (empty($data['groupSelect'])) {
             return;
         }
@@ -25,8 +26,8 @@ trait GroupLoading
             $name = $data['groupName'] ?? '';
             if (empty($name)) {
                 $name = sprintf(
-                  lang('Skupina %s'),
-                  date('d.m.Y H:i')
+                    lang('Skupina %s'),
+                    date('d.m.Y H:i')
                 );
             }
 

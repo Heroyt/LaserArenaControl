@@ -16,7 +16,8 @@ readonly final class BaseGameModeSingleQuery implements QueryInterface
     /**
      * @throws Exception
      */
-    public function get() : ?BaseGameModeRow {
+    public function get(): ?BaseGameModeRow
+    {
         return $this->query->fetchDto(BaseGameModeRow::class, $this->cache);
     }
 }

@@ -25,15 +25,15 @@ class GameGroups extends Controller
      * @throws ValidationException
      * @throws Throwable
      */
-    public function listGroups(Request $request) : ResponseInterface {
+    public function listGroups(Request $request): ResponseInterface
+    {
         $groups = $request->getGet('all') !== null ? GameGroup::getAllByDate() : GameGroup::getActiveByDate();
         $data = [];
         if ($request->getGet('basic') !== null) {
             foreach ($groups as $group) {
                 $data[] = $group->jsonSerialize();
             }
-        }
-        else {
+        } else {
             foreach ($groups as $group) {
                 $groupData = $group->jsonSerialize();
                 $groupData['players'] = $group->players;
@@ -44,17 +44,18 @@ class GameGroups extends Controller
         return $this->respond($data);
     }
 
-    public function findGroups(Request $request) : ResponseInterface {
+    public function findGroups(Request $request): ResponseInterface
+    {
         /** @var string $search */
         $search = $request->getGet('search', '');
 
         return $this->respond(
-          array_values(
-            GameGroup::query()
+            array_values(
+                GameGroup::query()
                      ->where('[name] LIKE %~like~', $search)
                      ->where('[active] = 1')
                      ->get()
-          )
+            )
         );
     }
 
@@ -64,7 +65,8 @@ class GameGroups extends Controller
      * @throws JsonException
      * @throws Throwable
      */
-    public function getGroup(GameGroup $group) : ResponseInterface {
+    public function getGroup(GameGroup $group): ResponseInterface
+    {
         $groupData = $group->jsonSerialize();
         $groupData['players'] = $group->players;
         return $this->respond($groupData);
@@ -76,7 +78,8 @@ class GameGroups extends Controller
      * @return ResponseInterface
      * @throws JsonException
      */
-    public function create(Request $request) : ResponseInterface {
+    public function create(Request $request): ResponseInterface
+    {
         $group = new GameGroup();
         /** @var string $name */
         $name = $request->getPost('name', lang('Skupina %s', format: [date('d.m.Y H:i')]));
@@ -99,7 +102,8 @@ class GameGroups extends Controller
      * @return ResponseInterface
      * @throws JsonException
      */
-    public function update(GameGroup $group, Request $request) : ResponseInterface {
+    public function update(GameGroup $group, Request $request): ResponseInterface
+    {
         /** @var string $name */
         $name = $request->getPost('name', '');
         if (!empty($name)) {
@@ -109,8 +113,8 @@ class GameGroups extends Controller
         $active = $request->getPost('active');
         if ($active !== null) {
             $group->active = (is_bool($active) && $active) || (is_numeric(
-                  $active
-                ) && ((int) $active) === 1) || $active === 'true';
+                        $active
+                    ) && ((int)$active) === 1) || $active === 'true';
         }
 
         /** @var null|array{payment?:array<string,array<string,mixed>>|mixed}|string $meta */
@@ -141,7 +145,8 @@ class GameGroups extends Controller
      * @throws ValidationException
      * @throws TemplateDoesNotExistException
      */
-    public function printPlayerList(GameGroup $group) : ResponseInterface {
+    public function printPlayerList(GameGroup $group): ResponseInterface
+    {
         $this->params['group'] = $group;
         $this->params['priceGroups'] = PriceGroup::getAll();
         return $this->view('components/groups/groupPrint');

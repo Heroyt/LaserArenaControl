@@ -1,0 +1,52 @@
+tables:
+	result_file_imports:
+		order: 0
+		definition: '''
+		(
+			`id_result_file_import` int(11) unsigned NOT NULL AUTO_INCREMENT,
+			`path` varchar(500) NOT NULL,
+			`path_hash` char(40) NOT NULL,
+			`system` varchar(50) NOT NULL,
+			`seen_mtime` int(11) unsigned NOT NULL DEFAULT 0,
+			`seen_size` int(11) unsigned NOT NULL DEFAULT 0,
+			`seen_hash` char(64) NOT NULL DEFAULT '',
+			`seen_version` char(40) NOT NULL DEFAULT '',
+			`queued_at` datetime DEFAULT NULL,
+			`processing_version` char(40) DEFAULT NULL,
+			`processing_started_at` datetime DEFAULT NULL,
+			`processed_version` char(40) DEFAULT NULL,
+			`processed_hash` char(64) DEFAULT NULL,
+			`processed_at` datetime DEFAULT NULL,
+			`status` enum('seen','queued','processing','imported','skipped','failed','stale') NOT NULL DEFAULT 'seen',
+			`attempts` int(10) unsigned NOT NULL DEFAULT 0,
+			`last_error` text DEFAULT NULL,
+			`last_game_code` varchar(50) DEFAULT NULL,
+			`last_event` varchar(50) DEFAULT NULL,
+			`created_at` datetime NOT NULL DEFAULT current_timestamp(),
+			`updated_at` datetime DEFAULT NULL ON UPDATE current_timestamp(),
+			PRIMARY KEY (`id_result_file_import`)
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+		'''
+		indexes:
+			-
+				name: 'path_hash'
+				columns: ['path_hash']
+				unique: true
+			-
+				name: 'path'
+				columns: ['path']
+			-
+				name: 'system_status'
+				columns: ['system', 'status']
+			-
+				name: 'seen_version'
+				columns: ['seen_version']
+			-
+				name: 'processed_version'
+				columns: ['processed_version']
+			-
+				name: 'queued_at'
+				columns: ['queued_at']
+			-
+				name: 'processed_at'
+				columns: ['processed_at']

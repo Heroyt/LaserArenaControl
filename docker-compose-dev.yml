@@ -43,6 +43,7 @@ services:
       - ./:/var/www
       - ./fpm/:/etc/php/
       - ./docker/core/php.ini:/usr/local/etc/php/php.ini
+      - ./start.sh:/usr/local/bin/start.sh
     ports:
       - "8001:8001"
       - "8080:8080"

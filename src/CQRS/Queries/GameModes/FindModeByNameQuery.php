@@ -18,28 +18,32 @@ readonly final class FindModeByNameQuery implements QueryInterface
     private(set) Fluent $query;
 
     public function __construct(
-      private bool $cache = true,
+        private bool $cache = true,
     ) {
         $this->query = DB::select('vModesNames', 'id_mode, name, systems, type')
-                         ->cacheTags(AbstractMode::TABLE, AbstractMode::TABLE.'/query');
+            ->cacheTags(AbstractMode::TABLE, AbstractMode::TABLE . '/query');
     }
 
-    public function consoleName(string $name) : self {
+    public function consoleName(string $name): self
+    {
         $this->query->where('%s LIKE CONCAT(\'%\', [sysName], \'%\')', $name);
         return $this;
     }
 
-    public function name(string $name) : self {
+    public function name(string $name): self
+    {
         $this->query->where('[name] = %s', $name);
         return $this;
     }
 
-    public function type(GameModeType $type) : self {
+    public function type(GameModeType $type): self
+    {
         $this->query->where('type = %s', $type->value);
         return $this;
     }
 
-    public function get() : ?BaseGameModeRow {
+    public function get(): ?BaseGameModeRow
+    {
         return $this->query->fetchDto(BaseGameModeRow::class, $this->cache);
     }
 }

@@ -21,14 +21,17 @@ final readonly class AssignGameModeCommand implements CommandInterface
      * @param  AbstractMode|null  $mode
      */
     public function __construct(
-      public Game          $game,
-      public ?AbstractMode $mode = null,
-    ) {}
+        public Game          $game,
+        public ?AbstractMode $mode = null,
+    )
+    {
+    }
 
     /**
      * @inheritDoc
      */
-    public function getHandler() : string {
+    public function getHandler(): string
+    {
         return AssignGameModeCommandHandler::class;
     }
 }

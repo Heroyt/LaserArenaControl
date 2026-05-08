@@ -2,9 +2,9 @@
 
 namespace App\Tasks;
 
-use App\Services\ImportService;
+use App\CQRS\Commands\ScanResultsDirectoryCommand;
 use App\Tasks\Payloads\GameImportPayload;
-use Lsr\Core\Requests\Dto\ErrorResponse;
+use Lsr\CQRS\CommandBus;
 use Lsr\Orm\Exceptions\ModelNotFoundException;
 use Lsr\Roadrunner\Tasks\TaskDispatcherInterface;
 use Lsr\Roadrunner\Tasks\TaskPayloadInterface;
@@ -20,10 +20,13 @@ readonly class GameImportTask implements TaskDispatcherInterface
     public const int PRIORITY = 20;
 
     public function __construct(
-      private ImportService $importService
-    ) {}
+        private CommandBus $commandBus
+    )
+    {
+    }
 
-    public static function getDiName() : string {
+    public static function getDiName(): string
+    {
         return 'task.gamesImport';
     }
 
@@ -35,7 +38,8 @@ readonly class GameImportTask implements TaskDispatcherInterface
      * @throws ModelNotFoundException
      * @throws Throwable
      */
-    public function process(ReceivedTaskInterface $task, ?TaskPayloadInterface $payload = null) : void {
+    public function process(ReceivedTaskInterface $task, ?TaskPayloadInterface $payload = null): void
+    {
         if ($payload === null) {
             $task->nack('Missing payload');
             return;
@@ -45,12 +49,7 @@ readonly class GameImportTask implements TaskDispatcherInterface
             return;
         }
 
-        $response = $this->importService->import($payload->dir);
-
-        if ($response instanceof ErrorResponse) {
-            $task->nack('Game import failed '.$response->title);
-            return;
-        }
+        $this->commandBus->dispatch(new ScanResultsDirectoryCommand($payload->dir));
 
         $task->complete();
     }

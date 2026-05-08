@@ -20,5 +20,5 @@ interface TeamHighlightChecker
      *
      * @return void
      */
-    public function checkTeam(Team $team, HighlightCollection $highlights) : void;
+    public function checkTeam(Team $team, HighlightCollection $highlights): void;
 }

@@ -17,19 +17,23 @@ final class Theme
     private static Theme $instance;
 
     public function __construct(
-      public string $primaryColor = '#339af0',
-      public string $secondaryColor = '#304d99ff',
-    ) {}
+        public string $primaryColor = '#339af0',
+        public string $secondaryColor = '#304d99ff',
+    )
+    {
+    }
 
-    public static function getCssVersion() : int {
-        $time = filemtime(ROOT.'dist/theme.css');
+    public static function getCssVersion(): int
+    {
+        $time = filemtime(ROOT . 'dist/theme.css');
         if ($time === false) {
             return 1;
         }
         return $time;
     }
 
-    public static function get() : Theme {
+    public static function get(): Theme
+    {
         if (isset(self::$instance)) {
             return self::$instance;
         }
@@ -42,7 +46,8 @@ final class Theme
         return self::$instance;
     }
 
-    public function getCss() : string {
+    public function getCss(): string
+    {
         $primaryColor = $this->primaryColor;
         $primaryColorText = Color::getFontColor($this->primaryColor);
         $secondaryColor = $this->secondaryColor;
@@ -134,7 +139,8 @@ final class Theme
      * @return void
      * @throws Exception
      */
-    public function save() : void {
+    public function save(): void
+    {
         self::$instance = $this;
         Info::set(self::INFO_KEY, $this);
     }

@@ -15,7 +15,8 @@ final readonly class RecalculateScoresCommandHandler implements CommandHandlerIn
     /**
      * @param  RecalculateScoresCommand  $command
      */
-    public function handle(CommandInterface $command) : bool {
+    public function handle(CommandInterface $command): bool
+    {
         // Refresh game
         $game = $command->game;
         try {

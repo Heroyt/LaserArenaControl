@@ -26,7 +26,8 @@ trait GeneralStatsData
      *         }
      * @phpstan-ignore method.templateTypeNotInParameter
      */
-    protected function getTopPlayersData(array $gameIdsRankable, array $gameIdsAll) : array {
+    protected function getTopPlayersData(array $gameIdsRankable, array $gameIdsAll): array
+    {
         /**
          * @var P[] $topScores
          */
@@ -86,12 +87,13 @@ trait GeneralStatsData
      * @phpstan-ignore missingType.generics
      */
     protected function getTopPlayers(
-      string $statType,
-      int    $count,
-      array  $gameIds,
-      bool   $desc = true,
-      array  $conditions = []
-    ) : array {
+        string $statType,
+        int    $count,
+        array  $gameIds,
+        bool   $desc = true,
+        array  $conditions = []
+    ): array
+    {
         $q = PlayerFactory::queryPlayers($gameIds)
                           ->orderBy('%n', $statType);
         if ($desc) {
@@ -106,8 +108,8 @@ trait GeneralStatsData
         $players = [];
         foreach ($topPlayers as $topPlayer) {
             $player = PlayerFactory::getById(
-              (int) $topPlayer->id_player,
-              ['system' => (string) $topPlayer->system]
+                (int)$topPlayer->id_player,
+                ['system' => (string)$topPlayer->system]
             );
             if ($player !== null) {
                 $players[] = $player;
@@ -125,11 +127,12 @@ trait GeneralStatsData
      * @phpstan-ignore missingType.generics
      */
     protected function getTopPlayer(
-      string $statType,
-      array  $gameIds,
-      bool   $desc = true,
-      array  $conditions = []
-    ) : ?Player {
+        string $statType,
+        array  $gameIds,
+        bool   $desc = true,
+        array  $conditions = []
+    ): ?Player
+    {
         $q = PlayerFactory::queryPlayers($gameIds)
                           ->orderBy('%n', $statType);
         if ($desc) {
@@ -142,8 +145,8 @@ trait GeneralStatsData
         $topPlayer = $q->fetch(cache: false);
         if (isset($topPlayer)) {
             return PlayerFactory::getById(
-              (int) $topPlayer->id_player,
-              ['system' => (string) $topPlayer->system]
+                (int)$topPlayer->id_player,
+                ['system' => (string)$topPlayer->system]
             );
         }
         return null;
@@ -153,7 +156,8 @@ trait GeneralStatsData
      * @param  array<string, int[]>  $gameIdsAll
      * @return int<0, max>
      */
-    protected function getGameCount(array $gameIdsAll) : int {
+    protected function getGameCount(array $gameIdsAll): int
+    {
         $count = (int) array_reduce($gameIdsAll, static fn($value, $games) => $value + count($games), 0);
         assert($count >= 0);
         return $count;
@@ -163,7 +167,8 @@ trait GeneralStatsData
      * @param  array<string, int[]>  $gameIds
      * @return int<0, max>
      */
-    protected function getTeamCount(array $gameIds) : int {
+    protected function getTeamCount(array $gameIds): int
+    {
         if (empty($gameIds)) {
             return 0;
         }
@@ -176,7 +181,8 @@ trait GeneralStatsData
      * @param  array<string, int[]>  $gameIds
      * @return int<0, max>
      */
-    protected function getPlayerCount(array $gameIds) : int {
+    protected function getPlayerCount(array $gameIds): int
+    {
         if (empty($gameIds)) {
             return 0;
         }

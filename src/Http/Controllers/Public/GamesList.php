@@ -18,7 +18,8 @@ use Psr\Http\Message\ResponseInterface;
 
 class GamesList extends Controller
 {
-    public function show(Request $request) : ResponseInterface {
+    public function show(Request $request): ResponseInterface
+    {
         $this->params = new GamesListTemplate($this->params);
 
         /** @var string $date */
@@ -37,10 +38,11 @@ class GamesList extends Controller
      * @throws \Lsr\Exceptions\TemplateDoesNotExistException
      * @throws \Throwable
      */
-    public function detail(string $code) : ResponseInterface {
+    public function detail(string $code): ResponseInterface
+    {
         $this->params = new GamesDetailTemplate($this->params);
 
-        $this->params->publicUrl = trailingSlashIt(Info::get('liga_api_url', 'https://laserliga.cz')).'g/'.$code;
+        $this->params->publicUrl = trailingSlashIt(Info::get('liga_api_url', 'https://laserliga.cz')) . 'g/' . $code;
         $this->params->code = $code;
         $game = GameFactory::getByCode($code);
         if ($game === null) {
@@ -48,9 +50,9 @@ class GamesList extends Controller
         }
         $this->params->game = $game;
         $qr = new Builder(
-          writer  : new SvgWriter(),
-          data    : $this->params->publicUrl,
-          encoding: new Encoding('UTF-8'),
+            writer: new SvgWriter(),
+            data: $this->params->publicUrl,
+            encoding: new Encoding('UTF-8'),
         )
           ->build()
           ->getString();

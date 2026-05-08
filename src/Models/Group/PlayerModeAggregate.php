@@ -11,8 +11,10 @@ class PlayerModeAggregate
     use PlayerAggregate;
 
     public function __construct(
-      public readonly AbstractMode $mode,
-    ) {}
+        public readonly AbstractMode $mode,
+    )
+    {
+    }
 
     /**
      * @template P of GamePlayer
@@ -22,7 +24,8 @@ class PlayerModeAggregate
      * @param  G|null  $game
      * @return void
      */
-    public function addGame(GamePlayer $player, ?Game $game = null) : void {
+    public function addGame(GamePlayer $player, ?Game $game = null): void
+    {
         if (!isset($game)) {
             $game = $player->game;
         }

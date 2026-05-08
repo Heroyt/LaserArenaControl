@@ -43,8 +43,8 @@ class ResultParserTest extends Unit
 
     protected function validateGame(Game $game, string $file, array $meta): void {
         $this->assertEquals($meta['system'], $game::SYSTEM, 'Value is different (file: ' . $file . ')');
-        $this->assertEquals($meta['playerCount'], $game->playerCount, 'Value is different (file: '.$file.')');
-        $this->assertEquals($meta['teamCount'], $game->teamCount, 'Value is different (file: '.$file.')');
+        $this->assertEquals($meta['playerCount'], $game->playerCount, 'Value is different (file: ' . $file . ')');
+        $this->assertEquals($meta['teamCount'], $game->teamCount, 'Value is different (file: ' . $file . ')');
         $this->assertEquals($meta['start']->getTimestamp(), $game->start->getTimestamp(), 'Value is different (file: ' . $file . ')');
         $this->assertEquals($meta['end']->getTimestamp(), $game->end->getTimestamp(), 'Value is different (file: ' . $file . ')');
 

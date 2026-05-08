@@ -23,7 +23,8 @@ class TopPlayerSkills implements WidgetInterface, WithGameIdsInterface
     private ?array $topPlayers = null;
 
 
-    public function refresh() : static {
+    public function refresh(): static
+    {
         $this->hash = null;
         $this->topPlayers = null;
         $this->setGameIds(null);
@@ -40,7 +41,8 @@ class TopPlayerSkills implements WidgetInterface, WithGameIdsInterface
      * @return array{topPlayers: P[]}
      * @throws Throwable
      */
-    public function getData(?Game $game = null, ?DateTimeInterface $date = null, ?array $systems = []) : array {
+    public function getData(?Game $game = null, ?DateTimeInterface $date = null, ?array $systems = []): array
+    {
         /** @phpstan-ignore return.type */
         return [
           'topPlayers' => $this->getTopPlayers($date, $systems),
@@ -53,7 +55,8 @@ class TopPlayerSkills implements WidgetInterface, WithGameIdsInterface
      * @throws Throwable
      * @phpstan-ignore missingType.generics
      */
-    private function getTopPlayers(?DateTimeInterface $date = null, ?array $systems = []) : array {
+    private function getTopPlayers(?DateTimeInterface $date = null, ?array $systems = []): array
+    {
         if (!isset($this->topPlayers)) {
             $this->topPlayers = [];
             $gameIds = $this->getGameIds(rankableOnly: true);
@@ -63,11 +66,10 @@ class TopPlayerSkills implements WidgetInterface, WithGameIdsInterface
                                           ->desc()
                                           ->limit(10)
                                           ->fetchAssoc('name', cache: false);
-            }
-            else {
+            } else {
                 $q = PlayerFactory::queryPlayersWithGames()->where(
-                  'DATE([start]) = %d AND [end] IS NOT NULL',
-                  $date ?? new DateTimeImmutable()
+                    'DATE([start]) = %d AND [end] IS NOT NULL',
+                    $date ?? new DateTimeImmutable()
                 )->orderBy('[skill]')->desc()->limit(10);
                 if (!empty($systems)) {
                     $q->where('[system] IN %in', $systems);
@@ -78,8 +80,8 @@ class TopPlayerSkills implements WidgetInterface, WithGameIdsInterface
             if (!empty($topScores)) {
                 foreach ($topScores as $score) {
                     $player = PlayerFactory::getById(
-                      (int) $score->id_player,
-                      ['system' => (string) $score->system]
+                        (int)$score->id_player,
+                        ['system' => (string)$score->system]
                     );
                     if ($player !== null) {
                         $this->topPlayers[] = $player;
@@ -93,22 +95,25 @@ class TopPlayerSkills implements WidgetInterface, WithGameIdsInterface
     /**
      * @inheritDoc
      */
-    public function getHash(?Game $game = null, ?DateTimeInterface $date = null, ?array $systems = []) : string {
+    public function getHash(?Game $game = null, ?DateTimeInterface $date = null, ?array $systems = []): string
+    {
         if (!isset($this->hash)) {
             $data = '';
             foreach ($this->getTopPlayers($date, $systems) as $player) {
-                $data .= $player->name.$player->skill;
+                $data .= $player->name . $player->skill;
             }
             $this->hash = md5($data);
         }
         return $this->hash;
     }
 
-    public function getTemplate() : string {
+    public function getTemplate(): string
+    {
         return 'topPlayerSkills.latte';
     }
 
-    public function getSettingsTemplate() : string {
+    public function getSettingsTemplate(): string
+    {
         return '';
     }
 }

@@ -52,19 +52,19 @@ class GameGroup extends BaseModel implements GameGroupInterface
                 /** @var Cache $cache */
                 $cache = App::getService('cache');
                 $dependencies = [
-                  CacheParent::Tags   => ['gameGroups', 'group/'.$this->id.'/games'],
-                  CacheParent::Expire => '1 months',
+                    CacheParent::Tags => ['gameGroups', 'group/' . $this->id . '/games'],
+                    CacheParent::Expire => '1 months',
                 ];
                 try {
                     $this->games = $cache->load(
-                      'group/'.$this->id.'/games',
-                      [$this, 'loadGames'],
-                      $dependencies
+                        'group/' . $this->id . '/games',
+                        [$this, 'loadGames'],
+                        $dependencies
                     );
                 } catch (Throwable $e) {
                     $this->getLogger()->exception($e);
                     $this->games = $this->loadGames();
-                    $cache->save('group/'.$this->id.'/games', $this->games, $dependencies);
+                    $cache->save('group/' . $this->id . '/games', $this->games, $dependencies);
                 }
             }
             return $this->games;
@@ -86,21 +86,21 @@ class GameGroup extends BaseModel implements GameGroupInterface
             /** @var Cache $cache */
             $cache = App::getService('cache');
             $dependencies = [
-              CacheParent::Tags   => ['gameGroups', 'group/'.$this->id.'/players'],
+                CacheParent::Tags => ['gameGroups', 'group/' . $this->id . '/players'],
               CacheParent::Expire => '1 months',
             ];
             try {
                 [$this->players, $this->teams] = $cache->load(
-                  'group/'.$this->id.'/players',
-                  function () use ($games) : array {
-                      return $this->loadPlayersAndTeams($games);
-                  },
-                  $dependencies,
+                    'group/' . $this->id . '/players',
+                    function () use ($games): array {
+                        return $this->loadPlayersAndTeams($games);
+                    },
+                    $dependencies,
                 );
             } catch (Throwable $e) {
                 $this->getLogger()->exception($e);
                 $teamsAndPlayers = $this->loadPlayersAndTeams($games);
-                $cache->save('group/'.$this->id.'/players', $teamsAndPlayers, $dependencies);
+                $cache->save('group/' . $this->id . '/players', $teamsAndPlayers, $dependencies);
                 [$this->players, $this->teams] = $teamsAndPlayers;
             }
             return $this->players;
@@ -120,14 +120,16 @@ class GameGroup extends BaseModel implements GameGroupInterface
     /**
      * @return static[]
      */
-    public static function getActive() : array {
+    public static function getActive(): array
+    {
         return static::query()->where('[active] = 1')->get();
     }
 
     /**
      * @return static[]
      */
-    public static function getActiveByDate(bool $descending = true) : array {
+    public static function getActiveByDate(bool $descending = true): array
+    {
         $query = static::query()
                        ->where('[active] = 1')
                        ->orderBy('[created_at]');
@@ -144,7 +146,8 @@ class GameGroup extends BaseModel implements GameGroupInterface
     /**
      * @return static[]
      */
-    public static function getAllByDate(bool $descending = true) : array {
+    public static function getAllByDate(bool $descending = true): array
+    {
         $query = static::query()
                        ->orderBy('[created_at]');
         if ($descending) {
@@ -157,12 +160,14 @@ class GameGroup extends BaseModel implements GameGroupInterface
         return $query->get();
     }
 
-    public function save() : bool {
+    public function save(): bool
+    {
         $this->createdAt ??= new DateTimeImmutable();
         return parent::save();
     }
 
-    public function jsonSerialize() : array {
+    public function jsonSerialize(): array
+    {
         $data = parent::jsonSerialize();
         $data['meta'] = $this->getMeta();
         return $data;
@@ -174,11 +179,12 @@ class GameGroup extends BaseModel implements GameGroupInterface
      * @throws Throwable
      * @phpstan-ignore missingType.generics
      */
-    public function loadGames() : array {
+    public function loadGames(): array
+    {
         $games = [];
         $rows = GameFactory::queryGames(true, fields: ['id_group'])
                            ->where('[id_group] = %i', $this->id)
-          ->cacheTags('group/'.$this->id.'/games')
+            ->cacheTags('group/' . $this->id . '/games')
                            ->fetchAll();
         foreach ($rows as $row) {
             $game = GameFactory::getByCode($row->code);
@@ -196,7 +202,8 @@ class GameGroup extends BaseModel implements GameGroupInterface
      * @param  G[]  $games
      * @return array{0:array<string,GroupPlayer>,1:array<string,Team>}
      */
-    public function loadPlayersAndTeams(array $games) : array {
+    public function loadPlayersAndTeams(array $games): array
+    {
         $players = [];
         $teams = [];
         foreach ($games as $game) {
@@ -208,8 +215,8 @@ class GameGroup extends BaseModel implements GameGroupInterface
                     $tPlayerNames[] = $asciiName;
                     if (!isset($players[$asciiName])) {
                         $players[$asciiName] = new GroupPlayer(
-                          $asciiName,
-                          clone $player
+                            $asciiName,
+                            clone $player
                         );
                         $players[$asciiName]->name = $player->name;
                     }
@@ -241,8 +248,8 @@ class GameGroup extends BaseModel implements GameGroupInterface
 
         // Sort players by their skill in descending order
         uasort(
-          $players,
-          static fn(GroupPlayer $playerA, GroupPlayer $playerB) => $playerB->getSkill() - $playerA->getSkill()
+            $players,
+            static fn(GroupPlayer $playerA, GroupPlayer $playerB) => $playerB->getSkill() - $playerA->getSkill()
         );
 
         return [$players, $teams];
@@ -252,50 +259,56 @@ class GameGroup extends BaseModel implements GameGroupInterface
      * @return GroupPlayer[]
      * @throws Throwable
      */
-    public function getPlayersSortedByName() : array {
+    public function getPlayersSortedByName(): array
+    {
         $players = $this->players;
         uasort(
-          $players,
-          static fn(GroupPlayer $a, GroupPlayer $b) => strcmp(strtolower($a->name), strtolower($b->name))
+            $players,
+            static fn(GroupPlayer $a, GroupPlayer $b) => strcmp(strtolower($a->name), strtolower($b->name))
         );
         return $players;
     }
 
     #[AfterUpdate, AfterInsert, AfterDelete]
-    public function clearCache() : void {
+    public function clearCache(): void
+    {
         parent::clearCache();
         if (isset($this->id)) {
             /** @var Cache $cache */
             $cache = App::getService('cache');
             $cache->clean(
-              [
-                CacheParent::Tags => [
-                  'group/'.$this->id.'/games',
-                  'group/'.$this->id.'/players',
-                ],
-              ]
+                [
+                    CacheParent::Tags => [
+                        'group/' . $this->id . '/games',
+                        'group/' . $this->id . '/players',
+                    ],
+                ]
             );
-            $cache->remove('group/'.$this->id.'/players');
-            $cache->remove('group/'.$this->id.'/games');
-            $cache->remove('group/'.$this->id.'/games/ids');
+            $cache->remove('group/' . $this->id . '/players');
+            $cache->remove('group/' . $this->id . '/games');
+            $cache->remove('group/' . $this->id . '/games/ids');
         }
     }
 
-    public function getPlayer(PlayerInterface $player) : ?GroupPlayerInterface {
+    public function getPlayer(PlayerInterface $player): ?GroupPlayerInterface
+    {
         $name = $player->name;
         return $this->getPlayerByName($name);
     }
 
-    public function getPlayerByName(string $name) : ?GroupPlayerInterface {
+    public function getPlayerByName(string $name): ?GroupPlayerInterface
+    {
         $name = Strings::toAscii($name);
         return array_find($this->players, static fn(GroupPlayer $player) => $player->asciiName === $name);
     }
 
-    public function getGamesCodes() : array {
+    public function getGamesCodes(): array
+    {
         return array_map(static fn(Game $game) => $game->code, $this->games);
     }
 
-    public function getDateRange(string $format = 'd.m.Y') : string {
+    public function getDateRange(string $format = 'd.m.Y'): string
+    {
         return '';
     }
 }

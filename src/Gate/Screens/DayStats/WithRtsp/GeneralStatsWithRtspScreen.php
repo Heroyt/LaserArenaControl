@@ -24,9 +24,9 @@ class GeneralStatsWithRtspScreen extends GateScreen implements WithSettings
     private RtspSettings $settings;
 
     public function __construct(
-      Latte                         $latte,
-      private readonly GeneralStats $generalStats,
-      private readonly Cache        $cache,
+        Latte                         $latte,
+        private readonly GeneralStats $generalStats,
+        private readonly Cache        $cache,
     ) {
         parent::__construct($latte);
     }
@@ -34,50 +34,57 @@ class GeneralStatsWithRtspScreen extends GateScreen implements WithSettings
     /**
      * @inheritDoc
      */
-    public static function getName() : string {
+    public static function getName(): string
+    {
         return lang('Základní denní statistiky s kamerami', domain: 'gate', context: 'screens');
     }
 
-    public static function getDescription() : string {
+    public static function getDescription(): string
+    {
         return lang(
-                   'Obrazovka zobrazující dnešní nejlepší hráče a počet odehraných her.',
-          domain : 'gate',
-          context: 'screens.description'
+            'Obrazovka zobrazující dnešní nejlepší hráče a počet odehraných her.',
+            domain: 'gate',
+            context: 'screens.description'
         );
     }
 
-    public static function getGroup() : string {
+    public static function getGroup(): string
+    {
         return lang('Denní statistiky', domain: 'gate', context: 'screens.groups');
     }
 
     /**
      * @inheritDoc
      */
-    public static function getDiKey() : string {
+    public static function getDiKey(): string
+    {
         return 'gate.screens.idle.stats_cameras';
     }
 
     /**
      * @inheritDoc
      */
-    public static function getSettingsForm() : string {
+    public static function getSettingsForm(): string
+    {
         return 'gate/settings/rtsp.latte';
     }
 
     /**
      * @inheritDoc
      */
-    public static function buildSettingsFromForm(array $data) : GateSettings {
+    public static function buildSettingsFromForm(array $data): GateSettings
+    {
         return new RtspSettings(
-          array_filter(array_map('trim', explode("\n", $data['streams'] ?? ''))),
-          (int) ($data['max-streams'] ?? 9),
+            array_filter(array_map('trim', explode("\n", $data['streams'] ?? ''))),
+            (int)($data['max-streams'] ?? 9),
         );
     }
 
     /**
      * @inheritDoc
      */
-    public function run() : ResponseInterface {
+    public function run(): ResponseInterface
+    {
         /** @var Request $request */
         $request = App::getInstance()->getRequest();
         /** @var string $date */
@@ -87,29 +94,29 @@ class GeneralStatsWithRtspScreen extends GateScreen implements WithSettings
         $this->generalStats->refresh();
 
         [$generalStatsHash, $generalStatsData] = $this->cache->load(
-          'gate.today.generalStats.'.$today->format('Y-m-d'),
-          fn() => [
-            $this->generalStats->getHash(date: $today, systems: $this->systems),
-            [
-              'data'     => $this->generalStats->getData(date: $today, systems: $this->systems),
-              'template' => $this->generalStats->getTemplate(),
+            'gate.today.generalStats.' . $today->format('Y-m-d'),
+            fn() => [
+                $this->generalStats->getHash(date: $today, systems: $this->systems),
+                [
+                    'data' => $this->generalStats->getData(date: $today, systems: $this->systems),
+                    'template' => $this->generalStats->getTemplate(),
+                ],
             ],
-          ],
-          [
+            [
             'tags'   => [
               'gate',
               'gate.widgets',
               'gate.widgets.generalStats',
-              'games/'.$today->format('Y-m-d'),
+                'games/' . $today->format('Y-m-d'),
             ],
             'expire' => '1 days',
-          ]
+            ]
         );
 
 
         return $this->view(
-          'gate/screens/generalDayStatsRtsp',
-          [
+            'gate/screens/generalDayStatsRtsp',
+            [
             'settings' => $this->getSettings(),
             'screenHash' => $generalStatsHash,
             'widgets'    => [
@@ -117,14 +124,15 @@ class GeneralStatsWithRtspScreen extends GateScreen implements WithSettings
             ],
             'addJs'    => ['gate/todayRtsp.js'],
             'addCss'   => ['gate/todayStatsRtsp.css'],
-          ]
+            ]
         );
     }
 
     /**
      * @inheritDoc
      */
-    public function getSettings() : RtspSettings {
+    public function getSettings(): RtspSettings
+    {
         if (!isset($this->settings)) {
             $this->settings = new RtspSettings();
         }
@@ -134,7 +142,8 @@ class GeneralStatsWithRtspScreen extends GateScreen implements WithSettings
     /**
      * @inheritDoc
      */
-    public function setSettings(GateSettings $settings) : static {
+    public function setSettings(GateSettings $settings): static
+    {
         $this->settings = $settings;
         return $this;
     }

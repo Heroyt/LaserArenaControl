@@ -27,7 +27,8 @@ class NewGame extends Controller
 
     protected string $title = 'Nová hra';
 
-    public function init(RequestInterface $request) : void {
+    public function init(RequestInterface $request): void
+    {
         parent::init($request);
         $this->baseInit($request);
     }
@@ -40,7 +41,8 @@ class NewGame extends Controller
      * @throws ValidationException
      * @throws Throwable
      */
-    public function show(Request $request) : ResponseInterface {
+    public function show(Request $request): ResponseInterface
+    {
         $this->initNewGameParams($request);
         $this->params->gameModes = $this->params->system !== null ?
           GameModeFactory::getAll(['system' => $this->params->system, 'public' => true])

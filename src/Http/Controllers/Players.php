@@ -17,11 +17,14 @@ use Spiral\RoadRunner\Jobs\Exception\JobsException;
 class Players extends Controller
 {
     public function __construct(
-      private readonly PlayerProvider $playerProvider,
-      private readonly TaskProducer   $taskProducer,
-    ) {}
+        private readonly PlayerProvider $playerProvider,
+        private readonly TaskProducer   $taskProducer,
+    )
+    {
+    }
 
-    public function getPlayer(string $code) : ResponseInterface {
+    public function getPlayer(string $code): ResponseInterface
+    {
         try {
             $player = Player::getByCode($code);
         } catch (InvalidArgumentException $e) {
@@ -36,7 +39,8 @@ class Players extends Controller
         return $this->respond($player);
     }
 
-    public function syncPlayer(string $code) : ResponseInterface {
+    public function syncPlayer(string $code): ResponseInterface
+    {
         $player = $this->playerProvider->findPublicPlayerByCode($code);
         if (!isset($player)) {
             return $this->respond(['error' => 'Player not found'], 404);
@@ -47,42 +51,46 @@ class Players extends Controller
         return $this->respond($player);
     }
 
-    public function find(Request $request) : ResponseInterface {
+    public function find(Request $request): ResponseInterface
+    {
         /** @var string $search */
         $search = $request->getGet('search', '');
         return $this->respond(
-          array_values(
-            $this->playerProvider->findPlayersLocal(
-              $search,
-              empty($request->getGet('nomail', ''))
+            array_values(
+                $this->playerProvider->findPlayersLocal(
+                    $search,
+                    empty($request->getGet('nomail', ''))
+                )
             )
-          )
         );
     }
 
-    public function findPublic(Request $request) : ResponseInterface {
+    public function findPublic(Request $request): ResponseInterface
+    {
         /** @var string $search */
         $search = $request->getGet('search', '');
         return $this->respond(
-          $this->playerProvider->findPlayersPublic($search) ?? []
+            $this->playerProvider->findPlayersPublic($search) ?? []
         );
     }
 
-    public function sync() : ResponseInterface {
+    public function sync(): ResponseInterface
+    {
         try {
             $this->taskProducer->push(PlayersSyncTask::class, null);
         } catch (JobsException $e) {
             return $this->respond(new ErrorResponse($e->getMessage(), exception: $e), 500);
         }
         return $this->respond(
-          new SuccessResponse(
-            message: lang('Synchronizace byla naplánována'),
-            detail : lang('Synchronizace proběhne na pozadí během pár minut.')
-          )
+            new SuccessResponse(
+                message: lang('Synchronizace byla naplánována'),
+                detail: lang('Synchronizace proběhne na pozadí během pár minut.')
+            )
         );
     }
 
-    public function show(Request $request) : ResponseInterface {
+    public function show(Request $request): ResponseInterface
+    {
         $perPage = 20;
         $fields = ['nickname', 'code', 'email', 'birthday', 'rank'];
         $sort = $request->getGet('sort', 'nickname');
@@ -99,12 +107,12 @@ class Players extends Controller
         $query->orderBy('id_user');
         if (!empty($search)) {
             $query->where(
-              '%or',
-              [
+                '%or',
+                [
                 ['[code] LIKE %~like~', $search],
                 ['[nickname] LIKE %~like~', $search],
                 ['[email] LIKE %~like~', $search],
-              ]
+                ]
             );
         }
         $page = (int) $request->getGet('page', 0);

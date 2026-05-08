@@ -14,7 +14,7 @@ interface WithSettings
      *
      * @return string
      */
-    public static function getSettingsForm() : string;
+    public static function getSettingsForm(): string;
 
     /**
      * Process the settings form submission
@@ -24,7 +24,7 @@ interface WithSettings
      * @param  array<string, mixed>  $data
      * @return T
      */
-    public static function buildSettingsFromForm(array $data) : GateSettings;
+    public static function buildSettingsFromForm(array $data): GateSettings;
 
     /**
      * Return a settings DTO.
@@ -33,7 +33,7 @@ interface WithSettings
      *
      * @return T
      */
-    public function getSettings() : GateSettings;
+    public function getSettings(): GateSettings;
 
     /**
      * Set screen settings.
@@ -42,5 +42,5 @@ interface WithSettings
      *
      * @return $this
      */
-    public function setSettings(GateSettings $settings) : static;
+    public function setSettings(GateSettings $settings): static;
 }

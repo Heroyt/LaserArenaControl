@@ -8,7 +8,8 @@ use Tracy\ILogger;
 
 final class SchedulerTracyLogger
 {
-    public static function log(Throwable $throwable) : void {
+    public static function log(Throwable $throwable): void
+    {
         Debugger::log($throwable, ILogger::EXCEPTION);
     }
 }

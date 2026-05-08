@@ -30,11 +30,14 @@ class GameHelpers extends ApiController
     use WithGameCodeParam;
 
     public function __construct(
-      private readonly Config $config,
-      private readonly CommandBus $commandBus,
-    ) {}
+        private readonly Config     $config,
+        private readonly CommandBus $commandBus,
+    )
+    {
+    }
 
-    public function getLoadedGameInfo(Request $request) : ResponseInterface {
+    public function getLoadedGameInfo(Request $request): ResponseInterface
+    {
         // Allow for filtering games just from one system
         /** @var string $system */
         $system = $request->getGet('system', 'all');
@@ -56,7 +59,7 @@ class GameHelpers extends ApiController
 
         // Try to find the last loaded or started games in selected systems
         foreach ($systems as $system) {
-            $started = Info::get($system.'-game-started');
+            $started = Info::get($system . '-game-started');
             $allGames['started'] = $started;
             if ($started instanceof Game && ($now - $started->start?->getTimestamp()) <= $gameStartedTime) {
                 if (isset($this->game) && $this->game->fileTime > $started->fileTime) {
@@ -67,7 +70,7 @@ class GameHelpers extends ApiController
                 continue;
             }
 
-            $loaded = Info::get($system.'-game-loaded');
+            $loaded = Info::get($system . '-game-loaded');
             $allGames['loaded'] = $loaded;
             if ($loaded instanceof Game && ($now - $loaded->fileTime?->getTimestamp()) <= $gameLoadedTime) {
                 if (isset($this->game) && $this->game->fileTime > $loaded->fileTime) {
@@ -79,8 +82,8 @@ class GameHelpers extends ApiController
 
         if (!isset($game)) {
             return $this->respond(
-              new ErrorResponse('No game found', ErrorType::NOT_FOUND, values: ['games' => $allGames]),
-              404
+                new ErrorResponse('No game found', ErrorType::NOT_FOUND, values: ['games' => $allGames]),
+                404
             );
         }
 
@@ -112,7 +115,8 @@ class GameHelpers extends ApiController
     /**
      * @return ResponseInterface
      */
-    public function getGateGameInfo() : ResponseInterface {
+    public function getGateGameInfo(): ResponseInterface
+    {
         $game = Info::get('gate-game');
 
         if (!($game instanceof Game)) {
@@ -120,7 +124,7 @@ class GameHelpers extends ApiController
         }
 
         return $this->respond(
-          [
+            [
             'currentServerTime' => time(),
             'gateTime'          => Info::get('gate-time'),
             'started'     => $game->isStarted(),
@@ -131,7 +135,7 @@ class GameHelpers extends ApiController
             'playerCount' => count($game->players),
             'teamCount'   => count($game->teams),
             'mode'        => $game->mode,
-          ]
+            ]
         );
     }
 
@@ -140,7 +144,8 @@ class GameHelpers extends ApiController
      * @return ResponseInterface
      * @throws Throwable
      */
-    public function recalcSkill(string $code = '') : ResponseInterface {
+    public function recalcSkill(string $code = ''): ResponseInterface
+    {
         $game = $this->getGameFromCode($code);
         if ($game instanceof ErrorResponse) {
             return $this->respond($game, $game->type->httpCode());
@@ -162,7 +167,8 @@ class GameHelpers extends ApiController
      * @throws JsonException
      * @throws Throwable
      */
-    public function changeGameMode(string $code, Request $request) : ResponseInterface {
+    public function changeGameMode(string $code, Request $request): ResponseInterface
+    {
         $game = $this->getGameFromCode($code);
         if ($game instanceof ErrorResponse) {
             return $this->respond($game, $game->type->httpCode());
@@ -183,12 +189,12 @@ class GameHelpers extends ApiController
         if (!$response->success) {
             $errorType = $response->exception !== null ? ErrorType::INTERNAL : ErrorType::VALIDATION;
             $this->respond(
-              new ErrorResponse(
-                           $response->message ?? 'error',
-                           $errorType,
-                exception: $response->exception
-              ),
-              $errorType === ErrorType::INTERNAL ? 500 : 400
+                new ErrorResponse(
+                    $response->message ?? 'error',
+                    $errorType,
+                    exception: $response->exception
+                ),
+                $errorType === ErrorType::INTERNAL ? 500 : 400
             );
         }
 
@@ -201,7 +207,8 @@ class GameHelpers extends ApiController
      * @return ResponseInterface
      * @throws Throwable
      */
-    public function recalcScores(string $code) : ResponseInterface {
+    public function recalcScores(string $code): ResponseInterface
+    {
         $game = $this->getGameFromCode($code);
         if ($game instanceof ErrorResponse) {
             return $this->respond($game, $game->type->httpCode());

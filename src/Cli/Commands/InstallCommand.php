@@ -12,24 +12,28 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class InstallCommand extends Command
 {
-    public static function getDefaultName() : ?string {
+    public static function getDefaultName(): ?string
+    {
         return 'install';
     }
 
-    public static function getDefaultDescription() : ?string {
+    public static function getDefaultDescription(): ?string
+    {
         return 'Install the database';
     }
 
-    protected function configure() : void {
+    protected function configure(): void
+    {
         $this->addOption(
-          'fresh',
-          'f',
-          InputOption::VALUE_NONE,
-          'Fresh install',
+            'fresh',
+            'f',
+            InputOption::VALUE_NONE,
+            'Fresh install',
         );
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output) : int {
+    protected function execute(InputInterface $input, OutputInterface $output): int
+    {
         $fresh = $input->getOption('fresh');
         if (Install::install($fresh, $output)) {
             return self::SUCCESS;

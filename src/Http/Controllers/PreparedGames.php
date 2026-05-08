@@ -49,13 +49,15 @@ class PreparedGames extends Controller
 
         /** @var array<string,mixed> $body */
         $body = $request->getParsedBody();
-        if (!$this->commandBus->dispatch(
-            new PrepareGameCommand(
-                $preparedType,
-                $system,
-                $body,
+        if (
+            !$this->commandBus->dispatch(
+                new PrepareGameCommand(
+                    $preparedType,
+                    $system,
+                    $body,
+                )
             )
-        )) {
+        ) {
             return $this->respond(new ErrorResponse('Failed to save prepared game'), 500);
         }
 

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\CQRS\CommandHandlers;
@@ -19,7 +20,6 @@ use Symfony\Component\Serializer\Serializer;
 
 final readonly class PrepareGameCommandHandler implements CommandHandlerInterface
 {
-
     public function __construct(
         private Serializer $serializer,
         private Cache      $cache,

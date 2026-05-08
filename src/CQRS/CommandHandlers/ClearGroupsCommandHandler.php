@@ -18,7 +18,8 @@ class ClearGroupsCommandHandler implements CommandHandlerInterface
     /**
      * @param  ClearGroupsCommand  $command
      */
-    public function handle(CommandInterface $command) : ClearGroupsCommandResponse {
+    public function handle(CommandInterface $command): ClearGroupsCommandResponse
+    {
         $logger = new Logger(LOG_DIR, 'clear_groups');
         $logger->info('Clearing groups...');
         $response = new ClearGroupsCommandResponse();
@@ -38,7 +39,7 @@ class ClearGroupsCommandHandler implements CommandHandlerInterface
             if (count($group->games) === 0) {
                 // Delete groups without games
                 if (!$group->delete()) {
-                    $logger->error('Failed to delete group: '.$group->id);
+                    $logger->error('Failed to delete group: ' . $group->id);
                     continue;
                 }
                 $response->deleted++;
@@ -54,14 +55,14 @@ class ClearGroupsCommandHandler implements CommandHandlerInterface
                 // Hide groups with games older than 2 days
                 $group->active = false;
                 if (!$group->save()) {
-                    $logger->error('Failed to hide group: '.$group->id);
+                    $logger->error('Failed to hide group: ' . $group->id);
                     continue;
                 }
                 $response->hidden++;
             }
         }
         GameGroup::clearModelCache();
-        $logger->info('Cleared groups: '.$response->deleted.' deleted, '.$response->hidden.' hidden');
+        $logger->info('Cleared groups: ' . $response->deleted . ' deleted, ' . $response->hidden . ' hidden');
 
         return $response;
     }

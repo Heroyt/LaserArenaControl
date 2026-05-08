@@ -28,7 +28,8 @@ class PlayerConnection extends BaseModel
      * @return PlayerConnection[]
      * @throws ValidationException
      */
-    public static function getForPlayer(Player $player) : array {
+    public static function getForPlayer(Player $player): array
+    {
         return self::query()->where('%n = %i', $player::getPrimaryKey(), $player->id)->get();
     }
 
@@ -41,7 +42,8 @@ class PlayerConnection extends BaseModel
      * @return PlayerConnection[]
      * @throws ValidationException
      */
-    public static function getForPlayerAndType(Player $player, ConnectionType $type) : array {
+    public static function getForPlayerAndType(Player $player, ConnectionType $type): array
+    {
         return self::query()
                    ->where('%n = %i AND [type] = %s', $player::getPrimaryKey(), $player->id, $type->value)
                    ->get();
@@ -55,7 +57,8 @@ class PlayerConnection extends BaseModel
      *
      * @return PlayerConnection|null
      */
-    public static function getByIdentifier(int | string $identifier, ConnectionType $type) : ?PlayerConnection {
+    public static function getByIdentifier(int|string $identifier, ConnectionType $type): ?PlayerConnection
+    {
         return self::query()->where('[identifier] = %s AND [type] = %s', $identifier, $type->value)->first();
     }
 
@@ -64,13 +67,14 @@ class PlayerConnection extends BaseModel
      * @throws DuplicateRecordException
      * @throws ValidationException
      */
-    public function insert() : bool {
+    public function insert(): bool
+    {
         // Check for duplicates before inserting a new one
         /** @var int|null $test */
         $test = DB::select($this::TABLE, 'id_user')->where(
-          '[type] = %s AND [identifier] = %s',
-          $this->type,
-          $this->identifier
+            '[type] = %s AND [identifier] = %s',
+            $this->type,
+            $this->identifier
         )->fetchSingle();
         if (isset($test)) {
             if ($test === $this->player->id) {
@@ -78,7 +82,7 @@ class PlayerConnection extends BaseModel
             }
             // Trying to add a duplicate for a different user -> error
             throw new DuplicateRecordException(
-              'Trying to add a duplicate user connection. This connection already exists for a different user.'
+                'Trying to add a duplicate user connection. This connection already exists for a different user.'
             );
         }
         return parent::insert();
@@ -89,19 +93,20 @@ class PlayerConnection extends BaseModel
      * @throws DuplicateRecordException
      * @throws ValidationException
      */
-    public function update() : bool {
+    public function update(): bool
+    {
         // Check for duplicates before updating an existing one
         $test = DB::select($this::TABLE, '*')->where(
-          '[type] = %s AND [identifier] = %s AND %n <> %i',
-          $this->type,
-          $this->identifier,
-          $this::getPrimaryKey(),
-          $this->id
+            '[type] = %s AND [identifier] = %s AND %n <> %i',
+            $this->type,
+            $this->identifier,
+            $this::getPrimaryKey(),
+            $this->id
         )->fetch();
         if (isset($test)) {
             // Trying to add a duplicate -> error
             throw new DuplicateRecordException(
-              'Trying to add a duplicate user connection. This connection already exists for a different user.'
+                'Trying to add a duplicate user connection. This connection already exists for a different user.'
             );
         }
         return parent::update();

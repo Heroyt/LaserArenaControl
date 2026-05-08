@@ -14,7 +14,9 @@ readonly class TimerSettings extends GateSettings
      * @param  int  $timer  Timer to swap screens in seconds
      */
     public function __construct(
-      public array $children = [],
-      public int   $timer = 60,
-    ) {}
+        public array $children = [],
+        public int   $timer = 60,
+    )
+    {
+    }
 }

@@ -11,7 +11,8 @@ class Cache extends Controller
 {
     protected string $title = 'Mezipaměť';
 
-    public function show() : ResponseInterface {
+    public function show(): ResponseInterface
+    {
         return $this->view('pages/settings/cache');
     }
 }

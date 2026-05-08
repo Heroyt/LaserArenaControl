@@ -20,18 +20,19 @@ class Image
     private array $customSizes = [];
 
     public function __construct(
-      string $image
+        string $image
     ) {
-        $this->image = file_exists($image) ? $image : ROOT.'assets/images/questionmark.jpg';
+        $this->image = file_exists($image) ? $image : ROOT . 'assets/images/questionmark.jpg';
 
         $this->name = pathinfo($this->image, PATHINFO_FILENAME);
-        $this->path = pathinfo($this->image, PATHINFO_DIRNAME).'/';
+        $this->path = pathinfo($this->image, PATHINFO_DIRNAME) . '/';
     }
 
 
-    public function getSize(int $size) : string {
+    public function getSize(int $size): string
+    {
         $optimized = $this->getOptimized();
-        $index = $size.'-webp';
+        $index = $size . '-webp';
         if (isset($optimized[$index])) {
             return $optimized[$index];
         }
@@ -42,7 +43,8 @@ class Image
     /**
      * @return array<string|numeric-string,string>
      */
-    public function getOptimized() : array {
+    public function getOptimized(): array
+    {
         if (!empty($this->optimized)) {
             return $this->optimized;
         }
@@ -65,15 +67,17 @@ class Image
         return $this->optimized;
     }
 
-    public function getUrl() : string {
+    public function getUrl(): string
+    {
         return $this->pathToUrl($this->image);
     }
 
-    private function pathToUrl(string $file) : string {
+    private function pathToUrl(string $file): string
+    {
         $path = explode('/', str_replace(ROOT, '', $file));
         $index = count($path) - 1;
         $path[$index] = rawurlencode($path[$index]);
-        return App::getInstance()->getBaseUrl().implode('/', $path);
+        return App::getInstance()->getBaseUrl() . implode('/', $path);
     }
 
     /**
@@ -81,7 +85,8 @@ class Image
      *
      * @return void
      */
-    private function findOptimizedImages(array &$images) : void {
+    private function findOptimizedImages(array &$images): void
+    {
         if ($this->getType() === 'svg') {
             return;
         }
@@ -90,20 +95,20 @@ class Image
             $images['webp'] = $webP;
         }
 
-        $optimizedDir = $this->path.'optimized/';
+        $optimizedDir = $this->path . 'optimized/';
 
         $imageService = App::getService('image');
         assert($imageService instanceof ImageService);
         foreach ($imageService->getSizes() as $size) {
-            $file = $optimizedDir.$this->name.'x'.$size.'.'.$this->getType();
+            $file = $optimizedDir . $this->name . 'x' . $size . '.' . $this->getType();
             if (file_exists($file)) {
                 /** @phpstan-ignore parameterByRef.type */
                 $images[(string) $size] = $this->pathToUrl($file);
             }
-            $file = $optimizedDir.$this->name.'x'.$size.'.webp';
+            $file = $optimizedDir . $this->name . 'x' . $size . '.webp';
             if (file_exists($file)) {
                 /** @phpstan-ignore parameterByRef.type */
-                $images[($size.'-webp')] = $this->pathToUrl($file);
+                $images[($size . '-webp')] = $this->pathToUrl($file);
             }
         }
     }
@@ -113,7 +118,8 @@ class Image
      *
      * @return string
      */
-    public function getType() : string {
+    public function getType(): string
+    {
         if (!isset($this->type)) {
             // Default to using provided extension
             $this->type ??= strtolower(pathinfo($this->image, PATHINFO_EXTENSION));
@@ -135,14 +141,15 @@ class Image
         return $this->type;
     }
 
-    public function getWebp() : ?string {
+    public function getWebp(): ?string
+    {
         if ($this->getType() === 'svg') {
             return null;
         }
         if ($this->getType() === 'webp') {
             return $this->pathToUrl($this->image);
         }
-        $webp = $this->path.'optimized/'.$this->name.'.webp';
+        $webp = $this->path . 'optimized/' . $this->name . '.webp';
         if (!file_exists($webp)) {
             $this->optimize();
             if (!file_exists($webp)) {
@@ -157,7 +164,8 @@ class Image
      * @return void
      * @throws FileException
      */
-    public function optimize() : void {
+    public function optimize(): void
+    {
         // Do not optimize SVG
         if ($this->getType() === 'svg') {
             return;
@@ -175,7 +183,8 @@ class Image
      * @return array{original?:string,webp?:string|null}
      * @throws FileException
      */
-    public function getResized(?int $width = null, ?int $height = null) : array {
+    public function getResized(?int $width = null, ?int $height = null): array
+    {
         if ($width === null && $height === null) {
             return [
               'original' => $this->getUrl(),
@@ -183,7 +192,7 @@ class Image
             ];
         }
 
-        $key = ($width ?? 'auto').'x'.($height ?? 'auto');
+        $key = ($width ?? 'auto') . 'x' . ($height ?? 'auto');
         if (isset($this->customSizes[$key])) {
             return $this->customSizes[$key];
         }
@@ -191,9 +200,9 @@ class Image
         $this->customSizes[$key] = [];
 
         // Try to find existing images
-        $optimizedPath = $this->path.'optimized/'.$this->name.'.'.$key.'.';
-        $originalFile = $optimizedPath.$this->getType();
-        $webpFile = $optimizedPath.'webp';
+        $optimizedPath = $this->path . 'optimized/' . $this->name . '.' . $key . '.';
+        $originalFile = $optimizedPath . $this->getType();
+        $webpFile = $optimizedPath . 'webp';
 
         if (file_exists($originalFile)) {
             $this->customSizes[$key]['original'] = $this->pathToUrl($originalFile);
@@ -228,11 +237,13 @@ class Image
         return $this->customSizes[$key];
     }
 
-    public function getPath() : string {
+    public function getPath(): string
+    {
         return $this->image;
     }
 
-    public function getMimeType() : string {
+    public function getMimeType(): string
+    {
         if (function_exists('exif_imagetype') && function_exists('image_type_to_mime_type')) {
             /** @var int|false $type */
             $type = exif_imagetype($this->image);

@@ -16,17 +16,21 @@ use Spiral\RoadRunner\Jobs\Task\ReceivedTaskInterface;
 readonly class GameHighlightsTask implements TaskDispatcherInterface
 {
     public function __construct(
-      private GameHighlightService $highlightService
-    ) {}
+        private GameHighlightService $highlightService
+    )
+    {
+    }
 
-    public static function getDiName() : string {
+    public static function getDiName(): string
+    {
         return 'task.gamesHighlights';
     }
 
     /**
      * @throws JobsException
      */
-    public function process(ReceivedTaskInterface $task, ?TaskPayloadInterface $payload = null) : void {
+    public function process(ReceivedTaskInterface $task, ?TaskPayloadInterface $payload = null): void
+    {
         if ($payload === null) {
             $task->nack('Missing payload');
             return;
@@ -39,7 +43,7 @@ readonly class GameHighlightsTask implements TaskDispatcherInterface
             $task->nack('Missing game code in payload');
             return;
         }
-        echo 'Loading game highlights: '.$payload->code;
+        echo 'Loading game highlights: ' . $payload->code;
         $game = GameFactory::getByCode($payload->code);
         if (!isset($game)) {
             $task->nack('Game not found');
@@ -48,9 +52,8 @@ readonly class GameHighlightsTask implements TaskDispatcherInterface
         $highlights = $this->highlightService->getHighlightsForGame($game, false);
         if ($highlights->count() === 0) {
             echo 'No highlights for this game';
-        }
-        else {
-            echo 'Loaded '.$highlights->count().' highlights';
+        } else {
+            echo 'Loaded ' . $highlights->count() . ' highlights';
         }
         $task->ack();
     }

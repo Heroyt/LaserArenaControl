@@ -12,9 +12,11 @@ use Random\RandomException;
 class FairTeams
 {
     public function __construct(
-      public readonly int $maxIterations = 1000,
-      public readonly int $maxIterationsWithoutImprovement = 40,
-    ) {}
+        public readonly int $maxIterations = 1000,
+        public readonly int $maxIterationsWithoutImprovement = 40,
+    )
+    {
+    }
 
     /**
      * @param  PlayerSkillDto[]  $players
@@ -22,7 +24,8 @@ class FairTeams
      * @return FairTeamDto[]
      * @throws RandomException
      */
-    public function splitPlayers(array $players, int $teamCount) : array {
+    public function splitPlayers(array $players, int $teamCount): array
+    {
         assert($teamCount > 2, 'Cannot split players into less than 2 teams');
 
         $playerCount = count($players);
@@ -130,7 +133,8 @@ class FairTeams
      * @param  array<string,int>|null  $deltas
      * @return int
      */
-    public function getMinSkillDelta(array $teams, ?array $deltas = null) : int {
+    public function getMinSkillDelta(array $teams, ?array $deltas = null): int
+    {
         $deltas ??= $this->calculateDeltas($teams);
         if (count($deltas) === 0) {
             return 0;
@@ -142,14 +146,15 @@ class FairTeams
      * @param  FairTeamDto[]  $teams
      * @return array<string,int>
      */
-    public function calculateDeltas(array $teams) : array {
+    public function calculateDeltas(array $teams): array
+    {
         $deltas = [];
         foreach ($teams as $team) {
             foreach ($teams as $team2) {
                 if ($team->key === $team2->key) {
                     continue;
                 }
-                $key = min($team->key, $team2->key).'-'.max($team->key, $team2->key);
+                $key = min($team->key, $team2->key) . '-' . max($team->key, $team2->key);
                 $deltas[$key] = abs($team->skill - $team2->skill);
             }
         }
@@ -161,7 +166,8 @@ class FairTeams
      * @param  array<string,int>|null  $deltas
      * @return int
      */
-    public function getMaxSkillDelta(array $teams, ?array $deltas = null) : int {
+    public function getMaxSkillDelta(array $teams, ?array $deltas = null): int
+    {
         $deltas ??= $this->calculateDeltas($teams);
         if (count($deltas) === 0) {
             return 0;
@@ -174,7 +180,8 @@ class FairTeams
      * @param  array<string,int>|null  $deltas
      * @return float
      */
-    public function getAvgSkillDelta(array $teams, ?array $deltas = null) : float {
+    public function getAvgSkillDelta(array $teams, ?array $deltas = null): float
+    {
         $deltas ??= $this->calculateDeltas($teams);
         $count = count($deltas);
         if ($count === 0) {
@@ -188,7 +195,8 @@ class FairTeams
      * @param  array<string,int>|null  $deltas
      * @return int
      */
-    public function getTotalSkillDelta(array $teams, ?array $deltas = null) : int {
+    public function getTotalSkillDelta(array $teams, ?array $deltas = null): int
+    {
         $deltas ??= $this->calculateDeltas($teams);
         return array_sum($deltas);
     }
@@ -198,7 +206,8 @@ class FairTeams
      * @param  array<string,int>|null  $deltas
      * @return float
      */
-    public function getSkillDeltaStdDev(array $teams, ?array $deltas = null) : float {
+    public function getSkillDeltaStdDev(array $teams, ?array $deltas = null): float
+    {
         $deltas ??= $this->calculateDeltas($teams);
 
         $mean = $this->getMeanSkillDelta($teams, $deltas);
@@ -217,7 +226,8 @@ class FairTeams
      * @param  array<string,int>|null  $deltas
      * @return float
      */
-    public function getMeanSkillDelta(array $teams, ?array $deltas = null) : float {
+    public function getMeanSkillDelta(array $teams, ?array $deltas = null): float
+    {
         $deltas ??= $this->calculateDeltas($teams);
         sort($deltas);
         $count = count($deltas);

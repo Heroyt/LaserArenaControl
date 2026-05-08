@@ -18,7 +18,8 @@ trait WithExtensions
      *
      * @return void
      */
-    protected function processExtensions(GameInterface $game, array $meta) : void {
+    protected function processExtensions(GameInterface $game, array $meta): void
+    {
         $extensionNames = App::getContainer()->findByType(ResultParserExtensionInterface::class);
         foreach ($extensionNames as $extensionName) {
             /** @var ResultParserExtensionInterface $extension */

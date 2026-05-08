@@ -39,22 +39,23 @@ class DbInstall implements InstallInterface
      *
      * @return bool
      */
-    public static function install(bool $fresh = false, ?OutputInterface $output = null) : bool {
+    public static function install(bool $fresh = false, ?OutputInterface $output = null): bool
+    {
         self::printInfo('Loading migrations', $output);
         // Load migration files
-        $loader = new MigrationLoader(ROOT.'config/migrations.neon');
+        $loader = new MigrationLoader(ROOT . 'config/migrations.neon');
         try {
             $loader->load();
-            $modules = glob(ROOT.'modules/*/config/migrations.neon');
+            $modules = glob(ROOT . 'modules/*/config/migrations.neon');
             if ($modules !== false) {
                 foreach ($modules as $module) {
                     self::printInfo(
-                      'Loading migrations for module - '.str_replace(
-                        [ROOT.'modules/', '/config/migrations.neon'],
-                        '',
-                        $module
-                      ),
-                      $output
+                        'Loading migrations for module - ' . str_replace(
+                            [ROOT . 'modules/', '/config/migrations.neon'],
+                            '',
+                            $module
+                        ),
+                        $output
                     );
                     ['tables' => $tables, 'views' => $views] = $loader->loadFile($module);
                     $loader->migrations = $loader::merge($loader->migrations, $tables);
@@ -92,14 +93,13 @@ class DbInstall implements InstallInterface
                 if (class_exists($tableName)) {
                     $tableName = static::getTableNameFromClass($tableName);
                     if ($tableName === null) {
-                        self::printDebug('Table name from class '.$tableName.' cannot be found - skipping');
+                        self::printDebug('Table name from class ' . $tableName . ' cannot be found - skipping');
                         continue;
                     }
+                } else {
+                    self::printDebug('Class ' . $tableName . ' does not exist - using table name as is');
                 }
-                else {
-                    self::printDebug('Class '.$tableName.' does not exist - using table name as is');
-                }
-                self::printDebug('Creating table '.$tableName, $output);
+                self::printDebug('Creating table ' . $tableName, $output);
                 $definition = $info->definition;
                 $connection->query("CREATE TABLE IF NOT EXISTS %n $definition", $tableName);
             }
@@ -134,16 +134,16 @@ class DbInstall implements InstallInterface
 
                         // Run ALTER TABLE queries for current version
                         foreach ($queries as $query) {
-                            self::printDebug('Altering table: '.$tableName.' - '.$query, $output);
+                            self::printDebug('Altering table: ' . $tableName . ' - ' . $query, $output);
                             try {
                                 $connection->query("ALTER TABLE %n $query;", $tableName);
                             } catch (Exception $e) {
                                 if (
-                                  $e->getCode() === 1060
-                                  || $e->getCode() === 1061
-                                  || $e->getCode() === 1091
-                                  || ($e->getCode() === 1054 && str_starts_with(strtolower($query), 'drop column'))
-                                  || ($e->getCode() === 1075 && str_starts_with(strtolower($query), 'drop primary key'))
+                                    $e->getCode() === 1060
+                                    || $e->getCode() === 1061
+                                    || $e->getCode() === 1091
+                                    || ($e->getCode() === 1054 && str_starts_with(strtolower($query), 'drop column'))
+                                    || ($e->getCode() === 1075 && str_starts_with(strtolower($query), 'drop primary key'))
                                 ) {
                                     // Duplicate column <-> already created
                                     // Or column does not exist <-> already dropped
@@ -195,15 +195,15 @@ class DbInstall implements InstallInterface
                         $columns[] = '%n';
                     }
                     self::printDebug(
-                      'Creating '.($index->unique ? 'UNIQUE ' :
-                        '').'index on: '.$tableName.' - '.$index->name.' ('.implode(', ', $index->columns).')',
-                      $output
+                        'Creating ' . ($index->unique ? 'UNIQUE ' :
+                            '') . 'index on: ' . $tableName . ' - ' . $index->name . ' (' . implode(', ', $index->columns) . ')',
+                        $output
                     );
                     $connection->query(
-                         'CREATE '.($index->unique ? 'UNIQUE ' : '').'INDEX %n ON %n ('.implode(',', $columns).');',
-                         $index->name,
-                         $tableName,
-                      ...$index->columns,
+                        'CREATE ' . ($index->unique ? 'UNIQUE ' : '') . 'INDEX %n ON %n (' . implode(',', $columns) . ');',
+                        $index->name,
+                        $tableName,
+                        ...$index->columns,
                     );
                 }
 
@@ -220,8 +220,8 @@ class DbInstall implements InstallInterface
                     $indexNames[] = $foreignKey->column;
 
                     self::printDebug(
-                      'Checking foreign keys for relation '.$tableName.'.'.$foreignKey->column.'->'.$refTable.'.'.$foreignKey->refColumn,
-                      $output
+                        'Checking foreign keys for relation ' . $tableName . '.' . $foreignKey->column . '->' . $refTable . '.' . $foreignKey->refColumn,
+                        $output
                     );
 
                     // Check current foreign keys
@@ -232,9 +232,9 @@ class DbInstall implements InstallInterface
                       ->where('TABLE_NAME = %s', $tableName)
                       ->where('COLUMN_NAME = %s', $foreignKey->column)
                       ->where(
-                        'REFERENCED_TABLE_NAME = %s AND REFERENCED_COLUMN_NAME = %s',
-                        $refTable,
-                        $foreignKey->refColumn
+                          'REFERENCED_TABLE_NAME = %s AND REFERENCED_COLUMN_NAME = %s',
+                          $refTable,
+                          $foreignKey->refColumn
                       )
                       ->fetchPairs();
                     $count = count($fks);
@@ -244,18 +244,18 @@ class DbInstall implements InstallInterface
                     }
                     if ($count > 1) {
                         self::printWarning(
-                          'Multiple foreign keys found for relation '.$tableName.'.'.$foreignKey->column.'->'.$refTable.'.'.$foreignKey->refColumn.' - '.implode(
-                            ', ',
-                            $fks
-                          ),
-                          $output
+                            'Multiple foreign keys found for relation ' . $tableName . '.' . $foreignKey->column . '->' . $refTable . '.' . $foreignKey->refColumn . ' - ' . implode(
+                                ', ',
+                                $fks
+                            ),
+                            $output
                         );
                         // FK already exists, but is duplicated
                         array_shift($fks); // Remove first element
                         // Drop any duplicate foreign key
                         foreach ($fks as $fkName) {
                             try {
-                                self::printDebug('DROPPING foreign key on: '.$tableName.' - '.$fkName, $output);
+                                self::printDebug('DROPPING foreign key on: ' . $tableName . ' - ' . $fkName, $output);
                                 $connection->query('ALTER TABLE %n DROP FOREIGN KEY %n;', $tableName, $fkName);
                             } catch (Exception $e) {
                                 self::printException($e, $output);
@@ -266,28 +266,28 @@ class DbInstall implements InstallInterface
 
                     // Create new foreign key
                     self::printDebug(
-                      'Creating foreign key on: '.$tableName.' - '.$foreignKey->column.'->'.$refTable.'.'.$foreignKey->refColumn,
-                      $output
+                        'Creating foreign key on: ' . $tableName . ' - ' . $foreignKey->column . '->' . $refTable . '.' . $foreignKey->refColumn,
+                        $output
                     );
                     $connection->query(
-                      'ALTER TABLE %n ADD FOREIGN KEY (%n) REFERENCES %n (%n) ON DELETE %SQL ON UPDATE %SQL;',
-                      $tableName,
-                      $foreignKey->column,
-                      $refTable,
-                      $foreignKey->refColumn,
-                      $foreignKey->onDelete,
-                      $foreignKey->onUpdate,
+                        'ALTER TABLE %n ADD FOREIGN KEY (%n) REFERENCES %n (%n) ON DELETE %SQL ON UPDATE %SQL;',
+                        $tableName,
+                        $foreignKey->column,
+                        $refTable,
+                        $foreignKey->refColumn,
+                        $foreignKey->onDelete,
+                        $foreignKey->onUpdate,
                     );
                 }
 
                 // DROP all undefined indexes
-                self::printDebug('DROPPING indexes on '.$tableName.' other then: '.implode(', ', $indexNames), $output);
+                self::printDebug('DROPPING indexes on ' . $tableName . ' other then: ' . implode(', ', $indexNames), $output);
                 /** @var Row[] $indexes */
                 $indexes = $connection->query("SHOW INDEX FROM %n WHERE key_name NOT IN %in;", $tableName, $indexNames)
                                       ->fetchAll();
                 foreach ($indexes as $row) {
                     try {
-                        self::printDebug('DROPPING index on: '.$tableName.' - '.$row->Key_name, $output);
+                        self::printDebug('DROPPING index on: ' . $tableName . ' - ' . $row->Key_name, $output);
                         $connection->query('DROP INDEX %n ON %n;', $row->Key_name, $tableName);
                     } catch (Exception $e) {
                         if (str_contains($e->getMessage(), 'needed in a foreign key')) {
@@ -302,9 +302,9 @@ class DbInstall implements InstallInterface
             self::printInfo('Creating views', $output);
             foreach ($loader->views as $name => $select) {
                 $connection->query(
-                  <<<SQL
+                    <<<SQL
                     CREATE OR REPLACE VIEW `$name` AS $select;
-                    SQL
+                      SQL
                 );
             }
         } catch (Exception $e) {
@@ -323,7 +323,8 @@ class DbInstall implements InstallInterface
      *
      * @return string|null
      */
-    protected static function getTableNameFromClass(string $className) : ?string {
+    protected static function getTableNameFromClass(string $className): ?string
+    {
         // Check static cache
         if (isset(static::$classTables[$className])) {
             return static::$classTables[$className];

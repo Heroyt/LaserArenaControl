@@ -10,6 +10,8 @@ use Lsr\Roadrunner\Tasks\TaskPayloadInterface;
 readonly class MusicSyncPayload implements TaskPayloadInterface
 {
     public function __construct(
-      public ?MusicMode $music = null,
-    ) {}
+        public ?MusicMode $music = null,
+    )
+    {
+    }
 }

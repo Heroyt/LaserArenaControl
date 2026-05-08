@@ -22,11 +22,12 @@ class PlayerCode implements Validator
      * @throws ValidationException
      */
     public function validateValue(
-      mixed           $value,
-      object | string $class,
-      string          $property,
-      string          $propertyPrefix = ''
-    ) : void {
+        mixed         $value,
+        object|string $class,
+        string        $property,
+        string        $propertyPrefix = ''
+    ): void
+    {
         assert($class instanceof Player);
         $class::validateCode($value, $class, $propertyPrefix);
     }

@@ -28,7 +28,8 @@ class Info
      *
      * @return mixed
      */
-    public static function get(string $key, mixed $default = null, bool $useCache = true) : mixed {
+    public static function get(string $key, mixed $default = null, bool $useCache = true): mixed
+    {
         if (!$useCache) {
             $value = self::getValue($key);
             if ($value === null) {
@@ -49,11 +50,11 @@ class Info
         try {
             /** @var string|null $value */
             $value = $cache->load(
-              'info.'.$key,
-              static fn() => self::getValue($key),
-              [
-                'tags' => ['info', 'info/'.$key],
-              ]
+                'info.' . $key,
+                static fn() => self::getValue($key),
+                [
+                    'tags' => ['info', 'info/' . $key],
+                ]
             );
         } catch (Throwable) {
             $value = null;
@@ -64,26 +65,28 @@ class Info
         return self::getUnserialized($value, $key);
     }
 
-    private static function getValue(string $key) : ?string {
+    private static function getValue(string $key): ?string
+    {
         try {
             return DB::select(self::TABLE, '[value]')
                      ->where('[key] = %s', $key)
-                     ->cacheTags('info', 'info/'.$key)
+                ->cacheTags('info', 'info/' . $key)
                      ->fetchSingle(false);
         } catch (Exception) {
             return null;
         }
     }
 
-    private static function getUnserialized(?string $value, string $key) : mixed {
+    private static function getUnserialized(?string $value, string $key): mixed
+    {
         if ($value === null) {
             return null;
         }
-        
+
         $unserialized = igbinary_unserialize($value);
         if (
-          ($unserialized === false && $value !== igbinary_serialize(false)) ||
-          ($unserialized === null && $value !== igbinary_serialize(null))
+            ($unserialized === false && $value !== igbinary_serialize(false)) ||
+            ($unserialized === null && $value !== igbinary_serialize(null))
         ) {
             // Fallback to normal PHP serialization
             /** @noinspection UnserializeExploitsInspection */
@@ -102,24 +105,26 @@ class Info
      * @return void
      * @throws Exception
      */
-    public static function set(string $key, mixed $value) : void {
+    public static function set(string $key, mixed $value): void
+    {
         self::$info[$key] = $value; // Cache
         $serialized = igbinary_serialize($value);
         DB::replace(
-          self::TABLE,
-          [
+            self::TABLE,
+            [
             [
               'key'   => $key,
               'value' => $serialized,
             ],
-          ]
+            ]
         );
         /** @var Cache $cache */
         $cache = App::getService('cache');
-        $cache->save('info.'.$key, $serialized, [$cache::Tags => ['info', 'info/'.$key]]);
+        $cache->save('info.' . $key, $serialized, [$cache::Tags => ['info', 'info/' . $key]]);
     }
 
-    public static function clearStaticCache() : void {
+    public static function clearStaticCache(): void
+    {
         self::$info = [];
     }
 }

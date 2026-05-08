@@ -20,14 +20,17 @@ final readonly class SetGameGroupCommand implements CommandInterface
      * @param  GameGroup|null  $group
      */
     public function __construct(
-      public Game       $game,
-      public ?GameGroup $group,
-    ) {}
+        public Game       $game,
+        public ?GameGroup $group,
+    )
+    {
+    }
 
     /**
      * @inheritDoc
      */
-    public function getHandler() : string {
+    public function getHandler(): string
+    {
         return SetGameGroupCommandHandler::class;
     }
 }

@@ -30,17 +30,21 @@ use Spiral\RoadRunner\Jobs\Options;
 class Music extends Controller
 {
     public function __construct(
-      private readonly TaskProducer  $taskProducer,
-      private readonly FeatureConfig $config,
-    ) {}
+        private readonly TaskProducer  $taskProducer,
+        private readonly FeatureConfig $config,
+    )
+    {
+    }
 
-    public function show() : ResponseInterface {
+    public function show(): ResponseInterface
+    {
         $this->params['music'] = MusicMode::getAll();
         $this->params['playlists'] = Playlist::getAll();
         return $this->view('pages/settings/music');
     }
 
-    public function upload(Request $request) : ResponseInterface {
+    public function upload(Request $request): ResponseInterface
+    {
         $allMusic = [];
 
         $files = $request->getUploadedFiles();
@@ -60,25 +64,25 @@ class Music extends Controller
                 // Handle form errors
                 if ($file->getError() !== UPLOAD_ERR_OK) {
                     $request->passErrors[] = match ($file->getError()) {
-                        UPLOAD_ERR_INI_SIZE   => lang('Nahraný soubor je příliš velký', context: 'errors').' - '.$name,
-                        UPLOAD_ERR_FORM_SIZE  => lang('Form size is to large', context: 'errors').' - '.$name,
+                        UPLOAD_ERR_INI_SIZE => lang('Nahraný soubor je příliš velký', context: 'errors') . ' - ' . $name,
+                        UPLOAD_ERR_FORM_SIZE => lang('Form size is to large', context: 'errors') . ' - ' . $name,
                         UPLOAD_ERR_PARTIAL    => lang(
-                                     'The uploaded file was only partially uploaded.',
+                                'The uploaded file was only partially uploaded.',
                             context: 'errors'
-                          ).' - '.$name,
-                        UPLOAD_ERR_CANT_WRITE => lang('Failed to write file to disk.', context: 'errors').' - '.$name,
-                        default               => lang('Error while uploading a file.', context: 'errors').' - '.$name,
+                            ) . ' - ' . $name,
+                        UPLOAD_ERR_CANT_WRITE => lang('Failed to write file to disk.', context: 'errors') . ' - ' . $name,
+                        default => lang('Error while uploading a file.', context: 'errors') . ' - ' . $name,
                     };
                     continue;
                 }
 
                 // Check for duplicates
-                if (file_exists(UPLOAD_DIR.$name)) {
+                if (file_exists(UPLOAD_DIR . $name)) {
                     $request->passNotices[] = [
                       'type'    => 'info',
-                      'content' => lang('Uploaded file already exists', context: 'errors').' - '.$name,
+                        'content' => lang('Uploaded file already exists', context: 'errors') . ' - ' . $name,
                     ];
-                    $musicCheck = MusicMode::query()->where('file_name = %s', UPLOAD_DIR.$name)->first();
+                    $musicCheck = MusicMode::query()->where('file_name = %s', UPLOAD_DIR . $name)->first();
                     if (isset($musicCheck)) {
                         $music = $musicCheck;
                     }
@@ -93,15 +97,15 @@ class Music extends Controller
 
                 // Upload file
                 try {
-                    $file->moveTo(UPLOAD_DIR.$name);
+                    $file->moveTo(UPLOAD_DIR . $name);
                 } catch (RuntimeException $e) {
-                    $request->passErrors[] = lang('File upload failed.', context: 'errors').$e->getMessage();
+                    $request->passErrors[] = lang('File upload failed.', context: 'errors') . $e->getMessage();
                     continue;
                 }
 
                 // Save the model
                 $music->name = pathinfo($name, PATHINFO_FILENAME);
-                $music->fileName = UPLOAD_DIR.$name;
+                $music->fileName = UPLOAD_DIR . $name;
                 try {
                     if (!$music->save()) {
                         $request->passErrors[] = lang('Failed to save data to the database', context: 'errors');
@@ -111,7 +115,7 @@ class Music extends Controller
                     $allMusic[] = [
                       'id'       => $music->id,
                       'name'     => $music->name,
-                      'media' => App::getInstance()->getBaseUrl().$name,
+                        'media' => App::getInstance()->getBaseUrl() . $name,
                       'fileName' => $music->fileName,
                     ];
                     $request->passNotices[] = [
@@ -121,13 +125,12 @@ class Music extends Controller
                     $this->taskProducer->plan(MusicTrimPreviewTask::class, new MusicTrimPreviewPayload($music->id));
                 } catch (ValidationException $e) {
                     $request->passErrors[] = lang(
-                                 'Failed to validate data before saving',
+                            'Failed to validate data before saving',
                         context: 'errors'
-                      ).': '.$e->getMessage();
+                        ) . ': ' . $e->getMessage();
                 }
             }
-        }
-        else {
+        } else {
             $request->passErrors[] = lang('No file uploaded', context: 'errors');
         }
         if ($this->config->isFeatureEnabled('liga')) {
@@ -138,7 +141,8 @@ class Music extends Controller
         return $this->customRespond($request, ['music' => $allMusic]);
     }
 
-    public function save(Request $request) : ResponseInterface {
+    public function save(Request $request): ResponseInterface
+    {
         /** @var UploadedFile[][][] $files */
         $files = $request->getUploadedFiles();
         /** @var array{name:string,group:string,order:numeric-string,public?:string,previewStart?:numeric-string}[] $musicInfo */
@@ -170,41 +174,39 @@ class Music extends Controller
                     if ($file->getError() === UPLOAD_ERR_OK) {
                         $fileType = strtolower(pathinfo($name, PATHINFO_EXTENSION));
                         if (in_array($fileType, ['jpg', 'jpeg', 'png'], true)) {
-                            $uploadPath = UPLOAD_DIR.'music-'.$id.'-background.'.$fileType;
+                            $uploadPath = UPLOAD_DIR . 'music-' . $id . '-background.' . $fileType;
                             $file->moveTo($uploadPath);
                             $music->backgroundImage = $uploadPath;
-                            $request->passNotices[] = 'music - '.$id.' - backgroundImage - '.$music->backgroundImage;
+                            $request->passNotices[] = 'music - ' . $id . ' - backgroundImage - ' . $music->backgroundImage;
 
                             // Delete all optimized images
-                            $images = glob(UPLOAD_DIR.'optimized/music-'.$id.'-background*');
+                            $images = glob(UPLOAD_DIR . 'optimized/music-' . $id . '-background*');
                             assert($images !== false);
                             foreach ($images as $file) {
                                 unlink($file);
                             }
-                        }
-                        else {
+                        } else {
                             $request->passErrors[] = lang('Nepodporovaný typ obrázku.', context: 'errors');
                         }
-                    }
-                    else {
+                    } else {
                         $request->passErrors[] = match ($file->getError()) {
                             UPLOAD_ERR_INI_SIZE   => lang(
-                                         'Nahraný soubor je příliš velký',
+                                    'Nahraný soubor je příliš velký',
                                 context: 'errors'
-                              ).' - '.$name,
-                            UPLOAD_ERR_FORM_SIZE  => lang('Form size is to large', context: 'errors').' - '.$name,
+                                ) . ' - ' . $name,
+                            UPLOAD_ERR_FORM_SIZE => lang('Form size is to large', context: 'errors') . ' - ' . $name,
                             UPLOAD_ERR_PARTIAL    => lang(
-                                         'The uploaded file was only partially uploaded.',
+                                    'The uploaded file was only partially uploaded.',
                                 context: 'errors'
-                              ).' - '.$name,
+                                ) . ' - ' . $name,
                             UPLOAD_ERR_CANT_WRITE => lang(
-                                         'Failed to write file to disk.',
+                                    'Failed to write file to disk.',
                                 context: 'errors'
-                              ).' - '.$name,
+                                ) . ' - ' . $name,
                             default               => lang(
-                                         'Error while uploading a file.',
+                                    'Error while uploading a file.',
                                 context: 'errors'
-                              ).' - '.$name,
+                                ) . ' - ' . $name,
                         };
                     }
                 }
@@ -222,41 +224,39 @@ class Music extends Controller
                     if ($file->getError() === UPLOAD_ERR_OK) {
                         $fileType = strtolower(pathinfo($name, PATHINFO_EXTENSION));
                         if (in_array($fileType, ['jpg', 'jpeg', 'png', 'svg'], true)) {
-                            $uploadPath = UPLOAD_DIR.'music-'.$id.'-icon.'.$fileType;
+                            $uploadPath = UPLOAD_DIR . 'music-' . $id . '-icon.' . $fileType;
                             $file->moveTo($uploadPath);
                             $music->icon = $uploadPath;
-                            $request->passNotices[] = 'music - '.$id.' - icon - '.$music->icon;
+                            $request->passNotices[] = 'music - ' . $id . ' - icon - ' . $music->icon;
 
                             // Delete all optimized images
-                            $images = glob(UPLOAD_DIR.'optimized/music-'.$id.'-icon*');
+                            $images = glob(UPLOAD_DIR . 'optimized/music-' . $id . '-icon*');
                             assert($images !== false);
                             foreach ($images as $file) {
                                 unlink($file);
                             }
-                        }
-                        else {
+                        } else {
                             $request->passErrors[] = lang('Nepodporovaný typ obrázku.', context: 'errors');
                         }
-                    }
-                    else {
+                    } else {
                         $request->passErrors[] = match ($file->getError()) {
                             UPLOAD_ERR_INI_SIZE   => lang(
-                                         'Nahraný soubor je příliš velký',
+                                    'Nahraný soubor je příliš velký',
                                 context: 'errors'
-                              ).' - '.$name,
-                            UPLOAD_ERR_FORM_SIZE  => lang('Form size is to large', context: 'errors').' - '.$name,
+                                ) . ' - ' . $name,
+                            UPLOAD_ERR_FORM_SIZE => lang('Form size is to large', context: 'errors') . ' - ' . $name,
                             UPLOAD_ERR_PARTIAL    => lang(
-                                         'The uploaded file was only partially uploaded.',
+                                    'The uploaded file was only partially uploaded.',
                                 context: 'errors'
-                              ).' - '.$name,
+                                ) . ' - ' . $name,
                             UPLOAD_ERR_CANT_WRITE => lang(
-                                         'Failed to write file to disk.',
+                                    'Failed to write file to disk.',
                                 context: 'errors'
-                              ).' - '.$name,
+                                ) . ' - ' . $name,
                             default               => lang(
-                                         'Error while uploading a file.',
+                                    'Error while uploading a file.',
                                 context: 'errors'
-                              ).' - '.$name,
+                                ) . ' - ' . $name,
                         };
                     }
                 }
@@ -268,9 +268,9 @@ class Music extends Controller
                 $request->passErrors[] = lang('Cannot find music mode', context: 'errors');
             } catch (ValidationException $e) {
                 $request->passErrors[] = lang(
-                             'Failed to validate data before saving',
+                        'Failed to validate data before saving',
                     context: 'errors'
-                  ).': '.$e->getMessage();
+                    ) . ': ' . $e->getMessage();
             } catch (DirectoryCreationException) {
             }
         }
@@ -286,8 +286,7 @@ class Music extends Controller
             if (str_starts_with($id, 'new')) {
                 $playlist = new Playlist();
                 $new = true;
-            }
-            else {
+            } else {
                 try {
                     $playlist = Playlist::get((int) $id);
                 } catch (ModelNotFoundException) {
@@ -327,26 +326,28 @@ class Music extends Controller
      * @return ResponseInterface
      * @throws JsonException
      */
-    private function customRespond(Request $request, array $data = []) : ResponseInterface {
+    private function customRespond(Request $request, array $data = []): ResponseInterface
+    {
         if ($request->isAjax()) {
             if (!empty($request->passErrors)) {
                 return $this->respond(
-                  array_merge(['errors' => $request->passErrors, 'notices' => $request->passNotices], $data),
-                  500
+                    array_merge(['errors' => $request->passErrors, 'notices' => $request->passNotices], $data),
+                    500
                 );
             }
             return $this->respond(
-              array_merge([['status' => 'ok', 'errors' => [], 'notices' => $request->passNotices]], $data)
+                array_merge([['status' => 'ok', 'errors' => [], 'notices' => $request->passNotices]], $data)
             );
         }
         return $this->app->redirect(['settings', 'music'], $request);
     }
 
-    public function uploadIntro(MusicMode $music, Request $request) : ResponseInterface {
+    public function uploadIntro(MusicMode $music, Request $request): ResponseInterface
+    {
         $files = $request->getUploadedFiles();
         if (isset($files['intro']) && $files['intro'] instanceof UploadedFile) {
             $file = $files['intro'];
-            $savePath = UPLOAD_DIR.$music->id.'_intro.mp3';
+            $savePath = UPLOAD_DIR . $music->id . '_intro.mp3';
             $response = $this->processMediaUpload($file, $savePath);
             if ($response !== null) {
                 return $response;
@@ -355,24 +356,25 @@ class Music extends Controller
             $music->introFile = $savePath;
             if (!$music->save()) {
                 return $this->respond(
-                  new ErrorResponse(lang('Nepodařilo se uložit hudební mód.', context: 'errors'), ErrorType::DATABASE),
-                  500
+                    new ErrorResponse(lang('Nepodařilo se uložit hudební mód.', context: 'errors'), ErrorType::DATABASE),
+                    500
                 );
             }
 
             return $this->respond(
-              new SuccessResponse(values: ['url' => $music->getIntroMediaUrl(), 'name' => $music->getIntroFileName()])
+                new SuccessResponse(values: ['url' => $music->getIntroMediaUrl(), 'name' => $music->getIntroFileName()])
             );
         }
         return $this->respond(new ErrorResponse('No file was uploaded', ErrorType::VALIDATION), 400);
     }
 
-    private function processMediaUpload(UploadedFile $file, string $savePath) : ?ResponseInterface {
+    private function processMediaUpload(UploadedFile $file, string $savePath): ?ResponseInterface
+    {
         $clientFilename = $file->getClientFilename();
         if (empty($clientFilename)) {
             return $this->respond(
-              new ErrorResponse(lang('Nelze nahrát soubor bez názvu.', context: 'errors'), ErrorType::VALIDATION),
-              400
+                new ErrorResponse(lang('Nelze nahrát soubor bez názvu.', context: 'errors'), ErrorType::VALIDATION),
+                400
             );
         }
         $name = basename($clientFilename);
@@ -380,14 +382,14 @@ class Music extends Controller
         // Handle form errors
         if ($file->getError() !== UPLOAD_ERR_OK) {
             $error = match ($file->getError()) {
-                UPLOAD_ERR_INI_SIZE   => lang('Nahraný soubor je příliš velký', context: 'errors').' - '.$name,
-                UPLOAD_ERR_FORM_SIZE  => lang('Form size is to large', context: 'errors').' - '.$name,
+                UPLOAD_ERR_INI_SIZE => lang('Nahraný soubor je příliš velký', context: 'errors') . ' - ' . $name,
+                UPLOAD_ERR_FORM_SIZE => lang('Form size is to large', context: 'errors') . ' - ' . $name,
                 UPLOAD_ERR_PARTIAL    => lang(
-                             'The uploaded file was only partially uploaded.',
+                        'The uploaded file was only partially uploaded.',
                     context: 'errors'
-                  ).' - '.$name,
-                UPLOAD_ERR_CANT_WRITE => lang('Failed to write file to disk.', context: 'errors').' - '.$name,
-                default               => lang('Error while uploading a file.', context: 'errors').' - '.$name,
+                    ) . ' - ' . $name,
+                UPLOAD_ERR_CANT_WRITE => lang('Failed to write file to disk.', context: 'errors') . ' - ' . $name,
+                default => lang('Error while uploading a file.', context: 'errors') . ' - ' . $name,
             };
             return $this->respond(new ErrorResponse($error, ErrorType::VALIDATION), 400);
         }
@@ -396,8 +398,8 @@ class Music extends Controller
         $fileType = strtolower(pathinfo($name, PATHINFO_EXTENSION));
         if ($fileType !== 'mp3') {
             return $this->respond(
-              new ErrorResponse(lang('File must be an mp3.', context: 'errors'), ErrorType::VALIDATION),
-              400
+                new ErrorResponse(lang('File must be an mp3.', context: 'errors'), ErrorType::VALIDATION),
+                400
             );
         }
 
@@ -406,18 +408,19 @@ class Music extends Controller
             $file->moveTo($savePath);
         } catch (RuntimeException $e) {
             return $this->respond(
-              new ErrorResponse(lang('File upload failed.', context: 'errors'), exception: $e),
-              500
+                new ErrorResponse(lang('File upload failed.', context: 'errors'), exception: $e),
+                500
             );
         }
         return null;
     }
 
-    public function uploadEnding(MusicMode $music, Request $request) : ResponseInterface {
+    public function uploadEnding(MusicMode $music, Request $request): ResponseInterface
+    {
         $files = $request->getUploadedFiles();
         if (isset($files['ending']) && $files['ending'] instanceof UploadedFile) {
             $file = $files['ending'];
-            $savePath = UPLOAD_DIR.$music->id.'_ending.mp3';
+            $savePath = UPLOAD_DIR . $music->id . '_ending.mp3';
             $response = $this->processMediaUpload($file, $savePath);
             if ($response !== null) {
                 return $response;
@@ -426,23 +429,24 @@ class Music extends Controller
             $music->endingFile = $savePath;
             if (!$music->save()) {
                 return $this->respond(
-                  new ErrorResponse(lang('Nepodařilo se uložit hudební mód.', context: 'errors'), ErrorType::DATABASE),
-                  500
+                    new ErrorResponse(lang('Nepodařilo se uložit hudební mód.', context: 'errors'), ErrorType::DATABASE),
+                    500
                 );
             }
 
             return $this->respond(
-              new SuccessResponse(values: ['url' => $music->getEndingMediaUrl(), 'name' => $music->getEndingFileName()])
+                new SuccessResponse(values: ['url' => $music->getEndingMediaUrl(), 'name' => $music->getEndingFileName()])
             );
         }
         return $this->respond(new ErrorResponse('No file was uploaded', ErrorType::VALIDATION), 400);
     }
 
-    public function uploadArmed(MusicMode $music, Request $request) : ResponseInterface {
+    public function uploadArmed(MusicMode $music, Request $request): ResponseInterface
+    {
         $files = $request->getUploadedFiles();
         if (isset($files['armed']) && $files['armed'] instanceof UploadedFile) {
             $file = $files['armed'];
-            $savePath = UPLOAD_DIR.$music->id.'_armed.mp3';
+            $savePath = UPLOAD_DIR . $music->id . '_armed.mp3';
             $response = $this->processMediaUpload($file, $savePath);
             if ($response !== null) {
                 return $response;
@@ -451,13 +455,13 @@ class Music extends Controller
             $music->armedFile = $savePath;
             if (!$music->save()) {
                 return $this->respond(
-                  new ErrorResponse(lang('Nepodařilo se uložit hudební mód.', context: 'errors'), ErrorType::DATABASE),
-                  500
+                    new ErrorResponse(lang('Nepodařilo se uložit hudební mód.', context: 'errors'), ErrorType::DATABASE),
+                    500
                 );
             }
 
             return $this->respond(
-              new SuccessResponse(values: ['url' => $music->getArmedMediaUrl(), 'name' => $music->getArmedFileName()])
+                new SuccessResponse(values: ['url' => $music->getArmedMediaUrl(), 'name' => $music->getArmedFileName()])
             );
         }
         return $this->respond(new ErrorResponse('No file was uploaded', ErrorType::VALIDATION), 400);
@@ -469,7 +473,8 @@ class Music extends Controller
      * @return ResponseInterface
      * @throws JsonException
      */
-    public function delete(Request $request) : ResponseInterface {
+    public function delete(Request $request): ResponseInterface
+    {
         $id = (int) ($request->params['id'] ?? 0);
         if ($id <= 0) {
             return $this->respond(['error' => lang('Invalid ID', context: 'errors')], 400);

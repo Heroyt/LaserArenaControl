@@ -43,11 +43,12 @@ class FileWatchWorker implements Worker
         $this->worker = RrWorker::create();
     }
 
-    public function run() : void {
+    public function run(): void
+    {
         while ($payload = $this->worker->waitPayload()) {
             try {
                 /** @phpstan-ignore property.internalClass */
-                $this->logger->debug('file_watch: '.$payload->body);
+                $this->logger->debug('file_watch: ' . $payload->body);
 
                 // Parse payload
                 /** @var array{directory?:string,eventTime?:string,file?:string,op?:string,path?:string} $data */
@@ -72,7 +73,8 @@ class FileWatchWorker implements Worker
         }
     }
 
-    public function handleError(Throwable $error) : void {
+    public function handleError(Throwable $error): void
+    {
         $this->logger->exception($error);
         /** @phpstan-ignore new.internalClass, method.internalClass */
         $this->worker->respond(new Payload('ERROR'));

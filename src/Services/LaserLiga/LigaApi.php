@@ -45,18 +45,19 @@ class LigaApi
     private array $extensions;
 
     public function __construct(
-      public string                  $url,
-      #[SensitiveParameter]
-      public string                  $apiKey,
-      private readonly Metrics       $metrics,
-      private readonly Serializer    $serializer,
-      private readonly GuzzleFactory $guzzleFactory,
+        public string                  $url,
+        #[SensitiveParameter]
+        public string                  $apiKey,
+        private readonly Metrics       $metrics,
+        private readonly Serializer    $serializer,
+        private readonly GuzzleFactory $guzzleFactory,
     ) {
         $this->logger = new Logger(LOG_DIR, 'ligaApi');
         $this->makeClient();
     }
 
-    private function makeClient() : void {
+    private function makeClient(): void
+    {
         $this->client = $this->guzzleFactory->makeClient($this->url, $this->apiKey);
     }
 
@@ -67,10 +68,11 @@ class LigaApi
      * @return LigaApi
      */
     public static function getInstance(
-      Metrics       $metrics,
-      Serializer    $serializer,
-      GuzzleFactory $guzzleFactory
-    ) : LigaApi {
+        Metrics       $metrics,
+        Serializer    $serializer,
+        GuzzleFactory $guzzleFactory
+    ): LigaApi
+    {
         if (!isset(self::$instance)) {
             /** @var string $url */
             $url = Info::get('liga_api_url', '');
@@ -91,7 +93,8 @@ class LigaApi
      * @return ResponseInterface
      * @throws GuzzleException
      */
-    public function get(string $path, ?array $params = null, array $config = []) : ResponseInterface {
+    public function get(string $path, ?array $params = null, array $config = []): ResponseInterface
+    {
         $this->makeClient();
         if (isset($params)) {
             $config['query'] = $params;
@@ -112,11 +115,12 @@ class LigaApi
      * @post All finished games will be sent to public
      */
     public function syncGames(
-      string $system,
-      array  $games,
-      ?float $timeout = null,
-      bool   $recreateClient = false
-    ) : bool {
+        string $system,
+        array  $games,
+        ?float $timeout = null,
+        bool   $recreateClient = false
+    ): bool
+    {
         if ($recreateClient) {
             $this->makeClient();
         }
@@ -133,7 +137,7 @@ class LigaApi
         foreach ($games as $key => $game) {
             if ($game::SYSTEM !== $system) {
                 throw new InvalidArgumentException(
-                  'Game #'.$key.' (code: '.$game->code.') is not an '.$system.' game.'
+                    'Game #' . $key . ' (code: ' . $game->code . ') is not an ' . $system . ' game.'
                 );
             }
             // Remove unfinished games
@@ -143,15 +147,15 @@ class LigaApi
             // Check assigned users
             try {
                 // Get user data from game
-                $response = $this->client->get('games/'.$game->code.'/users');
+                $response = $this->client->get('games/' . $game->code . '/users');
                 if ($response->getStatusCode() === 200) {
                     $response->getBody()->rewind();
 
                     /** @var LigaPlayerData[] $users */
                     $users = $this->serializer->deserialize(
-                      $response->getBody()->getContents(),
-                      LigaPlayerData::class.'[]',
-                      'json'
+                        $response->getBody()->getContents(),
+                        LigaPlayerData::class . '[]',
+                        'json'
                     );
                     if (!empty($users)) {
                         // Assign user objects for each user got
@@ -180,7 +184,7 @@ class LigaApi
 
         // Build a request
         try {
-            $this->logger->debug('Syncing '.count($gamesData).' games');
+            $this->logger->debug('Syncing ' . count($gamesData) . ' games');
             $config = [
               'body' => $this->serializer->serialize(['system' => $system, 'games' => $gamesData], 'json'),
             ];
@@ -195,10 +199,10 @@ class LigaApi
             if ($status > 299) {
                 $response->getBody()->rewind();
                 $this->logger->error(
-                  'Request failed ('.$status.'): '.$this->serializer->serialize(
-                    $response->getBody()->getContents(),
-                    'json'
-                  )
+                    'Request failed (' . $status . '): ' . $this->serializer->serialize(
+                        $response->getBody()->getContents(),
+                        'json'
+                    )
                 );
                 return false;
             }
@@ -219,14 +223,14 @@ class LigaApi
     /**
      * @return LigaApiExtensionInterface[]
      */
-    public function getExtensions() : array {
+    public function getExtensions(): array
+    {
         if (!isset($this->extensions)) {
             /** @var LigaApiExtensionInterface|LigaApiExtensionInterface[]|null $extensions */
             $extensions = App::getServiceByType(LigaApiExtensionInterface::class); // @phpstan-ignore varTag.nativeType
             if ($extensions === null) {
                 $extensions = [];
-            }
-            else {
+            } else {
                 if (!is_array($extensions)) {
                     $extensions = [$extensions];
                 }
@@ -246,7 +250,8 @@ class LigaApi
      * @return ResponseInterface
      * @throws GuzzleException
      */
-    public function post(string $path, array | object | null $data = null, array $config = []) : ResponseInterface {
+    public function post(string $path, array|object|null $data = null, array $config = []): ResponseInterface
+    {
         $this->makeClient();
         if (isset($data)) {
             $config['body'] = $this->serializer->serialize($data, 'json');
@@ -260,7 +265,8 @@ class LigaApi
      * @return bool
      * @throws ValidationException
      */
-    public function syncMusicModes() : bool {
+    public function syncMusicModes(): bool
+    {
         $musicModes = MusicMode::getAll();
 
         // Sync data
@@ -281,10 +287,10 @@ class LigaApi
         try {
             $config = [
               'body' => $this->serializer->serialize(
-                [
+                  [
                   'music' => $data,
-                ],
-                'json'
+                  ],
+                  'json'
               ),
             ];
             $config['headers']['Content-Type'] = 'application/json';
@@ -293,17 +299,17 @@ class LigaApi
             $response->getBody()->rewind();
             $body = $response->getBody()->getContents();
             if ($response->getStatusCode() !== 200) {
-                $this->logger->error('Music sync failed: '.$body);
+                $this->logger->error('Music sync failed: ' . $body);
                 return false;
             }
 
             $ids = array_map(static fn($data) => $data['id'], $data);
             $config = [
               'body' => $this->serializer->serialize(
-                [
+                  [
                   'whitelist' => $ids,
-                ],
-                'json',
+                  ],
+                  'json',
               ),
               'headers' => [
                 'Content-Type' => 'application/json',
@@ -311,7 +317,7 @@ class LigaApi
             ];
             $config['headers']['Content-Length'] = strlen($config['body']);
             $this->client->deleteAsync('music', $config);
-            $this->logger->debug('Removing music modes except: '.implode(',', $ids));
+            $this->logger->debug('Removing music modes except: ' . implode(',', $ids));
 
             // Upload files
             foreach ($musicModes as $mode) {
@@ -325,7 +331,7 @@ class LigaApi
                 $media = Utils::tryGetContents(Utils::tryFopen($previewFile, 'r'));
 
                 $boundary = uniqid('', true);
-                $delimiter = '-------------'.$boundary;
+                $delimiter = '-------------' . $boundary;
 
                 $fileName = basename($previewFile);
                 $files = [['name' => 'media', 'fileName' => $fileName, 'contents' => $media, 'type' => 'audio/mpeg']];
@@ -353,37 +359,37 @@ class LigaApi
                 }
 
                 $post_data = $this->buildDataFiles(
-                  $boundary,
-                  [],
-                  $files
+                    $boundary,
+                    [],
+                    $files
                 );
 
-                $ch = curl_init(trailingSlashIt($this->url).'api/music/'.$mode->id.'/upload');
+                $ch = curl_init(trailingSlashIt($this->url) . 'api/music/' . $mode->id . '/upload');
                 if ($ch === false) {
                     throw new RuntimeException('CURL init failed');
                 }
                 curl_setopt_array(
-                  $ch,
-                  [
+                    $ch,
+                    [
                     CURLOPT_POST       => true,
                     CURLOPT_TIMEOUT    => 60,
                     CURLOPT_RETURNTRANSFER => true,
                     CURLOPT_POSTFIELDS => $post_data,
                     CURLOPT_HTTPHEADER => [
-                      'Authorization: Bearer '.$this->apiKey,
-                      'Content-Type: multipart/form-data; boundary='.$delimiter,
-                      "Content-Length: ".strlen($post_data),
+                        'Authorization: Bearer ' . $this->apiKey,
+                        'Content-Type: multipart/form-data; boundary=' . $delimiter,
+                        "Content-Length: " . strlen($post_data),
                       "Accept: application/json",
                     ],
-                  ]
+                    ]
                 );
                 $body = curl_exec($ch);
                 $info = curl_getinfo($ch);
-                $this->logger->debug('Music upload response: '.$body);
+                $this->logger->debug('Music upload response: ' . $body);
                 if ($info['http_code'] !== 200) {
                     $this->logger->error(
-                      'Music upload failed: '.$body.' '.
-                      $this->serializer->serialize($info, 'json')
+                        'Music upload failed: ' . $body . ' ' .
+                        $this->serializer->serialize($info, 'json')
                     );
                     if ($info['http_code'] !== 404) {
                         return false;
@@ -405,16 +411,17 @@ class LigaApi
      * @param  array{name:string,fileName:string,contents:string,type:string}[]  $files
      * @return string
      */
-    private function buildDataFiles(string $boundary, array $fields, array $files) : string {
+    private function buildDataFiles(string $boundary, array $fields, array $files): string
+    {
         $data = '';
         $eol = "\r\n";
 
-        $delimiter = '-------------'.$boundary;
+        $delimiter = '-------------' . $boundary;
 
         foreach ($fields as $name => $content) {
-            $data .= "--".$delimiter.$eol
-              .'Content-Disposition: form-data; name="'.$name."\"".$eol.$eol
-              .$content.$eol;
+            $data .= "--" . $delimiter . $eol
+                . 'Content-Disposition: form-data; name="' . $name . "\"" . $eol . $eol
+                . $content . $eol;
         }
 
         foreach ($files as $file) {
@@ -422,15 +429,15 @@ class LigaApi
             $fileName = $file['fileName'];
             $content = $file['contents'];
             $type = $file['type'];
-            $data .= "--".$delimiter.$eol
-              .'Content-Disposition: form-data; name="'.$name.'"; filename="'.$fileName.'"'.$eol
-              .'Content-Type: '.$type.$eol
-              .'Content-Transfer-Encoding: binary'.$eol;
+            $data .= "--" . $delimiter . $eol
+                . 'Content-Disposition: form-data; name="' . $name . '"; filename="' . $fileName . '"' . $eol
+                . 'Content-Type: ' . $type . $eol
+                . 'Content-Transfer-Encoding: binary' . $eol;
 
             $data .= $eol;
-            $data .= $content.$eol;
+            $data .= $content . $eol;
         }
-        $data .= "--".$delimiter."--".$eol;
+        $data .= "--" . $delimiter . "--" . $eol;
 
         return $data;
     }
@@ -440,7 +447,8 @@ class LigaApi
      *
      * @return Client
      */
-    public function getClient(bool $remake = false) : Client {
+    public function getClient(bool $remake = false): Client
+    {
         if ($remake) {
             $this->makeClient();
         }
@@ -458,7 +466,8 @@ class LigaApi
      * @throws ValidationException
      * @throws Exception
      */
-    public function syncVests(bool $recreateClient = false) : bool {
+    public function syncVests(bool $recreateClient = false): bool
+    {
         if ($recreateClient) {
             $this->makeClient();
         }
@@ -478,9 +487,9 @@ class LigaApi
             try {
                 /** @var LigaVest[] $data */
                 $data = $this->serializer->deserialize(
-                  $contents,
-                  LigaVest::class.'[]',
-                  'json'
+                    $contents,
+                    LigaVest::class . '[]',
+                    'json'
                 );
 
                 foreach ($data as $vestData) {
@@ -501,17 +510,16 @@ class LigaApi
             } catch (UnexpectedValueException $e) {
                 $response->getBody()->rewind();
                 $this->logger->error(
-                           'Failed to parse GET /api/vests response',
-                  context: ['response' => $response->getBody()->getContents()]
+                    'Failed to parse GET /api/vests response',
+                    context: ['response' => $response->getBody()->getContents()]
                 );
                 $this->logger->exception($e);
             }
-        }
-        else {
+        } else {
             $response->getBody()->rewind();
             $this->logger->error(
-                       'Failed to call GET /api/vests',
-              context: [
+                'Failed to call GET /api/vests',
+                context: [
                          'response' => $response->getBody()
                                                 ->getContents(),
                        ]
@@ -523,8 +531,8 @@ class LigaApi
         if ($response->getStatusCode() >= 300) {
             $response->getBody()->rewind();
             $this->logger->error(
-                       'Failed to call POST /api/vests',
-              context: [
+                'Failed to call POST /api/vests',
+                context: [
                          'response' => $response->getBody()
                                                 ->getContents(),
                          'request'  => $vestsAll,

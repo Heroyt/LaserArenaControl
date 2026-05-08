@@ -24,11 +24,13 @@ class LasermaxxLoadData
      * @param  int<0,5>  $soloTeam
      */
     public function __construct(
-      public array $meta = [],
-      public array $players = [],
-      public array $teams = [],
-      public int $soloTeam = 2,
-    ) {}
+        public array $meta = [],
+        public array $players = [],
+        public array $teams = [],
+        public int   $soloTeam = 2,
+    )
+    {
+    }
 
     /**
      * @return array{
@@ -39,7 +41,8 @@ class LasermaxxLoadData
      *     soloTeam: int<0,5>,
      * }
      */
-    public function getParams() : array {
+    public function getParams(): array
+    {
         return [
           'meta'     => $this->meta,
           'players'  => $this->players,
@@ -52,7 +55,8 @@ class LasermaxxLoadData
     /**
      * @return string
      */
-    public function encodeMeta() : string {
+    public function encodeMeta(): string
+    {
         $meta = json_encode($this->meta, JSON_THROW_ON_ERROR);
         $meta = gzdeflate($meta, 9);
         if (!is_string($meta)) {
@@ -71,7 +75,8 @@ class LasermaxxLoadData
      * @post All teams with less than 1 player are removed
      * @return void
      */
-    public function filterTeams() : void {
+    public function filterTeams(): void
+    {
         $this->teams = array_filter($this->teams, static fn($team) => $team->playerCount > 0);
     }
 
@@ -80,7 +85,8 @@ class LasermaxxLoadData
      *
      * @return void
      */
-    public function sortPlayers() : void {
+    public function sortPlayers(): void
+    {
         ksort($this->players);
     }
 }

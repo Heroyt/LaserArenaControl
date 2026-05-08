@@ -16,14 +16,17 @@ use Throwable;
 final readonly class SetGameGroupCommandHandler implements CommandHandlerInterface
 {
     public function __construct(
-      private CommandBus $commandBus,
-    ) {}
+        private CommandBus $commandBus,
+    )
+    {
+    }
 
     /**
      * @param  SetGameGroupCommand  $command
      * @return array{game: string, group: int|null}|false
      */
-    public function handle(CommandInterface $command) : array | false {
+    public function handle(CommandInterface $command): array|false
+    {
         // Refresh game
         $game = $command->game;
         try {

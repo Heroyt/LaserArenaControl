@@ -5,21 +5,21 @@ namespace App\Http\Response;
 use OpenApi\Attributes as OA;
 
 #[OA\Schema(
-  schema: 'GamesList',
-  type  : 'array',
-  items : new OA\Items(
-    oneOf: [
+    schema: 'GamesList',
+    type: 'array',
+    items: new OA\Items(
+        oneOf: [
              new OA\Schema(
-               ref: '#/components/schemas/Game',
+                 ref: '#/components/schemas/Game',
              ),
              new OA\Schema(
-               type: 'string',
+                 type: 'string',
              ),
              new OA\Schema(
-               type: 'string',
+                 type: 'string',
              ),
            ]
-  )
+    )
 )]
 class GamesListResponse
 {

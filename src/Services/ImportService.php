@@ -205,5 +205,4 @@ class ImportService
         return str_starts_with($path, DIRECTORY_SEPARATOR)
             || preg_match('/^[a-z]:[\/\\\\]/i', $path) === 1;
     }
-
 }

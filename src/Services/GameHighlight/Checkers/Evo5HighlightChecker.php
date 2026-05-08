@@ -18,7 +18,8 @@ class Evo5HighlightChecker implements GameHighlightChecker
     /**
      * @inheritDoc
      */
-    public function checkGame(Game $game, HighlightCollection $highlights) : void {
+    public function checkGame(Game $game, HighlightCollection $highlights): void
+    {
         if (!$game instanceof \App\GameModels\Game\Lasermaxx\Evo5\Game) {
             return;
         }
@@ -39,12 +40,10 @@ class Evo5HighlightChecker implements GameHighlightChecker
                     $powersSecondMax = $powersMax;
                     $powersMax = $bonusCount;
                     $powersMaxPlayer = $player;
-                }
-                else {
+                } else {
                     if ($bonusCount > $powersSecondMax && $bonusCount < $powersMax) {
                         $powersSecondMax = $bonusCount;
-                    }
-                    else {
+                    } else {
                         if ($bonusCount === $powersMax) {
                             $powersMax = self::DUPLICATE_MAX_POWER;
                             $powersMaxPlayer = null;
@@ -58,22 +57,22 @@ class Evo5HighlightChecker implements GameHighlightChecker
             $name = $mineDeaths[0]->name;
             $gender = GenderService::rankWord($name);
             $highlights->add(
-              new GameHighlight(
-                GameHighlightType::ALONE_STATS,
-                sprintf(
-                  lang(
-                    match ($gender) {
-                        Gender::MALE   => '%s jediný byl zasažen minou.',
-                        Gender::FEMALE => '%s jediná byla zasažena minou.',
-                        Gender::OTHER  => '%s jediné bylo zasaženo minou.',
-                    },
-                    context: 'evo5',
-                    domain : 'highlights'
-                  ),
-                  '@'.$name.'@'
-                ),
-                GameHighlight::VERY_HIGH_RARITY
-              )
+                new GameHighlight(
+                    GameHighlightType::ALONE_STATS,
+                    sprintf(
+                        lang(
+                            match ($gender) {
+                                Gender::MALE => '%s jediný byl zasažen minou.',
+                                Gender::FEMALE => '%s jediná byla zasažena minou.',
+                                Gender::OTHER => '%s jediné bylo zasaženo minou.',
+                            },
+                            context: 'evo5',
+                            domain: 'highlights'
+                        ),
+                        '@' . $name . '@'
+                    ),
+                    GameHighlight::VERY_HIGH_RARITY
+                )
             );
         }
 
@@ -81,22 +80,22 @@ class Evo5HighlightChecker implements GameHighlightChecker
             $name = $powers[0]->name;
             $gender = GenderService::rankWord($name);
             $highlights->add(
-              new GameHighlight(
-                GameHighlightType::ALONE_STATS,
-                sprintf(
-                  lang(
-                    match ($gender) {
-                        Gender::MALE   => '%s jediný získal bonus.',
-                        Gender::FEMALE => '%s jediná získala bonusy.',
-                        Gender::OTHER  => '%s jediné získalo bonusy.',
-                    },
-                    context: 'evo5',
-                    domain : 'highlights'
-                  ),
-                  '@'.$name.'@'
-                ),
-                GameHighlight::VERY_HIGH_RARITY
-              )
+                new GameHighlight(
+                    GameHighlightType::ALONE_STATS,
+                    sprintf(
+                        lang(
+                            match ($gender) {
+                                Gender::MALE => '%s jediný získal bonus.',
+                                Gender::FEMALE => '%s jediná získala bonusy.',
+                                Gender::OTHER => '%s jediné získalo bonusy.',
+                            },
+                            context: 'evo5',
+                            domain: 'highlights'
+                        ),
+                        '@' . $name . '@'
+                    ),
+                    GameHighlight::VERY_HIGH_RARITY
+                )
             );
         }
 
@@ -105,23 +104,23 @@ class Evo5HighlightChecker implements GameHighlightChecker
             $name = $powersMaxPlayer->name;
             $gender = GenderService::rankWord($name);
             $highlights->add(
-              new GameHighlight(
-                GameHighlightType::ALONE_STATS,
-                sprintf(
-                  lang(
-                    match ($gender) {
-                        Gender::MALE   => '%s získal %.1fx tolik bonusů co ostatní.',
-                        Gender::FEMALE => '%s získala %.1fx tolik bonusů co ostatní.',
-                        Gender::OTHER  => '%s získalo %.1fx tolik bonusů co ostatní.',
-                    },
-                    context: 'evo5',
-                    domain : 'highlights'
-                  ),
-                  '@'.$name.'@',
-                  $ratio
-                ),
-                GameHighlight::HIGH_RARITY
-              )
+                new GameHighlight(
+                    GameHighlightType::ALONE_STATS,
+                    sprintf(
+                        lang(
+                            match ($gender) {
+                                Gender::MALE => '%s získal %.1fx tolik bonusů co ostatní.',
+                                Gender::FEMALE => '%s získala %.1fx tolik bonusů co ostatní.',
+                                Gender::OTHER => '%s získalo %.1fx tolik bonusů co ostatní.',
+                            },
+                            context: 'evo5',
+                            domain: 'highlights'
+                        ),
+                        '@' . $name . '@',
+                        $ratio
+                    ),
+                    GameHighlight::HIGH_RARITY
+                )
             );
         }
     }

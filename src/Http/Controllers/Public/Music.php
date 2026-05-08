@@ -20,7 +20,8 @@ class Music extends Controller
         $this->params = new MusicTemplate();
     }
 
-    public function show() : ResponseInterface {
+    public function show(): ResponseInterface
+    {
         $musicModes = MusicMode::query()->where('public = 1')->orderBy('order')->get();
         $this->params->music = [];
         foreach ($musicModes as $music) {

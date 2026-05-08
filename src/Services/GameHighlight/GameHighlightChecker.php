@@ -20,5 +20,5 @@ interface GameHighlightChecker
      *
      * @return void
      */
-    public function checkGame(Game $game, HighlightCollection $highlights) : void;
+    public function checkGame(Game $game, HighlightCollection $highlights): void;
 }

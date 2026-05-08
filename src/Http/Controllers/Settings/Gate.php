@@ -35,7 +35,8 @@ class Gate extends Controller
      * @throws TemplateDoesNotExistException
      * @throws ValidationException
      */
-    public function gate() : ResponseInterface {
+    public function gate(): ResponseInterface
+    {
         $this->params['gates'] = GateType::getAll();
         $this->params['screens'] = [];
         foreach (App::getContainer()->findByType(GateScreen::class) as $key) {
@@ -50,7 +51,8 @@ class Gate extends Controller
         return $this->view('pages/settings/gate');
     }
 
-    public function screenSettings(string $screen, Request $request) : ResponseInterface {
+    public function screenSettings(string $screen, Request $request): ResponseInterface
+    {
         /** @var GateScreen $screenObject */
         $screenObject = App::getService($screen);
         $this->params['screen'] = GateScreenModel::createFromScreen($screenObject);
@@ -63,12 +65,12 @@ class Gate extends Controller
             return $this->view('components/settings/gateScreenSettings');
         }
         return $this->respond(
-          new ErrorResponse(
-            'Invalid screen',
-            ErrorType::VALIDATION,
-            'This screen doesn\'t have any settings.'
-          ),
-          400
+            new ErrorResponse(
+                'Invalid screen',
+                ErrorType::VALIDATION,
+                'This screen doesn\'t have any settings.'
+            ),
+            400
         );
     }
 
@@ -91,25 +93,24 @@ class Gate extends Controller
             Info::set('timer_on_inactive_screen', $data->timerOnInactiveScreen);
             $files = $request->getUploadedFiles();
             if (
-              isset($files['background']) &&
-              $files['background'] instanceof UploadedFile &&
-              $files['background']->getError() === UPLOAD_ERR_OK
+                isset($files['background']) &&
+                $files['background'] instanceof UploadedFile &&
+                $files['background']->getError() === UPLOAD_ERR_OK
             ) {
                 $file = $files['background'];
                 $clientFilename = $file->getClientFilename();
                 if (empty($clientFilename)) {
                     $request->passErrors[] = lang('Nelze nahrát soubor bez názvu.', context: 'errors');
-                }
-                else {
+                } else {
                     // Remove old uploaded files
-                    $files = glob(UPLOAD_DIR.'gate.*');
+                    $files = glob(UPLOAD_DIR . 'gate.*');
                     assert($files !== false);
                     foreach ($files as $old) {
                         unlink($old);
                     }
                     // Save new file
                     $extension = strtolower(pathinfo($clientFilename, PATHINFO_EXTENSION));
-                    $file->moveTo(UPLOAD_DIR.'gate.'.$extension);
+                    $file->moveTo(UPLOAD_DIR . 'gate.' . $extension);
                 }
             }
         } catch (Exception) {
@@ -124,7 +125,7 @@ class Gate extends Controller
             try {
                 $gateType = GateType::get((int) $id);
             } catch (ModelNotFoundException $e) {
-                bdump('Gate type #'.$id.' not found.');
+                bdump('Gate type #' . $id . ' not found.');
                 bdump($e);
                 continue;
             }
@@ -142,7 +143,7 @@ class Gate extends Controller
             try {
                 $gateType = GateType::get((int) $id);
             } catch (ModelNotFoundException $e) {
-                bdump('Gate type #'.$id.' not found.');
+                bdump('Gate type #' . $id . ' not found.');
                 bdump($e);
                 continue;
             }
@@ -154,12 +155,12 @@ class Gate extends Controller
         if ($request->isAjax()) {
             bdump($request->params);
             return $this->respond(
-              [
+                [
                 'success'    => empty($request->passErrors),
                 'errors'     => $request->passErrors,
                 'newGateIds' => $newGateIds,
                 'newScreenIds' => $newScreenIds,
-              ]
+                ]
             );
         }
         return $this->app->redirect('settings-gate', $request);
@@ -176,13 +177,14 @@ class Gate extends Controller
      * @throws ValidationException
      */
     private function processGateType(
-      GateType     $gateType,
-      GateSaveInfo $gateData,
-      Request      $request,
-      string | int $gateKey,
-      array        &$newGateIds,
-      array        &$newScreenIds
-    ) : void {
+        GateType     $gateType,
+        GateSaveInfo $gateData,
+        Request      $request,
+        string|int   $gateKey,
+        array        &$newGateIds,
+        array        &$newScreenIds
+    ): void
+    {
         $new = !isset($gateType->id);
         bdump($new);
         if (!empty($gateData->name)) {
@@ -197,7 +199,7 @@ class Gate extends Controller
             try {
                 $screenModel = GateScreenModel::get((int) $screenId);
             } catch (ModelNotFoundException $e) {
-                bdump('Gate screen #'.$screenId.' not found.');
+                bdump('Gate screen #' . $screenId . ' not found.');
                 bdump($e);
                 continue;
             }
@@ -220,7 +222,7 @@ class Gate extends Controller
                 try {
                     $screenModel = GateScreenModel::get($id);
                 } catch (ModelNotFoundException $e) {
-                    bdump('Gate screen #'.$id.' not found.');
+                    bdump('Gate screen #' . $id . ' not found.');
                     bdump($e);
                     continue;
                 }
@@ -238,11 +240,10 @@ class Gate extends Controller
         if (!empty($gateType->name) && count($gateType->screens) > 0) {
             if (!$gateType->save()) {
                 $request->passErrors[] = sprintf(
-                  lang('Nepodařilo se uložit výsledkovou tabuli %s.', context: 'errors'),
-                  $gateType->name
+                    lang('Nepodařilo se uložit výsledkovou tabuli %s.', context: 'errors'),
+                    $gateType->name
                 );
-            }
-            elseif ($new || $newScreens) {
+            } elseif ($new || $newScreens) {
                 $newGateIds[$gateKey] = $gateType->id;
                 foreach ($newScreens as $key => $screen) {
                     if (isset($screen->id)) {
@@ -254,16 +255,17 @@ class Gate extends Controller
     }
 
     private function processScreen(
-      GateScreenModel $screenModel,
-      ScreenSaveInfo  $screenData,
-    ) : void {
+        GateScreenModel $screenModel,
+        ScreenSaveInfo  $screenData,
+    ): void
+    {
         if (
-          $screenData->type !== null
-          && (!isset($screenModel->screenSerialized) || $screenData->type !== $screenModel->screenSerialized)
+            $screenData->type !== null
+            && (!isset($screenModel->screenSerialized) || $screenData->type !== $screenModel->screenSerialized)
         ) {
             $screen = App::getService($screenData->type);
             if (!($screen instanceof GateScreen)) {
-                throw new ValidationException('Invalid screen type: '.$screenData->type);
+                throw new ValidationException('Invalid screen type: ' . $screenData->type);
             }
             $screenModel->setScreen($screen);
         }

@@ -12,7 +12,8 @@ enum SystemType : string
     case EVO6       = 'evo6';
     case LASERFORCE = 'laserforce';
 
-    public function getReadableName() : string {
+    public function getReadableName(): string
+    {
         return match ($this) {
             self::EVO5       => 'LaserMaxx EVO5',
             self::EVO6       => 'LaserMaxx EVO6',
@@ -20,7 +21,8 @@ enum SystemType : string
         };
     }
 
-    public function isActive() : bool {
+    public function isActive(): bool
+    {
         return match ($this) {
             self::EVO5, self::EVO6 => true,
             self::LASERFORCE       => false,
@@ -30,7 +32,8 @@ enum SystemType : string
     /**
      * @return string[]
      */
-    public function getColors() : array {
+    public function getColors(): array
+    {
         $game = $this->getGameClass();
         if (!method_exists($game, 'getTeamColors')) {
             return [];
@@ -41,7 +44,8 @@ enum SystemType : string
     /**
      * @return class-string<Game|\App\GameModels\Game\Lasermaxx\Evo6\Game|\App\GameModels\Game\LaserForce\Game>
      */
-    public function getGameClass() : string {
+    public function getGameClass(): string
+    {
         return match ($this) {
             self::EVO5       => Game::class,
             self::EVO6 => \App\GameModels\Game\Lasermaxx\Evo6\Game::class,
@@ -52,7 +56,8 @@ enum SystemType : string
     /**
      * @return string[]
      */
-    public function getTeamNames() : array {
+    public function getTeamNames(): array
+    {
         $game = $this->getGameClass();
         if (!method_exists($game, 'getTeamNames')) {
             return [];

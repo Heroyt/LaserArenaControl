@@ -25,11 +25,13 @@ final readonly class ResultsImportJob implements Job
         $this->logger = new Logger(LOG_DIR, 'cron');
     }
 
-    public function getName() : string {
+    public function getName(): string
+    {
         return 'Import results';
     }
 
-    public function run(JobLock $lock) : void {
+    public function run(JobLock $lock): void
+    {
         $this->metrics->add('cron_job_started', 1, ['results_import']);
 
         $lock->refresh(30.0);

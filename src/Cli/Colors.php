@@ -27,10 +27,11 @@ class Colors
      * @return string
      */
     public static function color(
-      ?ForegroundColors $foreground = null,
-      ?BackgroundColors $background = null,
-      ?TextAttributes   $attribute = null
-    ) : string {
+        ?ForegroundColors $foreground = null,
+        ?BackgroundColors $background = null,
+        ?TextAttributes   $attribute = null
+    ): string
+    {
         $return = '';
         if (isset($attribute)) {
             $return .= $attribute->value;
@@ -44,7 +45,8 @@ class Colors
         return $return;
     }
 
-    public static function reset() : string {
+    public static function reset(): string
+    {
         return self::COLOR_RESET;
     }
 }

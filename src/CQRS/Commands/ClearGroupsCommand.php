@@ -16,7 +16,8 @@ class ClearGroupsCommand implements CommandInterface
     /**
      * @inheritDoc
      */
-    public function getHandler() : string {
+    public function getHandler(): string
+    {
         return ClearGroupsCommandHandler::class;
     }
 }

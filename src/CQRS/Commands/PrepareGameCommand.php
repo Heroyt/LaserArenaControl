@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\CQRS\Commands;
@@ -13,7 +14,6 @@ use Lsr\CQRS\CommandInterface;
  */
 final readonly class PrepareGameCommand implements CommandInterface
 {
-
     /**
      * @param PreparedGameType $type
      * @param System|int|string|null $system

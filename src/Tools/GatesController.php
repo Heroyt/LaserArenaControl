@@ -26,7 +26,8 @@ class GatesController
      * @return int
      * @throws Exception
      */
-    public static function start(string $ip) : int {
+    public static function start(string $ip): int
+    {
         return self::sendCommand($ip, (string) hex2bin(self::START_COMMAND));
     }
 
@@ -37,7 +38,8 @@ class GatesController
      * @return int
      * @throws Exception
      */
-    public static function sendCommand(string $ip, string $command) : int {
+    public static function sendCommand(string $ip, string $command): int
+    {
         /** @var Socket|false $sock */
         $sock = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
         if ($sock === false) {
@@ -47,7 +49,7 @@ class GatesController
         $res = socket_connect($sock, $ip, self::PORT);
         if ($res === false) {
             throw new RuntimeException(
-              sprintf(lang('Nepodařilo se připojit k socket serveru (%s:%d).'), $ip, self::PORT)
+                sprintf(lang('Nepodařilo se připojit k socket serveru (%s:%d).'), $ip, self::PORT)
             );
         }
         $a = socket_write($sock, $command, 5);
@@ -60,13 +62,13 @@ class GatesController
             $errCode = socket_last_error();
             $errMsg = socket_strerror($errCode);
             throw new RuntimeException(
-              sprintf(lang('Nepodařilo se přijmout odpověď od serveru (%s - %s)'), $errCode, $errMsg)
+                sprintf(lang('Nepodařilo se přijmout odpověď od serveru (%s - %s)'), $errCode, $errMsg)
             );
         }
         socket_close($sock);
         if ($reply !== $command) {
             throw new RuntimeException(
-              sprintf(lang('Neočekávaná odpověď od serveru: "%s". Očekávaná: "%s".'), $reply, $command)
+                sprintf(lang('Neočekávaná odpověď od serveru: "%s". Očekávaná: "%s".'), $reply, $command)
             );
         }
         return $a;
@@ -78,7 +80,8 @@ class GatesController
      * @return int
      * @throws Exception
      */
-    public static function end(string $ip) : int {
+    public static function end(string $ip): int
+    {
         return self::sendCommand($ip, (string) hex2bin(self::END_COMMAND));
     }
 }

@@ -14,7 +14,8 @@ class SyncGameCommandHandler implements CommandHandlerInterface
     /**
      * @param  SyncGameCommand  $command
      */
-    public function handle(CommandInterface $command) : bool {
+    public function handle(CommandInterface $command): bool
+    {
         try {
             $command->game->fetch(true);
 

@@ -19,10 +19,12 @@ final readonly class AssignGameModeCommandResponse
      * @param  ($success is true ? AbstractMode : null)  $mode
      */
     public function __construct(
-      public bool          $success = true,
-      public ?string       $message = null,
-      public ?Throwable    $exception = null,
-      public ?Game         $game = null,
-      public ?AbstractMode $mode = null,
-    ) {}
+        public bool          $success = true,
+        public ?string       $message = null,
+        public ?Throwable    $exception = null,
+        public ?Game         $game = null,
+        public ?AbstractMode $mode = null,
+    )
+    {
+    }
 }

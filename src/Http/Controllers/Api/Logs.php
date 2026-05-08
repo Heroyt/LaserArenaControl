@@ -19,10 +19,11 @@ class Logs extends ApiController
     /**
      * @throws JsonException
      */
-    public function show(Request $request) : ResponseInterface {
+    public function show(Request $request): ResponseInterface
+    {
         try {
-            $logger = new Logger(LOG_DIR.'api/', 'logs');
-            $logger->info('Showing logs ('.$request->getIp().')');
+            $logger = new Logger(LOG_DIR . 'api/', 'logs');
+            $logger->info('Showing logs (' . $request->getIp() . ')');
         } catch (DirectoryCreationException) {
             $logger = null;
         }
@@ -32,20 +33,19 @@ class Logs extends ApiController
         if (empty($logFile)) {
             return $this->respond('Missing required argument "log".', 400);
         }
-        if (!file_exists(LOG_DIR.$logFile.'.log')) {
+        if (!file_exists(LOG_DIR . $logFile . '.log')) {
             /** @var string $date */
             $date = $request->getGet('date', date('Y-m-d'));
-            $logFile .= '-'.$date.'.log';
-            if (!file_exists(LOG_DIR.$logFile) || !is_readable(LOG_DIR.$logFile)) {
-                return $this->respond('Log file "'.$logFile.'" does not exist or is not readable.', 404);
+            $logFile .= '-' . $date . '.log';
+            if (!file_exists(LOG_DIR . $logFile) || !is_readable(LOG_DIR . $logFile)) {
+                return $this->respond('Log file "' . $logFile . '" does not exist or is not readable.', 404);
             }
-        }
-        else {
+        } else {
             $logFile .= '.log';
         }
 
         /** @var string $contents */
-        $contents = file_get_contents(LOG_DIR.$logFile);
+        $contents = file_get_contents(LOG_DIR . $logFile);
 
         preg_match_all('/(^\[(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})] ([A-Z]+): ([^\[]+))/m', $contents, $matches);
         $lines = [];
@@ -63,10 +63,11 @@ class Logs extends ApiController
     /**
      * @throws ArchiveCreationException
      */
-    public function download(Request $request) : ResponseInterface {
+    public function download(Request $request): ResponseInterface
+    {
         try {
-            $logger = new Logger(LOG_DIR.'api/', 'logs');
-            $logger->info('Downloading logs ('.$request->getIp().')');
+            $logger = new Logger(LOG_DIR . 'api/', 'logs');
+            $logger->info('Downloading logs (' . $request->getIp() . ')');
         } catch (DirectoryCreationException) {
             $logger = null;
         }
@@ -76,20 +77,20 @@ class Logs extends ApiController
         /** @var string $date */
         $date = $request->getGet('date', date('Y-m-d'));
         if (!empty($logFile)) {
-            $logFile .= '-'.$date.'.log';
-            if (!file_exists(LOG_DIR.$logFile) || !is_readable(LOG_DIR.$logFile)) {
-                return $this->respond('Log file "'.$logFile.'" does not exist or is not readable.', 404);
+            $logFile .= '-' . $date . '.log';
+            if (!file_exists(LOG_DIR . $logFile) || !is_readable(LOG_DIR . $logFile)) {
+                return $this->respond('Log file "' . $logFile . '" does not exist or is not readable.', 404);
             }
             header('Content-Type: text/plain');
-            header('Content-Disposition: attachment; filename="'.$logFile.'"');
-            header('Content-Length: '.filesize(LOG_DIR.$logFile));
+            header('Content-Disposition: attachment; filename="' . $logFile . '"');
+            header('Content-Length: ' . filesize(LOG_DIR . $logFile));
             http_response_code(200);
-            echo file_get_contents(LOG_DIR.$logFile);
+            echo file_get_contents(LOG_DIR . $logFile);
             exit;
         }
 
         $archive = new ZipArchive();
-        $test = $archive->open(LOG_DIR.'logs.zip', ZipArchive::CREATE); // Create or open a zip file
+        $test = $archive->open(LOG_DIR . 'logs.zip', ZipArchive::CREATE); // Create or open a zip file
         if ($test !== true) {
             throw new ArchiveCreationException($test);
         }
@@ -111,9 +112,9 @@ class Logs extends ApiController
 
         header('Content-Type: application/zip');
         header('Content-Disposition: attachment; filename="logs.zip"');
-        header("Content-Length: ".filesize(LOG_DIR.'logs.zip'));
+        header("Content-Length: " . filesize(LOG_DIR . 'logs.zip'));
         http_response_code(200);
-        readfile(LOG_DIR.'logs.zip');
+        readfile(LOG_DIR . 'logs.zip');
         exit;
     }
 }

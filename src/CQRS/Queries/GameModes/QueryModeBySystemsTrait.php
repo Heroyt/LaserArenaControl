@@ -13,7 +13,8 @@ trait QueryModeBySystemsTrait
      * @param  value-of<SystemType>|System|SystemType|int  ...$systems  System type name, System object or system ID
      * @return $this
      */
-    public function systems(string | System | SystemType | int ...$systems) : static {
+    public function systems(string|System|SystemType|int ...$systems): static
+    {
         $or = [
           'systems IS NULL',
         ];

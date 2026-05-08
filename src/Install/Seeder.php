@@ -772,7 +772,8 @@ class Seeder implements InstallInterface
     /**
      * @inheritDoc
      */
-    public static function install(bool $fresh = false, ?OutputInterface $output = null) : bool {
+    public static function install(bool $fresh = false, ?OutputInterface $output = null): bool
+    {
         try {
             self::printInfo('Seeding...', $output);
             // Game modes
@@ -783,10 +784,10 @@ class Seeder implements InstallInterface
                 DB::insertIgnore(AbstractMode::TABLE, $insert);
             }
             if ($fresh) {
-                DB::delete(AbstractMode::TABLE.'-names', ['1=1']);
+                DB::delete(AbstractMode::TABLE . '-names', ['1=1']);
             }
             foreach (self::GAME_MODE_NAMES as $insert) {
-                DB::insertIgnore(AbstractMode::TABLE.'-names', $insert);
+                DB::insertIgnore(AbstractMode::TABLE . '-names', $insert);
             }
 
             // Print styles
@@ -811,12 +812,12 @@ class Seeder implements InstallInterface
             }
             foreach (self::TIPS as $id => $tip) {
                 DB::insertIgnore(
-                  Tip::TABLE,
-                  [
+                    Tip::TABLE,
+                    [
                     'id_tip' => $id,
                     'text'   => $tip['text'],
                       'translations' => base64_encode(igbinary_serialize($tip['translations'])),
-                  ]
+                    ]
                 );
             }
 
@@ -853,10 +854,10 @@ class Seeder implements InstallInterface
 
 
             $idleScreen->setSettings(
-              new TimerSettings(
-                [$child1, $child2, $child3],
-                60
-              )
+                new TimerSettings(
+                    [$child1, $child2, $child3],
+                    60
+                )
             );
 
             $vestsScreens = $defaultGate->getScreensForTrigger(ScreenTriggerType::GAME_LOADED);
@@ -913,14 +914,14 @@ class Seeder implements InstallInterface
             // SYSTEMS
             if (!System::exists(1)) {
                 DB::insertIgnore(
-                  System::TABLE,
-                  [
+                    System::TABLE,
+                    [
                     'id_system' => 1,
                     'name'      => 'Evo5',
                     'type'      => 'evo5',
                     'default'   => true,
                     'active'    => true,
-                  ]
+                    ]
                 );
                 DB::update(Vest::TABLE, ['id_system' => 1], ['id_system IS NULL']);
             }

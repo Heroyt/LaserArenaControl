@@ -25,14 +25,16 @@ class ResultsParams extends TemplateParameters
      * @param  bool  $colorless
      */
     public function __construct(
-      public Game          $game,
-      public PrintStyle    $style,
-      public PrintTemplate $template,
-      public Today         $today,
-      public string        $publicUrl,
-      public string        $qr,
-      public string        $lang,
-      public int           $copies = 1,
-      public bool          $colorless = false,
-    ) {}
+        public Game          $game,
+        public PrintStyle    $style,
+        public PrintTemplate $template,
+        public Today         $today,
+        public string        $publicUrl,
+        public string        $qr,
+        public string        $lang,
+        public int           $copies = 1,
+        public bool          $colorless = false,
+    )
+    {
+    }
 }

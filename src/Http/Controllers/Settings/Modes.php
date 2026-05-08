@@ -32,8 +32,10 @@ use Throwable;
 class Modes extends Controller
 {
     public function __construct(
-      private readonly Cache $cache,
-    ) {}
+        private readonly Cache $cache,
+    )
+    {
+    }
 
     /**
      * @param  Request  $request
@@ -43,7 +45,8 @@ class Modes extends Controller
      * @throws JsonException
      * @throws TemplateDoesNotExistException
      */
-    public function modes(Request $request) : ResponseInterface {
+    public function modes(Request $request): ResponseInterface
+    {
         $this->params['system'] = $request->params['system'] ?? first(GameFactory::getSupportedSystems());
         assert($this->params['system'] !== null);
         $this->params['modes'] = GameModeFactory::getAll(['system' => $this->params['system'], 'all' => true]);
@@ -58,7 +61,8 @@ class Modes extends Controller
      * @throws ModelNotFoundException
      * @throws ValidationException
      */
-    public function modeVariations(Request $request) : ResponseInterface {
+    public function modeVariations(Request $request): ResponseInterface
+    {
         $id = $this->getRequestId($request);
         if ($id instanceof ErrorResponse) {
             return $this->respond($id, 400);
@@ -82,10 +86,10 @@ class Modes extends Controller
         }
 
         return $this->respond(
-          [
+            [
             'mode'       => $mode,
             'variations' => $variations,
-          ]
+            ]
         );
     }
 
@@ -95,7 +99,8 @@ class Modes extends Controller
      * @return int
      * @throws JsonException
      */
-    protected function getRequestId(Request $request) : int | ErrorResponse {
+    protected function getRequestId(Request $request): int|ErrorResponse
+    {
         $id = (int) ($request->params['id'] ?? 0);
         if ($id <= 0) {
             return new ErrorResponse('Invalid parameter id');
@@ -109,7 +114,8 @@ class Modes extends Controller
      * @return ResponseInterface
      * @throws JsonException
      */
-    public function modeSettings(Request $request) : ResponseInterface {
+    public function modeSettings(Request $request): ResponseInterface
+    {
         $id = $this->getRequestId($request);
         if ($id instanceof ErrorResponse) {
             return $this->respond($id, 400);
@@ -133,7 +139,8 @@ class Modes extends Controller
      * @return ResponseInterface
      * @throws JsonException
      */
-    public function modeNames(Request $request) : ResponseInterface {
+    public function modeNames(Request $request): ResponseInterface
+    {
         $id = $this->getRequestId($request);
         if ($id instanceof ErrorResponse) {
             return $this->respond($id, 400);
@@ -153,7 +160,8 @@ class Modes extends Controller
         return $this->respond($names);
     }
 
-    public function saveModeNames(Request $request) : ResponseInterface {
+    public function saveModeNames(Request $request): ResponseInterface
+    {
         $id = $this->getRequestId($request);
         if ($id instanceof ErrorResponse) {
             $this->respond($id, 400);
@@ -175,8 +183,8 @@ class Modes extends Controller
         } catch (DriverException | \Dibi\Exception $e) {
             DB::getConnection()->rollback();
             return $this->respond(
-              ['error' => 'Failed to save the data to database', 'exception' => $e->getMessage()],
-              500
+                ['error' => 'Failed to save the data to database', 'exception' => $e->getMessage()],
+                500
             );
         }
         // Clear cache
@@ -189,7 +197,8 @@ class Modes extends Controller
      * @throws JsonException
      * @throws ValidationException
      */
-    public function getAllVariations() : ResponseInterface {
+    public function getAllVariations(): ResponseInterface
+    {
         return $this->respond(GameModeVariation::getAll());
     }
 
@@ -200,7 +209,8 @@ class Modes extends Controller
      * @throws JsonException
      * @throws ValidationException
      */
-    public function createVariation(Request $request) : ResponseInterface {
+    public function createVariation(Request $request): ResponseInterface
+    {
         /** @var string $name */
         $name = $request->getPost('name', '');
         if (empty($name)) {
@@ -231,7 +241,8 @@ class Modes extends Controller
      * @return ResponseInterface
      * @throws JsonException
      */
-    public function save(Request $request) : ResponseInterface {
+    public function save(Request $request): ResponseInterface
+    {
         $modes = [];
 
         /** @var array<int, array{name?:string,type?:string,load?:string,description?:string,settings:array<string,mixed>,public?:string,active?:string,teams?:string[]}> $post */
@@ -252,8 +263,7 @@ class Modes extends Controller
                 if (isset($values['type'])) {
                     $mode->type = GameModeType::tryFrom($values['type']) ?? $mode->type;
                 }
-            }
-            elseif (isset($values['name'])) {
+            } elseif (isset($values['name'])) {
                 $mode->alias = $values['name'] === $mode->name ? '' : $values['name'];
             }
             if (isset($values['load'])) {
@@ -274,12 +284,12 @@ class Modes extends Controller
             }
             try {
                 if (!$mode->save()) {
-                    $request->passErrors[] = lang('Nepodařilo se uložit herní mód', context: 'errors').': '.$mode->name;
+                    $request->passErrors[] = lang('Nepodařilo se uložit herní mód', context: 'errors') . ': ' . $mode->name;
                     continue;
                 }
                 $modes[$mode->id] = $mode;
             } catch (ValidationException $e) {
-                $request->passErrors[] = lang('Validace selhala', context: 'errors').' - '.$e->getMessage();
+                $request->passErrors[] = lang('Validace selhala', context: 'errors') . ' - ' . $e->getMessage();
             }
         }
         // Clear cache
@@ -294,12 +304,13 @@ class Modes extends Controller
      * @return ResponseInterface
      * @throws JsonException
      */
-    private function saveResponse(Request $request, array $additional = []) : ResponseInterface {
+    private function saveResponse(Request $request, array $additional = []): ResponseInterface
+    {
         if ($request->isAjax()) {
             if (!empty($request->passErrors)) {
                 return $this->respond(
-                  array_merge($additional, ['errors' => $request->passErrors, 'notices' => $request->passNotices]),
-                  500
+                    array_merge($additional, ['errors' => $request->passErrors, 'notices' => $request->passNotices]),
+                    500
                 );
             }
             return $this->respond(array_merge($additional, ['status' => 'ok', 'notices' => $request->passNotices]));
@@ -307,7 +318,8 @@ class Modes extends Controller
         return $this->app->redirect(['settings', 'modes'], $request);
     }
 
-    public function saveModeVariations(Request $request) : ResponseInterface {
+    public function saveModeVariations(Request $request): ResponseInterface
+    {
         $id = (int) ($request->params['id'] ?? 0);
         if ($id <= 0) {
             $request->passErrors[] = 'Invalid parameter id';
@@ -339,40 +351,40 @@ class Modes extends Controller
                 }
                 foreach ($info['values'] ?? [] as $value) {
                     DB::insert(
-                      GameModeVariation::TABLE_VALUES,
-                      [
+                        GameModeVariation::TABLE_VALUES,
+                        [
                         'id_variation' => $variationId,
                         'id_mode'      => $id,
                         'value'        => $value['value'] ?? '',
                         'suffix'       => $value['suffix'] ?? '',
                         'order'        => $value['order'] ?? 0,
-                      ]
+                        ]
                     );
                 }
             }
             // Delete empty variations
             DB::delete(
-              GameModeVariation::TABLE,
-              [
+                GameModeVariation::TABLE,
+                [
                 '[id_variation] NOT IN %sql',
                 DB::select(GameModeVariation::TABLE_VALUES, 'id_variation')->fluent,
-              ]
+                ]
             );
             DB::getConnection()->commit();
             // Clear cache
             $this->cache->clean(
-              [
+                [
                 $this->cache::Tags => [
-                  'mode.'.$id.'.variations',
+                    'mode.' . $id . '.variations',
                   'templates.mode',
                   GameModeVariation::TABLE,
                   GameModeVariation::TABLE_VALUES,
                 ],
-              ]
+                ]
             );
         } catch (Throwable $e) {
             DB::getConnection()->rollback();
-            $request->passErrors[] = 'Saving failed - '.$e->getMessage();
+            $request->passErrors[] = 'Saving failed - ' . $e->getMessage();
         }
 
         return $this->saveResponse($request);
@@ -384,7 +396,8 @@ class Modes extends Controller
      * @return ResponseInterface
      * @throws JsonException
      */
-    public function deleteGameMode(Request $request) : ResponseInterface {
+    public function deleteGameMode(Request $request): ResponseInterface
+    {
         $id = $this->getRequestId($request);
         if ($id instanceof ErrorResponse) {
             return $this->respond($id, 400);
@@ -412,7 +425,8 @@ class Modes extends Controller
         return $this->respond(['status' => 'ok']);
     }
 
-    public function createGameMode(Request $request) : ResponseInterface {
+    public function createGameMode(Request $request): ResponseInterface
+    {
         $type = strtoupper($request->params['type'] ?? 'TEAM');
         $system = $request->params['system'] ?? null;
 
@@ -421,13 +435,13 @@ class Modes extends Controller
         }
 
         DB::insert(
-          AbstractMode::TABLE,
-          [
+            AbstractMode::TABLE,
+            [
             'systems' => $system,
             'type'      => $type,
             'name'      => lang('Nový mód', context: 'gameModes'),
             'load_name' => 'game-mode',
-          ]
+            ]
         );
         try {
             $mode = GameModeFactory::getById(DB::getInsertId());

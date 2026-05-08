@@ -25,21 +25,25 @@ class PriceGroup extends BaseModel
     #[OA\Property]
     public bool $deleted = false;
 
-    public static function getAll() : array {
+    public static function getAll(): array
+    {
         return static::query()->where('[deleted] = 0')->get();
     }
 
-    public function jsonSerialize() : array {
+    public function jsonSerialize(): array
+    {
         $data = parent::jsonSerialize();
         $data['price'] = $this->getPrice();
         return $data;
     }
 
-    public function getPrice() : float {
+    public function getPrice(): float
+    {
         return $this->price / 100;
     }
 
-    public function setPrice(float | int $price) : void {
+    public function setPrice(float|int $price): void
+    {
         $this->price = (int) ($price * 100);
     }
 }

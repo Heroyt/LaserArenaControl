@@ -4,9 +4,11 @@ namespace App\Cli\Commands\Games;
 
 use App\Cli\Colors;
 use App\Cli\Enums\ForegroundColors;
+use App\CQRS\Commands\ScanResultsDirectoryCommand;
 use App\GameModels\Factory\GameFactory;
 use App\Services\ImportService;
 use Lsr\Core\Requests\Dto\ErrorResponse;
+use Lsr\CQRS\CommandBus;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -19,6 +21,7 @@ class ImportGameCommand extends Command
 {
     public function __construct(
       private readonly ImportService $importService,
+      private readonly CommandBus $commandBus,
       private readonly Serializer    $serializer,
     ) {
         parent::__construct('games:import');
@@ -100,33 +103,31 @@ class ImportGameCommand extends Command
             return self::SUCCESS;
         }
 
-        $response = $this->importService->import($dir, $input->getOption('all'), $limit, $output);
-        if ($response instanceof ErrorResponse) {
+        try {
+            $response = $this->commandBus->dispatch(
+                new ScanResultsDirectoryCommand($dir, $input->getOption('all'), $limit)
+            );
+        } catch (Throwable $e) {
             $output->writeln(
               Colors::color(ForegroundColors::RED).
-              $response->title.
+              $e->getMessage() .
               Colors::reset()
             );
             $output->setVerbosity(OutputInterface::VERBOSITY_VERBOSE);
-            if (!empty($response->values)) {
-                $output->writeln(
-                  Colors::color(ForegroundColors::RED).
-                  json_encode($response->values, JSON_PRETTY_PRINT).
-                  Colors::reset()
-                );
-            }
-            if ($response->exception !== null) {
-                $output->writeln($response->exception->getTraceAsString());
-            }
+            $output->writeln($e->getTraceAsString());
             $output->setVerbosity(OutputInterface::VERBOSITY_NORMAL);
             return self::FAILURE;
         }
 
         $output->writeln(
           Colors::color(ForegroundColors::GREEN).
-          'Imported: '.$response->imported.'/'.$response->total.' in '.$response->time.'s'.
+          'Queued: ' . $response->queued . '/' . $response->seen .
+          ' changed result files. Unchanged: ' . $response->unchanged . '. Invalid: ' . $response->invalid . '.' .
           Colors::reset()
         );
+        if ($response->errors !== []) {
+            $output->writeln('<comment>Scan completed with ' . count($response->errors) . ' non-fatal errors.</comment>');
+        }
         return self::SUCCESS;
     }
 }

@@ -2,9 +2,9 @@
 
 namespace App\Cron;
 
+use App\CQRS\Commands\ScanResultsDirectoryCommand;
 use App\Models\System;
-use App\Services\ImportService;
-use Lsr\Core\Requests\Dto\ErrorResponse;
+use Lsr\CQRS\CommandBus;
 use Lsr\Logging\Logger;
 use Orisai\Scheduler\Job\Job;
 use Orisai\Scheduler\Job\JobLock;
@@ -19,8 +19,8 @@ final readonly class ResultsImportJob implements Job
     private Logger $logger;
 
     public function __construct(
-      private ImportService $importService,
-      private Metrics       $metrics,
+        private CommandBus $commandBus,
+        private Metrics    $metrics,
     ) {
         $this->logger = new Logger(LOG_DIR, 'cron');
     }
@@ -41,26 +41,17 @@ final readonly class ResultsImportJob implements Job
 
             $this->metrics->add('import_planned', 1, ['cron']);
             try {
-                $response = $this->importService->import($resultsDir);
+                $response = $this->commandBus->dispatch(new ScanResultsDirectoryCommand($resultsDir));
             } catch (Throwable $e) {
                 $this->logger->exception($e);
                 $this->metrics->add('cron_job_error', 1, ['results_import']);
                 continue;
             }
 
-            if ($response instanceof ErrorResponse) {
-                $this->logger->error(
-                  $response->title.(!empty($response->detail) ? ' '.$response->detail : ''),
-                  $response->values ?? []
+            if ($response->queued > 0 || $response->errors !== []) {
+                $this->logger->info(
+                    'Queued ' . $response->queued . '/' . $response->seen . ' changed result files for import.'
                 );
-                if (isset($response->exception)) {
-                    $this->logger->exception($response->exception);
-                }
-                $this->metrics->add('cron_job_error', 1, ['results_import']);
-                continue;
-            }
-            if ($response->imported) {
-                $this->logger->info('Imported '.$response->imported.'/'.$response->total.' results.');
             }
             $this->metrics->add('cron_job_ok', 1, ['results_import']);
         }

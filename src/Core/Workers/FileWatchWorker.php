@@ -4,13 +4,11 @@ declare(strict_types=1);
 
 namespace App\Core\Workers;
 
-use App\Tasks\GameImportTask;
-use App\Tasks\Payloads\GameImportPayload;
+use App\CQRS\Commands\ScanResultsDirectoryCommand;
 use Lsr\Core\App;
+use Lsr\CQRS\CommandBus;
 use Lsr\Logging\Logger;
-use Lsr\Roadrunner\Tasks\TaskProducer;
 use Lsr\Roadrunner\Workers\Worker;
-use Spiral\RoadRunner\Jobs\Options;
 use Spiral\RoadRunner\Metrics\Metrics;
 use Spiral\RoadRunner\Payload;
 use Spiral\RoadRunner\Worker as RrWorker;
@@ -39,8 +37,8 @@ class FileWatchWorker implements Worker
     private RrWorker $worker;
 
     public function __construct(
-      private readonly TaskProducer $taskProducer,
-      private readonly Metrics      $metrics,
+        private readonly CommandBus $commandBus,
+        private readonly Metrics    $metrics,
     ) {
         $this->worker = RrWorker::create();
     }
@@ -65,11 +63,7 @@ class FileWatchWorker implements Worker
 
                 // Plan import on watched dir
                 $this->metrics->add('import_planned', 1, ['file_watch']);
-                $this->taskProducer->push(
-                  GameImportTask::class,
-                  new GameImportPayload($dir),
-                  new Options(priority: GameImportTask::PRIORITY),
-                );
+                $this->commandBus->dispatchAsync(new ScanResultsDirectoryCommand($dir));
                 /** @phpstan-ignore new.internalClass, method.internalClass */
                 $this->worker->respond(new Payload('OK'));
             } catch (Throwable $e) {

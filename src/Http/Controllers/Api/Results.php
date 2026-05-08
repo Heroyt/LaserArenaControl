@@ -2,23 +2,20 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\CQRS\Commands\ScanResultsDirectoryCommand;
 use App\GameModels\Factory\GameFactory;
 use App\GameModels\Game\Game;
 use App\Http\Response\Results\LastResultsResponse;
 use App\Services\ImportService;
-use App\Tasks\GameImportTask;
-use App\Tasks\Payloads\GameImportPayload;
 use Lsr\Core\Controllers\ApiController;
 use Lsr\Core\Requests\Dto\ErrorResponse;
 use Lsr\Core\Requests\Dto\SuccessResponse;
 use Lsr\Core\Requests\Enums\ErrorType;
 use Lsr\Core\Requests\Request;
+use Lsr\CQRS\CommandBus;
 use Lsr\Lg\Results\Interface\ResultsParserInterface;
-use Lsr\Roadrunner\Tasks\TaskProducer;
 use OpenApi\Attributes as OA;
 use Psr\Http\Message\ResponseInterface;
-use Spiral\RoadRunner\Jobs\Exception\JobsException;
-use Spiral\RoadRunner\Jobs\Options;
 use Spiral\RoadRunner\Metrics\Metrics;
 use Throwable;
 
@@ -29,7 +26,7 @@ class Results extends ApiController
 {
     public function __construct(
       private readonly ImportService $importService,
-      private readonly TaskProducer  $taskProducer,
+      private readonly CommandBus $commandBus,
       private readonly Metrics       $metrics,
     ) {}
 
@@ -66,7 +63,7 @@ class Results extends ApiController
       content    : new OA\JsonContent(
         oneOf: [
                  new OA\Schema(ref: '#/components/schemas/SuccessResponse'),
-                 new OA\Schema(ref: '#/components/schemas/ImportResponse'),
+                new OA\Schema(ref: '#/components/schemas/ResultsScanResult'),
                ]
       )
     )]
@@ -97,22 +94,12 @@ class Results extends ApiController
         $sync = $request->getPost('sync');
         try {
             if (!empty($sync)) {
-                $response = $this->importService->import($resultsDir);
-                if ($response instanceof ErrorResponse) {
-                    return $this->respond($response, 500);
-                }
+                $response = $this->commandBus->dispatch(new ScanResultsDirectoryCommand($resultsDir));
                 return $this->respond($response);
             }
-            else {
-                $this->metrics->add('import_planned', 1, ['api']);
-                $this->taskProducer->push(
-                  GameImportTask::class,
-                  new GameImportPayload($resultsDir),
-                  new Options(priority: GameImportTask::PRIORITY),
-                );
-            }
-        } catch (JobsException $e) {
-            return $this->respond(new ErrorResponse('Job push failed', exception: $e), 500);
+
+            $this->metrics->add('import_planned', 1, ['api']);
+            $this->commandBus->dispatchAsync(new ScanResultsDirectoryCommand($resultsDir));
         } catch (Throwable $e) {
             return $this->respond(new ErrorResponse('Internal error', exception: $e), 500);
         }

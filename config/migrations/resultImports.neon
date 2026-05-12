@@ -27,6 +27,14 @@ tables:
 			PRIMARY KEY (`id_result_file_import`)
 		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 		'''
+		modifications:
+			0.1:
+				- 'MODIFY `path_hash` char(40) NOT NULL'
+				- 'MODIFY `seen_hash` char(64) NOT NULL DEFAULT '''''
+				- 'MODIFY `seen_version` char(40) NOT NULL DEFAULT '''''
+				- 'MODIFY `processing_version` char(40) DEFAULT NULL'
+				- 'MODIFY `processed_version` char(40) DEFAULT NULL'
+				- 'MODIFY `processed_hash` char(64) DEFAULT NULL'
 		indexes:
 			-
 				name: 'path_hash'

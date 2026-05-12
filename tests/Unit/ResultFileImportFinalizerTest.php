@@ -2,10 +2,13 @@
 
 namespace Tests\Unit;
 
+use App\GameModels\Game\Lasermaxx\Evo6\Game;
 use App\Services\EventService;
 use App\Services\FeatureConfig;
+use App\Services\GameStateStorage;
 use App\Services\LaserLiga\LigaApi;
 use App\Services\ResultFileImportFinalizer;
+use DateTimeImmutable;
 use Lsr\Logging\Logger;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Stub;
@@ -35,7 +38,10 @@ class ResultFileImportFinalizerTest extends TestCase
             ->getMock();
     }
 
-    private function createFinalizer(?EventService $eventService = null): ResultFileImportFinalizer
+    private function createFinalizer(
+        ?EventService     $eventService = null,
+        ?GameStateStorage $gameStateStorage = null,
+    ): ResultFileImportFinalizer
     {
         /** @var LigaApi&Stub $ligaApi */
         $ligaApi = $this->createStub(LigaApi::class);
@@ -47,6 +53,7 @@ class ResultFileImportFinalizerTest extends TestCase
             $eventService ?? $this->createStub(EventService::class),
             $ligaApi,
             $featureConfig,
+                $gameStateStorage ?? $this->createStub(GameStateStorage::class),
         );
     }
 
@@ -60,6 +67,39 @@ class ResultFileImportFinalizerTest extends TestCase
             ->willReturn(true);
 
         $this->createFinalizer($eventService)->triggerImported(2);
+    }
+
+    public function testTriggerUnfinishedStoresGameAndDispatchesEvent(): void
+    {
+        /** @var Game $game */
+        $game = $this->createStub(Game::class);
+        $game->resultsFile = '0001';
+        $game->fileTime = new DateTimeImmutable('@123');
+
+        $eventService = $this->createEventServiceMock();
+        $eventService
+            ->expects($this->once())
+            ->method('trigger')
+            ->with('game-loaded', ['game' => '0001'])
+            ->willReturn(true);
+
+        $gameStateStorage = $this
+            ->getMockBuilder(GameStateStorage::class)
+            ->onlyMethods(['get', 'set'])
+            ->getMock();
+        $gameStateStorage
+            ->expects($this->once())
+            ->method('get')
+            ->with('evo6-game-loaded')
+            ->willReturn(null);
+        $gameStateStorage
+            ->expects($this->once())
+            ->method('set')
+            ->with('evo6-game-loaded', $game);
+
+        $this
+            ->createFinalizer($eventService, $gameStateStorage)
+            ->triggerUnfinished($game, 'game-loaded', $this->createStub(Logger::class));
     }
 
     public function testFinalizeEmptyGameListOnlyLogs(): void

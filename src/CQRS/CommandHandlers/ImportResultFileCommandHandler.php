@@ -8,6 +8,7 @@ use App\Core\App;
 use App\CQRS\Commands\ImportResultFileCommand;
 use App\DataObjects\Import\ImportResultFileCommandResult;
 use App\DataObjects\Import\ResultFileImportResult;
+use App\DataObjects\Import\ResultFileImportState;
 use App\DataObjects\Import\ResultFileImportStatus;
 use App\Services\ResultFileImporter;
 use App\Services\ResultFileImportFinalizer;
@@ -72,7 +73,7 @@ readonly class ImportResultFileCommandHandler implements CommandHandlerInterface
         try {
             $state = $this->stateRepository->findByPathHash($command->pathHash);
             if ($state === null || $state->seenVersion !== $command->version) {
-                return $this->recordMetrics($command, $this->stale($command, 'stale'), $startedAt);
+                return $this->recordMetrics($command, $this->stale($command, 'stale', $state), $startedAt);
             }
 
             if ($state->processedVersion === $command->version) {
@@ -161,7 +162,7 @@ readonly class ImportResultFileCommandHandler implements CommandHandlerInterface
 
             $state = $this->stateRepository->findByPathHash($command->pathHash);
             if ($state === null || $state->seenVersion !== $command->version) {
-                return $this->recordMetrics($command, $this->stale($command, 'stale-after-import'), $startedAt);
+                return $this->recordMetrics($command, $this->stale($command, 'stale-after-import', $state), $startedAt);
             }
 
             $saveStartedAt = microtime(true);
@@ -202,7 +203,11 @@ readonly class ImportResultFileCommandHandler implements CommandHandlerInterface
         }
     }
 
-    private function stale(ImportResultFileCommand $command, string $event): ImportResultFileCommandResult
+    private function stale(
+        ImportResultFileCommand $command,
+        string                  $event,
+        ?ResultFileImportState  $state = null,
+    ): ImportResultFileCommandResult
     {
         try {
             $this->stateRepository->markStale($command->toVersion(), new DateTimeImmutable());
@@ -214,6 +219,11 @@ readonly class ImportResultFileCommandHandler implements CommandHandlerInterface
             $command->version,
             ResultFileImportStatus::STALE,
             event: $event,
+            error: $state === null
+                ? 'No import state found for path hash ' . $command->pathHash . '.'
+                : 'Import state version mismatch. queued=' . $command->version .
+                ' stored=' . $state->seenVersion .
+                ' status=' . $state->status->value,
         );
     }
 
@@ -340,6 +350,7 @@ readonly class ImportResultFileCommandHandler implements CommandHandlerInterface
 
         if ($result->unfinishedGame !== null) {
             $this->stateRepository->markSkipped($version, $now, $result->unfinishedEvent);
+            $this->finalizer->triggerUnfinished($result->unfinishedGame, $result->unfinishedEvent, $logger);
             return new ImportResultFileCommandResult(
                 $command->path,
                 $command->version,

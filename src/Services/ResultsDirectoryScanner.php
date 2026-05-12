@@ -6,12 +6,14 @@ namespace App\Services;
 
 use App\Core\App;
 use App\DataObjects\Import\QueuedResultFileImport;
+use App\DataObjects\Import\ResultFileImportState;
 use App\DataObjects\Import\ResultFileImportStatus;
 use App\DataObjects\Import\ResultsScanError;
 use App\DataObjects\Import\ResultsScanResult;
 use App\GameModels\Factory\GameFactory;
 use App\GameModels\Game\Game;
 use DateTimeImmutable;
+use Lsr\Core\Config;
 use Lsr\Lg\Results\AbstractResultsParser;
 use Nette\DI\MissingServiceException;
 use RuntimeException;
@@ -19,11 +21,15 @@ use Throwable;
 
 readonly class ResultsDirectoryScanner
 {
+    private int $processingTtlSeconds;
+
     public function __construct(
         private ResultFileVersionFactory        $versionFactory,
         private ResultFileImportStateRepository $stateRepository,
+        Config $config,
     )
     {
+        $this->processingTtlSeconds = (int)($config->getConfig('ENV')['RESULT_IMPORT_PROCESSING_TTL'] ?? 300);
     }
 
     /**
@@ -87,7 +93,11 @@ readonly class ResultsDirectoryScanner
                 if (str_ends_with($file, '0000.game')) {
                     $processedFiles[$file] = true;
                     $invalid++;
-                    $errors[] = new ResultsScanError('Skipping file with invalid name ending with 0000.game', $file, $system);
+                    $errors[] = new ResultsScanError(
+                        'Skipping file with invalid name ending with 0000.game',
+                        $file,
+                        $system
+                    );
                     continue;
                 }
 
@@ -100,12 +110,14 @@ readonly class ResultsDirectoryScanner
                     $version = $this->versionFactory->fromFile($file);
                     $state = $this->stateRepository->findByPathHash($version->pathHash);
                     $seen++;
+                    $processingExpired = $this->isProcessingExpired($state, $queuedAt);
 
                     if (
                         !$all
                         && $state !== null
                         && $state->seenVersion === $version->version
                         && $state->status !== ResultFileImportStatus::FAILED
+                        && !$processingExpired
                     ) {
                         $unchanged++;
                         continue;
@@ -150,5 +162,23 @@ readonly class ResultsDirectoryScanner
             queuedFiles: $queuedFiles,
             errors: $errors,
         );
+    }
+
+    private function isProcessingExpired(?ResultFileImportState $state, DateTimeImmutable $now): bool
+    {
+        if (
+            $state === null
+            || $state->status !== ResultFileImportStatus::PROCESSING
+            || $this->processingTtlSeconds <= 0
+        ) {
+            return false;
+        }
+
+        if ($state->processingStartedAt === null) {
+            return true;
+        }
+
+        return $state->processingStartedAt->getTimestamp()
+            <= ($now->getTimestamp() - $this->processingTtlSeconds);
     }
 }

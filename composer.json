@@ -16,7 +16,7 @@
     }
   ],
   "scripts": {
-    "test": "env XDEBUG_MODE=coverage php vendor/bin/codecept run --coverage --coverage-xml --coverage-html",
+    "test": "env XDEBUG_MODE=coverage php vendor/bin/phpunit run --coverage --coverage-xml --coverage-html",
     "docs": "doxygen",
     "build-production": "composer update --no-dev && composer dump-autoload --no-dev && npm install && npm run buildDev",
     "build": "composer update && composer dump-autoload && npm install && npm run build",

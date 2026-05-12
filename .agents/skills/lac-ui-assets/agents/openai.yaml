@@ -1,0 +1,6 @@
+interface:
+  display_name: "LAC UI"
+  short_description: "Latte, TypeScript, SCSS, and gate UI workflow"
+  default_prompt: "Use $lac-ui-assets to update a LaserArenaControl template or frontend asset."
+policy:
+  allow_implicit_invocation: true

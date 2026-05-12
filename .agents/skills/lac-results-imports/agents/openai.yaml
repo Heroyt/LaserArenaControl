@@ -1,0 +1,6 @@
+interface:
+  display_name: "LAC Results"
+  short_description: "Result import and game persistence workflow"
+  default_prompt: "Use $lac-results-imports to change or debug LaserArenaControl result importing."
+policy:
+  allow_implicit_invocation: true

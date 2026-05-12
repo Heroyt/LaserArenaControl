@@ -1,0 +1,6 @@
+interface:
+  display_name: "LAC DB Migrations"
+  short_description: "Schema, indexes, FKs, and install migrations"
+  default_prompt: "Use $lac-db-migrations to add or review a LaserArenaControl database migration."
+policy:
+  allow_implicit_invocation: true

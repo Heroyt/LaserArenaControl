@@ -1,0 +1,6 @@
+interface:
+  display_name: "LAC Project"
+  short_description: "General LaserArenaControl development workflow"
+  default_prompt: "Use $lac-project to make a focused LaserArenaControl backend or runtime change."
+policy:
+  allow_implicit_invocation: true

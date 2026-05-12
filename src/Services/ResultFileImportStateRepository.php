@@ -68,7 +68,11 @@ readonly class ResultFileImportStateRepository
             'last_error' => null,
         ];
 
-        $this->upsert($data);
+        if ($this->findByPathHash($version->pathHash) === null) {
+            $this->insert($data);
+        } else {
+            $this->updateByPathHash($version->pathHash, $data);
+        }
 
         $saved = $this->findByPathHash($version->pathHash);
         if ($saved === null) {
@@ -82,24 +86,34 @@ readonly class ResultFileImportStateRepository
      * @param array<string, mixed> $data
      * @throws Exception
      */
-    private function upsert(array $data): void
+    private function insert(array $data): void
     {
         $columns = array_keys($data);
         $placeholders = array_map([$this, 'placeholder'], $data);
-        $updates = array_map(
-            static fn(string $column): string => sprintf('`%s` = VALUES(`%s`)', $column, $column),
-            array_diff($columns, ['path_hash'])
-        );
 
         DB::query(
             sprintf(
-                'INSERT INTO %%n (`%s`) VALUES (%s) ON DUPLICATE KEY UPDATE %s',
+                'INSERT INTO %%n (`%s`) VALUES (%s)',
                 implode('`, `', $columns),
                 implode(', ', $placeholders),
-                implode(', ', $updates),
             ),
             self::TABLE,
             ...array_values($data),
+        );
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     * @throws Exception
+     */
+    private function updateByPathHash(string $pathHash, array $data): void
+    {
+        unset($data['path_hash']);
+
+        DB::update(
+            self::TABLE,
+            $data,
+            ['path_hash = %s', $pathHash],
         );
     }
 

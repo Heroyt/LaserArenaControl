@@ -132,6 +132,7 @@ services:
 
 	lasermaxx.regression: App\GameModels\Tools\Lasermaxx\RegressionStatCalculator
 	evo5.simulator: App\Services\Evo5\GameSimulator
+	evo6.simulator: App\Services\Evo6\GameSimulator
 	evo5.gameLoader: App\Tools\GameLoading\Evo5GameLoader
 	evo6.gameLoader: App\Tools\GameLoading\Evo6GameLoader
 

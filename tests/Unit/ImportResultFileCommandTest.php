@@ -51,6 +51,23 @@ class ImportResultFileCommandTest extends TestCase
         $this->assertSame('content', $command->content);
     }
 
+    public function testCreatesForcedCommandFromQueuedFile(): void
+    {
+        $queuedFile = new QueuedResultFileImport(
+            '/tmp/results/0001.game',
+            sha1('/tmp/results/0001.game'),
+            'evo6',
+            123,
+            456,
+            str_repeat('a', 64),
+            sha1('/tmp/results/0001.game:123:456:' . str_repeat('a', 64)),
+        );
+
+        $command = ImportResultFileCommand::fromQueuedFile($queuedFile, force: true);
+
+        $this->assertTrue($command->force);
+    }
+
     public function testConvertsToVersion(): void
     {
         $command = $this->createCommand();

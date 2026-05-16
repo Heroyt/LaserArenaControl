@@ -76,7 +76,7 @@ readonly class ImportResultFileCommandHandler implements CommandHandlerInterface
                 return $this->recordMetrics($command, $this->stale($command, 'stale', $state), $startedAt);
             }
 
-            if ($state->processedVersion === $command->version) {
+            if (!$command->force && $state->processedVersion === $command->version) {
                 return $this->recordMetrics(
                     $command,
                     new ImportResultFileCommandResult(

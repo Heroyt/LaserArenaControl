@@ -35,7 +35,9 @@ readonly class ScanResultsDirectoryCommandHandler implements CommandHandlerInter
         );
         if ($command->queueImports) {
             foreach ($result->queuedFiles as $queuedFile) {
-                $this->commandBus->dispatchAsync(ImportResultFileCommand::fromQueuedFile($queuedFile));
+                $this->commandBus->dispatchAsync(
+                    ImportResultFileCommand::fromQueuedFile($queuedFile, force: $command->forceImport)
+                );
             }
         }
 

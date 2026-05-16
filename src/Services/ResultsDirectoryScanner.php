@@ -164,6 +164,130 @@ readonly class ResultsDirectoryScanner
         );
     }
 
+    /**
+     * @param non-empty-string $file
+     */
+    public function scanFile(
+        string $file,
+        bool   $all = false,
+        bool   $includeContent = false,
+        int    $maxContentBytes = 65536,
+    ): ResultsScanResult
+    {
+        if (!is_file($file) || !is_readable($file)) {
+            throw new RuntimeException('Result file does not exist or is not readable: ' . $file);
+        }
+
+        $dir = trailingSlashIt(dirname($file));
+        $queuedAt = new DateTimeImmutable();
+        $errors = [];
+
+        if (str_ends_with($file, '0000.game')) {
+            return new ResultsScanResult(
+                dir: $dir,
+                seen: 0,
+                queued: 0,
+                unchanged: 0,
+                invalid: 1,
+                errors: [
+                    new ResultsScanError(
+                        'Skipping file with invalid name ending with 0000.game',
+                        $file
+                    ),
+                ],
+            );
+        }
+
+        $supportedSystems = GameFactory::getSupportedSystems();
+        foreach ($supportedSystems as $system) {
+            try {
+                /**
+                 * @var AbstractResultsParser<Game> $parser
+                 * @phpstan-ignore missingType.generics
+                 */
+                $parser = App::getService('result.parser.' . $system);
+            } catch (MissingServiceException $e) {
+                $errors[] = new ResultsScanError($e->getMessage(), system: $system);
+                continue;
+            }
+
+            if (!$parser::checkFile($file)) {
+                continue;
+            }
+
+            try {
+                $version = $this->versionFactory->fromFile($file);
+                $state = $this->stateRepository->findByPathHash($version->pathHash);
+                $processingExpired = $this->isProcessingExpired($state, $queuedAt);
+
+                if (
+                    !$all
+                    && $state !== null
+                    && $state->seenVersion === $version->version
+                    && $state->status !== ResultFileImportStatus::FAILED
+                    && !$processingExpired
+                ) {
+                    return new ResultsScanResult(
+                        dir: $dir,
+                        seen: 1,
+                        queued: 0,
+                        unchanged: 1,
+                        invalid: 0,
+                        errors: $errors,
+                    );
+                }
+
+                $this->stateRepository->saveSeen(
+                    $version,
+                    $system,
+                    ResultFileImportStatus::QUEUED,
+                    $queuedAt,
+                );
+                $content = null;
+                if ($includeContent && $version->size <= $maxContentBytes) {
+                    $content = file_get_contents($file);
+                    if ($content === false) {
+                        throw new RuntimeException('Failed to read result file content: ' . $file);
+                    }
+                }
+
+                return new ResultsScanResult(
+                    dir: $dir,
+                    seen: 1,
+                    queued: 1,
+                    unchanged: 0,
+                    invalid: 0,
+                    queuedFiles: [QueuedResultFileImport::fromVersion($version, $system, $content)],
+                    errors: $errors,
+                );
+            } catch (Throwable $e) {
+                return new ResultsScanResult(
+                    dir: $dir,
+                    seen: 0,
+                    queued: 0,
+                    unchanged: 0,
+                    invalid: 1,
+                    errors: [
+                        ...$errors,
+                        new ResultsScanError($e->getMessage(), $file, $system),
+                    ],
+                );
+            }
+        }
+
+        return new ResultsScanResult(
+            dir: $dir,
+            seen: 0,
+            queued: 0,
+            unchanged: 0,
+            invalid: 1,
+            errors: [
+                ...$errors,
+                new ResultsScanError('Skipping file because no enabled parser accepted its content', $file),
+            ],
+        );
+    }
+
     private function isProcessingExpired(?ResultFileImportState $state, DateTimeImmutable $now): bool
     {
         if (

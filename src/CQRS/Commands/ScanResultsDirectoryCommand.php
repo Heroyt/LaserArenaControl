@@ -23,6 +23,7 @@ final readonly class ScanResultsDirectoryCommand implements CommandInterface
         public bool $includeContent = false,
         public int  $maxContentBytes = 65536,
         public bool $queueImports = true,
+        public bool $forceImport = false,
     )
     {
     }

@@ -25,11 +25,16 @@ final readonly class ImportResultFileCommand implements CommandInterface
         public string  $version,
         public ?string $content = null,
         public int     $timeoutSeconds = 30,
+        public bool $force = false,
     )
     {
     }
 
-    public static function fromQueuedFile(QueuedResultFileImport $queuedFile, int $timeoutSeconds = 30): self
+    public static function fromQueuedFile(
+        QueuedResultFileImport $queuedFile,
+        int                    $timeoutSeconds = 30,
+        bool                   $force = false,
+    ): self
     {
         return new self(
             path: $queuedFile->path,
@@ -41,6 +46,7 @@ final readonly class ImportResultFileCommand implements CommandInterface
             version: $queuedFile->version,
             content: $queuedFile->content,
             timeoutSeconds: $timeoutSeconds,
+            force: $force,
         );
     }
 

@@ -4,6 +4,7 @@ namespace App\Cli\Commands\Games;
 
 use App\Cli\Colors;
 use App\Cli\Enums\ForegroundColors;
+use App\Core\App;
 use App\CQRS\Commands\ImportResultFileCommand;
 use App\CQRS\Commands\ScanResultsDirectoryCommand;
 use App\DataObjects\Import\ImportResultFileCommandResult;
@@ -12,6 +13,7 @@ use App\DataObjects\Import\ResultFileImportStatus;
 use App\DataObjects\Import\ResultsScanError;
 use App\GameModels\Factory\GameFactory;
 use App\Services\ImportService;
+use App\Services\ResultsDirectoryScanner;
 use Lsr\Core\Requests\Dto\ErrorResponse;
 use Lsr\CQRS\CommandBus;
 use Symfony\Component\Console\Command\Command;
@@ -32,6 +34,7 @@ class ImportGameCommand extends Command
         private readonly Serializer    $serializer,
     ) {
         parent::__construct('games:import');
+        $this->setDescription(self::getDefaultDescription() ?? 'Import games from a directory or a result file.');
     }
 
     public static function getDefaultName(): ?string
@@ -41,7 +44,7 @@ class ImportGameCommand extends Command
 
     public static function getDefaultDescription(): ?string
     {
-        return 'Import games from a directory.';
+        return 'Import games from a directory or a concrete result file.';
     }
 
     protected function configure(): void
@@ -77,8 +80,14 @@ class ImportGameCommand extends Command
             InputOption::VALUE_NONE,
             'Run each synchronous file import in a separate PHP process so crashes do not stop the batch.'
         );
+        $this->addOption(
+            'force',
+            'f',
+            InputOption::VALUE_NONE,
+            'Ignore skip conditions and re-import unchanged or already processed result files.'
+        );
         $this->addOption('worker-import-file', null, InputOption::VALUE_REQUIRED, 'Internal worker payload file.');
-        $this->addArgument('directory', InputArgument::REQUIRED, 'Results directory');
+        $this->addArgument('directory', InputArgument::REQUIRED, 'Results directory or result file');
         $this->addArgument('game', InputArgument::OPTIONAL, 'Game code');
     }
 
@@ -90,15 +99,37 @@ class ImportGameCommand extends Command
         $async = (bool)$input->getOption('async');
         $timeout = max(0, (int)$input->getOption('timeout'));
         $isolate = (bool)$input->getOption('isolate');
+        $force = (bool)$input->getOption('force');
         $workerImportFile = $input->getOption('worker-import-file');
 
         if (is_string($workerImportFile) && $workerImportFile !== '') {
-            return $this->executeWorkerImport($workerImportFile, $timeout, $output);
+            return $this->executeWorkerImport($workerImportFile, $timeout, $force, $output);
+        }
+
+        if (is_file($dir)) {
+            if (!empty($gameCode)) {
+                $output->writeln(
+                    '<error>Error: game code argument can only be used when importing from a directory.</error>'
+                );
+                return self::FAILURE;
+            }
+
+            return $this->executeResultFileImport(
+                $dir,
+                (bool)$input->getOption('all') || $force,
+                $async,
+                $timeout,
+                $isolate,
+                $force,
+                $output,
+            );
         }
 
         if (!file_exists($dir) || !is_dir($dir)) {
             $output->writeln(
-                Colors::color(ForegroundColors::RED) . 'Error: argument must be a valid directory.' . Colors::reset()
+                Colors::color(ForegroundColors::RED) .
+                'Error: argument must be a valid directory or result file.' .
+                Colors::reset()
             );
             return self::FAILURE;
         }
@@ -159,9 +190,10 @@ class ImportGameCommand extends Command
             $response = $this->commandBus->dispatch(
                 new ScanResultsDirectoryCommand(
                     $dir,
-                    (bool)$input->getOption('all'),
+                    (bool)$input->getOption('all') || $force,
                     $limit,
                     queueImports: $async,
+                    forceImport: $force,
                 )
             );
             $this->writeScanDetails($output, $response->queuedFiles, $response->errors);
@@ -183,8 +215,10 @@ class ImportGameCommand extends Command
                         OutputInterface::VERBOSITY_VERBOSE
                     );
                     $result = $isolate
-                        ? $this->dispatchIsolatedImport($queuedFile, $timeout)
-                        : $this->commandBus->dispatch(ImportResultFileCommand::fromQueuedFile($queuedFile, $timeout));
+                        ? $this->dispatchIsolatedImport($queuedFile, $timeout, $force)
+                        : $this->commandBus->dispatch(
+                            ImportResultFileCommand::fromQueuedFile($queuedFile, $timeout, $force)
+                        );
                     $importResults[] = $result;
                     $this->writeImportResult($output, $result, microtime(true) - $startedAt);
                 }
@@ -221,7 +255,110 @@ class ImportGameCommand extends Command
         return self::SUCCESS;
     }
 
-    private function executeWorkerImport(string $payloadFile, int $timeout, OutputInterface $output): int
+    private function executeResultFileImport(
+        string          $file,
+        bool            $all,
+        bool            $async,
+        int             $timeout,
+        bool            $isolate,
+        bool            $force,
+        OutputInterface $output,
+    ): int
+    {
+        try {
+            $output->writeln(
+                sprintf(
+                    '<info>Importing result file %s (%s)</info>',
+                    $file,
+                    $async ? 'async queue mode' : 'synchronous mode' . ($isolate ? ', isolated' : '')
+                ),
+                OutputInterface::VERBOSITY_VERBOSE
+            );
+
+            /** @var ResultsDirectoryScanner $scanner */
+            $scanner = App::getServiceByType(ResultsDirectoryScanner::class);
+            $response = $scanner->scanFile($file, $all);
+            $this->writeScanDetails($output, $response->queuedFiles, $response->errors);
+
+            if ($async) {
+                foreach ($response->queuedFiles as $queuedFile) {
+                    $this->commandBus->dispatchAsync(ImportResultFileCommand::fromQueuedFile($queuedFile, force: $force));
+                }
+
+                $output->writeln(
+                    Colors::color(ForegroundColors::GREEN) .
+                    'Queued: ' . $response->queued . '/' . $response->seen .
+                    ' changed result files. Unchanged: ' . $response->unchanged .
+                    '. Invalid: ' . $response->invalid . '.' .
+                    Colors::reset()
+                );
+                if ($response->errors !== []) {
+                    $output->writeln(
+                        '<comment>Scan completed with ' . count($response->errors) . ' non-fatal errors.</comment>'
+                    );
+                }
+                return $response->invalid > 0 ? self::FAILURE : self::SUCCESS;
+            }
+
+            $importResults = [];
+            foreach ($response->queuedFiles as $queuedFile) {
+                $startedAt = microtime(true);
+                $output->writeln(
+                    sprintf(
+                        '<comment>Importing %s (%s, %d B, timeout=%ss)</comment>',
+                        $queuedFile->path,
+                        $queuedFile->system,
+                        $queuedFile->size,
+                        $timeout === 0 ? 'off' : (string)$timeout
+                    ),
+                    OutputInterface::VERBOSITY_VERBOSE
+                );
+                $result = $isolate
+                    ? $this->dispatchIsolatedImport($queuedFile, $timeout, $force)
+                    : $this->commandBus->dispatch(ImportResultFileCommand::fromQueuedFile($queuedFile, $timeout, $force));
+                $importResults[] = $result;
+                $this->writeImportResult($output, $result, microtime(true) - $startedAt);
+            }
+
+            $this->writeSynchronousImportSummary(
+                $output,
+                $response->seen,
+                $response->unchanged,
+                $response->invalid,
+                $importResults
+            );
+            if ($response->errors !== []) {
+                $output->writeln(
+                    '<comment>Scan completed with ' . count($response->errors) . ' non-fatal errors.</comment>'
+                );
+            }
+
+            foreach ($importResults as $result) {
+                if ($result->status === ResultFileImportStatus::FAILED) {
+                    return self::FAILURE;
+                }
+            }
+
+            return $response->invalid > 0 ? self::FAILURE : self::SUCCESS;
+        } catch (Throwable $e) {
+            $output->writeln(
+                Colors::color(ForegroundColors::RED) .
+                $e->getMessage() .
+                Colors::reset()
+            );
+            $output->setVerbosity(OutputInterface::VERBOSITY_VERBOSE);
+            $output->writeln($e->getTraceAsString());
+            $output->setVerbosity(OutputInterface::VERBOSITY_NORMAL);
+            return self::FAILURE;
+        }
+    }
+
+    private function executeWorkerImport(
+        string          $payloadFile,
+        int             $timeout,
+        bool            $force,
+        OutputInterface $output,
+    ): int
     {
         $payload = file_get_contents($payloadFile);
         if ($payload === false) {
@@ -246,7 +383,8 @@ class ImportGameCommand extends Command
             isset($data['content']) && is_string($data['content']) ? $data['content'] : null,
         );
 
-        $result = $this->commandBus->dispatch(ImportResultFileCommand::fromQueuedFile($queuedFile, $timeout));
+        $force = $force || (isset($data['force']) && (bool)$data['force']);
+        $result = $this->commandBus->dispatch(ImportResultFileCommand::fromQueuedFile($queuedFile, $timeout, $force));
         echo json_encode([
             'path' => $result->path,
             'version' => $result->version,
@@ -262,6 +400,7 @@ class ImportGameCommand extends Command
     private function dispatchIsolatedImport(
         QueuedResultFileImport $queuedFile,
         int                    $timeout,
+        bool $force = false,
     ): ImportResultFileCommandResult
     {
         $payloadFile = tempnam(TMP_DIR, 'result-import-');
@@ -284,6 +423,7 @@ class ImportGameCommand extends Command
                 'contentHash' => $queuedFile->contentHash,
                 'version' => $queuedFile->version,
                 'content' => $queuedFile->content,
+                'force' => $force,
             ], JSON_THROW_ON_ERROR));
 
             $command = [
@@ -295,6 +435,9 @@ class ImportGameCommand extends Command
                 '--timeout=' . $timeout,
                 '--no-interaction',
             ];
+            if ($force) {
+                $command[] = '--force';
+            }
             if ($timeout > 0 && $this->hasTimeoutCommand()) {
                 array_unshift($command, (string)($timeout + 5));
                 array_unshift($command, 'timeout');

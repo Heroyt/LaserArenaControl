@@ -117,9 +117,12 @@ class GateScreenModel extends BaseModel
         $this->trigger = $data['trigger'];
     }
 
-    public function getScreen(): GateScreen
+    public function getScreen(): ?GateScreen
     {
         if (!isset($this->screen)) {
+            if (!isset($this->screenSerialized)) {
+                return null;
+            }
             $screen = App::getService($this->screenSerialized);
             assert($screen instanceof GateScreen);
             $this->screen = $screen;

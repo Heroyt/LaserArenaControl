@@ -1,0 +1,6 @@
+interface:
+  display_name: "LAC Gates"
+  short_description: "Gate screens, triggers, widgets, and controls"
+  default_prompt: "Use $lac-gates-screens to update a LaserArenaControl gate screen or gate control flow."
+policy:
+  allow_implicit_invocation: true

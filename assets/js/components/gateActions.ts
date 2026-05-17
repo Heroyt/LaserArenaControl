@@ -5,6 +5,10 @@ import {triggerNotificationError} from '../includes/notifications';
 
 export function gateActions() {
     (document.querySelectorAll('[data-toggle="gate"]') as NodeListOf<HTMLButtonElement>).forEach(btn => {
+        if (btn.dataset.gateActionInitialized === '1') {
+            return;
+        }
+        btn.dataset.gateActionInitialized = '1';
 	    const id = btn.dataset.id === 'last' ? 'last' : parseInt(btn.dataset.id);
         const system = btn.dataset.system;
         // Allow for tooltips
@@ -28,6 +32,10 @@ export function gateActions() {
         });
     });
     (document.querySelectorAll('[data-toggle="gate-loaded"]') as NodeListOf<HTMLButtonElement>).forEach(btn => {
+        if (btn.dataset.gateActionInitialized === '1') {
+            return;
+        }
+        btn.dataset.gateActionInitialized = '1';
 	    const id = btn.dataset.id === 'last' ? 'last' : parseInt(btn.dataset.id);
         const system = btn.dataset.system;
         // Allow for tooltips
@@ -51,6 +59,10 @@ export function gateActions() {
         });
     });
     (document.querySelectorAll('[data-toggle="gate-idle"]') as NodeListOf<HTMLButtonElement>).forEach(btn => {
+        if (btn.dataset.gateActionInitialized === '1') {
+            return;
+        }
+        btn.dataset.gateActionInitialized = '1';
         const system = btn.dataset.system;
         // Allow for tooltips
         if (btn.title) {
@@ -75,6 +87,10 @@ export function gateActions() {
 
 	// Events
 	document.querySelectorAll<HTMLButtonElement>('[data-toggle="gate-event"]').forEach(btn => {
+        if (btn.dataset.gateActionInitialized === '1') {
+            return;
+        }
+        btn.dataset.gateActionInitialized = '1';
 		btn.addEventListener('click', () => {
 			let event = '';
 			let time = 60;

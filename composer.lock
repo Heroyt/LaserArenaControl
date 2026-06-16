@@ -1918,12 +1918,12 @@
       "source": {
         "type": "git",
         "url": "https://github.com/Heroyt/lsr-lg-result-parsing.git",
-        "reference": "553a2d594fd163dae6ae2f6c7f348cf792a34924"
+        "reference": "f3a4a59397566f836ddddecd9fc4f09aa0aa2e68"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/Heroyt/lsr-lg-result-parsing/zipball/553a2d594fd163dae6ae2f6c7f348cf792a34924",
-        "reference": "553a2d594fd163dae6ae2f6c7f348cf792a34924",
+        "url": "https://api.github.com/repos/Heroyt/lsr-lg-result-parsing/zipball/f3a4a59397566f836ddddecd9fc4f09aa0aa2e68",
+        "reference": "f3a4a59397566f836ddddecd9fc4f09aa0aa2e68",
         "shasum": ""
       },
       "require": {
@@ -1973,7 +1973,7 @@
         "source": "https://github.com/Heroyt/lsr-lg-result-parsing/tree/master",
         "issues": "https://github.com/Heroyt/lsr-lg-result-parsing/issues"
       },
-      "time": "2026-06-16T10:41:17+00:00"
+      "time": "2026-06-16T11:35:51+00:00"
     },
     {
       "name": "lsr/logging",

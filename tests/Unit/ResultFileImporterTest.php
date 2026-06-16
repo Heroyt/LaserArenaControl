@@ -7,11 +7,84 @@ use App\GameModels\Game\Game;
 use App\Services\ResultFileImporter;
 use DateTimeImmutable;
 use Lsr\Caching\Cache;
+use Lsr\LaserLiga\PlayerProviderInterface;
+use Lsr\Lg\Results\AbstractResultsParser;
+use Lsr\Lg\Results\Interface\GameModeProviderInterface;
+use Lsr\Lg\Results\Interface\Models\GameInterface as ParsedGameInterface;
 use Lsr\Logging\Logger;
 use PHPUnit\Framework\TestCase;
 
 class ResultFileImporterTest extends TestCase
 {
+    public function testParseContentPreservesInlineSourceMetadata(): void {
+        $file = '/var/results/evo6/0007.game';
+        $mtime = 1_700_000_123;
+        $importer = new ResultFileImporter($this->createStub(Cache::class));
+        $parser = new class (
+            $this->createStub(PlayerProviderInterface::class),
+            $this->createStub(GameModeProviderInterface::class),
+        ) extends AbstractResultsParser {
+            public function __construct(
+                PlayerProviderInterface $playerProvider,
+                GameModeProviderInterface $gameModeProvider,
+            ) {
+                parent::__construct($playerProvider, $gameModeProvider, Game::class);
+            }
+
+            public static function getFileGlob(): string {
+                return '*.game';
+            }
+
+            public static function checkFile(string $fileName = '', string $contents = ''): bool {
+                return true;
+            }
+
+            /**
+             * @return Game<\App\GameModels\Game\Lasermaxx\Evo6\Team, \App\GameModels\Game\Lasermaxx\Evo6\Player>
+             */
+            public function parse(): Game {
+                $game = new class extends \App\GameModels\Game\Lasermaxx\Evo6\Game {
+                    public function __construct(?int $id = null, ?\Dibi\Row $dbRow = null) {
+                        unset($id, $dbRow);
+                    }
+
+                    public function isFinished(): bool {
+                        return false;
+                    }
+                };
+                $game->resultsFile = $this->getSourcePath();
+                $game->modeName = $this->getSourceBaseName();
+                $sourceMtime = $this->getSourceMtime();
+                $game->fileTime = $sourceMtime === null ? null : new DateTimeImmutable('@' . $sourceMtime);
+
+                return $game;
+            }
+
+            /**
+             * @param ParsedGameInterface<\App\GameModels\Game\Lasermaxx\Evo6\Team, \App\GameModels\Game\Lasermaxx\Evo6\Player, array<string, mixed>> $game
+             * @param array<string, mixed> $meta
+             */
+            protected function processExtensions(ParsedGameInterface $game, array $meta): void {
+            }
+        };
+
+        $game = $importer->parseContent(
+            $parser,
+            'evo6',
+            $file,
+            "content\n",
+            $mtime,
+            $this->createStub(Logger::class),
+        );
+
+        $this->assertSame($file, $parser->getSourcePath());
+        $this->assertSame('0007', $parser->getSourceBaseName());
+        $this->assertSame($mtime, $parser->getSourceMtime());
+        $this->assertSame($file, $game->resultsFile);
+        $this->assertSame('0007', $game->modeName);
+        $this->assertSame($mtime, $game->fileTime?->getTimestamp());
+    }
+
     public function testStartedGameUsesStartedWindowInsteadOfLoadedWindow(): void {
         $result = $this->importUnfinishedGame(
             isStarted: true,
@@ -91,9 +164,15 @@ class ResultFileImporterTest extends TestCase
         );
     }
 
+    /**
+     * @return Game<\App\GameModels\Game\Lasermaxx\Evo6\Team, \App\GameModels\Game\Lasermaxx\Evo6\Player>
+     */
     private function createGame(bool $isStarted): Game {
-        $game = new class ($isStarted) extends Game {
-            public function __construct(private bool $started) {
+        $game = new class extends \App\GameModels\Game\Lasermaxx\Evo6\Game {
+            public bool $started = false;
+
+            public function __construct(?int $id = null, ?\Dibi\Row $dbRow = null) {
+                unset($id, $dbRow);
             }
 
             public function isFinished(): bool {
@@ -104,6 +183,7 @@ class ResultFileImporterTest extends TestCase
                 return $this->started;
             }
         };
+        $game->started = $isStarted;
 
         return $game;
     }

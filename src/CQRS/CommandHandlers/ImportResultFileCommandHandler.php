@@ -29,6 +29,7 @@ use Throwable;
 readonly class ImportResultFileCommandHandler implements CommandHandlerInterface
 {
     private const int IMPORT_LOCK_TTL_SECONDS = 60;
+    private const int IMPORT_LOCK_TTL_MARGIN_SECONDS = 30;
     private int $gameLoadedTime;
     private int $gameStartedTime;
 
@@ -54,7 +55,7 @@ readonly class ImportResultFileCommandHandler implements CommandHandlerInterface
         $startedAt = microtime(true);
         $lock = $this->lockFactory->createLock(
             'result-file-import-' . $command->pathHash,
-            ttl: self::IMPORT_LOCK_TTL_SECONDS
+            ttl: $this->getImportLockTtl($command->timeoutSeconds)
         );
 
         if (!$lock->acquire(false)) {
@@ -116,7 +117,7 @@ readonly class ImportResultFileCommandHandler implements CommandHandlerInterface
                 return $this->recordMetrics($command, $this->stale($command, 'stale'), $startedAt);
             }
 
-            $lock->refresh(self::IMPORT_LOCK_TTL_SECONDS);
+            $lock->refresh($this->getImportLockTtl($command->timeoutSeconds));
             $parser = $this->getParser($command->system);
             if (
                 $command->content === null
@@ -165,6 +166,7 @@ readonly class ImportResultFileCommandHandler implements CommandHandlerInterface
                 return $this->recordMetrics($command, $this->stale($command, 'stale-after-import', $state), $startedAt);
             }
 
+            $lock->refresh($this->getImportLockTtl($command->timeoutSeconds));
             $saveStartedAt = microtime(true);
             $result = $this->importer->importParsed(
                 $game,
@@ -182,6 +184,7 @@ readonly class ImportResultFileCommandHandler implements CommandHandlerInterface
             );
             $this->guardTimeout($startedAt, $command->timeoutSeconds);
 
+            $lock->refresh($this->getImportLockTtl($command->timeoutSeconds));
             return $this->recordMetrics($command, $this->complete($command, $result, $logger), $startedAt);
         } catch (Throwable $e) {
             try {
@@ -231,6 +234,14 @@ readonly class ImportResultFileCommandHandler implements CommandHandlerInterface
         if ($timeoutSeconds > 0 && microtime(true) - $startedAt > $timeoutSeconds) {
             throw new RuntimeException('Import timed out.');
         }
+    }
+
+    private function getImportLockTtl(int $timeoutSeconds): int {
+        if ($timeoutSeconds <= 0) {
+            return self::IMPORT_LOCK_TTL_SECONDS;
+        }
+
+        return max(self::IMPORT_LOCK_TTL_SECONDS, $timeoutSeconds + self::IMPORT_LOCK_TTL_MARGIN_SECONDS);
     }
 
     private function recordMetrics(

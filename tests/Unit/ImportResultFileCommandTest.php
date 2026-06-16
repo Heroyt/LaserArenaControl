@@ -6,6 +6,8 @@ use App\CQRS\CommandHandlers\ImportResultFileCommandHandler;
 use App\CQRS\Commands\ImportResultFileCommand;
 use App\DataObjects\Import\QueuedResultFileImport;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use ReflectionMethod;
 
 class ImportResultFileCommandTest extends TestCase
 {
@@ -80,5 +82,25 @@ class ImportResultFileCommandTest extends TestCase
         $this->assertSame($command->size, $version->size);
         $this->assertSame($command->contentHash, $version->contentHash);
         $this->assertSame($command->version, $version->version);
+    }
+
+    public function testImportLockTtlUsesMinimumForShortTimeout(): void {
+        $this->assertSame(60, $this->getImportLockTtl(30));
+    }
+
+    public function testImportLockTtlUsesTimeoutWithMarginForLongTimeout(): void {
+        $this->assertSame(150, $this->getImportLockTtl(120));
+    }
+
+    public function testImportLockTtlUsesMinimumForDisabledTimeout(): void {
+        $this->assertSame(60, $this->getImportLockTtl(0));
+    }
+
+    private function getImportLockTtl(int $timeoutSeconds): int {
+        $handler = (new ReflectionClass(ImportResultFileCommandHandler::class))
+            ->newInstanceWithoutConstructor();
+        $method = new ReflectionMethod(ImportResultFileCommandHandler::class, 'getImportLockTtl');
+
+        return $method->invoke($handler, $timeoutSeconds);
     }
 }

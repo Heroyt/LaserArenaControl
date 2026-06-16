@@ -22,14 +22,15 @@ use Throwable;
 readonly class ResultsDirectoryScanner
 {
     private int $processingTtlSeconds;
+    private int $queuedTtlSeconds;
 
     public function __construct(
         private ResultFileVersionFactory        $versionFactory,
         private ResultFileImportStateRepository $stateRepository,
         Config $config,
-    )
-    {
+    ) {
         $this->processingTtlSeconds = (int)($config->getConfig('ENV')['RESULT_IMPORT_PROCESSING_TTL'] ?? 300);
+        $this->queuedTtlSeconds = (int)($config->getConfig('ENV')['RESULT_IMPORT_QUEUED_TTL'] ?? 120);
     }
 
     /**
@@ -41,8 +42,7 @@ readonly class ResultsDirectoryScanner
         int    $limit = 0,
         bool   $includeContent = false,
         int    $maxContentBytes = 65536,
-    ): ResultsScanResult
-    {
+    ): ResultsScanResult {
         if (!is_dir($dir) || !is_readable($dir)) {
             throw new RuntimeException('Results directory does not exist or is not readable: ' . $dir);
         }
@@ -110,14 +110,12 @@ readonly class ResultsDirectoryScanner
                     $version = $this->versionFactory->fromFile($file);
                     $state = $this->stateRepository->findByPathHash($version->pathHash);
                     $seen++;
-                    $processingExpired = $this->isProcessingExpired($state, $queuedAt);
 
                     if (
                         !$all
                         && $state !== null
                         && $state->seenVersion === $version->version
-                        && $state->status !== ResultFileImportStatus::FAILED
-                        && !$processingExpired
+                        && $this->shouldSkipSameVersion($state, $queuedAt)
                     ) {
                         $unchanged++;
                         continue;
@@ -172,8 +170,7 @@ readonly class ResultsDirectoryScanner
         bool   $all = false,
         bool   $includeContent = false,
         int    $maxContentBytes = 65536,
-    ): ResultsScanResult
-    {
+    ): ResultsScanResult {
         if (!is_file($file) || !is_readable($file)) {
             throw new RuntimeException('Result file does not exist or is not readable: ' . $file);
         }
@@ -218,14 +215,12 @@ readonly class ResultsDirectoryScanner
             try {
                 $version = $this->versionFactory->fromFile($file);
                 $state = $this->stateRepository->findByPathHash($version->pathHash);
-                $processingExpired = $this->isProcessingExpired($state, $queuedAt);
 
                 if (
                     !$all
                     && $state !== null
                     && $state->seenVersion === $version->version
-                    && $state->status !== ResultFileImportStatus::FAILED
-                    && !$processingExpired
+                    && $this->shouldSkipSameVersion($state, $queuedAt)
                 ) {
                     return new ResultsScanResult(
                         dir: $dir,
@@ -288,8 +283,7 @@ readonly class ResultsDirectoryScanner
         );
     }
 
-    private function isProcessingExpired(?ResultFileImportState $state, DateTimeImmutable $now): bool
-    {
+    private function isProcessingExpired(?ResultFileImportState $state, DateTimeImmutable $now): bool {
         if (
             $state === null
             || $state->status !== ResultFileImportStatus::PROCESSING
@@ -304,5 +298,43 @@ readonly class ResultsDirectoryScanner
 
         return $state->processingStartedAt->getTimestamp()
             <= ($now->getTimestamp() - $this->processingTtlSeconds);
+    }
+
+    private function shouldSkipSameVersion(ResultFileImportState $state, DateTimeImmutable $now): bool {
+        if ($state->status === ResultFileImportStatus::FAILED) {
+            return false;
+        }
+
+        if ($this->isProcessingExpired($state, $now) || $this->isQueuedExpired($state, $now)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private function isQueuedExpired(?ResultFileImportState $state, DateTimeImmutable $now): bool {
+        if (
+            $state === null
+            || $state->processedVersion !== null
+            || $this->queuedTtlSeconds <= 0
+            || !in_array(
+                $state->status,
+                [
+                    ResultFileImportStatus::SEEN,
+                    ResultFileImportStatus::QUEUED,
+                    ResultFileImportStatus::LOADED,
+                    ResultFileImportStatus::STARTED,
+                ],
+                true
+            )
+        ) {
+            return false;
+        }
+
+        if ($state->queuedAt === null) {
+            return true;
+        }
+
+        return $state->queuedAt->getTimestamp() <= ($now->getTimestamp() - $this->queuedTtlSeconds);
     }
 }

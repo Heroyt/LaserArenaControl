@@ -19,16 +19,14 @@ readonly class ResultFileImportStateRepository
     /**
      * @throws Exception
      */
-    public function findByPath(string $path): ?ResultFileImportState
-    {
+    public function findByPath(string $path): ?ResultFileImportState {
         return $this->findByPathHash($this->pathHash($path));
     }
 
     /**
      * @throws Exception
      */
-    public function findByPathHash(string $pathHash): ?ResultFileImportState
-    {
+    public function findByPathHash(string $pathHash): ?ResultFileImportState {
         $row = DB::select(self::TABLE, '*')
             ->where('[path_hash] = %s', $pathHash)
             ->fetch(cache: false);
@@ -36,8 +34,7 @@ readonly class ResultFileImportStateRepository
         return $row === null ? null : ResultFileImportState::fromRow($row);
     }
 
-    private function pathHash(string $path): string
-    {
+    private function pathHash(string $path): string {
         $realPath = realpath($path);
         return sha1($realPath === false ? $path : $realPath);
     }
@@ -50,8 +47,7 @@ readonly class ResultFileImportStateRepository
         string                 $system,
         ResultFileImportStatus $status = ResultFileImportStatus::SEEN,
         ?DateTimeInterface     $queuedAt = null,
-    ): ResultFileImportState
-    {
+    ): ResultFileImportState {
         $data = [
             'path' => $version->path,
             'path_hash' => $version->pathHash,
@@ -86,8 +82,7 @@ readonly class ResultFileImportStateRepository
      * @param array<string, mixed> $data
      * @throws Exception
      */
-    private function insert(array $data): void
-    {
+    private function insert(array $data): void {
         $columns = array_keys($data);
         $placeholders = array_map([$this, 'placeholder'], $data);
 
@@ -106,8 +101,7 @@ readonly class ResultFileImportStateRepository
      * @param array<string, mixed> $data
      * @throws Exception
      */
-    private function updateByPathHash(string $pathHash, array $data): void
-    {
+    private function updateByPathHash(string $pathHash, array $data): void {
         unset($data['path_hash']);
 
         DB::update(
@@ -117,8 +111,7 @@ readonly class ResultFileImportStateRepository
         );
     }
 
-    private function placeholder(mixed $value): string
-    {
+    private function placeholder(mixed $value): string {
         return match (true) {
             is_int($value) => '%i',
             is_float($value) => '%f',
@@ -130,19 +123,18 @@ readonly class ResultFileImportStateRepository
     /**
      * @throws Exception
      */
-    public function markProcessing(ResultFileVersion $version, DateTimeInterface $now): bool
-    {
+    public function markProcessing(ResultFileVersion $version, DateTimeInterface $now): bool {
         return DB::update(
-                self::TABLE,
-                [
+            self::TABLE,
+            [
                     'status' => ResultFileImportStatus::PROCESSING->value,
                     'processing_version' => $version->version,
                     'processing_started_at' => $now,
                     'attempts%sql' => 'attempts + 1',
                     'last_error' => null,
                 ],
-                ['path_hash = %s AND seen_version = %s', $version->pathHash, $version->version]
-            ) > 0;
+            ['path_hash = %s AND seen_version = %s', $version->pathHash, $version->version]
+        ) > 0;
     }
 
     /**
@@ -153,8 +145,7 @@ readonly class ResultFileImportStateRepository
         DateTimeInterface $now,
         ?string           $gameCode = null,
         string            $event = 'imported',
-    ): bool
-    {
+    ): bool {
         return $this->markCompleted(
             $version,
             ResultFileImportStatus::IMPORTED,
@@ -175,11 +166,10 @@ readonly class ResultFileImportStateRepository
         ?string                $gameCode = null,
         ?string                $event = null,
         ?string                $processedHash = null,
-    ): bool
-    {
+    ): bool {
         return DB::update(
-                self::TABLE,
-                [
+            self::TABLE,
+            [
                     'status' => $status->value,
                     'processing_version' => null,
                     'processing_started_at' => null,
@@ -190,40 +180,78 @@ readonly class ResultFileImportStateRepository
                     'last_event' => $event,
                     'last_error' => null,
                 ],
-                ['path_hash = %s AND seen_version = %s', $version->pathHash, $version->version]
-            ) > 0;
+            ['path_hash = %s AND seen_version = %s', $version->pathHash, $version->version]
+        ) > 0;
     }
 
     /**
      * @throws Exception
      */
-    public function markSkipped(ResultFileVersion $version, DateTimeInterface $now, string $event = 'skipped'): bool
-    {
+    public function markSkipped(ResultFileVersion $version, DateTimeInterface $now, string $event = 'skipped'): bool {
         return $this->markCompleted($version, ResultFileImportStatus::SKIPPED, $now, event: $event);
     }
 
     /**
      * @throws Exception
      */
-    public function markStale(ResultFileVersion $version, DateTimeInterface $now): bool
-    {
+    public function markLoaded(ResultFileVersion $version, DateTimeInterface $now): bool {
+        return $this->markActive($version, ResultFileImportStatus::LOADED, $now, 'game-loaded');
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function markStarted(ResultFileVersion $version, DateTimeInterface $now): bool {
+        return $this->markActive($version, ResultFileImportStatus::STARTED, $now, 'game-started');
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function markActive(
+        ResultFileVersion      $version,
+        ResultFileImportStatus $status,
+        DateTimeInterface      $now,
+        string                 $event,
+    ): bool {
+        return DB::update(
+            self::TABLE,
+            [
+                    'status' => $status->value,
+                    'queued_at' => $now,
+                    'processing_version' => null,
+                    'processing_started_at' => null,
+                    'processed_version' => null,
+                    'processed_hash' => null,
+                    'processed_at' => null,
+                    'last_game_code' => null,
+                    'last_event' => $event,
+                    'last_error' => null,
+                ],
+            ['path_hash = %s AND seen_version = %s', $version->pathHash, $version->version]
+        ) > 0;
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function markStale(ResultFileVersion $version, DateTimeInterface $now): bool {
         return $this->markCompleted($version, ResultFileImportStatus::STALE, $now, event: 'stale');
     }
 
     /**
      * @throws Exception
      */
-    public function markFailed(ResultFileVersion $version, string $error): bool
-    {
+    public function markFailed(ResultFileVersion $version, string $error): bool {
         return DB::update(
-                self::TABLE,
-                [
+            self::TABLE,
+            [
                     'status' => ResultFileImportStatus::FAILED->value,
                     'processing_version' => null,
                     'processing_started_at' => null,
                     'last_error' => mb_substr($error, 0, 1000),
                 ],
-                ['path_hash = %s AND seen_version = %s', $version->pathHash, $version->version]
-            ) > 0;
+            ['path_hash = %s AND seen_version = %s', $version->pathHash, $version->version]
+        ) > 0;
     }
 }

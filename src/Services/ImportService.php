@@ -32,14 +32,15 @@ use Throwable;
 class ImportService
 {
     private int $gameLoadedTime;
+    private int $gameStartedTime;
 
     public function __construct(
         Config                                     $config,
         private readonly ResultFileImporter        $resultFileImporter,
         private readonly ResultFileImportFinalizer $resultFileImportFinalizer,
-    )
-    {
+    ) {
         $this->gameLoadedTime = (int)($config->getConfig('ENV')['GAME_LOADED_TIME'] ?? 300);
+        $this->gameStartedTime = (int)($config->getConfig('ENV')['GAME_STARTED_TIME'] ?? 1800);
     }
 
     /**
@@ -53,8 +54,7 @@ class ImportService
      * @throws ValidationException
      * @throws ModelNotFoundException
      */
-    public function importGame(Game $game, string $resultsDir): SuccessResponse|ErrorResponse
-    {
+    public function importGame(Game $game, string $resultsDir): SuccessResponse|ErrorResponse {
         $logger = new Logger(LOG_DIR . 'results/', 'import');
         $resultsDir = trailingSlashIt($resultsDir);
 
@@ -142,7 +142,10 @@ class ImportService
 
             // Check timestamps
             $isStarted = $game->isStarted();
-            $isUpdated = isset($game->fileTime) && ($now - $game->fileTime->getTimestamp()) <= $this->gameLoadedTime;
+            $isFreshLoaded = isset($game->fileTime)
+                && ($now - $game->fileTime->getTimestamp()) <= $this->gameLoadedTime;
+            $isRecentlyStarted = $game->start !== null
+                && ($now - $game->start->getTimestamp()) <= $this->gameStartedTime;
 
             if (!$game->isFinished()) {
                 $logger->debug('Game is not finished');
@@ -155,9 +158,9 @@ class ImportService
                 // An old game should be ignored, the other 2 cases should be logged and an event should be sent.
                 // But only the latest game should be considered
 
-                if ($isUpdated && $isStarted) { // The game is started
+                if ($isStarted && $isRecentlyStarted) { // The game is started
                     $logger->debug('Game is started');
-                } elseif ($isUpdated) { // The game is loaded
+                } elseif ($isFreshLoaded) { // The game is loaded
                     $logger->debug('Game is loaded');
                 }
                 return new ErrorResponse('Game is not finished', type: ErrorType::VALIDATION);
@@ -200,8 +203,7 @@ class ImportService
         return new SuccessResponse(values: ['game' => $game]);
     }
 
-    private function isAbsolutePath(string $path): bool
-    {
+    private function isAbsolutePath(string $path): bool {
         return str_starts_with($path, DIRECTORY_SEPARATOR)
             || preg_match('/^[a-z]:[\/\\\\]/i', $path) === 1;
     }

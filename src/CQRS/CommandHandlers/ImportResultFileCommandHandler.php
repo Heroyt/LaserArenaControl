@@ -30,6 +30,7 @@ readonly class ImportResultFileCommandHandler implements CommandHandlerInterface
 {
     private const int IMPORT_LOCK_TTL_SECONDS = 60;
     private int $gameLoadedTime;
+    private int $gameStartedTime;
 
     public function __construct(
         private ResultFileImportStateRepository $stateRepository,
@@ -39,16 +40,15 @@ readonly class ImportResultFileCommandHandler implements CommandHandlerInterface
         private LockFactory                     $lockFactory,
         private Metrics $metrics,
         Config                                  $config,
-    )
-    {
+    ) {
         $this->gameLoadedTime = (int)($config->getConfig('ENV')['GAME_LOADED_TIME'] ?? 300);
+        $this->gameStartedTime = (int)($config->getConfig('ENV')['GAME_STARTED_TIME'] ?? 1800);
     }
 
     /**
      * @param ImportResultFileCommand $command
      */
-    public function handle(CommandInterface $command): ImportResultFileCommandResult
-    {
+    public function handle(CommandInterface $command): ImportResultFileCommandResult {
         $version = $command->toVersion();
         $logger = new Logger(LOG_DIR . 'results/', 'import-command');
         $startedAt = microtime(true);
@@ -172,6 +172,7 @@ readonly class ImportResultFileCommandHandler implements CommandHandlerInterface
                 $command->path,
                 time(),
                 $this->gameLoadedTime,
+                $this->gameStartedTime,
                 $logger,
             );
             $this->setMetric(
@@ -207,8 +208,7 @@ readonly class ImportResultFileCommandHandler implements CommandHandlerInterface
         ImportResultFileCommand $command,
         string                  $event,
         ?ResultFileImportState  $state = null,
-    ): ImportResultFileCommandResult
-    {
+    ): ImportResultFileCommandResult {
         try {
             $this->stateRepository->markStale($command->toVersion(), new DateTimeImmutable());
         } catch (Throwable) {
@@ -227,8 +227,7 @@ readonly class ImportResultFileCommandHandler implements CommandHandlerInterface
         );
     }
 
-    private function guardTimeout(float $startedAt, int $timeoutSeconds): void
-    {
+    private function guardTimeout(float $startedAt, int $timeoutSeconds): void {
         if ($timeoutSeconds > 0 && microtime(true) - $startedAt > $timeoutSeconds) {
             throw new RuntimeException('Import timed out.');
         }
@@ -238,8 +237,7 @@ readonly class ImportResultFileCommandHandler implements CommandHandlerInterface
         ImportResultFileCommand       $command,
         ImportResultFileCommandResult $result,
         float                         $startedAt,
-    ): ImportResultFileCommandResult
-    {
+    ): ImportResultFileCommandResult {
         $event = $result->event ?? 'none';
         $this->addMetric(
             'result_file_imports_total',
@@ -259,8 +257,7 @@ readonly class ImportResultFileCommandHandler implements CommandHandlerInterface
      * @param non-empty-string $name
      * @param string[] $labels
      */
-    private function addMetric(string $name, int|float $value, array $labels = []): void
-    {
+    private function addMetric(string $name, int|float $value, array $labels = []): void {
         try {
             $this->metrics->add($name, $value, $this->normalizeMetricLabels($labels));
         } catch (Throwable) {
@@ -271,8 +268,7 @@ readonly class ImportResultFileCommandHandler implements CommandHandlerInterface
      * @param non-empty-string $name
      * @param string[] $labels
      */
-    private function setMetric(string $name, int|float $value, array $labels = []): void
-    {
+    private function setMetric(string $name, int|float $value, array $labels = []): void {
         try {
             $this->metrics->set($name, $value, $this->normalizeMetricLabels($labels));
         } catch (Throwable) {
@@ -283,8 +279,7 @@ readonly class ImportResultFileCommandHandler implements CommandHandlerInterface
      * @param string[] $labels
      * @return list<non-empty-string>
      */
-    private function normalizeMetricLabels(array $labels): array
-    {
+    private function normalizeMetricLabels(array $labels): array {
         $normalized = [];
         foreach ($labels as $label) {
             $normalized[] = $label === '' ? 'unknown' : $label;
@@ -293,8 +288,7 @@ readonly class ImportResultFileCommandHandler implements CommandHandlerInterface
         return $normalized;
     }
 
-    private function validateInlineContent(ImportResultFileCommand $command): ?string
-    {
+    private function validateInlineContent(ImportResultFileCommand $command): ?string {
         if ($command->content === null) {
             return null;
         }
@@ -311,8 +305,7 @@ readonly class ImportResultFileCommandHandler implements CommandHandlerInterface
     }
 
     /** @phpstan-ignore missingType.generics */
-    private function getParser(string $system): AbstractResultsParser
-    {
+    private function getParser(string $system): AbstractResultsParser {
         try {
             $parser = App::getService('result.parser.' . $system);
         } catch (MissingServiceException $e) {
@@ -329,8 +322,7 @@ readonly class ImportResultFileCommandHandler implements CommandHandlerInterface
         ImportResultFileCommand $command,
         ResultFileImportResult  $result,
         Logger                  $logger,
-    ): ImportResultFileCommandResult
-    {
+    ): ImportResultFileCommandResult {
         $version = $command->toVersion();
         $now = new DateTimeImmutable();
 
@@ -349,12 +341,21 @@ readonly class ImportResultFileCommandHandler implements CommandHandlerInterface
         }
 
         if ($result->unfinishedGame !== null) {
-            $this->stateRepository->markSkipped($version, $now, $result->unfinishedEvent);
+            $status = match ($result->unfinishedEvent) {
+                'game-loaded' => ResultFileImportStatus::LOADED,
+                'game-started' => ResultFileImportStatus::STARTED,
+                default => ResultFileImportStatus::SKIPPED,
+            };
+            match ($status) {
+                ResultFileImportStatus::LOADED => $this->stateRepository->markLoaded($version, $now),
+                ResultFileImportStatus::STARTED => $this->stateRepository->markStarted($version, $now),
+                default => $this->stateRepository->markSkipped($version, $now, $result->unfinishedEvent),
+            };
             $this->finalizer->triggerUnfinished($result->unfinishedGame, $result->unfinishedEvent, $logger);
             return new ImportResultFileCommandResult(
                 $command->path,
                 $command->version,
-                ResultFileImportStatus::SKIPPED,
+                $status,
                 event: $result->unfinishedEvent,
             );
         }

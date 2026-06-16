@@ -119,6 +119,13 @@ class ImportServiceTest extends TestCase
         $response = $service->importGame($game, $dir);
 
         $this->assertInstanceOf(SuccessResponse::class, $response);
+        $this->assertArrayNotHasKey('game', $response->values ?? []);
+        $this->assertEquals(new ImportResultFileCommandResult(
+            $version->path,
+            $version->version,
+            ResultFileImportStatus::IMPORTED,
+            'manual-code',
+        ), $response->values['import'] ?? null);
 
         unlink($file);
         rmdir($dir);

@@ -149,7 +149,7 @@ class ImportService
         }
 
         if ($result->status === ResultFileImportStatus::IMPORTED) {
-            return new SuccessResponse(values: ['game' => $game, 'import' => $result]);
+            return new SuccessResponse(values: ['import' => $result]);
         }
 
         return new ErrorResponse(

@@ -96,6 +96,7 @@ readonly class ResultsDirectoryScanner
                     continue;
                 }
 
+                // LaserMaxx writes 0000.game as the prepared game load input, not a result output file.
                 if (str_ends_with($file, '0000.game')) {
                     $processedFiles[$file] = true;
                     $invalid++;
@@ -200,6 +201,7 @@ readonly class ResultsDirectoryScanner
         $queuedAt = new DateTimeImmutable();
         $errors = [];
 
+        // LaserMaxx writes 0000.game as the prepared game load input, not a result output file.
         if (str_ends_with($file, '0000.game')) {
             return new ResultsScanResult(
                 dir: $dir,

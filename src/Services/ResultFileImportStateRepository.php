@@ -104,6 +104,7 @@ readonly class ResultFileImportStateRepository
     private function placeholder(mixed $value): string {
         return match (true) {
             is_int($value) => '%i',
+            is_bool($value) => '%i',
             is_float($value) => '%f',
             $value instanceof DateTimeInterface => '%dt',
             default => '%s',

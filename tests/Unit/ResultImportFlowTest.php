@@ -403,11 +403,8 @@ class ResultImportFlowTest extends TestCase
             throw new RuntimeException('Failed to create result flow fixture directory.');
         }
         $file = $dir . '/0012.game';
-        if (!copy(
-            '/Users/heroyt/Projects/Laser arena control/Libraries/LsrResultParsing/results/0012.game',
-            $file
-        )) {
-            throw new RuntimeException('Failed to copy result flow fixture.');
+        if (file_put_contents($file, "SITE{57690,0602022,EVO-6 MAXX}#\r\nGAME{12,,20250208214146,20250208214447,3}#\r\n") === false) {
+            throw new RuntimeException('Failed to write result flow fixture.');
         }
 
         return $file;

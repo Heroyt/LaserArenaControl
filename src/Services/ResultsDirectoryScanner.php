@@ -88,10 +88,10 @@ readonly class ResultsDirectoryScanner
             }
 
             foreach ($files as $file) {
-                $candidateFiles[$file] = true;
                 if ($limit > 0 && $seen >= $limit) {
                     break;
                 }
+                $candidateFiles[$file] = true;
                 if (isset($processedFiles[$file])) {
                     continue;
                 }
@@ -125,21 +125,15 @@ readonly class ResultsDirectoryScanner
                     $version = $this->versionFactory->fromFile($file);
                     $state = $this->stateRepository->findByPathHash($version->pathHash);
                     $decision = $this->decideForVersion($version, $state, $all, $queuedAt);
-                    $decisions[] = $decision;
-                    $this->recordDecision($decision, $system);
-                    $seen++;
 
                     if ($decision->action === ResultFileScanAction::SKIP) {
+                        $decisions[] = $decision;
+                        $this->recordDecision($decision, $system);
+                        $seen++;
                         $unchanged++;
                         continue;
                     }
 
-                    $this->stateRepository->saveSeen(
-                        $version,
-                        $system,
-                        ResultFileImportStatus::QUEUED,
-                        $queuedAt,
-                    );
                     $content = null;
                     if ($includeContent && $version->size <= $maxContentBytes) {
                         $content = file_get_contents($file);
@@ -148,9 +142,28 @@ readonly class ResultsDirectoryScanner
                         }
                     }
 
+                    $this->stateRepository->saveSeen(
+                        $version,
+                        $system,
+                        ResultFileImportStatus::QUEUED,
+                        $queuedAt,
+                    );
+                    $decisions[] = $decision;
+                    $this->recordDecision($decision, $system);
+                    $seen++;
                     $queuedFiles[] = QueuedResultFileImport::fromVersion($version, $system, $content);
                     $queued++;
                 } catch (Throwable $e) {
+                    $invalid++;
+                    $decision = new ResultFileScanDecision(
+                        $file,
+                        null,
+                        ResultFileScanAction::INVALID,
+                        'invalid-metadata-error',
+                        lastError: $e->getMessage(),
+                    );
+                    $decisions[] = $decision;
+                    $this->recordDecision($decision, $system);
                     $errors[] = new ResultsScanError($e->getMessage(), $file, $system);
                 }
             }
@@ -351,7 +364,46 @@ readonly class ResultsDirectoryScanner
             );
         }
 
+        // LaserMaxx writes 0000.game as the prepared game load input, not a result output file.
+        if (str_ends_with($file, '0000.game')) {
+            return new ResultFileScanDecision(
+                $file,
+                null,
+                ResultFileScanAction::INVALID,
+                'invalid-prepared-load-file',
+            );
+        }
+
+        if (!$this->hasParserForFile($file)) {
+            return new ResultFileScanDecision(
+                $file,
+                null,
+                ResultFileScanAction::INVALID,
+                'invalid-no-parser',
+            );
+        }
+
         return $this->decideForVersion($version, $state, $all, $now ?? new DateTimeImmutable());
+    }
+
+    private function hasParserForFile(string $file): bool {
+        foreach (GameFactory::getSupportedSystems() as $system) {
+            try {
+                /**
+                 * @var AbstractResultsParser<Game> $parser
+                 * @phpstan-ignore missingType.generics
+                 */
+                $parser = App::getService('result.parser.' . $system);
+            } catch (MissingServiceException) {
+                continue;
+            }
+
+            if ($parser::checkFile($file)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private function decideForVersion(

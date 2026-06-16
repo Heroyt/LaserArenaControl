@@ -6,13 +6,21 @@ use App\DataObjects\Import\ResultFileImportState;
 use App\DataObjects\Import\ResultFileImportStatus;
 use App\DataObjects\Import\ResultFileScanAction;
 use App\DataObjects\Import\ResultFileVersion;
+use App\GameModels\Factory\GameFactory;
 use App\Services\ResultFileImportStateRepository;
 use App\Services\ResultFileVersionFactory;
 use App\Services\ResultsDirectoryScanner;
 use DateTimeImmutable;
 use Lsr\Core\Config;
+use Lsr\LaserLiga\PlayerProviderInterface;
+use Lsr\Lg\Results\AbstractResultsParser;
+use Lsr\Lg\Results\Interface\GameModeProviderInterface;
+use Lsr\Lg\Results\Interface\Models\GameInterface as ParsedGameInterface;
+use Nette\DI\Container;
 use PHPUnit\Framework\TestCase;
 use ReflectionMethod;
+use ReflectionProperty;
+use RuntimeException;
 
 class ResultsDirectoryScannerTest extends TestCase
 {
@@ -36,6 +44,105 @@ class ResultsDirectoryScannerTest extends TestCase
             unlink($file);
             rmdir($dir);
         }
+    }
+
+    public function testScanLimitDoesNotClassifyBeyondLimitCandidateAsInvalid(): void {
+        $this->installScannerTestParser(acceptsFiles: true);
+        $dir = sys_get_temp_dir() . '/lac-results-scanner-' . uniqid('', true);
+        mkdir($dir);
+        $firstFile = $dir . '/0001.game';
+        $secondFile = $dir . '/0002.game';
+        file_put_contents($firstFile, 'SITE{EVO-6 MAXX}#');
+        file_put_contents($secondFile, 'SITE{EVO-6 MAXX}#');
+
+        $stateRepository = $this
+            ->getMockBuilder(ResultFileImportStateRepository::class)
+            ->onlyMethods(['findByPathHash', 'saveSeen'])
+            ->getMock();
+        $stateRepository->expects($this->once())->method('findByPathHash')->willReturn(null);
+        $stateRepository->expects($this->once())->method('saveSeen');
+
+        try {
+            $result = new ResultsDirectoryScanner(
+                new ResultFileVersionFactory(),
+                $stateRepository,
+                $this->createScannerConfig(),
+            )->scan($dir, limit: 1);
+
+            $this->assertSame(1, $result->seen);
+            $this->assertSame(1, $result->queued);
+            $this->assertSame(0, $result->invalid);
+            $this->assertCount(1, $result->decisions);
+        } finally {
+            unlink($firstFile);
+            unlink($secondFile);
+            rmdir($dir);
+        }
+    }
+
+    public function testScanMetadataFailureEmitsInvalidDecision(): void {
+        $this->installScannerTestParser(acceptsFiles: true);
+        $dir = sys_get_temp_dir() . '/lac-results-scanner-' . uniqid('', true);
+        mkdir($dir);
+        $file = $dir . '/0001.game';
+        file_put_contents($file, 'SITE{EVO-6 MAXX}#');
+
+        $versionFactory = $this
+            ->getMockBuilder(ResultFileVersionFactory::class)
+            ->onlyMethods(['fromFile'])
+            ->getMock();
+        $versionFactory
+            ->expects($this->once())
+            ->method('fromFile')
+            ->with($file)
+            ->willThrowException(new RuntimeException('metadata failed'));
+
+        try {
+            $result = new ResultsDirectoryScanner(
+                $versionFactory,
+                $this->createStub(ResultFileImportStateRepository::class),
+                $this->createScannerConfig(),
+            )->scan($dir);
+
+            $this->assertSame(0, $result->seen);
+            $this->assertSame(0, $result->queued);
+            $this->assertSame(1, $result->invalid);
+            $this->assertCount(1, $result->decisions);
+            $this->assertSame(ResultFileScanAction::INVALID, $result->decisions[0]->action);
+            $this->assertSame('invalid-metadata-error', $result->decisions[0]->reason);
+            $this->assertSame('metadata failed', $result->decisions[0]->lastError);
+        } finally {
+            unlink($file);
+            rmdir($dir);
+        }
+    }
+
+    public function testDescribeDecisionRejectsPreparedLoadFile(): void {
+        $version = new ResultFileVersion(
+            '/tmp/results/0000.game',
+            sha1('/tmp/results/0000.game'),
+            123,
+            456,
+            str_repeat('a', 64),
+            sha1('/tmp/results/0000.game:123:456:' . str_repeat('a', 64)),
+        );
+        $scanner = $this->createScannerForDecision($version, null);
+
+        $decision = $scanner->describeFileDecision($version->path);
+
+        $this->assertSame(ResultFileScanAction::INVALID, $decision->action);
+        $this->assertSame('invalid-prepared-load-file', $decision->reason);
+    }
+
+    public function testDescribeDecisionRejectsFileWithoutAcceptedParser(): void {
+        $this->installScannerTestParser(acceptsFiles: false);
+        $version = $this->createVersion();
+        $scanner = $this->createScannerForDecision($version, null, installParser: false);
+
+        $decision = $scanner->describeFileDecision($version->path);
+
+        $this->assertSame(ResultFileScanAction::INVALID, $decision->action);
+        $this->assertSame('invalid-no-parser', $decision->reason);
     }
 
     public function testProcessingStateExpiresAfterTtl(): void {
@@ -284,7 +391,12 @@ class ResultsDirectoryScannerTest extends TestCase
     private function createScannerForDecision(
         ResultFileVersion       $version,
         ?ResultFileImportState  $state,
+        bool                    $installParser = true,
     ): ResultsDirectoryScanner {
+        if ($installParser) {
+            $this->installScannerTestParser(acceptsFiles: true);
+        }
+
         $versionFactory = $this
             ->getMockBuilder(ResultFileVersionFactory::class)
             ->onlyMethods(['fromFile'])
@@ -339,5 +451,64 @@ class ResultsDirectoryScannerTest extends TestCase
                 return $category === null ? $config : ($config[$category] ?? []);
             }
         };
+    }
+
+    private function installScannerTestParser(bool $acceptsFiles): void {
+        new ReflectionProperty(GameFactory::class, 'supportedSystems')
+            ->setValue(null, ['evo6']);
+        new ReflectionProperty(\Lsr\Core\App::class, 'container')
+            ->setValue(null, new ScannerTestContainer(new ScannerTestParser(
+                $this->createStub(PlayerProviderInterface::class),
+                $this->createStub(GameModeProviderInterface::class),
+                $acceptsFiles,
+            )));
+    }
+}
+
+final class ScannerTestContainer extends Container
+{
+    public function __construct(ScannerTestParser $parser) {
+        parent::__construct();
+        $this->addService('result.parser.evo6', $parser);
+    }
+}
+
+/**
+ * @extends AbstractResultsParser<ParsedGameInterface<\App\GameModels\Game\Lasermaxx\Evo6\Team, \App\GameModels\Game\Lasermaxx\Evo6\Player, array<string, mixed>>>
+ */
+final class ScannerTestParser extends AbstractResultsParser
+{
+    public static bool $acceptsFiles = true;
+
+    public function __construct(
+        PlayerProviderInterface $playerProvider,
+        GameModeProviderInterface $gameModeProvider,
+        bool $acceptsFiles,
+    ) {
+        unset($playerProvider, $gameModeProvider);
+        self::$acceptsFiles = $acceptsFiles;
+    }
+
+    public static function getFileGlob(): string {
+        return '*.game';
+    }
+
+    public static function checkFile(string $fileName = '', string $contents = ''): bool {
+        unset($fileName, $contents);
+        return self::$acceptsFiles;
+    }
+
+    /**
+     * @return ParsedGameInterface<\App\GameModels\Game\Lasermaxx\Evo6\Team, \App\GameModels\Game\Lasermaxx\Evo6\Player, array<string, mixed>>
+     */
+    public function parse(): ParsedGameInterface {
+        throw new RuntimeException('Scanner tests do not parse result files.');
+    }
+
+    /**
+     * @param ParsedGameInterface<\App\GameModels\Game\Lasermaxx\Evo6\Team, \App\GameModels\Game\Lasermaxx\Evo6\Player, array<string, mixed>> $game
+     * @param array<string, mixed> $meta
+     */
+    protected function processExtensions(ParsedGameInterface $game, array $meta): void {
     }
 }

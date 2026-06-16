@@ -14,6 +14,28 @@ use ReflectionMethod;
 
 class ResultsDirectoryScannerTest extends TestCase
 {
+    public function testZeroGameFileIsRejectedAsPreparedLoadFile(): void {
+        $dir = sys_get_temp_dir() . '/lac-results-scanner-' . uniqid('', true);
+        mkdir($dir);
+        $file = $dir . '/0000.game';
+        file_put_contents($file, '');
+
+        try {
+            $result = $this->createScanner()->scanFile($file);
+
+            $this->assertSame(0, $result->seen);
+            $this->assertSame(0, $result->queued);
+            $this->assertSame(1, $result->invalid);
+            $this->assertSame(
+                'Skipping file with invalid name ending with 0000.game',
+                $result->errors[0]->message
+            );
+        } finally {
+            unlink($file);
+            rmdir($dir);
+        }
+    }
+
     public function testProcessingStateExpiresAfterTtl(): void {
         $scanner = $this->createScanner();
 

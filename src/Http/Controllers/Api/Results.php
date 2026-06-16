@@ -35,7 +35,7 @@ class Results extends ApiController
     #[OA\Post(
         path: '/api/results/import',
         operationId: 'importResults',
-        description: 'Import results from a directory. Pushes a job to the queue by default.',
+        description: 'Scan a result directory. Pushes a scan job to the queue by default. With body sync=true, scans immediately and queues changed result files. With query process=sync, scans immediately and imports changed files before responding.',
         requestBody: new OA\RequestBody(
             required: true,
             content: new OA\JsonContent(
@@ -49,7 +49,7 @@ class Results extends ApiController
                                   ),
                                   new OA\Property(
                                       property: "sync",
-                                      description: 'If present, import games immediately.',
+                                      description: 'If present, scan immediately and queue changed result files.',
                                       type: "boolean",
                                       example: 'true'
                                   ),
@@ -58,6 +58,13 @@ class Results extends ApiController
             ),
         ),
         tags: ['Import']
+    )]
+    #[OA\Parameter(
+        name: 'process',
+        description: 'Set to "sync" to import changed result files synchronously before returning. This implies sync=true.',
+        in: 'query',
+        required: false,
+        schema: new OA\Schema(type: 'string', enum: ['sync'])
     )]
     #[OA\Response(
         response: 200,
@@ -95,9 +102,17 @@ class Results extends ApiController
         }
 
         $sync = $request->getPost('sync');
+        $process = $request->getGet('process');
+        $processSynchronously = $process === 'sync';
         try {
-            if (!empty($sync)) {
-                $response = $this->commandBus->dispatch(new ScanResultsDirectoryCommand($resultsDir));
+            if (!empty($sync) || $processSynchronously) {
+                $response = $this->commandBus->dispatch(
+                    new ScanResultsDirectoryCommand(
+                        $resultsDir,
+                        queueImports: !$processSynchronously,
+                        processImports: $processSynchronously,
+                    )
+                );
                 return $this->respond($response);
             }
 

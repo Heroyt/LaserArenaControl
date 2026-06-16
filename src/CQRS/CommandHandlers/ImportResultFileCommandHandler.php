@@ -10,6 +10,7 @@ use App\DataObjects\Import\ImportResultFileCommandResult;
 use App\DataObjects\Import\ResultFileImportResult;
 use App\DataObjects\Import\ResultFileImportState;
 use App\DataObjects\Import\ResultFileImportStatus;
+use App\GameModels\Game\Game;
 use App\Services\ResultFileImporter;
 use App\Services\ResultFileImportFinalizer;
 use App\Services\ResultFileImportStateRepository;
@@ -160,6 +161,7 @@ readonly class ImportResultFileCommandHandler implements CommandHandlerInterface
                 [$command->system, $command->pathHash],
             );
             $this->guardTimeout($startedAt, $command->timeoutSeconds);
+            $this->preserveParsedGameIdentity($game, $command);
 
             $state = $this->stateRepository->findByPathHash($command->pathHash);
             if ($state === null || $state->seenVersion !== $command->version) {
@@ -313,6 +315,32 @@ readonly class ImportResultFileCommandHandler implements CommandHandlerInterface
         }
 
         return null;
+    }
+
+    /**
+     * @template T of \App\GameModels\Game\Team
+     * @template P of \App\GameModels\Game\Player
+     * @param Game<T,P> $game
+     */
+    private function preserveParsedGameIdentity(Game $game, ImportResultFileCommand $command): void {
+        if ($command->preserveGameId !== null) {
+            $game->id = $command->preserveGameId;
+        }
+        if ($command->preserveGameCode !== null) {
+            $game->code = $command->preserveGameCode;
+        }
+
+        foreach ($game->players as $player) {
+            if (isset($command->preservePlayerIdsByVest[$player->vest])) {
+                $player->id = $command->preservePlayerIdsByVest[$player->vest];
+            }
+        }
+
+        foreach ($game->teams as $team) {
+            if (isset($command->preserveTeamIdsByColor[$team->color])) {
+                $team->id = $command->preserveTeamIdsByColor[$team->color];
+            }
+        }
     }
 
     /** @phpstan-ignore missingType.generics */

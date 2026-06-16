@@ -12,6 +12,7 @@ readonly class ResultsScanResult implements JsonSerializable
 {
     /**
      * @param list<QueuedResultFileImport> $queuedFiles
+     * @param list<ImportResultFileCommandResult> $importResults
      * @param list<ResultsScanError> $errors
      */
     public function __construct(
@@ -27,10 +28,29 @@ readonly class ResultsScanResult implements JsonSerializable
         public int    $invalid,
         #[OA\Property(items: new OA\Items(ref: '#/components/schemas/QueuedResultFileImport'))]
         public array $queuedFiles = [],
+        #[OA\Property(items: new OA\Items(ref: '#/components/schemas/ImportResultFileCommandResult'))]
+        public array $importResults = [],
         #[OA\Property(items: new OA\Items(ref: '#/components/schemas/ResultsScanError'))]
         public array  $errors = [],
     )
     {
+    }
+
+    /**
+     * @param list<ImportResultFileCommandResult> $importResults
+     */
+    public function withImportResults(array $importResults): self
+    {
+        return new self(
+            $this->dir,
+            $this->seen,
+            $this->queued,
+            $this->unchanged,
+            $this->invalid,
+            $this->queuedFiles,
+            $importResults,
+            $this->errors,
+        );
     }
 
     /**

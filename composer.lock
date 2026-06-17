@@ -1322,7 +1322,7 @@
       "dist": {
         "type": "path",
         "url": "./modules/Core",
-        "reference": "ef4dc5ce30f74a59603e3e590d70455a7bbbe4e4"
+        "reference": "2fecc085b80460004721bfa62e155452b83ea7e1"
       },
       "type": "library",
       "autoload": {
@@ -1670,16 +1670,16 @@
     },
     {
       "name": "lsr/db",
-      "version": "0.3.10",
+      "version": "0.3.11",
       "source": {
         "type": "git",
         "url": "https://github.com/Heroyt/lsr-db.git",
-        "reference": "9cb34d16d94abcc51ec663d4ccf4a5737dddac76"
+        "reference": "6db290e1037952307a62d18dd96276ec2bce4c23"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/Heroyt/lsr-db/zipball/9cb34d16d94abcc51ec663d4ccf4a5737dddac76",
-        "reference": "9cb34d16d94abcc51ec663d4ccf4a5737dddac76",
+        "url": "https://api.github.com/repos/Heroyt/lsr-db/zipball/6db290e1037952307a62d18dd96276ec2bce4c23",
+        "reference": "6db290e1037952307a62d18dd96276ec2bce4c23",
         "shasum": ""
       },
       "require": {
@@ -1733,10 +1733,10 @@
       ],
       "description": "Laser framework core - DB",
       "support": {
-        "source": "https://github.com/Heroyt/lsr-db/tree/v0.3.10",
+        "source": "https://github.com/Heroyt/lsr-db/tree/v0.3.11",
         "issues": "https://github.com/Heroyt/lsr-db/issues"
       },
-      "time": "2026-05-08T13:57:52+00:00"
+      "time": "2026-06-17T11:38:33+00:00"
     },
     {
       "name": "lsr/helpers",

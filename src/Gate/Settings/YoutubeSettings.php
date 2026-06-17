@@ -1,10 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Gate\Settings;
 
-/**
- *
- */
 readonly class YoutubeSettings extends GateSettings
 {
     use WithTime;

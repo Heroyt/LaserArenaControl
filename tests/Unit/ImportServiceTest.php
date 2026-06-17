@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Unit;
 
 use App\CQRS\Commands\ImportResultFileCommand;
@@ -22,8 +24,7 @@ use PHPUnit\Framework\TestCase;
 
 class ImportServiceTest extends TestCase
 {
-    public function testImportGameDispatchesForcedStateTableImportWithIdentityPreservation(): void
-    {
+    public function test_import_game_dispatches_forced_state_table_import_with_identity_preservation(): void {
         $dir = sys_get_temp_dir() . '/lac-import-service-test-' . uniqid('', true);
         self::assertTrue(mkdir($dir));
         $file = $dir . '/0001.game';
@@ -88,7 +89,7 @@ class ImportServiceTest extends TestCase
                     $version->version,
                     ResultFileImportStatus::QUEUED,
                     0,
-                )
+                ),
             );
         $commandBus
             ->expects($this->once())
@@ -111,7 +112,7 @@ class ImportServiceTest extends TestCase
                     $version->version,
                     ResultFileImportStatus::IMPORTED,
                     'manual-code',
-                )
+                ),
             );
 
         $service = new ImportService($versionFactory, $stateRepository, $commandBus);
@@ -140,8 +141,7 @@ class ImportServiceTestGame extends LasermaxxGame
     public const string SYSTEM = 'evo6';
     public const string TABLE = 'test_games';
 
-    public function __construct(?int $id = null, ?Row $dbRow = null)
-    {
+    public function __construct(?int $id = null, ?Row $dbRow = null) {
         unset($id, $dbRow);
     }
 
@@ -155,18 +155,15 @@ class ImportServiceTestPlayer extends LasermaxxPlayer
     public const string SYSTEM = 'evo6';
     public const string TABLE = 'test_players';
 
-    public function __construct(?int $id = null, ?Row $dbRow = null)
-    {
+    public function __construct(?int $id = null, ?Row $dbRow = null) {
         unset($id, $dbRow);
     }
 
-    public function getMines(): int
-    {
+    public function getMines(): int {
         return 0;
     }
 
-    public function getBonusCount(): int
-    {
+    public function getBonusCount(): int {
         return 0;
     }
 }
@@ -179,8 +176,7 @@ class ImportServiceTestTeam extends LasermaxxTeam
     public const string SYSTEM = 'evo6';
     public const string TABLE = 'test_teams';
 
-    public function __construct(?int $id = null, ?Row $dbRow = null)
-    {
+    public function __construct(?int $id = null, ?Row $dbRow = null) {
         unset($id, $dbRow);
     }
 }

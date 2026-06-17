@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Unit;
 
 use App\CQRS\CommandHandlers\ImportResultFileCommandHandler;
@@ -10,12 +12,16 @@ use App\DataObjects\Import\ResultFileImportStatus;
 use App\DataObjects\Import\ResultFileVersion;
 use App\GameModels\Factory\GameFactory;
 use App\GameModels\Game\Game;
+use App\GameModels\Game\Lasermaxx\Evo6\Player;
+use App\GameModels\Game\Lasermaxx\Evo6\Team;
 use App\Services\ResultFileImporter;
 use App\Services\ResultFileImportFinalizer;
 use App\Services\ResultFileImportStateRepository;
 use App\Services\ResultFileVersionFactory;
 use App\Services\ResultsDirectoryScanner;
 use DateTimeInterface;
+use Dibi\Row;
+use Lsr\Core\App;
 use Lsr\Core\Config;
 use Lsr\LaserLiga\PlayerProviderInterface;
 use Lsr\Lg\Results\AbstractResultsParser;
@@ -38,10 +44,10 @@ class ResultImportFlowTest extends TestCase
     public static function setUpBeforeClass(): void {
         parent::setUpBeforeClass();
 
-        if (!defined('LOG_DIR')) {
+        if ( ! defined('LOG_DIR')) {
             define('LOG_DIR', sys_get_temp_dir() . '/lac-result-flow-logs/');
         }
-        if (!is_dir(LOG_DIR)) {
+        if ( ! is_dir(LOG_DIR)) {
             mkdir(LOG_DIR);
         }
     }
@@ -51,11 +57,11 @@ class ResultImportFlowTest extends TestCase
 
         new ReflectionProperty(GameFactory::class, 'supportedSystems')
             ->setValue(null, ['evo6']);
-        new ReflectionProperty(\Lsr\Core\App::class, 'container')
+        new ReflectionProperty(App::class, 'container')
             ->setValue(null, $this->createContainer());
     }
 
-    public function testScanQueueAndCommandImportFlowMarksImportedAndFinalizes(): void {
+    public function test_scan_queue_and_command_import_flow_marks_imported_and_finalizes(): void {
         $file = $this->createTempResultFile();
         $state = null;
 
@@ -96,7 +102,7 @@ class ResultImportFlowTest extends TestCase
                     function (ResultFileVersion $version, DateTimeInterface $now, ?string $gameCode) use (&$state): bool {
                         $state = $this->completedState($version, ResultFileImportStatus::IMPORTED, $now, $gameCode, 'imported');
                         return true;
-                    }
+                    },
                 );
             $stateRepository->expects($this->never())->method('markStarted');
             $stateRepository->expects($this->never())->method('markLoaded');
@@ -123,7 +129,7 @@ class ResultImportFlowTest extends TestCase
         }
     }
 
-    public function testScanQueueAndCommandImportFlowMarksStartedWithoutProcessingVersion(): void {
+    public function test_scan_queue_and_command_import_flow_marks_started_without_processing_version(): void {
         $file = $this->createTempResultFile();
         $state = null;
 
@@ -147,7 +153,7 @@ class ResultImportFlowTest extends TestCase
                     function (ResultFileVersion $version, DateTimeInterface $now) use (&$state): bool {
                         $state = $this->activeState($version, ResultFileImportStatus::STARTED, $now, 'game-started');
                         return true;
-                    }
+                    },
                 );
             $stateRepository->expects($this->never())->method('markImported');
             $stateRepository->expects($this->never())->method('markLoaded');
@@ -200,7 +206,7 @@ class ResultImportFlowTest extends TestCase
             ->willReturnCallback(
                 static function () use (&$state): ?ResultFileImportState {
                     return $state;
-                }
+                },
             );
         $stateRepository
             ->expects($this->once())
@@ -227,7 +233,7 @@ class ResultImportFlowTest extends TestCase
                     );
 
                     return $state;
-                }
+                },
             );
         $stateRepository
             ->expects($this->once())
@@ -256,7 +262,7 @@ class ResultImportFlowTest extends TestCase
                     );
 
                     return true;
-                }
+                },
             );
         $stateRepository->expects($this->never())->method('markSkipped');
         $stateRepository->expects($this->never())->method('markFailed');
@@ -330,11 +336,11 @@ class ResultImportFlowTest extends TestCase
     }
 
     /**
-     * @return Game<\App\GameModels\Game\Lasermaxx\Evo6\Team, \App\GameModels\Game\Lasermaxx\Evo6\Player>
+     * @return Game<Team, Player>
      */
     private function createGame(string $code): Game {
         $game = new class extends \App\GameModels\Game\Lasermaxx\Evo6\Game {
-            public function __construct(?int $id = null, ?\Dibi\Row $dbRow = null) {
+            public function __construct(?int $id = null, ?Row $dbRow = null) {
                 unset($id, $dbRow);
             }
         };
@@ -399,7 +405,7 @@ class ResultImportFlowTest extends TestCase
      */
     private function createTempResultFile(): string {
         $dir = sys_get_temp_dir() . '/lac-result-flow-' . uniqid('', true);
-        if (!mkdir($dir)) {
+        if ( ! mkdir($dir)) {
             throw new RuntimeException('Failed to create result flow fixture directory.');
         }
         $file = $dir . '/0012.game';
@@ -446,14 +452,14 @@ final class ResultImportFlowParser extends AbstractResultsParser
     }
 
     /**
-     * @return ParsedGameInterface<\App\GameModels\Game\Lasermaxx\Evo6\Team, \App\GameModels\Game\Lasermaxx\Evo6\Player, array<string, mixed>>
+     * @return ParsedGameInterface<Team, Player, array<string, mixed>>
      */
     public function parse(): ParsedGameInterface {
         throw new RuntimeException('Flow tests mock parsing through ResultFileImporter.');
     }
 
     /**
-     * @param ParsedGameInterface<\App\GameModels\Game\Lasermaxx\Evo6\Team, \App\GameModels\Game\Lasermaxx\Evo6\Player, array<string, mixed>> $game
+     * @param ParsedGameInterface<Team, Player, array<string, mixed>> $game
      * @param array<string, mixed> $meta
      */
     protected function processExtensions(ParsedGameInterface $game, array $meta): void {

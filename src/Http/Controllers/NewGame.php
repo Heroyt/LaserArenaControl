@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /** @noinspection PhpDynamicFieldDeclarationInspection */
 
 namespace App\Http\Controllers;
@@ -27,8 +29,7 @@ class NewGame extends Controller
 
     protected string $title = 'Nová hra';
 
-    public function init(RequestInterface $request): void
-    {
+    public function init(RequestInterface $request): void {
         parent::init($request);
         $this->baseInit($request);
     }
@@ -41,8 +42,7 @@ class NewGame extends Controller
      * @throws Throwable
      * @throws ValidationException
      */
-    public function show(Request $request): ResponseInterface
-    {
+    public function show(Request $request): ResponseInterface {
         $this->initNewGameParams($request);
         $this->params->gameModes = $this->params->system ?
           GameModeFactory::getAll(['system' => $this->params->system])
@@ -54,12 +54,12 @@ class NewGame extends Controller
         /** @var string|null $game */
         $game = $request->getGet('game');
 
-        $this->params->loadGame = !empty($game) ? GameFactory::getByCode($game) : null;
+        $this->params->loadGame = ! empty($game) ? GameFactory::getByCode($game) : null;
 
         $gateActionScreens = GateScreenModel::query()->where('trigger_value IS NOT NULL')->get();
         $this->params->gateActions = [];
         foreach ($gateActionScreens as $gateActionScreen) {
-            if (!empty($gateActionScreen->triggerValue)) {
+            if ( ! empty($gateActionScreen->triggerValue)) {
                 $this->params->gateActions[$gateActionScreen->triggerValue] = $gateActionScreen->triggerValue;
             }
         }
@@ -71,6 +71,6 @@ class NewGame extends Controller
         }
 
         return $this->view('pages/new-game/index')
-                    ->withAddedHeader('Expires', date('D, d M Y H:i:s T', strtotime('+ 1 minutes')));
+            ->withAddedHeader('Expires', date('D, d M Y H:i:s T', strtotime('+ 1 minutes')));
     }
 }

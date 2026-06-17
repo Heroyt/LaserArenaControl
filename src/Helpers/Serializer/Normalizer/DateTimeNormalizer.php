@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Helpers\Serializer\Normalizer;
 
 use DateTime;
@@ -11,6 +13,7 @@ use Symfony\Component\Serializer\Exception\InvalidArgumentException;
 use Symfony\Component\Serializer\Exception\NotNormalizableValueException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+
 use function is_float;
 use function is_int;
 use function is_string;
@@ -28,17 +31,17 @@ final class DateTimeNormalizer implements NormalizerInterface, DenormalizerInter
     public const string TIMEZONE_KEY = 'datetime_timezone';
     public const string CAST_KEY = 'datetime_cast';
     private const array SUPPORTED_TYPES = [
-      DateTimeInterface::class => true,
-      DateTimeImmutable::class => true,
-      DateTime::class => true,
+        DateTimeInterface::class => true,
+        DateTimeImmutable::class => true,
+        DateTime::class => true,
     ];
     /**
      * @var array<string,mixed>
      */
     private array $defaultContext = [
-      self::FORMAT_KEY => DateTimeInterface::RFC3339,
-      self::TIMEZONE_KEY => null,
-      self::CAST_KEY   => null,
+        self::FORMAT_KEY => DateTimeInterface::RFC3339,
+        self::TIMEZONE_KEY => null,
+        self::CAST_KEY   => null,
     ];
 
     /**
@@ -52,17 +55,15 @@ final class DateTimeNormalizer implements NormalizerInterface, DenormalizerInter
      * @param  array<string,mixed>  $defaultContext
      * @return void
      */
-    public function setDefaultContext(array $defaultContext): void
-    {
+    public function setDefaultContext(array $defaultContext): void {
         $this->defaultContext = array_merge($this->defaultContext, $defaultContext);
     }
 
-    public function getSupportedTypes(?string $format): array
-    {
+    public function getSupportedTypes(?string $format): array {
         return [
-          DateTimeInterface::class => true,
-          DateTimeImmutable::class => true,
-          DateTime::class => true,
+            DateTimeInterface::class => true,
+            DateTimeImmutable::class => true,
+            DateTime::class => true,
         ];
     }
 
@@ -72,9 +73,8 @@ final class DateTimeNormalizer implements NormalizerInterface, DenormalizerInter
      * @param  array<string,mixed>  $context
      * @return int|float|string
      */
-    public function normalize(mixed $object, ?string $format = null, array $context = []): int|float|string
-    {
-        if (!$object instanceof DateTimeInterface) {
+    public function normalize(mixed $object, ?string $format = null, array $context = []): int|float|string {
+        if ( ! $object instanceof DateTimeInterface) {
             throw new InvalidArgumentException('The object must implement the "\DateTimeInterface".');
         }
 
@@ -98,8 +98,7 @@ final class DateTimeNormalizer implements NormalizerInterface, DenormalizerInter
      * @param  array<string, mixed>  $context
      * @return DateTimeZone|null
      */
-    private function getTimezone(array $context): ?DateTimeZone
-    {
+    private function getTimezone(array $context): ?DateTimeZone {
         $dateTimeZone = $context[self::TIMEZONE_KEY] ?? $this->defaultContext[self::TIMEZONE_KEY];
 
         if (null === $dateTimeZone) {
@@ -115,8 +114,7 @@ final class DateTimeNormalizer implements NormalizerInterface, DenormalizerInter
      * @param  array<string,mixed>  $context
      * @return bool
      */
-    public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
-    {
+    public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool {
         return $data instanceof DateTimeInterface;
     }
 
@@ -131,9 +129,8 @@ final class DateTimeNormalizer implements NormalizerInterface, DenormalizerInter
         mixed   $data,
         string  $type,
         ?string $format = null,
-        array   $context = []
-    ): DateTimeInterface
-    {
+        array   $context = [],
+    ): DateTimeInterface {
         if (DateTimeInterface::class === $type) {
             $type = DateTimeImmutable::class;
         }
@@ -152,13 +149,13 @@ final class DateTimeNormalizer implements NormalizerInterface, DenormalizerInter
         }
 
         if (is_array($data) && array_key_exists('date', $data)) {
-            if (!is_string($data['date']) || '' === trim($data['date'])) {
+            if ( ! is_string($data['date']) || '' === trim($data['date'])) {
                 throw NotNormalizableValueException::createForUnexpectedDataType(
                     'The data is either not an string, an empty string, or null; you should pass a string that can be parsed with the passed format or a valid DateTime string.',
                     $data,
                     ['string'],
                     $context['deserialization_path'] ?? null,
-                    true
+                    true,
                 );
             }
 
@@ -169,17 +166,17 @@ final class DateTimeNormalizer implements NormalizerInterface, DenormalizerInter
                 $data['date'],
                 $type,
                 $timezone ?? new DateTimeZone('europe/prague'),
-                $context
+                $context,
             );
         }
 
-        if (!is_string($data) || '' === trim($data)) {
+        if ( ! is_string($data) || '' === trim($data)) {
             throw NotNormalizableValueException::createForUnexpectedDataType(
                 'The data is either not an string, an empty string, or null; you should pass a string that can be parsed with the passed format or a valid DateTime string.',
                 $data,
                 ['string'],
                 $context['deserialization_path'] ?? null,
-                true
+                true,
             );
         }
 
@@ -197,9 +194,8 @@ final class DateTimeNormalizer implements NormalizerInterface, DenormalizerInter
         string       $data,
         string       $type,
         DateTimeZone $timezone,
-        array        $context
-    ): DateTimeInterface
-    {
+        array        $context,
+    ): DateTimeInterface {
         try {
             $dateTimeFormat = $context[self::FORMAT_KEY] ?? null;
 
@@ -222,7 +218,7 @@ final class DateTimeNormalizer implements NormalizerInterface, DenormalizerInter
                     $data,
                     ['string'],
                     $context['deserialization_path'] ?? null,
-                    true
+                    true,
                 );
             }
 
@@ -232,7 +228,7 @@ final class DateTimeNormalizer implements NormalizerInterface, DenormalizerInter
                 (null !== $defaultDateTimeFormat) && false !== $object = $type::createFromFormat(
                     $defaultDateTimeFormat,
                     $data,
-                    $timezone
+                    $timezone,
                 )
             ) {
                 return $object;
@@ -249,7 +245,7 @@ final class DateTimeNormalizer implements NormalizerInterface, DenormalizerInter
                 $context['deserialization_path'] ?? null,
                 false,
                 $e->getCode(),
-                $e
+                $e,
             );
         }
     }
@@ -261,8 +257,7 @@ final class DateTimeNormalizer implements NormalizerInterface, DenormalizerInter
      *
      * @return string[]
      */
-    private function formatDateTimeErrors(array $errors): array
-    {
+    private function formatDateTimeErrors(array $errors): array {
         $formattedErrors = [];
 
         foreach ($errors as $pos => $message) {
@@ -283,9 +278,8 @@ final class DateTimeNormalizer implements NormalizerInterface, DenormalizerInter
         mixed   $data,
         string  $type,
         ?string $format = null,
-        array   $context = []
-    ): bool
-    {
+        array   $context = [],
+    ): bool {
         return isset(self::SUPPORTED_TYPES[$type]);
     }
 }

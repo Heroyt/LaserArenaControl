@@ -1,11 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Unit;
 
 use App\DataObjects\Import\ResultFileImportResult;
 use App\GameModels\Game\Game;
+use App\GameModels\Game\Lasermaxx\Evo6\Player;
+use App\GameModels\Game\Lasermaxx\Evo6\Team;
 use App\Services\ResultFileImporter;
 use DateTimeImmutable;
+use Dibi\Row;
 use Lsr\Caching\Cache;
 use Lsr\LaserLiga\PlayerProviderInterface;
 use Lsr\Lg\Results\AbstractResultsParser;
@@ -16,7 +21,7 @@ use PHPUnit\Framework\TestCase;
 
 class ResultFileImporterTest extends TestCase
 {
-    public function testParseContentPreservesInlineSourceMetadata(): void {
+    public function test_parse_content_preserves_inline_source_metadata(): void {
         $file = '/var/results/evo6/0007.game';
         $mtime = 1_700_000_123;
         $importer = new ResultFileImporter($this->createStub(Cache::class));
@@ -40,11 +45,11 @@ class ResultFileImporterTest extends TestCase
             }
 
             /**
-             * @return Game<\App\GameModels\Game\Lasermaxx\Evo6\Team, \App\GameModels\Game\Lasermaxx\Evo6\Player>
+             * @return Game<Team, Player>
              */
             public function parse(): Game {
                 $game = new class extends \App\GameModels\Game\Lasermaxx\Evo6\Game {
-                    public function __construct(?int $id = null, ?\Dibi\Row $dbRow = null) {
+                    public function __construct(?int $id = null, ?Row $dbRow = null) {
                         unset($id, $dbRow);
                     }
 
@@ -61,7 +66,7 @@ class ResultFileImporterTest extends TestCase
             }
 
             /**
-             * @param ParsedGameInterface<\App\GameModels\Game\Lasermaxx\Evo6\Team, \App\GameModels\Game\Lasermaxx\Evo6\Player, array<string, mixed>> $game
+             * @param ParsedGameInterface<Team, Player, array<string, mixed>> $game
              * @param array<string, mixed> $meta
              */
             protected function processExtensions(ParsedGameInterface $game, array $meta): void {
@@ -85,7 +90,7 @@ class ResultFileImporterTest extends TestCase
         $this->assertSame($mtime, $game->fileTime?->getTimestamp());
     }
 
-    public function testStartedGameUsesStartedWindowInsteadOfLoadedWindow(): void {
+    public function test_started_game_uses_started_window_instead_of_loaded_window(): void {
         $result = $this->importUnfinishedGame(
             isStarted: true,
             fileTime: new DateTimeImmutable('@600'),
@@ -98,7 +103,7 @@ class ResultFileImporterTest extends TestCase
         $this->assertSame('game-started', $result->unfinishedEvent);
     }
 
-    public function testFreshNotStartedGameIsLoaded(): void {
+    public function test_fresh_not_started_game_is_loaded(): void {
         $result = $this->importUnfinishedGame(
             isStarted: false,
             fileTime: new DateTimeImmutable('@900'),
@@ -111,7 +116,7 @@ class ResultFileImporterTest extends TestCase
         $this->assertSame('game-loaded', $result->unfinishedEvent);
     }
 
-    public function testOldNotStartedGameIsSkipped(): void {
+    public function test_old_not_started_game_is_skipped(): void {
         $result = $this->importUnfinishedGame(
             isStarted: false,
             fileTime: new DateTimeImmutable('@600'),
@@ -125,7 +130,7 @@ class ResultFileImporterTest extends TestCase
         $this->assertNull($result->unfinishedGame);
     }
 
-    public function testOldStartedGameBeyondStartedWindowIsSkipped(): void {
+    public function test_old_started_game_beyond_started_window_is_skipped(): void {
         $result = $this->importUnfinishedGame(
             isStarted: true,
             fileTime: new DateTimeImmutable('@600'),
@@ -165,13 +170,13 @@ class ResultFileImporterTest extends TestCase
     }
 
     /**
-     * @return Game<\App\GameModels\Game\Lasermaxx\Evo6\Team, \App\GameModels\Game\Lasermaxx\Evo6\Player>
+     * @return Game<Team, Player>
      */
     private function createGame(bool $isStarted): Game {
         $game = new class extends \App\GameModels\Game\Lasermaxx\Evo6\Game {
             public bool $started = false;
 
-            public function __construct(?int $id = null, ?\Dibi\Row $dbRow = null) {
+            public function __construct(?int $id = null, ?Row $dbRow = null) {
                 unset($id, $dbRow);
             }
 

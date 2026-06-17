@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Cli\Commands\Cache;
 
 use App\Cli\Colors;
@@ -19,76 +21,72 @@ class CleanCacheCommand extends Command
         parent::__construct('cache:clean');
     }
 
-    public static function getDefaultName(): ?string
-    {
+    public static function getDefaultName(): ?string {
         return 'cache:clean';
     }
 
-    public static function getDefaultDescription(): ?string
-    {
+    public static function getDefaultDescription(): ?string {
         return 'Clean server cache';
     }
 
-    protected function configure(): void
-    {
+    protected function configure(): void {
         $this->addOption(
             'all',
             'a',
             InputOption::VALUE_NONE,
-            'Clear all cache.'
+            'Clear all cache.',
         );
         $this->addOption(
             'system',
             's',
             InputOption::VALUE_NONE,
-            'Clear system cache (Redis).'
+            'Clear system cache (Redis).',
         );
         $this->addOption(
             'di',
             'd',
             InputOption::VALUE_NONE,
-            'Clear DI cache.'
+            'Clear DI cache.',
         );
         $this->addOption(
             'latte',
             'l',
             InputOption::VALUE_NONE,
-            'Clear latte cache.'
+            'Clear latte cache.',
         );
         $this->addOption(
             'model',
             'm',
             InputOption::VALUE_NONE,
-            'Clear model (ORM) cache.'
+            'Clear model (ORM) cache.',
         );
         $this->addOption(
             'info',
             'i',
             InputOption::VALUE_NONE,
-            'Clear info cache.'
+            'Clear info cache.',
         );
         $this->addOption(
             'results',
             'r',
             InputOption::VALUE_NONE,
-            'Clear results cache.'
+            'Clear results cache.',
         );
         $this->addOption(
             'config',
             'c',
             InputOption::VALUE_NONE,
-            'Clear config cache.'
+            'Clear config cache.',
         );
         $this->addOption(
             'tag',
             't',
             InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
-            'If set, only the records with specified tags will be removed.'
+            'If set, only the records with specified tags will be removed.',
         );
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): int
-    {
+    protected function execute(InputInterface $input, OutputInterface $output): int {
         $all = $input->getOption('all');
         $system = $input->getOption('system');
         $di = $input->getOption('di');
@@ -106,7 +104,7 @@ class CleanCacheCommand extends Command
                 $this->cache->clean([\Nette\Caching\Cache::All => true]);
             }
             $output->writeln(
-                Colors::color(ForegroundColors::GREEN) . 'Successfully purged system cache' . Colors::reset()
+                Colors::color(ForegroundColors::GREEN) . 'Successfully purged system cache' . Colors::reset(),
             );
         }
 
@@ -125,8 +123,8 @@ class CleanCacheCommand extends Command
             $output->writeln(
                 Colors::color(ForegroundColors::GREEN) . sprintf(
                     'Successfully removed %d DI cache files.',
-                    count($files)
-                ) . Colors::reset()
+                    count($files),
+                ) . Colors::reset(),
             );
         }
 
@@ -141,8 +139,8 @@ class CleanCacheCommand extends Command
             $output->writeln(
                 Colors::color(ForegroundColors::GREEN) . sprintf(
                     'Successfully removed %d latte cache files.',
-                    count($files)
-                ) . Colors::reset()
+                    count($files),
+                ) . Colors::reset(),
             );
         }
 
@@ -157,8 +155,8 @@ class CleanCacheCommand extends Command
             $output->writeln(
                 Colors::color(ForegroundColors::GREEN) . sprintf(
                     'Successfully removed %d model (ORM) cache files.',
-                    count($files)
-                ) . Colors::reset()
+                    count($files),
+                ) . Colors::reset(),
             );
         }
 
@@ -171,14 +169,14 @@ class CleanCacheCommand extends Command
             Info::set('gate-game', null);
             Info::set('gate-time', 0);
             $output->writeln(
-                Colors::color(ForegroundColors::GREEN) . 'Cleared info values.' . Colors::reset()
+                Colors::color(ForegroundColors::GREEN) . 'Cleared info values.' . Colors::reset(),
             );
         }
 
         if ($all || $config) {
             Config::getInstance()->clearCache();
             $output->writeln(
-                Colors::color(ForegroundColors::GREEN) . 'Cleared config cache.' . Colors::reset()
+                Colors::color(ForegroundColors::GREEN) . 'Cleared config cache.' . Colors::reset(),
             );
         }
 
@@ -193,8 +191,8 @@ class CleanCacheCommand extends Command
             $output->writeln(
                 Colors::color(ForegroundColors::GREEN) . sprintf(
                     'Successfully removed %d results cache files.',
-                    count($files)
-                ) . Colors::reset()
+                    count($files),
+                ) . Colors::reset(),
             );
         }
 

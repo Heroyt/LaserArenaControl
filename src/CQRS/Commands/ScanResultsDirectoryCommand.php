@@ -26,12 +26,10 @@ final readonly class ScanResultsDirectoryCommand implements CommandInterface
         public bool $forceImport = false,
         public bool $processImports = false,
         public int $importTimeoutSeconds = 30,
-    )
-    {
+    ) {
     }
 
-    public function getHandler(): string
-    {
+    public function getHandler(): string {
         return ScanResultsDirectoryCommandHandler::class;
     }
 }

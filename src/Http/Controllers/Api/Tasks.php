@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Api;
 
 use App\GameModels\Factory\GameFactory;
@@ -19,9 +21,8 @@ use Spiral\RoadRunner\Jobs\Exception\JobsException;
 class Tasks extends ApiController
 {
     public function __construct(
-        private readonly TaskProducer $taskProducer
-    )
-    {
+        private readonly TaskProducer $taskProducer,
+    ) {
     }
 
     #[OA\Post(
@@ -33,12 +34,12 @@ class Tasks extends ApiController
             content: new OA\JsonContent(
                 required: ["game"],
                 properties: [
-                                  new OA\Property(
-                                      property: "game",
-                                      description: 'Game code',
-                                      type: "string",
-                                  ),
-                                ],
+                    new OA\Property(
+                        property: "game",
+                        description: 'Game code',
+                        type: "string",
+                    ),
+                ],
                 type: 'object',
             ),
         ),
@@ -53,24 +54,23 @@ class Tasks extends ApiController
         description: 'Request error',
         content: new OA\JsonContent(
             ref: '#/components/schemas/ErrorResponse',
-        )
+        ),
     )]
     #[OA\Response(
         response: 404,
         description: 'Game not found',
         content: new OA\JsonContent(
             ref: '#/components/schemas/ErrorResponse',
-        )
+        ),
     )]
     #[OA\Response(
         response: 500,
         description: 'Internal error',
         content: new OA\JsonContent(
             ref: '#/components/schemas/ErrorResponse',
-        )
+        ),
     )]
-    public function planGamePrecache(Request $request): ResponseInterface
-    {
+    public function planGamePrecache(Request $request): ResponseInterface {
         /** @var string $code */
         $code = $request->getPost('game', '');
         if (empty($code)) {
@@ -79,16 +79,16 @@ class Tasks extends ApiController
                     'Missing or invalid required post parameter `game`',
                     ErrorType::VALIDATION,
                     // @phpstan-ignore-next-line
-                    values: $request->getParsedBody()
+                    values: $request->getParsedBody(),
                 ),
-                400
+                400,
             );
         }
         $game = GameFactory::getByCode($code);
-        if (!isset($game)) {
+        if ( ! isset($game)) {
             return $this->respond(
                 new ErrorResponse('Game not found', ErrorType::NOT_FOUND),
-                404
+                404,
             );
         }
 
@@ -104,7 +104,7 @@ class Tasks extends ApiController
                     $code,
                     isset($style) ? (int)$style : null,
                     isset($template) ? (string)$template : null,
-                )
+                ),
             );
         } catch (JobsException $e) {
             return $this->respond(new ErrorResponse('Failed to plan a job', exception: $e), 500);
@@ -122,12 +122,12 @@ class Tasks extends ApiController
             content: new OA\JsonContent(
                 required: ["game"],
                 properties: [
-                                  new OA\Property(
-                                      property: "game",
-                                      description: 'Game code',
-                                      type: "string",
-                                  ),
-                                ],
+                    new OA\Property(
+                        property: "game",
+                        description: 'Game code',
+                        type: "string",
+                    ),
+                ],
                 type: 'object',
             ),
         ),
@@ -142,24 +142,23 @@ class Tasks extends ApiController
         description: 'Request error',
         content: new OA\JsonContent(
             ref: '#/components/schemas/ErrorResponse',
-        )
+        ),
     )]
     #[OA\Response(
         response: 404,
         description: 'Game not found',
         content: new OA\JsonContent(
             ref: '#/components/schemas/ErrorResponse',
-        )
+        ),
     )]
     #[OA\Response(
         response: 500,
         description: 'Internal error',
         content: new OA\JsonContent(
             ref: '#/components/schemas/ErrorResponse',
-        )
+        ),
     )]
-    public function planGameHighlights(Request $request): ResponseInterface
-    {
+    public function planGameHighlights(Request $request): ResponseInterface {
         /** @var string $code */
         $code = $request->getPost('game', '');
         if (empty($code)) {
@@ -167,23 +166,23 @@ class Tasks extends ApiController
                 new ErrorResponse(
                     'Missing or invalid required post parameter `game`',
                     ErrorType::VALIDATION,
-                    values: ['parsed' => $request->getParsedBody(), 'body' => $request->getBody()->getContents()]
+                    values: ['parsed' => $request->getParsedBody(), 'body' => $request->getBody()->getContents()],
                 ),
-                400
+                400,
             );
         }
         $game = GameFactory::getByCode($code);
-        if (!isset($game)) {
+        if ( ! isset($game)) {
             return $this->respond(
                 new ErrorResponse('Game not found', ErrorType::NOT_FOUND),
-                404
+                404,
             );
         }
 
         try {
             $this->taskProducer->push(
                 GameHighlightsTask::class,
-                new GameHighlightsPayload($code)
+                new GameHighlightsPayload($code),
             );
         } catch (JobsException $e) {
             return $this->respond(new ErrorResponse('Failed to plan a job', exception: $e), 500);

@@ -11,11 +11,11 @@ use Lsr\Db\DB;
 use Lsr\Db\Dibi\Fluent;
 use Lsr\Lg\Results\Enums\GameModeType;
 
-readonly final class FindModeByNameQuery implements QueryInterface
+final readonly class FindModeByNameQuery implements QueryInterface
 {
     use QueryModeBySystemsTrait;
 
-    private(set) Fluent $query;
+    public private(set) Fluent $query;
 
     public function __construct(
         private bool $cache = true,
@@ -24,26 +24,22 @@ readonly final class FindModeByNameQuery implements QueryInterface
             ->cacheTags(AbstractMode::TABLE, AbstractMode::TABLE . '/query');
     }
 
-    public function consoleName(string $name): self
-    {
+    public function consoleName(string $name): self {
         $this->query->where('%s LIKE CONCAT(\'%\', [sysName], \'%\')', $name);
         return $this;
     }
 
-    public function name(string $name): self
-    {
+    public function name(string $name): self {
         $this->query->where('[name] = %s', $name);
         return $this;
     }
 
-    public function type(GameModeType $type): self
-    {
+    public function type(GameModeType $type): self {
         $this->query->where('type = %s', $type->value);
         return $this;
     }
 
-    public function get(): ?BaseGameModeRow
-    {
+    public function get(): ?BaseGameModeRow {
         return $this->query->fetchDto(BaseGameModeRow::class, $this->cache);
     }
 }

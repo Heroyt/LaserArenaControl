@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Gate\Screens;
 
 use App\Core\App;
@@ -23,32 +25,28 @@ class ImageScreen extends GateScreen implements WithSettings, ReloadTimerInterfa
     /**
      * @inheritDoc
      */
-    public static function getName(): string
-    {
+    public static function getName(): string {
         return lang('Obrázek', domain: 'gate', context: 'screens');
     }
 
     /**
      * @inheritDoc
      */
-    public static function getDiKey(): string
-    {
+    public static function getDiKey(): string {
         return 'gate.screens.image';
     }
 
     /**
      * @inheritDoc
      */
-    public static function getSettingsForm(): string
-    {
+    public static function getSettingsForm(): string {
         return 'gate/settings/image.latte';
     }
 
     /**
      * @inheritDoc
      */
-    public static function buildSettingsFromForm(array $data): GateSettings
-    {
+    public static function buildSettingsFromForm(array $data): GateSettings {
         $type = ImageScreenType::tryFrom($data['type'] ?? '') ?? ImageScreenType::CENTER;
         $animation = AnimationType::tryFrom($data['animation'] ?? '') ?? AnimationType::FADE;
         $time = (int) ($data['time'] ?? 0);
@@ -62,14 +60,14 @@ class ImageScreen extends GateScreen implements WithSettings, ReloadTimerInterfa
             isset($uploadedImage['image']) && $uploadedImage['image'] instanceof UploadedFile && $uploadedImage['image']->getError() === UPLOAD_ERR_OK
         ) {
             $dir = UPLOAD_DIR . 'gate/';
-            if (!file_exists($dir) && (!mkdir($dir) || !is_dir($dir))) {
+            if ( ! file_exists($dir) && ( ! mkdir($dir) || ! is_dir($dir))) {
                 bdump('Error creating upload directory: ' . $dir);
                 $dir = UPLOAD_DIR;
             }
             $name = $uploadedImage['image']->getClientFilename();
             if (empty($name)) {
                 bdump('Uploaded file has no name.');
-                return new ImageSettings(null, $type, $animation, $time > 0 ? $time : null,);
+                return new ImageSettings(null, $type, $animation, $time > 0 ? $time : null, );
             }
             $extension = strtolower(pathinfo($name, PATHINFO_EXTENSION));
 
@@ -77,40 +75,38 @@ class ImageScreen extends GateScreen implements WithSettings, ReloadTimerInterfa
             if (in_array($extension, ['jpg', 'jpeg', 'png'])) {
                 $fileName = $dir . $name;
                 $uploadedImage['image']->moveTo($fileName);
-                return new ImageSettings(new Image($fileName), $type, $animation, $time > 0 ? $time : null,);
+                return new ImageSettings(new Image($fileName), $type, $animation, $time > 0 ? $time : null, );
             }
 
             bdump('Invalid file extension ' . $extension);
         }
 
-        if (!empty($data['current']) && file_exists($data['current'])) {
-            return new ImageSettings(new Image($data['current']), $type, $animation, $time > 0 ? $time : null,);
+        if ( ! empty($data['current']) && file_exists($data['current'])) {
+            return new ImageSettings(new Image($data['current']), $type, $animation, $time > 0 ? $time : null, );
         }
 
-        return new ImageSettings(null, $type, $animation, $time > 0 ? $time : null,);
+        return new ImageSettings(null, $type, $animation, $time > 0 ? $time : null, );
     }
 
     /**
      * @inheritDoc
      */
-    public function run(): ResponseInterface
-    {
+    public function run(): ResponseInterface {
         return $this->view(
             'gate/screens/image',
             [
-            'settings' => $this->getSettings(),
-            'image'    => $this->getSettings()->image,
-            'addCss'   => ['gate/image.css'],
-            ]
+                'settings' => $this->getSettings(),
+                'image'    => $this->getSettings()->image,
+                'addCss'   => ['gate/image.css'],
+            ],
         );
     }
 
     /**
      * @inheritDoc
      */
-    public function getSettings(): ImageSettings
-    {
-        if (!isset($this->settings)) {
+    public function getSettings(): ImageSettings {
+        if ( ! isset($this->settings)) {
             $this->settings = new ImageSettings();
         }
         return $this->settings;
@@ -119,8 +115,7 @@ class ImageScreen extends GateScreen implements WithSettings, ReloadTimerInterfa
     /**
      * @inheritDoc
      */
-    public function setSettings(GateSettings $settings): static
-    {
+    public function setSettings(GateSettings $settings): static {
         $this->settings = $settings;
         return $this;
     }

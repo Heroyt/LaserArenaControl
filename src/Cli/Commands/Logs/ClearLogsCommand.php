@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Cli\Commands\Logs;
 
 use DateTimeImmutable;
@@ -16,23 +18,20 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 class ClearLogsCommand extends Command
 {
-    public static function getDefaultName(): ?string
-    {
+    public static function getDefaultName(): ?string {
         return 'log:clear';
     }
 
-    public static function getDefaultDescription(): string
-    {
+    public static function getDefaultDescription(): string {
         return 'Remove log files. Removes at least 1 week old files by default.';
     }
 
-    protected function configure(): void
-    {
+    protected function configure(): void {
         $this->addOption(
             'all',
             'a',
             InputOption::VALUE_NONE,
-            'Clear all log files and archives.'
+            'Clear all log files and archives.',
         );
         $this->addOption(
             'until',
@@ -41,9 +40,9 @@ class ClearLogsCommand extends Command
             'If set, only logs until specified date will be removed. Any strtotime() parsable string can be passed as value.',
             '-7 days',
             [
-            '2024-04-20',
-            '-7 days',
-            '-1 months',
+                '2024-04-20',
+                '-7 days',
+                '-1 months',
             ],
         );
         $this->addOption(
@@ -72,8 +71,7 @@ class ClearLogsCommand extends Command
         );
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): int
-    {
+    protected function execute(InputInterface $input, OutputInterface $output): int {
         $count = 0;
         $dirIt = new RecursiveDirectoryIterator(LOG_DIR);
         $itIt = new RecursiveIteratorIterator($dirIt, RecursiveIteratorIterator::LEAVES_ONLY);
@@ -89,14 +87,14 @@ class ClearLogsCommand extends Command
             assert($helper instanceof QuestionHelper);
             $question = new ConfirmationQuestion(
                 'Are you sure, you want to delete all log files and log archives? [y|N] ',
-                false
+                false,
             );
-            if (!$helper->ask($input, $output, $question)) {
+            if ( ! $helper->ask($input, $output, $question)) {
                 return self::SUCCESS;
             }
             /** @var string $file */
             foreach ($it as $file) {
-                if (!unlink($file)) {
+                if ( ! unlink($file)) {
                     $output->writeln('<error>Failed to delete ' . $file . '</error>');
                 } else {
                     $count++;
@@ -104,7 +102,7 @@ class ClearLogsCommand extends Command
             }
             /** @var string $file */
             foreach ($itTracy as $file) {
-                if (!unlink($file)) {
+                if ( ! unlink($file)) {
                     $output->writeln('<error>Failed to delete ' . $file . '</error>');
                 } else {
                     $count++;
@@ -112,7 +110,7 @@ class ClearLogsCommand extends Command
             }
             /** @var string $file */
             foreach ($itRR as $file) {
-                if (!unlink($file)) {
+                if ( ! unlink($file)) {
                     $output->writeln('<error>Failed to delete ' . $file . '</error>');
                 } else {
                     $count++;
@@ -120,7 +118,7 @@ class ClearLogsCommand extends Command
             }
             /** @var string $file */
             foreach ($itCron as $file) {
-                if (!unlink($file)) {
+                if ( ! unlink($file)) {
                     $output->writeln('<error>Failed to delete ' . $file . '</error>');
                 } else {
                     $count++;
@@ -128,7 +126,7 @@ class ClearLogsCommand extends Command
             }
             /** @var string $file */
             foreach ($itException as $file) {
-                if (!unlink($file)) {
+                if ( ! unlink($file)) {
                     $output->writeln('<error>Failed to delete ' . $file . '</error>');
                 } else {
                     $count++;
@@ -185,7 +183,7 @@ class ClearLogsCommand extends Command
                 continue;
             }
 
-            if (!unlink($file)) {
+            if ( ! unlink($file)) {
                 $output->writeln('<error>Failed to delete ' . $file . '</error>');
             } else {
                 $count++;
@@ -215,7 +213,7 @@ class ClearLogsCommand extends Command
                     continue;
                 }
 
-                if (!unlink($file)) {
+                if ( ! unlink($file)) {
                     $output->writeln('<error>Failed to delete ' . $file . '</error>');
                 } else {
                     $count++;
@@ -225,7 +223,7 @@ class ClearLogsCommand extends Command
         if ($cron) {
             /** @var string $file */
             foreach ($itCron as $file) {
-                if (!unlink($file)) {
+                if ( ! unlink($file)) {
                     $output->writeln('<error>Failed to delete ' . $file . '</error>');
                 } else {
                     $count++;
@@ -235,7 +233,7 @@ class ClearLogsCommand extends Command
         if ($roadrunner) {
             /** @var string $file */
             foreach ($itRR as $file) {
-                if (!unlink($file)) {
+                if ( ! unlink($file)) {
                     $output->writeln('<error>Failed to delete ' . $file . '</error>');
                 } else {
                     $count++;
@@ -245,7 +243,7 @@ class ClearLogsCommand extends Command
         if ($exception) {
             /** @var string $file */
             foreach ($itException as $file) {
-                if (!unlink($file)) {
+                if ( ! unlink($file)) {
                     $output->writeln('<error>Failed to delete ' . $file . '</error>');
                 } else {
                     $count++;

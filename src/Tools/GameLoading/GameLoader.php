@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tools\GameLoading;
 
 use App\Core\App;
@@ -8,9 +10,6 @@ use App\Models\SystemType;
 use InvalidArgumentException;
 use Throwable;
 
-/**
- *
- */
 class GameLoader
 {
     /** @var array<string, LoaderInterface> */
@@ -21,10 +20,9 @@ class GameLoader
      *
      * @return array<string, string|numeric> Metadata
      */
-    public function loadGame(string|int|System $system, array $data): array
-    {
+    public function loadGame(string|int|System $system, array $data): array {
         $loader = $this->findGameLoader($system);
-        if (!isset($loader)) {
+        if ( ! isset($loader)) {
             throw new InvalidArgumentException('Cannot find loader for system - ' . $system);
         }
 
@@ -38,8 +36,7 @@ class GameLoader
      *
      * @return LoaderInterface|null
      */
-    private function findGameLoader(string|int|System $system): ?LoaderInterface
-    {
+    private function findGameLoader(string|int|System $system): ?LoaderInterface {
         if (is_numeric($system)) {
             $system = System::get((int) $system);
         } elseif (is_string($system)) {

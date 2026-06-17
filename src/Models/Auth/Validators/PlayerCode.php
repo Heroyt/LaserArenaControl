@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models\Auth\Validators;
 
 use App\Models\Auth\Player;
@@ -25,9 +27,8 @@ class PlayerCode implements Validator
         mixed         $value,
         object|string $class,
         string        $property,
-        string        $propertyPrefix = ''
-    ): void
-    {
+        string        $propertyPrefix = '',
+    ): void {
         assert($class instanceof Player);
         $class::validateCode($value, $class, $propertyPrefix);
     }

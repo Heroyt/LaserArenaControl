@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @author Tomáš Vojík <xvojik00@stud.fit.vutbr.cz>, <vojik@wboy.cz>
  */
@@ -21,13 +23,11 @@ class EventService
 
     public function __construct(
         private readonly RPC $rpc,
-    )
-    {
+    ) {
     }
 
-    public static function getEventUrl(): string
-    {
-        if (!isset(self::$eventUrl)) {
+    public static function getEventUrl(): string {
+        if ( ! isset(self::$eventUrl)) {
             /** @var Config $config */
             $config = App::getServiceByType(Config::class);
 
@@ -52,8 +52,7 @@ class EventService
         return self::$eventUrl;
     }
 
-    public static function getEventPort(): int
-    {
+    public static function getEventPort(): int {
         return EVENT_PORT;
     }
 
@@ -65,8 +64,7 @@ class EventService
      * @return bool Success
      * @throws JsonException
      */
-    public function trigger(string $type, string|array $message): bool
-    {
+    public function trigger(string $type, string|array $message): bool {
         if (is_array($message)) {
             $message = json_encode($message, JSON_THROW_ON_ERROR);
         }
@@ -74,15 +72,15 @@ class EventService
             $id = $this->rpc->call(
                 'eventserver.TriggerEvent',
                 [
-                'Type'    => $type,
-                'Message' => $message,
-                ]
+                    'Type'    => $type,
+                    'Message' => $message,
+                ],
             );
-            return !empty($id);
+            return ! empty($id);
         } catch (Throwable $e) {
             App::getInstance()->getLogger()->error(
                 'EventService: Failed to trigger event',
-                ['type' => $type, 'message' => $message, 'error' => $e->getMessage()]
+                ['type' => $type, 'message' => $message, 'error' => $e->getMessage()],
             );
             return false;
         }

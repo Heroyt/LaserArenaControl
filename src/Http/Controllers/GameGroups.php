@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Models\GameGroup;
@@ -13,9 +15,6 @@ use Lsr\ObjectValidation\Exceptions\ValidationException;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
 
-/**
- *
- */
 class GameGroups extends Controller
 {
     /**
@@ -25,8 +24,7 @@ class GameGroups extends Controller
      * @throws ValidationException
      * @throws Throwable
      */
-    public function listGroups(Request $request): ResponseInterface
-    {
+    public function listGroups(Request $request): ResponseInterface {
         $groups = $request->getGet('all') !== null ? GameGroup::getAllByDate() : GameGroup::getActiveByDate();
         $data = [];
         if ($request->getGet('basic') !== null) {
@@ -44,18 +42,17 @@ class GameGroups extends Controller
         return $this->respond($data);
     }
 
-    public function findGroups(Request $request): ResponseInterface
-    {
+    public function findGroups(Request $request): ResponseInterface {
         /** @var string $search */
         $search = $request->getGet('search', '');
 
         return $this->respond(
             array_values(
                 GameGroup::query()
-                     ->where('[name] LIKE %~like~', $search)
-                     ->where('[active] = 1')
-                     ->get()
-            )
+                    ->where('[name] LIKE %~like~', $search)
+                    ->where('[active] = 1')
+                    ->get(),
+            ),
         );
     }
 
@@ -65,8 +62,7 @@ class GameGroups extends Controller
      * @throws JsonException
      * @throws Throwable
      */
-    public function getGroup(GameGroup $group): ResponseInterface
-    {
+    public function getGroup(GameGroup $group): ResponseInterface {
         $groupData = $group->jsonSerialize();
         $groupData['players'] = $group->players;
         return $this->respond($groupData);
@@ -78,14 +74,13 @@ class GameGroups extends Controller
      * @return ResponseInterface
      * @throws JsonException
      */
-    public function create(Request $request): ResponseInterface
-    {
+    public function create(Request $request): ResponseInterface {
         $group = new GameGroup();
         /** @var string $name */
         $name = $request->getPost('name', lang('Skupina %s', format: [date('d.m.Y H:i')]));
         $group->name = $name;
         try {
-            if (!$group->save()) {
+            if ( ! $group->save()) {
                 return $this->respond(['error' => 'Save failed'], 500);
             }
         } catch (ValidationException $e) {
@@ -102,19 +97,18 @@ class GameGroups extends Controller
      * @return ResponseInterface
      * @throws JsonException
      */
-    public function update(GameGroup $group, Request $request): ResponseInterface
-    {
+    public function update(GameGroup $group, Request $request): ResponseInterface {
         /** @var string $name */
         $name = $request->getPost('name', '');
-        if (!empty($name)) {
+        if ( ! empty($name)) {
             $group->name = $name;
         }
         /** @var bool|string|numeric|null $active */
         $active = $request->getPost('active');
         if ($active !== null) {
             $group->active = (is_bool($active) && $active) || (is_numeric(
-                        $active
-                    ) && ((int)$active) === 1) || $active === 'true';
+                $active,
+            ) && ((int)$active) === 1) || $active === 'true';
         }
 
         /** @var null|array{payment?:array<string,array<string,mixed>>|mixed}|string $meta */
@@ -129,7 +123,7 @@ class GameGroups extends Controller
         }
 
         try {
-            if (!$group->save()) {
+            if ( ! $group->save()) {
                 return $this->respond(['error' => 'Save failed'], 500);
             }
         } catch (ValidationException $e) {
@@ -145,8 +139,7 @@ class GameGroups extends Controller
      * @throws ValidationException
      * @throws TemplateDoesNotExistException
      */
-    public function printPlayerList(GameGroup $group): ResponseInterface
-    {
+    public function printPlayerList(GameGroup $group): ResponseInterface {
         $this->params['group'] = $group;
         $this->params['priceGroups'] = PriceGroup::getAll();
         return $this->view('components/groups/groupPrint');

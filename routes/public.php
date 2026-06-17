@@ -6,8 +6,9 @@ use App\Http\Controllers\Public\GamesList;
 use App\Http\Controllers\Public\LaserLiga;
 use App\Http\Controllers\Public\Music;
 use App\Http\Controllers\Public\NewGame;
+use Lsr\Core\Routing\Router;
 
-/** @var \Lsr\Core\Routing\Router $this */
+/** @var Router $this */
 
 $publicGroup = $this->group('public');
 

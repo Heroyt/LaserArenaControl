@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Gate\Widgets;
 
 use App\GameModels\Game\Game;
@@ -29,8 +31,7 @@ class GeneralStats implements WidgetInterface, WithGameIdsInterface
     /**
      * @inheritDoc
      */
-    public function getHash(?Game $game = null, ?DateTimeInterface $date = null, ?array $systems = []): string
-    {
+    public function getHash(?Game $game = null, ?DateTimeInterface $date = null, ?array $systems = []): string {
         if (isset($this->hash)) {
             return $this->hash;
         }
@@ -50,8 +51,7 @@ class GeneralStats implements WidgetInterface, WithGameIdsInterface
     /**
      * @inheritDoc
      */
-    public function getData(?Game $game = null, ?DateTimeInterface $date = null, ?array $systems = []): array
-    {
+    public function getData(?Game $game = null, ?DateTimeInterface $date = null, ?array $systems = []): array {
         if (isset($this->data)) {
             return $this->data;
         }
@@ -63,18 +63,15 @@ class GeneralStats implements WidgetInterface, WithGameIdsInterface
         return $this->data;
     }
 
-    public function getTemplate(): string
-    {
+    public function getTemplate(): string {
         return 'generalStats.latte';
     }
 
-    public function getSettingsTemplate(): string
-    {
+    public function getSettingsTemplate(): string {
         return '';
     }
 
-    public function refresh(): static
-    {
+    public function refresh(): static {
         $this->data = null;
         $this->hash = null;
         $this->gameIds['rankable'] = null;

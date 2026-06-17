@@ -11,15 +11,18 @@ use App\Http\Templates\Public\GamesListTemplate;
 use DateTimeImmutable;
 use Endroid\QrCode\Builder\Builder;
 use Endroid\QrCode\Encoding\Encoding;
+use Endroid\QrCode\Exception\ValidationException;
 use Endroid\QrCode\Writer\SvgWriter;
+use JsonException;
 use Lsr\Core\Controllers\Controller;
 use Lsr\Core\Requests\Request;
+use Lsr\Exceptions\TemplateDoesNotExistException;
 use Psr\Http\Message\ResponseInterface;
+use Throwable;
 
 class GamesList extends Controller
 {
-    public function show(Request $request): ResponseInterface
-    {
+    public function show(Request $request): ResponseInterface {
         $this->params = new GamesListTemplate($this->params);
 
         /** @var string $date */
@@ -33,13 +36,12 @@ class GamesList extends Controller
     /**
      * @param  non-empty-string  $code
      * @return ResponseInterface
-     * @throws \Endroid\QrCode\Exception\ValidationException
-     * @throws \JsonException
-     * @throws \Lsr\Exceptions\TemplateDoesNotExistException
-     * @throws \Throwable
+     * @throws ValidationException
+     * @throws JsonException
+     * @throws TemplateDoesNotExistException
+     * @throws Throwable
      */
-    public function detail(string $code): ResponseInterface
-    {
+    public function detail(string $code): ResponseInterface {
         $this->params = new GamesDetailTemplate($this->params);
 
         $this->params->publicUrl = trailingSlashIt(Info::get('liga_api_url', 'https://laserliga.cz')) . 'g/' . $code;
@@ -54,9 +56,9 @@ class GamesList extends Controller
             data: $this->params->publicUrl,
             encoding: new Encoding('UTF-8'),
         )
-          ->build()
-          ->getString();
-        assert(!empty($qr));
+            ->build()
+            ->getString();
+        assert( ! empty($qr));
         $this->params->qr = $qr;
 
         return $this->view('pages/public/detail');

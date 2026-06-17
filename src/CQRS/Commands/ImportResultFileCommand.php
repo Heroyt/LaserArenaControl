@@ -34,16 +34,14 @@ final readonly class ImportResultFileCommand implements CommandInterface
         public ?string $preserveGameCode = null,
         public array $preservePlayerIdsByVest = [],
         public array $preserveTeamIdsByColor = [],
-    )
-    {
+    ) {
     }
 
     public static function fromQueuedFile(
         QueuedResultFileImport $queuedFile,
         int                    $timeoutSeconds = 30,
         bool                   $force = false,
-    ): self
-    {
+    ): self {
         return new self(
             path: $queuedFile->path,
             pathHash: $queuedFile->pathHash,
@@ -58,13 +56,11 @@ final readonly class ImportResultFileCommand implements CommandInterface
         );
     }
 
-    public function getHandler(): string
-    {
+    public function getHandler(): string {
         return ImportResultFileCommandHandler::class;
     }
 
-    public function toVersion(): ResultFileVersion
-    {
+    public function toVersion(): ResultFileVersion {
         return new ResultFileVersion(
             path: $this->path,
             pathHash: $this->pathHash,

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Unit;
 
 use App\CQRS\CommandHandlers\ScanResultsDirectoryCommandHandler;
@@ -14,15 +16,13 @@ use PHPUnit\Framework\TestCase;
 
 class ScanResultsDirectoryCommandHandlerTest extends TestCase
 {
-    public function testCommandUsesScanHandler(): void
-    {
+    public function test_command_uses_scan_handler(): void {
         $command = new ScanResultsDirectoryCommand('/tmp/results');
 
         $this->assertSame(ScanResultsDirectoryCommandHandler::class, $command->getHandler());
     }
 
-    public function testHandlerDelegatesToScanner(): void
-    {
+    public function test_handler_delegates_to_scanner(): void {
         $queuedFile = new QueuedResultFileImport(
             '/tmp/results/0001.game',
             sha1('/tmp/results/0001.game'),
@@ -62,14 +62,13 @@ class ScanResultsDirectoryCommandHandlerTest extends TestCase
                     all: true,
                     limit: 5,
                     includeContent: true,
-                    maxContentBytes: 1024
-                )
-            )
+                    maxContentBytes: 1024,
+                ),
+            ),
         );
     }
 
-    public function testHandlerCanSkipQueueingImports(): void
-    {
+    public function test_handler_can_skip_queueing_imports(): void {
         $queuedFile = new QueuedResultFileImport(
             '/tmp/results/0001.game',
             sha1('/tmp/results/0001.game'),
@@ -102,12 +101,11 @@ class ScanResultsDirectoryCommandHandlerTest extends TestCase
 
         $this->assertSame(
             $result,
-            $handler->handle(new ScanResultsDirectoryCommand('/tmp/results', queueImports: false))
+            $handler->handle(new ScanResultsDirectoryCommand('/tmp/results', queueImports: false)),
         );
     }
 
-    public function testHandlerCanProcessImportsSynchronously(): void
-    {
+    public function test_handler_can_process_imports_synchronously(): void {
         $queuedFile = new QueuedResultFileImport(
             '/tmp/results/0001.game',
             sha1('/tmp/results/0001.game'),
@@ -154,7 +152,7 @@ class ScanResultsDirectoryCommandHandlerTest extends TestCase
                 queueImports: true,
                 processImports: true,
                 importTimeoutSeconds: 45,
-            )
+            ),
         );
 
         $this->assertSame($result->queuedFiles, $response->queuedFiles);

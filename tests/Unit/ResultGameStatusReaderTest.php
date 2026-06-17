@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Unit;
 
 use App\DataObjects\Import\ResultGameStatusState;
@@ -9,10 +11,10 @@ use PHPUnit\Framework\TestCase;
 
 class ResultGameStatusReaderTest extends TestCase
 {
-    public function testEvo6LoadedStatusExtraction(): void {
+    public function test_evo6_loaded_status_extraction(): void {
         $status = Evo6ResultsParser::readStatus(
             '0012.game',
-            $this->content('EVO-6 MAXX', 'GAME{12,,20250208214146,20000101000000,3}#')
+            $this->content('EVO-6 MAXX', 'GAME{12,,20250208214146,20000101000000,3}#'),
         );
 
         $this->assertSame(ResultGameStatusState::LOADED, $status->state);
@@ -25,14 +27,14 @@ class ResultGameStatusReaderTest extends TestCase
         $this->assertNull($status->realEndedAt);
     }
 
-    public function testEvo6StartedStatusExtraction(): void {
+    public function test_evo6_started_status_extraction(): void {
         $status = Evo6ResultsParser::readStatus(
             '0012.game',
             $this->content(
                 'EVO-6 MAXX',
                 'GAME{12,,20250208214146,20000101000000,3}#',
-                'TIMING{10, 15, 5, 20250208214156,20000101000000,20000101000000}#'
-            )
+                'TIMING{10, 15, 5, 20250208214156,20000101000000,20000101000000}#',
+            ),
         );
 
         $this->assertSame(ResultGameStatusState::STARTED, $status->state);
@@ -41,14 +43,14 @@ class ResultGameStatusReaderTest extends TestCase
         $this->assertNull($status->realEndedAt);
     }
 
-    public function testEvo6FinishedStatusExtractionWithSixTimingArguments(): void {
+    public function test_evo6_finished_status_extraction_with_six_timing_arguments(): void {
         $status = Evo6ResultsParser::readStatus(
             '0012.game',
             $this->content(
                 'EVO-6 MAXX',
                 'GAME{12,,20250208214146,20250208214447,3}#',
-                'TIMING{10, 15, 5, 20250208214156,20250208214442,20250208214447}#'
-            )
+                'TIMING{10, 15, 5, 20250208214156,20250208214442,20250208214447}#',
+            ),
         );
 
         $this->assertSame(ResultGameStatusState::FINISHED, $status->state);
@@ -57,14 +59,14 @@ class ResultGameStatusReaderTest extends TestCase
         $this->assertSame('20250208214447', $status->importedAt?->format('YmdHis'));
     }
 
-    public function testEvo6FinishedStatusExtractionWithFiveTimingArguments(): void {
+    public function test_evo6_finished_status_extraction_with_five_timing_arguments(): void {
         $status = Evo6ResultsParser::readStatus(
             '0012.game',
             $this->content(
                 'EVO-6 MAXX',
                 'GAME{12,,20250208214146,20250208214447,3}#',
-                'TIMING{10, 15, 5, 20250208214156,20250208214442}#'
-            )
+                'TIMING{10, 15, 5, 20250208214156,20250208214442}#',
+            ),
         );
 
         $this->assertSame(ResultGameStatusState::FINISHED, $status->state);
@@ -72,14 +74,14 @@ class ResultGameStatusReaderTest extends TestCase
         $this->assertNull($status->realEndedAt);
     }
 
-    public function testEvo5StatusExtraction(): void {
+    public function test_evo5_status_extraction(): void {
         $status = Evo5ResultsParser::readStatus(
             '0012.game',
             $this->content(
                 'EVO-5 MAXX',
                 'GAME{12,,20250208214146,20250208214447,3}#',
-                'TIMING{10, 15, 5, 20250208214156,20250208214442,20250208214447}#'
-            )
+                'TIMING{10, 15, 5, 20250208214156,20250208214442,20250208214447}#',
+            ),
         );
 
         $this->assertSame(ResultGameStatusState::FINISHED, $status->state);
@@ -88,17 +90,16 @@ class ResultGameStatusReaderTest extends TestCase
         $this->assertSame(3, $status->playerCount);
     }
 
-    public function testUnknownStatusForWrongSystem(): void {
+    public function test_unknown_status_for_wrong_system(): void {
         $status = Evo6ResultsParser::readStatus(
             '0012.game',
-            $this->content('EVO-5 MAXX', 'GAME{12,,20250208214146,20250208214447,3}#')
+            $this->content('EVO-5 MAXX', 'GAME{12,,20250208214146,20250208214447,3}#'),
         );
 
         $this->assertSame(ResultGameStatusState::UNKNOWN, $status->state);
     }
 
-    private function content(string $site, string ...$lines): string
-    {
+    private function content(string $site, string ...$lines): string {
         return implode("\r\n", [
             'SITE{Arena,1,' . $site . '}#',
             ...$lines,

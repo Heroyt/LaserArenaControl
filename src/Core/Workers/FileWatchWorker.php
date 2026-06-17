@@ -18,7 +18,7 @@ class FileWatchWorker implements Worker
 {
     public App $app {
         get {
-            if (!isset($this->app)) {
+            if ( ! isset($this->app)) {
                 $this->app = App::getInstance();
             }
             return $this->app;
@@ -27,7 +27,7 @@ class FileWatchWorker implements Worker
     }
     private Logger $logger {
         get {
-            if (!isset($this->logger)) {
+            if ( ! isset($this->logger)) {
                 $this->logger = new Logger(LOG_DIR, 'worker-file-watch');
             }
             return $this->logger;
@@ -43,8 +43,7 @@ class FileWatchWorker implements Worker
         $this->worker = RrWorker::create();
     }
 
-    public function run(): void
-    {
+    public function run(): void {
         while ($payload = $this->worker->waitPayload()) {
             try {
                 /** @phpstan-ignore property.internalClass */
@@ -73,8 +72,7 @@ class FileWatchWorker implements Worker
         }
     }
 
-    public function handleError(Throwable $error): void
-    {
+    public function handleError(Throwable $error): void {
         $this->logger->exception($error);
         /** @phpstan-ignore new.internalClass, method.internalClass */
         $this->worker->respond(new Payload('ERROR'));

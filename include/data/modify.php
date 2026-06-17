@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 const MW = 'man_vs_woman_suffixes.txt';
 const CASES = [
     1 => 'nominative',

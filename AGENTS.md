@@ -54,7 +54,7 @@ Run the smallest useful check for the change, then broaden if the touched area i
 
 - Tests: `vendor/bin/phpunit`, or a specific test file such as `vendor/bin/phpunit tests/Unit/FairTeamsTest.php`.
 - Static analysis: `composer phpstan`.
-- Coding standard: `vendor/bin/phpcs`; automatic PHP fixes: `composer phpcbf`.
+- Coding standard: `composer cs`; automatic PHP fixes: `composer cbf`.
 - Frontend build: `pnpm run build`.
 - Frontend watch during active work: `pnpm run watch`.
 - Docker dev stack: `docker compose -f docker-compose-dev.yml up`.

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Api;
 
 use App\CQRS\Commands\ScanResultsDirectoryCommand;
@@ -19,17 +21,13 @@ use Psr\Http\Message\ResponseInterface;
 use Spiral\RoadRunner\Metrics\Metrics;
 use Throwable;
 
-/**
- *
- */
 class Results extends ApiController
 {
     public function __construct(
         private readonly ImportService $importService,
         private readonly CommandBus    $commandBus,
         private readonly Metrics       $metrics,
-    )
-    {
+    ) {
     }
 
     #[OA\Post(
@@ -41,53 +39,52 @@ class Results extends ApiController
             content: new OA\JsonContent(
                 required: ["dir"],
                 properties: [
-                                  new OA\Property(
-                                      property: "dir",
-                                      description: 'Directory to import from',
-                                      type: "string",
-                                      example: 'lmx/results'
-                                  ),
-                                  new OA\Property(
-                                      property: "sync",
-                                      description: 'If present, scan immediately and queue changed result files.',
-                                      type: "boolean",
-                                      example: 'true'
-                                  ),
-                                ],
+                    new OA\Property(
+                        property: "dir",
+                        description: 'Directory to import from',
+                        type: "string",
+                        example: 'lmx/results',
+                    ),
+                    new OA\Property(
+                        property: "sync",
+                        description: 'If present, scan immediately and queue changed result files.',
+                        type: "boolean",
+                        example: 'true',
+                    ),
+                ],
                 type: 'object',
             ),
         ),
-        tags: ['Import']
+        tags: ['Import'],
     )]
     #[OA\Parameter(
         name: 'process',
         description: 'Set to "sync" to import changed result files synchronously before returning. This implies sync=true.',
         in: 'query',
         required: false,
-        schema: new OA\Schema(type: 'string', enum: ['sync'])
+        schema: new OA\Schema(type: 'string', enum: ['sync']),
     )]
     #[OA\Response(
         response: 200,
         description: 'Success response',
         content: new OA\JsonContent(
             oneOf: [
-                 new OA\Schema(ref: '#/components/schemas/SuccessResponse'),
+                new OA\Schema(ref: '#/components/schemas/SuccessResponse'),
                 new OA\Schema(ref: '#/components/schemas/ResultsScanResult'),
-               ]
-        )
+            ],
+        ),
     )]
     #[OA\Response(
         response: 400,
         description: 'Request error',
-        content: new OA\JsonContent(ref: '#/components/schemas/ErrorResponse')
+        content: new OA\JsonContent(ref: '#/components/schemas/ErrorResponse'),
     )]
     #[OA\Response(
         response: 500,
         description: 'Internal error',
-        content: new OA\JsonContent(ref: '#/components/schemas/ErrorResponse')
+        content: new OA\JsonContent(ref: '#/components/schemas/ErrorResponse'),
     )]
-    public function import(Request $request): ResponseInterface
-    {
+    public function import(Request $request): ResponseInterface {
         $resultsDir = $request->getPost('dir', '');
         assert(is_string($resultsDir), 'Import directory must be a string');
 
@@ -95,9 +92,9 @@ class Results extends ApiController
             return $this->respond(
                 new ErrorResponse(
                     'Missing required argument "dir". Valid results directory is expected.',
-                    type: ErrorType::VALIDATION
+                    type: ErrorType::VALIDATION,
                 ),
-                400
+                400,
             );
         }
 
@@ -105,13 +102,13 @@ class Results extends ApiController
         $process = $request->getGet('process');
         $processSynchronously = $process === 'sync';
         try {
-            if (!empty($sync) || $processSynchronously) {
+            if ( ! empty($sync) || $processSynchronously) {
                 $response = $this->commandBus->dispatch(
                     new ScanResultsDirectoryCommand(
                         $resultsDir,
-                        queueImports: !$processSynchronously,
+                        queueImports: ! $processSynchronously,
                         processImports: $processSynchronously,
-                    )
+                    ),
                 );
                 return $this->respond($response);
             }
@@ -137,31 +134,30 @@ class Results extends ApiController
         path: '/api/results/import/{game}',
         operationId: 'importGameResults',
         description: 'Import results for 1 game.',
-        tags: ['Import']
+        tags: ['Import'],
     )]
     #[OA\Parameter(name: 'game', description: 'Game code', in: 'path', required: true)]
     #[OA\Response(
         response: 200,
         description: 'Success response',
-        content: new OA\JsonContent(ref: '#/components/schemas/SuccessResponse')
+        content: new OA\JsonContent(ref: '#/components/schemas/SuccessResponse'),
     )]
     #[OA\Response(
         response: 404,
         description: 'Game (file) not found',
-        content: new OA\JsonContent(ref: '#/components/schemas/ErrorResponse')
+        content: new OA\JsonContent(ref: '#/components/schemas/ErrorResponse'),
     )]
     #[OA\Response(
         response: 500,
         description: 'Internal error',
-        content: new OA\JsonContent(ref: '#/components/schemas/ErrorResponse')
+        content: new OA\JsonContent(ref: '#/components/schemas/ErrorResponse'),
     )]
     #[OA\Response(
         response: 417,
         description: 'Cannot get game file number',
-        content: new OA\JsonContent(ref: '#/components/schemas/ErrorResponse')
+        content: new OA\JsonContent(ref: '#/components/schemas/ErrorResponse'),
     )]
-    public function importGame(Request $request, string $game = ''): ResponseInterface
-    {
+    public function importGame(Request $request, string $game = ''): ResponseInterface {
         /** @var string $dir */
         $dir = $request->getPost('dir', DEFAULT_RESULTS_DIR);
         if (empty($dir)) {
@@ -176,15 +172,15 @@ class Results extends ApiController
                 new ErrorResponse(
                     'Error while getting the game by code.',
                     type: ErrorType::INTERNAL,
-                    exception: $e
+                    exception: $e,
                 ),
-                500
+                500,
             );
         }
-        if (!isset($gameObj)) {
+        if ( ! isset($gameObj)) {
             return $this->respond(
                 new ErrorResponse('Unknown game.', type: ErrorType::NOT_FOUND),
-                404
+                404,
             );
         }
 
@@ -207,21 +203,20 @@ class Results extends ApiController
         path: '/api/results/last',
         operationId: 'getLastGameFile',
         description: 'Get last game file from results directory.',
-        tags: ['Import']
+        tags: ['Import'],
     )]
     #[OA\Parameter(name: 'dir', description: 'Results directory', in: 'query', required: true, example: 'lmx/results')]
     #[OA\Response(
         response: 200,
         description: 'Last results data',
-        content: new OA\JsonContent(ref: '#/components/schemas/LastResultsResponse')
+        content: new OA\JsonContent(ref: '#/components/schemas/LastResultsResponse'),
     )]
     #[OA\Response(
         response: 400,
         description: 'Request error',
-        content: new OA\JsonContent(ref: '#/components/schemas/ErrorResponse')
+        content: new OA\JsonContent(ref: '#/components/schemas/ErrorResponse'),
     )]
-    public function getLastGameFile(Request $request): ResponseInterface
-    {
+    public function getLastGameFile(Request $request): ResponseInterface {
         $dir = $request->getGet('dir', '');
         assert(is_string($dir), 'Invalid input parameter');
         $resultsDir = urldecode($dir);
@@ -229,9 +224,9 @@ class Results extends ApiController
             return $this->respond(
                 new ErrorResponse(
                     'Missing required argument "dir". Valid results directory is expected.',
-                    type: ErrorType::VALIDATION
+                    type: ErrorType::VALIDATION,
                 ),
-                400
+                400,
             );
         }
         $resultsDir = $this->resolveResultsDir($resultsDir);
@@ -242,7 +237,7 @@ class Results extends ApiController
              * @phpstan-ignore missingType.generics
              */
             $class = 'App\\Tools\\ResultParsing\\' . ucfirst($system) . '\\ResultsParser';
-            if (!class_exists($class)) {
+            if ( ! class_exists($class)) {
                 continue;
             }
             $files = glob($resultsDir . $class::getFileGlob());
@@ -255,7 +250,7 @@ class Results extends ApiController
         $resultFiles = array_unique(array_merge([], ...$resultFilesAll));
 
         // Sort by time
-        usort($resultFiles, static fn(string $a, string $b) => filemtime($b) - filemtime($a));
+        usort($resultFiles, static fn (string $a, string $b) => filemtime($b) - filemtime($a));
 
         if (empty($resultFiles)) {
             return $this->respond(new ErrorResponse('No result files found.', type: ErrorType::NOT_FOUND), 404);
@@ -268,12 +263,11 @@ class Results extends ApiController
                 $resultFiles,
                 mb_convert_encoding($resultsContent1 === false ? '' : $resultsContent1, 'UTF-8', 'ISO-8859-1'),
                 mb_convert_encoding($resultsContent2 === false ? '' : $resultsContent2, 'UTF-8', 'ISO-8859-1'),
-            )
+            ),
         );
     }
 
-    private function resolveResultsDir(string $resultsDir): string
-    {
+    private function resolveResultsDir(string $resultsDir): string {
         if (str_starts_with($resultsDir, DIRECTORY_SEPARATOR) || preg_match('/^[a-z]:[\/\\\\]/i', $resultsDir) === 1) {
             return trailingSlashIt($resultsDir);
         }

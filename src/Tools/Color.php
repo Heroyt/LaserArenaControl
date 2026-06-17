@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @author Tomáš Vojík <xvojik00@stud.fit.vutbr.cz>, <vojik@wboy.cz>
  */
@@ -23,8 +25,7 @@ class Color
      *
      * @return string
      */
-    public static function getGamesColor(array $games): string
-    {
+    public static function getGamesColor(array $games): string {
         /** @var array<string, string[]> $styles */
         $styles = [];
         foreach ($games as $game) {
@@ -62,8 +63,7 @@ class Color
      *
      * @return string
      */
-    public static function getFontColor(string $backgroundColor, bool $returnHex = true): string
-    {
+    public static function getFontColor(string $backgroundColor, bool $returnHex = true): string {
         if ($backgroundColor[0] === '#') {
             $backgroundColor = substr($backgroundColor, 1);
         }

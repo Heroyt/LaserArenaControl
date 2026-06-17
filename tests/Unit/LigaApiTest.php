@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Unit;
 
 use App\Core\App;
@@ -19,7 +21,7 @@ class LigaApiTest extends Unit
 {
     protected UnitTester $tester;
 
-    public function testSyncVest(): void {
+    public function test_sync_vest(): void {
         $metrics = Stub::makeEmpty(Metrics::class);
         /** @var Serializer $serializer */
         $serializer = App::getService('symfony.serializer');

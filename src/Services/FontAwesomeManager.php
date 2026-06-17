@@ -21,18 +21,16 @@ class FontAwesomeManager
         $this->file = ROOT . 'assets/icons/fontawesome.json';
     }
 
-    public function resetIcons(): void
-    {
+    public function resetIcons(): void {
         if ($this->changed) {
             return;
         }
         $this->collection = null;
     }
 
-    public function saveIcons(): void
-    {
+    public function saveIcons(): void {
         $file = ROOT . 'assets/scss/fontawesome-icons.scss';
-        if (!$this->changed && file_exists($file)) {
+        if ( ! $this->changed && file_exists($file)) {
             return;
         }
         $this->changed = false;
@@ -49,28 +47,26 @@ class FontAwesomeManager
             array_merge(
                 $collection->solid,
                 $collection->regular,
-                $collection->brands
-            )
+                $collection->brands,
+            ),
         );
         sort($icons);
         foreach ($icons as $name) {
-            $content .= "\t'$name': \$var-$name,\n";
+            $content .= "\t'{$name}': \$var-{$name},\n";
         }
         $content .= ");\n";
         file_put_contents($file, $content);
     }
 
-    public function getCollection(bool $forceReload = false): FontAwesomeCollection
-    {
-        if ($forceReload || !isset($this->collection)) {
+    public function getCollection(bool $forceReload = false): FontAwesomeCollection {
+        if ($forceReload || ! isset($this->collection)) {
             return $this->loadIcons();
         }
         return $this->collection;
     }
 
-    public function loadIcons(): FontAwesomeCollection
-    {
-        if (!file_exists($this->file)) {
+    public function loadIcons(): FontAwesomeCollection {
+        if ( ! file_exists($this->file)) {
             $this->collection = new FontAwesomeCollection();
             return $this->collection;
         }
@@ -81,34 +77,32 @@ class FontAwesomeManager
         return $this->collection;
     }
 
-    public function icon(IconType $style, string $name): string
-    {
+    public function icon(IconType $style, string $name): string {
         $this->addIcon($style, $name);
         return 'fa-' . $style->value . ' fa-' . $name;
     }
 
-    public function addIcon(IconType $iconType, string $name): void
-    {
+    public function addIcon(IconType $iconType, string $name): void {
         $name = strtolower(trim($name));
-        if (!in_array($name, FontAwesomeCollection::AVAILABLE_ICONS, true)) {
+        if ( ! in_array($name, FontAwesomeCollection::AVAILABLE_ICONS, true)) {
             throw new InvalidArgumentException('Invalid icon "' . $name . '"'); // TODO: Replace with custom exception
         }
         $collection = $this->getCollection();
         switch ($iconType) {
             case IconType::SOLID:
-                if (!in_array($name, $collection->solid, true)) {
+                if ( ! in_array($name, $collection->solid, true)) {
                     $collection->solid[] = $name;
                     $this->changed = true;
                 }
                 break;
             case IconType::REGULAR:
-                if (!in_array($name, $collection->regular, true)) {
+                if ( ! in_array($name, $collection->regular, true)) {
                     $collection->regular[] = $name;
                     $this->changed = true;
                 }
                 break;
             case IconType::BRAND:
-                if (!in_array($name, $collection->brands, true)) {
+                if ( ! in_array($name, $collection->brands, true)) {
                     $collection->brands[] = $name;
                     $this->changed = true;
                 }
@@ -116,20 +110,17 @@ class FontAwesomeManager
         }
     }
 
-    public function solid(string $name): string
-    {
+    public function solid(string $name): string {
         $this->addIcon(IconType::SOLID, $name);
         return 'fa-solid fa-' . $name;
     }
 
-    public function regular(string $name): string
-    {
+    public function regular(string $name): string {
         $this->addIcon(IconType::REGULAR, $name);
         return 'fa-regular fa-' . $name;
     }
 
-    public function brands(string $name): string
-    {
+    public function brands(string $name): string {
         $this->addIcon(IconType::BRAND, $name);
         return 'fa-brands fa-' . $name;
     }

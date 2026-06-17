@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @file      config.php
  * @brief     App configuration
@@ -16,9 +18,9 @@ require_once ROOT . 'include/constants.php';
 const DEFAULT_RESULTS_DIR = ROOT . 'lmx/results/';
 
 // Prevent IDE warnings about non-existent constant
-if (!defined('JSON_THROW_ON_ERROR')) {
+if ( ! defined('JSON_THROW_ON_ERROR')) {
     define('JSON_THROW_ON_ERROR', 4194304);
 }
 
 /** If in production */
-define('PRODUCTION', !(Config::getInstance()->getConfig('General')['DEBUG'] ?? false));
+define('PRODUCTION', ! (Config::getInstance()->getConfig('General')['DEBUG'] ?? false));

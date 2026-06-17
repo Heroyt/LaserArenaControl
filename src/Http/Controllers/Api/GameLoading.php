@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Api;
 
 use App\Models\System;
@@ -19,8 +21,7 @@ class GameLoading extends ApiController
     public function __construct(
         private readonly GameLoader $loader,
         private readonly Metrics    $metrics,
-    )
-    {
+    ) {
     }
 
     /**
@@ -30,8 +31,7 @@ class GameLoading extends ApiController
      * @return ResponseInterface
      * @throws ModelNotFoundException
      */
-    public function loadGame(string|int|System $system, Request $request): ResponseInterface
-    {
+    public function loadGame(string|int|System $system, Request $request): ResponseInterface {
         $start = microtime(true);
         if (is_numeric($system)) {
             $system = System::get((int)$system);
@@ -66,7 +66,7 @@ class GameLoading extends ApiController
                     'groupName' => $meta['groupName'] ?? null,
                     'system' => $system,
                 ],
-            )
+            ),
         );
     }
 }

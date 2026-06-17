@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services\GameHighlight\Checkers;
 
 use App\DataObjects\Highlights\GameHighlight;
@@ -18,9 +20,8 @@ class Evo5HighlightChecker implements GameHighlightChecker
     /**
      * @inheritDoc
      */
-    public function checkGame(Game $game, HighlightCollection $highlights): void
-    {
-        if (!$game instanceof \App\GameModels\Game\Lasermaxx\Evo5\Game) {
+    public function checkGame(Game $game, HighlightCollection $highlights): void {
+        if ( ! $game instanceof \App\GameModels\Game\Lasermaxx\Evo5\Game) {
             return;
         }
 
@@ -35,7 +36,7 @@ class Evo5HighlightChecker implements GameHighlightChecker
                 $mineDeaths[] = $player;
             }
             if (($bonusCount = $player->bonus->getSum()) > 0) {
-                $powers[] = $powers;
+                $powers[] = $player;
                 if ($bonusCount > $powersMax) {
                     $powersSecondMax = $powersMax;
                     $powersMax = $bonusCount;
@@ -67,12 +68,12 @@ class Evo5HighlightChecker implements GameHighlightChecker
                                 Gender::OTHER => '%s jediné bylo zasaženo minou.',
                             },
                             context: 'evo5',
-                            domain: 'highlights'
+                            domain: 'highlights',
                         ),
-                        '@' . $name . '@'
+                        '@' . $name . '@',
                     ),
-                    GameHighlight::VERY_HIGH_RARITY
-                )
+                    GameHighlight::VERY_HIGH_RARITY,
+                ),
             );
         }
 
@@ -90,12 +91,12 @@ class Evo5HighlightChecker implements GameHighlightChecker
                                 Gender::OTHER => '%s jediné získalo bonusy.',
                             },
                             context: 'evo5',
-                            domain: 'highlights'
+                            domain: 'highlights',
                         ),
-                        '@' . $name . '@'
+                        '@' . $name . '@',
                     ),
-                    GameHighlight::VERY_HIGH_RARITY
-                )
+                    GameHighlight::VERY_HIGH_RARITY,
+                ),
             );
         }
 
@@ -114,13 +115,13 @@ class Evo5HighlightChecker implements GameHighlightChecker
                                 Gender::OTHER => '%s získalo %.1fx tolik bonusů co ostatní.',
                             },
                             context: 'evo5',
-                            domain: 'highlights'
+                            domain: 'highlights',
                         ),
                         '@' . $name . '@',
-                        $ratio
+                        $ratio,
                     ),
-                    GameHighlight::HIGH_RARITY
-                )
+                    GameHighlight::HIGH_RARITY,
+                ),
             );
         }
     }

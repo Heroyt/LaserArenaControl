@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models\Group;
 
 trait PlayerAggregate
@@ -53,8 +55,7 @@ trait PlayerAggregate
     protected int $deathsOwnSum;
     protected float $missesAvg;
 
-    public function getAverageShots(): float
-    {
+    public function getAverageShots(): float {
         if (isset($this->shotsAvg)) {
             return $this->shotsAvg;
         }
@@ -65,8 +66,7 @@ trait PlayerAggregate
         return $this->shotsAvg;
     }
 
-    public function getAverageAccuracy(): float
-    {
+    public function getAverageAccuracy(): float {
         if (isset($this->accuracyAvg)) {
             return $this->accuracyAvg;
         }
@@ -77,8 +77,7 @@ trait PlayerAggregate
         return $this->accuracyAvg;
     }
 
-    public function getAverageHits(): float
-    {
+    public function getAverageHits(): float {
         if (isset($this->hitsAvg)) {
             return $this->hitsAvg;
         }
@@ -89,8 +88,7 @@ trait PlayerAggregate
         return $this->hitsAvg;
     }
 
-    public function getAverageDeaths(): float
-    {
+    public function getAverageDeaths(): float {
         if (isset($this->deathsAvg)) {
             return $this->deathsAvg;
         }
@@ -101,8 +99,7 @@ trait PlayerAggregate
         return $this->deathsAvg;
     }
 
-    public function getSumScore(): int
-    {
+    public function getSumScore(): int {
         if (isset($this->scoreSum)) {
             return $this->scoreSum;
         }
@@ -110,8 +107,7 @@ trait PlayerAggregate
         return $this->scoreSum;
     }
 
-    public function getAverageScore(): float
-    {
+    public function getAverageScore(): float {
         if (isset($this->scoreAvg)) {
             return $this->scoreAvg;
         }
@@ -122,8 +118,7 @@ trait PlayerAggregate
         return $this->scoreAvg;
     }
 
-    public function getAverageOwnHits(): float
-    {
+    public function getAverageOwnHits(): float {
         if (isset($this->hitsOwnAvg)) {
             return $this->hitsOwnAvg;
         }
@@ -134,8 +129,7 @@ trait PlayerAggregate
         return $this->hitsOwnAvg;
     }
 
-    public function getSumOwnHits(): int
-    {
+    public function getSumOwnHits(): int {
         if (isset($this->hitsOwnSum)) {
             return $this->hitsOwnSum;
         }
@@ -143,8 +137,7 @@ trait PlayerAggregate
         return $this->hitsOwnSum;
     }
 
-    public function getAverageOwnDeaths(): float
-    {
+    public function getAverageOwnDeaths(): float {
         if (isset($this->deathsOwnAvg)) {
             return $this->deathsOwnAvg;
         }
@@ -155,8 +148,7 @@ trait PlayerAggregate
         return $this->deathsOwnAvg;
     }
 
-    public function getSumOwnDeaths(): int
-    {
+    public function getSumOwnDeaths(): int {
         if (isset($this->deathsOwnSum)) {
             return $this->deathsOwnSum;
         }
@@ -164,8 +156,7 @@ trait PlayerAggregate
         return $this->deathsOwnSum;
     }
 
-    public function getAverageMisses(): float
-    {
+    public function getAverageMisses(): float {
         if (isset($this->missesAvg)) {
             return $this->missesAvg;
         }
@@ -176,13 +167,11 @@ trait PlayerAggregate
         return $this->missesAvg;
     }
 
-    public function getSumMisses(): int
-    {
+    public function getSumMisses(): int {
         return $this->getSumShots() - $this->getSumHits();
     }
 
-    public function getSumShots(): int
-    {
+    public function getSumShots(): int {
         if (isset($this->shotsSum)) {
             return $this->shotsSum;
         }
@@ -190,8 +179,7 @@ trait PlayerAggregate
         return $this->shotsSum;
     }
 
-    public function getSumHits(): int
-    {
+    public function getSumHits(): int {
         if (isset($this->hitsSum)) {
             return $this->hitsSum;
         }
@@ -202,8 +190,7 @@ trait PlayerAggregate
     /**
      * @return int[]
      */
-    public function getMisses(): array
-    {
+    public function getMisses(): array {
         $misses = [];
         $count = count($this->hits);
         for ($i = 0; $i < $count; $i++) {
@@ -215,8 +202,7 @@ trait PlayerAggregate
     /**
      * @return int
      */
-    public function getSkill(): int
-    {
+    public function getSkill(): int {
         if (isset($this->skillAvg)) {
             return $this->skillAvg;
         }
@@ -227,8 +213,7 @@ trait PlayerAggregate
         return $this->skillAvg;
     }
 
-    public function getFavouriteVest(): int
-    {
+    public function getFavouriteVest(): int {
         if (isset($this->favouriteVest)) {
             return $this->favouriteVest;
         }
@@ -237,8 +222,7 @@ trait PlayerAggregate
         return $this->favouriteVest;
     }
 
-    public function getKd(): float
-    {
+    public function getKd(): float {
         if (isset($this->kdAvg)) {
             return $this->kdAvg;
         }
@@ -246,8 +230,7 @@ trait PlayerAggregate
         return $this->kdAvg;
     }
 
-    public function getSumDeaths(): int
-    {
+    public function getSumDeaths(): int {
         if (isset($this->deathsSum)) {
             return $this->deathsSum;
         }

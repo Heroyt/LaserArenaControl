@@ -18,15 +18,14 @@ class ClearGroupsCommandHandler implements CommandHandlerInterface
     /**
      * @param  ClearGroupsCommand  $command
      */
-    public function handle(CommandInterface $command): ClearGroupsCommandResponse
-    {
+    public function handle(CommandInterface $command): ClearGroupsCommandResponse {
         $logger = new Logger(LOG_DIR, 'clear_groups');
         $logger->info('Clearing groups...');
         $response = new ClearGroupsCommandResponse();
 
         $groups = DB::select(GameGroup::TABLE, '*')
-                    ->where('[active] = 1')
-                    ->fetchIterator(false);
+            ->where('[active] = 1')
+            ->fetchIterator(false);
         $hourAgo = new DateTimeImmutable('-1 hour');
         $twoDaysAgo = new DateTimeImmutable('-2 days');
         foreach ($groups as $row) {
@@ -38,7 +37,7 @@ class ClearGroupsCommandHandler implements CommandHandlerInterface
             // Check if group has games
             if (count($group->games) === 0) {
                 // Delete groups without games
-                if (!$group->delete()) {
+                if ( ! $group->delete()) {
                     $logger->error('Failed to delete group: ' . $group->id);
                     continue;
                 }
@@ -54,7 +53,7 @@ class ClearGroupsCommandHandler implements CommandHandlerInterface
             if ($lastDate < $twoDaysAgo) {
                 // Hide groups with games older than 2 days
                 $group->active = false;
-                if (!$group->save()) {
+                if ( ! $group->save()) {
                     $logger->error('Failed to hide group: ' . $group->id);
                     continue;
                 }

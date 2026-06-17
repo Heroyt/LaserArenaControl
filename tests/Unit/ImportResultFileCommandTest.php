@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Unit;
 
 use App\CQRS\CommandHandlers\ImportResultFileCommandHandler;
@@ -11,15 +13,13 @@ use ReflectionMethod;
 
 class ImportResultFileCommandTest extends TestCase
 {
-    public function testCommandUsesImportHandler(): void
-    {
+    public function test_command_uses_import_handler(): void {
         $command = $this->createCommand();
 
         $this->assertSame(ImportResultFileCommandHandler::class, $command->getHandler());
     }
 
-    private function createCommand(): ImportResultFileCommand
-    {
+    private function createCommand(): ImportResultFileCommand {
         return new ImportResultFileCommand(
             '/tmp/results/0001.game',
             sha1('/tmp/results/0001.game'),
@@ -31,8 +31,7 @@ class ImportResultFileCommandTest extends TestCase
         );
     }
 
-    public function testCreatesCommandFromQueuedFile(): void
-    {
+    public function test_creates_command_from_queued_file(): void {
         $queuedFile = new QueuedResultFileImport(
             '/tmp/results/0001.game',
             sha1('/tmp/results/0001.game'),
@@ -53,8 +52,7 @@ class ImportResultFileCommandTest extends TestCase
         $this->assertSame('content', $command->content);
     }
 
-    public function testCreatesForcedCommandFromQueuedFile(): void
-    {
+    public function test_creates_forced_command_from_queued_file(): void {
         $queuedFile = new QueuedResultFileImport(
             '/tmp/results/0001.game',
             sha1('/tmp/results/0001.game'),
@@ -70,8 +68,7 @@ class ImportResultFileCommandTest extends TestCase
         $this->assertTrue($command->force);
     }
 
-    public function testConvertsToVersion(): void
-    {
+    public function test_converts_to_version(): void {
         $command = $this->createCommand();
 
         $version = $command->toVersion();
@@ -84,15 +81,15 @@ class ImportResultFileCommandTest extends TestCase
         $this->assertSame($command->version, $version->version);
     }
 
-    public function testImportLockTtlUsesMinimumForShortTimeout(): void {
+    public function test_import_lock_ttl_uses_minimum_for_short_timeout(): void {
         $this->assertSame(60, $this->getImportLockTtl(30));
     }
 
-    public function testImportLockTtlUsesTimeoutWithMarginForLongTimeout(): void {
+    public function test_import_lock_ttl_uses_timeout_with_margin_for_long_timeout(): void {
         $this->assertSame(150, $this->getImportLockTtl(120));
     }
 
-    public function testImportLockTtlUsesMinimumForDisabledTimeout(): void {
+    public function test_import_lock_ttl_uses_minimum_for_disabled_timeout(): void {
         $this->assertSame(60, $this->getImportLockTtl(0));
     }
 

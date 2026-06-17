@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tasks;
 
 use App\Services\ResultsPrecacheService;
@@ -9,19 +11,14 @@ use Lsr\Roadrunner\Tasks\TaskPayloadInterface;
 use Spiral\RoadRunner\Jobs\Exception\JobsException;
 use Spiral\RoadRunner\Jobs\Task\ReceivedTaskInterface;
 
-/**
- *
- */
 readonly class GamePrecacheTask implements TaskDispatcherInterface
 {
     public function __construct(
-        private ResultsPrecacheService $precacheService
-    )
-    {
+        private ResultsPrecacheService $precacheService,
+    ) {
     }
 
-    public static function getDiName(): string
-    {
+    public static function getDiName(): string {
         return 'task.gamesPrecache';
     }
 
@@ -30,13 +27,12 @@ readonly class GamePrecacheTask implements TaskDispatcherInterface
      * @return void
      * @throws JobsException
      */
-    public function process(ReceivedTaskInterface $task, ?TaskPayloadInterface $payload = null): void
-    {
+    public function process(ReceivedTaskInterface $task, ?TaskPayloadInterface $payload = null): void {
         if ($payload === null) {
             $task->nack('Missing payload');
             return;
         }
-        if (!($payload instanceof GamePrecachePayload)) {
+        if ( ! ($payload instanceof GamePrecachePayload)) {
             $task->nack('Invalid payload');
             return;
         }

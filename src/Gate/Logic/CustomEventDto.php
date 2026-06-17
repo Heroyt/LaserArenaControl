@@ -1,10 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Gate\Logic;
 
-/**
- *
- */
 readonly class CustomEventDto
 {
     public int $time;

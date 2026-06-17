@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models\Auth;
 
 use App\Models\Auth\Validators\PlayerCode;
@@ -40,8 +42,7 @@ class Player extends BaseModel implements PlayerInterface
     #[NoDB]
     public array $codeHistory = [];
 
-    public static function getByCode(string $code): ?static
-    {
+    public static function getByCode(string $code): ?static {
         $code = strtoupper(trim($code));
         if (preg_match('/(\d)+-([A-Z\d]{5})/', $code) !== 1) {
             throw new InvalidArgumentException('Code is not valid');
@@ -55,14 +56,13 @@ class Player extends BaseModel implements PlayerInterface
      *
      * @return void
      */
-    public static function validateCode(string $code, PlayerInterface $player, string $propertyPrefix = ''): void
-    {
-        if (!$player->validateUniqueCode($code)) {
+    public static function validateCode(string $code, PlayerInterface $player, string $propertyPrefix = ''): void {
+        if ( ! $player->validateUniqueCode($code)) {
             throw ValidationException::createWithValue(
                 $player,
                 $propertyPrefix . 'code',
                 'Invalid player\'s code. Must be unique.',
-                $code
+                $code,
             );
         }
     }
@@ -74,22 +74,19 @@ class Player extends BaseModel implements PlayerInterface
      *
      * @return bool
      */
-    public function validateUniqueCode(string $code): bool
-    {
+    public function validateUniqueCode(string $code): bool {
         $id = DB::select($this::TABLE, $this::getPrimaryKey())->where('[code] = %s', $code)->fetchSingle();
-        return !isset($id) || $id === $this->id;
+        return ! isset($id) || $id === $this->id;
     }
 
     /**
      * @return ModelCollection<PlayerConnection>
      */
-    public function loadConnections(): ModelCollection
-    {
+    public function loadConnections(): ModelCollection {
         return new ModelCollection(PlayerConnection::getForPlayer($this));
     }
 
-    public function addConnection(PlayerConnection $connection): Player
-    {
+    public function addConnection(PlayerConnection $connection): Player {
         // Find duplicates
         $found = false;
         foreach ($this->connections as $connectionToTest) {
@@ -98,39 +95,37 @@ class Player extends BaseModel implements PlayerInterface
                 break;
             }
         }
-        if (!$found) {
+        if ( ! $found) {
             $this->connections->add($connection);
         }
         return $this;
     }
 
-    public function jsonSerialize(): array
-    {
+    public function jsonSerialize(): array {
         $connections = [];
-//        try {
-//            foreach ($this->connections as $connection) {
-//                if ($connection instanceof PlayerConnection) {
-//                    $connections[] = ['type' => $connection->type->value, 'identifier' => $connection->identifier];
-//                }
-//            }
-//        } catch (ValidationException) {
-//        }
+        //        try {
+        //            foreach ($this->connections as $connection) {
+        //                if ($connection instanceof PlayerConnection) {
+        //                    $connections[] = ['type' => $connection->type->value, 'identifier' => $connection->identifier];
+        //                }
+        //            }
+        //        } catch (ValidationException) {
+        //        }
         return [
-          'id'          => $this->id,
-          'nickname'    => $this->nickname,
-          'code'        => $this->getCode(),
-          'email'       => $this->email,
-          'rank'        => $this->rank,
-          'birthday' => $this->birthday,
-          'connections' => $connections,
+            'id'          => $this->id,
+            'nickname'    => $this->nickname,
+            'code'        => $this->getCode(),
+            'email'       => $this->email,
+            'rank'        => $this->rank,
+            'birthday' => $this->birthday,
+            'connections' => $connections,
         ];
     }
 
     /**
      * @return string
      */
-    public function getCode(): string
-    {
+    public function getCode(): string {
         return $this->code;
     }
 }

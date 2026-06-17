@@ -1,10 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services;
 
-/**
- *
- */
 class SerializerHelper
 {
     /**
@@ -13,8 +12,7 @@ class SerializerHelper
      * @param  array<string, mixed>  $context
      * @return mixed
      */
-    public static function handleCircularReference(object $object, string $format, array $context): mixed
-    {
+    public static function handleCircularReference(object $object, string $format, array $context): mixed {
         if (property_exists($object, 'code')) {
             return $object->code;
         }

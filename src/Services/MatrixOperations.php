@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services;
 
 /**
@@ -12,8 +14,7 @@ trait MatrixOperations
      *
      * @return numeric[][]
      */
-    public function matTranspose(array $mat): array
-    {
+    public function matTranspose(array $mat): array {
         return (count($mat) === 1) ? array_chunk($mat[0], 1) : array_map(null, ...$mat);
     }
 
@@ -23,8 +24,7 @@ trait MatrixOperations
      *
      * @return numeric[][]
      */
-    public function matMultiply(array $mat1, array $mat2): array
-    {
+    public function matMultiply(array $mat1, array $mat2): array {
         $result = [];
         $rows1 = count($mat1);
         $cols1 = count($mat1[0]);
@@ -48,8 +48,7 @@ trait MatrixOperations
      *
      * @return numeric[][]
      */
-    public function matInverse(array $matrix): array
-    {
+    public function matInverse(array $matrix): array {
         $n = count($matrix);
         $identity = $this->identityMatrix($n);
 
@@ -84,8 +83,7 @@ trait MatrixOperations
      *
      * @return int[][]
      */
-    public function identityMatrix(int $n): array
-    {
+    public function identityMatrix(int $n): array {
         $matrix = [];
         for ($i = 0; $i < $n; $i++) {
             for ($j = 0; $j < $n; $j++) {

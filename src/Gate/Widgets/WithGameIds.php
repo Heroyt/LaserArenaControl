@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Gate\Widgets;
 
 use App\GameModels\Factory\GameFactory;
@@ -14,14 +16,14 @@ trait WithGameIds
      * @var array{rankable:array<string, int[]>|null,all:array<string, int[]>|null}
      */
     protected array $gameIds = [
-      'rankable' => null,
-      'all'      => null,
+        'rankable' => null,
+        'all'      => null,
     ];
 
     /** @var int[] */
     protected array $rankableModeIds {
         get {
-            if (!isset($this->rankableModeIds)) {
+            if ( ! isset($this->rankableModeIds)) {
                 /** @var int[] $rows */
                 $rows = DB::select(AbstractMode::TABLE, 'id_mode')
                     ->where('[rankable] = true')
@@ -38,17 +40,16 @@ trait WithGameIds
         ?DateTimeInterface $dateTo = null,
         ?array             $systems = [],
         bool               $rankableOnly = false,
-    ): array
-    {
+    ): array {
         if (
             ($rankableOnly && $this->gameIds['rankable'] === null)
-            || (!$rankableOnly && $this->gameIds['all'] === null)
+            || ( ! $rankableOnly && $this->gameIds['all'] === null)
         ) {
             $gameIds = [];
             $dateFrom ??= new DateTimeImmutable();
             $dateTo ??= new DateTimeImmutable();
             $query = GameFactory::queryGames(true, fields: ['id_mode'])
-                                ->where('DATE([start]) BETWEEN %d AND %d', $dateFrom, $dateTo);
+                ->where('DATE([start]) BETWEEN %d AND %d', $dateFrom, $dateTo);
             if (isset($systems) && count($systems) > 0) {
                 $query->where('[system] IN %in', $systems);
             }
@@ -77,23 +78,22 @@ trait WithGameIds
         return $this->gameIds['all'];
     }
 
-    public function setGameIds(?array $gameIds): static
-    {
+    public function setGameIds(?array $gameIds): static {
         // Reset all game IDs if null is provided
         if ($gameIds === null) {
             $this->gameIds = [
-              'rankable' => null,
-              'all'      => null,
+                'rankable' => null,
+                'all'      => null,
             ];
             return $this;
         }
 
         // Check if the provided array is not already in the expected format
-        if (!isset($gameIds['rankable']) && !isset($gameIds['all'])) {
+        if ( ! isset($gameIds['rankable']) && ! isset($gameIds['all'])) {
             /** @var array<string, int[]> $gameIds */
             $this->gameIds = [
-              'rankable' => null,
-              'all'      => $gameIds, // Treat as 'all' game IDs
+                'rankable' => null,
+                'all'      => $gameIds, // Treat as 'all' game IDs
             ];
             return $this;
         }

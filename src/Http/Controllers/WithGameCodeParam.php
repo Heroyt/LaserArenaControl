@@ -17,8 +17,7 @@ trait WithGameCodeParam
      * @return Game|ErrorResponse
      * @phpstan-ignore missingType.generics
      */
-    protected function getGameFromCode(string $code): Game|ErrorResponse
-    {
+    protected function getGameFromCode(string $code): Game|ErrorResponse {
         if (empty($code)) {
             return new ErrorResponse('Invalid code', ErrorType::VALIDATION);
         }

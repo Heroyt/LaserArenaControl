@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\System;
 
 use Lsr\Core\Controllers\Controller;
@@ -9,16 +11,12 @@ use Psr\Http\Message\ResponseInterface;
 use Spiral\Goridge\RPC\AsyncRPCInterface;
 use Spiral\RoadRunner\Metrics\MetricsInterface;
 
-/**
- *
- */
 class Roadrunner extends Controller
 {
     public function __construct(
         private readonly AsyncRPCInterface $rpc,
         private readonly MetricsInterface  $metrics,
-    )
-    {
+    ) {
     }
 
     #[OA\Get(
@@ -34,10 +32,9 @@ class Roadrunner extends Controller
         content: new OA\JsonContent(
             type: 'string',
             example: 'Resetting workers...',
-        )
+        ),
     )]
-    public function reset(Request $request): ResponseInterface
-    {
+    public function reset(Request $request): ResponseInterface {
         /** @var non-empty-string $service */
         $service = $request->getPost('service', 'all');
         $this->metrics->add('reset_called', 1, [$service]);
@@ -49,8 +46,7 @@ class Roadrunner extends Controller
         return $this->respond('Restarting...');
     }
 
-    private function resetAll(): void
-    {
+    private function resetAll(): void {
         /** @var string[] $list */
         $list = $this->rpc->call('resetter.List', true);
         foreach ($list as $service) {

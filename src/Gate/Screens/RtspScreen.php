@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Gate\Screens;
 
 use App\Gate\Settings\GateSettings;
@@ -16,32 +18,28 @@ class RtspScreen extends GateScreen implements WithSettings
     /**
      * @inheritDoc
      */
-    public static function getName(): string
-    {
+    public static function getName(): string {
         return lang('RTSP - kamery', domain: 'gate', context: 'screens');
     }
 
     /**
      * @inheritDoc
      */
-    public static function getDiKey(): string
-    {
+    public static function getDiKey(): string {
         return 'gate.screens.rtsp';
     }
 
     /**
      * @inheritDoc
      */
-    public static function getSettingsForm(): string
-    {
+    public static function getSettingsForm(): string {
         return 'gate/settings/rtsp.latte';
     }
 
     /**
      * @inheritDoc
      */
-    public static function buildSettingsFromForm(array $data): GateSettings
-    {
+    public static function buildSettingsFromForm(array $data): GateSettings {
         return new RtspSettings(
             array_filter(array_map('trim', explode("\n", $data['streams'] ?? ''))),
             (int)($data['max-streams'] ?? 9),
@@ -51,25 +49,23 @@ class RtspScreen extends GateScreen implements WithSettings
     /**
      * @inheritDoc
      */
-    public function run(): ResponseInterface
-    {
+    public function run(): ResponseInterface {
         return $this->view(
             'gate/screens/rtsp',
             [
-            'settings' => $this->getSettings(),
-            'hash'     => md5(json_encode($this->settings, JSON_THROW_ON_ERROR)),
-            'addCss'   => ['gate/rtsp.css'],
-            'addJs'    => ['gate/rtsp.js'],
-            ]
+                'settings' => $this->getSettings(),
+                'hash'     => md5(json_encode($this->settings, JSON_THROW_ON_ERROR)),
+                'addCss'   => ['gate/rtsp.css'],
+                'addJs'    => ['gate/rtsp.js'],
+            ],
         );
     }
 
     /**
      * @inheritDoc
      */
-    public function getSettings(): RtspSettings
-    {
-        if (!isset($this->settings)) {
+    public function getSettings(): RtspSettings {
+        if ( ! isset($this->settings)) {
             $this->settings = new RtspSettings();
         }
         return $this->settings;
@@ -78,8 +74,7 @@ class RtspScreen extends GateScreen implements WithSettings
     /**
      * @inheritDoc
      */
-    public function setSettings(GateSettings $settings): static
-    {
+    public function setSettings(GateSettings $settings): static {
         $this->settings = $settings;
         return $this;
     }

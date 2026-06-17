@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services\LaserLiga;
 
 use App\Core\App;
@@ -28,8 +30,7 @@ readonly class PlayerProvider implements PlayerProviderInterface
     public function __construct(
         private LigaApi    $api,
         private Serializer $serializer,
-    )
-    {
+    ) {
     }
 
     /**
@@ -39,23 +40,22 @@ readonly class PlayerProvider implements PlayerProviderInterface
      * @return Player[]
      * @throws ValidationException
      */
-    public function findPlayersLocal(string $search, bool $includeMail = true): array
-    {
+    public function findPlayersLocal(string $search, bool $includeMail = true): array {
         $query = Player::query();
         // Check code format
         if (preg_match('/^(\d+-[A-Z\d]{1,5})$/', trim($search), $matches) === 1) {
             $query->where('[code] LIKE %like~', $matches[1]);
         } else {
             $where = [
-              ['[code] LIKE %~like~', $search],
-              ['[nickname] LIKE %~like~', $search],
+                ['[code] LIKE %~like~', $search],
+                ['[nickname] LIKE %~like~', $search],
             ];
             if ($includeMail) {
                 $where[] = ['[email] LIKE %~like~', $search];
             }
             $query->where(
                 '%or',
-                $where
+                $where,
             );
         }
 
@@ -67,8 +67,7 @@ readonly class PlayerProvider implements PlayerProviderInterface
      *
      * @return Player[]|null
      */
-    public function findPlayersPublic(string $search, bool $noSave = false): ?array
-    {
+    public function findPlayersPublic(string $search, bool $noSave = false): ?array {
         try {
             $response = $this->api->get('players', ['search' => $search], ['timeout' => 10]);
         } catch (GuzzleException) {
@@ -84,8 +83,7 @@ readonly class PlayerProvider implements PlayerProviderInterface
      * @param  ResponseInterface  $response
      * @return Player[]|null
      */
-    public function getPlayersFromResponse(ResponseInterface $response, bool $noSave = false): ?array
-    {
+    public function getPlayersFromResponse(ResponseInterface $response, bool $noSave = false): ?array {
         if ($response->getStatusCode() !== 200) {
             return null;
         }
@@ -112,17 +110,16 @@ readonly class PlayerProvider implements PlayerProviderInterface
      *
      * @return Player
      */
-    public function getPlayerObjectFromData(LigaPlayerData $data, bool $noSave = false): Player
-    {
+    public function getPlayerObjectFromData(LigaPlayerData $data, bool $noSave = false): Player {
         // Try to find existing player first
         $player = Player::getByCode($data->code);
-        if ($noSave || !isset($player)) {
+        if ($noSave || ! isset($player)) {
             $player = new Player();
         }
 
-        $changed = !$noSave && isset($player->id)
+        $changed = ! $noSave && isset($player->id)
           && (
-            $player->nickname !== $data->nickname
+              $player->nickname !== $data->nickname
             || $player->email !== $data->email
             || $player->rank !== $data->stats->rank
             || $player->birthday?->format('Y-m-d') !== $data->birthday?->format('Y-m-d')
@@ -132,7 +129,7 @@ readonly class PlayerProvider implements PlayerProviderInterface
         $player->email = $data->email;
         $player->rank = $data->stats->rank;
         $player->birthday = $data->birthday;
-        foreach ($data->connections ?? [] as $connectionData) {
+        foreach ($data->connections as $connectionData) {
             $connection = new PlayerConnection();
             $connection->type = $connectionData->type;
             $connection->identifier = $connectionData->identifier;
@@ -143,7 +140,7 @@ readonly class PlayerProvider implements PlayerProviderInterface
             $player->codeHistory = $data->codeHistory;
         }
 
-        if (!$noSave && ($changed || !isset($player->id))) {
+        if ( ! $noSave && ($changed || ! isset($player->id))) {
             // Update player data from public
             try {
                 $player->save();
@@ -161,22 +158,21 @@ readonly class PlayerProvider implements PlayerProviderInterface
      *
      * @return Player|null
      */
-    public function findPublicPlayerByCode(string $code, bool $noSave = false): ?Player
-    {
+    public function findPublicPlayerByCode(string $code, bool $noSave = false): ?Player {
         App::getInstance()->getLogger()->debug('PlayerProvider: lookup public player by code', ['code' => $code]);
         try {
             $response = $this->api->get('players/' . $code, config: ['timeout' => 10]);
         } catch (GuzzleException $e) {
             App::getInstance()->getLogger()->warning(
                 'PlayerProvider: public player lookup failed',
-                ['code' => $code, 'error' => $e->getMessage()]
+                ['code' => $code, 'error' => $e->getMessage()],
             );
             return null;
         }
         if ($response->getStatusCode() !== 200) {
             App::getInstance()->getLogger()->debug(
                 'PlayerProvider: public player lookup returned non-200',
-                ['code' => $code, 'status' => $response->getStatusCode()]
+                ['code' => $code, 'status' => $response->getStatusCode()],
             );
             return null;
         }
@@ -192,8 +188,7 @@ readonly class PlayerProvider implements PlayerProviderInterface
     /**
      * @return Player[]|null
      */
-    public function findAllPublicPlayers(bool $noSave = false): ?array
-    {
+    public function findAllPublicPlayers(bool $noSave = false): ?array {
         try {
             $response = $this->api->get('players', ['arena' => 'self'], config: ['timeout' => 10]);
         } catch (GuzzleException) {
@@ -206,8 +201,7 @@ readonly class PlayerProvider implements PlayerProviderInterface
      * @param  string[]  $codes
      * @return Player[]|null
      */
-    public function findAllPublicPlayersByCodes(array $codes, bool $noSave = false): ?array
-    {
+    public function findAllPublicPlayersByCodes(array $codes, bool $noSave = false): ?array {
         try {
             $response = $this->api->get('players', ['codes' => $codes], config: ['timeout' => 10]);
         } catch (GuzzleException) {
@@ -219,8 +213,7 @@ readonly class PlayerProvider implements PlayerProviderInterface
     /**
      * @return Player[]|null
      */
-    public function findAllPublicPlayersByOldCode(string $code, bool $noSave = false): ?array
-    {
+    public function findAllPublicPlayersByOldCode(string $code, bool $noSave = false): ?array {
         try {
             $response = $this->api->get('players/old/' . $code, config: ['timeout' => 10]);
         } catch (GuzzleException) {

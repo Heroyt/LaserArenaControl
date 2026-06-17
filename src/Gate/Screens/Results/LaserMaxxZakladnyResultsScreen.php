@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Gate\Screens\Results;
 
 use App\Exceptions\GameModeNotFoundException;
@@ -7,38 +9,31 @@ use App\GameModels\Game\Lasermaxx\GameModes\Zakladny;
 use Lsr\Core\Requests\Dto\ErrorResponse;
 use Psr\Http\Message\ResponseInterface;
 
-/**
- *
- */
 class LaserMaxxZakladnyResultsScreen extends AbstractResultsScreen
 {
     /**
      * @inheritDoc
      */
-    public static function getName(): string
-    {
+    public static function getName(): string {
         return lang('LaserMaxx výsledky z módu Základny', context: 'screens', domain: 'gate');
     }
 
-    public static function getDescription(): string
-    {
+    public static function getDescription(): string {
         return lang(
             'Obrazovka zobrazující výsledky LaserMaxx z módu Základny.',
             context: 'screens.description',
-            domain: 'gate'
+            domain: 'gate',
         );
     }
 
     /**
      * @inheritDoc
      */
-    public static function getDiKey(): string
-    {
+    public static function getDiKey(): string {
         return 'gate.screens.results.lasermaxx.zakladny';
     }
 
-    public function isActive(): bool
-    {
+    public function isActive(): bool {
         try {
             return parent::isActive() && $this->game?->mode instanceof Zakladny;
         } catch (GameModeNotFoundException) {
@@ -49,11 +44,10 @@ class LaserMaxxZakladnyResultsScreen extends AbstractResultsScreen
     /**
      * @inheritDoc
      */
-    public function run(): ResponseInterface
-    {
+    public function run(): ResponseInterface {
         $game = $this->game;
 
-        if (!isset($game)) {
+        if ( ! isset($game)) {
             return $this->respond(new ErrorResponse('Cannot show screen without game.'), 412);
         }
 
@@ -64,10 +58,10 @@ class LaserMaxxZakladnyResultsScreen extends AbstractResultsScreen
         return $this->view(
             'gate/screens/results/lasermaxxZakladny',
             [
-            'game'   => $game,
-            'mode'   => $game->mode,
-            'addCss' => ['gate/resultsZakladny.css'],
-            ]
+                'game'   => $game,
+                'mode'   => $game->mode,
+                'addCss' => ['gate/resultsZakladny.css'],
+            ],
         );
     }
 }

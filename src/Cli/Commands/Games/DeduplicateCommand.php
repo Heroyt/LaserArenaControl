@@ -13,18 +13,15 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class DeduplicateCommand extends Command
 {
-    public static function getDefaultName(): ?string
-    {
+    public static function getDefaultName(): ?string {
         return 'games:deduplicate';
     }
 
-    public static function getDefaultDescription(): ?string
-    {
+    public static function getDefaultDescription(): ?string {
         return 'Remove duplicate games and players.';
     }
 
-    public function execute(InputInterface $input, OutputInterface $output): int
-    {
+    public function execute(InputInterface $input, OutputInterface $output): int {
         DB::getConnection()->begin();
 
         foreach (GameFactory::getSupportedSystems() as $system) {
@@ -32,12 +29,12 @@ class DeduplicateCommand extends Command
 
             $games = DB::select(
                 $system . '_games',
-                'GROUP_CONCAT([id_game]) as [ids], COUNT(*) as [count]'
+                'GROUP_CONCAT([id_game]) as [ids], COUNT(*) as [count]',
             )
-                       ->groupBy('start')
-                       ->having('[count] > 1')
-                       ->orderBy('id_game')
-                       ->fetchAll(cache: false);
+                ->groupBy('start')
+                ->having('[count] > 1')
+                ->orderBy('id_game')
+                ->fetchAll(cache: false);
 
             $removeIds = [];
             foreach ($games as $game) {
@@ -60,12 +57,12 @@ class DeduplicateCommand extends Command
             $output->writeln(sprintf('Checking players for system <info>%s</info>', $system));
             $players = DB::select(
                 $system . '_players',
-                'GROUP_CONCAT([id_player]) as [ids], COUNT(*) as [count]'
+                'GROUP_CONCAT([id_player]) as [ids], COUNT(*) as [count]',
             )
-                         ->groupBy('id_game, vest')
-                         ->having('[count] > 1')
-                         ->orderBy('id_player')
-                         ->fetchAll(cache: false);
+                ->groupBy('id_game, vest')
+                ->having('[count] > 1')
+                ->orderBy('id_player')
+                ->fetchAll(cache: false);
 
             $removeIds = [];
             foreach ($players as $player) {

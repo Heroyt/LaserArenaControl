@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Gate\Models;
 
 use App\DataObjects\Image;
@@ -14,13 +16,11 @@ class MusicGroupDto
 
     public function __construct(
         public string $name,
-    )
-    {
+    ) {
     }
 
-    public function getIcon(): ?Image
-    {
-        if (!isset($this->icon)) {
+    public function getIcon(): ?Image {
+        if ( ! isset($this->icon)) {
             foreach ($this->music as $music) {
                 if (isset($music->icon)) {
                     $this->icon = $music->getIcon();
@@ -31,9 +31,8 @@ class MusicGroupDto
         return $this->icon;
     }
 
-    public function getBackgroundImage(): ?Image
-    {
-        if (!isset($this->backgroundImage)) {
+    public function getBackgroundImage(): ?Image {
+        if ( ! isset($this->backgroundImage)) {
             foreach ($this->music as $music) {
                 if (isset($music->backgroundImage)) {
                     $this->backgroundImage = $music->getBackgroundImage();
@@ -44,10 +43,9 @@ class MusicGroupDto
         return $this->backgroundImage;
     }
 
-    public function getValue(): string
-    {
+    public function getValue(): string {
         if (count($this->music) > 1) {
-            return 'g-' . implode('-', array_map(static fn($music) => $music->id, $this->music));
+            return 'g-' . implode('-', array_map(static fn ($music) => $music->id, $this->music));
         }
 
         return (string) $this->music[0]->id;

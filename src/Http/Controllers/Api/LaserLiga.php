@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Api;
 
 use App\Services\LaserLiga\LigaApi;
@@ -9,13 +11,11 @@ use Psr\Http\Message\ResponseInterface;
 class LaserLiga extends Controller
 {
     public function __construct(
-        private readonly LigaApi $api
-    )
-    {
+        private readonly LigaApi $api,
+    ) {
     }
 
-    public function highlights(string $code): ResponseInterface
-    {
+    public function highlights(string $code): ResponseInterface {
         $response = $this->api->get('/api/games/' . $code . '/highlights');
         $response->getBody()->rewind();
         $contents = $response->getBody()->getContents();

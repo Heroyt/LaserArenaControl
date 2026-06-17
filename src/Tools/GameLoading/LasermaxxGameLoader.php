@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tools\GameLoading;
 
 use App\Core\App;
@@ -43,8 +45,7 @@ abstract class LasermaxxGameLoader implements LoaderInterface
     public function __construct(
         protected readonly Latte   $latte,
         protected readonly Metrics $metrics,
-    )
-    {
+    ) {
     }
 
     /**
@@ -54,17 +55,16 @@ abstract class LasermaxxGameLoader implements LoaderInterface
         int    $musicId,
         string $musicFile,
         string $system = 'evo5',
-        ?float $timeSinceStart = null
-    ): void
-    {
+        ?float $timeSinceStart = null,
+    ): void {
         $startPlay = microtime(true);
         $endPlay = null;
         try {
             $music = MusicMode::get($musicId);
-            if (!file_exists($music->fileName)) {
+            if ( ! file_exists($music->fileName)) {
                 App::getInstance()->getLogger()->warning('Music file does not exist - ' . $music->fileName);
             } else {
-                if (!copy($music->fileName, $musicFile)) {
+                if ( ! copy($music->fileName, $musicFile)) {
                     App::getInstance()->getLogger()->warning('Music copy failed - ' . $music->fileName);
                 }
             }
@@ -73,10 +73,10 @@ abstract class LasermaxxGameLoader implements LoaderInterface
             if ($music->introFile !== null) {
                 $startIntro = microtime(true);
                 $introFile = str_replace('.mp3', '.intro.mp3', $musicFile);
-                if (!file_exists($music->introFile)) {
+                if ( ! file_exists($music->introFile)) {
                     App::getInstance()->getLogger()->warning('Music file does not exist - ' . $music->introFile);
                 } else {
-                    if (!copy($music->introFile, $introFile)) {
+                    if ( ! copy($music->introFile, $introFile)) {
                         App::getInstance()->getLogger()->warning('Music copy failed - ' . $music->introFile);
                     }
                 }
@@ -86,10 +86,10 @@ abstract class LasermaxxGameLoader implements LoaderInterface
             if ($music->endingFile !== null) {
                 $startEnding = microtime(true);
                 $endingFile = str_replace('.mp3', '.gameover.mp3', $musicFile);
-                if (!file_exists($music->endingFile)) {
+                if ( ! file_exists($music->endingFile)) {
                     App::getInstance()->getLogger()->warning('Music file does not exist - ' . $music->endingFile);
                 } else {
-                    if (!copy($music->endingFile, $endingFile)) {
+                    if ( ! copy($music->endingFile, $endingFile)) {
                         App::getInstance()->getLogger()->warning('Music copy failed - ' . $music->endingFile);
                     }
                 }
@@ -122,8 +122,7 @@ abstract class LasermaxxGameLoader implements LoaderInterface
         int    $musicId,
         string $musicFile,
         string $system = 'evo5',
-    ): void
-    {
+    ): void {
         $start = microtime(true);
         try {
             $music = MusicMode::get($musicId);
@@ -131,10 +130,10 @@ abstract class LasermaxxGameLoader implements LoaderInterface
                 return;
             }
             $armedFile = str_replace('.mp3', '.armed.mp3', $musicFile);
-            if (!file_exists($music->armedFile)) {
+            if ( ! file_exists($music->armedFile)) {
                 App::getInstance()->getLogger()->warning('Music file does not exist - ' . $music->armedFile);
             } else {
-                if (!copy($music->armedFile, $armedFile)) {
+                if ( ! copy($music->armedFile, $armedFile)) {
                     App::getInstance()->getLogger()->warning('Music copy failed - ' . $music->armedFile);
                 }
             }
@@ -150,16 +149,15 @@ abstract class LasermaxxGameLoader implements LoaderInterface
      *
      * @return LasermaxxLoadData
      */
-    protected function loadLasermaxxGame(array $data): LasermaxxLoadData
-    {
+    protected function loadLasermaxxGame(array $data): LasermaxxLoadData {
         $loadData = new LasermaxxLoadData(
             meta: [
-                  'music'    => empty($data['music']) ? null : $data['music'],
-                  'mode'     => $data['mode'] ?? '',
-                  'loadTime' => time(),
-                  'resultsHidden' => !empty($data['hideResults']),
-                  ...($data['meta'] ?? []),
-                ],
+                'music'    => empty($data['music']) ? null : $data['music'],
+                'mode'     => $data['mode'] ?? '',
+                'loadTime' => time(),
+                'resultsHidden' => ! empty($data['hideResults']),
+                ...($data['meta'] ?? []),
+            ],
         );
 
         /** @var array<int,string> $hashData */
@@ -167,17 +165,17 @@ abstract class LasermaxxGameLoader implements LoaderInterface
 
         $this->prepareGroup($loadData, $data);
 
-        if (!empty($data['tableSelect'])) {
+        if ( ! empty($data['tableSelect'])) {
             $loadData->meta['table'] = $data['tableSelect'];
         }
 
         try {
-            $mode = GameModeFactory::getById((int) ($data['game-mode'] ?? 0), ['system' => $this->system]);
+            $mode = GameModeFactory::getById((int) ($data['game-mode'] ?? 0), ['system' => $this->system->type->value]);
         } catch (GameModeNotFoundException) {
         }
         if (empty($loadData->meta['mode']) && isset($mode)) {
             $loadData->meta['mode'] = strtolower($mode->loadName ?? '');
-            if (!empty($data['variation'])) {
+            if ( ! empty($data['variation'])) {
                 uksort(
                     $data['variation'],
                     static function ($a, $b) {
@@ -186,7 +184,7 @@ abstract class LasermaxxGameLoader implements LoaderInterface
                         } catch (ModelNotFoundException) {
                             return 0;
                         }
-                    }
+                    },
                 );
                 $loadData->meta['variations'] = [];
                 /**
@@ -212,8 +210,8 @@ abstract class LasermaxxGameLoader implements LoaderInterface
                 // Default team for solo game
                 $player['team'] = '2';
             } else {
-                if (!isset($player['team']) || $player['team'] === '') {
-                    if (!isset($mode) || $mode->isTeam()) {
+                if ( ! isset($player['team']) || $player['team'] === '') {
+                    if ( ! isset($mode) || $mode->isTeam()) {
                         continue;
                     }
                     // Default team for solo game
@@ -225,7 +223,7 @@ abstract class LasermaxxGameLoader implements LoaderInterface
             if ($player['name'] !== $asciiName) {
                 $loadData->meta['p' . $vest . 'n'] = $player['name'];
             }
-            if (!empty($player['code'])) {
+            if ( ! empty($player['code'])) {
                 $loadData->meta['p' . $vest . 'u'] = $player['code'];
             }
             $hashData[(int)$vest] = $vest . '-' . $asciiName;
@@ -236,7 +234,7 @@ abstract class LasermaxxGameLoader implements LoaderInterface
                 ((int)($player['vip'] ?? 0)) === 1,
                 birthday: ((int)($player['birthday'] ?? 0)) === 1,
             );
-            if (!isset($teams[(string) $player['team']])) {
+            if ( ! isset($teams[(string) $player['team']])) {
                 $teams[(string) $player['team']] = 0;
             }
             $teams[(string) $player['team']]++;
@@ -267,11 +265,11 @@ abstract class LasermaxxGameLoader implements LoaderInterface
 
 
         // Choose random music ID if a group is selected
-        if (!empty($data['use-playlist']) && !empty($data['playlist'])) {
+        if ( ! empty($data['use-playlist']) && ! empty($data['playlist'])) {
             try {
                 $playlist = Playlist::get((int) $data['playlist']);
                 $musicIds = $playlist->getMusicIds();
-                if (!empty($musicIds)) {
+                if ( ! empty($musicIds)) {
                     $loadData->meta['music'] = (int) $musicIds[array_rand($musicIds)];
                 }
             } catch (ModelNotFoundException | ValidationException) {
@@ -283,7 +281,7 @@ abstract class LasermaxxGameLoader implements LoaderInterface
             str_starts_with($loadData->meta['music'], 'g-')
         ) {
             $musicIds = array_slice(explode('-', $loadData->meta['music']), 1);
-            if (!empty($musicIds)) {
+            if ( ! empty($musicIds)) {
                 $loadData->meta['music'] = (int) $musicIds[array_rand($musicIds)];
             }
         }
@@ -296,25 +294,24 @@ abstract class LasermaxxGameLoader implements LoaderInterface
      * @param  string  $name
      * @return string
      */
-    public function escapeName(string $name): string
-    {
+    public function escapeName(string $name): string {
         // Remove UTF-8 characters
         $name = Strings::toAscii($name);
         // Remove key characters
         return str_replace(
             [
-            '#',
-            ',',
-            '}',
-            '{',
+                '#',
+                ',',
+                '}',
+                '{',
             ],
             [
-            '+',
-            '.',
-            ']',
-            '[',
+                '+',
+                '.',
+                ']',
+                '[',
             ],
-            $name
+            $name,
         );
     }
 }

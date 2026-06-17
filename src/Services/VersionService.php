@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services;
 
 use Lsr\Logging\Exceptions\DirectoryCreationException;
@@ -20,8 +22,7 @@ class VersionService
     /**
      * @return string returns 'dev' if no version is found
      */
-    public function getLastAvailableVersion(): string
-    {
+    public function getLastAvailableVersion(): string {
         $versions = $this->getAvailableVersions();
         if (empty($versions)) {
             return 'dev';
@@ -32,9 +33,8 @@ class VersionService
     /**
      * @return string[] Versions sorted in ascending order
      */
-    public function getAvailableVersions(): array
-    {
-        if (!isset($this->availableVersions)) {
+    public function getAvailableVersions(): array {
+        if ( ! isset($this->availableVersions)) {
             $this->execCommand('git fetch --all --tags');
             $versions = $this->execCommand('git tag -l');
             $this->availableVersions = [];
@@ -45,7 +45,7 @@ class VersionService
                 }
             }
             // Sort all versions in ascending order
-            usort($this->availableVersions, static fn(string $v1, string $v2) => version_compare($v1, $v2));
+            usort($this->availableVersions, static fn (string $v1, string $v2) => version_compare($v1, $v2));
         }
         return $this->availableVersions;
     }
@@ -55,9 +55,8 @@ class VersionService
      *
      * @return string[] All lines got from the command
      */
-    private function execCommand(string $command): array
-    {
-        if (!str_contains($command, '2>&1')) {
+    private function execCommand(string $command): array {
+        if ( ! str_contains($command, '2>&1')) {
             $command .= ' 2>&1'; // Add stderr redirect to stdout
         }
         /** @var string|false $out */
@@ -66,7 +65,7 @@ class VersionService
             try {
                 $this->getLogger()->error(
                     'Running command `' . $command . '` failed.',
-                    ['code' => $returnCode, 'output' => $output]
+                    ['code' => $returnCode, 'output' => $output],
                 );
             } catch (DirectoryCreationException) {
             }
@@ -79,20 +78,18 @@ class VersionService
      * @return Logger
      * @throws DirectoryCreationException
      */
-    private function getLogger(): Logger
-    {
-        if (!isset($this->logger)) {
+    private function getLogger(): Logger {
+        if ( ! isset($this->logger)) {
             $this->logger = new Logger(LOG_DIR . 'services/', 'version');
         }
         return $this->logger;
     }
 
-    public function getCurrentVersion(): string
-    {
-        if (!isset($this->currentVersion)) {
+    public function getCurrentVersion(): string {
+        if ( ! isset($this->currentVersion)) {
             $lines = $this->execCommand('git branch --show-current');
             $branch = 'master';
-            if (!empty($lines[0])) {
+            if ( ! empty($lines[0])) {
                 $branch = $lines[0];
             }
             $this->currentVersion = 'dev';

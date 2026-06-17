@@ -1,12 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\DataObjects\NewGame;
 
 use Lsr\Lg\Results\Enums\GameModeType;
 
-/**
- *
- */
 class ModeLoadData
 {
     public int $id = 0;

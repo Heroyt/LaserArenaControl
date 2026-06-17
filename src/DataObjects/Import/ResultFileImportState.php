@@ -6,6 +6,7 @@ namespace App\DataObjects\Import;
 
 use DateTimeImmutable;
 use DateTimeInterface;
+use Dibi\Row;
 
 readonly class ResultFileImportState
 {
@@ -31,15 +32,13 @@ readonly class ResultFileImportState
         public ?string                $lastEvent = null,
         public ?DateTimeInterface     $createdAt = null,
         public ?DateTimeInterface     $updatedAt = null,
-    )
-    {
+    ) {
     }
 
     /**
-     * @param array<string, mixed>|\Dibi\Row $row
+     * @param array<string, mixed>|Row $row
      */
-    public static function fromRow(array|\Dibi\Row $row): self
-    {
+    public static function fromRow(array|Row $row): self {
         return new self(
             id: (int)self::value($row, 'id_result_file_import'),
             path: (string)self::value($row, 'path'),
@@ -66,15 +65,13 @@ readonly class ResultFileImportState
     }
 
     /**
-     * @param array<string, mixed>|\Dibi\Row $row
+     * @param array<string, mixed>|Row $row
      */
-    private static function value(array|\Dibi\Row $row, string $key): mixed
-    {
+    private static function value(array|Row $row, string $key): mixed {
         return $row[$key] ?? null;
     }
 
-    private static function date(mixed $value): ?DateTimeInterface
-    {
+    private static function date(mixed $value): ?DateTimeInterface {
         if ($value instanceof DateTimeInterface) {
             return $value;
         }
@@ -84,8 +81,7 @@ readonly class ResultFileImportState
         return null;
     }
 
-    private static function nullableString(mixed $value): ?string
-    {
+    private static function nullableString(mixed $value): ?string {
         if ($value === null) {
             return null;
         }

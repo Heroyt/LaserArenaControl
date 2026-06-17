@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Exceptions\ConnectionException;
@@ -15,19 +17,14 @@ use Lsr\Core\Requests\Request;
 use Psr\Http\Message\ResponseInterface;
 use Spiral\RoadRunner\Metrics\Metrics;
 
-/**
- *
- */
 class GameControl extends Controller
 {
     public function __construct(
         private readonly Metrics $metrics,
-    )
-    {
+    ) {
     }
 
-    public function status(?System $system = null): ResponseInterface
-    {
+    public function status(?System $system = null): ResponseInterface {
         $ip = $this->getSystemIp($system);
         if ($ip === null) {
             return $this->respond(new ErrorResponse('LaserMaxx IP is not defined'), 500);
@@ -40,11 +37,11 @@ class GameControl extends Controller
             $this->metrics->set('control_time', (microtime(true) - $start) * 1000, ['status']);
             return $this->respond(
                 [
-                'status'    => 'error',
-                'error'     => 'Error while getting the game status',
-                'exception' => $e->getMessage(),
+                    'status'    => 'error',
+                    'error'     => 'Error while getting the game status',
+                    'exception' => $e->getMessage(),
                 ],
-                500
+                500,
             );
         }
         $this->metrics->set('control_time', (microtime(true) - $start) * 1000, ['status']);
@@ -54,8 +51,7 @@ class GameControl extends Controller
     /**
      * @return non-empty-string|null
      */
-    private function getSystemIp(?System $system = null): ?string
-    {
+    private function getSystemIp(?System $system = null): ?string {
         if ($system === null) {
             $system = System::getDefault();
         }
@@ -66,8 +62,7 @@ class GameControl extends Controller
         return $system->systemIp;
     }
 
-    public function loadSafe(Request $request, ?System $system = null): ResponseInterface
-    {
+    public function loadSafe(Request $request, ?System $system = null): ResponseInterface {
         $ip = $this->getSystemIp($system);
         if ($ip === null) {
             return $this->respond(new ErrorResponse('LaserMaxx IP is not defined'), 500);
@@ -103,24 +98,22 @@ class GameControl extends Controller
      * @param  Exception|ConnectionTimeoutException  $e
      * @return ResponseInterface
      */
-    private function lmxControlConnectionError(Exception|ConnectionTimeoutException $e): ResponseInterface
-    {
+    private function lmxControlConnectionError(Exception|ConnectionTimeoutException $e): ResponseInterface {
         return $this->respond(
             new ErrorResponse(
                 lang(
                     'Nepodařilo se připojit k aplikaci LaserMaxxControl. Zkontrolujte, že je spuštěná a dostupná.',
-                    context: 'errors'
+                    context: 'errors',
                 ),
                 type: ErrorType::INTERNAL,
                 detail: $e->getMessage(),
                 exception: $e,
             ),
-            503
+            503,
         );
     }
 
-    public function load(Request $request, ?System $system = null): ResponseInterface
-    {
+    public function load(Request $request, ?System $system = null): ResponseInterface {
         $ip = $this->getSystemIp($system);
         if ($ip === null) {
             return $this->respond(new ErrorResponse('LaserMaxx IP is not defined'), 500);
@@ -144,8 +137,7 @@ class GameControl extends Controller
         return $this->respond(new SuccessResponse());
     }
 
-    public function startSafe(Request $request, ?System $system = null): ResponseInterface
-    {
+    public function startSafe(Request $request, ?System $system = null): ResponseInterface {
         $ip = $this->getSystemIp($system);
         if ($ip === null) {
             return $this->respond(new ErrorResponse('LaserMaxx IP is not defined'), 500);
@@ -166,11 +158,11 @@ class GameControl extends Controller
             if (empty($modeName)) {
                 return $this->respond(
                     [
-                    'status' => 'error',
-                    'error'  => 'Missing required parameter - mode',
-                    'post'   => $request->getParsedBody(),
+                        'status' => 'error',
+                        'error'  => 'Missing required parameter - mode',
+                        'post'   => $request->getParsedBody(),
                     ],
-                    400
+                    400,
                 );
             }
             try {
@@ -193,8 +185,7 @@ class GameControl extends Controller
         return $this->respond(new SuccessResponse());
     }
 
-    public function start(?System $system = null): ResponseInterface
-    {
+    public function start(?System $system = null): ResponseInterface {
         $ip = $this->getSystemIp($system);
         if ($ip === null) {
             return $this->respond(new ErrorResponse('LaserMaxx IP is not defined'), 500);
@@ -213,8 +204,7 @@ class GameControl extends Controller
         return $this->respond(new SuccessResponse());
     }
 
-    public function stop(?System $system = null): ResponseInterface
-    {
+    public function stop(?System $system = null): ResponseInterface {
         $ip = $this->getSystemIp($system);
         if ($ip === null) {
             return $this->respond(new ErrorResponse('LaserMaxx IP is not defined'), 500);
@@ -233,8 +223,7 @@ class GameControl extends Controller
         return $this->respond(new SuccessResponse());
     }
 
-    public function retryDownload(?System $system = null): ResponseInterface
-    {
+    public function retryDownload(?System $system = null): ResponseInterface {
         $ip = $this->getSystemIp($system);
         if ($ip === null) {
             return $this->respond(new ErrorResponse('LaserMaxx IP is not defined'), 500);
@@ -252,8 +241,7 @@ class GameControl extends Controller
         return $this->respond(new SuccessResponse());
     }
 
-    public function cancelDownload(?System $system = null): ResponseInterface
-    {
+    public function cancelDownload(?System $system = null): ResponseInterface {
         $ip = $this->getSystemIp($system);
         if ($ip === null) {
             return $this->respond(new ErrorResponse('LaserMaxx IP is not defined'), 500);

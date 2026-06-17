@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models\Group;
 
 use App\GameModels\Game\Game;
@@ -30,8 +32,7 @@ class Player implements JsonSerializable, GroupPlayerInterface
     public function __construct(
         public readonly string     $asciiName,
         public readonly GamePlayer $player,
-    )
-    {
+    ) {
     }
 
     /**
@@ -42,9 +43,8 @@ class Player implements JsonSerializable, GroupPlayerInterface
      * @param  G|null  $game
      * @return void
      */
-    public function addGame(GamePlayer $player, ?Game $game = null): void
-    {
-        if (!isset($game)) {
+    public function addGame(GamePlayer $player, ?Game $game = null): void {
+        if ( ! isset($game)) {
             $game = $player->game;
         }
 
@@ -70,14 +70,14 @@ class Player implements JsonSerializable, GroupPlayerInterface
         $this->shots[] = $player->shots;
 
         // Add vest
-        if (!isset($this->vests[$player->vest])) {
+        if ( ! isset($this->vests[$player->vest])) {
             $this->vests[$player->vest] = 0;
         }
         $this->vests[$player->vest]++;
 
         // Add aggregate values for game mode
         if (isset($game->mode->id)) {
-            if (!isset($this->gameModes[$game->mode->id])) {
+            if ( ! isset($this->gameModes[$game->mode->id])) {
                 $this->gameModes[$game->mode->id] = new PlayerModeAggregate($game->mode);
             }
             $this->gameModes[$game->mode->id]->addGame($player, $game);
@@ -93,8 +93,7 @@ class Player implements JsonSerializable, GroupPlayerInterface
      *
      * @return mixed
      */
-    public function __call($name, $arguments): mixed
-    {
+    public function __call($name, $arguments): mixed {
         return $this->player->$name(...$arguments);
     }
 
@@ -103,8 +102,7 @@ class Player implements JsonSerializable, GroupPlayerInterface
      *
      * @return mixed
      */
-    public function __get($name): mixed
-    {
+    public function __get($name): mixed {
         return $this->player->$name;
     }
 
@@ -114,8 +112,7 @@ class Player implements JsonSerializable, GroupPlayerInterface
      *
      * @return void
      */
-    public function __set($name, $value): void
-    {
+    public function __set($name, $value): void {
         $this->player->$name = $value;
     }
 
@@ -124,8 +121,7 @@ class Player implements JsonSerializable, GroupPlayerInterface
      *
      * @return bool
      */
-    public function __isset($name): bool
-    {
+    public function __isset($name): bool {
         return isset($this->player->$name);
     }
 
@@ -134,8 +130,7 @@ class Player implements JsonSerializable, GroupPlayerInterface
      *
      * @return int
      */
-    public function getModesSumShots(array $modeIds): int
-    {
+    public function getModesSumShots(array $modeIds): int {
         $sum = 0;
         foreach ($modeIds as $id) {
             if (isset($this->gameModes[$id])) {
@@ -150,8 +145,7 @@ class Player implements JsonSerializable, GroupPlayerInterface
      *
      * @return float
      */
-    public function getModesAverageShots(array $modeIds): float
-    {
+    public function getModesAverageShots(array $modeIds): float {
         $sum = 0;
         $count = 0;
         foreach ($modeIds as $id) {
@@ -171,8 +165,7 @@ class Player implements JsonSerializable, GroupPlayerInterface
      *
      * @return float
      */
-    public function getModesAverageAccuracy(array $modeIds): float
-    {
+    public function getModesAverageAccuracy(array $modeIds): float {
         $sumHits = 0;
         $sumShots = 0;
         foreach ($modeIds as $id) {
@@ -192,8 +185,7 @@ class Player implements JsonSerializable, GroupPlayerInterface
      *
      * @return float
      */
-    public function getModesAverageHits(array $modeIds): float
-    {
+    public function getModesAverageHits(array $modeIds): float {
         $sum = 0;
         $count = 0;
         foreach ($modeIds as $id) {
@@ -213,8 +205,7 @@ class Player implements JsonSerializable, GroupPlayerInterface
      *
      * @return float
      */
-    public function getModesAverageDeaths(array $modeIds): float
-    {
+    public function getModesAverageDeaths(array $modeIds): float {
         $sum = 0;
         $count = 0;
         foreach ($modeIds as $id) {
@@ -234,8 +225,7 @@ class Player implements JsonSerializable, GroupPlayerInterface
      *
      * @return int
      */
-    public function getModesSumScore(array $modeIds): int
-    {
+    public function getModesSumScore(array $modeIds): int {
         $sum = 0;
         foreach ($modeIds as $id) {
             if (isset($this->gameModes[$id])) {
@@ -250,8 +240,7 @@ class Player implements JsonSerializable, GroupPlayerInterface
      *
      * @return float
      */
-    public function getModesAverageScore(array $modeIds): float
-    {
+    public function getModesAverageScore(array $modeIds): float {
         $sum = 0;
         $count = 0;
         foreach ($modeIds as $id) {
@@ -271,8 +260,7 @@ class Player implements JsonSerializable, GroupPlayerInterface
      *
      * @return int
      */
-    public function getModesSkill(array $modeIds): int
-    {
+    public function getModesSkill(array $modeIds): int {
         $sum = 0;
         $count = 0;
         foreach ($modeIds as $id) {
@@ -292,13 +280,12 @@ class Player implements JsonSerializable, GroupPlayerInterface
      *
      * @return int|string
      */
-    public function getModesFavouriteVest(array $modeIds): int|string
-    {
+    public function getModesFavouriteVest(array $modeIds): int|string {
         $vests = [];
         foreach ($modeIds as $id) {
             if (isset($this->gameModes[$id])) {
                 foreach ($this->gameModes[$id]->vests as $vest => $count) {
-                    if (!isset($vests[$vest])) {
+                    if ( ! isset($vests[$vest])) {
                         $vests[$vest] = 0;
                     }
                     $vests[$vest] += $count;
@@ -315,8 +302,7 @@ class Player implements JsonSerializable, GroupPlayerInterface
      *
      * @return float
      */
-    public function getModesKd(array $modeIds): float
-    {
+    public function getModesKd(array $modeIds): float {
         $sum = 0;
         $sumDeath = 0;
         foreach ($modeIds as $id) {
@@ -333,8 +319,7 @@ class Player implements JsonSerializable, GroupPlayerInterface
      *
      * @return int
      */
-    public function getModesSumHits(array $modeIds): int
-    {
+    public function getModesSumHits(array $modeIds): int {
         $sum = 0;
         foreach ($modeIds as $id) {
             if (isset($this->gameModes[$id])) {
@@ -349,8 +334,7 @@ class Player implements JsonSerializable, GroupPlayerInterface
      *
      * @return int
      */
-    public function getModesSumDeaths(array $modeIds): int
-    {
+    public function getModesSumDeaths(array $modeIds): int {
         $sum = 0;
         foreach ($modeIds as $id) {
             if (isset($this->gameModes[$id])) {
@@ -365,8 +349,7 @@ class Player implements JsonSerializable, GroupPlayerInterface
      *
      * @return int
      */
-    public function getModesPlayCount(array $modeIds): int
-    {
+    public function getModesPlayCount(array $modeIds): int {
         $sum = 0;
         foreach ($modeIds as $id) {
             if (isset($this->gameModes[$id])) {
@@ -379,14 +362,13 @@ class Player implements JsonSerializable, GroupPlayerInterface
     /**
      * @return array<string,mixed>
      */
-    public function jsonSerialize(): array
-    {
+    public function jsonSerialize(): array {
         $data = get_object_vars($this);
         $data['player'] = [
-          'id'    => $this->player->id,
-          'name'  => $this->player->name,
-          'skill' => $this->player->skill,
-          'vest'  => $this->player->vest,
+            'id'    => $this->player->id,
+            'name'  => $this->player->name,
+            'skill' => $this->player->skill,
+            'vest'  => $this->player->vest,
         ];
         $data['skill'] = $this->getSkill();
         $data['avgSkill'] = $this->getSkill();

@@ -12,23 +12,20 @@ use Symfony\Component\Console\Output\OutputInterface;
 final class ClearGroupsCommand extends Command
 {
     public function __construct(
-        private readonly CommandBus $commandBus
+        private readonly CommandBus $commandBus,
     ) {
         parent::__construct();
     }
 
-    public static function getDefaultName(): string
-    {
+    public static function getDefaultName(): string {
         return 'games:clear-groups';
     }
 
-    public static function getDefaultDescription(): string
-    {
+    public static function getDefaultDescription(): string {
         return 'Clear old game groups.';
     }
 
-    public function run(InputInterface $input, OutputInterface $output): int
-    {
+    public function run(InputInterface $input, OutputInterface $output): int {
         $result = $this->commandBus->dispatch(new \App\CQRS\Commands\ClearGroupsCommand());
         $output->writeln("<info>Cleared old game groups</info>");
         $output->writeln(sprintf('%d deleted', $result->deleted));

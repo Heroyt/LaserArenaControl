@@ -1,12 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Gate\Settings;
 
 use App\Gate\Models\GateScreenModel;
 
-/**
- *
- */
 readonly class TimerSettings extends GateSettings
 {
     /**
@@ -16,7 +15,6 @@ readonly class TimerSettings extends GateSettings
     public function __construct(
         public array $children = [],
         public int   $timer = 60,
-    )
-    {
+    ) {
     }
 }

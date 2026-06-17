@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Core;
 
 use Lsr\Caching\Cache;
@@ -7,8 +9,7 @@ use Lsr\Core\Menu\MenuBuilder;
 
 class App extends \Lsr\Core\App
 {
-    public static function getMenu(string $type = 'menu'): array
-    {
+    public static function getMenu(string $type = 'menu'): array {
         /** @var Cache $cache */
         $cache = self::getService('cache');
         $uri = self::getInstance()->getRequest()->getUri();
@@ -21,17 +22,16 @@ class App extends \Lsr\Core\App
                 return $menuBuilder->getMenu($type);
             },
             [
-            'tags'   => ['core', 'core.menu'],
-            'expire' => '30 days',
-            ]
+                'tags'   => ['core', 'core.menu'],
+                'expire' => '30 days',
+            ],
         );
     }
 
     /**
      * @return non-empty-string
      */
-    public static function getShortLanguageCode(): string
-    {
+    public static function getShortLanguageCode(): string {
         /** @phpstan-ignore return.type */
         return self::getInstance()->translations->getLang();
     }

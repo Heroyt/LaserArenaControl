@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Gate\Screens\Results;
 
 use App\Core\App;
@@ -14,9 +16,6 @@ use Psr\Http\Message\ResponseInterface;
 use RuntimeException;
 use Throwable;
 
-/**
- *
- */
 class ResultsScreen extends GateScreen implements ResultsScreenInterface
 {
     use WithResultsSettings;
@@ -26,40 +25,35 @@ class ResultsScreen extends GateScreen implements ResultsScreenInterface
     /**
      * @inheritDoc
      */
-    public static function getName(): string
-    {
+    public static function getName(): string {
         return lang('Výsledky ze hry', context: 'screens', domain: 'gate');
     }
 
-    public static function getDescription(): string
-    {
+    public static function getDescription(): string {
         return lang(
             'Obrazovka zobrazující výsledky z her. Automaticky vybírá zobrazení podle herního módu.',
             context: 'screens.description',
-            domain: 'gate'
+            domain: 'gate',
         );
     }
 
     /**
      * @inheritDoc
      */
-    public static function getSettingsForm(): string
-    {
+    public static function getSettingsForm(): string {
         return 'gate/settings/results.latte';
     }
 
     /**
      * @inheritDoc
      */
-    public static function buildSettingsFromForm(array $data): GateSettings
-    {
+    public static function buildSettingsFromForm(array $data): GateSettings {
         return new ResultsSettings(isset($data['time']) ? (int) $data['time'] : null);
     }
 
-    public function isActive(): bool
-    {
+    public function isActive(): bool {
         $game = $this->game;
-        if (!isset($game)) {
+        if ( ! isset($game)) {
             return false;
         }
 
@@ -81,14 +75,13 @@ class ResultsScreen extends GateScreen implements ResultsScreenInterface
      * @return ResultsScreenInterface
      * @throws GameModeNotFoundException
      */
-    private function getChildScreen(): ResultsScreenInterface
-    {
+    private function getChildScreen(): ResultsScreenInterface {
         if (isset($this->childScreen)) {
             return $this->childScreen;
         }
         $game = $this->game;
 
-        if (!isset($game)) {
+        if ( ! isset($game)) {
             throw new RuntimeException('Game must be set.');
         }
 
@@ -115,7 +108,7 @@ class ResultsScreen extends GateScreen implements ResultsScreenInterface
         // Default to basic rankable
         /** @var 'evo5'|'evo6'|'laserforce'|string $system */
         $system = $game::SYSTEM;
-        if (!isset($this->childScreen)) {
+        if ( ! isset($this->childScreen)) {
             $screen = match ($system) {
                 'evo5', 'evo6' => App::getService('gate.screens.results.lasermaxx.rankable'),
                 default => throw new Exception('Cannot find results screen for system ' . $system),
@@ -126,8 +119,8 @@ class ResultsScreen extends GateScreen implements ResultsScreenInterface
 
         assert($this->childScreen instanceof GateScreen);
         $this->childScreen->setSettings($this->getSettings())
-                          ->setGame($game)
-                          ->setParams($this->params);
+            ->setGame($game)
+            ->setParams($this->params);
 
         return $this->childScreen;
     }
@@ -135,19 +128,17 @@ class ResultsScreen extends GateScreen implements ResultsScreenInterface
     /**
      * @inheritDoc
      */
-    public static function getDiKey(): string
-    {
+    public static function getDiKey(): string {
         return 'gate.screens.results';
     }
 
     /**
      * @inheritDoc
      */
-    public function run(): ResponseInterface
-    {
+    public function run(): ResponseInterface {
         $game = $this->game;
 
-        if (!isset($game)) {
+        if ( ! isset($game)) {
             return $this->respond(new ErrorResponse('Cannot show screen without game.'), 412);
         }
 
@@ -160,14 +151,14 @@ class ResultsScreen extends GateScreen implements ResultsScreenInterface
 
         return $screen->run()
             ->withAddedHeader('X-Screen', $screen::getDiKey() . ' - ' . $screen::class)
-                      ->withAddedHeader(
-                          'X-GameMode',
-                          $game->mode === null ? 'Unknown' :
-                              $game->mode->getName() . ' - ' . $game->mode::class
-                      )
-                      ->withAddedHeader(
-                          'X-GameMode-CustomResults',
-                          $game->mode instanceof CustomResultsMode ? 'Yes' : 'No'
-                      );
+            ->withAddedHeader(
+                'X-GameMode',
+                $game->mode === null ? 'Unknown' :
+                    $game->mode->getName() . ' - ' . $game->mode::class,
+            )
+            ->withAddedHeader(
+                'X-GameMode-CustomResults',
+                $game->mode instanceof CustomResultsMode ? 'Yes' : 'No',
+            );
     }
 }

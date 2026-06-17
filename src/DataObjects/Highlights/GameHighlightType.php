@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\DataObjects\Highlights;
 
 use OpenApi\Attributes as OA;
@@ -10,7 +12,7 @@ use OpenApi\Attributes as OA;
  * @property string $value
  */
 #[OA\Schema(type: 'string')]
-enum GameHighlightType : string
+enum GameHighlightType: string
 {
     case TROPHY      = 'trophy';
     case OTHER       = 'other';
@@ -22,16 +24,14 @@ enum GameHighlightType : string
     /**
      * @return class-string<GameHighlight>
      */
-    public function getHighlightClass(): string
-    {
+    public function getHighlightClass(): string {
         return match ($this) {
             self::TROPHY => TrophyHighlight::class,
             default      => GameHighlight::class,
         };
     }
 
-    public function getIcon(): string
-    {
+    public function getIcon(): string {
         return match ($this) {
             self::TROPHY       => 'trophy',
             self::OTHER        => 'star',

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Templates\NewGame;
 
 use App\DataObjects\NewGame\HookedTemplates;

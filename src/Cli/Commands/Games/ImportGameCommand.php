@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Cli\Commands\Games;
 
 use App\Cli\Colors;
@@ -37,62 +39,58 @@ class ImportGameCommand extends Command
         $this->setDescription(self::getDefaultDescription() ?? 'Import games from a directory or a result file.');
     }
 
-    public static function getDefaultName(): ?string
-    {
+    public static function getDefaultName(): ?string {
         return 'games:import';
     }
 
-    public static function getDefaultDescription(): ?string
-    {
+    public static function getDefaultDescription(): ?string {
         return 'Import games from a directory or a concrete result file.';
     }
 
-    protected function configure(): void
-    {
+    protected function configure(): void {
         $this->addOption(
             'all',
             'a',
             InputOption::VALUE_NONE,
-            'Import all games in a directory - ignore modification time.'
+            'Import all games in a directory - ignore modification time.',
         );
         $this->addOption(
             'limit',
             'l',
             InputOption::VALUE_REQUIRED,
-            'Limit games to import.'
+            'Limit games to import.',
         );
         $this->addOption(
             'async',
             null,
             InputOption::VALUE_NONE,
-            'Only scan and queue changed files. By default, changed files are imported synchronously.'
+            'Only scan and queue changed files. By default, changed files are imported synchronously.',
         );
         $this->addOption(
             'timeout',
             't',
             InputOption::VALUE_REQUIRED,
             'Per-file synchronous import timeout in seconds. Use 0 to disable.',
-            30
+            30,
         );
         $this->addOption(
             'isolate',
             null,
             InputOption::VALUE_NONE,
-            'Run each synchronous file import in a separate PHP process so crashes do not stop the batch.'
+            'Run each synchronous file import in a separate PHP process so crashes do not stop the batch.',
         );
         $this->addOption(
             'force',
             'f',
             InputOption::VALUE_NONE,
-            'Ignore skip conditions and re-import unchanged or already processed result files.'
+            'Ignore skip conditions and re-import unchanged or already processed result files.',
         );
         $this->addOption('worker-import-file', null, InputOption::VALUE_REQUIRED, 'Internal worker payload file.');
         $this->addArgument('directory', InputArgument::REQUIRED, 'Results directory or result file');
         $this->addArgument('game', InputArgument::OPTIONAL, 'Game code');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): int
-    {
+    protected function execute(InputInterface $input, OutputInterface $output): int {
         $dir = $input->getArgument('directory');
         $gameCode = $input->getArgument('game');
         $limit = (int) $input->getOption('limit');
@@ -107,9 +105,9 @@ class ImportGameCommand extends Command
         }
 
         if (is_file($dir)) {
-            if (!empty($gameCode)) {
+            if ( ! empty($gameCode)) {
                 $output->writeln(
-                    '<error>Error: game code argument can only be used when importing from a directory.</error>'
+                    '<error>Error: game code argument can only be used when importing from a directory.</error>',
                 );
                 return self::FAILURE;
             }
@@ -125,11 +123,11 @@ class ImportGameCommand extends Command
             );
         }
 
-        if (!file_exists($dir) || !is_dir($dir)) {
+        if ( ! file_exists($dir) || ! is_dir($dir)) {
             $output->writeln(
                 Colors::color(ForegroundColors::RED) .
                 'Error: argument must be a valid directory or result file.' .
-                Colors::reset()
+                Colors::reset(),
             );
             return self::FAILURE;
         }
@@ -140,28 +138,28 @@ class ImportGameCommand extends Command
             sprintf(
                 '<info>Importing results from %s (%s)</info>',
                 $dir,
-                $async ? 'async queue mode' : 'synchronous mode' . ($isolate ? ', isolated' : '')
+                $async ? 'async queue mode' : 'synchronous mode' . ($isolate ? ', isolated' : ''),
             ),
-            OutputInterface::VERBOSITY_VERBOSE
+            OutputInterface::VERBOSITY_VERBOSE,
         );
 
-        if (!empty($gameCode)) {
+        if ( ! empty($gameCode)) {
             $output->writeln(
                 sprintf('<info>Importing single game %s</info>', $gameCode),
-                OutputInterface::VERBOSITY_VERBOSE
+                OutputInterface::VERBOSITY_VERBOSE,
             );
             try {
                 $game = GameFactory::getByCode($gameCode);
             } catch (Throwable $e) {
                 $output->writeln(
-                    '<error>Error: Game not found - ' . $e->getMessage() . '.</error>'
+                    '<error>Error: Game not found - ' . $e->getMessage() . '.</error>',
                 );
                 return self::FAILURE;
             }
 
-            if (!isset($game)) {
+            if ( ! isset($game)) {
                 $output->writeln(
-                    '<error>Error: Game not found.</error>'
+                    '<error>Error: Game not found.</error>',
                 );
                 return self::FAILURE;
             }
@@ -170,7 +168,7 @@ class ImportGameCommand extends Command
 
             if ($response instanceof ErrorResponse) {
                 $output->writeln('<error>' . $response->title . '</error>');
-                if (!empty($response->values)) {
+                if ( ! empty($response->values)) {
                     $output->setVerbosity(OutputInterface::VERBOSITY_VERBOSE);
                     $output->writeln($this->serializer->serialize($response->values, 'json'));
                     $output->setVerbosity(OutputInterface::VERBOSITY_NORMAL);
@@ -194,11 +192,11 @@ class ImportGameCommand extends Command
                     $limit,
                     queueImports: $async,
                     forceImport: $force,
-                )
+                ),
             );
             $this->writeScanDetails($output, $response->queuedFiles, $response->errors);
             $importResults = [];
-            if (!$async) {
+            if ( ! $async) {
                 $totalQueued = count($response->queuedFiles);
                 foreach ($response->queuedFiles as $index => $queuedFile) {
                     $startedAt = microtime(true);
@@ -210,14 +208,14 @@ class ImportGameCommand extends Command
                             $queuedFile->path,
                             $queuedFile->system,
                             $queuedFile->size,
-                            $timeout === 0 ? 'off' : (string)$timeout
+                            $timeout === 0 ? 'off' : (string)$timeout,
                         ),
-                        OutputInterface::VERBOSITY_VERBOSE
+                        OutputInterface::VERBOSITY_VERBOSE,
                     );
                     $result = $isolate
                         ? $this->dispatchIsolatedImport($queuedFile, $timeout, $force)
                         : $this->commandBus->dispatch(
-                            ImportResultFileCommand::fromQueuedFile($queuedFile, $timeout, $force)
+                            ImportResultFileCommand::fromQueuedFile($queuedFile, $timeout, $force),
                         );
                     $importResults[] = $result;
                     $this->writeImportResult($output, $result, microtime(true) - $startedAt);
@@ -227,7 +225,7 @@ class ImportGameCommand extends Command
             $output->writeln(
                 Colors::color(ForegroundColors::RED) .
                 $e->getMessage() .
-                Colors::reset()
+                Colors::reset(),
             );
             $output->setVerbosity(OutputInterface::VERBOSITY_VERBOSE);
             $output->writeln($e->getTraceAsString());
@@ -235,7 +233,7 @@ class ImportGameCommand extends Command
             return self::FAILURE;
         }
 
-        if (!$async) {
+        if ( ! $async) {
             $this->writeSynchronousImportSummary($output, $response->seen, $response->unchanged, $response->invalid, $importResults);
             if ($response->errors !== []) {
                 $output->writeln('<comment>Scan completed with ' . count($response->errors) . ' non-fatal errors.</comment>');
@@ -247,7 +245,7 @@ class ImportGameCommand extends Command
             Colors::color(ForegroundColors::GREEN) .
             'Queued: ' . $response->queued . '/' . $response->seen .
             ' changed result files. Unchanged: ' . $response->unchanged . '. Invalid: ' . $response->invalid . '.' .
-            Colors::reset()
+            Colors::reset(),
         );
         if ($response->errors !== []) {
             $output->writeln('<comment>Scan completed with ' . count($response->errors) . ' non-fatal errors.</comment>');
@@ -263,16 +261,20 @@ class ImportGameCommand extends Command
         bool            $isolate,
         bool            $force,
         OutputInterface $output,
-    ): int
-    {
+    ): int {
+        if ($file === '') {
+            $output->writeln('<error>Error: result file path cannot be empty.</error>');
+            return self::FAILURE;
+        }
+
         try {
             $output->writeln(
                 sprintf(
                     '<info>Importing result file %s (%s)</info>',
                     $file,
-                    $async ? 'async queue mode' : 'synchronous mode' . ($isolate ? ', isolated' : '')
+                    $async ? 'async queue mode' : 'synchronous mode' . ($isolate ? ', isolated' : ''),
                 ),
-                OutputInterface::VERBOSITY_VERBOSE
+                OutputInterface::VERBOSITY_VERBOSE,
             );
 
             /** @var ResultsDirectoryScanner $scanner */
@@ -290,11 +292,11 @@ class ImportGameCommand extends Command
                     'Queued: ' . $response->queued . '/' . $response->seen .
                     ' changed result files. Unchanged: ' . $response->unchanged .
                     '. Invalid: ' . $response->invalid . '.' .
-                    Colors::reset()
+                    Colors::reset(),
                 );
                 if ($response->errors !== []) {
                     $output->writeln(
-                        '<comment>Scan completed with ' . count($response->errors) . ' non-fatal errors.</comment>'
+                        '<comment>Scan completed with ' . count($response->errors) . ' non-fatal errors.</comment>',
                     );
                 }
                 return $response->invalid > 0 ? self::FAILURE : self::SUCCESS;
@@ -309,9 +311,9 @@ class ImportGameCommand extends Command
                         $queuedFile->path,
                         $queuedFile->system,
                         $queuedFile->size,
-                        $timeout === 0 ? 'off' : (string)$timeout
+                        $timeout === 0 ? 'off' : (string)$timeout,
                     ),
-                    OutputInterface::VERBOSITY_VERBOSE
+                    OutputInterface::VERBOSITY_VERBOSE,
                 );
                 $result = $isolate
                     ? $this->dispatchIsolatedImport($queuedFile, $timeout, $force)
@@ -325,11 +327,11 @@ class ImportGameCommand extends Command
                 $response->seen,
                 $response->unchanged,
                 $response->invalid,
-                $importResults
+                $importResults,
             );
             if ($response->errors !== []) {
                 $output->writeln(
-                    '<comment>Scan completed with ' . count($response->errors) . ' non-fatal errors.</comment>'
+                    '<comment>Scan completed with ' . count($response->errors) . ' non-fatal errors.</comment>',
                 );
             }
 
@@ -344,7 +346,7 @@ class ImportGameCommand extends Command
             $output->writeln(
                 Colors::color(ForegroundColors::RED) .
                 $e->getMessage() .
-                Colors::reset()
+                Colors::reset(),
             );
             $output->setVerbosity(OutputInterface::VERBOSITY_VERBOSE);
             $output->writeln($e->getTraceAsString());
@@ -358,8 +360,7 @@ class ImportGameCommand extends Command
         int             $timeout,
         bool            $force,
         OutputInterface $output,
-    ): int
-    {
+    ): int {
         $payload = file_get_contents($payloadFile);
         if ($payload === false) {
             $output->writeln('<error>Failed to read worker import payload.</error>');
@@ -367,7 +368,7 @@ class ImportGameCommand extends Command
         }
 
         $data = json_decode($payload, true);
-        if (!is_array($data)) {
+        if ( ! is_array($data)) {
             $output->writeln('<error>Invalid worker import payload.</error>');
             return self::FAILURE;
         }
@@ -401,8 +402,7 @@ class ImportGameCommand extends Command
         QueuedResultFileImport $queuedFile,
         int                    $timeout,
         bool $force = false,
-    ): ImportResultFileCommandResult
-    {
+    ): ImportResultFileCommandResult {
         $payloadFile = tempnam(TMP_DIR, 'result-import-');
         if ($payloadFile === false) {
             return new ImportResultFileCommandResult(
@@ -501,8 +501,7 @@ class ImportGameCommand extends Command
         }
     }
 
-    private function hasTimeoutCommand(): bool
-    {
+    private function hasTimeoutCommand(): bool {
         static $hasTimeout = null;
         if ($hasTimeout !== null) {
             return $hasTimeout;
@@ -520,11 +519,10 @@ class ImportGameCommand extends Command
      * @param QueuedResultFileImport[] $queuedFiles
      * @param ResultsScanError[] $errors
      */
-    private function writeScanDetails(OutputInterface $output, array $queuedFiles, array $errors): void
-    {
+    private function writeScanDetails(OutputInterface $output, array $queuedFiles, array $errors): void {
         $output->writeln(
             sprintf('<info>Scan found %d changed result file(s).</info>', count($queuedFiles)),
-            OutputInterface::VERBOSITY_VERBOSE
+            OutputInterface::VERBOSITY_VERBOSE,
         );
 
         foreach ($queuedFiles as $queuedFile) {
@@ -536,9 +534,9 @@ class ImportGameCommand extends Command
                     $queuedFile->mtime,
                     $queuedFile->size,
                     $queuedFile->contentHash,
-                    $queuedFile->version
+                    $queuedFile->version,
                 ),
-                OutputInterface::VERBOSITY_VERY_VERBOSE
+                OutputInterface::VERBOSITY_VERY_VERBOSE,
             );
         }
 
@@ -548,9 +546,9 @@ class ImportGameCommand extends Command
                     '<comment>Scan error: %s%s%s</comment>',
                     $error->message,
                     $error->path !== null ? ' path=' . $error->path : '',
-                    $error->system !== null ? ' system=' . $error->system : ''
+                    $error->system !== null ? ' system=' . $error->system : '',
                 ),
-                OutputInterface::VERBOSITY_VERBOSE
+                OutputInterface::VERBOSITY_VERBOSE,
             );
         }
     }
@@ -559,15 +557,14 @@ class ImportGameCommand extends Command
         OutputInterface               $output,
         ImportResultFileCommandResult $result,
         float                         $elapsedSeconds,
-    ): void
-    {
+    ): void {
         $message = sprintf(
             '  -> %s %.3fs %s%s%s',
             $result->status->value,
             $elapsedSeconds,
             $result->path,
             $result->event !== null ? ' event=' . $result->event : '',
-            $result->gameCode !== null ? ' game=' . $result->gameCode : ''
+            $result->gameCode !== null ? ' game=' . $result->gameCode : '',
         );
         if ($result->error !== null) {
             $message .= ' error=' . $result->error;
@@ -585,8 +582,7 @@ class ImportGameCommand extends Command
         int             $unchanged,
         int             $invalid,
         array           $importResults,
-    ): void
-    {
+    ): void {
         $counts = [
             ResultFileImportStatus::IMPORTED->value => 0,
             ResultFileImportStatus::SKIPPED->value => 0,
@@ -607,7 +603,7 @@ class ImportGameCommand extends Command
             '. Seen: ' . $seen .
             '. Unchanged: ' . $unchanged .
             '. Invalid: ' . $invalid . '.' .
-            Colors::reset()
+            Colors::reset(),
         );
     }
 }

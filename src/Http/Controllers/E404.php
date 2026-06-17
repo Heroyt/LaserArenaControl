@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @file      E404.php
  * @brief     Pages\E404 class
@@ -43,8 +45,7 @@ class E404 extends Controller implements HttpErrorHandler
      */
     protected string $description = 'Page not found';
 
-    public function showError(Request $request, ?Throwable $error = null): ResponseInterface
-    {
+    public function showError(Request $request, ?Throwable $error = null): ResponseInterface {
         $this->init($request);
         if (str_contains($request->getHeaderLine('Accept'), 'application/json')) {
             return $this->respond(
@@ -52,21 +53,21 @@ class E404 extends Controller implements HttpErrorHandler
                     'Resource not found',
                     type: ErrorType::NOT_FOUND,
                     detail: $error?->getMessage(),
-                    exception: $error
+                    exception: $error,
                 ),
-                404
+                404,
             );
         }
         if (str_contains($request->getHeaderLine('Accept'), 'text/html')) {
             $this->params['exception'] = $error;
             return $this->view('errors/E404')
-                        ->withStatus(404);
+                ->withStatus(404);
         }
 
         return $this->respond(
             'Resource not found - ' . ($error?->getMessage() ?? 'unknown error'),
             404,
-            ['Content-Type' => 'text/plain']
+            ['Content-Type' => 'text/plain'],
         );
     }
 }

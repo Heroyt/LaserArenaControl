@@ -1,14 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Gate\Screens\Results;
 
 use App\Gate\Screens\WithGameQR;
 use Lsr\Core\Requests\Dto\ErrorResponse;
 use Psr\Http\Message\ResponseInterface;
 
-/**
- *
- */
 class LaserMaxxRankableResultsScreen extends AbstractResultsScreen
 {
     use WithGameQR;
@@ -16,36 +15,32 @@ class LaserMaxxRankableResultsScreen extends AbstractResultsScreen
     /**
      * @inheritDoc
      */
-    public static function getName(): string
-    {
+    public static function getName(): string {
         return lang('LaserMaxx klasické výsledky', context: 'screens', domain: 'gate');
     }
 
-    public static function getDescription(): string
-    {
+    public static function getDescription(): string {
         return lang(
             'Obrazovka zobrazující výsledky LaserMaxx z klasických her.',
             context: 'screens.description',
-            domain: 'gate'
+            domain: 'gate',
         );
     }
 
     /**
      * @inheritDoc
      */
-    public static function getDiKey(): string
-    {
+    public static function getDiKey(): string {
         return 'gate.screens.results.lasermaxx.rankable';
     }
 
     /**
      * @inheritDoc
      */
-    public function run(): ResponseInterface
-    {
+    public function run(): ResponseInterface {
         $game = $this->game;
 
-        if (!isset($game)) {
+        if ( ! isset($game)) {
             return $this->respond(new ErrorResponse('Cannot show screen without game.'), 412);
         }
 
@@ -56,11 +51,11 @@ class LaserMaxxRankableResultsScreen extends AbstractResultsScreen
         return $this->view(
             'gate/screens/results/lasermaxxRankable',
             [
-            'game'   => $game,
-            'qr'     => $this->getQR($game),
-            'addJs'  => ['gate/results.js'],
-            'addCss' => ['gate/results.css'],
-            ]
+                'game'   => $game,
+                'qr'     => $this->getQR($game),
+                'addJs'  => ['gate/results.js'],
+                'addCss' => ['gate/results.css'],
+            ],
         );
     }
 }

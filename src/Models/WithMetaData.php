@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Lsr\Orm\Attributes\JsonExclude;
@@ -20,8 +22,7 @@ trait WithMetaData
      * @param  mixed  $value
      * @return $this
      */
-    public function setMetaValue(string $key, mixed $value): static
-    {
+    public function setMetaValue(string $key, mixed $value): static {
         $meta = $this->getMeta();
         $meta[$key] = $value;
         $this->setMeta($meta);
@@ -31,12 +32,10 @@ trait WithMetaData
     /**
      * @return T|array<string,mixed>
      */
-    public function getMeta(): array
-    {
-        if (!isset($this->metaData)) {
-            $this->metaData = !empty($this->meta) ? $this->unserializeMeta($this->meta) : [];
+    public function getMeta(): array {
+        if ( ! isset($this->metaData)) {
+            $this->metaData = ! empty($this->meta) ? $this->unserializeMeta($this->meta) : [];
         }
-        assert($this->metaData !== null);
         return $this->metaData;
     }
 
@@ -44,23 +43,20 @@ trait WithMetaData
      * @param  T|array<string,mixed>  $meta
      * @return $this
      */
-    public function setMeta(array $meta): static
-    {
+    public function setMeta(array $meta): static {
         $this->metaData = $meta;
         $this->meta = igbinary_serialize($meta);
         return $this;
     }
 
-    public function transformMetaForSave(?string $meta): ?string
-    {
+    public function transformMetaForSave(?string $meta): ?string {
         if ($meta === null) {
             return null;
         }
         return base64_encode($meta);
     }
 
-    public function transformMetaForLoad(?string $meta): ?string
-    {
+    public function transformMetaForLoad(?string $meta): ?string {
         if ($meta === null) {
             return null;
         }
@@ -77,8 +73,7 @@ trait WithMetaData
     /**
      * @return T|array<string,mixed>
      */
-    protected function unserializeMeta(string $meta): array
-    {
+    protected function unserializeMeta(string $meta): array {
         $decoded = base64_decode($meta, true);
         if ($decoded !== false && $this->canUnserializeMeta($decoded)) {
             /** `@var` T|array<string,mixed> $data */
@@ -93,10 +88,9 @@ trait WithMetaData
         return [];
     }
 
-    private function canUnserializeMeta(string $value): bool
-    {
+    private function canUnserializeMeta(string $value): bool {
         $unserialized = @igbinary_unserialize($value);
-        return !(
+        return ! (
             ($unserialized === false && $value !== igbinary_serialize(false)) ||
             ($unserialized === null && $value !== igbinary_serialize(null))
         );

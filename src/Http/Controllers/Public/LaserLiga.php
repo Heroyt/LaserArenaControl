@@ -37,14 +37,12 @@ class LaserLiga extends Controller
         $this->params = new LaserLigaTemplate();
     }
 
-    public function show(): ResponseInterface
-    {
+    public function show(): ResponseInterface {
         $this->prepareParams();
         return $this->view('pages/public/laserliga');
     }
 
-    private function prepareParams(): void
-    {
+    private function prepareParams(): void {
         $this->params->addCss = ['pages/laserLigaPublic.css'];
         $id = Info::get('liga_arena_id');
         $this->params->url = 'https://laserliga.cz/';
@@ -56,49 +54,48 @@ class LaserLiga extends Controller
             data: $this->params->url,
             encoding: new Encoding('UTF-8'),
         )
-          ->build()
-          ->getString();
+            ->build()
+            ->getString();
     }
 
-    public function register(Request $request): ResponseInterface
-    {
+    public function register(Request $request): ResponseInterface {
         $this->prepareParams();
         $acceptTypes = $this->getAcceptTypes($request);
         $sendJson = $request->isAjax() || in_array('application/json', $acceptTypes);
 
         // Validate register values
         $name = $request->getPost('name');
-        if (empty($name) || !is_string($name)) {
+        if (empty($name) || ! is_string($name)) {
             $this->params->errors['name'] = lang('Přezdívka je povinná', context: 'errors');
         } else {
             $this->params->registerValues['name'] = $name;
         }
 
         $email = $request->getPost('email');
-        if (empty($email) || !is_string($email)) {
+        if (empty($email) || ! is_string($email)) {
             $this->params->errors['email'] = lang('E-mail je povinný', context: 'errors');
-        } elseif (!Validators::isEmail($email)) {
+        } elseif ( ! Validators::isEmail($email)) {
             $this->params->errors['email'] = lang('E-mail není platný', context: 'errors');
         } else {
             $this->params->registerValues['email'] = $email;
         }
 
         $password = $request->getPost('password');
-        if (empty($password) || !is_string($password)) {
+        if (empty($password) || ! is_string($password)) {
             $this->params->errors['password'] = lang('Heslo je povinné', context: 'errors');
         }
 
         // Send error response
-        if (!empty($this->params->errors)) {
+        if ( ! empty($this->params->errors)) {
             if ($sendJson) {
                 return $this->respond(
                     new ErrorResponse(
                         lang('Formulář obsahuje chyby'),
                         ErrorType::VALIDATION,
                         /** @phpstan-ignore argument.type */
-                        values: $this->params->errors
+                        values: $this->params->errors,
                     ),
-                    400
+                    400,
                 );
             }
             return $this->view('pages/public/laserliga')->withStatus(400);
@@ -113,9 +110,9 @@ class LaserLiga extends Controller
                     new ErrorResponse(
                         lang('Registraci se nepodařilo odeslat'),
                         ErrorType::INTERNAL,
-                        exception: $e
+                        exception: $e,
                     ),
-                    500
+                    500,
                 );
             }
             $this->params->errors[] = lang('Registraci se nepodařilo odeslat');
@@ -127,7 +124,7 @@ class LaserLiga extends Controller
             $errorResponse = $this->serializer->deserialize(
                 $response->getBody()->getContents(),
                 ErrorResponse::class,
-                'json'
+                'json',
             );
             if ($sendJson) {
                 return $this->respond($errorResponse, $response->getStatusCode());
@@ -143,7 +140,7 @@ class LaserLiga extends Controller
         $playerData = $this->serializer->deserialize(
             $response->getBody()->getContents(),
             LigaPlayerData::class,
-            'json'
+            'json',
         );
         $player = $this->playerProvider->getPlayerObjectFromData($playerData);
         $this->params->newPlayer = $player;
@@ -154,8 +151,7 @@ class LaserLiga extends Controller
         return $this->view('pages/public/laserliga');
     }
 
-    public function topPlayers(): ResponseInterface
-    {
+    public function topPlayers(): ResponseInterface {
         $response = $this->cache->load(
             'topLigaPlayers',
             /** @phpstan-ignore argument.type */
@@ -171,9 +167,9 @@ class LaserLiga extends Controller
                 return $players ?? new ErrorResponse(lang('Nepodařilo se stáhnout informace o hráčích'));
             },
             [
-            'tags'   => ['api', 'players'],
-            'expire' => '1 days',
-            ]
+                'tags'   => ['api', 'players'],
+                'expire' => '1 days',
+            ],
         );
 
         if ($response instanceof ErrorResponse) {

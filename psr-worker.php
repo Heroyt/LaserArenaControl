@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Core\App;
 use Lsr\Roadrunner\Server;
 use Tracy\Debugger;
@@ -17,9 +19,9 @@ $app = App::getInstance();
 // Tracy logging
 Debugger::$logDirectory = LOG_DIR . 'tracy';
 if (
-    !file_exists(Debugger::$logDirectory) &&
-    !mkdir(Debugger::$logDirectory, 0777, true) &&
-    !is_dir(Debugger::$logDirectory)
+    ! file_exists(Debugger::$logDirectory) &&
+    ! mkdir(Debugger::$logDirectory, 0777, true) &&
+    ! is_dir(Debugger::$logDirectory)
 ) {
     Debugger::$logDirectory = LOG_DIR;
 }

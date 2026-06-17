@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tasks;
 
 use App\CQRS\Commands\ScanResultsDirectoryCommand;
@@ -12,21 +14,16 @@ use Spiral\RoadRunner\Jobs\Exception\JobsException;
 use Spiral\RoadRunner\Jobs\Task\ReceivedTaskInterface;
 use Throwable;
 
-/**
- *
- */
 readonly class GameImportTask implements TaskDispatcherInterface
 {
     public const int PRIORITY = 20;
 
     public function __construct(
-        private CommandBus $commandBus
-    )
-    {
+        private CommandBus $commandBus,
+    ) {
     }
 
-    public static function getDiName(): string
-    {
+    public static function getDiName(): string {
         return 'task.gamesImport';
     }
 
@@ -38,13 +35,12 @@ readonly class GameImportTask implements TaskDispatcherInterface
      * @throws ModelNotFoundException
      * @throws Throwable
      */
-    public function process(ReceivedTaskInterface $task, ?TaskPayloadInterface $payload = null): void
-    {
+    public function process(ReceivedTaskInterface $task, ?TaskPayloadInterface $payload = null): void {
         if ($payload === null) {
             $task->nack('Missing payload');
             return;
         }
-        if (!($payload instanceof GameImportPayload) || $payload->dir === '') {
+        if ( ! ($payload instanceof GameImportPayload) || $payload->dir === '') {
             $task->nack('Invalid payload');
             return;
         }

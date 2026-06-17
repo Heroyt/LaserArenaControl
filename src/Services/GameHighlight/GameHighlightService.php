@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services\GameHighlight;
 
 use App\Core\App;
@@ -19,6 +21,7 @@ use GuzzleHttp\Exception\GuzzleException;
 use JsonException;
 use Lsr\Caching\Cache;
 use Lsr\Db\DB;
+use RuntimeException;
 use Throwable;
 
 class GameHighlightService
@@ -67,19 +70,18 @@ class GameHighlightService
      * @return HighlightDto[]
      * @phpstan-ignore missingType.generics
      */
-    public function getHighlightsDataForDay(DateTimeInterface $date): array
-    {
+    public function getHighlightsDataForDay(DateTimeInterface $date): array {
         $highlights = [];
         $rows = DB::select(self::TABLE, '*')
-                  ->where('DATE([datetime]) = %d AND [object] IS NOT NULL', $date)
-                  ->orderBy('rarity')
-                  ->desc()
-                  ->cacheTags(
-                      'highlights',
-                      'highlights/' . $date->format('Y-m-d'),
-                      'games/' . $date->format('Y-m-d')
-                  )
-                  ->fetchAll();
+            ->where('DATE([datetime]) = %d AND [object] IS NOT NULL', $date)
+            ->orderBy('rarity')
+            ->desc()
+            ->cacheTags(
+                'highlights',
+                'highlights/' . $date->format('Y-m-d'),
+                'games/' . $date->format('Y-m-d'),
+            )
+            ->fetchAll();
         foreach ($rows as $row) {
             try {
                 $highlights[] = new HighlightDto(
@@ -98,19 +100,18 @@ class GameHighlightService
         return $highlights;
     }
 
-    public function getHighlightsForDay(DateTimeInterface $date): HighlightCollection
-    {
+    public function getHighlightsForDay(DateTimeInterface $date): HighlightCollection {
         /** @var string[] $rows */
         $rows = DB::select(self::TABLE, '[object]')
-                  ->where('DATE([datetime]) = %d AND [object] IS NOT NULL', $date)
-                  ->orderBy('rarity')
-                  ->desc()
-                  ->cacheTags(
-                      'highlights',
-                      'highlights/' . $date->format('Y-m-d'),
-                      'games/' . $date->format('Y-m-d')
-                  )
-                  ->fetchPairs();
+            ->where('DATE([datetime]) = %d AND [object] IS NOT NULL', $date)
+            ->orderBy('rarity')
+            ->desc()
+            ->cacheTags(
+                'highlights',
+                'highlights/' . $date->format('Y-m-d'),
+                'games/' . $date->format('Y-m-d'),
+            )
+            ->fetchPairs();
 
         $highlights = new HighlightCollection();
         foreach ($rows as $row) {
@@ -135,12 +136,11 @@ class GameHighlightService
      * @return HighlightCollection
      * @throws Throwable Cache error
      */
-    public function getHighlightsForGame(Game $game, bool $cache = true): HighlightCollection
-    {
+    public function getHighlightsForGame(Game $game, bool $cache = true): HighlightCollection {
         $dependencies = [
-          'tags' => $this->getCacheTags($game),
+            'tags' => $this->getCacheTags($game),
         ];
-        if (!$cache) {
+        if ( ! $cache) {
             $highlights = $this->loadHighlightsForGame($game);
             // Cache result
             $this->cache->save(
@@ -153,7 +153,7 @@ class GameHighlightService
 
         return $this->cache->load(
             'game.' . $game->code . '.highlights.' . App::getShortLanguageCode(),
-            fn() => $this->loadHighlightsForGame($game),
+            fn () => $this->loadHighlightsForGame($game),
             $dependencies,
         );
     }
@@ -165,12 +165,11 @@ class GameHighlightService
      * @param  G  $game
      * @return non-empty-string[]
      */
-    private function getCacheTags(Game $game): array
-    {
+    private function getCacheTags(Game $game): array {
         return [
-          'highlights',
+            'highlights',
             'highlights/' . $game->start?->format('Y-m-d'),
-          'games',
+            'games',
             'games/' . $game::SYSTEM,
             'games/' . $game::SYSTEM . '/' . $game->id,
             'games/' . $game->code,
@@ -189,8 +188,7 @@ class GameHighlightService
      * @return HighlightCollection
      * @throws GuzzleException
      */
-    private function loadHighlightsForGame(Game $game, bool $generate = false): HighlightCollection
-    {
+    private function loadHighlightsForGame(Game $game, bool $generate = false): HighlightCollection {
         $ligaActive = $this->config->isFeatureEnabled('LIGA') && $game->sync;
         $highlights = null;
         if ($generate) {
@@ -224,8 +222,7 @@ class GameHighlightService
      * @throws GuzzleException
      * @throws JsonException
      */
-    private function getHighlightsFromLiga(Game $game): HighlightCollection
-    {
+    private function getHighlightsFromLiga(Game $game): HighlightCollection {
         $response = $this->api->get('/api/games/' . $game->code . '/highlights');
         $response->getBody()->rewind();
         $contents = $response->getBody()->getContents();
@@ -242,7 +239,7 @@ class GameHighlightService
 
         foreach ($highlights as $highlight) {
             $collection->add(
-                (GameHighlightType::from($highlight['type'])->getHighlightClass()::fromJson($highlight, $game))
+                (GameHighlightType::from($highlight['type'])->getHighlightClass()::fromJson($highlight, $game)),
             );
         }
         return $collection;
@@ -255,8 +252,7 @@ class GameHighlightService
      * @param  G  $game
      * @return HighlightCollection
      */
-    private function generateHighlightsForGame(Game $game): HighlightCollection
-    {
+    private function generateHighlightsForGame(Game $game): HighlightCollection {
         $highlights = new HighlightCollection();
 
         foreach ($game->teams as $team) {
@@ -289,8 +285,7 @@ class GameHighlightService
      * @throws DriverException
      * @throws JsonException
      */
-    private function saveHighlightCollection(HighlightCollection $collection, Game $game): bool
-    {
+    private function saveHighlightCollection(HighlightCollection $collection, Game $game): bool {
         assert($game->isFinished());
         try {
             DB::getConnection()->begin();
@@ -298,17 +293,17 @@ class GameHighlightService
                 DB::replace(
                     $this::TABLE,
                     [
-                    'code'        => $game->code,
-                    'datetime'    => $game->start,
-                    'rarity'      => $highlight->rarityScore,
-                    'type'        => $highlight->type->value,
-                    'description' => $highlight->getDescription(),
-                    'players'     => json_encode(
-                        $this->getHighlightPlayers($highlight, $game),
-                        JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
-                    ),
-                      'object' => base64_encode(igbinary_serialize($highlight)),
-                    ]
+                        'code'        => $game->code,
+                        'datetime'    => $game->start,
+                        'rarity'      => $highlight->rarityScore,
+                        'type'        => $highlight->type->value,
+                        'description' => $highlight->getDescription(),
+                        'players'     => json_encode(
+                            $this->getHighlightPlayers($highlight, $game),
+                            JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES,
+                        ),
+                        'object' => base64_encode($this->serializeHighlight($highlight)),
+                    ],
                 );
             }
             DB::getConnection()->commit();
@@ -319,11 +314,11 @@ class GameHighlightService
 
         $this->cache->clean(
             [
-            $this->cache::Tags => [
-                'games/' . $game->code . '/highlights',
-                'highlights/' . $game->start->format('d-m-Y'),
+                $this->cache::Tags => [
+                    'games/' . $game->code . '/highlights',
+                    'highlights/' . $game->start->format('d-m-Y'),
+                ],
             ],
-            ]
         );
 
         return true;
@@ -341,8 +336,7 @@ class GameHighlightService
      *
      * @return array{name:string,label:string,user:string|null}[]
      */
-    public function getHighlightPlayers(GameHighlight $highlight, Game $game): array
-    {
+    public function getHighlightPlayers(GameHighlight $highlight, Game $game): array {
         preg_match_all($this::PLAYER_REGEXP, $highlight->getDescription(), $matches, PREG_SET_ORDER);
         $players = [];
         foreach ($matches as $match) {
@@ -364,8 +358,7 @@ class GameHighlightService
      *
      * @return P|null
      */
-    private function getPlayerByName(string $name, Game $game): ?Player
-    {
+    private function getPlayerByName(string $name, Game $game): ?Player {
         $this->playerCache[$game->code] ??= [];
         if (array_key_exists($name, $this->playerCache[$game->code])) { // Might be null, which is valid.
             /** @phpstan-ignore return.type */
@@ -384,14 +377,13 @@ class GameHighlightService
      *
      * @return HighlightCollection
      */
-    private function loadHighlightsForGameFromDb(Game $game): HighlightCollection
-    {
+    private function loadHighlightsForGameFromDb(Game $game): HighlightCollection {
         $highlights = new HighlightCollection();
         /** @var string[] $objects */
         $objects = DB::select($this::TABLE, '[object]')
-                     ->where('[code] = %s && [object] IS NOT NULL', $game->code)
-          ->cacheTags(...$this->getCacheTags($game))
-          ->fetchPairs();
+            ->where('[code] = %s && [object] IS NOT NULL', $game->code)
+            ->cacheTags(...$this->getCacheTags($game))
+            ->fetchPairs();
 
         foreach ($objects as $object) {
             $highlight = $this->unserializeHighlight($object);
@@ -399,7 +391,16 @@ class GameHighlightService
                 $highlights->add($highlight);
             }
         }
+
         return $highlights;
+    }
+
+    private function serializeHighlight(GameHighlight $highlight): string {
+        $serialized = igbinary_serialize($highlight);
+        if ($serialized === null) {
+            throw new RuntimeException('Failed to serialize game highlight.');
+        }
+        return $serialized;
     }
 
     /**
@@ -412,8 +413,7 @@ class GameHighlightService
      *
      * @return string
      */
-    public function playerNamesToLinks(string $highlightDescription, Game $game): string
-    {
+    public function playerNamesToLinks(string $highlightDescription, Game $game): string {
         $replaced = preg_replace_callback(
             $this::PLAYER_REGEXP,
             function (array $matches) use ($game) {
@@ -421,7 +421,7 @@ class GameHighlightService
                 $label = $matches[2] ?? $playerName;
 
                 $player = $this->getPlayerByName($playerName, $game);
-                if (!isset($player)) {
+                if ( ! isset($player)) {
                     return $label;
                 }
                 return '<a href="#player-' . str_replace(' ', '_', $playerName) . '" ' .
@@ -430,13 +430,12 @@ class GameHighlightService
                     'data-name="' . $playerName . '"  ' .
                     'data-vest="' . $player->vest . '">' . $label . '</a>';
             },
-            $highlightDescription
+            $highlightDescription,
         );
         return $replaced ?? $highlightDescription;
     }
 
-    private function unserializeHighlight(string $object): mixed
-    {
+    private function unserializeHighlight(string $object): mixed {
         $decoded = base64_decode($object, true);
         if ($decoded !== false && $this->canUnserializeHighlight($decoded)) {
             return @igbinary_unserialize($decoded);
@@ -444,10 +443,9 @@ class GameHighlightService
         return @igbinary_unserialize($object);
     }
 
-    private function canUnserializeHighlight(string $value): bool
-    {
+    private function canUnserializeHighlight(string $value): bool {
         $unserialized = @igbinary_unserialize($value);
-        return !(
+        return ! (
             ($unserialized === false && $value !== igbinary_serialize(false)) ||
             ($unserialized === null && $value !== igbinary_serialize(null))
         );

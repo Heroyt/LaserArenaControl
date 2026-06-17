@@ -1,18 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services;
 
 use App\Core\App;
 
 class GateStyleService
 {
-    public static function getGateBackgroundUrl(): string
-    {
+    public static function getGateBackgroundUrl(): string {
         return App::getInstance()->getBaseUrl() . str_replace(ROOT, '', self::getGateBackgroundPath());
     }
 
-    public static function getGateBackgroundPath(): string
-    {
+    public static function getGateBackgroundPath(): string {
         $image = UPLOAD_DIR . '/gate';
         if (file_exists($image . '.png')) {
             return $image . '.png';

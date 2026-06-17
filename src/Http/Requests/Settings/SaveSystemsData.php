@@ -12,29 +12,25 @@ class SaveSystemsData
     /** @var VestData[] */
     public array $vests = [];
 
-    public function addVest(VestData $vest): void
-    {
+    public function addVest(VestData $vest): void {
         $this->vests[] = $vest;
     }
 
     /**
      * @return VestData[]
      */
-    public function getVests(): array
-    {
+    public function getVests(): array {
         return $this->vests;
     }
 
-    public function addSystem(SystemData $system): void
-    {
+    public function addSystem(SystemData $system): void {
         $this->systems[] = $system;
     }
 
     /**
      * @return SystemData[]
      */
-    public function getSystems(): array
-    {
+    public function getSystems(): array {
         return $this->systems;
     }
 }

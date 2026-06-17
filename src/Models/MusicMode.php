@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use App\Core\App;
@@ -41,52 +43,43 @@ class MusicMode extends BaseModel implements MusicModeInterface
     /**
      * @return MusicMode[]
      */
-    public static function getAll(): array
-    {
+    public static function getAll(): array {
         return self::query()->orderBy('order')->get();
     }
 
-    public function getMediaUrl(): string
-    {
+    public function getMediaUrl(): string {
         return str_replace(ROOT, App::getInstance()->getBaseUrl(), $this->fileName);
     }
 
-    public function getIntroFileName(): ?string
-    {
+    public function getIntroFileName(): ?string {
         return $this->introFile === null ? null : basename($this->introFile);
     }
 
-    public function getArmedFileName(): ?string
-    {
+    public function getArmedFileName(): ?string {
         return $this->armedFile === null ? null : basename($this->armedFile);
     }
 
-    public function getEndingFileName(): ?string
-    {
+    public function getEndingFileName(): ?string {
         return $this->endingFile === null ? null : basename($this->endingFile);
     }
 
-    public function getIntroMediaUrl(): ?string
-    {
+    public function getIntroMediaUrl(): ?string {
         return $this->introFile === null ? null : str_replace(ROOT, App::getInstance()->getBaseUrl(), $this->introFile);
     }
 
-    public function getEndingMediaUrl(): ?string
-    {
+    public function getEndingMediaUrl(): ?string {
         return $this->endingFile === null ? null :
           str_replace(ROOT, App::getInstance()->getBaseUrl(), $this->endingFile);
     }
 
-    public function getArmedMediaUrl(): ?string
-    {
+    public function getArmedMediaUrl(): ?string {
         return $this->armedFile === null ? null : str_replace(ROOT, App::getInstance()->getBaseUrl(), $this->armedFile);
     }
 
-    public function setPreviewStartFromFormatted(string $formatted): MusicMode
-    {
+    public function setPreviewStartFromFormatted(string $formatted): MusicMode {
         $this->previewStart = 0;
         /** @var int[] $exploded */
-        $exploded = array_reverse(array_map(static fn(string $part) => (int) trim($part), explode(':', $formatted)));
+        $exploded = array_reverse(array_map(static fn (string $part) => (int) trim($part), explode(':', $formatted)));
         $multiplier = 1;
         foreach ($exploded as $part) {
             $this->previewStart += $part * $multiplier;
@@ -95,24 +88,21 @@ class MusicMode extends BaseModel implements MusicModeInterface
         return $this;
     }
 
-    public function getPreviewUrl(): string
-    {
+    public function getPreviewUrl(): string {
         return str_replace(ROOT, App::getInstance()->getBaseUrl(), $this->getPreviewFileName());
     }
 
-    public function getPreviewFileName(): string
-    {
+    public function getPreviewFileName(): string {
         $extension = pathinfo($this->fileName, PATHINFO_EXTENSION);
         return str_replace('.' . $extension, '.preview.mp3', $this->fileName);
     }
 
-    public function trimMediaToPreview(): string
-    {
+    public function trimMediaToPreview(): string {
         $outFile = $this->getPreviewFileName();
         $out = exec(
             'ffmpeg -i "' . $this->fileName . '" -ss ' . $this->getFormattedPreviewStart() . ' -t 0:30 -acodec copy -y "' . $outFile . '" 2>&1',
             $output,
-            $returnCode
+            $returnCode,
         );
         if ($out === false || $returnCode !== 0) {
             throw new RuntimeException('FFMPEG failed to trim the preview (' . $returnCode . '). ' . implode(';', $output));
@@ -120,23 +110,20 @@ class MusicMode extends BaseModel implements MusicModeInterface
         return $outFile;
     }
 
-    public function getFormattedPreviewStart(int $offset = 0): string
-    {
+    public function getFormattedPreviewStart(int $offset = 0): string {
         $start = $this->previewStart + $offset;
         return floor($start / 60) . ':' . str_pad((string)($start % 60), 2, '0', STR_PAD_LEFT);
     }
 
-    public function getBackgroundImage(): ?Image
-    {
-        if (!isset($this->backgroundImageObject) && isset($this->backgroundImage)) {
+    public function getBackgroundImage(): ?Image {
+        if ( ! isset($this->backgroundImageObject) && isset($this->backgroundImage)) {
             $this->backgroundImageObject = new Image($this->backgroundImage);
         }
         return $this->backgroundImageObject;
     }
 
-    public function getIcon(): ?Image
-    {
-        if (!isset($this->iconObject) && isset($this->icon)) {
+    public function getIcon(): ?Image {
+        if ( ! isset($this->iconObject) && isset($this->icon)) {
             $this->iconObject = new Image($this->icon);
         }
         return $this->iconObject;

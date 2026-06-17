@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Gate\Screens;
 
 use App\Core\Info;
@@ -21,17 +23,16 @@ trait WithGameQR
      * @return non-empty-string
      * @throws ValidationException
      */
-    protected function getQR(Game $game): string
-    {
+    protected function getQR(Game $game): string {
         $return = new Builder(
             writer: new SvgWriter(),
             data: $this->getPublicUrl($game),
             encoding: new Encoding('UTF-8'),
-            errorCorrectionLevel: ErrorCorrectionLevel::Low
+            errorCorrectionLevel: ErrorCorrectionLevel::Low,
         )
-          ->build()
-          ->getString();
-        assert(!empty($return));
+            ->build()
+            ->getString();
+        assert( ! empty($return));
         return $return;
     }
 
@@ -40,8 +41,7 @@ trait WithGameQR
      * @param  G  $game
      * @return non-empty-string
      */
-    protected function getPublicUrl(Game $game): string
-    {
+    protected function getPublicUrl(Game $game): string {
         /** @var string $url */
         $url = Info::get('liga_api_url');
         return trailingSlashIt($url) . 'g/' . $game->code . '?mtm_campaign=QR&mtm_kwd=gate';

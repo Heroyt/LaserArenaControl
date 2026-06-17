@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Gate\Screens\DayStats\WithRtsp;
 
 use App\Core\App;
@@ -38,46 +40,40 @@ class HighlightsWithRtspScreen extends GateScreen implements WithSettings
     /**
      * @inheritDoc
      */
-    public static function getName(): string
-    {
+    public static function getName(): string {
         return lang('Dnešní zajímavosti z her s kamerami', domain: 'gate', context: 'screens');
     }
 
-    public static function getDescription(): string
-    {
+    public static function getDescription(): string {
         return lang(
             'Obrazovka zobrazující zajímavosti z dnešních odehraných her.',
             domain: 'gate',
-            context: 'screens.description'
+            context: 'screens.description',
         );
     }
 
     /**
      * @inheritDoc
      */
-    public static function getDiKey(): string
-    {
+    public static function getDiKey(): string {
         return 'gate.screens.idle.highlights_cameras';
     }
 
-    public static function getGroup(): string
-    {
+    public static function getGroup(): string {
         return lang('Denní statistiky', domain: 'gate', context: 'screens.groups');
     }
 
     /**
      * @inheritDoc
      */
-    public static function getSettingsForm(): string
-    {
+    public static function getSettingsForm(): string {
         return 'gate/settings/rtsp.latte';
     }
 
     /**
      * @inheritDoc
      */
-    public static function buildSettingsFromForm(array $data): GateSettings
-    {
+    public static function buildSettingsFromForm(array $data): GateSettings {
         return new RtspSettings(
             array_filter(array_map('trim', explode("\n", $data['streams'] ?? ''))),
             (int)($data['max-streams'] ?? 9),
@@ -87,8 +83,7 @@ class HighlightsWithRtspScreen extends GateScreen implements WithSettings
     /**
      * @inheritDoc
      */
-    public function run(): ResponseInterface
-    {
+    public function run(): ResponseInterface {
         /** @var Request $request */
         $request = App::getInstance()->getRequest();
         /** @var string $date */
@@ -101,7 +96,7 @@ class HighlightsWithRtspScreen extends GateScreen implements WithSettings
 
         [$highlightsHash, $highlightsData] = $this->cache->load(
             'gate.today.highlights.' . $today->format('Y-m-d'),
-            fn() => [
+            fn () => [
                 $this->highlights->getHash(date: $today),
                 [
                     'data' => $this->highlights->getData(date: $today),
@@ -109,19 +104,19 @@ class HighlightsWithRtspScreen extends GateScreen implements WithSettings
                 ],
             ],
             [
-            'tags'   => [
-              'gate',
-              'gate.widgets',
-              'gate.widgets.highlights',
-                'games/' . $today->format('Y-m-d'),
+                'tags'   => [
+                    'gate',
+                    'gate.widgets',
+                    'gate.widgets.highlights',
+                    'games/' . $today->format('Y-m-d'),
+                ],
+                'expire' => '1 days',
             ],
-            'expire' => '1 days',
-            ]
         );
 
         [$musicHash, $musicData, $musicGameIds, $musicGameIdsRankable] = $this->cache->load(
             'gate.today.musicCounts.' . $today->format('Y-m-d'),
-            fn() => [
+            fn () => [
                 $this->musicCount->getHash(date: $today, systems: $this->systems),
                 [
                     'data' => $this->musicCount->getData(date: $today, systems: $this->systems),
@@ -132,18 +127,18 @@ class HighlightsWithRtspScreen extends GateScreen implements WithSettings
                     dateFrom: $today,
                     dateTo: $today,
                     systems: $this->systems,
-                    rankableOnly: true
+                    rankableOnly: true,
                 ),
             ],
             [
-            'tags'   => [
-              'gate',
-              'gate.widgets',
-              'gate.widgets.musicCounts',
-                'games/' . $today->format('Y-m-d'),
+                'tags'   => [
+                    'gate',
+                    'gate.widgets',
+                    'gate.widgets.musicCounts',
+                    'games/' . $today->format('Y-m-d'),
+                ],
+                'expire' => '1 days',
             ],
-            'expire' => '1 days',
-            ]
         );
 
         [$topPlayersHash, $topPlayersData] = $this->cache->load(
@@ -153,49 +148,48 @@ class HighlightsWithRtspScreen extends GateScreen implements WithSettings
                     [
                         'all' => $musicGameIds,
                         'rankable' => $musicGameIdsRankable,
-                    ]
+                    ],
                 );
                 return [
                     $this->topPlayerSkills->getHash(date: $today, systems: $this->systems),
                     [
-                  'data'     => $this->topPlayerSkills->getData(date: $today, systems: $this->systems),
-                  'template' => $this->topPlayerSkills->getTemplate(),
+                        'data'     => $this->topPlayerSkills->getData(date: $today, systems: $this->systems),
+                        'template' => $this->topPlayerSkills->getTemplate(),
                     ],
                 ];
             },
             [
-            'tags'   => [
-              'gate',
-              'gate.widgets',
-              'gate.widgets.topPlayers',
-                'games/' . $today->format('Y-m-d'),
+                'tags'   => [
+                    'gate',
+                    'gate.widgets',
+                    'gate.widgets.topPlayers',
+                    'games/' . $today->format('Y-m-d'),
+                ],
+                'expire' => '1 days',
             ],
-            'expire' => '1 days',
-            ]
         );
 
         return $this->view(
             'gate/screens/todayHighlightsRtsp',
             [
-            'settings'   => $this->getSettings(),
+                'settings'   => $this->getSettings(),
                 'screenHash' => md5($highlightsHash . $musicHash . $topPlayersHash),
-            'widgets'    => [
-              'highlights' => $highlightsData,
-              'music'      => $musicData,
-              'skills'     => $topPlayersData,
+                'widgets'    => [
+                    'highlights' => $highlightsData,
+                    'music'      => $musicData,
+                    'skills'     => $topPlayersData,
+                ],
+                'addJs'      => ['gate/todayHighlightsRtsp.js'],
+                'addCss'     => ['gate/todayHighlightsRtsp.css'],
             ],
-            'addJs'      => ['gate/todayHighlightsRtsp.js'],
-            'addCss'     => ['gate/todayHighlightsRtsp.css'],
-            ]
         );
     }
 
     /**
      * @inheritDoc
      */
-    public function getSettings(): RtspSettings
-    {
-        if (!isset($this->settings)) {
+    public function getSettings(): RtspSettings {
+        if ( ! isset($this->settings)) {
             $this->settings = new RtspSettings();
         }
         return $this->settings;
@@ -204,8 +198,7 @@ class HighlightsWithRtspScreen extends GateScreen implements WithSettings
     /**
      * @inheritDoc
      */
-    public function setSettings(GateSettings $settings): static
-    {
+    public function setSettings(GateSettings $settings): static {
         $this->settings = $settings;
         return $this;
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Api;
 
 use Lsr\Core\Controllers\ApiController;
@@ -10,8 +12,7 @@ use Psr\Http\Message\ResponseInterface;
 
 class Mount extends ApiController
 {
-    public function mount(Request $request): ResponseInterface
-    {
+    public function mount(Request $request): ResponseInterface {
         try {
             $logger = new Logger(LOG_DIR . 'api/', 'mount');
             $logger->info('Remounting all (' . $request->getIp() . ')');

@@ -18,18 +18,15 @@ class SyncMusicCommand extends Command
         parent::__construct($name);
     }
 
-    public static function getDefaultName(): string
-    {
+    public static function getDefaultName(): string {
         return 'laserliga:sync-music';
     }
 
-    public static function getDefaultDescription(): string
-    {
+    public static function getDefaultDescription(): string {
         return 'Synchronize all music modes to local Liga API.';
     }
 
-    public function run(InputInterface $input, OutputInterface $output): int
-    {
+    public function run(InputInterface $input, OutputInterface $output): int {
         $output->writeln('<info>Synchronizing music modes...</info>');
         if ($this->api->syncMusicModes()) {
             $output->writeln('<info>Success</info>');

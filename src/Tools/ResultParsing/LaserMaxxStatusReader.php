@@ -11,10 +11,9 @@ trait LaserMaxxStatusReader
 {
     private const int STATUS_READ_BYTES = 16384;
 
-    public static function readStatus(string $file, ?string $contents = null): ResultGameStatus
-    {
+    public static function readStatus(string $file, ?string $contents = null): ResultGameStatus {
         $contents ??= self::readStatusContents($file);
-        if ($contents === null || !static::checkFile($file, $contents)) {
+        if ($contents === null || ! static::checkFile($file, $contents)) {
             return ResultGameStatus::unknown(static::SYSTEM);
         }
 
@@ -65,9 +64,8 @@ trait LaserMaxxStatusReader
         );
     }
 
-    private static function readStatusContents(string $file): ?string
-    {
-        if (!is_file($file) || !is_readable($file)) {
+    private static function readStatusContents(string $file): ?string {
+        if ( ! is_file($file) || ! is_readable($file)) {
             return null;
         }
 
@@ -78,13 +76,11 @@ trait LaserMaxxStatusReader
     /**
      * @return string[]
      */
-    private static function getStatusArgs(string $args): array
-    {
+    private static function getStatusArgs(string $args): array {
         return array_map('trim', explode(',', $args));
     }
 
-    private static function parseStatusDate(string $value): ?DateTimeImmutable
-    {
+    private static function parseStatusDate(string $value): ?DateTimeImmutable {
         if ($value === '' || $value === static::EMPTY_DATE) {
             return null;
         }

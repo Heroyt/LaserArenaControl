@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Gate\Screens;
 
 use App\Gate\Settings\AnimationType;
@@ -20,32 +22,28 @@ class YoutubeScreen extends GateScreen implements WithSettings, ReloadTimerInter
     /**
      * @inheritDoc
      */
-    public static function getName(): string
-    {
+    public static function getName(): string {
         return lang('Youtube video', domain: 'gate', context: 'screens');
     }
 
     /**
      * @inheritDoc
      */
-    public static function getDiKey(): string
-    {
+    public static function getDiKey(): string {
         return 'gate.screens.youtube';
     }
 
     /**
      * @inheritDoc
      */
-    public static function getSettingsForm(): string
-    {
+    public static function getSettingsForm(): string {
         return 'gate/settings/youtube.latte';
     }
 
     /**
      * @inheritDoc
      */
-    public static function buildSettingsFromForm(array $data): GateSettings
-    {
+    public static function buildSettingsFromForm(array $data): GateSettings {
         $time = (int) ($data['time'] ?? 0);
         return new YoutubeSettings(
             self::convertToEmbedUrl($data['url'] ?? ''),
@@ -55,44 +53,39 @@ class YoutubeScreen extends GateScreen implements WithSettings, ReloadTimerInter
         );
     }
 
-    private static function convertToEmbedUrl(string $url): string
-    {
+    private static function convertToEmbedUrl(string $url): string {
         // Regular expression to match YouTube URL formats
         $pattern = '/^(?:https?:\/\/)?(?:www\.)?(?:youtube(?:-nocookie)?\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})$/';
 
         // If URL matches pattern, extract video ID and return embed URL
-        if (preg_match($pattern, $url, $matches) !== false) {
+        if (preg_match($pattern, $url, $matches) === 1) {
             $videoID = $matches[1];
-            bdump($videoID);
             return 'https://www.youtube-nocookie.com/embed/' . $videoID;
         }
 
-        bdump('Invalid URL: ' . $url);
         return '';
     }
 
     /**
      * @inheritDoc
      */
-    public function run(): ResponseInterface
-    {
+    public function run(): ResponseInterface {
         return $this->view(
             'gate/screens/youtube',
             [
-            'settings' => $this->getSettings(),
-            'url'      => $this->getSettings()->url,
-            'addCss'   => ['gate/youtube.css'],
-            'addJs'    => ['gate/youtube.js'],
-            ]
+                'settings' => $this->getSettings(),
+                'url'      => $this->getSettings()->url,
+                'addCss'   => ['gate/youtube.css'],
+                'addJs'    => ['gate/youtube.js'],
+            ],
         );
     }
 
     /**
      * @inheritDoc
      */
-    public function getSettings(): YoutubeSettings
-    {
-        if (!isset($this->settings)) {
+    public function getSettings(): YoutubeSettings {
+        if ( ! isset($this->settings)) {
             $this->settings = new YoutubeSettings('');
         }
         return $this->settings;
@@ -101,8 +94,7 @@ class YoutubeScreen extends GateScreen implements WithSettings, ReloadTimerInter
     /**
      * @inheritDoc
      */
-    public function setSettings(GateSettings $settings): static
-    {
+    public function setSettings(GateSettings $settings): static {
         bdump($settings);
         $this->settings = $settings;
         return $this;

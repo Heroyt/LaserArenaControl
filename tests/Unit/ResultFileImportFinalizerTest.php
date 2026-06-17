@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Unit;
 
 use App\GameModels\Game\Lasermaxx\Evo6\Game;
@@ -16,8 +18,7 @@ use PHPUnit\Framework\TestCase;
 
 class ResultFileImportFinalizerTest extends TestCase
 {
-    public function testTriggerImportedSkipsEmptyCount(): void
-    {
+    public function test_trigger_imported_skips_empty_count(): void {
         $eventService = $this->createEventServiceMock();
         $eventService
             ->expects($this->never())
@@ -29,8 +30,7 @@ class ResultFileImportFinalizerTest extends TestCase
     /**
      * @return EventService&MockObject
      */
-    private function createEventServiceMock(): EventService
-    {
+    private function createEventServiceMock(): EventService {
         return $this
             ->getMockBuilder(EventService::class)
             ->disableOriginalConstructor()
@@ -41,8 +41,7 @@ class ResultFileImportFinalizerTest extends TestCase
     private function createFinalizer(
         ?EventService     $eventService = null,
         ?GameStateStorage $gameStateStorage = null,
-    ): ResultFileImportFinalizer
-    {
+    ): ResultFileImportFinalizer {
         /** @var LigaApi&Stub $ligaApi */
         $ligaApi = $this->createStub(LigaApi::class);
 
@@ -53,12 +52,11 @@ class ResultFileImportFinalizerTest extends TestCase
             $eventService ?? $this->createStub(EventService::class),
             $ligaApi,
             $featureConfig,
-                $gameStateStorage ?? $this->createStub(GameStateStorage::class),
+            $gameStateStorage ?? $this->createStub(GameStateStorage::class),
         );
     }
 
-    public function testTriggerImportedDispatchesEvent(): void
-    {
+    public function test_trigger_imported_dispatches_event(): void {
         $eventService = $this->createEventServiceMock();
         $eventService
             ->expects($this->once())
@@ -69,8 +67,7 @@ class ResultFileImportFinalizerTest extends TestCase
         $this->createFinalizer($eventService)->triggerImported(2);
     }
 
-    public function testTriggerUnfinishedStoresGameAndDispatchesEvent(): void
-    {
+    public function test_trigger_unfinished_stores_game_and_dispatches_event(): void {
         /** @var Game $game */
         $game = $this->createStub(Game::class);
         $game->resultsFile = '0001';
@@ -102,8 +99,7 @@ class ResultFileImportFinalizerTest extends TestCase
             ->triggerUnfinished($game, 'game-loaded', $this->createStub(Logger::class));
     }
 
-    public function testFinalizeEmptyGameListOnlyLogs(): void
-    {
+    public function test_finalize_empty_game_list_only_logs(): void {
         $logger = $this
             ->getMockBuilder(Logger::class)
             ->disableOriginalConstructor()

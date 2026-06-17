@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services;
 
 use Lsr\Core\Config;
@@ -29,14 +31,13 @@ class FeatureConfig
             if (str_starts_with($key, 'FEATURE_')) {
                 $key = strtolower(str_replace('FEATURE_', '', $key));
                 $this->features[$key] = (is_int($value) && $value > 0) || (is_string($value) && strtolower(
-                            $value
-                        ) === 'true');
+                    $value,
+                ) === 'true');
             }
         }
     }
 
-    public function isFeatureEnabled(string $feature): bool
-    {
+    public function isFeatureEnabled(string $feature): bool {
         $feature = strtolower($feature);
         return isset($this->features[$feature]) && $this->features[$feature];
     }
@@ -44,8 +45,7 @@ class FeatureConfig
     /**
      * @return array<string,bool>
      */
-    public function getFeatures(): array
-    {
+    public function getFeatures(): array {
         return $this->features;
     }
 }

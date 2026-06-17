@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Cli\Commands\Regression;
 
 use App\Exceptions\InsufficientRegressionDataException;
@@ -18,18 +20,15 @@ class UpdateRegressionModelsCommand extends Command
         parent::__construct('regression:update');
     }
 
-    public static function getDefaultName(): ?string
-    {
+    public static function getDefaultName(): ?string {
         return 'regression:update';
     }
 
-    public static function getDefaultDescription(): ?string
-    {
+    public static function getDefaultDescription(): ?string {
         return 'Update all regression models.';
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): int
-    {
+    protected function execute(InputInterface $input, OutputInterface $output): int {
         try {
             $this->calculator->updateHitsModel(GameModeType::SOLO);
         } catch (InsufficientRegressionDataException) {
@@ -77,7 +76,7 @@ class UpdateRegressionModelsCommand extends Command
                 }
             } catch (InsufficientRegressionDataException) {
                 $output->writeln(
-                    sprintf('<error>Insufficient data for game mode: %s (#%d)</error>', $mode->name, $mode->id)
+                    sprintf('<error>Insufficient data for game mode: %s (#%d)</error>', $mode->name, $mode->id),
                 );
             }
         }

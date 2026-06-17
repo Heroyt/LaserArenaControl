@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tasks\Payloads;
 
 use Lsr\Roadrunner\Tasks\TaskPayloadInterface;
@@ -12,7 +14,6 @@ readonly class MusicLoadPayload implements TaskPayloadInterface
         public string $loader,
         public string $system = 'evo5',
         public ?float $timeSinceStart = null,
-    )
-    {
+    ) {
     }
 }

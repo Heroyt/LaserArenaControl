@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Api;
 
 use JsonException;
@@ -19,8 +21,7 @@ class Logs extends ApiController
     /**
      * @throws JsonException
      */
-    public function show(Request $request): ResponseInterface
-    {
+    public function show(Request $request): ResponseInterface {
         try {
             $logger = new Logger(LOG_DIR . 'api/', 'logs');
             $logger->info('Showing logs (' . $request->getIp() . ')');
@@ -33,11 +34,11 @@ class Logs extends ApiController
         if (empty($logFile)) {
             return $this->respond('Missing required argument "log".', 400);
         }
-        if (!file_exists(LOG_DIR . $logFile . '.log')) {
+        if ( ! file_exists(LOG_DIR . $logFile . '.log')) {
             /** @var string $date */
             $date = $request->getGet('date', date('Y-m-d'));
             $logFile .= '-' . $date . '.log';
-            if (!file_exists(LOG_DIR . $logFile) || !is_readable(LOG_DIR . $logFile)) {
+            if ( ! file_exists(LOG_DIR . $logFile) || ! is_readable(LOG_DIR . $logFile)) {
                 return $this->respond('Log file "' . $logFile . '" does not exist or is not readable.', 404);
             }
         } else {
@@ -51,9 +52,9 @@ class Logs extends ApiController
         $lines = [];
         foreach ($matches[0] as $key => $line) {
             $lines[] = [
-              'time'     => $matches[2][$key],
-              'severity' => $matches[3][$key],
-              'contents' => $matches[4][$key],
+                'time'     => $matches[2][$key],
+                'severity' => $matches[3][$key],
+                'contents' => $matches[4][$key],
             ];
         }
 
@@ -63,8 +64,7 @@ class Logs extends ApiController
     /**
      * @throws ArchiveCreationException
      */
-    public function download(Request $request): ResponseInterface
-    {
+    public function download(Request $request): ResponseInterface {
         try {
             $logger = new Logger(LOG_DIR . 'api/', 'logs');
             $logger->info('Downloading logs (' . $request->getIp() . ')');
@@ -76,9 +76,9 @@ class Logs extends ApiController
         $logFile = $request->getGet('log', '');
         /** @var string $date */
         $date = $request->getGet('date', date('Y-m-d'));
-        if (!empty($logFile)) {
+        if ( ! empty($logFile)) {
             $logFile .= '-' . $date . '.log';
-            if (!file_exists(LOG_DIR . $logFile) || !is_readable(LOG_DIR . $logFile)) {
+            if ( ! file_exists(LOG_DIR . $logFile) || ! is_readable(LOG_DIR . $logFile)) {
                 return $this->respond('Log file "' . $logFile . '" does not exist or is not readable.', 404);
             }
             header('Content-Type: text/plain');

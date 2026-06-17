@@ -46,8 +46,7 @@ readonly class ResultFileScanDecision implements JsonSerializable
     /**
      * @return array<string,mixed>
      */
-    public function jsonSerialize(): array
-    {
+    public function jsonSerialize(): array {
         return [
             'path' => $this->path,
             'pathHash' => $this->pathHash,

@@ -13,10 +13,9 @@ trait QueryModeBySystemsTrait
      * @param  value-of<SystemType>|System|SystemType|int  ...$systems  System type name, System object or system ID
      * @return $this
      */
-    public function systems(string|System|SystemType|int ...$systems): static
-    {
+    public function systems(string|System|SystemType|int ...$systems): static {
         $or = [
-          'systems IS NULL',
+            'systems IS NULL',
         ];
         foreach ($systems as $system) {
             /** @phpstan-ignore booleanAnd.alwaysFalse, identical.alwaysFalse */
@@ -33,10 +32,10 @@ trait QueryModeBySystemsTrait
                 $system = $system->type->value;
             }
             /** @phpstan-ignore empty.variable */
-            if (!empty($system)) {
+            if ( ! empty($system)) {
                 $or[] = [
-                  'systems LIKE %~like~',
-                  $system,
+                    'systems LIKE %~like~',
+                    $system,
                 ];
             }
         }

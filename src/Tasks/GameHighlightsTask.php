@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tasks;
 
 use App\GameModels\Factory\GameFactory;
@@ -10,42 +12,36 @@ use Lsr\Roadrunner\Tasks\TaskPayloadInterface;
 use Spiral\RoadRunner\Jobs\Exception\JobsException;
 use Spiral\RoadRunner\Jobs\Task\ReceivedTaskInterface;
 
-/**
- *
- */
 readonly class GameHighlightsTask implements TaskDispatcherInterface
 {
     public function __construct(
-        private GameHighlightService $highlightService
-    )
-    {
+        private GameHighlightService $highlightService,
+    ) {
     }
 
-    public static function getDiName(): string
-    {
+    public static function getDiName(): string {
         return 'task.gamesHighlights';
     }
 
     /**
      * @throws JobsException
      */
-    public function process(ReceivedTaskInterface $task, ?TaskPayloadInterface $payload = null): void
-    {
+    public function process(ReceivedTaskInterface $task, ?TaskPayloadInterface $payload = null): void {
         if ($payload === null) {
             $task->nack('Missing payload');
             return;
         }
-        if (!($payload instanceof GameHighlightsPayload)) {
+        if ( ! ($payload instanceof GameHighlightsPayload)) {
             $task->nack('Invalid payload');
             return;
         }
-        if (!isset($payload->code)) {
+        if ( ! isset($payload->code)) {
             $task->nack('Missing game code in payload');
             return;
         }
         echo 'Loading game highlights: ' . $payload->code;
         $game = GameFactory::getByCode($payload->code);
-        if (!isset($game)) {
+        if ( ! isset($game)) {
             $task->nack('Game not found');
             return;
         }

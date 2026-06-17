@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Core\App;
 use App\Http\Controllers\Settings\Gate;
 use App\Http\Controllers\Settings\Modes;

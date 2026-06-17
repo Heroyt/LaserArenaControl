@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Gate\Settings;
 
 /**
@@ -7,13 +9,12 @@ namespace App\Gate\Settings;
  * @method static MusicModeScreenLayout[] cases()
  * @method static MusicModeScreenLayout|null tryFrom(string $param)
  */
-enum MusicModeScreenLayout : string
+enum MusicModeScreenLayout: string
 {
     case EMPTY_SPACE = 'empty_space';
     case FULL_SCREEN = 'full_screen';
 
-    public function getReadableName(): string
-    {
+    public function getReadableName(): string {
         return match ($this) {
             self::EMPTY_SPACE => lang('Ve volném prostoru', domain: 'gate', context: 'screen.type'),
             self::FULL_SCREEN => lang('Celá obrazovka', domain: 'gate', context: 'screen.type'),

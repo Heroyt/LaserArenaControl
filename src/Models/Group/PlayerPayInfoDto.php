@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models\Group;
 
 use JsonSerializable;
@@ -14,16 +16,14 @@ class PlayerPayInfoDto implements JsonSerializable
         public int    $gamesPlayed,
         public int    $gamesPaid = 0,
         public ?int   $priceGroupId = null,
-    )
-    {
+    ) {
     }
 
     /**
      * @inheritDoc
      * @return array<string,mixed>
      */
-    public function jsonSerialize(): array
-    {
+    public function jsonSerialize(): array {
         return get_object_vars($this);
     }
 }

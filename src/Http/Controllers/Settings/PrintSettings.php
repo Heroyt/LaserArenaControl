@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Settings;
 
 use App\Core\Info;
@@ -21,21 +23,16 @@ use Nyholm\Psr7\UploadedFile;
 use Psr\Http\Message\ResponseInterface;
 use RuntimeException;
 
-/**
- *
- */
 class PrintSettings extends Controller
 {
     public string $title = 'Nastavení - Tisk';
 
     public function __construct(
         private readonly FeatureConfig $featureConfig,
-    )
-    {
+    ) {
     }
 
-    public function init(RequestInterface $request): void
-    {
+    public function init(RequestInterface $request): void {
         parent::init($request);
         $this->params['featureConfig'] = $this->featureConfig;
     }
@@ -47,8 +44,7 @@ class PrintSettings extends Controller
      * @throws TemplateDoesNotExistException
      * @throws ValidationException
      */
-    public function show(): ResponseInterface
-    {
+    public function show(): ResponseInterface {
         $this->params['styles'] = PrintStyle::getAll();
         $this->params['templates'] = PrintTemplate::getAll();
         $this->params['defaultTemplateId'] = Info::get('default_print_template', 'default');
@@ -60,8 +56,7 @@ class PrintSettings extends Controller
      * @throws DriverException
      * @throws JsonException
      */
-    public function save(Request $request): ResponseInterface
-    {
+    public function save(Request $request): ResponseInterface {
         if ($this->validate($request)) {
             try {
                 DB::getConnection()->begin();
@@ -78,8 +73,8 @@ class PrintSettings extends Controller
 
                 $printDir = 'upload/print/';
                 if (
-                    !file_exists(ROOT . 'upload/print') && !mkdir($concurrentDirectory = ROOT . 'upload/print') && !is_dir(
-                        $concurrentDirectory
+                    ! file_exists(ROOT . 'upload/print') && ! mkdir($concurrentDirectory = ROOT . 'upload/print') && ! is_dir(
+                        $concurrentDirectory,
                     )
                 ) {
                     $printDir = 'upload';
@@ -109,7 +104,7 @@ class PrintSettings extends Controller
                             $request,
                             $printDir,
                             $style,
-                            true
+                            true,
                         );
                     }
                     $style->default = $style->id === (int) ($request->getPost('default-style', 0));
@@ -125,10 +120,10 @@ class PrintSettings extends Controller
                     DB::insert(
                         PrintStyle::TABLE . '_dates',
                         [
-                        PrintStyle::getPrimaryKey() => $info['style'],
-                        'date_from'                 => $dateFrom,
-                        'date_to'                   => $dateTo,
-                        ]
+                            PrintStyle::getPrimaryKey() => $info['style'],
+                            'date_from'                 => $dateFrom,
+                            'date_to'                   => $dateTo,
+                        ],
                     );
                 }
 
@@ -144,10 +139,10 @@ class PrintSettings extends Controller
         if ($request->isAjax()) {
             return $this->respond(
                 [
-                'success' => empty($request->passErrors),
-                'errors'  => $request->passErrors,
+                    'success' => empty($request->passErrors),
+                    'errors'  => $request->passErrors,
                 ],
-                empty($request->passErrors) ? 200 : 500
+                empty($request->passErrors) ? 200 : 500,
             );
         }
         return $this->app->redirect('settings-print', $request);
@@ -158,8 +153,7 @@ class PrintSettings extends Controller
      *
      * @return bool
      */
-    private function validate(Request $request): bool
-    {
+    private function validate(Request $request): bool {
         // TODO: Actually validate request..
         return count($request->passErrors) === 0;
     }
@@ -177,9 +171,8 @@ class PrintSettings extends Controller
         Request      $request,
         string       $printDir,
         PrintStyle   $style,
-        bool         $landscape = false
-    ): void
-    {
+        bool         $landscape = false,
+    ): void {
         $clientFilename = $file->getClientFilename();
         if (empty($clientFilename)) {
             $request->passErrors[] = lang('Nelze nahrát soubor bez názvu.', context: 'errors');
@@ -192,9 +185,9 @@ class PrintSettings extends Controller
                 UPLOAD_ERR_INI_SIZE => lang('Nahraný soubor je příliš velký', context: 'errors') . ' - ' . $name,
                 UPLOAD_ERR_FORM_SIZE => lang('Form size is to large', context: 'errors') . ' - ' . $name,
                 UPLOAD_ERR_PARTIAL    => lang(
-                        'The uploaded file was only partially uploaded.',
-                    context: 'errors'
-                    ) . ' - ' . $name,
+                    'The uploaded file was only partially uploaded.',
+                    context: 'errors',
+                ) . ' - ' . $name,
                 UPLOAD_ERR_CANT_WRITE => lang('Failed to write file to disk.', context: 'errors') . ' - ' . $name,
                 default => lang('Error while uploading a file.', context: 'errors') . ' - ' . $name,
             };
@@ -209,11 +202,11 @@ class PrintSettings extends Controller
 
         $validTypes = ['jpg', 'png', 'jpeg'];
         $fileType = strtolower(pathinfo($name, PATHINFO_EXTENSION));
-        if (!in_array($fileType, $validTypes)) {
+        if ( ! in_array($fileType, $validTypes)) {
             $request->passErrors[] = lang(
                 'Nahraný soubor musí být v jednom z formátů: %s.',
                 context: 'errors',
-                format: [implode(', ', $validTypes)]
+                format: [implode(', ', $validTypes)],
             );
             return;
         }

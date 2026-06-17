@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Gate\Screens\Results;
 
 use App\Exceptions\GameModeNotFoundException;
@@ -8,9 +10,6 @@ use App\Gate\Screens\WithGameQR;
 use Lsr\Core\Requests\Dto\ErrorResponse;
 use Psr\Http\Message\ResponseInterface;
 
-/**
- *
- */
 class LaserMaxx100NabojuResultsScreen extends AbstractResultsScreen
 {
     use WithGameQR;
@@ -18,30 +17,26 @@ class LaserMaxx100NabojuResultsScreen extends AbstractResultsScreen
     /**
      * @inheritDoc
      */
-    public static function getName(): string
-    {
+    public static function getName(): string {
         return lang('LaserMaxx výsledky z módu 100 nábojů', context: 'screens', domain: 'gate');
     }
 
-    public static function getDescription(): string
-    {
+    public static function getDescription(): string {
         return lang(
             'Obrazovka zobrazující výsledky LaserMaxx z módu 100 nábojů.',
             context: 'screens.description',
-            domain: 'gate'
+            domain: 'gate',
         );
     }
 
     /**
      * @inheritDoc
      */
-    public static function getDiKey(): string
-    {
+    public static function getDiKey(): string {
         return 'gate.screens.results.lasermaxx.100naboju';
     }
 
-    public function isActive(): bool
-    {
+    public function isActive(): bool {
         try {
             return parent::isActive() && $this->game?->mode instanceof M100Naboju;
         } catch (GameModeNotFoundException) {
@@ -52,11 +47,10 @@ class LaserMaxx100NabojuResultsScreen extends AbstractResultsScreen
     /**
      * @inheritDoc
      */
-    public function run(): ResponseInterface
-    {
+    public function run(): ResponseInterface {
         $game = $this->game;
 
-        if (!isset($game)) {
+        if ( ! isset($game)) {
             return $this->respond(new ErrorResponse('Cannot show screen without game.'), 412);
         }
 
@@ -67,11 +61,11 @@ class LaserMaxx100NabojuResultsScreen extends AbstractResultsScreen
         return $this->view(
             'gate/screens/results/lasermaxx100naboju',
             [
-            'game'   => $game,
-            'qr'     => $this->getQR($game),
-            'mode'   => $game->mode,
-            'addCss' => ['gate/results.css'],
-            ]
+                'game'   => $game,
+                'qr'     => $this->getQR($game),
+                'mode'   => $game->mode,
+                'addCss' => ['gate/results.css'],
+            ],
         );
     }
 }

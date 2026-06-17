@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Unit;
 
 use Codeception\Test\Unit;
@@ -58,7 +60,7 @@ class StringsTest extends Unit
      *
      * @dataProvider camelCaseStrings
      */
-    public function testToCamelCase(string $original, string $expected): void {
+    public function test_to_camel_case(string $original, string $expected): void {
         $this::assertSame($expected, Strings::toCamelCase($original));
     }
 
@@ -68,7 +70,7 @@ class StringsTest extends Unit
      *
      * @dataProvider pascalCaseStrings
      */
-    public function testToPascalCase(string $original, string $expected): void {
+    public function test_to_pascal_case(string $original, string $expected): void {
         $this::assertSame($expected, Strings::toPascalCase($original));
     }
 
@@ -78,7 +80,7 @@ class StringsTest extends Unit
      *
      * @dataProvider snakeCaseStrings
      */
-    public function testToSnakeCase(string $original, string $expected): void {
+    public function test_to_snake_case(string $original, string $expected): void {
         $this::assertSame($expected, Strings::toSnakeCase($original));
     }
 }

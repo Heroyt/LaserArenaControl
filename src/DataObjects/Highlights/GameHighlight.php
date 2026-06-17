@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\DataObjects\Highlights;
 
 use App\GameModels\Game\Game;
@@ -27,8 +29,7 @@ class GameHighlight implements JsonSerializable
         public string                     $value,
         #[OA\Property]
         public int                        $rarityScore = self::LOW_RARITY,
-    )
-    {
+    ) {
     }
 
     /**
@@ -37,8 +38,7 @@ class GameHighlight implements JsonSerializable
      * @param  G  $game
      * @return static
      */
-    public static function fromJson(array $data, Game $game): static
-    {
+    public static function fromJson(array $data, Game $game): static {
         /** @phpstan-ignore new.static */
         return new static(
             GameHighlightType::from($data['type']),
@@ -50,18 +50,16 @@ class GameHighlight implements JsonSerializable
     /**
      * @return array<string,mixed>
      */
-    public function jsonSerialize(): array
-    {
+    public function jsonSerialize(): array {
         return [
-          'type'        => $this->type,
-          'score'       => $this->rarityScore,
-          'value'       => $this->value,
-          'description' => $this->getDescription(),
+            'type'        => $this->type,
+            'score'       => $this->rarityScore,
+            'value'       => $this->value,
+            'description' => $this->getDescription(),
         ];
     }
 
-    public function getDescription(): string
-    {
+    public function getDescription(): string {
         return $this->value;
     }
 }

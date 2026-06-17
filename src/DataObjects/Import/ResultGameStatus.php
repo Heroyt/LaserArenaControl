@@ -45,8 +45,7 @@ readonly class ResultGameStatus
         return ResultGameStatusState::UNKNOWN;
     }
 
-    public static function unknown(string $system): self
-    {
+    public static function unknown(string $system): self {
         return new self($system, state: ResultGameStatusState::UNKNOWN);
     }
 }

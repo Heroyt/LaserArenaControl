@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services\Evo5;
 
 use App\Core\Info;
@@ -17,9 +19,6 @@ use Lsr\Exceptions\TemplateDoesNotExistException;
 use Lsr\Lg\Results\Enums\GameModeType;
 use RuntimeException;
 
-/**
- *
- */
 class GameSimulator
 {
     public const int HIT_STD_DEVIATION = 30;
@@ -30,8 +29,7 @@ class GameSimulator
     public function __construct(
         private readonly Latte                    $latte,
         private readonly RegressionStatCalculator $regressionCalculator,
-    )
-    {
+    ) {
     }
 
     /**
@@ -39,16 +37,17 @@ class GameSimulator
      * @throws InsufficientRegressionDataException
      * @throws TemplateDoesNotExistException
      */
-    public function simulate(GameSimulationState $state = GameSimulationState::FINISHED): void
-    {
+    public function simulate(GameSimulationState $state = GameSimulationState::FINISHED): void {
         $loadDir = LMX_DIR . Info::get('evo5_load_file', 'games/');
         $loadFile = $loadDir . '0000.game';
-        if (!file_exists($loadFile)) {
+        if ( ! file_exists($loadFile)) {
             throw new RuntimeException('No game file to simulate');
         }
 
         $meta = [];
+        /** @var list<array{vest:string,name:string,team:string,vip:string,score:int|float,shots:int|float,hits:int,deaths:int,position:int,scoreForShots:int,scoreForBonuses:int,scoreForPowers:int,scoreForPodDeaths:int,ammoRemaining:int|float,accuracy:int,podHits:int,agent:int,invisibility:int,machineGun:int,shield:int,enemyHits:int,teammateHits:int,enemyDeaths:int,teammateDeaths:int,lives:int|float,scoreForHits:int,vipHits:int,playerHits:list<int|null>}> $players */
         $players = [];
+        /** @var array<string,array{key:string,name:string,playerCount:string,score:int|float,position:int}> $teams */
         $teams = [];
 
         [$start, $end] = $this->getGameTimes($state);
@@ -74,8 +73,8 @@ class GameSimulator
                 case 'GROUP':
                     $decodedJson = gzinflate(
                         (string)gzinflate(
-                            (string)base64_decode($args[1])
-                        )
+                            (string)base64_decode($args[1]),
+                        ),
                     );
                     if ($decodedJson !== false) {
                         try {
@@ -86,56 +85,56 @@ class GameSimulator
                         }
                     }
                     break;
-                // PACK contains information about vest settings
-                // - Vest number
-                // - Player name
-                // - Team number
-                // - ???
-                // - VIP
-                // - 2 unknown arguments
+                    // PACK contains information about vest settings
+                    // - Vest number
+                    // - Player name
+                    // - Team number
+                    // - ???
+                    // - VIP
+                    // - 2 unknown arguments
                 case 'PACK':
                     $players[] = [
-                      'vest'              => $args[0],
-                      'name'              => $args[1],
-                      'team'              => $args[2],
-                      'vip'               => $args[4],
-                      'score'             => 0,
-                      'shots'             => 0,
-                      'hits'              => 0,
-                      'deaths'            => 0,
-                      'position'          => 0,
-                      'scoreForShots'     => 0,
-                      'scoreForBonuses'   => 0,
-                      'scoreForPowers'    => 0,
-                      'scoreForPodDeaths' => 0,
-                      'ammoRemaining'     => 0,
-                      'accuracy'          => 0,
-                      'podHits'           => 0,
-                      'agent'             => 0,
-                      'invisibility'      => 0,
-                      'machineGun'        => 0,
-                      'shield'            => 0,
-                      'enemyHits'         => 0,
-                      'teammateHits'      => 0,
-                      'enemyDeaths'       => 0,
-                      'teammateDeaths'    => 0,
-                      'lives'             => 0,
-                      'scoreForHits'      => 0,
-                      'vipHits'           => 0,
-                      'playerHits'        => [],
+                        'vest'              => (string)$args[0],
+                        'name'              => (string)($args[1] ?? ''),
+                        'team'              => (string)($args[2] ?? ''),
+                        'vip'               => (string)($args[4] ?? ''),
+                        'score'             => 0,
+                        'shots'             => 0,
+                        'hits'              => 0,
+                        'deaths'            => 0,
+                        'position'          => 0,
+                        'scoreForShots'     => 0,
+                        'scoreForBonuses'   => 0,
+                        'scoreForPowers'    => 0,
+                        'scoreForPodDeaths' => 0,
+                        'ammoRemaining'     => 0,
+                        'accuracy'          => 0,
+                        'podHits'           => 0,
+                        'agent'             => 0,
+                        'invisibility'      => 0,
+                        'machineGun'        => 0,
+                        'shield'            => 0,
+                        'enemyHits'         => 0,
+                        'teammateHits'      => 0,
+                        'enemyDeaths'       => 0,
+                        'teammateDeaths'    => 0,
+                        'lives'             => 0,
+                        'scoreForHits'      => 0,
+                        'vipHits'           => 0,
+                        'playerHits'        => [],
                     ];
                     break;
-                // TEAM contains team info
-                // - Team number
-                // - Team name
-                // - Player count
+                    // TEAM contains team info
+                    // - Team number
+                    // - Team name
+                    // - Player count
                 case 'TEAM':
                     $teams[$args[0]] = [
-                      'key'         => $args[0],
-                      'name'        => $args[1],
-                      'playerCount' => $args[2],
-                      'score'       => 0,
-                      'position'    => 0,
+                        'key'         => (string)$args[0],
+                        'name'        => (string)($args[1] ?? ''),
+                        'playerCount' => (string)($args[2] ?? '0'),
+                        'score'       => 0,
+                        'position'    => 0,
                     ];
                     break;
             }
@@ -155,7 +154,9 @@ class GameSimulator
 
         $gameLength = 15;
 
+        /** @var array<string,array{team:int,enemy:int}> $teamsCounts */
         $teamsCounts = [];
+        /** @var array<string,array{hits:float,deaths:float,hitsOwn:float,deathsOwn:float}> $teamMedians */
         $teamMedians = [];
         foreach ($teams as $key => $team) {
             $teamsCounts[$team['key']] = ['team' => (int) $team['playerCount'], 'enemy' => 0];
@@ -166,22 +167,22 @@ class GameSimulator
                 $teamsCounts[$team['key']]['enemy'] += (int) $team2['playerCount'];
             }
             $teamMedians[$team['key']] = [
-              'hits'      => RegressionCalculator::calculateRegressionPrediction(
-                  [$teamsCounts[$team['key']]['team'], $teamsCounts[$team['key']]['enemy'], $gameLength],
-                  $hitsModel
-              ),
-              'deaths'    => RegressionCalculator::calculateRegressionPrediction(
-                  [$teamsCounts[$team['key']]['team'], $teamsCounts[$team['key']]['enemy'], $gameLength],
-                  $deathsModel
-              ),
-              'hitsOwn'   => RegressionCalculator::calculateRegressionPrediction(
-                  [$teamsCounts[$team['key']]['team'], $teamsCounts[$team['key']]['enemy'], $gameLength],
-                  $hitsOwnModel
-              ),
-              'deathsOwn' => RegressionCalculator::calculateRegressionPrediction(
-                  [$teamsCounts[$team['key']]['team'], $teamsCounts[$team['key']]['enemy'], $gameLength],
-                  $deathsOwnModel
-              ),
+                'hits'      => RegressionCalculator::calculateRegressionPrediction(
+                    [$teamsCounts[$team['key']]['team'], $teamsCounts[$team['key']]['enemy'], $gameLength],
+                    $hitsModel,
+                ),
+                'deaths'    => RegressionCalculator::calculateRegressionPrediction(
+                    [$teamsCounts[$team['key']]['team'], $teamsCounts[$team['key']]['enemy'], $gameLength],
+                    $deathsModel,
+                ),
+                'hitsOwn'   => RegressionCalculator::calculateRegressionPrediction(
+                    [$teamsCounts[$team['key']]['team'], $teamsCounts[$team['key']]['enemy'], $gameLength],
+                    $hitsOwnModel,
+                ),
+                'deathsOwn' => RegressionCalculator::calculateRegressionPrediction(
+                    [$teamsCounts[$team['key']]['team'], $teamsCounts[$team['key']]['enemy'], $gameLength],
+                    $deathsOwnModel,
+                ),
             ];
         }
 
@@ -190,19 +191,19 @@ class GameSimulator
         foreach ($players as $key => $player) {
             $players[$key]['enemyHits'] = Random::randomNormal(
                 $teamMedians[$player['team']]['hits'],
-                $this::HIT_STD_DEVIATION
+                $this::HIT_STD_DEVIATION,
             );
             $players[$key]['teammateHits'] = Random::randomNormal(
                 $teamMedians[$player['team']]['hitsOwn'],
-                $this::HIT_OWN_STD_DEVIATION
+                $this::HIT_OWN_STD_DEVIATION,
             );
             $players[$key]['enemyDeaths'] = Random::randomNormal(
                 $teamMedians[$player['team']]['deaths'],
-                $this::DEATH_STD_DEVIATION
+                $this::DEATH_STD_DEVIATION,
             );
             $players[$key]['teammateDeaths'] = Random::randomNormal(
                 $teamMedians[$player['team']]['deathsOwn'],
-                $this::DEATH_OWN_STD_DEVIATION
+                $this::DEATH_OWN_STD_DEVIATION,
             );
             $players[$key]['hits'] = $players[$key]['enemyHits'] + $players[$key]['teammateHits'];
             $players[$key]['deaths'] = $players[$key]['enemyDeaths'] + $players[$key]['teammateDeaths'];
@@ -220,11 +221,11 @@ class GameSimulator
 
             $hitsOwn = Random::randomSumDistribution(
                 $players[$key]['teammateHits'],
-                $teamsCounts[$player['team']]['team'] - 1
+                $teamsCounts[$player['team']]['team'] - 1,
             );
             $hitsEnemy = Random::randomSumDistribution(
                 $players[$key]['enemyHits'],
-                $teamsCounts[$player['team']]['enemy']
+                $teamsCounts[$player['team']]['enemy'],
             );
 
             foreach ($players as $key2 => $player2) {
@@ -264,12 +265,12 @@ class GameSimulator
         $content = $this->latte->viewToString(
             'gameFiles/evo5Results',
             [
-            'players' => $players,
-            'teams' => $teams,
-            'meta'  => $meta,
-            'start' => $start,
-            'end'   => $end,
-            ]
+                'players' => $players,
+                'teams' => $teams,
+                'meta'  => $meta,
+                'start' => $start,
+                'end'   => $end,
+            ],
         );
         file_put_contents(LMX_DIR . 'results/simulated.game', $content);
     }
@@ -277,8 +278,7 @@ class GameSimulator
     /**
      * @return array{DateTimeImmutable,DateTimeImmutable}
      */
-    private function getGameTimes(GameSimulationState $state): array
-    {
+    private function getGameTimes(GameSimulationState $state): array {
         return match ($state) {
             GameSimulationState::FINISHED => [
                 new DateTimeImmutable('- 16 minutes'),

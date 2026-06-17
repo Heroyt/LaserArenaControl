@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Cli\Commands\Translation;
 
 use App\Cli\Colors;
@@ -20,24 +22,21 @@ class CompileTranslationsCommand extends Command
         parent::__construct($name);
     }
 
-    public static function getDefaultName(): ?string
-    {
+    public static function getDefaultName(): ?string {
         return 'translations:compile';
     }
 
-    public static function getDefaultDescription(): ?string
-    {
+    public static function getDefaultDescription(): ?string {
         return 'Compile all translation PO files into MO.';
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): int
-    {
+    protected function execute(InputInterface $input, OutputInterface $output): int {
         $poLoader = new PoLoader();
         $moGenerator = new MoGenerator();
         foreach ($this->translations->supportedLanguages as $lang => $country) {
             $concatLang = $lang . '_' . $country;
             $path = LANGUAGE_DIR . $concatLang;
-            if (!is_dir($path)) {
+            if ( ! is_dir($path)) {
                 continue;
             }
             $file = $path . '/LC_MESSAGES/' . LANGUAGE_FILE_NAME . '.po';
@@ -46,7 +45,7 @@ class CompileTranslationsCommand extends Command
             if (
                 $moGenerator->generateFile(
                     $translation,
-                    $path . '/LC_MESSAGES/' . LANGUAGE_FILE_NAME . '.mo'
+                    $path . '/LC_MESSAGES/' . LANGUAGE_FILE_NAME . '.mo',
                 )
             ) {
                 $output->writeln('Compiled ' . $file);
@@ -54,7 +53,7 @@ class CompileTranslationsCommand extends Command
 
             foreach ($this->translations->textDomains as $domain) {
                 $file = $path . '/LC_MESSAGES/' . $domain . '.po';
-                if (!file_exists($file)) {
+                if ( ! file_exists($file)) {
                     $output->writeln('File "' . $file . '" does not exist.');
                     continue;
                 }
@@ -63,7 +62,7 @@ class CompileTranslationsCommand extends Command
                 if (
                     $moGenerator->generateFile(
                         $translation,
-                        $path . '/LC_MESSAGES/' . $domain . '.mo'
+                        $path . '/LC_MESSAGES/' . $domain . '.mo',
                     )
                 ) {
                     $output->writeln('Compiled ' . $file);
@@ -72,7 +71,7 @@ class CompileTranslationsCommand extends Command
         }
 
         $output->writeln(
-            Colors::color(ForegroundColors::GREEN) . 'Done' . Colors::reset()
+            Colors::color(ForegroundColors::GREEN) . 'Done' . Colors::reset(),
         );
         return self::SUCCESS;
     }

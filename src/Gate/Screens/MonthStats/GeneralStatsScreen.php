@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Gate\Screens\MonthStats;
 
 use App\Core\App;
@@ -24,38 +26,33 @@ class GeneralStatsScreen extends GateScreen
     /**
      * @inheritDoc
      */
-    public static function getName(): string
-    {
+    public static function getName(): string {
         return lang('Základní měsíční statistiky', context: 'screens', domain: 'gate');
     }
 
-    public static function getDescription(): string
-    {
+    public static function getDescription(): string {
         return lang(
             'Obrazovka zobrazující nejlepší hráče a počet odehraných her pro aktuální měsíc.',
             context: 'screens.description',
-            domain: 'gate'
+            domain: 'gate',
         );
     }
 
     /**
      * @inheritDoc
      */
-    public static function getDiKey(): string
-    {
+    public static function getDiKey(): string {
         return 'gate.screens.idle.month.stats';
     }
 
-    public static function getGroup(): string
-    {
+    public static function getGroup(): string {
         return lang('Měsíční statistiky', context: 'screens.groups', domain: 'gate');
     }
 
     /**
      * @inheritDoc
      */
-    public function run(): ResponseInterface
-    {
+    public function run(): ResponseInterface {
         /** @var Request $request */
         $request = App::getInstance()->getRequest();
         /** @var string $date */
@@ -65,11 +62,11 @@ class GeneralStatsScreen extends GateScreen
         $monthEnd = new DateTimeImmutable($today->format('Y-m-t'));
 
         $query = GameFactory::queryGames(true, fields: ['id_mode'])
-                            ->where(
-                                'DATE(start) BETWEEN %d AND %d',
-                                $monthStart,
-                                $monthEnd
-                            );
+            ->where(
+                'DATE(start) BETWEEN %d AND %d',
+                $monthStart,
+                $monthEnd,
+            );
         if (count($this->systems) > 0) {
             $query->where('system IN %in', $this->systems);
         }
@@ -82,9 +79,9 @@ class GeneralStatsScreen extends GateScreen
 
         /** @var int[] $rankableModeIds */
         $rankableModeIds = DB::select(AbstractMode::TABLE, 'id_mode')
-                             ->where('[rankable] = true')
-                             ->cacheTags(AbstractMode::TABLE)
-                             ->fetchPairs();
+            ->where('[rankable] = true')
+            ->cacheTags(AbstractMode::TABLE)
+            ->fetchPairs();
 
         foreach ($games as $system => $g) {
             /** @var array<int, Row> $g */
@@ -92,8 +89,8 @@ class GeneralStatsScreen extends GateScreen
             $gameIdsRankable[$system] = array_keys(
                 array_filter(
                     $g,
-                    static fn(Row $game) => in_array((int)$game->id_mode, $rankableModeIds, true)
-                )
+                    static fn (Row $game) => in_array((int)$game->id_mode, $rankableModeIds, true),
+                ),
             );
         }
 
@@ -102,30 +99,30 @@ class GeneralStatsScreen extends GateScreen
 
         // Calculate current screen hash (for caching)
         $hashData = [
-          'gameCount'   => $params['gameCount'],
-          'teamCount'   => $params['teamCount'],
-          'playerCount' => $params['playerCount'],
-          'scores'      => [],
-          'hits'        => [
-            $params['topHits']?->name,
-            $params['topHits']?->user?->getCode(),
-            $params['topHits']?->hits,
-          ],
-          'deaths'      => [
-            $params['topDeaths']?->name,
-            $params['topDeaths']?->user?->getCode(),
-            $params['topDeaths']?->deaths,
-          ],
-          'accuracy'    => [
-            $params['topAccuracy']?->name,
-            $params['topAccuracy']?->user?->getCode(),
-            $params['topAccuracy']?->accuracy,
-          ],
-          'shots'       => [
-            $params['topShots']?->name,
-            $params['topShots']?->user?->getCode(),
-            $params['topShots']?->shots,
-          ],
+            'gameCount'   => $params['gameCount'],
+            'teamCount'   => $params['teamCount'],
+            'playerCount' => $params['playerCount'],
+            'scores'      => [],
+            'hits'        => [
+                $params['topHits']?->name,
+                $params['topHits']?->user?->getCode(),
+                $params['topHits']?->hits,
+            ],
+            'deaths'      => [
+                $params['topDeaths']?->name,
+                $params['topDeaths']?->user?->getCode(),
+                $params['topDeaths']?->deaths,
+            ],
+            'accuracy'    => [
+                $params['topAccuracy']?->name,
+                $params['topAccuracy']?->user?->getCode(),
+                $params['topAccuracy']?->accuracy,
+            ],
+            'shots'       => [
+                $params['topShots']?->name,
+                $params['topShots']?->user?->getCode(),
+                $params['topShots']?->shots,
+            ],
         ];
         foreach ($params['topScores'] as $player) {
             $hashData['scores'][] = [$player->name, $player->user?->getCode(), $player->score];

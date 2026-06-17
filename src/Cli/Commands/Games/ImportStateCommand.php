@@ -6,6 +6,7 @@ namespace App\Cli\Commands\Games;
 
 use App\DataObjects\Import\ResultFileScanDecision;
 use App\Services\ResultsDirectoryScanner;
+use DateTimeInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
@@ -22,26 +23,22 @@ class ImportStateCommand extends Command
         $this->setDescription(self::getDefaultDescription() ?? 'Show result import state and scanner decisions.');
     }
 
-    public static function getDefaultName(): ?string
-    {
+    public static function getDefaultName(): ?string {
         return 'games:import-state';
     }
 
-    public static function getDefaultDescription(): ?string
-    {
+    public static function getDefaultDescription(): ?string {
         return 'Show result import state and scanner decisions for a result file or directory.';
     }
 
-    protected function configure(): void
-    {
+    protected function configure(): void {
         $this->addArgument('path', InputArgument::REQUIRED, 'Result file or directory.');
         $this->addOption('all', 'a', InputOption::VALUE_NONE, 'Show decision with force/all scan semantics.');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): int
-    {
+    protected function execute(InputInterface $input, OutputInterface $output): int {
         $path = $input->getArgument('path');
-        if (!is_string($path) || $path === '') {
+        if ( ! is_string($path) || $path === '') {
             $output->writeln('<error>Path is required.</error>');
             return self::INVALID;
         }
@@ -78,13 +75,12 @@ class ImportStateCommand extends Command
     /**
      * @return list<string>
      */
-    private function resolveFiles(string $path): array
-    {
+    private function resolveFiles(string $path): array {
         if (is_file($path)) {
             return [$path];
         }
 
-        if (!is_dir($path)) {
+        if ( ! is_dir($path)) {
             return [];
         }
 
@@ -100,8 +96,7 @@ class ImportStateCommand extends Command
     /**
      * @return list<string>
      */
-    private function formatDecision(ResultFileScanDecision $decision): array
-    {
+    private function formatDecision(ResultFileScanDecision $decision): array {
         return [
             $decision->path,
             $decision->action->value,
@@ -116,8 +111,7 @@ class ImportStateCommand extends Command
         ];
     }
 
-    private function age(?\DateTimeInterface $time): string
-    {
+    private function age(?DateTimeInterface $time): string {
         if ($time === null) {
             return '-';
         }
@@ -126,8 +120,7 @@ class ImportStateCommand extends Command
         return $seconds . 's';
     }
 
-    private function formatVersion(?string $version, ?string $hash): string
-    {
+    private function formatVersion(?string $version, ?string $hash): string {
         if ($version === null) {
             return '-';
         }

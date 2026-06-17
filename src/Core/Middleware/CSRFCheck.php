@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @author Tomáš Vojík <xvojik00@stud.fit.vutbr.cz>, <vojik@wboy.cz>
  */
@@ -21,10 +23,9 @@ class CSRFCheck implements Middleware
 {
     use MiddlewareResponder;
 
-    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
-    {
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
         $csrfName = $request->getUri()->getPath();
-        if (!formValid($csrfName)) {
+        if ( ! formValid($csrfName)) {
             return $this->respond(
                 $request,
                 new ErrorResponse('Request expired', ErrorType::ACCESS, 'Try reloading the page.'),

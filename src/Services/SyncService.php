@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @author Tomáš Vojík <xvojik00@stud.fit.vutbr.cz>, <vojik@wboy.cz>
  */
@@ -25,16 +27,15 @@ class SyncService
      * @return int
      * @throws Throwable
      */
-    public static function syncGames(int $limit = 5, ?float $timeout = null): int
-    {
+    public static function syncGames(int $limit = 5, ?float $timeout = null): int {
         $logger = new Logger(LOG_DIR, 'sync');
         /** @var Row[] $gameRows */
         $gameRows = GameFactory::queryGames(true, fields: ['sync'])
-                               ->where('[sync] = 0')
-                               ->limit($limit)
-                               ->orderBy('start')
-                               ->desc()
-                               ->fetchAll(cache: false);
+            ->where('[sync] = 0')
+            ->limit($limit)
+            ->orderBy('start')
+            ->desc()
+            ->fetchAll(cache: false);
 
         if (empty($gameRows)) {
             $logger->info('No games to synchronize.');
@@ -47,15 +48,15 @@ class SyncService
                 static function (object $row) {
                     return $row->id_game . ' - ' . $row->code;
                 },
-                $gameRows
-            )
-            );
+                $gameRows,
+            ),
+        );
         $logger->info($message);
 
         // Split games by their system
         $systems = [];
         foreach ($gameRows as $row) {
-            if (!isset($systems[$row->system])) {
+            if ( ! isset($systems[$row->system])) {
                 $systems[$row->system] = [];
             }
             $game = GameFactory::getByCode($row->code);
@@ -77,7 +78,7 @@ class SyncService
             // Send request in batches of 2 games max
             //$batchNum = 1;
             foreach ($games as $key => $game) {
-                if (!$game->sync()) {
+                if ( ! $game->sync()) {
                     $logger->warning('Failed to synchronize "' . $system . '" system (game ' . $key . ')');
                     continue;
                 }

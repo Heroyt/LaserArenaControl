@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Gate\Models;
 
 use App\Core\App;
@@ -19,9 +21,6 @@ use Lsr\Orm\ModelCollection;
 use Nette\Utils\Strings;
 use OpenApi\Attributes as OA;
 
-/**
- *
- */
 #[PrimaryKey('id_gate'), OA\Schema]
 class GateType extends BaseModel
 {
@@ -40,27 +39,25 @@ class GateType extends BaseModel
     #[OneToMany(class: GateScreenModel::class, factoryMethod: 'loadScreens')]
     public ModelCollection $screens;
 
-    public static function getBySlug(string $slug): ?GateType
-    {
+    public static function getBySlug(string $slug): ?GateType {
         $cache = App::getService('cache');
         assert($cache instanceof Cache);
         /** @var non-empty-string[] $tags */
         $tags = array_merge(
             ['models', self::TABLE, self::TABLE . '/' . $slug],
-            self::CACHE_TAGS
+            self::CACHE_TAGS,
         );
         return $cache->load(
             'gateType.slug.' . $slug,
-            fn() => static::query()->where('slug = %s', $slug)->first(),
+            fn () => static::query()->where('slug = %s', $slug)->first(),
             [
-            Cache::Tags   => $tags,
-            Cache::Expire => '7 days',
-            ]
+                Cache::Tags   => $tags,
+                Cache::Expire => '7 days',
+            ],
         );
     }
 
-    public function getQueryData(bool $filterChanged = true): array
-    {
+    public function getQueryData(bool $filterChanged = true): array {
         $data = parent::getQueryData($filterChanged);
         if (empty($data['slug'])) {
             $data['slug'] = $this->getSlug();
@@ -68,8 +65,7 @@ class GateType extends BaseModel
         return $data;
     }
 
-    public function getSlug(): string
-    {
+    public function getSlug(): string {
         if (empty($this->slug)) {
             $this->slug = str_replace(' ', '-', strtolower(Strings::toAscii($this->name)));
             // Test uniqueness
@@ -81,14 +77,12 @@ class GateType extends BaseModel
         return $this->slug;
     }
 
-    public function setSlug(string $slug): GateType
-    {
+    public function setSlug(string $slug): GateType {
         $this->slug = $slug;
         return $this;
     }
 
-    public function addScreenModel(GateScreenModel ...$screens): GateType
-    {
+    public function addScreenModel(GateScreenModel ...$screens): GateType {
         foreach ($screens as $screen) {
             $this->screens->models[] = $screen;
             $screen->gate = $this;
@@ -97,8 +91,7 @@ class GateType extends BaseModel
         return $this;
     }
 
-    public function removeScreenModel(GateScreenModel ...$screens): GateType
-    {
+    public function removeScreenModel(GateScreenModel ...$screens): GateType {
         foreach ($screens as $key2 => $findScreen) {
             foreach ($this->screens as $key => $screen) {
                 if ($screen->id === $findScreen->id) {
@@ -115,9 +108,8 @@ class GateType extends BaseModel
         GateScreen        $screen,
         ?GateSettings     $settings = null,
         ScreenTriggerType $trigger = ScreenTriggerType::DEFAULT,
-        int               $order = 0
-    ): GateType
-    {
+        int               $order = 0,
+    ): GateType {
         $screenModel = new GateScreenModel();
         $screenModel->setScreen($screen);
         if (isset($settings)) {
@@ -134,8 +126,7 @@ class GateType extends BaseModel
     public function findScreen(
         string            $screenType,
         ScreenTriggerType $trigger = ScreenTriggerType::DEFAULT,
-    ): ?GateScreenModel
-    {
+    ): ?GateScreenModel {
         foreach ($this->screens as $screen) {
             if ($screen->screenSerialized === $screenType && $screen->trigger === $trigger) {
                 return $screen;
@@ -149,8 +140,7 @@ class GateType extends BaseModel
      * @return GateScreenModel[]
      * @throws ValidationException
      */
-    public function getScreensForTrigger(ScreenTriggerType $trigger): array
-    {
+    public function getScreensForTrigger(ScreenTriggerType $trigger): array {
         $screens = [];
         foreach ($this->screens as $screen) {
             if ($screen->trigger === $trigger) {
@@ -160,18 +150,16 @@ class GateType extends BaseModel
         return $screens;
     }
 
-    public function save(): bool
-    {
+    public function save(): bool {
         return parent::save() && $this->saveScreens();
     }
 
-    public function saveScreens(): bool
-    {
+    public function saveScreens(): bool {
         $success = true;
 
         if (isset($this->screens)) {
             foreach ($this->screens as $screen) {
-                if (!isset($screen->gate)) {
+                if ( ! isset($screen->gate)) {
                     $screen->gate = $this;
                 }
                 $success = $success && $screen->save();
@@ -185,69 +173,62 @@ class GateType extends BaseModel
         return $success;
     }
 
-    public function setName(string $name): GateType
-    {
+    public function setName(string $name): GateType {
         $this->name = $name;
         return $this;
     }
 
-    public function setDescription(?string $description): GateType
-    {
+    public function setDescription(?string $description): GateType {
         $this->description = $description;
         return $this;
     }
 
-    public function setLocked(bool $locked): GateType
-    {
+    public function setLocked(bool $locked): GateType {
         $this->locked = $locked;
         return $this;
     }
 
-    public function getUrl(): string
-    {
+    public function getUrl(): string {
         return App::getLink($this->getPath());
     }
 
     /**
      * @return string[]
      */
-    public function getPath(): array
-    {
+    public function getPath(): array {
         return ['gate', $this->slug];
     }
 
     #[AfterUpdate, AfterInsert, AfterDelete]
-    public function clearCache(): void
-    {
+    public function clearCache(): void {
         parent::clearCache();
         /** @var Cache $cache */
         $cache = App::getService('cache');
         $cache->clean(
             [
-            $cache::Tags => ['core.menu'],
-            ]
+                $cache::Tags => ['core.menu'],
+            ],
         );
     }
 
     /**
      * @return ModelCollection<GateScreenModel&LoadedModel>
      */
-    protected function loadScreens(): ModelCollection
-    {
-        if (!isset($this->id)) {
+    protected function loadScreens(): ModelCollection {
+        if ( ! isset($this->id)) {
             return new ModelCollection();
         }
 
         /** @var non-empty-string[] $tags */
         $tags = array_merge(
             [
-            'models',
-            GateScreenModel::TABLE,
-            $this::TABLE,
+                'models',
+                GateScreenModel::TABLE,
+                $this::TABLE,
                 $this::TABLE . '/' . $this->id,
                 $this::TABLE . '/' . $this->id . '/relations',
             ],
-            GateScreenModel::CACHE_TAGS
+            GateScreenModel::CACHE_TAGS,
         );
 
         $cache = App::getService('cache');
@@ -255,15 +236,15 @@ class GateType extends BaseModel
         return new ModelCollection(
             $cache->load(
                 'gateType.' . $this->id . '.screens',
-                fn() => GateScreenModel::query()
+                fn () => GateScreenModel::query()
                     ->where('id_gate = %i', $this->id)
                     ->orderBy('order')
                     ->get(),
                 [
                     Cache::Tags => $tags,
                     Cache::Expire => '7 days',
-                ]
-            )
+                ],
+            ),
         );
     }
 }

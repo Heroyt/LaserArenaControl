@@ -18,18 +18,15 @@ class SyncPlayersCommand extends Command
         parent::__construct($name);
     }
 
-    public static function getDefaultName(): string
-    {
+    public static function getDefaultName(): string {
         return 'laserliga:sync-players';
     }
 
-    public static function getDefaultDescription(): string
-    {
+    public static function getDefaultDescription(): string {
         return 'Synchronize all players from LaserLiga API to local DB.';
     }
 
-    public function run(InputInterface $input, OutputInterface $output): int
-    {
+    public function run(InputInterface $input, OutputInterface $output): int {
         $output->writeln('<info>Synchronizing players...</info>');
         $this->synchronizationService->syncAllLocalPlayers();
         $output->writeln('<info>Checked old players for changes...</info>');

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Cli\Commands\Translation;
 
 use App\Core\App;
@@ -11,18 +13,15 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class RemoveCommentsCommand extends Command
 {
-    public static function getDefaultName(): ?string
-    {
+    public static function getDefaultName(): ?string {
         return 'translations:remove-comments';
     }
 
-    public static function getDefaultDescription(): ?string
-    {
+    public static function getDefaultDescription(): ?string {
         return 'Remove comments from all translation files.';
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): int
-    {
+    protected function execute(InputInterface $input, OutputInterface $output): int {
         $poLoader = new PoLoader();
         $poGenerator = new PoGenerator();
         $languages = App::getInstance()->translations->supportedLanguages;
@@ -32,7 +31,7 @@ class RemoveCommentsCommand extends Command
         foreach ($languages as $lang => $country) {
             $concatLang = $lang . '_' . $country;
             $path = LANGUAGE_DIR . '/' . $concatLang;
-            if (!is_dir($path)) {
+            if ( ! is_dir($path)) {
                 continue;
             }
             $file = $path . '/LC_MESSAGES/' . LANGUAGE_FILE_NAME . '.po';
@@ -46,7 +45,7 @@ class RemoveCommentsCommand extends Command
                 $comments->delete(...$all);
             }
 
-            if (!isset($template)) {
+            if ( ! isset($template)) {
                 $template = clone $translation;
             }
 
@@ -71,7 +70,7 @@ class RemoveCommentsCommand extends Command
         }
 
         $output->writeln(
-            '<info>Done</info>'
+            '<info>Done</info>',
         );
         return self::SUCCESS;
     }

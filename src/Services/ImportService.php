@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /** @noinspection PhpToStringImplementationInspection */
 
 /**
@@ -71,13 +73,13 @@ class ImportService
         }
 
         $file = null;
-        if (!empty($game->resultsFile)) {
+        if ( ! empty($game->resultsFile)) {
             $resultsFile = $game->resultsFile;
             $candidates = [$resultsFile];
             if (pathinfo($resultsFile, PATHINFO_EXTENSION) === '') {
                 $candidates[] = $resultsFile . '.game';
             }
-            if (!$this->isAbsolutePath($resultsFile)) {
+            if ( ! $this->isAbsolutePath($resultsFile)) {
                 $candidates[] = $resultsDir . $resultsFile;
                 if (pathinfo($resultsFile, PATHINFO_EXTENSION) === '') {
                     $candidates[] = $resultsDir . $resultsFile . '.game';
@@ -92,21 +94,21 @@ class ImportService
             }
         }
 
-        if ($file === null && $game instanceof \App\GameModels\Game\Lasermaxx\Game && !empty($game->fileNumber)) {
+        if ($file === null && $game instanceof \App\GameModels\Game\Lasermaxx\Game && ! empty($game->fileNumber)) {
             $pattern = $resultsDir . str_pad((string)$game->fileNumber, 4, '0', STR_PAD_LEFT) . '*.game';
             $files = glob($pattern);
             if (empty($files)) {
                 return new ErrorResponse(
                     'Cannot find game file.',
                     type: ErrorType::NOT_FOUND,
-                    values: ['path' => $pattern]
+                    values: ['path' => $pattern],
                 );
             }
             if (count($files) > 1) {
                 return new ErrorResponse(
                     'Found more than one suitable game file.',
                     type: ErrorType::INTERNAL,
-                    values: ['path' => $pattern, 'files' => $files]
+                    values: ['path' => $pattern, 'files' => $files],
                 );
             }
             $file = $files[0];
@@ -115,7 +117,7 @@ class ImportService
             return new ErrorResponse(
                 'Cannot get game file number.',
                 type: ErrorType::NOT_FOUND,
-                values: ['game' => $game]
+                values: ['game' => $game],
             );
         }
 
@@ -142,7 +144,7 @@ class ImportService
                     preserveGameCode: $code,
                     preservePlayerIdsByVest: $playerIds,
                     preserveTeamIdsByColor: $teamIds,
-                )
+                ),
             );
         } catch (Throwable $e) {
             return new ErrorResponse('Error while parsing game file.', type: ErrorType::INTERNAL, exception: $e);

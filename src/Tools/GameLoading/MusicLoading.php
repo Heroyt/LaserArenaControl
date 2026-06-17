@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tools\GameLoading;
 
 use App\Core\App;
@@ -11,9 +13,6 @@ use Lsr\Roadrunner\Tasks\TaskProducer;
 use Spiral\RoadRunner\Jobs\Exception\JobsException;
 use Spiral\RoadRunner\Jobs\Options;
 
-/**
- *
- */
 trait MusicLoading
 {
     private Config $config;
@@ -21,10 +20,9 @@ trait MusicLoading
     private Logger $logger;
     private bool $loadAsync;
 
-    protected function loadOrPlanMusic(int $musicId): void
-    {
+    protected function loadOrPlanMusic(int $musicId): void {
         $musicFile = trailingSlashIt($this->system->musicDir) . $this->system->type->value . '.mp3';
-        if (!file_exists($this->system->musicDir) || !is_dir($this->system->musicDir)) {
+        if ( ! file_exists($this->system->musicDir) || ! is_dir($this->system->musicDir)) {
             $musicFile = $this::MUSIC_FILE;
         }
         // Always eager-load armed music
@@ -48,25 +46,22 @@ trait MusicLoading
         $this->loadMusic($musicId, $musicFile, $this->system->type->value);
     }
 
-    protected function isLoadAsync(): bool
-    {
-        if (!isset($this->loadAsync)) {
+    protected function isLoadAsync(): bool {
+        if ( ! isset($this->loadAsync)) {
             $this->loadAsync = (bool) ($this->getConfig()->getConfig('ENV')['MUSIC_LOAD_ASYNC'] ?? false);
         }
         return $this->loadAsync;
     }
 
-    protected function getConfig(): Config
-    {
-        if (!isset($this->config)) {
+    protected function getConfig(): Config {
+        if ( ! isset($this->config)) {
             $this->config = App::getInstance()->config;
         }
         return $this->config;
     }
 
-    public function getLogger(): Logger
-    {
-        if (!isset($this->logger)) {
+    public function getLogger(): Logger {
+        if ( ! isset($this->logger)) {
             $this->logger = new Logger(LOG_DIR . 'loading/', $this::DI_NAME);
         }
         return $this->logger;
@@ -75,10 +70,9 @@ trait MusicLoading
     /**
      * @throws JobsException
      */
-    protected function planMusicLoad(int $musicId): void
-    {
+    protected function planMusicLoad(int $musicId): void {
         $musicFile = trailingSlashIt($this->system->musicDir) . $this->system->type->value . '.mp3';
-        if (!file_exists($this->system->musicDir) || !is_dir($this->system->musicDir)) {
+        if ( ! file_exists($this->system->musicDir) || ! is_dir($this->system->musicDir)) {
             $musicFile = $this::MUSIC_FILE;
         }
         $this->getTaskProducer()->push(
@@ -88,15 +82,14 @@ trait MusicLoading
                 $musicFile,
                 $this::DI_NAME,
                 $this->system->type->value,
-                microtime(true)
+                microtime(true),
             ),
-            new Options(priority: 1) // Priority job should be done as soon as possible
+            new Options(priority: 1), // Priority job should be done as soon as possible
         );
     }
 
-    protected function getTaskProducer(): TaskProducer
-    {
-        if (!isset($this->taskProducer)) {
+    protected function getTaskProducer(): TaskProducer {
+        if ( ! isset($this->taskProducer)) {
             $taskProducer = App::getService('roadrunner.tasks.producer');
             assert($taskProducer instanceof TaskProducer);
             $this->taskProducer = $taskProducer;

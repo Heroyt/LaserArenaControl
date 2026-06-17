@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Cli\Commands\Regression;
 
 use App\Cli\Colors;
@@ -19,26 +21,22 @@ class CalculateHitsRegressionCommand extends Command
         parent::__construct('regression:hits');
     }
 
-    public static function getDefaultName(): ?string
-    {
+    public static function getDefaultName(): ?string {
         return 'regression:hits';
     }
 
-    public static function getDefaultDescription(): ?string
-    {
+    public static function getDefaultDescription(): ?string {
         return 'Calculate hits regression.';
     }
 
-    protected function configure(): void
-    {
+    protected function configure(): void {
         $this->addArgument('type', InputArgument::OPTIONAL, 'TEAM/SOLO', 'TEAM');
         $this->addOption('teammates', 't', InputOption::VALUE_OPTIONAL, 'Teammate count', 5);
         $this->addOption('enemies', 'e', InputOption::VALUE_OPTIONAL, 'Enemy count', 5);
         $this->addOption('length', 'l', InputOption::VALUE_OPTIONAL, 'Game\'s length', 15);
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): int
-    {
+    protected function execute(InputInterface $input, OutputInterface $output): int {
         $type = GameModeType::from(strtoupper($input->getArgument('type')));
         $teammates = (int) $input->getOption('teammates');
         $enemies = (int) $input->getOption('enemies');
@@ -53,7 +51,7 @@ class CalculateHitsRegressionCommand extends Command
         }
 
         $output->writeln(
-            Colors::color(ForegroundColors::GREEN) . 'Prediction: ' . $expected . ' hits' . Colors::reset()
+            Colors::color(ForegroundColors::GREEN) . 'Prediction: ' . $expected . ' hits' . Colors::reset(),
         );
         return self::SUCCESS;
     }

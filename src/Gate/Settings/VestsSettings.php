@@ -1,20 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Gate\Settings;
 
 use App\Core\App;
 use Lsr\Core\Config;
 use Lsr\Core\Constants;
 
-/**
- *
- */
 readonly class VestsSettings extends GateSettings
 {
     use WithTime;
 
     public function __construct(
-        ?int $time = null
+        ?int $time = null,
     ) {
         /** @var Config $config */
         $config = App::getService('config');

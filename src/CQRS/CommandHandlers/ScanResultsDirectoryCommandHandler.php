@@ -17,15 +17,13 @@ readonly class ScanResultsDirectoryCommandHandler implements CommandHandlerInter
     public function __construct(
         private ResultsDirectoryScanner $scanner,
         private CommandBus $commandBus,
-    )
-    {
+    ) {
     }
 
     /**
      * @param ScanResultsDirectoryCommand $command
      */
-    public function handle(CommandInterface $command): ResultsScanResult
-    {
+    public function handle(CommandInterface $command): ResultsScanResult {
         $result = $this->scanner->scan(
             $command->dir,
             $command->all,
@@ -41,7 +39,7 @@ readonly class ScanResultsDirectoryCommandHandler implements CommandHandlerInter
                         $queuedFile,
                         $command->importTimeoutSeconds,
                         $command->forceImport,
-                    )
+                    ),
                 );
             }
 
@@ -51,7 +49,7 @@ readonly class ScanResultsDirectoryCommandHandler implements CommandHandlerInter
         if ($command->queueImports) {
             foreach ($result->queuedFiles as $queuedFile) {
                 $this->commandBus->dispatchAsync(
-                    ImportResultFileCommand::fromQueuedFile($queuedFile, force: $command->forceImport)
+                    ImportResultFileCommand::fromQueuedFile($queuedFile, force: $command->forceImport),
                 );
             }
         }

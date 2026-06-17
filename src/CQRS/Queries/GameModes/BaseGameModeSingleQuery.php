@@ -8,7 +8,7 @@ use App\GameModels\DataObjects\BaseGameModeRow;
 use Dibi\Exception;
 use Lsr\CQRS\QueryInterface;
 
-readonly final class BaseGameModeSingleQuery implements QueryInterface
+final readonly class BaseGameModeSingleQuery implements QueryInterface
 {
     use BaseGameModeQueryTrait;
     use QueryModeBySystemsTrait;
@@ -16,8 +16,7 @@ readonly final class BaseGameModeSingleQuery implements QueryInterface
     /**
      * @throws Exception
      */
-    public function get(): ?BaseGameModeRow
-    {
+    public function get(): ?BaseGameModeRow {
         return $this->query->fetchDto(BaseGameModeRow::class, $this->cache);
     }
 }

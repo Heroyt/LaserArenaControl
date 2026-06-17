@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @file      Loader.php
  * @brief     Core\Loader class
@@ -47,8 +49,7 @@ class Loader
      * @since   1.0
      * @version 1.0
      */
-    public static function init(): void
-    {
+    public static function init(): void {
         // Initialize app
         Timer::start('core.init.app');
         App::prettyUrl();
@@ -74,8 +75,7 @@ class Loader
      * @since   1.0
      * @version 1.0
      */
-    public static function initDB(): void
-    {
+    public static function initDB(): void {
         if (isset($_ENV['noDb'])) {
             return;
         }
@@ -85,7 +85,7 @@ class Loader
             DB::init($db);
         } catch (Exception | DriverException $e) {
             App::getInstance()->getLogger()->error(
-                'Cannot connect to the database! (' . $e->getCode() . ') ' . $e->getMessage()
+                'Cannot connect to the database! (' . $e->getCode() . ') ' . $e->getMessage(),
             );
             throw new RuntimeException(
                 'Cannot connect to the database!' . PHP_EOL .
@@ -93,13 +93,12 @@ class Loader
                 $e->getTraceAsString() . PHP_EOL .
                 json_encode(App::getInstance()->config->getConfig(), JSON_THROW_ON_ERROR),
                 $e->getCode(),
-                $e
+                $e,
             );
         }
     }
 
-    public static function loadModules(): void
-    {
+    public static function loadModules(): void {
         /** @var string[] $modules */
         $modules = App::getContainer()->findByType(Module::class);
         foreach ($modules as $moduleName) {

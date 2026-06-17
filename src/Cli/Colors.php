@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @author Tomáš Vojík <xvojik00@stud.fit.vutbr.cz>, <vojik@wboy.cz>
  */
@@ -29,9 +31,8 @@ class Colors
     public static function color(
         ?ForegroundColors $foreground = null,
         ?BackgroundColors $background = null,
-        ?TextAttributes   $attribute = null
-    ): string
-    {
+        ?TextAttributes   $attribute = null,
+    ): string {
         $return = '';
         if (isset($attribute)) {
             $return .= $attribute->value;
@@ -45,8 +46,7 @@ class Colors
         return $return;
     }
 
-    public static function reset(): string
-    {
+    public static function reset(): string {
         return self::COLOR_RESET;
     }
 }

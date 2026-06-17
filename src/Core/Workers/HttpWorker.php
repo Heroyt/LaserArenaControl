@@ -20,8 +20,7 @@ class HttpWorker extends \Lsr\Roadrunner\Workers\HttpWorker
         parent::__construct($error500Handler, $error404Handler, $error403Handler);
     }
 
-    public function handleRequest(RequestInterface $request): void
-    {
+    public function handleRequest(RequestInterface $request): void {
         Info::clearStaticCache();
         parent::handleRequest($request);
         $this->fontAwesome->saveIcons();

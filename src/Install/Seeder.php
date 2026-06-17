@@ -33,6 +33,7 @@ use App\Gate\Settings\VestsSettings;
 use App\Models\System;
 use Dibi\Exception;
 use Lsr\Db\DB;
+use RuntimeException;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -812,12 +813,16 @@ class Seeder implements InstallInterface
                 DB::delete(Tip::TABLE, ['1=1']);
             }
             foreach (self::TIPS as $id => $tip) {
+                $translations = igbinary_serialize($tip['translations']);
+                if ($translations === null) {
+                    throw new RuntimeException('Failed to serialize tip translations.');
+                }
                 DB::insertIgnore(
                     Tip::TABLE,
                     [
                         'id_tip' => $id,
                         'text'   => $tip['text'],
-                        'translations' => base64_encode(igbinary_serialize($tip['translations'])),
+                        'translations' => base64_encode($translations),
                     ],
                 );
             }

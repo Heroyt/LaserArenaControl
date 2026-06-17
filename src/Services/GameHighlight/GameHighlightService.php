@@ -21,6 +21,7 @@ use GuzzleHttp\Exception\GuzzleException;
 use JsonException;
 use Lsr\Caching\Cache;
 use Lsr\Db\DB;
+use RuntimeException;
 use Throwable;
 
 class GameHighlightService
@@ -301,7 +302,7 @@ class GameHighlightService
                             $this->getHighlightPlayers($highlight, $game),
                             JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES,
                         ),
-                        'object' => base64_encode(igbinary_serialize($highlight)),
+                        'object' => base64_encode($this->serializeHighlight($highlight)),
                     ],
                 );
             }
@@ -390,7 +391,16 @@ class GameHighlightService
                 $highlights->add($highlight);
             }
         }
+
         return $highlights;
+    }
+
+    private function serializeHighlight(GameHighlight $highlight): string {
+        $serialized = igbinary_serialize($highlight);
+        if ($serialized === null) {
+            throw new RuntimeException('Failed to serialize game highlight.');
+        }
+        return $serialized;
     }
 
     /**

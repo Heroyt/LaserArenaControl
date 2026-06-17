@@ -233,7 +233,7 @@ class HitsHighlightChecker implements GameHighlightChecker, PlayerHighlightCheck
 
             try {
                 if ($player->favouriteTarget !== null && $player->favouriteTarget->team?->color === $player->team?->color) {
-                    $name2 = $player->favouriteTarget->name ?? '';
+                    $name2 = $player->favouriteTarget->name;
                     $gender2 = GenderService::rankWord($name2);
                     $name2Verb = match ($gender2) {
                         Gender::OTHER, Gender::MALE => 'svého spoluhráče',

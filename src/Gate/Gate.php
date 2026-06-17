@@ -83,9 +83,11 @@ class Gate
                 || $activeGateType !== ScreenTriggerType::CUSTOM
                 )
             ) {
-                $screen = $screenModel->getScreen()
-                    ->setGame($game)
-                    ->setSystems($systems);
+                $screen = $screenModel->getScreen();
+                if ($screen === null) {
+                    continue;
+                }
+                $screen->setGame($game)->setSystems($systems);
 
                 if ($activeGateType === ScreenTriggerType::CUSTOM) {
                     $screen->setTriggerEvent($customEvent);
@@ -104,7 +106,11 @@ class Gate
                 }
             } else {
                 if ($screenModel->trigger === ScreenTriggerType::DEFAULT) {
-                    $defaultScreen = $screenModel->getScreen()->setGame($game)->setSystems($systems);
+                    $defaultScreen = $screenModel->getScreen();
+                    if ($defaultScreen === null) {
+                        continue;
+                    }
+                    $defaultScreen->setGame($game)->setSystems($systems);
                     $settings = $screenModel->getSettings();
                     if (isset($settings) && method_exists($defaultScreen, 'setSettings')) {
                         $defaultScreen->setSettings($settings);

@@ -62,7 +62,7 @@ class AssignGameModesCommand extends Command
                 . $game->code . ' '
                 . $gameSystem . ' '
                 . str_pad($game->modeName, 16) . ' (' . $game->gameType->value . ') '
-                . str_pad($game->mode->name ?? 'unknown', 20) . ' '
+                . str_pad($game->mode->name, 20) . ' '
                 . ' DB: ' . str_pad(
                     (
                         $mode === null ?

@@ -262,6 +262,11 @@ class ImportGameCommand extends Command
         bool            $force,
         OutputInterface $output,
     ): int {
+        if ($file === '') {
+            $output->writeln('<error>Error: result file path cannot be empty.</error>');
+            return self::FAILURE;
+        }
+
         try {
             $output->writeln(
                 sprintf(

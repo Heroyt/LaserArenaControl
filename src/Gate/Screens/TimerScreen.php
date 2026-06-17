@@ -10,6 +10,7 @@ use App\Gate\Models\GateScreenModel;
 use App\Gate\Settings\GateSettings;
 use App\Gate\Settings\TimerSettings;
 use Psr\Http\Message\ResponseInterface;
+use RuntimeException;
 
 /**
  * @implements WithSettings<TimerSettings>
@@ -96,8 +97,11 @@ class TimerScreen extends GateScreen implements WithSettings
         $timeRemaining = ($now % $this->getSettings()->timer) + 2;
 
         $screenModel = $screens[$activeScreen];
-        $screen = $screenModel->getScreen()
-            ->setReloadTime($timeRemaining)
+        $screen = $screenModel->getScreen();
+        if ($screen === null) {
+            throw new RuntimeException('Timer child screen is not configured.');
+        }
+        $screen->setReloadTime($timeRemaining)
             ->setGame($this->game)
             ->setParams($this->params);
         if ($screen instanceof WithSettings) {

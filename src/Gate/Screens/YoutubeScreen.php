@@ -58,13 +58,11 @@ class YoutubeScreen extends GateScreen implements WithSettings, ReloadTimerInter
         $pattern = '/^(?:https?:\/\/)?(?:www\.)?(?:youtube(?:-nocookie)?\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})$/';
 
         // If URL matches pattern, extract video ID and return embed URL
-        if (preg_match($pattern, $url, $matches) !== false) {
+        if (preg_match($pattern, $url, $matches) === 1) {
             $videoID = $matches[1];
-            bdump($videoID);
             return 'https://www.youtube-nocookie.com/embed/' . $videoID;
         }
 
-        bdump('Invalid URL: ' . $url);
         return '';
     }
 

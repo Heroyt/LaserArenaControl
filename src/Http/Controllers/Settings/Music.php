@@ -107,7 +107,6 @@ class Music extends Controller
                         $request->passErrors[] = lang('Failed to save data to the database', context: 'errors');
                         continue;
                     }
-                    assert($music->id !== null);
                     $allMusic[] = [
                         'id'       => $music->id,
                         'name'     => $music->name,
@@ -330,7 +329,7 @@ class Music extends Controller
                 );
             }
             return $this->respond(
-                array_merge([['status' => 'ok', 'errors' => [], 'notices' => $request->passNotices]], $data),
+                array_merge(['status' => 'ok', 'errors' => [], 'notices' => $request->passNotices], $data),
             );
         }
         return $this->app->redirect(['settings', 'music'], $request);

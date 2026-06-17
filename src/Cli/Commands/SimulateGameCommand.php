@@ -79,8 +79,17 @@ class SimulateGameCommand extends Command
     }
 
     private function getEvo6GameSimulator(): Evo6GameSimulator {
-        $this->evo6GameSimulator ??= App::getServiceByType(Evo6GameSimulator::class);
-        return $this->evo6GameSimulator;
+        if ($this->evo6GameSimulator instanceof Evo6GameSimulator) {
+            return $this->evo6GameSimulator;
+        }
+
+        $simulator = App::getServiceByType(Evo6GameSimulator::class);
+        if ( ! $simulator instanceof Evo6GameSimulator) {
+            throw new Exception('Evo6 game simulator service is not available.');
+        }
+
+        $this->evo6GameSimulator = $simulator;
+        return $simulator;
     }
 
     private function getState(InputInterface $input): GameSimulationState {

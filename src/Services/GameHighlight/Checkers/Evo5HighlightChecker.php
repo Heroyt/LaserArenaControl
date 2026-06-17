@@ -36,7 +36,7 @@ class Evo5HighlightChecker implements GameHighlightChecker
                 $mineDeaths[] = $player;
             }
             if (($bonusCount = $player->bonus->getSum()) > 0) {
-                $powers[] = $powers;
+                $powers[] = $player;
                 if ($bonusCount > $powersMax) {
                     $powersSecondMax = $powersMax;
                     $powersMax = $bonusCount;

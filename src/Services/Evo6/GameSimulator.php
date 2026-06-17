@@ -45,7 +45,9 @@ class GameSimulator
         }
 
         $meta = [];
+        /** @var list<array{vest:string,name:string,team:string,vip:bool,birthday:bool,score:int|float,shots:int|float,hits:int,deaths:int,position:int,myLasermaxx:string,activity:int,calories:int,scoreForShots:int,scoreForBonuses:int,scoreForPowers:int,scoreForPodDeaths:int,ammoRemaining:int|float,accuracy:int,podHits:int,enemyHits:int,teammateHits:int,enemyDeaths:int,teammateDeaths:int,lives:int|float,scoreForHits:int|float,vipHits:int,scoreForActivity:int,scoreEncouragement:int,scoreKnockout:int,scoreReality:int,bonusCount:int,penaltyCount:int,scorePenalty:int,playerHits:list<int>}> $players */
         $players = [];
+        /** @var array<string,array{key:string,name:string,playerCount:string,score:int|float,position:int}> $teams */
         $teams = [];
         $soloTeam = 2;
 
@@ -85,9 +87,9 @@ class GameSimulator
                     break;
                 case 'PACK':
                     $players[] = [
-                        'vest' => $args[0],
-                        'name' => $args[1],
-                        'team' => $args[2],
+                        'vest' => (string)$args[0],
+                        'name' => (string)($args[1] ?? ''),
+                        'team' => (string)($args[2] ?? ''),
                         'vip' => (bool)($args[4] ?? false),
                         'birthday' => (bool)($args[7] ?? false),
                         'score' => 0,
@@ -124,9 +126,9 @@ class GameSimulator
                     break;
                 case 'TEAM':
                     $teams[$args[0]] = [
-                        'key' => $args[0],
-                        'name' => $args[1],
-                        'playerCount' => $args[2],
+                        'key' => (string)$args[0],
+                        'name' => (string)($args[1] ?? ''),
+                        'playerCount' => (string)($args[2] ?? '0'),
                         'score' => 0,
                         'position' => 0,
                     ];
@@ -147,7 +149,9 @@ class GameSimulator
 
         $gameLength = 15;
 
+        /** @var array<string,array{team:int,enemy:int}> $teamsCounts */
         $teamsCounts = [];
+        /** @var array<string,array{hits:float,deaths:float,hitsOwn:float,deathsOwn:float}> $teamMedians */
         $teamMedians = [];
         foreach ($teams as $key => $team) {
             $teamsCounts[$team['key']] = ['team' => (int)$team['playerCount'], 'enemy' => 0];

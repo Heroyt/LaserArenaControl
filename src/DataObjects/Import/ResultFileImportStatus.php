@@ -10,6 +10,8 @@ enum ResultFileImportStatus: string
     case QUEUED = 'queued';
     case PROCESSING = 'processing';
     case IMPORTED = 'imported';
+    case LOADED = 'loaded';
+    case STARTED = 'started';
     case SKIPPED = 'skipped';
     case FAILED = 'failed';
     case STALE = 'stale';

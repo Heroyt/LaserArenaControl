@@ -17,7 +17,7 @@ tables:
 			`processed_version` char(40) DEFAULT NULL,
 			`processed_hash` char(64) DEFAULT NULL,
 			`processed_at` datetime DEFAULT NULL,
-			`status` enum('seen','queued','processing','imported','skipped','failed','stale') NOT NULL DEFAULT 'seen',
+			`status` enum('seen','queued','processing','imported','loaded','started','skipped','failed','stale') NOT NULL DEFAULT 'seen',
 			`attempts` int(10) unsigned NOT NULL DEFAULT 0,
 			`last_error` text DEFAULT NULL,
 			`last_game_code` varchar(50) DEFAULT NULL,
@@ -35,6 +35,8 @@ tables:
 				- 'MODIFY `processing_version` char(40) DEFAULT NULL'
 				- 'MODIFY `processed_version` char(40) DEFAULT NULL'
 				- 'MODIFY `processed_hash` char(64) DEFAULT NULL'
+			0.2:
+				- 'MODIFY `status` enum(''seen'',''queued'',''processing'',''imported'',''loaded'',''started'',''skipped'',''failed'',''stale'') NOT NULL DEFAULT ''seen'''
 		indexes:
 			-
 				name: 'path_hash'

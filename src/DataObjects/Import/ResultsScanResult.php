@@ -12,7 +12,9 @@ readonly class ResultsScanResult implements JsonSerializable
 {
     /**
      * @param list<QueuedResultFileImport> $queuedFiles
+     * @param list<ImportResultFileCommandResult> $importResults
      * @param list<ResultsScanError> $errors
+     * @param list<ResultFileScanDecision> $decisions
      */
     public function __construct(
         #[OA\Property]
@@ -27,10 +29,32 @@ readonly class ResultsScanResult implements JsonSerializable
         public int    $invalid,
         #[OA\Property(items: new OA\Items(ref: '#/components/schemas/QueuedResultFileImport'))]
         public array $queuedFiles = [],
+        #[OA\Property(items: new OA\Items(ref: '#/components/schemas/ImportResultFileCommandResult'))]
+        public array $importResults = [],
         #[OA\Property(items: new OA\Items(ref: '#/components/schemas/ResultsScanError'))]
         public array  $errors = [],
+        #[OA\Property(items: new OA\Items(ref: '#/components/schemas/ResultFileScanDecision'))]
+        public array $decisions = [],
     )
     {
+    }
+
+    /**
+     * @param list<ImportResultFileCommandResult> $importResults
+     */
+    public function withImportResults(array $importResults): self
+    {
+        return new self(
+            $this->dir,
+            $this->seen,
+            $this->queued,
+            $this->unchanged,
+            $this->invalid,
+            $this->queuedFiles,
+            $importResults,
+            $this->errors,
+            $this->decisions,
+        );
     }
 
     /**

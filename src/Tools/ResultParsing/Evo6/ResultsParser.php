@@ -12,6 +12,7 @@ use App\GameModels\Game\Lasermaxx\Evo6\Team;
 use App\Models\Auth\Player as User;
 use App\Models\GameGroup;
 use App\Models\MusicMode;
+use App\Tools\ResultParsing\LaserMaxxStatusReader;
 use App\Tools\ResultParsing\WithExtensions;
 
 /**
@@ -23,6 +24,7 @@ use App\Tools\ResultParsing\WithExtensions;
  */
 class ResultsParser extends \Lsr\Lg\Results\LaserMaxx\Evo6\ResultsParser
 {
+    use LaserMaxxStatusReader;
     use WithExtensions;
 
     public const string  MUSIC_CLASS = MusicMode::class;

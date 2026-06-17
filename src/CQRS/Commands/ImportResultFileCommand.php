@@ -15,6 +15,10 @@ use Lsr\CQRS\CommandInterface;
  */
 final readonly class ImportResultFileCommand implements CommandInterface
 {
+    /**
+     * @param array<int|string, int> $preservePlayerIdsByVest
+     * @param array<int, int> $preserveTeamIdsByColor
+     */
     public function __construct(
         public string  $path,
         public string  $pathHash,
@@ -26,6 +30,10 @@ final readonly class ImportResultFileCommand implements CommandInterface
         public ?string $content = null,
         public int     $timeoutSeconds = 30,
         public bool $force = false,
+        public ?int $preserveGameId = null,
+        public ?string $preserveGameCode = null,
+        public array $preservePlayerIdsByVest = [],
+        public array $preserveTeamIdsByColor = [],
     )
     {
     }

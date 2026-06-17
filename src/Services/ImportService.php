@@ -8,22 +8,20 @@
 
 namespace App\Services;
 
-use App\Core\App;
+use App\CQRS\Commands\ImportResultFileCommand;
+use App\DataObjects\Import\ResultFileImportStatus;
 use App\GameModels\Game\Game;
 use App\GameModels\Game\Lasermaxx\Team;
 use App\GameModels\Game\Player;
-use Dibi\Exception;
-use Lsr\Core\Config;
+use DateTimeImmutable;
 use Lsr\Core\Requests\Dto\ErrorResponse;
 use Lsr\Core\Requests\Dto\SuccessResponse;
 use Lsr\Core\Requests\Enums\ErrorType;
+use Lsr\CQRS\CommandBus;
 use Lsr\Exceptions\FileException;
-use Lsr\Lg\Results\AbstractResultsParser;
 use Lsr\Lg\Results\Exception\ResultsParseException;
-use Lsr\Logging\Logger;
 use Lsr\ObjectValidation\Exceptions\ValidationException;
 use Lsr\Orm\Exceptions\ModelNotFoundException;
-use Nette\DI\MissingServiceException;
 use Throwable;
 
 /**
@@ -31,15 +29,11 @@ use Throwable;
  */
 class ImportService
 {
-    private int $gameLoadedTime;
-
     public function __construct(
-        Config                                     $config,
-        private readonly ResultFileImporter        $resultFileImporter,
-        private readonly ResultFileImportFinalizer $resultFileImportFinalizer,
-    )
-    {
-        $this->gameLoadedTime = (int)($config->getConfig('ENV')['GAME_LOADED_TIME'] ?? 300);
+        private readonly ResultFileVersionFactory        $versionFactory,
+        private readonly ResultFileImportStateRepository $stateRepository,
+        private readonly CommandBus                      $commandBus,
+    ) {
     }
 
     /**
@@ -53,26 +47,28 @@ class ImportService
      * @throws ValidationException
      * @throws ModelNotFoundException
      */
-    public function importGame(Game $game, string $resultsDir): SuccessResponse|ErrorResponse
-    {
-        $logger = new Logger(LOG_DIR . 'results/', 'import');
+    public function importGame(Game $game, string $resultsDir): SuccessResponse|ErrorResponse {
         $resultsDir = trailingSlashIt($resultsDir);
 
         $id = $game->id;
         $code = $game->code;
 
+        /** @var array<int|string, int> $playerIds */
         $playerIds = [];
+        /** @var array<int, int> $teamIds */
         $teamIds = [];
 
         foreach ($game->players as $player) {
-            $playerIds[$player->vest] = $player->id;
+            if ($player->id !== null) {
+                $playerIds[$player->vest] = $player->id;
+            }
         }
 
         foreach ($game->teams as $team) {
-            $teamIds[$team->color] = $team->id;
+            if ($team->id !== null) {
+                $teamIds[$team->color] = $team->id;
+            }
         }
-
-        $game->clearCache();
 
         $file = null;
         if (!empty($game->resultsFile)) {
@@ -124,84 +120,46 @@ class ImportService
         }
 
         try {
-            $logger->info('Importing file: ' . $file);
-            try {
-                /** @var AbstractResultsParser<G> $parser */
-                $parser = App::getService('result.parser.' . $game::SYSTEM);
-            } catch (MissingServiceException) {
-                return new ErrorResponse('No parser for this game (' . $game::SYSTEM . ')', type: ErrorType::INTERNAL);
-            }
-            if (!$parser::checkFile($file)) {
-                return
-                    new ErrorResponse('Game file cannot be parsed: ' . $file, type: ErrorType::INTERNAL);
-            }
-            $parser->setFile($file);
-            $game = $parser->parse();
+            $version = $this->versionFactory->fromFile($file);
+            $this->stateRepository->saveSeen(
+                $version,
+                $game::SYSTEM,
+                ResultFileImportStatus::QUEUED,
+                new DateTimeImmutable(),
+            );
 
-            $now = time();
-
-            // Check timestamps
-            $isStarted = $game->isStarted();
-            $isUpdated = isset($game->fileTime) && ($now - $game->fileTime->getTimestamp()) <= $this->gameLoadedTime;
-
-            if (!$game->isFinished()) {
-                $logger->debug('Game is not finished');
-
-                // The game is not finished and does not contain any results
-                // It is either:
-                // - an old, un-played game
-                // - freshly loaded game
-                // - started and not finished game
-                // An old game should be ignored, the other 2 cases should be logged and an event should be sent.
-                // But only the latest game should be considered
-
-                if ($isUpdated && $isStarted) { // The game is started
-                    $logger->debug('Game is started');
-                } elseif ($isUpdated) { // The game is loaded
-                    $logger->debug('Game is loaded');
-                }
-                return new ErrorResponse('Game is not finished', type: ErrorType::VALIDATION);
-            }
-
-            // Check players
-            $null = true;
-            foreach ($game->players as $player) {
-                if (isset($playerIds[$player->vest])) {
-                    $player->id = $playerIds[$player->vest];
-                }
-                if ($player->score !== 0 || $player->shots !== 0) {
-                    $null = false;
-                    break;
-                }
-            }
-            foreach ($game->teams as $team) {
-                if (isset($teamIds[$team->color])) {
-                    $team->id = $teamIds[$team->color];
-                }
-            }
-            if ($null) {
-                $logger->warning('Game is empty');
-                // Empty game - no shots, no hits, etc..
-                return new ErrorResponse('Game is empty', type: ErrorType::VALIDATION);
-            }
-
-            $game->id = $id;
-            $game->code = $code;
-
-            if (!$game->save()) {
-                throw new ResultsParseException('Failed saving game into DB.');
-            }
-            $this->resultFileImporter->clearImportedGameState($game, $game::SYSTEM, $logger);
-            $this->resultFileImportFinalizer->triggerImported(1);
-            $this->resultFileImportFinalizer->finalize([$game], $logger);
-        } catch (Exception $e) {
+            $result = $this->commandBus->dispatch(
+                new ImportResultFileCommand(
+                    path: $version->path,
+                    pathHash: $version->pathHash,
+                    system: $game::SYSTEM,
+                    mtime: $version->mtime,
+                    size: $version->size,
+                    contentHash: $version->contentHash,
+                    version: $version->version,
+                    force: true,
+                    preserveGameId: $id,
+                    preserveGameCode: $code,
+                    preservePlayerIdsByVest: $playerIds,
+                    preserveTeamIdsByColor: $teamIds,
+                )
+            );
+        } catch (Throwable $e) {
             return new ErrorResponse('Error while parsing game file.', type: ErrorType::INTERNAL, exception: $e);
         }
-        return new SuccessResponse(values: ['game' => $game]);
+
+        if ($result->status === ResultFileImportStatus::IMPORTED) {
+            return new SuccessResponse(values: ['import' => $result]);
+        }
+
+        return new ErrorResponse(
+            $result->error ?? $result->event ?? 'Game was not imported.',
+            type: $result->status === ResultFileImportStatus::FAILED ? ErrorType::INTERNAL : ErrorType::VALIDATION,
+            values: ['import' => $result],
+        );
     }
 
-    private function isAbsolutePath(string $path): bool
-    {
+    private function isAbsolutePath(string $path): bool {
         return str_starts_with($path, DIRECTORY_SEPARATOR)
             || preg_match('/^[a-z]:[\/\\\\]/i', $path) === 1;
     }

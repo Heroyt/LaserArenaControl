@@ -12,11 +12,9 @@ use App\GameModels\Factory\GameFactory;
 use App\GameModels\Game\Game;
 use DateTimeInterface;
 use Lsr\Caching\Cache;
-use Lsr\Exceptions\FileException;
 use Lsr\Lg\Results\AbstractResultsParser;
 use Lsr\Logging\Logger;
 use Lsr\Orm\ModelRepository;
-use ReflectionProperty;
 use RuntimeException;
 use Symfony\Component\Console\Output\OutputInterface;
 use TypeError;
@@ -25,8 +23,7 @@ readonly class ResultFileImporter
 {
     public function __construct(
         private Cache $cache,
-    )
-    {
+    ) {
     }
 
     /**
@@ -39,13 +36,13 @@ readonly class ResultFileImporter
         string                $file,
         int                   $now,
         int                   $gameLoadedTime,
+        int                   $gameStartedTime,
         Logger                $logger,
         ?OutputInterface      $output = null,
-    ): ResultFileImportResult
-    {
+    ): ResultFileImportResult {
         $game = $this->parse($parser, $system, $file, $logger);
 
-        return $this->importParsed($game, $system, $file, $now, $gameLoadedTime, $logger, $output);
+        return $this->importParsed($game, $system, $file, $now, $gameLoadedTime, $gameStartedTime, $logger, $output);
     }
 
     /** @phpstan-ignore-next-line missingType.generics */
@@ -54,8 +51,7 @@ readonly class ResultFileImporter
         string                $system,
         string                $file,
         Logger                $logger,
-    ): Game
-    {
+    ): Game {
         $logger->debug('Preparing parser for file', ['file' => $file, 'system' => $system]);
         $parser->setFile($file);
         $logger->debug('Starting parser->parse()', ['file' => $file, 'system' => $system]);
@@ -93,42 +89,24 @@ readonly class ResultFileImporter
         string                $content,
         int                   $mtime,
         Logger                $logger,
-    ): Game
-    {
+    ): Game {
         $logger->debug('Preparing parser for inline file content', ['file' => $file, 'system' => $system]);
-        $tempFile = $this->createInlineSourceFile($file, $content, $mtime);
 
+        $parser->setSource($file, $content, $mtime);
+        $logger->debug('Starting parser->parse() from inline content', ['file' => $file, 'system' => $system]);
         try {
-            $parser->setContents(mb_convert_encoding($content, 'UTF-8'));
-            $this->setParserFileName($parser, $tempFile);
-            $logger->debug('Starting parser->parse() from inline content', ['file' => $file, 'system' => $system]);
-            try {
-                $game = $parser->parse();
-            } catch (TypeError $e) {
-                if (!$this->isOrmModelConfigCacheError($e)) {
-                    throw $e;
-                }
-                $this->clearOrmModelConfigCache($logger);
-                $parser->setContents(mb_convert_encoding($content, 'UTF-8'));
-                $this->setParserFileName($parser, $tempFile);
-                $game = $parser->parse();
+            $game = $parser->parse();
+        } catch (TypeError $e) {
+            if (!$this->isOrmModelConfigCacheError($e)) {
+                throw $e;
             }
-        } finally {
-            if (is_file($tempFile) && !unlink($tempFile)) {
-                $logger->warning('Failed to remove inline result import temp file.', ['file' => $tempFile]);
-            }
-            $tempDir = dirname($tempFile);
-            $tempDirFiles = is_dir($tempDir) ? scandir($tempDir) : false;
-            if ($tempDirFiles === ['.', '..']) {
-                rmdir($tempDir);
-            }
+            $this->clearOrmModelConfigCache($logger);
+            $parser->setSource($file, $content, $mtime);
+            $game = $parser->parse();
         }
 
         if (!$game instanceof Game) {
             throw new RuntimeException('Parsed result is not an application game model.');
-        }
-        if ($game->resultsFile === pathinfo($tempFile, PATHINFO_FILENAME)) {
-            $game->resultsFile = pathinfo($file, PATHINFO_FILENAME);
         }
         $logger->debug(
             'Finished parser->parse() from inline content',
@@ -153,12 +131,13 @@ readonly class ResultFileImporter
         string           $file,
         int              $now,
         int              $gameLoadedTime,
+        int              $gameStartedTime,
         Logger           $logger,
         ?OutputInterface $output = null,
-    ): ResultFileImportResult
-    {
+    ): ResultFileImportResult {
         $isStarted = $game->isStarted();
-        $isUpdated = isset($game->fileTime) && ($now - $game->fileTime->getTimestamp()) <= $gameLoadedTime;
+        $isFreshLoaded = isset($game->fileTime) && ($now - $game->fileTime->getTimestamp()) <= $gameLoadedTime;
+        $isRecentlyStarted = $game->start !== null && ($now - $game->start->getTimestamp()) <= $gameStartedTime;
 
         if (!$game->isFinished()) {
             $logger->debug('Game is not finished');
@@ -175,13 +154,13 @@ readonly class ResultFileImporter
                 OutputInterface::VERBOSITY_VERBOSE
             );
 
-            if ($isUpdated && $isStarted) {
+            if ($isStarted && $isRecentlyStarted) {
                 $logger->debug('Game is started');
                 $output?->writeln('Game is started');
                 return ResultFileImportResult::unfinished($game, 'game-started');
             }
 
-            if ($isUpdated) {
+            if ($isFreshLoaded) {
                 $logger->debug('Game is loaded');
                 $output?->writeln('Game is loaded');
                 return ResultFileImportResult::unfinished($game, 'game-loaded');
@@ -227,26 +206,22 @@ readonly class ResultFileImporter
         return ResultFileImportResult::imported($gameModel ?? $game);
     }
 
-    private function formatDate(?DateTimeInterface $date): ?string
-    {
+    private function formatDate(?DateTimeInterface $date): ?string {
         return $date?->format('c');
     }
 
     /** @phpstan-ignore-next-line missingType.generics */
-    private function getGameCode(Game $game): ?string
-    {
+    private function getGameCode(Game $game): ?string {
         return isset($game->code) ? $game->code : null;
     }
 
-    private function isOrmModelConfigCacheError(TypeError $e): bool
-    {
+    private function isOrmModelConfigCacheError(TypeError $e): bool {
         return str_contains($e->getMessage(), 'getModelConfig()')
             && str_contains($e->getMessage(), 'ModelConfig')
             && str_contains($e->getMessage(), 'int returned');
     }
 
-    private function clearOrmModelConfigCache(Logger $logger): void
-    {
+    private function clearOrmModelConfigCache(Logger $logger): void {
         ModelRepository::$modelConfig = [];
 
         $files = glob(TMP_DIR . 'models/*');
@@ -268,39 +243,11 @@ readonly class ResultFileImporter
         );
     }
 
-    private function createInlineSourceFile(string $file, string $content, int $mtime): string
-    {
-        $dir = TMP_DIR . 'result-import-inline/' . sha1($file . ':' . $mtime . ':' . hash('sha256', $content)) . '/';
-        if (!is_dir($dir) && !mkdir($dir, recursive: true) && !is_dir($dir)) {
-            throw new RuntimeException('Failed to create inline result import directory.');
-        }
-
-        $basename = basename($file);
-        if ($basename === '' || $basename === '.' || $basename === '..') {
-            $basename = 'result.game';
-        }
-
-        $tempFile = $dir . $basename;
-        if (file_put_contents($tempFile, $content) === false) {
-            throw new FileException('Failed to write inline result import file.');
-        }
-        touch($tempFile, $mtime);
-
-        return $tempFile;
-    }
-
-    /** @phpstan-ignore missingType.generics */
-    private function setParserFileName(AbstractResultsParser $parser, string $file): void
-    {
-        new ReflectionProperty(AbstractResultsParser::class, 'fileName')->setValue($parser, $file);
-    }
-
     /**
      * @template G of Game
      * @param G $game
      */
-    public function clearImportedGameState(Game $game, string $system, ?Logger $logger = null): void
-    {
+    public function clearImportedGameState(Game $game, string $system, ?Logger $logger = null): void {
         $game::clearModelCache();
         if ($game->start !== null) {
             $this->cache->clean([$this->cache::Tags => ['games/' . $game->start->format('Y-m-d')]]);

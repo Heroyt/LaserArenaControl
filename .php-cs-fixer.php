@@ -109,4 +109,8 @@ return new PhpCsFixer\Config()
         'nullable_type_declaration_for_default_null_value' => true,
         'php_unit_method_casing' => ['case' => 'snake_case'],
         'declare_strict_types' => true,
+        'void_return' => true,
+        'modernize_types_casting' => true,
+        'modernize_strpos' => true,
+        'is_null' => true,
     ]);

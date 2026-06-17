@@ -144,7 +144,7 @@ class ResultParserTest extends Unit
     // TODO: Test with invalid meta - hash + mode
     // TODO: Test with invalid meta - hash + mode + load time
 
-    protected function _before() {
+    protected function _before(): void {
         $this->playerProvider = App::getService('playersProvider');
     }
 

@@ -20,8 +20,9 @@ use App\Http\Controllers\System\Cache;
 use App\Http\Controllers\System\Roadrunner;
 use App\Http\Controllers\System\System;
 use App\Services\FeatureConfig;
+use Lsr\Core\Routing\Router;
 
-/** @var \Lsr\Core\Routing\Router $this */
+/** @var Router $this */
 
 /** @var FeatureConfig $featureConfig */
 $featureConfig = App::getService('features');

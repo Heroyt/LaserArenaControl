@@ -52,8 +52,8 @@ final class Theme
             foreach ($systemColors as $key => $color) {
                 $textColor = Color::getFontColor($color);
                 $gameColorsRoot .= <<<CSS
-                    --team-{$system}-{$key}: $color;
-                    --team-{$system}-{$key}-text: $textColor;
+                    --team-{$system}-{$key}: {$color};
+                    --team-{$system}-{$key}-text: {$textColor};
 
                 CSS;
                 $gameColorsClasses .= <<<CSS
@@ -81,13 +81,13 @@ final class Theme
         return <<<CSS
         :root {
             /* Theme */
-            --theme-primary-color: $primaryColor;
-            --theme-primary-color-text: $primaryColorText;
-            --theme-secondary-color: $secondaryColor;
-            --theme-secondary-color-text: $secondaryColorText;
+            --theme-primary-color: {$primaryColor};
+            --theme-primary-color-text: {$primaryColorText};
+            --theme-secondary-color: {$secondaryColor};
+            --theme-secondary-color-text: {$secondaryColorText};
             
             /* Game colors */
-        $gameColorsRoot
+        {$gameColorsRoot}
         }
         
         .bg-theme-primary {
@@ -124,7 +124,7 @@ final class Theme
             --text-color: var(--theme-secondary-color);
             color: var(--theme-secondary-color);
         }
-        $gameColorsClasses
+        {$gameColorsClasses}
         CSS;
     }
 

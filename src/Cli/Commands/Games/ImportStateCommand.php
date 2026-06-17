@@ -6,6 +6,7 @@ namespace App\Cli\Commands\Games;
 
 use App\DataObjects\Import\ResultFileScanDecision;
 use App\Services\ResultsDirectoryScanner;
+use DateTimeInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
@@ -110,7 +111,7 @@ class ImportStateCommand extends Command
         ];
     }
 
-    private function age(?\DateTimeInterface $time): string {
+    private function age(?DateTimeInterface $time): string {
         if ($time === null) {
             return '-';
         }

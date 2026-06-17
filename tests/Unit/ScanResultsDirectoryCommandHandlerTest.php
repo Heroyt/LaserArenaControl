@@ -14,13 +14,13 @@ use PHPUnit\Framework\TestCase;
 
 class ScanResultsDirectoryCommandHandlerTest extends TestCase
 {
-    public function testCommandUsesScanHandler(): void {
+    public function test_command_uses_scan_handler(): void {
         $command = new ScanResultsDirectoryCommand('/tmp/results');
 
         $this->assertSame(ScanResultsDirectoryCommandHandler::class, $command->getHandler());
     }
 
-    public function testHandlerDelegatesToScanner(): void {
+    public function test_handler_delegates_to_scanner(): void {
         $queuedFile = new QueuedResultFileImport(
             '/tmp/results/0001.game',
             sha1('/tmp/results/0001.game'),
@@ -66,7 +66,7 @@ class ScanResultsDirectoryCommandHandlerTest extends TestCase
         );
     }
 
-    public function testHandlerCanSkipQueueingImports(): void {
+    public function test_handler_can_skip_queueing_imports(): void {
         $queuedFile = new QueuedResultFileImport(
             '/tmp/results/0001.game',
             sha1('/tmp/results/0001.game'),
@@ -103,7 +103,7 @@ class ScanResultsDirectoryCommandHandlerTest extends TestCase
         );
     }
 
-    public function testHandlerCanProcessImportsSynchronously(): void {
+    public function test_handler_can_process_imports_synchronously(): void {
         $queuedFile = new QueuedResultFileImport(
             '/tmp/results/0001.game',
             sha1('/tmp/results/0001.game'),

@@ -6,6 +6,7 @@ namespace App\Services;
 
 use App\Cli\Colors;
 use App\Cli\Enums\ForegroundColors;
+use App\Core\App;
 use App\GameModels\Game\Game;
 use App\Services\LaserLiga\LigaApi;
 use Dibi\Exception;
@@ -126,7 +127,7 @@ readonly class ResultFileImportFinalizer
         }
 
         /** @var ResultsPrecacheService $precacheService */
-        $precacheService = \App\Core\App::getService('resultPrecache');
+        $precacheService = App::getService('resultPrecache');
         $precacheService->prepareGamePrecache(
             ...array_map(static fn (Game $game): string => $game->code, $finishedGames),
         );

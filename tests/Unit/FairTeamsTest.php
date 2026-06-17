@@ -281,7 +281,7 @@ class FairTeamsTest extends Unit
     // tests
 
     #[DataProvider('provideTeamDeltas')]
-    public function testCalculateDeltas(array $teams, array $expectedDeltas): void {
+    public function test_calculate_deltas(array $teams, array $expectedDeltas): void {
         $fairTeams = new FairTeams();
 
         $deltas = $fairTeams->calculateDeltas($teams);
@@ -291,7 +291,7 @@ class FairTeamsTest extends Unit
 
     #[Depends('testCalculateDeltas')]
     #[DataProvider('provideTeamMaxDelta')]
-    public function testMaxDelta(array $teams, int $expectedMax): void {
+    public function test_max_delta(array $teams, int $expectedMax): void {
         $fairTeams = new FairTeams();
 
         self::assertSame($expectedMax, $fairTeams->getMaxSkillDelta($teams));
@@ -299,7 +299,7 @@ class FairTeamsTest extends Unit
 
     #[Depends('testCalculateDeltas')]
     #[DataProvider('provideTeamAvgDelta')]
-    public function testAvgDelta(array $teams, float $expectedAvg): void {
+    public function test_avg_delta(array $teams, float $expectedAvg): void {
         $fairTeams = new FairTeams();
 
         self::assertSame($expectedAvg, $fairTeams->getAvgSkillDelta($teams));
@@ -307,7 +307,7 @@ class FairTeamsTest extends Unit
 
     #[Depends('testCalculateDeltas', 'testMaxDelta')]
     #[DataProvider('provideSplitPlayers')]
-    public function testSplitPlayers(int $iteration, array $players, int $teamCount, int $iterations, int $maxIterationsWithoutImprovement): void {
+    public function test_split_players(int $iteration, array $players, int $teamCount, int $iterations, int $maxIterationsWithoutImprovement): void {
         $fairTeams = new FairTeams($iterations, $maxIterationsWithoutImprovement);
         $teams = $fairTeams->splitPlayers($players, $teamCount);
         self::assertCount($teamCount, $teams);

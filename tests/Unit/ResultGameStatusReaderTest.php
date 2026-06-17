@@ -9,7 +9,7 @@ use PHPUnit\Framework\TestCase;
 
 class ResultGameStatusReaderTest extends TestCase
 {
-    public function testEvo6LoadedStatusExtraction(): void {
+    public function test_evo6_loaded_status_extraction(): void {
         $status = Evo6ResultsParser::readStatus(
             '0012.game',
             $this->content('EVO-6 MAXX', 'GAME{12,,20250208214146,20000101000000,3}#'),
@@ -25,7 +25,7 @@ class ResultGameStatusReaderTest extends TestCase
         $this->assertNull($status->realEndedAt);
     }
 
-    public function testEvo6StartedStatusExtraction(): void {
+    public function test_evo6_started_status_extraction(): void {
         $status = Evo6ResultsParser::readStatus(
             '0012.game',
             $this->content(
@@ -41,7 +41,7 @@ class ResultGameStatusReaderTest extends TestCase
         $this->assertNull($status->realEndedAt);
     }
 
-    public function testEvo6FinishedStatusExtractionWithSixTimingArguments(): void {
+    public function test_evo6_finished_status_extraction_with_six_timing_arguments(): void {
         $status = Evo6ResultsParser::readStatus(
             '0012.game',
             $this->content(
@@ -57,7 +57,7 @@ class ResultGameStatusReaderTest extends TestCase
         $this->assertSame('20250208214447', $status->importedAt?->format('YmdHis'));
     }
 
-    public function testEvo6FinishedStatusExtractionWithFiveTimingArguments(): void {
+    public function test_evo6_finished_status_extraction_with_five_timing_arguments(): void {
         $status = Evo6ResultsParser::readStatus(
             '0012.game',
             $this->content(
@@ -72,7 +72,7 @@ class ResultGameStatusReaderTest extends TestCase
         $this->assertNull($status->realEndedAt);
     }
 
-    public function testEvo5StatusExtraction(): void {
+    public function test_evo5_status_extraction(): void {
         $status = Evo5ResultsParser::readStatus(
             '0012.game',
             $this->content(
@@ -88,7 +88,7 @@ class ResultGameStatusReaderTest extends TestCase
         $this->assertSame(3, $status->playerCount);
     }
 
-    public function testUnknownStatusForWrongSystem(): void {
+    public function test_unknown_status_for_wrong_system(): void {
         $status = Evo6ResultsParser::readStatus(
             '0012.game',
             $this->content('EVO-5 MAXX', 'GAME{12,,20250208214146,20250208214447,3}#'),

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Core\Info;
+use Dibi\Exception;
 
 class GameStateStorage
 {
@@ -13,7 +14,7 @@ class GameStateStorage
     }
 
     /**
-     * @throws \Dibi\Exception
+     * @throws Exception
      */
     public function set(string $key, mixed $value): void {
         Info::set($key, $value);

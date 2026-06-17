@@ -6,6 +6,7 @@ use App\GameModels\Factory\GameFactory;
 use App\GameModels\Game\Game;
 use App\Services\GameHighlight\GameHighlightService;
 use DateTimeInterface;
+use Throwable;
 
 /**
  * @template G of Game
@@ -39,7 +40,7 @@ class HighlightDto
 
     /**
      * @return G|null
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function getGame(): ?Game {
         /** @phpstan-ignore assign.propertyType */

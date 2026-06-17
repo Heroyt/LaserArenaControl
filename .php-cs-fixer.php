@@ -90,4 +90,22 @@ return new PhpCsFixer\Config()
         'no_empty_phpdoc' => true,
         'no_empty_statement' => true,
         'no_unused_imports' => true,
+        'combine_consecutive_issets' => true,
+        'combine_consecutive_unsets' => true,
+        'explicit_string_variable' => true,
+        'fully_qualified_strict_types' => [
+            'leading_backslash_in_global_namespace' => true,
+            'import_symbols' => true,
+        ],
+        'global_namespace_import' => [
+            'import_classes' => true,
+            'import_constants' => true,
+            'import_functions' => true,
+        ],
+        'ternary_to_null_coalescing' => true,
+        'assign_null_coalescing_to_coalesce_equal' => true,
+        'no_superfluous_elseif' => true,
+        'no_useless_else' => true,
+        'nullable_type_declaration_for_default_null_value' => true,
+        'php_unit_method_casing' => ['case' => 'snake_case'],
     ]);

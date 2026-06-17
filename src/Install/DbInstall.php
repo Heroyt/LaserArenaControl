@@ -100,7 +100,7 @@ class DbInstall implements InstallInterface
                 }
                 self::printDebug('Creating table ' . $tableName, $output);
                 $definition = $info->definition;
-                $connection->query("CREATE TABLE IF NOT EXISTS %n $definition", $tableName);
+                $connection->query("CREATE TABLE IF NOT EXISTS %n {$definition}", $tableName);
             }
 
             // Update tables
@@ -135,7 +135,7 @@ class DbInstall implements InstallInterface
                         foreach ($queries as $query) {
                             self::printDebug('Altering table: ' . $tableName . ' - ' . $query, $output);
                             try {
-                                $connection->query("ALTER TABLE %n $query;", $tableName);
+                                $connection->query("ALTER TABLE %n {$query};", $tableName);
                             } catch (Exception $e) {
                                 if (
                                     $e->getCode() === 1060
@@ -302,7 +302,7 @@ class DbInstall implements InstallInterface
             foreach ($loader->views as $name => $select) {
                 $connection->query(
                     <<<SQL
-                    CREATE OR REPLACE VIEW `$name` AS $select;
+                    CREATE OR REPLACE VIEW `{$name}` AS {$select};
                     SQL,
                 );
             }

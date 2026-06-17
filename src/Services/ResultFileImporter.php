@@ -11,6 +11,7 @@ use App\DataObjects\Import\ResultFileImportResult;
 use App\GameModels\Factory\GameFactory;
 use App\GameModels\Game\Game;
 use DateTimeInterface;
+use Dibi\Exception;
 use Lsr\Caching\Cache;
 use Lsr\Lg\Results\AbstractResultsParser;
 use Lsr\Logging\Logger;
@@ -212,7 +213,7 @@ readonly class ResultFileImporter
 
     /** @phpstan-ignore-next-line missingType.generics */
     private function getGameCode(Game $game): ?string {
-        return isset($game->code) ? $game->code : null;
+        return $game->code ?? null;
     }
 
     private function isOrmModelConfigCacheError(TypeError $e): bool {
@@ -257,7 +258,7 @@ readonly class ResultFileImporter
         if ($startedGame instanceof Game && $game->resultsFile === $startedGame->resultsFile) {
             try {
                 Info::set($system . '-game-started', null);
-            } catch (\Dibi\Exception $e) {
+            } catch (Exception $e) {
                 $logger?->error(
                     'Failed to clear started game state after import',
                     ['key' => $system . '-game-started', 'exception' => $e->getMessage()],

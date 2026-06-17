@@ -20,8 +20,9 @@ use App\Http\Controllers\Api\PriceGroups;
 use App\Http\Controllers\Api\Results;
 use App\Http\Controllers\Api\Tasks;
 use App\Http\Controllers\Api\Updater;
+use Lsr\Core\Routing\Router;
 
-/** @var \Lsr\Core\Routing\Router $this */
+/** @var Router $this */
 
 $apiGroup = $this->group('api')
     ->post('mount', [Mount::class, 'mount'])

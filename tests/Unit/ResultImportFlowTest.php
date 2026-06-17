@@ -10,12 +10,16 @@ use App\DataObjects\Import\ResultFileImportStatus;
 use App\DataObjects\Import\ResultFileVersion;
 use App\GameModels\Factory\GameFactory;
 use App\GameModels\Game\Game;
+use App\GameModels\Game\Lasermaxx\Evo6\Player;
+use App\GameModels\Game\Lasermaxx\Evo6\Team;
 use App\Services\ResultFileImporter;
 use App\Services\ResultFileImportFinalizer;
 use App\Services\ResultFileImportStateRepository;
 use App\Services\ResultFileVersionFactory;
 use App\Services\ResultsDirectoryScanner;
 use DateTimeInterface;
+use Dibi\Row;
+use Lsr\Core\App;
 use Lsr\Core\Config;
 use Lsr\LaserLiga\PlayerProviderInterface;
 use Lsr\Lg\Results\AbstractResultsParser;
@@ -51,11 +55,11 @@ class ResultImportFlowTest extends TestCase
 
         new ReflectionProperty(GameFactory::class, 'supportedSystems')
             ->setValue(null, ['evo6']);
-        new ReflectionProperty(\Lsr\Core\App::class, 'container')
+        new ReflectionProperty(App::class, 'container')
             ->setValue(null, $this->createContainer());
     }
 
-    public function testScanQueueAndCommandImportFlowMarksImportedAndFinalizes(): void {
+    public function test_scan_queue_and_command_import_flow_marks_imported_and_finalizes(): void {
         $file = $this->createTempResultFile();
         $state = null;
 
@@ -123,7 +127,7 @@ class ResultImportFlowTest extends TestCase
         }
     }
 
-    public function testScanQueueAndCommandImportFlowMarksStartedWithoutProcessingVersion(): void {
+    public function test_scan_queue_and_command_import_flow_marks_started_without_processing_version(): void {
         $file = $this->createTempResultFile();
         $state = null;
 
@@ -330,11 +334,11 @@ class ResultImportFlowTest extends TestCase
     }
 
     /**
-     * @return Game<\App\GameModels\Game\Lasermaxx\Evo6\Team, \App\GameModels\Game\Lasermaxx\Evo6\Player>
+     * @return Game<Team, Player>
      */
     private function createGame(string $code): Game {
         $game = new class extends \App\GameModels\Game\Lasermaxx\Evo6\Game {
-            public function __construct(?int $id = null, ?\Dibi\Row $dbRow = null) {
+            public function __construct(?int $id = null, ?Row $dbRow = null) {
                 unset($id, $dbRow);
             }
         };
@@ -446,14 +450,14 @@ final class ResultImportFlowParser extends AbstractResultsParser
     }
 
     /**
-     * @return ParsedGameInterface<\App\GameModels\Game\Lasermaxx\Evo6\Team, \App\GameModels\Game\Lasermaxx\Evo6\Player, array<string, mixed>>
+     * @return ParsedGameInterface<Team, Player, array<string, mixed>>
      */
     public function parse(): ParsedGameInterface {
         throw new RuntimeException('Flow tests mock parsing through ResultFileImporter.');
     }
 
     /**
-     * @param ParsedGameInterface<\App\GameModels\Game\Lasermaxx\Evo6\Team, \App\GameModels\Game\Lasermaxx\Evo6\Player, array<string, mixed>> $game
+     * @param ParsedGameInterface<Team, Player, array<string, mixed>> $game
      * @param array<string, mixed> $meta
      */
     protected function processExtensions(ParsedGameInterface $game, array $meta): void {

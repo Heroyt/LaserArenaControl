@@ -19,7 +19,7 @@ class LigaApiTest extends Unit
 {
     protected UnitTester $tester;
 
-    public function testSyncVest(): void {
+    public function test_sync_vest(): void {
         $metrics = Stub::makeEmpty(Metrics::class);
         /** @var Serializer $serializer */
         $serializer = App::getService('symfony.serializer');

@@ -8,7 +8,7 @@ use RuntimeException;
 
 class ResultFileVersionFactoryTest extends TestCase
 {
-    public function testCreatesStableVersionFromMetadata(): void {
+    public function test_creates_stable_version_from_metadata(): void {
         $factory = new ResultFileVersionFactory();
 
         $version = $factory->fromMetadata('/tmp/results/0001.game', 123, 456, str_repeat('a', 64));
@@ -24,7 +24,7 @@ class ResultFileVersionFactoryTest extends TestCase
         );
     }
 
-    public function testCreatesVersionFromReadableFile(): void {
+    public function test_creates_version_from_readable_file(): void {
         $path = tempnam(sys_get_temp_dir(), 'lac-result-version-');
         $this->assertIsString($path);
         file_put_contents($path, 'result-content');
@@ -41,7 +41,7 @@ class ResultFileVersionFactoryTest extends TestCase
         }
     }
 
-    public function testUnreadableFileThrows(): void {
+    public function test_unreadable_file_throws(): void {
         $this->expectException(RuntimeException::class);
 
         (new ResultFileVersionFactory())->fromFile('/path/that/does/not/exist.game');

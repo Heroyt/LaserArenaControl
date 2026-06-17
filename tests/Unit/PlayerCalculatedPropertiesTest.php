@@ -7,7 +7,7 @@ use Codeception\Test\Unit;
 
 class PlayerCalculatedPropertiesTest extends Unit
 {
-    public function testRelativeHitsReturnsNullForZeroExpectedHits(): void {
+    public function test_relative_hits_returns_null_for_zero_expected_hits(): void {
         $player = new class {
             use PlayerCalculatedProperties;
 
@@ -26,7 +26,7 @@ class PlayerCalculatedPropertiesTest extends Unit
         $this::assertNull($player->relativeHits);
     }
 
-    public function testRelativeDeathsReturnsNullForZeroExpectedDeaths(): void {
+    public function test_relative_deaths_returns_null_for_zero_expected_deaths(): void {
         $player = new class {
             use PlayerCalculatedProperties;
 

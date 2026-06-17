@@ -7,10 +7,13 @@ use App\DataObjects\Import\ResultFileImportStatus;
 use App\DataObjects\Import\ResultFileScanAction;
 use App\DataObjects\Import\ResultFileVersion;
 use App\GameModels\Factory\GameFactory;
+use App\GameModels\Game\Lasermaxx\Evo6\Player;
+use App\GameModels\Game\Lasermaxx\Evo6\Team;
 use App\Services\ResultFileImportStateRepository;
 use App\Services\ResultFileVersionFactory;
 use App\Services\ResultsDirectoryScanner;
 use DateTimeImmutable;
+use Lsr\Core\App;
 use Lsr\Core\Config;
 use Lsr\LaserLiga\PlayerProviderInterface;
 use Lsr\Lg\Results\AbstractResultsParser;
@@ -24,7 +27,7 @@ use RuntimeException;
 
 class ResultsDirectoryScannerTest extends TestCase
 {
-    public function testZeroGameFileIsRejectedAsPreparedLoadFile(): void {
+    public function test_zero_game_file_is_rejected_as_prepared_load_file(): void {
         $dir = sys_get_temp_dir() . '/lac-results-scanner-' . uniqid('', true);
         mkdir($dir);
         $file = $dir . '/0000.game';
@@ -46,7 +49,7 @@ class ResultsDirectoryScannerTest extends TestCase
         }
     }
 
-    public function testScanLimitDoesNotClassifyBeyondLimitCandidateAsInvalid(): void {
+    public function test_scan_limit_does_not_classify_beyond_limit_candidate_as_invalid(): void {
         $this->installScannerTestParser(acceptsFiles: true);
         $dir = sys_get_temp_dir() . '/lac-results-scanner-' . uniqid('', true);
         mkdir($dir);
@@ -80,7 +83,7 @@ class ResultsDirectoryScannerTest extends TestCase
         }
     }
 
-    public function testScanMetadataFailureEmitsInvalidDecision(): void {
+    public function test_scan_metadata_failure_emits_invalid_decision(): void {
         $this->installScannerTestParser(acceptsFiles: true);
         $dir = sys_get_temp_dir() . '/lac-results-scanner-' . uniqid('', true);
         mkdir($dir);
@@ -117,7 +120,7 @@ class ResultsDirectoryScannerTest extends TestCase
         }
     }
 
-    public function testDescribeDecisionRejectsPreparedLoadFile(): void {
+    public function test_describe_decision_rejects_prepared_load_file(): void {
         $version = new ResultFileVersion(
             '/tmp/results/0000.game',
             sha1('/tmp/results/0000.game'),
@@ -134,7 +137,7 @@ class ResultsDirectoryScannerTest extends TestCase
         $this->assertSame('invalid-prepared-load-file', $decision->reason);
     }
 
-    public function testDescribeDecisionRejectsFileWithoutAcceptedParser(): void {
+    public function test_describe_decision_rejects_file_without_accepted_parser(): void {
         $this->installScannerTestParser(acceptsFiles: false);
         $version = $this->createVersion();
         $scanner = $this->createScannerForDecision($version, null, installParser: false);
@@ -145,7 +148,7 @@ class ResultsDirectoryScannerTest extends TestCase
         $this->assertSame('invalid-no-parser', $decision->reason);
     }
 
-    public function testProcessingStateExpiresAfterTtl(): void {
+    public function test_processing_state_expires_after_ttl(): void {
         $scanner = $this->createScanner();
 
         $this->assertTrue(
@@ -200,7 +203,7 @@ class ResultsDirectoryScannerTest extends TestCase
         );
     }
 
-    public function testFreshProcessingStateDoesNotExpire(): void {
+    public function test_fresh_processing_state_does_not_expire(): void {
         $scanner = $this->createScanner();
 
         $this->assertFalse(
@@ -212,7 +215,7 @@ class ResultsDirectoryScannerTest extends TestCase
         );
     }
 
-    public function testProcessingStateWithoutStartTimeExpires(): void {
+    public function test_processing_state_without_start_time_expires(): void {
         $scanner = $this->createScanner();
 
         $this->assertTrue(
@@ -224,7 +227,7 @@ class ResultsDirectoryScannerTest extends TestCase
         );
     }
 
-    public function testNonProcessingStateDoesNotExpire(): void {
+    public function test_non_processing_state_does_not_expire(): void {
         $scanner = $this->createScanner();
 
         $this->assertFalse(
@@ -236,7 +239,7 @@ class ResultsDirectoryScannerTest extends TestCase
         );
     }
 
-    public function testOldQueuedStateExpiresWhenUnprocessed(): void {
+    public function test_old_queued_state_expires_when_unprocessed(): void {
         $scanner = $this->createScanner();
 
         $this->assertTrue(
@@ -251,7 +254,7 @@ class ResultsDirectoryScannerTest extends TestCase
         );
     }
 
-    public function testFreshQueuedStateDoesNotExpire(): void {
+    public function test_fresh_queued_state_does_not_expire(): void {
         $scanner = $this->createScanner();
 
         $this->assertFalse(
@@ -266,7 +269,7 @@ class ResultsDirectoryScannerTest extends TestCase
         );
     }
 
-    public function testSeenStateWithoutQueueTimeExpiresWhenUnprocessed(): void {
+    public function test_seen_state_without_queue_time_expires_when_unprocessed(): void {
         $scanner = $this->createScanner();
 
         $this->assertTrue(
@@ -278,7 +281,7 @@ class ResultsDirectoryScannerTest extends TestCase
         );
     }
 
-    public function testImportedStateDoesNotExpire(): void {
+    public function test_imported_state_does_not_expire(): void {
         $scanner = $this->createScanner();
         $state = $this->createState(ResultFileImportStatus::IMPORTED);
 
@@ -294,7 +297,7 @@ class ResultsDirectoryScannerTest extends TestCase
         );
     }
 
-    public function testOldStartedStateExpiresWhenUnprocessed(): void {
+    public function test_old_started_state_expires_when_unprocessed(): void {
         $scanner = $this->createScanner();
 
         $this->assertTrue(
@@ -309,7 +312,7 @@ class ResultsDirectoryScannerTest extends TestCase
         );
     }
 
-    public function testImportedSameVersionDecisionIsUnchangedImported(): void {
+    public function test_imported_same_version_decision_is_unchanged_imported(): void {
         $version = $this->createVersion();
         $scanner = $this->createScannerForDecision(
             $version,
@@ -325,7 +328,7 @@ class ResultsDirectoryScannerTest extends TestCase
         $this->assertSame('unchanged-imported', $decision->reason);
     }
 
-    public function testFreshQueuedDecisionIsQueuedFresh(): void {
+    public function test_fresh_queued_decision_is_queued_fresh(): void {
         $version = $this->createVersion();
         $scanner = $this->createScannerForDecision(
             $version,
@@ -338,7 +341,7 @@ class ResultsDirectoryScannerTest extends TestCase
         $this->assertSame('queued-fresh', $decision->reason);
     }
 
-    public function testExpiredQueuedDecisionIsRequeued(): void {
+    public function test_expired_queued_decision_is_requeued(): void {
         $version = $this->createVersion();
         $scanner = $this->createScannerForDecision(
             $version,
@@ -351,7 +354,7 @@ class ResultsDirectoryScannerTest extends TestCase
         $this->assertSame('queued-expired-requeued', $decision->reason);
     }
 
-    public function testExpiredProcessingDecisionIsRequeued(): void {
+    public function test_expired_processing_decision_is_requeued(): void {
         $version = $this->createVersion();
         $scanner = $this->createScannerForDecision(
             $version,
@@ -364,7 +367,7 @@ class ResultsDirectoryScannerTest extends TestCase
         $this->assertSame('processing-expired-requeued', $decision->reason);
     }
 
-    public function testExpiredLoadedDecisionIsRequeued(): void {
+    public function test_expired_loaded_decision_is_requeued(): void {
         $version = $this->createVersion();
         $scanner = $this->createScannerForDecision(
             $version,
@@ -456,7 +459,7 @@ class ResultsDirectoryScannerTest extends TestCase
     private function installScannerTestParser(bool $acceptsFiles): void {
         new ReflectionProperty(GameFactory::class, 'supportedSystems')
             ->setValue(null, ['evo6']);
-        new ReflectionProperty(\Lsr\Core\App::class, 'container')
+        new ReflectionProperty(App::class, 'container')
             ->setValue(null, new ScannerTestContainer(new ScannerTestParser(
                 $this->createStub(PlayerProviderInterface::class),
                 $this->createStub(GameModeProviderInterface::class),
@@ -499,14 +502,14 @@ final class ScannerTestParser extends AbstractResultsParser
     }
 
     /**
-     * @return ParsedGameInterface<\App\GameModels\Game\Lasermaxx\Evo6\Team, \App\GameModels\Game\Lasermaxx\Evo6\Player, array<string, mixed>>
+     * @return ParsedGameInterface<Team, Player, array<string, mixed>>
      */
     public function parse(): ParsedGameInterface {
         throw new RuntimeException('Scanner tests do not parse result files.');
     }
 
     /**
-     * @param ParsedGameInterface<\App\GameModels\Game\Lasermaxx\Evo6\Team, \App\GameModels\Game\Lasermaxx\Evo6\Player, array<string, mixed>> $game
+     * @param ParsedGameInterface<Team, Player, array<string, mixed>> $game
      * @param array<string, mixed> $meta
      */
     protected function processExtensions(ParsedGameInterface $game, array $meta): void {

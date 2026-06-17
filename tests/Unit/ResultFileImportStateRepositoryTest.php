@@ -8,7 +8,7 @@ use ReflectionMethod;
 
 class ResultFileImportStateRepositoryTest extends TestCase
 {
-    public function testBooleanPlaceholderUsesIntegerPlaceholder(): void {
+    public function test_boolean_placeholder_uses_integer_placeholder(): void {
         $method = new ReflectionMethod(ResultFileImportStateRepository::class, 'placeholder');
 
         $this->assertSame('%i', $method->invoke(new ResultFileImportStateRepository(), true));

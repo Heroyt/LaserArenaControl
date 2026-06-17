@@ -22,7 +22,7 @@ use PHPUnit\Framework\TestCase;
 
 class ImportServiceTest extends TestCase
 {
-    public function testImportGameDispatchesForcedStateTableImportWithIdentityPreservation(): void {
+    public function test_import_game_dispatches_forced_state_table_import_with_identity_preservation(): void {
         $dir = sys_get_temp_dir() . '/lac-import-service-test-' . uniqid('', true);
         self::assertTrue(mkdir($dir));
         $file = $dir . '/0001.game';

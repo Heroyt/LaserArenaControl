@@ -18,6 +18,7 @@ use Lsr\Core\Requests\Request;
 use Lsr\Interfaces\RequestInterface;
 use Lsr\Interfaces\SessionInterface;
 use Lsr\Orm\Exceptions\ModelNotFoundException;
+use RuntimeException;
 
 /**
  * @property NewGameParams $params
@@ -92,7 +93,7 @@ trait NewGameTrait
             $this->params->system = first($this->params->systems);
         }
         if ($this->params->system === null) {
-            throw new \RuntimeException('No active systems found');
+            throw new RuntimeException('No active systems found');
         }
         $this->session->set('active_lg_system', $this->params->system->id);
 

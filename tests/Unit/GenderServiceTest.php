@@ -13,7 +13,7 @@ class GenderServiceTest extends Unit
     protected UnitTester $tester;
 
     #[DataProvider('wordProvider')]
-    public function testRanking(string $value, Gender $expected): void {
+    public function test_ranking(string $value, Gender $expected): void {
         $this->assertEquals(
             $expected,
             GenderService::rankWord($value),

@@ -54,7 +54,7 @@ final class ConsoleRequestFactory extends RequestFactory
                 if ( ! Validators::isUrl($url)) {
                     throw InvalidArgument::create()
                         ->withMessage(
-                            "Command option '$this->argvOptionName' has to be valid URL, '$url' given.",
+                            "Command option '{$this->argvOptionName}' has to be valid URL, '{$url}' given.",
                         );
                 }
 
@@ -70,8 +70,8 @@ final class ConsoleRequestFactory extends RequestFactory
             ->withContext('Trying to create HTTP request.')
             ->withProblem('Request factory for console mode is used and no URL was provided.')
             ->withSolution(
-                "Specify URL either via '$this->configOptionName' extension option or via " .
-                "'$this->argvOptionName' command option.",
+                "Specify URL either via '{$this->configOptionName}' extension option or via " .
+                "'{$this->argvOptionName}' command option.",
             );
 
         throw InvalidState::create()

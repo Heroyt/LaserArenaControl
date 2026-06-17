@@ -22,7 +22,7 @@ class ResultParserTest extends Unit
     protected PlayerProvider $playerProvider;
 
     #[DataProvider('getFiles')]
-    public function testParser(string $file, array $meta): void {
+    public function test_parser(string $file, array $meta): void {
         $this->assertInstanceOf(PlayerProvider::class, $this->playerProvider);
         $parser = new ResultsParser($this->playerProvider);
         $parser->setFile($file);
@@ -32,7 +32,7 @@ class ResultParserTest extends Unit
     }
 
     #[DataProvider('getFiles')]
-    public function testParserFromString(string $file, array $meta): void {
+    public function test_parser_from_string(string $file, array $meta): void {
         $this->assertInstanceOf(PlayerProvider::class, $this->playerProvider);
         $parser = new ResultsParser($this->playerProvider);
         $parser->setContents(file_get_contents($file));
@@ -100,20 +100,20 @@ class ResultParserTest extends Unit
     }
 
     #[DataProvider('getFilesError')]
-    public function testParserError(string $file): void {
+    public function test_parser_error(string $file): void {
         $parser = new ResultsParser($this->playerProvider);
         $parser->setFile($file);
         $this->expectException(ResultsParseException::class);
         $game = $parser->parse();
     }
 
-    public function testUnknownFile(): void {
+    public function test_unknown_file(): void {
         $this->expectException(FileException::class);
         $parser = new ResultsParser($this->playerProvider);
         $parser->setFile('');
     }
 
-    public function testGetGlob(): void {
+    public function test_get_glob(): void {
         $files = glob(ROOT . 'results-test/' . \App\Tools\ResultParsing\Evo5\ResultsParser::getFileGlob());
         $this->assertIsArray($files);
         $this->assertNotEmpty($files);
@@ -123,12 +123,12 @@ class ResultParserTest extends Unit
         $this->assertNotEmpty($files);
     }
 
-    public function testCheckFileEmpty(): void {
+    public function test_check_file_empty(): void {
         $this->assertFalse(\App\Tools\ResultParsing\Evo5\ResultsParser::checkFile());
         $this->assertFalse(\App\Tools\ResultParsing\Evo6\ResultsParser::checkFile());
     }
 
-    public function testCheckFileInvalid(): void {
+    public function test_check_file_invalid(): void {
         $this->assertFalse(\App\Tools\ResultParsing\Evo5\ResultsParser::checkFile(ROOT . 'index.php'));
         $this->assertFalse(\App\Tools\ResultParsing\Evo6\ResultsParser::checkFile(ROOT . 'index.php'));
 

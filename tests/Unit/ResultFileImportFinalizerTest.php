@@ -16,7 +16,7 @@ use PHPUnit\Framework\TestCase;
 
 class ResultFileImportFinalizerTest extends TestCase
 {
-    public function testTriggerImportedSkipsEmptyCount(): void {
+    public function test_trigger_imported_skips_empty_count(): void {
         $eventService = $this->createEventServiceMock();
         $eventService
             ->expects($this->never())
@@ -54,7 +54,7 @@ class ResultFileImportFinalizerTest extends TestCase
         );
     }
 
-    public function testTriggerImportedDispatchesEvent(): void {
+    public function test_trigger_imported_dispatches_event(): void {
         $eventService = $this->createEventServiceMock();
         $eventService
             ->expects($this->once())
@@ -65,7 +65,7 @@ class ResultFileImportFinalizerTest extends TestCase
         $this->createFinalizer($eventService)->triggerImported(2);
     }
 
-    public function testTriggerUnfinishedStoresGameAndDispatchesEvent(): void {
+    public function test_trigger_unfinished_stores_game_and_dispatches_event(): void {
         /** @var Game $game */
         $game = $this->createStub(Game::class);
         $game->resultsFile = '0001';
@@ -97,7 +97,7 @@ class ResultFileImportFinalizerTest extends TestCase
             ->triggerUnfinished($game, 'game-loaded', $this->createStub(Logger::class));
     }
 
-    public function testFinalizeEmptyGameListOnlyLogs(): void {
+    public function test_finalize_empty_game_list_only_logs(): void {
         $logger = $this
             ->getMockBuilder(Logger::class)
             ->disableOriginalConstructor()

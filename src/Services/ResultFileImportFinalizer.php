@@ -31,7 +31,9 @@ readonly class ResultFileImportFinalizer
     }
 
     /**
-     * @template G of Game
+     * @template T of \App\GameModels\Game\Team
+     * @template P of \App\GameModels\Game\Player
+     * @template G of Game<T,P>
      * @param G $game
      * @throws Exception
      */
@@ -70,6 +72,12 @@ readonly class ResultFileImportFinalizer
         $this->eventService->trigger($event, ['game' => $game->resultsFile]);
     }
 
+    /**
+     * @template T of \App\GameModels\Game\Team
+     * @template P of \App\GameModels\Game\Player
+     * @template G of Game<T,P>
+     * @param G $game
+     */
     private function getUnfinishedGameTimestamp(Game $game, string $event): int {
         if ($event === 'game-started') {
             return $game->start?->getTimestamp() ?? $game->fileTime?->getTimestamp() ?? 0;
@@ -79,7 +87,9 @@ readonly class ResultFileImportFinalizer
     }
 
     /**
-     * @template G of Game
+     * @template T of \App\GameModels\Game\Team
+     * @template P of \App\GameModels\Game\Player
+     * @template G of Game<T,P>
      * @param list<G> $finishedGames
      */
     public function finalize(array $finishedGames, Logger $logger, ?OutputInterface $output = null): void {

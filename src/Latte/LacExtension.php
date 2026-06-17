@@ -6,11 +6,16 @@ namespace App\Latte;
 
 use App\Latte\Nodes\IconNode;
 use App\Services\FontAwesomeManager;
+use Generator;
+use Latte\Compiler\Node;
+use Latte\Compiler\Tag;
+use Latte\Compiler\TemplateParser;
 use Latte\ContentType;
 use Latte\Engine;
 use Latte\Extension;
 use Latte\Runtime\FilterInfo;
 use Latte\Runtime\HtmlStringable;
+use stdClass;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class LacExtension extends Extension
@@ -26,6 +31,9 @@ class LacExtension extends Extension
         parent::beforeCompile($engine);
     }
 
+    /**
+     * @return array<string, callable(Tag, TemplateParser): (Node|Generator<mixed,mixed,mixed,mixed>|void)|stdClass>
+     */
     public function getTags(): array {
         return [
             'fa'      => [IconNode::class, 'create'],

@@ -58,9 +58,8 @@ function getImageSrcSet(Image | string $image, bool $includeAllSizes = true): st
                 $srcSet[] = $versions[$index] . ' ' . $size . 'w';
                 continue;
             }
-            $index = (string) $size;
-            if (isset($versions[$index])) {
-                $srcSet[] = $versions[$index] . ' ' . $size . 'w';
+            if (isset($versions[$size])) {
+                $srcSet[] = $versions[$size] . ' ' . $size . 'w';
             }
         }
     }

@@ -36,7 +36,6 @@ trait WithMetaData
         if ( ! isset($this->metaData)) {
             $this->metaData = ! empty($this->meta) ? $this->unserializeMeta($this->meta) : [];
         }
-        assert($this->metaData !== null);
         return $this->metaData;
     }
 

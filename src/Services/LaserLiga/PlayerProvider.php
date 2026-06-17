@@ -129,7 +129,7 @@ readonly class PlayerProvider implements PlayerProviderInterface
         $player->email = $data->email;
         $player->rank = $data->stats->rank;
         $player->birthday = $data->birthday;
-        foreach ($data->connections ?? [] as $connectionData) {
+        foreach ($data->connections as $connectionData) {
             $connection = new PlayerConnection();
             $connection->type = $connectionData->type;
             $connection->identifier = $connectionData->identifier;

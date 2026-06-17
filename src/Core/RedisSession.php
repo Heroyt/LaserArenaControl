@@ -70,7 +70,7 @@ class RedisSession implements SessionInterface
      */
     public function getParams(): array {
         return [
-            'lifetime' => $this->ttl ?? 0,
+            'lifetime' => $this->ttl,
             'path'     => $this->path ?? '/',
             'domain'   => $this->domain ?? '',
             'secure'   => $this->secure ?? false,

@@ -76,8 +76,8 @@ readonly class ResultPrintService
 
         $bg = ROOT . (
             $templateObj?->orientation === PrintOrientation::landscape ?
-            ($styleObj->bgLandscape ?? '') :
-            ($styleObj->bg ?? '')
+            $styleObj->bgLandscape :
+            $styleObj->bg
         );
 
         if ( ! file_exists($bg)) {

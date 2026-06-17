@@ -15,7 +15,7 @@ class Image
     private string $path;
     private ?string $type = null;
 
-    /** @var array{original?:string,webp?:string}|array<string|numeric-string,string> */
+    /** @var array<int|string,string> */
     private array $optimized = [];
 
     /** @var array<string,array{original?:string,webp?:string}> */
@@ -37,12 +37,11 @@ class Image
         if (isset($optimized[$index])) {
             return $optimized[$index];
         }
-        $index = (string) $size;
-        return $optimized[$index] ?? $optimized['webp'] ?? $optimized['original'];
+        return $optimized[$size] ?? $optimized['webp'] ?? $optimized['original'];
     }
 
     /**
-     * @return array<string|numeric-string,string>
+     * @return array<int|string,string>
      */
     public function getOptimized(): array {
         if ( ! empty($this->optimized)) {
@@ -79,7 +78,7 @@ class Image
     }
 
     /**
-     * @param  array<string|numeric-string,string>  $images
+     * @param  array<int|string,string>  $images
      *
      * @return void
      */
@@ -99,12 +98,10 @@ class Image
         foreach ($imageService->getSizes() as $size) {
             $file = $optimizedDir . $this->name . 'x' . $size . '.' . $this->getType();
             if (file_exists($file)) {
-                /** @phpstan-ignore parameterByRef.type */
-                $images[(string) $size] = $this->pathToUrl($file);
+                $images[$size] = $this->pathToUrl($file);
             }
             $file = $optimizedDir . $this->name . 'x' . $size . '.webp';
             if (file_exists($file)) {
-                /** @phpstan-ignore parameterByRef.type */
                 $images[($size . '-webp')] = $this->pathToUrl($file);
             }
         }
@@ -133,7 +130,6 @@ class Image
                 }
             }
         }
-        assert($this->type !== null);
         return $this->type;
     }
 

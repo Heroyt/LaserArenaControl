@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @file  config/constants.php
  * @brief Constants that need to be imported into DI container

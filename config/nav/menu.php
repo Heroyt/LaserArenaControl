@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @file  config/nav/menu.php
  * @brief Definition of the main menu items

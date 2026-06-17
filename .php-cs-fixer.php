@@ -26,8 +26,8 @@ $finder = PhpCsFixer\Finder::create()
     ->ignoreVCS(true);
 
 return new PhpCsFixer\Config()
-    ->setUsingCache(false)
-    ->setRiskyAllowed(false)
+    ->setUsingCache(true)
+    ->setRiskyAllowed(true)
     ->setFinder($finder)
     ->setRules([
         '@PSR12' => true,
@@ -108,4 +108,5 @@ return new PhpCsFixer\Config()
         'no_useless_else' => true,
         'nullable_type_declaration_for_default_null_value' => true,
         'php_unit_method_casing' => ['case' => 'snake_case'],
+        'declare_strict_types' => true,
     ]);

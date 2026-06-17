@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @file      E404.php
  * @brief     Pages\E404 class

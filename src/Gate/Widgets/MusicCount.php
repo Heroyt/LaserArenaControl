@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Gate\Widgets;
 
 use App\GameModels\Factory\GameFactory;

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @file      Loader.php
  * @brief     Core\Loader class

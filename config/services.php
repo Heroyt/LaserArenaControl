@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @file  config/services.php
  * @brief List of all DI container definition files

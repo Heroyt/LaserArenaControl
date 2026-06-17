@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Cron;
 
 use Lsr\Logging\Exceptions\ArchiveCreationException;

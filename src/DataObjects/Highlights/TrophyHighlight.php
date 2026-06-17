@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\DataObjects\Highlights;
 
 use App\GameModels\Game\Game;

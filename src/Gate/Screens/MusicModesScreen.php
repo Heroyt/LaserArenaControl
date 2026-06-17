@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Gate\Screens;
 
 use App\Gate\Models\MusicGroupDto;

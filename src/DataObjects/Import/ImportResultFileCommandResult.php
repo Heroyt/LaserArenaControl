@@ -23,15 +23,13 @@ readonly class ImportResultFileCommandResult implements JsonSerializable
         public ?string                $event = null,
         #[OA\Property(nullable: true)]
         public ?string                $error = null,
-    )
-    {
+    ) {
     }
 
     /**
      * @return array<string,mixed>
      */
-    public function jsonSerialize(): array
-    {
+    public function jsonSerialize(): array {
         return [
             'path' => $this->path,
             'version' => $this->version,

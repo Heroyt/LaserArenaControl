@@ -23,48 +23,44 @@ class SimulateGameCommand extends Command
         parent::__construct();
     }
 
-    public static function getDefaultName(): ?string
-    {
+    public static function getDefaultName(): ?string {
         return 'games:simulate';
     }
 
-    public static function getDefaultDescription(): ?string
-    {
+    public static function getDefaultDescription(): ?string {
         return 'Simulate the game loaded in 0000.game';
     }
 
-    protected function configure(): void
-    {
+    protected function configure(): void {
         $this->addOption(
             'system',
             's',
             InputOption::VALUE_REQUIRED,
             'LaserMaxx system to simulate (evo5 or evo6)',
-            'evo5'
+            'evo5',
         );
         $this->addOption(
             'state',
             null,
             InputOption::VALUE_REQUIRED,
             'Simulated game state: finished, loaded, or started',
-            GameSimulationState::FINISHED->value
+            GameSimulationState::FINISHED->value,
         );
         $this->addOption(
             'loaded',
             null,
             InputOption::VALUE_NONE,
-            'Shortcut for --state=loaded'
+            'Shortcut for --state=loaded',
         );
         $this->addOption(
             'started',
             null,
             InputOption::VALUE_NONE,
-            'Shortcut for --state=started'
+            'Shortcut for --state=started',
         );
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): int
-    {
+    protected function execute(InputInterface $input, OutputInterface $output): int {
         try {
             $system = (string)$input->getOption('system');
             $state = $this->getState($input);
@@ -82,14 +78,12 @@ class SimulateGameCommand extends Command
         }
     }
 
-    private function getEvo6GameSimulator(): Evo6GameSimulator
-    {
+    private function getEvo6GameSimulator(): Evo6GameSimulator {
         $this->evo6GameSimulator ??= App::getServiceByType(Evo6GameSimulator::class);
         return $this->evo6GameSimulator;
     }
 
-    private function getState(InputInterface $input): GameSimulationState
-    {
+    private function getState(InputInterface $input): GameSimulationState {
         if ((bool)$input->getOption('loaded') && (bool)$input->getOption('started')) {
             throw new Exception('Use only one of --loaded or --started.');
         }

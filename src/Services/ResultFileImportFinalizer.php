@@ -20,12 +20,10 @@ readonly class ResultFileImportFinalizer
         private LigaApi          $ligaApi,
         private FeatureConfig    $featureConfig,
         private GameStateStorage $gameStateStorage,
-    )
-    {
+    ) {
     }
 
-    public function triggerImported(int $count): void
-    {
+    public function triggerImported(int $count): void {
         if ($count > 0) {
             $this->eventService->trigger('game-imported', ['count' => $count]);
         }
@@ -41,8 +39,7 @@ readonly class ResultFileImportFinalizer
         string           $event,
         Logger           $logger,
         ?OutputInterface $output = null,
-    ): void
-    {
+    ): void {
         if ($event !== 'game-started' && $event !== 'game-loaded') {
             $logger->warning('Skipping unknown unfinished game event.', ['event' => $event]);
             return;
@@ -60,7 +57,7 @@ readonly class ResultFileImportFinalizer
                     'key' => $key,
                     'storedGame' => $storedGame->resultsFile,
                     'game' => $game->resultsFile,
-                ]
+                ],
             );
             return;
         }
@@ -72,8 +69,7 @@ readonly class ResultFileImportFinalizer
         $this->eventService->trigger($event, ['game' => $game->resultsFile]);
     }
 
-    private function getUnfinishedGameTimestamp(Game $game, string $event): int
-    {
+    private function getUnfinishedGameTimestamp(Game $game, string $event): int {
         if ($event === 'game-started') {
             return $game->start?->getTimestamp() ?? $game->fileTime?->getTimestamp() ?? 0;
         }
@@ -85,8 +81,7 @@ readonly class ResultFileImportFinalizer
      * @template G of Game
      * @param list<G> $finishedGames
      */
-    public function finalize(array $finishedGames, Logger $logger, ?OutputInterface $output = null): void
-    {
+    public function finalize(array $finishedGames, Logger $logger, ?OutputInterface $output = null): void {
         if (empty($finishedGames)) {
             $logger->info('No games to synchronize to public');
             return;
@@ -109,11 +104,11 @@ readonly class ResultFileImportFinalizer
                             $output?->writeln(
                                 Colors::color(ForegroundColors::RED) .
                                 'Failed to save finished game after synchronization. ' . $e->getMessage() .
-                                Colors::reset()
+                                Colors::reset(),
                             );
                             $logger->warning(
                                 'Failed to save finished game after synchronization',
-                                ['system' => $system, 'game' => $finishedGame->code, 'exception' => $e->getMessage()]
+                                ['system' => $system, 'game' => $finishedGame->code, 'exception' => $e->getMessage()],
                             );
                             $logger->exception($e);
                         }
@@ -125,7 +120,7 @@ readonly class ResultFileImportFinalizer
                 $output?->writeln(
                     Colors::color(ForegroundColors::RED) .
                     'Failed to synchronize games to public' .
-                    Colors::reset()
+                    Colors::reset(),
                 );
             }
         }
@@ -133,7 +128,7 @@ readonly class ResultFileImportFinalizer
         /** @var ResultsPrecacheService $precacheService */
         $precacheService = \App\Core\App::getService('resultPrecache');
         $precacheService->prepareGamePrecache(
-            ...array_map(static fn(Game $game): string => $game->code, $finishedGames)
+            ...array_map(static fn (Game $game): string => $game->code, $finishedGames),
         );
     }
 }

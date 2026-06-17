@@ -19,15 +19,13 @@ class Highlights implements WidgetInterface
     private ?string $hash = null;
 
     public function __construct(
-        private readonly GameHighlightService $highlightService
-    )
-    {
+        private readonly GameHighlightService $highlightService,
+    ) {
     }
 
-    public function getData(?Game $game = null, ?DateTimeInterface $date = null, ?array $systems = []): array
-    {
+    public function getData(?Game $game = null, ?DateTimeInterface $date = null, ?array $systems = []): array {
         return [
-          'highlights' => $this->getHighlights($date ?? new DateTimeImmutable()),
+            'highlights' => $this->getHighlights($date ?? new DateTimeImmutable()),
         ];
     }
 
@@ -36,27 +34,23 @@ class Highlights implements WidgetInterface
      * @return HighlightDto[]
      * @phpstan-ignore missingType.generics
      */
-    private function getHighlights(DateTimeInterface $date): array
-    {
-        if (!isset($this->highlights)) {
+    private function getHighlights(DateTimeInterface $date): array {
+        if ( ! isset($this->highlights)) {
             $this->highlights = $this->highlightService->getHighlightsDataForDay($date);
         }
         return $this->highlights;
     }
 
-    public function getTemplate(): string
-    {
+    public function getTemplate(): string {
         return 'highlights.latte';
     }
 
-    public function getSettingsTemplate(): string
-    {
+    public function getSettingsTemplate(): string {
         return '';
     }
 
-    public function getHash(?Game $game = null, ?DateTimeInterface $date = null, ?array $systems = []): string
-    {
-        if (!isset($this->hash)) {
+    public function getHash(?Game $game = null, ?DateTimeInterface $date = null, ?array $systems = []): string {
+        if ( ! isset($this->hash)) {
             $data = '';
             foreach ($this->getHighlights($date ?? new DateTimeImmutable()) as $highlight) {
                 $data .= $highlight->code . $highlight->description;
@@ -66,8 +60,7 @@ class Highlights implements WidgetInterface
         return $this->hash;
     }
 
-    public function refresh(): static
-    {
+    public function refresh(): static {
         $this->highlights = null;
         $this->hash = null;
         return $this;

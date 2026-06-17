@@ -17,8 +17,7 @@ class GamesList extends Controller
     protected string $title = 'Seznam her';
     protected string $description = '';
 
-    public function show(Request $request): ResponseInterface
-    {
+    public function show(Request $request): ResponseInterface {
         /** @var string $date */
         $date = $request->getGet('date', 'now');
         $this->params['date'] = new DateTimeImmutable($date);
@@ -27,8 +26,7 @@ class GamesList extends Controller
         return $this->view('pages/games-list/index');
     }
 
-    public function game(): ResponseInterface
-    {
+    public function game(): ResponseInterface {
         return $this->view('pages/dashboard/index');
     }
 
@@ -40,8 +38,7 @@ class GamesList extends Controller
      * @throws ValidationException
      * @throws DirectoryCreationException
      */
-    public function checkGameTeamScores(Game $game): bool
-    {
+    public function checkGameTeamScores(Game $game): bool {
         if ($game->gameType !== GameModeType::TEAM) {
             return true;
         }

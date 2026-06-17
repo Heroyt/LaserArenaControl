@@ -40,8 +40,7 @@ class RedisSession implements SessionInterface
     /**
      * @inheritDoc
      */
-    public function close(): void
-    {
+    public function close(): void {
         if ($this->sessionId === null) {
             $this->status = PHP_SESSION_NONE;
             return;
@@ -52,8 +51,7 @@ class RedisSession implements SessionInterface
         $this->status = PHP_SESSION_NONE;
     }
 
-    private function saveSessionData(): void
-    {
+    private function saveSessionData(): void {
         if ($this->data === null) {
             return;
         }
@@ -63,22 +61,20 @@ class RedisSession implements SessionInterface
     /**
      * @inheritDoc
      */
-    public function getStatus(): int
-    {
+    public function getStatus(): int {
         return $this->status;
     }
 
     /**
      * @inheritDoc
      */
-    public function getParams(): array
-    {
+    public function getParams(): array {
         return [
-          'lifetime' => $this->ttl ?? 0,
-          'path'     => $this->path ?? '/',
-          'domain'   => $this->domain ?? '',
-          'secure'   => $this->secure ?? false,
-          'httponly' => $this->httponly ?? true,
+            'lifetime' => $this->ttl ?? 0,
+            'path'     => $this->path ?? '/',
+            'domain'   => $this->domain ?? '',
+            'secure'   => $this->secure ?? false,
+            'httponly' => $this->httponly ?? true,
         ];
     }
 
@@ -90,9 +86,8 @@ class RedisSession implements SessionInterface
         ?string $path = '/',
         ?string $domain = null,
         ?bool   $secure = null,
-        ?bool   $httponly = null
-    ): bool
-    {
+        ?bool   $httponly = null,
+    ): bool {
         $this->ttl = $lifetime;
         $this->path = $path;
         $this->domain = $domain;
@@ -104,8 +99,7 @@ class RedisSession implements SessionInterface
     /**
      * @inheritDoc
      */
-    public function delete(string $key): void
-    {
+    public function delete(string $key): void {
         if ($this->data === null) {
             $this->loadSessionData();
         }
@@ -117,22 +111,20 @@ class RedisSession implements SessionInterface
     /**
      * @inheritDoc
      */
-    public function clear(): void
-    {
+    public function clear(): void {
         $this->data = [
-          self::SESSION_FLASH_KEY => [],
+            self::SESSION_FLASH_KEY => [],
         ];
     }
 
     /**
      * @inheritDoc
      */
-    public function getFlash(string $key, mixed $default = null): mixed
-    {
+    public function getFlash(string $key, mixed $default = null): mixed {
         if ($this->data === null) {
             $this->loadSessionData();
         }
-        if (!isset($this->data[self::SESSION_FLASH_KEY]) || !is_array($this->data[self::SESSION_FLASH_KEY])) {
+        if ( ! isset($this->data[self::SESSION_FLASH_KEY]) || ! is_array($this->data[self::SESSION_FLASH_KEY])) {
             $this->data[self::SESSION_FLASH_KEY] = [];
         }
         return $this->data[self::SESSION_FLASH_KEY][$key] ?? $default;
@@ -141,27 +133,25 @@ class RedisSession implements SessionInterface
     /**
      * @inheritDoc
      */
-    public function flash(string $key, mixed $value): void
-    {
+    public function flash(string $key, mixed $value): void {
         if ($this->data === null) {
             $this->loadSessionData();
         }
-        if (!isset($this->data[self::SESSION_FLASH_KEY]) || !is_array($this->data[self::SESSION_FLASH_KEY])) {
+        if ( ! isset($this->data[self::SESSION_FLASH_KEY]) || ! is_array($this->data[self::SESSION_FLASH_KEY])) {
             $this->data[self::SESSION_FLASH_KEY] = [];
         }
         $this->data[self::SESSION_FLASH_KEY][$key] = $value;
     }
 
-    public function getCookieHeader(): string
-    {
+    public function getCookieHeader(): string {
         if ($this->sessionId === null) {
             throw new LogicException('Session not initialized');
         }
         $cookie = self::SESSION_COOKIE_NAME . '=' . $this->sessionId;
-        if (!empty($this->domain)) {
+        if ( ! empty($this->domain)) {
             $cookie .= '; Domain=' . $this->domain;
         }
-        if (!empty($this->path)) {
+        if ( ! empty($this->path)) {
             $cookie .= '; Path=' . $this->path;
         }
         if ($this->secure) {
@@ -174,19 +164,17 @@ class RedisSession implements SessionInterface
         return $cookie;
     }
 
-    public function flashError(string $message): void
-    {
+    public function flashError(string $message): void {
         $this->flashNotice(new Notice($message, NoticeType::ERROR));
     }
 
-    public function flashNotice(Notice $notice): void
-    {
-        if (!$this->isInitialized()) {
+    public function flashNotice(Notice $notice): void {
+        if ( ! $this->isInitialized()) {
             $this->init();
         }
         if (
-            !isset($this->data[self::SESSION_FLASH_MESSAGE_KEY])
-            || !is_array($this->data[self::SESSION_FLASH_MESSAGE_KEY])
+            ! isset($this->data[self::SESSION_FLASH_MESSAGE_KEY])
+            || ! is_array($this->data[self::SESSION_FLASH_MESSAGE_KEY])
         ) {
             $this->data[self::SESSION_FLASH_MESSAGE_KEY] = [];
         }
@@ -197,16 +185,14 @@ class RedisSession implements SessionInterface
     /**
      * @inheritDoc
      */
-    public function isInitialized(): bool
-    {
+    public function isInitialized(): bool {
         return $this->sessionId !== null;
     }
 
     /**
      * @inheritDoc
      */
-    public function init(): void
-    {
+    public function init(): void {
         // Get session cookie from request
         $request = App::getInstance()->getRequest();
         $cookies = $request->getCookieParams();
@@ -222,7 +208,7 @@ class RedisSession implements SessionInterface
         // Generate new session
         $this->sessionId = $this->generateSessionId();
         $this->data = [
-          self::SESSION_FLASH_KEY => [],
+            self::SESSION_FLASH_KEY => [],
         ];
         $this->status = PHP_SESSION_ACTIVE;
     }
@@ -230,8 +216,7 @@ class RedisSession implements SessionInterface
     /**
      * @inheritDoc
      */
-    public static function getInstance(): static
-    {
+    public static function getInstance(): static {
         if (self::$instance === null) {
             $redis = App::getService('redis');
             assert($redis instanceof Redis);
@@ -241,8 +226,7 @@ class RedisSession implements SessionInterface
         return self::$instance;
     }
 
-    private function generateSessionId(): string
-    {
+    private function generateSessionId(): string {
         $random = new Randomizer();
         do {
             $id = bin2hex($random->getBytes(32));
@@ -250,26 +234,24 @@ class RedisSession implements SessionInterface
         return $id;
     }
 
-    private function setCookie(): void
-    {
+    private function setCookie(): void {
         App::cookieJar()
-           ->set(
-               self::SESSION_COOKIE_NAME,
-               $this->sessionId ?? $this->generateSessionId(),
-               /** @phpstan-ignore argument.type */
-               time() + $this->ttl,
-               $this->path ?? '/',
-               $this->domain ?? '',
-               $this->secure ?? false,
-               $this->httponly ?? true
-           );
+            ->set(
+                self::SESSION_COOKIE_NAME,
+                $this->sessionId ?? $this->generateSessionId(),
+                /** @phpstan-ignore argument.type */
+                time() + $this->ttl,
+                $this->path ?? '/',
+                $this->domain ?? '',
+                $this->secure ?? false,
+                $this->httponly ?? true,
+            );
     }
 
     /**
      * @inheritDoc
      */
-    public function set(string $key, mixed $value): void
-    {
+    public function set(string $key, mixed $value): void {
         if ($this->data === null) {
             $this->loadSessionData();
         }
@@ -279,8 +261,7 @@ class RedisSession implements SessionInterface
         $this->data[$key] = $value;
     }
 
-    private function loadSessionData(): void
-    {
+    private function loadSessionData(): void {
         assert($this->sessionId !== null);
         $data = $this->redis->get(self::SESSION_KEY_PREFIX . $this->sessionId);
         if ($data !== false) {
@@ -292,41 +273,36 @@ class RedisSession implements SessionInterface
         }
         // Initialize empty data
         $this->data = [
-          self::SESSION_FLASH_KEY => [],
+            self::SESSION_FLASH_KEY => [],
         ];
     }
 
     /**
      * @inheritDoc
      */
-    public function get(string $key, mixed $default = null): mixed
-    {
+    public function get(string $key, mixed $default = null): mixed {
         if ($this->data === null) {
             $this->loadSessionData();
         }
         return $this->data[$key] ?? $default;
     }
 
-    public function flashSuccess(string $message): void
-    {
+    public function flashSuccess(string $message): void {
         $this->flashNotice(new Notice($message, NoticeType::SUCCESS));
     }
 
-    public function flashInfo(string $message): void
-    {
+    public function flashInfo(string $message): void {
         $this->flashNotice(new Notice($message, NoticeType::INFO));
     }
 
-    public function flashWarning(string $message): void
-    {
+    public function flashWarning(string $message): void {
         $this->flashNotice(new Notice($message, NoticeType::WARNING));
     }
 
-    public function getFlashMessages(): array
-    {
+    public function getFlashMessages(): array {
         if (
-            !isset($this->data[self::SESSION_FLASH_MESSAGE_KEY])
-            || !is_array($this->data[self::SESSION_FLASH_MESSAGE_KEY])
+            ! isset($this->data[self::SESSION_FLASH_MESSAGE_KEY])
+            || ! is_array($this->data[self::SESSION_FLASH_MESSAGE_KEY])
         ) {
             $this->data[self::SESSION_FLASH_MESSAGE_KEY] = [];
         }

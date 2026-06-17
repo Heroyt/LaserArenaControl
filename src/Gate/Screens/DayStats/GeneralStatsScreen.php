@@ -27,38 +27,33 @@ class GeneralStatsScreen extends GateScreen
     /**
      * @inheritDoc
      */
-    public static function getName(): string
-    {
+    public static function getName(): string {
         return lang('Základní denní statistiky', domain: 'gate', context: 'screens');
     }
 
-    public static function getDescription(): string
-    {
+    public static function getDescription(): string {
         return lang(
             'Obrazovka zobrazující dnešní nejlepší hráče a počet odehraných her.',
             domain: 'gate',
-            context: 'screens.description'
+            context: 'screens.description',
         );
     }
 
-    public static function getGroup(): string
-    {
+    public static function getGroup(): string {
         return lang('Denní statistiky', domain: 'gate', context: 'screens.groups');
     }
 
     /**
      * @inheritDoc
      */
-    public static function getDiKey(): string
-    {
+    public static function getDiKey(): string {
         return 'gate.screens.idle.stats';
     }
 
     /**
      * @inheritDoc
      */
-    public function run(): ResponseInterface
-    {
+    public function run(): ResponseInterface {
         /** @var Request $request */
         $request = App::getInstance()->getRequest();
         /** @var string $date */
@@ -69,7 +64,7 @@ class GeneralStatsScreen extends GateScreen
 
         [$generalStatsHash, $generalStatsData] = $this->cache->load(
             'gate.today.generalStats.' . $today->format('Y-m-d'),
-            fn() => [
+            fn () => [
                 $this->generalStats->getHash(date: $today, systems: $this->systems),
                 [
                     'data' => $this->generalStats->getData(date: $today, systems: $this->systems),
@@ -77,27 +72,27 @@ class GeneralStatsScreen extends GateScreen
                 ],
             ],
             [
-            'tags'   => [
-              'gate',
-              'gate.widgets',
-              'gate.widgets.generalStats',
-                'games/' . $today->format('Y-m-d'),
+                'tags'   => [
+                    'gate',
+                    'gate.widgets',
+                    'gate.widgets.generalStats',
+                    'games/' . $today->format('Y-m-d'),
+                ],
+                'expire' => '1 days',
             ],
-            'expire' => '1 days',
-            ]
         );
 
 
         return $this->view(
             'gate/screens/generalDayStats',
             [
-            'screenHash' => $generalStatsHash,
-            'widgets'    => [
-              'generalStats' => $generalStatsData,
+                'screenHash' => $generalStatsHash,
+                'widgets'    => [
+                    'generalStats' => $generalStatsData,
+                ],
+                'addJs'      => ['gate/today.js'],
+                'addCss'     => ['gate/todayStats.css'],
             ],
-            'addJs'      => ['gate/today.js'],
-            'addCss'     => ['gate/todayStats.css'],
-            ]
         );
     }
 }

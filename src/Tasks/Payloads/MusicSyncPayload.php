@@ -11,7 +11,6 @@ readonly class MusicSyncPayload implements TaskPayloadInterface
 {
     public function __construct(
         public ?MusicMode $music = null,
-    )
-    {
+    ) {
     }
 }

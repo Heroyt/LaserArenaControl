@@ -28,19 +28,16 @@ class PreparedGames extends Controller
         private readonly Serializer       $serializer,
         private readonly SessionInterface $session,
         private readonly CommandBus       $commandBus,
-    )
-    {
+    ) {
     }
 
-    public function deleteAll(): ResponseInterface
-    {
+    public function deleteAll(): ResponseInterface {
         DB::update($this::TABLE, ['active' => 0], ['active = 1']);
         $this->cache->clean([$this->cache::Tags => $this::CACHE_TAGS]);
         return $this->respond(['status' => 'ok']);
     }
 
-    public function save(Request $request, string $type = PreparedGameType::PREPARED->value): ResponseInterface
-    {
+    public function save(Request $request, string $type = PreparedGameType::PREPARED->value): ResponseInterface {
         $preparedType = PreparedGameType::tryFrom($type) ?? PreparedGameType::PREPARED;
         $system = $request->getPost('system');
         if ($system === null) {
@@ -50,12 +47,12 @@ class PreparedGames extends Controller
         /** @var array<string,mixed> $body */
         $body = $request->getParsedBody();
         if (
-            !$this->commandBus->dispatch(
+            ! $this->commandBus->dispatch(
                 new PrepareGameCommand(
                     $preparedType,
                     $system,
                     $body,
-                )
+                ),
             )
         ) {
             return $this->respond(new ErrorResponse('Failed to save prepared game'), 500);
@@ -64,12 +61,11 @@ class PreparedGames extends Controller
         return $this->respond(new SuccessResponse());
     }
 
-    public function get(Request $request): ResponseInterface
-    {
-        $all = !empty($request->getGet('all'));
+    public function get(Request $request): ResponseInterface {
+        $all = ! empty($request->getGet('all'));
 
         $query = DB::select($this::TABLE, '*')->cacheTags(...$this::CACHE_TAGS);
-        if (!$all) {
+        if ( ! $all) {
             $query->where('`active` = 1');
         }
         $query->orderBy('datetime')->desc();
@@ -89,8 +85,7 @@ class PreparedGames extends Controller
         return $this->respond($games);
     }
 
-    public function delete(int $id): ResponseInterface
-    {
+    public function delete(int $id): ResponseInterface {
         DB::update($this::TABLE, ['active' => 0], ['id_game = %i', $id]);
 
         $this->cache->clean([$this->cache::Tags => $this::CACHE_TAGS]);

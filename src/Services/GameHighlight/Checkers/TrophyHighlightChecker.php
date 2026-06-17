@@ -16,9 +16,6 @@ use Lsr\ObjectValidation\Exceptions\ValidationException;
 use Lsr\Orm\Exceptions\ModelNotFoundException;
 use Throwable;
 
-/**
- *
- */
 class TrophyHighlightChecker implements PlayerHighlightChecker
 {
     /**
@@ -33,8 +30,7 @@ class TrophyHighlightChecker implements PlayerHighlightChecker
      * @throws GameModeNotFoundException
      * @throws Throwable
      */
-    public function checkPlayer(Player $player, HighlightCollection $highlights): void
-    {
+    public function checkPlayer(Player $player, HighlightCollection $highlights): void {
         foreach (PlayerTrophy::SPECIAL_TROPHIES as $trophy) {
             try {
                 if ($player->trophy->check($trophy)) {
@@ -68,8 +64,8 @@ class TrophyHighlightChecker implements PlayerHighlightChecker
                         new TrophyHighlight(
                             $trophy,
                             $player,
-                            (int)$rarity
-                        )
+                            (int)$rarity,
+                        ),
                     );
                 }
             } catch (ModelNotFoundException | ValidationException | DirectoryCreationException) {

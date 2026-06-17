@@ -9,7 +9,7 @@ namespace App\Cli\Enums;
 /**
  * List of CLI background colors and their values
  */
-enum BackgroundColors : string
+enum BackgroundColors: string
 {
     case BLACK        = "\033[40m";
     case RED          = "\033[41m";

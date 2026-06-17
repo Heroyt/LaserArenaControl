@@ -18,27 +18,26 @@ use function ksort;
 final class ParametersSorter
 {
     private const
-      TYPE_ARRAY = 'array',
-      TYPE_BOOL = 'bool',
-      TYPE_NUMBER = 'number',
-      TYPE_STRING = 'string',
-      TYPE_NULL = 'null',
-      TYPE_OTHER = 'other';
+        TYPE_ARRAY = 'array',
+        TYPE_BOOL = 'bool',
+        TYPE_NUMBER = 'number',
+        TYPE_STRING = 'string',
+        TYPE_NULL = 'null',
+        TYPE_OTHER = 'other';
 
     /**
      * @param  array<mixed>  $parameters
      * @return array<mixed>
      */
-    public static function sortByType(array $parameters): array
-    {
+    public static function sortByType(array $parameters): array {
         ksort($parameters);
         $byType = [
-          self::TYPE_ARRAY  => [],
-          self::TYPE_BOOL   => [],
-          self::TYPE_NUMBER => [],
-          self::TYPE_STRING => [],
-          self::TYPE_NULL   => [],
-          self::TYPE_OTHER  => [],
+            self::TYPE_ARRAY  => [],
+            self::TYPE_BOOL   => [],
+            self::TYPE_NUMBER => [],
+            self::TYPE_STRING => [],
+            self::TYPE_NULL   => [],
+            self::TYPE_OTHER  => [],
         ];
 
         foreach ($parameters as $key => $item) {

@@ -21,18 +21,15 @@ class ArchiveLogsCommand extends Command
         parent::__construct('log:archive');
     }
 
-    public static function getDefaultName(): ?string
-    {
+    public static function getDefaultName(): ?string {
         return 'log:archive';
     }
 
-    public static function getDefaultDescription(): string
-    {
+    public static function getDefaultDescription(): string {
         return 'Archive old logs.';
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): int
-    {
+    protected function execute(InputInterface $input, OutputInterface $output): int {
         $dirIt = new RecursiveDirectoryIterator(LOG_DIR);
         $itIt = new RecursiveIteratorIterator($dirIt, RecursiveIteratorIterator::LEAVES_ONLY);
         $it = new RegexIterator($itIt, '/.*-\\d{4}-\\d{2}-\\d{2}\\.log/');
@@ -55,7 +52,7 @@ class ArchiveLogsCommand extends Command
                         Colors::color(ForegroundColors::YELLOW) .
                         'No logs to archive' .
                         Colors::reset(),
-                        $output::VERBOSITY_DEBUG
+                        $output::VERBOSITY_DEBUG,
                     );
                 } else {
                     $output->writeln('Archived ' . $name);
@@ -63,7 +60,7 @@ class ArchiveLogsCommand extends Command
                 }
             } catch (ArchiveCreationException $e) {
                 $output->writeln(
-                    Colors::color(ForegroundColors::RED) . 'Error: ' . $e->getMessage() . "\n" . $e->getTraceAsString() . Colors::reset()
+                    Colors::color(ForegroundColors::RED) . 'Error: ' . $e->getMessage() . "\n" . $e->getTraceAsString() . Colors::reset(),
                 );
                 return self::FAILURE;
             }

@@ -25,22 +25,21 @@ class GameModeVariation extends BaseModel
      *
      * @return GameModeVariationValue[]
      */
-    public function getValuesForMode(AbstractMode $mode): array
-    {
+    public function getValuesForMode(AbstractMode $mode): array {
         assert($mode->id !== null);
         if (empty($this->valuesModes[$mode->id])) {
             $this->valuesModes[$mode->id] = [];
             $rows = DB::select(self::TABLE_VALUES, '[value], [suffix], [order]')
-              ->where('id_variation = %i AND id_mode = %i', $this->id, $mode->id)
-              ->orderBy('[order]')
-              ->fetchAll();
+                ->where('id_variation = %i AND id_mode = %i', $this->id, $mode->id)
+                ->orderBy('[order]')
+                ->fetchAll();
             foreach ($rows as $row) {
                 $this->valuesModes[$mode->id][] = new GameModeVariationValue(
                     $this,
                     $mode,
                     $row->value,
                     $row->suffix,
-                    $row->order
+                    $row->order,
                 );
             }
         }

@@ -58,14 +58,14 @@ readonly class ResultFileImporter
         try {
             $game = $parser->parse();
         } catch (TypeError $e) {
-            if (!$this->isOrmModelConfigCacheError($e)) {
+            if ( ! $this->isOrmModelConfigCacheError($e)) {
                 throw $e;
             }
             $this->clearOrmModelConfigCache($logger);
             $parser->setFile($file);
             $game = $parser->parse();
         }
-        if (!$game instanceof Game) {
+        if ( ! $game instanceof Game) {
             throw new RuntimeException('Parsed result is not an application game model.');
         }
         $logger->debug(
@@ -75,7 +75,7 @@ readonly class ResultFileImporter
                 'system' => $system,
                 'code' => $this->getGameCode($game),
                 'finished' => $game->isFinished(),
-            ]
+            ],
         );
 
         return $game;
@@ -97,7 +97,7 @@ readonly class ResultFileImporter
         try {
             $game = $parser->parse();
         } catch (TypeError $e) {
-            if (!$this->isOrmModelConfigCacheError($e)) {
+            if ( ! $this->isOrmModelConfigCacheError($e)) {
                 throw $e;
             }
             $this->clearOrmModelConfigCache($logger);
@@ -105,7 +105,7 @@ readonly class ResultFileImporter
             $game = $parser->parse();
         }
 
-        if (!$game instanceof Game) {
+        if ( ! $game instanceof Game) {
             throw new RuntimeException('Parsed result is not an application game model.');
         }
         $logger->debug(
@@ -115,7 +115,7 @@ readonly class ResultFileImporter
                 'system' => $system,
                 'code' => $this->getGameCode($game),
                 'finished' => $game->isFinished(),
-            ]
+            ],
         );
 
         return $game;
@@ -139,7 +139,7 @@ readonly class ResultFileImporter
         $isFreshLoaded = isset($game->fileTime) && ($now - $game->fileTime->getTimestamp()) <= $gameLoadedTime;
         $isRecentlyStarted = $game->start !== null && ($now - $game->start->getTimestamp()) <= $gameStartedTime;
 
-        if (!$game->isFinished()) {
+        if ( ! $game->isFinished()) {
             $logger->debug('Game is not finished');
             $output?->writeln('Game is not finished');
             $debugPayload = json_encode([
@@ -151,7 +151,7 @@ readonly class ResultFileImporter
             ]);
             $output?->writeln(
                 $debugPayload === false ? '' : $debugPayload,
-                OutputInterface::VERBOSITY_VERBOSE
+                OutputInterface::VERBOSITY_VERBOSE,
             );
 
             if ($isStarted && $isRecentlyStarted) {
@@ -184,20 +184,20 @@ readonly class ResultFileImporter
 
         $logger->debug(
             'Starting game save from import loop',
-            ['file' => $file, 'system' => $system, 'code' => $this->getGameCode($game)]
+            ['file' => $file, 'system' => $system, 'code' => $this->getGameCode($game)],
         );
-        if (!$game->save()) {
+        if ( ! $game->save()) {
             $logger->error('Failed saving game into DB. ' . $file);
             $output?->writeln(
                 Colors::color(ForegroundColors::RED) .
                 'Failed saving game into DB' .
-                Colors::reset()
+                Colors::reset(),
             );
             return ResultFileImportResult::saveFailed($game);
         }
         $logger->debug(
             'Finished game save from import loop',
-            ['file' => $file, 'system' => $system, 'code' => $this->getGameCode($game)]
+            ['file' => $file, 'system' => $system, 'code' => $this->getGameCode($game)],
         );
 
         $this->clearImportedGameState($game, $system, $logger);
@@ -239,7 +239,7 @@ readonly class ResultFileImporter
 
         $logger->warning(
             'Cleared stale ORM model config cache after parser failure; retrying result import parse.',
-            ['removedFiles' => $removed]
+            ['removedFiles' => $removed],
         );
     }
 
@@ -260,7 +260,7 @@ readonly class ResultFileImporter
             } catch (\Dibi\Exception $e) {
                 $logger?->error(
                     'Failed to clear started game state after import',
-                    ['key' => $system . '-game-started', 'exception' => $e->getMessage()]
+                    ['key' => $system . '-game-started', 'exception' => $e->getMessage()],
                 );
             }
         }

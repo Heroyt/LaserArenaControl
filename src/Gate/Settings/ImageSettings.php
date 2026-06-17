@@ -4,9 +4,6 @@ namespace App\Gate\Settings;
 
 use App\DataObjects\Image;
 
-/**
- *
- */
 readonly class ImageSettings extends GateSettings
 {
     use WithTime;

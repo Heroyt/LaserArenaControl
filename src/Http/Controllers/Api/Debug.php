@@ -11,14 +11,13 @@ use Psr\Http\Message\ResponseInterface;
 
 class Debug extends ApiController
 {
-    public function disable(): ResponseInterface
-    {
+    public function disable(): ResponseInterface {
         /** @var string $contents */
         $contents = file_get_contents(PRIVATE_DIR . 'config.ini');
         if (
             file_put_contents(
                 PRIVATE_DIR . 'config.ini',
-                str_replace('DEBUG = true', 'DEBUG = false', $contents)
+                str_replace('DEBUG = true', 'DEBUG = false', $contents),
             ) === false
         ) {
             return $this->respond(['error' => 'Cannot write to config file.'], 500);
@@ -26,15 +25,14 @@ class Debug extends ApiController
         return $this->respond(['success' => true]);
     }
 
-    public function incrementCache(): ResponseInterface
-    {
+    public function incrementCache(): ResponseInterface {
         $version = App::getInstance()->getCacheVersion();
         /** @var string $contents */
         $contents = file_get_contents(PRIVATE_DIR . 'config.ini');
         if (
             file_put_contents(
                 PRIVATE_DIR . 'config.ini',
-                str_replace('CACHE_VERSION = ' . $version, 'CACHE_VERSION = ' . ($version + 1), $contents)
+                str_replace('CACHE_VERSION = ' . $version, 'CACHE_VERSION = ' . ($version + 1), $contents),
             ) === false
         ) {
             return $this->respond(['error' => 'Cannot write to config file.'], 500);
@@ -42,14 +40,13 @@ class Debug extends ApiController
         return $this->respond(['success' => true]);
     }
 
-    public function enable(): ResponseInterface
-    {
+    public function enable(): ResponseInterface {
         /** @var string $contents */
         $contents = file_get_contents(PRIVATE_DIR . 'config.ini');
         if (
             file_put_contents(
                 PRIVATE_DIR . 'config.ini',
-                str_replace('DEBUG = false', 'DEBUG = true', $contents)
+                str_replace('DEBUG = false', 'DEBUG = true', $contents),
             ) === false
         ) {
             return $this->respond(['error' => 'Cannot write to config file.'], 500);
@@ -57,8 +54,7 @@ class Debug extends ApiController
         return $this->respond(['success' => true]);
     }
 
-    public function pwd(Request $request): ResponseInterface
-    {
+    public function pwd(Request $request): ResponseInterface {
         try {
             $logger = new Logger(LOG_DIR . 'api/', 'mount');
             $logger->info('Executing pwd (' . $request->getIp() . ')');
@@ -78,8 +74,7 @@ class Debug extends ApiController
         return $this->respond(['success' => true, 'output' => $out]);
     }
 
-    public function glob(Request $request): ResponseInterface
-    {
+    public function glob(Request $request): ResponseInterface {
         /** @var string $param */
         $param = $request->getGet('param', '');
         $param = urldecode($param);
@@ -89,8 +84,7 @@ class Debug extends ApiController
         return $this->respond(['success' => true, 'output' => glob($param)]);
     }
 
-    public function whoami(Request $request): ResponseInterface
-    {
+    public function whoami(Request $request): ResponseInterface {
         try {
             $logger = new Logger(LOG_DIR . 'api/', 'mount');
             $logger->info('Executing whoami (' . $request->getIp() . ')');

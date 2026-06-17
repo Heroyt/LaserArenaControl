@@ -20,22 +20,19 @@ readonly class MusicTrimPreviewTask implements TaskDispatcherInterface
     public function __construct(
         private FeatureConfig $config,
         private TaskProducer  $taskProducer,
-    )
-    {
+    ) {
     }
 
-    public static function getDiName(): string
-    {
+    public static function getDiName(): string {
         return 'task.musicTrimPreview';
     }
 
-    public function process(ReceivedTaskInterface $task, ?TaskPayloadInterface $payload = null): void
-    {
+    public function process(ReceivedTaskInterface $task, ?TaskPayloadInterface $payload = null): void {
         if ($payload === null) {
             $task->nack('Missing payload');
             return;
         }
-        if (!($payload instanceof MusicTrimPreviewPayload)) {
+        if ( ! ($payload instanceof MusicTrimPreviewPayload)) {
             $task->nack('Invalid payload');
             return;
         }
@@ -54,7 +51,7 @@ readonly class MusicTrimPreviewTask implements TaskDispatcherInterface
                 $this->taskProducer->push(
                     MusicSyncTask::class,
                     new MusicSyncPayload($music),
-                    new Options(priority: 99)
+                    new Options(priority: 99),
                 );
             } catch (JobsException) {
             }

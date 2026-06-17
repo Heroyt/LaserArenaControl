@@ -154,7 +154,7 @@ class ResultParserTest extends Unit
         foreach ($files as $file) {
             // Load metadata
             $metaFile = str_replace('.game', '.meta', $file);
-            if (!file_exists($metaFile)) {
+            if ( ! file_exists($metaFile)) {
                 continue;
             }
             $contents = file_get_contents($metaFile);

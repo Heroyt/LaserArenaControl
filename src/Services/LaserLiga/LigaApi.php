@@ -56,8 +56,7 @@ class LigaApi
         $this->makeClient();
     }
 
-    private function makeClient(): void
-    {
+    private function makeClient(): void {
         $this->client = $this->guzzleFactory->makeClient($this->url, $this->apiKey);
     }
 
@@ -70,10 +69,9 @@ class LigaApi
     public static function getInstance(
         Metrics       $metrics,
         Serializer    $serializer,
-        GuzzleFactory $guzzleFactory
-    ): LigaApi
-    {
-        if (!isset(self::$instance)) {
+        GuzzleFactory $guzzleFactory,
+    ): LigaApi {
+        if ( ! isset(self::$instance)) {
             /** @var string $url */
             $url = Info::get('liga_api_url', '');
             /** @var string $key */
@@ -93,8 +91,7 @@ class LigaApi
      * @return ResponseInterface
      * @throws GuzzleException
      */
-    public function get(string $path, ?array $params = null, array $config = []): ResponseInterface
-    {
+    public function get(string $path, ?array $params = null, array $config = []): ResponseInterface {
         $this->makeClient();
         if (isset($params)) {
             $config['query'] = $params;
@@ -118,9 +115,8 @@ class LigaApi
         string $system,
         array  $games,
         ?float $timeout = null,
-        bool   $recreateClient = false
-    ): bool
-    {
+        bool   $recreateClient = false,
+    ): bool {
         if ($recreateClient) {
             $this->makeClient();
         }
@@ -137,11 +133,11 @@ class LigaApi
         foreach ($games as $key => $game) {
             if ($game::SYSTEM !== $system) {
                 throw new InvalidArgumentException(
-                    'Game #' . $key . ' (code: ' . $game->code . ') is not an ' . $system . ' game.'
+                    'Game #' . $key . ' (code: ' . $game->code . ') is not an ' . $system . ' game.',
                 );
             }
             // Remove unfinished games
-            if (!$game->isFinished()) {
+            if ( ! $game->isFinished()) {
                 continue;
             }
             // Check assigned users
@@ -155,16 +151,16 @@ class LigaApi
                     $users = $this->serializer->deserialize(
                         $response->getBody()->getContents(),
                         LigaPlayerData::class . '[]',
-                        'json'
+                        'json',
                     );
-                    if (!empty($users)) {
+                    if ( ! empty($users)) {
                         // Assign user objects for each user got
                         foreach ($users as $vest => $userData) {
                             $player = $game->getVestPlayer($vest);
-                            if (isset($player) && !isset($player->user)) {
+                            if (isset($player) && ! isset($player->user)) {
                                 $player->user = $playerProvider->getPlayerObjectFromData($userData);
                                 // Sync new user
-                                if (!isset($player->user->id)) {
+                                if ( ! isset($player->user->id)) {
                                     $player->user->save();
                                 }
                                 $player->save();
@@ -186,7 +182,7 @@ class LigaApi
         try {
             $this->logger->debug('Syncing ' . count($gamesData) . ' games');
             $config = [
-              'body' => $this->serializer->serialize(['system' => $system, 'games' => $gamesData], 'json'),
+                'body' => $this->serializer->serialize(['system' => $system, 'games' => $gamesData], 'json'),
             ];
             $config['headers']['Content-Type'] = 'application/json';
             $config['headers']['Content-Length'] = strlen($config['body']);
@@ -201,8 +197,8 @@ class LigaApi
                 $this->logger->error(
                     'Request failed (' . $status . '): ' . $this->serializer->serialize(
                         $response->getBody()->getContents(),
-                        'json'
-                    )
+                        'json',
+                    ),
                 );
                 return false;
             }
@@ -223,15 +219,14 @@ class LigaApi
     /**
      * @return LigaApiExtensionInterface[]
      */
-    public function getExtensions(): array
-    {
-        if (!isset($this->extensions)) {
+    public function getExtensions(): array {
+        if ( ! isset($this->extensions)) {
             /** @var LigaApiExtensionInterface|LigaApiExtensionInterface[]|null $extensions */
             $extensions = App::getServiceByType(LigaApiExtensionInterface::class); // @phpstan-ignore varTag.nativeType
             if ($extensions === null) {
                 $extensions = [];
             } else {
-                if (!is_array($extensions)) {
+                if ( ! is_array($extensions)) {
                     $extensions = [$extensions];
                 }
             }
@@ -250,8 +245,7 @@ class LigaApi
      * @return ResponseInterface
      * @throws GuzzleException
      */
-    public function post(string $path, array|object|null $data = null, array $config = []): ResponseInterface
-    {
+    public function post(string $path, array|object|null $data = null, array $config = []): ResponseInterface {
         $this->makeClient();
         if (isset($data)) {
             $config['body'] = $this->serializer->serialize($data, 'json');
@@ -265,33 +259,32 @@ class LigaApi
      * @return bool
      * @throws ValidationException
      */
-    public function syncMusicModes(): bool
-    {
+    public function syncMusicModes(): bool {
         $musicModes = MusicMode::getAll();
 
         // Sync data
         $data = [];
         foreach ($musicModes as $mode) {
-            if (!$mode->public) {
+            if ( ! $mode->public) {
                 continue;
             }
             $data[] = [
-              'id'           => $mode->id,
-              'name'         => $mode->name,
-              'group'        => $mode->group,
-              'order'        => $mode->order,
-              'previewStart' => $mode->previewStart,
+                'id'           => $mode->id,
+                'name'         => $mode->name,
+                'group'        => $mode->group,
+                'order'        => $mode->order,
+                'previewStart' => $mode->previewStart,
             ];
         }
 
         try {
             $config = [
-              'body' => $this->serializer->serialize(
-                  [
-                  'music' => $data,
-                  ],
-                  'json'
-              ),
+                'body' => $this->serializer->serialize(
+                    [
+                        'music' => $data,
+                    ],
+                    'json',
+                ),
             ];
             $config['headers']['Content-Type'] = 'application/json';
             $config['headers']['Content-Length'] = strlen($config['body']);
@@ -303,17 +296,17 @@ class LigaApi
                 return false;
             }
 
-            $ids = array_map(static fn($data) => $data['id'], $data);
+            $ids = array_map(static fn ($data) => $data['id'], $data);
             $config = [
-              'body' => $this->serializer->serialize(
-                  [
-                  'whitelist' => $ids,
-                  ],
-                  'json',
-              ),
-              'headers' => [
-                'Content-Type' => 'application/json',
-              ],
+                'body' => $this->serializer->serialize(
+                    [
+                        'whitelist' => $ids,
+                    ],
+                    'json',
+                ),
+                'headers' => [
+                    'Content-Type' => 'application/json',
+                ],
             ];
             $config['headers']['Content-Length'] = strlen($config['body']);
             $this->client->deleteAsync('music', $config);
@@ -321,11 +314,11 @@ class LigaApi
 
             // Upload files
             foreach ($musicModes as $mode) {
-                if (!$mode->public) {
+                if ( ! $mode->public) {
                     continue;
                 }
                 $previewFile = $mode->getPreviewFileName();
-                if (!file_exists($previewFile)) {
+                if ( ! file_exists($previewFile)) {
                     $mode->trimMediaToPreview();
                 }
                 $media = Utils::tryGetContents(Utils::tryFopen($previewFile, 'r'));
@@ -340,10 +333,10 @@ class LigaApi
                 if ($icon !== null) {
                     $iconMedia = Utils::tryGetContents(Utils::tryFopen($icon->getPath(), 'r'));
                     $files[] = [
-                      'name'     => 'icon',
-                      'fileName' => basename($icon->getPath()),
-                      'contents' => $iconMedia,
-                      'type'     => $icon->getMimeType(),
+                        'name'     => 'icon',
+                        'fileName' => basename($icon->getPath()),
+                        'contents' => $iconMedia,
+                        'type'     => $icon->getMimeType(),
                     ];
                 }
 
@@ -351,17 +344,17 @@ class LigaApi
                 if ($background !== null) {
                     $backgroundMedia = Utils::tryGetContents(Utils::tryFopen($background->getPath(), 'r'));
                     $files[] = [
-                      'name'     => 'background',
-                      'fileName' => basename($background->getPath()),
-                      'contents' => $backgroundMedia,
-                      'type'     => $background->getMimeType(),
+                        'name'     => 'background',
+                        'fileName' => basename($background->getPath()),
+                        'contents' => $backgroundMedia,
+                        'type'     => $background->getMimeType(),
                     ];
                 }
 
                 $post_data = $this->buildDataFiles(
                     $boundary,
                     [],
-                    $files
+                    $files,
                 );
 
                 $ch = curl_init(trailingSlashIt($this->url) . 'api/music/' . $mode->id . '/upload');
@@ -371,17 +364,17 @@ class LigaApi
                 curl_setopt_array(
                     $ch,
                     [
-                    CURLOPT_POST       => true,
-                    CURLOPT_TIMEOUT    => 60,
-                    CURLOPT_RETURNTRANSFER => true,
-                    CURLOPT_POSTFIELDS => $post_data,
-                    CURLOPT_HTTPHEADER => [
-                        'Authorization: Bearer ' . $this->apiKey,
-                        'Content-Type: multipart/form-data; boundary=' . $delimiter,
-                        "Content-Length: " . strlen($post_data),
-                      "Accept: application/json",
+                        CURLOPT_POST       => true,
+                        CURLOPT_TIMEOUT    => 60,
+                        CURLOPT_RETURNTRANSFER => true,
+                        CURLOPT_POSTFIELDS => $post_data,
+                        CURLOPT_HTTPHEADER => [
+                            'Authorization: Bearer ' . $this->apiKey,
+                            'Content-Type: multipart/form-data; boundary=' . $delimiter,
+                            "Content-Length: " . strlen($post_data),
+                            "Accept: application/json",
+                        ],
                     ],
-                    ]
                 );
                 $body = curl_exec($ch);
                 $info = curl_getinfo($ch);
@@ -389,7 +382,7 @@ class LigaApi
                 if ($info['http_code'] !== 200) {
                     $this->logger->error(
                         'Music upload failed: ' . $body . ' ' .
-                        $this->serializer->serialize($info, 'json')
+                        $this->serializer->serialize($info, 'json'),
                     );
                     if ($info['http_code'] !== 404) {
                         return false;
@@ -411,8 +404,7 @@ class LigaApi
      * @param  array{name:string,fileName:string,contents:string,type:string}[]  $files
      * @return string
      */
-    private function buildDataFiles(string $boundary, array $fields, array $files): string
-    {
+    private function buildDataFiles(string $boundary, array $fields, array $files): string {
         $data = '';
         $eol = "\r\n";
 
@@ -447,8 +439,7 @@ class LigaApi
      *
      * @return Client
      */
-    public function getClient(bool $remake = false): Client
-    {
+    public function getClient(bool $remake = false): Client {
         if ($remake) {
             $this->makeClient();
         }
@@ -466,8 +457,7 @@ class LigaApi
      * @throws ValidationException
      * @throws Exception
      */
-    public function syncVests(bool $recreateClient = false): bool
-    {
+    public function syncVests(bool $recreateClient = false): bool {
         if ($recreateClient) {
             $this->makeClient();
         }
@@ -489,7 +479,7 @@ class LigaApi
                 $data = $this->serializer->deserialize(
                     $contents,
                     LigaVest::class . '[]',
-                    'json'
+                    'json',
                 );
 
                 foreach ($data as $vestData) {
@@ -497,7 +487,7 @@ class LigaApi
                     if ($systemKey instanceof LigaSystem) {
                         $systemKey = $systemKey->type;
                     }
-                    if (!isset($vests[$systemKey][$vestData->vestNum])) {
+                    if ( ! isset($vests[$systemKey][$vestData->vestNum])) {
                         continue;
                     }
                     $vest = $vests[$systemKey][$vestData->vestNum];
@@ -511,7 +501,7 @@ class LigaApi
                 $response->getBody()->rewind();
                 $this->logger->error(
                     'Failed to parse GET /api/vests response',
-                    context: ['response' => $response->getBody()->getContents()]
+                    context: ['response' => $response->getBody()->getContents()],
                 );
                 $this->logger->exception($e);
             }
@@ -520,9 +510,9 @@ class LigaApi
             $this->logger->error(
                 'Failed to call GET /api/vests',
                 context: [
-                         'response' => $response->getBody()
-                                                ->getContents(),
-                       ]
+                    'response' => $response->getBody()
+                        ->getContents(),
+                ],
             );
         }
 
@@ -533,10 +523,10 @@ class LigaApi
             $this->logger->error(
                 'Failed to call POST /api/vests',
                 context: [
-                         'response' => $response->getBody()
-                                                ->getContents(),
-                         'request'  => $vestsAll,
-                       ]
+                    'response' => $response->getBody()
+                        ->getContents(),
+                    'request'  => $vestsAll,
+                ],
             );
         }
         return $response->getStatusCode() < 300;

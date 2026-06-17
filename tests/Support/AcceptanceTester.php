@@ -20,7 +20,7 @@ use Codeception\Actor;
  * @method void pause($vars = [])
  *
  * @SuppressWarnings(PHPMD)
-*/
+ */
 class AcceptanceTester extends Actor
 {
     use _generated\AcceptanceTesterActions;

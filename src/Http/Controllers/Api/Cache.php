@@ -8,12 +8,10 @@ use Psr\Http\Message\ResponseInterface;
 
 class Cache extends Controller
 {
-    public function __construct(protected CacheService $cache)
-    {
+    public function __construct(protected CacheService $cache) {
     }
 
-    public function clearAll(): ResponseInterface
-    {
+    public function clearAll(): ResponseInterface {
         $this->cache->clean([\Nette\Caching\Cache::All => true]);
         $cache = glob(TMP_DIR . '*.cache');
         $php = glob(TMP_DIR . '*.php');
@@ -42,14 +40,12 @@ class Cache extends Controller
         return $this->respond(['status' => 'ok', 'deleted' => $deleted, 'total' => count($files)]);
     }
 
-    public function clearSystem(): ResponseInterface
-    {
+    public function clearSystem(): ResponseInterface {
         $this->cache->clean([\Nette\Caching\Cache::All => true]);
         return $this->respond(['status' => 'ok']);
     }
 
-    public function clearDi(): ResponseInterface
-    {
+    public function clearDi(): ResponseInterface {
         $php = glob(TMP_DIR . '*.php');
         $phpLock = glob(TMP_DIR . '*.php.lock');
         $di = glob(TMP_DIR . 'di/*');
@@ -67,8 +63,7 @@ class Cache extends Controller
         return $this->respond(['status' => 'ok', 'deleted' => $deleted, 'total' => count($files)]);
     }
 
-    public function clearModels(): ResponseInterface
-    {
+    public function clearModels(): ResponseInterface {
         $files = glob(TMP_DIR . 'models/*');
         $deleted = 0;
         if ($files !== false) {
@@ -83,8 +78,7 @@ class Cache extends Controller
         return $this->respond(['status' => 'ok', 'deleted' => $deleted, 'total' => count($files)]);
     }
 
-    public function clearConfig(): ResponseInterface
-    {
+    public function clearConfig(): ResponseInterface {
         $files = glob(TMP_DIR . '*.cache');
         $deleted = 0;
         if ($files !== false) {
@@ -99,8 +93,7 @@ class Cache extends Controller
         return $this->respond(['status' => 'ok', 'deleted' => $deleted, 'total' => count($files)]);
     }
 
-    public function clearResults(): ResponseInterface
-    {
+    public function clearResults(): ResponseInterface {
         $results = glob(TMP_DIR . 'results/*');
         $caches = glob(TMP_DIR . 'resultCaches/*');
         if ($results === false) {
@@ -119,8 +112,7 @@ class Cache extends Controller
         return $this->respond(['status' => 'ok', 'deleted' => $deleted, 'total' => count($files)]);
     }
 
-    public function clearLatte(): ResponseInterface
-    {
+    public function clearLatte(): ResponseInterface {
         $files = glob(TMP_DIR . 'latte/*');
         $deleted = 0;
         if ($files !== false) {

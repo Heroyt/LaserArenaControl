@@ -19,15 +19,13 @@ final readonly class SyncGameCommand implements CommandInterface
      */
     public function __construct(
         public Game $game,
-    )
-    {
+    ) {
     }
 
     /**
      * @inheritDoc
      */
-    public function getHandler(): string
-    {
+    public function getHandler(): string {
         return SyncGameCommandHandler::class;
     }
 }

@@ -31,8 +31,7 @@ class IconNode extends StatementNode
     public ExpressionNode $attributes;
     public bool $addDynamic = true;
 
-    public static function create(Tag $tag): Node
-    {
+    public static function create(Tag $tag): Node {
         $tag->expectArguments();
 
         $node = $tag->node = new self();
@@ -57,8 +56,7 @@ class IconNode extends StatementNode
         return self::createNode($node);
     }
 
-    private static function createNode(IconNode $node): Node
-    {
+    private static function createNode(IconNode $node): Node {
         $args = $node->args->toArguments();
         $node->icon = isset($args[0]) ? $args[0]->value : new StringNode('');
         $node->classes = isset($args[1]) ? $args[1]->value : new ArrayNode();
@@ -71,9 +69,9 @@ class IconNode extends StatementNode
 
         }
 
-        $node->addDynamic = !($node->style instanceof IconType) || !isset($icon) || !is_string($icon);
+        $node->addDynamic = ! ($node->style instanceof IconType) || ! isset($icon) || ! is_string($icon);
 
-        if (!$node->addDynamic) {
+        if ( ! $node->addDynamic) {
             assert($node->style instanceof IconType);
             /** @var FontAwesomeManager $manager */
             $manager = App::getService('fontawesome');
@@ -82,8 +80,7 @@ class IconNode extends StatementNode
         return $node;
     }
 
-    public static function createSolid(Tag $tag): Node
-    {
+    public static function createSolid(Tag $tag): Node {
         $tag->expectArguments();
 
         $node = $tag->node = new self();
@@ -95,8 +92,7 @@ class IconNode extends StatementNode
         return self::createNode($node);
     }
 
-    public static function createRegular(Tag $tag): Node
-    {
+    public static function createRegular(Tag $tag): Node {
         $tag->expectArguments();
 
         $node = $tag->node = new self();
@@ -108,8 +104,7 @@ class IconNode extends StatementNode
         return self::createNode($node);
     }
 
-    public static function createBrand(Tag $tag): Node
-    {
+    public static function createBrand(Tag $tag): Node {
         $tag->expectArguments();
 
         $node = $tag->node = new self();
@@ -122,9 +117,8 @@ class IconNode extends StatementNode
     }
 
     /** @internal */
-    public static function attrs(mixed $attrs, bool $xml): string
-    {
-        if (!is_array($attrs)) {
+    public static function attrs(mixed $attrs, bool $xml): string {
+        if ( ! is_array($attrs)) {
             return '';
         }
 
@@ -156,19 +150,19 @@ class IconNode extends StatementNode
                     continue;
                 }
 
-                $value = implode($key === 'style' || !strncmp($key, 'on', 2) ? ';' : ' ', $tmp);
+                $value = implode($key === 'style' || ! strncmp($key, 'on', 2) ? ';' : ' ', $tmp);
 
             } else {
                 $value = (string) $value;
             }
 
-            $q = !str_contains($value, '"') ? '"' : "'";
+            $q = ! str_contains($value, '"') ? '"' : "'";
             $s .= ' ' . $key . '=' . $q
                 . str_replace(
                     ['&', $q, '<'],
                     ['&amp;', $q === '"' ? '&quot;' : '&#39;', $xml ? '&lt;' : '<'],
                     $value,
-              )
+                )
                 . (str_contains($value, '`') && strpbrk($value, ' <>"\'') === false ? ' ' : '')
                 . $q;
         }
@@ -176,8 +170,7 @@ class IconNode extends StatementNode
         return $s;
     }
 
-    public function print(PrintContext $context): string
-    {
+    public function print(PrintContext $context): string {
         $icon = $context->format(
             <<<'XX'
                 $ʟ_style = %node;
@@ -205,8 +198,7 @@ class IconNode extends StatementNode
         return $icon;
     }
 
-    public function &getIterator(): Generator
-    {
+    public function &getIterator(): Generator {
         yield $this->icon;
         yield $this->classes;
         yield $this->attributes;

@@ -36,8 +36,7 @@ trait NewGameTrait
         $this->params = new NewGameParams();
     }
 
-    protected function baseInit(RequestInterface $request): void
-    {
+    protected function baseInit(RequestInterface $request): void {
         /** @var array<string, mixed> $decorators */
         $decorators = App::getContainer()->findByTag('newGameDecorator');
         bdump($decorators);
@@ -49,11 +48,10 @@ trait NewGameTrait
         }
     }
 
-    protected function initMusicGroups(): void
-    {
+    protected function initMusicGroups(): void {
         $this->params->musicGroups = [];
         foreach ($this->params->musicModes as $music) {
-            if (!$music->public) {
+            if ( ! $music->public) {
                 continue;
             }
             $group = empty($music->group) ? $music->name : $music->group;
@@ -62,8 +60,7 @@ trait NewGameTrait
         }
     }
 
-    protected function initNewGameParams(Request $request): void
-    {
+    protected function initNewGameParams(Request $request): void {
         $this->hookedTemplates = new HookedTemplates();
         $this->params->addedTemplates = $this->hookedTemplates;
         $this->params->featureConfig = $this->featureConfig;
@@ -86,7 +83,7 @@ trait NewGameTrait
             } else {
                 $this->params->system = array_find(
                     $this->params->systems,
-                    static fn(System $system) => $system->type->value === $systemId
+                    static fn (System $system) => $system->type->value === $systemId,
                 );
             }
         }

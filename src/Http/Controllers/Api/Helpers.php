@@ -11,13 +11,11 @@ class Helpers extends ApiController
 {
     public function __construct(
         private readonly Translations $translations,
-    )
-    {
+    ) {
     }
 
 
-    public function translate(Request $request): ResponseInterface
-    {
+    public function translate(Request $request): ResponseInterface {
         $string = $request->getGet('string');
         assert(is_string($string), 'string parameter is required and must be a string');
         return $this->respond(
@@ -27,7 +25,7 @@ class Helpers extends ApiController
                 num: (int)($request->getGet('count', 1)),
                 context: $request->getGet('context', null),
                 domain: $request->getGet('domain', null),
-            )
+            ),
         );
     }
 }

@@ -34,7 +34,6 @@ class ResultsParams extends TemplateParameters
         public string        $lang,
         public int           $copies = 1,
         public bool          $colorless = false,
-    )
-    {
+    ) {
     }
 }

@@ -23,15 +23,13 @@ final readonly class PrepareGameCommand implements CommandInterface
         public PreparedGameType       $type,
         public System|int|string|null $system,
         public array                  $data,
-    )
-    {
+    ) {
     }
 
     /**
      * @inheritDoc
      */
-    public function getHandler(): string
-    {
+    public function getHandler(): string {
         return PrepareGameCommandHandler::class;
     }
 }

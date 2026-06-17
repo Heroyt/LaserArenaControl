@@ -10,8 +10,7 @@ use Throwable;
 
 trait InstallPrints
 {
-    protected static function printException(Throwable $e, ?OutputInterface $output = null): void
-    {
+    protected static function printException(Throwable $e, ?OutputInterface $output = null): void {
         if ($output !== null) {
             $output->writeln("<error>" . $e->getMessage() . "</error>");
             $output->writeln($e->getTraceAsString());
@@ -26,8 +25,7 @@ trait InstallPrints
         }
     }
 
-    protected static function printError(string $message, ?OutputInterface $output = null): void
-    {
+    protected static function printError(string $message, ?OutputInterface $output = null): void {
         if ($output !== null) {
             $output->writeln("<error>" . $message . "</error>");
         } else {
@@ -35,8 +33,7 @@ trait InstallPrints
         }
     }
 
-    protected static function printWarning(string $message, ?OutputInterface $output = null): void
-    {
+    protected static function printWarning(string $message, ?OutputInterface $output = null): void {
         if ($output !== null) {
             $output->writeln("<comment>" . $message . "</comment>");
         } else {
@@ -44,8 +41,7 @@ trait InstallPrints
         }
     }
 
-    protected static function printInfo(string $message, ?OutputInterface $output = null): void
-    {
+    protected static function printInfo(string $message, ?OutputInterface $output = null): void {
         if ($output !== null) {
             $output->writeln("<info>" . $message . "</info>");
         } else {
@@ -53,8 +49,7 @@ trait InstallPrints
         }
     }
 
-    protected static function printDebug(string $message, ?OutputInterface $output = null): void
-    {
+    protected static function printDebug(string $message, ?OutputInterface $output = null): void {
         if ($output !== null) {
             $output->writeln($message);
         } else {

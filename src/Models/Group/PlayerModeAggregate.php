@@ -12,8 +12,7 @@ class PlayerModeAggregate
 
     public function __construct(
         public readonly AbstractMode $mode,
-    )
-    {
+    ) {
     }
 
     /**
@@ -24,9 +23,8 @@ class PlayerModeAggregate
      * @param  G|null  $game
      * @return void
      */
-    public function addGame(GamePlayer $player, ?Game $game = null): void
-    {
-        if (!isset($game)) {
+    public function addGame(GamePlayer $player, ?Game $game = null): void {
+        if ( ! isset($game)) {
             $game = $player->game;
         }
 
@@ -47,7 +45,7 @@ class PlayerModeAggregate
         $this->shots[] = $player->shots;
 
         // Add vest
-        if (!isset($this->vests[$player->vest])) {
+        if ( ! isset($this->vests[$player->vest])) {
             $this->vests[$player->vest] = 0;
         }
         $this->vests[$player->vest]++;

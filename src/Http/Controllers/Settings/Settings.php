@@ -27,21 +27,16 @@ use Nyholm\Psr7\UploadedFile;
 use Psr\Http\Message\ResponseInterface;
 use RuntimeException;
 
-/**
- *
- */
 class Settings extends Controller
 {
     protected string $title = 'Nastavení';
 
     public function __construct(
         private readonly FeatureConfig $featureConfig,
-    )
-    {
+    ) {
     }
 
-    public function init(RequestInterface $request): void
-    {
+    public function init(RequestInterface $request): void {
         parent::init($request);
         $this->params['featureConfig'] = $this->featureConfig;
     }
@@ -51,8 +46,7 @@ class Settings extends Controller
      * @throws JsonException
      * @throws TemplateDoesNotExistException
      */
-    public function show(): ResponseInterface
-    {
+    public function show(): ResponseInterface {
         $this->params['theme'] = Theme::get();
         $this->params['priceGroups'] = PriceGroup::getAll();
         return $this->view('pages/settings/index');
@@ -64,8 +58,7 @@ class Settings extends Controller
      * @throws TemplateDoesNotExistException
      * @throws ValidationException
      */
-    public function vests(): ResponseInterface
-    {
+    public function vests(): ResponseInterface {
         $vests = Vest::getAll();
         $this->params['systems'] = System::getAll();
         $this->params['vests'] = [];
@@ -97,7 +90,7 @@ class Settings extends Controller
 
             $this->params['columnCounts'][$vest->system->id] = max(
                 $this->params['columnCounts'][$vest->system->id],
-                $col
+                $col,
             );
             $this->params['rowCounts'][$vest->system->id] = max($this->params['rowCounts'][$vest->system->id], $row);
 
@@ -114,14 +107,13 @@ class Settings extends Controller
      * @throws ModelNotFoundException
      * @throws ValidationException
      */
-    public function saveVests(Request $request): ResponseInterface
-    {
+    public function saveVests(Request $request): ResponseInterface {
         try {
             $systems = System::getAll();
             /** @var array<numeric,numeric> $post */
             $post = $request->getPost('columns', []);
             foreach ($post as $systemId => $count) {
-                if (!isset($systems[(int) $systemId])) {
+                if ( ! isset($systems[(int) $systemId])) {
                     throw new ModelNotFoundException('System not found');
                 }
                 $systems[(int) $systemId]->columnCount = (int) $count;
@@ -129,7 +121,7 @@ class Settings extends Controller
             /** @var array<numeric, numeric> $post */
             $post = $request->getPost('rows', []);
             foreach ($post as $systemId => $count) {
-                if (!isset($systems[(int) $systemId])) {
+                if ( ! isset($systems[(int) $systemId])) {
                     throw new ModelNotFoundException('System not found');
                 }
                 $systems[(int) $systemId]->rowCount = (int) $count;
@@ -156,10 +148,10 @@ class Settings extends Controller
         if ($request->isAjax()) {
             return $this->respond(
                 [
-                'success' => empty($request->passErrors),
-                'errors'  => $request->passErrors,
+                    'success' => empty($request->passErrors),
+                    'errors'  => $request->passErrors,
                 ],
-                empty($request->passErrors) ? 200 : 400
+                empty($request->passErrors) ? 200 : 400,
             );
         }
         return $this->app->redirect('settings', $request);
@@ -171,8 +163,7 @@ class Settings extends Controller
      * @return ResponseInterface
      * @throws JsonException
      */
-    public function saveGeneral(Request $request): ResponseInterface
-    {
+    public function saveGeneral(Request $request): ResponseInterface {
         try {
             $apiUrl = $request->getPost('api_url');
             if (isset($apiUrl)) {
@@ -204,12 +195,12 @@ class Settings extends Controller
             $theme = Theme::get();
             /** @var string|null $primaryColor */
             $primaryColor = $request->getPost('primary_color');
-            if (!empty($primaryColor)) {
+            if ( ! empty($primaryColor)) {
                 $theme->primaryColor = $primaryColor;
             }
             /** @var string|null $secondaryColor */
             $secondaryColor = $request->getPost('secondary_color');
-            if (!empty($secondaryColor)) {
+            if ( ! empty($secondaryColor)) {
                 $theme->secondaryColor = $secondaryColor;
             }
             $theme->save();
@@ -223,18 +214,17 @@ class Settings extends Controller
         if ($request->isAjax()) {
             return $this->respond(
                 [
-                'success' => empty($request->passErrors),
-                'errors'  => $request->passErrors,
-                ]
+                    'success' => empty($request->passErrors),
+                    'errors'  => $request->passErrors,
+                ],
             );
         }
         return $this->app->redirect('settings', $request);
     }
 
-    private function handleLogoUpload(Request $request): void
-    {
+    private function handleLogoUpload(Request $request): void {
         $files = $request->getUploadedFiles();
-        if (!isset($files['logo'])) {
+        if ( ! isset($files['logo'])) {
             return;
         }
         /** @var UploadedFile $file */
@@ -251,9 +241,9 @@ class Settings extends Controller
                 UPLOAD_ERR_INI_SIZE => lang('Nahraný soubor je příliš velký', context: 'errors') . ' - ' . $name,
                 UPLOAD_ERR_FORM_SIZE => lang('Form size is to large', context: 'errors') . ' - ' . $name,
                 UPLOAD_ERR_PARTIAL    => lang(
-                        'The uploaded file was only partially uploaded.',
-                    context: 'errors'
-                    ) . ' - ' . $name,
+                    'The uploaded file was only partially uploaded.',
+                    context: 'errors',
+                ) . ' - ' . $name,
                 UPLOAD_ERR_CANT_WRITE => lang('Failed to write file to disk.', context: 'errors') . ' - ' . $name,
                 default => lang('Error while uploading a file.', context: 'errors') . ' - ' . $name,
             };
@@ -271,11 +261,11 @@ class Settings extends Controller
         // Validate type
         $validTypes = ['svg', 'jpg', 'png', 'jpeg', 'gif'];
         $fileType = strtolower(pathinfo($name, PATHINFO_EXTENSION));
-        if (!in_array($fileType, $validTypes)) {
+        if ( ! in_array($fileType, $validTypes)) {
             $request->passErrors[] = lang(
                 'Nahraný soubor musí být v jednom z formátů: %s.',
                 context: 'errors',
-                format: [implode(', ', $validTypes)]
+                format: [implode(', ', $validTypes)],
             );
             return;
         }
@@ -287,11 +277,10 @@ class Settings extends Controller
         }
     }
 
-    private function handlePriceGroups(Request $request): void
-    {
+    private function handlePriceGroups(Request $request): void {
         /** @var array<numeric, array{name?:string,price?:numeric}>|string $priceGroups */
         $priceGroups = $request->getPost('pricegroups', []);
-        if (!is_array($priceGroups) || empty($priceGroups)) {
+        if ( ! is_array($priceGroups) || empty($priceGroups)) {
             return;
         }
 
@@ -310,8 +299,7 @@ class Settings extends Controller
         }
     }
 
-    public function group(): ResponseInterface
-    {
+    public function group(): ResponseInterface {
         $this->params['groupsActive'] = GameGroup::getActiveByDate();
         $this->params['groupsInactive'] = GameGroup::query()->where('active = 0')->orderBy('id_group')->desc()->get();
 

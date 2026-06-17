@@ -29,8 +29,7 @@ class Gate
 
     private ?int $tmpResultsTime = null;
 
-    public function __construct(readonly private Config $config)
-    {
+    public function __construct(private readonly Config $config) {
     }
 
     /**
@@ -43,8 +42,7 @@ class Gate
      * @throws Throwable
      * @throws ValidationException
      */
-    public function getCurrentScreen(GateType $gate, string $system = 'all'): GateScreen
-    {
+    public function getCurrentScreen(GateType $gate, string $system = 'all'): GateScreen {
         $screens = $gate->screens;
 
         /** @var CustomEventDto|null $customEvent */
@@ -76,16 +74,16 @@ class Gate
             if (
                 $screenModel->trigger === $activeGateType
                 && (
-                (
-                  $activeGateType === ScreenTriggerType::CUSTOM
+                    (
+                        $activeGateType === ScreenTriggerType::CUSTOM
                   && $screenModel->triggerValue === $customEvent?->event
-                )
+                    )
                 || $activeGateType !== ScreenTriggerType::CUSTOM
                 )
             ) {
                 $screen = $screenModel->getScreen()
-                                      ->setGame($game)
-                                      ->setSystems($systems);
+                    ->setGame($game)
+                    ->setSystems($systems);
 
                 if ($activeGateType === ScreenTriggerType::CUSTOM) {
                     $screen->setTriggerEvent($customEvent);
@@ -130,8 +128,7 @@ class Gate
      * @throws Throwable
      * @phpstan-ignore missingType.generics
      */
-    public function getActiveGame(string $system = 'all'): ?Game
-    {
+    public function getActiveGame(string $system = 'all'): ?Game {
         $systems = [$system];
         if ($system === 'all') {
             $systems = GameFactory::getSupportedSystems();
@@ -177,10 +174,9 @@ class Gate
         return $maxGame;
     }
 
-    private function getTmpResultsTime(): int
-    {
+    private function getTmpResultsTime(): int {
         $this->tmpResultsTime ??= (int) ($this->config->getConfig(
-            'ENV'
+            'ENV',
         )['TMP_GAME_RESULTS_TIME'] ?? Constants::TMP_GAME_RESULTS_TIME);
         return $this->tmpResultsTime;
     }

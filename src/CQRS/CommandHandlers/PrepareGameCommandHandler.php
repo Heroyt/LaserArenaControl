@@ -23,8 +23,7 @@ final readonly class PrepareGameCommandHandler implements CommandHandlerInterfac
     public function __construct(
         private Serializer $serializer,
         private Cache      $cache,
-    )
-    {
+    ) {
     }
 
     /**
@@ -32,8 +31,7 @@ final readonly class PrepareGameCommandHandler implements CommandHandlerInterfac
      *
      * @param PrepareGameCommand $command
      */
-    public function handle(CommandInterface $command): bool
-    {
+    public function handle(CommandInterface $command): bool {
         // Normalize system
         $system = $command->system;
         if (is_numeric($system)) {

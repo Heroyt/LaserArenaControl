@@ -13,22 +13,19 @@ use Spiral\RoadRunner\Jobs\Task\ReceivedTaskInterface;
 readonly class HandleCommandTask implements TaskDispatcherInterface
 {
     public function __construct(
-        private CommandBus $commandBus
-    )
-    {
+        private CommandBus $commandBus,
+    ) {
     }
 
     /**
      * @inheritDoc
      */
-    public static function getDiName(): string
-    {
+    public static function getDiName(): string {
         return 'task.handleCommand';
     }
 
-    public function process(ReceivedTaskInterface $task, ?TaskPayloadInterface $payload = null): void
-    {
-        if (!($payload instanceof HandleCommandPayload)) {
+    public function process(ReceivedTaskInterface $task, ?TaskPayloadInterface $payload = null): void {
+        if ( ! ($payload instanceof HandleCommandPayload)) {
             $task->nack('Invalid payload');
             return;
         }

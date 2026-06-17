@@ -7,7 +7,7 @@ namespace App\Models\Auth\Enums;
  * @method static ConnectionType from(string $type)
  * @method static ConnectionType|null tryFrom(string $type)
  */
-enum ConnectionType : string
+enum ConnectionType: string
 {
     case RFID        = 'rfid';
     case LASER_FORCE = 'laserforce';

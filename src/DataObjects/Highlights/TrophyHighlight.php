@@ -34,8 +34,7 @@ class TrophyHighlight extends GameHighlight
      * @param  G  $game
      * @return static
      */
-    public static function fromJson(array $data, Game $game): static
-    {
+    public static function fromJson(array $data, Game $game): static {
         /** @phpstan-ignore new.static */
         return new static(
             $data['value'],
@@ -47,8 +46,7 @@ class TrophyHighlight extends GameHighlight
     /**
      * @return array<string,mixed>
      */
-    public function jsonSerialize(): array
-    {
+    public function jsonSerialize(): array {
         $data = parent::jsonSerialize();
         $data['player'] = ['vest' => $this->player->vest, 'name' => $this->player->name];
         return $data;
@@ -61,8 +59,7 @@ class TrophyHighlight extends GameHighlight
      * @throws DirectoryCreationException
      * @throws Throwable
      */
-    public function getDescription(): string
-    {
+    public function getDescription(): string {
         $fields = $this->player->trophy::getFields();
         $name = $this->player->name;
         if ($this->value === 'favouriteTarget') {
@@ -77,10 +74,10 @@ class TrophyHighlight extends GameHighlight
                         Gender::OTHER => '%s si zasedlo na %s',
                     },
                     context: 'trophy',
-                    domain: 'highlights'
+                    domain: 'highlights',
                 ),
                 '@' . $name . '@',
-                '@' . $name2 . '@<' . NameInflectionService::accusative($name2) . '>'
+                '@' . $name2 . '@<' . NameInflectionService::accusative($name2) . '>',
             );
         }
         if ($this->value === 'favouriteTargetOf') {
@@ -95,20 +92,20 @@ class TrophyHighlight extends GameHighlight
                         Gender::OTHER => '%s bylo pronásledováno od %s',
                     },
                     context: 'trophy',
-                    domain: 'highlights'
+                    domain: 'highlights',
                 ),
                 '@' . $name . '@',
-                '@' . $name2 . '@<' . NameInflectionService::genitive($name2) . '>'
+                '@' . $name2 . '@<' . NameInflectionService::genitive($name2) . '>',
             );
         }
         return sprintf(
             lang(
                 '%s získává trofej: %s',
                 context: 'trophy',
-                domain: 'highlights'
+                domain: 'highlights',
             ),
             '@' . $name . '@',
-            ($fields[$this->value] ?? ['name' => lang('Hráč', context: 'bests', domain: 'results')])['name']
+            ($fields[$this->value] ?? ['name' => lang('Hráč', context: 'bests', domain: 'results')])['name'],
         );
     }
 }

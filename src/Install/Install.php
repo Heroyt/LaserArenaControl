@@ -16,8 +16,7 @@ class Install implements InstallInterface
     use InstallPrints;
 
 
-    public static function install(bool $fresh = false, ?OutputInterface $output = null): bool
-    {
+    public static function install(bool $fresh = false, ?OutputInterface $output = null): bool {
         self::printInfo('Starting installation', $output);
         if (DbInstall::install($fresh, $output) && Seeder::install($fresh, $output) && self::installModules($output)) {
             self::printInfo('Installation successful', $output);
@@ -28,8 +27,7 @@ class Install implements InstallInterface
         return false;
     }
 
-    private static function installModules(?OutputInterface $output): bool
-    {
+    private static function installModules(?OutputInterface $output): bool {
         /** @var string[] $modules */
         $modules = App::getContainer()->findByType(Module::class);
         foreach ($modules as $moduleName) {

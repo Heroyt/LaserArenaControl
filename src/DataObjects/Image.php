@@ -20,7 +20,7 @@ class Image
     private array $customSizes = [];
 
     public function __construct(
-        string $image
+        string $image,
     ) {
         $this->image = file_exists($image) ? $image : ROOT . 'assets/images/questionmark.jpg';
 
@@ -29,8 +29,7 @@ class Image
     }
 
 
-    public function getSize(int $size): string
-    {
+    public function getSize(int $size): string {
         $optimized = $this->getOptimized();
         $index = $size . '-webp';
         if (isset($optimized[$index])) {
@@ -43,14 +42,13 @@ class Image
     /**
      * @return array<string|numeric-string,string>
      */
-    public function getOptimized(): array
-    {
-        if (!empty($this->optimized)) {
+    public function getOptimized(): array {
+        if ( ! empty($this->optimized)) {
             return $this->optimized;
         }
 
         $images = [
-          'original' => $this->getUrl(),
+            'original' => $this->getUrl(),
         ];
 
         $this->findOptimizedImages($images);
@@ -67,13 +65,11 @@ class Image
         return $this->optimized;
     }
 
-    public function getUrl(): string
-    {
+    public function getUrl(): string {
         return $this->pathToUrl($this->image);
     }
 
-    private function pathToUrl(string $file): string
-    {
+    private function pathToUrl(string $file): string {
         $path = explode('/', str_replace(ROOT, '', $file));
         $index = count($path) - 1;
         $path[$index] = rawurlencode($path[$index]);
@@ -85,8 +81,7 @@ class Image
      *
      * @return void
      */
-    private function findOptimizedImages(array &$images): void
-    {
+    private function findOptimizedImages(array &$images): void {
         if ($this->getType() === 'svg') {
             return;
         }
@@ -118,9 +113,8 @@ class Image
      *
      * @return string
      */
-    public function getType(): string
-    {
-        if (!isset($this->type)) {
+    public function getType(): string {
+        if ( ! isset($this->type)) {
             // Default to using provided extension
             $this->type ??= strtolower(pathinfo($this->image, PATHINFO_EXTENSION));
             if (function_exists('exif_imagetype')) {
@@ -141,8 +135,7 @@ class Image
         return $this->type;
     }
 
-    public function getWebp(): ?string
-    {
+    public function getWebp(): ?string {
         if ($this->getType() === 'svg') {
             return null;
         }
@@ -150,9 +143,9 @@ class Image
             return $this->pathToUrl($this->image);
         }
         $webp = $this->path . 'optimized/' . $this->name . '.webp';
-        if (!file_exists($webp)) {
+        if ( ! file_exists($webp)) {
             $this->optimize();
-            if (!file_exists($webp)) {
+            if ( ! file_exists($webp)) {
                 return null;
             }
             return $this->pathToUrl($webp);
@@ -164,8 +157,7 @@ class Image
      * @return void
      * @throws FileException
      */
-    public function optimize(): void
-    {
+    public function optimize(): void {
         // Do not optimize SVG
         if ($this->getType() === 'svg') {
             return;
@@ -183,12 +175,11 @@ class Image
      * @return array{original?:string,webp?:string|null}
      * @throws FileException
      */
-    public function getResized(?int $width = null, ?int $height = null): array
-    {
+    public function getResized(?int $width = null, ?int $height = null): array {
         if ($width === null && $height === null) {
             return [
-              'original' => $this->getUrl(),
-              'webp'     => $this->getWebp(),
+                'original' => $this->getUrl(),
+                'webp'     => $this->getWebp(),
             ];
         }
 
@@ -220,14 +211,14 @@ class Image
         $image = $imageService->loadFile($this->image);
         $resizedOriginal = null;
 
-        if (!isset($this->customSizes[$key]['original'])) {
+        if ( ! isset($this->customSizes[$key]['original'])) {
             $resizedOriginal = $imageService->resize($image, $width, $height);
             $imageService->save($resizedOriginal, $originalFile);
             $this->customSizes[$key]['original'] = $this->pathToUrl($originalFile);
         }
 
-        if (!isset($this->customSizes[$key]['webp'])) {
-            if (!isset($resizedOriginal)) {
+        if ( ! isset($this->customSizes[$key]['webp'])) {
+            if ( ! isset($resizedOriginal)) {
                 $resizedOriginal = $imageService->resize($image, $width, $height);
             }
             bdump($imageService->save($resizedOriginal, $webpFile));
@@ -237,13 +228,11 @@ class Image
         return $this->customSizes[$key];
     }
 
-    public function getPath(): string
-    {
+    public function getPath(): string {
         return $this->image;
     }
 
-    public function getMimeType(): string
-    {
+    public function getMimeType(): string {
         if (function_exists('exif_imagetype') && function_exists('image_type_to_mime_type')) {
             /** @var int|false $type */
             $type = exif_imagetype($this->image);

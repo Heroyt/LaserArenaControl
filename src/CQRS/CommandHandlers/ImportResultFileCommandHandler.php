@@ -56,10 +56,10 @@ readonly class ImportResultFileCommandHandler implements CommandHandlerInterface
         $startedAt = microtime(true);
         $lock = $this->lockFactory->createLock(
             'result-file-import-' . $command->pathHash,
-            ttl: $this->getImportLockTtl($command->timeoutSeconds)
+            ttl: $this->getImportLockTtl($command->timeoutSeconds),
         );
 
-        if (!$lock->acquire(false)) {
+        if ( ! $lock->acquire(false)) {
             return $this->recordMetrics(
                 $command,
                 new ImportResultFileCommandResult(
@@ -78,7 +78,7 @@ readonly class ImportResultFileCommandHandler implements CommandHandlerInterface
                 return $this->recordMetrics($command, $this->stale($command, 'stale', $state), $startedAt);
             }
 
-            if (!$command->force && $state->processedVersion === $command->version) {
+            if ( ! $command->force && $state->processedVersion === $command->version) {
                 return $this->recordMetrics(
                     $command,
                     new ImportResultFileCommandResult(
@@ -114,7 +114,7 @@ readonly class ImportResultFileCommandHandler implements CommandHandlerInterface
             }
 
             $this->guardTimeout($startedAt, $command->timeoutSeconds);
-            if (!$this->stateRepository->markProcessing($version, new DateTimeImmutable())) {
+            if ( ! $this->stateRepository->markProcessing($version, new DateTimeImmutable())) {
                 return $this->recordMetrics($command, $this->stale($command, 'stale'), $startedAt);
             }
 
@@ -122,8 +122,8 @@ readonly class ImportResultFileCommandHandler implements CommandHandlerInterface
             $parser = $this->getParser($command->system);
             if (
                 $command->content === null
-                    ? !$parser::checkFile($command->path)
-                    : !$parser::checkFile($command->path, $command->content)
+                    ? ! $parser::checkFile($command->path)
+                    : ! $parser::checkFile($command->path, $command->content)
             ) {
                 $this->stateRepository->markFailed($version, 'Game file cannot be parsed: ' . $command->path);
                 return $this->recordMetrics(
@@ -350,7 +350,7 @@ readonly class ImportResultFileCommandHandler implements CommandHandlerInterface
         } catch (MissingServiceException $e) {
             throw new RuntimeException('No parser for this game system (' . $system . ')', previous: $e);
         }
-        if (!$parser instanceof AbstractResultsParser) {
+        if ( ! $parser instanceof AbstractResultsParser) {
             throw new RuntimeException('No parser for this game system (' . $system . ')');
         }
 

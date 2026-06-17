@@ -3,7 +3,7 @@
 define('ROOT', dirname(__DIR__) . '/');
 const INDEX = true;
 
-if (!file_exists(ROOT . 'private/config.ini')) {
+if ( ! file_exists(ROOT . 'private/config.ini')) {
     copy(ROOT . 'tests/private/config.ini', ROOT . 'private/config.ini');
 }
 

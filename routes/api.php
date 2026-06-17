@@ -24,11 +24,11 @@ use App\Http\Controllers\Api\Updater;
 /** @var \Lsr\Core\Routing\Router $this */
 
 $apiGroup = $this->group('api')
-                 ->post('mount', [Mount::class, 'mount'])
-                 ->post('update', [Updater::class, 'update'])
-                 ->post('build', [Updater::class, 'build'])
-                 ->post('install', [Updater::class, 'install'])
-                 ->post('events', [Events::class, 'triggerEvent']);
+    ->post('mount', [Mount::class, 'mount'])
+    ->post('update', [Updater::class, 'update'])
+    ->post('build', [Updater::class, 'build'])
+    ->post('install', [Updater::class, 'install'])
+    ->post('events', [Events::class, 'triggerEvent']);
 
 $resultGroup = $apiGroup->group('results');
 $resultGroup->post('import', [Results::class, 'import']);
@@ -36,22 +36,22 @@ $resultGroup->post('import/{game}', [Results::class, 'importGame']);
 $resultGroup->get('last', [Results::class, 'getLastGameFile']);
 
 $gitGroup = $apiGroup->group('git')
-                     ->post('pull', [Updater::class, 'pull'])
-                     ->post('fetch', [Updater::class, 'fetch'])
-                     ->post('status', [Updater::class, 'status']);
+    ->post('pull', [Updater::class, 'pull'])
+    ->post('fetch', [Updater::class, 'fetch'])
+    ->post('status', [Updater::class, 'status']);
 
 $logGroup = $apiGroup->group('logs');
 $logGroup->get('', [Logs::class, 'show']);
 $logGroup->get('download', [Logs::class, 'download']);
 
 $debugGroup = $apiGroup->group('debug')
-                       ->get('pwd', [Debug::class, 'pwd'])
-                       ->get('whoami', [Debug::class, 'whoami'])
-                       ->post('enable', [Debug::class, 'enable'])
-                       ->post('disable', [Debug::class, 'disable'])
-                       ->update('incrementCache', [Debug::class, 'incrementCache'])
-                       ->put('incrementCache', [Debug::class, 'incrementCache'])
-                       ->get('glob', [Debug::class, 'glob']);
+    ->get('pwd', [Debug::class, 'pwd'])
+    ->get('whoami', [Debug::class, 'whoami'])
+    ->post('enable', [Debug::class, 'enable'])
+    ->post('disable', [Debug::class, 'disable'])
+    ->update('incrementCache', [Debug::class, 'incrementCache'])
+    ->put('incrementCache', [Debug::class, 'incrementCache'])
+    ->get('glob', [Debug::class, 'glob']);
 
 $gameGroup = $apiGroup->group('game');
 $gameGroup->post('load/{system}', [GameLoading::class, 'loadGame']);
@@ -59,18 +59,18 @@ $gameGroup->get('loaded', [GameHelpers::class, 'getLoadedGameInfo']);
 $gameGroup->get('gate', [GameHelpers::class, 'getGateGameInfo']);
 
 $gamesGroup = $apiGroup->group('games')
-                       ->get('', [Games::class, 'listGames'])
-                       ->post('sync', [Games::class, 'syncGames'])
-                       ->post('sync/{limit}', [Games::class, 'syncGames'])
-  ->post('simulate', [Games::class, 'simulate'])
-  ->group('{code}')
-  ->get('', [Games::class, 'getGame'])
-  ->post('group', [Games::class, 'setGroup'])
-  ->post('sync', [Games::class, 'syncGame'])
-  ->post('recalcSkill', [GameHelpers::class, 'recalcSkill'])
-  ->post('recalcScores', [GameHelpers::class, 'recalcScores'])
-  ->post('changeMode', [GameHelpers::class, 'changeGameMode'])
-  ->get('highlights', [Games::class, 'getHighlights']);
+    ->get('', [Games::class, 'listGames'])
+    ->post('sync', [Games::class, 'syncGames'])
+    ->post('sync/{limit}', [Games::class, 'syncGames'])
+    ->post('simulate', [Games::class, 'simulate'])
+    ->group('{code}')
+    ->get('', [Games::class, 'getGame'])
+    ->post('group', [Games::class, 'setGroup'])
+    ->post('sync', [Games::class, 'syncGame'])
+    ->post('recalcSkill', [GameHelpers::class, 'recalcSkill'])
+    ->post('recalcScores', [GameHelpers::class, 'recalcScores'])
+    ->post('changeMode', [GameHelpers::class, 'changeGameMode'])
+    ->get('highlights', [Games::class, 'getHighlights']);
 
 
 $tasksGroup = $apiGroup->group('tasks');

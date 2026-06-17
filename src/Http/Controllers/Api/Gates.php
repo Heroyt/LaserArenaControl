@@ -18,8 +18,7 @@ class Gates extends ApiController
         $this->ips = (array) Info::get('gates_ips', []);
     }
 
-    public function start(): ResponseInterface
-    {
+    public function start(): ResponseInterface {
         foreach ($this->ips as $ip) {
             try {
                 GatesController::start($ip);
@@ -30,8 +29,7 @@ class Gates extends ApiController
         return $this->respond(['status' => 'ok']);
     }
 
-    public function stop(): ResponseInterface
-    {
+    public function stop(): ResponseInterface {
         foreach ($this->ips as $ip) {
             try {
                 GatesController::end($ip);

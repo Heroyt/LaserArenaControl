@@ -14,8 +14,7 @@ readonly class HandleCommandPayload implements TaskPayloadInterface
      * @param  Command  $command
      */
     public function __construct(
-        public CommandInterface $command
-    )
-    {
+        public CommandInterface $command,
+    ) {
     }
 }

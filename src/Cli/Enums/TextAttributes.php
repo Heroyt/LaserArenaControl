@@ -9,7 +9,7 @@ namespace App\Cli\Enums;
 /**
  * List of CLI font attributes that can be applied to stdout
  */
-enum TextAttributes : string
+enum TextAttributes: string
 {
     case BOLD       = "\e[1m";
     case UN_BOLD    = "\e[21m";

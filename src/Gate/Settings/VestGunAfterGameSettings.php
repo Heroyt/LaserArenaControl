@@ -2,9 +2,6 @@
 
 namespace App\Gate\Settings;
 
-/**
- *
- */
 readonly class VestGunAfterGameSettings extends GateSettings
 {
     use WithTime;

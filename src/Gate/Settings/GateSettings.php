@@ -2,6 +2,6 @@
 
 namespace App\Gate\Settings;
 
-readonly abstract class GateSettings
+abstract readonly class GateSettings
 {
 }

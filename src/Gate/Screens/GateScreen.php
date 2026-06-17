@@ -31,8 +31,7 @@ abstract class GateScreen
 
     protected ?CustomEventDto $triggerEvent = null;
 
-    public function __construct(protected readonly Latte $latte)
-    {
+    public function __construct(protected readonly Latte $latte) {
     }
 
     /**
@@ -47,8 +46,7 @@ abstract class GateScreen
      *
      * @return string
      */
-    public static function getDescription(): string
-    {
+    public static function getDescription(): string {
         return '';
     }
 
@@ -57,8 +55,7 @@ abstract class GateScreen
      *
      * @return string
      */
-    public static function getGroup(): string
-    {
+    public static function getGroup(): string {
         return '';
     }
 
@@ -74,11 +71,10 @@ abstract class GateScreen
      *
      * @return bool
      */
-    public function isActive(): bool
-    {
+    public function isActive(): bool {
         if ($this instanceof ReloadTimerInterface) {
             $timer = $this->getReloadTimer();
-            return !isset($timer) || $timer > 0;
+            return ! isset($timer) || $timer > 0;
         }
         return true;
     }
@@ -95,8 +91,7 @@ abstract class GateScreen
      *
      * @return $this
      */
-    public function setSystems(array $systems): GateScreen
-    {
+    public function setSystems(array $systems): GateScreen {
         $this->systems = $systems;
         return $this;
     }
@@ -105,8 +100,7 @@ abstract class GateScreen
      * @return Game|null
      * @phpstan-ignore missingType.generics
      */
-    public function getGame(): ?Game
-    {
+    public function getGame(): ?Game {
         return $this->game;
     }
 
@@ -115,8 +109,7 @@ abstract class GateScreen
      * @param G|null $game
      * @return $this
      */
-    public function setGame(?Game $game): GateScreen
-    {
+    public function setGame(?Game $game): GateScreen {
         $this->game = $game;
         return $this;
     }
@@ -125,14 +118,12 @@ abstract class GateScreen
      * @param array<string,mixed>|TemplateParameters $params
      * @return $this
      */
-    public function setParams(array|TemplateParameters $params): GateScreen
-    {
+    public function setParams(array|TemplateParameters $params): GateScreen {
         $this->params = $params;
         return $this;
     }
 
-    public function setTriggerEvent(?CustomEventDto $triggerEvent): GateScreen
-    {
+    public function setTriggerEvent(?CustomEventDto $triggerEvent): GateScreen {
         $this->triggerEvent = $triggerEvent;
         return $this;
     }
@@ -144,8 +135,7 @@ abstract class GateScreen
      * @return ResponseInterface
      * @throws TemplateDoesNotExistException
      */
-    protected function view(string $template, array $params): ResponseInterface
-    {
+    protected function view(string $template, array $params): ResponseInterface {
         if ($this instanceof ReloadTimerInterface && $this->reloadTime <= 0) {
             $this->setReloadTime($this->getReloadTimer() ?? -1);
         }
@@ -166,8 +156,8 @@ abstract class GateScreen
                 $this->latte
                     ->viewToString(
                         $template,
-                        $this->params
-                    )
+                        $this->params,
+                    ),
             )
             ->withHeader('Content-Type', 'text/html')
             /** @phpstan-ignore nullsafe.neverNull */
@@ -189,8 +179,7 @@ abstract class GateScreen
         return $response;
     }
 
-    public function setReloadTime(?int $reloadTime): GateScreen
-    {
+    public function setReloadTime(?int $reloadTime): GateScreen {
         $this->reloadTime = $reloadTime ?? -1;
         return $this;
     }
@@ -205,9 +194,8 @@ abstract class GateScreen
     protected function respond(
         string|array|object $data,
         int                 $code = 200,
-        array               $headers = []
-    ): ResponseInterface
-    {
+        array               $headers = [],
+    ): ResponseInterface {
         $response = new Response(new \Nyholm\Psr7\Response($code, $headers));
 
         if (is_string($data)) {
@@ -217,13 +205,11 @@ abstract class GateScreen
         return $response->withJsonBody($data);
     }
 
-    public function getTrigger(): ?ScreenTriggerType
-    {
+    public function getTrigger(): ?ScreenTriggerType {
         return $this->trigger;
     }
 
-    public function setTrigger(ScreenTriggerType $trigger): static
-    {
+    public function setTrigger(ScreenTriggerType $trigger): static {
         $this->trigger = $trigger;
         return $this;
     }

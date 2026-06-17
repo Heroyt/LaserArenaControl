@@ -35,8 +35,7 @@ class Gate extends Controller
      * @throws TemplateDoesNotExistException
      * @throws ValidationException
      */
-    public function gate(): ResponseInterface
-    {
+    public function gate(): ResponseInterface {
         $this->params['gates'] = GateType::getAll();
         $this->params['screens'] = [];
         foreach (App::getContainer()->findByType(GateScreen::class) as $key) {
@@ -51,8 +50,7 @@ class Gate extends Controller
         return $this->view('pages/settings/gate');
     }
 
-    public function screenSettings(string $screen, Request $request): ResponseInterface
-    {
+    public function screenSettings(string $screen, Request $request): ResponseInterface {
         /** @var GateScreen $screenObject */
         $screenObject = App::getService($screen);
         $this->params['screen'] = GateScreenModel::createFromScreen($screenObject);
@@ -68,9 +66,9 @@ class Gate extends Controller
             new ErrorResponse(
                 'Invalid screen',
                 ErrorType::VALIDATION,
-                'This screen doesn\'t have any settings.'
+                'This screen doesn\'t have any settings.',
             ),
-            400
+            400,
         );
     }
 
@@ -79,8 +77,7 @@ class Gate extends Controller
      *
      * @return ResponseInterface
      */
-    public function saveGate(#[MapRequest] GateSaveRequest $data, Request $request): ResponseInterface
-    {
+    public function saveGate(#[MapRequest] GateSaveRequest $data, Request $request): ResponseInterface {
         new Logger(LOG_DIR, 'gate-settings')->debug('Save data', ['data' => $data, 'post' => $request->getParsedBody()]);
 
         try {
@@ -147,7 +144,7 @@ class Gate extends Controller
                 bdump($e);
                 continue;
             }
-            if (!$gateType->delete()) {
+            if ( ! $gateType->delete()) {
                 $request->passErrors[] = 'Failed to delete gate type.';
             }
         }
@@ -156,11 +153,11 @@ class Gate extends Controller
             bdump($request->params);
             return $this->respond(
                 [
-                'success'    => empty($request->passErrors),
-                'errors'     => $request->passErrors,
-                'newGateIds' => $newGateIds,
-                'newScreenIds' => $newScreenIds,
-                ]
+                    'success'    => empty($request->passErrors),
+                    'errors'     => $request->passErrors,
+                    'newGateIds' => $newGateIds,
+                    'newScreenIds' => $newScreenIds,
+                ],
             );
         }
         return $this->app->redirect('settings-gate', $request);
@@ -182,15 +179,14 @@ class Gate extends Controller
         Request      $request,
         string|int   $gateKey,
         array        &$newGateIds,
-        array        &$newScreenIds
-    ): void
-    {
-        $new = !isset($gateType->id);
+        array        &$newScreenIds,
+    ): void {
+        $new = ! isset($gateType->id);
         bdump($new);
-        if (!empty($gateData->name)) {
+        if ( ! empty($gateData->name)) {
             $gateType->setName($gateData->name);
         }
-        if (!empty($gateData->slug)) {
+        if ( ! empty($gateData->slug)) {
             $gateType->setSlug($gateData->slug);
         }
 
@@ -216,7 +212,7 @@ class Gate extends Controller
             $newScreens[$key] = $screenModel;
         }
 
-        if (!empty($gateData->deleteScreen)) {
+        if ( ! empty($gateData->deleteScreen)) {
             $screens = $gateType->screens;
             foreach ($gateData->deleteScreen as $id) {
                 try {
@@ -237,11 +233,11 @@ class Gate extends Controller
             $gateType->screens = $screens;
         }
 
-        if (!empty($gateType->name) && count($gateType->screens) > 0) {
-            if (!$gateType->save()) {
+        if ( ! empty($gateType->name) && count($gateType->screens) > 0) {
+            if ( ! $gateType->save()) {
                 $request->passErrors[] = sprintf(
                     lang('Nepodařilo se uložit výsledkovou tabuli %s.', context: 'errors'),
-                    $gateType->name
+                    $gateType->name,
                 );
             } elseif ($new || $newScreens) {
                 $newGateIds[$gateKey] = $gateType->id;
@@ -257,14 +253,13 @@ class Gate extends Controller
     private function processScreen(
         GateScreenModel $screenModel,
         ScreenSaveInfo  $screenData,
-    ): void
-    {
+    ): void {
         if (
             $screenData->type !== null
-            && (!isset($screenModel->screenSerialized) || $screenData->type !== $screenModel->screenSerialized)
+            && ( ! isset($screenModel->screenSerialized) || $screenData->type !== $screenModel->screenSerialized)
         ) {
             $screen = App::getService($screenData->type);
-            if (!($screen instanceof GateScreen)) {
+            if ( ! ($screen instanceof GateScreen)) {
                 throw new ValidationException('Invalid screen type: ' . $screenData->type);
             }
             $screenModel->setScreen($screen);

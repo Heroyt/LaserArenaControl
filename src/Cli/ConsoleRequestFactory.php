@@ -12,6 +12,7 @@ use Orisai\Exceptions\Logic\InvalidArgument;
 use Orisai\Exceptions\Logic\InvalidState;
 use Orisai\Exceptions\Message;
 use Symfony\Component\Console\Input\ArgvInput;
+
 use function strtolower;
 
 /**
@@ -34,8 +35,7 @@ final class ConsoleRequestFactory extends RequestFactory
         $this->configOptionName = $configOptionName;
     }
 
-    public function fromGlobals(): Request
-    {
+    public function fromGlobals(): Request {
         return new Request(
             new UrlScript($this->getUrl()),
             [],
@@ -45,18 +45,17 @@ final class ConsoleRequestFactory extends RequestFactory
         );
     }
 
-    private function getUrl(): string
-    {
+    private function getUrl(): string {
         $argv = new ArgvInput();
         if ($argv->hasParameterOption($this->argvOptionName)) {
             $url = $argv->getParameterOption($this->argvOptionName, null);
 
             if ($url !== null) {
-                if (!Validators::isUrl($url)) {
+                if ( ! Validators::isUrl($url)) {
                     throw InvalidArgument::create()
-                                         ->withMessage(
-                                             "Command option '$this->argvOptionName' has to be valid URL, '$url' given."
-                                         );
+                        ->withMessage(
+                            "Command option '$this->argvOptionName' has to be valid URL, '$url' given.",
+                        );
                 }
 
                 return $url;
@@ -68,19 +67,18 @@ final class ConsoleRequestFactory extends RequestFactory
         }
 
         $message = Message::create()
-                          ->withContext('Trying to create HTTP request.')
-                          ->withProblem('Request factory for console mode is used and no URL was provided.')
-                          ->withSolution(
-                              "Specify URL either via '$this->configOptionName' extension option or via " .
-                              "'$this->argvOptionName' command option.",
-                          );
+            ->withContext('Trying to create HTTP request.')
+            ->withProblem('Request factory for console mode is used and no URL was provided.')
+            ->withSolution(
+                "Specify URL either via '$this->configOptionName' extension option or via " .
+                "'$this->argvOptionName' command option.",
+            );
 
         throw InvalidState::create()
-                          ->withMessage($message);
+            ->withMessage($message);
     }
 
-    public function addHeader(string $name, string $value): void
-    {
+    public function addHeader(string $name, string $value): void {
         $this->headers[strtolower($name)] = $value;
     }
 }

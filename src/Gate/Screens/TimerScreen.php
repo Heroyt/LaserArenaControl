@@ -19,41 +19,36 @@ class TimerScreen extends GateScreen implements WithSettings
     /**
      * @inheritDoc
      */
-    public static function getName(): string
-    {
+    public static function getName(): string {
         return lang('Časovač', domain: 'gate', context: 'screens');
     }
 
-    public static function getDescription(): string
-    {
+    public static function getDescription(): string {
         return lang(
             'Obrazovka, která automaticky cyklí podle časovače.',
             domain: 'gate',
-            context: 'screens.description'
+            context: 'screens.description',
         );
     }
 
     /**
      * @inheritDoc
      */
-    public static function getDiKey(): string
-    {
+    public static function getDiKey(): string {
         return 'gate.screens.timer';
     }
 
     /**
      * @inheritDoc
      */
-    public static function getSettingsForm(): string
-    {
+    public static function getSettingsForm(): string {
         return 'gate/settings/timer.latte';
     }
 
     /**
      * @inheritDoc
      */
-    public static function buildSettingsFromForm(array $data): GateSettings
-    {
+    public static function buildSettingsFromForm(array $data): GateSettings {
         $children = [];
 
         // Process screens
@@ -62,7 +57,7 @@ class TimerScreen extends GateScreen implements WithSettings
         foreach ($screensData as $screenData) {
             $screenModel = new GateScreenModel();
 
-            if (isset($screenData['type']) && (!isset($screenModel->screenSerialized) || $screenData['type'] !== $screenModel->screenSerialized)) {
+            if (isset($screenData['type']) && ( ! isset($screenModel->screenSerialized) || $screenData['type'] !== $screenModel->screenSerialized)) {
                 // @phpstan-ignore-next-line
                 $screenModel->setScreen(App::getService($screenData['type']));
             }
@@ -90,8 +85,7 @@ class TimerScreen extends GateScreen implements WithSettings
     /**
      * @inheritDoc
      */
-    public function run(): ResponseInterface
-    {
+    public function run(): ResponseInterface {
         $screens = $this->getSettings()->children;
 
         $now = time();
@@ -101,9 +95,9 @@ class TimerScreen extends GateScreen implements WithSettings
 
         $screenModel = $screens[$activeScreen];
         $screen = $screenModel->getScreen()
-          ->setReloadTime($timeRemaining)
-          ->setGame($this->game)
-                              ->setParams($this->params);
+            ->setReloadTime($timeRemaining)
+            ->setGame($this->game)
+            ->setParams($this->params);
         if ($screen instanceof WithSettings) {
             $screen->setSettings($screenModel->getSettings() ?? new TimerSettings());
         }
@@ -114,9 +108,8 @@ class TimerScreen extends GateScreen implements WithSettings
     /**
      * @inheritDoc
      */
-    public function getSettings(): TimerSettings
-    {
-        if (!isset($this->settings)) {
+    public function getSettings(): TimerSettings {
+        if ( ! isset($this->settings)) {
             $this->settings = new TimerSettings();
         }
         return $this->settings;
@@ -125,8 +118,7 @@ class TimerScreen extends GateScreen implements WithSettings
     /**
      * @inheritDoc
      */
-    public function setSettings(GateSettings $settings): static
-    {
+    public function setSettings(GateSettings $settings): static {
         $this->settings = $settings;
         return $this;
     }

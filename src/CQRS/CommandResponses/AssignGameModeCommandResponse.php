@@ -24,7 +24,6 @@ final readonly class AssignGameModeCommandResponse
         public ?Throwable    $exception = null,
         public ?Game         $game = null,
         public ?AbstractMode $mode = null,
-    )
-    {
+    ) {
     }
 }

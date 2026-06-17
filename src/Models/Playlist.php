@@ -24,8 +24,7 @@ class Playlist extends BaseModel
     private bool $loadedMusic = false;
     private bool $musicChanged = false;
 
-    public function hasMusicMode(MusicMode $musicMode): bool
-    {
+    public function hasMusicMode(MusicMode $musicMode): bool {
         foreach ($this->getMusic() as $music) {
             if ($musicMode->id === $music->id) {
                 return true;
@@ -37,19 +36,18 @@ class Playlist extends BaseModel
     /**
      * @return ModelCollection<MusicMode&LoadedModel>
      */
-    public function getMusic(): ModelCollection
-    {
-        if (empty($this->music) && !$this->loadedMusic) {
+    public function getMusic(): ModelCollection {
+        if (empty($this->music) && ! $this->loadedMusic) {
             $this->music = new ModelCollection(
                 MusicMode::query()
-                       ->where(
-                           'id_music IN %sql',
-                           DB::select('playlist_music', 'id_music')
-                           ->where('id_playlist = %i', $this->id)
-                           ->fluent
-                       )
+                    ->where(
+                        'id_music IN %sql',
+                        DB::select('playlist_music', 'id_music')
+                            ->where('id_playlist = %i', $this->id)
+                            ->fluent,
+                    )
                     ->cacheTags($this::TABLE . '/' . $this->id . '/relations')
-                       ->get()
+                    ->get(),
             );
             $this->loadedMusic = true;
         }
@@ -60,8 +58,7 @@ class Playlist extends BaseModel
      * @param  (MusicMode&LoadedModel)[]|ModelCollection<MusicMode&LoadedModel>  $music
      * @return $this
      */
-    public function setMusic(array|ModelCollection $music): static
-    {
+    public function setMusic(array|ModelCollection $music): static {
         $this->music = $music instanceof ModelCollection ? $music : new ModelCollection($music);
         $this->musicChanged = true;
         return $this;
@@ -70,8 +67,7 @@ class Playlist extends BaseModel
     /**
      * @return int[]
      */
-    public function getMusicIds(): array
-    {
+    public function getMusicIds(): array {
         $ids = [];
         foreach ($this->getMusic() as $music) {
             assert($music->id !== null);
@@ -80,14 +76,12 @@ class Playlist extends BaseModel
         return $ids;
     }
 
-    public function save(): bool
-    {
+    public function save(): bool {
         return parent::save() && $this->saveMusic();
     }
 
-    public function saveMusic(): bool
-    {
-        if (!$this->musicChanged) {
+    public function saveMusic(): bool {
+        if ( ! $this->musicChanged) {
             return true;
         }
 

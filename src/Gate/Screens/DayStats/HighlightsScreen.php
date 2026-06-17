@@ -31,38 +31,33 @@ class HighlightsScreen extends GateScreen
     /**
      * @inheritDoc
      */
-    public static function getName(): string
-    {
+    public static function getName(): string {
         return lang('Dnešní zajímavosti z her', domain: 'gate', context: 'screens');
     }
 
-    public static function getDescription(): string
-    {
+    public static function getDescription(): string {
         return lang(
             'Obrazovka zobrazující zajímavosti z dnešních odehraných her.',
             domain: 'gate',
-            context: 'screens.description'
+            context: 'screens.description',
         );
     }
 
     /**
      * @inheritDoc
      */
-    public static function getDiKey(): string
-    {
+    public static function getDiKey(): string {
         return 'gate.screens.idle.highlights';
     }
 
-    public static function getGroup(): string
-    {
+    public static function getGroup(): string {
         return lang('Denní statistiky', domain: 'gate', context: 'screens.groups');
     }
 
     /**
      * @inheritDoc
      */
-    public function run(): ResponseInterface
-    {
+    public function run(): ResponseInterface {
         /** @var Request $request */
         $request = App::getInstance()->getRequest();
         /** @var string $date */
@@ -75,7 +70,7 @@ class HighlightsScreen extends GateScreen
 
         [$highlightsHash, $highlightsData] = $this->cache->load(
             'gate.today.highlights.' . $today->format('Y-m-d'),
-            fn() => [
+            fn () => [
                 $this->highlights->getHash(date: $today),
                 [
                     'data' => $this->highlights->getData(date: $today),
@@ -83,19 +78,19 @@ class HighlightsScreen extends GateScreen
                 ],
             ],
             [
-            'tags'   => [
-              'gate',
-              'gate.widgets',
-              'gate.widgets.highlights',
-                'games/' . $today->format('Y-m-d'),
+                'tags'   => [
+                    'gate',
+                    'gate.widgets',
+                    'gate.widgets.highlights',
+                    'games/' . $today->format('Y-m-d'),
+                ],
+                'expire' => '1 days',
             ],
-            'expire' => '1 days',
-            ]
         );
 
         [$musicHash, $musicData, $musicGameIds, $musicGameIdsRankable] = $this->cache->load(
             'gate.today.musicCounts.' . $today->format('Y-m-d'),
-            fn() => [
+            fn () => [
                 $this->musicCount->getHash(date: $today, systems: $this->systems),
                 [
                     'data' => $this->musicCount->getData(date: $today, systems: $this->systems),
@@ -106,18 +101,18 @@ class HighlightsScreen extends GateScreen
                     dateFrom: $today,
                     dateTo: $today,
                     systems: $this->systems,
-                    rankableOnly: true
+                    rankableOnly: true,
                 ),
             ],
             [
-            'tags'   => [
-              'gate',
-              'gate.widgets',
-              'gate.widgets.musicCounts',
-                'games/' . $today->format('Y-m-d'),
+                'tags'   => [
+                    'gate',
+                    'gate.widgets',
+                    'gate.widgets.musicCounts',
+                    'games/' . $today->format('Y-m-d'),
+                ],
+                'expire' => '1 days',
             ],
-            'expire' => '1 days',
-            ]
         );
 
         [$topPlayersHash, $topPlayersData] = $this->cache->load(
@@ -127,25 +122,25 @@ class HighlightsScreen extends GateScreen
                     [
                         'all' => $musicGameIds,
                         'rankable' => $musicGameIdsRankable,
-                    ]
+                    ],
                 );
                 return [
                     $this->topPlayerSkills->getHash(date: $today, systems: $this->systems),
                     [
-                  'data'     => $this->topPlayerSkills->getData(date: $today, systems: $this->systems),
-                  'template' => $this->topPlayerSkills->getTemplate(),
+                        'data'     => $this->topPlayerSkills->getData(date: $today, systems: $this->systems),
+                        'template' => $this->topPlayerSkills->getTemplate(),
                     ],
                 ];
             },
             [
-            'tags'   => [
-              'gate',
-              'gate.widgets',
-              'gate.widgets.topPlayers',
-                'games/' . $today->format('Y-m-d'),
+                'tags'   => [
+                    'gate',
+                    'gate.widgets',
+                    'gate.widgets.topPlayers',
+                    'games/' . $today->format('Y-m-d'),
+                ],
+                'expire' => '1 days',
             ],
-            'expire' => '1 days',
-            ]
         );
 
 
@@ -153,14 +148,14 @@ class HighlightsScreen extends GateScreen
             'gate/screens/todayHighlights',
             [
                 'screenHash' => md5($highlightsHash . $musicHash . $topPlayersHash),
-            'widgets'    => [
-              'highlights' => $highlightsData,
-              'music'      => $musicData,
-              'skills'     => $topPlayersData,
+                'widgets'    => [
+                    'highlights' => $highlightsData,
+                    'music'      => $musicData,
+                    'skills'     => $topPlayersData,
+                ],
+                'addJs'      => ['gate/todayHighlights.js'],
+                'addCss'     => ['gate/todayHighlights.css'],
             ],
-            'addJs'      => ['gate/todayHighlights.js'],
-            'addCss'     => ['gate/todayHighlights.css'],
-            ]
         );
     }
 }

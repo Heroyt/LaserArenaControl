@@ -20,7 +20,7 @@ use Codeception\Actor;
  * @method void pause($vars = [])
  *
  * @SuppressWarnings(PHPMD)
-*/
+ */
 class FunctionalTester extends Actor
 {
     use _generated\FunctionalTesterActions;

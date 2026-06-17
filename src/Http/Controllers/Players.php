@@ -19,63 +19,57 @@ class Players extends Controller
     public function __construct(
         private readonly PlayerProvider $playerProvider,
         private readonly TaskProducer   $taskProducer,
-    )
-    {
+    ) {
     }
 
-    public function getPlayer(string $code): ResponseInterface
-    {
+    public function getPlayer(string $code): ResponseInterface {
         try {
             $player = Player::getByCode($code);
         } catch (InvalidArgumentException $e) {
             return $this->respond(['error' => $e->getMessage(), 'code' => $code], 400);
         }
-        if (!isset($player)) {
+        if ( ! isset($player)) {
             $player = $this->playerProvider->findPublicPlayerByCode($code);
         }
-        if (!isset($player)) {
+        if ( ! isset($player)) {
             return $this->respond(['error' => 'Player not found'], 404);
         }
         return $this->respond($player);
     }
 
-    public function syncPlayer(string $code): ResponseInterface
-    {
+    public function syncPlayer(string $code): ResponseInterface {
         $player = $this->playerProvider->findPublicPlayerByCode($code);
-        if (!isset($player)) {
+        if ( ! isset($player)) {
             return $this->respond(['error' => 'Player not found'], 404);
         }
-        if (!$player->save()) {
+        if ( ! $player->save()) {
             return $this->respond(['error' => 'Save failed'], 500);
         }
         return $this->respond($player);
     }
 
-    public function find(Request $request): ResponseInterface
-    {
+    public function find(Request $request): ResponseInterface {
         /** @var string $search */
         $search = $request->getGet('search', '');
         return $this->respond(
             array_values(
                 $this->playerProvider->findPlayersLocal(
                     $search,
-                    empty($request->getGet('nomail', ''))
-                )
-            )
+                    empty($request->getGet('nomail', '')),
+                ),
+            ),
         );
     }
 
-    public function findPublic(Request $request): ResponseInterface
-    {
+    public function findPublic(Request $request): ResponseInterface {
         /** @var string $search */
         $search = $request->getGet('search', '');
         return $this->respond(
-            $this->playerProvider->findPlayersPublic($search) ?? []
+            $this->playerProvider->findPlayersPublic($search) ?? [],
         );
     }
 
-    public function sync(): ResponseInterface
-    {
+    public function sync(): ResponseInterface {
         try {
             $this->taskProducer->push(PlayersSyncTask::class, null);
         } catch (JobsException $e) {
@@ -84,20 +78,19 @@ class Players extends Controller
         return $this->respond(
             new SuccessResponse(
                 message: lang('Synchronizace byla naplánována'),
-                detail: lang('Synchronizace proběhne na pozadí během pár minut.')
-            )
+                detail: lang('Synchronizace proběhne na pozadí během pár minut.'),
+            ),
         );
     }
 
-    public function show(Request $request): ResponseInterface
-    {
+    public function show(Request $request): ResponseInterface {
         $perPage = 20;
         $fields = ['nickname', 'code', 'email', 'birthday', 'rank'];
         $sort = $request->getGet('sort', 'nickname');
-        if (!in_array($sort, $fields, true)) {
+        if ( ! in_array($sort, $fields, true)) {
             $sort = 'nickname';
         }
-        $desc = !empty($request->getGet('desc'));
+        $desc = ! empty($request->getGet('desc'));
         $search = $request->getGet('search', '');
         $query = Player::query();
         $query->orderBy($sort);
@@ -105,14 +98,14 @@ class Players extends Controller
             $query->desc();
         }
         $query->orderBy('id_user');
-        if (!empty($search)) {
+        if ( ! empty($search)) {
             $query->where(
                 '%or',
                 [
-                ['[code] LIKE %~like~', $search],
-                ['[nickname] LIKE %~like~', $search],
-                ['[email] LIKE %~like~', $search],
-                ]
+                    ['[code] LIKE %~like~', $search],
+                    ['[nickname] LIKE %~like~', $search],
+                    ['[email] LIKE %~like~', $search],
+                ],
             );
         }
         $page = (int) $request->getGet('page', 0);

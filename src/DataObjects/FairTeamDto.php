@@ -2,9 +2,6 @@
 
 namespace App\DataObjects;
 
-/**
- *
- */
 class FairTeamDto
 {
     /**
@@ -16,7 +13,6 @@ class FairTeamDto
         public int   $key,
         public array $players = [],
         public int   $skill = 0,
-    )
-    {
+    ) {
     }
 }

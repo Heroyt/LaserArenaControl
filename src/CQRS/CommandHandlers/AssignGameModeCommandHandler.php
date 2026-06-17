@@ -22,15 +22,13 @@ final readonly class AssignGameModeCommandHandler implements CommandHandlerInter
 {
     public function __construct(
         private CommandBus $commandBus,
-    )
-    {
+    ) {
     }
 
     /**
      * @param  AssignGameModeCommand  $command
      */
-    public function handle(CommandInterface $command): AssignGameModeCommandResponse
-    {
+    public function handle(CommandInterface $command): AssignGameModeCommandResponse {
         // Refresh game
         $game = $command->game;
         try {
@@ -44,14 +42,14 @@ final readonly class AssignGameModeCommandHandler implements CommandHandlerInter
         if ($command->mode !== null) {
             // Validate game mode system
             if (
-                !array_any(
+                ! array_any(
                     $command->mode->allowedSystems,
-                    fn(System $system) => $system->type->value === $game::SYSTEM
+                    fn (System $system) => $system->type->value === $game::SYSTEM,
                 )
             ) {
                 return new AssignGameModeCommandResponse(
                     false,
-                    'Given game mode does not support the game\'s system (' . $game::SYSTEM . ')'
+                    'Given game mode does not support the game\'s system (' . $game::SYSTEM . ')',
                 );
             }
 
@@ -85,7 +83,7 @@ final readonly class AssignGameModeCommandHandler implements CommandHandlerInter
         }
 
         try {
-            if (!$game->save()) {
+            if ( ! $game->save()) {
                 return new AssignGameModeCommandResponse(false, 'Game save failed');
             }
         } catch (Throwable $e) {

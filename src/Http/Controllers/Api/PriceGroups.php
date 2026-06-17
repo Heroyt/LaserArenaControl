@@ -12,9 +12,6 @@ use Lsr\ObjectValidation\Exceptions\ValidationException;
 use OpenApi\Attributes as OA;
 use Psr\Http\Message\ResponseInterface;
 
-/**
- *
- */
 class PriceGroups extends ApiController
 {
     #[OA\Get(
@@ -28,11 +25,10 @@ class PriceGroups extends ApiController
         description: 'PriceGroup list',
         content: new OA\JsonContent(
             type: 'array',
-            items: new OA\Items(ref: '#/components/schemas/PriceGroup')
-        )
+            items: new OA\Items(ref: '#/components/schemas/PriceGroup'),
+        ),
     )]
-    public function list(): ResponseInterface
-    {
+    public function list(): ResponseInterface {
         return $this->respond(array_values(PriceGroup::getAll()));
     }
 
@@ -47,18 +43,17 @@ class PriceGroups extends ApiController
         response: 200,
         description: 'PriceGroup',
         content: new OA\JsonContent(
-            ref: '#/components/schemas/PriceGroup'
-        )
+            ref: '#/components/schemas/PriceGroup',
+        ),
     )]
     #[OA\Response(
         response: 404,
         description: 'PriceGroup not found',
         content: new OA\JsonContent(
-            ref: '#/components/schemas/ErrorResponse'
-        )
+            ref: '#/components/schemas/ErrorResponse',
+        ),
     )]
-    public function show(PriceGroup $priceGroup): ResponseInterface
-    {
+    public function show(PriceGroup $priceGroup): ResponseInterface {
         return $this->respond($priceGroup);
     }
 
@@ -71,19 +66,19 @@ class PriceGroups extends ApiController
             content: new OA\JsonContent(
                 required: ["name", 'price'],
                 properties: [
-                                  new OA\Property(
-                                      property: "name",
-                                      description: 'Price group name',
-                                      type: "string",
-                                      example: 'Standard'
-                                  ),
-                                  new OA\Property(
-                                      property: "price",
-                                      description: 'Price value.',
-                                      type: "float",
-                                      example: '123.45'
-                                  ),
-                                ],
+                    new OA\Property(
+                        property: "name",
+                        description: 'Price group name',
+                        type: "string",
+                        example: 'Standard',
+                    ),
+                    new OA\Property(
+                        property: "price",
+                        description: 'Price value.',
+                        type: "float",
+                        example: '123.45',
+                    ),
+                ],
                 type: 'object',
             ),
         ),
@@ -94,29 +89,28 @@ class PriceGroups extends ApiController
         description: 'PriceGroup created',
         content: new OA\JsonContent(
             ref: '#/components/schemas/PriceGroup',
-        )
+        ),
     )]
     #[OA\Response(
         response: 400,
         description: 'Request error',
         content: new OA\JsonContent(
             ref: '#/components/schemas/ErrorResponse',
-        )
+        ),
     )]
     #[OA\Response(
         response: 500,
         description: 'Internal error',
         content: new OA\JsonContent(
             ref: '#/components/schemas/ErrorResponse',
-        )
+        ),
     )]
-    public function create(Request $request): ResponseInterface
-    {
+    public function create(Request $request): ResponseInterface {
         $name = $request->getPost('name');
         if (empty($name)) {
             return $this->respond(new ErrorResponse('`Name` is required', ErrorType::VALIDATION), 400);
         }
-        if (!is_string($name)) {
+        if ( ! is_string($name)) {
             return $this->respond(new ErrorResponse('`Name` must be a string', ErrorType::VALIDATION), 400);
         }
 
@@ -124,7 +118,7 @@ class PriceGroups extends ApiController
         if (empty($price)) {
             return $this->respond(new ErrorResponse('`Price` is required', ErrorType::VALIDATION), 400);
         }
-        if (!is_numeric($price)) {
+        if ( ! is_numeric($price)) {
             return $this->respond(new ErrorResponse('`Price` must be a number', ErrorType::VALIDATION), 400);
         }
 
@@ -133,7 +127,7 @@ class PriceGroups extends ApiController
         $priceGroup->setPrice((float) $price);
 
         try {
-            if (!$priceGroup->save()) {
+            if ( ! $priceGroup->save()) {
                 return $this->respond(new ErrorResponse('Error while saving the price group.'), 500);
             }
         } catch (ValidationException $e) {
@@ -151,19 +145,19 @@ class PriceGroups extends ApiController
             content: new OA\JsonContent(
                 required: ["name", 'price'],
                 properties: [
-                                  new OA\Property(
-                                      property: "name",
-                                      description: 'Price group name',
-                                      type: "string",
-                                      example: 'Standard'
-                                  ),
-                                  new OA\Property(
-                                      property: "price",
-                                      description: 'Price value.',
-                                      type: "float",
-                                      example: '123.45'
-                                  ),
-                                ],
+                    new OA\Property(
+                        property: "name",
+                        description: 'Price group name',
+                        type: "string",
+                        example: 'Standard',
+                    ),
+                    new OA\Property(
+                        property: "price",
+                        description: 'Price value.',
+                        type: "float",
+                        example: '123.45',
+                    ),
+                ],
                 type: 'object',
             ),
         ),
@@ -175,36 +169,35 @@ class PriceGroups extends ApiController
         description: 'PriceGroup updated',
         content: new OA\JsonContent(
             ref: '#/components/schemas/PriceGroup',
-        )
+        ),
     )]
     #[OA\Response(
         response: 400,
         description: 'Request error',
         content: new OA\JsonContent(
             ref: '#/components/schemas/ErrorResponse',
-        )
+        ),
     )]
     #[OA\Response(
         response: 404,
         description: 'Price group not found',
         content: new OA\JsonContent(
             ref: '#/components/schemas/ErrorResponse',
-        )
+        ),
     )]
     #[OA\Response(
         response: 500,
         description: 'Internal error',
         content: new OA\JsonContent(
             ref: '#/components/schemas/ErrorResponse',
-        )
+        ),
     )]
-    public function update(PriceGroup $priceGroup, Request $request): ResponseInterface
-    {
+    public function update(PriceGroup $priceGroup, Request $request): ResponseInterface {
         $name = $request->getPost('name', $priceGroup->name);
         if (empty($name)) {
             return $this->respond(new ErrorResponse('`Name` is required', ErrorType::VALIDATION), 400);
         }
-        if (!is_string($name)) {
+        if ( ! is_string($name)) {
             return $this->respond(new ErrorResponse('`Name` must be a string', ErrorType::VALIDATION), 400);
         }
 
@@ -212,7 +205,7 @@ class PriceGroups extends ApiController
         if (empty($price)) {
             return $this->respond(new ErrorResponse('`Price` is required', ErrorType::VALIDATION), 400);
         }
-        if (!is_numeric($price)) {
+        if ( ! is_numeric($price)) {
             return $this->respond(new ErrorResponse('`Price` must be a number', ErrorType::VALIDATION), 400);
         }
 
@@ -220,7 +213,7 @@ class PriceGroups extends ApiController
         $priceGroup->setPrice((float) $price);
 
         try {
-            if (!$priceGroup->save()) {
+            if ( ! $priceGroup->save()) {
                 return $this->respond(new ErrorResponse('Error while saving the price group.'), 500);
             }
         } catch (ValidationException $e) {
@@ -241,28 +234,27 @@ class PriceGroups extends ApiController
         description: 'PriceGroup deleted',
         content: new OA\JsonContent(
             ref: '#/components/schemas/SuccessResponse',
-        )
+        ),
     )]
     #[OA\Response(
         response: 404,
         description: 'Price group not found',
         content: new OA\JsonContent(
             ref: '#/components/schemas/ErrorResponse',
-        )
+        ),
     )]
     #[OA\Response(
         response: 500,
         description: 'Internal error',
         content: new OA\JsonContent(
             ref: '#/components/schemas/ErrorResponse',
-        )
+        ),
     )]
-    public function delete(PriceGroup $priceGroup): ResponseInterface
-    {
+    public function delete(PriceGroup $priceGroup): ResponseInterface {
         // Soft-delete the entity
         $priceGroup->deleted = true;
         try {
-            if (!$priceGroup->save()) {
+            if ( ! $priceGroup->save()) {
                 return $this->respond(new ErrorResponse('Error while deleting the price group.'), 500);
             }
         } catch (ValidationException $e) {

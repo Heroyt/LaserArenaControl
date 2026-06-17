@@ -38,7 +38,7 @@ class ResultsDirectoryScannerTest extends TestCase
             $this->assertSame(1, $result->invalid);
             $this->assertSame(
                 'Skipping file with invalid name ending with 0000.game',
-                $result->errors[0]->message
+                $result->errors[0]->message,
             );
         } finally {
             unlink($file);
@@ -152,8 +152,8 @@ class ResultsDirectoryScannerTest extends TestCase
             $this->isProcessingExpired(
                 $scanner,
                 $this->createState(ResultFileImportStatus::PROCESSING, new DateTimeImmutable('@600')),
-                new DateTimeImmutable('@1000')
-            )
+                new DateTimeImmutable('@1000'),
+            ),
         );
     }
 
@@ -207,8 +207,8 @@ class ResultsDirectoryScannerTest extends TestCase
             $this->isProcessingExpired(
                 $scanner,
                 $this->createState(ResultFileImportStatus::PROCESSING, new DateTimeImmutable('@800')),
-                new DateTimeImmutable('@1000')
-            )
+                new DateTimeImmutable('@1000'),
+            ),
         );
     }
 
@@ -219,8 +219,8 @@ class ResultsDirectoryScannerTest extends TestCase
             $this->isProcessingExpired(
                 $scanner,
                 $this->createState(ResultFileImportStatus::PROCESSING),
-                new DateTimeImmutable('@1000')
-            )
+                new DateTimeImmutable('@1000'),
+            ),
         );
     }
 
@@ -231,8 +231,8 @@ class ResultsDirectoryScannerTest extends TestCase
             $this->isProcessingExpired(
                 $scanner,
                 $this->createState(ResultFileImportStatus::QUEUED, new DateTimeImmutable('@600')),
-                new DateTimeImmutable('@1000')
-            )
+                new DateTimeImmutable('@1000'),
+            ),
         );
     }
 
@@ -246,8 +246,8 @@ class ResultsDirectoryScannerTest extends TestCase
                     ResultFileImportStatus::QUEUED,
                     queuedAt: new DateTimeImmutable('@800'),
                 ),
-                new DateTimeImmutable('@1000')
-            )
+                new DateTimeImmutable('@1000'),
+            ),
         );
     }
 
@@ -261,8 +261,8 @@ class ResultsDirectoryScannerTest extends TestCase
                     ResultFileImportStatus::QUEUED,
                     queuedAt: new DateTimeImmutable('@950'),
                 ),
-                new DateTimeImmutable('@1000')
-            )
+                new DateTimeImmutable('@1000'),
+            ),
         );
     }
 
@@ -273,8 +273,8 @@ class ResultsDirectoryScannerTest extends TestCase
             $this->isQueuedExpired(
                 $scanner,
                 $this->createState(ResultFileImportStatus::SEEN),
-                new DateTimeImmutable('@1000')
-            )
+                new DateTimeImmutable('@1000'),
+            ),
         );
     }
 
@@ -289,8 +289,8 @@ class ResultsDirectoryScannerTest extends TestCase
                     ResultFileImportStatus::IMPORTED,
                     processedVersion: $state->seenVersion,
                 ),
-                new DateTimeImmutable('@1000')
-            )
+                new DateTimeImmutable('@1000'),
+            ),
         );
     }
 
@@ -304,8 +304,8 @@ class ResultsDirectoryScannerTest extends TestCase
                     ResultFileImportStatus::STARTED,
                     queuedAt: new DateTimeImmutable('@800'),
                 ),
-                new DateTimeImmutable('@1000')
-            )
+                new DateTimeImmutable('@1000'),
+            ),
         );
     }
 
@@ -316,7 +316,7 @@ class ResultsDirectoryScannerTest extends TestCase
             $this->createState(
                 ResultFileImportStatus::IMPORTED,
                 processedVersion: $version->version,
-            )
+            ),
         );
 
         $decision = $scanner->describeFileDecision($version->path, now: new DateTimeImmutable('@1000'));
@@ -329,7 +329,7 @@ class ResultsDirectoryScannerTest extends TestCase
         $version = $this->createVersion();
         $scanner = $this->createScannerForDecision(
             $version,
-            $this->createState(ResultFileImportStatus::QUEUED, queuedAt: new DateTimeImmutable('@950'))
+            $this->createState(ResultFileImportStatus::QUEUED, queuedAt: new DateTimeImmutable('@950')),
         );
 
         $decision = $scanner->describeFileDecision($version->path, now: new DateTimeImmutable('@1000'));
@@ -342,7 +342,7 @@ class ResultsDirectoryScannerTest extends TestCase
         $version = $this->createVersion();
         $scanner = $this->createScannerForDecision(
             $version,
-            $this->createState(ResultFileImportStatus::QUEUED, queuedAt: new DateTimeImmutable('@800'))
+            $this->createState(ResultFileImportStatus::QUEUED, queuedAt: new DateTimeImmutable('@800')),
         );
 
         $decision = $scanner->describeFileDecision($version->path, now: new DateTimeImmutable('@1000'));
@@ -355,7 +355,7 @@ class ResultsDirectoryScannerTest extends TestCase
         $version = $this->createVersion();
         $scanner = $this->createScannerForDecision(
             $version,
-            $this->createState(ResultFileImportStatus::PROCESSING, new DateTimeImmutable('@600'))
+            $this->createState(ResultFileImportStatus::PROCESSING, new DateTimeImmutable('@600')),
         );
 
         $decision = $scanner->describeFileDecision($version->path, now: new DateTimeImmutable('@1000'));
@@ -368,7 +368,7 @@ class ResultsDirectoryScannerTest extends TestCase
         $version = $this->createVersion();
         $scanner = $this->createScannerForDecision(
             $version,
-            $this->createState(ResultFileImportStatus::LOADED, queuedAt: new DateTimeImmutable('@800'))
+            $this->createState(ResultFileImportStatus::LOADED, queuedAt: new DateTimeImmutable('@800')),
         );
 
         $decision = $scanner->describeFileDecision($version->path, now: new DateTimeImmutable('@1000'));

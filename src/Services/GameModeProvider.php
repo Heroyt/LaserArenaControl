@@ -14,9 +14,8 @@ class GameModeProvider implements GameModeProviderInterface
     public function find(
         string       $name,
         GameModeType $type = GameModeType::TEAM,
-        string       $system = ''
-    ): ?GameModeInterface
-    {
+        string       $system = '',
+    ): ?GameModeInterface {
         return GameModeFactory::find($name, $type, $system);
     }
 }

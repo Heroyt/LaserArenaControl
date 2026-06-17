@@ -16,7 +16,6 @@ readonly class ResultsScanError
         public ?string $path = null,
         #[OA\Property(nullable: true)]
         public ?string $system = null,
-    )
-    {
+    ) {
     }
 }

@@ -18,8 +18,7 @@ use Psr\Http\Message\ResponseInterface;
 
 class GamesList extends Controller
 {
-    public function show(Request $request): ResponseInterface
-    {
+    public function show(Request $request): ResponseInterface {
         $this->params = new GamesListTemplate($this->params);
 
         /** @var string $date */
@@ -38,8 +37,7 @@ class GamesList extends Controller
      * @throws \Lsr\Exceptions\TemplateDoesNotExistException
      * @throws \Throwable
      */
-    public function detail(string $code): ResponseInterface
-    {
+    public function detail(string $code): ResponseInterface {
         $this->params = new GamesDetailTemplate($this->params);
 
         $this->params->publicUrl = trailingSlashIt(Info::get('liga_api_url', 'https://laserliga.cz')) . 'g/' . $code;
@@ -54,9 +52,9 @@ class GamesList extends Controller
             data: $this->params->publicUrl,
             encoding: new Encoding('UTF-8'),
         )
-          ->build()
-          ->getString();
-        assert(!empty($qr));
+            ->build()
+            ->getString();
+        assert( ! empty($qr));
         $this->params->qr = $qr;
 
         return $this->view('pages/public/detail');

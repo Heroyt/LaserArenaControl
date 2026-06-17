@@ -11,15 +11,13 @@ use ReflectionMethod;
 
 class ImportResultFileCommandTest extends TestCase
 {
-    public function testCommandUsesImportHandler(): void
-    {
+    public function testCommandUsesImportHandler(): void {
         $command = $this->createCommand();
 
         $this->assertSame(ImportResultFileCommandHandler::class, $command->getHandler());
     }
 
-    private function createCommand(): ImportResultFileCommand
-    {
+    private function createCommand(): ImportResultFileCommand {
         return new ImportResultFileCommand(
             '/tmp/results/0001.game',
             sha1('/tmp/results/0001.game'),
@@ -31,8 +29,7 @@ class ImportResultFileCommandTest extends TestCase
         );
     }
 
-    public function testCreatesCommandFromQueuedFile(): void
-    {
+    public function testCreatesCommandFromQueuedFile(): void {
         $queuedFile = new QueuedResultFileImport(
             '/tmp/results/0001.game',
             sha1('/tmp/results/0001.game'),
@@ -53,8 +50,7 @@ class ImportResultFileCommandTest extends TestCase
         $this->assertSame('content', $command->content);
     }
 
-    public function testCreatesForcedCommandFromQueuedFile(): void
-    {
+    public function testCreatesForcedCommandFromQueuedFile(): void {
         $queuedFile = new QueuedResultFileImport(
             '/tmp/results/0001.game',
             sha1('/tmp/results/0001.game'),
@@ -70,8 +66,7 @@ class ImportResultFileCommandTest extends TestCase
         $this->assertTrue($command->force);
     }
 
-    public function testConvertsToVersion(): void
-    {
+    public function testConvertsToVersion(): void {
         $command = $this->createCommand();
 
         $version = $command->toVersion();

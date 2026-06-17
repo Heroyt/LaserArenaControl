@@ -6,9 +6,6 @@ use OpenApi\Attributes\Items;
 use OpenApi\Attributes\Property;
 use OpenApi\Attributes\Schema;
 
-/**
- *
- */
 #[Schema(type: 'object')]
 readonly class LastResultsResponse
 {
@@ -24,7 +21,6 @@ readonly class LastResultsResponse
         public string $contents1,
         #[Property]
         public string $contents2,
-    )
-    {
+    ) {
     }
 }

@@ -27,7 +27,7 @@ use Nette\Bridges\HttpTracy\SessionPanel;
 use Tracy\Debugger;
 use Tracy\NativeSession;
 
-if (!defined('ROOT')) {
+if ( ! defined('ROOT')) {
     define("ROOT", dirname(__DIR__) . '/');
 }
 
@@ -41,10 +41,10 @@ require_once ROOT . 'include/config.php';
 
 Timer::start('core.init');
 
-if (!is_dir(LOG_DIR) && !mkdir(LOG_DIR) && (!file_exists(LOG_DIR) || !is_dir(LOG_DIR))) {
+if ( ! is_dir(LOG_DIR) && ! mkdir(LOG_DIR) && ( ! file_exists(LOG_DIR) || ! is_dir(LOG_DIR))) {
     throw new RuntimeException(sprintf('Directory "%s" was not created', LOG_DIR));
 }
-if (!is_dir(UPLOAD_DIR) && !mkdir(UPLOAD_DIR) && (!file_exists(UPLOAD_DIR) || !is_dir(UPLOAD_DIR))) {
+if ( ! is_dir(UPLOAD_DIR) && ! mkdir(UPLOAD_DIR) && ( ! file_exists(UPLOAD_DIR) || ! is_dir(UPLOAD_DIR))) {
     throw new RuntimeException(sprintf('Directory "%s" was not created', UPLOAD_DIR));
 }
 
@@ -55,21 +55,21 @@ Debugger::setSessionStorage(new NativeSession());
 
 // Register custom tracy panels
 Debugger::getBar()
-  ->addPanel(new TimerTracyPanel())
-  ->addPanel(new TranslationTracyPanel())
-  ->addPanel(new RoutingTracyPanel());
+    ->addPanel(new TimerTracyPanel())
+    ->addPanel(new TranslationTracyPanel())
+    ->addPanel(new RoutingTracyPanel());
 
 Loader::init();
 
 define('CHECK_TRANSLATIONS', (bool) (App::getInstance()->config->getConfig()['General']['TRANSLATIONS'] ?? false));
 define(
     'TRANSLATIONS_COMMENTS',
-    (bool)(App::getInstance()->config->getConfig()['General']['TRANSLATIONS_COMMENTS'] ?? false)
+    (bool)(App::getInstance()->config->getConfig()['General']['TRANSLATIONS_COMMENTS'] ?? false),
 );
 
 // Translations update
 $translationChange = false;
-if (!PRODUCTION) {
+if ( ! PRODUCTION) {
     Timer::start('core.init.translations');
     $poLoader = new PoLoader();
     /** @var Translations[] $translations */
@@ -79,7 +79,7 @@ if (!PRODUCTION) {
     foreach ($languages as $lang => $country) {
         $concatLang = $lang . '_' . $country;
         $path = LANGUAGE_DIR . '/' . $concatLang;
-        if (!is_dir($path)) {
+        if ( ! is_dir($path)) {
             continue;
         }
         $file = $path . '/LC_MESSAGES/' . LANGUAGE_FILE_NAME . '.po';
@@ -90,14 +90,14 @@ if (!PRODUCTION) {
 
 if (defined('INDEX') && PHP_SAPI !== 'cli') {
     // Register library tracy panels
-    if (!isset($_ENV['noDb'])) {
+    if ( ! isset($_ENV['noDb'])) {
         (new Panel())->register(DB::getConnection()->connection);
     }
-    if (!PRODUCTION) {
+    if ( ! PRODUCTION) {
         Debugger::getBar()
-                ->addPanel(new ContainerPanel(App::getContainer()))
-                ->addPanel(new LattePanel(App::getService('templating.latte.engine'))) // @phpstan-ignore-line
-                ->addPanel(new SessionPanel());
+            ->addPanel(new ContainerPanel(App::getContainer()))
+            ->addPanel(new LattePanel(App::getService('templating.latte.engine'))) // @phpstan-ignore-line
+            ->addPanel(new SessionPanel());
     }
 }
 

@@ -8,7 +8,6 @@ readonly class GameHighlightsPayload implements TaskPayloadInterface
 {
     public function __construct(
         public ?string $code = null,
-    )
-    {
+    ) {
     }
 }

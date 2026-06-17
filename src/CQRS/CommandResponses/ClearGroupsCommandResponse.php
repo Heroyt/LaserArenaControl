@@ -9,7 +9,6 @@ final class ClearGroupsCommandResponse
     public function __construct(
         public int $deleted = 0,
         public int $hidden = 0,
-    )
-    {
+    ) {
     }
 }

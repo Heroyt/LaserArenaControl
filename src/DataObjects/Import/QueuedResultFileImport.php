@@ -26,12 +26,10 @@ readonly class QueuedResultFileImport
         public string  $version,
         #[OA\Property(nullable: true)]
         public ?string $content = null,
-    )
-    {
+    ) {
     }
 
-    public static function fromVersion(ResultFileVersion $version, string $system, ?string $content = null): self
-    {
+    public static function fromVersion(ResultFileVersion $version, string $system, ?string $content = null): self {
         return new self(
             path: $version->path,
             pathHash: $version->pathHash,

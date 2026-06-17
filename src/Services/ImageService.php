@@ -6,6 +6,7 @@ use GdImage;
 use InvalidArgumentException;
 use Lsr\Exceptions\FileException;
 use RuntimeException;
+
 use function imagecreatefromgif;
 use function imagecreatefromjpeg;
 use function imagecreatefrompng;
@@ -18,16 +19,15 @@ readonly class ImageService
      */
     public function __construct(
         public array $sizes = [
-        1000,
-        800,
-        500,
-        400,
-        300,
-        200,
-        150,
-        ]
-    )
-    {
+            1000,
+            800,
+            500,
+            400,
+            300,
+            200,
+            150,
+        ],
+    ) {
     }
 
     /**
@@ -36,8 +36,7 @@ readonly class ImageService
      * @return void
      * @throws FileException
      */
-    public function optimize(string $file): void
-    {
+    public function optimize(string $file): void {
         $image = $this->loadFile($file);
 
         $type = strtolower(pathinfo($file, PATHINFO_EXTENSION));
@@ -71,9 +70,8 @@ readonly class ImageService
      * @return GdImage
      * @throws FileException
      */
-    public function loadFile(string $file): GdImage
-    {
-        if (!file_exists($file)) {
+    public function loadFile(string $file): GdImage {
+        if ( ! file_exists($file)) {
             throw new FileException('File doesn\'t exist - ' . $file);
         }
 
@@ -82,7 +80,7 @@ readonly class ImageService
         $path = pathinfo($file, PATHINFO_DIRNAME) . '/';
 
         $optimizedDir = $path . 'optimized';
-        if (!is_dir($optimizedDir) && !mkdir($optimizedDir) && !is_dir($optimizedDir)) {
+        if ( ! is_dir($optimizedDir) && ! mkdir($optimizedDir) && ! is_dir($optimizedDir)) {
             throw new FileException('Cannot create an optimized image directory - ' . $file);
         }
 
@@ -106,8 +104,7 @@ readonly class ImageService
      *
      * @return bool
      */
-    public function save(GdImage $image, string $path): bool
-    {
+    public function save(GdImage $image, string $path): bool {
         $type = strtolower(pathinfo($path, PATHINFO_EXTENSION));
         return match ($type) {
             'jpg', 'jpeg' => imagejpeg($image, $path),
@@ -125,8 +122,7 @@ readonly class ImageService
      *
      * @return GdImage
      */
-    public function resize(GdImage $image, ?int $width = null, ?int $height = null): GdImage
-    {
+    public function resize(GdImage $image, ?int $width = null, ?int $height = null): GdImage {
         if ($width === null && $height === null) {
             throw new InvalidArgumentException('At least 1 argument $width or $height must be set.');
         }
@@ -214,8 +210,7 @@ readonly class ImageService
     /**
      * @return list<int<1,max>>
      */
-    public function getSizes(): array
-    {
+    public function getSizes(): array {
         return $this->sizes;
     }
 }

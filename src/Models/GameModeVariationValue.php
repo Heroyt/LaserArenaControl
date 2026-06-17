@@ -12,7 +12,6 @@ class GameModeVariationValue
         public string            $value,
         public string            $suffix,
         public int               $order = 0,
-    )
-    {
+    ) {
     }
 }

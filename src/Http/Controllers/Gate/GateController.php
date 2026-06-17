@@ -32,36 +32,34 @@ class GateController extends Controller
 {
     public function __construct(
         private readonly EventService $eventService,
-        private readonly Gate         $gate
-    )
-    {
+        private readonly Gate         $gate,
+    ) {
     }
 
     /**
      * @param  string  $gate
      * @return ResponseInterface
      */
-    public function show(Request $request, string $gate = 'default'): ResponseInterface
-    {
+    public function show(Request $request, string $gate = 'default'): ResponseInterface {
         /** @var string $system */
         $system = $request->getGet('system', 'all');
 
         $gateType = GateType::getBySlug(empty($gate) ? 'default' : $gate);
-        if (!isset($gateType)) {
+        if ( ! isset($gateType)) {
             return $this->respond(
                 new ErrorResponse('Gate type not found.', ErrorType::NOT_FOUND, values: ['slug' => $gate]),
-                404
+                404,
             );
         }
 
         try {
             $screen = $this->gate
-              ->getCurrentScreen($gateType, $system)
-              ->setParams($this->params);
+                ->getCurrentScreen($gateType, $system)
+                ->setParams($this->params);
             return $screen->run()
-                          ->withHeader('Cache-Control', 'no-store')
-                          ->withAddedHeader('X-Screen', $screen::getDiKey())
-              ->withAddedHeader('X-Trigger', $screen->getTrigger()->value ?? 'none');
+                ->withHeader('Cache-Control', 'no-store')
+                ->withAddedHeader('X-Screen', $screen::getDiKey())
+                ->withAddedHeader('X-Trigger', $screen->getTrigger()->value ?? 'none');
         } catch (Throwable $e) {
             return $this->respond(new ErrorResponse('An error has occured', exception: $e), 500);
         }
@@ -76,19 +74,19 @@ class GateController extends Controller
             content: new OA\JsonContent(
                 required: ["event"],
                 properties: [
-                                  new OA\Property(
-                                      property: "event",
-                                      description: 'Event name',
-                                      type: "string",
-                                      example: 'reload'
-                                  ),
-                                  new OA\Property(
-                                      property: "time",
-                                      description: 'How long should the event be valid in seconds.',
-                                      type: "int",
-                                      example: '60'
-                                  ),
-                                ],
+                    new OA\Property(
+                        property: "event",
+                        description: 'Event name',
+                        type: "string",
+                        example: 'reload',
+                    ),
+                    new OA\Property(
+                        property: "time",
+                        description: 'How long should the event be valid in seconds.',
+                        type: "int",
+                        example: '60',
+                    ),
+                ],
                 type: 'object',
             ),
         ),
@@ -97,17 +95,16 @@ class GateController extends Controller
     #[OA\Response(
         response: 200,
         description: 'Event set',
-        content: new OA\JsonContent(ref: '#/components/schemas/SuccessResponse')
+        content: new OA\JsonContent(ref: '#/components/schemas/SuccessResponse'),
     )]
     #[OA\Response(
         response: 500,
         description: 'Internal error',
         content: new OA\JsonContent(
             ref: '#/components/schemas/ErrorResponse',
-        )
+        ),
     )]
-    public function setEvent(Request $request): ResponseInterface
-    {
+    public function setEvent(Request $request): ResponseInterface {
         /** @var string $event */
         $event = $request->getPost('event', '');
         $time = (int) $request->getPost('time', 60);
@@ -116,7 +113,7 @@ class GateController extends Controller
         Info::set('gate-event', $dto);
         $this->eventService->trigger(
             'gate-reload',
-            ['type' => 'custom-event', 'event' => $event, 'time' => $dto->time]
+            ['type' => 'custom-event', 'event' => $event, 'time' => $dto->time],
         );
         return $this->respond(new SuccessResponse());
     }
@@ -130,19 +127,19 @@ class GateController extends Controller
             content: new OA\JsonContent(
                 required: ["game"],
                 properties: [
-                                  new OA\Property(
-                                      property: "game",
-                                      description: 'Game ID',
-                                      oneOf: [
-                                                   new OA\Schema(
-                                                       description: 'Last game',
-                                                       type: 'string',
-                                                       enum: ['last']
-                                                   ),
-                                                   new OA\Schema(description: 'Game ID', type: 'int', example: 1),
-                                                 ],
-                                  ),
-                                ],
+                    new OA\Property(
+                        property: "game",
+                        description: 'Game ID',
+                        oneOf: [
+                            new OA\Schema(
+                                description: 'Last game',
+                                type: 'string',
+                                enum: ['last'],
+                            ),
+                            new OA\Schema(description: 'Game ID', type: 'int', example: 1),
+                        ],
+                    ),
+                ],
                 type: 'object',
             ),
         ),
@@ -155,7 +152,7 @@ class GateController extends Controller
         required: true,
         schema: new OA\Schema(
             type: "string",
-            enum: ['evo5', 'evo6']
+            enum: ['evo5', 'evo6'],
         ),
     )]
     #[OA\Response(
@@ -168,24 +165,23 @@ class GateController extends Controller
         description: 'Request error',
         content: new OA\JsonContent(
             ref: '#/components/schemas/ErrorResponse',
-        )
+        ),
     )]
     #[OA\Response(
         response: 404,
         description: 'Game not found',
         content: new OA\JsonContent(
             ref: '#/components/schemas/ErrorResponse',
-        )
+        ),
     )]
     #[OA\Response(
         response: 500,
         description: 'Internal error',
         content: new OA\JsonContent(
             ref: '#/components/schemas/ErrorResponse',
-        )
+        ),
     )]
-    public function setGateGame(Request $request): ResponseInterface
-    {
+    public function setGateGame(Request $request): ResponseInterface {
         $game = $this->getGame($request);
         if ($game instanceof ErrorResponse) {
             return $this->respond($game, $game->type === ErrorType::NOT_FOUND ? 404 : 400);
@@ -198,12 +194,12 @@ class GateController extends Controller
             $this->clearEvent();
             $this->eventService->trigger(
                 'gate-reload',
-                ['type' => 'game-set', 'game' => $game->code, 'time' => $gateTime]
+                ['type' => 'game-set', 'game' => $game->code, 'time' => $gateTime],
             );
         } catch (Exception $e) {
             return $this->respond(
                 new ErrorResponse('Failed to save the game info', type: ErrorType::DATABASE, exception: $e),
-                500
+                500,
             );
         }
 
@@ -217,8 +213,7 @@ class GateController extends Controller
      * @throws Throwable
      * @phpstan-ignore missingType.generics
      */
-    private function getGame(Request $request): Game|ErrorResponse
-    {
+    private function getGame(Request $request): Game|ErrorResponse {
         /** @var 'last'|numeric $gamePost */
         $gamePost = $request->getPost('game', '0');
         $system = (string) $request->getParam('system', 'all');
@@ -241,8 +236,7 @@ class GateController extends Controller
         return $game ?? new ErrorResponse('Cannot find game', type: ErrorType::NOT_FOUND);
     }
 
-    private function clearEvent(): void
-    {
+    private function clearEvent(): void {
         Info::set('gate-event', null);
     }
 
@@ -255,19 +249,19 @@ class GateController extends Controller
             content: new OA\JsonContent(
                 required: ["game"],
                 properties: [
-                                  new OA\Property(
-                                      property: "game",
-                                      description: 'Game ID',
-                                      oneOf: [
-                                                   new OA\Schema(
-                                                       description: 'Last game',
-                                                       type: 'string',
-                                                       enum: ['last']
-                                                   ),
-                                                   new OA\Schema(description: 'Game ID', type: 'int', example: 1),
-                                                 ],
-                                  ),
-                                ],
+                    new OA\Property(
+                        property: "game",
+                        description: 'Game ID',
+                        oneOf: [
+                            new OA\Schema(
+                                description: 'Last game',
+                                type: 'string',
+                                enum: ['last'],
+                            ),
+                            new OA\Schema(description: 'Game ID', type: 'int', example: 1),
+                        ],
+                    ),
+                ],
                 type: 'object',
             ),
         ),
@@ -280,7 +274,7 @@ class GateController extends Controller
         required: true,
         schema: new OA\Schema(
             type: "string",
-            enum: ['evo5', 'evo6']
+            enum: ['evo5', 'evo6'],
         ),
     )]
     #[OA\Response(
@@ -293,24 +287,23 @@ class GateController extends Controller
         description: 'Request error',
         content: new OA\JsonContent(
             ref: '#/components/schemas/ErrorResponse',
-        )
+        ),
     )]
     #[OA\Response(
         response: 404,
         description: 'Game not found',
         content: new OA\JsonContent(
             ref: '#/components/schemas/ErrorResponse',
-        )
+        ),
     )]
     #[OA\Response(
         response: 500,
         description: 'Internal error',
         content: new OA\JsonContent(
             ref: '#/components/schemas/ErrorResponse',
-        )
+        ),
     )]
-    public function setGateLoaded(string $system, Request $request): ResponseInterface
-    {
+    public function setGateLoaded(string $system, Request $request): ResponseInterface {
         $game = $this->getGame($request);
         if ($game instanceof ErrorResponse) {
             return $this->respond($game, $game->type === ErrorType::NOT_FOUND ? 404 : 400);
@@ -324,12 +317,12 @@ class GateController extends Controller
             $this->clearEvent();
             $this->eventService->trigger(
                 'gate-reload',
-                ['type' => 'game-set-loaded', 'game' => $game->code, 'time' => time()]
+                ['type' => 'game-set-loaded', 'game' => $game->code, 'time' => time()],
             );
         } catch (Exception $e) {
             return $this->respond(
                 new ErrorResponse('Failed to save the game info', type: ErrorType::DATABASE, exception: $e),
-                500
+                500,
             );
         }
         return $this->respond(new SuccessResponse());
@@ -348,7 +341,7 @@ class GateController extends Controller
         required: true,
         schema: new OA\Schema(
             type: "string",
-            enum: ['evo5', 'evo6']
+            enum: ['evo5', 'evo6'],
         ),
     )]
     #[OA\Response(
@@ -361,17 +354,16 @@ class GateController extends Controller
         description: 'Request error',
         content: new OA\JsonContent(
             ref: '#/components/schemas/ErrorResponse',
-        )
+        ),
     )]
     #[OA\Response(
         response: 500,
         description: 'Internal error',
         content: new OA\JsonContent(
             ref: '#/components/schemas/ErrorResponse',
-        )
+        ),
     )]
-    public function setGateIdle(string $system = ''): ResponseInterface
-    {
+    public function setGateIdle(string $system = ''): ResponseInterface {
         if (empty($system)) {
             return $this->respond(new ErrorResponse('Missing / Incorrect system', type: ErrorType::VALIDATION), 400);
         }
@@ -383,7 +375,7 @@ class GateController extends Controller
         } catch (Exception $e) {
             return $this->respond(
                 new ErrorResponse('Failed to save the game info', type: ErrorType::DATABASE, exception: $e),
-                500
+                500,
             );
         }
         return $this->respond(new SuccessResponse());

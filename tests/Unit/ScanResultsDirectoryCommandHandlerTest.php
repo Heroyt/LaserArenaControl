@@ -14,15 +14,13 @@ use PHPUnit\Framework\TestCase;
 
 class ScanResultsDirectoryCommandHandlerTest extends TestCase
 {
-    public function testCommandUsesScanHandler(): void
-    {
+    public function testCommandUsesScanHandler(): void {
         $command = new ScanResultsDirectoryCommand('/tmp/results');
 
         $this->assertSame(ScanResultsDirectoryCommandHandler::class, $command->getHandler());
     }
 
-    public function testHandlerDelegatesToScanner(): void
-    {
+    public function testHandlerDelegatesToScanner(): void {
         $queuedFile = new QueuedResultFileImport(
             '/tmp/results/0001.game',
             sha1('/tmp/results/0001.game'),
@@ -62,14 +60,13 @@ class ScanResultsDirectoryCommandHandlerTest extends TestCase
                     all: true,
                     limit: 5,
                     includeContent: true,
-                    maxContentBytes: 1024
-                )
-            )
+                    maxContentBytes: 1024,
+                ),
+            ),
         );
     }
 
-    public function testHandlerCanSkipQueueingImports(): void
-    {
+    public function testHandlerCanSkipQueueingImports(): void {
         $queuedFile = new QueuedResultFileImport(
             '/tmp/results/0001.game',
             sha1('/tmp/results/0001.game'),
@@ -102,12 +99,11 @@ class ScanResultsDirectoryCommandHandlerTest extends TestCase
 
         $this->assertSame(
             $result,
-            $handler->handle(new ScanResultsDirectoryCommand('/tmp/results', queueImports: false))
+            $handler->handle(new ScanResultsDirectoryCommand('/tmp/results', queueImports: false)),
         );
     }
 
-    public function testHandlerCanProcessImportsSynchronously(): void
-    {
+    public function testHandlerCanProcessImportsSynchronously(): void {
         $queuedFile = new QueuedResultFileImport(
             '/tmp/results/0001.game',
             sha1('/tmp/results/0001.game'),
@@ -154,7 +150,7 @@ class ScanResultsDirectoryCommandHandlerTest extends TestCase
                 queueImports: true,
                 processImports: true,
                 importTimeoutSeconds: 45,
-            )
+            ),
         );
 
         $this->assertSame($result->queuedFiles, $response->queuedFiles);

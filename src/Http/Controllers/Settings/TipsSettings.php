@@ -15,17 +15,13 @@ use Lsr\ObjectValidation\Exceptions\ValidationException;
 use Lsr\Orm\Exceptions\ModelNotFoundException;
 use Psr\Http\Message\ResponseInterface;
 
-/**
- *
- */
 class TipsSettings extends Controller
 {
     public string $title = 'Nastavení - Tipy';
 
     public function __construct(
         private readonly Translations $translations,
-    )
-    {
+    ) {
     }
 
     /**
@@ -35,8 +31,7 @@ class TipsSettings extends Controller
      * @throws TemplateDoesNotExistException
      * @throws ValidationException
      */
-    public function show(): ResponseInterface
-    {
+    public function show(): ResponseInterface {
         $this->params['tips'] = Tip::getAll();
         $this->params['languages'] = $this->translations->supportedLanguages;
         return $this->view('pages/settings/tips');
@@ -46,11 +41,10 @@ class TipsSettings extends Controller
      * @throws DriverException
      * @throws JsonException
      */
-    public function save(Request $request): ResponseInterface
-    {
+    public function save(Request $request): ResponseInterface {
         $ids = [
-          'old' => [],
-          'new' => [],
+            'old' => [],
+            'new' => [],
         ];
         $tips = $request->getPost('tip', []);
         if (is_array($tips)) {
@@ -107,19 +101,18 @@ class TipsSettings extends Controller
         if ($request->isAjax()) {
             return $this->respond(
                 [
-                'success' => empty($request->passErrors),
-                'errors'  => $request->passErrors,
-                'ids' => $ids,
+                    'success' => empty($request->passErrors),
+                    'errors'  => $request->passErrors,
+                    'ids' => $ids,
                 ],
-                empty($request->passErrors) ? 200 : 500
+                empty($request->passErrors) ? 200 : 500,
             );
         }
         return $this->app->redirect('settings-tips', $request);
     }
 
-    public function remove(Tip $tip, Request $request): ResponseInterface
-    {
-        if (!$tip->delete()) {
+    public function remove(Tip $tip, Request $request): ResponseInterface {
+        if ( ! $tip->delete()) {
             $err = lang('Nepodařilo se odstranit entitu', context: 'errors');
             if ($request->isAjax()) {
                 return $this->respond(new ErrorResponse($err), 500);

@@ -20,16 +20,14 @@ readonly class ResultFileImportResult
         public string $unfinishedEvent = '',
         public bool   $empty = false,
         public bool   $saveFailed = false,
-    )
-    {
+    ) {
     }
 
     /**
      * @template SourceGame of Game
      * @param SourceGame $game
      */
-    public static function skipped(Game $game): self
-    {
+    public static function skipped(Game $game): self {
         return new self(game: $game);
     }
 
@@ -37,8 +35,7 @@ readonly class ResultFileImportResult
      * @template SourceGame of Game
      * @param SourceGame $game
      */
-    public static function unfinished(Game $game, string $event): self
-    {
+    public static function unfinished(Game $game, string $event): self {
         return new self(unfinishedGame: $game, unfinishedEvent: $event);
     }
 
@@ -46,8 +43,7 @@ readonly class ResultFileImportResult
      * @template SourceGame of Game
      * @param SourceGame $game
      */
-    public static function imported(Game $game): self
-    {
+    public static function imported(Game $game): self {
         return new self(imported: true, game: $game);
     }
 
@@ -55,8 +51,7 @@ readonly class ResultFileImportResult
      * @template SourceGame of Game
      * @param SourceGame $game
      */
-    public static function empty(Game $game): self
-    {
+    public static function empty(Game $game): self {
         return new self(game: $game, empty: true);
     }
 
@@ -64,8 +59,7 @@ readonly class ResultFileImportResult
      * @template SourceGame of Game
      * @param SourceGame $game
      */
-    public static function saveFailed(Game $game): self
-    {
+    public static function saveFailed(Game $game): self {
         return new self(game: $game, saveFailed: true);
     }
 }

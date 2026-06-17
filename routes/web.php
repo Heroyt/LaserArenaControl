@@ -31,21 +31,21 @@ $this->get('/lang/{lang}', [Lang::class, 'setLang']);
 $this->get('/', [NewGame::class, 'show'])->name('dashboard');
 
 $this->group('/results')
-  ->get('/', [Results::class, 'show'])
-  ->name('results')
-  ->get('/{code}', [Results::class, 'show'])
-  ->name('results-game')
-  ->get('/{code}/print', [Results::class, 'printGame'])
-  ->name('print')
-  ->get('/{code}/print/{lang}', [Results::class, 'printGame'])
-  ->get('/{code}/print/{lang}/{copies}', [Results::class, 'printGame'])
-  ->get('/{code}/print/{lang}/{copies}/{style}', [Results::class, 'printGame'])
-  ->get('/{code}/print/{lang}/{copies}/{style}/{template}', [Results::class, 'printGame'])
-  ->get('/{code}/print/{lang}/{copies}/{style}/{template}/{type}', [Results::class, 'printGame']);
+    ->get('/', [Results::class, 'show'])
+    ->name('results')
+    ->get('/{code}', [Results::class, 'show'])
+    ->name('results-game')
+    ->get('/{code}/print', [Results::class, 'printGame'])
+    ->name('print')
+    ->get('/{code}/print/{lang}', [Results::class, 'printGame'])
+    ->get('/{code}/print/{lang}/{copies}', [Results::class, 'printGame'])
+    ->get('/{code}/print/{lang}/{copies}/{style}', [Results::class, 'printGame'])
+    ->get('/{code}/print/{lang}/{copies}/{style}/{template}', [Results::class, 'printGame'])
+    ->get('/{code}/print/{lang}/{copies}/{style}/{template}/{type}', [Results::class, 'printGame']);
 
 $this->group('/list')->get('/', [GamesList::class, 'show'])->name('games-list')->get(
     '/{game}',
-    [GamesList::class, 'game']
+    [GamesList::class, 'game'],
 );
 
 $gateGroup = $this->group('/gate');
@@ -62,14 +62,14 @@ $gateGroup->post('/idle/{system}', [GateController::class, 'setGateIdle']);
 $playersGroup = $this->group('/players');
 $playersGroup->get('', [Players::class, 'show'])->name('liga-players');
 $playersGroup->group('sync')
-  ->post('', [Players::class, 'sync'])
-  ->get('{code}', [Players::class, 'syncPlayer'])
-  ->post('{code}', [Players::class, 'syncPlayer']);
+    ->post('', [Players::class, 'sync'])
+    ->get('{code}', [Players::class, 'syncPlayer'])
+    ->post('{code}', [Players::class, 'syncPlayer']);
 $playersGroup->group('find')
-  ->get('', [Players::class, 'find'])
-  ->get('{code}', [Players::class, 'getPlayer']);
+    ->get('', [Players::class, 'find'])
+    ->get('{code}', [Players::class, 'getPlayer']);
 $playersGroup->group('public')
-  ->get('find', [Players::class, 'findPublic']);
+    ->get('find', [Players::class, 'findPublic']);
 
 $prepared = $this->group('prepared');
 $prepared->get('', [PreparedGames::class, 'get']);

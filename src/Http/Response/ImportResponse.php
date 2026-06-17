@@ -5,9 +5,6 @@ namespace App\Http\Response;
 use JsonSerializable;
 use OpenApi\Attributes as OA;
 
-/**
- *
- */
 #[OA\Schema(schema: 'ImportResponse', type: 'object')]
 readonly class ImportResponse implements JsonSerializable
 {
@@ -27,41 +24,39 @@ readonly class ImportResponse implements JsonSerializable
         #[OA\Property(
             items: new OA\Items(
                 oneOf: [
-                   new OA\Schema(
-                       properties: [
-                                   'error'     => new OA\Property(
-                                       property: 'error',
-                                       type: 'string',
-                                       nullable: true,
-                                   ),
-                                   'exception' => new OA\Property(
-                                       property: 'exception',
-                                       type: 'string',
-                                       nullable: true,
-                                   ),
-                                   'sql'       => new OA\Property(
-                                       property: 'sql',
-                                       type: 'string',
-                                       nullable: true,
-                                   ),
-                                 ],
-                       type: 'object'
-                   ),
-                   new OA\Schema(type: 'string'),
-                 ]
-            )
+                    new OA\Schema(
+                        properties: [
+                            'error'     => new OA\Property(
+                                property: 'error',
+                                type: 'string',
+                                nullable: true,
+                            ),
+                            'exception' => new OA\Property(
+                                property: 'exception',
+                                type: 'string',
+                                nullable: true,
+                            ),
+                            'sql'       => new OA\Property(
+                                property: 'sql',
+                                type: 'string',
+                                nullable: true,
+                            ),
+                        ],
+                        type: 'object',
+                    ),
+                    new OA\Schema(type: 'string'),
+                ],
+            ),
         )]
         public array $errors,
-    )
-    {
+    ) {
     }
 
     /**
      * @inheritDoc
      * @return array<string,mixed>
      */
-    public function jsonSerialize(): array
-    {
+    public function jsonSerialize(): array {
         return get_object_vars($this);
     }
 }

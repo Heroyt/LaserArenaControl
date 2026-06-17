@@ -12,17 +12,14 @@ readonly class PlayersSyncTask implements TaskDispatcherInterface
 {
     public function __construct(
         private PlayerSynchronizationService $synchronizationService,
-    )
-    {
+    ) {
     }
 
-    public static function getDiName(): string
-    {
+    public static function getDiName(): string {
         return 'task.ligaPlayersSync';
     }
 
-    public function process(ReceivedTaskInterface $task, ?TaskPayloadInterface $payload = null): void
-    {
+    public function process(ReceivedTaskInterface $task, ?TaskPayloadInterface $payload = null): void {
         try {
             $this->synchronizationService->syncAllLocalPlayers();
             $this->synchronizationService->syncAllArenaPlayers();

@@ -8,8 +8,7 @@ use RuntimeException;
 
 class ResultFileVersionFactoryTest extends TestCase
 {
-    public function testCreatesStableVersionFromMetadata(): void
-    {
+    public function testCreatesStableVersionFromMetadata(): void {
         $factory = new ResultFileVersionFactory();
 
         $version = $factory->fromMetadata('/tmp/results/0001.game', 123, 456, str_repeat('a', 64));
@@ -21,12 +20,11 @@ class ResultFileVersionFactoryTest extends TestCase
         $this->assertSame(str_repeat('a', 64), $version->contentHash);
         $this->assertSame(
             sha1('/tmp/results/0001.game:123:456:' . str_repeat('a', 64)),
-            $version->version
+            $version->version,
         );
     }
 
-    public function testCreatesVersionFromReadableFile(): void
-    {
+    public function testCreatesVersionFromReadableFile(): void {
         $path = tempnam(sys_get_temp_dir(), 'lac-result-version-');
         $this->assertIsString($path);
         file_put_contents($path, 'result-content');
@@ -43,8 +41,7 @@ class ResultFileVersionFactoryTest extends TestCase
         }
     }
 
-    public function testUnreadableFileThrows(): void
-    {
+    public function testUnreadableFileThrows(): void {
         $this->expectException(RuntimeException::class);
 
         (new ResultFileVersionFactory())->fromFile('/path/that/does/not/exist.game');

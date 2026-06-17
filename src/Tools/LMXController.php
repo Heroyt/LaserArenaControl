@@ -30,7 +30,7 @@ class LMXController
 
     public const int DEFAULT_TIMEOUT = 30;
     public const array COMMAND_TIMEOUTS = [
-      self::GET_STATUS_COMMAND => 3,
+        self::GET_STATUS_COMMAND => 3,
     ];
 
     /**
@@ -41,8 +41,7 @@ class LMXController
      * @return string 'ok'
      * @throws ConnectionException
      */
-    public static function retryDownload(string $ip): string
-    {
+    public static function retryDownload(string $ip): string {
         return self::sendCommand($ip, self::RETRY_DOWNLOAD_COMMAND);
     }
 
@@ -54,19 +53,18 @@ class LMXController
      * @return string Response
      * @throws ConnectionException
      */
-    public static function sendCommand(string $ip, string $command, string $parameters = ''): string
-    {
+    public static function sendCommand(string $ip, string $command, string $parameters = ''): string {
         $timeout = self::COMMAND_TIMEOUTS[$command] ?? self::DEFAULT_TIMEOUT;
         $fp = @fsockopen($ip, self::PORT, $errno, $errstr, $timeout);
-        if (!$fp) {
+        if ( ! $fp) {
             throw new ConnectionTimeoutException(
                 sprintf(
                     lang('Nepodařilo se připojit k TCP serveru (%s:%d).'),
                     $ip,
-                    self::PORT
+                    self::PORT,
                 ) . ' ' . $errstr . ' (' . $errno . ')',
                 $errno,
-                $timeout
+                $timeout,
             );
         }
         if (fwrite($fp, $command . ':' . $parameters) === false) {
@@ -75,13 +73,13 @@ class LMXController
                 sprintf(
                     lang('Nepodařilo se odeslat příkaz TCP serveru (%s:%d).'),
                     $ip,
-                    self::PORT
+                    self::PORT,
                 ),
                 0,
             );
         }
         $response = '';
-        while (!feof($fp)) {
+        while ( ! feof($fp)) {
             $response .= fgets($fp, 128);
         }
         fclose($fp);
@@ -96,8 +94,7 @@ class LMXController
      * @return string 'ok'
      * @throws ConnectionException
      */
-    public static function cancelDownload(string $ip): string
-    {
+    public static function cancelDownload(string $ip): string {
         return self::sendCommand($ip, self::CANCEL_DOWNLOAD_COMMAND);
     }
 
@@ -109,17 +106,16 @@ class LMXController
      * @return string 'ARMED'|'STANDBY'|'PLAYING'
      * @throws ConnectionException
      */
-    public static function getStatus(string $ip): string
-    {
+    public static function getStatus(string $ip): string {
         $cache = App::getService('cache');
         assert($cache instanceof Cache);
         return $cache->load(
             'lmx.status.' . $ip,
-            static fn() => self::sendCommand($ip, self::GET_STATUS_COMMAND),
+            static fn () => self::sendCommand($ip, self::GET_STATUS_COMMAND),
             /** @phpstan-ignore argument.type */
             [
-            $cache::Expire => 5,
-            ]
+                $cache::Expire => 5,
+            ],
         );
     }
 
@@ -132,8 +128,7 @@ class LMXController
      * @return string Response
      * @throws ConnectionException
      */
-    public static function load(string $ip, string $gameMode): string
-    {
+    public static function load(string $ip, string $gameMode): string {
         return self::sendCommand($ip, self::LOAD_COMMAND, $gameMode);
     }
 
@@ -145,8 +140,7 @@ class LMXController
      * @return string
      * @throws ConnectionException
      */
-    public static function start(string $ip): string
-    {
+    public static function start(string $ip): string {
         return self::sendCommand($ip, self::START_COMMAND);
     }
 
@@ -159,8 +153,7 @@ class LMXController
      * @return string Response
      * @throws ConnectionException
      */
-    public static function loadStart(string $ip, string $gameMode): string
-    {
+    public static function loadStart(string $ip, string $gameMode): string {
         return self::sendCommand($ip, self::LOAD_START_COMMAND, $gameMode);
     }
 
@@ -172,8 +165,7 @@ class LMXController
      * @return string response
      * @throws ConnectionException
      */
-    public static function end(string $ip): string
-    {
+    public static function end(string $ip): string {
         return self::sendCommand($ip, self::END_COMMAND);
     }
 }

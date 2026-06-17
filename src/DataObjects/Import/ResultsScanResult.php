@@ -35,15 +35,13 @@ readonly class ResultsScanResult implements JsonSerializable
         public array  $errors = [],
         #[OA\Property(items: new OA\Items(ref: '#/components/schemas/ResultFileScanDecision'))]
         public array $decisions = [],
-    )
-    {
+    ) {
     }
 
     /**
      * @param list<ImportResultFileCommandResult> $importResults
      */
-    public function withImportResults(array $importResults): self
-    {
+    public function withImportResults(array $importResults): self {
         return new self(
             $this->dir,
             $this->seen,
@@ -60,8 +58,7 @@ readonly class ResultsScanResult implements JsonSerializable
     /**
      * @return array<string,mixed>
      */
-    public function jsonSerialize(): array
-    {
+    public function jsonSerialize(): array {
         return get_object_vars($this);
     }
 }

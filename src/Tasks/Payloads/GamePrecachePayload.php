@@ -10,7 +10,6 @@ readonly class GamePrecachePayload implements TaskPayloadInterface
         public ?string $code = null,
         public ?int    $style = null,
         public ?string $template = null,
-    )
-    {
+    ) {
     }
 }

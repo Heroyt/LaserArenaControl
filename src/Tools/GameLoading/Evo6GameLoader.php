@@ -24,14 +24,13 @@ class Evo6GameLoader extends LasermaxxGameLoader
      * @return MetaLoadData Metadata
      * @throws TemplateDoesNotExistException
      */
-    public function loadGame(array $data): array
-    {
+    public function loadGame(array $data): array {
         $loadData = $this->loadLasermaxxGame($data);
 
         // Render the game info into a load file
         $content = $this->latte->viewToString('gameFiles/evo6', $loadData->getParams());
         $loadDir = $this->system->gameLoadDir;
-        if (!file_exists($loadDir) || !is_dir($loadDir)) {
+        if ( ! file_exists($loadDir) || ! is_dir($loadDir)) {
             $loadDir = LMX_DIR . Info::get('evo6_load_file', 'games/');
         }
         if (file_exists($loadDir) && is_dir($loadDir)) {

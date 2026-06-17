@@ -13,7 +13,6 @@ readonly class ResultFileVersion
         public int    $size,
         public string $contentHash,
         public string $version,
-    )
-    {
+    ) {
     }
 }

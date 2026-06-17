@@ -17,12 +17,10 @@ final readonly class LogArchiveJob implements Job
     public function __construct(
         private LogArchiver $archiver,
         private Metrics     $metrics,
-    )
-    {
+    ) {
     }
 
-    public function run(JobLock $lock): void
-    {
+    public function run(JobLock $lock): void {
         $this->metrics->add('cron_job_started', 1, ['log_archive']);
         $it = new RecursiveDirectoryIterator(LOG_DIR);
         $it = new RecursiveIteratorIterator($it, RecursiveIteratorIterator::LEAVES_ONLY);
@@ -50,8 +48,7 @@ final readonly class LogArchiveJob implements Job
         $this->metrics->add($success ? 'cron_job_ok' : 'cron_job_error', 1, ['log_archive']);
     }
 
-    public function getName(): string
-    {
+    public function getName(): string {
         return 'Vest sync';
     }
 }

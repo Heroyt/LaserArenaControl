@@ -74,36 +74,36 @@ function getImageSrcSet(Image | string $image, bool $includeAllSizes = true): st
 
 function jsonSerialize(mixed $data): string {
     $normalizerContext = [
-      AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function (object $object, string $format, array $context) {
-        if (property_exists($object, 'code')) {
-            return $object->code;
-        }
-        if (property_exists($object, 'id')) {
-            return $object->id;
-        }
-        if (property_exists($object, 'name')) {
-            return $object->name;
-        }
-          return null;
-      },
+        AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function (object $object, string $format, array $context) {
+            if (property_exists($object, 'code')) {
+                return $object->code;
+            }
+            if (property_exists($object, 'id')) {
+                return $object->id;
+            }
+            if (property_exists($object, 'name')) {
+                return $object->name;
+            }
+            return null;
+        },
     ];
     $serializer = new Serializer(
         [
-        new DateTimeNormalizer(),
-        new BackedEnumNormalizer(),
-        new JsonSerializableNormalizer(defaultContext: $normalizerContext),
-        new ObjectNormalizer(defaultContext: $normalizerContext),
+            new DateTimeNormalizer(),
+            new BackedEnumNormalizer(),
+            new JsonSerializableNormalizer(defaultContext: $normalizerContext),
+            new ObjectNormalizer(defaultContext: $normalizerContext),
         ],
         [
-        new JsonEncoder(
-            defaultContext: [
-                            JsonDecode::ASSOCIATIVE => true,
-                            JsonEncode::OPTIONS     => JSON_UNESCAPED_UNICODE
-                              | JSON_UNESCAPED_SLASHES
-                              | JSON_PRESERVE_ZERO_FRACTION
-                              | JSON_THROW_ON_ERROR,
-                          ]
-        ),
+            new JsonEncoder(
+                defaultContext: [
+                    JsonDecode::ASSOCIATIVE => true,
+                    JsonEncode::OPTIONS     => JSON_UNESCAPED_UNICODE
+                      | JSON_UNESCAPED_SLASHES
+                      | JSON_PRESERVE_ZERO_FRACTION
+                      | JSON_THROW_ON_ERROR,
+                ],
+            ),
         ],
     );
     return $serializer->serialize($data, 'json');

@@ -8,7 +8,6 @@ readonly class GameImportPayload implements TaskPayloadInterface
 {
     public function __construct(
         public string $dir,
-    )
-    {
+    ) {
     }
 }

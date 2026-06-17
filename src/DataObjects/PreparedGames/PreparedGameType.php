@@ -7,7 +7,7 @@ namespace App\DataObjects\PreparedGames;
  * @method static PreparedGameType from(string $value)
  * @method static PreparedGameType|null tryFrom(string $value)
  */
-enum PreparedGameType : string
+enum PreparedGameType: string
 {
     case LOADED = 'loaded';
     case PREPARED   = 'prepared';

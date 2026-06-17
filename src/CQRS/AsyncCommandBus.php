@@ -15,15 +15,13 @@ readonly class AsyncCommandBus implements AsyncCommandBusInterface
 {
     public function __construct(
         private TaskProducer $taskProducer,
-    )
-    {
+    ) {
     }
 
     /**
      * @throws JobsException
      */
-    public function dispatch(CommandInterface $command): void
-    {
+    public function dispatch(CommandInterface $command): void {
         $this->taskProducer->push(HandleCommandTask::class, new HandleCommandPayload($command));
     }
 }

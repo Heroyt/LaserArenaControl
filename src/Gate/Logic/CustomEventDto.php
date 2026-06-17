@@ -2,9 +2,6 @@
 
 namespace App\Gate\Logic;
 
-/**
- *
- */
 readonly class CustomEventDto
 {
     public int $time;

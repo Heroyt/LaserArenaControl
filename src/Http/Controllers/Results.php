@@ -22,9 +22,6 @@ use Spiral\RoadRunner\Metrics\Metrics;
 use Throwable;
 use Tracy\Debugger;
 
-/**
- *
- */
 class Results extends Controller
 {
     protected string $title = 'Results';
@@ -33,8 +30,7 @@ class Results extends Controller
     public function __construct(
         private readonly ResultPrintService $printService,
         private readonly Metrics            $metrics,
-    )
-    {
+    ) {
     }
 
     /**
@@ -45,8 +41,7 @@ class Results extends Controller
      * @throws Throwable
      * @throws ValidationException
      */
-    public function show(Request $request): ResponseInterface
-    {
+    public function show(Request $request): ResponseInterface {
         $rows = GameFactory::queryGames(true)->orderBy('start')->desc()->limit(10)->fetchAll(cache: false);
         if (count($rows) === 0) {
             return $this->view('pages/results/noGames');
@@ -62,7 +57,7 @@ class Results extends Controller
                     break;
                 }
             }
-            if (!$found) {
+            if ( ! $found) {
                 $this->params['games'][] = $this->params['selected'];
             }
         }
@@ -73,9 +68,9 @@ class Results extends Controller
             $this->params['games'],
             static function (?Game $game1, ?Game $game2) {
                 return $game2?->start?->getTimestamp() - $game1?->start?->getTimestamp();
-            }
+            },
         );
-        if (!isset($this->params['selected'])) {
+        if ( ! isset($this->params['selected'])) {
             $this->params['selected'] = $this->params['games'][0] ?? null;
         }
         $this->params['selectedStyle'] = (int) $request->getGet('style', PrintStyle::getActiveStyleId());
@@ -101,12 +96,11 @@ class Results extends Controller
         string  $code = '',
         int     $copies = 1,
         string  $template = 'default',
-        ?int    $style = null
-    ): ResponseInterface
-    {
+        ?int    $style = null,
+    ): ResponseInterface {
         $copies = max(1, $copies);
         $style ??= PrintStyle::getActiveStyleId();
-        $cache = !($request->getGet('nocache', 0));
+        $cache = ! ($request->getGet('nocache', 0));
         //$colorless = ($request->params['type'] ?? 'color') === 'colorless';
 
         $game = $code === 'last' ? GameFactory::getLastGame() : GameFactory::getByCode($code);
@@ -115,7 +109,7 @@ class Results extends Controller
             return $this->respond('Game not found', 404);
         }
 
-        if (!($request->getGet('html', 0))) {
+        if ( ! ($request->getGet('html', 0))) {
             $pdfFile = $this->printService->getResultsPdf($game, $style, $template, $copies, $cache);
             if (file_exists($pdfFile)) {
                 /** @var non-empty-string[] $labels */
@@ -130,13 +124,13 @@ class Results extends Controller
                 return new Response(
                     200,
                     ['Content-Type' => 'application/pdf;filename=results.pdf'],
-                    $file
+                    $file,
                 );
             }
         }
         Debugger::$showBar = (bool) $request->getGet('tracy', 0);
         return $this->respond(
-            $this->printService->getResultsHtml($game, $style, $template, $copies, $cache)
+            $this->printService->getResultsHtml($game, $style, $template, $copies, $cache),
         );
     }
 }

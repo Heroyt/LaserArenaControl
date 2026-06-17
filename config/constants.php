@@ -7,7 +7,7 @@
 
 use Lsr\Core\Config;
 
-if (!defined('ROOT')) {
+if ( ! defined('ROOT')) {
     define('ROOT', dirname(__DIR__) . '/');
 }
 

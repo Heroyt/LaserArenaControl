@@ -118,13 +118,13 @@ readonly class ResultFileImportStateRepository
         return DB::update(
             self::TABLE,
             [
-                    'status' => ResultFileImportStatus::PROCESSING->value,
-                    'processing_version' => $version->version,
-                    'processing_started_at' => $now,
-                    'attempts%sql' => 'attempts + 1',
-                    'last_error' => null,
-                ],
-            ['path_hash = %s AND seen_version = %s', $version->pathHash, $version->version]
+                'status' => ResultFileImportStatus::PROCESSING->value,
+                'processing_version' => $version->version,
+                'processing_started_at' => $now,
+                'attempts%sql' => 'attempts + 1',
+                'last_error' => null,
+            ],
+            ['path_hash = %s AND seen_version = %s', $version->pathHash, $version->version],
         ) > 0;
     }
 
@@ -161,17 +161,17 @@ readonly class ResultFileImportStateRepository
         return DB::update(
             self::TABLE,
             [
-                    'status' => $status->value,
-                    'processing_version' => null,
-                    'processing_started_at' => null,
-                    'processed_version' => $version->version,
-                    'processed_hash' => $processedHash,
-                    'processed_at' => $now,
-                    'last_game_code' => $gameCode,
-                    'last_event' => $event,
-                    'last_error' => null,
-                ],
-            ['path_hash = %s AND seen_version = %s', $version->pathHash, $version->version]
+                'status' => $status->value,
+                'processing_version' => null,
+                'processing_started_at' => null,
+                'processed_version' => $version->version,
+                'processed_hash' => $processedHash,
+                'processed_at' => $now,
+                'last_game_code' => $gameCode,
+                'last_event' => $event,
+                'last_error' => null,
+            ],
+            ['path_hash = %s AND seen_version = %s', $version->pathHash, $version->version],
         ) > 0;
     }
 
@@ -208,18 +208,18 @@ readonly class ResultFileImportStateRepository
         return DB::update(
             self::TABLE,
             [
-                    'status' => $status->value,
-                    'queued_at' => $now,
-                    'processing_version' => null,
-                    'processing_started_at' => null,
-                    'processed_version' => null,
-                    'processed_hash' => null,
-                    'processed_at' => null,
-                    'last_game_code' => null,
-                    'last_event' => $event,
-                    'last_error' => null,
-                ],
-            ['path_hash = %s AND seen_version = %s', $version->pathHash, $version->version]
+                'status' => $status->value,
+                'queued_at' => $now,
+                'processing_version' => null,
+                'processing_started_at' => null,
+                'processed_version' => null,
+                'processed_hash' => null,
+                'processed_at' => null,
+                'last_game_code' => null,
+                'last_event' => $event,
+                'last_error' => null,
+            ],
+            ['path_hash = %s AND seen_version = %s', $version->pathHash, $version->version],
         ) > 0;
     }
 
@@ -237,12 +237,12 @@ readonly class ResultFileImportStateRepository
         return DB::update(
             self::TABLE,
             [
-                    'status' => ResultFileImportStatus::FAILED->value,
-                    'processing_version' => null,
-                    'processing_started_at' => null,
-                    'last_error' => mb_substr($error, 0, 1000),
-                ],
-            ['path_hash = %s AND seen_version = %s', $version->pathHash, $version->version]
+                'status' => ResultFileImportStatus::FAILED->value,
+                'processing_version' => null,
+                'processing_started_at' => null,
+                'last_error' => mb_substr($error, 0, 1000),
+            ],
+            ['path_hash = %s AND seen_version = %s', $version->pathHash, $version->version],
         ) > 0;
     }
 }

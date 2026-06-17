@@ -2,9 +2,6 @@
 
 namespace App\Gate\Settings;
 
-/**
- *
- */
 readonly class YoutubeSettings extends GateSettings
 {
     use WithTime;

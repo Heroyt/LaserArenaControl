@@ -25,20 +25,17 @@ trait BaseGameQuery
         $this->query = GameFactory::queryGames($excludeNotFinished, $date);
     }
 
-    public function limit(int $limit): self
-    {
+    public function limit(int $limit): self {
         $this->query->limit($limit);
         return $this;
     }
 
-    public function offset(int $offset): self
-    {
+    public function offset(int $offset): self {
         $this->query->offset($offset);
         return $this;
     }
 
-    public function system(string|System|SystemType $system): self
-    {
+    public function system(string|System|SystemType $system): self {
         if ($system instanceof System) {
             $system = $system->type->value;
         } else {
@@ -50,9 +47,8 @@ trait BaseGameQuery
         return $this;
     }
 
-    public function orderBy(string $field, bool $desc = false): self
-    {
-        if (!in_array($field, self::ALLOWED_ORDER_FIELDS, true)) {
+    public function orderBy(string $field, bool $desc = false): self {
+        if ( ! in_array($field, self::ALLOWED_ORDER_FIELDS, true)) {
             throw new InvalidArgumentException('Invalid orderBy field: ' . $field);
         }
         $this->query->orderBy($field);
@@ -62,8 +58,7 @@ trait BaseGameQuery
         return $this;
     }
 
-    public function noCache(): self
-    {
+    public function noCache(): self {
         $this->cache = false;
         return $this;
     }

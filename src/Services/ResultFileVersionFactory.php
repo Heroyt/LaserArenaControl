@@ -9,10 +9,9 @@ use RuntimeException;
 
 readonly class ResultFileVersionFactory
 {
-    public function fromFile(string $path): ResultFileVersion
-    {
+    public function fromFile(string $path): ResultFileVersion {
         $canonicalPath = realpath($path);
-        if ($canonicalPath === false || !is_file($canonicalPath) || !is_readable($canonicalPath)) {
+        if ($canonicalPath === false || ! is_file($canonicalPath) || ! is_readable($canonicalPath)) {
             throw new RuntimeException('Result file is not readable: ' . $path);
         }
 
@@ -26,8 +25,7 @@ readonly class ResultFileVersionFactory
         return $this->fromMetadata($canonicalPath, $mtime, $size, $hash);
     }
 
-    public function fromMetadata(string $path, int $mtime, int $size, string $contentHash): ResultFileVersion
-    {
+    public function fromMetadata(string $path, int $mtime, int $size, string $contentHash): ResultFileVersion {
         $canonicalPath = $this->canonicalizePath($path);
 
         return new ResultFileVersion(
@@ -40,8 +38,7 @@ readonly class ResultFileVersionFactory
         );
     }
 
-    private function canonicalizePath(string $path): string
-    {
+    private function canonicalizePath(string $path): string {
         $realPath = realpath($path);
         return $realPath === false ? $path : $realPath;
     }

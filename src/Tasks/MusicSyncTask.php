@@ -12,17 +12,14 @@ readonly class MusicSyncTask implements TaskDispatcherInterface
 {
     public function __construct(
         private LigaApi $api,
-    )
-    {
+    ) {
     }
 
-    public static function getDiName(): string
-    {
+    public static function getDiName(): string {
         return 'task.musicSync';
     }
 
-    public function process(ReceivedTaskInterface $task, ?TaskPayloadInterface $payload = null): void
-    {
+    public function process(ReceivedTaskInterface $task, ?TaskPayloadInterface $payload = null): void {
         try {
             if ($this->api->syncMusicModes()) {
                 $task->ack();

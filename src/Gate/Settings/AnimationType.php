@@ -8,7 +8,7 @@ namespace App\Gate\Settings;
  * @method static AnimationType from(string $value)
  * @method static AnimationType|null tryFrom(string $value)
  */
-enum AnimationType : string
+enum AnimationType: string
 {
     case FADE        = 'fade';
     case SCALE       = 'scale';
@@ -17,8 +17,7 @@ enum AnimationType : string
     case SLIDE_LEFT  = 'slide_left';
     case SLIDE_BOTTOM = 'slide_bottom';
 
-    public function getReadableName(): string
-    {
+    public function getReadableName(): string {
         return match ($this) {
             self::FADE         => lang('Prolnutí', context: 'animation'),
             self::SCALE        => lang('Zmenšení', context: 'animation'),

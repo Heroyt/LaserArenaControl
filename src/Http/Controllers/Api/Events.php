@@ -13,20 +13,18 @@ use Psr\Http\Message\ResponseInterface;
 class Events extends ApiController
 {
     public function __construct(
-        private readonly EventService $eventService
-    )
-    {
+        private readonly EventService $eventService,
+    ) {
     }
 
-    public function triggerEvent(Request $request): ResponseInterface
-    {
+    public function triggerEvent(Request $request): ResponseInterface {
         $type = $request->getPost('type', '');
-        if (empty($type) || !is_string($type)) {
+        if (empty($type) || ! is_string($type)) {
             return $this->respond(new ErrorResponse('Type must be a non-empty string', ErrorType::VALIDATION), 400);
         }
         /** @var string|array<string,string>|null $message */
         $message = $request->getPost('message');
-        if (!$this->eventService->trigger($type, $message ?? ((string) time()))) {
+        if ( ! $this->eventService->trigger($type, $message ?? ((string) time()))) {
             return $this->respond(new ErrorResponse('Failed setting an event'), 500);
         }
         return $this->respond(new SuccessResponse('Event successfully triggered.'));

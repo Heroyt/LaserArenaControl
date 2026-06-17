@@ -48,7 +48,7 @@ readonly class ResultsDirectoryScanner
         bool   $includeContent = false,
         int    $maxContentBytes = 65536,
     ): ResultsScanResult {
-        if (!is_dir($dir) || !is_readable($dir)) {
+        if ( ! is_dir($dir) || ! is_readable($dir)) {
             throw new RuntimeException('Results directory does not exist or is not readable: ' . $dir);
         }
 
@@ -111,12 +111,12 @@ readonly class ResultsDirectoryScanner
                     $errors[] = new ResultsScanError(
                         'Skipping file with invalid name ending with 0000.game',
                         $file,
-                        $system
+                        $system,
                     );
                     continue;
                 }
 
-                if (!$parser::checkFile($file)) {
+                if ( ! $parser::checkFile($file)) {
                     continue;
                 }
 
@@ -206,7 +206,7 @@ readonly class ResultsDirectoryScanner
         bool   $includeContent = false,
         int    $maxContentBytes = 65536,
     ): ResultsScanResult {
-        if (!is_file($file) || !is_readable($file)) {
+        if ( ! is_file($file) || ! is_readable($file)) {
             throw new RuntimeException('Result file does not exist or is not readable: ' . $file);
         }
 
@@ -225,7 +225,7 @@ readonly class ResultsDirectoryScanner
                 errors: [
                     new ResultsScanError(
                         'Skipping file with invalid name ending with 0000.game',
-                        $file
+                        $file,
                     ),
                 ],
                 decisions: [
@@ -252,7 +252,7 @@ readonly class ResultsDirectoryScanner
                 continue;
             }
 
-            if (!$parser::checkFile($file)) {
+            if ( ! $parser::checkFile($file)) {
                 continue;
             }
 
@@ -374,7 +374,7 @@ readonly class ResultsDirectoryScanner
             );
         }
 
-        if (!$this->hasParserForFile($file)) {
+        if ( ! $this->hasParserForFile($file)) {
             return new ResultFileScanDecision(
                 $file,
                 null,
@@ -545,7 +545,7 @@ readonly class ResultsDirectoryScanner
             $state === null
             || $state->processedVersion !== null
             || $this->queuedTtlSeconds <= 0
-            || !in_array(
+            || ! in_array(
                 $state->status,
                 [
                     ResultFileImportStatus::SEEN,
@@ -553,7 +553,7 @@ readonly class ResultsDirectoryScanner
                     ResultFileImportStatus::LOADED,
                     ResultFileImportStatus::STARTED,
                 ],
-                true
+                true,
             )
         ) {
             return false;

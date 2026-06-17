@@ -25,30 +25,31 @@ class PreparedGameDto implements JsonSerializable
     }
 
     public function __construct(
-      #[OA\Property]
-      public GameLoadData       $data,
-      #[OA\Property(property: 'id_game')]
-      public ?int               $id = null,
-      #[OA\Property]
-      public ?DateTimeInterface $datetime = null,
-      #[OA\Property]
-      public PreparedGameType   $type = PreparedGameType::PREPARED,
-      #[OA\Property]
-      public bool               $active = true,
-      public ?int               $id_system = null,
-    ) {}
+        #[OA\Property]
+        public GameLoadData       $data,
+        #[OA\Property(property: 'id_game')]
+        public ?int               $id = null,
+        #[OA\Property]
+        public ?DateTimeInterface $datetime = null,
+        #[OA\Property]
+        public PreparedGameType   $type = PreparedGameType::PREPARED,
+        #[OA\Property]
+        public bool               $active = true,
+        public ?int               $id_system = null,
+    ) {
+    }
 
     /**
      * @return array<string, mixed>
      */
-    public function jsonSerialize() : array {
+    public function jsonSerialize(): array {
         return [
-          'id_game'  => $this->id,
-          'datetime' => $this->datetime,
-          'data'     => $this->data,
-          'type'     => $this->type,
-          'active'   => $this->active,
-          'system'   => $this->system,
+            'id_game'  => $this->id,
+            'datetime' => $this->datetime,
+            'data'     => $this->data,
+            'type'     => $this->type,
+            'active'   => $this->active,
+            'system'   => $this->system,
         ];
     }
 }

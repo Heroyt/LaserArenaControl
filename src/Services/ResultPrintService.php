@@ -25,16 +25,12 @@ use Lsr\Exceptions\TemplateDoesNotExistException;
 use Lsr\ObjectValidation\Exceptions\ValidationException;
 use Lsr\Orm\Exceptions\ModelNotFoundException;
 
-/**
- *
- */
 readonly class ResultPrintService
 {
     public function __construct(
         private GotenbergService $gotenberg,
-        private Latte            $latte
-    )
-    {
+        private Latte            $latte,
+    ) {
     }
 
     /**
@@ -57,9 +53,8 @@ readonly class ResultPrintService
         int    $style,
         string $template,
         int    $copies = 1,
-        bool   $cache = true
-    ): string
-    {
+        bool   $cache = true,
+    ): string {
         $pdfFile = $this->getTmpDir() . $this->getResultsFileName($game, $style, $template, $copies) . '.pdf';
         if ($cache && file_exists($pdfFile)) {
             return $pdfFile;
@@ -78,19 +73,19 @@ readonly class ResultPrintService
         $templateObj = PrintTemplate::getBySlug($template);
 
         $bg = ROOT . (
-          $templateObj?->orientation === PrintOrientation::landscape ?
+            $templateObj?->orientation === PrintOrientation::landscape ?
             ($styleObj->bgLandscape ?? '') :
             ($styleObj->bg ?? '')
-          );
+        );
 
-        if (!file_exists($bg)) {
+        if ( ! file_exists($bg)) {
             throw new Exception('Background file ' . $bg . ' does not exist');
         }
 
         $additionalFiles = [
             ROOT . 'dist/main.css',
             ROOT . 'dist/results/' . $template . '.css',
-          $bg,
+            $bg,
         ];
 
         $mode = $game->mode;
@@ -107,41 +102,40 @@ readonly class ResultPrintService
         }
 
         $content = $this
-          ->gotenberg
-          ->chromium
-          ->getFromHTML(
-              str_replace(
-                  [
-                                 App::getInstance()->getBaseUrl(),
-                                 'dist/results/',
-                                 'dist/',
-                                 'assets/images/print/',
-                                 'upload/print/',
-                                 'upload/',
-                                 'uploads/print/',
-                                 'uploads/',
-                  ],
-                  ['', '', '', '', '', '', '', ''],
-                  $this->getResultsHtml(
-                      $game,
-                      $style,
-                      $template,
-                      $copies,
-                      $cache
-                  )
-              ),
-              additionalFiles: $additionalFiles,
-          );
+            ->gotenberg
+            ->chromium
+            ->getFromHTML(
+                str_replace(
+                    [
+                        App::getInstance()->getBaseUrl(),
+                        'dist/results/',
+                        'dist/',
+                        'assets/images/print/',
+                        'upload/print/',
+                        'upload/',
+                        'uploads/print/',
+                        'uploads/',
+                    ],
+                    ['', '', '', '', '', '', '', ''],
+                    $this->getResultsHtml(
+                        $game,
+                        $style,
+                        $template,
+                        $copies,
+                        $cache,
+                    ),
+                ),
+                additionalFiles: $additionalFiles,
+            );
 
-        if (!empty($content)) {
+        if ( ! empty($content)) {
             file_put_contents($pdfFile, $content);
             return $pdfFile;
         }
         throw new Exception('PDF generation failed');
     }
 
-    public function getTmpDir(): string
-    {
+    public function getTmpDir(): string {
         $dir = TMP_DIR . 'results/';
         if (is_dir($dir) || (mkdir($dir) && is_dir($dir))) {
             return $dir;
@@ -163,9 +157,8 @@ readonly class ResultPrintService
         int    $style,
         string $template,
         int    $copies,
-        bool   $view = false
-    ): string
-    {
+        bool   $view = false,
+    ): string {
         return $game->code . '-' .
             $template . '-' .
             $style . 'x' .
@@ -194,14 +187,13 @@ readonly class ResultPrintService
         int    $style,
         string $template,
         int    $copies = 1,
-        bool   $cache = true
-    ): string
-    {
+        bool   $cache = true,
+    ): string {
         bdump($cache);
         $htmlFile = $this->getHtmlFilePath($game, $style, $template, $copies);
         if ($cache && file_exists($htmlFile)) {
             $html = file_get_contents($htmlFile);
-            if (!empty($html)) {
+            if ( ! empty($html)) {
                 return $html;
             }
         }
@@ -217,8 +209,7 @@ readonly class ResultPrintService
      * @param  int<1,max>  $copies
      * @return non-empty-string
      */
-    public function getHtmlFilePath(Game $game, int $style, string $template, int $copies = 1): string
-    {
+    public function getHtmlFilePath(Game $game, int $style, string $template, int $copies = 1): string {
         return $this->getTmpDir() . $this->getResultsFileName($game, $style, $template, $copies) . '.html';
     }
 
@@ -233,9 +224,8 @@ readonly class ResultPrintService
      * @return non-empty-string
      * @throws TemplateDoesNotExistException|Exception|\Endroid\QrCode\Exception\ValidationException
      */
-    public function generateResultsHtml(Game $game, int $style, string $template, int $copies): string
-    {
-        assert(!empty($game::SYSTEM));
+    public function generateResultsHtml(Game $game, int $style, string $template, int $copies): string {
+        assert( ! empty($game::SYSTEM));
         $namespace = '\\App\\GameModels\\Game\\' . GameFactory::systemToNamespace($game::SYSTEM) . '\\';
         $teamClass = $namespace . 'Team';
         $playerClass = $namespace . 'Player';
@@ -300,8 +290,7 @@ readonly class ResultPrintService
      * @param  G  $game
      * @return non-empty-string
      */
-    public function getPublicUrl(Game $game, bool $tracking = true): string
-    {
+    public function getPublicUrl(Game $game, bool $tracking = true): string {
         /** @var string $url */
         $url = Info::get('liga_api_url');
         return trailingSlashIt($url) . 'g/' . $game->code . ($tracking ? '?mtm_campaign=QR&mtm_kwd=print' : '');
@@ -316,16 +305,15 @@ readonly class ResultPrintService
      * @return non-empty-string
      * @throws \Endroid\QrCode\Exception\ValidationException
      */
-    public function getQR(Game $game): string
-    {
+    public function getQR(Game $game): string {
         $result = new Builder(
             writer: new SvgWriter(),
             data: $this->getPublicUrl($game),
             encoding: new Encoding('UTF-8'),
-            errorCorrectionLevel: ErrorCorrectionLevel::Low
+            errorCorrectionLevel: ErrorCorrectionLevel::Low,
         )->build();
         $qr = $result->getString();
-        assert(!empty($qr));
+        assert( ! empty($qr));
         return $qr;
     }
 }

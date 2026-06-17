@@ -43,8 +43,7 @@ class E500 extends Controller implements HttpErrorHandler
      */
     protected string $description = 'Page not found';
 
-    public function showError(Request $request, ?Throwable $error = null): ResponseInterface
-    {
+    public function showError(Request $request, ?Throwable $error = null): ResponseInterface {
         $this->init($request);
         if (str_contains($request->getHeaderLine('Accept'), 'application/json')) {
             return $this->respond(
@@ -52,21 +51,21 @@ class E500 extends Controller implements HttpErrorHandler
                     'Internal error',
                     type: ErrorType::INTERNAL,
                     detail: $error?->getMessage(),
-                    exception: $error
+                    exception: $error,
                 ),
-                500
+                500,
             );
         }
         if (str_contains($request->getHeaderLine('Accept'), 'text/html')) {
             $this->params['exception'] = $error;
             return $this->view('errors/E500')
-                        ->withStatus(500);
+                ->withStatus(500);
         }
 
         return $this->respond(
             'Internal error - ' . ($error?->getMessage() ?? 'unknown error'),
             500,
-            ['Content-Type' => 'text/plain']
+            ['Content-Type' => 'text/plain'],
         );
     }
 }

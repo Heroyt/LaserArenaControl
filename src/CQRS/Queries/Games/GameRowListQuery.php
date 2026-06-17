@@ -18,8 +18,7 @@ class GameRowListQuery implements QueryInterface
      * @throws Exception
      * @throws Throwable
      */
-    public function get(): array
-    {
+    public function get(): array {
         return $this->query->fetchAllDto(MinimalGameRow::class, cache: $this->cache);
     }
 }

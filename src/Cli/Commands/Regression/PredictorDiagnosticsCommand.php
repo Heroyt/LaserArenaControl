@@ -12,6 +12,7 @@ use App\GameModels\Game\Team;
 use App\Services\Predictor\GamePredictionContextFactory;
 use App\Services\Predictor\GameResultPredictor;
 use Lsr\Lg\Predictor\Dto\PredictionContext;
+use Lsr\Lg\Predictor\Dto\PredictionResult;
 use Lsr\Lg\Predictor\Enum\PredictionTarget;
 use Lsr\Lg\Predictor\Exception\PredictionException;
 use Symfony\Component\Console\Command\Command;
@@ -154,7 +155,7 @@ final class PredictorDiagnosticsCommand extends Command
 
         (new Table($output))
             ->setHeaderTitle('Predictions')
-            ->setHeaders(['Target', 'Legacy expected', 'Predictor mean', 'Model', 'Fallback', 'Status'])
+            ->setHeaders(['Target', 'Legacy expected', 'Predictor / 15 min', 'Predictor game', 'Model', 'Fallback', 'Status'])
             ->setRows($rows)
             ->render();
     }
@@ -163,7 +164,7 @@ final class PredictorDiagnosticsCommand extends Command
      * @template G of Game
      * @template T of Team
      * @param Player<G, T> $player
-     * @return array{string,string,string,string,string,string}
+     * @return array{string,string,string,string,string,string,string}
      */
     private function predictionRow(PredictionTarget $target, Player $player, PredictionContext $context): array {
         $legacy = $this->legacyExpectedValue($target, $player);
@@ -175,6 +176,7 @@ final class PredictorDiagnosticsCommand extends Command
                 $target->value,
                 $legacy,
                 sprintf('%.3f', $prediction->mean),
+                sprintf('%.3f', $this->scalePredictionToGameLength($prediction, $context)),
                 $prediction->modelId,
                 (string) $prediction->fallbackLevel,
                 '<info>ok</info>',
@@ -183,6 +185,7 @@ final class PredictorDiagnosticsCommand extends Command
             return [
                 $target->value,
                 $legacy,
+                '-',
                 '-',
                 '-',
                 '-',
@@ -212,5 +215,13 @@ final class PredictorDiagnosticsCommand extends Command
         } catch (Throwable $e) {
             return 'error: ' . $e->getMessage();
         }
+    }
+
+    private function scalePredictionToGameLength(PredictionResult $prediction, PredictionContext $context): float {
+        if (($prediction->metadata['unit'] ?? null) !== 'count_per_15_minutes') {
+            return $prediction->mean;
+        }
+
+        return $prediction->mean * $context->gameLengthMinutes / 15;
     }
 }

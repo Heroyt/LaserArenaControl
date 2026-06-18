@@ -93,6 +93,12 @@ final class PredictorDiagnosticsCommand extends Command
             InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
             'Prediction target. Can be used more than once.',
         );
+        $this->addOption(
+            'exclude-empty-results',
+            null,
+            InputOption::VALUE_NONE,
+            'Exclude player results where all selected actual target values are zero or unavailable.',
+        );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int {
@@ -104,6 +110,7 @@ final class PredictorDiagnosticsCommand extends Command
         $codes = array_map(static fn (mixed $code): string => (string) $code, $codeArguments);
         $vestOption = $input->getOption('vest');
         $vest = $vestOption === null || $vestOption === '' ? null : (string) $vestOption;
+        $excludeEmptyResults = $input->getOption('exclude-empty-results') === true;
 
         if ($codes === []) {
             $output->writeln('<error>At least one game code is required.</error>');
@@ -112,10 +119,10 @@ final class PredictorDiagnosticsCommand extends Command
         }
 
         if (count($codes) === 1) {
-            return $this->executeSingleGame($codes[0], $vest, $targets, $output);
+            return $this->executeSingleGame($codes[0], $vest, $excludeEmptyResults, $targets, $output);
         }
 
-        return $this->executeMultipleGames($codes, $vest, $targets, $output);
+        return $this->executeMultipleGames($codes, $vest, $excludeEmptyResults, $targets, $output);
     }
 
     /**
@@ -124,6 +131,7 @@ final class PredictorDiagnosticsCommand extends Command
     private function executeSingleGame(
         string $code,
         ?string $vest,
+        bool $excludeEmptyResults,
         array $targets,
         OutputInterface $output,
     ): int {
@@ -136,7 +144,7 @@ final class PredictorDiagnosticsCommand extends Command
 
         if ($vest === null) {
             $output->writeln(sprintf('<info>Game %s / all players</info>', $game->code));
-            $this->renderGameSummary($output, $game, $targets, null);
+            $this->renderGameSummary($output, $game, $targets, null, $excludeEmptyResults);
 
             return self::SUCCESS;
         }
@@ -146,6 +154,17 @@ final class PredictorDiagnosticsCommand extends Command
             $output->writeln('<error>Player vest was not found in the game.</error>');
 
             return self::FAILURE;
+        }
+
+        if ($excludeEmptyResults && $this->hasEmptyActualResults($player, $targets)) {
+            $output->writeln(sprintf(
+                '<comment>Game %s / vest %s / %s was skipped because all selected actual target values are empty.</comment>',
+                $game->code,
+                (string) $player->vest,
+                $player->name,
+            ));
+
+            return self::SUCCESS;
         }
 
         $context = $this->contextFactory->createForPlayer($player);
@@ -169,6 +188,7 @@ final class PredictorDiagnosticsCommand extends Command
     private function executeMultipleGames(
         array $codes,
         ?string $vest,
+        bool $excludeEmptyResults,
         array $targets,
         OutputInterface $output,
     ): int {
@@ -177,11 +197,13 @@ final class PredictorDiagnosticsCommand extends Command
         $processedGames = 0;
         $missingGames = 0;
         $missingPlayers = 0;
+        $skippedPlayers = 0;
 
         $output->writeln(sprintf(
-            '<info>Processing %d games / %s</info>',
+            '<info>Processing %d games / %s%s</info>',
             count($codes),
             $vest === null ? 'all players' : 'vest ' . $vest,
+            $excludeEmptyResults ? ' / excluding empty results' : '',
         ));
 
         $progressBar = new ProgressBar($output, count($codes));
@@ -197,7 +219,15 @@ final class PredictorDiagnosticsCommand extends Command
             }
 
             $processedGames++;
-            $missingPlayers += $this->collectGamePredictions($game, $targets, $summaries, $details, $vest);
+            $missingPlayers += $this->collectGamePredictions(
+                $game,
+                $targets,
+                $summaries,
+                $details,
+                $vest,
+                $excludeEmptyResults,
+                $skippedPlayers,
+            );
             $progressBar->advance();
         }
 
@@ -215,6 +245,10 @@ final class PredictorDiagnosticsCommand extends Command
 
         if ($missingPlayers > 0) {
             $output->writeln(sprintf('<comment>Games without matching vest: %d</comment>', $missingPlayers));
+        }
+
+        if ($skippedPlayers > 0) {
+            $output->writeln(sprintf('<comment>Skipped empty player results: %d</comment>', $skippedPlayers));
         }
 
         $this->renderSummaryTable($output, $summaries);
@@ -265,11 +299,30 @@ final class PredictorDiagnosticsCommand extends Command
      * @param Game<T, P> $game
      * @param non-empty-list<PredictionTarget> $targets
      */
-    private function renderGameSummary(OutputInterface $output, Game $game, array $targets, ?string $vest): void {
+    private function renderGameSummary(
+        OutputInterface $output,
+        Game $game,
+        array $targets,
+        ?string $vest,
+        bool $excludeEmptyResults,
+    ): void {
         $summaries = $this->initializeSummaries($targets);
         $details = [];
+        $skippedPlayers = 0;
 
-        $this->collectGamePredictions($game, $targets, $summaries, $details, $vest);
+        $this->collectGamePredictions(
+            $game,
+            $targets,
+            $summaries,
+            $details,
+            $vest,
+            $excludeEmptyResults,
+            $skippedPlayers,
+        );
+
+        if ($skippedPlayers > 0) {
+            $output->writeln(sprintf('<comment>Skipped empty player results: %d</comment>', $skippedPlayers));
+        }
 
         $this->renderSummaryTable($output, $summaries);
 
@@ -293,11 +346,19 @@ final class PredictorDiagnosticsCommand extends Command
         array &$summaries,
         array &$details,
         ?string $vest,
+        bool $excludeEmptyResults,
+        int &$skippedPlayers,
     ): int {
         if ($vest !== null) {
             $player = $this->findPlayer($game, $vest);
             if ($player === null) {
                 return 1;
+            }
+
+            if ($excludeEmptyResults && $this->hasEmptyActualResults($player, $targets)) {
+                $skippedPlayers++;
+
+                return 0;
             }
 
             $context = $this->contextFactory->createForPlayer($player);
@@ -311,6 +372,12 @@ final class PredictorDiagnosticsCommand extends Command
         }
 
         foreach ($game->players as $player) {
+            if ($excludeEmptyResults && $this->hasEmptyActualResults($player, $targets)) {
+                $skippedPlayers++;
+
+                continue;
+            }
+
             $context = $this->contextFactory->createForPlayer($player);
             foreach ($targets as $target) {
                 $detail = $this->predictionDetail($target, $player, $context);
@@ -320,6 +387,23 @@ final class PredictorDiagnosticsCommand extends Command
         }
 
         return 0;
+    }
+
+    /**
+     * @template G of Game
+     * @template T of Team
+     * @param Player<G, T> $player
+     * @param non-empty-list<PredictionTarget> $targets
+     */
+    private function hasEmptyActualResults(Player $player, array $targets): bool {
+        foreach ($targets as $target) {
+            $actual = $this->actualValue($target, $player);
+            if ($actual !== null && $actual > 0) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**

@@ -12,6 +12,13 @@
     },
     {
       "type": "path",
+      "url": "../../Libraries/GameResultPredictor",
+      "options": {
+        "symlink": true
+      }
+    },
+    {
+      "type": "path",
       "url": "./modules/*"
     }
   ],
@@ -51,6 +58,7 @@
     "lsr/request": "^0.3",
     "lsr/cache": "^0.3.1",
     "lsr/db": "^0.3",
+    "lsr/game-result-predictor": "dev-master",
     "lsr/laser-liga-api": "^0.1.5",
     "lsr/lg-result-parsing": "dev-master",
     "lsr/roadrunner": "^0.1",

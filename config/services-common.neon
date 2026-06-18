@@ -62,6 +62,8 @@ parameters:
 	fairTeams:
 		maxIterations: 1000
 		maxIterationsWithoutImprovement: 100
+	predictors:
+		modelsDir: %constants.appDir%private/predictor-models
 services:
 	# Core
 	db.connection: Lsr\Db\Connection(config: %db%)
@@ -70,6 +72,12 @@ services:
 
 	version: App\Services\VersionService
 	regression: App\Services\RegressionCalculator
+	predictor.modelImporter: Lsr\Lg\Predictor\Model\ModelArtifactImporter
+	predictor.contextRidgeEvaluator: Lsr\Lg\Predictor\Runtime\ContextRidgePolynomialEvaluator
+	predictor.modelRepository: App\Services\Predictor\FilesystemPredictorModelRepository(%predictors.modelsDir%, @predictor.modelImporter)
+	predictor.contextFactory: App\Services\Predictor\GamePredictionContextFactory
+	predictor:
+		create: App\Services\Predictor\GameResultPredictor(@predictor.modelRepository, [@predictor.contextRidgeEvaluator])
 
 	image: App\Services\ImageService([1000,600,250])
 

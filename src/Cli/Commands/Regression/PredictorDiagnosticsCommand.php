@@ -155,7 +155,18 @@ final class PredictorDiagnosticsCommand extends Command
 
         (new Table($output))
             ->setHeaderTitle('Predictions')
-            ->setHeaders(['Target', 'Legacy expected', 'Predictor / 15 min', 'Predictor game', 'Model', 'Fallback', 'Status'])
+            ->setHeaders([
+                'Target',
+                'Actual',
+                'Legacy expected',
+                'Legacy error',
+                'Predictor / 15 min',
+                'Predictor game',
+                'Predictor error',
+                'Model',
+                'Fallback',
+                'Status',
+            ])
             ->setRows($rows)
             ->render();
     }
@@ -164,19 +175,24 @@ final class PredictorDiagnosticsCommand extends Command
      * @template G of Game
      * @template T of Team
      * @param Player<G, T> $player
-     * @return array{string,string,string,string,string,string,string}
+     * @return array{string,string,string,string,string,string,string,string,string,string}
      */
     private function predictionRow(PredictionTarget $target, Player $player, PredictionContext $context): array {
+        $actual = $this->actualValue($target, $player);
         $legacy = $this->legacyExpectedValue($target, $player);
 
         try {
             $prediction = $this->predictor->predict($target, $context);
+            $predictorGameValue = $this->scalePredictionToGameLength($prediction, $context);
 
             return [
                 $target->value,
-                $legacy,
+                $this->formatNullable($actual),
+                $this->formatNullable($legacy),
+                $this->formatError($actual, $legacy),
                 sprintf('%.3f', $prediction->mean),
-                sprintf('%.3f', $this->scalePredictionToGameLength($prediction, $context)),
+                sprintf('%.3f', $predictorGameValue),
+                $this->formatError($actual, $predictorGameValue),
                 $prediction->modelId,
                 (string) $prediction->fallbackLevel,
                 '<info>ok</info>',
@@ -184,7 +200,10 @@ final class PredictorDiagnosticsCommand extends Command
         } catch (Throwable $e) {
             return [
                 $target->value,
-                $legacy,
+                $this->formatNullable($actual),
+                $this->formatNullable($legacy),
+                $this->formatError($actual, $legacy),
+                '-',
                 '-',
                 '-',
                 '-',
@@ -199,21 +218,36 @@ final class PredictorDiagnosticsCommand extends Command
      * @template T of Team
      * @param Player<G, T> $player
      */
-    private function legacyExpectedValue(PredictionTarget $target, Player $player): string {
+    private function actualValue(PredictionTarget $target, Player $player): ?int {
+        return match ($target) {
+            PredictionTarget::ENEMY_HITS => $player instanceof LasermaxxPlayer ? $player->hitsOther : $player->hits,
+            PredictionTarget::ENEMY_DEATHS => $player instanceof LasermaxxPlayer ? $player->deathsOther : $player->deaths,
+            PredictionTarget::TEAMMATE_HITS => $player instanceof LasermaxxPlayer ? $player->hitsOwn : null,
+            PredictionTarget::TEAMMATE_DEATHS => $player instanceof LasermaxxPlayer ? $player->deathsOwn : null,
+            default => null,
+        };
+    }
+
+    /**
+     * @template G of Game
+     * @template T of Team
+     * @param Player<G, T> $player
+     */
+    private function legacyExpectedValue(PredictionTarget $target, Player $player): ?float {
         try {
             return match ($target) {
-                PredictionTarget::ENEMY_HITS => sprintf('%.3f', $player->getExpectedAverageHitCount()),
-                PredictionTarget::ENEMY_DEATHS => sprintf('%.3f', $player->getExpectedAverageDeathCount()),
+                PredictionTarget::ENEMY_HITS => $player->getExpectedAverageHitCount(),
+                PredictionTarget::ENEMY_DEATHS => $player->getExpectedAverageDeathCount(),
                 PredictionTarget::TEAMMATE_HITS => $player instanceof LasermaxxPlayer
-                    ? sprintf('%.3f', $player->getExpectedAverageTeammateHitCount())
-                    : '-',
+                    ? $player->getExpectedAverageTeammateHitCount()
+                    : null,
                 PredictionTarget::TEAMMATE_DEATHS => $player instanceof LasermaxxPlayer
-                    ? sprintf('%.3f', $player->getExpectedAverageTeammateDeathCount())
-                    : '-',
-                default => '-',
+                    ? $player->getExpectedAverageTeammateDeathCount()
+                    : null,
+                default => null,
             };
-        } catch (Throwable $e) {
-            return 'error: ' . $e->getMessage();
+        } catch (Throwable) {
+            return null;
         }
     }
 
@@ -223,5 +257,17 @@ final class PredictorDiagnosticsCommand extends Command
         }
 
         return $prediction->mean * $context->gameLengthMinutes / 15;
+    }
+
+    private function formatNullable(?float $value): string {
+        return $value === null ? '-' : sprintf('%.3f', $value);
+    }
+
+    private function formatError(?float $actual, ?float $expected): string {
+        if ($actual === null || $expected === null) {
+            return '-';
+        }
+
+        return sprintf('%+.3f', $actual - $expected);
     }
 }

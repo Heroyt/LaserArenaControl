@@ -16,6 +16,7 @@ use Lsr\Lg\Predictor\Dto\PredictionResult;
 use Lsr\Lg\Predictor\Enum\PredictionTarget;
 use Lsr\Lg\Predictor\Exception\PredictionException;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -25,6 +26,7 @@ use Throwable;
 
 /**
  * @phpstan-type PredictionDetail array{
+ *     game:string,
  *     vest:string,
  *     name:string,
  *     target:string,
@@ -78,8 +80,13 @@ final class PredictorDiagnosticsCommand extends Command
 
     protected function configure(): void {
         $this->setDescription(self::getDefaultDescription());
-        $this->addArgument('code', InputArgument::REQUIRED, 'Game code.');
-        $this->addArgument('vest', InputArgument::OPTIONAL, 'Player vest number. If omitted, all players are evaluated.');
+        $this->addArgument('code', InputArgument::REQUIRED | InputArgument::IS_ARRAY, 'Game code. Can be repeated.');
+        $this->addOption(
+            'vest',
+            null,
+            InputOption::VALUE_REQUIRED,
+            'Player vest number. If omitted, all players are evaluated.',
+        );
         $this->addOption(
             'target',
             't',
@@ -92,22 +99,49 @@ final class PredictorDiagnosticsCommand extends Command
         $targetOption = $input->getOption('target');
         $targets = $this->parseTargets(is_array($targetOption) ? array_values($targetOption) : []);
 
-        $game = GameFactory::getByCode((string) $input->getArgument('code'));
+        /** @var list<mixed> $codeArguments */
+        $codeArguments = $input->getArgument('code');
+        $codes = array_map(static fn (mixed $code): string => (string) $code, $codeArguments);
+        $vestOption = $input->getOption('vest');
+        $vest = $vestOption === null || $vestOption === '' ? null : (string) $vestOption;
+
+        if ($codes === []) {
+            $output->writeln('<error>At least one game code is required.</error>');
+
+            return self::FAILURE;
+        }
+
+        if (count($codes) === 1) {
+            return $this->executeSingleGame($codes[0], $vest, $targets, $output);
+        }
+
+        return $this->executeMultipleGames($codes, $vest, $targets, $output);
+    }
+
+    /**
+     * @param non-empty-list<PredictionTarget> $targets
+     */
+    private function executeSingleGame(
+        string $code,
+        ?string $vest,
+        array $targets,
+        OutputInterface $output,
+    ): int {
+        $game = GameFactory::getByCode($code);
         if ($game === null) {
             $output->writeln('<error>Game was not found.</error>');
 
             return self::FAILURE;
         }
 
-        $vest = $input->getArgument('vest');
-        if ($vest === null || $vest === '') {
+        if ($vest === null) {
             $output->writeln(sprintf('<info>Game %s / all players</info>', $game->code));
-            $this->renderGameSummary($output, $game, $targets);
+            $this->renderGameSummary($output, $game, $targets, null);
 
             return self::SUCCESS;
         }
 
-        $player = $this->findPlayer($game, (string) $input->getArgument('vest'));
+        $player = $this->findPlayer($game, $vest);
         if ($player === null) {
             $output->writeln('<error>Player vest was not found in the game.</error>');
 
@@ -126,6 +160,70 @@ final class PredictorDiagnosticsCommand extends Command
         $this->renderPredictions($output, $player, $context, $targets);
 
         return self::SUCCESS;
+    }
+
+    /**
+     * @param non-empty-list<string> $codes
+     * @param non-empty-list<PredictionTarget> $targets
+     */
+    private function executeMultipleGames(
+        array $codes,
+        ?string $vest,
+        array $targets,
+        OutputInterface $output,
+    ): int {
+        $summaries = $this->initializeSummaries($targets);
+        $details = [];
+        $processedGames = 0;
+        $missingGames = 0;
+        $missingPlayers = 0;
+
+        $output->writeln(sprintf(
+            '<info>Processing %d games / %s</info>',
+            count($codes),
+            $vest === null ? 'all players' : 'vest ' . $vest,
+        ));
+
+        $progressBar = new ProgressBar($output, count($codes));
+        $progressBar->start();
+
+        foreach ($codes as $code) {
+            $game = GameFactory::getByCode($code);
+            if ($game === null) {
+                $missingGames++;
+                $progressBar->advance();
+
+                continue;
+            }
+
+            $processedGames++;
+            $missingPlayers += $this->collectGamePredictions($game, $targets, $summaries, $details, $vest);
+            $progressBar->advance();
+        }
+
+        $progressBar->finish();
+        $output->writeln('');
+        $output->writeln(sprintf(
+            '<info>Processed %d/%d games</info>',
+            $processedGames,
+            count($codes),
+        ));
+
+        if ($missingGames > 0) {
+            $output->writeln(sprintf('<comment>Missing games: %d</comment>', $missingGames));
+        }
+
+        if ($missingPlayers > 0) {
+            $output->writeln(sprintf('<comment>Games without matching vest: %d</comment>', $missingPlayers));
+        }
+
+        $this->renderSummaryTable($output, $summaries);
+
+        if ($output->isVerbose()) {
+            $this->renderDetailTable($output, $details);
+        }
+
+        return $processedGames === 0 ? self::FAILURE : self::SUCCESS;
     }
 
     /**
@@ -167,9 +265,50 @@ final class PredictorDiagnosticsCommand extends Command
      * @param Game<T, P> $game
      * @param non-empty-list<PredictionTarget> $targets
      */
-    private function renderGameSummary(OutputInterface $output, Game $game, array $targets): void {
+    private function renderGameSummary(OutputInterface $output, Game $game, array $targets, ?string $vest): void {
         $summaries = $this->initializeSummaries($targets);
         $details = [];
+
+        $this->collectGamePredictions($game, $targets, $summaries, $details, $vest);
+
+        $this->renderSummaryTable($output, $summaries);
+
+        if ($output->isVerbose()) {
+            $this->renderDetailTable($output, $details);
+        }
+    }
+
+    /**
+     * @template T of Team
+     * @template P of Player
+     * @param Game<T, P> $game
+     * @param non-empty-list<PredictionTarget> $targets
+     * @param array<string, PredictionSummary> $summaries
+     * @param list<PredictionDetail> $details
+     * @return 0|1
+     */
+    private function collectGamePredictions(
+        Game $game,
+        array $targets,
+        array &$summaries,
+        array &$details,
+        ?string $vest,
+    ): int {
+        if ($vest !== null) {
+            $player = $this->findPlayer($game, $vest);
+            if ($player === null) {
+                return 1;
+            }
+
+            $context = $this->contextFactory->createForPlayer($player);
+            foreach ($targets as $target) {
+                $detail = $this->predictionDetail($target, $player, $context);
+                $details[] = $detail;
+                $this->addDetailToSummary($summaries[$target->value], $detail);
+            }
+
+            return 0;
+        }
 
         foreach ($game->players as $player) {
             $context = $this->contextFactory->createForPlayer($player);
@@ -180,11 +319,7 @@ final class PredictorDiagnosticsCommand extends Command
             }
         }
 
-        $this->renderSummaryTable($output, $summaries);
-
-        if ($output->isVerbose()) {
-            $this->renderDetailTable($output, $details);
-        }
+        return 0;
     }
 
     /**
@@ -321,6 +456,7 @@ final class PredictorDiagnosticsCommand extends Command
         $rows = [];
         foreach ($details as $detail) {
             $rows[] = [
+                $detail['game'],
                 $detail['vest'],
                 $detail['name'],
                 $detail['target'],
@@ -336,7 +472,7 @@ final class PredictorDiagnosticsCommand extends Command
 
         (new Table($output))
             ->setHeaderTitle('Per-player predictions')
-            ->setHeaders(['Vest', 'Player', 'Target', 'Actual', 'Legacy', 'Predictor / 15 min', 'Predictor game', 'Status', 'Model', 'Fallback'])
+            ->setHeaders(['Game', 'Vest', 'Player', 'Target', 'Actual', 'Legacy', 'Predictor / 15 min', 'Predictor game', 'Status', 'Model', 'Fallback'])
             ->setRows($rows)
             ->render();
     }
@@ -436,6 +572,7 @@ final class PredictorDiagnosticsCommand extends Command
             $prediction = $this->predictor->predict($target, $context);
 
             return [
+                'game'           => (string) $player->game->code,
                 'vest'           => (string) $player->vest,
                 'name'           => $player->name,
                 'target'         => $target->value,
@@ -449,6 +586,7 @@ final class PredictorDiagnosticsCommand extends Command
             ];
         } catch (Throwable $e) {
             return [
+                'game'           => (string) $player->game->code,
                 'vest'           => (string) $player->vest,
                 'name'           => $player->name,
                 'target'         => $target->value,

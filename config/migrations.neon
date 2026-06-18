@@ -4,6 +4,7 @@ includes:
 	- config/migrations/games.neon
 	- config/migrations/gate.neon
 	- config/migrations/music.neon
+	- config/migrations/predictors.neon
 	- config/migrations/resultImports.neon
 	- config/migrations/users.neon
 tables:

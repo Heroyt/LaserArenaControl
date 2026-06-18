@@ -74,7 +74,11 @@ services:
 	regression: App\Services\RegressionCalculator
 	predictor.modelImporter: Lsr\Lg\Predictor\Model\ModelArtifactImporter
 	predictor.contextRidgeEvaluator: Lsr\Lg\Predictor\Runtime\ContextRidgePolynomialEvaluator
-	predictor.modelRepository: App\Services\Predictor\FilesystemPredictorModelRepository(%predictors.modelsDir%, @predictor.modelImporter)
+	predictor.dbModelRepository: App\Services\Predictor\DatabasePredictorModelRepository(@predictor.modelImporter)
+	predictor.filesystemModelRepository: App\Services\Predictor\FilesystemPredictorModelRepository(%predictors.modelsDir%, @predictor.modelImporter)
+	predictor.modelRepository:
+		create: App\Services\Predictor\CompositePredictorModelRepository([@predictor.dbModelRepository, @predictor.filesystemModelRepository])
+	predictor.modelImport: App\Services\Predictor\PredictorModelImportService(@predictor.modelImporter)
 	predictor.contextFactory: App\Services\Predictor\GamePredictionContextFactory
 	predictor:
 		create: App\Services\Predictor\GameResultPredictor(@predictor.modelRepository, [@predictor.contextRidgeEvaluator])

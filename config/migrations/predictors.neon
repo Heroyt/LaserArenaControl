@@ -1,0 +1,50 @@
+tables:
+	predictor_models:
+		order: 0
+		definition: '''
+		(
+			`id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+			`model_id` varchar(255) NOT NULL,
+			`version` varchar(64) NOT NULL,
+			`model_family` varchar(64) NOT NULL,
+			`target` varchar(64) NOT NULL,
+			`system` varchar(32) DEFAULT NULL,
+			`arena_id` int(11) DEFAULT NULL,
+			`game_mode_id` int(11) DEFAULT NULL,
+			`mode_group` varchar(64) DEFAULT NULL,
+			`game_type` varchar(16) DEFAULT NULL,
+			`team_count` int(11) DEFAULT NULL,
+			`fallback_level` int(11) NOT NULL,
+			`payload` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(`payload`)),
+			`payload_hash` char(64) NOT NULL,
+			`sample_count` int(10) unsigned NOT NULL DEFAULT 0,
+			`train_rows` int(10) unsigned NOT NULL DEFAULT 0,
+			`test_rows` int(10) unsigned NOT NULL DEFAULT 0,
+			`mae` double DEFAULT NULL,
+			`rmse` double DEFAULT NULL,
+			`r2` double DEFAULT NULL,
+			`metrics` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (`metrics` IS NULL OR json_valid(`metrics`)),
+			`training_filters` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (`training_filters` IS NULL OR json_valid(`training_filters`)),
+			`trained_at` datetime DEFAULT NULL,
+			`imported_at` datetime NOT NULL DEFAULT current_timestamp(),
+			`activated_at` datetime DEFAULT NULL,
+			`created_by` varchar(128) DEFAULT NULL,
+			`active` tinyint(1) NOT NULL DEFAULT 0,
+			`notes` text DEFAULT NULL,
+			PRIMARY KEY (`id`),
+			UNIQUE KEY `model_id` (`model_id`),
+			UNIQUE KEY `payload_hash` (`payload_hash`)
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+		'''
+		indexes:
+			-
+				name: model_id
+				columns: [model_id]
+				unique: true
+			-
+				name: payload_hash
+				columns: [payload_hash]
+				unique: true
+			-
+				name: lookup
+				columns: [active, target, system, arena_id, game_mode_id, mode_group, game_type, team_count, fallback_level]

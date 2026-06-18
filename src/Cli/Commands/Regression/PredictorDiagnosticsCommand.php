@@ -23,6 +23,34 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Throwable;
 
+/**
+ * @phpstan-type PredictionDetail array{
+ *     vest:string,
+ *     name:string,
+ *     target:string,
+ *     actual:float|null,
+ *     legacy:float|null,
+ *     predictorPer15:float|null,
+ *     predictorGame:float|null,
+ *     model:string,
+ *     fallback:string,
+ *     status:string
+ * }
+ * @phpstan-type PredictionSummary array{
+ *     target:string,
+ *     count:int,
+ *     actualSum:float,
+ *     legacySum:float,
+ *     predictorSum:float,
+ *     legacyErrorSum:float,
+ *     predictorErrorSum:float,
+ *     legacyAbsErrorSum:float,
+ *     predictorAbsErrorSum:float,
+ *     legacySquaredErrorSum:float,
+ *     predictorSquaredErrorSum:float,
+ *     failures:int
+ * }
+ */
 final class PredictorDiagnosticsCommand extends Command
 {
     /** @var non-empty-list<PredictionTarget> */
@@ -45,12 +73,13 @@ final class PredictorDiagnosticsCommand extends Command
     }
 
     public static function getDefaultDescription(): string {
-        return 'Compare predictor output with legacy expected values for one player result.';
+        return 'Compare predictor output with actual and legacy expected game values.';
     }
 
     protected function configure(): void {
+        $this->setDescription(self::getDefaultDescription());
         $this->addArgument('code', InputArgument::REQUIRED, 'Game code.');
-        $this->addArgument('vest', InputArgument::REQUIRED, 'Player vest number.');
+        $this->addArgument('vest', InputArgument::OPTIONAL, 'Player vest number. If omitted, all players are evaluated.');
         $this->addOption(
             'target',
             't',
@@ -60,11 +89,22 @@ final class PredictorDiagnosticsCommand extends Command
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int {
+        $targetOption = $input->getOption('target');
+        $targets = $this->parseTargets(is_array($targetOption) ? array_values($targetOption) : []);
+
         $game = GameFactory::getByCode((string) $input->getArgument('code'));
         if ($game === null) {
             $output->writeln('<error>Game was not found.</error>');
 
             return self::FAILURE;
+        }
+
+        $vest = $input->getArgument('vest');
+        if ($vest === null || $vest === '') {
+            $output->writeln(sprintf('<info>Game %s / all players</info>', $game->code));
+            $this->renderGameSummary($output, $game, $targets);
+
+            return self::SUCCESS;
         }
 
         $player = $this->findPlayer($game, (string) $input->getArgument('vest'));
@@ -75,8 +115,6 @@ final class PredictorDiagnosticsCommand extends Command
         }
 
         $context = $this->contextFactory->createForPlayer($player);
-        $targetOption = $input->getOption('target');
-        $targets = $this->parseTargets(is_array($targetOption) ? array_values($targetOption) : []);
 
         $output->writeln(sprintf(
             '<info>Game %s / vest %s / %s</info>',
@@ -121,6 +159,186 @@ final class PredictorDiagnosticsCommand extends Command
         }
 
         return $targets;
+    }
+
+    /**
+     * @template T of Team
+     * @template P of Player
+     * @param Game<T, P> $game
+     * @param non-empty-list<PredictionTarget> $targets
+     */
+    private function renderGameSummary(OutputInterface $output, Game $game, array $targets): void {
+        $summaries = $this->initializeSummaries($targets);
+        $details = [];
+
+        foreach ($game->players as $player) {
+            $context = $this->contextFactory->createForPlayer($player);
+            foreach ($targets as $target) {
+                $detail = $this->predictionDetail($target, $player, $context);
+                $details[] = $detail;
+                $this->addDetailToSummary($summaries[$target->value], $detail);
+            }
+        }
+
+        $this->renderSummaryTable($output, $summaries);
+
+        if ($output->isVerbose()) {
+            $this->renderDetailTable($output, $details);
+        }
+    }
+
+    /**
+     * @param non-empty-list<PredictionTarget> $targets
+     * @return array<string, PredictionSummary>
+     */
+    private function initializeSummaries(array $targets): array {
+        $summaries = [];
+        foreach ($targets as $target) {
+            $summaries[$target->value] = [
+                'target'                    => $target->value,
+                'count'                     => 0,
+                'actualSum'                 => 0.0,
+                'legacySum'                 => 0.0,
+                'predictorSum'              => 0.0,
+                'legacyErrorSum'            => 0.0,
+                'predictorErrorSum'         => 0.0,
+                'legacyAbsErrorSum'         => 0.0,
+                'predictorAbsErrorSum'      => 0.0,
+                'legacySquaredErrorSum'     => 0.0,
+                'predictorSquaredErrorSum'  => 0.0,
+                'failures'                  => 0,
+            ];
+        }
+
+        return $summaries;
+    }
+
+    /**
+     * @param PredictionSummary $summary
+     * @param PredictionDetail $detail
+     */
+    private function addDetailToSummary(array &$summary, array $detail): void {
+        if ($detail['status'] !== 'ok') {
+            $summary['failures']++;
+
+            return;
+        }
+
+        if ($detail['actual'] === null || $detail['legacy'] === null || $detail['predictorGame'] === null) {
+            $summary['failures']++;
+
+            return;
+        }
+
+        $legacyError = $detail['actual'] - $detail['legacy'];
+        $predictorError = $detail['actual'] - $detail['predictorGame'];
+
+        $summary['count']++;
+        $summary['actualSum'] += $detail['actual'];
+        $summary['legacySum'] += $detail['legacy'];
+        $summary['predictorSum'] += $detail['predictorGame'];
+        $summary['legacyErrorSum'] += $legacyError;
+        $summary['predictorErrorSum'] += $predictorError;
+        $summary['legacyAbsErrorSum'] += abs($legacyError);
+        $summary['predictorAbsErrorSum'] += abs($predictorError);
+        $summary['legacySquaredErrorSum'] += $legacyError ** 2;
+        $summary['predictorSquaredErrorSum'] += $predictorError ** 2;
+    }
+
+    /**
+     * @param array<string, PredictionSummary> $summaries
+     */
+    private function renderSummaryTable(OutputInterface $output, array $summaries): void {
+        $rows = [];
+        foreach ($summaries as $summary) {
+            $rows[] = $this->summaryRow($summary);
+        }
+
+        (new Table($output))
+            ->setHeaderTitle('Prediction performance summary')
+            ->setHeaders([
+                'Target',
+                'Rows',
+                'Actual avg',
+                'Legacy avg',
+                'Legacy MAE',
+                'Legacy bias',
+                'Legacy RMSE',
+                'Predictor avg',
+                'Predictor MAE',
+                'Predictor bias',
+                'Predictor RMSE',
+                'Failures',
+            ])
+            ->setRows($rows)
+            ->render();
+    }
+
+    /**
+     * @param PredictionSummary $summary
+     * @return non-empty-list<string>
+     */
+    private function summaryRow(array $summary): array {
+        if ($summary['count'] === 0) {
+            return [
+                $summary['target'],
+                '0',
+                '-',
+                '-',
+                '-',
+                '-',
+                '-',
+                '-',
+                '-',
+                '-',
+                '-',
+                (string) $summary['failures'],
+            ];
+        }
+
+        $count = $summary['count'];
+
+        return [
+            $summary['target'],
+            (string) $count,
+            sprintf('%.3f', $summary['actualSum'] / $count),
+            sprintf('%.3f', $summary['legacySum'] / $count),
+            sprintf('%.3f', $summary['legacyAbsErrorSum'] / $count),
+            sprintf('%+.3f', $summary['legacyErrorSum'] / $count),
+            sprintf('%.3f', sqrt($summary['legacySquaredErrorSum'] / $count)),
+            sprintf('%.3f', $summary['predictorSum'] / $count),
+            sprintf('%.3f', $summary['predictorAbsErrorSum'] / $count),
+            sprintf('%+.3f', $summary['predictorErrorSum'] / $count),
+            sprintf('%.3f', sqrt($summary['predictorSquaredErrorSum'] / $count)),
+            (string) $summary['failures'],
+        ];
+    }
+
+    /**
+     * @param list<PredictionDetail> $details
+     */
+    private function renderDetailTable(OutputInterface $output, array $details): void {
+        $rows = [];
+        foreach ($details as $detail) {
+            $rows[] = [
+                $detail['vest'],
+                $detail['name'],
+                $detail['target'],
+                $this->formatNullable($detail['actual']),
+                $this->formatValueWithError($detail['legacy'], $detail['actual']),
+                $detail['predictorPer15'] === null ? '-' : sprintf('%.3f', $detail['predictorPer15']),
+                $this->formatValueWithError($detail['predictorGame'], $detail['actual']),
+                $detail['status'],
+                $detail['model'],
+                $detail['fallback'],
+            ];
+        }
+
+        (new Table($output))
+            ->setHeaderTitle('Per-player predictions')
+            ->setHeaders(['Vest', 'Player', 'Target', 'Actual', 'Legacy', 'Predictor / 15 min', 'Predictor game', 'Status', 'Model', 'Fallback'])
+            ->setRows($rows)
+            ->render();
     }
 
     private function renderContext(OutputInterface $output, PredictionContext $context): void {
@@ -186,43 +404,62 @@ final class PredictorDiagnosticsCommand extends Command
         PredictionContext $context,
         bool $verbose,
     ): array {
+        $detail = $this->predictionDetail($target, $player, $context);
+        $row = [
+            $detail['target'],
+            $this->formatNullable($detail['actual']),
+            $this->formatValueWithError($detail['legacy'], $detail['actual']),
+            $detail['predictorPer15'] === null ? '-' : sprintf('%.3f', $detail['predictorPer15']),
+            $this->formatValueWithError($detail['predictorGame'], $detail['actual']),
+            $detail['status'] === 'ok' ? '<info>ok</info>' : '<error>' . $detail['status'] . '</error>',
+        ];
+
+        if ($verbose) {
+            $row[] = $detail['model'];
+            $row[] = $detail['fallback'];
+        }
+
+        return $row;
+    }
+
+    /**
+     * @template G of Game
+     * @template T of Team
+     * @param Player<G, T> $player
+     * @return PredictionDetail
+     */
+    private function predictionDetail(PredictionTarget $target, Player $player, PredictionContext $context): array {
         $actual = $this->actualValue($target, $player);
         $legacy = $this->legacyExpectedValue($target, $player);
 
         try {
             $prediction = $this->predictor->predict($target, $context);
-            $predictorGameValue = $this->scalePredictionToGameLength($prediction, $context);
 
-            $row = [
-                $target->value,
-                $this->formatNullable($actual),
-                $this->formatValueWithError($legacy, $actual),
-                sprintf('%.3f', $prediction->mean),
-                $this->formatValueWithError($predictorGameValue, $actual),
-                '<info>ok</info>',
+            return [
+                'vest'           => (string) $player->vest,
+                'name'           => $player->name,
+                'target'         => $target->value,
+                'actual'         => $actual === null ? null : (float) $actual,
+                'legacy'         => $legacy,
+                'predictorPer15' => $prediction->mean,
+                'predictorGame'  => $this->scalePredictionToGameLength($prediction, $context),
+                'model'          => $prediction->modelId,
+                'fallback'       => (string) $prediction->fallbackLevel,
+                'status'         => 'ok',
             ];
-
-            if ($verbose) {
-                $row[] = $prediction->modelId;
-                $row[] = (string) $prediction->fallbackLevel;
-            }
-
-            return $row;
         } catch (Throwable $e) {
-            $row = [
-                $target->value,
-                $this->formatNullable($actual),
-                $this->formatValueWithError($legacy, $actual),
-                '-',
-                '<error>' . $e->getMessage() . '</error>',
+            return [
+                'vest'           => (string) $player->vest,
+                'name'           => $player->name,
+                'target'         => $target->value,
+                'actual'         => $actual === null ? null : (float) $actual,
+                'legacy'         => $legacy,
+                'predictorPer15' => null,
+                'predictorGame'  => null,
+                'model'          => '-',
+                'fallback'       => '-',
+                'status'         => $e->getMessage(),
             ];
-
-            if ($verbose) {
-                $row[] = '-';
-                $row[] = '-';
-            }
-
-            return $row;
         }
     }
 

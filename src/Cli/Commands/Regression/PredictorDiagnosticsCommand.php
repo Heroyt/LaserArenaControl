@@ -150,23 +150,26 @@ final class PredictorDiagnosticsCommand extends Command
     ): void {
         $rows = [];
         foreach ($targets as $target) {
-            $rows[] = $this->predictionRow($target, $player, $context);
+            $rows[] = $this->predictionRow($target, $player, $context, $output->isVerbose());
+        }
+
+        $headers = [
+            'Target',
+            'Actual',
+            'Legacy',
+            'Predictor / 15 min',
+            'Predictor game',
+            'Status',
+        ];
+
+        if ($output->isVerbose()) {
+            $headers[] = 'Model';
+            $headers[] = 'Fallback';
         }
 
         (new Table($output))
             ->setHeaderTitle('Predictions')
-            ->setHeaders([
-                'Target',
-                'Actual',
-                'Legacy expected',
-                'Legacy error',
-                'Predictor / 15 min',
-                'Predictor game',
-                'Predictor error',
-                'Model',
-                'Fallback',
-                'Status',
-            ])
+            ->setHeaders($headers)
             ->setRows($rows)
             ->render();
     }
@@ -175,9 +178,14 @@ final class PredictorDiagnosticsCommand extends Command
      * @template G of Game
      * @template T of Team
      * @param Player<G, T> $player
-     * @return array{string,string,string,string,string,string,string,string,string,string}
+     * @return non-empty-list<string>
      */
-    private function predictionRow(PredictionTarget $target, Player $player, PredictionContext $context): array {
+    private function predictionRow(
+        PredictionTarget $target,
+        Player $player,
+        PredictionContext $context,
+        bool $verbose,
+    ): array {
         $actual = $this->actualValue($target, $player);
         $legacy = $this->legacyExpectedValue($target, $player);
 
@@ -185,31 +193,36 @@ final class PredictorDiagnosticsCommand extends Command
             $prediction = $this->predictor->predict($target, $context);
             $predictorGameValue = $this->scalePredictionToGameLength($prediction, $context);
 
-            return [
+            $row = [
                 $target->value,
                 $this->formatNullable($actual),
-                $this->formatNullable($legacy),
-                $this->formatError($actual, $legacy),
+                $this->formatValueWithError($legacy, $actual),
                 sprintf('%.3f', $prediction->mean),
-                sprintf('%.3f', $predictorGameValue),
-                $this->formatError($actual, $predictorGameValue),
-                $prediction->modelId,
-                (string) $prediction->fallbackLevel,
+                $this->formatValueWithError($predictorGameValue, $actual),
                 '<info>ok</info>',
             ];
+
+            if ($verbose) {
+                $row[] = $prediction->modelId;
+                $row[] = (string) $prediction->fallbackLevel;
+            }
+
+            return $row;
         } catch (Throwable $e) {
-            return [
+            $row = [
                 $target->value,
                 $this->formatNullable($actual),
-                $this->formatNullable($legacy),
-                $this->formatError($actual, $legacy),
-                '-',
-                '-',
-                '-',
-                '-',
+                $this->formatValueWithError($legacy, $actual),
                 '-',
                 '<error>' . $e->getMessage() . '</error>',
             ];
+
+            if ($verbose) {
+                $row[] = '-';
+                $row[] = '-';
+            }
+
+            return $row;
         }
     }
 
@@ -269,5 +282,13 @@ final class PredictorDiagnosticsCommand extends Command
         }
 
         return sprintf('%+.3f', $actual - $expected);
+    }
+
+    private function formatValueWithError(?float $expected, ?float $actual): string {
+        if ($expected === null) {
+            return '-';
+        }
+
+        return sprintf('%s (%s)', $this->formatNullable($expected), $this->formatError($actual, $expected));
     }
 }

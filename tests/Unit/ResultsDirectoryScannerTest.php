@@ -356,6 +356,39 @@ class ResultsDirectoryScannerTest extends TestCase
         $this->assertSame('queued-expired-requeued', $decision->reason);
     }
 
+    public function test_expired_queued_decision_is_requeued_when_older_version_was_processed(): void {
+        $version = $this->createVersion();
+        $scanner = $this->createScannerForDecision(
+            $version,
+            $this->createState(
+                ResultFileImportStatus::QUEUED,
+                queuedAt: new DateTimeImmutable('@800'),
+                processedVersion: sha1('older-version'),
+            ),
+        );
+
+        $decision = $scanner->describeFileDecision($version->path, now: new DateTimeImmutable('@1000'));
+
+        $this->assertSame(ResultFileScanAction::QUEUE, $decision->action);
+        $this->assertSame('queued-expired-requeued', $decision->reason);
+    }
+
+    public function test_old_queued_decision_is_not_requeued_when_seen_version_was_processed(): void {
+        $version = $this->createVersion();
+        $scanner = $this->createScannerForDecision(
+            $version,
+            $this->createState(
+                ResultFileImportStatus::QUEUED,
+                queuedAt: new DateTimeImmutable('@800'),
+                processedVersion: $version->version,
+            ),
+        );
+
+        $decision = $scanner->describeFileDecision($version->path, now: new DateTimeImmutable('@1000'));
+
+        $this->assertSame(ResultFileScanAction::SKIP, $decision->action);
+    }
+
     public function test_expired_processing_decision_is_requeued(): void {
         $version = $this->createVersion();
         $scanner = $this->createScannerForDecision(

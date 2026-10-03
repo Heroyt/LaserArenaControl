@@ -543,7 +543,7 @@ readonly class ResultsDirectoryScanner
     private function isQueuedExpired(?ResultFileImportState $state, DateTimeImmutable $now): bool {
         if (
             $state === null
-            || $state->processedVersion !== null
+            || $state->processedVersion === $state->seenVersion
             || $this->queuedTtlSeconds <= 0
             || ! in_array(
                 $state->status,
